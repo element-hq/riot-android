@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +34,6 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import org.matrix.androidsdk.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -61,6 +61,14 @@ import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.util.Log;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import im.vector.LoginHandler;
 import im.vector.Matrix;
@@ -69,13 +77,6 @@ import im.vector.UnrecognizedCertHandler;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Displays the login screen.
@@ -131,7 +132,6 @@ public class LoginActivity extends MXCActionBarActivity {
     // mail validation
     private static final String BROADCAST_ACTION_MAIL_VALIDATION = "im.vector.activity.BROADCAST_ACTION_MAIL_VALIDATION";
     private static final String EXTRA_IS_STOP_REQUIRED = "EXTRA_IS_STOP_REQUIRED";
-    private static final String KEY_SUBMIT_TOKEN_SUCCESS = "success";
 
     // activity mode
     private int mMode = MODE_LOGIN;
@@ -256,8 +256,8 @@ public class LoginActivity extends MXCActionBarActivity {
     private boolean mIsWaitingNetworkConnection = false;
 
     /**
-     Tell whether the password has been reseted with success.
-     Used to return on login screen on submit button pressed.
+     * Tell whether the password has been reseted with success.
+     * Used to return on login screen on submit button pressed.
      */
     private boolean mIsPasswordResetted;
 
@@ -286,6 +286,7 @@ public class LoginActivity extends MXCActionBarActivity {
      * This method is called when the LoginActivity is set to foreground due
      * to a {@link #startActivity(Intent)} where the flags Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_SINGLE_TOP}
      * are set (see: {@link VectorRegistrationReceiver}).
+     *
      * @param aIntent new intent
      */
     @Override
@@ -295,14 +296,14 @@ public class LoginActivity extends MXCActionBarActivity {
 
         Bundle receivedBundle;
 
-        if(null ==aIntent){
+        if (null == aIntent) {
             Log.d(LOG_TAG, "## onNewIntent(): Unexpected value - aIntent=null ");
-        } else if(null == (receivedBundle = aIntent.getExtras())){
+        } else if (null == (receivedBundle = aIntent.getExtras())) {
             Log.d(LOG_TAG, "## onNewIntent(): Unexpected value - extras are missing");
         } else if (receivedBundle.containsKey(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS)) {
             Log.d(LOG_TAG, "## onNewIntent() Login activity started by email verification for registration");
 
-            if(processEmailValidationExtras(receivedBundle)){
+            if (processEmailValidationExtras(receivedBundle)) {
                 checkIfMailValidationPending();
             }
         }
@@ -324,7 +325,7 @@ public class LoginActivity extends MXCActionBarActivity {
         CommonActivityUtils.onApplicationStarted(this);
 
         Intent intent = getIntent();
-        Bundle receivedBundle = (null != intent) ?  getIntent().getExtras() : null;
+        Bundle receivedBundle = (null != intent) ? getIntent().getExtras() : null;
 
         // resume the application
         if (null != receivedBundle) {
@@ -337,7 +338,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 processEmailValidationExtras(receivedBundle);
             }
         }
-            // already registered
+        // already registered
         if (hasCredentials()) {
             if ((null != intent) && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
                 Log.d(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
@@ -384,7 +385,7 @@ public class LoginActivity extends MXCActionBarActivity {
         mForgotValidateEmailButton = (Button) findViewById(R.id.button_forgot_email_validate);
 
         mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
-        mUseCustomHomeServersCheckbox = (CheckBox)findViewById(R.id.display_server_url_expand_checkbox);
+        mUseCustomHomeServersCheckbox = (CheckBox) findViewById(R.id.display_server_url_expand_checkbox);
 
         mProgressTextView = (TextView) findViewById(R.id.flow_progress_message_textview);
 
@@ -394,8 +395,8 @@ public class LoginActivity extends MXCActionBarActivity {
             restoreSavedData(savedInstanceState);
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-            mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF,  getResources().getString(R.string.default_hs_server_url)));
-            mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF,  getResources().getString(R.string.default_identity_server_url)));
+            mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url)));
+            mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_identity_server_url)));
         }
 
         // trap the UI events
@@ -624,6 +625,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
     /**
      * Check if the home server url has been updated
+     *
      * @return true if the HS url has been updated
      */
     private boolean onHomeServerUrlUpdate() {
@@ -646,6 +648,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
     /**
      * Check if the identity server url has been updated
+     *
      * @return true if the IS url has been updated
      */
     private boolean onIdentityserverUrlUpdate() {
@@ -794,7 +797,7 @@ public class LoginActivity extends MXCActionBarActivity {
         } else if (password.length() < 6) {
             Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_password), Toast.LENGTH_SHORT).show();
             return;
-        } else if (!TextUtils.equals(password,passwordCheck)) {
+        } else if (!TextUtils.equals(password, passwordCheck)) {
             Toast.makeText(getApplicationContext(), getString(R.string.auth_password_dont_match), Toast.LENGTH_SHORT).show();
             return;
         } else if (!TextUtils.isEmpty(email) && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -879,12 +882,12 @@ public class LoginActivity extends MXCActionBarActivity {
             }
 
             @Override
-            public void onUnexpectedError (Exception e) {
+            public void onUnexpectedError(Exception e) {
                 onError(e.getLocalizedMessage());
             }
 
             @Override
-            public void onMatrixError (MatrixError e){
+            public void onMatrixError(MatrixError e) {
                 onError(e.getLocalizedMessage());
             }
         });
@@ -997,6 +1000,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
     /**
      * Error case Management
+     *
      * @param matrixError the matrix error
      */
     private void onFailureDuringAuthRequest(MatrixError matrixError) {
@@ -1024,7 +1028,7 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         }
 
-        Log.e(LOG_TAG, "## onFailureDuringAuthRequest(): Msg= \""+message+"\"");
+        Log.e(LOG_TAG, "## onFailureDuringAuthRequest(): Msg= \"" + message + "\"");
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
@@ -1033,15 +1037,16 @@ public class LoginActivity extends MXCActionBarActivity {
      * If yes, it initializes the LoginActivity to start in registration mode to finalize a registration
      * process that is in progress. This is mainly used when the LoginActivity
      * is triggered from the {@link VectorRegistrationReceiver}.
+     *
      * @param aRegistrationBundle bundle to be parsed
      * @return true operation succeed, false otherwise
      */
-    private boolean processEmailValidationExtras(Bundle aRegistrationBundle){
-        boolean retCode =false;
+    private boolean processEmailValidationExtras(Bundle aRegistrationBundle) {
+        boolean retCode = false;
 
         Log.d(LOG_TAG, "## processEmailValidationExtras() IN");
 
-        if(null != aRegistrationBundle) {
+        if (null != aRegistrationBundle) {
             mEmailValidationExtraParams = (HashMap<String, String>) aRegistrationBundle.getSerializable(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS);
 
             if (null != mEmailValidationExtraParams) {
@@ -1054,7 +1059,7 @@ public class LoginActivity extends MXCActionBarActivity {
         } else {
             Log.e(LOG_TAG, "## processEmailValidationExtras(): Bundle is missing - aRegistrationBundle=null");
         }
-        Log.d(LOG_TAG, "## processEmailValidationExtras() OUT - reCode="+retCode);
+        Log.d(LOG_TAG, "## processEmailValidationExtras() OUT - reCode=" + retCode);
         return retCode;
     }
 
@@ -1062,12 +1067,13 @@ public class LoginActivity extends MXCActionBarActivity {
     /**
      * Perform an email validation for a registration flow. One account has been created where
      * a mail was provided. To validate the email ownership a MX submitToken REST api call must be performed.
+     *
      * @param aMapParams map containing the parameters
      */
     private void startEmailOwnershipValidation(HashMap<String, String> aMapParams) {
-        Log.d(LOG_TAG, "## startEmailOwnershipValidation(): IN aMapParams="+aMapParams);
+        Log.d(LOG_TAG, "## startEmailOwnershipValidation(): IN aMapParams=" + aMapParams);
 
-        if(null != aMapParams) {
+        if (null != aMapParams) {
             // display waiting UI..
             enableLoadingScreen(true);
 
@@ -1083,6 +1089,18 @@ public class LoginActivity extends MXCActionBarActivity {
             String sessionId = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_SESSION_ID);
             String homeServer = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_HOME_SERVER_URL);
             String identityServer = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_IDENTITY_SERVER_URL);
+
+            // When the user tries to update his/her password after forgetting it (tap on the dedicated link)
+            // The HS / IS urls are not provided in the email link.
+            // This link should be only opened by the webclient (known issue server side)
+            // Use the current configuration by default (it might not work on some account if the user uses another HS)
+            if (null == homeServer) {
+                homeServer = getHomeServerUrl();
+            }
+
+            if (null == identityServer) {
+                identityServer = getIdentityServerUrl();
+            }
 
             // test if the home server urls are valid
             try {
@@ -1114,7 +1132,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
         if (mMode == MODE_ACCOUNT_CREATION) {
             Log.d(LOG_TAG, "## submitEmailToken(): calling submitEmailTokenValidation()..");
-            mLoginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, aToken, aClientSecret, aSid, new ApiCallback<Map<String,Object>>() {
+            mLoginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, aToken, aClientSecret, aSid, new ApiCallback<Boolean>() {
                 private void errorHandler(String errorMessage) {
                     Log.d(LOG_TAG, "## submitEmailToken(): errorHandler().");
                     enableLoadingScreen(false);
@@ -1124,24 +1142,15 @@ public class LoginActivity extends MXCActionBarActivity {
                 }
 
                 @Override
-                public void onSuccess(Map<String,Object> mapResp) {
-                    if(null != mapResp) {
-                        Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - respObject=" + mapResp.toString());
-
-                        Boolean status = (Boolean)mapResp.get(KEY_SUBMIT_TOKEN_SUCCESS);
-                        if (null != status) {
-                            if (status) {
-                                // the validation of mail ownership succeed, just resume the registration flow
-                                // next step: just register
-                                Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
-                                registerAfterEmailValidation(aClientSecret, aSid, aIdentityServer, aSessionId);
-                            } else {
-                                Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failed (success=false)");
-                                errorHandler(getString(R.string.login_error_unable_register_mail_ownership));
-                            }
-                        } else {
-                            Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failded (parameter missing)");
-                        }
+                public void onSuccess(Boolean isSuccess) {
+                    if (isSuccess) {
+                        // the validation of mail ownership succeed, just resume the registration flow
+                        // next step: just register
+                        Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
+                        registerAfterEmailValidation(aClientSecret, aSid, aIdentityServer, aSessionId);
+                    } else {
+                        Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failed (success=false)");
+                        errorHandler(getString(R.string.login_error_unable_register_mail_ownership));
                     }
                 }
 
@@ -1182,10 +1191,10 @@ public class LoginActivity extends MXCActionBarActivity {
         HashMap<String, Object> thirdPartyIdsCredentialsAuth = new HashMap<>();
         RegistrationParams registrationParams = new RegistrationParams();
 
-        Log.d(LoginActivity.LOG_TAG, "## registerAfterEmailValidation(): IN aSessionId="+aSessionId);
+        Log.d(LoginActivity.LOG_TAG, "## registerAfterEmailValidation(): IN aSessionId=" + aSessionId);
         // set session
-        if(null != mRegistrationResponse) {
-            Log.d(LoginActivity.LOG_TAG, "## registerAfterEmailValidation(): update session ID, old value="+mRegistrationResponse.session);
+        if (null != mRegistrationResponse) {
+            Log.d(LoginActivity.LOG_TAG, "## registerAfterEmailValidation(): update session ID, old value=" + mRegistrationResponse.session);
             mRegistrationResponse.session = aSessionId;
         }
 
@@ -1217,11 +1226,11 @@ public class LoginActivity extends MXCActionBarActivity {
      * else switch to a fallback page
      */
     private void register(final RegistrationParams params) {
-        Log.d(LOG_TAG,"## register(): IN");
+        Log.d(LOG_TAG, "## register(): IN");
 
         // should check only registration flows
         if (mMode != MODE_ACCOUNT_CREATION) {
-            Log.d(LOG_TAG,"## register(): exit1");
+            Log.d(LOG_TAG, "## register(): exit1");
             return;
         }
         if (null != mRegistrationResponse) {
@@ -1235,8 +1244,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                     final String fSession = mRegistrationResponse.session;
 
-                    mLoginHandler.register(LoginActivity.this, hsConfig, params, new SimpleApiCallback<HomeserverConnectionConfig>()
-                    {
+                    mLoginHandler.register(LoginActivity.this, hsConfig, params, new SimpleApiCallback<HomeserverConnectionConfig>() {
                         @Override
                         public void onSuccess(HomeserverConnectionConfig homeserverConnectionConfig) {
                             if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
@@ -1246,7 +1254,7 @@ public class LoginActivity extends MXCActionBarActivity {
                             }
                         }
 
-                        private void onError (String errorMessage){
+                        private void onError(String errorMessage) {
                             if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
                                 enableLoadingScreen(false);
                                 showMainLayout();
@@ -1255,18 +1263,18 @@ public class LoginActivity extends MXCActionBarActivity {
                         }
 
                         @Override
-                        public void onNetworkError (Exception e){
+                        public void onNetworkError(Exception e) {
                             Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
                             onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
                         }
 
                         @Override
-                        public void onUnexpectedError (Exception e){
+                        public void onUnexpectedError(Exception e) {
                             onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
                         }
 
                         @Override
-                        public void onMatrixError (MatrixError e){
+                        public void onMatrixError(MatrixError e) {
                             if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
                                 Log.d(LOG_TAG, "## register(): onMatrixError - Msg=" + e.getLocalizedMessage());
                                 // waiting for email case
@@ -1309,7 +1317,7 @@ public class LoginActivity extends MXCActionBarActivity {
                                             Log.e(LOG_TAG, "## register(): Received status 401 - Exception - JsonUtils.toRegistrationFlowResponse()");
                                         }
                                     } else {
-                                        Log.d(LOG_TAG, "## register(): Received not expected status 401 ="+e.mStatus);
+                                        Log.d(LOG_TAG, "## register(): Received not expected status 401 =" + e.mStatus);
                                     }
 
                                     // check if the server response can be casted
@@ -1324,7 +1332,7 @@ public class LoginActivity extends MXCActionBarActivity {
                                     }
                                 }
                             } else {
-                                Log.d(LOG_TAG, "## register(): onMatrixError - received session is different, mMode="+mMode+"(MODE_ACCOUNT_CREATION="+MODE_ACCOUNT_CREATION+")");
+                                Log.d(LOG_TAG, "## register(): onMatrixError - received session is different, mMode=" + mMode + "(MODE_ACCOUNT_CREATION=" + MODE_ACCOUNT_CREATION + ")");
                             }
                         }
                     });
@@ -1346,11 +1354,11 @@ public class LoginActivity extends MXCActionBarActivity {
      * @param params registration params
      */
     private void checkNameAvailability(final RegistrationParams params) {
-        Log.d(LOG_TAG,"## checkNameAvailability(): IN");
+        Log.d(LOG_TAG, "## checkNameAvailability(): IN");
 
         // should only check registration flows
         if (mMode != MODE_ACCOUNT_CREATION) {
-            Log.d(LOG_TAG,"## checkNameAvailability(): exit1");
+            Log.d(LOG_TAG, "## checkNameAvailability(): exit1");
             return;
         }
         if (null != mRegistrationResponse) {
@@ -1359,7 +1367,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                 // invalid URL
                 if (null == hsConfig) {
-                    Log.d(LOG_TAG,"## checkNameAvailability(): exit2");
+                    Log.d(LOG_TAG, "## checkNameAvailability(): exit2");
                     return;
                 } else {
                     final String fSession = mRegistrationResponse.session;
@@ -1369,7 +1377,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                     mLoginHandler.register(LoginActivity.this, hsConfig, params, new SimpleApiCallback<HomeserverConnectionConfig>() {
                         // common local error handler
-                        private void onError (String errorMessage){
+                        private void onError(String errorMessage) {
                             if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
                                 showMainLayout();
                                 enableLoadingScreen(false);
@@ -1386,20 +1394,20 @@ public class LoginActivity extends MXCActionBarActivity {
                         }
 
                         @Override
-                        public void onNetworkError(Exception e){
+                        public void onNetworkError(Exception e) {
                             Log.e(LOG_TAG, "## checkNameAvailability(): Network Error: " + e.getMessage(), e);
                             onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
                         }
 
                         @Override
-                        public void onUnexpectedError(Exception e){
+                        public void onUnexpectedError(Exception e) {
                             onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
                         }
 
                         @Override
-                        public void onMatrixError(MatrixError aErrorParam){
+                        public void onMatrixError(MatrixError aErrorParam) {
                             if ((mMode == MODE_ACCOUNT_CREATION)/* && TextUtils.equals(fSession, getRegistrationSession())*/) {
-                                Log.d(LOG_TAG, "## checkNameAvailability(): onMatrixError Response="+aErrorParam.getLocalizedMessage());
+                                Log.d(LOG_TAG, "## checkNameAvailability(): onMatrixError Response=" + aErrorParam.getLocalizedMessage());
 
                                 if (TextUtils.equals(aErrorParam.errcode, MatrixError.USER_IN_USE)) {
                                     // user name is already taken, the registration process stops here (new user name should be provided)
@@ -1420,7 +1428,7 @@ public class LoginActivity extends MXCActionBarActivity {
                                             Log.e(LOG_TAG, "## checkNameAvailability(): Received status 401 - Exception - JsonUtils.toRegistrationFlowResponse()");
                                         }
                                     } else {
-                                        Log.d(LOG_TAG, "## checkNameAvailability(): Received not expected status 401 ="+aErrorParam.mStatus);
+                                        Log.d(LOG_TAG, "## checkNameAvailability(): Received not expected status 401 =" + aErrorParam.mStatus);
                                     }
 
                                     // check if the server response can be casted
@@ -1471,8 +1479,8 @@ public class LoginActivity extends MXCActionBarActivity {
     private boolean isRecaptchaFlowRequired() {
         // sanity checks
         if ((null != mRegistrationResponse) && (null != mRegistrationResponse.flows)) {
-            for (LoginFlow loginFlow : mRegistrationResponse.flows){
-                if ((loginFlow.stages.indexOf(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA) < 0) && !TextUtils.equals(loginFlow.type, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA)) {
+            for (LoginFlow loginFlow : mRegistrationResponse.flows) {
+                if ((loginFlow.stages.indexOf(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA) < 0) && !TextUtils.equals(loginFlow.type, LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
                     return false;
                 }
             }
@@ -1489,7 +1497,7 @@ public class LoginActivity extends MXCActionBarActivity {
     private boolean isDummyFlow() {
         // sanity checks
         if ((null != mRegistrationResponse) && (null != mRegistrationResponse.flows)) {
-            for (LoginFlow loginFlow : mRegistrationResponse.flows){
+            for (LoginFlow loginFlow : mRegistrationResponse.flows) {
                 if (loginFlow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY)) {
                     return true;
                 }
@@ -1524,7 +1532,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 for (String stage : flow.stages) {
                     isSupported &= TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, stage) ||
                             TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, stage) ||
-                            TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA, stage)||
+                            TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA, stage) ||
                             TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY, stage);
                 }
             }
@@ -1567,35 +1575,33 @@ public class LoginActivity extends MXCActionBarActivity {
      * Note the mail validation processing can only be started if
      * {@link #onRegistrationFlow(HomeserverConnectionConfig, RegistrationFlowResponse)} has
      * been at least started once.
-     *
      */
-    private void checkIfMailValidationPending(){
-        Log.d(LOG_TAG,"## checkIfMailValidationPending(): mIsMailValidationPending="+mIsMailValidationPending);
+    private void checkIfMailValidationPending() {
+        Log.d(LOG_TAG, "## checkIfMailValidationPending(): mIsMailValidationPending=" + mIsMailValidationPending);
 
-        if(null == mRegistrationResponse){
+        if (null == mRegistrationResponse) {
             Log.d(LOG_TAG, "## checkIfMailValidationPending(): pending mail validation delayed (mRegistrationResponse=null)");
-        }
-        else if(mIsMailValidationPending) {
+        } else if (mIsMailValidationPending) {
             mIsMailValidationPending = false;
 
             // remove the pending polling register if any
             if (null != mRegisterPollingRunnable) {
                 mHandler.removeCallbacks(mRegisterPollingRunnable);
                 Log.d(LOG_TAG, "## checkIfMailValidationPending(): pending register() removed from handler");
-            } else{
+            } else {
                 Log.d(LOG_TAG, "## checkIfMailValidationPending(): no registering polling on M_UNAUTHORIZED");
             }
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(null != mEmailValidationExtraParams) {
+                    if (null != mEmailValidationExtraParams) {
                         startEmailOwnershipValidation(mEmailValidationExtraParams);
                     }
                 }
             });
         } else {
-            Log.d(LOG_TAG,"## checkIfMailValidationPending(): pending mail validation not started");
+            Log.d(LOG_TAG, "## checkIfMailValidationPending(): pending mail validation not started");
         }
     }
 
@@ -1605,7 +1611,7 @@ public class LoginActivity extends MXCActionBarActivity {
      * else switch to a fallback page
      */
     private void checkRegistrationFlows() {
-        Log.d(LOG_TAG,"## checkRegistrationFlows(): IN");
+        Log.d(LOG_TAG, "## checkRegistrationFlows(): IN");
         // should only check registration flows
         if (mMode != MODE_ACCOUNT_CREATION) {
             return;
@@ -1657,7 +1663,7 @@ public class LoginActivity extends MXCActionBarActivity {
                             removeNetworkStateNotificationListener();
 
                             if (mMode == MODE_ACCOUNT_CREATION) {
-                                Log.d(LOG_TAG,"## checkRegistrationFlows(): onMatrixError - Resp="+e.getLocalizedMessage());
+                                Log.d(LOG_TAG, "## checkRegistrationFlows(): onMatrixError - Resp=" + e.getLocalizedMessage());
                                 RegistrationFlowResponse registrationFlowResponse = null;
 
                                 // when a response is not completed the server returns an error message
@@ -1699,6 +1705,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
     /**
      * Hide the main layout and display a toast.
+     *
      * @param text the text helper
      */
     private void hideMainLayoutAndToast(String text) {
@@ -1742,7 +1749,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // sanity check
         if (null == mRegistrationResponse) {
-            Log.d(LOG_TAG,"## onRegisterClick(): return - mRegistrationResponse=nuul");
+            Log.d(LOG_TAG, "## onRegisterClick(): return - mRegistrationResponse=nuul");
             return;
         }
 
@@ -1769,7 +1776,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_email), Toast.LENGTH_SHORT).show();
                 return;
             } else {
-                String expression ="^[a-z0-9.\\-_]+$";
+                String expression = "^[a-z0-9.\\-_]+$";
 
                 Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
                 Matcher matcher = pattern.matcher(name);
@@ -1808,8 +1815,8 @@ public class LoginActivity extends MXCActionBarActivity {
         final String fSession = mRegistrationResponse.session;
 
         // ask server if chosen user name is available before doing anything
-        if(!mIsUserNameAvailable && !isEmailIdentityFlowCompleted()) {
-            Log.d(LOG_TAG,"## onRegisterClick(): start check user name flow");
+        if (!mIsUserNameAvailable && !isEmailIdentityFlowCompleted()) {
+            Log.d(LOG_TAG, "## onRegisterClick(): start check user name flow");
             enableLoadingScreen(true);
 
             // set only name value
@@ -1826,11 +1833,11 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // require an email registration
         if (!TextUtils.isEmpty(email) && !isEmailIdentityFlowCompleted()) {
-            Log.d(LOG_TAG,"## onRegisterClick(): start email flow");
+            Log.d(LOG_TAG, "## onRegisterClick(): start email flow");
             enableLoadingScreen(true);
 
             final HomeserverConnectionConfig hsConfig = getHsConfig();
-            mLoginHandler.requestValidationToken(LoginActivity.this, hsConfig, email, fSession,new SimpleApiCallback<ThreePid>() {
+            mLoginHandler.requestValidationToken(LoginActivity.this, hsConfig, email, fSession, new SimpleApiCallback<ThreePid>() {
                 @Override
                 public void onSuccess(ThreePid thirdPid) {
                     if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fSession, getRegistrationSession()))) {
@@ -1855,7 +1862,7 @@ public class LoginActivity extends MXCActionBarActivity {
                     }
                 }
 
-                private void onError (String errorMessage){
+                private void onError(String errorMessage) {
                     if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fSession, getRegistrationSession()))) {
                         enableLoadingScreen(false);
                         setActionButtonsEnabled(false);
@@ -1886,16 +1893,16 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // checks parameters
         if (isRecaptchaFlowRequired()) {
-            Log.d(LOG_TAG,"## onRegisterClick(): start captcha flow");
+            Log.d(LOG_TAG, "## onRegisterClick(): start captcha flow");
             // retrieve the site_key
             String site_key = null;
 
             if (null != mRegistrationResponse.params) {
-                Object recaptchaParamsAsVoid = mRegistrationResponse.params.get(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
+                Object recaptchaParamsAsVoid = mRegistrationResponse.params.get(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
 
                 if (null != recaptchaParamsAsVoid) {
                     try {
-                        Map<String, String> recaptchaParams = (Map<String, String>)recaptchaParamsAsVoid;
+                        Map<String, String> recaptchaParams = (Map<String, String>) recaptchaParamsAsVoid;
                         site_key = recaptchaParams.get("public_key");
 
                     } catch (Exception e) {
@@ -1915,10 +1922,10 @@ public class LoginActivity extends MXCActionBarActivity {
                 }
             }
         } else {
-            Log.d(LOG_TAG,"## onRegisterClick(): captcha flow skipped");
+            Log.d(LOG_TAG, "## onRegisterClick(): captcha flow skipped");
         }
 
-        Log.d(LOG_TAG,"## onRegisterClick(): start default flow");
+        Log.d(LOG_TAG, "## onRegisterClick(): start default flow");
         // use the default registration
         RegistrationParams params = new RegistrationParams();
 
@@ -1950,17 +1957,18 @@ public class LoginActivity extends MXCActionBarActivity {
         onIdentityserverUrlUpdate();
         onHomeServerUrlUpdate();
 
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mHomeServerText.getWindowToken(), 0);
     }
 
     /**
      * The user clicks on the login button
-     * @param hsConfig the HS config
-     * @param hsUrlString the HS url
+     *
+     * @param hsConfig          the HS config
+     * @param hsUrlString       the HS url
      * @param identityUrlString the Identity server URL
-     * @param username the username
-     * @param password the user password
+     * @param username          the username
+     * @param password          the user password
      */
     private void onLoginClick(final HomeserverConnectionConfig hsConfig, final String hsUrlString, final String identityUrlString, final String username, final String password) {
         if (onHomeServerUrlUpdate() || onIdentityserverUrlUpdate()) {
@@ -2073,7 +2081,7 @@ public class LoginActivity extends MXCActionBarActivity {
                     public void onSuccess(List<LoginFlow> flows) {
                         // stop listening to network state
                         removeNetworkStateNotificationListener();
-                        
+
                         if (mMode == MODE_LOGIN) {
                             enableLoadingScreen(false);
                             setActionButtonsEnabled(true);
@@ -2136,6 +2144,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
     /**
      * Restore the saved instance data.
+     *
      * @param savedInstanceState the instance state
      */
     private void restoreSavedData(Bundle savedInstanceState) {
@@ -2283,6 +2292,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
     /**
      * Display a loading screen mask over the login screen
+     *
      * @param isLoadingScreenVisible true to enable the loading screen, false otherwise
      */
     private void enableLoadingScreen(boolean isLoadingScreenVisible) {
@@ -2370,12 +2380,12 @@ public class LoginActivity extends MXCActionBarActivity {
     // third party activities
     //==============================================================================================================
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)  {
-        Log.d(LOG_TAG,"## onActivityResult(): IN - requestCode="+requestCode+" resultCode="+resultCode);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(LOG_TAG, "## onActivityResult(): IN - requestCode=" + requestCode + " resultCode=" + resultCode);
 
         if (CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
-                Log.d(LOG_TAG,"## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
+                Log.d(LOG_TAG, "## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
                 String captchaResponse = data.getStringExtra("response");
 
                 final RegistrationParams params = new RegistrationParams();
@@ -2383,11 +2393,11 @@ public class LoginActivity extends MXCActionBarActivity {
                 HashMap<String, Object> authParams = new HashMap<>();
                 authParams.put("session", mRegistrationResponse.session);
                 authParams.put("response", captchaResponse);
-                authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
+                authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
 
                 params.auth = authParams;
 
-                if(null == mEmailValidationExtraParams) {
+                if (null == mEmailValidationExtraParams) {
                     params.username = mCreationUsernameTextView.getText().toString().trim();
                     params.password = mCreationPassword1TextView.getText().toString().trim();
                     params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());
@@ -2395,6 +2405,13 @@ public class LoginActivity extends MXCActionBarActivity {
                     // if LoginActivity was started from an email validation do not set username, pswd and email,
                     // otherwise the server returns M_USER_IN_USE error code
                     Log.d(LOG_TAG, "## onActivityResult(): mail validation in progress => username, pswd and email not set in register()");
+
+                    // when the user updates his password, it must be provided as parameter.
+                    // we should not do it but it seems being a server side issue.
+                    String forgotPasswordText = mForgotPassword1TextView.getText().toString().trim();
+                    if (!TextUtils.isEmpty(forgotPasswordText)) {
+                        params.password = forgotPasswordText;
+                    }
                 }
 
                 runOnUiThread(new Runnable() {
@@ -2406,7 +2423,7 @@ public class LoginActivity extends MXCActionBarActivity {
                     }
                 });
             } else {
-                Log.d(LOG_TAG,"## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
+                Log.d(LOG_TAG, "## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
                 // cancel the registration flow
                 mRegistrationResponse = null;
                 showMainLayout();
@@ -2415,7 +2432,7 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         } else if ((ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
             if (resultCode == RESULT_OK) {
-                Log.d(LOG_TAG,"## onActivityResult(): ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
+                Log.d(LOG_TAG, "## onActivityResult(): ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
                 String homeServer = data.getStringExtra("homeServer");
                 String userId = data.getStringExtra("userId");
                 String accessToken = data.getStringExtra("accessToken");
@@ -2442,7 +2459,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 goToSplash();
                 LoginActivity.this.finish();
             } else if ((resultCode == RESULT_CANCELED) && (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
-                Log.d(LOG_TAG,"## onActivityResult(): RESULT_CANCELED && FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE");
+                Log.d(LOG_TAG, "## onActivityResult(): RESULT_CANCELED && FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE");
                 // reset the home server to let the user writes a valid one.
                 mHomeServerText.setText("https://");
                 setActionButtonsEnabled(false);

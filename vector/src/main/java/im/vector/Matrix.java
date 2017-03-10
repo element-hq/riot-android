@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Looper;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
@@ -99,7 +104,7 @@ public class Matrix {
         }
 
         @Override
-        public void onLiveEventsChunkProcessed() {
+        public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
             // when the client does not use GCM (ie. FDroid),
             // we need to compute the application badge values
 
@@ -162,7 +167,7 @@ public class Matrix {
          * Called when there is an incoming call within the room.
          */
         @Override
-        public void onIncomingCall(final IMXCall call) {
+        public void onIncomingCall(final IMXCall call, final MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
             if (null != call) {
                 getUIHandler().post(new Runnable() {
                     @Override
@@ -184,11 +189,14 @@ public class Matrix {
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, call.getSession().getMyUserId());
                                 intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, call.getCallId());
+                                if (null != unknownDevices) {
+                                    intent.putExtra(VectorHomeActivity.EXTRA_CALL_UNKNOWN_DEVICES, unknownDevices);
+                                }
                                 context.startActivity(intent);
                             } else {
                                 Log.d(LOG_TAG, "onIncomingCall : the home activity exists : but permissions have to be checked before");
                                 // check incoming call required permissions, before allowing the call..
-                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId());
+                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId(), unknownDevices);
                             }
                         } else {
                             Log.d(LOG_TAG, "onIncomingCall : a call is already in progress -> cancel");
@@ -616,7 +624,7 @@ public class Matrix {
      * Any opened activity is closed and the application switches to the splash screen.
      * @param context the context
      */
-    public void reloadSessions(Context context) {
+    public void reloadSessions(final Context context) {
         ArrayList<MXSession> sessions = getMXSessions(context);
 
         for(MXSession session : sessions) {
@@ -635,13 +643,18 @@ public class Matrix {
             }
         }
 
-        Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.getApplicationContext().startActivity(intent);
+        // clear GCM token before launching the splash screen
+        Matrix.getInstance(context).getSharedGCMRegistrationManager().clearGCMData(new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(final Void anything) {
+                Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.getApplicationContext().startActivity(intent);
 
-        if (null != VectorApp.getCurrentActivity()) {
-            VectorApp.getCurrentActivity().finish();
-        }
+                if (null != VectorApp.getCurrentActivity()) {
+                    VectorApp.getCurrentActivity().finish();
+                }
+            }});
     }
 
     /**

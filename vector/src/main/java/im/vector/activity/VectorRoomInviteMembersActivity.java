@@ -16,6 +16,7 @@
 
 package im.vector.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -23,7 +24,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -54,16 +54,19 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     public static final String EXTRA_HIDDEN_PARTICIPANT_ITEMS = "VectorInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS";
     public static final String EXTRA_SELECTED_USER_ID = "VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID";
     public static final String EXTRA_SELECTED_PARTICIPANT_ITEM = "VectorInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM";
+    // boolean : true displays a dialog to confirm the member selection
+    public static final String EXTRA_ADD_CONFIRMATION_DIALOG = "VectorInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG";
+
+
     // account data
     private String mMatrixId;
 
     // main UI items
     private ExpandableListView mListView;
-    private ImageView mBackgroundImageView;
-    private View mNoResultView;
     private View mLoadingView;
     private List<ParticipantAdapterItem> mParticipantItems = new ArrayList<>();
     private VectorParticipantsAdapter mAdapter;
+    private boolean mAddConfirmationDialog;
 
     // retrieve a matrix Id from an email
     private final ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
@@ -156,6 +159,9 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
 
+        // tell if a confirmation dialog must be displayed.
+        mAddConfirmationDialog = intent.getBooleanExtra(EXTRA_ADD_CONFIRMATION_DIALOG, false);
+
         setContentView(R.layout.activity_vector_invite_members);
 
         // the user defines a
@@ -163,8 +169,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             mPatternToSearchEditText.setHint(R.string.room_participants_invite_search_another_user);
         }
 
-        mBackgroundImageView = (ImageView) findViewById(R.id.search_background_imageview);
-        mNoResultView = findViewById(R.id.search_no_result_textview);
         mLoadingView = findViewById(R.id.search_in_progress_view);
 
         mListView = (ExpandableListView) findViewById(R.id.room_details_members_list);
@@ -186,13 +190,17 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 if (item instanceof ParticipantAdapterItem && ((ParticipantAdapterItem) item).mIsValid) {
                     ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem) item;
 
-                    // returns the selected user
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_SELECTED_USER_ID, participantAdapterItem.mUserId);
-                    intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, participantAdapterItem);
+                    if (mAddConfirmationDialog) {
+                        displaySelectionConfirmationDialog(participantAdapterItem);
+                    } else {
+                        // returns the selected user
+                        Intent intent = new Intent();
+                        intent.putExtra(EXTRA_SELECTED_USER_ID, participantAdapterItem.mUserId);
+                        intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, participantAdapterItem);
 
-                    setResult(RESULT_OK, intent);
-                    finish();
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
 
                     return true;
                 }
@@ -208,14 +216,14 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     protected void onResume() {
         super.onResume();
         mSession.getDataHandler().addListener(mEventsListener);
-        ContactsManager.addListener(mContactsListener);
+        ContactsManager.getInstance().addListener(mContactsListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mSession.getDataHandler().removeListener(mEventsListener);
-        ContactsManager.removeListener(mContactsListener);
+        ContactsManager.getInstance().removeListener(mContactsListener);
     }
 
     @Override
@@ -225,7 +233,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
             if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
-                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                ContactsManager.getInstance().refreshLocalContactsSnapshot();
                 onPatternUpdate(false);
             } else {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
@@ -259,7 +267,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         }
 
         // wait that the local contacts are populated
-        if (!ContactsManager.didPopulateLocalContacts(this)) {
+        if (!ContactsManager.getInstance().didPopulateLocalContacts()) {
             Log.d(LOG_TAG, "## onPatternUpdate() : The local contacts are not yet populated");
             mAdapter.reset();
             mLoadingView.setVisibility(View.VISIBLE);
@@ -273,11 +281,53 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                     @Override
                     public void run() {
                         mLoadingView.setVisibility(View.GONE);
-                        mBackgroundImageView.setVisibility((0 == count) && TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
-                        mNoResultView.setVisibility((0 == count) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
                     }
                 });
             }
         });
+    }
+
+    /**
+     * Display a selection confirmation dialog.
+     *
+     * @param participantAdapterItem the selected participant
+     */
+    private void displaySelectionConfirmationDialog(final ParticipantAdapterItem participantAdapterItem) {
+        final String userId = participantAdapterItem.mUserId;
+
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(VectorRoomInviteMembersActivity.this);
+        builder.setTitle(R.string.dialog_title_confirmation);
+
+        String displayName = userId;
+
+        if (MXSession.isUserId(userId)) {
+            User user = mSession.getDataHandler().getStore().getUser(userId);
+            if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
+                displayName = user.displayname;
+            }
+        }
+
+        builder.setMessage(getString(R.string.room_participants_invite_prompt_msg, displayName));
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // returns the selected user
+                Intent intent = new Intent();
+                intent.putExtra(EXTRA_SELECTED_USER_ID, participantAdapterItem.mUserId);
+                intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, participantAdapterItem);
+
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // nothing to do
+            }
+        });
+
+        builder.show();
     }
 }

@@ -29,12 +29,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 
-import org.matrix.androidsdk.MXSession;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorCallViewActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
@@ -44,12 +49,6 @@ import im.vector.services.EventStreamService;
 import im.vector.util.RageShake;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * The main application injection point
@@ -149,6 +148,16 @@ public class VectorApp extends Application {
 
         org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
         org.matrix.androidsdk.util.Log.init("RiotLog");
+
+        // log the application version to trace update
+        // useful to track backward compatibility issues
+
+        Log.d(LOG_TAG, "----------------------------------------------------------------");
+        Log.d(LOG_TAG, "----------------------------------------------------------------");
+        Log.d(LOG_TAG, " Application version: " + VECTOR_VERSION_STRING);
+        Log.d(LOG_TAG, " SDK version: " + SDK_VERSION_STRING);
+        Log.d(LOG_TAG, "----------------------------------------------------------------");
+        Log.d(LOG_TAG, "----------------------------------------------------------------\n\n\n\n");
 
         GAHelper.initGoogleAnalytics(getApplicationContext());
 
@@ -338,8 +347,8 @@ public class VectorApp extends Application {
             }
 
             // get the contact update at application launch
-            ContactsManager.clearSnapshot();
-            ContactsManager.refreshLocalContactsSnapshot(VectorApp.this);
+            ContactsManager.getInstance().clearSnapshot();
+            ContactsManager.getInstance().refreshLocalContactsSnapshot();
 
             boolean hasActiveCall = false;
 

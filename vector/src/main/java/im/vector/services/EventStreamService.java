@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
- *
+ * Copyright 2017 Vector Creations Ltd
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -32,6 +33,9 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -205,7 +209,7 @@ public class EventStreamService extends Service {
         }
 
         @Override
-        public void onIncomingCall(final IMXCall call) {
+        public void onIncomingCall(final IMXCall call, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
             Log.d(LOG_TAG, "onIncomingCall " + call.getCallId());
 
             IMXCall.MXCallListener callListener = new IMXCall.MXCallListener() {
@@ -284,7 +288,7 @@ public class EventStreamService extends Service {
         }
 
         @Override
-        public void onLiveEventsChunkProcessed() {
+        public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
             triggerPreparedNotification(true);
             mPendingNotifications.clear();
 
@@ -509,7 +513,13 @@ public class EventStreamService extends Service {
 
                     @Override
                     public void onStoreCorrupted(String accountId, String description) {
-                        startEventStream(fSession, store);
+                        // start a new initial sync
+                        if (null == store.getEventStreamToken()) {
+                            startEventStream(fSession, store);
+                        } else {
+                            // the data are out of sync
+                            Matrix.getInstance(getApplicationContext()).reloadSessions(getApplicationContext());
+                        }
                     }
 
                     @Override
@@ -1038,7 +1048,11 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "clearNotification " + mNotificationSessionId + " - " + mNotificationRoomId + " - " + mNotificationEventId);
 
         NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.cancelAll();
+        try {
+            nm.cancelAll();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## clearNotification() failed " + e.getMessage());
+        }
 
         // reset the identifiers
         mNotificationSessionId = null;

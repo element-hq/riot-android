@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +17,14 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -40,7 +44,7 @@ import im.vector.util.VectorUtils;
  * InComingCallActivity is Dialog Activity, displayed when an incoming call (audio or a video) over IP
  * is received by the user. The user is asked to accept or ignore.
  */
-public class InComingCallActivity extends Activity { // do NOT extend from UC*Activity, we do not want to login on this screen!
+public class InComingCallActivity extends AppCompatActivity {
     private static final String LOG_TAG = "InComingCallActivity";
 
     // only one instance of this class should be displayed
@@ -212,6 +216,13 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 // create the call view to enable mMxCallListener being used,
                 // otherwise call API is not enabled
                 mMxCall.createCallView();
+
+                this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        CommonActivityUtils.displayUnknownDevicesDialog(mSession, InComingCallActivity.this, (MXUsersDevicesMap<MXDeviceInfo>)intent.getSerializableExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES), null);
+                    }
+                });
             }
         }
     }

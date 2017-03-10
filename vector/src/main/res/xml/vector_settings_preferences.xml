@@ -25,6 +25,24 @@
 
     </PreferenceCategory>
 
+    <im.vector.preference.VectorDividerCategory
+        android:key="settings_contact_divider"
+        android:title="settings_contact_divider"/>
+
+    <PreferenceCategory
+        android:key="@string/settings_contact"
+        android:title="@string/settings_contact" >
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_contacts_app_permission"
+            android:key="CONTACT_BOOK_ACCESS_KEY"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="@string/settings_contacts_phonebook_country"
+            android:title="@string/settings_contacts_phonebook_country"
+            android:dialogTitle="@string/settings_select_country"/>
+    </PreferenceCategory>
+
     <im.vector.preference.VectorDividerCategory />
 
     <PreferenceCategory android:title="@string/settings_notifications">
@@ -117,15 +135,6 @@
     
     <im.vector.preference.VectorDividerCategory />
 
-    <!-- devices list: device ids + device names -->
-    <PreferenceCategory
-        android:title="@string/settings_devices_list"
-        android:key="@string/settings_devices_list">
-    </PreferenceCategory>
-
-    <im.vector.preference.VectorDividerCategory
-        android:key="@string/devices_divider"/>
-
     <!-- ************ Cryptography section ************ -->
     <PreferenceCategory android:title="@string/settings_cryptography"
         android:key="@string/settings_cryptography">
@@ -140,9 +149,35 @@
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="@string/encryption_information_device_key"
             android:title="@string/encryption_information_device_key"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="@string/encryption_export_e2e_room_keys"
+            android:title="@string/encryption_export_e2e_room_keys"
+            android:summary="@string/encryption_export_room_keys_summary" />
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="@string/encryption_import_e2e_room_keys"
+            android:title="@string/encryption_import_e2e_room_keys"
+            android:summary="@string/encryption_import_room_keys_summary" />
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/encryption_never_send_to_unverified_devices_title"
+            android:summary="@string/encryption_never_send_to_unverified_devices_summary"
+            android:key="@string/encryption_never_send_to_unverified_devices_title"/>
+
     </PreferenceCategory>
+
     <im.vector.preference.VectorDividerCategory android:key="@string/cryptography_divider" />
     <!-- ************************************************ -->
+
+    <!-- devices list: device ids + device names -->
+    <PreferenceCategory
+        android:title="@string/settings_devices_list"
+        android:key="@string/settings_devices_list">
+    </PreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory
+        android:key="@string/devices_divider"/>
 
 
     <PreferenceCategory android:title="@string/settings_advanced" >
@@ -185,19 +220,6 @@
             android:title="@string/settings_set_sync_delay"
             android:key="@string/settings_set_sync_delay"/>
 
-    </PreferenceCategory>
-
-    <im.vector.preference.VectorDividerCategory
-        android:key="settings_app_permission_divider"
-        android:title="settings_app_permission_divider"/>
-
-    <PreferenceCategory
-        android:key="@string/settings_app_permission"
-        android:title="@string/settings_app_permission" >
-
-        <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_app_permission_contacts"
-            android:key="CONTACT_BOOK_ACCESS_KEY"/>
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory/>

@@ -3,23 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/search_background_imageview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:src="@drawable/vector_search_bg"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/search_no_result_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search_no_results"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
-
     <ExpandableListView
         android:id="@+id/room_details_members_list"
         android:layout_width="match_parent"

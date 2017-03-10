@@ -94,6 +94,11 @@
             android:title="@string/room_settings_room_internal_id"
             android:key="roomInternalId"/>
 
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/room_settings_never_send_to_unverified_devices_title"
+            android:summary="@string/room_settings_never_send_to_unverified_devices_summary"
+            android:key="@string/room_settings_never_send_to_unverified_devices_title"/>
+
     </im.vector.preference.VectorPreferenceCategory>
 
 </PreferenceScreen>
