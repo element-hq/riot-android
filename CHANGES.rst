@@ -1,3 +1,43 @@
+Changes in Riot 0.6.9 (2017-03-10)
+===================================================
+ 
+Features:
+ * Add the MSISDN support for the authentification, the registration and the member search.
+ * Add the encryption keys import / export.
+ * Add the unknown devices management.
+  
+Improvements:
+ * Improve the bug report management.
+ * Reduce the application loading time.
+  
+Bugfixes:
+ * Fix many encryption issues.
+ * Fix several issues reported by GA.
+ * #814 : Sending or sharing .txt files fails silently.
+ * #908 : Don't close the contactPicker after selecting a member.
+ * #909 : Spelling/grammar: «Show Devices List» should be: «Show Device List.
+ * #913 : Mirrored thumbnails when sending pictures taken with front-facing camera.
+ * #918 : Handle forgotten password verification link properly.
+ * #923 : local contact section should be collapsable even when no search is started.
+ * #909 : Retry schedule is too aggressive for arbitrary endpoints.
+ * #931 : Settings: move the Devices section after the Cryptography section.
+ * #932 : Rooms details: can't open a txt file from the FILES tab of an e2e room.
+ * #933 : Search from recents: strange behaviour in the differents tab.
+ * #934 : Search from recents: no results displayed if device is turned landscape then portrait.
+ * #940 : The quick reply popup and compose box are unnecessarily small
+ * #941 : Usability: The compose window activation area is deceptively small.
+ * #949 : e2e and auth keys should be blacklisted from google backup somehow.
+ * #950 : Unknown devices: 2 press on blacklist button are needed.
+ * #952 : Launch a call in a e2e and 1:1 room with unknown devices make the call fail 
+ * #953 : Crash trying to send a message in e2e room with unknown devices.
+ * #954 : Language: "Report Bug Report"
+ * #955 : New Rageshake: no feedback or progress indication at all
+ * #957 : Voice Calling turns off screen erroneously
+ * #964 : 'Messages not sent due to unknown devices ...' is cropped in the notification area.
+ * #980 : Not an admin in a group --> "enable encryption" should not be displayed
+ * #984 : «Clear Cache» also erases my settings
+ * #989 : it sometimes takes several presses of the send button to get the message out
+ 
 Changes in Riot 0.6.8 (2017-01-27)
 ===================================================
  
