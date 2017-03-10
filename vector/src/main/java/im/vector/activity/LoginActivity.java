@@ -1480,7 +1480,7 @@ public class LoginActivity extends MXCActionBarActivity {
         // sanity checks
         if ((null != mRegistrationResponse) && (null != mRegistrationResponse.flows)) {
             for (LoginFlow loginFlow : mRegistrationResponse.flows) {
-                if ((loginFlow.stages.indexOf(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA) < 0) && !TextUtils.equals(loginFlow.type, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA)) {
+                if ((loginFlow.stages.indexOf(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA) < 0) && !TextUtils.equals(loginFlow.type, LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
                     return false;
                 }
             }
@@ -1532,7 +1532,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 for (String stage : flow.stages) {
                     isSupported &= TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, stage) ||
                             TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, stage) ||
-                            TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA, stage) ||
+                            TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA, stage) ||
                             TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY, stage);
                 }
             }
@@ -1898,7 +1898,7 @@ public class LoginActivity extends MXCActionBarActivity {
             String site_key = null;
 
             if (null != mRegistrationResponse.params) {
-                Object recaptchaParamsAsVoid = mRegistrationResponse.params.get(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
+                Object recaptchaParamsAsVoid = mRegistrationResponse.params.get(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
 
                 if (null != recaptchaParamsAsVoid) {
                     try {
@@ -2393,7 +2393,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 HashMap<String, Object> authParams = new HashMap<>();
                 authParams.put("session", mRegistrationResponse.session);
                 authParams.put("response", captchaResponse);
-                authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
+                authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
 
                 params.auth = authParams;
 
