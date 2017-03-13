@@ -142,6 +142,41 @@
                         android:singleLine="true"
                         android:hint="@string/auth_user_id_placeholder"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:textSize="16sp"
+                        android:text="@string/or" />
+
+                    <LinearLayout
+                        android:id="@+id/login_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/login_phone_number_country"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="6dp"
+                            android:clickable="false"
+                            android:drawableRight="@drawable/ic_material_expand_more_black"
+                            android:focusable="false"
+                            android:singleLine="true"
+                            android:visibility="gone"
+                            tools:text="FR" />
+
+                        <EditText
+                            android:id="@+id/login_phone_number_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/auth_phone_number_placeholder"
+                            android:inputType="phone"
+                            android:singleLine="true"
+                            tools:text="0600000000" />
+                    </LinearLayout>
+
                     <EditText
                         android:id="@+id/login_password"
                         android:layout_width="match_parent"

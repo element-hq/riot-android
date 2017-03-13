@@ -57,6 +57,7 @@
     <string name="device_information">Device information</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
     <string name="send_anyway">Send Anyway</string>
+    <string name="or">or</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url">https://vector.im</string>
@@ -180,7 +181,7 @@
     <string name="auth_skip">Skip</string>
     <string name="auth_send_reset_email">Send Reset Email</string>
     <string name="auth_return_to_login">Return to login screen</string>
-    <string name="auth_user_id_placeholder">Email, user name or phone number</string>
+    <string name="auth_user_id_placeholder">Email or user name</string>
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">New password</string>
     <string name="auth_user_name_placeholder">User name</string>
