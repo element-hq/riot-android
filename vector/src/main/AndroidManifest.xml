@@ -174,7 +174,7 @@
 
         <activity
             android:name="im.vector.activity.InComingCallActivity"
-            android:theme="@android:style/Theme.Holo.Light.Dialog"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
             android:taskAffinity=""

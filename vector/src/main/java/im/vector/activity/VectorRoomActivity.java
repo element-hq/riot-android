@@ -779,6 +779,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                            }
         );
 
+        findViewById(R.id.room_button_margin_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // extend the right side of right button
+                // to avoid clicking in the void
+                if (mStopCallLayout.getVisibility() == View.VISIBLE) {
+                    mStopCallLayout.performClick();
+                } else if (mStartCallLayout.getVisibility() == View.VISIBLE) {
+                    mStartCallLayout.performClick();
+                } else if (mSendButtonLayout.getVisibility() == View.VISIBLE) {
+                    mSendButtonLayout.performClick();
+                }
+            }
+        });
+
         mMyUserId = mSession.getCredentials().userId;
 
         CommonActivityUtils.resumeEventStream(this);
@@ -958,6 +973,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             // listen for room name or topic changes
             mRoom.addEventListener(mRoomEventListener);
+
+            mEditText.setHint(mRoom.isEncrypted() ? R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
         }
 
         mSession.getDataHandler().addListener(mGlobalEventListener);
@@ -1099,21 +1116,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         refreshNotificationsArea();
     }
 
-    private static final String TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG = "ActionBarActivity.TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG";
-
     @Override
     public void onUnknownDevices(Event event, MXCryptoError error) {
         refreshNotificationsArea();
-
-        FragmentManager fm = this.getSupportFragmentManager();
-
-        VectorUnknownDevicesFragment fragment = (VectorUnknownDevicesFragment) fm.findFragmentByTag(TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
-        if (fragment != null) {
-            fragment.dismissAllowingStateLoss();
-        }
-
-        fragment = VectorUnknownDevicesFragment.newInstance(mSession.getMyUserId(), (MXUsersDevicesMap<MXDeviceInfo>) error.mExceptionData);
-        fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+        CommonActivityUtils.displayUnknownDevicesDialog(mSession, this, (MXUsersDevicesMap<MXDeviceInfo>) error.mExceptionData, new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
+            @Override
+            public void onSendAnyway() {
+                mVectorMessageListFragment.resendUnsentMessages();
+                refreshNotificationsArea();
+            }
+        });
     }
 
     //================================================================================

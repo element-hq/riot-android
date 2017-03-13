@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -311,22 +311,31 @@ public class PhoneNumberUtils {
     public static Phonenumber.PhoneNumber extractPhoneNumber(final Context context, final String potentialPhoneNumber) {
         Phonenumber.PhoneNumber phoneNumber = null;
 
-        try {
-            if (potentialPhoneNumber.startsWith("+")) {
-                phoneNumber = PhoneNumberUtil.getInstance().parse(potentialPhoneNumber, null);
-            } else {
-                // Try with a "+" prefix
-                phoneNumber = PhoneNumberUtil.getInstance().parse("+" + potentialPhoneNumber, null);
-            }
-        } catch (NumberParseException e) {
-            // Try with specifying the calling code
+        if (android.util.Patterns.PHONE.matcher(potentialPhoneNumber).matches()) {
             try {
-                phoneNumber = PhoneNumberUtil.getInstance().parse(potentialPhoneNumber, PhoneNumberUtils.getCountryCode(context));
-            } catch (NumberParseException e1) {
+                if (potentialPhoneNumber.startsWith("+")) {
+                    phoneNumber = PhoneNumberUtil.getInstance().parse(potentialPhoneNumber, null);
+                } else {
+                    // Try with a "+" prefix
+                    phoneNumber = PhoneNumberUtil.getInstance().parse("+" + potentialPhoneNumber, null);
+                }
+            } catch (NumberParseException e) {
+                // Try with specifying the calling code
+                try {
+                    phoneNumber = PhoneNumberUtil.getInstance().parse(potentialPhoneNumber, PhoneNumberUtils.getCountryCode(context));
+                } catch (NumberParseException e1) {
+                    // Do nothing
+                }
+            } catch (Exception e) {
                 // Do nothing
             }
-        } catch (Exception e) {
-            // Do nothing
+
+            // PhoneNumberUtils parse does its best to extract a phone number from the string.
+            // For example, parse(abc100) returns 100.
+            // So, we check if it is a valid phone number.
+            if ((null != phoneNumber) && !PhoneNumberUtil.getInstance().isValidNumber(phoneNumber)) {
+                phoneNumber = null;
+            }
         }
 
         return phoneNumber;

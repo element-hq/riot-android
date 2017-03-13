@@ -23,6 +23,8 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -52,6 +54,7 @@ import org.matrix.androidsdk.rest.model.bingrules.Condition;
 import org.matrix.androidsdk.util.Log;
 
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +68,9 @@ import android.widget.Toast;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -74,30 +80,17 @@ import im.vector.Matrix;
  * BugReporter creates and sends the bug reports.
  */
 public class BugReporter {
-
     private static final String LOG_TAG = "BugReporter";
-
-    /**
-     * Bug report parameters class
-     */
-    private static class BugReportParams {
-        // logs
-        List<Map<String, String>> logs;
-
-        // bug description
-        String text;
-
-        // the application version
-        String version;
-
-        // the user agent
-        final String user_agent = "Android";
-    }
 
     /**
      * Bug report upload listener
      */
     private interface IMXBugReportListener {
+        /**
+         * The bug report has been cancelled
+         */
+        void onUploadCancelled();
+
         /**
          * The bug report upload failed.
          *
@@ -133,23 +126,24 @@ public class BugReporter {
      * @return the file content as String
      */
     private static String convertStreamToString(File fin) {
-        InputStream inputStream;
+        Reader reader = null;
 
         try {
-            inputStream = new FileInputStream(fin);
             Writer writer = new StringWriter();
-            char[] buffer = new char[2048];
-
+            InputStream inputStream = new FileInputStream(fin);
             try {
-                Reader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
                 int n;
 
+                char[] buffer = new char[2048];
                 while ((n = reader.read(buffer)) != -1) {
                     writer.write(buffer, 0, n);
                 }
             } finally {
                 try {
-                    inputStream.close();
+                    if (null != reader) {
+                        reader.close();
+                    }
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## convertStreamToString() failed to close inputStream " + e.getMessage());
                 }
@@ -157,159 +151,233 @@ public class BugReporter {
             return writer.toString();
         } catch (Exception e) {
             Log.e(LOG_TAG, "## convertStreamToString() failed " + e.getMessage());
+        } catch (OutOfMemoryError oom) {
+            Log.e(LOG_TAG, "## convertStreamToString() failed " + oom.getMessage());
+        } finally {
+            try {
+                if (null != reader) {
+                    reader.close();
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## convertStreamToString() failed to close inputStream " + e.getMessage());
+            }
         }
 
         return "";
     }
+
+    // boolean to cancel the bug report
+    private static boolean mIsCancelled = false;
 
     /**
      * Send a bug report.
      *
      * @param context         the application context
      * @param withDevicesLogs true to include the device logs
+     * @param withCrashLogs   true to include the crash logs
      */
-    private static void sendBugReport(final Context context, final boolean withDevicesLogs, final String bugDescription, final IMXBugReportListener listener) {
+    private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final String bugDescription, final IMXBugReportListener listener) {
         new AsyncTask<Void, Integer, String>() {
             @Override
             protected String doInBackground(Void... voids) {
-                BugReportParams params = new BugReportParams();
+                File bugReportFile = new File(context.getApplicationContext().getFilesDir(), "bug_report");
 
-                // the logs are optional
-                if (withDevicesLogs) {
-                    params.logs = new ArrayList<>();
-
-                    List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
-                    for (File f : files) {
-                        HashMap<String, String> map = new HashMap<>();
-                        map.put("lines", convertStreamToString(f));
-                        params.logs.add(map);
-                    }
-
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("lines", getLogCatError());
-                    params.logs.add(map);
+                if (bugReportFile.exists()) {
+                    bugReportFile.delete();
                 }
 
-
-                params.text = bugDescription;
-
-                // provides the version of each items
-                params.version = "";
-
-                if (null != Matrix.getInstance(context).getDefaultSession()) {
-                    params.version += "User : " + Matrix.getInstance(context).getDefaultSession().getMyUserId() + "\n";
-                }
-
-                params.version += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
-                params.version += "Vector version: " + Matrix.getInstance(context).getVersion(true) + "\n";
-                params.version += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
-                params.version += "Olm version:  " + Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true) + "\n";
-
-                // the screenshot is defined here
-                // File screenFile = new File(VectorApp.mLogsDirectoryFile, "screenshot.jpg");
-                ByteArrayInputStream inputStream = null;
                 String serverError = null;
-                HttpURLConnection conn = null;
+                FileWriter fileWriter = null;
+
                 try {
-                    inputStream = new ByteArrayInputStream(gson.toJsonTree(params).toString().getBytes("UTF-8"));
+                    fileWriter = new FileWriter(bugReportFile);
+                    JsonWriter jsonWriter = new JsonWriter(fileWriter);
+                    jsonWriter.beginObject();
 
-                    final int dataLen = inputStream.available();
+                    // android bug report
+                    jsonWriter.name("user_agent").value( "Android");
 
-                    // should never happen
-                    if (0 == dataLen) {
-                        return "No data";
-                    }
+                    // logs list
+                    jsonWriter.name("logs");
+                    jsonWriter.beginArray();
 
-                    URL url = new URL(context.getResources().getString(R.string.bug_report_url));
-                    conn = (HttpURLConnection) url.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    conn.setUseCaches(false);
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json");
-                    conn.setRequestProperty("Content-Length", Integer.toString(dataLen));
-                    // avoid caching data before really sending them.
-                    conn.setFixedLengthStreamingMode(inputStream.available());
-
-                    conn.connect();
-
-                    DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-
-                    byte[] buffer = new byte[2048];
-
-                    // read file and write it into form...
-                    int bytesRead;
-                    int totalWritten = 0;
-
-                    while ((bytesRead = inputStream.read(buffer, 0, buffer.length)) > 0) {
-                        dos.write(buffer, 0, bytesRead);
-                        totalWritten += bytesRead;
-                        publishProgress(totalWritten * 100 / dataLen);
-                    }
-
-                    dos.flush();
-                    dos.close();
-
-                    int mResponseCode;
-
-                    try {
-                        // Read the SERVER RESPONSE
-                        mResponseCode = conn.getResponseCode();
-                    } catch (EOFException eofEx) {
-                        mResponseCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
-                    }
-
-                    // if the upload failed, try to retrieve the reason
-                    if (mResponseCode != HttpURLConnection.HTTP_OK) {
-                        serverError = null;
-                        InputStream is = conn.getErrorStream();
-
-                        if (null != is) {
-                            int ch;
-                            StringBuilder b = new StringBuilder();
-                            while ((ch = is.read()) != -1) {
-                                b.append((char) ch);
+                    // the logs are optional
+                    if (withDevicesLogs) {
+                        List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
+                        for (File f : files) {
+                            if (!mIsCancelled) {
+                                jsonWriter.beginObject();
+                                jsonWriter.name("lines").value(convertStreamToString(f));
+                                jsonWriter.endObject();
+                                jsonWriter.flush();
                             }
-                            serverError = b.toString();
-                            is.close();
-
-                            // check if the error message
-                            try {
-                                JSONObject responseJSON = new JSONObject(serverError);
-                                serverError = responseJSON.getString("error");
-                            } catch (JSONException e) {
-                                Log.e(LOG_TAG, "doInBackground ; Json conversion failed " + e.getMessage());
-                            }
-
-                            // should never happen
-                            if (null == serverError) {
-                                serverError = "Failed with error " + mResponseCode;
-                            }
-
-                            is.close();
                         }
+                    }
+
+                    if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
+                        jsonWriter.beginObject();
+                        jsonWriter.name("lines").value(getLogCatError());
+                        jsonWriter.endObject();
+                        jsonWriter.flush();
+                    }
+
+                    jsonWriter.endArray();
+
+                    jsonWriter.name("text").value(bugDescription);
+
+                    String version = "";
+
+                    if (null != Matrix.getInstance(context).getDefaultSession()) {
+                        version += "User : " + Matrix.getInstance(context).getDefaultSession().getMyUserId() + "\n";
+                    }
+
+                    version += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
+                    version += "Vector version: " + Matrix.getInstance(context).getVersion(true) + "\n";
+                    version += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
+                    version += "Olm version:  " + Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true) + "\n";
+
+                    jsonWriter.name("version").value(version);
+
+                    jsonWriter.endObject();
+                    jsonWriter.close();
+
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "doInBackground ; failed to collect the bug report data " + e.getMessage());
+                    serverError = e.getLocalizedMessage();
+                } catch (OutOfMemoryError oom) {
+                    Log.e(LOG_TAG, "doInBackground ; failed to collect the bug report data " + oom.getMessage());
+                    serverError = oom.getMessage();
+
+                    if (TextUtils.isEmpty(serverError)) {
+                        serverError = "Out of memory";
+                    }
+                }
+
+                try {
+                    if (null != fileWriter) {
+                        fileWriter.close();
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "doInBackground ; failed with error " + e.getClass() + " - " + e.getMessage());
-                    serverError = e.getLocalizedMessage();
-                } finally {
+                    Log.e(LOG_TAG, "doInBackground ; failed to close fileWriter " + e.getMessage());
+                }
+
+                if (TextUtils.isEmpty(serverError) && !mIsCancelled) {
+
+                    // the screenshot is defined here
+                    // File screenFile = new File(VectorApp.mLogsDirectoryFile, "screenshot.jpg");
+                    InputStream inputStream = null;
+                    HttpURLConnection conn = null;
                     try {
-                        if (null != conn) {
-                            conn.disconnect();
+                        inputStream = new FileInputStream(bugReportFile);
+                        final int dataLen = inputStream.available();
+
+                        // should never happen
+                        if (0 == dataLen) {
+                            return "No data";
                         }
-                    } catch (Exception e2) {
-                        Log.e(LOG_TAG, "doInBackground : conn.disconnect() failed " + e2.getMessage());
-                    }
-                }
 
-                if (null != inputStream) {
-                    try {
-                        inputStream.close();
+                        URL url = new URL(context.getResources().getString(R.string.bug_report_url));
+                        conn = (HttpURLConnection) url.openConnection();
+                        conn.setDoInput(true);
+                        conn.setDoOutput(true);
+                        conn.setUseCaches(false);
+                        conn.setRequestMethod("POST");
+                        conn.setRequestProperty("Content-Type", "application/json");
+                        conn.setRequestProperty("Content-Length", Integer.toString(dataLen));
+                        // avoid caching data before really sending them.
+                        conn.setFixedLengthStreamingMode(inputStream.available());
+
+                        conn.connect();
+
+                        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+
+                        byte[] buffer = new byte[8192];
+
+                        // read file and write it into form...
+                        int bytesRead;
+                        int totalWritten = 0;
+
+                        while (!mIsCancelled && (bytesRead = inputStream.read(buffer, 0, buffer.length)) > 0) {
+                            dos.write(buffer, 0, bytesRead);
+                            totalWritten += bytesRead;
+                            publishProgress(totalWritten * 100 / dataLen);
+                        }
+
+                        dos.flush();
+                        dos.close();
+
+                        int mResponseCode;
+
+                        try {
+                            // Read the SERVER RESPONSE
+                            mResponseCode = conn.getResponseCode();
+                        } catch (EOFException eofEx) {
+                            mResponseCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
+                        }
+
+                        // if the upload failed, try to retrieve the reason
+                        if (mResponseCode != HttpURLConnection.HTTP_OK) {
+                            serverError = null;
+                            InputStream is = conn.getErrorStream();
+
+                            if (null != is) {
+                                int ch;
+                                StringBuilder b = new StringBuilder();
+                                while ((ch = is.read()) != -1) {
+                                    b.append((char) ch);
+                                }
+                                serverError = b.toString();
+                                is.close();
+
+                                // check if the error message
+                                try {
+                                    JSONObject responseJSON = new JSONObject(serverError);
+                                    serverError = responseJSON.getString("error");
+                                } catch (JSONException e) {
+                                    Log.e(LOG_TAG, "doInBackground ; Json conversion failed " + e.getMessage());
+                                }
+
+                                // should never happen
+                                if (null == serverError) {
+                                    serverError = "Failed with error " + mResponseCode;
+                                }
+
+                                is.close();
+                            }
+                        }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "doInBackground ; failed to close the inputStream " + e.getMessage());
+                        Log.e(LOG_TAG, "doInBackground ; failed with error " + e.getClass() + " - " + e.getMessage());
+                        serverError = e.getLocalizedMessage();
+
+                        if (TextUtils.isEmpty(serverError)) {
+                            serverError = "Failed to upload";
+                        }
+                    } catch (OutOfMemoryError oom) {
+                        Log.e(LOG_TAG, "doInBackground ; failed to send the bug report " + oom.getMessage());
+                        serverError = oom.getLocalizedMessage();
+
+                        if (TextUtils.isEmpty(serverError)) {
+                            serverError = "Out ouf memory";
+                        }
+
+                    } finally {
+                        try {
+                            if (null != conn) {
+                                conn.disconnect();
+                            }
+                        } catch (Exception e2) {
+                            Log.e(LOG_TAG, "doInBackground : conn.disconnect() failed " + e2.getMessage());
+                        }
+                    }
+
+                    if (null != inputStream) {
+                        try {
+                            inputStream.close();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "doInBackground ; failed to close the inputStream " + e.getMessage());
+                        }
                     }
                 }
-
                 return serverError;
             }
 
@@ -330,7 +398,9 @@ public class BugReporter {
             protected void onPostExecute(String reason) {
                 if (null != listener) {
                     try {
-                        if (null == reason) {
+                        if (mIsCancelled) {
+                            listener.onUploadCancelled();
+                        } else if (null == reason) {
                             listener.onUploadSucceed();
                         } else {
                             listener.onUploadFailed(reason);
@@ -351,7 +421,7 @@ public class BugReporter {
 
         // no current activity so cannot display an alert
         if (null == currentActivity) {
-            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, "", null);
+            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, true,  "", null);
             return;
         }
 
@@ -365,6 +435,7 @@ public class BugReporter {
 
         final EditText bugReportText = (EditText) dialogLayout.findViewById(R.id.bug_report_edit_text);
         final CheckBox includeLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_logs);
+        final CheckBox includeCrashLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_crash_logs);
 
         final ProgressBar progressBar = (ProgressBar) dialogLayout.findViewById(R.id.bug_report_progress_view);
         final TextView progressTextView = (TextView) dialogLayout.findViewById(R.id.bug_report_progress_text_view);
@@ -379,7 +450,7 @@ public class BugReporter {
         dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                // will be overridden to avoid dismissing the dialog while displaying the progress
             }
         });
 
@@ -387,6 +458,21 @@ public class BugReporter {
         final AlertDialog bugReportDialog = dialog.show();
         final Button cancelButton = bugReportDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
         final Button sendButton = bugReportDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+        if (null != cancelButton) {
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // check if there is no upload in progress
+                    if (includeLogsButton.isEnabled()) {
+                        bugReportDialog.dismiss();
+                    } else {
+                        mIsCancelled = true;
+                        cancelButton.setEnabled(false);
+                    }
+                }
+            });
+        }
 
         if (null != sendButton) {
             sendButton.setEnabled(false);
@@ -398,10 +484,7 @@ public class BugReporter {
                     bugReportText.setEnabled(false);
                     sendButton.setEnabled(false);
                     includeLogsButton.setEnabled(false);
-
-                    if (null != cancelButton) {
-                        cancelButton.setEnabled(false);
-                    }
+                    includeCrashLogsButton.setEnabled(false);
 
                     progressTextView.setVisibility(View.VISIBLE);
                     progressTextView.setText(appContext.getString(R.string.send_bug_report_progress, 0 + ""));
@@ -409,11 +492,11 @@ public class BugReporter {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgress(0);
 
-                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
+                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(),includeCrashLogsButton.isChecked(),  bugReportText.getText().toString(), new IMXBugReportListener() {
                         @Override
                         public void onUploadFailed(String reason) {
                             try {
-                                if (null != VectorApp.getInstance()) {
+                                if (null != VectorApp.getInstance() && !TextUtils.isEmpty(reason)) {
                                     Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show();
                                 }
                             } catch (Exception e) {
@@ -425,10 +508,8 @@ public class BugReporter {
                                 bugReportText.setEnabled(true);
                                 sendButton.setEnabled(true);
                                 includeLogsButton.setEnabled(true);
-
-                                if (null != cancelButton) {
-                                    cancelButton.setEnabled(true);
-                                }
+                                includeCrashLogsButton.setEnabled(true);
+                                cancelButton.setEnabled(true);
 
                                 progressTextView.setVisibility(View.GONE);
                                 progressBar.setVisibility(View.GONE);
@@ -441,6 +522,13 @@ public class BugReporter {
                                     Log.e(LOG_TAG, "## onUploadFailed() : failed to dismiss the dialog " + e2.getMessage());
                                 }
                             }
+
+                            mIsCancelled = false;
+                        }
+
+                        @Override
+                        public void onUploadCancelled() {
+                            onUploadFailed(null);
                         }
 
                         @Override

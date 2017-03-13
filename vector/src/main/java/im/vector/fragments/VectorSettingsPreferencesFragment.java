@@ -398,21 +398,23 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Boolean useGA = GAHelper.useGA(appContext);
-                    boolean newGa = (boolean) newValue;
+                    if (null != getActivity()) {
+                        Boolean useGA = GAHelper.useGA(getActivity());
+                        boolean newGa = (boolean) newValue;
 
-                    if ((null != useGA) && (useGA != newGa)) {
-                        if (!newGa) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(appContext);
+                        if ((null != useGA) && (useGA != newGa)) {
+                            if (!newGa) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                            builder.setMessage(getString(R.string.ga_use_disable_alert_message)).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do something here
-                                }
-                            }).show();
+                                builder.setMessage(getString(R.string.ga_use_disable_alert_message)).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do something here
+                                    }
+                                }).show();
+                            }
+                            GAHelper.setUseGA(getActivity(), newGa);
                         }
-                        GAHelper.setUseGA(appContext, newGa);
                     }
 
                     return true;
@@ -824,7 +826,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                         public void run() {
                                             hideLoadingView();
                                             Toast.makeText(getActivity(),
-                                                    getActivity().getString(textId),
+                                                    getString(textId),
                                                     Toast.LENGTH_LONG).show();
                                         }
                                     });
@@ -1310,7 +1312,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                                .setMessage(getActivity().getString(R.string.settings_unignore_user, userId))
+                                .setMessage(getString(R.string.settings_unignore_user, userId))
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -1756,9 +1758,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      */
     private String secondsToText(int seconds) {
         if (seconds > 1) {
-            return seconds + " " + getActivity().getString(R.string.settings_seconds);
+            return seconds + " " + getString(R.string.settings_seconds);
         } else {
-            return seconds + " " + getActivity().getString(R.string.settings_second);
+            return seconds + " " + getString(R.string.settings_second);
         }
     }
 
@@ -1878,7 +1880,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // device name
         if ((null != aMyDeviceInfo) && !TextUtils.isEmpty(aMyDeviceInfo.display_name)) {
-            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getString(R.string.encryption_information_device_name));
+            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_information_device_name));
             if (null != cryptoInfoTextPreference) {
                 cryptoInfoTextPreference.setSummary(aMyDeviceInfo.display_name);
 
@@ -1938,7 +1940,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // crypto section: device key (fingerprint)
         if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId)) {
-            mSession.getCrypto().getDeviceInfo(userId, deviceId, new ApiCallback<MXDeviceInfo>() {
+            mSession.getCrypto().getDeviceInfo(userId, deviceId, new SimpleApiCallback<MXDeviceInfo>() {
                 @Override
                 public void onSuccess(final MXDeviceInfo deviceInfo) {
                     if ((null != deviceInfo) && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
@@ -1957,20 +1959,40 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         }
                     }
                 }
+            });
+        }
 
+        // encrypt to unverified devices
+        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference)findPreference(getString(R.string.encryption_never_send_to_unverified_devices_title));
+
+        if (null != sendToUnverifiedDevicesPref) {
+            sendToUnverifiedDevicesPref.setChecked(false);
+
+            mSession.getCrypto().getGlobalBlacklistUnverifiedDevices(new SimpleApiCallback<Boolean>() {
                 @Override
-                public void onNetworkError(Exception e) {
-
+                public void onSuccess(Boolean status) {
+                    sendToUnverifiedDevicesPref.setChecked(status);
                 }
+            });
 
+            sendToUnverifiedDevicesPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
-                public void onMatrixError(MatrixError e) {
+                public boolean onPreferenceClick(Preference preference) {
+                    mSession.getCrypto().getGlobalBlacklistUnverifiedDevices(new SimpleApiCallback<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean status) {
+                            if (sendToUnverifiedDevicesPref.isChecked() != status) {
+                                mSession.getCrypto().setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked(), new SimpleApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
 
-                }
+                                    }
+                                });
+                            }
+                        }
+                    });
 
-                @Override
-                public void onUnexpectedError(Exception e) {
-
+                    return true;
                 }
             });
         }

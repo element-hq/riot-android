@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +30,10 @@ import org.matrix.androidsdk.rest.model.ThreePid;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import im.vector.Matrix;
 
@@ -118,8 +122,8 @@ public class PIDsRetriever {
      * @param contacts the contacts list
      * @return the medium addresses which are not cached.
      */
-    private List<String> retrieveMatrixIds(List<Contact> contacts) {
-        List<String> requestedMediums = new ArrayList<>();
+    private Set<String> retrieveMatrixIds(List<Contact> contacts) {
+        Set<String> requestedMediums = new HashSet<>();
 
         for (Contact contact : contacts) {
             // check if the medium have only been checked
@@ -134,26 +138,25 @@ public class PIDsRetriever {
                         contact.put(email, mxid);
                     }
                 } else {
-                    if (!requestedMediums.contains(email)) {
-                        requestedMediums.add(email);
-                    }
+                    requestedMediums.add(email);
                 }
             }
 
             for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
-                if (mMatrixIdsByMedium.containsKey(pn.mE164PhoneNumber)) {
-                    Contact.MXID mxid = mMatrixIdsByMedium.get(pn.mE164PhoneNumber);
+                if (mMatrixIdsByMedium.containsKey(pn.mMsisdnPhoneNumber)) {
+                    Contact.MXID mxid = mMatrixIdsByMedium.get(pn.mMsisdnPhoneNumber);
 
                     if (null != mxid) {
-                        contact.put(pn.mE164PhoneNumber, mxid);
+                        contact.put(pn.mMsisdnPhoneNumber, mxid);
                     }
                 } else {
-                    if (!requestedMediums.contains(pn.mE164PhoneNumber)) {
-                        requestedMediums.add(pn.mE164PhoneNumber);
-                    }
+                    requestedMediums.add(pn.mMsisdnPhoneNumber);
                 }
             }
         }
+
+        // Make sure the set does not contain null value
+        requestedMediums.remove(null);
 
         return requestedMediums;
     }
@@ -189,22 +192,23 @@ public class PIDsRetriever {
             return;
         }
 
-        List<String> missingMediums = retrieveMatrixIds(contacts);
+        Set<String> missingMediums = retrieveMatrixIds(contacts);
 
         if (!localUpdateOnly && !missingMediums.isEmpty()) {
-            List<String> medias = new ArrayList<>();
+            Map<String, String> lookupMap = new HashMap<>();
 
-            for (int index = 0; index < missingMediums.size(); index++) {
-                String medium = missingMediums.get(index);
-
-                if (android.util.Patterns.EMAIL_ADDRESS.matcher(medium).matches()) {
-                    medias.add(ThreePid.MEDIUM_EMAIL);
-                } else {
-                    medias.add(ThreePid.MEDIUM_MSISDN);
+            for (String medium : missingMediums) {
+                if (medium != null) {
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(medium).matches()) {
+                        lookupMap.put(medium, ThreePid.MEDIUM_EMAIL);
+                    } else {
+                        lookupMap.put(medium, ThreePid.MEDIUM_MSISDN);
+                    }
                 }
             }
 
-            final List<String> fRequestedMediums = missingMediums;
+            final List<String> fRequestedMediums = new ArrayList<>(lookupMap.keySet());
+            final List<String> medias = new ArrayList<>(lookupMap.values());
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             for (MXSession session : sessions) {

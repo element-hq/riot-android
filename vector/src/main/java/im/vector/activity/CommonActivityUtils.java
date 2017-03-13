@@ -53,6 +53,7 @@ import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
@@ -86,6 +87,7 @@ import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.AccountsSelectionDialogFragment;
+import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
@@ -347,6 +349,10 @@ public class CommonActivityUtils {
 
         // reset the GCM
         Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration(false);
+        // clear the preferences when the application goes to the login screen.
+        if (goToLoginPage) {
+            Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
+        }
 
         // clear credentials
         Matrix.getInstance(context).clearSessions(context, true);
@@ -1832,6 +1838,10 @@ public class CommonActivityUtils {
         displayMemoryInformation(activity, "onTrimMemory");
     }
 
+    //==============================================================================================================
+    // e2e devices management
+    //==============================================================================================================
+
     /**
      * Display the device verification warning
      *
@@ -1930,5 +1940,31 @@ public class CommonActivityUtils {
                 }
             }
         });
+    }
+
+    private static final String TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG = "ActionBarActivity.TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG";
+
+    /**
+     * Display the unknown e2e devices
+     * @param session the session
+     * @param activity the calling activity
+     * @param unknownDevices the unknown devices list
+     * @param listener optional listener to add an optional "Send anyway" button
+     */
+    public static void displayUnknownDevicesDialog(MXSession session, FragmentActivity activity, MXUsersDevicesMap<MXDeviceInfo> unknownDevices, VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
+        // sanity checks
+        if ((null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
+            return;
+        }
+
+        FragmentManager fm = activity.getSupportFragmentManager();
+
+        VectorUnknownDevicesFragment fragment = (VectorUnknownDevicesFragment) fm.findFragmentByTag(TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+        if (fragment != null) {
+            fragment.dismissAllowingStateLoss();
+        }
+
+        fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, listener);
+        fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
     }
 }

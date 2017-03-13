@@ -67,6 +67,11 @@ public class GAHelper {
      * @return null if not defined, true / false when defined
      */
     public static Boolean useGA(Context context) {
+        // avoid getting the GA issues from the forked branches
+        if (!TextUtils.equals(VectorApp.getInstance().getPackageName(), "im.vector.alpha")) {
+            return false;
+        }
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (preferences.contains(context.getString(R.string.ga_use_settings))) {

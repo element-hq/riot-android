@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +22,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,34 +70,67 @@ public class Contact implements java.io.Serializable {
      * Defines a contact phone number.
      */
     public static class PhoneNumber implements java.io.Serializable {
-        // genuine phone number
-        public final String mUnformattedPhoneNumber;
+        // Genuine phone number (given by contact cursor)
+        public final String mRawPhoneNumber;
 
-        // E164 phone number
-        public String mE164PhoneNumber;
+        // Genuine E164 phone number (given by contact cursor) without "+"
+        // May be null
+        public final String mE164PhoneNumber;
 
-        // without space, parenthesis
+        // MSISDN format (E164 phone number without "+")
+        // Same value as mE164PhoneNumber if not null or deduced from the current country code if mE164PhoneNumber is null
+        public String mMsisdnPhoneNumber;
+
+        // Without space, parenthesis
         public final String mCleanedPhoneNumber;
 
         /**
          * Constructor
-         * @param unformatPn the genuine phone number
+         *
+         * @param rawPhoneNumber  the genuine phone number
+         * @param e164PhoneNumber the genuine E164 phone number
          */
-        public PhoneNumber(String unformatPn) {
-            mUnformattedPhoneNumber = unformatPn;
-            mCleanedPhoneNumber = mUnformattedPhoneNumber.replaceAll("[\\D]", "");
-            refreshE164PhoneNumber();
+        public PhoneNumber(String rawPhoneNumber, String e164PhoneNumber) {
+            mRawPhoneNumber = rawPhoneNumber;
+            // without space, parenthesis
+            mCleanedPhoneNumber = rawPhoneNumber.replaceAll("[\\D]", "");
+
+            if (!TextUtils.isEmpty(e164PhoneNumber)) {
+                if (e164PhoneNumber.startsWith("+")) {
+                    e164PhoneNumber = e164PhoneNumber.substring(1);
+                }
+                mE164PhoneNumber = e164PhoneNumber;
+                mMsisdnPhoneNumber = e164PhoneNumber;
+            } else {
+                mE164PhoneNumber = null;
+                // Attempt to deduce msisdn format using current country code
+                refreshE164PhoneNumber();
+            }
         }
 
         /**
-         * Refresh the e164 phone number.
+         * Refresh the deduced e164 phone number.
          */
         public void refreshE164PhoneNumber() {
-            mE164PhoneNumber = PhoneNumberUtils.getE164format(VectorApp.getInstance(), mUnformattedPhoneNumber);
-
             if (TextUtils.isEmpty(mE164PhoneNumber)) {
-                mE164PhoneNumber = mCleanedPhoneNumber;
+                // Attempt to deduce E164 format using the new country code
+                mMsisdnPhoneNumber = PhoneNumberUtils.getE164format(VectorApp.getInstance(), mRawPhoneNumber);
+                if (TextUtils.isEmpty(mMsisdnPhoneNumber)) {
+                    mMsisdnPhoneNumber = mCleanedPhoneNumber;
+                }
             }
+            Log.d(LOG_TAG, "## refreshE164PhoneNumber " + mMsisdnPhoneNumber);
+        }
+
+        /**
+         * Check if the phone number starts by the given prefix
+         *
+         * @param prefix
+         * @return true if matching found
+         */
+        public boolean startsWith(final String prefix) {
+            return mRawPhoneNumber.startsWith(prefix) || (mE164PhoneNumber != null && mE164PhoneNumber.startsWith(prefix))
+                    || mMsisdnPhoneNumber.startsWith(prefix) || mCleanedPhoneNumber.startsWith(prefix);
         }
     }
 
@@ -166,11 +200,19 @@ public class Contact implements java.io.Serializable {
     /**
      * Add a phone number address to the list.
      * @param aPn the phone number to add
+     * @param aPnE164 the E164 phone number to add
      */
-    public void addPhoneNumber(String aPn) {
+    public void addPhoneNumber(String aPn, String aPnE164) {
         // sanity check
         if (!TextUtils.isEmpty(aPn)) {
-            mPhoneNumbers.add(new PhoneNumber(aPn));
+            final PhoneNumber pn = new PhoneNumber(aPn, aPnE164);
+            mPhoneNumbers.add(pn);
+
+            // test if the phone number also matches to a matrix ID
+            MXID mxid =  PIDsRetriever.getInstance().getMXID(pn.mMsisdnPhoneNumber);
+            if (null != mxid) {
+                mMXIDsByElement.put(pn.mMsisdnPhoneNumber, mxid);
+            }
         }
     }
 
@@ -218,10 +260,10 @@ public class Contact implements java.io.Serializable {
         }
 
         for(PhoneNumber pn : getPhonenumbers()) {
-            Contact.MXID mxid = pidRetriever.getMXID(pn.mE164PhoneNumber);
+            Contact.MXID mxid = pidRetriever.getMXID(pn.mMsisdnPhoneNumber);
 
             if (null != mxid) {
-                put(pn.mE164PhoneNumber, mxid);
+                put(pn.mMsisdnPhoneNumber, mxid);
             }
         }
     }
@@ -270,7 +312,9 @@ public class Contact implements java.io.Serializable {
 
         if (!matched) {
             for(PhoneNumber pn : mPhoneNumbers) {
-                matched |= pn.mE164PhoneNumber.toLowerCase().contains(pattern) || pn.mUnformattedPhoneNumber.toLowerCase().contains(pattern);
+                matched |= pn.mMsisdnPhoneNumber.toLowerCase().contains(pattern)
+                        || pn.mRawPhoneNumber.toLowerCase().contains(pattern)
+                        || (pn.mE164PhoneNumber != null && pn.mE164PhoneNumber.toLowerCase().contains(pattern));
             }
         }
 
@@ -300,13 +344,18 @@ public class Contact implements java.io.Serializable {
             }
         }
 
-        for(PhoneNumber pn : mPhoneNumbers) {
-            if (pn.mE164PhoneNumber.startsWith(prefix) || pn.mUnformattedPhoneNumber.startsWith(prefix)) {
+        // Remove the "+" and spaces from the prefix if there is any
+        String cleanPrefix = prefix.replaceAll("\\s", "");
+        if (cleanPrefix.startsWith("+")) {
+            cleanPrefix = cleanPrefix.substring(1);
+        }
+        for (PhoneNumber pn : mPhoneNumbers) {
+            if (pn.startsWith(cleanPrefix)) {
                 return true;
             }
 
-            if ((null != mMXIDsByElement) && mMXIDsByElement.containsKey(pn.mE164PhoneNumber)) {
-                matchedMatrixIds.add(mMXIDsByElement.get(pn.mE164PhoneNumber));
+            if ((null != mMXIDsByElement) && mMXIDsByElement.containsKey(pn.mMsisdnPhoneNumber)) {
+                matchedMatrixIds.add(mMXIDsByElement.get(pn.mMsisdnPhoneNumber));
             }
         }
 
@@ -363,7 +412,7 @@ public class Contact implements java.io.Serializable {
 
         if (TextUtils.isEmpty(res)) {
             for(PhoneNumber pn : mPhoneNumbers) {
-                return pn.mUnformattedPhoneNumber;
+                return pn.mRawPhoneNumber;
             }
         }
 
