@@ -57,6 +57,8 @@ public class RegistrationManager {
     private static String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
     private static String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
 
+    private static String NEXTLINK_BASE_URL = "https://riot.im/app";
+
     // JSON keys used for registration request
     private static final String JSON_KEY_CLIENT_SECRET = "client_secret";
     private static final String JSON_KEY_ID_SERVER = "id_server";
@@ -221,7 +223,9 @@ public class RegistrationManager {
                     requestValidationToken(mEmail, new ThreePidRequestListener() {
                         @Override
                         public void onThreePidRequested(ThreePid pid) {
-                            listener.onWaitingEmailValidation();
+                            if (!TextUtils.isEmpty(pid.sid)) {
+                                listener.onWaitingEmailValidation();
+                            }
                         }
                     });
                     return;
@@ -704,8 +708,7 @@ public class RegistrationManager {
         if (getThirdPidRestClient() != null) {
             switch (pid.medium) {
                 case ThreePid.MEDIUM_EMAIL:
-                    String webAppUrl = "https://vector.im/develop";
-                    String nextLink = webAppUrl + "/#/register?client_secret=" + pid.clientSecret;
+                    String nextLink = NEXTLINK_BASE_URL + "/#/register?client_secret=" + pid.clientSecret;
                     nextLink += "&hs_url=" + mHsConfig.getHomeserverUri().toString();
                     nextLink += "&is_url=" + mHsConfig.getIdentityServerUri().toString();
                     nextLink += "&session_id=" + mRegistrationResponse.session;
