@@ -334,6 +334,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    displayLoadingView();
                     Matrix.getInstance(appContext).reloadSessions(appContext);
                     return false;
                 }
