@@ -2079,12 +2079,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             mDevicesNameList = aDeviceInfoList;
 
             // sort before display: most recent first
-            Collections.sort(mDevicesNameList, new Comparator<DeviceInfo>() {
-                @Override
-                public int compare(DeviceInfo info1, DeviceInfo info2) {
-                    return -(info1.last_seen_ts < info2.last_seen_ts ? -1 : (info1.last_seen_ts == info2.last_seen_ts ? 0 : 1));
-                }
-            });
+            DeviceInfo.sortByLastSeen(mDevicesNameList);
 
             // start from scratch: remove the displayed ones
             mDevicesListSettingsCategory.removeAll();
