@@ -709,12 +709,32 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         return mParticipantsListsList.size();
     }
 
+    /**
+     * Tells if the session could contain some unused participants.
+     * @return true if the session could contains some unused participants.
+     */
+    private boolean couldHaveUnusedParticipants() {
+        // if the mUnusedParticipants has been initialised
+        if (null != mUnusedParticipants) {
+            return 0 != mUnusedParticipants.size();
+        } else { // else if there are rooms with more than one user
+            Collection<Room> rooms = mSession.getDataHandler().getStore().getRooms();
+
+            for(Room room : rooms) {
+                if (room.getMembers().size() > 1) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     private String getGroupTitle(final int position) {
         final int groupSize = mParticipantsListsList.get(position).size();
         if (position == mLocalContactsSectionPosition) {
             return mContext.getString(R.string.people_search_local_contacts, groupSize);
         } else if (position == mRoomContactsSectionPosition) {
-            final String titleExtra = TextUtils.isEmpty(mPattern) ? "-" : String.valueOf(groupSize);
+            final String titleExtra = (TextUtils.isEmpty(mPattern) && couldHaveUnusedParticipants()) ? "-" : String.valueOf(groupSize);
             return mContext.getString(R.string.people_search_known_contacts, titleExtra);
         } else {
             return "??";
@@ -844,8 +864,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             imageView.setImageDrawable(null);
             matrixView.setVisibility(View.GONE);
             if (TextUtils.isEmpty(mPattern)) {
-                // display info message when search is empty
-                knownContactsView.setVisibility(View.VISIBLE);
+                // display info message when search is empty and there are some unused participants
+                knownContactsView.setVisibility(couldHaveUnusedParticipants() ? View.VISIBLE : View.GONE);
             }
         }
 
