@@ -2289,7 +2289,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     }
 
     /**
-     * Truy to delete a device.
+     * Try to delete a device.
      * @param deviceId the device id
      */
     private void deleteDevice(final String deviceId) {
