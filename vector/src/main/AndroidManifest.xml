@@ -49,7 +49,8 @@
     <uses-sdk tools:overrideLibrary="io.pristine.libjingle"/>
 
     <application
-        android:allowBackup="true"
+        tools:replace="android:allowBackup"
+        android:allowBackup="false"
         android:name="im.vector.VectorApp"
         android:icon="@drawable/logo"
         android:logo="@drawable/logo"
@@ -61,6 +62,7 @@
         <activity
             android:name="im.vector.activity.LoginActivity"
             android:theme="@style/LoginAppTheme"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -172,7 +174,7 @@
 
         <activity
             android:name="im.vector.activity.InComingCallActivity"
-            android:theme="@android:style/Theme.Holo.Light.Dialog"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
             android:taskAffinity=""
@@ -225,6 +227,7 @@
             android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"
             android:theme="@style/SearchesAppTheme"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize">
 
             <meta-data
@@ -295,6 +298,24 @@
         <activity android:name=".activity.VectorFakeRoomPreviewActivity"
             android:theme="@android:style/Theme.NoDisplay">
         </activity>
+
+        <activity
+            android:name="im.vector.activity.PhoneNumberAdditionActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_add_phone_number"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="im.vector.activity.CountryPickerActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_select_country"
+            android:theme="@style/CountryPickerTheme" />
+
+        <activity
+            android:name="im.vector.activity.PhoneNumberVerificationActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_phone_number_verification"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- broadcast receiver -->
         <receiver

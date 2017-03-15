@@ -1,5 +1,6 @@
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,9 @@ import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.MXDataHandler;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -162,24 +166,6 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * reset the Registration
-     */
-    public void reset() {
-        Log.d(LOG_TAG, "Reset the registration");
-
-        // unregister
-        unregister(null);
-
-        // remove the customized keys
-        getGcmSharedPreferences().
-                edit().
-                remove(PREFS_SENDER_ID_KEY).
-                remove(PREFS_PUSHER_URL_KEY).
-                remove(PREFS_PUSHER_FILE_TAG_KEY).
-                commit();
-    }
-
-    /**
      * Check if the GCM registration has been broken with a new token ID.
      * The GCM could have cleared it (onTokenRefresh).
      */
@@ -306,9 +292,10 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * Reset the GCM registration (happen when the registration token has been updated).
+     * Reset the GCM registration.
+     * @param register set to true to trigger a fresh registration.
      */
-    public void resetGCMRegistration() {
+    public void resetGCMRegistration(final boolean register) {
         Log.d(LOG_TAG, "resetGCMRegistration");
 
         if (RegistrationState.SERVER_REGISTERED == mRegistrationState) {
@@ -326,7 +313,7 @@ public final class GcmRegistrationManager {
                 @Override
                 public void onThirdPartyUnregistered() {
                     Log.d(LOG_TAG, "resetGCMRegistration : unregistration is done --> start the registration process");
-                    resetGCMRegistration();
+                    resetGCMRegistration(register);
                 }
 
                 @Override
@@ -334,13 +321,19 @@ public final class GcmRegistrationManager {
                     Log.d(LOG_TAG, "resetGCMRegistration : unregistration failed.");
                 }
             });
-
         } else {
-            Log.d(LOG_TAG, "resetGCMRegistration : make a full registration process.");
-
-            setStoredRegistrationToken(null);
-            mRegistrationState = RegistrationState.UNREGISTRATED;
-            register(null);
+            Log.d(LOG_TAG, "resetGCMRegistration : Clear the GCM data");
+            clearGCMData(new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    if (register) {
+                        Log.d(LOG_TAG, "resetGCMRegistration : make a full registration process.");
+                        register(null);
+                    } else {
+                        Log.d(LOG_TAG, "resetGCMRegistration : Ready to register.");
+                    }
+                }
+            });
         }
     }
 
@@ -849,6 +842,13 @@ public final class GcmRegistrationManager {
     //================================================================================
 
     /**
+     * Clear the GCM preferences
+     */
+    public void clearPreferences() {
+        getGcmSharedPreferences().edit().clear().commit();
+    }
+
+    /**
      * Tells if the client prefers GCM over events polling thread.
      * @return true to use GCM before using the events polling thread, false otherwise
      */
@@ -877,9 +877,11 @@ public final class GcmRegistrationManager {
      * @param areAllowed true to enable the device notifications.
      */
     public void setDeviceNotificationsAllowed(boolean areAllowed) {
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putBoolean(PREFS_ALLOW_NOTIFICATIONS, areAllowed)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setDeviceNotificationsAllowed () : commit failed");
+        }
 
         if (!useGCM()) {
             // when GCM is disabled, enable / disable the "Listen for events" notifications
@@ -899,9 +901,11 @@ public final class GcmRegistrationManager {
      * @param flag true to enable the device notifications.
      */
     public void setScreenTurnedOn(boolean flag) {
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putBoolean(PREFS_TURN_SCREEN_ON, flag)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setScreenTurnedOn() : commit failed");
+        }
     }
 
     /**
@@ -916,9 +920,11 @@ public final class GcmRegistrationManager {
      * @param isAllowed true to allow the background sync.
      */
     public void setBackgroundSyncAllowed(boolean isAllowed) {
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putBoolean(PREFS_ALLOW_BACKGROUND_SYNC, isAllowed)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setBackgroundSyncAllowed() : commit failed");
+        }
 
         // when GCM is disabled, enable / disable the "Listen for events" notifications
         CommonActivityUtils.onGcmUpdate(mContext);
@@ -942,9 +948,11 @@ public final class GcmRegistrationManager {
      * @param syncDelay the new sync delay in ms.
      */
     public void setBackgroundSyncTimeOut(int syncDelay) {
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putInt(PREFS_SYNC_TIMEOUT, syncDelay)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setBackgroundSyncTimeOut() : commit failed");
+        }
     }
 
     /**
@@ -970,9 +978,11 @@ public final class GcmRegistrationManager {
      * @param syncDelay the delay between two syncs in ms.
      */
     public void setBackgroundSyncDelay(int syncDelay) {
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putInt(PREFS_SYNC_DELAY, syncDelay)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setBackgroundSyncDelay() : commit failed");
+        }
     }
 
     //================================================================================
@@ -1000,9 +1010,35 @@ public final class GcmRegistrationManager {
     private void setStoredRegistrationToken(String registrationToken) {
         Log.d(LOG_TAG, "Saving registration token");
 
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, registrationToken)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
+        }
+    }
+
+    /**
+     * Clear the GCM data
+     */
+    public void clearGCMData(final ApiCallback callback) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                setStoredRegistrationToken(null);
+                mRegistrationToken = null;
+                mRegistrationState = RegistrationState.UNREGISTRATED;
+                GCMHelper.clearRegistrationToken(mContext);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void nothing) {
+                if (null != callback) {
+                    callback.onSuccess(null);
+                }
+
+            }
+        }.execute();
     }
 
     //================================================================================

@@ -835,7 +835,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         if (null == newBitmap) {
             if (IMAGE_ORIGIN_CAMERA == aOrigin) {
-                newBitmap = mCameraTextureView.getBitmap();
+                newBitmap = null;
+
+                // for the back camera, the texture is used to create a thumbnail.
+                // It saves a lot of memory and reduces the processing time.
+                // For the front camera, some devices add a flip effect.
+                // so it is safer to create a thumbnail from the high res image.
+                if (mCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                    newBitmap = mCameraTextureView.getBitmap();
+                }
+
                 if (null == newBitmap) {
                     newBitmap = createPhotoThumbnail(aCameraImageUrl);
                 }

@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
- *
+ * Copyright 2017 Vector Creations Ltd
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,6 +21,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +39,7 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -50,13 +54,12 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     private final String LOG_TAG = "VRoomCreationActivity";
 
     // participants list
-    private static String PARTICIPANTS_LIST = "PARTICIPANTS_LIST";
+    private static final String PARTICIPANTS_LIST = "PARTICIPANTS_LIST";
 
     //
     private static final int INVITE_USER_REQUEST_CODE = 456;
 
     // UI items
-    private ListView mMembersListView;
     private VectorRoomCreationAdapter mAdapter;
     private View mSpinnerView;
 
@@ -64,7 +67,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     private boolean mIsFirstResume = true;
 
     // direct message
-    final ApiCallback<String> mCreateDirectMessageCallBack = new ApiCallback<String>() {
+    private final ApiCallback<String> mCreateDirectMessageCallBack = new ApiCallback<String>() {
         @Override
         public void onSuccess(final String roomId) {
             HashMap<String, Object> params = new HashMap<>();
@@ -107,30 +110,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     // displayed participants
     private ArrayList<ParticipantAdapterItem> mParticipants = new ArrayList<>();
 
-    /** direct chat room creation action listeners **/
-    private final ApiCallback<Void> mDirectMessageListener = new SimpleApiCallback<Void>(this) {
-        @Override
-        public void onMatrixError(MatrixError e) {
-            if (MatrixError.FORBIDDEN.equals(e.errcode)) {
-                Toast.makeText(VectorRoomCreationActivity.this, e.error, Toast.LENGTH_LONG).show();
-            }
-        }
-
-        @Override
-        public void onSuccess(Void info) {
-        }
-
-        @Override
-        public void onNetworkError(Exception e) {
-            Toast.makeText(VectorRoomCreationActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onUnexpectedError(Exception e) {
-            Toast.makeText(VectorRoomCreationActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,7 +133,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
         // get the UI items
         mSpinnerView = findViewById(R.id.room_creation_spinner_views);
-        mMembersListView = (ListView) findViewById(R.id.room_creation_members_list_view);
+        ListView membersListView = (ListView) findViewById(R.id.room_creation_members_list_view);
         mAdapter = new VectorRoomCreationAdapter(this, R.layout.adapter_item_vector_creation_add_member, R.layout.adapter_item_vector_add_participants, mSession);
 
         // init the content
@@ -166,7 +145,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         }
         mAdapter.addAll(mParticipants);
 
-        mMembersListView.setAdapter(mAdapter);
+        membersListView.setAdapter(mAdapter);
 
         mAdapter.setRoomCreationAdapterListener(new VectorRoomCreationAdapter.IRoomCreationAdapterListener() {
             @Override
@@ -176,7 +155,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             }
         });
 
-        mMembersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        membersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // the first one is "add a member"
@@ -340,8 +319,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
      * @return a room ID if search succeed, null otherwise.
      */
     private String isDirectChatRoomAlreadyExist(String aUserId) {
-
-
         if(null != mSession) {
             IMXStore store = mSession.getDataHandler().getStore();
 
@@ -354,14 +331,21 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                     ArrayList<String> roomIdsList = new ArrayList<>(directChatRoomsDict.get(aUserId));
 
                     if (0 != roomIdsList.size()) {
-
                         for(String roomId : roomIdsList) {
                             Room room = mSession.getDataHandler().getRoom(roomId, false);
 
                             // check if the room is already initialized
                             if ((null != room) && room.isReady() && !room.isInvited() && !room.isLeaving()) {
-                                Log.d(LOG_TAG,"## isDirectChatRoomAlreadyExist(): for user="+aUserId+" roomFound=" + roomId);
-                                return roomId;
+                                // test if the member did not leave the room
+                                Collection<RoomMember> members = room.getActiveMembers();
+
+                                for(RoomMember member : members) {
+                                    if (TextUtils.equals(member.getUserId(), aUserId)) {
+                                        Log.d(LOG_TAG,"## isDirectChatRoomAlreadyExist(): for user="+aUserId+" roomFound=" + roomId);
+                                        return roomId;
+                                    }
+                                }
+
                             }
                         }
                     }

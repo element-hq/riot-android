@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +41,8 @@ import im.vector.util.SlidableMediaInfo;
 public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesListFragment {
     /**
      * static constructor
-     * @param matrixId the session Id.
+     *
+     * @param matrixId    the session Id.
      * @param layoutResId the used layout.
      * @return the instance
      */
@@ -74,7 +76,7 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
                 MessageRow row = mAdapter.getItem(position);
                 Event event = row.getEvent();
 
-                VectorMessagesAdapter vectorMessagesAdapter = (VectorMessagesAdapter)mAdapter;
+                VectorMessagesAdapter vectorMessagesAdapter = (VectorMessagesAdapter) mAdapter;
 
                 if (vectorMessagesAdapter.isInSelectionMode()) {
                     // cancel the selection mode.
@@ -103,8 +105,8 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
                 } else if (Message.MSGTYPE_FILE.equals(message.msgtype)) {
                     FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
-                    if (null != fileMessage.url) {
-                        onMediaAction(ACTION_VECTOR_OPEN, fileMessage.url, fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
+                    if (null != fileMessage.getUrl()) {
+                        onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
                     }
                 }
             }

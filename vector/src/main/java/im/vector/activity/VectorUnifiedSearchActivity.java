@@ -161,7 +161,8 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
         // the background image view should only be displayed when there is no pattern,
         // the rooms searches has a result : the public rooms list.
-        resetUi(TextUtils.isEmpty(pattern) && !mPagerAdapter.isSearchInRoomNameFragment(position));
+        resetUi(TextUtils.isEmpty(pattern) && !mPagerAdapter.isSearchInRoomNameFragment(position)
+                && !mPagerAdapter.isSearchInPeoplesFragment(position));
 
         boolean isRemoteSearching = mPagerAdapter.search(position, pattern, new MatrixMessageListFragment.OnSearchResultListener() {
             @Override
@@ -243,7 +244,10 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             mWaitWhileSearchInProgressView.setVisibility(View.GONE);
 
             // display the background view if there is no pending such
-            mBackgroundImageView.setVisibility((0 == nbrMessages) && TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
+            mBackgroundImageView.setVisibility(!mPagerAdapter.isSearchInPeoplesFragment(tabIndex)
+                    && (0 == nbrMessages) && TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())
+                    ? View.VISIBLE
+                    : View.GONE);
 
             // display the "no result" text only if the researched text is not empty
             mNoResultsTxtView.setVisibility(((0 == nbrMessages) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())) ? View.VISIBLE : View.GONE);
@@ -258,7 +262,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
 				// trigger a contacts book refresh
-                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                ContactsManager.getInstance().refreshLocalContactsSnapshot();
 
                 searchAccordingToSelectedTab();
             } else {

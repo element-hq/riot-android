@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +18,19 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.media.ExifInterface;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.model.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
@@ -77,6 +81,7 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
         String thumbUrl = null;
         Long mediaSize = null;
         int avatarId = org.matrix.androidsdk.R.drawable.filetype_attachment;
+        EncryptedFileInfo encryptedFileInfo = null;
 
         if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
             ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
@@ -96,6 +101,9 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
                 avatarId = org.matrix.androidsdk.R.drawable.filetype_image;
             }
 
+            if (null != imageMessage.info) {
+                encryptedFileInfo = imageMessage.info.thumbnail_file;
+            }
         } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
             VideoMessage videoMessage = JsonUtils.toVideoMessage(event.getContent());
 
@@ -107,14 +115,18 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
 
             avatarId = org.matrix.androidsdk.R.drawable.filetype_video;
 
-        } else if(Message.MSGTYPE_FILE.equals(message.msgtype)) {
+            if (null != videoMessage.info) {
+                encryptedFileInfo = videoMessage.info.thumbnail_file;
+            }
+
+        } else if (Message.MSGTYPE_FILE.equals(message.msgtype) || Message.MSGTYPE_AUDIO.equals(message.msgtype)) {
             FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
             if (null != fileMessage.info) {
                 mediaSize = fileMessage.info.size;
             }
 
-            avatarId = org.matrix.androidsdk.R.drawable.filetype_attachment;
+            avatarId = Message.MSGTYPE_AUDIO.equals(message.msgtype) ? org.matrix.androidsdk.R.drawable.filetype_audio : org.matrix.androidsdk.R.drawable.filetype_attachment;
         }
 
         // thumbnail
@@ -124,8 +136,13 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
         thumbnailView.setImageResource(avatarId);
 
         if (null != thumbUrl) {
-            int size = getContext().getResources().getDimensionPixelSize(R.dimen.member_list_avatar_size);
-            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), thumbnailView, thumbUrl, size);
+            // detect if the media is encrypted
+            if (null == encryptedFileInfo) {
+                int size = getContext().getResources().getDimensionPixelSize(R.dimen.member_list_avatar_size);
+                mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), thumbnailView, thumbUrl, size);
+            } else {
+                mSession.getMediasCache().loadBitmap(mSession.getHomeserverConfig(), thumbnailView, thumbUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, encryptedFileInfo);
+            }
         }
 
         // filename

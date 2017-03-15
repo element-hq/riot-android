@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,10 +44,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,28 +53,20 @@ import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import im.vector.VectorApp;
-import im.vector.Matrix;
-import im.vector.MyPresenceManager;
-import im.vector.R;
-import im.vector.adapters.VectorRoomsSelectionAdapter;
-import im.vector.contacts.ContactsManager;
-import im.vector.contacts.PIDsRetriever;
-import im.vector.fragments.AccountsSelectionDialogFragment;
-import im.vector.ga.GAHelper;
-import im.vector.gcm.GcmRegistrationManager;
-import im.vector.services.EventStreamService;
+import org.matrix.androidsdk.util.Log;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -88,6 +79,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import im.vector.Matrix;
+import im.vector.MyPresenceManager;
+import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.adapters.VectorRoomsSelectionAdapter;
+import im.vector.contacts.ContactsManager;
+import im.vector.contacts.PIDsRetriever;
+import im.vector.fragments.AccountsSelectionDialogFragment;
+import im.vector.fragments.VectorUnknownDevicesFragment;
+import im.vector.ga.GAHelper;
+import im.vector.gcm.GcmRegistrationManager;
+import im.vector.services.EventStreamService;
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -101,7 +104,7 @@ public class CommonActivityUtils {
      * Mime types
      **/
     public static final String MIME_TYPE_JPEG = "image/jpeg";
-    public static final String MIME_TYPE_JPG =  "image/jpg";
+    public static final String MIME_TYPE_JPG = "image/jpg";
     public static final String MIME_TYPE_IMAGE_ALL = "image/*";
     public static final String MIME_TYPE_ALL_CONTENT = "*/*";
 
@@ -144,9 +147,9 @@ public class CommonActivityUtils {
     private static final boolean PERMISSIONS_DENIED = !PERMISSIONS_GRANTED;
     public static final int PERMISSION_BYPASSED = 0x0;
     public static final int PERMISSION_CAMERA = 0x1;
-    private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1<<1;
-    private static final int PERMISSION_RECORD_AUDIO = 0x1<<2;
-    private static final int PERMISSION_READ_CONTACTS = 0x1<<3;
+    private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1 << 1;
+    private static final int PERMISSION_RECORD_AUDIO = 0x1 << 2;
+    private static final int PERMISSION_READ_CONTACTS = 0x1 << 3;
     public static final int REQUEST_CODE_PERMISSION_AUDIO_IP_CALL = PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_VIDEO_IP_CALL = PERMISSION_CAMERA | PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_TAKE_PHOTO = PERMISSION_CAMERA | PERMISSION_WRITE_EXTERNAL_STORAGE;
@@ -157,7 +160,7 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
     public static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
 
-    public static void logout(Context context, MXSession session, Boolean clearCredentials) {
+    public static void logout(Context context, MXSession session, boolean clearCredentials) {
         if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
@@ -201,6 +204,7 @@ public class CommonActivityUtils {
      * But, the sessions are not initialised (i.e the stores are not ready and so on).
      * Thus, the activity could have an invalid behaviour.
      * It seems safer to go to splash screen and to wait for the end of the initialisation.
+     *
      * @param activity the caller activity
      * @return true if go to splash screen
      */
@@ -214,16 +218,17 @@ public class CommonActivityUtils {
      * But, the sessions are not initialised (i.e the stores are not ready and so on).
      * Thus, the activity could have an invalid behaviour.
      * It seems safer to go to splash screen and to wait for the end of the initialisation.
-     * @param activity the caller activity
+     *
+     * @param activity  the caller activity
      * @param sessionId the session id
-     * @param roomId the room id
+     * @param roomId    the room id
      * @return true if go to splash screen
      */
     public static boolean isGoingToSplash(Activity activity, String sessionId, String roomId) {
         if (Matrix.hasValidSessions()) {
             List<MXSession> sessions = Matrix.getInstance(activity).getSessions();
 
-            for(MXSession session : sessions) {
+            for (MXSession session : sessions) {
                 if (session.isAlive() && !session.getDataHandler().getStore().isReady()) {
                     Intent intent = new Intent(activity, SplashActivity.class);
 
@@ -301,12 +306,12 @@ public class CommonActivityUtils {
     /**
      * Logout the current user.
      *
-     * @param activity the caller activity
+     * @param activity      the caller activity
      * @param goToLoginPage true to jump to the login page
      */
-    public static void logout(Activity activity, boolean goToLoginPage) {
+    public static void logout(final Activity activity, boolean goToLoginPage) {
         // if no activity is provided, use the application context instead.
-        Context context = (null == activity) ? VectorApp.getInstance().getApplicationContext() : activity;
+        final Context context = (null == activity) ? VectorApp.getInstance().getApplicationContext() : activity;
 
         EventStreamService.removeNotification();
         stopEventStream(context);
@@ -314,7 +319,7 @@ public class CommonActivityUtils {
         try {
             ShortcutBadger.setBadge(context, 0);
         } catch (Exception e) {
-            Log.d(LOG_TAG,"## logout(): Exception Msg="+e.getMessage());
+            Log.d(LOG_TAG, "## logout(): Exception Msg=" + e.getMessage());
         }
 
         // warn that the user logs out
@@ -343,7 +348,11 @@ public class CommonActivityUtils {
         }
 
         // reset the GCM
-        Matrix.getInstance(context).getSharedGCMRegistrationManager().reset();
+        Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration(false);
+        // clear the preferences when the application goes to the login screen.
+        if (goToLoginPage) {
+            Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
+        }
 
         // clear credentials
         Matrix.getInstance(context).clearSessions(context, true);
@@ -356,7 +365,7 @@ public class CommonActivityUtils {
 
         // reset the contacts
         PIDsRetriever.getInstance().reset();
-        ContactsManager.reset();
+        ContactsManager.getInstance().reset();
 
         MXMediasCache.clearThumbnailsCache(context);
 
@@ -365,7 +374,7 @@ public class CommonActivityUtils {
                 // go to login page
                 activity.startActivity(new Intent(activity, LoginActivity.class));
                 activity.finish();
-            }  else {
+            } else {
                 Intent intent = new Intent(context, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(intent);
@@ -375,13 +384,14 @@ public class CommonActivityUtils {
 
     /**
      * Remove the http schemes from the URl passed in parameter
+     *
      * @param aUrl URL to be parsed
      * @return the URL with the scheme removed
      */
-    public static String removeUrlScheme(String aUrl){
+    public static String removeUrlScheme(String aUrl) {
         String urlRetValue = aUrl;
 
-        if(null != aUrl) {
+        if (null != aUrl) {
             // remove URL scheme
             if (aUrl.startsWith(HTTP_SCHEME)) {
                 urlRetValue = aUrl.substring(HTTP_SCHEME.length());
@@ -400,13 +410,14 @@ public class CommonActivityUtils {
     /**
      * Indicate if a user is logged out or not. If no default session is enabled,
      * no user is logged.
+     *
      * @param aContext App context
      * @return true if no user is logged in, false otherwise
      */
-    private static boolean isUserLogout(Context aContext){
+    private static boolean isUserLogout(Context aContext) {
         boolean retCode = false;
 
-        if(null == aContext) {
+        if (null == aContext) {
             retCode = true;
         } else {
             if (null == Matrix.getInstance(aContext.getApplicationContext()).getDefaultSession()) {
@@ -419,15 +430,16 @@ public class CommonActivityUtils {
 
     /**
      * Send an action to the events service.
+     *
      * @param context the context.
-     * @param action the action to send.
+     * @param action  the action to send.
      */
     private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
         Context appContext = context.getApplicationContext();
 
         Log.d(LOG_TAG, "sendEventStreamAction " + action);
 
-        if(!isUserLogout(appContext)) {
+        if (!isUserLogout(appContext)) {
             // Fix https://github.com/vector-im/vector-android/issues/230
             // Only start the service if a session is in progress, otherwise
             // starting the service is useless
@@ -435,12 +447,13 @@ public class CommonActivityUtils {
             killStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, action.ordinal());
             appContext.startService(killStreamService);
         } else {
-            Log.d(LOG_TAG,"## sendEventStreamAction(): \""+action+"\" action not sent - user logged out");
+            Log.d(LOG_TAG, "## sendEventStreamAction(): \"" + action + "\" action not sent - user logged out");
         }
     }
 
     /**
      * Stop the event stream.
+     *
      * @param context the context.
      */
     private static void stopEventStream(Context context) {
@@ -450,6 +463,7 @@ public class CommonActivityUtils {
 
     /**
      * Pause the event stream.
+     *
      * @param context the context.
      */
     public static void pauseEventStream(Context context) {
@@ -459,6 +473,7 @@ public class CommonActivityUtils {
 
     /**
      * Resume the events stream
+     *
      * @param context the context.
      */
     public static void resumeEventStream(Context context) {
@@ -468,6 +483,7 @@ public class CommonActivityUtils {
 
     /**
      * Trigger a event stream catchup i.e. there is only sync/ call.
+     *
      * @param context the context.
      */
     public static void catchupEventStream(Context context) {
@@ -479,6 +495,7 @@ public class CommonActivityUtils {
 
     /**
      * Warn the events stream that there was a GCM status update.
+     *
      * @param context the context.
      */
     public static void onGcmUpdate(Context context) {
@@ -488,6 +505,7 @@ public class CommonActivityUtils {
 
     /**
      * Start the events stream service.
+     *
      * @param context the context.
      */
     public static void startEventStreamService(Context context) {
@@ -524,7 +542,7 @@ public class CommonActivityUtils {
      * Check if the user power level allows to update the room avatar. This is mainly used to
      * determine if camera permission must be checked or not.
      *
-     * @param aRoom the room
+     * @param aRoom    the room
      * @param aSession the session
      * @return true if the user power level allows to update the avatar, false otherwise.
      */
@@ -552,29 +570,30 @@ public class CommonActivityUtils {
      * <br>If checkPermissions() returns true, the permissions were already granted.
      * The permissions to be granted are given as bit map in aPermissionsToBeGrantedBitMap (ex: {@link #REQUEST_CODE_PERMISSION_TAKE_PHOTO}).
      * <br>aPermissionsToBeGrantedBitMap is passed as the request code in onRequestPermissionsResult().
-     *
+     * <p>
      * If a permission was already denied by the user, a popup is displayed to
      * explain why vector needs the corresponding permission.
+     *
      * @param aPermissionsToBeGrantedBitMap the permissions bit map to be granted
-     * @param aCallingActivity the calling Activity that is requesting the permissions
+     * @param aCallingActivity              the calling Activity that is requesting the permissions
      * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
      */
     public static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Activity aCallingActivity) {
         boolean isPermissionGranted = false;
 
         // sanity check
-        if(null == aCallingActivity){
+        if (null == aCallingActivity) {
             Log.w(LOG_TAG, "## checkPermissions(): invalid input data");
             isPermissionGranted = false;
-        } else if(REQUEST_CODE_PERMISSION_BY_PASS == aPermissionsToBeGrantedBitMap) {
+        } else if (REQUEST_CODE_PERMISSION_BY_PASS == aPermissionsToBeGrantedBitMap) {
             isPermissionGranted = true;
-        } else if((REQUEST_CODE_PERMISSION_TAKE_PHOTO!=aPermissionsToBeGrantedBitMap)
-                && (REQUEST_CODE_PERMISSION_AUDIO_IP_CALL!=aPermissionsToBeGrantedBitMap)
-                && (REQUEST_CODE_PERMISSION_VIDEO_IP_CALL!=aPermissionsToBeGrantedBitMap)
-                && (REQUEST_CODE_PERMISSION_MEMBERS_SEARCH !=aPermissionsToBeGrantedBitMap)
-                && (REQUEST_CODE_PERMISSION_HOME_ACTIVITY !=aPermissionsToBeGrantedBitMap)
-                && (REQUEST_CODE_PERMISSION_MEMBER_DETAILS !=aPermissionsToBeGrantedBitMap)
-                && (REQUEST_CODE_PERMISSION_ROOM_DETAILS !=aPermissionsToBeGrantedBitMap)
+        } else if ((REQUEST_CODE_PERMISSION_TAKE_PHOTO != aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_AUDIO_IP_CALL != aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_VIDEO_IP_CALL != aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_MEMBERS_SEARCH != aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_HOME_ACTIVITY != aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_MEMBER_DETAILS != aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_ROOM_DETAILS != aPermissionsToBeGrantedBitMap)
                 ) {
             Log.w(LOG_TAG, "## checkPermissions(): permissions to be granted are not supported");
             isPermissionGranted = false;
@@ -584,21 +603,21 @@ public class CommonActivityUtils {
             final List<String> finalPermissionsListToBeGranted;
             boolean isRequestPermissionRequired = false;
             Resources resource = aCallingActivity.getResources();
-            String explanationMessage;
+            String explanationMessage = "";
             String permissionType;
 
             // retrieve the permissions to be granted according to the request code bit map
-            if(PERMISSION_CAMERA == (aPermissionsToBeGrantedBitMap & PERMISSION_CAMERA)){
+            if (PERMISSION_CAMERA == (aPermissionsToBeGrantedBitMap & PERMISSION_CAMERA)) {
                 permissionType = Manifest.permission.CAMERA;
                 isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
-            if(PERMISSION_RECORD_AUDIO == (aPermissionsToBeGrantedBitMap & PERMISSION_RECORD_AUDIO)){
+            if (PERMISSION_RECORD_AUDIO == (aPermissionsToBeGrantedBitMap & PERMISSION_RECORD_AUDIO)) {
                 permissionType = Manifest.permission.RECORD_AUDIO;
                 isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
-            if(PERMISSION_WRITE_EXTERNAL_STORAGE == (aPermissionsToBeGrantedBitMap & PERMISSION_WRITE_EXTERNAL_STORAGE)){
+            if (PERMISSION_WRITE_EXTERNAL_STORAGE == (aPermissionsToBeGrantedBitMap & PERMISSION_WRITE_EXTERNAL_STORAGE)) {
                 permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE;
                 isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
@@ -606,13 +625,13 @@ public class CommonActivityUtils {
             // the contact book access is requested for any android platforms
             // for android M, we use the system preferences
             // for android < M, we use a dedicated settings
-            if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)) {
+            if (PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)) {
                 permissionType = Manifest.permission.READ_CONTACTS;
 
                 if (Build.VERSION.SDK_INT >= 23) {
                     isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
                 } else {
-                    if (!ContactsManager.isContactBookAccessRequested(aCallingActivity)) {
+                    if (!ContactsManager.getInstance().isContactBookAccessRequested()) {
                         isRequestPermissionRequired = true;
                         permissionsListToBeGranted.add(permissionType);
                     }
@@ -622,24 +641,51 @@ public class CommonActivityUtils {
             finalPermissionsListToBeGranted = permissionsListToBeGranted;
 
             // if some permissions were already denied: display a dialog to the user before asking again..
+            // if some permissions were already denied: display a dialog to the user before asking again..
             if(!permissionListAlreadyDenied.isEmpty()) {
-                if(null != resource) {
-                    explanationMessage = resource.getString(R.string.permissions_rationale_msg_title);
-
+                if (null != resource) {
                     // add the user info text to be displayed to explain why the permission is required by the App
-                    for(String permissionAlreadyDenied : permissionListAlreadyDenied) {
-                        if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
-                            explanationMessage += "\n\n" + resource.getString(R.string.permissions_rationale_msg_camera, Matrix.getApplicationName());
-                        } else if(Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)){
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_record_audio, Matrix.getApplicationName());
-                        } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)){
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_storage, Matrix.getApplicationName());
-                        } else if(Manifest.permission.READ_CONTACTS.equals(permissionAlreadyDenied)){
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_contacts);
-                        } else {
-                            Log.d(LOG_TAG, "## checkPermissions(): already denied permission not supported");
+                    if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL){
+                        // Permission request for VOIP call
+                        if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
+                                && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
+                            // Both missing
+                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera_and_audio);
+                        } else if (permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
+                            // Audio missing
+                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_record_audio);
+                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_record_audio_explanation);
+                        } else if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)) {
+                            // Camera missing
+                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera);
+                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera_explanation);
                         }
-
+                    } else {
+                        for (String permissionAlreadyDenied : permissionListAlreadyDenied) {
+                            if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
+                                if (!TextUtils.isEmpty(explanationMessage)) {
+                                    explanationMessage += "\n\n";
+                                }
+                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera);
+                            } else if (Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)) {
+                                if (!TextUtils.isEmpty(explanationMessage)) {
+                                    explanationMessage += "\n\n";
+                                }
+                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_record_audio);
+                            } else if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)) {
+                                if (!TextUtils.isEmpty(explanationMessage)) {
+                                    explanationMessage += "\n\n";
+                                }
+                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_storage);
+                            } else if (Manifest.permission.READ_CONTACTS.equals(permissionAlreadyDenied)) {
+                                if (!TextUtils.isEmpty(explanationMessage)) {
+                                    explanationMessage += "\n\n";
+                                }
+                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_contacts);
+                            } else {
+                                Log.d(LOG_TAG, "## checkPermissions(): already denied permission not supported");
+                            }
+                        }
                     }
                 } else { // fall back if resource is null.. very unlikely
                     explanationMessage = "You are about to be asked to grant permissions..\n\n";
@@ -648,12 +694,11 @@ public class CommonActivityUtils {
                 // display the dialog with the info text
                 AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
                 if(null != resource) {
-                    permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title, Matrix.getApplicationName()));
+                    permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
                 }
 
                 permissionsInfoDialog.setMessage(explanationMessage);
-                permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_info);
-                permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
@@ -682,16 +727,16 @@ public class CommonActivityUtils {
                         permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_info);
 
                         if (null != resource) {
-                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title, Matrix.getApplicationName()));
+                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
                         }
 
-                        permissionsInfoDialog.setMessage(resource.getString(R.string.permissions_msg_contacts_warning_other_androids, Matrix.getApplicationName()));
+                        permissionsInfoDialog.setMessage(resource.getString(R.string.permissions_msg_contacts_warning_other_androids));
 
                         // gives the contacts book access
                         permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, true);
+                                ContactsManager.getInstance().setIsContactBookAccessAllowed(true);
                                 ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
                             }
                         });
@@ -700,7 +745,7 @@ public class CommonActivityUtils {
                         permissionsInfoDialog.setNegativeButton(aCallingActivity.getString(R.string.no), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, false);
+                                ContactsManager.getInstance().setIsContactBookAccessAllowed(false);
                                 ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
                             }
                         });
@@ -722,10 +767,11 @@ public class CommonActivityUtils {
     /**
      * Helper method used in {@link #checkPermissions(int, Activity)} to populate the list of the
      * permissions to be granted (aPermissionsListToBeGranted_out) and the list of the permissions already denied (aPermissionAlreadyDeniedList_out).
-     * @param aCallingActivity calling activity
+     *
+     * @param aCallingActivity                 calling activity
      * @param aPermissionAlreadyDeniedList_out list to be updated with the permissions already denied by the user
-     * @param aPermissionsListToBeGranted_out list to be updated with the permissions to be granted
-     * @param permissionType the permission to be checked
+     * @param aPermissionsListToBeGranted_out  list to be updated with the permissions to be granted
+     * @param permissionType                   the permission to be checked
      * @return true if the permission requires to be granted, false otherwise
      */
     private static boolean updatePermissionsToBeGranted(final Activity aCallingActivity, List<String> aPermissionAlreadyDeniedList_out, List<String> aPermissionsListToBeGranted_out, final String permissionType) {
@@ -734,11 +780,11 @@ public class CommonActivityUtils {
         // add permission to be granted
         aPermissionsListToBeGranted_out.add(permissionType);
 
-        if(PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(aCallingActivity.getApplicationContext(), permissionType)){
+        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(aCallingActivity.getApplicationContext(), permissionType)) {
             isRequestPermissionRequested = true;
 
             // add permission to the ones that were already asked to the user
-            if(ActivityCompat.shouldShowRequestPermissionRationale(aCallingActivity, permissionType)){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(aCallingActivity, permissionType)) {
                 aPermissionAlreadyDeniedList_out.add(permissionType);
             }
         }
@@ -748,8 +794,9 @@ public class CommonActivityUtils {
     /**
      * Helper method to process {@link CommonActivityUtils#REQUEST_CODE_PERMISSION_AUDIO_IP_CALL}
      * on onRequestPermissionsResult() methods.
-     * @param aContext App context
-     * @param aPermissions permissions list
+     *
+     * @param aContext      App context
+     * @param aPermissions  permissions list
      * @param aGrantResults permissions granted results
      * @return true if audio IP call is permitted, false otherwise
      */
@@ -763,12 +810,12 @@ public class CommonActivityUtils {
                     isPermissionGranted = true;
                 } else {
                     Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): RECORD_AUDIO permission not granted");
-                    if(null != aContext)
+                    if (null != aContext)
                         CommonActivityUtils.displayToast(aContext, aContext.getString(R.string.permissions_action_not_performed_missing_permissions));
                 }
             }
-        } catch (Exception ex){
-            Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): Exception MSg="+ex.getMessage());
+        } catch (Exception ex) {
+            Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): Exception MSg=" + ex.getMessage());
         }
 
         return isPermissionGranted;
@@ -778,8 +825,9 @@ public class CommonActivityUtils {
      * Helper method to process {@link CommonActivityUtils#REQUEST_CODE_PERMISSION_VIDEO_IP_CALL}
      * on onRequestPermissionsResult() methods.
      * For video IP calls, record audio and camera permissions are both mandatory.
-     * @param aContext App context
-     * @param aPermissions permissions list
+     *
+     * @param aContext      App context
+     * @param aPermissions  permissions list
      * @param aGrantResults permissions granted results
      * @return true if video IP call is permitted, false otherwise
      */
@@ -815,11 +863,11 @@ public class CommonActivityUtils {
                 isPermissionGranted = true;
             } else {
                 Log.w(LOG_TAG, "## onPermissionResultVideoIpCall(): No permissions granted to IP call (video or audio)");
-                if(null != aContext)
+                if (null != aContext)
                     CommonActivityUtils.displayToast(aContext, aContext.getString(R.string.permissions_action_not_performed_missing_permissions));
             }
-        } catch (Exception ex){
-            Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): Exception MSg="+ex.getMessage());
+        } catch (Exception ex) {
+            Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): Exception MSg=" + ex.getMessage());
         }
 
         return isPermissionGranted;
@@ -831,7 +879,8 @@ public class CommonActivityUtils {
 
     /**
      * Start a room activity in preview mode.
-     * @param fromActivity the caller activity.
+     *
+     * @param fromActivity    the caller activity.
      * @param roomPreviewData the room preview information
      */
     public static void previewRoom(final Activity fromActivity, RoomPreviewData roomPreviewData) {
@@ -847,9 +896,10 @@ public class CommonActivityUtils {
 
     /**
      * Helper method used to build an intent to trigger a room preview.
-     * @param aMatrixId matrix ID of the user
-     * @param aRoomId room ID
-     * @param aContext application context
+     *
+     * @param aMatrixId       matrix ID of the user
+     * @param aRoomId         room ID
+     * @param aContext        application context
      * @param aTargetActivity the activity set in the returned intent
      * @return a valid intent if operation succeed, null otherwise
      */
@@ -857,13 +907,13 @@ public class CommonActivityUtils {
         Intent intentRetCode;
 
         // sanity check
-        if ((null == aContext) || (null == aRoomId) || (null == aMatrixId)){
+        if ((null == aContext) || (null == aRoomId) || (null == aMatrixId)) {
             intentRetCode = null;
         } else {
             MXSession session;
 
             // get the session
-            if(null == (session = Matrix.getInstance(aContext).getSession(aMatrixId))) {
+            if (null == (session = Matrix.getInstance(aContext).getSession(aMatrixId))) {
                 session = Matrix.getInstance(aContext).getDefaultSession();
             }
 
@@ -895,11 +945,12 @@ public class CommonActivityUtils {
     /**
      * Start a room activity in preview mode.
      * If the room is already joined, open it in edition mode.
+     *
      * @param fromActivity the caller activity.
-     * @param session the session
-     * @param roomId the roomId
-     * @param roomAlias the room alias
-     * @param callback the operation callback
+     * @param session      the session
+     * @param roomId       the roomId
+     * @param roomAlias    the room alias
+     * @param callback     the operation callback
      */
     public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final String roomAlias, final ApiCallback<Void> callback) {
         previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, null, roomAlias, null), callback);
@@ -908,11 +959,12 @@ public class CommonActivityUtils {
     /**
      * Start a room activity in preview mode.
      * If the room is already joined, open it in edition mode.
-     * @param fromActivity the caller activity.
-     * @param session the session
-     * @param roomId the roomId
+     *
+     * @param fromActivity    the caller activity.
+     * @param session         the session
+     * @param roomId          the roomId
      * @param roomPreviewData the room preview data
-     * @param callback the operation callback
+     * @param callback        the operation callback
      */
     public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final RoomPreviewData roomPreviewData, final ApiCallback<Void> callback) {
         Room room = session.getDataHandler().getRoom(roomId, false);
@@ -966,7 +1018,6 @@ public class CommonActivityUtils {
         }
 
 
-
     }
     //==============================================================================================================
     // Room jump methods.
@@ -975,8 +1026,9 @@ public class CommonActivityUtils {
     /**
      * Start a room activity with the dedicated parameters.
      * Pop the activity to the homeActivity before pushing the new activity.
+     *
      * @param fromActivity the caller activity.
-     * @param params the room activity parameters
+     * @param params       the room activity parameters
      */
     public static void goToRoomPage(final Activity fromActivity, final Map<String, Object> params) {
         goToRoomPage(fromActivity, null, params);
@@ -985,9 +1037,10 @@ public class CommonActivityUtils {
     /**
      * Start a room activity with the dedicated parameters.
      * Pop the activity to the homeActivity before pushing the new activity.
-     * @param fromActivity  the caller activity.
-     * @param session the session.
-     * @param params the room activity parameters.
+     *
+     * @param fromActivity the caller activity.
+     * @param session      the session.
+     * @param params       the room activity parameters.
      */
     public static void goToRoomPage(final Activity fromActivity, final MXSession session, final Map<String, Object> params) {
         final MXSession finalSession = (session == null) ? Matrix.getMXSession(fromActivity, (String) params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
@@ -1066,7 +1119,8 @@ public class CommonActivityUtils {
      * Return all the 1:1 rooms joined by the searched user and by the current logged in user.
      * This method go through all the rooms, and for each room, tests if the searched user
      * and the logged in user are present.
-     * @param aSession session
+     *
+     * @param aSession        session
      * @param aSearchedUserId the searched user ID
      * @return an array containing the found rooms
      */
@@ -1075,11 +1129,11 @@ public class CommonActivityUtils {
         List<RoomMember> roomMembersList;
         String userId0, userId1;
 
-        if((null!=aSession) && (null!=aSearchedUserId)) {
+        if ((null != aSession) && (null != aSearchedUserId)) {
             Collection<Room> roomsList = aSession.getDataHandler().getStore().getRooms();
 
             for (Room room : roomsList) {
-                roomMembersList = (List<RoomMember>)room.getJoinedMembers();
+                roomMembersList = (List<RoomMember>) room.getJoinedMembers();
 
                 if ((null != roomMembersList) && (ROOM_SIZE_ONE_TO_ONE == roomMembersList.size())) {
                     userId0 = roomMembersList.get(0).getUserId();
@@ -1101,7 +1155,8 @@ public class CommonActivityUtils {
      * logged user have joined.
      * Among the list of the 1:1 rooms, joined by the user, the room with the most recent
      * posted message is chosen to be returned.
-     * @param aSession session
+     *
+     * @param aSession        session
      * @param aSearchedUserId the searched user ID
      * @return 1:1 room joined by the user with the most recent message, null otherwise
      */
@@ -1125,8 +1180,8 @@ public class CommonActivityUtils {
                         mostRecentRoomRetValue = room;
                         serverTimeStamp = newServerTimeStamp;
                     }
-                } catch(Exception ex) {
-                    Log.e(LOG_TAG,"## findLatestOneToOneRoom(): Exception Msg="+ex.getMessage());
+                } catch (Exception ex) {
+                    Log.e(LOG_TAG, "## findLatestOneToOneRoom(): Exception Msg=" + ex.getMessage());
                 }
             }
         }
@@ -1139,7 +1194,8 @@ public class CommonActivityUtils {
      * The user ID is searched in the room only if the room is a 1:1 room.
      * This method is useful to check if we can create a new 1:1 room when it is
      * asked from a already existing room (see {@link VectorMemberDetailsActivity#ITEM_ACTION_START_CHAT}).
-     * @param aRoom room to be checked
+     *
+     * @param aRoom           room to be checked
      * @param aSearchedUserId the user ID to be searched in the room
      * @return true if the room is a 1:1 room where the user ID is present, false otherwise
      */
@@ -1147,8 +1203,8 @@ public class CommonActivityUtils {
         boolean retVal = false;
         List<RoomMember> memberList;
 
-        if((null != aRoom) && (null != (memberList=(List<RoomMember>)aRoom.getJoinedMembers()))){
-            if(CommonActivityUtils.ROOM_SIZE_ONE_TO_ONE == memberList.size()) {
+        if ((null != aRoom) && (null != (memberList = (List<RoomMember>) aRoom.getJoinedMembers()))) {
+            if (CommonActivityUtils.ROOM_SIZE_ONE_TO_ONE == memberList.size()) {
                 for (RoomMember member : memberList) {
                     if (member.getUserId().equals(aSearchedUserId)) {
                         retVal = true;
@@ -1163,15 +1219,16 @@ public class CommonActivityUtils {
     /**
      * Set a room as a direct chat room.<br>
      * In case of success the corresponding room is displayed.
-     * @param aSession session
-     * @param aRoomId room ID
+     *
+     * @param aSession           session
+     * @param aRoomId            room ID
      * @param aParticipantUserId the direct chat invitee user ID
-     * @param fromActivity calling activity
-     * @param callback async response handler
+     * @param fromActivity       calling activity
+     * @param callback           async response handler
      */
     public static void setToggleDirectMessageRoom(final MXSession aSession, final String aRoomId, String aParticipantUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
 
-        if((null == aSession) || (null == fromActivity) || TextUtils.isEmpty(aRoomId)) {
+        if ((null == aSession) || (null == fromActivity) || TextUtils.isEmpty(aRoomId)) {
             Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): failure - invalid input parameters");
         } else {
             aSession.toggleDirectChatRoom(aRoomId, aParticipantUserId, new ApiCallback<Void>() {
@@ -1261,7 +1318,7 @@ public class CommonActivityUtils {
         for (int index = 0; index < mergedSummaries.size(); index++) {
             RoomSummary summary = mergedSummaries.get(index);
             Room room = session.getDataHandler().getRoom(summary.getRoomId());
-            
+
             if ((null == room) || room.isInvited() || room.isConferenceUserRoom()) {
                 mergedSummaries.remove(index);
                 index--;
@@ -1331,7 +1388,6 @@ public class CommonActivityUtils {
     //==============================================================================================================
 
 
-
     //==============================================================================================================
     // Media utils
     //==============================================================================================================
@@ -1357,7 +1413,7 @@ public class CommonActivityUtils {
                     } catch (ActivityNotFoundException e) {
                         Toast.makeText(activity, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        Log.d(LOG_TAG,"## openMedia(): Exception Msg="+e.getMessage());
+                        Log.d(LOG_TAG, "## openMedia(): Exception Msg=" + e.getMessage());
                     }
                 }
             });
@@ -1419,9 +1475,9 @@ public class CommonActivityUtils {
 
             int counter = 1;
 
-            while(dstFile.exists()) {
+            while (dstFile.exists()) {
                 dstFile = new File(dstDir, baseFileName + "(" + counter + ")" + fileExt);
-                counter ++;
+                counter++;
             }
         }
 
@@ -1447,7 +1503,7 @@ public class CommonActivityUtils {
                 if (inputStream != null) inputStream.close();
                 if (outputStream != null) outputStream.close();
             } catch (Exception e) {
-                Log.e(LOG_TAG,"## saveFileInto(): Exception Msg="+e.getMessage());
+                Log.e(LOG_TAG, "## saveFileInto(): Exception Msg=" + e.getMessage());
             }
         }
 
@@ -1478,7 +1534,7 @@ public class CommonActivityUtils {
                     File file = new File(fullFilePath);
                     downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG,"## saveMediaIntoDownloads(): Exception Msg="+e.getMessage());
+                    Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage());
                 }
             }
         }
@@ -1492,11 +1548,12 @@ public class CommonActivityUtils {
 
     /**
      * Helper method to display a toast message.
+     *
      * @param aCallingActivity calling Activity instance
-     * @param aMsgToDisplay message to display
+     * @param aMsgToDisplay    message to display
      */
-    public static void displayToastOnUiThread(final Activity aCallingActivity, final String aMsgToDisplay)  {
-        if(null != aCallingActivity) {
+    public static void displayToastOnUiThread(final Activity aCallingActivity, final String aMsgToDisplay) {
+        if (null != aCallingActivity) {
             aCallingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -1508,7 +1565,8 @@ public class CommonActivityUtils {
 
     /**
      * Display a toast
-     * @param aContext the context.
+     *
+     * @param aContext       the context.
      * @param aTextToDisplay the text to display.
      */
     public static void displayToast(Context aContext, CharSequence aTextToDisplay) {
@@ -1517,7 +1575,8 @@ public class CommonActivityUtils {
 
     /**
      * Display a snack.
-     * @param aTargetView the parent view.
+     *
+     * @param aTargetView    the parent view.
      * @param aTextToDisplay the text to display.
      */
     public static void displaySnack(View aTargetView, CharSequence aTextToDisplay) {
@@ -1532,14 +1591,14 @@ public class CommonActivityUtils {
      * Display a toast message according to the end call reason.
      *
      * @param aCallingActivity calling activity
-     * @param aCallEndReason define the reason of the end call
+     * @param aCallEndReason   define the reason of the end call
      */
     public static void processEndCallInfo(Activity aCallingActivity, int aCallEndReason) {
-        if(null != aCallingActivity) {
+        if (null != aCallingActivity) {
             if (IMXCall.END_CALL_REASON_UNDEFINED != aCallEndReason) {
                 switch (aCallEndReason) {
                     case IMXCall.END_CALL_REASON_PEER_HANG_UP:
-                        if(aCallingActivity instanceof InComingCallActivity) {
+                        if (aCallingActivity instanceof InComingCallActivity) {
                             CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_cancelled_call));
                         } else {
                             // let VectorCallActivity manage its
@@ -1607,7 +1666,7 @@ public class CommonActivityUtils {
             mBadgeValue = badgeValue;
             ShortcutBadger.setBadge(context, badgeValue);
         } catch (Exception e) {
-            Log.e(LOG_TAG,"## updateBadgeCount(): Exception Msg="+e.getMessage());
+            Log.e(LOG_TAG, "## updateBadgeCount(): Exception Msg=" + e.getMessage());
         }
     }
 
@@ -1624,6 +1683,7 @@ public class CommonActivityUtils {
      * <ul><li>offline</li><li>does not support GCM</li>
      * <li>GCM registration failed</li>
      * <br>Notifications rooms are parsed to track the notification count value.
+     *
      * @param aSession session value
      * @param aContext App context
      */
@@ -1631,12 +1691,12 @@ public class CommonActivityUtils {
         MXDataHandler dataHandler;
 
         // sanity check
-        if ((null == aContext) || (null == aSession)){
-            Log.w(LOG_TAG,"## specificUpdateBadgeUnreadCount(): invalid input null values");
-        } else if( (null == (dataHandler=aSession.getDataHandler()))) {
-            Log.w(LOG_TAG,"## specificUpdateBadgeUnreadCount(): invalid DataHandler instance");
+        if ((null == aContext) || (null == aSession)) {
+            Log.w(LOG_TAG, "## specificUpdateBadgeUnreadCount(): invalid input null values");
+        } else if ((null == (dataHandler = aSession.getDataHandler()))) {
+            Log.w(LOG_TAG, "## specificUpdateBadgeUnreadCount(): invalid DataHandler instance");
         } else {
-            if(aSession.isAlive()) {
+            if (aSession.isAlive()) {
                 boolean isRefreshRequired;
                 GcmRegistrationManager gcmMgr = Matrix.getInstance(aContext).getSharedGCMRegistrationManager();
 
@@ -1654,36 +1714,33 @@ public class CommonActivityUtils {
     /**
      * Update the badge count value according to the rooms content.
      *
-     * @param aContext App context
+     * @param aContext     App context
      * @param aDataHandler data handler instance
      */
     public static void updateBadgeCount(Context aContext, MXDataHandler aDataHandler) {
         //sanity check
-        if((null == aContext) || (null == aDataHandler)) {
+        if ((null == aContext) || (null == aDataHandler)) {
             Log.w(LOG_TAG, "## updateBadgeCount(): invalid input null values");
-        } else if(null == aDataHandler.getStore()) {
+        } else if (null == aDataHandler.getStore()) {
             Log.w(LOG_TAG, "## updateBadgeCount(): invalid store instance");
         } else {
             ArrayList<Room> roomCompleteList = new ArrayList<>(aDataHandler.getStore().getRooms());
             int unreadRoomsCount = 0;
 
             // compute the number of rooms with unread notifications
-            if (null != roomCompleteList) {
+            // "invite to join a room" counts as a notification
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(aContext);
+            boolean isInvitedNotifEnabled = preferences.getBoolean(aContext.getResources().getString(R.string.settings_invited_to_room), false);
 
-                // "invite to join a room" counts as a notification
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(aContext);
-                boolean isInvitedNotifEnabled = preferences.getBoolean(aContext.getResources().getString(R.string.settings_invited_to_room), false);
-
-                for (Room room : roomCompleteList) {
-                    if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
-                        unreadRoomsCount++;
-                    }
+            for (Room room : roomCompleteList) {
+                if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
+                    unreadRoomsCount++;
                 }
-
-                // update the badge counter
-                Log.d(LOG_TAG,"## updateBadgeCount(): badge update count=" + unreadRoomsCount);
-                CommonActivityUtils.updateBadgeCount(aContext, unreadRoomsCount);
             }
+
+            // update the badge counter
+            Log.d(LOG_TAG, "## updateBadgeCount(): badge update count=" + unreadRoomsCount);
+            CommonActivityUtils.updateBadgeCount(aContext, unreadRoomsCount);
         }
     }
 
@@ -1695,6 +1752,7 @@ public class CommonActivityUtils {
 
     /**
      * Log the memory statuses.
+     *
      * @param activity the calling activity
      * @return if the device is running on low memory.
      */
@@ -1743,7 +1801,7 @@ public class CommonActivityUtils {
      */
     public static void onLowMemory(Activity activity) {
         if (!VectorApp.isAppInBackground()) {
-            String activityName = (null!=activity)?activity.getClass().getSimpleName():"NotAvailable";
+            String activityName = (null != activity) ? activity.getClass().getSimpleName() : "NotAvailable";
             Log.e(LOW_MEMORY_LOG_TAG, "Active application : onLowMemory from " + activityName);
 
             // it seems that onLowMemory is called whereas the device is seen on low memory condition
@@ -1768,25 +1826,31 @@ public class CommonActivityUtils {
 
     /**
      * Manage the trim memory.
+     *
      * @param activity the activity.
-     * @param level the memory level
+     * @param level    the memory level
      */
     public static void onTrimMemory(Activity activity, int level) {
-        String activityName = (null!=activity)?activity.getClass().getSimpleName():"NotAvailable";
-        Log.e(LOW_MEMORY_LOG_TAG, "Active application : onTrimMemory from "+ activityName+" level=" + level);
+        String activityName = (null != activity) ? activity.getClass().getSimpleName() : "NotAvailable";
+        Log.e(LOW_MEMORY_LOG_TAG, "Active application : onTrimMemory from " + activityName + " level=" + level);
         // TODO implement things to reduce memory usage
 
         displayMemoryInformation(activity, "onTrimMemory");
     }
 
+    //==============================================================================================================
+    // e2e devices management
+    //==============================================================================================================
+
     /**
      * Display the device verification warning
+     *
      * @param deviceInfo the device info
      */
-    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo, final String sender, final MXSession session, final ArrayAdapter<T> adapter, Activity activiy) {
+    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo, final String sender, final MXSession session, Activity activiy, final ApiCallback<Void> callback) {
 
         // sanity check
-        if((null == deviceInfo) || (null==sender) || (null==session)) {
+        if ((null == deviceInfo) || (null == sender) || (null == session)) {
             Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid imput parameters");
             return;
         }
@@ -1798,13 +1862,13 @@ public class CommonActivityUtils {
 
         TextView textView;
 
-        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_name);
+        textView = (TextView) layout.findViewById(R.id.encrypted_device_info_device_name);
         textView.setText(deviceInfo.displayName());
 
-        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_id);
+        textView = (TextView) layout.findViewById(R.id.encrypted_device_info_device_id);
         textView.setText(deviceInfo.deviceId);
 
-        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_key);
+        textView = (TextView) layout.findViewById(R.id.encrypted_device_info_device_key);
         textView.setText(deviceInfo.fingerprint());
 
         builder.setView(layout);
@@ -1813,33 +1877,7 @@ public class CommonActivityUtils {
         builder.setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender, new ApiCallback<Void>() {
-                    private void onDone() {
-                        if(null != adapter) {
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(Void info) {
-                        onDone();
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onDone();
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onDone();
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onDone();
-                    }
-                });
+                session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender, callback);
             }
         });
 
@@ -1850,5 +1888,83 @@ public class CommonActivityUtils {
         });
 
         builder.create().show();
+    }
+
+    /**
+     * Export the e2e keys for a dedicated session.
+     * @param session the session
+     * @param password the password
+     * @param callback the asynchronous callback.
+     */
+    public static void exportKeys(final MXSession session, final String password, final ApiCallback<String>callback) {
+        final Context appContext = VectorApp.getInstance();
+
+        session.getCrypto().exportRoomKeys(password, new ApiCallback<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytesArray) {
+                try {
+                    ByteArrayInputStream stream = new ByteArrayInputStream(bytesArray);
+                    String url = session.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
+                    stream.close();
+
+                    String path = CommonActivityUtils.saveMediaIntoDownloads(appContext, new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain");
+
+                    if (null != callback) {
+                        callback.onSuccess(path);
+                    }
+                } catch (Exception e) {
+                    if (null != callback) {
+                        callback.onMatrixError(new MatrixError(null, e.getLocalizedMessage()));
+                    }
+                }
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                if (null != callback) {
+                    callback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                if (null != callback) {
+                    callback.onMatrixError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                if (null != callback) {
+                    callback.onUnexpectedError(e);
+                }
+            }
+        });
+    }
+
+    private static final String TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG = "ActionBarActivity.TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG";
+
+    /**
+     * Display the unknown e2e devices
+     * @param session the session
+     * @param activity the calling activity
+     * @param unknownDevices the unknown devices list
+     * @param listener optional listener to add an optional "Send anyway" button
+     */
+    public static void displayUnknownDevicesDialog(MXSession session, FragmentActivity activity, MXUsersDevicesMap<MXDeviceInfo> unknownDevices, VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
+        // sanity checks
+        if ((null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
+            return;
+        }
+
+        FragmentManager fm = activity.getSupportFragmentManager();
+
+        VectorUnknownDevicesFragment fragment = (VectorUnknownDevicesFragment) fm.findFragmentByTag(TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+        if (fragment != null) {
+            fragment.dismissAllowingStateLoss();
+        }
+
+        fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, listener);
+        fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
     }
 }

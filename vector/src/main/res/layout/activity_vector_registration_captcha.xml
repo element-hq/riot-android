@@ -35,7 +35,7 @@
         android:id="@+id/account_creation_webview"
 	    android:layout_alignParentBottom="true"
         android:layout_below="@id/account_creation_message"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
 	    android:layout_height="0dp"
         android:background="#000" />
 

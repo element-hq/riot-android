@@ -73,6 +73,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
 
 public class VectorUtils {
@@ -657,72 +658,73 @@ public class VectorUtils {
     /**
      * Provide the application version
      *
-     * @param activity the activity
+     * @param context the application context
      * @return the version. an empty string is not found.
      */
-    public static String getApplicationVersion(final Activity activity) {
-        return im.vector.Matrix.getInstance(activity).getVersion(false);
+    public static String getApplicationVersion(final Context context) {
+        return im.vector.Matrix.getInstance(context).getVersion(false);
     }
 
     /**
      * Display the licenses text.
-     *
-     * @param activity the activity
      */
-    public static void displayThirdPartyLicenses(final Activity activity) {
+    public static void displayThirdPartyLicenses() {
+        final Activity activity = VectorApp.getCurrentActivity();
 
-        if (null != mMainAboutDialog) {
-            if (mMainAboutDialog.isShowing() && (null != mMainAboutDialog.getOwnerActivity())) {
-                try {
-                    mMainAboutDialog.dismiss();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## displayThirdPartyLicenses() : " + e.getMessage());
+        if (null != activity) {
+            if (null != mMainAboutDialog) {
+                if (mMainAboutDialog.isShowing() && (null != mMainAboutDialog.getOwnerActivity())) {
+                    try {
+                        mMainAboutDialog.dismiss();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## displayThirdPartyLicenses() : " + e.getMessage());
+                    }
                 }
+                mMainAboutDialog = null;
             }
-            mMainAboutDialog = null;
+
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WebView view = (WebView) LayoutInflater.from(activity).inflate(R.layout.dialog_licenses, null);
+                    view.loadUrl("file:///android_asset/open_source_licenses.html");
+
+                    View titleView = LayoutInflater.from(activity).inflate(R.layout.dialog_licenses_header, null);
+
+                    view.setScrollbarFadingEnabled(false);
+                    mMainAboutDialog = new AlertDialog.Builder(activity)
+                            .setCustomTitle(titleView)
+                            .setView(view)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mMainAboutDialog = null;
+                                }
+                            })
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    mMainAboutDialog = null;
+                                }
+                            })
+                            .create();
+
+                    mMainAboutDialog.show();
+                }
+            });
         }
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                WebView view = (WebView) LayoutInflater.from(activity).inflate(R.layout.dialog_licenses, null);
-                view.loadUrl("file:///android_asset/open_source_licenses.html");
-
-                View titleView = LayoutInflater.from(activity).inflate(R.layout.dialog_licenses_header, null);
-
-                view.setScrollbarFadingEnabled(false);
-                mMainAboutDialog = new AlertDialog.Builder(activity)
-                        .setCustomTitle(titleView)
-                        .setView(view)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mMainAboutDialog = null;
-                            }
-                        })
-                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                mMainAboutDialog = null;
-                            }
-                        })
-                        .create();
-
-                mMainAboutDialog.show();
-            }
-        });
     }
 
     /**
      * Open a webview above the current activity.
      *
-     * @param activity the activity
-     * @param url      the url to open
+     * @param context the application context
+     * @param url     the url to open
      */
-    private static void displayInWebview(final Activity activity, String url) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+    private static void displayInWebview(final Context context, String url) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
-        WebView wv = new WebView(activity);
+        WebView wv = new WebView(context);
         wv.loadUrl(url);
         wv.setWebViewClient(new WebViewClient() {
             @Override
@@ -740,29 +742,29 @@ public class VectorUtils {
 
     /**
      * Display the term and conditions.
-     *
-     * @param activity the activity
      */
-    public static void displayAppTac(final Activity activity) {
-        displayInWebview(activity, "https://riot.im/tac");
+    public static void displayAppTac() {
+        if (null != VectorApp.getCurrentActivity()) {
+            displayInWebview(VectorApp.getCurrentActivity(), "https://riot.im/tac");
+        }
     }
 
     /**
      * Display the copyright.
-     *
-     * @param activity the activity
      */
-    public static void displayAppCopyright(final Activity activity) {
-        displayInWebview(activity, "https://riot.im/copyright");
+    public static void displayAppCopyright() {
+        if (null != VectorApp.getCurrentActivity()) {
+            displayInWebview(VectorApp.getCurrentActivity(), "https://riot.im/copyright");
+        }
     }
 
     /**
      * Display the privacy policy.
-     *
-     * @param activity the activity
      */
-    public static void displayAppPrivacyPolicy(final Activity activity) {
-        displayInWebview(activity, "https://riot.im/privacy");
+    public static void displayAppPrivacyPolicy() {
+        if (null != VectorApp.getCurrentActivity()) {
+            displayInWebview(VectorApp.getCurrentActivity(), "https://riot.im/privacy");
+        }
     }
 
     //==============================================================================================================

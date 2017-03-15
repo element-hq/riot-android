@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ package im.vector;
 
 import android.content.Context;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
@@ -34,10 +34,10 @@ import org.matrix.androidsdk.rest.model.login.RegistrationParams;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 
 public class LoginHandler {
@@ -80,15 +80,17 @@ public class LoginHandler {
      * @param ctx the context.
      * @param hsConfig The homeserver config.
      * @param username The username.
+     * @param phoneNumber The phone number.
+     * @param phoneNumberCountry The phone number country code.
      * @param password The password;
      * @param callback The callback.
      */
-    public void login(Context ctx, final HomeserverConnectionConfig hsConfig, final String username, final String password,
-                              final SimpleApiCallback<HomeserverConnectionConfig> callback) {
+    public void login(Context ctx, final HomeserverConnectionConfig hsConfig, final String username,
+                      final String phoneNumber, final String phoneNumberCountry, final String password,
+                      final SimpleApiCallback<HomeserverConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
-        LoginRestClient client = new LoginRestClient(hsConfig);
 
-        client.loginWithPassword(username, password, new SimpleApiCallback<Credentials>() {
+        final SimpleApiCallback<Credentials> loginCallback = new SimpleApiCallback<Credentials>() {
             @Override
             public void onSuccess(Credentials credentials) {
                 onRegistrationDone(appCtx, hsConfig, credentials, callback);
@@ -102,7 +104,7 @@ public class LoginHandler {
                     UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                         @Override
                         public void onAccept() {
-                            login(appCtx, hsConfig, username, password, callback);
+                            login(appCtx, hsConfig, username, phoneNumber, phoneNumberCountry, password, callback);
                         }
 
                         @Override
@@ -129,7 +131,36 @@ public class LoginHandler {
             public void onMatrixError(MatrixError e) {
                 callback.onMatrixError(e);
             }
-        });
+        };
+
+        callLogin(hsConfig, username, phoneNumber, phoneNumberCountry, password, loginCallback);
+    }
+
+    /**
+     * Log the user using the given params after identifying if the login is a 3pid, a username or a phone number
+     *
+     * @param hsConfig
+     * @param username
+     * @param phoneNumber
+     * @param phoneNumberCountry
+     * @param password
+     * @param callback
+     */
+    private void callLogin(final HomeserverConnectionConfig hsConfig, final String username,
+                           final String phoneNumber, final String phoneNumberCountry,
+                           final String password, final SimpleApiCallback<Credentials> callback) {
+        LoginRestClient client = new LoginRestClient(hsConfig);
+        if (!TextUtils.isEmpty(username)) {
+            if (android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+                // Login with 3pid
+                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, username.toLowerCase(), password, callback);
+            } else {
+                // Login with user
+                client.loginWithUser(username, password, callback);
+            }
+        } else if (!TextUtils.isEmpty(phoneNumber) && !TextUtils.isEmpty(phoneNumberCountry)) {
+            client.loginWithPhoneNumber(phoneNumber, phoneNumberCountry, password, callback);
+        }
     }
 
     /**
@@ -255,14 +286,16 @@ public class LoginHandler {
     }
 
     /**
-     * Request a validation token.
+     * Request a validation token for the given email
      * @param ctx the context.
      * @param hsConfig the homeserver configuration.
      * @param email the email.
      * @param session the session description
      * @param callback the callback.
      */
-    public void requestValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig, final String email, final String session, final SimpleApiCallback<ThreePid> callback) {
+    public void requestEmailValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig,
+                                            final String email, final String session,
+                                            final SimpleApiCallback<ThreePid> callback) {
         final ThreePid pid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
 
         ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
@@ -275,7 +308,7 @@ public class LoginHandler {
         nextLink += "&is_url=" + hsConfig.getIdentityServerUri().toString();
         nextLink += "&session_id=" + session;
 
-        pid.requestValidationToken(client, nextLink, new ApiCallback<Void>() {
+        pid.requestEmailValidationToken(client, nextLink, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 callback.onSuccess(pid);
@@ -290,7 +323,7 @@ public class LoginHandler {
                     UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                         @Override
                         public void onAccept() {
-                            requestValidationToken(ctx,hsConfig, email, session, callback);
+                            requestEmailValidationToken(ctx,hsConfig, email, session, callback);
                         }
 
                         @Override
@@ -324,19 +357,21 @@ public class LoginHandler {
      * Perform the validation of a mail ownership.
      * @param aCtx Android App context
      * @param aHomeServerConfig server configuration
-     * @param aToken the token generated by {@link #requestValidationToken(Context, HomeserverConnectionConfig, String, String, SimpleApiCallback)}
-     * @param aClientSecret the client secret which was supplied by {@link #requestValidationToken(Context, HomeserverConnectionConfig, String, String, SimpleApiCallback)}
+     * @param aToken the token generated by {@link #requestEmailValidationToken(Context, HomeserverConnectionConfig, String, String, SimpleApiCallback)}
+     * @param aClientSecret the client secret which was supplied by {@link #requestEmailValidationToken(Context, HomeserverConnectionConfig, String, String, SimpleApiCallback)}
      * @param aSid the server identity session id
      * @param aRespCallback asynchronous callback response
      */
-    public void submitEmailTokenValidation(final Context aCtx, final HomeserverConnectionConfig aHomeServerConfig, final String aToken, final String aClientSecret, final String aSid, final ApiCallback<Map<String,Object>> aRespCallback) {
+    public void submitEmailTokenValidation(final Context aCtx, final HomeserverConnectionConfig aHomeServerConfig,
+                                           final String aToken, final String aClientSecret, final String aSid,
+                                           final ApiCallback<Boolean> aRespCallback) {
         final ThreePid pid = new ThreePid(null,  ThreePid.MEDIUM_EMAIL);
         ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
 
-        pid.submitEmailValidationToken(restClient, aToken, aClientSecret, aSid, new ApiCallback<Map<String,Object>>() {
+        pid.submitValidationToken(restClient, aToken, aClientSecret, aSid, new ApiCallback<Boolean>() {
             @Override
-            public void onSuccess(Map<String,Object> info) {
-                aRespCallback.onSuccess(info);
+            public void onSuccess(Boolean isSuccess) {
+                aRespCallback.onSuccess(isSuccess);
             }
 
             @Override

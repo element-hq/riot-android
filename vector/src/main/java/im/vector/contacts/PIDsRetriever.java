@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +25,17 @@ import android.util.Log;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import im.vector.Matrix;
+import org.matrix.androidsdk.rest.model.ThreePid;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import im.vector.Matrix;
 
 /**
  * retrieve the contact matrix IDs
@@ -63,8 +69,8 @@ public class PIDsRetriever {
         return mPIDsRetriever;
     }
 
-    // MatrixID <-> email
-    private final HashMap<String, Contact.MXID> mMatrixIdsByElement = new HashMap<>();
+    // MatrixID <-> medium
+    private final HashMap<String, Contact.MXID> mMatrixIdsByMedium = new HashMap<>();
 
     // listeners list
     private PIDsRetrieverListener mListener = null;
@@ -81,14 +87,14 @@ public class PIDsRetriever {
      * Clear the email to matrix id conversion table
      */
     public void onAppBackgrounded() {
-        mMatrixIdsByElement.clear();
+        mMatrixIdsByMedium.clear();
     }
 
     /**
      * reset
      */
     public void reset() {
-        mMatrixIdsByElement.clear();
+        mMatrixIdsByMedium.clear();
         mListener = null;
     }
 
@@ -97,45 +103,62 @@ public class PIDsRetriever {
      * @return the linked MXID if it exists
      */
     public Contact.MXID getMXID(String item) {
-        if (null != item) {
-            Contact.MXID mxId = mMatrixIdsByElement.get(item);
+        Contact.MXID mxId = null;
 
-            // test if a valid matrix id has been retrieved
-            if ((null != mxId) && !TextUtils.isEmpty(mxId.mMatrixId)) {
-                return mxId;
+        if ((null != item) && mMatrixIdsByMedium.containsKey(item)) {
+            mxId = mMatrixIdsByMedium.get(item);
+
+            // ensure that a valid matrix Id is set
+            if (null == mxId.mMatrixId) {
+                mxId = null;
             }
         }
 
-        return null;
+        return mxId;
     }
 
     /**
      * Retrieve the matrix ids for a list of contacts with the local cache.
      * @param contacts the contacts list
-     * @return the email addresses which are not cached.
+     * @return the medium addresses which are not cached.
      */
-    private List<String> retrieveMatrixIds(List<Contact> contacts) {
-        ArrayList<String> requestedAddresses = new ArrayList<>();
+    private Set<String> retrieveMatrixIds(List<Contact> contacts) {
+        Set<String> requestedMediums = new HashSet<>();
 
         for (Contact contact : contacts) {
-            // check if the emails have only been checked
+            // check if the medium have only been checked
             // i.e. requested their match PID to the identity server.
+
+            // email first
             for (String email : contact.getEmails()) {
-                if (mMatrixIdsByElement.containsKey(email)) {
-                    Contact.MXID mxid = mMatrixIdsByElement.get(email);
+                if (mMatrixIdsByMedium.containsKey(email)) {
+                    Contact.MXID mxid = mMatrixIdsByMedium.get(email);
 
                     if (null != mxid) {
                         contact.put(email, mxid);
                     }
                 } else {
-                    if (!requestedAddresses.contains(email)) {
-                        requestedAddresses.add(email);
+                    requestedMediums.add(email);
+                }
+            }
+
+            for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
+                if (mMatrixIdsByMedium.containsKey(pn.mMsisdnPhoneNumber)) {
+                    Contact.MXID mxid = mMatrixIdsByMedium.get(pn.mMsisdnPhoneNumber);
+
+                    if (null != mxid) {
+                        contact.put(pn.mMsisdnPhoneNumber, mxid);
                     }
+                } else {
+                    requestedMediums.add(pn.mMsisdnPhoneNumber);
                 }
             }
         }
 
-        return requestedAddresses;
+        // Make sure the set does not contain null value
+        requestedMediums.remove(null);
+
+        return requestedMediums;
     }
 
     /**
@@ -169,32 +192,39 @@ public class PIDsRetriever {
             return;
         }
 
-        List<String> missingEmails = retrieveMatrixIds(contacts);
+        Set<String> missingMediums = retrieveMatrixIds(contacts);
 
-        if (!localUpdateOnly && !missingEmails.isEmpty()) {
-            ArrayList<String> medias = new ArrayList<>();
+        if (!localUpdateOnly && !missingMediums.isEmpty()) {
+            Map<String, String> lookupMap = new HashMap<>();
 
-            for (int index = 0; index < missingEmails.size(); index++) {
-                medias.add("email");
+            for (String medium : missingMediums) {
+                if (medium != null) {
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(medium).matches()) {
+                        lookupMap.put(medium, ThreePid.MEDIUM_EMAIL);
+                    } else {
+                        lookupMap.put(medium, ThreePid.MEDIUM_MSISDN);
+                    }
+                }
             }
 
-            final List<String> fRequestedAddresses = missingEmails;
+            final List<String> fRequestedMediums = new ArrayList<>(lookupMap.keySet());
+            final List<String> medias = new ArrayList<>(lookupMap.values());
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             for (MXSession session : sessions) {
                 final String accountId = session.getCredentials().userId;
 
-                session.lookup3Pids(fRequestedAddresses, medias, new ApiCallback<List<String>>() {
+                session.lookup3Pids(fRequestedMediums, medias, new ApiCallback<List<String>>() {
                     @Override
                     public void onSuccess(final List<String> pids) {
                         Log.e(LOG_TAG, "lookup3Pids success " + pids.size());
                         // update the local cache
-                        for(int index = 0; index < fRequestedAddresses.size(); index++) {
-                            String email = fRequestedAddresses.get(index);
+                        for(int index = 0; index < fRequestedMediums.size(); index++) {
+                            String medium = fRequestedMediums.get(index);
                             String mxId = pids.get(index);
 
                             if (!TextUtils.isEmpty(mxId)) {
-                                mMatrixIdsByElement.put(email, new Contact.MXID(mxId, accountId));
+                                mMatrixIdsByMedium.put(medium, new Contact.MXID(mxId, accountId));
                             }
                         }
 

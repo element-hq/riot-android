@@ -190,7 +190,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                     CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
                 }
 
-                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                ContactsManager.getInstance().refreshLocalContactsSnapshot();
             }
         }
     }

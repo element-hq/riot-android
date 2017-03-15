@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +81,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
     public static final String EXTRA_MATRIX_ID = "CallViewActivity.EXTRA_MATRIX_ID";
     public static final String EXTRA_CALL_ID = "CallViewActivity.EXTRA_CALL_ID";
+    public static final String EXTRA_UNKNOWN_DEVICES = "CallViewActivity.EXTRA_UNKNOWN_DEVICES";
     public static final String EXTRA_AUTO_ACCEPT = "CallViewActivity.EXTRA_AUTO_ACCEPT";
 
     private static final String EXTRA_MIC_MUTE_STATUS = "EXTRA_MIC_MUTE_STATUS";
@@ -385,6 +387,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             // active call must be
             return
                     (state.equals(IMXCall.CALL_STATE_RINGING) && !mCall.isIncoming()) ||
+                            state.equals(IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA) ||
                             state.equals(IMXCall.CALL_STATE_CONNECTING) ||
                             state.equals(IMXCall.CALL_STATE_CONNECTED) ||
                             state.equals(IMXCall.CALL_STATE_CREATE_ANSWER);
@@ -487,8 +490,11 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             layout.removeView(mCallView);
-            layout.addView(mCallView, 1, params);
 
+            // add the call view only is the call is a video one
+            if (mCall.isVideo()) {
+                layout.addView(mCallView, 1, params);
+            }
             // init as GONE, will be displayed according to call states..
             mCall.setVisibility(View.GONE);
         }
@@ -848,12 +854,10 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-        VectorCallSoundManager.stopRinging();
-        instance = null;
-
+    /**
+     * Stop the proximity sensor.
+     */
+    private void stopProximitySensor() {
         // do not release the proximity sensor while pausing the activity
         // when the screen is turned off, the activity is paused.
         if ((null != mProximitySensor) && (null != mSensorMgr)) {
@@ -863,6 +867,25 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
 
         turnScreenOn();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        VectorCallSoundManager.stopRinging();
+        instance = null;
+
+        stopProximitySensor();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // called when the application is put in background
+        if (!mIsScreenOff) {
+            stopProximitySensor();
+        }
     }
 
     @Override
@@ -1444,6 +1467,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             Log.e(LOG_TAG, "## turnScreenOn() failed");
         }
 
+        mIsScreenOff = false;
         mWakeLock = null;
 
         // restore previous brightness (whatever it was)

@@ -70,4 +70,6 @@
     <color name="vector_25_black">#25000000</color>
     <color name="vector_33_black">#33000000</color>
 
+    <color name="vector_white_alpha_50">#80ffffff</color>
+
 </resources>

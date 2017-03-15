@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -95,14 +96,14 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     private MXSession mSession;
 
     // the universal link parameters
-    private HashMap<String, String>  mParameters;
+    private HashMap<String, String> mParameters;
 
     public VectorUniversalLinkReceiver() {
     }
 
     @Override
     public void onReceive(final Context aContext, final Intent aIntent) {
-        String action,uriString;
+        String action, uriString;
         Uri intentUri;
 
         Log.d(LOG_TAG, "## onReceive() IN");
@@ -130,13 +131,13 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             boolean isSessionActive = mSession.isAlive();
             boolean isLoginStepDone = mSession.getDataHandler().isInitialSyncComplete();
 
-            Log.d(LOG_TAG, "## onReceive() uri getDataString=" + uriString+"isSessionActive=" + isSessionActive + " isLoginStepDone=" + isLoginStepDone);
+            Log.d(LOG_TAG, "## onReceive() uri getDataString=" + uriString + "isSessionActive=" + isSessionActive + " isLoginStepDone=" + isLoginStepDone);
 
-            if (TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK)){
+            if (TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK)) {
                 Log.d(LOG_TAG, "## onReceive() action = BROADCAST_ACTION_UNIVERSAL_LINK");
                 intentUri = aIntent.getData();
 
-            } else if(TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK_RESUME)){
+            } else if (TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK_RESUME)) {
                 Log.d(LOG_TAG, "## onReceive() action = BROADCAST_ACTION_UNIVERSAL_LINK_RESUME");
 
                 // A first BROADCAST_ACTION_UNIVERSAL_LINK has been received with a room alias that could not be translated to a room ID.
@@ -146,7 +147,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 // aIntent.getParcelableExtra(EXTRA_UNIVERSAL_LINK_SENDER_ID);
             } else {
                 // unknown action (very unlikely)
-                Log.e(LOG_TAG, "## onReceive() Unknown action received ("+action+") - unable to proceed URL link");
+                Log.e(LOG_TAG, "## onReceive() Unknown action received (" + action + ") - unable to proceed URL link");
                 return;
             }
 
@@ -158,11 +159,11 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
                 if (null != params) {
 
-                    if(!isSessionActive) {
+                    if (!isSessionActive) {
                         Log.w(LOG_TAG, "## onReceive() Warning: Session is not alive");
                     }
 
-                    if(!isLoginStepDone){
+                    if (!isLoginStepDone) {
                         Log.w(LOG_TAG, "## onReceive() Warning: Session is not complete - start Login Activity");
 
                         // Start the login activity and wait for BROADCAST_ACTION_UNIVERSAL_LINK_RESUME.
@@ -192,6 +193,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
     /**
      * Start the universal link to process to manage member details activity
+     *
      * @param aContext the context.
      */
     private void manageMemberDetailsActivity(final Context aContext) {
@@ -216,6 +218,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     /**
      * Start the universal link management when the login process is done.
      * If there is no active activity, launch the home activity
+     *
      * @param aContext the context.
      */
     private void manageRoomOnActivity(final Context aContext) {
@@ -251,6 +254,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * Manage the room presence.
      * Check the URL room ID format: if room ID is provided as an alias, we translate it
      * into its corresponding room ID.
+     *
      * @param aContext the context
      */
     private void manageRoom(final Context aContext) {
@@ -261,6 +265,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * Manage the room presence.
      * Check the URL room ID format: if room ID is provided as an alias, we translate it
      * into its corresponding room ID.
+     *
      * @param aContext the context
      */
     private void manageRoom(final Context aContext, final String roomAlias) {
@@ -273,7 +278,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             return;
         }
 
-        if (roomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
+        if (roomIdOrAlias.startsWith("!")) { // usual room Id format (not alias)
             final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomIdOrAlias, mParameters.get(ULINK_EVENT_ID_KEY), roomAlias, mParameters);
             Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
@@ -330,6 +335,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
     /**
      * Open the room activity with the dedicated parameters
+     *
      * @param context the context.
      */
     private void openRoomActivity(Context context) {
@@ -349,9 +355,10 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
         context.startActivity(intent);
     }
-    
+
     /***
      * Tries to parse an universal link.
+     *
      * @param uri the uri to parse
      * @return the universal link items, null if the universal link is invalid
      */
@@ -370,7 +377,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 return null;
             }
 
-            boolean isSupportedHost = TextUtils.equals(uri.getHost(), "vector.im") || TextUtils.equals(uri.getHost(), "riot.im") ;
+            boolean isSupportedHost = TextUtils.equals(uri.getHost(), "vector.im") || TextUtils.equals(uri.getHost(), "riot.im");
 
             // when the uri host is vector.im, it is followed by a dedicated path
             if (isSupportedHost && !mSupportedVectorLinkPaths.contains(uri.getPath())) {
@@ -400,7 +407,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 return null;
             }
 
-            if (!TextUtils.equals(temp[0], "room") && !TextUtils.equals(temp[0], "user") ) {
+            if (!TextUtils.equals(temp[0], "room") && !TextUtils.equals(temp[0], "user")) {
                 Log.e(LOG_TAG, "## parseUniversalLink : not supported " + temp[0]);
                 return null;
             }
@@ -433,7 +440,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
                     Set<String> names = uri.getQueryParameterNames();
 
-                    for(String name : names) {
+                    for (String name : names) {
                         String value = uri.getQueryParameter(name);
 
                         try {
@@ -462,9 +469,10 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
     /**
      * Stop the spinner on the home activity
+     *
      * @param aContext the context.
      */
-    private void stopHomeActivitySpinner(Context aContext){
+    private void stopHomeActivitySpinner(Context aContext) {
         Intent myBroadcastIntent = new Intent(VectorHomeActivity.BROADCAST_ACTION_STOP_WAITING_VIEW);
         aContext.sendBroadcast(myBroadcastIntent);
     }

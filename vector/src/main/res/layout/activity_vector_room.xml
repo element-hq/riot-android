@@ -153,12 +153,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:layout_alignParentBottom="true">
 
                 <RelativeLayout
                     android:id="@+id/room_self_avatar_container"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -175,7 +175,7 @@
                     android:layout_toRightOf="@id/room_self_avatar_container"
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
-                    android:minHeight="24dp"
+                    android:minHeight="56dp"
                     android:layout_height="wrap_content">
 
                     <RelativeLayout
@@ -195,9 +195,10 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:inputType="textCapSentences|textMultiLine"
                         android:textSize="14sp"
-                        android:hint="@string/room_message_placeholder"
+                        android:hint="@string/room_message_placeholder_not_encrypted"
                         android:id="@+id/editText_messageBox"
                         android:layout_centerVertical="true"
                         android:theme="@style/SearchesAppTheme"
@@ -278,7 +279,7 @@
 
             <View
                 android:id="@+id/bottom_separator"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_alignParentLeft="true"
                 android:layout_above="@id/room_bottom_layout"
@@ -286,8 +287,9 @@
 
             <RelativeLayout
                 android:id="@+id/room_notifications_area"
-                android:layout_width="fill_parent"
-                android:layout_height="42dp"
+                android:layout_width="match_parent"
+                android:minHeight="42dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_above="@id/bottom_separator"
                 android:visibility="invisible">
@@ -314,7 +316,7 @@
 
             <View
                 android:id="@+id/room_notification_separator"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_marginLeft="13dp"
                 android:layout_height="1dp"
                 android:layout_above="@id/room_notifications_area"
