@@ -97,6 +97,7 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
         if (searchItem != null) {
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            mSearchView.setMaxWidth(Integer.MAX_VALUE);
             mSearchView.setSubmitButtonEnabled(false);
             mSearchView.setQueryHint(getString(R.string.search_hint));
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));

@@ -20,9 +20,6 @@ package im.vector;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
-
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -41,8 +38,6 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.List;
-
-import im.vector.util.PhoneNumberUtils;
 
 
 public class LoginHandler {
@@ -85,11 +80,14 @@ public class LoginHandler {
      * @param ctx the context.
      * @param hsConfig The homeserver config.
      * @param username The username.
+     * @param phoneNumber The phone number.
+     * @param phoneNumberCountry The phone number country code.
      * @param password The password;
      * @param callback The callback.
      */
-    public void login(Context ctx, final HomeserverConnectionConfig hsConfig, final String username, final String password,
-                              final SimpleApiCallback<HomeserverConnectionConfig> callback) {
+    public void login(Context ctx, final HomeserverConnectionConfig hsConfig, final String username,
+                      final String phoneNumber, final String phoneNumberCountry, final String password,
+                      final SimpleApiCallback<HomeserverConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
 
         final SimpleApiCallback<Credentials> loginCallback = new SimpleApiCallback<Credentials>() {
@@ -106,7 +104,7 @@ public class LoginHandler {
                     UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                         @Override
                         public void onAccept() {
-                            login(appCtx, hsConfig, username, password, callback);
+                            login(appCtx, hsConfig, username, phoneNumber, phoneNumberCountry, password, callback);
                         }
 
                         @Override
@@ -135,36 +133,33 @@ public class LoginHandler {
             }
         };
 
-        callLogin(ctx, hsConfig, username, password, loginCallback);
+        callLogin(hsConfig, username, phoneNumber, phoneNumberCountry, password, loginCallback);
     }
 
     /**
-     * Log the user using the given login/password after identifying if the login is a 3pid or a username
+     * Log the user using the given params after identifying if the login is a 3pid, a username or a phone number
      *
-     * @param context
-     * @param hsConfig the homeserver config
-     * @param login the login
+     * @param hsConfig
+     * @param username
+     * @param phoneNumber
+     * @param phoneNumberCountry
      * @param password
      * @param callback
      */
-    private void callLogin(final Context context, final HomeserverConnectionConfig hsConfig,
-                             final String login, final String password, final SimpleApiCallback<Credentials> callback) {
-        if (!TextUtils.isEmpty(login)) {
-            LoginRestClient client = new LoginRestClient(hsConfig);
-            if (android.util.Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
+    private void callLogin(final HomeserverConnectionConfig hsConfig, final String username,
+                           final String phoneNumber, final String phoneNumberCountry,
+                           final String password, final SimpleApiCallback<Credentials> callback) {
+        LoginRestClient client = new LoginRestClient(hsConfig);
+        if (!TextUtils.isEmpty(username)) {
+            if (android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
                 // Login with 3pid
-                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, login.toLowerCase(), password, callback);
+                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, username.toLowerCase(), password, callback);
             } else {
-                final Phonenumber.PhoneNumber phoneNumber = PhoneNumberUtils.extractPhoneNumber(context, login.trim());
-                if (phoneNumber != null) {
-                    // Login with 3pid
-                    final String phoneNumberFormatted = PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.E164).substring(1);
-                    client.loginWith3Pid(ThreePid.MEDIUM_MSISDN, phoneNumberFormatted, password, callback);
-                } else {
-                    // Login with user
-                    client.loginWithUser(login, password, callback);
-                }
+                // Login with user
+                client.loginWithUser(username, password, callback);
             }
+        } else if (!TextUtils.isEmpty(phoneNumber) && !TextUtils.isEmpty(phoneNumberCountry)) {
+            client.loginWithPhoneNumber(phoneNumber, phoneNumberCountry, password, callback);
         }
     }
 
@@ -291,14 +286,16 @@ public class LoginHandler {
     }
 
     /**
-     * Request a validation token.
+     * Request a validation token for the given email
      * @param ctx the context.
      * @param hsConfig the homeserver configuration.
      * @param email the email.
      * @param session the session description
      * @param callback the callback.
      */
-    public void requestValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig, final String email, final String session, final SimpleApiCallback<ThreePid> callback) {
+    public void requestEmailValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig,
+                                            final String email, final String session,
+                                            final SimpleApiCallback<ThreePid> callback) {
         final ThreePid pid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
 
         ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
@@ -326,7 +323,7 @@ public class LoginHandler {
                     UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                         @Override
                         public void onAccept() {
-                            requestValidationToken(ctx,hsConfig, email, session, callback);
+                            requestEmailValidationToken(ctx,hsConfig, email, session, callback);
                         }
 
                         @Override
@@ -360,8 +357,8 @@ public class LoginHandler {
      * Perform the validation of a mail ownership.
      * @param aCtx Android App context
      * @param aHomeServerConfig server configuration
-     * @param aToken the token generated by {@link #requestValidationToken(Context, HomeserverConnectionConfig, String, String, SimpleApiCallback)}
-     * @param aClientSecret the client secret which was supplied by {@link #requestValidationToken(Context, HomeserverConnectionConfig, String, String, SimpleApiCallback)}
+     * @param aToken the token generated by {@link #requestEmailValidationToken(Context, HomeserverConnectionConfig, String, String, SimpleApiCallback)}
+     * @param aClientSecret the client secret which was supplied by {@link #requestEmailValidationToken(Context, HomeserverConnectionConfig, String, String, SimpleApiCallback)}
      * @param aSid the server identity session id
      * @param aRespCallback asynchronous callback response
      */

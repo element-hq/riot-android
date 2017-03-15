@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
@@ -60,6 +61,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
+import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.util.VectorUtils;
 
 /**
@@ -290,17 +292,35 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             @Override
             public void onNetworkError(Exception e) {
-
+                CommonActivityUtils.displayToast(VectorMemberDetailsActivity.this, e.getLocalizedMessage());
+                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage());
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
+                if (e instanceof MXCryptoError) {
+                    MXCryptoError cryptoError = (MXCryptoError)e;
 
+                    if (MXCryptoError.UNKNOWN_DEVICES_CODE.equals(cryptoError.errcode)) {
+                        CommonActivityUtils.displayUnknownDevicesDialog(mSession, VectorMemberDetailsActivity.this, (MXUsersDevicesMap<MXDeviceInfo>)cryptoError.mExceptionData, new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
+                            @Override
+                            public void onSendAnyway() {
+                                startCall(isVideo);
+                            }
+                        });
+
+                        return;
+                    }
+                }
+
+                CommonActivityUtils.displayToast(VectorMemberDetailsActivity.this, e.getLocalizedMessage());
+                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage());
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
-
+                CommonActivityUtils.displayToast(VectorMemberDetailsActivity.this, e.getLocalizedMessage());
+                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage());
             }
         });
     }
@@ -496,7 +516,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             case ITEM_ACTION_UNIGNORE: {
-
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setMessage(getString(R.string.room_participants_action_unignore) + " ?");
 
@@ -571,6 +590,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     }
 
 
+    /**
+     * Refresh the user devices list.
+     */
     private void refreshDevicesListView() {
         // sanity check
         if ((null != mSession) && (null != mSession.getCrypto())) {
@@ -619,15 +641,20 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if ((android.R.id.home == item.getItemId()) && (View.VISIBLE == mDevicesListView.getVisibility())) {
-            setScreenDevicesListVisibility(View.GONE);
+        if (android.R.id.home == item.getItemId()) {
+            if (View.VISIBLE == mDevicesListView.getVisibility()) {
+                setScreenDevicesListVisibility(View.GONE);
+            } else {
+                // don't use the default parent activity defined in the manifest file.
+                // close this activity when the home button is pressed
+                onBackPressed();
+            }
             return true;
-        } else {
-            return false;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**

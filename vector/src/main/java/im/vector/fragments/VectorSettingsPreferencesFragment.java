@@ -174,6 +174,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private PreferenceCategory mDevicesListSettingsCategory;
     private PreferenceCategory mDevicesListSettingsCategoryDivider;
     private List<DeviceInfo> mDevicesNameList = new ArrayList<>();
+    // used to avoid requesting to enter the password for each deletion
+    private String mAccountPassword;
     // displayed the ignored users list
     private PreferenceCategory mIgnoredUserSettingsCategoryDivider;
     private PreferenceCategory mIgnoredUserSettingsCategory;
@@ -334,6 +336,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    displayLoadingView();
                     Matrix.getInstance(appContext).reloadSessions(appContext);
                     return false;
                 }
@@ -2079,12 +2082,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             mDevicesNameList = aDeviceInfoList;
 
             // sort before display: most recent first
-            Collections.sort(mDevicesNameList, new Comparator<DeviceInfo>() {
-                @Override
-                public int compare(DeviceInfo info1, DeviceInfo info2) {
-                    return -(info1.last_seen_ts < info2.last_seen_ts ? -1 : (info1.last_seen_ts == info2.last_seen_ts ? 0 : 1));
-                }
-            });
+            DeviceInfo.sortByLastSeen(mDevicesNameList);
 
             // start from scratch: remove the displayed ones
             mDevicesListSettingsCategory.removeAll();
@@ -2292,79 +2290,96 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     }
 
     /**
+     * Try to delete a device.
+     * @param deviceId the device id
+     */
+    private void deleteDevice(final String deviceId) {
+        displayLoadingView();
+        mSession.deleteDevice(deviceId, mAccountPassword, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                hideLoadingView();
+                refreshDevicesList(); // force settings update
+            }
+
+            private void onError(String message) {
+                mAccountPassword = null;
+                onCommonDone(message);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+        });
+    }
+    /**
      * Display a delete confirmation dialog to remove a device.<br>
      * The user is invited to enter his password to confirm the deletion.
      *
      * @param aDeviceInfoToDelete device info
      */
     private void displayDeviceDeletionDialog(final DeviceInfo aDeviceInfoToDelete) {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View layout = inflater.inflate(R.layout.devices_settings_delete, null);
+        if ((null != aDeviceInfoToDelete) && (null != aDeviceInfoToDelete.device_id)) {
+            if (!TextUtils.isEmpty(mAccountPassword)) {
+                deleteDevice(aDeviceInfoToDelete.device_id);
+            } else {
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View layout = inflater.inflate(R.layout.devices_settings_delete, null);
 
-        if (null != aDeviceInfoToDelete) {
-            final EditText passwordEditText = (EditText) layout.findViewById(R.id.delete_password);
-            builder.setIcon(android.R.drawable.ic_dialog_alert);
-            builder.setTitle(R.string.devices_delete_dialog_title);
-            builder.setView(layout);
 
-            builder.setPositiveButton(R.string.devices_delete_submit_button_label, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (null != mSession) {
-                        if (TextUtils.isEmpty(passwordEditText.toString())) {
-                            CommonActivityUtils.displayToast(VectorSettingsPreferencesFragment.this.getActivity().getApplicationContext(), "Password missing..");
-                            return;
+                final EditText passwordEditText = (EditText) layout.findViewById(R.id.delete_password);
+                builder.setIcon(android.R.drawable.ic_dialog_alert);
+                builder.setTitle(R.string.devices_delete_dialog_title);
+                builder.setView(layout);
+
+                builder.setPositiveButton(R.string.devices_delete_submit_button_label, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (null != mSession) {
+                            if (TextUtils.isEmpty(passwordEditText.toString())) {
+                                CommonActivityUtils.displayToast(VectorSettingsPreferencesFragment.this.getActivity().getApplicationContext(), "Password missing..");
+                                return;
+                            }
+                            mAccountPassword = passwordEditText.getText().toString();
+                            deleteDevice(aDeviceInfoToDelete.device_id);
                         }
-
-                        displayLoadingView();
-                        mSession.deleteDevice(aDeviceInfoToDelete.device_id, passwordEditText.getText().toString(), new ApiCallback<Void>() {
-                            @Override
-                            public void onSuccess(Void info) {
-                                hideLoadingView();
-                                refreshDevicesList(); // force settings update
-                            }
-
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                onCommonDone(e.getMessage());
-                            }
-
-                            @Override
-                            public void onMatrixError(MatrixError e) {
-                                onCommonDone(e.getMessage());
-                            }
-
-                            @Override
-                            public void onUnexpectedError(Exception e) {
-                                onCommonDone(e.getMessage());
-                            }
-                        });
                     }
-                }
-            });
+                });
 
-            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    hideLoadingView();
-                }
-            });
-
-            builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                @Override
-                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                    if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                        dialog.cancel();
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                         hideLoadingView();
-                        return true;
                     }
-                    return false;
-                }
-            });
+                });
 
-            builder.create().show();
+                builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                            dialog.cancel();
+                            hideLoadingView();
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
+                builder.create().show();
+            }
         } else {
             Log.e(LOG_TAG, "## displayDeviceDeletionDialog(): sanity check failure");
         }

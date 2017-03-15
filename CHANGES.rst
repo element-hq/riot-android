@@ -1,4 +1,4 @@
-Changes in Riot 0.6.9 (2017-03-10)
+Changes in Riot 0.6.9 (2017-03-15)
 ===================================================
  
 Features:
@@ -9,6 +9,8 @@ Features:
 Improvements:
  * Improve the bug report management.
  * Reduce the application loading time.
+ * Add the application / SDK version in the user agent
+ * Add the audio attachments support
   
 Bugfixes:
  * Fix many encryption issues.
@@ -37,6 +39,10 @@ Bugfixes:
  * #980 : Not an admin in a group --> "enable encryption" should not be displayed
  * #984 : «Clear Cache» also erases my settings
  * #989 : it sometimes takes several presses of the send button to get the message out
+ * #1010 : Room members Search with a new account displays "too many contacts" in the known section whereas there is no joined room
+ * #1011 : [e2e devices deletion] : write the user password once and allow to delete several devices
+ * #1012 : Close a member details activity should return to the calling activity 
+ * #1013 : Voip: call canceled when switching from call layout and pending call view  
  
 Changes in Riot 0.6.8 (2017-01-27)
 ===================================================

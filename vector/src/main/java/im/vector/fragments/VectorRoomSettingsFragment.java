@@ -1643,12 +1643,21 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             if (mRoom.isEncrypted()) {
                 sendToUnverifiedDevicesPref.setChecked(false);
 
-                mSession.getCrypto().isRoomBlacklistUnverifiedDevices(mRoom.getRoomId(), new SimpleApiCallback<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean status) {
-                        sendToUnverifiedDevicesPref.setChecked(status);
-                    }
-                });
+                mSession.getCrypto().getGlobalBlacklistUnverifiedDevices(
+                        new SimpleApiCallback<Boolean>() {
+                            @Override
+                            public void onSuccess(final Boolean sendToVerifiedDevicesInAnyRoom) {
+                                mSession.getCrypto().isRoomBlacklistUnverifiedDevices(mRoom.getRoomId(), new SimpleApiCallback<Boolean>() {
+                                    @Override
+                                    public void onSuccess(final Boolean sendToVerifiedDevicesInRoom) {
+                                        sendToUnverifiedDevicesPref.setChecked(sendToVerifiedDevicesInRoom || sendToVerifiedDevicesInAnyRoom);
+                                        sendToUnverifiedDevicesPref.setEnabled(!sendToVerifiedDevicesInAnyRoom);
+                                    }
+                                });
+                            }
+                        }
+                );
+
             }  else if (null != sendToUnverifiedDevicesPref) {
                 mAdvandceSettingsCategory.removePreference(sendToUnverifiedDevicesPref);
             }

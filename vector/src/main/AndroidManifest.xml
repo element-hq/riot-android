@@ -62,6 +62,7 @@
         <activity
             android:name="im.vector.activity.LoginActivity"
             android:theme="@style/LoginAppTheme"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
