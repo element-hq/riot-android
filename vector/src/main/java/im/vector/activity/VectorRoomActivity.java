@@ -1435,10 +1435,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                 if (e instanceof MXCryptoError) {
                     MXCryptoError cryptoError = (MXCryptoError)e;
-
                     if (MXCryptoError.UNKNOWN_DEVICES_CODE.equals(cryptoError.errcode)) {
                         setProgressVisibility(View.GONE);
-                        onUnknownDevices(null, cryptoError);
+                        CommonActivityUtils.displayUnknownDevicesDialog(mSession, VectorRoomActivity.this, (MXUsersDevicesMap<MXDeviceInfo>)cryptoError.mExceptionData, new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
+                            @Override
+                            public void onSendAnyway() {
+                                startIpCall(aIsVideoCall);
+                            }
+                        });
+
                         return;
                     }
                 }
