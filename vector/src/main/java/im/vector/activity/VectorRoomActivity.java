@@ -25,11 +25,13 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -1079,6 +1081,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mVectorOngoingConferenceCallView.onActivityResume();
         }
 
+        displayE2eRoomAlert();
+
         Log.d(LOG_TAG, "-- Resume the activity");
     }
 
@@ -1431,10 +1435,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                 if (e instanceof MXCryptoError) {
                     MXCryptoError cryptoError = (MXCryptoError)e;
-
                     if (MXCryptoError.UNKNOWN_DEVICES_CODE.equals(cryptoError.errcode)) {
                         setProgressVisibility(View.GONE);
-                        onUnknownDevices(null, cryptoError);
+                        CommonActivityUtils.displayUnknownDevicesDialog(mSession, VectorRoomActivity.this, (MXUsersDevicesMap<MXDeviceInfo>)cryptoError.mExceptionData, new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
+                            @Override
+                            public void onSendAnyway() {
+                                startIpCall(aIsVideoCall);
+                            }
+                        });
+
                         return;
                     }
                 }
@@ -3069,6 +3078,32 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     launchRoomDetails(VectorRoomDetailsActivity.PEOPLE_TAB_INDEX);
                 }
             });
+        }
+    }
+
+    private static final String E2E_WARNINGS_PREFERENCES = "E2E_WARNINGS_PREFERENCES";
+
+    /**
+     * Display an e2e alert for the first opened room.
+     */
+    private void displayE2eRoomAlert() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (!preferences.contains(E2E_WARNINGS_PREFERENCES) && (null != mRoom) && mRoom.isEncrypted()) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(E2E_WARNINGS_PREFERENCES, false);
+            editor.commit();
+
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setTitle(R.string.room_e2e_alert_title);
+            builder.setMessage(R.string.room_e2e_alert_message);
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // NOP
+                }
+            });
+            builder.create().show();
         }
     }
 }

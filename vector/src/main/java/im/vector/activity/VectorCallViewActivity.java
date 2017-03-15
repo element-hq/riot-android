@@ -387,6 +387,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             // active call must be
             return
                     (state.equals(IMXCall.CALL_STATE_RINGING) && !mCall.isIncoming()) ||
+                            state.equals(IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA) ||
                             state.equals(IMXCall.CALL_STATE_CONNECTING) ||
                             state.equals(IMXCall.CALL_STATE_CONNECTED) ||
                             state.equals(IMXCall.CALL_STATE_CREATE_ANSWER);

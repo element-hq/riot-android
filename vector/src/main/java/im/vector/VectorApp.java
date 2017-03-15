@@ -163,6 +163,9 @@ public class VectorApp extends Application {
 
         mRageShake.start(this);
 
+        // init the REST client
+        MXSession.initUserAgent(getApplicationContext());
+
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
