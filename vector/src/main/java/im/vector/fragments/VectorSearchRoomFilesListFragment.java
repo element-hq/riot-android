@@ -332,7 +332,8 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
                 if (Message.MSGTYPE_FILE.equals(message.msgtype) ||
                         Message.MSGTYPE_IMAGE.equals(message.msgtype) ||
-                        Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
+                        Message.MSGTYPE_VIDEO.equals(message.msgtype) ||
+                        Message.MSGTYPE_AUDIO.equals(message.msgtype)) {
                     filteredEvents.add(event);
                 }
             }

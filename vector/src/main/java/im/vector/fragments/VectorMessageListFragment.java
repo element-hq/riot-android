@@ -942,7 +942,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
                     getActivity().startActivity(viewImageIntent);
                 }
-            } else if (Message.MSGTYPE_FILE.equals(message.msgtype)) {
+            } else if (Message.MSGTYPE_FILE.equals(message.msgtype) || Message.MSGTYPE_AUDIO.equals(message.msgtype)) {
                 FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
                 if (null != fileMessage.getUrl()) {
