@@ -165,7 +165,14 @@ public class PhoneNumberUtils {
             try {
                 TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
                 String countryCode = tm.getNetworkCountryIso().toUpperCase();
-                setCountryCode(context, countryCode);
+                if (TextUtils.isEmpty(countryCode)
+                        && !TextUtils.isEmpty(Locale.getDefault().getCountry())
+                        && PhoneNumberUtil.getInstance().getCountryCodeForRegion(Locale.getDefault().getCountry()) != 0) {
+                    // Use Locale as a last resort
+                    setCountryCode(context, Locale.getDefault().getCountry());
+                } else {
+                    setCountryCode(context, countryCode);
+                }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## getCountryCode failed " + e.getMessage());
             }

@@ -41,8 +41,6 @@ import im.vector.util.PhoneNumberUtils;
  */
 public class PhoneNumberHandler implements TextWatcher, View.OnFocusChangeListener {
 
-    public static final int REQUEST_COUNTRY = 1245;
-
     @IntDef({DISPLAY_COUNTRY_FULL_NAME, DISPLAY_COUNTRY_ISO_CODE})
     @Retention(RetentionPolicy.SOURCE)
     @interface DisplayMode {
@@ -69,7 +67,8 @@ public class PhoneNumberHandler implements TextWatcher, View.OnFocusChangeListen
      */
 
     public PhoneNumberHandler(@NonNull final Activity activity, @NonNull final EditText phoneNumberInput,
-                              @NonNull final EditText countryCodeInput, @DisplayMode final int displayMode) {
+                              @NonNull final EditText countryCodeInput, @DisplayMode final int displayMode,
+                              final int requestCode) {
         mPhoneNumberInput = phoneNumberInput;
         mCountryCodeInput = countryCodeInput;
         mDisplayMode = displayMode;
@@ -85,7 +84,7 @@ public class PhoneNumberHandler implements TextWatcher, View.OnFocusChangeListen
             public void onClick(View v) {
                 if (!activity.isFinishing()) {
                     final Intent intent = CountryPickerActivity.getIntent(activity, true);
-                    activity.startActivityForResult(intent, REQUEST_COUNTRY);
+                    activity.startActivityForResult(intent, requestCode);
                 }
             }
         });
