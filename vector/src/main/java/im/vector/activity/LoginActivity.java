@@ -1981,7 +1981,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Log.d(LOG_TAG, "## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
                 String captchaResponse = data.getStringExtra("response");
                 RegistrationManager.getInstance().setCaptchaResponse(captchaResponse);
-                RegistrationManager.getInstance().attemptRegistration(this, this);
+                createAccount();
             } else {
                 Log.d(LOG_TAG, "## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
                 // cancel the registration flow
@@ -2137,10 +2137,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         if (mRegistrationPhoneNumberHandler.getPhoneNumber() != null) {
             // Communicate phone number to singleton + start validation process (always phone first)
+            enableLoadingScreen(true);
             RegistrationManager.getInstance().addPhoneNumberThreePid(mRegistrationPhoneNumberHandler.getE164PhoneNumber(), mRegistrationPhoneNumberHandler.getCountryCode(),
                     new RegistrationManager.ThreePidRequestListener() {
                         @Override
                         public void onThreePidRequested(ThreePid pid) {
+                            enableLoadingScreen(false);
                             if (!TextUtils.isEmpty(pid.sid)) {
                                 onPhoneNumberSidReceived(pid);
                             }
@@ -2199,7 +2201,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @param token code entered by the user
      * @param pid phone number pid
      */
-    private void submitPhoneNumber(String token, ThreePid pid) {
+    private void submitPhoneNumber(final String token, final ThreePid pid) {
         if (TextUtils.isEmpty(token)) {
             Toast.makeText(LoginActivity.this, R.string.auth_invalid_token, Toast.LENGTH_SHORT).show();
         } else {
@@ -2269,6 +2271,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @Override
     public void onRegistrationFailed(String message) {
         Log.e(LOG_TAG, "## onRegistrationFailed(): " + message);
+        showMainLayout();
         enableLoadingScreen(false);
         Toast.makeText(this, R.string.login_error_unable_register, Toast.LENGTH_LONG).show();
     }

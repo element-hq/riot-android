@@ -246,7 +246,8 @@ public class RegistrationManager {
                 authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
             }
 
-            if (TextUtils.equals(registrationType, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && mEmail != null) {
+            if (TextUtils.equals(registrationType, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)
+                    && mEmail != null && !isCaptchaRequired()) {
                 // Email will not be processed
                 mShowThreePidWarning = true;
                 mEmail = null;
@@ -275,10 +276,13 @@ public class RegistrationManager {
                 @Override
                 public void onRegistrationFailed(String message) {
                     if (TextUtils.equals(ERROR_MISSING_STAGE, message)
-                            && (mPhoneNumber == null || isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN))
-                            && (mEmail == null || isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY))) {
-                        // At this point, only captcha can be the missing stage
-                        listener.onWaitingCaptcha();
+                            && (mPhoneNumber == null || isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN))){
+                        if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
+                            attemptRegistration(context, listener);
+                        } else {
+                            // At this point, only captcha can be the missing stage
+                            listener.onWaitingCaptcha();
+                        }
                     } else {
                         listener.onRegistrationFailed(message);
                     }
@@ -406,6 +410,15 @@ public class RegistrationManager {
         return mRegistrationResponse != null
                 && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)
                 && (mRegistrationResponse.completed == null || !mRegistrationResponse.completed.contains(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN));
+    }
+
+    /**
+     * @return true if captcha is mandatory for registration and not completed yet
+     */
+    public boolean isCaptchaRequired() {
+        return mRegistrationResponse != null
+                && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)
+                && (mRegistrationResponse.completed == null || !mRegistrationResponse.completed.contains(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA));
     }
 
     /**
