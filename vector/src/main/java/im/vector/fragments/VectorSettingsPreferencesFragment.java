@@ -174,7 +174,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private PreferenceCategory mDevicesListSettingsCategory;
     private PreferenceCategory mDevicesListSettingsCategoryDivider;
     private List<DeviceInfo> mDevicesNameList = new ArrayList<>();
-    // used to avoid requesting to enter the password for each delet deletion
+    // used to avoid requesting to enter the password for each deletion
     private String mAccountPassword;
     // displayed the ignored users list
     private PreferenceCategory mIgnoredUserSettingsCategoryDivider;
