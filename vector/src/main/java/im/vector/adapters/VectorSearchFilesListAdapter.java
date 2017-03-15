@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,14 +119,14 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
                 encryptedFileInfo = videoMessage.info.thumbnail_file;
             }
 
-        } else if(Message.MSGTYPE_FILE.equals(message.msgtype)) {
+        } else if (Message.MSGTYPE_FILE.equals(message.msgtype) || Message.MSGTYPE_AUDIO.equals(message.msgtype)) {
             FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
             if (null != fileMessage.info) {
                 mediaSize = fileMessage.info.size;
             }
 
-            avatarId = org.matrix.androidsdk.R.drawable.filetype_attachment;
+            avatarId = Message.MSGTYPE_AUDIO.equals(message.msgtype) ? org.matrix.androidsdk.R.drawable.filetype_audio : org.matrix.androidsdk.R.drawable.filetype_attachment;
         }
 
         // thumbnail
