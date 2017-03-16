@@ -59,6 +59,10 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     private MXSession mSession;
     private ThreePid mThreePid;
 
+    // True when a phone number is submitted
+    // Used to prevent user to submit several times in a row
+    private boolean mIsSubmittingPhone;
+
      /*
      * *********************************************************************************************
      * Static methods
@@ -102,6 +106,12 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mIsSubmittingPhone = false;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_phone_number_verification, menu);
         return true;
@@ -131,41 +141,45 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
      * Submit code (token) to attach phone number to account
      */
     private void submitCode() {
-        if (TextUtils.isEmpty(mPhoneNumberCode.getText())) {
-            mPhoneNumberCodeLayout.setErrorEnabled(true);
-            mPhoneNumberCodeLayout.setError(getString(R.string.settings_phone_number_verification_error_empty_code));
-        } else {
-            mLoadingView.setVisibility(View.VISIBLE);
-            mSession.getThirdPidRestClient()
-                    .submitValidationToken(mThreePid.medium, mPhoneNumberCode.getText().toString(), mThreePid.clientSecret, mThreePid.sid, new ApiCallback<Boolean>() {
-                        @Override
-                        public void onSuccess(Boolean isSuccess) {
-                            if (isSuccess) {
-                                // the validation of mail ownership succeed, just resume the registration flow
-                                // next step: just register
-                                Log.e(LOG_TAG, "## submitPhoneNumberValidationToken(): onSuccess() - registerAfterEmailValidations() started");
-                                registerAfterPhoneNumberValidation(mThreePid);
-                            } else {
-                                Log.e(LOG_TAG, "## submitPhoneNumberValidationToken(): onSuccess() - failed (success=false)");
-                                onSubmitCodeError(getString(R.string.settings_phone_number_verification_error));
+        if (!mIsSubmittingPhone) {
+            mIsSubmittingPhone = true;
+            if (TextUtils.isEmpty(mPhoneNumberCode.getText())) {
+                mPhoneNumberCodeLayout.setErrorEnabled(true);
+                mPhoneNumberCodeLayout.setError(getString(R.string.settings_phone_number_verification_error_empty_code));
+            } else {
+                mLoadingView.setVisibility(View.VISIBLE);
+                mSession.getThirdPidRestClient()
+                        .submitValidationToken(mThreePid.medium, mPhoneNumberCode.getText().toString(), mThreePid.clientSecret, mThreePid.sid, new ApiCallback<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean isSuccess) {
+                                if (isSuccess) {
+                                    // the validation of mail ownership succeed, just resume the registration flow
+                                    // next step: just register
+                                    Log.e(LOG_TAG, "## submitPhoneNumberValidationToken(): onSuccess() - registerAfterEmailValidations() started");
+                                    registerAfterPhoneNumberValidation(mThreePid);
+                                } else {
+                                    Log.e(LOG_TAG, "## submitPhoneNumberValidationToken(): onSuccess() - failed (success=false)");
+                                    onSubmitCodeError(getString(R.string.settings_phone_number_verification_error));
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            onSubmitCodeError(e.getLocalizedMessage());
-                        }
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onSubmitCodeError(e.getLocalizedMessage());
+                            }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            onSubmitCodeError(e.getLocalizedMessage());
-                        }
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onSubmitCodeError(e.getLocalizedMessage());
+                            }
 
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            onSubmitCodeError(e.getLocalizedMessage());
-                        }
-                    });
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onSubmitCodeError(e.getLocalizedMessage());
+                            }
+                        });
+            }
+
         }
     }
 
@@ -196,6 +210,7 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     }
 
     private void onSubmitCodeError(final String errorMessage) {
+        mIsSubmittingPhone = false;
         mLoadingView.setVisibility(View.GONE);
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
