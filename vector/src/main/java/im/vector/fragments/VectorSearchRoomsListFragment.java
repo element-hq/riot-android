@@ -244,7 +244,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         mAdapter.setSearchPattern(pattern);
 
         if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
-            PublicRoomsManager.startPublicRoomsSearch(null, mAdapter.getSearchedPattern(), new ApiCallback<List<PublicRoom>>() {
+            PublicRoomsManager.getInstance().startPublicRoomsSearch(null, null, false, mAdapter.getSearchedPattern(), new ApiCallback<List<PublicRoom>>() {
 
                 private void onDone(int size) {
                     mAdapter.setMatchedPublicRoomsCount(size);
