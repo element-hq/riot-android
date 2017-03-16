@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/unread_counter_badge_background"
+    android:id="@+id/unread_counter_badge_layout"
+    android:background="@drawable/unread_counter_badge_background_default"
+    android:visibility="invisible"
     android:layout_width="30dp"
     android:layout_height="15dp">
 
