@@ -61,7 +61,7 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
 
     // True when a phone number token is submitted
     // Used to prevent user to submit several times in a row
-    private boolean mIsSubmittingPhone;
+    private boolean mIsSubmittingToken;
 
      /*
      * *********************************************************************************************
@@ -108,7 +108,7 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     @Override
     protected void onResume() {
         super.onResume();
-        mIsSubmittingPhone = false;
+        mIsSubmittingToken = false;
     }
 
     @Override
@@ -141,8 +141,8 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
      * Submit code (token) to attach phone number to account
      */
     private void submitCode() {
-        if (!mIsSubmittingPhone) {
-            mIsSubmittingPhone = true;
+        if (!mIsSubmittingToken) {
+            mIsSubmittingToken = true;
             if (TextUtils.isEmpty(mPhoneNumberCode.getText())) {
                 mPhoneNumberCodeLayout.setErrorEnabled(true);
                 mPhoneNumberCodeLayout.setError(getString(R.string.settings_phone_number_verification_error_empty_code));
@@ -210,7 +210,7 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     }
 
     private void onSubmitCodeError(final String errorMessage) {
-        mIsSubmittingPhone = false;
+        mIsSubmittingToken = false;
         mLoadingView.setVisibility(View.GONE);
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
