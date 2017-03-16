@@ -59,7 +59,7 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     private MXSession mSession;
     private ThreePid mThreePid;
 
-    // True when a phone number is submitted
+    // True when a phone number token is submitted
     // Used to prevent user to submit several times in a row
     private boolean mIsSubmittingPhone;
 
