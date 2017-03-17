@@ -36,17 +36,33 @@ public class HomeFragment extends AbsHomeFragment {
         super.onActivityCreated(savedInstanceState);
 
         initViews();
+
+        if (savedInstanceState != null) {
+            // Restore adapter items
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Abstract methods implementation
+     * *********************************************************************************************
+     */
+
+    @Override
+    protected void onMarkAllAsRead() {
+
     }
 
     @Override
-    public void onMarkAllAsRead() {
-
-    }
-
-    @Override
-    public void onFilter(String pattern) {
-        Toast.makeText(mActivity, "home onFilter "+pattern, Toast.LENGTH_SHORT).show();
+    protected void onFilter(String pattern, OnFilterListener listener) {
+        Toast.makeText(getActivity(), "home onFilter "+pattern, Toast.LENGTH_SHORT).show();
         //TODO adapter getFilter().filter(pattern, listener)
+        //TODO call listener.onFilterDone(); when complete
+    }
+
+    @Override
+    protected void onResetFilter() {
+
     }
 
     /*

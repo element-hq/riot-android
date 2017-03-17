@@ -47,6 +47,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -67,6 +68,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -82,9 +84,9 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
-import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
+import im.vector.fragments.VectorRecentsListFragment;
 import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -198,7 +200,10 @@ public class VectorHomeActivity extends AppCompatActivity {
 
     private FragmentManager mFragmentManager;
 
+    // The current item selected (bottom navigation)
     private int mCurrentMenuId;
+
+    private Map<String, List<Room>> mRoommMap = new HashMap<>();
 
      /*
      * *********************************************************************************************
@@ -657,7 +662,9 @@ public class VectorHomeActivity extends AppCompatActivity {
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_HOME);
                 if (fragment == null) {
                     Log.e(LOG_TAG, "onNavigationItemSelected NEW HOME");
-                    fragment = HomeFragment.newInstance();
+                    //fragment = HomeFragment.newInstance();
+                    // Use old fragment for now
+                    fragment = VectorRecentsListFragment.newInstance(mSession.getCredentials().userId, R.layout.fragment_vector_recents_list);
                 }
                 tag = TAG_FRAGMENT_HOME;
                 break;
@@ -693,6 +700,8 @@ public class VectorHomeActivity extends AppCompatActivity {
         mCurrentMenuId = item.getItemId();
 
         if (fragment != null) {
+            resetFilter();
+
             mFragmentManager.beginTransaction()
                     .replace(R.id.home_recents_list_anchor, fragment, tag)
                     .addToBackStack(tag)
@@ -758,8 +767,28 @@ public class VectorHomeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Reset the filter
+     */
+    private void resetFilter(){
+        mFilterInput.setText("");
+        mFilterInput.clearFocus();
+        hideKeyboard();
+    }
+
     private void showWaitingView() {
         mWaitingView.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Hide the keyboard
+     */
+    private void hideKeyboard() {
+        final View view = getCurrentFocus();
+        if (view != null) {
+            final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     /*
@@ -771,7 +800,7 @@ public class VectorHomeActivity extends AppCompatActivity {
     @OnEditorAction(R.id.filter_input)
     public boolean onSubmitFilter(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            performSearch(mFilterInput.getText().toString());
+            applyFilter(mFilterInput.getText().toString());
             return true;
         }
         return false;
@@ -779,7 +808,7 @@ public class VectorHomeActivity extends AppCompatActivity {
 
     @OnTextChanged(value = R.id.filter_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void onFilter(Editable s) {
-        performSearch(s.toString());
+        applyFilter(s.toString());
     }
 
     /**
@@ -789,7 +818,7 @@ public class VectorHomeActivity extends AppCompatActivity {
      *
      * @param pattern
      */
-    private void performSearch(final String pattern) {
+    private void applyFilter(final String pattern) {
         Fragment fragment = null;
         switch (mCurrentMenuId) {
             case R.id.bottom_action_home:
@@ -807,8 +836,11 @@ public class VectorHomeActivity extends AppCompatActivity {
         }
 
         if (fragment != null && fragment instanceof AbsHomeFragment) {
-            ((AbsHomeFragment) fragment).onFilter(pattern);
+            //TODO loading wheel ?
+            ((AbsHomeFragment) fragment).applyFilter(pattern.trim());
         }
+
+        //TODO add listener to know when filtering is done and dismiss the keyboard
     }
 
     /**

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -25,6 +26,8 @@ public abstract class AbsHomeFragment extends Fragment {
 
     // Butterknife unbinder
     private Unbinder mUnBinder;
+
+    private String mCurrentFilter;
 
     /*
      * *********************************************************************************************
@@ -70,6 +73,8 @@ public abstract class AbsHomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mUnBinder.unbind();
+
+        mCurrentFilter = null;
     }
 
     @Override
@@ -81,11 +86,49 @@ public abstract class AbsHomeFragment extends Fragment {
 
     /*
      * *********************************************************************************************
+     * Public methods
+     * *********************************************************************************************
+     */
+
+    /**
+     * Apply the filter
+     *
+     * @param pattern
+     */
+    public void applyFilter(final String pattern) {
+        if (TextUtils.isEmpty(pattern)) {
+            if (mCurrentFilter != null) {
+                onResetFilter();
+            }
+        } else if (!TextUtils.equals(mCurrentFilter, pattern)) {
+            onFilter(pattern, new OnFilterListener() {
+                @Override
+                public void onFilterDone(int nbItems) {
+                    mCurrentFilter = pattern;
+                }
+            });
+        }
+    }
+
+    /*
+     * *********************************************************************************************
      * Abstract methods
      * *********************************************************************************************
      */
 
-    public abstract void onMarkAllAsRead();
+    protected abstract void onMarkAllAsRead();
 
-    public abstract void onFilter(final String pattern);
+    protected abstract void onFilter(final String pattern, final OnFilterListener listener);
+
+    protected abstract void onResetFilter();
+
+    /*
+     * *********************************************************************************************
+     * Listener
+     * *********************************************************************************************
+     */
+
+    public interface OnFilterListener {
+        void onFilterDone(final int nbItems);
+    }
 }

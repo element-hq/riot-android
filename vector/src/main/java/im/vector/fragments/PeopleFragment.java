@@ -36,16 +36,33 @@ public class PeopleFragment extends AbsHomeFragment {
         super.onActivityCreated(savedInstanceState);
 
         initViews();
+
+        if (savedInstanceState != null) {
+            // Restore adapter items
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Abstract methods implementation
+     * *********************************************************************************************
+     */
+
+    @Override
+    protected void onMarkAllAsRead() {
+
     }
 
     @Override
-    public void onMarkAllAsRead() {
-
+    protected void onFilter(String pattern, OnFilterListener listener) {
+        Toast.makeText(getActivity(), "people onFilter "+pattern, Toast.LENGTH_SHORT).show();
+        //TODO adapter getFilter().filter(pattern, listener)
+        //TODO call listener.onFilterDone(); when complete
     }
 
     @Override
-    public void onFilter(String pattern) {
-        Toast.makeText(mActivity, "people onFilter "+pattern, Toast.LENGTH_SHORT).show();
+    protected void onResetFilter() {
+
     }
 
     /*
