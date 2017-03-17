@@ -8,10 +8,11 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/home_toolbar"
@@ -19,35 +20,55 @@
             android:layout_height="wrap_content"
             style="@style/VectorToolbarStyle"/>
 
+        <ProgressBar
+            android:id="@+id/home_recents_sync_in_progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_below="@id/home_toolbar"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="@color/vector_green_color"
+            android:indeterminate="true"/>
+
         <im.vector.view.VectorPendingCallView
             android:id="@+id/listView_pending_callview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/home_recents_sync_in_progress"
             android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/filter_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/home_recents_sync_in_progress"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/ic_material_search_black"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:hint="@string/home_filter_placeholder"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:padding="6dp" />
 
         <!-- The main content view -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_navigation"
+            android:layout_below="@+id/filter_input"
             tools:context="org.matrix.vector.activity.VectorHomeActivity">
-
-            <ProgressBar
-                android:id="@+id/home_recents_sync_in_progress"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:background="@color/vector_green_color"
-                android:indeterminate="true"/>
 
             <FrameLayout
                 android:id="@+id/home_recents_list_anchor"
-                android:layout_below="@+id/home_recents_sync_in_progress"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/listView_create_room_view"
+                android:id="@+id/floating_action_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -73,7 +94,18 @@
                     android:visibility="visible"/>
             </FrameLayout>
         </RelativeLayout>
-    </LinearLayout>
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            app:itemBackground="@android:color/white"
+            app:itemIconTint="@color/vector_green_color"
+            app:itemTextColor="@color/vector_green_color"
+            app:menu="@menu/bottom_navigation_main" />
+    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
