@@ -3,9 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/unread_counter_badge_layout"
     android:background="@drawable/unread_counter_badge_background_default"
-    android:visibility="invisible"
-    android:layout_width="30dp"
-    android:layout_height="15dp">
+    android:layout_width="25dp"
+    android:layout_height="12dp">
 
     <TextView
         android:id="@+id/unread_counter_badge_text_view"
