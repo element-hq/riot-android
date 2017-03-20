@@ -1,3 +1,20 @@
+/*
+ * Copyright 2014 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package im.vector.util;
 
 import android.annotation.SuppressLint;
@@ -7,7 +24,9 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -23,13 +42,16 @@ public class VectorMarkdownParser extends WebView {
     public interface IVectorMarkdownParserListener {
         /**
          * A markdown text has been parsed.
-         * @param text the text to parse.
+         *
+         * @param text     the text to parse.
          * @param HTMLText the parsed text
          */
         void onMarkdownParsed(String text, String HTMLText);
     }
 
-    /** Java <-> JS interface **/
+    /**
+     * Java <-> JS interface
+     **/
     private MarkDownWebAppInterface mMarkDownWebAppInterface = new MarkDownWebAppInterface();
 
     public VectorMarkdownParser(Context context) {
@@ -67,6 +89,7 @@ public class VectorMarkdownParser extends WebView {
 
     /**
      * Enable / disable the markdown parser
+     *
      * @param enable true to enable the parser
      */
     public void setEnable(boolean enable) {
@@ -79,8 +102,9 @@ public class VectorMarkdownParser extends WebView {
 
     /**
      * Parse the MarkDown text.
+     *
      * @param markdownText the text to parse
-     * @param listener the parser listener
+     * @param listener     the parser listener
      */
     public void markdownToHtml(final String markdownText, final IVectorMarkdownParserListener listener) {
         // sanity check
@@ -103,20 +127,26 @@ public class VectorMarkdownParser extends WebView {
 
         mMarkDownWebAppInterface.initParams(markdownText, listener);
 
-        // call the javascript method
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            loadUrl(String.format("javascript:convertToHtml('%s')", escapeText(markdownText)));
-        } else {
-            evaluateJavascript(String.format("convertToHtml('%s')", escapeText(markdownText)), null);
+        try {
+            // call the javascript method
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                loadUrl(String.format("javascript:convertToHtml('%s')", escapeText(markdownText)));
+            } else {
+                evaluateJavascript(String.format("convertToHtml('%s')", escapeText(markdownText)), null);
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## markdownToHtml() : failed " + e.getMessage());
+            listener.onMarkdownParsed(markdownText, text);
         }
     }
 
     /**
      * Escape text before converting it.
+     *
      * @param text the text to escape
      * @return the escaped text
      */
-    private  static String escapeText(String text) {
+    private static String escapeText(String text) {
         text = text.replace("\\", "\\\\");
         text = text.replace("\n", "\\\\n");
         text = text.replace("'", "\\\'");
@@ -138,8 +168,9 @@ public class VectorMarkdownParser extends WebView {
 
         /**
          * Init the search params.
+         *
          * @param textToParse the text to parse
-         * @param listener the listener.
+         * @param listener    the listener.
          */
         public void initParams(String textToParse, IVectorMarkdownParserListener listener) {
             mTextToParse = textToParse;
