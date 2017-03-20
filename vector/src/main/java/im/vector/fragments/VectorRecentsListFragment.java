@@ -209,6 +209,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                     String roomId = roomSummary.getRoomId();
                     Room room = session.getDataHandler().getRoom(roomId);
+
                     // cannot join a leaving room
                     if ((null == room) || room.isLeaving()) {
                         roomId = null;
@@ -228,6 +229,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                         params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 
                         CommonActivityUtils.goToRoomPage(getActivity(), session, params);
+                    } else {
+                        if (null == room) {
+                            Log.e(LOG_TAG, "Cannot open the room " + roomId + " because there is no matched room.");
+                        } else {
+                            Log.e(LOG_TAG, "Cannot open the room " + roomId + " because the user is leaving the room.");
+                        }
                     }
                 }
 
