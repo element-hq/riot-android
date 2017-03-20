@@ -212,7 +212,7 @@ public final class GcmRegistrationManager {
      * Retrieve the GCM registration token.
      * @return the GCM registration token
      */
-    private String getGCMRegistrationToken() {
+    public String getGCMRegistrationToken() {
         String registrationToken = getStoredRegistrationToken();
 
         if (registrationToken == null) {
@@ -529,6 +529,21 @@ public final class GcmRegistrationManager {
                         mPushersList = new ArrayList<>();
                     } else {
                         mPushersList = new ArrayList<>(pushersResponse.pushers);
+
+                        // move the self pusher to the top of the list
+                        Pusher selfPusher = null;
+
+                        for(Pusher pusher : mPushersList) {
+                            if (TextUtils.equals(pusher.pushkey, getGCMRegistrationToken())) {
+                                selfPusher = pusher;
+                                break;
+                            }
+                        }
+
+                        if (null != selfPusher) {
+                            mPushersList.remove(selfPusher);
+                            mPushersList.add(0, selfPusher);
+                        }
                     }
 
                     if (null != callback) {
@@ -735,6 +750,41 @@ public final class GcmRegistrationManager {
             public void onThirdPartyUnregistrationFailed() {
                 mRegistrationState = RegistrationState.SERVER_REGISTERED;
                 dispatchOnThirdPartyUnregistrationFailed();
+            }
+        });
+    }
+
+    /**
+     * Unregister a pusher.
+     * @param pusher the pusher.
+     * @param callback the asynchronous callback
+     */
+    public void unregister(final MXSession session,  final Pusher pusher, final ApiCallback<Void> callback) {
+        session.getPushersRestClient().removeHttpPusher(pusher.pushkey, pusher.appId, pusher.profileTag, pusher.lang, pusher.appDisplayName, pusher.deviceDisplayName, pusher.data.get("url"), new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                refreshPushersList(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), callback);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                if (null != callback) {
+                    callback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                if (null != callback) {
+                    callback.onMatrixError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                if (null != callback) {
+                    callback.onUnexpectedError(e);
+                }
             }
         });
     }
