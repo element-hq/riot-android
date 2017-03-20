@@ -80,7 +80,7 @@
     <string name="action_sign_out_confirmation">Для безопасности при выходе из системы удаляются все ключи шифрования, что делает невозможным чтение предыдущей зашифрованной истории чата.\n Выберите экспорт, чтобы сделать резервную копию истории чата, перед выходом из системы.</string>
     <string name="action_enable_room_notification">Включить уведомления Комнаты</string>
     <string name="action_disable_room_notification">Отключить уведомления Комнаты</string>
-    <string name="action_create_room">Создать...</string>
+    <string name="action_create_room">Создать…</string>
     <string name="action_room_info">Инфо о Комнаты</string>
     <string name="action_voice_call">Голосовой вызов</string>
     <string name="action_video_call">Видео вызов</string>
@@ -95,7 +95,7 @@
     <string name="action_home">Home</string>
     <string name="action_drawer">Extras</string>
     <string name="action_resume_call">Вернуться к вызову</string>
-    <string name="about">О ...</string>
+    <string name="about">О…</string>
     <string name="copied_to_clipboard">Скопировано в буфер</string>
     <string name="disable">Отключить</string>
 
@@ -158,9 +158,7 @@
     <string name="start_video_call">Начать видео вызов</string>
 
     <plurals name="num_members">
-        <item quantity="zero">%1$s пользователей</item>
         <item quantity="one">%1$s пользователь</item>
-        <item quantity="two">%1$s пользователя</item>
         <item quantity="few">%1$s пользователя</item>
         <item quantity="many">%1$s пользователей</item>
         <item quantity="other">%1$s пользователей</item>
@@ -300,7 +298,7 @@
     <string name="room_creation_room_alias">Алиас</string>
     <string name="room_creation_room_alias_hint">"Алиас комнаты (optional)</string>
     <string name="room_creation_participants">Пригласить</string>
-    <string name="room_creation_participants_hint">(например @me:hs;...)</string>
+    <string name="room_creation_participants_hint">(например @me:hs;…)</string>
     <string name="room_creation_create_room">Создать Комнату</string>
     <string name="room_creation_public">Публичная</string>
     <string name="room_creation_private">Приватная</string>
@@ -350,7 +348,7 @@
     <string name="notification_settings_receive_a_call">Уведомлять о входящих звонках</string>
     <string name="notification_settings_suppress_from_bots">Исключить уведомление от ботов</string>
 
-    <string name="notification_settings_by_default">По-умолчанию...</string>
+    <string name="notification_settings_by_default">По-умолчанию…</string>
     <string name="notification_settings_notify_all_other">Уведомлять для всех остальных сообщений/комнат</string>
 
     <!-- gcm section -->
@@ -387,9 +385,9 @@
 
     <!-- call string -->
     <string name="call_connected">Call connected</string>
-    <string name="call_connecting">Call connecting...</string>
+    <string name="call_connecting">Call connecting…</string>
     <string name="call_ended">Call ended</string>
-    <string name="call_ring">Calling...</string>
+    <string name="call_ring">Calling…</string>
     <string name="incoming_call">Incoming Call</string>
     <string name="incoming_video_call">Incoming Video Call</string>
     <string name="incoming_voice_call">Incoming Voice Call</string>
@@ -563,11 +561,11 @@
     <string name="room_option_start_group_video">Начать групповой видео чат</string>
     <string name="room_option_share_location">Передать местоположение</string>
     <string name="room_option_share_contact">Передать контакт</string>
-    <string name="room_one_user_is_typing">%s печатает...</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s печатают...</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; и другие печатают...</string>
-    <string name="room_message_placeholder_encrypted">Отправить зашифрованное сообщение...</string>
-    <string name="room_message_placeholder_not_encrypted">Отправить сообщение...</string>
+    <string name="room_one_user_is_typing">%s печатает…</string>
+    <string name="room_two_users_are_typing">%1$s &#038; %2$s печатают…</string>
+    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; и другие печатают…</string>
+    <string name="room_message_placeholder_encrypted">Отправить зашифрованное сообщение…</string>
+    <string name="room_message_placeholder_not_encrypted">Отправить сообщение…</string>
     <string name="room_offline_notification">Соединение с сервером потеряно.</string>
     <string name="room_unsent_messages_notification">Сообщения не отправлены. %1$s или %2$s сейчас?</string>
     <string name="room_unknown_devices_messages_notification">Сообщения, не отправленны из-за присутствия неизвестных устройств. %1$s или %2$s сейчас?</string>
