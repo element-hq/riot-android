@@ -187,10 +187,10 @@
     <string name="auth_password_placeholder">Пароль</string>
     <string name="auth_new_password_placeholder">Новый пароль</string>
     <string name="auth_user_name_placeholder">Логин</string>
-    <string name="auth_add_email_message">"Add an email address to your account to let users discover you, and let you reset password."</string>
-    <string name="auth_add_phone_message">"Add a phone number to your account to let users discover you."</string>
-    <string name="auth_add_email_phone_message">"Add an email address and/or a phone number to your account to let users discover you.\n\nEmail address will also let you reset your password."</string>
-    <string name="auth_add_email_and_phone_message">"Add an email address and a phone number to your account to let users discover you.\n\nEmail address will also let you reset your password."</string>
+    <string name="auth_add_email_message">"Добавьте email к вашему аккаунту, чтобы другие пользователи могли найти вас и стал возможено восстановление пароля."</string>
+    <string name="auth_add_phone_message">"Добавьте телефон к вашему аккаунту, чтобы другие пользователи могли найти вас."</string>
+    <string name="auth_add_email_phone_message">"Добавьте email и/или телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.\n\nEmail также позволит вам при необходимости восстановить пароль."</string>
+    <string name="auth_add_email_and_phone_message">"Добавьте email или телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.\n\nEmail также позволит вам при необходимости восстановить пароль."</string>
     <string name="auth_email_placeholder">Email адрес</string>
     <string name="auth_opt_email_placeholder">Email адрес (дополнительный)</string>
     <string name="auth_phone_number_placeholder">Телефонный номер</string>
@@ -220,7 +220,7 @@
     <string name="auth_username_in_use">Логин уже используется</string>
     <string name="auth_home_server">Сервер:</string>
     <string name="auth_identity_server">Identity Server:</string>
-    <string name="auth_reset_password_next_step_button">I have verified my email address</string>
+    <string name="auth_reset_password_next_step_button">Я проверил мой email адрес</string>
     <string name="auth_reset_password_message">Для сброса пароля введите привязанный к учётной записи email:</string>
     <string name="auth_reset_password_missing_email">Должен быть введён привязанный к учётной записи email.</string>
     <string name="auth_reset_password_missing_password">Должен быть введён новый пароль.</string>
@@ -230,7 +230,7 @@
     <string name="auth_reset_password_success_message">Ваш пароль сброшен.\n\nОсуществлён выход на всех устройствах - вы не будете получать push уведомления. Для включения push уведомлений заново войдите на каждом из ваших устройств.</string>
 
     <!-- Login Screen -->
-    <string name="login_error_already_logged_in">Already logged in</string>
+    <string name="login_error_already_logged_in">Уже авторизован</string>
     <string name="login_error_must_start_http">URL должен начинаться с http[s]://</string>
     <string name="login_error_network_error">Сбой входа: сетевая ошибка</string>
     <string name="login_error_unable_login">Сбой входа</string>
@@ -322,17 +322,17 @@
     <string name="notification_settings_enable_notifications">Включить уведомления</string>
     <string name="notification_settings_enable_notifications_warning">Все уведомления на всех устройства отключены.</string>
     <string name="notification_settings_global_notification_settings">Глобальные настройки уведомлений</string>
-    <string name="notification_settings_global_info">Notification settings are saved to your user account and are shared between all clients which support them (including desktop notifications).\n\nRules are applied in order; the first rule which matches defines the outcome for the message.\nSo: Per-word notifications are more important than per-room notifications which are more important than per-sender notifications.\nFor multiple rules of the same kind, the first one in the list that matches takes priority.</string>
-    <string name="notification_settings_per_word_notifications">Per-word notifications</string>
-    <string name="notification_settings_per_word_info">Words match case insensitively, and may include a * wildcard. So:\nfoo matches the string foo surrounded by word delimiters (e.g. punctuation and whitespace or start/end of line).\nfoo* matches any such word that begins foo.\n*foo* matches any such word which includes the 3 letters foo.</string>
-    <string name="notification_settings_always_notify">Always notify</string>
-    <string name="notification_settings_never_notify">Never notify</string>
-    <string name="notification_settings_word_to_match">word to match</string>
-    <string name="notification_settings_sound">Sound</string>
-    <string name="notification_settings_highlight">Highlight</string>
-    <string name="notification_settings_custom_sound">Custom sound</string>
-    <string name="notification_settings_per_room_notifications">Per-room notifications</string>
-    <string name="notification_settings_per_sender_notifications">Per-sender notifications</string>
+    <string name="notification_settings_global_info">Нараметры уведомлений сохраняются в вашем аккаунте и применяются на всех поддерживающих их клиентах (включая веб).\n\nПравила применяются по-порядку; первое совпадение правила определяет действие для сообщения.\nSo: Уведомления по слову приоритетнее чем уведомления на комнату, которые приоритетнее чем уведомления на отправителя.\nСреди однотипных правил первое, которое срабатывает получает приоритет.</string>
+    <string name="notification_settings_per_word_notifications">Уведомления по слову</string>
+    <string name="notification_settings_per_word_info">Шаблон слова регистронезависимый, можно использовать подстановочный символ *. Например:\nтри сработает на строку три окружённую разделителями (т.е. знаками припинания, пробелами или началом/концом строки).\nтри* сработает на любое слово, начинающееся с три.\n*три* сработает на любое слово, содержащее подряд 3 буквы три.</string>
+    <string name="notification_settings_always_notify">Всегда уведомлять</string>
+    <string name="notification_settings_never_notify">Не уведомлять</string>
+    <string name="notification_settings_word_to_match">шаблон фразы</string>
+    <string name="notification_settings_sound">Звук</string>
+    <string name="notification_settings_highlight">Подсветка</string>
+    <string name="notification_settings_custom_sound">Настраиваемый звук</string>
+    <string name="notification_settings_per_room_notifications">Уведомления на комнату</string>
+    <string name="notification_settings_per_sender_notifications">Уведомления на отправителя</string>
     <string name="notification_settings_sender_hint">\@user:domain.com</string>
     <string name="notification_settings_room">Коната: </string>
     <string name="notification_settings_select_room">Выбор комнаты</string>
@@ -366,7 +366,7 @@
     <string name="settings_failed_to_upload_avatar">Ошибка загрузки аватара</string>
 
     <string name="settings_display_name_hint">Введите отображаемое имя</string>
-    <string name="settings_update_profile">Update profile</string>
+    <string name="settings_update_profile">Обновить профиль</string>
 
     <!-- Settings keys -->
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
@@ -450,32 +450,32 @@
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s пригласил вас присоединиться к этой комнате</string>
     <string name="room_preview_subtitle">Это предпросмотр комнаты. Файлы и иные вложения недоступны.</string>
-    <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
-    <string name="room_preview_try_join_an_unknown_room">You are trying to access %s. Would you like to join in order to participate in the discussion?</string>
+    <string name="room_preview_unlinked_email_warning">Приглашение пришло на адрес %s, который не связан с этим аккаунтом.\nВы можете войти под другим аккаунтом или связать email с этим аккаунтом.</string>
+    <string name="room_preview_try_join_an_unknown_room">Вы пытаетесь получить доступ к %s. Хотите присоединиться к обсуждению?</string>
     <string name="room_preview_try_join_an_unknown_room_default">комната</string>
     <string name="room_preview_room_interactions_disabled">Это предпросмотр комнаты. Вы в режиме только чтения.</string>
 
     <!-- Chat creation -->
-    <string name="room_creation_title">New Chat</string>
-    <string name="room_creation_account">Account</string>
-    <string name="room_creation_appearance">Appearance</string>
-    <string name="room_creation_appearance_name">Name</string>
-    <string name="room_creation_appearance_picture">Chat picture (optional)</string>
-    <string name="room_creation_privacy">Privacy</string>
-    <string name="room_creation_private_room">This chat is private</string>
-    <string name="room_creation_public_room">This chat is public</string>
-    <string name="room_creation_make_public">Make public</string>
-    <string name="room_creation_make_public_prompt_title">Make this chat public?</string>
-    <string name="room_creation_make_public_prompt_msg">Are you sure you want to make this chat public? Anyone can read your messages and join the chat.</string>
-    <string name="room_creation_keep_private">Keep private</string>
-    <string name="room_creation_make_private">Make private</string>
-    <string name="room_creation_add_member">Add member</string>
-    <string name="room_creation_name_mobile_email">name, mobile or email</string>
+    <string name="room_creation_title">Новый чат</string>
+    <string name="room_creation_account">Аккаунт</string>
+    <string name="room_creation_appearance">Внешний вид</string>
+    <string name="room_creation_appearance_name">Имя</string>
+    <string name="room_creation_appearance_picture">Аватар (необязательно)</string>
+    <string name="room_creation_privacy">Приватность</string>
+    <string name="room_creation_private_room">Приватный чат</string>
+    <string name="room_creation_public_room">Публичный чат</string>
+    <string name="room_creation_make_public">Сделать публичным</string>
+    <string name="room_creation_make_public_prompt_title">Сделать чат публичным?</string>
+    <string name="room_creation_make_public_prompt_msg">Вы уверены, что хотите сделать чат публичным? Все смогут читать и присоединяться к чату.</string>
+    <string name="room_creation_keep_private">Сохранить приватным</string>
+    <string name="room_creation_make_private">Сделать приватным</string>
+    <string name="room_creation_add_member">Добавить участника</string>
+    <string name="room_creation_name_mobile_email">имя, телефон или email</string>
     <string name="room_header_active_members">%1$d/%2$d активных пользователей</string>
-    <string name="room_header_invite_members">Invite members</string>
+    <string name="room_header_invite_members">Пригласить участников</string>
     <string name="room_title_members">%1$d пользователей</string>
     <string name="room_title_one_member">1 пользователь</string>
-    <string name="room_e2e_alert_title">Warning!</string>
+    <string name="room_e2e_alert_title">Предостережение!</string>
     <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
 
     <!--  Time -->
@@ -583,13 +583,13 @@
     <string name="ssl_do_not_trust">Не доверять</string>
     <string name="ssl_logout_account">Выйти</string>
     <string name="ssl_remain_offline">Игнорировать</string>
-    <string name="ssl_fingerprint_hash">Fingerprint (%s):</string>
-    <string name="ssl_could_not_verify">Could not verify identity of remote server.</string>
-    <string name="ssl_cert_not_trust">This could mean that someone is maliciously intercepting your traffic, or that your phone does not trust the certificate provided by the remote server.</string>
-    <string name="ssl_cert_new_account_expl">If the server administrator has said that this is expected, ensure that the fingerprint below matches the fingerprint provided by them.</string>
-    <string name="ssl_unexpected_existing_expl">The certificate has changed from one that was trusted by your phone. This is HIGHLY UNUSUAL. It is recommended that you DO NOT ACCEPT this new certificate.</string>
-    <string name="ssl_expected_existing_expl">The certificate has changed from a previously trusted one to one that is not trusted. The server may have renewed its certificate. Contact the server administrator for the expected fingerprint.</string>
-    <string name="ssl_only_accept">ONLY accept the certificate if the server administrator has published a fingerprint that matches the one above.</string>
+    <string name="ssl_fingerprint_hash">Отпечаток (%s):</string>
+    <string name="ssl_could_not_verify">Не удалось проверить сертификат удаленного сервера.</string>
+    <string name="ssl_cert_not_trust">Это может означать, что кто-то злонамеренно перехватывает ваш трафик или что ваш телефон не доверяет сертификату, предоставленному удаленным сервером.</string>
+    <string name="ssl_cert_new_account_expl">Если администратор сервера сказал, что это ожидается, убедитесь, что отпечаток сертификата ниже соответствует отпечатку сертификата, предоставленному администратором.</string>
+    <string name="ssl_unexpected_existing_expl">Сертификат сервера изменился и ваш телефон теперь ему не доверяет. Это ОЧЕНЬ ПОДОЗРИТЕЛЬНО. Рекомендуется, НЕ ДОВЕРЯТЬ этому новому сертификату.</string>
+    <string name="ssl_expected_existing_expl">Сертификат изменился с ранее доверенного на недействительный. Возможно, сервер обновил свой сертификат. Свяжитесь с администратором сервера для получения ожидаемого отпечатка сертификата.</string>
+    <string name="ssl_only_accept">Принимайте сертификат ТОЛЬКО если администратор сервера опубликовал отпечаток сертификата, который соответствует указанному выше.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
@@ -808,7 +808,7 @@
     <string name="room_settings_read_history_entry_value_members_only_joined">joined</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
-    <string name="room_settings_room_access_warning">To link to a room it must have an address.</string>
+    <string name="room_settings_room_access_warning">Для генерации ссылки комнада толжна иметь адрес.</string>
     <string name="room_settings_room_access_entry_only_invited">Только приглашённые</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Все у кого есть ссылка на комнату, кроме гостей</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Все у кого есть ссылка на комнату, включая гостей</string>
@@ -915,7 +915,7 @@
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Room contains unknown devices</string>
-    <string name="unknown_devices_alert_message">This room contains unknown devices which have not been verified.\nThis means there is no guarantee that the devices belong to the users they claim to.\nWe recommend you go through the verification process for each device before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown devices:</string>
+    <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
+    <string name="unknown_devices_alert_message">Этот номер содержит неизвестные устройства, которые не были подтверждены.\nЭто означает, что эти устройства могут не пренадлежать тем пользователям, на которых они претендуют. \тПеред продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.\n\nНеизвестные устройства:</string>
     <string name="bug_report_url">https://riot.im/bugreports/submit</string>
 </resources>
