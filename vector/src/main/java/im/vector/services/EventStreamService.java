@@ -947,11 +947,11 @@ public class EventStreamService extends Service {
             from = member.getName();
 
             // is there any avatar url
-            if (!TextUtils.isEmpty(member.avatarUrl)) {
+            if (!TextUtils.isEmpty(member.getAvatarUrl())) {
                 int size = getApplicationContext().getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
 
                 // check if the thumbnail is already downloaded
-                File f = session.getMediasCache().thumbnailCacheFile(member.avatarUrl, size);
+                File f = session.getMediasCache().thumbnailCacheFile(member.getAvatarUrl(), size);
 
                 if (null != f) {
                     BitmapFactory.Options options = new BitmapFactory.Options();
@@ -962,7 +962,7 @@ public class EventStreamService extends Service {
                         Log.e(LOG_TAG, "decodeFile failed with an oom");
                     }
                 } else {
-                    session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(getApplicationContext()), member.avatarUrl, size);
+                    session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(getApplicationContext()), member.getAvatarUrl(), size);
                 }
             }
         }

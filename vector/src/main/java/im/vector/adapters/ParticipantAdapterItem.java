@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +72,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
      */
     public ParticipantAdapterItem(RoomMember member) {
         mDisplayName = member.getName();
-        mAvatarUrl = member.avatarUrl;
+        mAvatarUrl = member.getAvatarUrl();
         mUserId = member.getUserId();
 
         mRoomMember = member;

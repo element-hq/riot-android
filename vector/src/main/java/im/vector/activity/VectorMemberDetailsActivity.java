@@ -1234,7 +1234,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         String userId = mMemberId;
 
         if (null != mRoomMember) {
-            avatarUrl = mRoomMember.avatarUrl;
+            avatarUrl = mRoomMember.getAvatarUrl();
 
             if (TextUtils.isEmpty(avatarUrl)) {
                 userId = mRoomMember.getUserId();
@@ -1382,7 +1382,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // use the room member if it exists
             if (null != mRoomMember) {
                 String displayname = mRoomMember.displayname;
-                String avatarUrl = mRoomMember.avatarUrl;
+                String avatarUrl = mRoomMember.getAvatarUrl();
 
                 // if there is no avatar or displayname , try to find one from the known user
                 // it is always better than the vector avatar or the matrid id.
