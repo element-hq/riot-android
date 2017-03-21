@@ -714,7 +714,7 @@
 
     <string name="settings_user_settings">Параметры пользователя</string>
     <string name="settings_notifications">Уведомления</string>
-    <string name="settings_ignored_users">Чёрный список</string>
+    <string name="settings_ignored_users">Игнорируемые</string>
     <string name="settings_other">Другое</string>
     <string name="settings_advanced">Продвинутые</string>
     <string name="settings_cryptography">Cryptography</string>
@@ -904,18 +904,18 @@
 
     <string name="encryption_information_verify">Подтвердить</string>
     <string name="encryption_information_unverify">Отменить</string>
-    <string name="encryption_information_block">В чёрный список</string>
-    <string name="encryption_information_unblock">Из чёрного списка</string>
+    <string name="encryption_information_block">Игнорировать</string>
+    <string name="encryption_information_unblock">Разблокировать</string>
 
     <string name="encryption_information_verify_device">Проверить устройство</string>
     <string name="encryption_information_verify_device_warning"> Для проверки устройства свяжитесь с его владельцем альтернативным способом (лично или по телефону) и запросите ключ, которный он видит у себя в настройках пользователя. Проверьте что этот ключ совпадает с данными ниже:</string>
-    <string name="encryption_information_verify_device_warning2">Если совпадает, то нажмите кнопку Подтвердить ниже. если не совпадает, овзможно вы заходите добавитьу стройство в чёрный список.\nВ будующем данный процесс будет улучшен.</string>
+    <string name="encryption_information_verify_device_warning2">Если совпадает, то нажмите кнопку Подтвердить ниже. если не совпадает, возможно вы заходите добавитьу стройство в чёрный список.\nВ будующем данный процесс будет улучшен.</string>
     <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
 
     <string name="e2e_enabling_on_app_update">Riot теперь поддерживает E2E шифрование, но вам необходимо заново войти, чтобы включить его.\n\nШифрование можно включить в настройках приложения.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
-    <string name="unknown_devices_alert_message">Этот номер содержит неизвестные устройства, которые не были подтверждены.\nЭто означает, что эти устройства могут не пренадлежать тем пользователям, на которых они претендуют. \тПеред продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.\n\nНеизвестные устройства:</string>
+    <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.\nЭто означает, что эти устройства могут не пренадлежать тем пользователям, на которых они претендуют. \nПеред продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.\n\nНеизвестные устройства:</string>
     <string name="bug_report_url">https://riot.im/bugreports/submit</string>
 </resources>
