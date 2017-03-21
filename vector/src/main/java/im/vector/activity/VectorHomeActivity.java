@@ -66,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -155,8 +156,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private android.support.v7.widget.Toolbar mToolbar;
     private MXSession mSession;
     private DrawerLayout mDrawerLayout;
-    private Iterator mReadReceiptSessionListIterator;
-    private Iterator mReadReceiptSummaryListIterator;
     private IMXStore mReadReceiptStore;
 
     // calls
@@ -168,40 +167,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     // manage the previous first displayed item
     private static int mScrollToIndex = -1;
-
-    private final ApiCallback<Void> mSendReceiptCallback = new ApiCallback<Void>() {
-        @Override
-        public void onSuccess(Void info) {
-            Log.d(LOG_TAG, "## onSuccess() - mSendReceiptCallback");
-            stopWaitingView();
-            markAllMessagesAsRead();
-        }
-
-        private void onError() {
-            stopWaitingView();
-            mReadReceiptSessionListIterator = null;
-            mReadReceiptSummaryListIterator = null;
-            mReadReceiptStore = null;
-        }
-
-        @Override
-        public void onNetworkError(Exception e) {
-            Log.d(LOG_TAG, "## onNetworkError() - mSendReceiptCallback: Exception Msg=" + e.getLocalizedMessage());
-            onError();
-        }
-
-        @Override
-        public void onMatrixError(MatrixError e) {
-            Log.d(LOG_TAG, "## onMatrixError() - mSendReceiptCallback: Exception Msg=" + e.getLocalizedMessage());
-            onError();
-        }
-
-        @Override
-        public void onUnexpectedError(Exception e) {
-            Log.d(LOG_TAG, "## onUnexpectedError() - mSendReceiptCallback: Exception Msg=" + e.getLocalizedMessage());
-            onError();
-        }
-    };
 
     // a shared files intent is waiting the store init
     private Intent mSharedFilesIntent = null;
@@ -767,12 +732,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
             // search in rooms content
             case R.id.ic_action_mark_all_as_read:
-                if(markAllMessagesAsReadWhenOffline()) {
-                    // update badge unread count in case device is offline
-                    CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getApplicationContext());
-                } else {
-                    markAllMessagesAsRead();
-                }
+                markAllMessagesAsRead();
                 break;
 
             default:
@@ -864,121 +824,38 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     }
 
     /**
-     * Send a read receipt for each room.
-     * Recursive method to serialize read receipts processing.
-     * Sessions and summaries are all parsed through iterators.
-     * This method is based on the call back {@link #mSendReceiptCallback} that
-     * will stop the downloading spinner screen after each read receipt be sent.
-     * See also {@link #sendReadReceipt()}.
+     * Send a read receipt to the latest message of each room in the current session.
      */
     private void markAllMessagesAsRead() {
-        Log.d(LOG_TAG, "## markAllMessagesAsRead(): IN");
-
-        // sanity check
-        if(null == mReadReceiptSessionListIterator) {
-            ArrayList<MXSession> sessionsList = new ArrayList<>(Matrix.getMXSessions(this));
-            mReadReceiptSessionListIterator = sessionsList.iterator();
-        }
-
-        // 1 - init summary iterator
-        if (null == mReadReceiptSummaryListIterator) {
-            if (mReadReceiptSessionListIterator.hasNext()) {
-                MXSession session = (MXSession) mReadReceiptSessionListIterator.next();
-
-                if (null != session) {
-                    // test if the session is still alive i.e the account has not been logged out
-                    if (session.isAlive()) {
-                        mReadReceiptStore = session.getDataHandler().getStore();
-                        ArrayList<RoomSummary> summaries = new ArrayList<>(mReadReceiptStore.getSummaries());
-                        mReadReceiptSummaryListIterator = summaries.iterator();
-
-                        if (mReadReceiptSummaryListIterator.hasNext()) {
-                            sendReadReceipt();
-                        }
-
-                    } else {
-                        markAllMessagesAsRead();
-                    }
-                }
-            } else {
-                // no more sessions: session list is empty, reset used fields.
-                Log.d(LOG_TAG, "## markAllMessagesAsRead(): no more sessions - end");
-                mReadReceiptSessionListIterator = null;
-                mReadReceiptSummaryListIterator = null;
+        showWaitingView();
+        mSession.markRoomsAsRead(mSession.getDataHandler().getStore().getRooms(), new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
                 mRecentsListFragment.refresh();
+                stopWaitingView();
             }
-            // 2 - loop on next summary
-        } else if (mReadReceiptSummaryListIterator.hasNext()) {
-            sendReadReceipt();
-        } else {
-            //re start processing to loop on he next session
-            Log.d(LOG_TAG, "## markAllMessagesAsRead(): no more summaries");
-            mReadReceiptSummaryListIterator = null;
-            markAllMessagesAsRead();
-        }
-    }
 
-    /**
-     * Send a read receipt for the last message of the room, when the device is offline.
-     * @return true if operation was performed, false otherwise
-     */
-    private boolean markAllMessagesAsReadWhenOffline() {
-        boolean isOperationDone = false;
-
-        if(!Matrix.getInstance(this).isConnected()) {
-            ArrayList<MXSession> sessionsList = new ArrayList<>(Matrix.getMXSessions(this));
-
-            if (null == sessionsList) {
-                Log.w(LOG_TAG, "## markAllMessagesAsReadWhenOffline(): invalid session list");
-            } else {
-                for (MXSession session : sessionsList) {
-                    if (null != session) {
-                        // test if the session is still alive i.e the account has not been logged out
-                        ArrayList<Room> roomCompleteList = new ArrayList<>(session.getDataHandler().getStore().getRooms());
-
-                        if(null != roomCompleteList) {
-                            // for each room send the receipt for the latest message
-                            for (Room room : roomCompleteList) {
-                                isOperationDone |= room.sendReadReceipt(null);
-                            }
-                        }
-                    }
-                }
+            private void onError(String errorMessage) {
+                Log.e(LOG_TAG, "## markAllMessagesAsRead() failed " + errorMessage);
+                mRecentsListFragment.refresh();
+                stopWaitingView();
             }
-        }
 
-        if(isOperationDone) {
-            // update the room badges
-            mRecentsListFragment.refresh();
-        }
-
-        return isOperationDone;
-    }
-
-    /**
-     * Send a read receipt and manage the spinner screen.
-     * If the read receipt is effective the waiting spinner is started,
-     * otherwise {@link #markAllMessagesAsRead()} is resumed to go through
-     * all the summary iterator.
-     */
-    private void sendReadReceipt(){
-        if((null != mReadReceiptSummaryListIterator) && (null != mReadReceiptStore)) {
-            RoomSummary summary = (RoomSummary) mReadReceiptSummaryListIterator.next();
-
-            if (null != summary) {
-                summary.setHighlighted(false);
-                Room room = mReadReceiptStore.getRoom(summary.getRoomId());
-                if (null != room) {
-                    if(room.sendReadReceipt(mSendReceiptCallback)) {
-                        // send receipt has been sent, start the spinner waiting screen
-                        showWaitingView();
-                    } else {
-                        // the read receipt has not been sent, just go to the next iteration
-                        markAllMessagesAsRead();
-                    }
-                }
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getMessage());
             }
-        }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onError(e.getMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onError(e.getMessage());
+            }
+        });
     }
 
     /**
