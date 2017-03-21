@@ -134,8 +134,8 @@
     <string name="matrix_login">Matrix Login</string>
     <string name="login">Войти</string>
     <string name="logout">Выйти</string>
-    <string name="hs_url">Адрес сервера</string>
-    <string name="identity_url">Identity Server URL</string>
+    <string name="hs_url">URL сервера</string>
+    <string name="identity_url">URL сервера авторизации</string>
     <string name="user">пользователь</string>
     <string name="users">пользователей</string>
     <string name="search">Поиск</string>
@@ -213,13 +213,13 @@
     <string name="auth_forgot_password">Забыли пароль?</string>
     <string name="auth_use_server_options">Использовать особые параметры сервера</string>
     <string name="auth_email_validation_message">Проверьте email для продолжения регистрации</string>
-    <string name="auth_threepid_warning_message">Registration with email and phone number at once is not supported yet until the api exists. Only the phone number will be taken into account.\n\nYou may add your email to your profile in settings.</string>
+    <string name="auth_threepid_warning_message">Регистрация по email и телефону одновременно пока не поддерживается. Только телефонный номер будет связан с аккаунтом.\n\nВы можете добавить свой email в настройках профиля.</string>
     <string name="auth_email_check_name_in_use_message">"Проверка существования логина..</string>
     <string name="auth_email_registration_resumes_message">"Ожидание продолжения регистрации..</string>
     <string name="auth_recaptcha_message">Проверка не являетесь ли вы роботом</string>
     <string name="auth_username_in_use">Логин уже используется</string>
     <string name="auth_home_server">Сервер:</string>
-    <string name="auth_identity_server">Identity Server:</string>
+    <string name="auth_identity_server">Сервер авторизации:</string>
     <string name="auth_reset_password_next_step_button">Я проверил мой email адрес</string>
     <string name="auth_reset_password_message">Для сброса пароля введите привязанный к учётной записи email:</string>
     <string name="auth_reset_password_missing_email">Должен быть введён привязанный к учётной записи email.</string>
@@ -241,10 +241,10 @@
     <string name="login_error_invalid_home_server">Введите корректный URL</string>
 
     <string name="login_error_no_login_flow">Произошла ошибка аутентификаци на этом сервере</string>
-    <string name="login_error_do_not_support_login_flows">Currently we do not support any or all login flows defined by this Home Server</string>
+    <string name="login_error_do_not_support_login_flows">Не весь функционал данного сервера поддерживается этим клиентом.</string>
     <string name="login_error_registration_is_not_supported">Регистрация не поддерживается</string>
     <string name="login_error_forbidden">Некорректный логин/пароль</string>
-    <string name="login_error_unknown_token">The access token specified was not recognised</string>
+    <string name="login_error_unknown_token">Указанный токен не распознан</string>
     <string name="login_error_bad_json">Повреждённый JSON</string>
     <string name="login_error_not_json">Не JSON</string>
     <string name="login_error_limit_exceeded">Отправлено слишком много запросов</string>
@@ -259,7 +259,7 @@
     <string name="universal_link_email_invitation_body_3">Приглашение отправлено на адрес %s не связанный с текущей учётной записью.\nВы можете войти под другой учётной записью, или добавить этот email к текущей.</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
+    <string name="e2e_need_log_in_again">Вам необходимо перелогиниться, для генерации E2E ключей шифрования для этого устройства и отправки их на сервер.\nЭто однократная операция.\nИзвините за неудобства.</string>
 
     <!-- members list Screen -->
     <string name="members_list">Список участников</string>
@@ -284,9 +284,9 @@
     <string name="attachment_remaining_time_minutes">%1$dм %2$dс</string>
 
     <!-- invitation members list Screen -->
-    <string name="members_one_to_one">One to one room members</string>
-    <string name="members_small_room_members">Small room members</string>
-    <string name="members_large_room_members">Large room members</string>
+    <string name="members_one_to_one">Участники комнат один на один</string>
+    <string name="members_small_room_members">Участники малых комнат</string>
+    <string name="members_large_room_members">Участники больших комнат</string>
 
     <!-- room creation dialog Screen -->
     <string name="yesterday">Вчера</string>
@@ -352,16 +352,16 @@
     <string name="notification_settings_notify_all_other">Уведомлять для всех остальных сообщений/комнат</string>
 
     <!-- gcm section -->
-    <string name="settings_use_gcm">Use GCM</string>
+    <string name="settings_use_gcm">Использовать GCM</string>
     <string name="settings_gcm_app_id">GCM pusher application ID</string>
     <string name="settings_gcm_sender_id">GCM sender ID</string>
     <string name="settings_gcm_pusher_url">GCM pusher url</string>
     <string name="settings_gcm_pusher_profile_tag">GCM pusher profile tag</string>
 
-    <string name="settings_config_home_server">Home server: %s</string>
-    <string name="settings_config_identity_server">Identity server: %s</string>
+    <string name="settings_config_home_server">Сервер: %s</string>
+    <string name="settings_config_identity_server">Сервер авторизации: %s</string>
     <string name="settings_config_user_id">ID пользователя: %s</string>
-    <string name="settings_config_access_token">Access token: %s</string>
+    <string name="settings_config_access_token">Токен: %s</string>
     <string name="settings_command_commands">Следующие команды доступны в чате:\r\n\r\n /nick &#60;display_name&#62;&#58; change your display name\r\n /me &#60;action&#62;&#58; send the action you are doing. /me will be replaced by your display name\r\n /join &#60;room_alias&#62;&#58; join a room\r\n /kick &#60;user_id&#62; [&#60;reason>]&#58; kick the user\r\n /ban &#60;user_id&#62; [&#60;reason&#62;]&#58; ban the user\r\n /unban &#60;user_id&#62;&#58; unban the user\r\n /op &#60;user_id&#62; &#60;power_level&#62;&#58; set user power level\r\n /deop &#60;user_id&#62;&#58; reset user power level to the room default value</string>
     <string name="settings_failed_to_upload_avatar">Ошибка загрузки аватара</string>
 
@@ -729,18 +729,18 @@
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Имя</string>
     <string name="devices_details_device_name">Имя устройства</string>
-    <string name="devices_details_last_seen_title">Последнее подклбючение</string>
+    <string name="devices_details_last_seen_title">Последнее подключение</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_date_time_format">dd.MM.yyyy, HH:mm:ss</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
-    <string name="devices_delete_dialog_text">Эта операция требует дополнительно ауьтентификации.\nДля продолжения введите ваш пароль.</string>
+    <string name="devices_delete_dialog_text">Эта операция требует дополнительно аутентификации.\nДля продолжения введите ваш пароль.</string>
     <string name="devices_delete_dialog_title">Аутентификация</string>
     <string name="devices_delete_pswd">Пароль:</string>
     <string name="devices_delete_submit_button_label">Отправить</string>
 
     <string name="settings_logged_in">Авторизован как</string>
-    <string name="settings_home_server">Home Server</string>
-    <string name="settings_identity_server">Identity Server</string>
+    <string name="settings_home_server">Сервер</string>
+    <string name="settings_identity_server">Сервер авторизации</string>
 
     <string name="account_email_validation_title">Ожидается подтверждение</string>
     <string name="account_email_validation_message">Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
@@ -821,21 +821,21 @@
     <string name="room_settings_room_internal_id">Внутренний ID комнаты</string>
     <string name="room_settings_addresses_pref_title">Адреса</string>
     <string name="room_settings_labs_pref_title">Labs</string>
-    <string name="room_settings_labs_warning_message">These are experimental features that may break in unexpected ways. Use with caution.</string>
-    <string name="room_settings_labs_end_to_end">End-to-End Encryption</string>
-    <string name="room_settings_labs_end_to_end_is_active">End-to-End Encryption is active</string>
-    <string name="room_settings_labs_end_to_end_warnings">You need to logout to be able to enable the encryption.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices in this room from this device.</string>
+    <string name="room_settings_labs_warning_message">Это экспериментальный функционал, он может вызвать неожиданный сбой. Используйте с осторожностью.</string>
+    <string name="room_settings_labs_end_to_end">E2E шифрование</string>
+    <string name="room_settings_labs_end_to_end_is_active">E2E шифрование активно</string>
+    <string name="room_settings_labs_end_to_end_warnings">Вам необходимо выйти, чтобы включить шифрование.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Шифровать сообщения только для проверенных устройств</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Никогда не отправлять шифрованное сообщение на непроверенные устройства в этой комнате с этого устройства.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">У этой комнаты ещё нет локального адреса</string>
     <string name="room_settings_addresses_add_new_address">Новый адрес (например #foo:matrix.org")</string>
 
-    <string name="room_settings_addresses_invalid_format_dialog_title">Invalid alias format</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' is not a valid format for an alias</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified. The default main address for this room will be picked randomly"</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_title">Main address warnings</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Неверный формат алиаса</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' неверный формат алиаса</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Необходимо указать основной адрес. По-умолчанию основной адрес для этой комнаты будет выбран случайно"</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Предостережение: основной адрес</string>
 
     <string name="room_settings_set_main_address">Установить как основной адрес</string>
     <string name="room_settings_unset_main_address">Сбросить основной адрес</string>
@@ -847,7 +847,7 @@
     <string name="room_settings_addresses_e2e_disabled">Шифрование отключено для этой комнаты.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Включить шифрование \n(внимание: не может быть отключено!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Внимание!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nOnce encryption is enabled for a room it cannot be turned off again (for now).\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
+    <string name="room_settings_addresses_e2e_prompt_message">End-to-end шифрование пока нестабильно.\n\nВам не следует доверять этому шифрованию критичные данные.\n\nНет возможности расшифровать историю до момента присоединения к комнате.\n\nПосле включения шифрования для комнаты, оно не может быть отключено.\n\nЗашифрованные сообщения не будут отображаться на устройствах, не поддерживающих шифрование.</string>
 
     <!-- Directory -->
     <string name="directory_title">Каталог</string>
@@ -858,61 +858,61 @@
     <string name="ga_use_disable_alert_message">Для отключения отчётов о сбоях необходимо перезапустить приложение.</string>
 
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
+    <string name="failed_to_load_timeline_position">%s пытается загрузить историю комнаты, но не может её найти.</string>
 
 
     <!-- encryption dialog -->
-    <string name="encryption_information_title">End-to-end encryption information</string>
+    <string name="encryption_information_title">Информация о E2E шифровании</string>
 
-    <string name="encryption_information_device_info">Event information</string>
-    <string name="encryption_information_user_id">User id</string>
+    <string name="encryption_information_device_info">Информация о событии</string>
+    <string name="encryption_information_user_id">ID пользователя</string>
     <string name="encryption_information_curve25519_identity_key">Curve25519 identity key</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Claimed Ed25519 fingerprint key</string>
-    <string name="encryption_information_algorithm">Algorithm</string>
-    <string name="encryption_information_session_id">Session ID</string>
-    <string name="encryption_information_decryption_error">Decryption error</string>
+    <string name="encryption_information_algorithm">Алгоритм</string>
+    <string name="encryption_information_session_id">ID сесии</string>
+    <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
 
-    <string name="encryption_information_sender_device_information">Sender device information</string>
-    <string name="encryption_information_device_name">Device name</string>
-    <string name="encryption_information_name">Name</string>
-    <string name="encryption_information_device_id">Device ID</string>
-    <string name="encryption_information_device_key">Device key</string>
-    <string name="encryption_information_verification">Verification</string>
-    <string name="encryption_information_ed25519_fingerprint">Ed25519 fingerprint</string>
+    <string name="encryption_information_sender_device_information">Информация об устройстве отправителя</string>
+    <string name="encryption_information_device_name">Имя устройства</string>
+    <string name="encryption_information_name">Имя</string>
+    <string name="encryption_information_device_id">ID устройства</string>
+    <string name="encryption_information_device_key">Ключ устройства</string>
+    <string name="encryption_information_verification">Проверка</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечаток</string>
 
-    <string name="encryption_export_e2e_room_keys">Export E2E room keys</string>
-    <string name="encryption_export_room_keys">Export room keys</string>
-    <string name="encryption_export_room_keys_summary">Export the keys to a local file</string>
-    <string name="encryption_export_export">Export</string>
-    <string name="encryption_export_enter_passphrase">Enter passphrase</string>
-    <string name="encryption_export_confirm_passphrase">Confirm passphrase</string>
-    <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'</string>
+    <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей комнаты</string>
+    <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>
+    <string name="encryption_export_room_keys_summary">Экспорт ключей в локальный файл</string>
+    <string name="encryption_export_export">Экпорт</string>
+    <string name="encryption_export_enter_passphrase">Введите пароль</string>
+    <string name="encryption_export_confirm_passphrase">Подтвердите пароль</string>
+    <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'</string>
 
-    <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
-    <string name="encryption_import_room_keys">Import room keys</string>
-    <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
-    <string name="encryption_import_import">Import</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device</string>
+    <string name="encryption_import_e2e_room_keys">Импорт E2E ключей комнаты</string>
+    <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
+    <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
+    <string name="encryption_import_import">Импорт</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных устройств</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Никогда не посылать зашифрованные сообщения для непроверенных устройств с этого устройства</string>
 
-    <string name="encryption_information_not_verified">NOT Verified</string>
-    <string name="encryption_information_verified">Verified</string>
-    <string name="encryption_information_blocked">Blacklisted</string>
+    <string name="encryption_information_not_verified">Непроверено</string>
+    <string name="encryption_information_verified">Проверено</string>
+    <string name="encryption_information_blocked">В чёрном списке</string>
 
-    <string name="encryption_information_unknown_device">unknown device</string>
+    <string name="encryption_information_unknown_device">неизветсное устройство</string>
     <string name="encryption_information_none">none</string>
 
-    <string name="encryption_information_verify">Verify</string>
-    <string name="encryption_information_unverify">Unverify</string>
-    <string name="encryption_information_block">Blacklist</string>
-    <string name="encryption_information_unblock">Unblacklist</string>
+    <string name="encryption_information_verify">Подтвердить</string>
+    <string name="encryption_information_unverify">Отменить</string>
+    <string name="encryption_information_block">В чёрный список</string>
+    <string name="encryption_information_unblock">Из чёрного списка</string>
 
-    <string name="encryption_information_verify_device">Verify device</string>
-    <string name="encryption_information_verify_device_warning"> To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesnt, then someone else is intercepting this device and you probably want to press the block button instead.\nIn future this verification process will be more sophisticated.</string>
-    <string name="encryption_information_verify_key_match">I verify that the keys match</string>
+    <string name="encryption_information_verify_device">Проверить устройство</string>
+    <string name="encryption_information_verify_device_warning"> Для проверки устройства свяжитесь с его владельцем альтернативным способом (лично или по телефону) и запросите ключ, которный он видит у себя в настройках пользователя. Проверьте что этот ключ совпадает с данными ниже:</string>
+    <string name="encryption_information_verify_device_warning2">Если совпадает, то нажмите кнопку Подтвердить ниже. если не совпадает, овзможно вы заходите добавитьу стройство в чёрный список.\nВ будующем данный процесс будет улучшен.</string>
+    <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
 
-    <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
+    <string name="e2e_enabling_on_app_update">Riot теперь поддерживает E2E шифрование, но вам необходимо заново войти, чтобы включить его.\n\nШифрование можно включить в настройках приложения.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
