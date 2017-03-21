@@ -309,7 +309,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         super.onPause();
         mIsPaused = true;
         removeSessionListener();
-        PublicRoomsManager.removeListener(mPublicRoomsListener);
+        PublicRoomsManager.getInstance().removeListener(mPublicRoomsListener);
     }
 
     @Override
@@ -318,7 +318,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         mIsPaused = false;
         addSessionListener();
 
-        mAdapter.setPublicRoomsCount(PublicRoomsManager.getPublicRoomsCount());
+        mAdapter.setPublicRoomsCount(PublicRoomsManager.getInstance().getPublicRoomsCount());
 
         // some unsent messages could have been added
         // it does not trigger any live event.
@@ -331,8 +331,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             public void run() {
 
                 // trigger a public room refresh if the list was not initialized or too old (5 mins)
-                if (((null == PublicRoomsManager.getPublicRoomsCount()) || ((System.currentTimeMillis() - mLatestPublicRoomsRefresh) < (5 * 60000))) && (!mIsLoadingPublicRooms)) {
-                    PublicRoomsManager.refreshPublicRoomsCount(mPublicRoomsListener);
+                if (((null == PublicRoomsManager.getInstance().getPublicRoomsCount()) || ((System.currentTimeMillis() - mLatestPublicRoomsRefresh) < (5 * 60000))) && (!mIsLoadingPublicRooms)) {
+                    PublicRoomsManager.getInstance().refreshPublicRoomsCount(mPublicRoomsListener);
                 }
 
                 if (-1 != mScrollToIndex) {
