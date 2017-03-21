@@ -112,6 +112,9 @@
     <!-- Home screen -->
     <string name="home_filter_placeholder">Filter</string>
 
+    <!-- People fragment -->
+    <string name="direct_chats_header">Conversations</string>
+
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
     <string name="send_bug_report">Bug Report</string>

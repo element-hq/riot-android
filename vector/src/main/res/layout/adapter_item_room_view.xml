@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="74dp"
+    android:paddingRight="16dp">
+
+    <!-- Vertical bar with colour changing to indicate unread messages -->
+    <View
+        android:id="@+id/indicator_unread_message"
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray" />
+
+    <im.vector.view.VectorCircularImageView
+        android:id="@+id/room_avatar"
+        android:layout_width="@dimen/chat_avatar_size"
+        android:layout_height="@dimen/chat_avatar_size"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/indicator_unread_message"
+        tools:src="@color/material_blue_100" />
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="6dp"
+        android:layout_toRightOf="@+id/room_avatar">
+
+        <TextView
+            android:id="@+id/room_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/room_unread_count"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-regular"
+            android:maxLines="1"
+            android:textColor="@color/vector_text_black_color"
+            android:textSize="16sp"
+            tools:text="Room name a bit long to be displayed completely" />
+
+        <TextView
+            android:id="@+id/room_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/room_name"
+            android:layout_below="@+id/room_name"
+            android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/vector_0_54_black_color"
+            android:textSize="14sp"
+            tools:text="First message of the room is a bit too long to be displayed" />
+
+        <TextView
+            android:id="@+id/room_update_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/room_name"
+            android:layout_alignParentRight="true"
+            android:fontFamily="sans-serif-light"
+            android:text="Jan 1 00:00"
+            android:textColor="@color/vector_0_54_black_color"
+            android:textSize="12sp"
+            tools:text="14 Mar" />
+
+        <!-- unread count badge -->
+        <TextView
+            android:id="@+id/room_unread_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/room_name"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/room_update_date"
+            android:gravity="center"
+            android:minWidth="25dp"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:background="#AAff00ff"
+            tools:text="12" />
+    </RelativeLayout>
+
+</RelativeLayout>
