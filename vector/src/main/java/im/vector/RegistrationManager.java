@@ -612,7 +612,7 @@ public class RegistrationManager {
     }
 
     /**
-     * Set the flow stages for the current home server)
+     * Set the flow stages for the current home server
      *
      * @param registrationFlowResponse
      */
