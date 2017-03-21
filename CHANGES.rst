@@ -2,15 +2,15 @@ Changes in Riot 0.6.9 (2017-03-15)
 ===================================================
  
 Features:
- * Add the MSISDN support for the authentification, the registration and the member search.
- * Add the encryption keys import / export.
- * Add the unknown devices management.
+ * Add MSISDN support for authentication, registration and member search.
+ * Add encryption keys import / export.
+ * Add unknown devices management.
   
 Improvements:
- * Improve the bug report management.
- * Reduce the application loading time.
- * Add the application / SDK version in the user agent
- * Add the audio attachments support
+ * Improve bug report management.
+ * Reduce application loading time.
+ * Add application / SDK version in the user agent
+ * Add audio attachments support
   
 Bugfixes:
  * Fix many encryption issues.

@@ -761,6 +761,8 @@
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?</string>
 
+    <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
+
     <string name="settings_delete_threepid_confirmation">Are you sure you want to remove the %1$s %2$s?</string>
 
     <string name="settings_phonebook_country">Country</string>
