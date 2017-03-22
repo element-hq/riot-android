@@ -17,6 +17,7 @@ package im.vector.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.support.annotation.IntDef;
 import android.util.AttributeSet;
@@ -33,7 +34,6 @@ import java.lang.annotation.RetentionPolicy;
 import im.vector.R;
 
 public class UnreadCounterBadgeView extends RelativeLayout {
-
     // the background settings
     public static final int HIGHLIGHTED = 0;
     public static final int NOTIFIED = 1;
@@ -41,7 +41,8 @@ public class UnreadCounterBadgeView extends RelativeLayout {
 
     @IntDef({HIGHLIGHTED, NOTIFIED, DEFAULT})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface Status {}
+    public @interface Status {
+    }
 
     private TextView mCounterTextView;
     private View mParentView;
@@ -70,25 +71,29 @@ public class UnreadCounterBadgeView extends RelativeLayout {
     /**
      * Update the badge value and its status
      *
-     * @param value the new value
+     * @param value  the new value
      * @param status the new status
      */
     public void updateCounter(int value, @Status int status) {
         if (value > 0) {
             if (value > 999) {
-                mCounterTextView.setText("999+");
+                mCounterTextView.setText((value / 1000) + "." + ((value % 1000) / 100) + "K");
             } else {
                 mCounterTextView.setText(value + "");
             }
             setVisibility(View.VISIBLE);
 
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadius(100);
             if (status == HIGHLIGHTED) {
-                mParentView.setBackgroundResource(R.drawable.unread_counter_badge_background_highlighted);
+                shape.setColor(getContext().getResources().getColor(R.color.vector_fuchsia_color));
             } else if (status == NOTIFIED) {
-                mParentView.setBackgroundResource(R.drawable.unread_counter_badge_background_notified);
+                shape.setColor(getContext().getResources().getColor(R.color.vector_green_color));
             } else { //if (status == DEFAULT)
-                mParentView.setBackgroundResource(R.drawable.unread_counter_badge_background_default);
+                shape.setColor(getContext().getResources().getColor(R.color.vector_silver_color));
             }
+            mParentView.setBackground(shape);
         } else {
             setVisibility(View.INVISIBLE);
         }
