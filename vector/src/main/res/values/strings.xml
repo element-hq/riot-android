@@ -349,6 +349,11 @@
     <string name="notification_settings_by_default">By default...</string>
     <string name="notification_settings_notify_all_other">Notify for all other messages/rooms</string>
 
+    <!-- Notification settings screen -->
+    <string name="notification_sounds_settings">Notification Sounds</string>
+    <string name="notification_sounds_settings_ringtone">Call ringtone</string>
+    <string name="notification_sound_select">Select ringtone for calls:</string>
+
     <!-- gcm section -->
     <string name="settings_use_gcm">Use GCM</string>
     <string name="settings_gcm_app_id">GCM pusher application ID</string>

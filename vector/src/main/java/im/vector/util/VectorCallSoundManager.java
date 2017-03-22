@@ -369,7 +369,7 @@ public class VectorCallSoundManager {
         stopRinging();
 
         // use the ringTone to manage sound volume properly
-        mRingTone = getRingTone(R.raw.ring, RING_TONE_START_RINGING);
+        mRingTone = RingtoneUtils.getCallRingtone();
 
         if (null != mRingTone) {
             setSpeakerphoneOn(false, true);
