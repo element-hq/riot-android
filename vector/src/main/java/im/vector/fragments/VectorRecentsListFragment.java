@@ -22,11 +22,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +48,11 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventUtils;
+import org.matrix.androidsdk.util.Log;
+
+import java.util.HashMap;
+import java.util.List;
+
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
@@ -59,9 +63,6 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.services.EventStreamService;
 import im.vector.view.RecentsExpandableListView;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener {
 

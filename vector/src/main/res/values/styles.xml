@@ -282,4 +282,16 @@
         <item name="android:textColorHint">@color/vector_74_gray</item>
     </style>
 
+    <style name="ListHeader">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/vector_text_black_color</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:background">@color/list_header_background</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+
 </resources>
