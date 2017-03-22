@@ -47,18 +47,18 @@ import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.adapters.DirectoryServerAdapter;
-import im.vector.util.DirectoryServerData;
+import im.vector.adapters.RoomDirectoryAdapter;
+import im.vector.util.RoomDirectoryData;
 
-public class DirectoryServerPickerActivity extends AppCompatActivity implements DirectoryServerAdapter.OnSelectDirectoryServerListener, SearchView.OnQueryTextListener {
-    private static final String LOG_TAG = "DirServerPickerAct";
+public class RoomDirectoryPickerActivity extends AppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener, SearchView.OnQueryTextListener {
+    private static final String LOG_TAG = "RoomDirPickerActivity";
 
     public static final String EXTRA_SESSION_ID = "EXTRA_SESSION_ID";
     public static final String EXTRA_OUT_DIRECTORY_SERVER_DATA = "EXTRA_OUT_DIRECTORY_SERVER_DATA";
 
     private MXSession mSession;
-    private RecyclerView mDirectorySourceRecyclerView;
-    private DirectoryServerAdapter mDirectoryServerAdapter;
+    private RecyclerView mRoomDirectoryRecyclerView;
+    private RoomDirectoryAdapter mRoomDirectoryAdapter;
     private SearchView mSearchView;
     private View mLoadingView;
 
@@ -69,7 +69,7 @@ public class DirectoryServerPickerActivity extends AppCompatActivity implements 
      */
 
     public static Intent getIntent(final Context context, final String sessionId) {
-        final Intent intent = new Intent(context, DirectoryServerPickerActivity.class);
+        final Intent intent = new Intent(context, RoomDirectoryPickerActivity.class);
         intent.putExtra(EXTRA_SESSION_ID, sessionId);
         return intent;
     }
@@ -83,7 +83,7 @@ public class DirectoryServerPickerActivity extends AppCompatActivity implements 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_directory_server_picker);
+        setContentView(R.layout.activity_room_directory_picker);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -153,33 +153,33 @@ public class DirectoryServerPickerActivity extends AppCompatActivity implements 
         mLoadingView.setVisibility(View.VISIBLE);
 
         mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
-            private void onDone(List<DirectoryServerData> list) {
+            private void onDone(List<RoomDirectoryData> list) {
                 mLoadingView.setVisibility(View.GONE);
                 // all the connected network
-                list.add(0, new DirectoryServerData(null, "matrix.org", null, null, true));
+                list.add(0, new RoomDirectoryData(null, "matrix.org", null, null, true));
 
                 if (!list.isEmpty()) {
-                    list.add(1, new DirectoryServerData(null, "Matrix", null, null, false));
+                    list.add(1, new RoomDirectoryData(null, "Matrix", null, null, false));
                 }
 
                 // if the user uses his own home server
                 if (!mSession.getMyUserId().endsWith(":matrix.org")) {
                     String server = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
-                    list.add(new DirectoryServerData(server, server, null, null, false));
+                    list.add(new RoomDirectoryData(server, server, null, null, false));
                 }
 
-                mDirectoryServerAdapter.updateDirectoryServersList(list);
+                mRoomDirectoryAdapter.updateDirectoryServersList(list);
             }
 
             @Override
             public void onSuccess(Map<String, ThirdPartyProtocol> protocols) {
-                List<DirectoryServerData> list = new ArrayList<>();
+                List<RoomDirectoryData> list = new ArrayList<>();
 
                 for (String key : protocols.keySet()) {
                     ThirdPartyProtocol protocol = protocols.get(key);
 
                     for (ThirdPartyProtocolInstance instance : protocol.instances) {
-                        list.add(new DirectoryServerData(null, instance.desc, instance.icon, instance.instanceId, false));
+                        list.add(new RoomDirectoryData(null, instance.desc, instance.icon, instance.instanceId, false));
                     }
                 }
 
@@ -189,19 +189,19 @@ public class DirectoryServerPickerActivity extends AppCompatActivity implements 
             @Override
             public void onNetworkError(Exception e) {
                 Log.e(LOG_TAG, "## refreshDirectoryServersList() : " + e.getMessage());
-                onDone(new ArrayList<DirectoryServerData>());
+                onDone(new ArrayList<RoomDirectoryData>());
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
                 Log.e(LOG_TAG, "## onMatrixError() : " + e.getMessage());
-                onDone(new ArrayList<DirectoryServerData>());
+                onDone(new ArrayList<RoomDirectoryData>());
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
                 Log.e(LOG_TAG, "## onUnexpectedError() : " + e.getMessage());
-                onDone(new ArrayList<DirectoryServerData>());
+                onDone(new ArrayList<RoomDirectoryData>());
             }
         });
     }
@@ -213,19 +213,19 @@ public class DirectoryServerPickerActivity extends AppCompatActivity implements 
     */
 
     private void initViews() {
-        mDirectorySourceRecyclerView = (RecyclerView) findViewById(R.id.directory_server_recycler_view);
+        mRoomDirectoryRecyclerView = (RecyclerView) findViewById(R.id.room_directory_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mDirectorySourceRecyclerView.setLayoutManager(layoutManager);
-        mDirectoryServerAdapter = new DirectoryServerAdapter(new ArrayList<DirectoryServerData>(), this);
-        mDirectorySourceRecyclerView.setAdapter(mDirectoryServerAdapter);
+        mRoomDirectoryRecyclerView.setLayoutManager(layoutManager);
+        mRoomDirectoryAdapter = new RoomDirectoryAdapter(new ArrayList<RoomDirectoryData>(), this);
+        mRoomDirectoryRecyclerView.setAdapter(mRoomDirectoryAdapter);
 
-        mLoadingView = findViewById(R.id.directory_server_loading);
+        mLoadingView = findViewById(R.id.room_directory_loading);
         refreshDirectoryServersList();
     }
 
     private void filterServersList(final String pattern) {
-        mDirectoryServerAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
+        mRoomDirectoryAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
             @Override
             public void onFilterComplete(int count) {
             }
@@ -239,7 +239,7 @@ public class DirectoryServerPickerActivity extends AppCompatActivity implements 
     */
 
     @Override
-    public void onSelectDirectoryServer(final DirectoryServerData directoryServerData) {
+    public void onSelectRoomDirectory(final RoomDirectoryData directoryServerData) {
         // test if the server exists
         if (!TextUtils.isEmpty(mSearchView.getQuery()) && TextUtils.equals(directoryServerData.getServerUrl(), mSearchView.getQuery())) {
             mLoadingView.setVisibility(View.VISIBLE);
@@ -256,7 +256,7 @@ public class DirectoryServerPickerActivity extends AppCompatActivity implements 
                         private void onError(String error) {
                             Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
                             mLoadingView.setVisibility(View.GONE);
-                            Toast.makeText(DirectoryServerPickerActivity.this, R.string.select_directory_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
+                            Toast.makeText(RoomDirectoryPickerActivity.this, R.string.room_directory_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
                         }
 
                         @Override

@@ -10,13 +10,13 @@
         android:layout_height="?attr/actionBarSize" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/directory_server_recycler_view"
-        android:layout_width="wrap_content"
+        android:id="@+id/room_directory_recycler_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar" />
 
     <RelativeLayout
-        android:id="@+id/directory_server_loading"
+        android:id="@+id/room_directory_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/chat_encoding_background">

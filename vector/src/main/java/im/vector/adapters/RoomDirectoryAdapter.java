@@ -40,18 +40,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import im.vector.util.DirectoryServerData;
-
 import im.vector.R;
+import im.vector.util.RoomDirectoryData;
 
-public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServerAdapter.DirectoryServerViewHolder> implements Filterable {
+public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdapter.RoomDirectoryViewHolder> implements Filterable {
 
-    private static final String LOG_TAG = "DirServerAdapter";
+    private static final String LOG_TAG = "RoomDirectoryAdapter";
 
-    private List<DirectoryServerData> mList;
-    private List<DirectoryServerData> mFilteredList;
+    private List<RoomDirectoryData> mList;
+    private List<RoomDirectoryData> mFilteredList;
 
-    private final OnSelectDirectoryServerListener mListener;
+    private final OnSelectRoomDirectoryListener mListener;
 
     /*
      * *********************************************************************************************
@@ -59,7 +58,7 @@ public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServer
      * *********************************************************************************************
      */
 
-    public DirectoryServerAdapter(final List<DirectoryServerData> serversList, final OnSelectDirectoryServerListener listener) {
+    public RoomDirectoryAdapter(final List<RoomDirectoryData> serversList, final OnSelectRoomDirectoryListener listener) {
         mList = serversList;
         mFilteredList = new ArrayList<>(serversList);
         mListener = listener;
@@ -69,7 +68,7 @@ public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServer
      * Update the servers list
      * @param serversList the new servers list
      */
-    public void updateDirectoryServersList(List<DirectoryServerData> serversList) {
+    public void updateDirectoryServersList(List<RoomDirectoryData> serversList) {
         mList = serversList;
         mFilteredList = new ArrayList<>(serversList);
         notifyDataSetChanged();
@@ -82,14 +81,14 @@ public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServer
      */
 
     @Override
-    public DirectoryServerViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public RoomDirectoryViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         final LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
-        final View itemView = layoutInflater.inflate(R.layout.item_directory_server, viewGroup, false);
-        return new DirectoryServerAdapter.DirectoryServerViewHolder(itemView);
+        final View itemView = layoutInflater.inflate(R.layout.item_room_directory, viewGroup, false);
+        return new RoomDirectoryAdapter.RoomDirectoryViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(DirectoryServerAdapter.DirectoryServerViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RoomDirectoryAdapter.RoomDirectoryViewHolder viewHolder, int position) {
         viewHolder.populateViews(mFilteredList.get(position));
     }
 
@@ -110,11 +109,11 @@ public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServer
                     mFilteredList.addAll(mList);
                 } else {
                     final String filterPattern = constraint.toString().trim();
-                    mFilteredList.add(new DirectoryServerData(filterPattern, filterPattern, null, null, false));
+                    mFilteredList.add(new RoomDirectoryData(filterPattern, filterPattern, null, null, false));
 
                     Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
 
-                    for (final DirectoryServerData serverData : mList) {
+                    for (final RoomDirectoryData serverData : mList) {
                         if (serverData.isMatched(pattern)) {
                             mFilteredList.add(serverData);
                         }
@@ -139,24 +138,26 @@ public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServer
      * *********************************************************************************************
      */
 
-    class DirectoryServerViewHolder extends RecyclerView.ViewHolder {
+    class RoomDirectoryViewHolder extends RecyclerView.ViewHolder {
+        View vMainView;
         ImageView vAvatarView;
         TextView vServerTextView;
 
-        private DirectoryServerViewHolder(final View itemView) {
+        private RoomDirectoryViewHolder(final View itemView) {
             super(itemView);
-            vAvatarView = (ImageView) itemView.findViewById(R.id.directory_server_avatar);
-            vServerTextView = (TextView) itemView.findViewById(R.id.directory_server_display_name);
+            vMainView = itemView;
+            vAvatarView = (ImageView) itemView.findViewById(R.id.room_directory_avatar);
+            vServerTextView = (TextView) itemView.findViewById(R.id.room_directory_display_name);
         }
 
-        private void populateViews(final DirectoryServerData server) {
+        private void populateViews(final RoomDirectoryData server) {
             vServerTextView.setText(server.getDisplayName());
-            setAvatar(vAvatarView, server.getAvatarUrl(), server.isIncludedAllNetworks() ? null : vServerTextView.getContext().getDrawable(R.drawable.network_matrix));
+            setAvatar(vAvatarView, server.getAvatarUrl(), server.isIncludedAllNetworks() ? null : vServerTextView.getContext().getResources().getDrawable(R.drawable.network_matrix));
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            vMainView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onSelectDirectoryServer(server);
+                    mListener.onSelectRoomDirectory(server);
                 }
             });
         }
@@ -221,7 +222,7 @@ public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServer
      * *********************************************************************************************
      */
 
-    public interface OnSelectDirectoryServerListener {
-        void onSelectDirectoryServer(DirectoryServerData directoryServer);
+    public interface OnSelectRoomDirectoryListener {
+        void onSelectRoomDirectory(RoomDirectoryData roomDirectory);
     }
 }

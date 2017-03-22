@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 /**
  * This class describes a directory server.
  */
-public class DirectoryServerData implements Serializable {
+public class RoomDirectoryData implements Serializable {
 
     /**
      * The display name
@@ -58,7 +58,7 @@ public class DirectoryServerData implements Serializable {
      * @param thirdPartyInstanceId the third party instance id (might be null)
      * @param includeAllNetworks   true to tell
      */
-    public DirectoryServerData(String serverUrl, String displayName, String avatarUrl, String thirdPartyInstanceId, boolean includeAllNetworks) {
+    public RoomDirectoryData(String serverUrl, String displayName, String avatarUrl, String thirdPartyInstanceId, boolean includeAllNetworks) {
         mServerUrl = serverUrl;
         mDisplayName = displayName;
         mAvatarUrl = avatarUrl;
@@ -88,6 +88,7 @@ public class DirectoryServerData implements Serializable {
 
     /**
      * Tells if it matches a pattern
+     *
      * @param pattern the pattern
      * @return true if it matches
      */

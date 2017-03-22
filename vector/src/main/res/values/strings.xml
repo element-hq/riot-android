@@ -927,6 +927,6 @@
 
 
     <!-- directory activity  -->
-    <string name="select_directory_server">Select a directory server</string>
-    <string name="select_directory_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
+    <string name="select_room_directory">Select a room directory</string>
+    <string name="room_directory_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
 </resources>
