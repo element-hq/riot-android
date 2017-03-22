@@ -331,7 +331,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         }
 
         if ((member != null) && (null == url)) {
-            url = member.avatarUrl;
+            url = member.getAvatarUrl();
         }
 
         if (null != member) {
