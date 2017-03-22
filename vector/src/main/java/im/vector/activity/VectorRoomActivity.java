@@ -31,10 +31,10 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextPaint;
@@ -42,12 +42,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-
-import org.matrix.androidsdk.crypto.MXCryptoError;
-import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
-import org.matrix.androidsdk.util.Log;
-
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,6 +60,9 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.crypto.MXCryptoError;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -87,7 +84,15 @@ import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.view.AutoScrollDownListView;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -106,13 +111,6 @@ import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Displays a single room with messages.
@@ -1214,7 +1212,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.ic_action_search_in_room) {
+        if (id == android.R.id.home){
+            finish();
+            return true;
+        } else if (id == R.id.ic_action_search_in_room) {
             try {
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 

@@ -17,7 +17,7 @@
         android:layout_width="@dimen/chat_avatar_size"
         android:layout_height="@dimen/chat_avatar_size"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_toRightOf="@+id/indicator_unread_message"
         tools:src="@color/material_blue_100" />
 
@@ -48,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/room_name"
             android:layout_below="@+id/room_name"
-            android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/vector_0_54_black_color"
@@ -61,8 +60,6 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/room_name"
             android:layout_alignParentRight="true"
-            android:fontFamily="sans-serif-light"
-            android:text="Jan 1 00:00"
             android:textColor="@color/vector_0_54_black_color"
             android:textSize="12sp"
             tools:text="14 Mar" />
