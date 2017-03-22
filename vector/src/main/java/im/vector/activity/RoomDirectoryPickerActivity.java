@@ -37,7 +37,6 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoomsResponse;
 import org.matrix.androidsdk.rest.model.ThirdPartyProtocol;
 import org.matrix.androidsdk.rest.model.ThirdPartyProtocolInstance;
 
@@ -53,11 +52,10 @@ import im.vector.util.RoomDirectoryData;
 public class RoomDirectoryPickerActivity extends AppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener, SearchView.OnQueryTextListener {
     private static final String LOG_TAG = "RoomDirPickerActivity";
 
-    public static final String EXTRA_SESSION_ID = "EXTRA_SESSION_ID";
-    public static final String EXTRA_OUT_DIRECTORY_SERVER_DATA = "EXTRA_OUT_DIRECTORY_SERVER_DATA";
+    private static final String EXTRA_SESSION_ID = "EXTRA_SESSION_ID";
+    public static final String EXTRA_OUT_ROOM_DIRECTORY_DATA = "EXTRA_OUT_ROOM_DIRECTORY_DATA";
 
     private MXSession mSession;
-    private RecyclerView mRoomDirectoryRecyclerView;
     private RoomDirectoryAdapter mRoomDirectoryAdapter;
     private SearchView mSearchView;
     private View mLoadingView;
@@ -213,12 +211,12 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
     */
 
     private void initViews() {
-        mRoomDirectoryRecyclerView = (RecyclerView) findViewById(R.id.room_directory_recycler_view);
+        RecyclerView roomDirectoryRecyclerView = (RecyclerView) findViewById(R.id.room_directory_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRoomDirectoryRecyclerView.setLayoutManager(layoutManager);
+        roomDirectoryRecyclerView.setLayoutManager(layoutManager);
         mRoomDirectoryAdapter = new RoomDirectoryAdapter(new ArrayList<RoomDirectoryData>(), this);
-        mRoomDirectoryRecyclerView.setAdapter(mRoomDirectoryAdapter);
+        roomDirectoryRecyclerView.setAdapter(mRoomDirectoryAdapter);
 
         mLoadingView = findViewById(R.id.room_directory_loading);
         refreshDirectoryServersList();
@@ -245,38 +243,38 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
             mLoadingView.setVisibility(View.VISIBLE);
 
             mSession.getEventsApiClient().getPublicRoomsCount(directoryServerData.getServerUrl(), new ApiCallback<Integer>() {
-                        @Override
-                        public void onSuccess(Integer count) {
-                            Intent intent = new Intent();
-                            intent.putExtra(EXTRA_OUT_DIRECTORY_SERVER_DATA, directoryServerData);
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        }
+                @Override
+                public void onSuccess(Integer count) {
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_OUT_ROOM_DIRECTORY_DATA, directoryServerData);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
 
-                        private void onError(String error) {
-                            Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
-                            mLoadingView.setVisibility(View.GONE);
-                            Toast.makeText(RoomDirectoryPickerActivity.this, R.string.room_directory_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
-                        }
+                private void onError(String error) {
+                    Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
+                    mLoadingView.setVisibility(View.GONE);
+                    Toast.makeText(RoomDirectoryPickerActivity.this, R.string.room_directory_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
+                }
 
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            onError(e.getMessage());
-                        }
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError(e.getMessage());
+                }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            onError(e.getMessage());
-                        }
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError(e.getMessage());
+                }
 
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            onError(e.getMessage());
-                        }
-                    });
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError(e.getMessage());
+                }
+            });
         } else {
             Intent intent = new Intent();
-            intent.putExtra(EXTRA_OUT_DIRECTORY_SERVER_DATA, directoryServerData);
+            intent.putExtra(EXTRA_OUT_ROOM_DIRECTORY_DATA, directoryServerData);
             setResult(RESULT_OK, intent);
             finish();
         }

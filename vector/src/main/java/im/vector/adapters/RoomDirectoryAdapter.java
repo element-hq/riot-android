@@ -139,9 +139,9 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
      */
 
     class RoomDirectoryViewHolder extends RecyclerView.ViewHolder {
-        View vMainView;
-        ImageView vAvatarView;
-        TextView vServerTextView;
+        final View vMainView;
+        final ImageView vAvatarView;
+        final TextView vServerTextView;
 
         private RoomDirectoryViewHolder(final View itemView) {
             super(itemView);
