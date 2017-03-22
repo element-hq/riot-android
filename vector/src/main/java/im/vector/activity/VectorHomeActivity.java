@@ -30,7 +30,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -446,8 +445,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mSession.getDataHandler().addListener(mLiveEventListener);
 
         // initialize the public rooms list
-        PublicRoomsManager.setSession(mSession);
-        PublicRoomsManager.refreshPublicRoomsCount(null);
+        PublicRoomsManager.getInstance().setSession(mSession);
+        PublicRoomsManager.getInstance().refreshPublicRoomsCount(null);
     }
 
     @Override
