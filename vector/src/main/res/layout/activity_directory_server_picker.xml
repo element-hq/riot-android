@@ -10,19 +10,22 @@
         android:layout_height="?attr/actionBarSize" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/directory_source_recycler_view"
+        android:id="@+id/directory_server_recycler_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar" />
 
-    <TextView
-        android:id="@+id/directory_source_empty_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:text="@string/search_no_results"
-        android:textSize="16sp"
-        android:visibility="gone" />
+    <RelativeLayout
+        android:id="@+id/directory_server_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/chat_encoding_background">
+
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:indeterminate="true" />
+    </RelativeLayout>
 </RelativeLayout>

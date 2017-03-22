@@ -18,6 +18,7 @@ package im.vector.adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -39,8 +40,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import im.vector.R;
 import im.vector.util.DirectoryServerData;
+
+import im.vector.R;
 
 public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServerAdapter.DirectoryServerViewHolder> implements Filterable {
 
@@ -149,7 +151,7 @@ public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServer
 
         private void populateViews(final DirectoryServerData server) {
             vServerTextView.setText(server.getDisplayName());
-            setAvatar(vAvatarView, server.getAvatarUrl());
+            setAvatar(vAvatarView, server.getAvatarUrl(), server.isIncludedAllNetworks() ? null : vServerTextView.getContext().getDrawable(R.drawable.network_matrix));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -165,7 +167,7 @@ public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServer
      * avatar downloader
      * *********************************************************************************************
      */
-    private final Map<String, Bitmap> mAvatarByUrl = new HashMap<>();
+    private static final Map<String, Bitmap> mAvatarByUrl = new HashMap<>();
 
     /**
      * Load the avatar bitmap in the provided imageView
@@ -173,11 +175,12 @@ public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServer
      * @param imageView the image view
      * @param avatarURL the avatar URL
      */
-    private void setAvatar(final ImageView imageView, final String avatarURL) {
+    private void setAvatar(final ImageView imageView, final String avatarURL, Drawable defaultAvatar) {
+        imageView.setImageDrawable(defaultAvatar);
+        imageView.setTag(null);
+
         if (null != avatarURL) {
             Bitmap bitmap = mAvatarByUrl.get(avatarURL);
-
-            imageView.setImageBitmap(bitmap);
             imageView.setTag(avatarURL);
 
             // if the image is not cached, download it
@@ -205,10 +208,10 @@ public class DirectoryServerAdapter extends RecyclerView.Adapter<DirectoryServer
                             imageView.setImageBitmap(bitmap);
                         }
                     }
-                };
+                }.execute();
+            } else {
+                imageView.setImageBitmap(bitmap);
             }
-        } else {
-            imageView.setImageBitmap(null);
         }
     }
 

@@ -26,15 +26,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Filter;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.PublicRoomsResponse;
 import org.matrix.androidsdk.rest.model.ThirdPartyProtocol;
 import org.matrix.androidsdk.rest.model.ThirdPartyProtocolInstance;
 
@@ -50,15 +53,14 @@ import im.vector.util.DirectoryServerData;
 public class DirectoryServerPickerActivity extends AppCompatActivity implements DirectoryServerAdapter.OnSelectDirectoryServerListener, SearchView.OnQueryTextListener {
     private static final String LOG_TAG = "DirServerPickerAct";
 
-    public static final String EXTRA_SESSION_ID = "EXTRA_IN_WITH_INDICATOR";
-
+    public static final String EXTRA_SESSION_ID = "EXTRA_SESSION_ID";
     public static final String EXTRA_OUT_DIRECTORY_SERVER_DATA = "EXTRA_OUT_DIRECTORY_SERVER_DATA";
 
     private MXSession mSession;
     private RecyclerView mDirectorySourceRecyclerView;
-    private View mDirectoryServerEmptyView;
     private DirectoryServerAdapter mDirectoryServerAdapter;
     private SearchView mSearchView;
+    private View mLoadingView;
 
      /*
      * *********************************************************************************************
@@ -148,10 +150,24 @@ public class DirectoryServerPickerActivity extends AppCompatActivity implements 
      * Refresh the directory servers list.
      */
     private void refreshDirectoryServersList() {
-        mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
+        mLoadingView.setVisibility(View.VISIBLE);
 
+        mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
             private void onDone(List<DirectoryServerData> list) {
-                list.add(0, new DirectoryServerData(null, "Matrix.org", null, null, true));
+                mLoadingView.setVisibility(View.GONE);
+                // all the connected network
+                list.add(0, new DirectoryServerData(null, "matrix.org", null, null, true));
+
+                if (!list.isEmpty()) {
+                    list.add(1, new DirectoryServerData(null, "Matrix", null, null, false));
+                }
+
+                // if the user uses his own home server
+                if (!mSession.getMyUserId().endsWith(":matrix.org")) {
+                    String server = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
+                    list.add(new DirectoryServerData(server, server, null, null, false));
+                }
+
                 mDirectoryServerAdapter.updateDirectoryServersList(list);
             }
 
@@ -197,23 +213,21 @@ public class DirectoryServerPickerActivity extends AppCompatActivity implements 
     */
 
     private void initViews() {
-        mDirectoryServerEmptyView = findViewById(R.id.directory_source_empty_view);
-
-        mDirectorySourceRecyclerView = (RecyclerView) findViewById(R.id.directory_source_recycler_view);
+        mDirectorySourceRecyclerView = (RecyclerView) findViewById(R.id.directory_server_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mDirectorySourceRecyclerView.setLayoutManager(layoutManager);
         mDirectoryServerAdapter = new DirectoryServerAdapter(new ArrayList<DirectoryServerData>(), this);
         mDirectorySourceRecyclerView.setAdapter(mDirectoryServerAdapter);
 
+        mLoadingView = findViewById(R.id.directory_server_loading);
         refreshDirectoryServersList();
     }
 
-    private void filterCountries(final String pattern) {
+    private void filterServersList(final String pattern) {
         mDirectoryServerAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
             @Override
             public void onFilterComplete(int count) {
-                mDirectoryServerEmptyView.setVisibility(count > 0 ? View.GONE : View.VISIBLE);
             }
         });
     }
@@ -225,16 +239,52 @@ public class DirectoryServerPickerActivity extends AppCompatActivity implements 
     */
 
     @Override
-    public void onSelectDirectoryServer(DirectoryServerData directoryServerData) {
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_OUT_DIRECTORY_SERVER_DATA, directoryServerData);
-        setResult(RESULT_OK, intent);
-        finish();
+    public void onSelectDirectoryServer(final DirectoryServerData directoryServerData) {
+        // test if the server exists
+        if (!TextUtils.isEmpty(mSearchView.getQuery()) && TextUtils.equals(directoryServerData.getServerUrl(), mSearchView.getQuery())) {
+            mLoadingView.setVisibility(View.VISIBLE);
+
+            mSession.getEventsApiClient().getPublicRoomsCount(directoryServerData.getServerUrl(), new ApiCallback<Integer>() {
+                        @Override
+                        public void onSuccess(Integer count) {
+                            Intent intent = new Intent();
+                            intent.putExtra(EXTRA_OUT_DIRECTORY_SERVER_DATA, directoryServerData);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+
+                        private void onError(String error) {
+                            Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
+                            mLoadingView.setVisibility(View.GONE);
+                            Toast.makeText(DirectoryServerPickerActivity.this, R.string.select_directory_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onError(e.getMessage());
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onError(e.getMessage());
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onError(e.getMessage());
+                        }
+                    });
+        } else {
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_OUT_DIRECTORY_SERVER_DATA, directoryServerData);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        filterCountries(newText);
+        filterServersList(newText);
         return true;
     }
 
