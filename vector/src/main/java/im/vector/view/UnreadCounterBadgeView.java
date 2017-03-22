@@ -16,17 +16,13 @@
 package im.vector.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
-import android.net.Uri;
 import android.support.annotation.IntDef;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -87,11 +83,11 @@ public class UnreadCounterBadgeView extends RelativeLayout {
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(100);
             if (status == HIGHLIGHTED) {
-                shape.setColor(getContext().getResources().getColor(R.color.vector_fuchsia_color));
+                shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_fuchsia_color));
             } else if (status == NOTIFIED) {
-                shape.setColor(getContext().getResources().getColor(R.color.vector_green_color));
+                shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_green_color));
             } else { //if (status == DEFAULT)
-                shape.setColor(getContext().getResources().getColor(R.color.vector_silver_color));
+                shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_silver_color));
             }
             mParentView.setBackground(shape);
         } else {
