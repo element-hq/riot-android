@@ -62,19 +62,19 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -490,6 +490,8 @@ public class VectorHomeActivity extends AppCompatActivity {
         mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
 
         displayCryptoCorruption();
+
+        addBadgeEventsListener();
     }
 
     @Override
@@ -565,6 +567,8 @@ public class VectorHomeActivity extends AppCompatActivity {
                 mRoomCreationViewTimer = null;
             }
         }
+
+        removeBadgeEventsListener();
     }
 
     @Override
@@ -718,10 +722,12 @@ public class VectorHomeActivity extends AppCompatActivity {
                     .commit();
         }
 
+        // there is an animation while selecting an entry
+        // so delay the refresh at the end of the animation
         new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                refreshBadges();
+                refreshUnreadBadges();
             }
         }, 115);
     }
@@ -844,6 +850,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     ((VectorRecentsListFragment) fragment).refresh();
                 }
                 stopWaitingView();
+                refreshUnreadBadges();
             }
 
             private void onError(String errorMessage) {
@@ -1464,7 +1471,74 @@ public class VectorHomeActivity extends AppCompatActivity {
     // Unread counter badges
     //==============================================================================================================
 
-    Map<Integer, UnreadCounterBadgeView> mBadgeViewByIndex = new HashMap<>();
+    // Badge view <-> menu entry id
+    private final Map<Integer, UnreadCounterBadgeView> mBadgeViewByIndex = new HashMap<>();
+
+    // events listener to track required refresh
+    private final MXEventListener mBadgeEventsListener = new MXEventListener() {
+        private boolean mRefreshBadgeOnChunkEnd = false;
+
+        @Override
+        public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
+            if (mRefreshBadgeOnChunkEnd) {
+                refreshUnreadBadges();
+            }
+        }
+
+        @Override
+        public void onLiveEvent(final Event event, final RoomState roomState) {
+            String eventType = event.getType();
+
+            // refresh the UI at the end of the next events chunk
+            mRefreshBadgeOnChunkEnd |= ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
+                    Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
+                    Event.EVENT_TYPE_REDACTION.equals(eventType) ||
+                    Event.EVENT_TYPE_TAGS.equals(eventType) ||
+                    Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
+
+        }
+
+        @Override
+        public void onReceiptEvent(String roomId, List<String> senderIds) {
+            // refresh only if the current user read some messages (to update the unread messages counters)
+            mRefreshBadgeOnChunkEnd |= (senderIds.indexOf(mSession.getCredentials().userId) >= 0);
+        }
+
+        @Override
+        public void onLeaveRoom(final String roomId) {
+            mRefreshBadgeOnChunkEnd = true;
+        }
+
+        @Override
+        public void onNewRoom(String roomId) {
+            mRefreshBadgeOnChunkEnd = true;
+        }
+
+        @Override
+        public void onJoinRoom(String roomId) {
+            mRefreshBadgeOnChunkEnd = true;
+        }
+
+        @Override
+        public void onDirectMessageChatRoomsListUpdate() {
+            mRefreshBadgeOnChunkEnd = true;
+        }
+    };
+
+    /**
+     * Add the badge events listener
+     */
+    private void addBadgeEventsListener() {
+        mSession.getDataHandler().addListener(mBadgeEventsListener);
+        refreshUnreadBadges();
+    }
+
+    /**
+     * Remove the badge events listener
+     */
+    private void removeBadgeEventsListener() {
+        mSession.getDataHandler().removeListener(mBadgeEventsListener);
+    }
 
     /**
      * Add the unread messages badges.
@@ -1483,17 +1557,17 @@ public class VectorHomeActivity extends AppCompatActivity {
             }
         }
 
-        refreshBadges();
+        refreshUnreadBadges();
     }
 
     /**
      * Refresh the badges
      */
-    private void refreshBadges() {
+    private void refreshUnreadBadges() {
         final float scale = getResources().getDisplayMetrics().density;
         int badgeOffsetX =  (int)(18 * scale + 0.5f);
-        int selectedbadgeOffsetY = (int)(8 * scale + 0.5f);
-        int unselectedbadgeOffsetY = (int)(11 * scale + 0.5f);
+        int selectedbadgeOffsetY = (int)(4 * scale + 0.5f);
+        int unselectedbadgeOffsetY = (int)(7 * scale + 0.5f);
         Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
 
         for(Integer id : mBadgeViewByIndex.keySet()) {
@@ -1515,58 +1589,40 @@ public class VectorHomeActivity extends AppCompatActivity {
             // compute the badge value and its displays
             int highlightCount = 0;
             int notificationCount = 0;
-            int unreadMsgCount = 0;
-            boolean mustBeHidhlighted = false;
+            boolean mustBeHighlighted = false;
 
-            if ((id == R.id.bottom_action_home) || (id == R.id.bottom_action_rooms)) {
+            List<String> filteredRoomIds = null;
+
+            if (id == R.id.bottom_action_favourites) {
+                List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
+
+                filteredRoomIds = new ArrayList<>();
+
+                for(Room room : favRooms) {
+                    filteredRoomIds.add(room.getRoomId());
+                }
+            } else if ((id == R.id.bottom_action_people)){
+                filteredRoomIds = mSession.getDirectChatRoomIdsList();
+            }
+
+            if ((null == filteredRoomIds) || !filteredRoomIds.isEmpty()) {
                 for(RoomSummary summary : summaries) {
-                    Room childRoom =  mSession.getDataHandler().getStore().getRoom(summary.getRoomId());
+                    Room childRoom = mSession.getDataHandler().getStore().getRoom(summary.getRoomId());
 
-                    if (null != childRoom) {
+                    // test if the room is allowed
+                    if ((null != childRoom) && ((null == filteredRoomIds) || filteredRoomIds.contains(summary.getRoomId()))) {
                         highlightCount += childRoom.getHighlightCount();
                         notificationCount += childRoom.getNotificationCount();
-                    }
-
-                    unreadMsgCount += summary.getUnreadEventsCount();
-                    mustBeHidhlighted |= summary.isHighlighted();
-                }
-            } else if ((id == R.id.bottom_action_favourites) || (id == R.id.bottom_action_people))  {
-                List<String> filteredRoomIds;
-
-                if (id == R.id.bottom_action_favourites) {
-                    List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
-
-                    filteredRoomIds = new ArrayList<>();
-
-                    for(Room room : favRooms) {
-                        filteredRoomIds.add(room.getRoomId());
-                    }
-                } else {
-                    filteredRoomIds = mSession.getDirectChatRoomIdsList();
-                }
-
-                if (!filteredRoomIds.isEmpty()) {
-                    for (RoomSummary summary : summaries) {
-                        Room childRoom = mSession.getDataHandler().getStore().getRoom(summary.getRoomId());
-
-                        // test if the room is favorite one
-                        if ((null != childRoom) && filteredRoomIds.contains(summary.getRoomId())) {
-                            highlightCount += childRoom.getHighlightCount();
-                            notificationCount += childRoom.getNotificationCount();
-
-                            unreadMsgCount += summary.getUnreadEventsCount();
-                            mustBeHidhlighted |= summary.isHighlighted();
-                        }
+                        mustBeHighlighted |= summary.isHighlighted();
                     }
                 }
             }
 
             badgeView.updateCounter(notificationCount,
-                    ((0 != highlightCount) || mustBeHidhlighted) ? UnreadCounterBadgeView.HIGHLIGHTED :
-                    ((0 != notificationCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
+                    ((0 != highlightCount) || mustBeHighlighted) ? UnreadCounterBadgeView.HIGHLIGHTED :
+                            ((0 != notificationCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
         }
     }
-
 
     //==============================================================================================================
     // encryption
