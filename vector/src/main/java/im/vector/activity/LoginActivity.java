@@ -897,11 +897,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                     enableLoadingScreen(false);
 
-                    mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
-                    refreshDisplay();
-
                     // refresh the messages
                     hideMainLayoutAndToast(getResources().getString(R.string.auth_reset_password_email_validation_message, email));
+
+                    mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
+                    refreshDisplay();
 
                     mForgotPid = new HashMap<>();
                     mForgotPid.put("client_secret", thirdPid.clientSecret);
