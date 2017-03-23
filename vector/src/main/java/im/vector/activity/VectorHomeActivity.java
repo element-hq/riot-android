@@ -26,6 +26,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -50,6 +51,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,14 +62,21 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -92,6 +101,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
+import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 
 /**
@@ -707,6 +717,13 @@ public class VectorHomeActivity extends AppCompatActivity {
                     .addToBackStack(tag)
                     .commit();
         }
+
+        new Handler(getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshBadges();
+            }
+        }, 115);
     }
 
     /**
@@ -765,6 +782,8 @@ public class VectorHomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        addUnreadBadges();
     }
 
     /**
@@ -1440,6 +1459,114 @@ public class VectorHomeActivity extends AppCompatActivity {
             });
         }
     }
+
+    //==============================================================================================================
+    // Unread counter badges
+    //==============================================================================================================
+
+    Map<Integer, UnreadCounterBadgeView> mBadgeViewByIndex = new HashMap<>();
+
+    /**
+     * Add the unread messages badges.
+     */
+    private void addUnreadBadges() {
+        List<Integer> menuEntries = Arrays.asList(R.id.bottom_action_home, R.id.bottom_action_favourites, R.id.bottom_action_people, R.id.bottom_action_rooms);
+
+        for(Integer index : menuEntries) {
+            View navigationItemView =  mBottomNavigationView.findViewById(index);
+            View iconView = navigationItemView.findViewById(R.id.icon);
+
+            if (iconView.getParent() instanceof FrameLayout) {
+                UnreadCounterBadgeView badgeView = new UnreadCounterBadgeView(iconView.getContext());
+                ((FrameLayout)iconView.getParent()).addView(badgeView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+                mBadgeViewByIndex.put(index, badgeView);
+            }
+        }
+
+        refreshBadges();
+    }
+
+    /**
+     * Refresh the badges
+     */
+    private void refreshBadges() {
+        final float scale = getResources().getDisplayMetrics().density;
+        int badgeOffsetX =  (int)(18 * scale + 0.5f);
+        int selectedbadgeOffsetY = (int)(8 * scale + 0.5f);
+        int unselectedbadgeOffsetY = (int)(11 * scale + 0.5f);
+        Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
+
+        for(Integer id : mBadgeViewByIndex.keySet()) {
+            View navigationItemView =  mBottomNavigationView.findViewById(id);
+            View iconView = navigationItemView.findViewById(R.id.icon);
+
+            UnreadCounterBadgeView badgeView = mBadgeViewByIndex.get(id);
+
+            // compute the new position
+            FrameLayout.LayoutParams iconViewLayoutParams = (FrameLayout.LayoutParams)iconView.getLayoutParams();
+            FrameLayout.LayoutParams badgeLayoutParams = (FrameLayout.LayoutParams) badgeView.getLayoutParams();
+            badgeLayoutParams.setMargins(iconViewLayoutParams.leftMargin +  badgeOffsetX, iconViewLayoutParams.topMargin, iconViewLayoutParams.rightMargin, iconViewLayoutParams.bottomMargin);
+            badgeLayoutParams.gravity = iconViewLayoutParams.gravity;
+
+            // do not apply the same offset when the entry is selected because of the description text is displayed
+            badgeLayoutParams.topMargin -=  (id == mBottomNavigationView.getSelectedItemId()) ? selectedbadgeOffsetY : unselectedbadgeOffsetY;
+            badgeView.setLayoutParams(badgeLayoutParams);
+
+            // compute the badge value and its displays
+            int highlightCount = 0;
+            int notificationCount = 0;
+            int unreadMsgCount = 0;
+            boolean mustBeHidhlighted = false;
+
+            if ((id == R.id.bottom_action_home) || (id == R.id.bottom_action_rooms)) {
+                for(RoomSummary summary : summaries) {
+                    Room childRoom =  mSession.getDataHandler().getStore().getRoom(summary.getRoomId());
+
+                    if (null != childRoom) {
+                        highlightCount += childRoom.getHighlightCount();
+                        notificationCount += childRoom.getNotificationCount();
+                    }
+
+                    unreadMsgCount += summary.getUnreadEventsCount();
+                    mustBeHidhlighted |= summary.isHighlighted();
+                }
+            } else if ((id == R.id.bottom_action_favourites) || (id == R.id.bottom_action_people))  {
+                List<String> filteredRoomIds;
+
+                if (id == R.id.bottom_action_favourites) {
+                    List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
+
+                    filteredRoomIds = new ArrayList<>();
+
+                    for(Room room : favRooms) {
+                        filteredRoomIds.add(room.getRoomId());
+                    }
+                } else {
+                    filteredRoomIds = mSession.getDirectChatRoomIdsList();
+                }
+
+                if (!filteredRoomIds.isEmpty()) {
+                    for (RoomSummary summary : summaries) {
+                        Room childRoom = mSession.getDataHandler().getStore().getRoom(summary.getRoomId());
+
+                        // test if the room is favorite one
+                        if ((null != childRoom) && filteredRoomIds.contains(summary.getRoomId())) {
+                            highlightCount += childRoom.getHighlightCount();
+                            notificationCount += childRoom.getNotificationCount();
+
+                            unreadMsgCount += summary.getUnreadEventsCount();
+                            mustBeHidhlighted |= summary.isHighlighted();
+                        }
+                    }
+                }
+            }
+
+            badgeView.updateCounter(notificationCount,
+                    ((0 != highlightCount) || mustBeHidhlighted) ? UnreadCounterBadgeView.HIGHLIGHTED :
+                    ((0 != notificationCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
+        }
+    }
+
 
     //==============================================================================================================
     // encryption
