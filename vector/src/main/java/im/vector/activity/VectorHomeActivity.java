@@ -26,9 +26,10 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -72,6 +73,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.Log;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -681,6 +683,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = VectorRecentsListFragment.newInstance(mSession.getCredentials().userId, R.layout.fragment_vector_recents_list);
                 }
                 tag = TAG_FRAGMENT_HOME;
+                setTitle(R.string.bottom_action_home);
                 break;
             case R.id.bottom_action_favourites:
                 Log.e(LOG_TAG, "onNavigationItemSelected FAVOURITES");
@@ -690,6 +693,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = FavouritesFragment.newInstance();
                 }
                 tag = TAG_FRAGMENT_FAVOURITES;
+                setTitle(R.string.bottom_action_favourites);
                 break;
             case R.id.bottom_action_people:
                 Log.e(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -699,6 +703,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = PeopleFragment.newInstance();
                 }
                 tag = TAG_FRAGMENT_PEOPLE;
+                setTitle(R.string.bottom_action_people);
                 break;
             case R.id.bottom_action_rooms:
                 Log.e(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -708,6 +713,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = RoomsFragment.newInstance();
                 }
                 tag = TAG_FRAGMENT_ROOMS;
+                setTitle(R.string.bottom_action_rooms);
                 break;
         }
 
@@ -721,15 +727,6 @@ public class VectorHomeActivity extends AppCompatActivity {
                     .addToBackStack(tag)
                     .commit();
         }
-
-        // there is an animation while selecting an entry
-        // so delay the refresh at the end of the animation
-        new Handler(getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                refreshUnreadBadges();
-            }
-        }, 115);
     }
 
     /**
@@ -1541,19 +1538,75 @@ public class VectorHomeActivity extends AppCompatActivity {
     }
 
     /**
+     * Remove the BottomNavigationView menu shift
+     */
+    private void removeMenuShiftMode() {
+        int childCount = mBottomNavigationView.getChildCount();
+
+        for(int i = 0; i < childCount; i++) {
+            if (mBottomNavigationView.getChildAt(i) instanceof BottomNavigationMenuView) {
+                BottomNavigationMenuView bottomNavigationMenuView = (BottomNavigationMenuView) mBottomNavigationView.getChildAt(i);
+
+                try {
+                    Field shiftingMode = bottomNavigationMenuView.getClass().getDeclaredField("mShiftingMode");
+                    shiftingMode.setAccessible(true);
+                    shiftingMode.setBoolean(bottomNavigationMenuView, false);
+                    shiftingMode.setAccessible(false);
+
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## removeMenuShiftMode failed " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    /**
      * Add the unread messages badges.
      */
     private void addUnreadBadges() {
-        List<Integer> menuEntries = Arrays.asList(R.id.bottom_action_home, R.id.bottom_action_favourites, R.id.bottom_action_people, R.id.bottom_action_rooms);
+        final float scale = getResources().getDisplayMetrics().density;
+        int badgeOffsetX =  (int)(18 * scale + 0.5f);
+        int badgeOffsetY = (int)(7 * scale + 0.5f);
 
-        for(Integer index : menuEntries) {
-            View navigationItemView =  mBottomNavigationView.findViewById(index);
-            View iconView = navigationItemView.findViewById(R.id.icon);
+        removeMenuShiftMode();
 
-            if (iconView.getParent() instanceof FrameLayout) {
-                UnreadCounterBadgeView badgeView = new UnreadCounterBadgeView(iconView.getContext());
-                ((FrameLayout)iconView.getParent()).addView(badgeView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-                mBadgeViewByIndex.put(index, badgeView);
+        int largeTextHeight = getResources().getDimensionPixelSize(android.support.design.R.dimen.design_bottom_navigation_active_text_size);
+
+        for(int menuIndex = 0; menuIndex < mBottomNavigationView.getMenu().size(); menuIndex++) {
+            try {
+                int itemId = mBottomNavigationView.getMenu().getItem(menuIndex).getItemId();
+                BottomNavigationItemView navigationItemView = (BottomNavigationItemView) mBottomNavigationView.findViewById(itemId);
+
+                navigationItemView.setShiftingMode(false);
+
+                Field marginField = navigationItemView.getClass().getDeclaredField("mDefaultMargin");
+                marginField.setAccessible(true);
+                marginField.setInt(navigationItemView, marginField.getInt(navigationItemView) + (largeTextHeight /2));
+                marginField.setAccessible(false);
+
+                Field shiftAmountField = navigationItemView.getClass().getDeclaredField("mShiftAmount");
+                shiftAmountField.setAccessible(true);
+                shiftAmountField.setInt(navigationItemView, 0);
+                shiftAmountField.setAccessible(false);
+
+                navigationItemView.setChecked(navigationItemView.getItemData().isChecked());
+
+                View iconView = navigationItemView.findViewById(R.id.icon);
+
+                if (iconView.getParent() instanceof FrameLayout) {
+                    UnreadCounterBadgeView badgeView = new UnreadCounterBadgeView(iconView.getContext());
+
+                    // compute the new position
+                    FrameLayout.LayoutParams iconViewLayoutParams = (FrameLayout.LayoutParams)iconView.getLayoutParams();
+                    FrameLayout.LayoutParams badgeLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                    badgeLayoutParams.setMargins(iconViewLayoutParams.leftMargin +  badgeOffsetX, iconViewLayoutParams.topMargin - badgeOffsetY, iconViewLayoutParams.rightMargin, iconViewLayoutParams.bottomMargin);
+                    badgeLayoutParams.gravity = iconViewLayoutParams.gravity;
+
+                    ((FrameLayout) iconView.getParent()).addView(badgeView, badgeLayoutParams);
+                    mBadgeViewByIndex.put(itemId, badgeView);
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## addUnreadBadges failed " + e.getMessage());
             }
         }
 
@@ -1564,27 +1617,10 @@ public class VectorHomeActivity extends AppCompatActivity {
      * Refresh the badges
      */
     private void refreshUnreadBadges() {
-        final float scale = getResources().getDisplayMetrics().density;
-        int badgeOffsetX =  (int)(18 * scale + 0.5f);
-        int selectedbadgeOffsetY = (int)(4 * scale + 0.5f);
-        int unselectedbadgeOffsetY = (int)(7 * scale + 0.5f);
         Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
 
         for(Integer id : mBadgeViewByIndex.keySet()) {
-            View navigationItemView =  mBottomNavigationView.findViewById(id);
-            View iconView = navigationItemView.findViewById(R.id.icon);
-
             UnreadCounterBadgeView badgeView = mBadgeViewByIndex.get(id);
-
-            // compute the new position
-            FrameLayout.LayoutParams iconViewLayoutParams = (FrameLayout.LayoutParams)iconView.getLayoutParams();
-            FrameLayout.LayoutParams badgeLayoutParams = (FrameLayout.LayoutParams) badgeView.getLayoutParams();
-            badgeLayoutParams.setMargins(iconViewLayoutParams.leftMargin +  badgeOffsetX, iconViewLayoutParams.topMargin, iconViewLayoutParams.rightMargin, iconViewLayoutParams.bottomMargin);
-            badgeLayoutParams.gravity = iconViewLayoutParams.gravity;
-
-            // do not apply the same offset when the entry is selected because of the description text is displayed
-            badgeLayoutParams.topMargin -=  (id == mBottomNavigationView.getSelectedItemId()) ? selectedbadgeOffsetY : unselectedbadgeOffsetY;
-            badgeView.setLayoutParams(badgeLayoutParams);
 
             // compute the badge value and its displays
             int highlightCount = 0;
