@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.VectorUtils;
 
 public class ContactAdapter extends AbsListAdapter<ParticipantAdapterItem, ContactAdapter.ContactViewHolder> {
 
@@ -139,8 +141,13 @@ public class ContactAdapter extends AbsListAdapter<ParticipantAdapterItem, Conta
 
         private void populateViews(final ParticipantAdapterItem participant) {
             participant.displayAvatar(mSession, vContactAvatar);
+            vContactName.setText(participant.getUniqueDisplayName(null));
 
-            // the contact defines a matrix user but there is no way to get more information (presence, avatar)
+            /*
+             * Get the description to be displayed below the name
+             * For local contact, it is the medium (email, phone number)
+             * For other contacts, it is the presence
+             */
             if (participant.mContact != null) {
                 boolean isMatrixUserId = MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(participant.mUserId).matches();
                 vContactBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
@@ -151,10 +158,46 @@ public class ContactAdapter extends AbsListAdapter<ParticipantAdapterItem, Conta
                     vContactDesc.setText(participant.mContact.getPhonenumbers().get(0).mRawPhoneNumber);
                 }
             } else {
-                vContactDesc.setText("");
+                loadContactPresence(vContactDesc, participant);
                 vContactBadge.setVisibility(View.GONE);
             }
-            vContactName.setText(participant.getUniqueDisplayName(null));
+        }
+
+        /**
+         * Get the presence for the given contact
+         *
+         * @param textView
+         * @param item
+         */
+        private void loadContactPresence(final TextView textView, final ParticipantAdapterItem item) {
+            User user = null;
+            MXSession matchedSession = null;
+            // retrieve the linked user
+            ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
+
+            for (MXSession session : sessions) {
+                if (null == user) {
+                    matchedSession = session;
+                    user = session.getDataHandler().getUser(item.mUserId);
+                }
+            }
+
+            if (null != user) {
+                final MXSession finalMatchedSession = matchedSession;
+                final String presence = VectorUtils.getUserOnlineStatus(mContext, matchedSession, item.mUserId, new SimpleApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        if (textView != null) {
+                            textView.setText(VectorUtils.getUserOnlineStatus(mContext, finalMatchedSession, item.mUserId, null));
+                            // TODO
+//                            Collections.sort(mItems, mComparator);
+//                            setItems(mItems, null);
+//                            notifyDataSetChanged();
+                        }
+                    }
+                });
+                textView.setText(presence);
+            }
         }
     }
 }
