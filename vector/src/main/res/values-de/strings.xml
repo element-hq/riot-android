@@ -650,8 +650,8 @@
     <!-- home room settings -->
     <string name="room_settings_notifications">Benachrichtigungen</string>
     <string name="room_settings_favourite">Favorisieren</string>
-    <string name="room_settings_de_prioritize">De-priorisieren</string>
-    <string name="room_settings_direct_chat">Directer Chat</string>
+    <string name="room_settings_de_prioritize">Depriorisieren</string>
+    <string name="room_settings_direct_chat">Direkter Chat</string>
     <string name="room_settings_leave_conversation">Verlasse Konversation</string>
 
     <!-- home sliding menu -->
@@ -670,14 +670,14 @@
     <string name="settings_title_config">Konfiguration</string>
 
     <string name="settings_sign_out">Abmelden</string>
-    <string name="settings_profile_picture">Profil-Bilder</string>
+    <string name="settings_profile_picture">Profil-Bild</string>
     <string name="settings_display_name">Anzeigename</string>
     <string name="settings_first_name">Vorname</string>
     <string name="settings_surname">Nachname</string>
     <string name="settings_email_address">E-Mail</string>
     <string name="settings_add_email_address">Füge E-Mail-Adresse hinzu</string>
     <string name="settings_phone_number">Mobilnummer</string>
-    <string name="settings_add_phone_number">Füge Mobilnummer hinzu</string>
+    <string name="settings_add_phone_number">Füge Mobilfunknummer hinzu</string>
     <string name="settings_night_mode">Nachtmodus</string>
     <string name="settings_summary_app_info_link">App-Info-Anzeige vom System</string>
     <string name="settings_title_app_info_link">Applikations-Infos</string>
@@ -701,7 +701,7 @@
     <string name="settings_seconds">Sekunden</string>
 
     <string name="settings_version">Version</string>
-    <string name="settings_olm_version">olm version</string>
+    <string name="settings_olm_version">OLM Version</string>
     <string name="settings_app_term_conditions">Geschäftsbedingungen</string>
     <string name="settings_third_party_notices">Bemerkungen von Drittanbietern</string>
     <string name="settings_copyright">Kopierrecht</string>
@@ -718,7 +718,7 @@
     <string name="settings_cryptography">Kryptographie</string>
     <string name="settings_notifications_targets">Benachrichtigungs-Ziele</string>
     <string name="settings_contact">Lokale Kontakte</string>
-    <string name="settings_contacts_app_permission">Kontakt Berechtigung</string>
+    <string name="settings_contacts_app_permission">Kontaktzugriffsberechtigung</string>
     <string name="settings_contacts_phonebook_country">Telefonbuch-Land</string>
     <string name="settings_devices_list">Geräte</string>
     <string name="devices_divider">devices_devider</string>
@@ -823,7 +823,7 @@
     <string name="room_settings_labs_pref_title">Labor</string>
     <string name="room_settings_labs_warning_message">Dies sind experimentelle Funktionen die unerwarte Fehler produzieren können. Mit Vorsicht zu benutzen.</string>
     <string name="room_settings_labs_end_to_end">Ende-zu-Ende Verschlüsselung</string>
-    <string name="room_settings_labs_end_to_end_is_active">Ende-zu-Ende Verschlüsselung isr aktiv</string>
+    <string name="room_settings_labs_end_to_end_is_active">Ende-zu-Ende Verschlüsselung ist aktiv</string>
     <string name="room_settings_labs_end_to_end_warnings">Du musst dich abmelden um die Verschlüsselung aktivieren zu können.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Verschlüssele nur für verifizierte Geräte</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Sende keine verschlüsselten Nachrichten an unverifizierte Geräte in diesem Raum von diesem Gerät.</string>
@@ -875,7 +875,7 @@
     <string name="encryption_information_sender_device_information">Absender-Geräte-Informationen</string>
     <string name="encryption_information_device_name">Gerätename</string>
     <string name="encryption_information_name">Name</string>
-    <string name="encryption_information_device_id">Geräte ID</string>
+    <string name="encryption_information_device_id">Geräte-ID</string>
     <string name="encryption_information_device_key">Geräte-Schlüssel</string>
     <string name="encryption_information_verification">Bestätigung</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 Fingerabdruck</string>
@@ -893,7 +893,7 @@
     <string name="encryption_import_room_keys_summary">Importiere die Schlüssel aus einer lokalen Datei</string>
     <string name="encryption_import_import">Importiere</string>
     <string name="encryption_never_send_to_unverified_devices_title">Verschlüssele nur für bestätigte Geräte</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Sende von diesem Gerät aus keine verschlüsselten Nachrichten zu unbestätigten Geräten</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Sende von diesem Gerät aus keine verschlüsselten Nachrichten an unbestätigte Geräte</string>
 
     <string name="encryption_information_not_verified">NICHT bestätigt</string>
     <string name="encryption_information_verified">Bestätigt</string>
@@ -910,7 +910,7 @@
     <string name="encryption_information_verify_device">Gerät bestätigen</string>
     <string name="encryption_information_verify_device_warning">Um zu bestätigen, dass diesem Gerät vertraut werden kann, kontaktiere den Besitzer über andere Kanäle (z.B. persönlich oder telefonisch) und frage ob der Schüssel den er in seinen Nutzer-Einstellungen für dieses Gerät sieht mit folgendem übereinstimmt:</string>
     <string name="encryption_information_verify_device_warning2">Wenn es passt, drücke unten auf den Bestätigen-Button. Wenn nicht, fängt jemand anderes dieses Gerät ab und du möchtest wohl lieber den Blocken-Button drücken.\nIn Zukunft wird dieser Bestätigungsprozess eleganter.</string>
-    <string name="encryption_information_verify_key_match">Ich bestätige dass die Schlüssel passen</string>
+    <string name="encryption_information_verify_key_match">Die Schlüssel passen</string>
 
     <string name="e2e_enabling_on_app_update">Riot unterstützt nun Ende-zu-Ende-Verschlüsselung aber du musst dich erneut anmelden um es zu aktivieren.\n\nDu kannst es jetzt oder später durch die Einstellungen durchführen.</string>
 
