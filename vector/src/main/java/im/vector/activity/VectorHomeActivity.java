@@ -610,6 +610,7 @@ public class VectorHomeActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int aRequestCode,@NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        super.onRequestPermissionsResult(aRequestCode, aPermissions, aGrantResults);
         if (0 == aPermissions.length) {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY) {

@@ -40,6 +40,7 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -575,10 +576,11 @@ public class CommonActivityUtils {
      * explain why vector needs the corresponding permission.
      *
      * @param aPermissionsToBeGrantedBitMap the permissions bit map to be granted
-     * @param aCallingActivity              the calling Activity that is requesting the permissions
+     * @param aCallingActivity              the calling Activity that is requesting the permissions (or fragment parent)
+     * @param fragment                      the calling fragment that is requesting the permissions
      * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
      */
-    public static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Activity aCallingActivity) {
+    public static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Activity aCallingActivity, final Fragment fragment) {
         boolean isPermissionGranted = false;
 
         // sanity check
@@ -641,7 +643,6 @@ public class CommonActivityUtils {
             finalPermissionsListToBeGranted = permissionsListToBeGranted;
 
             // if some permissions were already denied: display a dialog to the user before asking again..
-            // if some permissions were already denied: display a dialog to the user before asking again..
             if(!permissionListAlreadyDenied.isEmpty()) {
                 if (null != resource) {
                     // add the user info text to be displayed to explain why the permission is required by the App
@@ -694,15 +695,20 @@ public class CommonActivityUtils {
                 // display the dialog with the info text
                 AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
                 if(null != resource) {
-                    permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
+                    permissionsInfoDialog.setTitle(R.string.permissions_rationale_popup_title);
                 }
 
                 permissionsInfoDialog.setMessage(explanationMessage);
-                permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                permissionsInfoDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
-                            ActivityCompat.requestPermissions(aCallingActivity, finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
+                            if (fragment != null) {
+                                fragment.requestPermissions(finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
+                            } else {
+                                ActivityCompat.requestPermissions(aCallingActivity,
+                                        finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
+                            }
                         }
                     }
                 });
@@ -737,7 +743,11 @@ public class CommonActivityUtils {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ContactsManager.getInstance().setIsContactBookAccessAllowed(true);
-                                ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                if (fragment != null) {
+                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                } else {
+                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                }
                             }
                         });
 
@@ -746,14 +756,22 @@ public class CommonActivityUtils {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ContactsManager.getInstance().setIsContactBookAccessAllowed(false);
-                                ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                if (fragment != null) {
+                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                } else {
+                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                }
                             }
                         });
 
                         permissionsInfoDialog.show();
 
                     } else {
-                        ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                        if (fragment != null) {
+                            fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                        } else {
+                            ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                        }
                     }
                 } else {
                     // permissions were granted, start now..
@@ -762,6 +780,17 @@ public class CommonActivityUtils {
             }
         }
         return isPermissionGranted;
+    }
+
+    /**
+     * See {@link #checkPermissions(int, Activity, Fragment)}
+     *
+     * @param aPermissionsToBeGrantedBitMap
+     * @param aCallingActivity
+     * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
+     */
+    public static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Activity aCallingActivity) {
+        return checkPermissions(aPermissionsToBeGrantedBitMap, aCallingActivity, null);
     }
 
     /**

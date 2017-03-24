@@ -32,9 +32,11 @@ import java.util.List;
 public abstract class AbsListAdapter<T, R extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<R> implements Filterable {
 
     private final int mLayoutRes;
-    private final List<T> mItems;
+    protected final List<T> mItems;
     private final List<T> mFilteredItems;
     private final OnSelectItemListener<T> mListener;
+    private Filter mFilter;
+    private CharSequence mCurrentFilterPattern;
 
     /*
      * *********************************************************************************************
@@ -47,6 +49,32 @@ public abstract class AbsListAdapter<T, R extends RecyclerView.ViewHolder> exten
         mItems = new ArrayList<>();
         mFilteredItems = new ArrayList<>();
         mListener = listener;
+
+        mFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults results = new FilterResults();
+
+                mFilteredItems.clear();
+                if (TextUtils.isEmpty(constraint)) {
+                    mFilteredItems.addAll(mItems);
+                } else {
+                    final String filterPattern = constraint.toString().trim();
+                    mFilteredItems.addAll(getFilterItems(mItems, filterPattern));
+                }
+
+                results.values = mFilteredItems;
+                results.count = mFilteredItems.size();
+
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                notifyDataSetChanged();
+                mCurrentFilterPattern = constraint;
+            }
+        };
     }
 
     /*
@@ -81,30 +109,7 @@ public abstract class AbsListAdapter<T, R extends RecyclerView.ViewHolder> exten
 
     @Override
     public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                final FilterResults results = new FilterResults();
-
-                mFilteredItems.clear();
-                if (TextUtils.isEmpty(constraint)) {
-                    mFilteredItems.addAll(mItems);
-                } else {
-                    final String filterPattern = constraint.toString().trim();
-                    mFilteredItems.addAll(getFilterItems(mItems, filterPattern));
-                }
-
-                results.values = mFilteredItems;
-                results.count = mFilteredItems.size();
-
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                notifyDataSetChanged();
-            }
-        };
+        return mFilter;
     }
 
     /*
@@ -119,16 +124,17 @@ public abstract class AbsListAdapter<T, R extends RecyclerView.ViewHolder> exten
      * @param items
      */
     @CallSuper
-    public void setItems(final List<T> items) {
+    public void setItems(final List<T> items, final Filter.FilterListener listener) {
         if (items != null) {
             mItems.clear();
             mItems.addAll(items);
-
-            mFilteredItems.clear();
-            mFilteredItems.addAll(items);
         }
 
-        notifyDataSetChanged();
+        if (listener != null) {
+            getFilter().filter(mCurrentFilterPattern, listener);
+        } else {
+            getFilter().filter(mCurrentFilterPattern);
+        }
     }
 
     /*

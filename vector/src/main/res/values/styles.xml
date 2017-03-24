@@ -294,4 +294,8 @@
         <item name="android:paddingBottom">10dp</item>
     </style>
 
+    <style name="CheckBoxTheme">
+        <item name="colorAccent">@color/vector_green_color</item>
+    </style>
+
 </resources>

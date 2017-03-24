@@ -120,6 +120,7 @@ public abstract class AbsHomeFragment extends Fragment {
         if (TextUtils.isEmpty(pattern)) {
             if (mCurrentFilter != null) {
                 onResetFilter();
+                mCurrentFilter = null;
             }
         } else if (!TextUtils.equals(mCurrentFilter, pattern)) {
             onFilter(pattern, new OnFilterListener() {

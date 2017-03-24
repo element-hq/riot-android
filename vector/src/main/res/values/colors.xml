@@ -72,6 +72,6 @@
 
     <color name="vector_white_alpha_50">#80ffffff</color>
 
-    <color name="list_header_background">#77F2F2F2</color>
+    <color name="list_header_background">#f6f6f6</color>
 
 </resources>

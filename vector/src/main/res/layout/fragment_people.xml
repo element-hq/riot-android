@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<im.vector.view.StickyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/sticky_scroll"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -15,58 +17,71 @@
             style="@style/ListHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:tag="sticky"
             android:text="@string/direct_chats_header" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/direct_chats_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/direct_chats_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/search_no_results" />
 
         <TextView
             android:id="@+id/local_contacts_header"
             style="@style/ListHeader"
+            android:tag="sticky"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="6dp"
-            android:text="@string/people_search_local_contacts" />
+            android:text="@string/local_address_book_header" />
 
-        <LinearLayout
-            android:id="@+id/people_header_matrix_contacts_layout"
+        <CheckBox
+            android:id="@+id/matrix_only_filter_checkbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:background="@color/list_header_background"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-            <CheckBox
-                android:id="@+id/contacts_filter_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="19dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/people_search_filter_text"
-                android:textColor="@color/vector_text_black_color"
-                android:textSize="14sp" />
-        </LinearLayout>
+            android:text="@string/matrix_only_filter"
+            android:theme="@style/CheckBoxTheme" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/local_contact_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/local_contact_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/search_no_results" />
 
         <TextView
             android:id="@+id/known_contacts_header"
             style="@style/ListHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/direct_chats_header" />
+            android:text="@string/known_contacts_header" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/known_contact_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/known_contact_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/search_no_results" />
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</im.vector.view.StickyScrollView>
