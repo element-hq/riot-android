@@ -87,7 +87,7 @@
     <string name="action_search_room">Suche Raum</string>
     <string name="action_search_contact">Suche Kontakt</string>
     <string name="action_mark_all_as_read">Markiere alle als gelesen</string>
-    <string name="action_quick_reply">Schnell-Antwort</string>
+    <string name="action_quick_reply">Antworten</string>
     <string name="action_open">Öffnen</string>
     <string name="action_close">Schließen</string>
     <string name="action_invite_by_name">Invite from identifier</string>
