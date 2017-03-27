@@ -225,7 +225,7 @@ public class RegistrationManager {
      */
     public void attemptRegistration(final Context context, final RegistrationListener listener) {
         final String registrationType;
-        if (!TextUtils.isEmpty(mRegistrationResponse.session)) {
+        if (mRegistrationResponse != null && !TextUtils.isEmpty(mRegistrationResponse.session)) {
             Map<String, Object> authParams;
             if (mPhoneNumber != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && !TextUtils.isEmpty(mPhoneNumber.sid)) {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_MSISDN;
@@ -507,7 +507,7 @@ public class RegistrationManager {
      */
     public String getCaptchaPublicKey() {
         String publicKey = null;
-        if (null != mRegistrationResponse.params) {
+        if (mRegistrationResponse != null && mRegistrationResponse.params != null) {
             Object recaptchaParamsAsVoid = mRegistrationResponse.params.get(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
             if (null != recaptchaParamsAsVoid) {
                 try {
