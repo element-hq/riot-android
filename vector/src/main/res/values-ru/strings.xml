@@ -751,7 +751,9 @@
     <string name="settings_fail_to_update_password">Ошибка смены пароля</string>
     <string name="settings_password_updated">Пароль был обновлён</string>
     <string name="settings_unignore_user">Отображать сообщения пользователя %s?</string>
-    
+
+    <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
+
     <string name="settings_delete_threepid_confirmation">Вы уверены, что хотите удалить %1$s %2$s?</string>
     
     <string name="settings_phonebook_country">Страна</string>
@@ -841,6 +843,8 @@
     <string name="room_settings_copy_room_address">Копировать адрес комныты</string>
     <string name="room_details_copy_room_url">Копировать ссылку на комнату</string>
 
+    <string name="room_settings_addresses_e2e_enabled">Encryption is enabled in this room.</string>
+    <string name="room_settings_addresses_e2e_disabled">Encryption is disabled in this room.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Включить шифрование \n(внимание: не может быть отключено!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Внимание!</string>
     <string name="room_settings_addresses_e2e_prompt_message">End-to-end шифрование пока нестабильно.\n\nВам не следует доверять этому шифрованию критичные данные.\n\nНет возможности расшифровать историю до момента присоединения к комнате.\n\nПосле включения шифрования для комнаты, оно не может быть отключено.\n\nЗашифрованные сообщения не будут отображаться на устройствах, не поддерживающих шифрование.</string>
