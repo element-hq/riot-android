@@ -505,8 +505,6 @@
     <string name="room_participants_leave">Verlassen</string>
     <string name="room_participants_ban">Gebannt</string>
 
-    <string name="you">Du</string>
-
     <string name="room_participants_header_admin_tools">ADMIN-WERKZEUGE</string>
     <string name="room_participants_header_call">ANRUFE</string>
     <string name="room_participants_header_direct_chats">DIRECTE CHATS</string>
