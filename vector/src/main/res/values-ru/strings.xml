@@ -506,9 +506,7 @@
     <string name="room_participants_invite">Пригласить</string>
     <string name="room_participants_leave">Покинуть</string>
     <string name="room_participants_ban">Забанен</string>
-    
-    <string name="you">Вы</string>
-    
+
     <string name="room_participants_header_admin_tools">АДМИНИСТРИРОВАНИЕ</string>
     <string name="room_participants_header_call">ВЫЗОВ</string>
     <string name="room_participants_header_direct_chats">ПРЯМЫЕ ЧАТЫ</string>
@@ -842,9 +840,7 @@
     <string name="room_settings_copy_room_id">Копировать ID комнаты</string>
     <string name="room_settings_copy_room_address">Копировать адрес комныты</string>
     <string name="room_details_copy_room_url">Копировать ссылку на комнату</string>
-    
-    <string name="room_settings_addresses_e2e_enabled">Шифрование включено для этой комнаты.</string>
-    <string name="room_settings_addresses_e2e_disabled">Шифрование отключено для этой комнаты.</string>
+
     <string name="room_settings_addresses_e2e_encryption_warning">Включить шифрование \n(внимание: не может быть отключено!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Внимание!</string>
     <string name="room_settings_addresses_e2e_prompt_message">End-to-end шифрование пока нестабильно.\n\nВам не следует доверять этому шифрованию критичные данные.\n\nНет возможности расшифровать историю до момента присоединения к комнате.\n\nПосле включения шифрования для комнаты, оно не может быть отключено.\n\nЗашифрованные сообщения не будут отображаться на устройствах, не поддерживающих шифрование.</string>
@@ -917,5 +913,4 @@
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
     <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.\nЭто означает, что эти устройства могут не пренадлежать тем пользователям, на которых они претендуют. \nПеред продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.\n\nНеизвестные устройства:</string>
-    <string name="bug_report_url">https://riot.im/bugreports/submit</string>
 </resources>

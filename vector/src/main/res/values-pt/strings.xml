@@ -24,7 +24,6 @@
     <string name="action_invite_by_list">Convidar de outras salas</string>
     <string name="action_invite_by_name">Convidar a partir do identificador</string>
     <string name="action_leave">Deixar a sala</string>
-    <string name="action_logout">Desconectar</string>
     <string name="action_mark_all_as_read">Marcar como lido</string>
     <string name="action_members">Lista de integrantes</string>
     <string name="action_my_rooms">Minhas salas</string>
@@ -41,12 +40,10 @@
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_voice_search">Busca de voz</string>
     <string name="active_call">Chamada ativa</string>
-    <string name="allow_ga_use">true</string>
-    <string name="allow_gcm_use">true</string>
     <string name="attachment_cancel_download">"Cancelar o download?</string>
     <string name="attachment_cancel_upload">Cancelar o upload?</string>
-    <string name="attachment_remaining_time_minutes">%1$sm %2$ss</string>
-    <string name="attachment_remaining_time_seconds">%s s</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="auth_email_already_defined">Este email já está cadastrado.</string>
     <string name="auth_email_check_name_in_use_message">"Verificando se o nome de usuário está disponível..</string>
     <string name="auth_email_placeholder">Endereço de email</string>

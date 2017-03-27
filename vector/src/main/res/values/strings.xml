@@ -505,8 +505,6 @@
     <string name="room_participants_leave">Left</string>
     <string name="room_participants_ban">Banned</string>
 
-    <string name="you">You</string>
-
     <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
     <string name="room_participants_header_call">CALL</string>
     <string name="room_participants_header_direct_chats">DIRECT CHATS</string>

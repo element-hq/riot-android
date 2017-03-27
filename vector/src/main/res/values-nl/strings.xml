@@ -95,11 +95,6 @@
     <string name="action_resume_call">Gesprek hervatten</string>
     <string name="about">Over</string>
     <string name="copied_to_clipboard">Naar klembord kopïeren</string>
-    <string name="with_email_and_screenshot">Met e-mail (en schermafbeelding)</string>
-    <string name="with_email_without_screenshot">Met e-mail (zonder schermafbeelding)</string>
-    <string name="with_vector_and_screenshot">Met %s (en schermafbeelding)</string>
-    <string name="with_vector_without_screenshot">With %s (zonder schermafbeelding)</string>
-    <string name="bug_report_password">Zet een wachtwoord op je bug rapport</string>
     <string name="disable">Deactiveren</string>
     <string name="send_bug_report_alert_message">Het lijkt alsof je de telefoon in frustatie schud. wil je een bug report versturen?</string>
     
@@ -393,7 +388,6 @@
     
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">%s permissies</string>
-    <string name="permissions_rationale_msg_title">Je wordt zo gevraagd om permissies toe te staan..</string>
     <string name="permissions_rationale_msg_storage">%s heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.\n\n</string>
     <string name="permissions_rationale_msg_camera">%s heeft toegang nodig tot je camera om afbeeldingen en video oproepen te maken..</string>
     <string name="permissions_rationale_msg_record_audio">%s heeft toegang nodig tot je microfoon om spraakoproepen te maken</string>
@@ -461,7 +455,6 @@
     <string name="room_participants_multi_participants">%s deelnemers</string>
     <string name="room_participants_leave_prompt_title">Ruimte verlaten</string>
     <string name="room_participants_leave_prompt_msg">Weet je zeker dat je de ruimte wilt verlaten?</string>
-    <string name="room_participants_remove_prompt_title">Verwijderen?</string>
     <string name="room_participants_remove_prompt_msg">Weet je zeker dat je %s van deze chat wilt verwijderen?</string>
     <string name="room_participants_admin_name">%s (beheerder)</string>
     <string name="room_participants_create">Maak</string>
@@ -477,9 +470,7 @@
     <string name="room_participants_invite">Uitnodigen</string>
     <string name="room_participants_leave">Verlaten</string>
     <string name="room_participants_ban">Verbannen</string>
-    
-    <string name="you">Jij</string>
-    
+
     <string name="room_participants_header_admin_tools">BEHEERDER GEREEDSCHAPPEN</string>
     <string name="room_participants_header_call">OPROEP</string>
     <string name="room_participants_header_direct_chats">PRIVE CHATS</string>
@@ -524,10 +515,8 @@
     <string name="room_one_user_is_typing">%s is aan het typen...</string>
     <string name="room_two_users_are_typing">%1$s &#038; %2$s zijn aan het typen...</string>
     <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; anderen zijn aan het typen...</string>
-    <string name="room_message_placeholder">Typ een bericht...</string>
     <string name="room_offline_notification">De verbinding met de server is verbroken.</string>
     <string name="room_unsent_messages_notification">Berichten niet verstuurd.</string>
-    <string name="room_prompt_resent">Nu opnieuw versturen?</string>
     <string name="room_resend_unsent_messages">Verstuur niet verstuurde berichten</string>
     <string name="room_delete_unsent_messages">Verwijder niet gestuurde berichten</string>
     <string name="room_message_file_not_found">Bestand niet gevonden</string>
@@ -675,7 +664,6 @@
     <string name="settings_advanced">Geavanceerd</string>
     <string name="settings_cryptography">Cryptografie</string>
     <string name="settings_notifications_targets">Notificatie doelen</string>
-    <string name="settings_app_permission">App permissies</string>
     <string name="settings_devices_list">Apparaten</string>
     <string name="devices_divider">Apparater_verdeler</string>
     <string name="cryptography_divider">cryptografie_verdelen</string>
@@ -706,8 +694,6 @@
     <string name="settings_fail_to_update_password">Wachtwoord wijziging is mislukt</string>
     <string name="settings_password_updated">Je wachtwoord is gewijzigd</string>
     <string name="settings_unignore_user">Alle berichten van %s laten zien?</string>
-    
-    <string name="settings_app_permission_contacts">Contacten</string>
     
     <!-- Room Settings -->
     
@@ -780,8 +766,6 @@
     <string name="room_settings_copy_room_address">Ruimte adres kopïeren</string>
     <string name="room_details_copy_room_url">Ruimte URL kopïeren</string>
     
-    <string name="room_settings_addresses_e2e_enable">Encryptie is aangezet in deze ruimte.</string>
-    <string name="room_settings_addresses_e2e_disable">Encryptie aanzetten \n(waarschuwing: dit kan niet meer worden uitgezet!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Waarschuwing!</string>
     <string name="room_settings_addresses_e2e_prompt_message">Eind-tot-eind encryptie is experimenteel en zal misschien niet betrouwbaar zijn.\n\nJe zou het nog niet moeten vertrouwen voor gevoelige gegevens.\n\nApparaten zullen de geschiedenis nog niet kunnen ontsleutelen van voordat ze de ruimte toetraden.\n\nZodra encryptie aan staat kan het niet meer worden uitgezet (voor nu).\n\nVersleutelde berichten zullen niet zichbaar zijn op programma\'s dat nog niet encryptie implementeren.</string>
     
