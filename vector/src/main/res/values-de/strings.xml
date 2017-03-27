@@ -916,5 +916,5 @@
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Raum enthält unbekannte Geräte</string>
-    <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Geräte die noch nicht bestätigt wurden.\nEs gibt also keine Garantie, dass diese Geräte zu dem Nutzer gehören wie behauptet.\nWir empfehlen durch den Bestätigunsprozess für jedes Gerät zu durchlaufen bevor du fortfährst, aber du kannst die Nachricht erneut ohne Bestätigung senden wenn du es vorziehst.\n\nUnbekannte Geräte:</string>
+    <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Geräte die noch nicht bestätigt wurden.\nEs gibt also keine Garantie, dass diese Geräte zu dem Nutzer gehören wie behauptet.\nWir empfehlen den Bestätigunsprozess für jedes Gerät zu durchlaufen bevor du fortfährst. Du kannst die Nachricht aber auch erneut ohne Bestätigung senden, wenn du es vorziehst.\n\nUnbekannte Geräte:</string>
 </resources>
