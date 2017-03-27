@@ -57,7 +57,8 @@
     <string name="device_information">Información del dispositivo</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas conferencias no son compatibes en salas cifrados</string>
     <string name="send_anyway">Enviar de todos modos</string>
-    <string name="o">or</string>
+    <string name="or">o
+    </string>
 
     <!-- server urls -->
     <string name="vector_im_server_url">https://vector.im</string>
