@@ -50,7 +50,11 @@ import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
 
 public class RoomDirectoryPickerActivity extends AppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener, SearchView.OnQueryTextListener {
+    // LOG TAG
     private static final String LOG_TAG = "RoomDirPickerActivity";
+
+    private static final String DEFAULT_HOME_SERVER_URL = "matrix.org";
+    private static final String DEFAULT_HOME_SERVER_NAME = "Matrix";
 
     private static final String EXTRA_SESSION_ID = "EXTRA_SESSION_ID";
     public static final String EXTRA_OUT_ROOM_DIRECTORY_DATA = "EXTRA_OUT_ROOM_DIRECTORY_DATA";
@@ -154,14 +158,14 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
             private void onDone(List<RoomDirectoryData> list) {
                 mLoadingView.setVisibility(View.GONE);
                 // all the connected network
-                list.add(0, new RoomDirectoryData(null, "matrix.org", null, null, true));
+                list.add(0, new RoomDirectoryData(null, DEFAULT_HOME_SERVER_URL, null, null, true));
 
                 if (!list.isEmpty()) {
-                    list.add(1, new RoomDirectoryData(null, "Matrix", null, null, false));
+                    list.add(1, new RoomDirectoryData(null, DEFAULT_HOME_SERVER_NAME, null, null, false));
                 }
 
                 // if the user uses his own home server
-                if (!mSession.getMyUserId().endsWith(":matrix.org")) {
+                if (!mSession.getMyUserId().endsWith(":" + DEFAULT_HOME_SERVER_URL)) {
                     String server = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
                     list.add(new RoomDirectoryData(server, server, null, null, false));
                 }

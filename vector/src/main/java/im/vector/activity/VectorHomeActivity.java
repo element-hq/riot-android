@@ -370,10 +370,8 @@ public class VectorHomeActivity extends AppCompatActivity {
         mSession.getDataHandler().addListener(mLiveEventListener);
 
         // initialize the public rooms list
-        // initialize the public rooms list
         PublicRoomsManager.getInstance().setSession(mSession);
         PublicRoomsManager.getInstance().refreshPublicRoomsCount(null);
-
 
         initViews();
     }

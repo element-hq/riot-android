@@ -33,8 +33,10 @@ import android.widget.TextView;
 import org.matrix.androidsdk.util.Log;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +61,8 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
      */
 
     public RoomDirectoryAdapter(final List<RoomDirectoryData> serversList, final OnSelectRoomDirectoryListener listener) {
-        mList = serversList;
-        mFilteredList = new ArrayList<>(serversList);
+        mList = (null == serversList) ? new ArrayList<RoomDirectoryData>() : new ArrayList<>(serversList);
+        mFilteredList = new ArrayList<>(mList);
         mListener = listener;
     }
 
@@ -69,8 +71,11 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
      * @param serversList the new servers list
      */
     public void updateDirectoryServersList(List<RoomDirectoryData> serversList) {
-        mList = serversList;
-        mFilteredList = new ArrayList<>(serversList);
+        mList.clear();
+        mList.addAll(serversList);
+
+        mFilteredList.clear();
+        mFilteredList.addAll(serversList);
         notifyDataSetChanged();
     }
 
@@ -169,6 +174,7 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
      * *********************************************************************************************
      */
     private static final Map<String, Bitmap> mAvatarByUrl = new HashMap<>();
+    private static final Map<String, List<WeakReference<ImageView>>> mPendingDownloadByUrl = new HashMap<>();
 
     /**
      * Load the avatar bitmap in the provided imageView
@@ -182,38 +188,72 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
 
         if (null != avatarURL) {
             Bitmap bitmap = mAvatarByUrl.get(avatarURL);
-            imageView.setTag(avatarURL);
-
             // if the image is not cached, download it
             if (null == bitmap) {
-                new AsyncTask<Void, Void, Bitmap>() {
-                    @Override
-                    protected Bitmap doInBackground(Void... params) {
-                        Bitmap bitmap = null;
-                        try {
-                            URL url = new URL(avatarURL);
-                            bitmap = BitmapFactory.decodeStream((InputStream) url.getContent());
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## setAvatar() : cannot load the avatar " + avatarURL);
-                        }
-                        return bitmap;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Bitmap bitmap) {
-                        if ((null != bitmap) && !mAvatarByUrl.containsKey(avatarURL)) {
-                            mAvatarByUrl.put(avatarURL, bitmap);
-                        }
-
-                        if (TextUtils.equals((String) imageView.getTag(), avatarURL)) {
-                            imageView.setImageBitmap(bitmap);
-                        }
-                    }
-                }.execute();
+                downloadAvatar(imageView, avatarURL);
             } else {
                 imageView.setImageBitmap(bitmap);
             }
         }
+    }
+
+    /**
+     * Download the room avatar.
+     * @param imageView the image view
+     * @param avatarURL the avatar url
+     */
+    private void downloadAvatar(final ImageView imageView, final String avatarURL) {
+        // sanity check
+        if ((null == imageView) || (null == avatarURL)) {
+            return;
+        }
+
+        // set the ImageView tag
+        imageView.setTag(avatarURL);
+
+        WeakReference<ImageView> weakImageView = new WeakReference<>(imageView);
+
+        // test if there is already a pending download
+        if (mPendingDownloadByUrl.containsKey(avatarURL)) {
+            mPendingDownloadByUrl.get(avatarURL).add(weakImageView);
+            return;
+        }
+
+        mPendingDownloadByUrl.put(avatarURL, new ArrayList<>(Arrays.asList(weakImageView)));
+
+        new AsyncTask<Void, Void, Bitmap>() {
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                Bitmap bitmap = null;
+                try {
+                    URL url = new URL(avatarURL);
+                    bitmap = BitmapFactory.decodeStream((InputStream) url.getContent());
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## downloadAvatar() : cannot load the avatar " + avatarURL);
+                }
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                if ((null != bitmap) && !mAvatarByUrl.containsKey(avatarURL)) {
+                    mAvatarByUrl.put(avatarURL, bitmap);
+                }
+
+                if (mPendingDownloadByUrl.containsKey(avatarURL)) {
+                    List<WeakReference<ImageView>> weakImageViews = mPendingDownloadByUrl.get(avatarURL);
+                    mPendingDownloadByUrl.remove(avatarURL);
+
+                    for(WeakReference<ImageView> weakImageView : weakImageViews) {
+                        ImageView imageViewToUpdate = weakImageView.get();
+
+                        if ((null != imageViewToUpdate) && TextUtils.equals((String) imageView.getTag(), avatarURL)) {
+                            imageViewToUpdate.setImageBitmap(bitmap);
+                        }
+                    }
+                }
+            }
+        }.execute();
     }
 
     /*
