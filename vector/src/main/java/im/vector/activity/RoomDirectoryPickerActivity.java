@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
@@ -61,8 +63,10 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
 
     private MXSession mSession;
     private RoomDirectoryAdapter mRoomDirectoryAdapter;
+
     private SearchView mSearchView;
-    private View mLoadingView;
+    @BindView(R.id.room_directory_loading)
+    View mLoadingView;
 
      /*
      * *********************************************************************************************
@@ -86,6 +90,7 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_directory_picker);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -222,7 +227,6 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
         mRoomDirectoryAdapter = new RoomDirectoryAdapter(new ArrayList<RoomDirectoryData>(), this);
         roomDirectoryRecyclerView.setAdapter(mRoomDirectoryAdapter);
 
-        mLoadingView = findViewById(R.id.room_directory_loading);
         refreshDirectoryServersList();
     }
 
