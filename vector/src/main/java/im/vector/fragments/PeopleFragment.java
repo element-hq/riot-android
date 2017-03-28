@@ -39,6 +39,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,6 +68,9 @@ import im.vector.view.SimpleDividerItemDecoration;
 public class PeopleFragment extends AbsHomeFragment implements ContactsManager.ContactsManagerListener {
 
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
+
+    @BindView(R.id.direct_chats_header)
+    TextView mDirectChatsHeader;
 
     @BindView(R.id.direct_chats_recyclerview)
     RecyclerView mDirectChatsRecyclerView;
@@ -144,20 +148,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             }
         };
 
-        if (savedInstanceState != null) {
-            restoreData(savedInstanceState);
-        } else {
-            // Direct chats
-            initDirectChatsData();
-            // Local address book
-            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, getActivity(), this);
-            } else {
-                initContactsData();
-            }
-        }
+        prepareViews();
 
-        initViews();
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, getActivity(), this);
+        }
     }
 
     @Override
@@ -165,6 +160,13 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         super.onResume();
         mSession.getDataHandler().addListener(mEventsListener);
         ContactsManager.getInstance().addListener(this);
+        // Direct chats
+        initDirectChatsData();
+        initDirectChatsViews();
+
+        // Local address book
+        initContactsData();
+        initContactsViews();
     }
 
 
@@ -240,7 +242,10 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * *********************************************************************************************
      */
 
-    private void initViews() {
+    /**
+     * Prepare views
+     */
+    private void prepareViews() {
         int margin = (int) getResources().getDimension(R.dimen.item_decoration_left_margin);
         SimpleDividerItemDecoration dividerItemDecoration =
                 new SimpleDividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL, margin);
@@ -248,19 +253,21 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         // Direct chats
         mDirectChatsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mDirectChatsRecyclerView.addItemDecoration(dividerItemDecoration);
+        mDirectChatsRecyclerView.setHasFixedSize(true);
+        mDirectChatsRecyclerView.setNestedScrollingEnabled(false);
         mDirectChatAdapter = new RoomAdapter(getActivity(), new AbsListAdapter.OnSelectItemListener<Room>() {
             @Override
             public void onSelectItem(Room room, int position) {
                 onRoomSelected(room, position);
             }
         });
-        mDirectChatAdapter.setItems(mDirectChats, null);
         mDirectChatsRecyclerView.setAdapter(mDirectChatAdapter);
-        updateDirectChatsDisplay(mDirectChats.size());
 
         // Local address book
         mLocalContactsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mLocalContactsRecyclerView.addItemDecoration(dividerItemDecoration);
+        mLocalContactsRecyclerView.setHasFixedSize(true);
+        mLocalContactsRecyclerView.setNestedScrollingEnabled(false);
         mLocalContactAdapter = new ContactAdapter(getActivity(), ParticipantAdapterItem.alphaComparator, new AbsListAdapter.OnSelectItemListener<ParticipantAdapterItem>() {
             @Override
             public void onSelectItem(ParticipantAdapterItem item, int position) {
@@ -271,16 +278,21 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         // Known contacts
         mKnownContactsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mKnownContactsRecyclerView.addItemDecoration(dividerItemDecoration);
+        mKnownContactsRecyclerView.setHasFixedSize(true);
+        mKnownContactsRecyclerView.setNestedScrollingEnabled(false);
         mKnownContactAdapter = new ContactAdapter(getActivity(), ParticipantAdapterItem.getComparator(mSession), new AbsListAdapter.OnSelectItemListener<ParticipantAdapterItem>() {
             @Override
             public void onSelectItem(ParticipantAdapterItem item, int position) {
                 onContactSelected(item);
             }
         });
-
-        initContactsViews();
     }
 
+    /**
+     * Update the display of direct chats views depending on content
+     *
+     * @param count
+     */
     private void updateDirectChatsDisplay(final int count) {
         if (count > 0) {
             mDirectChatsRecyclerView.setVisibility(View.VISIBLE);
@@ -291,6 +303,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         }
     }
 
+    /**
+     * Update the display of local contacts views depending on content
+     *
+     * @param count
+     */
     private void updateLocalContactsDisplay(final int count) {
         if (count > 0) {
             mLocalContactsHeader.setText(mLocalContactsHeaderText.concat(" (" + count + ")"));
@@ -303,8 +320,13 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         }
     }
 
+    /**
+     * Update the display of known contacts views depending on content
+     *
+     * @param count
+     */
     private void updateKnownContactsDisplay(final boolean firstTime, final int count) {
-        if (count > 0 && !firstTime) {
+        if (count > 0 ) {
             mKnownContactsHeader.setText(mKnownContactsHeaderText.concat(" (" + count + ")"));
             mKnownContactsRecyclerView.setVisibility(View.VISIBLE);
             mKnownContactsPlaceholder.setVisibility(View.GONE);
@@ -369,15 +391,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                 }
             }
         }
-    }
-
-    private void initContactsViews() {
-        mLocalContactAdapter.setItems(mLocalContacts, null);
-        mLocalContactsRecyclerView.setAdapter(mLocalContactAdapter);
-        updateLocalContactsDisplay(mLocalContacts.size());
-        mKnownContactAdapter.setItems(mKnownContacts, null);
-        mKnownContactsRecyclerView.setAdapter(mKnownContactAdapter);
-        updateKnownContactsDisplay(mCurrentFilter == null, mKnownContacts.size());
     }
 
     /**
@@ -468,6 +481,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * *********************************************************************************************
      */
 
+    /**
+     * Retrieve the contacts
+     *
+     * @return
+     */
     private List<ParticipantAdapterItem> getContacts() {
         List<ParticipantAdapterItem> participants = new ArrayList<>();
 
@@ -523,6 +541,27 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             }
         }
         return matrixUsers;
+    }
+
+    /**
+     * Init direct chats view with data and update its display
+     */
+    private void initDirectChatsViews() {
+        mDirectChatAdapter.setItems(mDirectChats, null);
+        updateDirectChatsDisplay(mDirectChats.size());
+
+    }
+
+    /**
+     * Init contacts views with data and update their display
+     */
+    private void initContactsViews() {
+        mLocalContactAdapter.setItems(mLocalContacts, null);
+        mLocalContactsRecyclerView.setAdapter(mLocalContactAdapter);
+        updateLocalContactsDisplay(mLocalContacts.size());
+        mKnownContactAdapter.setItems(mKnownContacts, null);
+        mKnownContactsRecyclerView.setAdapter(mKnownContactAdapter);
+        updateKnownContactsDisplay(mCurrentFilter == null, mKnownContacts.size());
     }
 
     /*
