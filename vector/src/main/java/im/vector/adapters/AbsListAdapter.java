@@ -79,6 +79,18 @@ public abstract class AbsListAdapter<T, R extends RecyclerView.ViewHolder> exten
         return mFilteredItems.size();
     }
 
+    /**
+     * Provides a copy of the items list.
+     * @return a copy of the items list
+     */
+    public List<T> getItems() {
+        if (null != mFilteredItems) {
+            return new ArrayList<>(mFilteredItems);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
     @Override
     public Filter getFilter() {
         return new Filter() {
