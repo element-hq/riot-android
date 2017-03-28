@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resouces_language">en</string>
-    <string name="resouces_country">UK</string>
+    <string name="resouces_language">es</string>
+    <string name="resouces_country">MX</string>
 
     <!-- titles -->
     <string name="app_name">Riot</string>
@@ -182,190 +182,190 @@
     <string name="auth_skip">Omitir</string>
     <string name="auth_send_reset_email">Enviar Correo Electrónico de Reinicio</string>
     <string name="auth_return_to_login">Volver a la página de etrar</string>
-    <string name="auth_user_id_placeholder">Correo electronico o nombre</string>
+    <string name="auth_user_id_placeholder">Correo electrónico o nombre</string>
     <string name="auth_password_placeholder">Contraseña</string>
     <string name="auth_new_password_placeholder">Contraseña nueva</string>
     <string name="auth_user_name_placeholder">Nombre</string>
-    <string name="auth_add_email_message">"Add an email address to your account to let users discover you, and let you reset password."</string>
-    <string name="auth_add_phone_message">"Add a phone number to your account to let users discover you."</string>
-    <string name="auth_add_email_phone_message">"Add an email address and/or a phone number to your account to let users discover you.\n\nEmail address will also let you reset your password."</string>
-    <string name="auth_add_email_and_phone_message">"Add an email address and a phone number to your account to let users discover you.\n\nEmail address will also let you reset your password."</string>
-    <string name="auth_email_placeholder">Email address</string>
-    <string name="auth_opt_email_placeholder">Email address (optional)</string>
-    <string name="auth_phone_number_placeholder">Phone number</string>
-    <string name="auth_opt_phone_number_placeholder">Phone number (optional)</string>
-    <string name="auth_repeat_password_placeholder">Repeat password</string>
-    <string name="auth_repeat_new_password_placeholder">Confirm your new password</string>
-    <string name="auth_invalid_login_param">Incorrect username and/or password</string>
-    <string name="auth_invalid_user_name">User names may only contain letters, numbers, dots, hyphens and underscores</string>
-    <string name="auth_invalid_password">Password too short (min 6)</string>
-    <string name="auth_missing_password">Missing password</string>
-    <string name="auth_invalid_email">"This doesn't look like a valid email address"</string>
-    <string name="auth_invalid_phone">"This doesn't look like a valid phone number"</string>
-    <string name="auth_email_already_defined">This email address is already defined.</string>
-    <string name="auth_missing_optional_email">If you don\'t specify an email address, you won\'t be able to reset your password. Are you sure?</string>
-    <string name="auth_missing_email">Missing email address</string>
-    <string name="auth_missing_phone">Missing phone number</string>
-    <string name="auth_missing_email_or_phone">Missing email address or phone number</string>
-    <string name="auth_invalid_token">Invalid token</string>
-    <string name="auth_password_dont_match">Passwords don\'t match</string>
-    <string name="auth_forgot_password">Forgot password?</string>
-    <string name="auth_use_server_options">Use custom server options (advanced)</string>
-    <string name="auth_email_validation_message">Please check your email to continue registration</string>
-    <string name="auth_threepid_warning_message">Registration with email and phone number at once is not supported yet until the api exists. Only the phone number will be taken into account.\n\nYou may add your email to your profile in settings.</string>
-    <string name="auth_email_check_name_in_use_message">"Checking if user name is available..</string>
-    <string name="auth_email_registration_resumes_message">"Wait while registration resumes..</string>
-    <string name="auth_recaptcha_message">This Home Server would like to make sure you are not a robot</string>
-    <string name="auth_username_in_use">Username in use</string>
-    <string name="auth_home_server">Home Server:</string>
-    <string name="auth_identity_server">Identity Server:</string>
-    <string name="auth_reset_password_next_step_button">I have verified my email address</string>
-    <string name="auth_reset_password_message">To reset your password, enter the email address linked to your account:</string>
-    <string name="auth_reset_password_missing_email">The email address linked to your account must be entered.</string>
-    <string name="auth_reset_password_missing_password">A new password must be entered.</string>
-    <string name="auth_reset_password_email_validation_message">An email has been sent to %s. Once you\'ve followed the link it contains, click below.</string>
-    <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
-    <string name="auth_reset_password_error_not_found">Your email address does not appear to be associated with a Matrix ID on this Homeserver.</string>
-    <string name="auth_reset_password_success_message">Your password has been reset.\n\nYou have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, re-log in on each device.</string>
+    <string name="auth_add_email_message">"Añadir un correo electrónico a tu cuenta para que otros te descubran, y para que puedas reiniciar tu contraseña."</string>
+    <string name="auth_add_phone_message">"Añadir número telefónico a tu cuenta para que otros te descubran."</string>
+    <string name="auth_add_email_phone_message">"Añadir un correo electrónico y/o número telefónico a tu cuenta para que otros te descubran.\n\nEl correo electrónico te permitira reiniciar tu contraseña."</string>
+    <string name="auth_add_email_and_phone_message">"Añadir un correo electrónico y un número telefónico a tu cuenta para que otros te descubran.\n\nEl correo electrónico te permitira reiniciar tu contraseña."</string>
+    <string name="auth_email_placeholder">Correo electrónico</string>
+    <string name="auth_opt_email_placeholder">Correo electrónico (opcional)</string>
+    <string name="auth_phone_number_placeholder">Número telefónico</string>
+    <string name="auth_opt_phone_number_placeholder">Número telefónico (opcional)</string>
+    <string name="auth_repeat_password_placeholder">Confirmar contraseña</string>
+    <string name="auth_repeat_new_password_placeholder">Confirmar contraseña nueva</string>
+    <string name="auth_invalid_login_param">Nombre y/o contraseña incorrecta</string>
+    <string name="auth_invalid_user_name">Nombres sólo pueden ser letras, numeros, puntos, guiones medios, y guiones bajos</string>
+    <string name="auth_invalid_password">Contraseña demasiada corta (min 6)</string>
+    <string name="auth_missing_password">Contraseña ausente</string>
+    <string name="auth_invalid_email">"Esto no parece ser correo electrónico valido"</string>
+    <string name="auth_invalid_phone">"Esto no parece ser número telefónico valido"</string>
+    <string name="auth_email_already_defined">Este correo electrónico ya está ocupado.</string>
+    <string name="auth_missing_optional_email">Si no introduce un correo electrónico, no será capaz de reiniciar su contraseña. ¿Estás seguro?</string>
+    <string name="auth_missing_email">Correo electrónico ausente</string>
+    <string name="auth_missing_phone">Número telefónico ausente</string>
+    <string name="auth_missing_email_or_phone">Correo electrónico o número telefónico ausente</string>
+    <string name="auth_invalid_token">Simbolo no valido</string>
+    <string name="auth_password_dont_match">Las contraseñas no coinciden</string>
+    <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="auth_use_server_options">¿Usar opciones de servidora propietarias? (avanzado)</string>
+    <string name="auth_email_validation_message">Consulte su correo electrónico para poder continuar con la inscripción</string>
+    <string name="auth_threepid_warning_message">La inscripción con correo electrónico y número telefónico no está implementado hasta que exista el api. Solamente se tomara en cuenta el número telefónico.\n\nPodra añadir un correo electrónico en Ajustes.</string>
+    <string name="auth_email_check_name_in_use_message">"Verificando su nombre..</string>
+    <string name="auth_email_registration_resumes_message">"Espere mientras continue la inscripcíon..</string>
+    <string name="auth_recaptcha_message">Esta servidora quiere verificar que no seas robot</string>
+    <string name="auth_username_in_use">Este nombre ya está reservado para otra persona</string>
+    <string name="auth_home_server">Servidora:</string>
+    <string name="auth_identity_server">Servidora Identidad:</string>
+    <string name="auth_reset_password_next_step_button">Verifiqué mi correo electrónico</string>
+    <string name="auth_reset_password_message">Para reiniciar su contraseña, presente el correo electrónico de esta cuenta:</string>
+    <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requisito.</string>
+    <string name="auth_reset_password_missing_password">Contraseña nueva es requerida.</string>
+    <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez siguió el enlace, seleccione abajo.</string>
+    <string name="auth_reset_password_error_unauthorized">Verificación de correo electronico fallo: asegúrese que siguio el enlace.</string>
+    <string name="auth_reset_password_error_not_found">Su correo electrónico no coincide con los de esta servidora.</string>
+    <string name="auth_reset_password_success_message">Su contraseña fue atualizada.\n\nHaz sido desconectado de todos tus dispositivos y las notificaciones están apagados. Para prender las notificaciones, entre su cuenta en cada dispositivo.</string>
 
     <!-- Login Screen -->
-    <string name="login_error_already_logged_in">Already logged in</string>
-    <string name="login_error_must_start_http">URL must start with http[s]://</string>
-    <string name="login_error_network_error">Unable to login: Network error</string>
-    <string name="login_error_unable_login">Unable to login</string>
-    <string name="login_error_registration_network_error">Unable to register: Network error</string>
-    <string name="login_error_unable_register">Unable to register</string>
-    <string name="login_error_unable_register_mail_ownership">Unable to register : email ownership failure</string>
-    <string name="login_error_invalid_credentials">Enter valid credentials</string>
-    <string name="login_error_invalid_home_server">Enter valid URL</string>
+    <string name="login_error_already_logged_in">Sesión activo</string>
+    <string name="login_error_must_start_http">El enlace sólo puede comenzar con http[s]://</string>
+    <string name="login_error_network_error">Sesión fallo: Error con la red</string>
+    <string name="login_error_unable_login">Sesion fallo</string>
+    <string name="login_error_registration_network_error">Inscripción fallo: error con la red</string>
+    <string name="login_error_unable_register">Inscripción fallo</string>
+    <string name="login_error_unable_register_mail_ownership">Inscripción fallo : Posesión de correo electrónico fallo</string>
+    <string name="login_error_invalid_credentials">Escribe credencialed validos</string>
+    <string name="login_error_invalid_home_server">Escribe enlace valido</string>
 
-    <string name="login_error_no_login_flow">We failed to retrieve authentication information from this Home Server</string>
-    <string name="login_error_do_not_support_login_flows">Currently we do not support any or all login flows defined by this Home Server</string>
-    <string name="login_error_registration_is_not_supported">Registration is not currently supported</string>
-    <string name="login_error_forbidden">Invalid username/password</string>
-    <string name="login_error_unknown_token">The access token specified was not recognised</string>
-    <string name="login_error_bad_json">Malformed JSON</string>
-    <string name="login_error_not_json">Did not contain valid JSON</string>
-    <string name="login_error_limit_exceeded">Too many requests have been sent</string>
-    <string name="login_error_user_in_use">This user name is already used</string>
-    <string name="login_error_login_email_not_yet">The email link which has not been clicked yet</string>
+    <string name="login_error_no_login_flow">Falló la autenticación de esta servidora</string>
+    <string name="login_error_do_not_support_login_flows">Presentemente, no contamos con sesiónes de esta servidora.</string>
+    <string name="login_error_registration_is_not_supported">Presentemente, no contamos con inscripción.</string>
+    <string name="login_error_forbidden">Nombre/Contraseña inválido</string>
+    <string name="login_error_unknown_token">El character de acesso escogido no fue reconocido.</string>
+    <string name="login_error_bad_json">JSON malformado</string>
+    <string name="login_error_not_json">No contenía JSON valido</string>
+    <string name="login_error_limit_exceeded">Demasiadas peticiones enviadas</string>
+    <string name="login_error_user_in_use">Este nombre ya está reservado para otra persona</string>
+    <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
 
     <!-- universal link receiver -->
-    <string name="universal_link_join_alert_title">You are trying to access a room.</string>
-    <string name="universal_link_join_alert_body">Would you like to join in order to participate in the discussion?</string>
-    <string name="universal_link_email_invitation_body_1">You have been invited to join this room by %s</string>
-    <string name="universal_link_email_invitation_body_2">Would you like to accept or decline this invitation?</string>
-    <string name="universal_link_email_invitation_body_3">This invitation was sent to %s which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
+    <string name="universal_link_join_alert_title">Estás intentando entrar una sala.</string>
+    <string name="universal_link_join_alert_body">¿Te gustaría entrar para participar en la conversacion?</string>
+    <string name="universal_link_email_invitation_body_1">Tu has sido invitado por %s para entrar a esta sala</string>
+    <string name="universal_link_email_invitation_body_2">¿Desea aceptar o rechazar esta invitación?</string>
+    <string name="universal_link_email_invitation_body_3">Esta invitación fue enviado a %s que no esta unido a esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
+    <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifración de persona-a-persona nuevas de este dispositivo y enviar la clave pública a la servidora.\nEsto sólo ocurre una vez.\nPerdon por la inconveniencia.</string>
 
     <!-- members list Screen -->
-    <string name="members_list">Members List</string>
+    <string name="members_list">Lista de Miembros</string>
 
     <!-- read receipts list Screen -->
-    <string name="read_receipts_list">Read Receipts List</string>
+    <string name="read_receipts_list">Lista de Recibos de Lectura</string>
 
     <!-- accounts list Screen -->
-    <string name="choose_account">Choose account</string>
+    <string name="choose_account">Elige Cuenta</string>
 
     <!-- image size selection -->
-    <string name="compression_options">Send as </string>
+    <string name="compression_options">Enviar como </string>
     <string name="compression_opt_list_original">Original</string>
-    <string name="compression_opt_list_large">Large</string>
-    <string name="compression_opt_list_medium">Medium</string>
-    <string name="compression_opt_list_small">Small</string>
+    <string name="compression_opt_list_large">Grande</string>
+    <string name="compression_opt_list_medium">Mediano</string>
+    <string name="compression_opt_list_small">Chico</string>
 
     <!-- media upload / download messages -->
-    <string name="attachment_cancel_download">"Cancel the download?</string>
-    <string name="attachment_cancel_upload">Cancel the upload?</string>
+    <string name="attachment_cancel_download">"¿Cancelar la descarga?</string>
+    <string name="attachment_cancel_upload">¿Cancelar la subida?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
     <!-- invitation members list Screen -->
-    <string name="members_one_to_one">One to one room members</string>
-    <string name="members_small_room_members">Small room members</string>
-    <string name="members_large_room_members">Large room members</string>
+    <string name="members_one_to_one">Miembros de salas de persona-a-persona</string>
+    <string name="members_small_room_members">Miembros de salas chicas</string>
+    <string name="members_large_room_members">Miembros de salas grandes</string>
 
     <!-- room creation dialog Screen -->
-    <string name="yesterday">Yesterday</string>
-    <string name="today">Today</string>
+    <string name="yesterday">Ayer</string>
+    <string name="today">Hoy</string>
 
     <!-- room creation dialog Screen -->
-    <string name="room_creation_room_name">Name</string>
+    <string name="room_creation_room_name">Nombre</string>
     <string name="room_creation_room_name_hint">(e.g lunchGroup)</string>
     <string name="room_creation_room_alias">Alias</string>
-    <string name="room_creation_room_alias_hint">"Room Alias (optional)</string>
-    <string name="room_creation_participants">With</string>
+    <string name="room_creation_room_alias_hint">"Alias de la Sala (opcional)</string>
+    <string name="room_creation_participants">Con</string>
     <string name="room_creation_participants_hint">(e.g. @me:hs;…)</string>
-    <string name="room_creation_create_room">Create room</string>
-    <string name="room_creation_public">Public Room</string>
-    <string name="room_creation_private">Private</string>
+    <string name="room_creation_create_room">Crear Sala</string>
+    <string name="room_creation_public">Sala Publica</string>
+    <string name="room_creation_private">Privada</string>
 
     <!-- room info dialog Screen -->
-    <string name="room_info_room_name">Room name</string>
-    <string name="room_info_room_name_hint">Enter a room name</string>
-    <string name="room_info_room_topic">Room topic</string>
-    <string name="room_info_room_topic_hint">Enter a room topic</string>
-    <string name="room_info_room_canonical_alias">Canonical alias</string>
-    <string name="room_info_room_canonical_hint">Enter a canonical alias</string>
-    <string name="room_info_room_discard_changes">Discard changes ?</string>
-    <string name="room_info_room_discard">Discard</string>
+    <string name="room_info_room_name">Nombre de la Sala</string>
+    <string name="room_info_room_name_hint">Escribe el nombre de la sala</string>
+    <string name="room_info_room_topic">Tema de la Sala</string>
+    <string name="room_info_room_topic_hint">Escribe el tema de la sala</string>
+    <string name="room_info_room_canonical_alias">Alias Canónico</string>
+    <string name="room_info_room_canonical_hint">Escribe un alias canónico</string>
+    <string name="room_info_room_discard_changes">¿Deshechar cambios?</string>
+    <string name="room_info_room_discard">Deshechar</string>
 
     <!-- contacts list screen -->
-    <string name="contacts">Contacts</string>
+    <string name="contacts">Contactos</string>
 
     <!-- Notification settings screen -->
-    <string name="notification_settings_title">Notification Settings</string>
-    <string name="notification_settings_disable_all">Disable all notifications</string>
-    <string name="notification_settings_enable_notifications">Enable notifications</string>
-    <string name="notification_settings_enable_notifications_warning">All notifications are currently disabled for all devices.</string>
-    <string name="notification_settings_global_notification_settings">Global Notification Settings</string>
-    <string name="notification_settings_global_info">Notification settings are saved to your user account and are shared between all clients which support them (including desktop notifications).\n\nRules are applied in order; the first rule which matches defines the outcome for the message.\nSo: Per-word notifications are more important than per-room notifications which are more important than per-sender notifications.\nFor multiple rules of the same kind, the first one in the list that matches takes priority.</string>
-    <string name="notification_settings_per_word_notifications">Per-word notifications</string>
-    <string name="notification_settings_per_word_info">Words match case insensitively, and may include a * wildcard. So:\nfoo matches the string foo surrounded by word delimiters (e.g. punctuation and whitespace or start/end of line).\nfoo* matches any such word that begins foo.\n*foo* matches any such word which includes the 3 letters foo.</string>
-    <string name="notification_settings_always_notify">Always notify</string>
-    <string name="notification_settings_never_notify">Never notify</string>
-    <string name="notification_settings_word_to_match">word to match</string>
-    <string name="notification_settings_sound">Sound</string>
-    <string name="notification_settings_highlight">Highlight</string>
-    <string name="notification_settings_custom_sound">Custom sound</string>
-    <string name="notification_settings_per_room_notifications">Per-room notifications</string>
-    <string name="notification_settings_per_sender_notifications">Per-sender notifications</string>
+    <string name="notification_settings_title">Ajustes de Notificación</string>
+    <string name="notification_settings_disable_all">Apagar todas las notificaciones</string>
+    <string name="notification_settings_enable_notifications">Prender notificaciones</string>
+    <string name="notification_settings_enable_notifications_warning">Todas la notificaciones están apagadas en todos sus dispositivos.</string>
+    <string name="notification_settings_global_notification_settings">Ajustes Universales de las Notificaciones</string>
+    <string name="notification_settings_global_info">Sus ajustes de notificaciones están guardados en tu cuenta y todos tus dispositivos compatibles los comparten (incluso los de escritorio).\n\nLas reglas se aplican en orden; la primera regla que aplica determina el resultado del mensaje.\nEntonces: Las notificaciones de palabras son mas importantes que las notificaciones de salas que son mas importantes que las notificaciones del enviador.\nPara varias reglas del mismo tipo, el primero de la lista que coincide toma precedencia.</string>
+    <string name="notification_settings_per_word_notifications">Notificaciones de Palabras</string>
+    <string name="notification_settings_per_word_info">Las palabras coinciden sin resptetár mayúsculas ni minúsculas, y podran contener un * , que es letra universál. Entonces:\nfoo coincide con la combinacion de foo envuelto en delimitadores de palabras (e.g. punctuación y blanco o comienzo/fin de una linea).\nfoo* Coincide con qualquera palabra que comienze con foo.\n*foo* coincide con qualquiera palabra que incluye las letras foo.</string>
+    <string name="notification_settings_always_notify">Siempre notificar</string>
+    <string name="notification_settings_never_notify">nunca notificar</string>
+    <string name="notification_settings_word_to_match">Palabra para coincidir</string>
+    <string name="notification_settings_sound">Sonido</string>
+    <string name="notification_settings_highlight">Destacar</string>
+    <string name="notification_settings_custom_sound">Sonido propietario</string>
+    <string name="notification_settings_per_room_notifications">Notificaciones de salas</string>
+    <string name="notification_settings_per_sender_notifications">Notificaciones de personas</string>
     <string name="notification_settings_sender_hint">\@user:domain.com</string>
     <string name="notification_settings_room">Room : </string>
-    <string name="notification_settings_select_room">Select a room</string>
+    <string name="notification_settings_select_room">Seleccione una sala</string>
 
-    <string name="notification_settings_add">Add</string>
+    <string name="notification_settings_add">Añadir</string>
 
-    <string name="notification_settings_other_alerts">Other Alerts</string>
-    <string name="notification_settings_contain_my_user_name">Notify me with sound about messages that contain my user name</string>
-    <string name="notification_settings_contain_my_display_name">Notify me with sound about messages that contain my display name</string>
-    <string name="notification_settings_just_sent_to_me">Notify me with sound about messages sent just to me</string>
-    <string name="notification_settings_invite_to_a_new_room">Notify me when I am invited to a new room</string>
-    <string name="notification_settings_people_join_leave_rooms">Notify me when people join or leave rooms</string>
-    <string name="notification_settings_receive_a_call">Notify me when I receive a call</string>
-    <string name="notification_settings_suppress_from_bots">Suppress notifications from bots</string>
+    <string name="notification_settings_other_alerts">Otras Alertas</string>
+    <string name="notification_settings_contain_my_user_name">Notifiquenme con sonido de los mensajes que contienen mi nombre</string>
+    <string name="notification_settings_contain_my_display_name">Notifiquenme con sonido de los mensajes que contienen mi nombre visible</string>
+    <string name="notification_settings_just_sent_to_me">Notifiquenme con sonido de los mensajes enviados directo a mi</string>
+    <string name="notification_settings_invite_to_a_new_room">Notifiquenme quando me invitan a una sala nueva</string>
+    <string name="notification_settings_people_join_leave_rooms">Notifiquenme quando la gente entra o sale salas</string>
+    <string name="notification_settings_receive_a_call">Notifiquenme quando recibo una llamada</string>
+    <string name="notification_settings_suppress_from_bots">Callar notificaciones de robots</string>
 
-    <string name="notification_settings_by_default">By default…</string>
-    <string name="notification_settings_notify_all_other">Notify for all other messages/rooms</string>
+    <string name="notification_settings_by_default">Por defecto…</string>
+    <string name="notification_settings_notify_all_other">Notifiquenme de todas los otros cuartos/mensages</string>
 
     <!-- gcm section -->
-    <string name="settings_use_gcm">Use GCM</string>
-    <string name="settings_gcm_app_id">GCM pusher application ID</string>
-    <string name="settings_gcm_sender_id">GCM sender ID</string>
-    <string name="settings_gcm_pusher_url">GCM pusher url</string>
-    <string name="settings_gcm_pusher_profile_tag">GCM pusher profile tag</string>
+    <string name="settings_use_gcm">Usar GCM</string>
+    <string name="settings_gcm_app_id">Identificacion de la aplicación enviadora de GSM</string>
+    <string name="settings_gcm_sender_id">Identificación de enviadora GSM</string>
+    <string name="settings_gcm_pusher_url">Enlace enviadora de GSM</string>
+    <string name="settings_gcm_pusher_profile_tag">Etqueta del perfíl enviadora de GSM</string>
 
-    <string name="settings_config_home_server">Home server: %s</string>
-    <string name="settings_config_identity_server">Identity server: %s</string>
-    <string name="settings_config_user_id">User ID: %s</string>
-    <string name="settings_config_access_token">Access token: %s</string>
-    <string name="settings_command_commands">The following commands are available in the room chat:\r\n\r\n /nick &#60;display_name&#62;&#58; change your display name\r\n /me &#60;action&#62;&#58; send the action you are doing. /me will be replaced by your display name\r\n /join &#60;room_alias&#62;&#58; join a room\r\n /kick &#60;user_id&#62; [&#60;reason>]&#58; kick the user\r\n /ban &#60;user_id&#62; [&#60;reason&#62;]&#58; ban the user\r\n /unban &#60;user_id&#62;&#58; unban the user\r\n /op &#60;user_id&#62; &#60;power_level&#62;&#58; set user power level\r\n /deop &#60;user_id&#62;&#58; reset user power level to the room default value</string>
-    <string name="settings_failed_to_upload_avatar">Failed to upload avatar</string>
+    <string name="settings_config_home_server">Servidora: %s</string>
+    <string name="settings_config_identity_server">Servidora Identidad: %s</string>
+    <string name="settings_config_user_id">Identificación de usuario: %s</string>
+    <string name="settings_config_access_token">Símbolo de acesso: %s</string>
+    <string name="settings_command_commands">Estos son los ordenes aplicables en un chat de sala:\r\n\r\n /nick &#60;display_name&#62;&#58; cambiar tu nombre visible\r\n /me &#60;action&#62;&#58; enviar la acción que está haciendo. /me será reemplazado por tu nombre visible\r\n /join &#60;room_alias&#62;&#58; entrar una sala\r\n /kick &#60;user_id&#62; [&#60;reason>]&#58; remover el usuario\r\n /ban &#60;user_id&#62; [&#60;reason&#62;]&#58; prohibir el usuario\r\n /unban &#60;user_id&#62;&#58; desprohibir el usuario\r\n /op &#60;user_id&#62; &#60;power_level&#62;&#58; ajustar nivel de potencia\r\n /deop &#60;user_id&#62;&#58; establecer el nivel de potencia defecto de la servidoratu como el tuyo</string>
+    <string name="settings_failed_to_upload_avatar">La subida del foto de perfil fallo</string>
 
-    <string name="settings_display_name_hint">Enter a display name</string>
-    <string name="settings_update_profile">Update profile</string>
+    <string name="settings_display_name_hint">Escribe su nombre de vista</string>
+    <string name="settings_update_profile">Actualizar perfil</string>
 
     <!-- Settings keys -->
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
@@ -378,33 +378,33 @@
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
 
     <string name="logo">Logo</string>
-    <string name="user_says_body">%1$s says %2$s</string>
-    <string name="unseen_message">%1$s unseen notified message</string>
-    <string name="unseen_messages">%1$s unseen notified messages</string>
+    <string name="user_says_body">%1$s dice %2$s</string>
+    <string name="unseen_message">%1$s mensage notificado no visto</string>
+    <string name="unseen_messages">%1$s mensajes notificados no vistos</string>
 
     <!-- call string -->
-    <string name="call_connected">Call connected</string>
-    <string name="call_connecting">Call connecting…</string>
-    <string name="call_ended">Call ended</string>
-    <string name="call_ring">Calling…</string>
-    <string name="incoming_call">Incoming Call</string>
-    <string name="incoming_video_call">Incoming Video Call</string>
-    <string name="incoming_voice_call">Incoming Voice Call</string>
-    <string name="call_invite_expired">Call Invite Expired</string>
-    <string name="call_in_progress">Call In Progress</string>
+    <string name="call_connected">Llamada conectada</string>
+    <string name="call_connecting">La llamada se esá conectando…</string>
+    <string name="call_ended">Llamada finalizada</string>
+    <string name="call_ring">Llamando…</string>
+    <string name="incoming_call">Llamada Entrante</string>
+    <string name="incoming_video_call">Llamada de Video Entrante</string>
+    <string name="incoming_voice_call">Llamada de Voz Entrante</string>
+    <string name="call_invite_expired">La invitacion de llamada se vencio</string>
+    <string name="call_in_progress">Llamada en Processo</string>
 
-    <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
-    <string name="call_error_ice_failed">Media Connection Failed</string>
-    <string name="call_error_camera_init_failed">Cannot initialize the camera</string>
-    <string name="call_error_answered_elsewhere">call answered elsewhere</string>
-    <string name="call_error_peer_hangup">peer hung up</string>
-    <string name="call_error_peer_hangup_elsewhere">call hung up elsewhere</string>
-    <string name="call_error_peer_cancelled_call">call cancelled</string>
+    <string name="call_error_user_not_responding">El lado remoto no pudo contestar.</string>
+    <string name="call_error_ice_failed">Conexion de media fallo</string>
+    <string name="call_error_camera_init_failed">La camara no se pudo prender</string>
+    <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
+    <string name="call_error_peer_hangup">el igual colgó la llamada</string>
+    <string name="call_error_peer_hangup_elsewhere">la llamada fue colgado en otra parte</string>
+    <string name="call_error_peer_cancelled_call">la llamada fue cancelada</string>
 
-    <string name="action_accept">ACCEPT</string>
-    <string name="action_ignore">IGNORE</string>
-    <string name="action_cancel">Cancel</string>
-    <string name="action_hangup">Hang up</string>
+    <string name="action_accept">ACEPTAR</string>
+    <string name="action_ignore">IGNORAR</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_hangup">Colgar</string>
 
     <!-- medias picker string -->
     <string name="media_picker_picture_capture_title">Take a picture</string>
