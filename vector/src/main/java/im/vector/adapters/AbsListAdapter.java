@@ -143,6 +143,25 @@ public abstract class AbsListAdapter<T, R extends RecyclerView.ViewHolder> exten
         notifyDataSetChanged();
     }
 
+
+    /**
+     * Add more items to the current list
+     *
+     * @param items
+     */
+    @CallSuper
+    public void addItems(final List<T> items) {
+        if (items != null) {
+            mItems.addAll(items);
+            mFilteredItems.addAll(items);
+
+            notifyDataSetChanged();
+
+            // does not seem to work
+            //notifyItemRangeInserted(curSize, items.size());
+        }
+    }
+
     /*
      * *********************************************************************************************
      * Abstract methods

@@ -48,7 +48,7 @@ public class PublicRoomAdapter extends AbsListAdapter<PublicRoom, PublicRoomAdap
      */
 
     public PublicRoomAdapter(final Context context, final OnSelectItemListener<PublicRoom> listener) {
-        super(R.layout.adapter_item_room_view, listener);
+        super(R.layout.adapter_item_public_room_view, listener);
         mContext = context;
         mSession = Matrix.getInstance(context).getDefaultSession();
     }
@@ -69,58 +69,10 @@ public class PublicRoomAdapter extends AbsListAdapter<PublicRoom, PublicRoomAdap
         viewHolder.populateViews(item);
     }
 
-
-    /**
-     * Tells if a public room matches a pattern.
-     *
-     * @param publicRoom the roomState to test
-     * @param pattern    the pattern
-     * @return true if it matches
-     */
-    private static boolean match(PublicRoom publicRoom, Pattern pattern) {
-        List<String> itemsToTest = new ArrayList<>();
-
-        if (null != publicRoom.name) {
-            itemsToTest.add(publicRoom.name);
-        }
-
-        if (null != publicRoom.topic) {
-            itemsToTest.add(publicRoom.topic);
-        }
-
-        if (null != publicRoom.alias) {
-            itemsToTest.add(publicRoom.alias);
-        }
-
-        if (null != publicRoom.roomId) {
-            itemsToTest.add(publicRoom.roomId);
-        }
-
-        if (null != publicRoom.aliases) {
-            itemsToTest.addAll(publicRoom.aliases);
-        }
-
-        for (String item : itemsToTest) {
-            if (pattern.matcher(item).find()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     @Override
     protected List<PublicRoom> getFilterItems(List<PublicRoom> publicRooms, String text) {
-        Pattern pattern = Pattern.compile(Pattern.quote(text), Pattern.CASE_INSENSITIVE);
-
-        List<PublicRoom> filteredRoomStates = new ArrayList<>();
-
-        for (final PublicRoom state : publicRooms) {
-            if (match(state, pattern)) {
-                filteredRoomStates.add(state);
-            }
-        }
-        return filteredRoomStates;
+        // no local search
+        return new ArrayList<>();
     }
 
     /*
@@ -130,18 +82,17 @@ public class PublicRoomAdapter extends AbsListAdapter<PublicRoom, PublicRoomAdap
      */
 
     class PublicRoomViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.public_room_avatar)
+        ImageView vPublicRoomAvatar;
 
-        @BindView(R.id.room_avatar)
-        ImageView vRoomAvatar;
+        @BindView(R.id.public_room_name)
+        TextView vPublicRoomName;
 
-        @BindView(R.id.room_name)
-        TextView vRoomName;
+        @BindView(R.id.public_room_topic)
+        TextView vRoomTopic;
 
-        @BindView(R.id.room_message)
-        TextView vRoomLastMessage;
-
-        @BindView(R.id.room_update_date)
-        TextView vRoomTimestamp;
+        @BindView(R.id.public_room_members_count)
+        TextView vPublicRoomsMemberCountTextView;
 
         private PublicRoomViewHolder(final View itemView) {
             super(itemView);
@@ -152,24 +103,17 @@ public class PublicRoomAdapter extends AbsListAdapter<PublicRoom, PublicRoomAdap
             String roomName = !TextUtils.isEmpty(publicRoom.name) ? publicRoom.name : VectorUtils.getPublicRoomDisplayName(publicRoom);
 
             // display the room avatar
-            vRoomAvatar.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
-            VectorUtils.loadUserAvatar(mContext, mSession, vRoomAvatar, publicRoom.getAvatarUrl(), publicRoom.roomId, roomName);
+            vPublicRoomAvatar.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
+            VectorUtils.loadUserAvatar(mContext, mSession, vPublicRoomAvatar, publicRoom.getAvatarUrl(), publicRoom.roomId, roomName);
 
             // set the topic
-            vRoomLastMessage.setText(publicRoom.topic);
+            vRoomTopic.setText(publicRoom.topic);
 
             // display the room name
-            vRoomName.setText(roomName);
+            vPublicRoomName.setText(roomName);
 
-            // display the number of users
-            String usersText;
-            if (publicRoom.numJoinedMembers > 1) {
-                usersText = publicRoom.numJoinedMembers + " " + mContext.getResources().getString(R.string.users);
-            } else {
-                usersText = publicRoom.numJoinedMembers + " " + mContext.getResources().getString(R.string.user);
-            }
-
-            vRoomTimestamp.setText(usersText);
+            // members count
+            vPublicRoomsMemberCountTextView.setText(publicRoom.numJoinedMembers + "");
         }
     }
 }

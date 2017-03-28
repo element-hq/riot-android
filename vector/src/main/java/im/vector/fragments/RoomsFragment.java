@@ -18,13 +18,13 @@ package im.vector.fragments;
 
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -40,19 +40,26 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.adapters.AbsListAdapter;
 import im.vector.adapters.PublicRoomAdapter;
+import im.vector.view.SimpleDividerItemDecoration;
 
 public class RoomsFragment extends AbsHomeFragment {
-
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
-
-    @BindView(R.id.room_directory_recycler_view)
-    RecyclerView mRoomDirectoryRecyclerView;
 
     @BindView(R.id.nested_scroll_view)
     NestedScrollView mNestedScrollView;
 
+    @BindView(R.id.room_directory_recycler_view)
+    RecyclerView mRoomDirectoryRecyclerView;
+
+    @BindView(R.id.room_directory_loading_view)
+    View mLoadingMoreDirectoryRooms;
+
+    // public rooms management
     private PublicRoomAdapter mPublicRoomAdapter;
-    private List<PublicRoom> mPublicRooms = new ArrayList<>();
+    private List<PublicRoom> mPublicRoomsList = new ArrayList<>();
+
+    //
+    private String mSearchedPattern;
 
     /*
      * *********************************************************************************************
@@ -79,6 +86,8 @@ public class RoomsFragment extends AbsHomeFragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mSearchedPattern = null;
+
         initViews();
 
         if (savedInstanceState != null) {
@@ -99,14 +108,17 @@ public class RoomsFragment extends AbsHomeFragment {
 
     @Override
     protected void onFilter(String pattern, OnFilterListener listener) {
-        Toast.makeText(getActivity(), "room onFilter "+pattern, Toast.LENGTH_SHORT).show();
-        //TODO adapter getFilter().filter(pattern, listener)
-        //TODO call listener.onFilterDone(); when complete
+        // check if there is an update
+        if (!TextUtils.equals(mSearchedPattern, pattern)) {
+            mSearchedPattern = pattern;
+            initPublicRooms();
+        }
     }
 
     @Override
     protected void onResetFilter() {
-
+        mSearchedPattern = null;
+        initPublicRooms();
     }
 
     /*
@@ -116,9 +128,10 @@ public class RoomsFragment extends AbsHomeFragment {
      */
 
     private void initViews() {
-
+        // public rooms
         mRoomDirectoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mRoomDirectoryRecyclerView.setHasFixedSize(true);
+        mRoomDirectoryRecyclerView.setNestedScrollingEnabled(false);
 
         //mRoomDirectoryRecyclerView.addItemDecoration(dividerItemDecoration);
         mPublicRoomAdapter = new PublicRoomAdapter(getActivity(), new AbsListAdapter.OnSelectItemListener<PublicRoom>() {
@@ -128,11 +141,15 @@ public class RoomsFragment extends AbsHomeFragment {
             }
         });
 
-        mPublicRoomAdapter.setItems(mPublicRooms);
+        int margin = (int) getResources().getDimension(R.dimen.item_decoration_left_margin);
+        SimpleDividerItemDecoration dividerItemDecoration =
+                new SimpleDividerItemDecoration(mRoomDirectoryRecyclerView.getContext(), DividerItemDecoration.HORIZONTAL, margin);
+        mRoomDirectoryRecyclerView.addItemDecoration(dividerItemDecoration);
+
+        mPublicRoomAdapter.setItems(mPublicRoomsList);
         mRoomDirectoryRecyclerView.setAdapter(mPublicRoomAdapter);
         initPublicRooms();
     }
-
 
     /*
      * *********************************************************************************************
@@ -140,53 +157,70 @@ public class RoomsFragment extends AbsHomeFragment {
      * *********************************************************************************************
      */
 
-    private boolean mIsForwardPaginating = false;
-    private int mItemHeight = -1;
+    // Cell height
+    private int mPublicCellHeight = -1;
 
-    private final RecyclerView.OnScrollListener mPublicRoomScrollListener = new RecyclerView.OnScrollListener() {
+    // tells if a forward pagination is in progress
+    private boolean isForwardPaginating() {
+        return View.VISIBLE == mLoadingMoreDirectoryRooms.getVisibility();
+    }
+
+    /**
+     * Scroll events listener to forward paginate when it is required.
+     */
+    private final NestedScrollView.OnScrollChangeListener mPublicRoomScrollListener = new NestedScrollView.OnScrollChangeListener() {
         @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
+        public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+            LinearLayoutManager layoutManager = (LinearLayoutManager)mRoomDirectoryRecyclerView.getLayoutManager();
 
-            /*LinearLayoutManager layoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
-            int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+            int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
 
+            // as a nestedScrollView is used, findLastVisibleItemPosition is not valid (always the last list item)
+            if (0 != mRoomDirectoryRecyclerView.getChildCount()) {
 
-            if (-1 == mItemHeight) {
-                mItemHeight = (mRoomDirectoryRecyclerView.getMeasuredHeight() + mRoomDirectoryRecyclerView.getChildCount() - 1) / recyclerView.getLayoutManager().getChildCount();
+                // compute the item height in pixels
+                if (-1 == mPublicCellHeight) {
+                    mPublicCellHeight = (mRoomDirectoryRecyclerView.getMeasuredHeight() + mRoomDirectoryRecyclerView.getChildCount() - 1) / mRoomDirectoryRecyclerView.getLayoutManager().getChildCount();
+                }
+
+                // compute the first item position
+                int[] recyclerPosition = {0, 0};
+                mRoomDirectoryRecyclerView.getLocationOnScreen(recyclerPosition);
+
+                int firstPosition = 0;
+                int offsetY = recyclerPosition[1];
+
+                if (offsetY < 0) {
+                    firstPosition = (-offsetY) / mPublicCellHeight;
+                }
+
+                // compute the last visible item position
+                lastVisibleItemPosition = firstPosition + (mNestedScrollView.getHeight() + mPublicCellHeight - 1) / mPublicCellHeight;
             }
-
-            int[] location = {0,0};
-            mRoomDirectoryRecyclerView.getLocationOnScreen(location);
-
-            int firstPosition = 0;
-
-            int offsetY = location[1] - mNestedScrollView.getScrollY();
-
-            if (offsetY < 0) {
-                firstPosition = (-offsetY) / mItemHeight;
-            }
-
-            int count = (mNestedScrollView.getHeight() + mItemHeight - 1) / mItemHeight;
-
-            int lastVisibleItemPosition = firstPosition + count;
-
-            Log.e(LOG_TAG, "DTC :  " + firstPosition);*/
 
             // detect if the last visible item is going to be displayed
-            /*if (!mIsForwardPaginating && (lastVisibleItemPosition != RecyclerView.NO_POSITION) && (lastVisibleItemPosition >= (recyclerView.getAdapter().getItemCount() - 10)))  {
+            if (!isForwardPaginating() && (lastVisibleItemPosition != RecyclerView.NO_POSITION) && (lastVisibleItemPosition >= (mRoomDirectoryRecyclerView.getAdapter().getItemCount() - 10)))  {
                 forwardPaginate();
-            }*/
+            }
         }
     };
 
+    /**
+     * Init the public rooms.
+     */
     private void initPublicRooms() {
-        PublicRoomsManager.getInstance().startPublicRoomsSearch(null, null, false, "", new ApiCallback<List<PublicRoom>>() {
+        mLoadingMoreDirectoryRooms.setVisibility(View.VISIBLE);
+        mRoomDirectoryRecyclerView.setVisibility(View.GONE);
+
+        PublicRoomsManager.getInstance().startPublicRoomsSearch(null, null, false, mSearchedPattern, new ApiCallback<List<PublicRoom>>() {
             @Override
             public void onSuccess(List<PublicRoom> publicRooms) {
                 if (null != getActivity()) {
                     mPublicRoomAdapter.setItems(publicRooms);
                     addPublicRoomsListener();
+
+                    mLoadingMoreDirectoryRooms.setVisibility(View.GONE);
+                    mRoomDirectoryRecyclerView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -194,6 +228,8 @@ public class RoomsFragment extends AbsHomeFragment {
                 if (null != getActivity()) {
                     Log.e(LOG_TAG, "## startPublicRoomsSearch() failed " + message);
                     Toast.makeText(getActivity(),message, Toast.LENGTH_SHORT).show();
+
+                    mLoadingMoreDirectoryRooms.setVisibility(View.GONE);
                 }
             }
 
@@ -214,33 +250,30 @@ public class RoomsFragment extends AbsHomeFragment {
         });
     }
 
-
-    private void addPublicRoomsListener() {
-        mRoomDirectoryRecyclerView.addOnScrollListener(mPublicRoomScrollListener);
-    }
-
-    private void removePublicRoomsListener() {
-        mRoomDirectoryRecyclerView.removeOnScrollListener(mPublicRoomScrollListener);
-    }
-
     /**
      * Trigger a forward room pagination
      */
     private void forwardPaginate() {
-        mIsForwardPaginating = PublicRoomsManager.getInstance().forwardPaginate(new ApiCallback<List<PublicRoom>>() {
+        boolean isForwarding = PublicRoomsManager.getInstance().forwardPaginate(new ApiCallback<List<PublicRoom>>() {
             @Override
-            public void onSuccess(List<PublicRoom> publicRooms) {
+            public void onSuccess(final List<PublicRoom> publicRooms) {
                 if (null != getActivity()) {
-                    List items = mPublicRoomAdapter.getItems();
-                    items.addAll(publicRooms);
+                    //List items = mPublicRoomAdapter.getItems();
+                    //items.addAll(publicRooms);
 
-                    mPublicRoomAdapter.setItems(items);
-                    // unplug the scroll listener if there is no more data to find
-                    if (!PublicRoomsManager.getInstance().hasMoreResults()) {
-                        removePublicRoomsListener();
-                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mPublicRoomAdapter.addItems(publicRooms);
 
-                    mIsForwardPaginating = false;
+                            // unplug the scroll listener if there is no more data to find
+                            if (!PublicRoomsManager.getInstance().hasMoreResults()) {
+                                removePublicRoomsListener();
+                            }
+
+                            mLoadingMoreDirectoryRooms.setVisibility(View.GONE);
+                        }
+                    });
                 }
             }
 
@@ -250,7 +283,7 @@ public class RoomsFragment extends AbsHomeFragment {
                     Toast.makeText(getActivity(),message, Toast.LENGTH_SHORT).show();
                 }
 
-                mIsForwardPaginating = false;
+                mLoadingMoreDirectoryRooms.setVisibility(View.GONE);
             }
 
             @Override
@@ -268,5 +301,20 @@ public class RoomsFragment extends AbsHomeFragment {
                 onError(e.getLocalizedMessage());
             }
         });
+
+        mLoadingMoreDirectoryRooms.setVisibility(isForwarding ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * Add the public rooms listener
+     */
+    private void addPublicRoomsListener() {
+        mNestedScrollView.setOnScrollChangeListener(mPublicRoomScrollListener);
+    }
+
+    /**
+     * Remove the public rooms listener
+     */
+    private void removePublicRoomsListener() {
     }
 }
