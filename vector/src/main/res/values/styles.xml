@@ -188,6 +188,12 @@
         <item name="android:textColorHint">@color/vector_white_alpha_50</item>
     </style>
 
+    <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar">
+        <item name="editTextColor">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">@color/vector_white_alpha_50</item>
+    </style>
+
     <style name="LoginEditTextStyle" parent="@android:style/Widget.EditText">
         <item name="android:textSize">16sp</item>
     </style>
