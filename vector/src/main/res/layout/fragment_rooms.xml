@@ -18,6 +18,14 @@
             android:layout_height="wrap_content"
             android:text="@string/rooms_directory_header" />
 
+        <Spinner
+            android:id="@+id/public_rooms_selector"
+            style="@style/ListHeader"
+            android:spinnerMode="dropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </Spinner>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/room_directory_recycler_view"
             android:layout_width="match_parent"

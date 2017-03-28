@@ -16,6 +16,8 @@
 
 package im.vector.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DividerItemDecoration;
@@ -23,8 +25,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -38,12 +43,17 @@ import java.util.List;
 import butterknife.BindView;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
+import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.adapters.AbsListAdapter;
 import im.vector.adapters.PublicRoomAdapter;
+import im.vector.util.RoomDirectoryData;
 import im.vector.view.SimpleDividerItemDecoration;
 
 public class RoomsFragment extends AbsHomeFragment {
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
+
+    //
+    private static final int DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE = 314;
 
     @BindView(R.id.nested_scroll_view)
     NestedScrollView mNestedScrollView;
@@ -54,12 +64,18 @@ public class RoomsFragment extends AbsHomeFragment {
     @BindView(R.id.room_directory_loading_view)
     View mLoadingMoreDirectoryRooms;
 
+    @BindView(R.id.public_rooms_selector)
+    Spinner mPublicRoomsSelector;
+
     // public rooms management
     private PublicRoomAdapter mPublicRoomAdapter;
     private List<PublicRoom> mPublicRoomsList = new ArrayList<>();
 
     //
     private String mSearchedPattern;
+
+    // the selected room directory
+    private RoomDirectoryData mSelectedRoomDirectory;
 
     /*
      * *********************************************************************************************
@@ -157,6 +173,8 @@ public class RoomsFragment extends AbsHomeFragment {
      * *********************************************************************************************
      */
 
+    private ArrayAdapter<CharSequence> mRoomDirectoryAdapter;
+
     // Cell height
     private int mPublicCellHeight = -1;
 
@@ -206,13 +224,58 @@ public class RoomsFragment extends AbsHomeFragment {
     };
 
     /**
+     * Refresh the directory source spinner
+     */
+    private void refreshDirectorySourceSpinner() {
+        // already set a preferred directory source
+        if (null == mSelectedRoomDirectory) {
+            mSelectedRoomDirectory = RoomDirectoryData.getDefault();
+        }
+
+        if (null == mRoomDirectoryAdapter) {
+            mRoomDirectoryAdapter = new ArrayAdapter<>(getActivity(), R.layout.public_room_spinner_item);
+            mPublicRoomsSelector.setAdapter(mRoomDirectoryAdapter);
+
+            mPublicRoomsSelector.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        startActivityForResult(RoomDirectoryPickerActivity.getIntent(getActivity(), mSession.getMyUserId()), DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE);
+                    }
+                    return true;
+                }
+            });
+        } else {
+            mRoomDirectoryAdapter.clear();
+        }
+
+        mRoomDirectoryAdapter.add(mSelectedRoomDirectory.getDisplayName());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (Activity.RESULT_OK == resultCode) {
+            if (requestCode == DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE) {
+                mSelectedRoomDirectory = (RoomDirectoryData)data.getSerializableExtra(RoomDirectoryPickerActivity.EXTRA_OUT_ROOM_DIRECTORY_DATA);
+
+                initPublicRooms();
+            }
+        }
+    }
+
+    /**
      * Init the public rooms.
      */
     private void initPublicRooms() {
+        refreshDirectorySourceSpinner();
+
         mLoadingMoreDirectoryRooms.setVisibility(View.VISIBLE);
         mRoomDirectoryRecyclerView.setVisibility(View.GONE);
 
-        PublicRoomsManager.getInstance().startPublicRoomsSearch(null, null, false, mSearchedPattern, new ApiCallback<List<PublicRoom>>() {
+        PublicRoomsManager.getInstance().startPublicRoomsSearch(mSelectedRoomDirectory.getServerUrl(),
+                mSelectedRoomDirectory.getThirdPartyInstanceId(),
+                mSelectedRoomDirectory.isIncludedAllNetworks(),
+                mSearchedPattern, new ApiCallback<List<PublicRoom>>() {
             @Override
             public void onSuccess(List<PublicRoom> publicRooms) {
                 if (null != getActivity()) {
@@ -258,22 +321,14 @@ public class RoomsFragment extends AbsHomeFragment {
             @Override
             public void onSuccess(final List<PublicRoom> publicRooms) {
                 if (null != getActivity()) {
-                    //List items = mPublicRoomAdapter.getItems();
-                    //items.addAll(publicRooms);
+                    mPublicRoomAdapter.addItems(publicRooms);
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mPublicRoomAdapter.addItems(publicRooms);
+                    // unplug the scroll listener if there is no more data to find
+                    if (!PublicRoomsManager.getInstance().hasMoreResults()) {
+                        removePublicRoomsListener();
+                    }
 
-                            // unplug the scroll listener if there is no more data to find
-                            if (!PublicRoomsManager.getInstance().hasMoreResults()) {
-                                removePublicRoomsListener();
-                            }
-
-                            mLoadingMoreDirectoryRooms.setVisibility(View.GONE);
-                        }
-                    });
+                    mLoadingMoreDirectoryRooms.setVisibility(View.GONE);
                 }
             }
 

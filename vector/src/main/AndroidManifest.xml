@@ -302,6 +302,12 @@
             android:theme="@style/CountryPickerTheme" />
 
         <activity
+            android:name="im.vector.activity.RoomDirectoryPickerActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/select_room_directory"
+            android:theme="@style/DirectoryPickerTheme" />
+
+        <activity
             android:name="im.vector.activity.PhoneNumberVerificationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_phone_number_verification"
