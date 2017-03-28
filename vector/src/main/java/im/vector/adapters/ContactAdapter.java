@@ -189,10 +189,7 @@ public class ContactAdapter extends AbsListAdapter<ParticipantAdapterItem, Conta
                     public void onSuccess(Void info) {
                         if (textView != null) {
                             textView.setText(VectorUtils.getUserOnlineStatus(mContext, finalMatchedSession, item.mUserId, null));
-                            // TODO
-//                            Collections.sort(mItems, mComparator);
-//                            setItems(mItems, null);
-//                            notifyDataSetChanged();
+                            setItems(mItems, null);
                         }
                     }
                 });
