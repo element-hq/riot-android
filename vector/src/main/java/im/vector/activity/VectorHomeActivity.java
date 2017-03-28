@@ -137,6 +137,9 @@ public class VectorHomeActivity extends AppCompatActivity {
     private static final String TAG_FRAGMENT_PEOPLE = "TAG_FRAGMENT_PEOPLE";
     private static final String TAG_FRAGMENT_ROOMS = "TAG_FRAGMENT_ROOMS";
 
+    // Key used to restore the proper fragment after orientation change
+    private static final String CURRENT_MENU_ID = "CURRENT_MENU_ID";
+
     // switch to a room activity
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
 
@@ -330,8 +333,15 @@ public class VectorHomeActivity extends AppCompatActivity {
             }
         }
 
-        mBottomNavigationView.findViewById(R.id.bottom_action_home).performClick();
-        mCurrentMenuId = R.id.bottom_action_home;
+        final View selectedMenu;
+        if (savedInstanceState != null) {
+            selectedMenu = mBottomNavigationView.findViewById(savedInstanceState.getInt(CURRENT_MENU_ID, R.id.bottom_action_home));
+        } else {
+            selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_home);
+        }
+        if (selectedMenu != null) {
+            selectedMenu.performClick();
+        }
 
         // clear the notification if they are not anymore valid
         // i.e the event has been read from another client
@@ -530,6 +540,12 @@ public class VectorHomeActivity extends AppCompatActivity {
         mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_MENU_ID, mCurrentMenuId);
     }
 
 
