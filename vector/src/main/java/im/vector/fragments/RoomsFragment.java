@@ -29,6 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -52,11 +53,14 @@ import im.vector.view.SimpleDividerItemDecoration;
 public class RoomsFragment extends AbsHomeFragment {
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
 
-    //
+    // activity result codes
     private static final int DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE = 314;
 
-    @BindView(R.id.nested_scroll_view)
-    NestedScrollView mNestedScrollView;
+    //
+    private static final String SELECTED_ROOM_DIRECTORY = "SELECTED_ROOM_DIRECTORY";
+
+    @BindView(R.id.rooms_scroll_view)
+    ScrollView mScrollView;
 
     @BindView(R.id.room_directory_recycler_view)
     RecyclerView mRoomDirectoryRecyclerView;
@@ -103,12 +107,20 @@ public class RoomsFragment extends AbsHomeFragment {
         super.onActivityCreated(savedInstanceState);
 
         mSearchedPattern = null;
-
         initViews();
 
         if (savedInstanceState != null) {
-            // Restore adapter items
+            mSelectedRoomDirectory = (RoomDirectoryData)savedInstanceState.getSerializable(SELECTED_ROOM_DIRECTORY);
         }
+        initPublicRooms();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // save the selected room directory
+        outState.putSerializable(SELECTED_ROOM_DIRECTORY, mSelectedRoomDirectory);
     }
 
     /*
@@ -164,7 +176,6 @@ public class RoomsFragment extends AbsHomeFragment {
 
         mPublicRoomAdapter.setItems(mPublicRoomsList);
         mRoomDirectoryRecyclerView.setAdapter(mPublicRoomAdapter);
-        initPublicRooms();
     }
 
     /*
@@ -186,9 +197,9 @@ public class RoomsFragment extends AbsHomeFragment {
     /**
      * Scroll events listener to forward paginate when it is required.
      */
-    private final NestedScrollView.OnScrollChangeListener mPublicRoomScrollListener = new NestedScrollView.OnScrollChangeListener() {
+    private final ScrollView.OnScrollChangeListener mPublicRoomScrollListener = new ScrollView.OnScrollChangeListener() {
         @Override
-        public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
             LinearLayoutManager layoutManager = (LinearLayoutManager)mRoomDirectoryRecyclerView.getLayoutManager();
 
             int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
@@ -213,7 +224,7 @@ public class RoomsFragment extends AbsHomeFragment {
                 }
 
                 // compute the last visible item position
-                lastVisibleItemPosition = firstPosition + (mNestedScrollView.getHeight() + mPublicCellHeight - 1) / mPublicCellHeight;
+                lastVisibleItemPosition = firstPosition + (mScrollView.getHeight() + mPublicCellHeight - 1) / mPublicCellHeight;
             }
 
             // detect if the last visible item is going to be displayed
@@ -227,27 +238,27 @@ public class RoomsFragment extends AbsHomeFragment {
      * Refresh the directory source spinner
      */
     private void refreshDirectorySourceSpinner() {
-        // already set a preferred directory source
+        // no directory source, use the default one
         if (null == mSelectedRoomDirectory) {
             mSelectedRoomDirectory = RoomDirectoryData.getDefault();
         }
 
         if (null == mRoomDirectoryAdapter) {
             mRoomDirectoryAdapter = new ArrayAdapter<>(getActivity(), R.layout.public_room_spinner_item);
-            mPublicRoomsSelector.setAdapter(mRoomDirectoryAdapter);
-
-            mPublicRoomsSelector.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        startActivityForResult(RoomDirectoryPickerActivity.getIntent(getActivity(), mSession.getMyUserId()), DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE);
-                    }
-                    return true;
-                }
-            });
         } else {
             mRoomDirectoryAdapter.clear();
         }
+
+        mPublicRoomsSelector.setAdapter(mRoomDirectoryAdapter);
+        mPublicRoomsSelector.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    startActivityForResult(RoomDirectoryPickerActivity.getIntent(getActivity(), mSession.getMyUserId()), DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE);
+                }
+                return true;
+            }
+        });
 
         mRoomDirectoryAdapter.add(mSelectedRoomDirectory.getDisplayName());
     }
@@ -364,7 +375,7 @@ public class RoomsFragment extends AbsHomeFragment {
      * Add the public rooms listener
      */
     private void addPublicRoomsListener() {
-        mNestedScrollView.setOnScrollChangeListener(mPublicRoomScrollListener);
+        mScrollView.setOnScrollChangeListener(mPublicRoomScrollListener);
     }
 
     /**
