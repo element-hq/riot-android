@@ -28,6 +28,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -50,6 +52,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,14 +63,22 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.Log;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -92,6 +103,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
+import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 
 /**
@@ -490,6 +502,8 @@ public class VectorHomeActivity extends AppCompatActivity {
         mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
 
         displayCryptoCorruption();
+
+        addBadgeEventsListener();
     }
 
     @Override
@@ -571,6 +585,8 @@ public class VectorHomeActivity extends AppCompatActivity {
                 mRoomCreationViewTimer = null;
             }
         }
+
+        removeBadgeEventsListener();
     }
 
     @Override
@@ -683,6 +699,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = VectorRecentsListFragment.newInstance(mSession.getCredentials().userId, R.layout.fragment_vector_recents_list);
                 }
                 tag = TAG_FRAGMENT_HOME;
+                setTitle(R.string.bottom_action_home);
                 break;
             case R.id.bottom_action_favourites:
                 Log.e(LOG_TAG, "onNavigationItemSelected FAVOURITES");
@@ -692,6 +709,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = FavouritesFragment.newInstance();
                 }
                 tag = TAG_FRAGMENT_FAVOURITES;
+                setTitle(R.string.bottom_action_favourites);
                 break;
             case R.id.bottom_action_people:
                 Log.e(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -701,6 +719,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = PeopleFragment.newInstance();
                 }
                 tag = TAG_FRAGMENT_PEOPLE;
+                setTitle(R.string.bottom_action_people);
                 break;
             case R.id.bottom_action_rooms:
                 Log.e(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -710,6 +729,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = RoomsFragment.newInstance();
                 }
                 tag = TAG_FRAGMENT_ROOMS;
+                setTitle(R.string.bottom_action_rooms);
                 break;
         }
 
@@ -781,6 +801,8 @@ public class VectorHomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        addUnreadBadges();
     }
 
     /**
@@ -841,6 +863,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     ((VectorRecentsListFragment) fragment).refresh();
                 }
                 stopWaitingView();
+                refreshUnreadBadges();
             }
 
             private void onError(String errorMessage) {
@@ -1454,6 +1477,202 @@ public class VectorHomeActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+    }
+
+    //==============================================================================================================
+    // Unread counter badges
+    //==============================================================================================================
+
+    // Badge view <-> menu entry id
+    private final Map<Integer, UnreadCounterBadgeView> mBadgeViewByIndex = new HashMap<>();
+
+    // events listener to track required refresh
+    private final MXEventListener mBadgeEventsListener = new MXEventListener() {
+        private boolean mRefreshBadgeOnChunkEnd = false;
+
+        @Override
+        public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
+            if (mRefreshBadgeOnChunkEnd) {
+                refreshUnreadBadges();
+            }
+        }
+
+        @Override
+        public void onLiveEvent(final Event event, final RoomState roomState) {
+            String eventType = event.getType();
+
+            // refresh the UI at the end of the next events chunk
+            mRefreshBadgeOnChunkEnd |= ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
+                    Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
+                    Event.EVENT_TYPE_REDACTION.equals(eventType) ||
+                    Event.EVENT_TYPE_TAGS.equals(eventType) ||
+                    Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
+
+        }
+
+        @Override
+        public void onReceiptEvent(String roomId, List<String> senderIds) {
+            // refresh only if the current user read some messages (to update the unread messages counters)
+            mRefreshBadgeOnChunkEnd |= (senderIds.indexOf(mSession.getCredentials().userId) >= 0);
+        }
+
+        @Override
+        public void onLeaveRoom(final String roomId) {
+            mRefreshBadgeOnChunkEnd = true;
+        }
+
+        @Override
+        public void onNewRoom(String roomId) {
+            mRefreshBadgeOnChunkEnd = true;
+        }
+
+        @Override
+        public void onJoinRoom(String roomId) {
+            mRefreshBadgeOnChunkEnd = true;
+        }
+
+        @Override
+        public void onDirectMessageChatRoomsListUpdate() {
+            mRefreshBadgeOnChunkEnd = true;
+        }
+    };
+
+    /**
+     * Add the badge events listener
+     */
+    private void addBadgeEventsListener() {
+        mSession.getDataHandler().addListener(mBadgeEventsListener);
+        refreshUnreadBadges();
+    }
+
+    /**
+     * Remove the badge events listener
+     */
+    private void removeBadgeEventsListener() {
+        mSession.getDataHandler().removeListener(mBadgeEventsListener);
+    }
+
+    /**
+     * Remove the BottomNavigationView menu shift
+     */
+    private void removeMenuShiftMode() {
+        int childCount = mBottomNavigationView.getChildCount();
+
+        for(int i = 0; i < childCount; i++) {
+            if (mBottomNavigationView.getChildAt(i) instanceof BottomNavigationMenuView) {
+                BottomNavigationMenuView bottomNavigationMenuView = (BottomNavigationMenuView) mBottomNavigationView.getChildAt(i);
+
+                try {
+                    Field shiftingMode = bottomNavigationMenuView.getClass().getDeclaredField("mShiftingMode");
+                    shiftingMode.setAccessible(true);
+                    shiftingMode.setBoolean(bottomNavigationMenuView, false);
+                    shiftingMode.setAccessible(false);
+
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## removeMenuShiftMode failed " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    /**
+     * Add the unread messages badges.
+     */
+    private void addUnreadBadges() {
+        final float scale = getResources().getDisplayMetrics().density;
+        int badgeOffsetX =  (int)(18 * scale + 0.5f);
+        int badgeOffsetY = (int)(7 * scale + 0.5f);
+
+        removeMenuShiftMode();
+
+        int largeTextHeight = getResources().getDimensionPixelSize(android.support.design.R.dimen.design_bottom_navigation_active_text_size);
+
+        for(int menuIndex = 0; menuIndex < mBottomNavigationView.getMenu().size(); menuIndex++) {
+            try {
+                int itemId = mBottomNavigationView.getMenu().getItem(menuIndex).getItemId();
+                BottomNavigationItemView navigationItemView = (BottomNavigationItemView) mBottomNavigationView.findViewById(itemId);
+
+                navigationItemView.setShiftingMode(false);
+
+                Field marginField = navigationItemView.getClass().getDeclaredField("mDefaultMargin");
+                marginField.setAccessible(true);
+                marginField.setInt(navigationItemView, marginField.getInt(navigationItemView) + (largeTextHeight /2));
+                marginField.setAccessible(false);
+
+                Field shiftAmountField = navigationItemView.getClass().getDeclaredField("mShiftAmount");
+                shiftAmountField.setAccessible(true);
+                shiftAmountField.setInt(navigationItemView, 0);
+                shiftAmountField.setAccessible(false);
+
+                navigationItemView.setChecked(navigationItemView.getItemData().isChecked());
+
+                View iconView = navigationItemView.findViewById(R.id.icon);
+
+                if (iconView.getParent() instanceof FrameLayout) {
+                    UnreadCounterBadgeView badgeView = new UnreadCounterBadgeView(iconView.getContext());
+
+                    // compute the new position
+                    FrameLayout.LayoutParams iconViewLayoutParams = (FrameLayout.LayoutParams)iconView.getLayoutParams();
+                    FrameLayout.LayoutParams badgeLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                    badgeLayoutParams.setMargins(iconViewLayoutParams.leftMargin +  badgeOffsetX, iconViewLayoutParams.topMargin - badgeOffsetY, iconViewLayoutParams.rightMargin, iconViewLayoutParams.bottomMargin);
+                    badgeLayoutParams.gravity = iconViewLayoutParams.gravity;
+
+                    ((FrameLayout) iconView.getParent()).addView(badgeView, badgeLayoutParams);
+                    mBadgeViewByIndex.put(itemId, badgeView);
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## addUnreadBadges failed " + e.getMessage());
+            }
+        }
+
+        refreshUnreadBadges();
+    }
+
+    /**
+     * Refresh the badges
+     */
+    private void refreshUnreadBadges() {
+        Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
+
+        for(Integer id : mBadgeViewByIndex.keySet()) {
+            UnreadCounterBadgeView badgeView = mBadgeViewByIndex.get(id);
+
+            // compute the badge value and its displays
+            int highlightCount = 0;
+            int notificationCount = 0;
+            boolean mustBeHighlighted = false;
+
+            List<String> filteredRoomIds = null;
+
+            if (id == R.id.bottom_action_favourites) {
+                List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
+
+                filteredRoomIds = new ArrayList<>();
+
+                for(Room room : favRooms) {
+                    filteredRoomIds.add(room.getRoomId());
+                }
+            } else if ((id == R.id.bottom_action_people)){
+                filteredRoomIds = mSession.getDirectChatRoomIdsList();
+            }
+
+            if ((null == filteredRoomIds) || !filteredRoomIds.isEmpty()) {
+                for(RoomSummary summary : summaries) {
+                    Room childRoom = mSession.getDataHandler().getStore().getRoom(summary.getRoomId());
+
+                    // test if the room is allowed
+                    if ((null != childRoom) && ((null == filteredRoomIds) || filteredRoomIds.contains(summary.getRoomId()))) {
+                        highlightCount += childRoom.getHighlightCount();
+                        notificationCount += childRoom.getNotificationCount();
+                        mustBeHighlighted |= summary.isHighlighted();
+                    }
+                }
+            }
+
+            badgeView.updateCounter(notificationCount,
+                    ((0 != highlightCount) || mustBeHighlighted) ? UnreadCounterBadgeView.HIGHLIGHTED :
+                            ((0 != notificationCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
         }
     }
 
