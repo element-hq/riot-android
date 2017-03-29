@@ -2652,44 +2652,47 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 @Override
                 public void onClick(View v) {
                     Log.d(LOG_TAG, "The user clicked on Join.");
+                    
+                    if (null != sRoomPreviewData) {
+                        Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
 
-                    Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
+                        String signUrl = null;
 
-                    String signUrl = null;
+                        if (null != roomEmailInvitation) {
+                            signUrl = roomEmailInvitation.signUrl;
+                        }
 
-                    if (null != roomEmailInvitation) {
-                        signUrl = roomEmailInvitation.signUrl;
+                        setProgressVisibility(View.VISIBLE);
+
+                        room.joinWithThirdPartySigned(sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void info) {
+                                onJoined();
+                            }
+
+                            private void onError(String errorMessage) {
+                                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                                setProgressVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onError(e.getLocalizedMessage());
+                            }
+                        });
+                    } else {
+                        VectorRoomActivity.this.finish();
                     }
-
-                    setProgressVisibility(View.VISIBLE);
-
-                    room.joinWithThirdPartySigned(sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void info) {
-                            onJoined();
-                        }
-
-                        private void onError(String errorMessage) {
-                            CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
-                            setProgressVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            onError(e.getLocalizedMessage());
-                        }
-
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            onError(e.getLocalizedMessage());
-                        }
-
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            onError(e.getLocalizedMessage());
-                        }
-                    });
-
                 }
             });
 
