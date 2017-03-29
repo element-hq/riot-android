@@ -116,7 +116,7 @@
     <string name="send_bug_report_progress">Progress (%s%%)</string>
 
     <string name="send_files_in">Enviar a</string>
-    <string name="save_files_in">Gueardar en</string>
+    <string name="save_files_in">Guardar en</string>
     <string name="file_is_saved">%1$s se guardo.</string>
     <string name="read_receipt">Leer</string>
 
@@ -323,7 +323,7 @@
     <string name="notification_settings_global_notification_settings">Ajustes Universales de las Notificaciones</string>
     <string name="notification_settings_global_info">Sus ajustes de notificaciones están guardados en tu cuenta y todos tus dispositivos compatibles los comparten (incluso los de escritorio).\n\nLas reglas se aplican en orden; la primera regla que aplica determina el resultado del mensaje.\nEntonces: Las notificaciones de palabras son mas importantes que las notificaciones de salas que son mas importantes que las notificaciones del enviador.\nPara varias reglas del mismo tipo, el primero de la lista que coincide toma precedencia.</string>
     <string name="notification_settings_per_word_notifications">Notificaciones de Palabras</string>
-    <string name="notification_settings_per_word_info">Las palabras coinciden sin resptetár mayúsculas ni minúsculas, y podran contener un * , que es letra universál. Entonces:\nfoo coincide con la combinacion de foo envuelto en delimitadores de palabras (e.g. punctuación y blanco o comienzo/fin de una linea).\nfoo* Coincide con qualquera palabra que comienze con foo.\n*foo* coincide con qualquiera palabra que incluye las letras foo.</string>
+    <string name="notification_settings_per_word_info">Las palabras coinciden sin resptetár mayúsculas ni minúsculas, y podran contener un * , que es letra universal. Entonces:\nfoo coincide con la combinacion de foo envuelto en delimitadores de palabras (e.g. punctuación y blanco o comienzo/fin de una linea).\nfoo* Coincide con qualquera palabra que comienze con foo.\n*foo* coincide con qualquiera palabra que incluye las letras foo.</string>
     <string name="notification_settings_always_notify">Siempre notificar</string>
     <string name="notification_settings_never_notify">nunca notificar</string>
     <string name="notification_settings_word_to_match">Palabra para coincidir</string>
@@ -333,7 +333,7 @@
     <string name="notification_settings_per_room_notifications">Notificaciones de salas</string>
     <string name="notification_settings_per_sender_notifications">Notificaciones de personas</string>
     <string name="notification_settings_sender_hint">\@user:domain.com</string>
-    <string name="notification_settings_room">Room : </string>
+    <string name="notification_settings_room">Sala : </string>
     <string name="notification_settings_select_room">Seleccione una sala</string>
 
     <string name="notification_settings_add">Añadir</string>
@@ -361,7 +361,7 @@
     <string name="settings_config_identity_server">Servidora Identidad: %s</string>
     <string name="settings_config_user_id">Identificación de usuario: %s</string>
     <string name="settings_config_access_token">Símbolo de acesso: %s</string>
-    <string name="settings_command_commands">Estos son los ordenes aplicables en un chat de sala:\r\n\r\n /nick &#60;display_name&#62;&#58; cambiar tu nombre visible\r\n /me &#60;action&#62;&#58; enviar la acción que está haciendo. /me será reemplazado por tu nombre visible\r\n /join &#60;room_alias&#62;&#58; entrar una sala\r\n /kick &#60;user_id&#62; [&#60;reason>]&#58; remover el usuario\r\n /ban &#60;user_id&#62; [&#60;reason&#62;]&#58; prohibir el usuario\r\n /unban &#60;user_id&#62;&#58; desprohibir el usuario\r\n /op &#60;user_id&#62; &#60;power_level&#62;&#58; ajustar nivel de potencia\r\n /deop &#60;user_id&#62;&#58; establecer el nivel de potencia defecto de la servidoratu como el tuyo</string>
+    <string name="settings_command_commands">Estos son los ordenes aplicables en un chat de sala:\r\n\r\n /nick &#60;display_name&#62;&#58; cambiar tu nombre visible\r\n /me &#60;action&#62;&#58; enviar la acción que está haciendo. /me será reemplazado por tu nombre visible\r\n /join &#60;room_alias&#62;&#58; entrar una sala\r\n /kick &#60;user_id&#62; [&#60;reason>]&#58; retirar el usuario\r\n /ban &#60;user_id&#62; [&#60;reason&#62;]&#58; prohibir el usuario\r\n /unban &#60;user_id&#62;&#58; desprohibir el usuario\r\n /op &#60;user_id&#62; &#60;power_level&#62;&#58; ajustar nivel de potencia\r\n /deop &#60;user_id&#62;&#58; establecer el nivel de potencia defecto de la servidoratu como el tuyo</string>
     <string name="settings_failed_to_upload_avatar">La subida del foto de perfil fallo</string>
 
     <string name="settings_display_name_hint">Escribe su nombre de vista</string>
@@ -394,7 +394,7 @@
     <string name="call_in_progress">Llamada en Processo</string>
 
     <string name="call_error_user_not_responding">El lado remoto no pudo contestar.</string>
-    <string name="call_error_ice_failed">Conexion de media fallo</string>
+    <string name="call_error_ice_failed">Conexión de media fallo</string>
     <string name="call_error_camera_init_failed">La camara no se pudo prender</string>
     <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
     <string name="call_error_peer_hangup">el igual colgó la llamada</string>
@@ -407,75 +407,75 @@
     <string name="action_hangup">Colgar</string>
 
     <!-- medias picker string -->
-    <string name="media_picker_picture_capture_title">Take a picture</string>
-    <string name="media_picker_video_capture_title">Record a video</string>
-    <string name="media_picker_both_capture_title">Take a picture or a video"</string>
-    <string name="media_picker_retake">Retake"</string>
-    <string name="media_picker_choose">Choose"</string>
-    <string name="media_picker_attach">Attach"</string>
-    <string name="media_picker_choose_from_library">Choose from library"</string>
-    <string name="media_picker_library">Library"</string>
-    <string name="media_picker_cannot_record_video">Cannot record video"</string>
+    <string name="media_picker_picture_capture_title">Tomar una foto</string>
+    <string name="media_picker_video_capture_title">Grabar un vidoe</string>
+    <string name="media_picker_both_capture_title">Tomar una foto o grabar un video"</string>
+    <string name="media_picker_retake">Repetir"</string>
+    <string name="media_picker_choose">Escoger"</string>
+    <string name="media_picker_attach">Agregar"</string>
+    <string name="media_picker_choose_from_library">Escoger de una carpeta"</string>
+    <string name="media_picker_library">Carpeta"</string>
+    <string name="media_picker_cannot_record_video">No pudo grabar video"</string>
 
     <!-- permissions Android M -->
-    <string name="permissions_rationale_popup_title">Information</string>
-    <string name="permissions_rationale_msg_storage">Riot needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
-    <string name="permissions_rationale_msg_camera">Riot needs permission to access your camera to take pictures and video calls.</string>
-    <string name="permissions_rationale_msg_camera_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot needs permission to access your microphone to perform audio calls.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
-    <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
+    <string name="permissions_rationale_popup_title">Información</string>
+    <string name="permissions_rationale_msg_storage">Riot necesita tu permiso para entrar en tu almacenaje de fotos y videos para enviar y guardar archivos.\n\nPorfavor permite el acceso en el siguiente mensaje para poder enviar achivos desde su dispostivo.</string>
+    <string name="permissions_rationale_msg_camera">Riot necesita tu permiso para usar tu camara para tomar fotos y hacer llamadas de video.</string>
+    <string name="permissions_rationale_msg_camera_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot necesita tu permiso para usar tu micrófono para hacer llamadas de voz.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot necesita tu permiso para usar su camara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
+    <string name="permissions_rationale_msg_contacts">Riot necesita tu permiso para leer tus contactos y directorio para encontrar a otros usuarios por sus correos electrónicos y números telefónicos.\n\nPor favor permite el acceso en elsiguiente mensaje para encontrar usuarios de Riot en su directorio.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.\n\n¿Permitir el acceso a Riot para leer tus contactos ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
+    <string name="permissions_action_not_performed_missing_permissions">Perdon.. Operación no realizada, debido a permisos ausentes</string>
 
     <!-- medias slider string -->
-    <string name="media_slider_saved">Saved</string>
-    <string name="media_slider_saved_message">Save to downloads</string>
-    <string name="yes">YES</string>
+    <string name="media_slider_saved">Guardado</string>
+    <string name="media_slider_saved_message">Guardar en Descargas</string>
+    <string name="yes">SI</string>
     <string name="no">NO</string>
-    <string name="_continue">Continue</string>
+    <string name="_continue">Continuar</string>
 
     <!-- Actions -->
-    <string name="mark_all_as_read_prompt">Mark all as read?</string>
-    <string name="next">Next</string>
-    <string name="back">Back</string>
-    <string name="remove">Remove</string>
-    <string name="join">Join</string>
-    <string name="preview">Preview</string>
-    <string name="reject">Reject</string>
+    <string name="mark_all_as_read_prompt">¿Marcar a todos como visto?</string>
+    <string name="next">Siguiente</string>
+    <string name="back">Retrasar</string>
+    <string name="remove">Retirar</string>
+    <string name="join">Entrar</string>
+    <string name="preview">Preestreno</string>
+    <string name="reject">Rechazar</string>
 
     <!-- Room Preview -->
-    <string name="room_preview_invitation_format">You have been invited to join this room by %s</string>
-    <string name="room_preview_subtitle">This is a preview of this room. Files and other attachments have been disabled.</string>
-    <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
-    <string name="room_preview_try_join_an_unknown_room">You are trying to access %s. Would you like to join in order to participate in the discussion?</string>
-    <string name="room_preview_try_join_an_unknown_room_default">a room</string>
-    <string name="room_preview_room_interactions_disabled">This is a preview of this room. Room interactions have been disabled.</string>
+    <string name="room_preview_invitation_format">Has sido invitado por %s a entrar a esta sala.</string>
+    <string name="room_preview_subtitle">Esto es un preestreno de esta sala. Los archivos y otros accesorios estan impedidos.</string>
+    <string name="room_preview_unlinked_email_warning">Esta invitación fue enviado a %s, que no esta asociado con esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
+    <string name="room_preview_try_join_an_unknown_room">Estas intentando entara a %s. ¿Desea entrar para participar en la conversacion?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">una sala</string>
+    <string name="room_preview_room_interactions_disabled">Esto es un preestreno de esta sala. Los interacciones estan impedidos.</string>
 
     <!-- Chat creation -->
-    <string name="room_creation_title">New Chat</string>
-    <string name="room_creation_account">Account</string>
-    <string name="room_creation_appearance">Appearance</string>
-    <string name="room_creation_appearance_name">Name</string>
-    <string name="room_creation_appearance_picture">Chat picture (optional)</string>
-    <string name="room_creation_privacy">Privacy</string>
-    <string name="room_creation_private_room">This chat is private</string>
-    <string name="room_creation_public_room">This chat is public</string>
-    <string name="room_creation_make_public">Make public</string>
-    <string name="room_creation_make_public_prompt_title">Make this chat public?</string>
-    <string name="room_creation_make_public_prompt_msg">Are you sure you want to make this chat public? Anyone can read your messages and join the chat.</string>
-    <string name="room_creation_keep_private">Keep private</string>
-    <string name="room_creation_make_private">Make private</string>
-    <string name="room_creation_add_member">Add member</string>
-    <string name="room_creation_name_mobile_email">name, mobile or email</string>
-    <string name="room_header_active_members">%1$d/%2$d active members</string>
-    <string name="room_header_invite_members">Invite members</string>
-    <string name="room_title_members">%1$d members</string>
-    <string name="room_title_one_member">1 member</string>
-    <string name="room_e2e_alert_title">Warning!</string>
-    <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
+    <string name="room_creation_title">Chat Nuevo</string>
+    <string name="room_creation_account">Cuenta</string>
+    <string name="room_creation_appearance">Apariencia</string>
+    <string name="room_creation_appearance_name">Nombre</string>
+    <string name="room_creation_appearance_picture">Foto de Perfil del Chat (opcional)</string>
+    <string name="room_creation_privacy">Privacidad</string>
+    <string name="room_creation_private_room">Este chat es privado</string>
+    <string name="room_creation_public_room">Este chat es publico</string>
+    <string name="room_creation_make_public">Hacerlo público</string>
+    <string name="room_creation_make_public_prompt_title">¿Hacer este chat público?</string>
+    <string name="room_creation_make_public_prompt_msg">¿Estas seguro que quieres hacer este chat público? Qualquier puede leer tus mensajes y entrar el chat.</string>
+    <string name="room_creation_keep_private">Mantener privado</string>
+    <string name="room_creation_make_private">Hacerlo privado</string>
+<string name="room_creation_add_member">Añadir miembro</string>
+    <string name="room_creation_name_mobile_email">nombre, número telefónico o correo electrónico</string>
+    <string name="room_header_active_members">%1$d/%2$d miembros activos</string>
+    <string name="room_header_invite_members">Invitar miembros</string>
+    <string name="room_title_members">%1$d miembros</string>
+    <string name="room_title_one_member">1 miembro</string>
+    <string name="room_e2e_alert_title">¡Aviso!</string>
+    <string name="room_e2e_alert_message">La cifracion de persona-a-persona esta en beta y puede ser poco fiable.\n\nNo debe usarla para proteger informacion.\n\nLos dispositivos no podran descifrar el historial de la sala desde antes de entrar.\n\nMensajes cifrados no seran visibles en cuentas que no implementan la cifracion.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
@@ -484,160 +484,160 @@
     <string name="format_time_d">d</string>
 
     <!--  Chat participants -->
-    <string name="room_participants_title">Participants</string>
-    <string name="room_participants_add_participant">Add participant</string>
-    <string name="room_participants_one_participant">1 participant</string>
-    <string name="room_participants_multi_participants">%s participants</string>
-    <string name="room_participants_leave_prompt_title">Leave room</string>
-    <string name="room_participants_leave_prompt_msg">Are you sure you want to leave the room?</string>
-    <string name="room_participants_remove_prompt_msg">Are you sure you want to remove %s from this chat?</string>
-    <string name="room_participants_admin_name">%s (admin)</string>
-    <string name="room_participants_create">Create</string>
-    <string name="room_participants_invite_another_user">Invite another user</string>
+    <string name="room_participants_title">Participantes</string>
+    <string name="room_participants_add_participant">Añadir participante</string>
+    <string name="room_participants_one_participant">1 participante</string>
+    <string name="room_participants_multi_participants">%s participantes</string>
+    <string name="room_participants_leave_prompt_title">Salir de la sala</string>
+    <string name="room_participants_leave_prompt_msg">¿Estas seguro que quieres salir de la sala?</string>
+    <string name="room_participants_remove_prompt_msg">¿Estas seguro que quieres quitar a %s de este chat?</string>
+    <string name="room_participants_admin_name">%s (administrador)</string>
+    <string name="room_participants_create">Crear</string>
+    <string name="room_participants_invite_another_user">Invitar a otro usuario</string>
 
-    <string name="room_participants_active">Active</string>
-    <string name="room_participants_online">Online</string>
-    <string name="room_participants_offline">Offline</string>
-    <string name="room_participants_unkown">Unkwown</string>
-    <string name="room_participants_idle">Idle</string>
-    <string name="room_participants_now">now</string>
-    <string name="room_participants_ago">ago</string>
-    <string name="room_participants_invite">Invite</string>
-    <string name="room_participants_leave">Left</string>
-    <string name="room_participants_ban">Banned</string>
+    <string name="room_participants_active">Activo</string>
+    <string name="room_participants_online">Conectado</string>
+    <string name="room_participants_offline">Desconectado</string>
+    <string name="room_participants_unkown">Desconocido</string>
+    <string name="room_participants_idle">Ocioso</string>
+    <string name="room_participants_now">ahora</string>
+    <string name="room_participants_ago">en el pasado</string>
+    <string name="room_participants_invite">Invitar</string>
+    <string name="room_participants_leave">Salio</string>
+    <string name="room_participants_ban">Prohibido</string>
 
-    <string name="you">You</string>
+    <string name="you">Tu</string>
 
-    <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
-    <string name="room_participants_header_call">CALL</string>
-    <string name="room_participants_header_direct_chats">DIRECT CHATS</string>
-    <string name="room_participants_header_devices">DEVICES</string>
+    <string name="room_participants_header_admin_tools">HERRAMIENTAS DE ADMINISTRADOR</string>
+    <string name="room_participants_header_call">LLAMAR</string>
+    <string name="room_participants_header_direct_chats">CONVERSACIONES DIRECTAS</string>
+    <string name="room_participants_header_devices">DISPOSITIVOS</string>
 
-    <string name="room_participants_action_invite">Invite</string>
-    <string name="room_participants_action_leave">Leave this room</string>
-    <string name="room_participants_action_remove">Remove from this room</string>
-    <string name="room_participants_action_ban">Ban</string>
-    <string name="room_participants_action_unban">Unban</string>
-    <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
-    <string name="room_participants_action_set_moderator">Make moderator</string>
-    <string name="room_participants_action_set_admin">Make admin</string>
-    <string name="room_participants_action_start_chat">Start chat</string>
-    <string name="room_participants_action_start_voice_call">Start voice call</string>
-    <string name="room_participants_action_start_video_call">Start video call</string>
-    <string name="room_participants_action_ignore">Hide all messages from this user</string>
-    <string name="room_participants_action_unignore">Show all messages from this user</string>
-    <string name="room_participants_invite_search_another_user">User ID, Name or email</string>
-    <string name="room_participants_action_mention">Mention</string>
-    <string name="room_participants_action_devices_list">Show Device List</string>
-    <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
+    <string name="room_participants_action_invite">Invitar</string>
+    <string name="room_participants_action_leave">Salir de esta sala</string>
+    <string name="room_participants_action_remove">Remover de esta sala</string>
+    <string name="room_participants_action_ban">Prohibir</string>
+    <string name="room_participants_action_unban">Desprohibir</string>
+    <string name="room_participants_action_set_default_power_level">Reestablecer como usuario normal</string>
+    <string name="room_participants_action_set_moderator">Hacerlo moderador</string>
+    <string name="room_participants_action_set_admin">Hacerlo administrador</string>
+    <string name="room_participants_action_start_chat">Comenzar chat</string>
+    <string name="room_participants_action_start_voice_call">Comenzar llamada de voz</string>
+    <string name="room_participants_action_start_video_call">Comenzar llamada de video</string>
+    <string name="room_participants_action_ignore">Ocultar todos los mensajes de este usuario</string>
+    <string name="room_participants_action_unignore">Mostrar todos los mensajes de este usuario</string>
+    <string name="room_participants_invite_search_another_user">Identificació, Nombre, o Correo Electrónico</string>
+    <string name="room_participants_action_mention">Mencionar</string>
+    <string name="room_participants_action_devices_list">Mostrar lista de dispositivos</string>
+    <string name="room_participants_power_level_prompt">No podrás deshacer este cambio porque estas provocando que el usuario tenga el mismo poder que el tuyo.\n¿Estás seguro?</string>
 
-    <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
+    <string name="room_participants_invite_prompt_msg">"¿Estas seguro que quieres invitar a %s que entre en este chat?"</string>
 
     <!-- invitation -->
-    <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
-    <string name="people_search_known_contacts">KNOWN CONTACTS (%s)</string>
-    <string name="people_search_filter_text">Matrix users only</string>
-    <string name="people_search_too_many_contacts">Too many contacts, please use the search field</string>
+    <string name="people_search_local_contacts">CONTACTOS LOCALES (%d)</string>
+    <string name="people_search_known_contacts">CONTACTOS CONOCIDOS (%s)</string>
+    <string name="people_search_filter_text">Solmente usuarios de Matrix</string>
+    <string name="people_search_too_many_contacts">Demasiados contactos, pror favor use la busqueda</string>
 
-    <string name="people_search_all_contacts">All contacts</string>
-    <string name="people_search_matrix_contacts">Matrix contacts</string>
+    <string name="people_search_all_contacts">Todos los contactos</string>
+    <string name="people_search_matrix_contacts">Contactos de Matrix</string>
 
     <!-- Presence status-->
-    <string name="presence_offline">Offline</string>
-    <string name="presence_online">Online</string>
-    <string name="presence_online_now">Online now</string>
-    <string name="presence_hidden">Hidden</string>
-    <string name="presence_unavailable">Unavailable</string>
+    <string name="presence_offline">Desconectado</string>
+    <string name="presence_online">Conectado</string>
+    <string name="presence_online_now">Conectado ahora mismo</string>
+    <string name="presence_hidden">Ocultado</string>
+    <string name="presence_unavailable">Indisponible</string>
 
     <!--  Chat -->
-    <string name="room_menu_search">Search</string>
-    <string name="room_menu_call">Call</string>
-    <string name="room_menu_participants">Participants</string>
-    <string name="room_menu_favourite">Favourite</string>
-    <string name="room_menu_unfavourite">Unfavourite</string>
-    <string name="room_menu_settings">Settings</string>
-    <string name="room_option_start_group_voice">Start group audio chat</string>
-    <string name="room_option_start_group_video">Start group video chat</string>
-    <string name="room_option_share_location">Share location</string>
-    <string name="room_option_share_contact">Share contact</string>
-    <string name="room_one_user_is_typing">%s is typing…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s are typing…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; others are typing…</string>
-    <string name="room_message_placeholder_encrypted">Send an encrypted message…</string>
-    <string name="room_message_placeholder_not_encrypted">Send a message (unencrypted)…</string>
-    <string name="room_offline_notification">Connectivity to the server has been lost.</string>
-    <string name="room_unsent_messages_notification">Messages not sent. %1$s or %2$s now?</string>
-    <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown devices being present. %1$s or %2$s now?</string>
-    <string name="room_prompt_resend">Resend all</string>
-    <string name="room_prompt_cancel">cancel all</string>
-    <string name="room_resend_unsent_messages">Resend unsent messages</string>
-    <string name="room_delete_unsent_messages">Delete unsent messages</string>
-    <string name="room_message_file_not_found">File not found</string>
-    <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
-    <string name="room_new_message_notification">1 new message</string>
-    <string name="room_new_messages_notification">%1$d new messages</string>
+    <string name="room_menu_search">Buscar</string>
+    <string name="room_menu_call">Llamar</string>
+    <string name="room_menu_participants">Participantes</string>
+    <string name="room_menu_favourite">Favorecer</string>
+    <string name="room_menu_unfavourite">Defavorable</string>
+    <string name="room_menu_settings">Configuraciones</string>
+    <string name="room_option_start_group_voice">Comenzar llamada de voz en grupo</string>
+    <string name="room_option_start_group_video">Comenzar llamada de video en grupo</string>
+    <string name="room_option_share_location">Compartir ubicación</string>
+    <string name="room_option_share_contact">Compartir contacto</string>
+    <string name="room_one_user_is_typing">%s esta escribiendo…</string>
+    <string name="room_two_users_are_typing">%1$s &#038; %2$s están escribiendo…</string>
+    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; otros están escribiendo…</string>
+    <string name="room_message_placeholder_encrypted">Enviar mensaje cifrado…</string>
+    <string name="room_message_placeholder_not_encrypted">Enviar mensaje (descifrado)…</string>
+    <string name="room_offline_notification">La conexión a la servidora se perdió.</string>
+    <string name="room_unsent_messages_notification">Mensajes no fueron enviados. ¿ %1$s o %2$s ahora?</string>
+    <string name="room_unknown_devices_messages_notification">Mensajes no fueron enviados debido a la precencia de dispositivos no conocidos. ¿ %1$s o %2$s ahora?</string>
+    <string name="room_prompt_resend">Reenviar a todos</string>
+    <string name="room_prompt_cancel">cancelar a todos</string>
+    <string name="room_resend_unsent_messages">Reenviar mensajes no enviados</string>
+    <string name="room_delete_unsent_messages">Borrar mensajes no enviados</string>
+    <string name="room_message_file_not_found">No se pudo encontrar el archivo</string>
+    <string name="room_do_not_have_permission_to_post">No tienes permiso para enviar en esta sala</string>
+    <string name="room_new_message_notification">1 mensaje nuevo</string>
+    <string name="room_new_messages_notification">%1$d mensajes nuevos</string>
 
     <!-- unrecognized SSL certificate -->
-    <string name="ssl_trust">Trust</string>
-    <string name="ssl_do_not_trust">Do not trust</string>
-    <string name="ssl_logout_account">Logout</string>
-    <string name="ssl_remain_offline">Ignore</string>
-    <string name="ssl_fingerprint_hash">Fingerprint (%s):</string>
-    <string name="ssl_could_not_verify">Could not verify identity of remote server.</string>
-    <string name="ssl_cert_not_trust">This could mean that someone is maliciously intercepting your traffic, or that your phone does not trust the certificate provided by the remote server.</string>
-    <string name="ssl_cert_new_account_expl">If the server administrator has said that this is expected, ensure that the fingerprint below matches the fingerprint provided by them.</string>
-    <string name="ssl_unexpected_existing_expl">The certificate has changed from one that was trusted by your phone. This is HIGHLY UNUSUAL. It is recommended that you DO NOT ACCEPT this new certificate.</string>
-    <string name="ssl_expected_existing_expl">The certificate has changed from a previously trusted one to one that is not trusted. The server may have renewed its certificate. Contact the server administrator for the expected fingerprint.</string>
-    <string name="ssl_only_accept">ONLY accept the certificate if the server administrator has published a fingerprint that matches the one above.</string>
+    <string name="ssl_trust">Confiar</string>
+    <string name="ssl_do_not_trust">No confiar</string>
+    <string name="ssl_logout_account">Salir</string>
+    <string name="ssl_remain_offline">Ignorar</string>
+    <string name="ssl_fingerprint_hash">Huella (%s):</string>
+    <string name="ssl_could_not_verify">La identidad de la servidora remoto no se pudo verificar.</string>
+    <string name="ssl_cert_not_trust">TEsto podría significar que alquien esta maliciosamente interceptando tus mensajes, o que tu dispositivo no confí en el certificado proporcionado por la servidora remoto.</string>
+    <string name="ssl_cert_new_account_expl">Si el administrador publicó que esto es normal, verifica que la huella abajo coincide con el que fue proporcionado por el administrador.</string>
+    <string name="ssl_unexpected_existing_expl">El certificado cambio de el que confiaba tu dispositivo. Esto es MUY RARO. Se recomienda que no aceptes el certificado nuevo.</string>
+    <string name="ssl_expected_existing_expl">El certificado cambio de uno que confiaba tu dispositivo a un certificado desconfiado. La servidora posiblemente actualizo su certificado. Pongase en contacto con el administrador de la servidora para la huella esperada.</string>
+    <string name="ssl_only_accept">SOLAMENTE acepta el certificado arriba si coincide con el certificado que publicó el administrador de la servidora.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
-    <string name="room_details_title">Room Details</string>
-    <string name="room_details_people">People</string>
-    <string name="room_details_files">Files</string>
-    <string name="room_details_settings">Settings</string>
-    <string name="room_details_fail_to_update_topic">Fail to update the topic</string>
-    <string name="room_details_fail_to_update_room_name">Fail to update the room name</string>
-    <string name="room_details_with_updates">The updates will be lost : are you sure to leave ?</string>
-    <string name="room_details_room_listed_in_directory">room listed</string>
-    <string name="room_details_room_not_listed_in_directory">room not listed</string>
-    <string name="room_details_selected">selected</string>
-    <string name="malformed_id">Malformed ID. Should be an email address or a Matrix ID like \'@localpart:domain\'</string>
-    <string name="room_details_people_invited_group_name">INVITED</string>
-    <string name="room_details_people_present_group_name">JOINED</string>
+    <string name="room_details_title">Detalles de la Sala</string>
+    <string name="room_details_people">Personas</string>
+    <string name="room_details_files">Archivos</string>
+    <string name="room_details_settings">Configuraciones</string>
+    <string name="room_details_fail_to_update_topic">Actualizacion de la tema falló</string>
+    <string name="room_details_fail_to_update_room_name">Actualizacion de el nombre de la sala fallo</string>
+    <string name="room_details_with_updates">Las actualizaciones se deshecharán : ¿ seguro que quieres salir ?</string>
+    <string name="room_details_room_listed_in_directory">Sala enumerada</string>
+    <string name="room_details_room_not_listed_in_directory">Sala no enumerada</string>
+    <string name="room_details_selected">seleccionado</string>
+    <string name="malformed_id">Identificación malformada. Debe ser correo electrónico o identificación de Matrix como \'@localpart:domain\'</string>
+    <string name="room_details_people_invited_group_name">INVITADO</string>
+    <string name="room_details_people_present_group_name">ENTRO</string>
 
     <!-- Room events -->
-    <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
-    <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>
-    <string name="room_event_action_cancel_upload">Cancel Upload</string>
-    <string name="room_event_action_cancel_download">Cancel Download</string>
+    <string name="room_event_action_report_prompt_reason">Razón por reportar este contenido</string>
+    <string name="room_event_action_report_prompt_ignore_user">¿Desea ocultar todos los mensajes de este usuario?</string>
+    <string name="room_event_action_cancel_upload">Cancelar Subida</string>
+    <string name="room_event_action_cancel_download">Cancelar Descarga</string>
 
     <!-- Room display name -->
-    <string name="room_displayname_invite_from">Invite from %s</string>
-    <string name="room_displayname_room_invite">Room Invite</string>
-    <string name="room_displayname_two_members">%1$s and %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s and %2$d others</string>
-    <string name="room_displayname_no_title">Empty room</string>
+    <string name="room_displayname_invite_from">Invitar de %s</string>
+    <string name="room_displayname_room_invite">Initacion de Sala</string>
+    <string name="room_displayname_two_members">%1$s y %2$s</string>
+    <string name="room_displayname_more_than_two_members">%1$s y %2$d otros</string>
+    <string name="room_displayname_no_title">Sala vacía</string>
 
     <!-- Search -->
-    <string name="search_hint">Search</string>
-    <string name="search_members_hint">Filter room members</string>
-    <string name="search_no_results">No results</string>
-    <string name="tab_title_search_rooms">ROOMS</string>
-    <string name="tab_title_search_messages">MESSAGES</string>
-    <string name="tab_title_search_people">PEOPLE</string>
-    <string name="tab_title_search_files">FILES</string>
+    <string name="search_hint">Buscar</string>
+    <string name="search_members_hint">Buscar miembros</string>
+    <string name="search_no_results">No hay resultados</string>
+    <string name="tab_title_search_rooms">SALAS</string>
+    <string name="tab_title_search_messages">MENSAGES</string>
+    <string name="tab_title_search_people">PERSONAS</string>
+    <string name="tab_title_search_files">ARCHIVOS</string>
 
     <!-- Room recents -->
-    <string name="room_recents_join">JOIN</string>
-    <string name="room_recents_directory">DIRECTORY</string>
-    <string name="room_recents_favourites">FAVORITES</string>
-    <string name="room_recents_pepole">PEOPLE</string>
-    <string name="room_recents_conversations">ROOMS</string>
-    <string name="room_recents_low_priority">LOW PRIORITY</string>
-    <string name="room_recents_invites">INVITES</string>
-    <string name="room_recents_start_chat">Start chat</string>
-    <string name="room_recents_create_room">Create room</string>
+    <string name="room_recents_join">ENTRAR</string>
+    <string name="room_recents_directory">DIRECTORIO</string>
+    <string name="room_recents_favourites">FAVORITOS</string>
+    <string name="room_recents_pepole">PERSONAS</string>
+    <string name="room_recents_conversations">SALAS</string>
+    <string name="room_recents_low_priority">BAJA PRIORIDAD</string>
+    <string name="room_recents_invites">INVITACIONES</string>
+    <string name="room_recents_start_chat">Comenzar chat</string>
+    <string name="room_recents_create_room">Crear sala</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
