@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resouces_language">en</string>
-    <string name="resouces_country">UK</string>
+    <string name="resouces_language">ca</string>
+    <string name="resouces_country">ES</string>
 
     <!-- titles -->
     <string name="app_name">Riot</string>
-    <string name="title_activity_home">Messages</string>
-    <string name="title_activity_room">Room</string>
-    <string name="title_activity_public_rooms">Public Rooms</string>
-    <string name="title_activity_room_info">Room info</string>
-    <string name="title_activity_settings">Settings</string>
-    <string name="title_activity_notification_settings">Notification Settings</string>
-    <string name="title_activity_member_details">Member Details</string>
-    <string name="title_activity_invite_user">Invite Users</string>
+    <string name="title_activity_home">Missatges</string>
+    <string name="title_activity_room">Sala</string>
+    <string name="title_activity_public_rooms">Sales publiques</string>
+    <string name="title_activity_room_info">Informació de la sala</string>
+    <string name="title_activity_settings">Configuració</string>
+    <string name="title_activity_notification_settings">Configuració de notificacions</string>
+    <string name="title_activity_member_details">detalls dels participants</string>
+    <string name="title_activity_invite_user">Convidar usuaris</string>
     <string name="title_activity_medias_picker">Select Medias</string>
 
     <!-- button names -->
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
+    <string name="ok">D\'acord</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Guardar</string>
     <string name="stay">Stay</string>
-    <string name="leave">Leave</string>
-    <string name="send">Send</string>
-    <string name="copy">Copy</string>
-    <string name="resend">Resend</string>
-    <string name="redact">Redact</string>
-    <string name="quote">Quote</string>
-    <string name="share">Share</string>
+    <string name="leave">Deixar</string>
+    <string name="send">Enviar</string>
+    <string name="copy">Copiar</string>
+    <string name="resend">Reenviar</string>
+    <string name="redact">Esborrar</string>
+    <string name="quote">Citar</string>
+    <string name="share">Compartir</string>
     <string name="later">Later</string>
-    <string name="paste_username">Paste username</string>
-    <string name="view_profile">View profile</string>
-    <string name="direct_message">Direct message</string>
-    <string name="forward">Forward</string>
-    <string name="permalink">Permalink</string>
-    <string name="message_details">Message details</string>
+    <string name="paste_username">Enganxa nom d\'usuari</string>
+    <string name="view_profile">Veure perfil</string>
+    <string name="direct_message">Missatge directe</string>
+    <string name="forward">Reenviar</string>
+    <string name="permalink">Enllaç permanent</string>
+    <string name="message_details">Detalls del missatge</string>
     <string name="view_source">View Source</string>
     <string name="view">View</string>
     <string name="set_power_level">Power level</string>
@@ -41,7 +41,7 @@
     <string name="clear_cache">Clear Cache</string>
     <string name="more">More</string>
     <string name="chat_with">Chat with </string>
-    <string name="delete">Delete</string>
+    <string name="delete">Esborrar</string>
     <string name="rename">Rename</string>
     <string name="report_content">Report content</string>
     <string name="decline">Decline</string>
@@ -50,11 +50,11 @@
     <string name="ongoing_conference_call_voice">voice</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
-    <string name="room_url">Room URL</string>
+    <string name="room_url">URL de la sala</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing..</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
-    <string name="device_information">Device information</string>
+    <string name="device_information">Informació del dispositiu</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
@@ -66,9 +66,9 @@
     <string name="default_identity_server_url">https://vector.im</string>
 
     <!-- actions -->
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Configuració</string>
     <string name="action_members">Members list</string>
-    <string name="action_public_rooms">Public Rooms</string>
+    <string name="action_public_rooms">Sales públiques</string>
     <string name="action_my_rooms">My Rooms</string>
     <string name="action_add_account">Add Account</string>
     <string name="action_remove_account">Remove Account</string>
@@ -807,9 +807,9 @@
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">To link to a room it must have an address.</string>
-    <string name="room_settings_room_access_entry_only_invited">Only people who have been invited</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room\'s link, apart from guests</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room\'s link, including guests</string>
+    <string name="room_settings_room_access_entry_only_invited">Només les persones convidades</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Qualsevol que conegui l\'enllaç de la sala, excepte els convidats</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualsevol que conegui l\'enllaç de la sala, excepte els convidats, inclosos els convidats</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Banned users</string>
