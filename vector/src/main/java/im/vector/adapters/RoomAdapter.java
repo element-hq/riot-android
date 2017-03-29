@@ -75,14 +75,14 @@ public class RoomAdapter extends AbsListAdapter<Room, RoomAdapter.RoomViewHolder
     }
 
     @Override
-    protected List<Room> getFilterItems(List<Room> items, String pattern) {
+    protected List<Room> getFilterItems(List<Room> items, String aPattern) {
+        Pattern pattern = Pattern.compile(Pattern.quote(aPattern), Pattern.CASE_INSENSITIVE);
+
         List<Room> filteredRoom = new ArrayList<>();
         for (final Room room : items) {
 
             final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-            if (Pattern.compile(Pattern.quote(pattern), Pattern.CASE_INSENSITIVE)
-                    .matcher(roomName)
-                    .find()) {
+            if (pattern.matcher(roomName).find()) {
                 filteredRoom.add(room);
             }
         }
@@ -115,9 +115,12 @@ public class RoomAdapter extends AbsListAdapter<Room, RoomAdapter.RoomViewHolder
         @BindView(R.id.indicator_unread_message)
         View vRoomUnreadIndicator;
 
-        @BindColor(R.color.vector_fuchsia_color) int mFuchsiaColor;
-        @BindColor(R.color.vector_green_color) int mGreenColor;
-        @BindColor(R.color.vector_silver_color) int mSilverColor;
+        @BindColor(R.color.vector_fuchsia_color)
+        int mFuchsiaColor;
+        @BindColor(R.color.vector_green_color)
+        int mGreenColor;
+        @BindColor(R.color.vector_silver_color)
+        int mSilverColor;
 
         private RoomViewHolder(final View itemView) {
             super(itemView);
