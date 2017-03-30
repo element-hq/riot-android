@@ -773,28 +773,28 @@
     <!-- Room Settings -->
 
     <!-- room global settings-->
-    <string name="room_settings_room_photo">Room Photo</string>
-    <string name="room_settings_photo">Room Photo</string>
-    <string name="room_settings_room_name">Room Name</string>
-    <string name="room_settings_topic">Topic</string>
-    <string name="room_settings_room_tag">Room Tag</string>
-    <string name="room_settings_tag_pref_dialog_title">Tagged as:</string>
-    <string name="room_settings_mute_notifs">Mute Notifications</string>
+    <string name="room_settings_room_photo">Foto de la Sala</string>
+    <string name="room_settings_photo">Foto de la Sala</string>
+    <string name="room_settings_room_name">Nombre de la Sala</string>
+    <string name="room_settings_topic">Tema</string>
+    <string name="room_settings_room_tag">Etiqueta de la Sala</string>
+    <string name="room_settings_tag_pref_dialog_title">Etiquetado como:</string>
+    <string name="room_settings_mute_notifs">Callar Notificaciones</string>
 
     <!-- Room settings: Room tag -->
-    <string name="room_settings_tag_pref_entry_favourite">Favourite</string>
-    <string name="room_settings_tag_pref_entry_low_priority">Low priority</string>
-    <string name="room_settings_tag_pref_entry_none">None</string>
-    <string name="room_settings_tag_pref_no_tag">not tagged</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favourite</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">low</string>
-    <string name="room_settings_tag_pref_entry_value_none">none</string>
+    <string name="room_settings_tag_pref_entry_favourite">Destacar</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Baja prioridad</string>
+    <string name="room_settings_tag_pref_entry_none">Ninguno</string>
+    <string name="room_settings_tag_pref_no_tag">no etiqutado</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">destacado</string>
+    <string name="room_settings_tag_pref_entry_value_low_priority">bajo</string>
+    <string name="room_settings_tag_pref_entry_value_none">ninguno</string>
 
     <!-- room settings : access and visibility -->
-    <string name="room_settings_category_access_visibility_title">Access and visibility</string>
-    <string name="room_settings_directory_visibility">List this room in room directory</string>
-    <string name="room_settings_room_access_rules_pref_title">Room Access</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
+    <string name="room_settings_category_access_visibility_title">Acceso y Visibilidad</string>
+    <string name="room_settings_directory_visibility">Inscribir esta sala en el directorio de salas</string>
+    <string name="room_settings_room_access_rules_pref_title">Acceso a la Sala</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Historial y Legibilidad de la Sala</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
 
