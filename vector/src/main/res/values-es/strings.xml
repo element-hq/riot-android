@@ -212,7 +212,7 @@
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="auth_use_server_options">¿Usar opciones de servidora propietarias? (avanzado)</string>
     <string name="auth_email_validation_message">Consulte su correo electrónico para poder continuar con la inscripción</string>
-    <string name="auth_threepid_warning_message">La inscripción con correo electrónico y número telefónico no está implementado hasta que exista el api. Solamente se tomara en cuenta el número telefónico.\n\nPodra añadir un correo electrónico en Ajustes.</string>
+    <string name="auth_threepid_warning_message">La inscripción con correo electrónico y número telefónico no está implementado hasta que exista el api. Solamente se tomara en cuenta el número telefónico.\n\nPodra añadir un correo electrónico en Configuraciones.</string>
     <string name="auth_email_check_name_in_use_message">"Verificando su nombre..</string>
     <string name="auth_email_registration_resumes_message">"Espere mientras continue la inscripcíon..</string>
     <string name="auth_recaptcha_message">Esta servidora quiere verificar que no seas robot</string>
@@ -224,18 +224,18 @@
     <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requisito.</string>
     <string name="auth_reset_password_missing_password">Contraseña nueva es requerida.</string>
     <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez siguió el enlace, seleccione abajo.</string>
-    <string name="auth_reset_password_error_unauthorized">Verificación de correo electronico fallo: asegúrese que siguio el enlace.</string>
+    <string name="auth_reset_password_error_unauthorized">Verificación de correo electronico falló: asegúrese que siguio el enlace.</string>
     <string name="auth_reset_password_error_not_found">Su correo electrónico no coincide con los de esta servidora.</string>
     <string name="auth_reset_password_success_message">Su contraseña fue atualizada.\n\nHaz sido desconectado de todos tus dispositivos y las notificaciones están apagados. Para prender las notificaciones, entre su cuenta en cada dispositivo.</string>
 
     <!-- Login Screen -->
     <string name="login_error_already_logged_in">Sesión activo</string>
     <string name="login_error_must_start_http">El enlace sólo puede comenzar con http[s]://</string>
-    <string name="login_error_network_error">Sesión fallo: Error con la red</string>
-    <string name="login_error_unable_login">Sesion fallo</string>
-    <string name="login_error_registration_network_error">Inscripción fallo: error con la red</string>
-    <string name="login_error_unable_register">Inscripción fallo</string>
-    <string name="login_error_unable_register_mail_ownership">Inscripción fallo : Posesión de correo electrónico fallo</string>
+    <string name="login_error_network_error">Sesión falló: Error con la red</string>
+    <string name="login_error_unable_login">Sesion falló</string>
+    <string name="login_error_registration_network_error">Inscripción falló: error con la red</string>
+    <string name="login_error_unable_register">Inscripción falló</string>
+    <string name="login_error_unable_register_mail_ownership">Inscripción falló : Posesión de correo electrónico falló</string>
     <string name="login_error_invalid_credentials">Escribe credencialed validos</string>
     <string name="login_error_invalid_home_server">Escribe enlace valido</string>
 
@@ -316,12 +316,12 @@
     <string name="contacts">Contactos</string>
 
     <!-- Notification settings screen -->
-    <string name="notification_settings_title">Ajustes de Notificación</string>
+    <string name="notification_settings_title">Configuraciones de Notificación</string>
     <string name="notification_settings_disable_all">Apagar todas las notificaciones</string>
     <string name="notification_settings_enable_notifications">Prender notificaciones</string>
     <string name="notification_settings_enable_notifications_warning">Todas la notificaciones están apagadas en todos sus dispositivos.</string>
-    <string name="notification_settings_global_notification_settings">Ajustes Universales de las Notificaciones</string>
-    <string name="notification_settings_global_info">Sus ajustes de notificaciones están guardados en tu cuenta y todos tus dispositivos compatibles los comparten (incluso los de escritorio).\n\nLas reglas se aplican en orden; la primera regla que aplica determina el resultado del mensaje.\nEntonces: Las notificaciones de palabras son mas importantes que las notificaciones de salas que son mas importantes que las notificaciones del enviador.\nPara varias reglas del mismo tipo, el primero de la lista que coincide toma precedencia.</string>
+    <string name="notification_settings_global_notification_settings">Configuraciones Universales de las Notificaciones</string>
+    <string name="notification_settings_global_info">Sus configuraciones de notificaciones están guardados en tu cuenta y todos tus dispositivos compatibles los comparten (incluso los de escritorio).\n\nLas reglas se aplican en orden; la primera regla que aplica determina el resultado del mensaje.\nEntonces: Las notificaciones de palabras son mas importantes que las notificaciones de salas que son mas importantes que las notificaciones del enviador.\nPara varias reglas del mismo tipo, el primero de la lista que coincide toma precedencia.</string>
     <string name="notification_settings_per_word_notifications">Notificaciones de Palabras</string>
     <string name="notification_settings_per_word_info">Las palabras coinciden sin resptetár mayúsculas ni minúsculas, y podran contener un * , que es letra universal. Entonces:\nfoo coincide con la combinacion de foo envuelto en delimitadores de palabras (e.g. punctuación y blanco o comienzo/fin de una linea).\nfoo* Coincide con qualquera palabra que comienze con foo.\n*foo* coincide con qualquiera palabra que incluye las letras foo.</string>
     <string name="notification_settings_always_notify">Siempre notificar</string>
@@ -362,7 +362,7 @@
     <string name="settings_config_user_id">Identificación de usuario: %s</string>
     <string name="settings_config_access_token">Símbolo de acesso: %s</string>
     <string name="settings_command_commands">Estos son los ordenes aplicables en un chat de sala:\r\n\r\n /nick &#60;display_name&#62;&#58; cambiar tu nombre visible\r\n /me &#60;action&#62;&#58; enviar la acción que está haciendo. /me será reemplazado por tu nombre visible\r\n /join &#60;room_alias&#62;&#58; entrar una sala\r\n /kick &#60;user_id&#62; [&#60;reason>]&#58; retirar el usuario\r\n /ban &#60;user_id&#62; [&#60;reason&#62;]&#58; prohibir el usuario\r\n /unban &#60;user_id&#62;&#58; desprohibir el usuario\r\n /op &#60;user_id&#62; &#60;power_level&#62;&#58; ajustar nivel de potencia\r\n /deop &#60;user_id&#62;&#58; establecer el nivel de potencia defecto de la servidoratu como el tuyo</string>
-    <string name="settings_failed_to_upload_avatar">La subida del foto de perfil fallo</string>
+    <string name="settings_failed_to_upload_avatar">La subida del foto de perfil falló</string>
 
     <string name="settings_display_name_hint">Escribe su nombre de vista</string>
     <string name="settings_update_profile">Actualizar perfil</string>
@@ -394,7 +394,7 @@
     <string name="call_in_progress">Llamada en Processo</string>
 
     <string name="call_error_user_not_responding">El lado remoto no pudo contestar.</string>
-    <string name="call_error_ice_failed">Conexión de media fallo</string>
+    <string name="call_error_ice_failed">Conexión de media falló</string>
     <string name="call_error_camera_init_failed">La camara no se pudo prender</string>
     <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
     <string name="call_error_peer_hangup">el igual colgó la llamada</string>
@@ -450,7 +450,7 @@
     <string name="room_preview_invitation_format">Has sido invitado por %s a entrar a esta sala.</string>
     <string name="room_preview_subtitle">Esto es un preestreno de esta sala. Los archivos y otros accesorios estan impedidos.</string>
     <string name="room_preview_unlinked_email_warning">Esta invitación fue enviado a %s, que no esta asociado con esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
-    <string name="room_preview_try_join_an_unknown_room">Estas intentando entara a %s. ¿Desea entrar para participar en la conversacion?</string>
+    <string name="room_preview_try_join_an_unknown_room">Estás intentando entara a %s. ¿Desea entrar para participar en la conversacion?</string>
     <string name="room_preview_try_join_an_unknown_room_default">una sala</string>
     <string name="room_preview_room_interactions_disabled">Esto es un preestreno de esta sala. Los interacciones estan impedidos.</string>
 
@@ -465,7 +465,7 @@
     <string name="room_creation_public_room">Este chat es publico</string>
     <string name="room_creation_make_public">Hacerlo público</string>
     <string name="room_creation_make_public_prompt_title">¿Hacer este chat público?</string>
-    <string name="room_creation_make_public_prompt_msg">¿Estas seguro que quieres hacer este chat público? Qualquier puede leer tus mensajes y entrar el chat.</string>
+    <string name="room_creation_make_public_prompt_msg">¿Estás seguro que quieres hacer este chat público? Qualquier puede leer tus mensajes y entrar el chat.</string>
     <string name="room_creation_keep_private">Mantener privado</string>
     <string name="room_creation_make_private">Hacerlo privado</string>
 <string name="room_creation_add_member">Añadir miembro</string>
@@ -489,8 +489,8 @@
     <string name="room_participants_one_participant">1 participante</string>
     <string name="room_participants_multi_participants">%s participantes</string>
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
-    <string name="room_participants_leave_prompt_msg">¿Estas seguro que quieres salir de la sala?</string>
-    <string name="room_participants_remove_prompt_msg">¿Estas seguro que quieres quitar a %s de este chat?</string>
+    <string name="room_participants_leave_prompt_msg">¿Estás seguro que quieres salir de la sala?</string>
+    <string name="room_participants_remove_prompt_msg">¿Estás seguro que quieres quitar a %s de este chat?</string>
     <string name="room_participants_admin_name">%s (administrador)</string>
     <string name="room_participants_create">Crear</string>
     <string name="room_participants_invite_another_user">Invitar a otro usuario</string>
@@ -529,9 +529,9 @@
     <string name="room_participants_invite_search_another_user">Identificació, Nombre, o Correo Electrónico</string>
     <string name="room_participants_action_mention">Mencionar</string>
     <string name="room_participants_action_devices_list">Mostrar lista de dispositivos</string>
-    <string name="room_participants_power_level_prompt">No podrás deshacer este cambio porque estas provocando que el usuario tenga el mismo poder que el tuyo.\n¿Estás seguro?</string>
+    <string name="room_participants_power_level_prompt">No podrás deshacer este cambio porque estás provocando que el usuario tenga el mismo poder que el tuyo.\n¿Estás seguro?</string>
 
-    <string name="room_participants_invite_prompt_msg">"¿Estas seguro que quieres invitar a %s que entre en este chat?"</string>
+    <string name="room_participants_invite_prompt_msg">"¿Estás seguro que quieres invitar a %s que entre en este chat?"</string>
 
     <!-- invitation -->
     <string name="people_search_local_contacts">CONTACTOS LOCALES (%d)</string>
@@ -588,7 +588,7 @@
     <string name="ssl_cert_new_account_expl">Si el administrador publicó que esto es normal, verifica que la huella abajo coincide con el que fue proporcionado por el administrador.</string>
     <string name="ssl_unexpected_existing_expl">El certificado cambio de el que confiaba tu dispositivo. Esto es MUY RARO. Se recomienda que no aceptes el certificado nuevo.</string>
     <string name="ssl_expected_existing_expl">El certificado cambio de uno que confiaba tu dispositivo a un certificado desconfiado. La servidora posiblemente actualizo su certificado. Pongase en contacto con el administrador de la servidora para la huella esperada.</string>
-    <string name="ssl_only_accept">SOLAMENTE acepta el certificado arriba si coincide con el certificado que publicó el administrador de la servidora.</string>
+    <string name="ssl_only_accept">SOLAMENTE acepta el certificado  de arriba si coincide con el certificado que publicó el administrador de la servidora.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
@@ -597,7 +597,7 @@
     <string name="room_details_files">Archivos</string>
     <string name="room_details_settings">Configuraciones</string>
     <string name="room_details_fail_to_update_topic">Actualizacion de la tema falló</string>
-    <string name="room_details_fail_to_update_room_name">Actualizacion de el nombre de la sala fallo</string>
+    <string name="room_details_fail_to_update_room_name">Actualizacion de el nombre de la sala falló</string>
     <string name="room_details_with_updates">Las actualizaciones se deshecharán : ¿ seguro que quieres salir ?</string>
     <string name="room_details_room_listed_in_directory">Sala enumerada</string>
     <string name="room_details_room_not_listed_in_directory">Sala no enumerada</string>
@@ -640,135 +640,135 @@
     <string name="room_recents_create_room">Crear sala</string>
 
     <!-- Directory -->
-    <string name="directory_search_results_title">Browse directory</string>
-    <string name="directory_search_room">%1$d room</string>
-    <string name="directory_search_rooms">%1$d rooms</string>
-    <string name="directory_search_room_for">%1$d room found for %2$s</string>
-    <string name="directory_search_rooms_for">%1$s rooms found for %2$s</string>
-    <string name="directory_searching_title">Searching directory..</string>
-    <string name="directory_search_fail">Failed to fetch data</string>
+    <string name="directory_search_results_title">Buscar directorio</string>
+    <string name="directory_search_room">%1$d sala</string>
+    <string name="directory_search_rooms">%1$d salas</string>
+    <string name="directory_search_room_for">%1$d sala encontrado por %2$s</string>
+    <string name="directory_search_rooms_for">%1$s salas encontrados por %2$s</string>
+    <string name="directory_searching_title">Buscando directorio..</string>
+    <string name="directory_search_fail">Búsqueda de data falló</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notifications</string>
-    <string name="room_settings_favourite">Favourite</string>
-    <string name="room_settings_de_prioritize">De-prioritize</string>
-    <string name="room_settings_direct_chat">Direct Chat</string>
-    <string name="room_settings_leave_conversation">Leave Conversation</string>
+    <string name="room_settings_notifications">Notificaciones</string>
+    <string name="room_settings_favourite">Destacar</string>
+    <string name="room_settings_de_prioritize">Despriorizar</string>
+    <string name="room_settings_direct_chat">Chat Directo</string>
+    <string name="room_settings_leave_conversation">Salir la Conversacion</string>
 
     <!-- home sliding menu -->
-    <string name="room_sliding_menu_messages">Messages</string>
-    <string name="room_sliding_menu_settings">Settings</string>
-    <string name="room_sliding_menu_version">Version </string>
-    <string name="room_sliding_menu_term_and_conditions">Terms &amp; conditions</string>
-    <string name="room_sliding_menu_third_party_notices">Third party notices</string>
-    <string name="room_sliding_menu_copyright">Copyright</string>
-    <string name="room_sliding_menu_privacy_policy">Privacy policy</string>
-    <string name="action_voice_search">Voice search</string>
+    <string name="room_sliding_menu_messages">Mensajes</string>
+    <string name="room_sliding_menu_settings">Configuraciones</string>
+    <string name="room_sliding_menu_version">Versión </string>
+    <string name="room_sliding_menu_term_and_conditions">Terminos &amp; condiciones</string>
+    <string name="room_sliding_menu_third_party_notices">Avisos de partidos terceros</string>
+    <string name="room_sliding_menu_copyright">Derechos de autor</string>
+    <string name="room_sliding_menu_privacy_policy">Políticas de privacidad</string>
+    <string name="action_voice_search">Búsqueda de voz</string>
 
     <!-- Vector Settings -->
-    <string name="account_logout_all">Logout all accounts</string>
-    <string name="settings_config_no_build_info">(no build info)</string>
-    <string name="settings_title_config">Configuration</string>
+    <string name="account_logout_all">Desconectar todas tus cuentas</string>
+    <string name="settings_config_no_build_info">(no hay información de versión)</string>
+    <string name="settings_title_config">Configuración</string>
 
-    <string name="settings_sign_out">Sign Out</string>
-    <string name="settings_profile_picture">Profile Picture</string>
-    <string name="settings_display_name">Display Name</string>
-    <string name="settings_first_name">First Name</string>
-    <string name="settings_surname">Surname</string>
-    <string name="settings_email_address">Email</string>
-    <string name="settings_add_email_address">Add email address</string>
-    <string name="settings_phone_number">Phone</string>
-    <string name="settings_add_phone_number">Add phone number</string>
-    <string name="settings_night_mode">Night Mode</string>
-    <string name="settings_summary_app_info_link">Application system info screen</string>
-    <string name="settings_title_app_info_link">Application info</string>
+    <string name="settings_sign_out">Salir</string>
+    <string name="settings_profile_picture">Foto de Perfil</string>
+    <string name="settings_display_name">Nombre Visible</string>
+    <string name="settings_first_name">Primer Nombre</string>
+    <string name="settings_surname">Apellido</string>
+    <string name="settings_email_address">Correo Electrónico</string>
+    <string name="settings_add_email_address">Añadir correo electróico</string>
+    <string name="settings_phone_number">Número Telefónico</string>
+    <string name="settings_add_phone_number">Añadir número telefónico</string>
+    <string name="settings_night_mode">Modo Nocturna</string>
+    <string name="settings_summary_app_info_link">Página de la información del sistema de la aplicación</string>
+    <string name="settings_title_app_info_link">Información de la Aplicación</string>
 
-    <string name="settings_enable_all_notif">Enable notifications for this account</string>
-    <string name="settings_enable_this_device">Enable notifications for this device</string>
-    <string name="settings_turn_screen_on">Turn the screen on for 3 seconds</string>
+    <string name="settings_enable_all_notif">Prender notificaciones para esta cuenta</string>
+    <string name="settings_enable_this_device">Prender notificaciones para este dispostivo</string>
+    <string name="settings_turn_screen_on">Prender la pantalla por 3 segundos</string>
 
-    <string name="settings_containing_my_name">Msgs containing my name</string>
-    <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
-    <string name="settings_messages_in_group_chat">Msgs in group chats</string>
-    <string name="settings_invited_to_room">When i\'m invited to a room</string>
-    <string name="settings_call_invitations">Call invitations</string>
-    <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
+    <string name="settings_containing_my_name">Mensages conteniendo mi nombre</string>
+    <string name="settings_messages_in_one_to_one">Mensajes en chats de persona-a-paersona</string>
+    <string name="settings_messages_in_group_chat">Mensajes en chats de grupo</string>
+    <string name="settings_invited_to_room">Cuando me invitan a una sala</string>
+    <string name="settings_call_invitations">Invitaciones de llamada</string>
+    <string name="settings_messages_sent_by_bot">Mensajes enviados por robot</string>
 
-    <string name="settings_background_sync">Background synchronization</string>
-    <string name="settings_enable_background_sync">Enable background sync</string>
-    <string name="settings_set_sync_timeout">Sync request timeout</string>
-    <string name="settings_set_sync_delay">Delay between two sync requests</string>
-    <string name="settings_second">second</string>
-    <string name="settings_seconds">seconds</string>
+    <string name="settings_background_sync">Sincronización interna</string>
+    <string name="settings_enable_background_sync">Prender sincronización interna</string>
+    <string name="settings_set_sync_timeout">Vencimiento de peticones de sncronización</string>
+    <string name="settings_set_sync_delay">El tardar entre dos peticiones de sincronización</string>
+    <string name="settings_second">segundo</string>
+    <string name="settings_seconds">segundos</string>
 
-    <string name="settings_version">Version</string>
-    <string name="settings_olm_version">olm version</string>
-    <string name="settings_app_term_conditions">Terms &amp; conditions</string>
-    <string name="settings_third_party_notices">Third party notices</string>
-    <string name="settings_copyright">Copyright</string>
-    <string name="settings_privacy_policy">Privacy policy</string>
-    <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_version">Verción</string>
+    <string name="settings_olm_version">verción olm</string>
+    <string name="settings_app_term_conditions">Terminos &amp; condiciones</string>
+    <string name="settings_third_party_notices">Avisos de partidos terceros</string>
+    <string name="settings_copyright">Derechos de autor</string>
+    <string name="settings_privacy_policy">Políticas de privacidad</string>
+    <string name="settings_clear_cache">Borrar memoria cache</string>
     <!--string name="settings_room_privacy_label">Privacy</string-->
 
 
-    <string name="settings_user_settings">User settings</string>
-    <string name="settings_notifications">Notifications</string>
-    <string name="settings_ignored_users">Ignored users</string>
-    <string name="settings_other">Other</string>
-    <string name="settings_advanced">Advanced</string>
-    <string name="settings_cryptography">Cryptography</string>
-    <string name="settings_notifications_targets">Notification Targets</string>
-    <string name="settings_contact">Local contacts</string>
-    <string name="settings_contacts_app_permission">Contacts permission</string>
-    <string name="settings_contacts_phonebook_country">Phonebook country</string>
-    <string name="settings_devices_list">Devices</string>
+    <string name="settings_user_settings">Configuraciones de Usuario</string>
+    <string name="settings_notifications">Notificaciones</string>
+    <string name="settings_ignored_users">Usuarios ignorados</string>
+    <string name="settings_other">Otro</string>
+    <string name="settings_advanced">Avanzado</string>
+    <string name="settings_cryptography">Cifración</string>
+    <string name="settings_notifications_targets">Objectivos de Notificaciones</string>
+    <string name="settings_contact">Contactos locales</string>
+    <string name="settings_contacts_app_permission">Permiso de contactos</string>
+    <string name="settings_contacts_phonebook_country">País de directorio telefónico</string>
+    <string name="settings_devices_list">Dispositivos</string>
     <string name="devices_divider">devices_devider</string>
     <string name="cryptography_divider">cryptography_divider</string>
-    <string name="devices_details_dialog_title">Device details</string>
-    <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Name</string>
-    <string name="devices_details_device_name">Device Name</string>
-    <string name="devices_details_last_seen_title">Last seen</string>
+    <string name="devices_details_dialog_title">Información del dispositivo</string>
+    <string name="devices_details_id_title">Identificación</string>
+    <string name="devices_details_name_title">Nombre</string>
+    <string name="devices_details_device_name">Nombre del dispositivo</string>
+    <string name="devices_details_last_seen_title">Ultima vez visto</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_date_time_format">yyyy/MM/dd, HH:mm:ss</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
-    <string name="devices_delete_dialog_text">This operation requires additional authentication.\nTo continue, please enter your password.</string>
-    <string name="devices_delete_dialog_title">Authentication</string>
-    <string name="devices_delete_pswd">Password:</string>
-    <string name="devices_delete_submit_button_label">Submit</string>
+    <string name="devices_delete_dialog_text">Esta operación requiere autenticación addicional.\nPara continuar, escribe su contraseña.</string>
+    <string name="devices_delete_dialog_title">Autenticación</string>
+    <string name="devices_delete_pswd">Contraseña:</string>
+    <string name="devices_delete_submit_button_label">Enviar</string>
 
-    <string name="settings_logged_in">Logged in as</string>
-    <string name="settings_home_server">Home Server</string>
-    <string name="settings_identity_server">Identity Server</string>
+    <string name="settings_logged_in">Conectado como</string>
+    <string name="settings_home_server">Servidora</string>
+    <string name="settings_identity_server">Servidora Identidad</string>
 
-    <string name="account_email_validation_title">Verification Pending</string>
-    <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
-    <string name="account_email_validation_error">Unable to verify email address. Please check your email and click on the link it contains. Once this is done, click continue</string>
+    <string name="account_email_validation_title">Verificación Pendiente</string>
+    <string name="account_email_validation_message">Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
+    <string name="account_email_validation_error">Verificación de su correo electrónico falló. Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
 
-    <string name="settings_change_password">Change password</string>
-    <string name="settings_old_password">old password</string>
-    <string name="settings_new_password">new password</string>
-    <string name="settings_confirm_password">confirm password</string>
-    <string name="settings_fail_to_update_password">Fail to update password</string>
-    <string name="settings_password_updated">Your password has been updated</string>
-    <string name="settings_unignore_user">Show all messages from %s?</string>
+<string name="settings_change_password">Cambiar Contraseña</string>
+    <string name="settings_old_password">Contraseña anterior</string>
+    <string name="settings_new_password">Contraseña nueva</string>
+    <string name="settings_confirm_password">confirmar contraseña</string>
+    <string name="settings_fail_to_update_password">La actualización de su contraseña falló</string>
+    <string name="settings_password_updated">Su contraseña fue actualizada</string>
+    <string name="settings_unignore_user">¿Mostrar todo los mensajes de %s?</string>
 
-    <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
+    <string name="settings_delete_notification_targets_confirmation">¿Estás seguro que quieres quitar este objectivo de notificación?</string>
 
-    <string name="settings_delete_threepid_confirmation">Are you sure you want to remove the %1$s %2$s?</string>
+    <string name="settings_delete_threepid_confirmation">¿Estás seguro que quieres quitar el/los %1$s %2$s?</string>
 
-    <string name="settings_phonebook_country">Country</string>
-    <string name="settings_select_country">Choose a country</string>
+    <string name="settings_phonebook_country">País</string>
+    <string name="settings_select_country">Escoje un país</string>
 
-    <string name="settings_phone_number_country_label">Country</string>
-    <string name="settings_phone_number_country_error">Please choose a country</string>
-    <string name="settings_phone_number_label">Phone number</string>
-    <string name="settings_phone_number_error">Invalid phone number for the selected country</string>
-    <string name="settings_phone_number_verification">Phone verification</string>
-    <string name="settings_phone_number_verification_instruction">"We've sent an SMS with an activation code. Please enter this code below."</string>
-    <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
-    <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
-    <string name="settings_phone_number_code">Code</string>
+    <string name="settings_phone_number_country_label">País</string>
+    <string name="settings_phone_number_country_error">Por favor escoje un país</string>
+    <string name="settings_phone_number_label">Número electrónico</string>
+    <string name="settings_phone_number_error">Número telefónico inválido por el país escojido</string>
+    <string name="settings_phone_number_verification">Verficación de número telefónico</string>
+    <string name="settings_phone_number_verification_instruction">"Enviamos un SMS con un código de activación. Por favor escribe ese código abajo."</string>
+    <string name="settings_phone_number_verification_error_empty_code">Escribe un código de activación</string>
+    <string name="settings_phone_number_verification_error">Error en la validación de tu número telefónico</string>
+    <string name="settings_phone_number_code">Código</string>
 
     <!-- Room Settings -->
 
