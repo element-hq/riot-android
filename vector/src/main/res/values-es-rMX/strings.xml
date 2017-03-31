@@ -468,7 +468,7 @@
     <string name="room_creation_make_public_prompt_msg">¿Estás seguro que quieres hacer este chat público? Qualquier puede leer tus mensajes y entrar el chat.</string>
     <string name="room_creation_keep_private">Mantener privado</string>
     <string name="room_creation_make_private">Hacerlo privado</string>
-<string name="room_creation_add_member">Añadir miembro</string>
+    <string name="room_creation_add_member">Añadir miembro</string>
     <string name="room_creation_name_mobile_email">nombre, número telefónico o correo electrónico</string>
     <string name="room_header_active_members">%1$d/%2$d miembros activos</string>
     <string name="room_header_invite_members">Invitar miembros</string>
@@ -745,7 +745,7 @@
     <string name="account_email_validation_message">Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
     <string name="account_email_validation_error">Verificación de su correo electrónico falló. Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
 
-<string name="settings_change_password">Cambiar Contraseña</string>
+    <string name="settings_change_password">Cambiar Contraseña</string>
     <string name="settings_old_password">Contraseña anterior</string>
     <string name="settings_new_password">Contraseña nueva</string>
     <string name="settings_confirm_password">confirmar contraseña</string>
