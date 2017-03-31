@@ -44,7 +44,7 @@
     <string name="delete">Borrar</string>
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
-    <string name="decline">Rechasar</string>
+    <string name="decline">Rechazar</string>
     <string name="active_call">Llamada activa</string>
     <string name="ongoing_conference_call">Llamada conferencia en proceso. Unir con voz o video.</string>
     <string name="ongoing_conference_call_voice">voz</string>
