@@ -59,12 +59,6 @@
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
 
-    <!-- server urls -->
-    <string name="vector_im_server_url">https://vector.im</string>
-    <string name="matrix_org_server_url">https://matrix.org</string>
-    <string name="default_hs_server_url">https://matrix.org</string>
-    <string name="default_identity_server_url">https://vector.im</string>
-    
     <!-- actions -->
     <string name="action_settings">Instellinge</string>
     <string name="action_members">Deelnemers</string>
