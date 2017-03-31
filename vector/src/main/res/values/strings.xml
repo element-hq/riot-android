@@ -719,8 +719,8 @@
     <string name="settings_contacts_app_permission">Contacts permission</string>
     <string name="settings_contacts_phonebook_country">Phonebook country</string>
     <string name="settings_devices_list">Devices</string>
-    <string name="devices_divider">devices_devider</string>
-    <string name="cryptography_divider">cryptography_divider</string>
+    <string name="devices_divider" translatable="false">devices_devider</string>
+    <string name="cryptography_divider" translatable="false">cryptography_divider</string>
     <string name="devices_details_dialog_title">Device details</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Name</string>
@@ -800,10 +800,10 @@
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Members only (since the point in time of selecting this option)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Members only (since they were invited)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Members only (since they joined)</string>
-    <string name="room_settings_read_history_entry_value_anyone">world_readable</string>
-    <string name="room_settings_read_history_entry_value_members_only_option_time_shared">shared</string>
-    <string name="room_settings_read_history_entry_value_members_only_invited">invited</string>
-    <string name="room_settings_read_history_entry_value_members_only_joined">joined</string>
+    <string name="room_settings_read_history_entry_value_anyone" translatable="false">world_readable</string>
+    <string name="room_settings_read_history_entry_value_members_only_option_time_shared" translatable="false">shared</string>
+    <string name="room_settings_read_history_entry_value_members_only_invited" translatable="false">invited</string>
+    <string name="room_settings_read_history_entry_value_members_only_joined" translatable="false">joined</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">To link to a room it must have an address.</string>

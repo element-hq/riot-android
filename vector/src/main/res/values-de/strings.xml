@@ -713,8 +713,6 @@
     <string name="settings_contacts_app_permission">Kontaktzugriffsberechtigung</string>
     <string name="settings_contacts_phonebook_country">Telefonbuch-Land</string>
     <string name="settings_devices_list">Geräte</string>
-    <string name="devices_divider">devices_devider</string>
-    <string name="cryptography_divider">cryptography_divider</string>
     <string name="devices_details_dialog_title">Geräte-Details</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Name</string>
@@ -794,10 +792,6 @@
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Nur Mitglieder (ab dem Zeitpunk bei dem diese Option ausgewählt wurde)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Nur Mitglieder (ab der Einladung)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Nur Mitglieder (ab Betreten des Raumes)</string>
-    <string name="room_settings_read_history_entry_value_anyone">world_readable</string>
-    <string name="room_settings_read_history_entry_value_members_only_option_time_shared">shared</string>
-    <string name="room_settings_read_history_entry_value_members_only_invited">invited</string>
-    <string name="room_settings_read_history_entry_value_members_only_joined">joined</string>
 
     <!-- Raum settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Um in einen Link zu einem Raum zu erstellen, muss dieser eine Adresse haben</string>
