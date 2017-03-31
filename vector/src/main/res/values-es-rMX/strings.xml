@@ -13,7 +13,7 @@
     <string name="title_activity_notification_settings">Configuración de las notificaciones</string>
     <string name="title_activity_member_details">Detalles de los miembros</string>
     <string name="title_activity_invite_user">Invitar a usuarios</string>
-    <string name="title_activity_medias_picker">Seleccion de medios</string>
+    <string name="title_activity_medias_picker">Selección de medios</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
