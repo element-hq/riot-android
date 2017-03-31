@@ -961,17 +961,30 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
         if (null != mRoom) {
-            // to do not trigger notifications for this room
-            // because it is displayed.
-            ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
-
             // check if the room has been left from another client.
             if (mRoom.isReady()) {
-                if ((null == mRoom.getMember(mMyUserId)) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+                if (null == mRoom.getMember(mMyUserId)) {
+                    Log.e(LOG_TAG, "## onResume() : the user is not anymore a member of the room.");
+                    VectorRoomActivity.this.finish();
+                    return;
+                }
+
+                if (!mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+                    Log.e(LOG_TAG, "## onResume() : the user is not anymore a member of the room.");
+                    VectorRoomActivity.this.finish();
+                    return;
+                }
+
+                if (mRoom.isLeaving()) {
+                    Log.e(LOG_TAG, "## onResume() : the user is leaving the room.");
                     VectorRoomActivity.this.finish();
                     return;
                 }
             }
+
+            // to do not trigger notifications for this room
+            // because it is displayed.
+            ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
 
             // listen for room name or topic changes
             mRoom.addEventListener(mRoomEventListener);
@@ -1059,20 +1072,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             mCallId = null;
-        }
-
-        if (null != mRoom) {
-            // check if the room has been left from another activity
-            if (mRoom.isLeaving() || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
-
-                runOnUiThread(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      VectorRoomActivity.this.finish();
-                                  }
-                              }
-                );
-            }
         }
 
         // the pending call view is only displayed with "active " room
