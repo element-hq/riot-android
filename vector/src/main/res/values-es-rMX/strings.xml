@@ -112,7 +112,7 @@
     <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaria enviar un reporte de error?</string>
     <string name="send_bug_report_sent">El reporte de error ha sido enviado</string>
     <string name="send_bug_report_failed">El reporte de erro no se pudo enviar (%s)</string>
-    <string name="send_bug_report_progress">Progress (%s%%)</string>
+    <string name="send_bug_report_progress">Progreso (%s%%)</string>
 
     <string name="send_files_in">Enviar a</string>
     <string name="save_files_in">Guardar en</string>
