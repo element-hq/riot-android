@@ -298,7 +298,7 @@
     <string name="room_creation_participants">Con</string>
     <string name="room_creation_participants_hint">(e.g. @me:hs;…)</string>
     <string name="room_creation_create_room">Crear Sala</string>
-    <string name="room_creation_public">Sala Publica</string>
+    <string name="room_creation_public">Sala Pública</string>
     <string name="room_creation_private">Privada</string>
 
     <!-- room info dialog Screen -->
