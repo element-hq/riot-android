@@ -76,7 +76,7 @@
     <string name="action_delete">Borrar Sala</string>
     <string name="action_invite">Invitar</string>
     <string name="action_disconnect">Desconectar</string>
-    <string name="action_sign_out">Deconectar</string>
+    <string name="action_sign_out">Desconectar</string>
     <string name="action_sign_out_confirmation">Para la seguridad, al desconectar, las claves de cifracion de extremo-a-extremo serán borrados haciendo que el historial sea illegible.\nSeleccione exportar para hacer archivo de respaldo antes de desconectar.</string>
     <string name="action_enable_room_notification">Prender notificaciones de la sala</string>
     <string name="action_disable_room_notification">Apagar notificaciones de la sala</string>
