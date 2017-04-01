@@ -55,7 +55,7 @@
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para realizar una llamada conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Llamada no se puede empezar</string>
     <string name="device_information">Información del dispositivo</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas conferencias no son compatibes en salas cifrados</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas conferencias no son compatibes en salas cifradas</string>
     <string name="send_anyway">Enviar de todos modos</string>
     <string name="or">o</string>
 
