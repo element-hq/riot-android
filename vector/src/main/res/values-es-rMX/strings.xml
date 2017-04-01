@@ -92,7 +92,7 @@
     <string name="action_close">Cerrar</string>
     <string name="action_invite_by_name">Invitar de alguna identificación</string>
     <string name="action_invite_by_list">Invitar de otra sala</string>
-    <string name="action_home">Pagina principal</string>
+    <string name="action_home">Página principal</string>
     <string name="action_drawer">Extras</string>
     <string name="action_resume_call">Continuar llamada</string>
     <string name="about">Cerca de</string>
@@ -908,7 +908,7 @@
     <string name="encryption_information_unblock">Desprohibir</string>
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
-    <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte el dueño de este dispositivo por otro medio (e.g. cara-a-cara o por llamada) y verifique que la clave de este dispositivo que ellos ven en su pagina de configuraciones coincide con el de abajo:</string>
+    <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte el dueño de este dispositivo por otro medio (e.g. cara-a-cara o por llamada) y verifique que la clave de este dispositivo que ellos ven en su página de configuraciones coincide con el de abajo:</string>
     <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione Verificar. Si no, otro esta interceptando este dispositivo y vas a querer bloquearlo.\nEn el futuro, este procceso sera mas sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
