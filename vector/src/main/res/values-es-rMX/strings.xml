@@ -180,7 +180,7 @@
     <string name="auth_submit">Entregar</string>
     <string name="auth_skip">Omitir</string>
     <string name="auth_send_reset_email">Enviar Correo Electrónico de Reinicio</string>
-    <string name="auth_return_to_login">Volver a la página de etrar</string>
+    <string name="auth_return_to_login">Volver a la página de entrar</string>
     <string name="auth_user_id_placeholder">Correo electrónico o nombre</string>
     <string name="auth_password_placeholder">Contraseña</string>
     <string name="auth_new_password_placeholder">Contraseña nueva</string>
