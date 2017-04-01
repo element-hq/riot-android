@@ -137,7 +137,7 @@
     <string name="hs_url">Enlace de la Servidora</string>
     <string name="identity_url">Enlace De la Servidora Entidad</string>
     <string name="user">usuario</string>
-    <string name="users">usuarioss</string>
+    <string name="users">usuarios</string>
     <string name="search">Buscar</string>
 
     <string name="create_room_set_alias">Crear alias de la sala</string>
