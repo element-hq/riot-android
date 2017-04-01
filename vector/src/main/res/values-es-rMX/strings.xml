@@ -7,7 +7,7 @@
     <string name="app_name">Riot</string>
     <string name="title_activity_home">Mensajes</string>
     <string name="title_activity_room">Sala</string>
-    <string name="title_activity_public_rooms">Salas Publicas</string>
+    <string name="title_activity_public_rooms">Salas Públicas</string>
     <string name="title_activity_room_info">Información de la sala</string>
     <string name="title_activity_settings">Configuraciones</string>
     <string name="title_activity_notification_settings">Configuración de las notificaciones</string>
