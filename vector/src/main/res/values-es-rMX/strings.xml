@@ -87,7 +87,7 @@
     <string name="action_search_room">Buscar Sala</string>
     <string name="action_search_contact">Buscar contactos</string>
     <string name="action_mark_all_as_read">Marcar todos como visto</string>
-    <string name="action_quick_reply">Respuesta rapida</string>
+    <string name="action_quick_reply">Respuesta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Cerrar</string>
     <string name="action_invite_by_name">Invitar de alguna identificación</string>
