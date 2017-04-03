@@ -34,14 +34,12 @@ android {
     buildTypes {
         debug {
             resValue "string", "git_revision", "\"${gitRevision()}\""
-            resValue "string", "git_revision_unix_date", "\"${gitRevisionUnixDate()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
             minifyEnabled false
         }
 
         release {
             resValue "string", "git_revision", "\"${gitRevision()}\""
-            resValue "string", "git_revision_unix_date", "\"${gitRevisionUnixDate()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

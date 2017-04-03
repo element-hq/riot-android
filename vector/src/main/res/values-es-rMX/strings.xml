@@ -6,19 +6,13 @@
     <!-- titles -->
     <string name="title_activity_home">Mensajes</string>
     <string name="title_activity_room">Sala</string>
-    <string name="title_activity_public_rooms">Salas Públicas</string>
-    <string name="title_activity_room_info">Información de la sala</string>
     <string name="title_activity_settings">Configuraciones</string>
-    <string name="title_activity_notification_settings">Configuración de las notificaciones</string>
     <string name="title_activity_member_details">Detalles de los miembros</string>
-    <string name="title_activity_invite_user">Invitar a usuarios</string>
-    <string name="title_activity_medias_picker">Selección de medios</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
     <string name="save">Guardar</string>
-    <string name="stay">Permanecer</string>
     <string name="leave">Salir</string>
     <string name="send">Enviar</string>
     <string name="copy">Copiar</string>
@@ -27,29 +21,17 @@
     <string name="quote">Citar</string>
     <string name="share">Compartir</string>
     <string name="later">Luego</string>
-    <string name="paste_username">Pegar nombre</string>
-    <string name="view_profile">Ver perfil</string>
-    <string name="direct_message">Mensaje directo</string>
     <string name="forward">Enviar</string>
     <string name="permalink">Enlace permanente</string>
-    <string name="message_details">Detalles del mensaje</string>
     <string name="view_source">Ver fuente</string>
-    <string name="view">Ver</string>
-    <string name="set_power_level">Nivel de potencia</string>
-    <string name="chat">Chat</string>
-    <string name="clear_cache">Borrar memoria cache</string>
-    <string name="more">Más</string>
-    <string name="chat_with">Chat con </string>
     <string name="delete">Borrar</string>
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
-    <string name="decline">Rechazar</string>
     <string name="active_call">Llamada activa</string>
     <string name="ongoing_conference_call">Llamada conferencia en proceso. Unir con voz o video.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo de nuevo más tarde.</string>
-    <string name="room_url">Enlace de la sala</string>
     <string name="missing_permissions_warning">"Debido a permisos ausentes, algunas caracteristicas possiblemente serán ausentes..</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para realizar una llamada conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Llamada no se puede empezar</string>
@@ -59,36 +41,15 @@
     <string name="or">o</string>
 
     <!-- actions -->
-    <string name="action_settings">Configuraciones</string>
-    <string name="action_members">Lista de miembros</string>
-    <string name="action_public_rooms">Salas Públicas</string>
-    <string name="action_my_rooms">Mis Salas</string>
-    <string name="action_add_account">Añadir Cuenta</string>
-    <string name="action_remove_account">Retirar Cuenta</string>
-    <string name="action_leave">Retirar de la Sala</string>
-    <string name="action_delete">Borrar Sala</string>
-    <string name="action_invite">Invitar</string>
-    <string name="action_disconnect">Desconectar</string>
     <string name="action_sign_out">Desconectar</string>
     <string name="action_sign_out_confirmation">Para la seguridad, al desconectar, las claves de cifracion de extremo-a-extremo serán borrados haciendo que el historial sea illegible.\nSeleccione exportar para hacer archivo de respaldo antes de desconectar.</string>
-    <string name="action_enable_room_notification">Prender notificaciones de la sala</string>
-    <string name="action_disable_room_notification">Apagar notificaciones de la sala</string>
-    <string name="action_create_room">Crear…</string>
-    <string name="action_room_info">Información de la sala</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Video</string>
     <string name="action_search_room">Buscar Sala</string>
-    <string name="action_search_contact">Buscar contactos</string>
     <string name="action_mark_all_as_read">Marcar todos como visto</string>
     <string name="action_quick_reply">Respuesta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Cerrar</string>
-    <string name="action_invite_by_name">Invitar de alguna identificación</string>
-    <string name="action_invite_by_list">Invitar de otra sala</string>
-    <string name="action_home">Página principal</string>
-    <string name="action_drawer">Extras</string>
-    <string name="action_resume_call">Continuar llamada</string>
-    <string name="about">Cerca de</string>
     <string name="copied_to_clipboard">Copiado</string>
     <string name="disable">Desactivar</string>
 
@@ -108,23 +69,11 @@
     <string name="send_bug_report_progress">Progreso (%s%%)</string>
 
     <string name="send_files_in">Enviar a</string>
-    <string name="save_files_in">Guardar en</string>
-    <string name="file_is_saved">%1$s se guardo.</string>
     <string name="read_receipt">Leer</string>
 
-    <string name="downloads">Descargas</string>
-    <string name="gallery">Galería</string>
-    <string name="sd_scard">Tarjeta SD</string>
-    <string name="other">Otro</string>
-
-    <string name="my_rooms">Mis salas</string>
-    <string name="create_room">Crear Sala</string>
     <string name="join_room">Entrar Sala</string>
-    <string name="create">Crear:</string>
-    <string name="sign_in">Entrar</string>
     <string name="username">Nombre</string>
     <string name="create_account">Registrar</string>
-    <string name="matrix_login">Entrar Matrix</string>
     <string name="login">Entrar</string>
     <string name="logout">Salir</string>
     <string name="hs_url">Enlace de la Servidora</string>
@@ -133,39 +82,12 @@
     <string name="users">usuarios</string>
     <string name="search">Buscar</string>
 
-    <string name="create_room_set_alias">Crear alias de la sala</string>
-    <string name="create_room_alias_hint">alias de la sala</string>
-    <string name="create_room_set_name">Crear nombre se la sala</string>
-    <string name="create_room_name_hint">Mi sala</string>
-    <string name="join_room_title">Entrar sala</string>
-    <string name="join_room_hint">(e.g. #foo:example.org)</string>
-
-    <string name="membership_invite">Invitado</string>
-    <string name="membership_join">Entrado</string>
-    <string name="membership_leave">Salir</string>
-    <string name="membership_kick">Retirado</string>
-    <string name="membership_ban">Prohibido</string>
-    <string name="start_chat">Comenzar chat</string>
     <string name="start_new_chat">Comenzar chat nuevo</string>
     <string name="start_voice_call">Comenzar Llamada de Voz</string>
     <string name="start_video_call">Comenzar Llamada de video</string>
 
-    <plurals name="num_members">
-        <item quantity="one">%1$s usuario</item>
-        <item quantity="other">%1$s usuarios</item>
-    </plurals>
-
-    <string name="invite">Invitar</string>
-    <string name="kick">Retirar</string>
-    <string name="ban">Prohibir</string>
-    <string name="unban">Des-Prohibir</string>
-
-    <string name="message_changes_successful">Cambios exitosos</string>
-    <string name="message_unsaved_changes">Existen cambios no aplicados. El Salir los deshechará.</string>
-
     <string name="option_send_files">Enviar archivos</string>
     <string name="option_take_photo_video">Tomar foto o video</string>
-    <string name="option_attach_video">Agregar video</string>
 
     <!-- Authentication -->
     <string name="auth_login">Entrar</string>
@@ -195,7 +117,6 @@
     <string name="auth_invalid_email">"Esto no parece ser correo electrónico valido"</string>
     <string name="auth_invalid_phone">"Esto no parece ser número telefónico valido"</string>
     <string name="auth_email_already_defined">Este correo electrónico ya está ocupado.</string>
-    <string name="auth_missing_optional_email">Si no introduce un correo electrónico, no será capaz de reiniciar su contraseña. ¿Estás seguro?</string>
     <string name="auth_missing_email">Correo electrónico ausente</string>
     <string name="auth_missing_phone">Número telefónico ausente</string>
     <string name="auth_missing_email_or_phone">Correo electrónico o número telefónico ausente</string>
@@ -205,8 +126,6 @@
     <string name="auth_use_server_options">¿Usar opciones de servidora propietarias? (avanzado)</string>
     <string name="auth_email_validation_message">Consulte su correo electrónico para poder continuar con la inscripción</string>
     <string name="auth_threepid_warning_message">La inscripción con correo electrónico y número telefónico no está implementado hasta que exista el api. Solamente se tomara en cuenta el número telefónico.\n\nPodra añadir un correo electrónico en Configuraciones.</string>
-    <string name="auth_email_check_name_in_use_message">"Verificando su nombre..</string>
-    <string name="auth_email_registration_resumes_message">"Espere mientras continue la inscripcíon..</string>
     <string name="auth_recaptcha_message">Esta servidora quiere verificar que no seas robot</string>
     <string name="auth_username_in_use">Este nombre ya está reservado para otra persona</string>
     <string name="auth_home_server">Servidora:</string>
@@ -217,23 +136,17 @@
     <string name="auth_reset_password_missing_password">Contraseña nueva es requerida.</string>
     <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez siguió el enlace, seleccione abajo.</string>
     <string name="auth_reset_password_error_unauthorized">Verificación de correo electronico falló: asegúrese que siguio el enlace.</string>
-    <string name="auth_reset_password_error_not_found">Su correo electrónico no coincide con los de esta servidora.</string>
     <string name="auth_reset_password_success_message">Su contraseña fue atualizada.\n\nHaz sido desconectado de todos tus dispositivos y las notificaciones están apagados. Para prender las notificaciones, entre su cuenta en cada dispositivo.</string>
 
     <!-- Login Screen -->
-    <string name="login_error_already_logged_in">Sesión activo</string>
     <string name="login_error_must_start_http">El enlace sólo puede comenzar con http[s]://</string>
     <string name="login_error_network_error">Sesión falló: Error con la red</string>
     <string name="login_error_unable_login">Sesion falló</string>
     <string name="login_error_registration_network_error">Inscripción falló: error con la red</string>
     <string name="login_error_unable_register">Inscripción falló</string>
     <string name="login_error_unable_register_mail_ownership">Inscripción falló : Posesión de correo electrónico falló</string>
-    <string name="login_error_invalid_credentials">Escribe credencialed validos</string>
     <string name="login_error_invalid_home_server">Escribe enlace valido</string>
 
-    <string name="login_error_no_login_flow">Falló la autenticación de esta servidora</string>
-    <string name="login_error_do_not_support_login_flows">Presentemente, no contamos con sesiónes de esta servidora.</string>
-    <string name="login_error_registration_is_not_supported">Presentemente, no contamos con inscripción.</string>
     <string name="login_error_forbidden">Nombre/Contraseña inválido</string>
     <string name="login_error_unknown_token">El character de acesso escogido no fue reconocido.</string>
     <string name="login_error_bad_json">JSON malformado</string>
@@ -243,17 +156,11 @@
     <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
 
     <!-- universal link receiver -->
-    <string name="universal_link_join_alert_title">Estás intentando entrar una sala.</string>
-    <string name="universal_link_join_alert_body">¿Te gustaría entrar para participar en la conversacion?</string>
-    <string name="universal_link_email_invitation_body_1">Tu has sido invitado por %s para entrar a esta sala</string>
-    <string name="universal_link_email_invitation_body_2">¿Desea aceptar o rechazar esta invitación?</string>
-    <string name="universal_link_email_invitation_body_3">Esta invitación fue enviado a %s que no esta unido a esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
 
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifración de persona-a-persona nuevas de este dispositivo y enviar la clave pública a la servidora.\nEsto sólo ocurre una vez.\nPerdon por la inconveniencia.</string>
 
     <!-- members list Screen -->
-    <string name="members_list">Lista de Miembros</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
@@ -275,104 +182,26 @@
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
     <!-- invitation members list Screen -->
-    <string name="members_one_to_one">Miembros de salas de persona-a-persona</string>
-    <string name="members_small_room_members">Miembros de salas chicas</string>
-    <string name="members_large_room_members">Miembros de salas grandes</string>
 
     <!-- room creation dialog Screen -->
     <string name="yesterday">Ayer</string>
     <string name="today">Hoy</string>
 
     <!-- room creation dialog Screen -->
-    <string name="room_creation_room_name">Nombre</string>
-    <string name="room_creation_room_name_hint">(e.g lunchGroup)</string>
-    <string name="room_creation_room_alias">Alias</string>
-    <string name="room_creation_room_alias_hint">"Alias de la Sala (opcional)</string>
-    <string name="room_creation_participants">Con</string>
-    <string name="room_creation_participants_hint">(e.g. @me:hs;…)</string>
-    <string name="room_creation_create_room">Crear Sala</string>
-    <string name="room_creation_public">Sala Pública</string>
-    <string name="room_creation_private">Privada</string>
 
     <!-- room info dialog Screen -->
     <string name="room_info_room_name">Nombre de la Sala</string>
-    <string name="room_info_room_name_hint">Escribe el nombre de la sala</string>
     <string name="room_info_room_topic">Tema de la Sala</string>
-    <string name="room_info_room_topic_hint">Escribe el tema de la sala</string>
-    <string name="room_info_room_canonical_alias">Alias Canónico</string>
-    <string name="room_info_room_canonical_hint">Escribe un alias canónico</string>
-    <string name="room_info_room_discard_changes">¿Deshechar cambios?</string>
-    <string name="room_info_room_discard">Deshechar</string>
 
     <!-- contacts list screen -->
-    <string name="contacts">Contactos</string>
 
     <!-- Notification settings screen -->
-    <string name="notification_settings_title">Configuraciones de Notificación</string>
-    <string name="notification_settings_disable_all">Apagar todas las notificaciones</string>
-    <string name="notification_settings_enable_notifications">Prender notificaciones</string>
-    <string name="notification_settings_enable_notifications_warning">Todas la notificaciones están apagadas en todos sus dispositivos.</string>
-    <string name="notification_settings_global_notification_settings">Configuraciones Universales de las Notificaciones</string>
-    <string name="notification_settings_global_info">Sus configuraciones de notificaciones están guardados en tu cuenta y todos tus dispositivos compatibles los comparten (incluso los de escritorio).\n\nLas reglas se aplican en orden; la primera regla que aplica determina el resultado del mensaje.\nEntonces: Las notificaciones de palabras son mas importantes que las notificaciones de salas que son mas importantes que las notificaciones del enviador.\nPara varias reglas del mismo tipo, el primero de la lista que coincide toma precedencia.</string>
-    <string name="notification_settings_per_word_notifications">Notificaciones de Palabras</string>
-    <string name="notification_settings_per_word_info">Las palabras coinciden sin resptetár mayúsculas ni minúsculas, y podran contener un * , que es letra universal. Entonces:\nfoo coincide con la combinacion de foo envuelto en delimitadores de palabras (e.g. punctuación y blanco o comienzo/fin de una linea).\nfoo* Coincide con qualquera palabra que comienze con foo.\n*foo* coincide con qualquiera palabra que incluye las letras foo.</string>
-    <string name="notification_settings_always_notify">Siempre notificar</string>
-    <string name="notification_settings_never_notify">nunca notificar</string>
-    <string name="notification_settings_word_to_match">Palabra para coincidir</string>
-    <string name="notification_settings_sound">Sonido</string>
-    <string name="notification_settings_highlight">Destacar</string>
-    <string name="notification_settings_custom_sound">Sonido propietario</string>
-    <string name="notification_settings_per_room_notifications">Notificaciones de salas</string>
-    <string name="notification_settings_per_sender_notifications">Notificaciones de personas</string>
-    <string name="notification_settings_sender_hint">\@user:domain.com</string>
-    <string name="notification_settings_room">Sala : </string>
-    <string name="notification_settings_select_room">Seleccione una sala</string>
-
-    <string name="notification_settings_add">Añadir</string>
-
-    <string name="notification_settings_other_alerts">Otras Alertas</string>
-    <string name="notification_settings_contain_my_user_name">Notifiquenme con sonido de los mensajes que contienen mi nombre</string>
-    <string name="notification_settings_contain_my_display_name">Notifiquenme con sonido de los mensajes que contienen mi nombre visible</string>
-    <string name="notification_settings_just_sent_to_me">Notifiquenme con sonido de los mensajes enviados directo a mi</string>
-    <string name="notification_settings_invite_to_a_new_room">Notifiquenme quando me invitan a una sala nueva</string>
-    <string name="notification_settings_people_join_leave_rooms">Notifiquenme quando la gente entra o sale salas</string>
-    <string name="notification_settings_receive_a_call">Notifiquenme quando recibo una llamada</string>
-    <string name="notification_settings_suppress_from_bots">Callar notificaciones de robots</string>
-
-    <string name="notification_settings_by_default">Por defecto…</string>
-    <string name="notification_settings_notify_all_other">Notifiquenme de todas los otros cuartos/mensages</string>
 
     <!-- gcm section -->
-    <string name="settings_use_gcm">Usar GCM</string>
-    <string name="settings_gcm_app_id">Identificacion de la aplicación enviadora de GSM</string>
-    <string name="settings_gcm_sender_id">Identificación de enviadora GSM</string>
-    <string name="settings_gcm_pusher_url">Enlace enviadora de GSM</string>
-    <string name="settings_gcm_pusher_profile_tag">Etqueta del perfíl enviadora de GSM</string>
-
-    <string name="settings_config_home_server">Servidora: %s</string>
-    <string name="settings_config_identity_server">Servidora Identidad: %s</string>
-    <string name="settings_config_user_id">Identificación de usuario: %s</string>
-    <string name="settings_config_access_token">Símbolo de acesso: %s</string>
-    <string name="settings_command_commands">Estos son los ordenes aplicables en un chat de sala:\r\n\r\n /nick &#60;display_name&#62;&#58; cambiar tu nombre visible\r\n /me &#60;action&#62;&#58; enviar la acción que está haciendo. /me será reemplazado por tu nombre visible\r\n /join &#60;room_alias&#62;&#58; entrar una sala\r\n /kick &#60;user_id&#62; [&#60;reason>]&#58; retirar el usuario\r\n /ban &#60;user_id&#62; [&#60;reason&#62;]&#58; prohibir el usuario\r\n /unban &#60;user_id&#62;&#58; desprohibir el usuario\r\n /op &#60;user_id&#62; &#60;power_level&#62;&#58; ajustar nivel de potencia\r\n /deop &#60;user_id&#62;&#58; establecer el nivel de potencia defecto de la servidoratu como el tuyo</string>
-    <string name="settings_failed_to_upload_avatar">La subida del foto de perfil falló</string>
-
-    <string name="settings_display_name_hint">Escribe su nombre de vista</string>
-    <string name="settings_update_profile">Actualizar perfil</string>
 
     <!-- Settings keys -->
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_hide_redactions">settings_key_hide_redactions</string>
-    <string name="settings_key_hide_unsupported_events">settings_key_hide_unsupported_events</string>
-    <string name="settings_key_sort_by_last_seen">settings_key_sort_by_last_seen</string>
-    <string name="settings_key_display_left_members">settings_key_display_left_members</string>
-    <string name="settings_key_display_public_rooms_recents">settings_key_display_public_rooms_recents</string>
-    <string name="settings_key_use_google_cloud_messaging">settings_key_use_google_cloud_messaging</string>
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
-    <string name="logo">Logo</string>
-    <string name="user_says_body">%1$s dice %2$s</string>
-    <string name="unseen_message">%1$s mensage notificado no visto</string>
-    <string name="unseen_messages">%1$s mensajes notificados no vistos</string>
 
     <!-- call string -->
     <string name="call_connected">Llamada conectada</string>
@@ -382,31 +211,20 @@
     <string name="incoming_call">Llamada Entrante</string>
     <string name="incoming_video_call">Llamada de Video Entrante</string>
     <string name="incoming_voice_call">Llamada de Voz Entrante</string>
-    <string name="call_invite_expired">La invitacion de llamada se vencio</string>
     <string name="call_in_progress">Llamada en Processo</string>
 
     <string name="call_error_user_not_responding">El lado remoto no pudo contestar.</string>
     <string name="call_error_ice_failed">Conexión de media falló</string>
     <string name="call_error_camera_init_failed">La camara no se pudo prender</string>
     <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
-    <string name="call_error_peer_hangup">el igual colgó la llamada</string>
     <string name="call_error_peer_hangup_elsewhere">la llamada fue colgado en otra parte</string>
     <string name="call_error_peer_cancelled_call">la llamada fue cancelada</string>
 
     <string name="action_accept">ACEPTAR</string>
     <string name="action_ignore">IGNORAR</string>
-    <string name="action_cancel">Cancelar</string>
-    <string name="action_hangup">Colgar</string>
 
     <!-- medias picker string -->
-    <string name="media_picker_picture_capture_title">Tomar una foto</string>
-    <string name="media_picker_video_capture_title">Grabar un vidoe</string>
     <string name="media_picker_both_capture_title">Tomar una foto o grabar un video"</string>
-    <string name="media_picker_retake">Repetir"</string>
-    <string name="media_picker_choose">Escoger"</string>
-    <string name="media_picker_attach">Agregar"</string>
-    <string name="media_picker_choose_from_library">Escoger de una carpeta"</string>
-    <string name="media_picker_library">Carpeta"</string>
     <string name="media_picker_cannot_record_video">No pudo grabar video"</string>
 
     <!-- permissions Android M -->
@@ -430,9 +248,6 @@
     <string name="_continue">Continuar</string>
 
     <!-- Actions -->
-    <string name="mark_all_as_read_prompt">¿Marcar a todos como visto?</string>
-    <string name="next">Siguiente</string>
-    <string name="back">Retrasar</string>
     <string name="remove">Retirar</string>
     <string name="join">Entrar</string>
     <string name="preview">Preestreno</string>
@@ -440,7 +255,6 @@
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Has sido invitado por %s a entrar a esta sala.</string>
-    <string name="room_preview_subtitle">Esto es un preestreno de esta sala. Los archivos y otros accesorios estan impedidos.</string>
     <string name="room_preview_unlinked_email_warning">Esta invitación fue enviado a %s, que no esta asociado con esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
     <string name="room_preview_try_join_an_unknown_room">Estás intentando entara a %s. ¿Desea entrar para participar en la conversacion?</string>
     <string name="room_preview_try_join_an_unknown_room_default">una sala</string>
@@ -448,20 +262,7 @@
 
     <!-- Chat creation -->
     <string name="room_creation_title">Chat Nuevo</string>
-    <string name="room_creation_account">Cuenta</string>
-    <string name="room_creation_appearance">Apariencia</string>
-    <string name="room_creation_appearance_name">Nombre</string>
-    <string name="room_creation_appearance_picture">Foto de Perfil del Chat (opcional)</string>
-    <string name="room_creation_privacy">Privacidad</string>
-    <string name="room_creation_private_room">Este chat es privado</string>
-    <string name="room_creation_public_room">Este chat es publico</string>
-    <string name="room_creation_make_public">Hacerlo público</string>
-    <string name="room_creation_make_public_prompt_title">¿Hacer este chat público?</string>
-    <string name="room_creation_make_public_prompt_msg">¿Estás seguro que quieres hacer este chat público? Qualquier puede leer tus mensajes y entrar el chat.</string>
-    <string name="room_creation_keep_private">Mantener privado</string>
-    <string name="room_creation_make_private">Hacerlo privado</string>
     <string name="room_creation_add_member">Añadir miembro</string>
-    <string name="room_creation_name_mobile_email">nombre, número telefónico o correo electrónico</string>
     <string name="room_header_active_members">%1$d/%2$d miembros activos</string>
     <string name="room_header_invite_members">Invitar miembros</string>
     <string name="room_title_members">%1$d miembros</string>
@@ -476,27 +277,16 @@
     <string name="format_time_d">d</string>
 
     <!--  Chat participants -->
-    <string name="room_participants_title">Participantes</string>
-    <string name="room_participants_add_participant">Añadir participante</string>
-    <string name="room_participants_one_participant">1 participante</string>
-    <string name="room_participants_multi_participants">%s participantes</string>
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Estás seguro que quieres salir de la sala?</string>
     <string name="room_participants_remove_prompt_msg">¿Estás seguro que quieres quitar a %s de este chat?</string>
-    <string name="room_participants_admin_name">%s (administrador)</string>
     <string name="room_participants_create">Crear</string>
-    <string name="room_participants_invite_another_user">Invitar a otro usuario</string>
 
-    <string name="room_participants_active">Activo</string>
     <string name="room_participants_online">Conectado</string>
     <string name="room_participants_offline">Desconectado</string>
-    <string name="room_participants_unkown">Desconocido</string>
     <string name="room_participants_idle">Ocioso</string>
     <string name="room_participants_now">ahora</string>
     <string name="room_participants_ago">en el pasado</string>
-    <string name="room_participants_invite">Invitar</string>
-    <string name="room_participants_leave">Salio</string>
-    <string name="room_participants_ban">Prohibido</string>
 
     <string name="room_participants_header_admin_tools">HERRAMIENTAS DE ADMINISTRADOR</string>
     <string name="room_participants_header_call">LLAMAR</string>
@@ -511,9 +301,6 @@
     <string name="room_participants_action_set_default_power_level">Reestablecer como usuario normal</string>
     <string name="room_participants_action_set_moderator">Hacerlo moderador</string>
     <string name="room_participants_action_set_admin">Hacerlo administrador</string>
-    <string name="room_participants_action_start_chat">Comenzar chat</string>
-    <string name="room_participants_action_start_voice_call">Comenzar llamada de voz</string>
-    <string name="room_participants_action_start_video_call">Comenzar llamada de video</string>
     <string name="room_participants_action_ignore">Ocultar todos los mensajes de este usuario</string>
     <string name="room_participants_action_unignore">Mostrar todos los mensajes de este usuario</string>
     <string name="room_participants_invite_search_another_user">Identificació, Nombre, o Correo Electrónico</string>
@@ -529,27 +316,10 @@
     <string name="people_search_filter_text">Solmente usuarios de Matrix</string>
     <string name="people_search_too_many_contacts">Demasiados contactos, pror favor use la busqueda</string>
 
-    <string name="people_search_all_contacts">Todos los contactos</string>
-    <string name="people_search_matrix_contacts">Contactos de Matrix</string>
-
     <!-- Presence status-->
-    <string name="presence_offline">Desconectado</string>
-    <string name="presence_online">Conectado</string>
-    <string name="presence_online_now">Conectado ahora mismo</string>
-    <string name="presence_hidden">Ocultado</string>
-    <string name="presence_unavailable">Indisponible</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Buscar</string>
-    <string name="room_menu_call">Llamar</string>
-    <string name="room_menu_participants">Participantes</string>
-    <string name="room_menu_favourite">Favorecer</string>
-    <string name="room_menu_unfavourite">Defavorable</string>
-    <string name="room_menu_settings">Configuraciones</string>
-    <string name="room_option_start_group_voice">Comenzar llamada de voz en grupo</string>
-    <string name="room_option_start_group_video">Comenzar llamada de video en grupo</string>
-    <string name="room_option_share_location">Compartir ubicación</string>
-    <string name="room_option_share_contact">Compartir contacto</string>
     <string name="room_one_user_is_typing">%s esta escribiendo…</string>
     <string name="room_two_users_are_typing">%1$s &#038; %2$s están escribiendo…</string>
     <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; otros están escribiendo…</string>
@@ -586,11 +356,6 @@
     <string name="room_details_people">Personas</string>
     <string name="room_details_files">Archivos</string>
     <string name="room_details_settings">Configuraciones</string>
-    <string name="room_details_fail_to_update_topic">Actualizacion de la tema falló</string>
-    <string name="room_details_fail_to_update_room_name">Actualizacion de el nombre de la sala falló</string>
-    <string name="room_details_with_updates">Las actualizaciones se deshecharán : ¿ seguro que quieres salir ?</string>
-    <string name="room_details_room_listed_in_directory">Sala enumerada</string>
-    <string name="room_details_room_not_listed_in_directory">Sala no enumerada</string>
     <string name="room_details_selected">seleccionado</string>
     <string name="malformed_id">Identificación malformada. Debe ser correo electrónico o identificación de Matrix como \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITADO</string>
@@ -622,7 +387,6 @@
     <string name="room_recents_join">ENTRAR</string>
     <string name="room_recents_directory">DIRECTORIO</string>
     <string name="room_recents_favourites">FAVORITOS</string>
-    <string name="room_recents_pepole">PERSONAS</string>
     <string name="room_recents_conversations">SALAS</string>
     <string name="room_recents_low_priority">BAJA PRIORIDAD</string>
     <string name="room_recents_invites">INVITACIONES</string>
@@ -636,7 +400,6 @@
     <string name="directory_search_room_for">%1$d sala encontrado por %2$s</string>
     <string name="directory_search_rooms_for">%1$s salas encontrados por %2$s</string>
     <string name="directory_searching_title">Buscando directorio..</string>
-    <string name="directory_search_fail">Búsqueda de data falló</string>
 
     <!-- home room settings -->
     <string name="room_settings_notifications">Notificaciones</string>
@@ -653,23 +416,15 @@
     <string name="room_sliding_menu_third_party_notices">Avisos de partidos terceros</string>
     <string name="room_sliding_menu_copyright">Derechos de autor</string>
     <string name="room_sliding_menu_privacy_policy">Políticas de privacidad</string>
-    <string name="action_voice_search">Búsqueda de voz</string>
 
     <!-- Vector Settings -->
-    <string name="account_logout_all">Desconectar todas tus cuentas</string>
-    <string name="settings_config_no_build_info">(no hay información de versión)</string>
-    <string name="settings_title_config">Configuración</string>
 
-    <string name="settings_sign_out">Salir</string>
     <string name="settings_profile_picture">Foto de Perfil</string>
     <string name="settings_display_name">Nombre Visible</string>
-    <string name="settings_first_name">Primer Nombre</string>
-    <string name="settings_surname">Apellido</string>
     <string name="settings_email_address">Correo Electrónico</string>
     <string name="settings_add_email_address">Añadir correo electróico</string>
     <string name="settings_phone_number">Número Telefónico</string>
     <string name="settings_add_phone_number">Añadir número telefónico</string>
-    <string name="settings_night_mode">Modo Nocturna</string>
     <string name="settings_summary_app_info_link">Página de la información del sistema de la aplicación</string>
     <string name="settings_title_app_info_link">Información de la Aplicación</string>
 
@@ -718,7 +473,6 @@
     <string name="devices_details_device_name">Nombre del dispositivo</string>
     <string name="devices_details_last_seen_title">Ultima vez visto</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_date_time_format">yyyy/MM/dd, HH:mm:ss</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Esta operación requiere autenticación addicional.\nPara continuar, escribe su contraseña.</string>
     <string name="devices_delete_dialog_title">Autenticación</string>
@@ -745,7 +499,6 @@
 
     <string name="settings_delete_threepid_confirmation">¿Estás seguro que quieres quitar el/los %1$s %2$s?</string>
 
-    <string name="settings_phonebook_country">País</string>
     <string name="settings_select_country">Escoje un país</string>
 
     <string name="settings_phone_number_country_label">País</string>
@@ -762,7 +515,6 @@
 
     <!-- room global settings-->
     <string name="room_settings_room_photo">Foto de la Sala</string>
-    <string name="room_settings_photo">Foto de la Sala</string>
     <string name="room_settings_room_name">Nombre de la Sala</string>
     <string name="room_settings_topic">Tema</string>
     <string name="room_settings_room_tag">Etiqueta de la Sala</string>
@@ -826,7 +578,6 @@
     <string name="room_settings_unset_main_address">Desescojer como Direccion Principal</string>
     <string name="room_settings_copy_room_id">Copiar Identificación de la Sala</string>
     <string name="room_settings_copy_room_address">Copiar Dirección de la Sala</string>
-    <string name="room_details_copy_room_url">Copiar el Enlace de la Sala</string>
 
     <string name="room_settings_addresses_e2e_enabled">Cifración está prendida en esta sala.</string>
     <string name="room_settings_addresses_e2e_disabled">Cifración está apagada es esta sala.</string>
