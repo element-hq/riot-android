@@ -59,12 +59,6 @@
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
 
-    <!-- server urls -->
-    <string name="vector_im_server_url">https://vector.im</string>
-    <string name="matrix_org_server_url">https://matrix.org</string>
-    <string name="default_hs_server_url">https://matrix.org</string>
-    <string name="default_identity_server_url">https://vector.im</string>
-    
     <!-- actions -->
     <string name="action_settings">Instellinge</string>
     <string name="action_members">Deelnemers</string>
@@ -719,8 +713,6 @@
     <string name="settings_contacts_app_permission">Contacts permission</string>
     <string name="settings_contacts_phonebook_country">Phonebook country</string>
     <string name="settings_devices_list">Apparaten</string>
-    <string name="devices_divider">Apparater_verdeler</string>
-    <string name="cryptography_divider">cryptografie_verdelen</string>
     <string name="devices_details_dialog_title">Apparaat details</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Naam</string>
@@ -801,11 +793,7 @@
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Alleen deelnemers (vanaf de tijd dat deze optie is geselecteerd)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Alleen deelnemers (vanaf de tijd dat ze worden uitgenodigd)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Alleen deelnemers (vanaf de tijd dat ze deelnemen)</string>
-    <string name="room_settings_read_history_entry_value_anyone">world_readable</string>
-    <string name="room_settings_read_history_entry_value_members_only_option_time_shared">shared</string>
-    <string name="room_settings_read_history_entry_value_members_only_invited">invited</string>
-    <string name="room_settings_read_history_entry_value_members_only_joined">joined</string>
-    
+
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Om naar een ruimte te verwijzen moeten het een adres hebben.</string>
     <string name="room_settings_room_access_entry_only_invited">Alleen mensen die uitgenodigd zijn</string>

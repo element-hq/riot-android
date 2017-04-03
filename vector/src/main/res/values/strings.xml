@@ -59,12 +59,6 @@
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
 
-    <!-- server urls -->
-    <string name="vector_im_server_url">https://vector.im</string>
-    <string name="matrix_org_server_url">https://matrix.org</string>
-    <string name="default_hs_server_url">https://matrix.org</string>
-    <string name="default_identity_server_url">https://vector.im</string>
-
     <!-- actions -->
     <string name="action_settings">Settings</string>
     <string name="action_members">Members list</string>
@@ -719,8 +713,6 @@
     <string name="settings_contacts_app_permission">Contacts permission</string>
     <string name="settings_contacts_phonebook_country">Phonebook country</string>
     <string name="settings_devices_list">Devices</string>
-    <string name="devices_divider">devices_devider</string>
-    <string name="cryptography_divider">cryptography_divider</string>
     <string name="devices_details_dialog_title">Device details</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Name</string>
@@ -800,10 +792,6 @@
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Members only (since the point in time of selecting this option)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Members only (since they were invited)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Members only (since they joined)</string>
-    <string name="room_settings_read_history_entry_value_anyone">world_readable</string>
-    <string name="room_settings_read_history_entry_value_members_only_option_time_shared">shared</string>
-    <string name="room_settings_read_history_entry_value_members_only_invited">invited</string>
-    <string name="room_settings_read_history_entry_value_members_only_joined">joined</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">To link to a room it must have an address.</string>
