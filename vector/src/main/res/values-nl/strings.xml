@@ -73,7 +73,7 @@
     <string name="action_sign_out_confirmation">Uitloggen?</string>
     <string name="action_enable_room_notification">Ruimte notificaties toestaan</string>
     <string name="action_disable_room_notification">Ruimte notificaties niet toestaan</string>
-    <string name="action_create_room">Maak...</string>
+    <string name="action_create_room">Maak…</string>
     <string name="action_room_info">Ruimte informatie</string>
     <string name="action_voice_call">Spraakoproep</string>
     <string name="action_video_call">Videogesprek</string>
@@ -289,7 +289,7 @@
     <string name="room_creation_room_alias">Alias</string>
     <string name="room_creation_room_alias_hint">"Ruimte Alias (optioneel)</string>
     <string name="room_creation_participants">Met</string>
-    <string name="room_creation_participants_hint">(bijv. @me:hs;...)</string>
+    <string name="room_creation_participants_hint">(bijv. @me:hs;…)</string>
     <string name="room_creation_create_room">Ruimte maken</string>
     <string name="room_creation_public">Publieke ruimte</string>
     <string name="room_creation_private">Privé</string>
@@ -339,7 +339,7 @@
     <string name="notification_settings_receive_a_call">Notificeer mij wanneer ik een oproep krijg</string>
     <string name="notification_settings_suppress_from_bots">Niet notificeren bij berichten van robots</string>
     
-    <string name="notification_settings_by_default">Standaard...</string>
+    <string name="notification_settings_by_default">Standaard…</string>
     <string name="notification_settings_notify_all_other">Notificeer voor alle andere berichten/ruimtes</string>
     
     <!-- gcm section -->
@@ -376,9 +376,9 @@
     
     <!-- call string -->
     <string name="call_connected">Oproep verbonden</string>
-    <string name="call_connecting">Oproep is aan het verbinden...</string>
+    <string name="call_connecting">Oproep is aan het verbinden…</string>
     <string name="call_ended">Oproep beëindigt</string>
-    <string name="call_ring">Bellen...</string>
+    <string name="call_ring">Bellen…</string>
     <string name="incoming_call">Inkomende oproep</string>
     <string name="incoming_video_call">Inkomend videogesprek</string>
     <string name="incoming_voice_call">Inkomende spraakoproep</string>
@@ -550,9 +550,9 @@
     <string name="room_option_start_group_video">Start groepvideogesprek</string>
     <string name="room_option_share_location">Locatie delen</string>
     <string name="room_option_share_contact">Contact delen</string>
-    <string name="room_one_user_is_typing">%s is aan het typen...</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s zijn aan het typen...</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; anderen zijn aan het typen...</string>
+    <string name="room_one_user_is_typing">%s is aan het typen…</string>
+    <string name="room_two_users_are_typing">%1$s &#038; %2$s zijn aan het typen…</string>
+    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; anderen zijn aan het typen…</string>
     <string name="room_offline_notification">De verbinding met de server is verbroken.</string>
     <string name="room_message_placeholder_encrypted">Send an encrypted message…</string>
     <string name="room_message_placeholder_not_encrypted">Send a message (unencrypted)…</string>
