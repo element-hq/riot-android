@@ -13,7 +13,7 @@
     <string name="title_activity_notification_settings">Configuració de notificacions</string>
     <string name="title_activity_member_details">Detalls dels participants</string>
     <string name="title_activity_invite_user">Convida usuaris</string>
-    <string name="title_activity_medias_picker">Select Medias</string>
+    <string name="title_activity_medias_picker">Selecciona suports</string>
 
     <!-- button names -->
     <string name="ok">D\'acord</string>
