@@ -101,7 +101,7 @@
             android:layout_marginRight="16dp"
             android:layout_toLeftOf="@id/filtered_list_actions_list"
             android:layout_toRightOf="@id/filtered_list_avatar"
-            android:singleLine="true"
+            android:maxLines="1"
             android:text="A member name"
             android:textColor="@color/vector_21_black"
             android:textSize="16sp"
@@ -115,7 +115,7 @@
             android:layout_alignLeft="@id/filtered_list_name"
             android:layout_marginRight="16dp"
             android:layout_toLeftOf="@id/filtered_list_actions_list"
-            android:singleLine="true"
+            android:maxLines="1"
             android:text="A member status"
             android:textColor="@color/vector_80_gray"
             android:textSize="14sp" />
