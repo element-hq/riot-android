@@ -72,12 +72,12 @@
     <string name="action_my_rooms">Les meves sales</string>
     <string name="action_add_account">Afegeix un compte</string>
     <string name="action_remove_account">Elimina un compte</string>
-    <string name="action_leave">Sortir de la sala</string>
+    <string name="action_leave">Surt de la sala</string>
     <string name="action_delete">Elimina la sala</string>
     <string name="action_invite">Convida</string>
     <string name="action_disconnect">Desconnecta</string>
     <string name="action_sign_out">Surt</string>
-    <string name="action_sign_out_confirmation">Per motius de seguretat, en sortir s'eliminaran totes les claus d'encriptació d'extrem a extrem, amb això l'històric del xat encriptat quedarà il·legible si es torna a entrar. Seleccioneu l'acció d'exportar per tal de fer una còpia de seguretat del xat abans de sortir.</string>
+    <string name="action_sign_out_confirmation">Per motius de seguretat, en sortir s'eliminaran totes les claus d'encriptació d'extrem a extrem, amb això l'històric del xat encriptat quedarà il·legible si es torna a entrar. Seleccioneu l'acció d'exportar abans de sortir per tal de fer una còpia de seguretat.</string>
     <string name="action_enable_room_notification">Activa les notificacions de la sala</string>
     <string name="action_disable_room_notification">Desactiva les notificacions de la sala</string>
     <string name="action_create_room">Crea…</string>
@@ -100,79 +100,79 @@
     <string name="disable">Desactiva</string>
 
     <!-- dialog titles -->
-    <string name="dialog_title_confirmation">Confirmation</string>
-    <string name="dialog_title_warning">Warning</string>
+    <string name="dialog_title_confirmation">Confirmació</string>
+    <string name="dialog_title_warning">Avís</string>
 
-    <string name="send_bug_report_include_logs">Send logs</string>
-    <string name="send_bug_report_include_crash_logs">Send crash logs</string>
-    <string name="send_bug_report">Bug Report</string>
-    <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
-    <string name="send_bug_report_placeholder">Describe your problem here</string>
-    <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:</string>
-    <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
-    <string name="send_bug_report_sent">The bug report has been successfully sent</string>
-    <string name="send_bug_report_failed">The bug report failed to be sent (%s)</string>
-    <string name="send_bug_report_progress">Progress (%s%%)</string>
+    <string name="send_bug_report_include_logs">Envia registres</string>
+    <string name="send_bug_report_include_crash_logs">Envia registres de fallada</string>
+    <string name="send_bug_report">Informa d'un error</string>
+    <string name="send_bug_report_description">Descriviu l'error. Què heu fet? Què esperàveu que passés? Què ha passat realment?</string>
+    <string name="send_bug_report_placeholder">Descriviu el problema aquí</string>
+    <string name="send_bug_report_logs_description">Els registres d'aquest client s'enviaran amb aquest informe d'error per tal de diagnosticar problemes. Desmarqueu si preferiu enviar només el text:</string>
+    <string name="send_bug_report_alert_message">Sembla que esteu prou frustrat com per estar sacsejant el telèfon. Voleu enviar un informe d'error?</string>
+    <string name="send_bug_report_sent">L'informe d'error s'ha enviat correctament</string>
+    <string name="send_bug_report_failed">No s'ha pogut enviar l'informe d'error (%s)</string>
+    <string name="send_bug_report_progress">En curs (%s%%)</string>
 
-    <string name="send_files_in">Send into</string>
-    <string name="save_files_in">Save into</string>
-    <string name="file_is_saved">%1$s is saved.</string>
-    <string name="read_receipt">Read</string>
+    <string name="send_files_in">Envia a</string>
+    <string name="save_files_in">Desa a</string>
+    <string name="file_is_saved">S'ha desat %1$s.</string>
+    <string name="read_receipt">Llegeix</string>
 
-    <string name="downloads">Downloads</string>
-    <string name="gallery">Gallery</string>
-    <string name="sd_scard">SD card</string>
-    <string name="other">Other</string>
+    <string name="downloads">Baixades</string>
+    <string name="gallery">Galeria</string>
+    <string name="sd_scard">Targeta SD</string>
+    <string name="other">Altres</string>
 
-    <string name="my_rooms">My rooms</string>
-    <string name="create_room">Create Room</string>
-    <string name="join_room">Join Room</string>
-    <string name="create">Create:</string>
-    <string name="sign_in">Sign in</string>
-    <string name="username">Username</string>
-    <string name="create_account">Register</string>
-    <string name="matrix_login">Matrix Login</string>
-    <string name="login">Log in</string>
-    <string name="logout">Log out</string>
-    <string name="hs_url">Home Server URL</string>
-    <string name="identity_url">Identity Server URL</string>
-    <string name="user">user</string>
-    <string name="users">users</string>
-    <string name="search">Search</string>
+    <string name="my_rooms">Les meves sales</string>
+    <string name="create_room">Crea una sala</string>
+    <string name="join_room">Uneix-te a la sala</string>
+    <string name="create">Crea:</string>
+    <string name="sign_in">Entra</string>
+    <string name="username">Nom d'usuari</string>
+    <string name="create_account">Registra'm</string>
+    <string name="matrix_login">Inici de sessió de Matrix</string>
+    <string name="login">Entra</string>
+    <string name="logout">Surt</string>
+    <string name="hs_url">URL del servidor</string>
+    <string name="identity_url">URL de la identitat del servidor</string>
+    <string name="user">usuari</string>
+    <string name="users">usuaris</string>
+    <string name="search">Cerca</string>
 
-    <string name="create_room_set_alias">Set room alias</string>
-    <string name="create_room_alias_hint">room-alias</string>
-    <string name="create_room_set_name">Set room name</string>
-    <string name="create_room_name_hint">My room</string>
-    <string name="join_room_title">Join Room</string>
-    <string name="join_room_hint">(e.g. #foo:example.org)</string>
+    <string name="create_room_set_alias">Estableix l'àlies de la sala</string>
+    <string name="create_room_alias_hint">àlies de la sala</string>
+    <string name="create_room_set_name">Estableix el nom de la sala</string>
+    <string name="create_room_name_hint">La meva sala</string>
+    <string name="join_room_title">Uneix-me a la sala</string>
+    <string name="join_room_hint">(per exemple #foo:exemple.org)</string>
 
-    <string name="membership_invite">Invited</string>
-    <string name="membership_join">Joined</string>
-    <string name="membership_leave">Left</string>
-    <string name="membership_kick">Kicked</string>
-    <string name="membership_ban">Banned</string>
-    <string name="start_chat">Start chat</string>
-    <string name="start_new_chat">Start New Chat</string>
-    <string name="start_voice_call">Start Voice Call</string>
-    <string name="start_video_call">Start Video Call</string>
+    <string name="membership_invite">Ha estat convidat</string>
+    <string name="membership_join">S'ha unit</string>
+    <string name="membership_leave">Ha marxat</string>
+    <string name="membership_kick">S'ha expulsat</string>
+    <string name="membership_ban">S'ha inhabilitat</string>
+    <string name="start_chat">Inicia un xat</string>
+    <string name="start_new_chat">Inicia un xat nou</string>
+    <string name="start_voice_call">Inicia una trucada de veu</string>
+    <string name="start_video_call">Inicia una vídeotrucada</string>
 
     <plurals name="num_members">
-        <item quantity="one">%1$s user</item>
-        <item quantity="other">%1$s users</item>
+        <item quantity="one">%1$s usuari</item>
+        <item quantity="other">%1$s usuaris</item>
     </plurals>
 
-    <string name="invite">Invite</string>
-    <string name="kick">Kick</string>
-    <string name="ban">Ban</string>
-    <string name="unban">Un-ban</string>
+    <string name="invite">Convida</string>
+    <string name="kick">Expulsa</string>
+    <string name="ban">Inhabilita</string>
+    <string name="unban">Habilita</string>
 
-    <string name="message_changes_successful">Changes successfully made</string>
-    <string name="message_unsaved_changes">There are unsaved changes. Leaving will discard them.</string>
+    <string name="message_changes_successful">S'han relitzat els canvis correctament</string>
+    <string name="message_unsaved_changes">Hi ha canvis no desats. Si sortiu es perdran.</string>
 
-    <string name="option_send_files">Send files</string>
-    <string name="option_take_photo_video">Take photo or video</string>
-    <string name="option_attach_video">Attach video</string>
+    <string name="option_send_files">Envia fitxers</string>
+    <string name="option_take_photo_video">Fes una foto o un vídeo</string>
+    <string name="option_attach_video">Adjunta un vídeo</string>
 
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
