@@ -114,13 +114,13 @@
     <string name="auth_invalid_user_name">Nombres sólo pueden ser letras, numeros, puntos, guiones medios, y guiones bajos</string>
     <string name="auth_invalid_password">Contraseña demasiada corta (min 6)</string>
     <string name="auth_missing_password">Contraseña ausente</string>
-    <string name="auth_invalid_email">"Esto no parece ser correo electrónico valido"</string>
-    <string name="auth_invalid_phone">"Esto no parece ser número telefónico valido"</string>
+    <string name="auth_invalid_email">"Esto no parece ser correo electrónico válido"</string>
+    <string name="auth_invalid_phone">"Esto no parece ser número telefónico válido"</string>
     <string name="auth_email_already_defined">Este correo electrónico ya está ocupado.</string>
     <string name="auth_missing_email">Correo electrónico ausente</string>
     <string name="auth_missing_phone">Número telefónico ausente</string>
     <string name="auth_missing_email_or_phone">Correo electrónico o número telefónico ausente</string>
-    <string name="auth_invalid_token">Simbolo no valido</string>
+    <string name="auth_invalid_token">Simbolo no válido</string>
     <string name="auth_password_dont_match">Las contraseñas no coinciden</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="auth_use_server_options">¿Usar opciones de servidora propietarias? (avanzado)</string>
@@ -145,12 +145,12 @@
     <string name="login_error_registration_network_error">Inscripción falló: error con la red</string>
     <string name="login_error_unable_register">Inscripción falló</string>
     <string name="login_error_unable_register_mail_ownership">Inscripción falló : Posesión de correo electrónico falló</string>
-    <string name="login_error_invalid_home_server">Escribe enlace valido</string>
+    <string name="login_error_invalid_home_server">Escribe enlace válido</string>
 
     <string name="login_error_forbidden">Nombre/Contraseña inválido</string>
     <string name="login_error_unknown_token">El character de acesso escogido no fue reconocido.</string>
     <string name="login_error_bad_json">JSON malformado</string>
-    <string name="login_error_not_json">No contenía JSON valido</string>
+    <string name="login_error_not_json">No contenía JSON válido</string>
     <string name="login_error_limit_exceeded">Demasiadas peticiones enviadas</string>
     <string name="login_error_user_in_use">Este nombre ya está reservado para otra persona</string>
     <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
@@ -569,8 +569,8 @@
     <string name="room_settings_addresses_no_local_addresses">Esta sala no tiene direcciones locales</string>
     <string name="room_settings_addresses_add_new_address">Dirección nueva (e.g #foo:matrix.org")</string>
 
-    <string name="room_settings_addresses_invalid_format_dialog_title">Formato de alias no valido</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' no es formato valido de alias</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Formato de alias no válido</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' no es formato válido de alias</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">No habra direccion principal seleccionado. La direccion principal de esta sala por defecto sera seleccionado al azar"</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Avisos de la direccion principal</string>
 
