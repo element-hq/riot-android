@@ -59,12 +59,6 @@
     <string name="send_anyway">Lähetä silti</string>
     <string name="or">tai</string>
 
-    <!-- server urls -->
-    <string name="vector_im_server_url">https://vector.im</string>
-    <string name="matrix_org_server_url">https://matrix.org</string>
-    <string name="default_hs_server_url">https://matrix.org</string>
-    <string name="default_identity_server_url">https://vector.im</string>
-
     <!-- actions -->
     <string name="action_settings">Asetukset</string>
     <string name="action_members">Jäsenet</string>
@@ -719,8 +713,6 @@
     <string name="settings_contacts_app_permission">Osoitekirjakäyttölupa</string>
     <string name="settings_contacts_phonebook_country">Osoitekirjan maa</string>
     <string name="settings_devices_list">Laitteet</string>
-    <string name="devices_divider">devices_devider</string>
-    <string name="cryptography_divider">cryptography_divider</string>
     <string name="devices_details_dialog_title">Laitteen tiedot</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Nimi</string>
@@ -800,10 +792,6 @@
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Vain jäsenet (alkaen tämän asetuksen asettamisesta)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Vain jäsenet (alkaen niiden kutsumisesta)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Vain jäsenet (alkaen niiden liittymisestä)</string>
-    <string name="room_settings_read_history_entry_value_anyone">world_readable</string>
-    <string name="room_settings_read_history_entry_value_members_only_option_time_shared">shared</string>
-    <string name="room_settings_read_history_entry_value_members_only_invited">invited</string>
-    <string name="room_settings_read_history_entry_value_members_only_joined">joined</string> <!-- ??? should these just be left untranslated? -->
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Linkittääksesi huoneeseen sillä pitää olla osoite.</string>
