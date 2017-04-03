@@ -4,7 +4,6 @@
     <string name="resouces_country">MX</string>
 
     <!-- titles -->
-    <string name="app_name">Riot</string>
     <string name="title_activity_home">Mensajes</string>
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_public_rooms">Salas Públicas</string>

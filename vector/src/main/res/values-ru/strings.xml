@@ -4,7 +4,6 @@
     <string name="resouces_country">RU</string>
     
     <!-- titles -->
-    <string name="app_name">Riot</string>
     <string name="title_activity_home">Сообщения</string>
     <string name="title_activity_room">Комнаты</string>
     <string name="title_activity_public_rooms">Публичные Комнаты</string>

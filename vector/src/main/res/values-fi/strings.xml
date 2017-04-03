@@ -4,7 +4,6 @@
     <string name="resouces_country">FI</string>
 
     <!-- titles -->
-    <string name="app_name">Riot</string>
     <string name="title_activity_home">Keskustelut</string>
     <string name="title_activity_room">Huone</string>
     <string name="title_activity_public_rooms">Julkiset huoneet</string>
