@@ -155,12 +155,8 @@
     <string name="login_error_user_in_use">This user name is already used</string>
     <string name="login_error_login_email_not_yet">The email link which has not been clicked yet</string>
 
-    <!-- universal link receiver -->
-
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
-
-    <!-- members list Screen -->
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
@@ -181,23 +177,13 @@
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
-    <!-- invitation members list Screen -->
-
     <!-- room creation dialog Screen -->
     <string name="yesterday">Yesterday</string>
     <string name="today">Today</string>
 
-    <!-- room creation dialog Screen -->
-
     <!-- room info dialog Screen -->
     <string name="room_info_room_name">Room name</string>
     <string name="room_info_room_topic">Room topic</string>
-
-    <!-- contacts list screen -->
-
-    <!-- Notification settings screen -->
-
-    <!-- gcm section -->
 
     <!-- Settings keys -->
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
@@ -315,8 +301,6 @@
     <string name="people_search_known_contacts">KNOWN CONTACTS (%s)</string>
     <string name="people_search_filter_text">Matrix users only</string>
     <string name="people_search_too_many_contacts">Too many contacts, please use the search field</string>
-
-    <!-- Presence status-->
 
     <!--  Chat -->
     <string name="room_menu_search">Search</string>

@@ -155,12 +155,8 @@
     <string name="login_error_user_in_use">Este nombre ya está reservado para otra persona</string>
     <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
 
-    <!-- universal link receiver -->
-
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifración de persona-a-persona nuevas de este dispositivo y enviar la clave pública a la servidora.\nEsto sólo ocurre una vez.\nPerdon por la inconveniencia.</string>
-
-    <!-- members list Screen -->
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
@@ -181,23 +177,14 @@
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
-    <!-- invitation members list Screen -->
-
     <!-- room creation dialog Screen -->
     <string name="yesterday">Ayer</string>
     <string name="today">Hoy</string>
 
-    <!-- room creation dialog Screen -->
 
     <!-- room info dialog Screen -->
     <string name="room_info_room_name">Nombre de la Sala</string>
     <string name="room_info_room_topic">Tema de la Sala</string>
-
-    <!-- contacts list screen -->
-
-    <!-- Notification settings screen -->
-
-    <!-- gcm section -->
 
     <!-- Settings keys -->
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
@@ -315,8 +302,6 @@
     <string name="people_search_known_contacts">CONTACTOS CONOCIDOS (%s)</string>
     <string name="people_search_filter_text">Solmente usuarios de Matrix</string>
     <string name="people_search_too_many_contacts">Demasiados contactos, pror favor use la busqueda</string>
-
-    <!-- Presence status-->
 
     <!--  Chat -->
     <string name="room_menu_search">Buscar</string>

@@ -154,13 +154,9 @@
     <string name="login_error_limit_exceeded">Отправлено слишком много запросов</string>
     <string name="login_error_user_in_use">Логин уже используется</string>
     <string name="login_error_login_email_not_yet">Вы не перешли по высланной в email ссылке</string>
-    
-    <!-- universal link receiver -->
 
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">Вам необходимо перелогиниться, для генерации E2E ключей шифрования для этого устройства и отправки их на сервер.\nЭто однократная операция.\nИзвините за неудобства.</string>
-    
-    <!-- members list Screen -->
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
@@ -180,24 +176,14 @@
     <string name="attachment_cancel_upload">Отменить загрузку?</string>
     <string name="attachment_remaining_time_seconds">%d с</string>
     <string name="attachment_remaining_time_minutes">%1$dм %2$dс</string>
-    
-    <!-- invitation members list Screen -->
 
     <!-- room creation dialog Screen -->
     <string name="yesterday">Вчера</string>
     <string name="today">Сегодня</string>
-    
-    <!-- room creation dialog Screen -->
 
     <!-- room info dialog Screen -->
     <string name="room_info_room_name">Название Комнаты</string>
     <string name="room_info_room_topic">Тема комнаты</string>
-
-    <!-- contacts list screen -->
-
-    <!-- Notification settings screen -->
-
-    <!-- gcm section -->
 
     <!-- Settings keys -->
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
@@ -315,8 +301,6 @@
     <string name="people_search_known_contacts">Известные Контакты (%s)</string>
     <string name="people_search_filter_text">Только зарегистрированные</string>
     <string name="people_search_too_many_contacts">Слишком много контактов, используйте поле поиска</string>
-
-    <!-- Presence status-->
 
     <!--  Chat -->
     <string name="room_menu_search">Поиск</string>
