@@ -59,12 +59,6 @@
     <string name="send_anyway">Enviar de todos modos</string>
     <string name="or">o</string>
 
-    <!-- server urls -->
-    <string name="vector_im_server_url">https://vector.im</string>
-    <string name="matrix_org_server_url">https://matrix.org</string>
-    <string name="default_hs_server_url">https://matrix.org</string>
-    <string name="default_identity_server_url">https://vector.im</string>
-
     <!-- actions -->
     <string name="action_settings">Configuraciones</string>
     <string name="action_members">Lista de miembros</string>
@@ -505,8 +499,6 @@
     <string name="room_participants_leave">Salio</string>
     <string name="room_participants_ban">Prohibido</string>
 
-    <string name="you">Tu</string>
-
     <string name="room_participants_header_admin_tools">HERRAMIENTAS DE ADMINISTRADOR</string>
     <string name="room_participants_header_call">LLAMAR</string>
     <string name="room_participants_header_direct_chats">CONVERSACIONES DIRECTAS</string>
@@ -721,8 +713,6 @@
     <string name="settings_contacts_app_permission">Permiso de contactos</string>
     <string name="settings_contacts_phonebook_country">País de directorio telefónico</string>
     <string name="settings_devices_list">Dispositivos</string>
-    <string name="devices_divider">devices_devider</string>
-    <string name="cryptography_divider">cryptography_divider</string>
     <string name="devices_details_dialog_title">Información del dispositivo</string>
     <string name="devices_details_id_title">Identificación</string>
     <string name="devices_details_name_title">Nombre</string>
@@ -802,10 +792,6 @@
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Solamente miembros (deste seleccionar esta opción)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Solamente miembros (desde su invitación)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Solamente miembros (desde entrar la sala)</string>
-    <string name="room_settings_read_history_entry_value_anyone">world_readable</string>
-    <string name="room_settings_read_history_entry_value_members_only_option_time_shared">compartido</string>
-    <string name="room_settings_read_history_entry_value_members_only_invited">invitado</string>
-    <string name="room_settings_read_history_entry_value_members_only_joined">entró</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Para hacer enlace a una sala debe tener una dirección.</string>
