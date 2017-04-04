@@ -131,6 +131,19 @@ public abstract class AbsListAdapter<T, R extends RecyclerView.ViewHolder> exten
         notifyDataSetChanged();
     }
 
+    /**
+     * Provides the item at the dedicated position
+     * @param position the position
+     * @return the item
+     */
+    public T getItem(int position) {
+        if (position < mItems.size()) {
+            return mItems.get(position);
+        }
+
+        return null;
+    }
+
     /*
      * *********************************************************************************************
      * Abstract methods

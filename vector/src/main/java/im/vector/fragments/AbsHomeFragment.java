@@ -131,6 +131,12 @@ public abstract class AbsHomeFragment extends Fragment {
         }
     }
 
+    /**
+     * A room summary has been updated
+     */
+    public void onSummariesUpdate() {
+    }
+
     /*
      * *********************************************************************************************
      * Abstract methods
