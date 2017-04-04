@@ -23,8 +23,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -32,26 +31,27 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
 
+import java.util.List;
+import java.util.Map;
+
 import im.vector.Matrix;
 import im.vector.R;
-
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
-
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
+import im.vector.util.VectorUtils;
 
-
-public class  VectorSearchPeopleListFragment extends Fragment {
+public class VectorSearchPeopleListFragment extends Fragment {
 
     private static final String ARG_MATRIX_ID = "VectorSearchPeopleListFragment.ARG_MATRIX_ID";
     private static final String ARG_LAYOUT_ID = "VectorSearchPeopleListFragment.ARG_LAYOUT_ID";
 
     // the session
     private MXSession mSession;
-    private ListView mPeopleListView;
+    private ExpandableListView mPeopleListView;
     private VectorParticipantsAdapter mAdapter;
 
     // pending requests
@@ -69,7 +69,9 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.notifyDataSetChanged();
+                        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
+                            ((VectorBaseSearchActivity.IVectorSearchActivity) getActivity()).refreshSearch();
+                        }
                     }
                 });
             }
@@ -77,11 +79,15 @@ public class  VectorSearchPeopleListFragment extends Fragment {
 
         @Override
         public void onContactPresenceUpdate(final Contact contact, final String matrixId) {
+        }
+
+        @Override
+        public void onPIDsUpdate() {
             if (null != getActivity()) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.onContactUpdate(contact, matrixId, mPeopleListView.getFirstVisiblePosition(), mPeopleListView.getLastVisiblePosition());
+                        mAdapter.onPIdsUpdate();
                     }
                 });
             }
@@ -96,13 +102,22 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        int firstIndex = mPeopleListView.getFirstVisiblePosition();
-                        int lastIndex = mPeopleListView.getLastVisiblePosition();
+                        Map<Integer, List<Integer>> visibleChildViews = VectorUtils.getVisibleChildViews(mPeopleListView, mAdapter);
 
-                        for (int index = firstIndex; index <= lastIndex; index++) {
-                            if (TextUtils.equals(user.user_id, mAdapter.getItem(index).mUserId)) {
-                                mAdapter.notifyDataSetChanged();
-                                break;
+                        for (Integer groupPosition : visibleChildViews.keySet()) {
+                            List<Integer> childPositions = visibleChildViews.get(groupPosition);
+
+                            for (Integer childPosition : childPositions) {
+                                Object item = mAdapter.getChild(groupPosition, childPosition);
+
+                                if (item instanceof ParticipantAdapterItem) {
+                                    ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem) item;
+
+                                    if (TextUtils.equals(user.user_id, participantAdapterItem.mUserId)) {
+                                        mAdapter.notifyDataSetChanged();
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -114,6 +129,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
 
     /**
      * Static constructor
+     *
      * @param matrixId the matrix id
      * @return a VectorSearchPeopleListFragment instance
      */
@@ -140,19 +156,30 @@ public class  VectorSearchPeopleListFragment extends Fragment {
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
-        mPeopleListView = (ListView)v.findViewById(R.id.search_people_list);
-        mAdapter = new VectorParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, null);
+        mPeopleListView = (ExpandableListView) v.findViewById(R.id.search_people_list);
+        // the chevron is managed in the header view
+        mPeopleListView.setGroupIndicator(null);
+        mAdapter = new VectorParticipantsAdapter(getActivity(),
+                R.layout.adapter_item_vector_add_participants,
+                R.layout.adapter_item_vector_people_header,
+                mSession, null, false);
         mPeopleListView.setAdapter(mAdapter);
 
-        mPeopleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mPeopleListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ParticipantAdapterItem item = mAdapter.getItem(position);
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Object child = mAdapter.getChild(groupPosition, childPosition);
 
-                Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, item.mUserId);
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                startActivity(startRoomInfoIntent);
+                if (child instanceof ParticipantAdapterItem && ((ParticipantAdapterItem) child).mIsValid) {
+                    ParticipantAdapterItem item = (ParticipantAdapterItem) child;
+
+                    Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+                    startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, item.mUserId);
+                    startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    startActivity(startRoomInfoIntent);
+                }
+
+                return true;
             }
         });
 
@@ -163,12 +190,13 @@ public class  VectorSearchPeopleListFragment extends Fragment {
      * @return true if the local search is ready to start.
      */
     public boolean isReady() {
-        return mAdapter.isKnownMembersInitialized();
+        return ContactsManager.getInstance().didPopulateLocalContacts() && mAdapter.isKnownMembersInitialized();
     }
 
     /**
      * Search a pattern in the room
-     * @param pattern the pattern to search
+     *
+     * @param pattern                the pattern to search
      * @param onSearchResultListener the result listener
      */
     public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
@@ -178,54 +206,45 @@ public class  VectorSearchPeopleListFragment extends Fragment {
             return;
         }
 
-        if (TextUtils.isEmpty(pattern)) {
-            mPeopleListView.setVisibility(View.GONE);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    onSearchResultListener.onSearchSucceed(0);
-                }
-            });
-        } else {
-            mAdapter.setSearchedPattern(pattern, VectorParticipantsAdapter.SEARCH_METHOD_CONTAINS, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
-                @Override
-                public void onSearchEnd(final int count) {
-                    mPeopleListView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mPeopleListView.setVisibility((count == 0) ? View.INVISIBLE : View.VISIBLE);
-                            onSearchResultListener.onSearchSucceed(count);
-                        }
-                    });
-                }
-            });
+        // wait that the local contacts are populated
+        if (!ContactsManager.getInstance().didPopulateLocalContacts()) {
+            mAdapter.reset();
+            return;
         }
+
+        ParticipantAdapterItem firstEntry = null;
+        if (!TextUtils.isEmpty(pattern)) {
+            // test if the pattern is a valid email or matrix id
+            boolean isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
+                    MXSession.isUserId(pattern);
+            firstEntry = new ParticipantAdapterItem(pattern, null, pattern, isValid);
+        }
+
+        mAdapter.setSearchedPattern(pattern, firstEntry, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
+            @Override
+            public void onSearchEnd(final int count) {
+                mPeopleListView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPeopleListView.setVisibility((count == 0 && !TextUtils.isEmpty(pattern)) ? View.INVISIBLE : View.VISIBLE);
+                        onSearchResultListener.onSearchSucceed(count);
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mAdapter.setSearchedPattern(null, null, null);
-
         mSession.getDataHandler().removeListener(mEventsListener);
-        ContactsManager.removeListener(mContactsListener);
+        ContactsManager.getInstance().removeListener(mContactsListener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
-            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
-        } else {
-            if (null != mPendingPattern) {
-                searchPattern(mPendingPattern, mPendingSearchResultListener);
-                mPendingPattern = null;
-                mPendingSearchResultListener = null;
-            }
-        }
-
         mSession.getDataHandler().addListener(mEventsListener);
-        ContactsManager.addListener(mContactsListener);
+        ContactsManager.getInstance().addListener(mContactsListener);
     }
 }

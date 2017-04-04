@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,43 +18,55 @@
 package im.vector.contacts;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.User;
-
-import im.vector.Matrix;
-import im.vector.VectorApp;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+
+import im.vector.Matrix;
+import im.vector.VectorApp;
+import im.vector.util.PhoneNumberUtils;
 
 /**
  * Manage the local contacts
  */
-public class ContactsManager {
+public class ContactsManager implements SharedPreferences.OnSharedPreferenceChangeListener  {
     private static final String LOG_TAG = "ContactsManager";
 
+    /**
+     * Contacts update listener
+     */
     public interface ContactsManagerListener {
         /**
-         * Called when the contacts list have been
+         * Called when the contacts list have been refreshed
          */
         void onRefresh();
+
+        /**
+         * Call when some contact PIDs have been retrieved
+         */
+        void onPIDsUpdate();
 
         /**
          * Called when an user presence has been updated
@@ -61,47 +74,120 @@ public class ContactsManager {
         void onContactPresenceUpdate(Contact contact, String matrixId);
     }
 
-    private static Collection<Contact> mContactsList = null;
-    private static ArrayList<ContactsManagerListener> mListeners = null;
+    // singleton
+    private static ContactsManager mInstance = null;
+
+    // the contacts list snapshot
+    private List<Contact> mContactsList = null;
+
+    // the listeners
+    private ArrayList<ContactsManagerListener> mListeners = null;
+
+    // a contacts population is in progress
+    private boolean mIsPopulating = false;
+
+    // set to true when there is a pending
+    private boolean mIsRetrievingPids = false;
+    private boolean mArePidsRetrieved = false;
+
+    // Trigger another PIDs retrieval when there is a valid data connection.
+    private boolean mRetryPIDsRetrievalOnConnect = false;
+
+    // the application context
+    private Context mContext;
+
+    /**
+     * Network events listener
+     */
+    private final IMXNetworkEventListener mNetworkConnectivityReceiver = new IMXNetworkEventListener() {
+        @Override
+        public void onNetworkConnectionUpdate(boolean isConnected) {
+            if (isConnected && mRetryPIDsRetrievalOnConnect) {
+                retrievePids();
+            }
+        }
+    };
 
     // retriever listener
-    private static final PIDsRetriever.PIDsRetrieverListener mPIDsRetrieverListener = new PIDsRetriever.PIDsRetrieverListener() {
+    private final PIDsRetriever.PIDsRetrieverListener mPIDsRetrieverListener = new PIDsRetriever.PIDsRetrieverListener() {
         /**
          * Warn the listeners about a contact information update.
          * @param contact the contact
          * @param mxid the mxid
          */
-        private void onContactPresenceUpdate(Contact contact, Contact.MXID mxid ) {
-            if(null != mListeners) {
+        private void onContactPresenceUpdate(Contact contact, Contact.MXID mxid) {
+            if (null != mListeners) {
                 for (ContactsManagerListener listener : mListeners) {
                     try {
                         listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getMessage());
+                    }
+                }
+            }
+        }
+
+        /**
+         * Warn that some PIDs have been retrieved from the contacts data.
+         */
+        private void onPIDsUpdate() {
+            if (null != mListeners) {
+                for (ContactsManagerListener listener : mListeners) {
+                    try {
+                        listener.onPIDsUpdate();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "onPIDsUpdate failed " + e.getMessage());
                     }
                 }
             }
         }
 
         @Override
-        public void onPIDsRetrieved(final String accountId, final Contact contact, final boolean has3PIDs) {
+        public void onFailure(String accountId) {
+            // ignore the current response because the request has been cancelled
+            if (!mIsRetrievingPids) {
+                Log.d(LOG_TAG, "## Retrieve a PIDS success whereas it is not expected");
+                return;
+            }
+
+            mIsRetrievingPids = false;
+            mArePidsRetrieved = false;
+            mRetryPIDsRetrievalOnConnect = true;
+            Log.d(LOG_TAG, "## fail to retrieve the PIDs");
+
+            // warn that the current request failed.
+            // Thus, if the listeners display a spinner (or so), it should be hidden.
+            onPIDsUpdate();
+        }
+
+        @Override
+        public void onSuccess(final String accountId) {
+            // ignore the current response because the request has been cancelled
+            if (!mIsRetrievingPids) {
+                Log.d(LOG_TAG, "## Retrieve a PIDS success whereas it is not expected");
+                return;
+            }
+
+            Log.d(LOG_TAG, "## Retrieve IPDs successfully");
+
+            mRetryPIDsRetrievalOnConnect = false;
+            mIsRetrievingPids = false;
+            mArePidsRetrieved = true;
+
+            // warn that the contacts list have been updated
+            onPIDsUpdate();
+
             // privacy
             // Log.d(LOG_TAG, "onPIDsRetrieved : the contact " + contact + " retrieves its 3PIds.");
 
-            if (has3PIDs) {
-                MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
+            MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
 
-                if (null != session) {
-                    Set<String> medias = contact.getMatrixIdMedias();
+            if ((null != session) && (null != mContactsList)) {
+                for (final Contact contact : mContactsList) {
+                    Set<String> medias = contact.getMatrixIdMediums();
 
-                    // privacy
-                    //Log.d(LOG_TAG, "medias " + medias);
-
-                    for(String media : medias) {
+                    for (String media : medias) {
                         final Contact.MXID mxid = contact.getMXID(media);
-
-                        onContactPresenceUpdate(contact, mxid);
-
                         mxid.mUser = session.getDataHandler().getUser(mxid.mMatrixId);
 
                         // if the user is not known, get its presence
@@ -109,33 +195,28 @@ public class ContactsManager {
                             session.getPresenceApiClient().getPresence(mxid.mMatrixId, new ApiCallback<User>() {
                                 @Override
                                 public void onSuccess(User user) {
-                                    Log.d(LOG_TAG, "retrieve the presence of " + mxid.mMatrixId + " :"  + user);
+                                    Log.d(LOG_TAG, "retrieve the presence of " + mxid.mMatrixId + " :" + user);
                                     mxid.mUser = user;
                                     onContactPresenceUpdate(contact, mxid);
                                 }
 
-                                /**
-                                 * Error method
-                                 * @param errorMessage the error description
-                                 */
                                 private void onError(String errorMessage) {
-                                    Log.e(LOG_TAG, "cannot retrieve the presence of " + mxid.mMatrixId + " :"  + errorMessage);
-                                    onContactPresenceUpdate(contact, mxid);
+                                    Log.e(LOG_TAG, "cannot retrieve the presence of " + mxid.mMatrixId + " :" + errorMessage);
                                 }
 
                                 @Override
                                 public void onNetworkError(Exception e) {
-                                    onError(e.getLocalizedMessage());
+                                    onError(e.getMessage());
                                 }
 
                                 @Override
                                 public void onMatrixError(MatrixError e) {
-                                    onError(e.getLocalizedMessage());
+                                    onError(e.getMessage());
                                 }
 
                                 @Override
                                 public void onUnexpectedError(Exception e) {
-                                    onError(e.getLocalizedMessage());
+                                    onError(e.getMessage());
                                 }
                             });
                         }
@@ -146,37 +227,126 @@ public class ContactsManager {
     };
 
     /**
-     * Refresh the local contacts list snapshot.
-     * @param context the context.
-     * @return a local contacts list
+     * @return the static instance
      */
-    public static Collection<Contact> getLocalContactsSnapshot(Context context) {
-        if (null == mContactsList) {
-            refreshLocalContactsSnapshot(context);
+    public static ContactsManager getInstance() {
+        if (null == mInstance) {
+            mInstance = new ContactsManager();
         }
+
+        return mInstance;
+    }
+
+    /**
+     * Constructor
+     */
+    public ContactsManager() {
+        mContext = VectorApp.getInstance().getApplicationContext();
+        PreferenceManager.getDefaultSharedPreferences(mContext).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    /**
+     * Provides an unique identifier of the contacts snapshot
+     *
+     * @return an unique identifier
+     */
+    public int getLocalContactsSnapshotSession() {
+        if (null != mContactsList) {
+            return mContactsList.hashCode();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Refresh the local contacts list snapshot.
+     *
+     * @return a local contacts list snapshot.
+     */
+    public Collection<Contact> getLocalContactsSnapshot() {
         return mContactsList;
+    }
+
+    /**
+     * Tell if the contacts snapshot list is ready
+     * @return true if the contacts snapshot list is ready
+     */
+    public boolean didPopulateLocalContacts() {
+        boolean res;
+        boolean isPopulating;
+
+        synchronized (LOG_TAG) {
+            res = (null != mContactsList);
+            isPopulating = mIsPopulating;
+        }
+
+        if (!res && !isPopulating) {
+            refreshLocalContactsSnapshot();
+        }
+
+        return res;
     }
 
     /**
      * reset
      */
-    public static void reset() {
+    public void reset() {
         mListeners = null;
-        mContactsList = null;
+        clearSnapshot();
     }
 
     /**
      * Clear the current snapshot
      */
-    public static void clearSnapshot() {
-        mContactsList = null;
+    public void clearSnapshot() {
+        synchronized (LOG_TAG) {
+            mContactsList = null;
+        }
+
+        MXSession defaultSession = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
+
+        if (null != defaultSession) {
+            defaultSession.getNetworkConnectivityReceiver().removeEventListener(mNetworkConnectivityReceiver);
+        }
+    }
+
+    /**
+     * Update the contacts with the new country codes.
+     */
+    private void onCountryCodeUpdate() {
+        synchronized (LOG_TAG) {
+            if (null != mContactsList) {
+                for(Contact contact : mContactsList) {
+                    contact.onCountryCodeUpdate();
+                }
+            }
+        }
+
+        // the PIDs will be refreshed the next time
+        // anyone will require them.
+        mIsRetrievingPids = false;
+        mArePidsRetrieved = false;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (TextUtils.equals(key, PhoneNumberUtils.COUNTRY_CODE_PREF_KEY)) {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    onCountryCodeUpdate();
+                }
+            });
+        }
     }
 
     /**
      * Add a listener.
+     *
      * @param listener the listener to add.
      */
-    public static void addListener(ContactsManagerListener listener) {
+    public void addListener(ContactsManagerListener listener) {
         if (null == mListeners) {
             mListeners = new ArrayList<>();
         }
@@ -186,160 +356,252 @@ public class ContactsManager {
 
     /**
      * Remove a listener.
+     *
      * @param listener the listener to remove.
      */
-    public static void removeListener(ContactsManagerListener listener) {
+    public void removeListener(ContactsManagerListener listener) {
         if (null != mListeners) {
             mListeners.remove(listener);
         }
     }
 
     /**
-     * List the local contacts.
-     * @param context the context.
+     * Tells if the contacts PIDs have been retrieved
+     *
+     * @return true if the PIDs have been retrieved.
      */
-    public static void refreshLocalContactsSnapshot (Context context) {
-        ContentResolver cr = context.getContentResolver();
-        HashMap<String, Contact> dict = new HashMap<>();
+    public boolean arePIDsRetrieved() {
+        return mArePidsRetrieved;
+    }
 
-        // test if the user allows to access to the contact
-        if (isContactBookAccessAllowed(context)) {
-            // get the names
-            Cursor namesCur = null;
+    /**
+     * Retrieve the contacts PIDs
+     */
+    public void retrievePids() {
+        Handler handler = new Handler(Looper.getMainLooper());
 
-            try {
-                namesCur = cr.query(ContactsContract.Data.CONTENT_URI,
-                        new String[]{ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-                                ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID,
-                                ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
-                        },
-                        ContactsContract.Data.MIMETYPE + " = ?",
-                        new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE}, null);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query Msg=" + e.getMessage());
-            }
-
-            if (namesCur != null) {
-                try {
-                    while (namesCur.moveToNext()) {
-                        String displayName = namesCur.getString(namesCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
-                        String contactId = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID));
-                        String thumbnailUri = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
-
-                        if (null != contactId) {
-                            Contact contact = dict.get(contactId);
-
-                            if (null == contact) {
-                                contact = new Contact(contactId);
-                                dict.put(contactId, contact);
-                            }
-
-                            if (null != displayName) {
-                                contact.setDisplayName(displayName);
-                            }
-
-                            if (null != thumbnailUri) {
-                                contact.setThumbnailUri(thumbnailUri);
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query2 Msg=" + e.getMessage());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mIsRetrievingPids) {
+                    Log.d(LOG_TAG, "## retrievePids() : already in progress");
+                } else if (mArePidsRetrieved) {
+                    Log.d(LOG_TAG, "## retrievePids() : already done");
+                } else {
+                    Log.d(LOG_TAG, "## retrievePids() : Start search");
+                    mIsRetrievingPids = true;
+                    PIDsRetriever.getInstance().retrieveMatrixIds(VectorApp.getInstance(), mContactsList, false);
                 }
-
-                namesCur.close();
             }
+        });
+    }
 
-            // get the phonenumbers
-            Cursor phonesCur = null;
+    /**
+     * List the local contacts.
+     */
+    public void refreshLocalContactsSnapshot() {
+        boolean isPopulating;
 
-            try {
-                phonesCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        new String[]{ContactsContract.CommonDataKinds.Phone.DATA, // actual number
-                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID
-                        },
-                        null, null, null);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query Msg=" + e.getMessage());
-            }
-
-            if (null != phonesCur) {
-                try {
-                    while (phonesCur.moveToNext()) {
-                        String phone = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
-
-                        if (!TextUtils.isEmpty(phone)) {
-                            String contactId = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-
-                            if (null != contactId) {
-                                Contact contact = dict.get(contactId);
-                                if (null == contact) {
-                                    contact = new Contact(contactId);
-                                    dict.put(contactId, contact);
-                                }
-
-                                contact.addPhonenumber(phone);
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query2 Msg=" + e.getMessage());
-                }
-
-                phonesCur.close();
-            }
-
-            // get the emails
-            Cursor emailsCur = null;
-
-            try {
-                emailsCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                        new String[]{ContactsContract.CommonDataKinds.Email.DATA, // actual email
-                                ContactsContract.CommonDataKinds.Email.CONTACT_ID},
-                        null, null, null);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query Msg=" + e.getMessage());
-            }
-
-            if (emailsCur != null) {
-                try {
-                    while (emailsCur.moveToNext()) {
-                        String email = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                        if (!TextUtils.isEmpty(email)) {
-                            String contactId = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
-
-                            if (null != contactId) {
-                                Contact contact = dict.get(contactId);
-                                if (null == contact) {
-                                    contact = new Contact(contactId);
-                                    dict.put(contactId, contact);
-                                }
-
-                                contact.addEmailAdress(email);
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query2 Msg=" + e.getMessage());
-                }
-
-                emailsCur.close();
-            }
+        synchronized (LOG_TAG) {
+            isPopulating = mIsPopulating;
         }
 
-        PIDsRetriever.getIntance().setPIDsRetrieverListener(mPIDsRetrieverListener);
+        // test if there is a population is in progress
+        if (isPopulating) {
+            return;
+        }
 
-        mContactsList = dict.values();
+        synchronized (LOG_TAG) {
+            mIsPopulating = true;
+        }
 
-        if (null != mListeners) {
-            for(ContactsManagerListener listener : mListeners) {
-                try {
-                    listener.onRefresh();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getLocalizedMessage());
+        // refresh the contacts list in background
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                long t0 = System.currentTimeMillis();
+                ContentResolver cr = mContext.getContentResolver();
+                HashMap<String, Contact> dict = new HashMap<>();
+
+                // test if the user allows to access to the contact
+                if (isContactBookAccessAllowed()) {
+                    // get the names
+                    Cursor namesCur = null;
+
+                    try {
+                        namesCur = cr.query(ContactsContract.Data.CONTENT_URI,
+                                new String[]{ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+                                        ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID,
+                                        ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
+                                },
+                                ContactsContract.Data.MIMETYPE + " = ?",
+                                new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE}, null);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query Msg=" + e.getMessage());
+                    }
+
+                    if (namesCur != null) {
+                        try {
+                            while (namesCur.moveToNext()) {
+                                String displayName = namesCur.getString(namesCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
+                                String contactId = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID));
+                                String thumbnailUri = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
+
+                                if (null != contactId) {
+                                    Contact contact = dict.get(contactId);
+
+                                    if (null == contact) {
+                                        contact = new Contact(contactId);
+                                        dict.put(contactId, contact);
+                                    }
+
+                                    if (null != displayName) {
+                                        contact.setDisplayName(displayName);
+                                    }
+
+                                    if (null != thumbnailUri) {
+                                        contact.setThumbnailUri(thumbnailUri);
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query2 Msg=" + e.getMessage());
+                        }
+
+                        namesCur.close();
+                    }
+
+                    // get the phonenumbers
+                    Cursor phonesCur = null;
+
+                    try {
+                        phonesCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER,
+                                        ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER,
+                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+                                },
+                                null, null, null);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query Msg=" + e.getMessage());
+                    }
+
+                    if (null != phonesCur) {
+                        try {
+                            while (phonesCur.moveToNext()) {
+                                final String pn = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                final String pnE164 = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
+
+                                if (!TextUtils.isEmpty(pn)) {
+                                    String contactId = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+
+                                    if (null != contactId) {
+                                        Contact contact = dict.get(contactId);
+                                        if (null == contact) {
+                                            contact = new Contact(contactId);
+                                            dict.put(contactId, contact);
+                                        }
+
+                                        contact.addPhoneNumber(pn, pnE164);
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query2 Msg=" + e.getMessage());
+                        }
+
+                        phonesCur.close();
+                    }
+
+                    // get the emails
+                    Cursor emailsCur = null;
+
+                    try {
+                        emailsCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                                new String[]{ContactsContract.CommonDataKinds.Email.DATA, // actual email
+                                        ContactsContract.CommonDataKinds.Email.CONTACT_ID},
+                                null, null, null);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query Msg=" + e.getMessage());
+                    }
+
+                    if (emailsCur != null) {
+                        try {
+                            while (emailsCur.moveToNext()) {
+                                String email = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                                if (!TextUtils.isEmpty(email)) {
+                                    String contactId = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
+
+                                    if (null != contactId) {
+                                        Contact contact = dict.get(contactId);
+                                        if (null == contact) {
+                                            contact = new Contact(contactId);
+                                            dict.put(contactId, contact);
+                                        }
+
+                                        contact.addEmailAdress(email);
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query2 Msg=" + e.getMessage());
+                        }
+
+                        emailsCur.close();
+                    }
+                }
+
+                synchronized (LOG_TAG) {
+                    mContactsList = new ArrayList<>(dict.values());
+                    mIsPopulating = false;
+                }
+
+                if (0 != mContactsList.size()) {
+                    long delta = System.currentTimeMillis() - t0;
+
+                    VectorApp.sendGAStats(VectorApp.getInstance(),
+                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                            VectorApp.GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION,
+                            mContactsList.size() + " contacts in " + delta + " ms",
+                            delta
+                    );
+                }
+
+                // define the PIDs listener
+                PIDsRetriever.getInstance().setPIDsRetrieverListener(mPIDsRetrieverListener);
+
+                // trigger a PIDs retrieval
+                // add a network listener to ensure that the PIDS will be retreived asap a valid network will be found.
+                MXSession defaultSession = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
+                if (null != defaultSession) {
+                    defaultSession.getNetworkConnectivityReceiver().addEventListener(mNetworkConnectivityReceiver);
+
+                    // reset the PIDs retriever statuses
+                    mIsRetrievingPids = false;
+                    mArePidsRetrieved = false;
+
+                    // the PIDs retrieval is done on demand.
+                }
+
+                if (null != mListeners) {
+                    Handler handler = new Handler(Looper.getMainLooper());
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (ContactsManagerListener listener : mListeners) {
+                                try {
+                                    listener.onRefresh();
+                                } catch (Exception e) {
+                                    Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getMessage());
+                                }
+                            }
+                        }
+                    });
                 }
             }
-        }
+        });
+
+        t.setPriority(Thread.MIN_PRIORITY);
+        t.start();
     }
 
     //================================================================================
@@ -350,42 +612,41 @@ public class ContactsManager {
     /**
      * Tells if the contacts book access has been requested.
      * For android > M devices, it only tells if the permission has been granted.
-     * @param activity the calling activity
      * @return true it was requested once
      */
-    public static boolean isContactBookAccessRequested(Activity activity) {
+    public boolean isContactBookAccessRequested() {
         if (Build.VERSION.SDK_INT >= 23) {
-            return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.READ_CONTACTS));
+            return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS));
         } else {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
             return preferences.contains(CONTACTS_BOOK_ACCESS_KEY);
         }
     }
 
     /**
      * Update the contacts book access.
-     * @param activity the calling activity.
      * @param isAllowed true to allowed the contacts book access.
      */
-    public static void setIsContactBookAccessAllowed(Activity activity, boolean isAllowed) {
+    public void setIsContactBookAccessAllowed(boolean isAllowed) {
         if (Build.VERSION.SDK_INT < 23) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed);
             editor.commit();
         }
+        mIsRetrievingPids = false;
+        mArePidsRetrieved = false;
     }
 
     /**
      * Tells if the contacts book access has been granted
-     * @param context the context
      * @return true if it was granted.
      */
-    private static boolean isContactBookAccessAllowed(Context context) {
+    public boolean isContactBookAccessAllowed() {
         if (Build.VERSION.SDK_INT >= 23) {
-            return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS));
+            return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS));
         } else {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
             return preferences.getBoolean(CONTACTS_BOOK_ACCESS_KEY, false);
         }
     }

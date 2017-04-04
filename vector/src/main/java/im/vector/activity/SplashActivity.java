@@ -1,6 +1,7 @@
 /* 
  * Copyright 2014 OpenMarket Ltd
- * 
+ * Copyright 2017 Vector Creations Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,7 +18,7 @@ package im.vector.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.IMXEventListener;
@@ -25,6 +26,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -32,6 +34,8 @@ import im.vector.services.EventStreamService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * SplashActivity displays a splash while loading and inittializing the client.
@@ -44,13 +48,11 @@ public class SplashActivity extends MXCActionBarActivity {
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
 
     private Collection<MXSession> mSessions;
-    private GcmRegistrationManager mGCMRegistrationManager;
-
-    private boolean mInitialSyncComplete = false;
-    private boolean mPusherRegistrationComplete = false;
 
     private HashMap<MXSession, IMXEventListener> mListeners;
     private HashMap<MXSession, IMXEventListener> mDoneListeners;
+
+    private final long mLaunchTime = System.currentTimeMillis();
 
     /**
      * @return true if a store is corrupted.
@@ -70,46 +72,50 @@ public class SplashActivity extends MXCActionBarActivity {
     /**
      * Close the splash screen if the stores are fully loaded.
      */
-    private void finishIfReady() {
-        Log.e(LOG_TAG, "finishIfReady " + mInitialSyncComplete + " " + mPusherRegistrationComplete);
+    private void onFinish() {
+        Log.e(LOG_TAG, "##onFinish() : start VectorHomeActivity");
 
-        if (mInitialSyncComplete && mPusherRegistrationComplete) {
-            Log.e(LOG_TAG, "finishIfRead start VectorHomeActivity");
+        if (!hasCorruptedStore()) {
+            VectorApp.sendGAStats(getApplicationContext(),
+                    VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                    VectorApp.GOOGLE_ANALYTICS_STARTUP_LAUNCH_SCREEN_ACTION,
+                    null,
+                    System.currentTimeMillis() - mLaunchTime
+            );
 
-            if (!hasCorruptedStore()) {
-                // Go to the home page
-                Intent intent = new Intent(SplashActivity.this, VectorHomeActivity.class);
+            // Go to the home page
+            Intent intent = new Intent(SplashActivity.this, VectorHomeActivity.class);
 
-                Bundle receivedBundle = getIntent().getExtras();
+            Bundle receivedBundle = getIntent().getExtras();
 
-                if (null != receivedBundle) {
-                    intent.putExtras(receivedBundle);
-                }
-
-                // display a spinner while managing the universal link
-                if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-                    intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
-                }
-
-                // launch from a shared files menu
-                if (getIntent().hasExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS)) {
-                    intent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS, getIntent().getParcelableExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS));
-                }
-
-                if (getIntent().hasExtra(EXTRA_ROOM_ID) && getIntent().hasExtra(EXTRA_MATRIX_ID)) {
-                    HashMap<String, Object> params = new HashMap<>();
-
-                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, getIntent().getStringExtra(EXTRA_MATRIX_ID));
-                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, getIntent().getStringExtra(EXTRA_ROOM_ID));
-                    intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
-                }
-
-                startActivity(intent);
-                SplashActivity.this.finish();
-            } else {
-                CommonActivityUtils.logout(this);
+            if (null != receivedBundle) {
+                intent.putExtras(receivedBundle);
             }
+
+            // display a spinner while managing the universal link
+            if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
+            }
+
+            // launch from a shared files menu
+            if (getIntent().hasExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS)) {
+                intent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS, getIntent().getParcelableExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS));
+            }
+
+            if (getIntent().hasExtra(EXTRA_ROOM_ID) && getIntent().hasExtra(EXTRA_MATRIX_ID)) {
+                HashMap<String, Object> params = new HashMap<>();
+
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, getIntent().getStringExtra(EXTRA_MATRIX_ID));
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, getIntent().getStringExtra(EXTRA_ROOM_ID));
+                intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+            }
+
+            startActivity(intent);
+            SplashActivity.this.finish();
+        } else {
+            CommonActivityUtils.logout(this);
         }
+
     }
 
     @Override
@@ -133,32 +139,100 @@ public class SplashActivity extends MXCActionBarActivity {
 
         ArrayList<String> matrixIds = new ArrayList<>();
 
-        for(MXSession session : mSessions) {
+        for(final MXSession session : mSessions) {
             final MXSession fSession = session;
             session.getDataHandler().getStore().open();
 
             final IMXEventListener eventListener = new MXEventListener() {
+                private void onReady() {
+                    boolean isAlreadyDone;
+
+                    synchronized (LOG_TAG) {
+                        isAlreadyDone = mDoneListeners.containsKey(fSession);
+                    }
+
+                    if (!isAlreadyDone) {
+                        synchronized (LOG_TAG) {
+                            boolean noMoreListener;
+
+                            Log.e(LOG_TAG, "Session " + fSession.getCredentials().userId + " is initialized");
+
+                            mDoneListeners.put(fSession, mListeners.get(fSession));
+                            // do not remove the listeners here
+                            // it crashes the application because of the upper loop
+                            //fSession.getDataHandler().removeListener(mListeners.get(fSession));
+                            // remove from the pending list
+
+                            mListeners.remove(fSession);
+                            noMoreListener = (mListeners.size() == 0);
+
+                            try {
+                                int nbrRooms = fSession.getDataHandler().getStore().getRooms().size();
+
+                                VectorApp.sendGAStats(getApplicationContext(),
+                                        VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                        VectorApp.GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION,
+                                        nbrRooms + " rooms in " + (System.currentTimeMillis() - mLaunchTime) + " ms",
+                                        System.currentTimeMillis() - mLaunchTime
+                                );
+
+                                VectorApp.sendGAStats(getApplicationContext(),
+                                        VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                        VectorApp.GOOGLE_ANALYTICS_STATS_ROOMS_ACTION,
+                                        null,
+                                        nbrRooms
+                                );
+
+                                long preloadTime = fSession.getDataHandler().getStore().getPreloadTime();
+                                String label = nbrRooms + " rooms in " + preloadTime + " ms";
+
+                                if (0 != nbrRooms) {
+                                    label += "(" + preloadTime / nbrRooms + " ms per room)";
+                                }
+
+                                VectorApp.sendGAStats(getApplicationContext(),
+                                        VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                        VectorApp.GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION,
+                                        label,
+                                        fSession.getDataHandler().getStore().getPreloadTime()
+                                );
+
+                                Map<String, Long> storeStats = session.getDataHandler().getStore().getStats();
+
+                                if (null != storeStats) {
+                                    for (String key : storeStats.keySet()) {
+                                        VectorApp.sendGAStats(getApplicationContext(),
+                                                VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                                key,
+                                                null,
+                                                storeStats.get(key)
+                                        );
+                                    }
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "Fail to send stats " + e.getMessage());
+                            }
+
+                            if (noMoreListener) {
+                                VectorApp.addSyncingSession(session);
+                                onFinish();
+                            }
+                        }
+                    }
+                }
+
+                // should be called if the application was already initialized
                 @Override
-                public void onInitialSyncComplete() {
-                    super.onInitialSyncComplete();
-                    boolean noMoreListener;
+                public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
+                    super.onLiveEventsChunkProcessed(fromToken, toToken);
+                    onReady();
+                }
 
-                    Log.e(LOG_TAG, "Session " + fSession.getCredentials().userId + " is initialized");
-
-                    synchronized(LOG_TAG) {
-                        mDoneListeners.put(fSession, mListeners.get(fSession));
-                        // do not remove the listeners here
-                        // it crashes the application because of the upper loop
-                        //fSession.getDataHandler().removeListener(mListeners.get(fSession));
-                        // remove from the pendings list
-
-                        mListeners.remove(fSession);
-                        noMoreListener = mInitialSyncComplete = (mListeners.size() == 0);
-                    }
-
-                    if (noMoreListener) {
-                        finishIfReady();
-                    }
+                // first application launched
+                @Override
+                public void onInitialSyncComplete(String toToken) {
+                    super.onInitialSyncComplete(toToken);
+                    onReady();
                 }
             };
 
@@ -196,47 +270,19 @@ public class SplashActivity extends MXCActionBarActivity {
             EventStreamService.getInstance().startAccounts(matrixIds);
         }
 
-        mGCMRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
-        mPusherRegistrationComplete = mGCMRegistrationManager.isGCMRegistred();
+        // trigger the GCM registration if required
+        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
 
-        if (!mPusherRegistrationComplete) {
-            mGCMRegistrationManager.registerToGCM(new GcmRegistrationManager.GCMRegistrationListener() {
-                /**
-                 * Common behaviour.
-                 */
-                private void onDone() {
-                    SplashActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CommonActivityUtils.onGcmUpdate(SplashActivity.this);
-                        }
-                    });
-
-                    mPusherRegistrationComplete = true;
-                    finishIfReady();
-                }
-
-                @Override
-                public void onGCMRegistered() {
-                    Log.d(LOG_TAG, "The GCM registration is done");
-                    onDone();
-                }
-
-                @Override
-                public void onGCMRegistrationFailed() {
-                    Log.d(LOG_TAG, "The GCM registration failed");
-                    onDone();
-                }
-            });
-        } else if (mGCMRegistrationManager.useGCM()) {
-            mGCMRegistrationManager.forceSessionsRegistration(null);
+        if (!gcmRegistrationManager.isGCMRegistred()) {
+            gcmRegistrationManager.checkRegistrations();
+        } else {
+            gcmRegistrationManager.forceSessionsRegistration(null);
         }
 
         boolean noUpdate;
 
         synchronized(LOG_TAG) {
-            mInitialSyncComplete = (mListeners.size() == 0);
-            noUpdate = mInitialSyncComplete && mPusherRegistrationComplete;
+            noUpdate = (mListeners.size() == 0);
         }
 
         // nothing to do ?
@@ -244,7 +290,7 @@ public class SplashActivity extends MXCActionBarActivity {
         if (noUpdate) {
             // do not launch an activity if there was nothing new.
             Log.e(LOG_TAG, "nothing to do");
-            finishIfReady();
+            onFinish();
         }
     }
 

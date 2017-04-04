@@ -10,8 +10,8 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item android:id="@+id/action_logout"
-          android:title="@string/action_logout"
+    <item android:id="@+id/action_sign_out"
+          android:title="@string/action_sign_out"
           android:orderInCategory="100"
           app:showAsAction="never" />
 </menu>

@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ package im.vector.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,12 +53,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
     // the session
     private MXSession mSession;
-
-    // current public Rooms List
-    private List<PublicRoom> mPublicRoomsList;
-
-    // true to avoid trigger several public rooms request
-    private boolean mIsLoadingPublicRooms;
 
     /**
      * Static constructor
@@ -142,13 +138,13 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                 }
                 // display the public rooms list
                 else if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
-                    List<PublicRoom> matchedPublicRooms = mAdapter.getMatchedPublicRooms();
-
-                    if ((null != matchedPublicRooms) && (matchedPublicRooms.size() > 0)) {
+                    if (TextUtils.isEmpty(mAdapter.getSearchedPattern()) || (mAdapter.getMatchedPublicRoomsCount() > 0)) {
                         Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
                         intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        // cannot send the public rooms list in parameters because it might trigger a stackoverflow
-                        VectorPublicRoomsActivity.mPublicRooms = new ArrayList<>(matchedPublicRooms);
+
+                        if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
+                            intent.putExtra(VectorPublicRoomsActivity.EXTRA_SEARCHED_PATTERN, mAdapter.getSearchedPattern());
+                        }
                         getActivity().startActivity(intent);
                     }
                 } else {
@@ -245,8 +241,36 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             return;
         }
 
-        mAdapter.setPublicRoomsList(PublicRoomsManager.getPublicRooms());
         mAdapter.setSearchPattern(pattern);
+
+        if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
+            PublicRoomsManager.startPublicRoomsSearch(null, mAdapter.getSearchedPattern(), new ApiCallback<List<PublicRoom>>() {
+
+                private void onDone(int size) {
+                    mAdapter.setMatchedPublicRoomsCount(size);
+                }
+
+                @Override
+                public void onSuccess(List<PublicRoom> info) {
+                    onDone(info.size());
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone(0);
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone(0);
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone(0);
+                }
+            });
+        }
 
         mRecentsListView.post(new Runnable() {
             @Override
@@ -255,43 +279,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                 onSearchResultListener.onSearchSucceed(1);
             }
         });
-
-        // the public rooms have not yet been retrieved
-        if ((null == mPublicRoomsList) && (!mIsLoadingPublicRooms)) {
-
-            PublicRoomsManager.refresh(new PublicRoomsManager.PublicRoomsManagerListener() {
-                @Override
-                public void onRefresh() {
-                    if (null != getActivity()) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mIsLoadingPublicRooms = false;
-
-                                mPublicRoomsList = PublicRoomsManager.getPublicRooms();
-                                mAdapter.setPublicRoomsList(mPublicRoomsList);
-                                mAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPublicRoomsList = null;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
-            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
-        }
     }
 
     protected boolean isDragAndDropSupported() {

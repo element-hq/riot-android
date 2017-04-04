@@ -15,34 +15,40 @@
  */
 
 package im.vector;
+
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.TextUtils;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.util.Log;
 
-import im.vector.activity.VectorCallViewActivity;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorCallViewActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
-import im.vector.util.LogUtilities;
 import im.vector.util.RageShake;
 import im.vector.util.VectorCallSoundManager;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import im.vector.util.VectorMarkdownParser;
 
 /**
  * The main application injection point
@@ -64,7 +70,7 @@ public class VectorApp extends Application {
      * Delay to detect if the application is in background.
      * If there is no active activity during the elapsed time, it means that the application is in background.
      */
-    private static final long MAX_ACTIVITY_TRANSITION_TIME_MS = 2000;
+    private static final long MAX_ACTIVITY_TRANSITION_TIME_MS = 4000;
 
     /**
      * The current active activity
@@ -96,11 +102,21 @@ public class VectorApp extends Application {
     private final ArrayList<String> mCreatedActivities = new ArrayList<>();
 
     /**
+     * Markdown parser
+     */
+    public VectorMarkdownParser mMarkdownParser;
+
+    /**
      * @return the current instance
      */
     public static VectorApp getInstance() {
         return instance;
     }
+
+    /**
+     * The directory in which the logs are stored
+     */
+    public static File mLogsDirectoryFile = null;
 
     @Override
     public void onCreate() {
@@ -128,43 +144,65 @@ public class VectorApp extends Application {
             SDK_VERSION_STRING = "";
         }
 
-        LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath() + "/logs"));
-        LogUtilities.storeLogcat();
+        mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
+
+        org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
+        org.matrix.androidsdk.util.Log.init("RiotLog");
+
+        // log the application version to trace update
+        // useful to track backward compatibility issues
+
+        Log.d(LOG_TAG, "----------------------------------------------------------------");
+        Log.d(LOG_TAG, "----------------------------------------------------------------");
+        Log.d(LOG_TAG, " Application version: " + VECTOR_VERSION_STRING);
+        Log.d(LOG_TAG, " SDK version: " + SDK_VERSION_STRING);
+        Log.d(LOG_TAG, "----------------------------------------------------------------");
+        Log.d(LOG_TAG, "----------------------------------------------------------------\n\n\n\n");
 
         GAHelper.initGoogleAnalytics(getApplicationContext());
 
         mRageShake.start(this);
 
+        // init the REST client
+        MXSession.initUserAgent(getApplicationContext());
+
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
             }
 
             @Override
             public void onActivityStarted(Activity activity) {
+                Log.d(LOG_TAG, "onActivityStarted " + activity);
             }
 
             @Override
             public void onActivityResumed(Activity activity) {
+                Log.d(LOG_TAG, "onActivityResumed " + activity);
                 setCurrentActivity(activity);
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
+                Log.d(LOG_TAG, "onActivityPaused " + activity);
                 setCurrentActivity(null);
             }
 
             @Override
             public void onActivityStopped(Activity activity) {
+                Log.d(LOG_TAG, "onActivityStopped " + activity);
             }
 
             @Override
             public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+                Log.d(LOG_TAG, "onActivitySaveInstanceState " + activity);
             }
 
             @Override
             public void onActivityDestroyed(Activity activity) {
+                Log.d(LOG_TAG, "onActivityDestroyed " + activity);
                 mCreatedActivities.remove(activity.toString());
 
                 if (mCreatedActivities.size() > 1) {
@@ -175,6 +213,33 @@ public class VectorApp extends Application {
 
         // detect if the headset is plugged / unplugged.
         registerReceiver(new HeadsetConnectionReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+
+        // create the markdown parser
+        try {
+            mMarkdownParser = new VectorMarkdownParser(this);
+        } catch (Exception e) {
+            // reported by GA
+            Log.e(LOG_TAG, "cannot create the mMarkdownParser " + e.getMessage());
+        }
+    }
+
+    /**
+     * Parse a markdown text
+     * @param text the text to parse
+     * @param listener the result listener
+     */
+    public static void markdownToHtml(final String text, final VectorMarkdownParser.IVectorMarkdownParserListener listener) {
+        if (null != getInstance().mMarkdownParser) {
+            getInstance().mMarkdownParser.markdownToHtml(text, listener);
+        } else {
+            (new Handler(Looper.getMainLooper())).post(new Runnable() {
+                @Override
+                public void run() {
+                    // GA issue
+                    listener.onMarkdownParsed(text, null);
+                }
+            });
+        }
     }
 
     /**
@@ -199,10 +264,11 @@ public class VectorApp extends Application {
                 session.setIsOnline(false);
                 session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
                 session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                removeSyncingSession(session);
             }
         }
 
-        PIDsRetriever.getIntance().onAppBackgrounded();
+        PIDsRetriever.getInstance().onAppBackgrounded();
 
         MyPresenceManager.advertiseAllUnavailable();
     }
@@ -212,6 +278,8 @@ public class VectorApp extends Application {
      * i.e wait 2s before assuming that the application is put in background.
      */
     private void startActivityTransitionTimer() {
+        Log.d(LOG_TAG, "## startActivityTransitionTimer()");
+
         mActivityTransitionTimer = new Timer();
         mActivityTransitionTimerTask = new TimerTask() {
             @Override
@@ -226,16 +294,21 @@ public class VectorApp extends Application {
                     mActivityTransitionTimer = null;
                 }
 
-                VectorApp.this.mIsInBackground = true;
-                mIsCallingInBackground = (null != VectorCallViewActivity.getActiveCall());
-
-                // if there is a pending call
-                // the application is not suspended
-                if (!mIsCallingInBackground) {
-                    Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within 2 seconds");
-                    suspendApp();
+                if (null != mCurrentActivity) {
+                    Log.e(LOG_TAG, "## startActivityTransitionTimer() : the timer expires but there is an active activity.");
                 } else {
-                    Log.d(LOG_TAG, "App not suspended due to call in progress");
+                    VectorApp.this.mIsInBackground = true;
+                    mIsCallingInBackground = (null != VectorCallViewActivity.getActiveCall());
+
+                    // if there is a pending call
+                    // the application is not suspended
+                    if (!mIsCallingInBackground) {
+                        Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
+                        CommonActivityUtils.displayMemoryInformation(null, " app suspended");
+                        suspendApp();
+                    } else {
+                        Log.d(LOG_TAG, "App not suspended due to call in progress");
+                    }
                 }
             }
         };
@@ -247,6 +320,8 @@ public class VectorApp extends Application {
      * Stop the background detection.
      */
     private void stopActivityTransitionTimer() {
+        Log.d(LOG_TAG, "## stopActivityTransitionTimer()");
+
         if (mActivityTransitionTimerTask != null) {
             mActivityTransitionTimerTask.cancel();
             mActivityTransitionTimerTask = null;
@@ -275,7 +350,8 @@ public class VectorApp extends Application {
             }
 
             // get the contact update at application launch
-            ContactsManager.refreshLocalContactsSnapshot(this);
+            ContactsManager.getInstance().clearSnapshot();
+            ContactsManager.getInstance().refreshLocalContactsSnapshot();
 
             boolean hasActiveCall = false;
 
@@ -286,12 +362,17 @@ public class VectorApp extends Application {
                 session.setSyncDelay(0);
                 session.setSyncTimeout(0);
                 hasActiveCall |= session.getDataHandler().getCallsManager().hasActiveCalls();
+                addSyncingSession(session);
             }
 
             // detect if an infinite ringing has been triggered
             if (VectorCallSoundManager.isRinging() && !hasActiveCall && (null != EventStreamService.getInstance())) {
                 Log.e(LOG_TAG, "## suspendApp() : fix an infinite ringing");
                 EventStreamService.getInstance().hideCallNotifications();
+                
+                if (VectorCallSoundManager.isRinging()) {
+                    VectorCallSoundManager.stopRinging();
+                }
             }
         }
 
@@ -307,6 +388,8 @@ public class VectorApp extends Application {
      * @param activity the current activity, null if there is no more one.
      */
     private void setCurrentActivity(Activity activity) {
+        Log.d(LOG_TAG, "## setCurrentActivity() : from " + mCurrentActivity + " to " + activity);
+
         if (VectorApp.isAppInBackground() && (null != activity)) {
             Matrix matrixInstance =  Matrix.getInstance(activity.getApplicationContext());
 
@@ -317,7 +400,7 @@ public class VectorApp extends Application {
 
             Log.d(LOG_TAG, "The application is resumed");
             // display the memory usage when the application is put iun foreground..
-            CommonActivityUtils.displayMemoryInformation(activity);
+            CommonActivityUtils.displayMemoryInformation(activity, " app resumed with " + activity);
         }
 
         // wait 2s to check that the application is put in background
@@ -327,6 +410,8 @@ public class VectorApp extends Application {
             } else {
                 getInstance().stopActivityTransitionTimer();
             }
+        } else {
+            Log.e(LOG_TAG, "The application is resumed but there is no active instance");
         }
 
         mCurrentActivity = activity;
@@ -410,6 +495,116 @@ public class VectorApp extends Application {
 
             mSavedPickerImagePreview = aSavedCameraImagePreview;
         }
+    }
+
+    //==============================================================================================================
+    // Syncing mxSessions
+    //==============================================================================================================
+
+    /**
+     * syncing sessions
+     */
+    private static ArrayList<MXSession> mSyncingSessions = new ArrayList<>();
+
+    /**
+     * Add a session in the syncing sessions list
+     * @param session the session
+     */
+    public static void addSyncingSession(MXSession session) {
+        synchronized (mSyncingSessions) {
+            if ((null != session) && (mSyncingSessions.indexOf(session) < 0)) {
+                mSyncingSessions.add(session);
+            }
+        }
+    }
+
+    /**
+     * Remove a session in the syncing sessions list
+     * @param session the session
+     */
+    public static void removeSyncingSession(MXSession session) {
+        if (null != session) {
+            synchronized (mSyncingSessions) {
+                mSyncingSessions.remove(session);
+            }
+        }
+    }
+
+    /**
+     * Tell if a session is syncing
+     * @param session the session
+     * @return true if the session is syncing
+     */
+    public static boolean isSessionSyncing(MXSession session) {
+        boolean isSyncing = false;
+
+        if (null != session) {
+            synchronized (mSyncingSessions) {
+                isSyncing = (mSyncingSessions.indexOf(session) >= 0);
+            }
+        }
+
+        return isSyncing;
+    }
+
+    //==============================================================================================================
+    // GA management
+    //==============================================================================================================
+    /**
+     * GA tags
+     */
+    public static final String GOOGLE_ANALYTICS_STATS_CATEGORY = "stats";
+
+    public static final String GOOGLE_ANALYTICS_STATS_ROOMS_ACTION = "rooms";
+    public static final String GOOGLE_ANALYTICS_STARTUP_INITIAL_SYNC_ACTION = "initialSync";
+    public static final String GOOGLE_ANALYTICS_STARTUP_INCREMENTAL_SYNC_ACTION = "incrementalSync";
+    public static final String GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION = "storePreload";
+    public static final String GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION = "mountData";
+    public static final String GOOGLE_ANALYTICS_STARTUP_LAUNCH_SCREEN_ACTION = "launchScreen";
+    public static final String GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION = "Contacts";
+
+    // keep track of the GA events
+    private static HashMap<String, String> mGAStatsMap = new HashMap<>();
+
+    /**
+     * Send a GA stats
+     * @param context the context
+     * @param category the category
+     * @param action the action
+     * @param label the label
+     * @param value the value
+     */
+    public static void sendGAStats(Context context, String category, String action, String label, long value) {
+        try {
+            String key = "[" + category + "] " + action;
+            String mapValue = "" ;
+
+            if (!TextUtils.isEmpty(label)) {
+                mapValue += label;
+            } else {
+                mapValue += value + " ms";
+            }
+
+            mGAStatsMap.put(key, mapValue);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## sendGAStats() failed " + e.getMessage());
+        }
+
+        GAHelper.sendGAStats(context, category, action, label, value);
+    }
+
+    /**
+     * Provide the GA stats.
+     * @return the GA stats.
+     */
+    public static String getGAStats() {
+        String stats = "";
+
+        for(String k : mGAStatsMap.keySet()) {
+            stats += k + " : " + mGAStatsMap.get(k) + "\n";
+        }
+
+        return stats;
     }
 }
 

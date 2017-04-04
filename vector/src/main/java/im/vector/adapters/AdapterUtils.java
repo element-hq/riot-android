@@ -24,7 +24,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;

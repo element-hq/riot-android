@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,337 +17,400 @@
 
 package im.vector.util;
 
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.Modifier;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.zip.GZIPOutputStream;
+import java.util.Map;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.matrix.androidsdk.rest.json.ConditionDeserializer;
+import org.matrix.androidsdk.rest.model.bingrules.Condition;
+import org.matrix.androidsdk.util.Log;
+
+import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
-
-import org.matrix.androidsdk.MXSession;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.Matrix;
-import im.vector.activity.CommonActivityUtils;
-
-import org.matrix.androidsdk.data.MyUser;
 
 /**
  * BugReporter creates and sends the bug reports.
  */
 public class BugReporter {
-
     private static final String LOG_TAG = "BugReporter";
 
     /**
-     * @return the bug report body message.
+     * Bug report upload listener
      */
-    private static String buildBugReportMessage(Context context) {
-        String message = "Something went wrong on my Vector client : \n\n\n";
-        message += "-----> my comments <-----\n\n\n";
+    private interface IMXBugReportListener {
+        /**
+         * The bug report has been cancelled
+         */
+        void onUploadCancelled();
 
-        message += "---------------------------------------------------------------------\n";
-        message += "Application info\n";
+        /**
+         * The bug report upload failed.
+         *
+         * @param reason the failure reason
+         */
+        void onUploadFailed(String reason);
 
-        Collection<MXSession> sessions = Matrix.getMXSessions(context);
-        int profileIndex = 1;
+        /**
+         * The upload progress (in percent)
+         * @param progress the upload progress
+         */
+        void onProgress(int progress);
 
-        for(MXSession session : sessions) {
-            message += "Profile " + profileIndex + " :\n";
-            profileIndex++;
-
-            MyUser mMyUser = session.getMyUser();
-            message += "userId : "+ mMyUser.user_id + "\n";
-            message += "displayname : " + mMyUser.displayname + "\n";
-            message += "homeServer :" + session.getCredentials().homeServer + "\n";
-        }
-
-        message += "\n";
-        message += "---------------------------------------------------------------------\n";
-        message += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
-        message += "Vector version: " + Matrix.getInstance(context).getVersion(true) + "\n";
-        message += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
-        message += "\n";
-        message += "---------------------------------------------------------------------\n";
-        message += "Memory statuses \n";
-
-        long freeSize = 0L;
-        long totalSize = 0L;
-        long usedSize = -1L;
-        try {
-            Runtime info = Runtime.getRuntime();
-            freeSize = info.freeMemory();
-            totalSize = info.totalMemory();
-            usedSize = totalSize - freeSize;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        message += "---------------------------------------------------------------------\n";
-        message += "usedSize   " + (usedSize / 1048576L) + " MB\n";
-        message += "freeSize   " + (freeSize / 1048576L) + " MB\n";
-        message += "totalSize   " + (totalSize / 1048576L) + " MB\n";
-        message += "---------------------------------------------------------------------\n";
-
-        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-        ActivityManager activityManager = (ActivityManager) VectorApp.getCurrentActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        activityManager.getMemoryInfo(mi);
-
-        message += "availMem   " + (mi.availMem / 1048576L) + " MB\n";
-        message += "totalMem   " + (mi.totalMem / 1048576L) + " MB\n";
-        message += "threshold  " + (mi.threshold / 1048576L) + " MB\n";
-        message += "lowMemory  " + mi.lowMemory + "\n";
-
-        message += "---------------------------------------------------------------------\n";
-
-        return message;
+        /**
+         * The bug report upload succeeded.
+         */
+        void onUploadSucceed();
     }
 
     /**
-     * Send the bug report with Vector.
-     * @param context the application context
-     * @param password the password
+     * GSON management
      */
-    private static void sendBugReportWithVector(Context context, String password) {
-        Bitmap screenShot = takeScreenshot();
+    private static final Gson gson = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .excludeFieldsWithModifiers(Modifier.PRIVATE, Modifier.STATIC)
+            .registerTypeAdapter(Condition.class, new ConditionDeserializer())
+            .create();
 
-        if (null != screenShot) {
+    /**
+     * Read the file content as String
+     *
+     * @param fin the input file
+     * @return the file content as String
+     */
+    private static String convertStreamToString(File fin) {
+        Reader reader = null;
+
+        try {
+            Writer writer = new StringWriter();
+            InputStream inputStream = new FileInputStream(fin);
             try {
-                ArrayList<File> logFiles = new ArrayList<>();
+                reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                int n;
 
-                File screenFile = new File(LogUtilities.ensureLogDirectoryExists(), "screenshot.jpg");
-
-                if (screenFile.exists()) {
-                    screenFile.delete();
+                char[] buffer = new char[2048];
+                while ((n = reader.read(buffer)) != -1) {
+                    writer.write(buffer, 0, n);
                 }
-
-                FileOutputStream screenOutputStream = new FileOutputStream(screenFile);
-                screenShot.compress(Bitmap.CompressFormat.PNG, 50, screenOutputStream);
-                screenOutputStream.close();
-                logFiles.add(screenFile);
-
-                {
-                    File configLogFile = new File(LogUtilities.ensureLogDirectoryExists(), "config.txt");
-                    ByteArrayOutputStream configOutputStream = new ByteArrayOutputStream();
-                    configOutputStream.write(buildBugReportMessage(context).getBytes());
-
-                    if (configLogFile.exists()) {
-                        configLogFile.delete();
+            } finally {
+                try {
+                    if (null != reader) {
+                        reader.close();
                     }
-
-                    FileOutputStream fos = new FileOutputStream(configLogFile);
-                    configOutputStream.writeTo(fos);
-                    configOutputStream.flush();
-                    configOutputStream.close();
-
-                    logFiles.add(configLogFile);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## convertStreamToString() failed to close inputStream " + e.getMessage());
                 }
-
-                {
-                    String message = "";
-                    String errorCatLog = LogUtilities.getLogCatError();
-                    String debugCatLog = LogUtilities.getLogCatDebug();
-
-                    message += "\n\n\n\n\n\n\n\n\n\n------------------ Error logs ------------------\n\n\n\n\n\n\n\n";
-                    message += errorCatLog;
-
-                    message += "\n\n\n\n\n\n\n\n\n\n------------------ Debug logs ------------------\n\n\n\n\n\n\n\n";
-                    message += debugCatLog;
-
-
-                    ByteArrayOutputStream logOutputStream = new ByteArrayOutputStream();
-                    logOutputStream.write(message.getBytes());
-
-                    File debugLogFile = new File(LogUtilities.ensureLogDirectoryExists(), "logcat.txt");
-
-                    if (debugLogFile.exists()) {
-                        debugLogFile.delete();
-                    }
-
-                    FileOutputStream fos = new FileOutputStream(debugLogFile);
-                    logOutputStream.writeTo(fos);
-                    logOutputStream.flush();
-                    logOutputStream.close();
-
-                    logFiles.add(debugLogFile);
+            }
+            return writer.toString();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## convertStreamToString() failed " + e.getMessage());
+        } catch (OutOfMemoryError oom) {
+            Log.e(LOG_TAG, "## convertStreamToString() failed " + oom.getMessage());
+        } finally {
+            try {
+                if (null != reader) {
+                    reader.close();
                 }
-
-                logFiles.addAll(LogUtilities.getLogsFileList());
-
-                MXSession session = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
-                String userName = session.getMyUser().user_id.replace("@", "").replace(":", "_");
-
-                File compressedFile = new File(LogUtilities.ensureLogDirectoryExists(), "VectorBugReport-" + System.currentTimeMillis()  + "-" + userName + ".zip");
-
-                if (compressedFile.exists()) {
-                    compressedFile.delete();
-                }
-
-                ZipFile zipFile = new ZipFile(compressedFile);
-                ZipParameters parameters = new ZipParameters();
-
-                parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
-                parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_FASTEST);
-
-                if (!TextUtils.isEmpty(password)) {
-                    parameters.setEncryptFiles(true);
-                    parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
-                    parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
-                    parameters.setPassword(password);
-                }
-
-                // file compressed
-                zipFile.addFiles(logFiles, parameters);
-
-                final Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.setType("application/zip");
-                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(compressedFile));
-
-                CommonActivityUtils.sendFilesTo(VectorApp.getCurrentActivity(), sendIntent);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "" + e);
+                Log.e(LOG_TAG, "## convertStreamToString() failed to close inputStream " + e.getMessage());
             }
         }
+
+        return "";
     }
 
+    // boolean to cancel the bug report
+    private static boolean mIsCancelled = false;
+
     /**
-     * Send the bug report by mail.
+     * Send a bug report.
+     *
+     * @param context         the application context
+     * @param withDevicesLogs true to include the device logs
+     * @param withCrashLogs   true to include the crash logs
      */
-    private static void sendBugReportWithMail(Context context) {
-        Bitmap screenShot = takeScreenshot();
+    private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final String bugDescription, final IMXBugReportListener listener) {
+        new AsyncTask<Void, Integer, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                File bugReportFile = new File(context.getApplicationContext().getFilesDir(), "bug_report");
 
-        if (null != screenShot) {
-            try {
-                // store the file in shared place
-                String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), screenShot, "screenshot-" + new Date(), null);
-                Uri screenUri = null;
-
-                if (null == path) {
-                    try {
-                        File file  = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "screenshot-" + new Date() + ".jpg");
-                        FileOutputStream out = new FileOutputStream(file);
-                        screenShot.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        screenUri = Uri.fromFile(file);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "sendBugReport : " + e.getLocalizedMessage());
-                    }
-                } else {
-                    screenUri = Uri.parse(path);
+                if (bugReportFile.exists()) {
+                    bugReportFile.delete();
                 }
 
-                String message = buildBugReportMessage(context);
-
-                ArrayList<Uri> attachmentUris = new ArrayList<>();
-
-                if (null != screenUri) {
-                    // attachments
-                    attachmentUris.add(screenUri);
-                }
-
-                String errorLog = LogUtilities.getLogCatError();
-                String debugLog = LogUtilities.getLogCatDebug();
-
-                errorLog += "\n\n\n\n\n\n\n\n\n\n------------------ Debug logs ------------------\n\n\n\n\n\n\n\n";
-                errorLog += debugLog;
+                String serverError = null;
+                FileWriter fileWriter = null;
 
                 try {
-                    // add the current device logs
-                    {
-                        ByteArrayOutputStream os = new ByteArrayOutputStream();
-                        GZIPOutputStream gzip = new GZIPOutputStream(os);
-                        gzip.write(errorLog.getBytes());
-                        gzip.finish();
+                    fileWriter = new FileWriter(bugReportFile);
+                    JsonWriter jsonWriter = new JsonWriter(fileWriter);
+                    jsonWriter.beginObject();
 
-                        File debugLogFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "logs-" + new Date() + ".gz");
-                        FileOutputStream fos = new FileOutputStream(debugLogFile);
-                        os.writeTo(fos);
-                        os.flush();
-                        os.close();
+                    // android bug report
+                    jsonWriter.name("user_agent").value( "Android");
 
-                        attachmentUris.add(Uri.fromFile(debugLogFile));
-                    }
+                    // logs list
+                    jsonWriter.name("logs");
+                    jsonWriter.beginArray();
 
-                    // add the stored logs
-                    ArrayList<File> logsList = LogUtilities.getLogsFileList();
-
-                    long marker = System.currentTimeMillis();
-
-                    for(File file : logsList) {
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        GZIPOutputStream glogzip = new GZIPOutputStream(bos);
-
-                        FileInputStream inputStream = new FileInputStream(file);
-
-                        byte[] buffer = new byte[1024 * 10];
-                        int len;
-                        while ((len = inputStream.read(buffer)) != -1) {
-                            glogzip.write(buffer, 0, len);
+                    // the logs are optional
+                    if (withDevicesLogs) {
+                        List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
+                        for (File f : files) {
+                            if (!mIsCancelled) {
+                                jsonWriter.beginObject();
+                                jsonWriter.name("lines").value(convertStreamToString(f));
+                                jsonWriter.endObject();
+                                jsonWriter.flush();
+                            }
                         }
-                        glogzip.finish();
+                    }
 
-                        File storedLogFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), marker + "-" + file.getName() + ".gz");
-                        FileOutputStream flogOs = new FileOutputStream(storedLogFile);
-                        bos.writeTo(flogOs);
-                        flogOs.flush();
-                        flogOs.close();
+                    if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
+                        jsonWriter.beginObject();
+                        jsonWriter.name("lines").value(getLogCatError());
+                        jsonWriter.endObject();
+                        jsonWriter.flush();
+                    }
 
-                        attachmentUris.add(Uri.fromFile(storedLogFile));
+                    jsonWriter.endArray();
+
+                    jsonWriter.name("text").value(bugDescription);
+
+                    String version = "";
+
+                    if (null != Matrix.getInstance(context).getDefaultSession()) {
+                        version += "User : " + Matrix.getInstance(context).getDefaultSession().getMyUserId() + "\n";
+                    }
+
+                    version += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
+                    version += "Vector version: " + Matrix.getInstance(context).getVersion(true) + "\n";
+                    version += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
+                    version += "Olm version:  " + Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true) + "\n";
+
+                    jsonWriter.name("version").value(version);
+
+                    jsonWriter.endObject();
+                    jsonWriter.close();
+
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "doInBackground ; failed to collect the bug report data " + e.getMessage());
+                    serverError = e.getLocalizedMessage();
+                } catch (OutOfMemoryError oom) {
+                    Log.e(LOG_TAG, "doInBackground ; failed to collect the bug report data " + oom.getMessage());
+                    serverError = oom.getMessage();
+
+                    if (TextUtils.isEmpty(serverError)) {
+                        serverError = "Out of memory";
                     }
                 }
-                catch (IOException e) {
-                    Log.e(LOG_TAG, "" + e);
+
+                try {
+                    if (null != fileWriter) {
+                        fileWriter.close();
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "doInBackground ; failed to close fileWriter " + e.getMessage());
                 }
 
-                // list the intent which supports email
-                // it should avoid having lot of unexpected applications (like bluetooth...)
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rageshake@riot.im", null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Mail subject");
-                List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(emailIntent, 0);
+                if (TextUtils.isEmpty(serverError) && !mIsCancelled) {
 
-                if ((null == resolveInfos) || (0 == resolveInfos.size())) {
-                    Log.e(LOG_TAG, "Cannot send bug report because there is no application to send emails");
-                    return;
+                    // the screenshot is defined here
+                    // File screenFile = new File(VectorApp.mLogsDirectoryFile, "screenshot.jpg");
+                    InputStream inputStream = null;
+                    HttpURLConnection conn = null;
+                    try {
+                        inputStream = new FileInputStream(bugReportFile);
+                        final int dataLen = inputStream.available();
+
+                        // should never happen
+                        if (0 == dataLen) {
+                            return "No data";
+                        }
+
+                        URL url = new URL(context.getResources().getString(R.string.bug_report_url));
+                        conn = (HttpURLConnection) url.openConnection();
+                        conn.setDoInput(true);
+                        conn.setDoOutput(true);
+                        conn.setUseCaches(false);
+                        conn.setRequestMethod("POST");
+                        conn.setRequestProperty("Content-Type", "application/json");
+                        conn.setRequestProperty("Content-Length", Integer.toString(dataLen));
+                        // avoid caching data before really sending them.
+                        conn.setFixedLengthStreamingMode(inputStream.available());
+
+                        conn.connect();
+
+                        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+
+                        byte[] buffer = new byte[8192];
+
+                        // read file and write it into form...
+                        int bytesRead;
+                        int totalWritten = 0;
+
+                        while (!mIsCancelled && (bytesRead = inputStream.read(buffer, 0, buffer.length)) > 0) {
+                            dos.write(buffer, 0, bytesRead);
+                            totalWritten += bytesRead;
+                            publishProgress(totalWritten * 100 / dataLen);
+                        }
+
+                        dos.flush();
+                        dos.close();
+
+                        int mResponseCode;
+
+                        try {
+                            // Read the SERVER RESPONSE
+                            mResponseCode = conn.getResponseCode();
+                        } catch (EOFException eofEx) {
+                            mResponseCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
+                        }
+
+                        // if the upload failed, try to retrieve the reason
+                        if (mResponseCode != HttpURLConnection.HTTP_OK) {
+                            serverError = null;
+                            InputStream is = conn.getErrorStream();
+
+                            if (null != is) {
+                                int ch;
+                                StringBuilder b = new StringBuilder();
+                                while ((ch = is.read()) != -1) {
+                                    b.append((char) ch);
+                                }
+                                serverError = b.toString();
+                                is.close();
+
+                                // check if the error message
+                                try {
+                                    JSONObject responseJSON = new JSONObject(serverError);
+                                    serverError = responseJSON.getString("error");
+                                } catch (JSONException e) {
+                                    Log.e(LOG_TAG, "doInBackground ; Json conversion failed " + e.getMessage());
+                                }
+
+                                // should never happen
+                                if (null == serverError) {
+                                    serverError = "Failed with error " + mResponseCode;
+                                }
+
+                                is.close();
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "doInBackground ; failed with error " + e.getClass() + " - " + e.getMessage());
+                        serverError = e.getLocalizedMessage();
+
+                        if (TextUtils.isEmpty(serverError)) {
+                            serverError = "Failed to upload";
+                        }
+                    } catch (OutOfMemoryError oom) {
+                        Log.e(LOG_TAG, "doInBackground ; failed to send the bug report " + oom.getMessage());
+                        serverError = oom.getLocalizedMessage();
+
+                        if (TextUtils.isEmpty(serverError)) {
+                            serverError = "Out ouf memory";
+                        }
+
+                    } finally {
+                        try {
+                            if (null != conn) {
+                                conn.disconnect();
+                            }
+                        } catch (Exception e2) {
+                            Log.e(LOG_TAG, "doInBackground : conn.disconnect() failed " + e2.getMessage());
+                        }
+                    }
+
+                    if (null != inputStream) {
+                        try {
+                            inputStream.close();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "doInBackground ; failed to close the inputStream " + e.getMessage());
+                        }
+                    }
                 }
-
-                Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setType("text/html");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"rageshake@riot.im"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Vector bug report");
-                intent.putExtra(Intent.EXTRA_TEXT, message);
-                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachmentUris);
-                context.startActivity(intent);
-
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "" + e);
+                return serverError;
             }
-        }
+
+            @Override
+            protected void onProgressUpdate(Integer ... progress) {
+                super.onProgressUpdate(progress);
+
+                if (null != listener) {
+                    try {
+                        listener.onProgress((null == progress) ? 0 : progress[0]);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## onProgress() : failed " + e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String reason) {
+                if (null != listener) {
+                    try {
+                        if (mIsCancelled) {
+                            listener.onUploadCancelled();
+                        } else if (null == reason) {
+                            listener.onUploadSucceed();
+                        } else {
+                            listener.onUploadFailed(reason);
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## onPostExecute() : failed " + e.getMessage());
+                    }
+                }
+            }
+        }.execute();
     }
 
     /**
@@ -357,40 +421,173 @@ public class BugReporter {
 
         // no current activity so cannot display an alert
         if (null == currentActivity) {
-            sendBugReportWithMail(VectorApp.getInstance().getApplicationContext());
+            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, true,  "", null);
             return;
         }
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(currentActivity);
+        final Context appContext = currentActivity.getApplicationContext();
+        LayoutInflater inflater = currentActivity.getLayoutInflater();
+        View dialogLayout = inflater.inflate(R.layout.dialog_bug_report, null);
+
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(currentActivity);
         dialog.setTitle(R.string.send_bug_report);
+        dialog.setView(dialogLayout);
 
-        CharSequence items[] = new CharSequence[] {currentActivity.getString(R.string.with_email), currentActivity.getString(R.string.with_vector, Matrix.getApplicationName())};
-        dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface d, int n) {
-                d.cancel();
+        final EditText bugReportText = (EditText) dialogLayout.findViewById(R.id.bug_report_edit_text);
+        final CheckBox includeLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_logs);
+        final CheckBox includeCrashLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_crash_logs);
 
-                if (0 == n) {
-                    sendBugReportWithMail(currentActivity);
-                } else {
-                    sendBugReportWithVector(currentActivity, null);
-                }
-            }
-        });
+        final ProgressBar progressBar = (ProgressBar) dialogLayout.findViewById(R.id.bug_report_progress_view);
+        final TextView progressTextView = (TextView) dialogLayout.findViewById(R.id.bug_report_progress_text_view);
 
-        dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sendBugReportWithMail(currentActivity);
+                // will be overridden to avoid dismissing the dialog while displaying the progress
             }
         });
 
-        dialog.setNegativeButton(R.string.cancel, null);
-        dialog.show();
+        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // will be overridden to avoid dismissing the dialog while displaying the progress
+            }
+        });
+
+        //
+        final AlertDialog bugReportDialog = dialog.show();
+        final Button cancelButton = bugReportDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        final Button sendButton = bugReportDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+        if (null != cancelButton) {
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // check if there is no upload in progress
+                    if (includeLogsButton.isEnabled()) {
+                        bugReportDialog.dismiss();
+                    } else {
+                        mIsCancelled = true;
+                        cancelButton.setEnabled(false);
+                    }
+                }
+            });
+        }
+
+        if (null != sendButton) {
+            sendButton.setEnabled(false);
+
+            sendButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // disable the active area while uploading the bug report
+                    bugReportText.setEnabled(false);
+                    sendButton.setEnabled(false);
+                    includeLogsButton.setEnabled(false);
+                    includeCrashLogsButton.setEnabled(false);
+
+                    progressTextView.setVisibility(View.VISIBLE);
+                    progressTextView.setText(appContext.getString(R.string.send_bug_report_progress, 0 + ""));
+
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setProgress(0);
+
+                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(),includeCrashLogsButton.isChecked(),  bugReportText.getText().toString(), new IMXBugReportListener() {
+                        @Override
+                        public void onUploadFailed(String reason) {
+                            try {
+                                if (null != VectorApp.getInstance() && !TextUtils.isEmpty(reason)) {
+                                    Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show();
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## onUploadFailed() : failed to display the toast " + e.getMessage());
+                            }
+
+                            try {
+                                // restore the dialog if the upload failed
+                                bugReportText.setEnabled(true);
+                                sendButton.setEnabled(true);
+                                includeLogsButton.setEnabled(true);
+                                includeCrashLogsButton.setEnabled(true);
+                                cancelButton.setEnabled(true);
+
+                                progressTextView.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.GONE);
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## onUploadFailed() : failed to restore the dialog button " + e.getMessage());
+
+                                try {
+                                    bugReportDialog.dismiss();
+                                } catch (Exception e2) {
+                                    Log.e(LOG_TAG, "## onUploadFailed() : failed to dismiss the dialog " + e2.getMessage());
+                                }
+                            }
+
+                            mIsCancelled = false;
+                        }
+
+                        @Override
+                        public void onUploadCancelled() {
+                            onUploadFailed(null);
+                        }
+
+                        @Override
+                        public void onProgress(int progress) {
+                            if (progress > 100) {
+                                Log.e(LOG_TAG, "## onProgress() : progress > 100");
+                                progress = 100;
+                            } else if (progress < 0) {
+                                Log.e(LOG_TAG, "## onProgress() : progress < 0");
+                                progress = 0;
+                            }
+
+                            progressBar.setProgress(progress);
+                            progressTextView.setText(appContext.getString(R.string.send_bug_report_progress, progress + ""));
+                        }
+
+                        @Override
+                        public void onUploadSucceed() {
+                            try {
+                                if (null != VectorApp.getInstance()) {
+                                    Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_sent), Toast.LENGTH_LONG).show();
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the toast " + e.getMessage());
+                            }
+
+                            try {
+                                bugReportDialog.dismiss();
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the dialog " + e.getMessage());
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        bugReportText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (null != sendButton) {
+                    sendButton.setEnabled(bugReportText.getText().toString().length() > 10);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     /**
      * Take a screenshot of the display.
+     *
      * @return the screenshot
      */
     private static Bitmap takeScreenshot() {
@@ -417,13 +614,63 @@ public class BugReporter {
 
         try {
             return rootView.getDrawingCache();
-        }
-        catch (OutOfMemoryError oom) {
-            Log.e(LOG_TAG, "Cannot get drawing cache for "+ VectorApp.getCurrentActivity() +" OOM.");
-        }
-        catch (Exception e) {
-            Log.e(LOG_TAG, "Cannot get snapshot of screen: "+e);
+        } catch (OutOfMemoryError oom) {
+            Log.e(LOG_TAG, "Cannot get drawing cache for " + VectorApp.getCurrentActivity() + " OOM.");
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Cannot get snapshot of screen: " + e);
         }
         return null;
+    }
+
+    private static final int BUFFER_SIZE = 1024 * 1024 * 5;
+    private static final String[] LOGCAT_CMD = new String[]{
+            "logcat", ///< Run 'logcat' command
+            "-d",  ///< Dump the log rather than continue outputting it
+            "-v", // formatting
+            "threadtime", // include timestamps
+            "AndroidRuntime:E " + ///< Pick all AndroidRuntime errors (such as uncaught exceptions)"communicatorjni:V " + ///< All communicatorjni logging
+                    "libcommunicator:V " + ///< All libcommunicator logging
+                    "DEBUG:V " + ///< All DEBUG logging - which includes native land crashes (seg faults, etc)
+                    "*:S" ///< Everything else silent, so don't pick it..
+    };
+
+
+    /**
+     * Retrieves the logs
+     * @return the logs.
+     */
+    private static String getLogCatError() {
+        Process logcatProc;
+
+        try {
+            logcatProc = Runtime.getRuntime().exec(LOGCAT_CMD);
+        } catch (IOException e1) {
+            return "";
+        }
+
+        BufferedReader reader = null;
+        String response = "";
+        try {
+            String separator = System.getProperty("line.separator");
+            StringBuilder sb = new StringBuilder();
+            reader = new BufferedReader(new InputStreamReader(logcatProc.getInputStream()), BUFFER_SIZE);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+                sb.append(separator);
+            }
+            response = sb.toString();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "getLog fails with " + e.getLocalizedMessage());
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    Log.e(LOG_TAG, "getLog fails with " + e.getLocalizedMessage());
+                }
+            }
+        }
+        return response;
     }
 }

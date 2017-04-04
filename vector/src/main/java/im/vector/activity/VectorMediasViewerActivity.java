@@ -21,7 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -248,7 +248,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
             }
         } else {
             // else download it
-            final String downloadId = mediasCache.downloadMedia(this, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+            final String downloadId = mediasCache.downloadMedia(this, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
             if (null != downloadId) {
                 mediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {

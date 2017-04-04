@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +23,20 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
+
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
-import org.matrix.androidsdk.data.IMXStore;
-import org.matrix.androidsdk.data.MXFileStore;
-import org.matrix.androidsdk.data.MXMemoryStore;
+import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.data.store.MXFileStore;
+import org.matrix.androidsdk.data.store.MXMemoryStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
@@ -51,6 +56,7 @@ import im.vector.store.LoginStorage;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Vector;
 
 /**
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
@@ -94,37 +100,44 @@ public class Matrix {
 
         @Override
         public void onLiveEvent(Event event, RoomState roomState) {
-            mRefreshUnreadCounter |=  Event.EVENT_TYPE_MESSAGE.equals(event.type) || Event.EVENT_TYPE_RECEIPT.equals(event.type);
+            mRefreshUnreadCounter |=  Event.EVENT_TYPE_MESSAGE.equals(event.getType()) || Event.EVENT_TYPE_RECEIPT.equals(event.getType());
         }
 
         @Override
-        public void onLiveEventsChunkProcessed() {
-            // when the client does not use GCM
+        public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
+            // when the client does not use GCM (ie. FDroid),
             // we need to compute the application badge values
 
-            if ((null != instance) && (null != instance.mMXSessions) && mRefreshUnreadCounter) {
-                GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
+            if ((null != instance) && (null != instance.mMXSessions)) {
+                if (mRefreshUnreadCounter) {
+                    GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
 
-                // check if the GCM is not available
-                if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
-                    int unreadCount = 0;
+                    // perform update: if the GCM is not available or if GCM registration failed
+                    if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
+                        int unreadCount = 0;
 
-                    for(MXSession session :  instance.mMXSessions) {
-                        if (session.isAlive()) {
-                            Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
+                        for (MXSession session : instance.mMXSessions) {
+                            if (session.isAlive()) {
+                                Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
 
-                            if (null != rooms) {
-                                for(Room room : rooms) {
-                                    if ((0 != room.getNotificationCount()) || (0 != room.getHighlightCount())) {
-                                        unreadCount++;
+                                if (null != rooms) {
+                                    for (Room room : rooms) {
+                                        if ((0 != room.getNotificationCount()) || (0 != room.getHighlightCount())) {
+                                            unreadCount++;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // update the badge counter
-                    CommonActivityUtils.updateBadgeCount(instance.mAppContext, unreadCount);
+                        // update the badge counter
+                        CommonActivityUtils.updateBadgeCount(instance.mAppContext, unreadCount);
+                    }
+                }
+
+                // TODO find a way to detect which session is synced
+                for (MXSession session : instance.mMXSessions) {
+                    VectorApp.removeSyncingSession(session);
                 }
             }
 
@@ -154,7 +167,7 @@ public class Matrix {
          * Called when there is an incoming call within the room.
          */
         @Override
-        public void onIncomingCall(final IMXCall call) {
+        public void onIncomingCall(final IMXCall call, final MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
             if (null != call) {
                 getUIHandler().post(new Runnable() {
                     @Override
@@ -176,11 +189,14 @@ public class Matrix {
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, call.getSession().getMyUserId());
                                 intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, call.getCallId());
+                                if (null != unknownDevices) {
+                                    intent.putExtra(VectorHomeActivity.EXTRA_CALL_UNKNOWN_DEVICES, unknownDevices);
+                                }
                                 context.startActivity(intent);
                             } else {
                                 Log.d(LOG_TAG, "onIncomingCall : the home activity exists : but permissions have to be checked before");
                                 // check incoming call required permissions, before allowing the call..
-                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId());
+                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId(), unknownDevices);
                             }
                         } else {
                             Log.d(LOG_TAG, "onIncomingCall : a call is already in progress -> cancel");
@@ -268,14 +284,16 @@ public class Matrix {
      */
     public String getVersion(boolean longformat) {
         String versionName = "";
+        String flavor = "";
+
         try {
             PackageInfo pInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), 0);
             versionName = pInfo.versionName;
 
-            String flavor = mAppContext.getResources().getString(R.string.flavor_description);
+            flavor = mAppContext.getResources().getString(R.string.flavor_description);
 
             if (!TextUtils.isEmpty(flavor)) {
-                versionName += " (" + flavor +")";
+                flavor += "-";
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage());
@@ -284,9 +302,9 @@ public class Matrix {
         String gitVersion = mAppContext.getResources().getString(R.string.git_revision);
         if (longformat) {
             String date = mAppContext.getResources().getString(R.string.git_revision_date);
-            versionName += " (" + gitVersion + "-" + date + ")";
+            versionName += " (" + flavor + gitVersion + "-" + date + ")";
         } else {
-            versionName += " (" + gitVersion + ")";
+            versionName += " (" + flavor + gitVersion + ")";
         }
 
         return versionName;
@@ -318,6 +336,25 @@ public class Matrix {
         }
 
         return sessions;
+    }
+
+    /**
+     * Tell if there is a corrupted store in the active session/
+     * @param context the application context
+     * @return true if there is a corrupted store.
+     */
+    public static boolean hasCorruptedStore(Context context) {
+        boolean hasCorruptedStore = false;
+        ArrayList<MXSession> sessions = Matrix.getMXSessions(context);
+
+        if (null != sessions) {
+            for (MXSession session : sessions) {
+                if (session.isAlive()) {
+                    hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
+                }
+            }
+        }
+        return hasCorruptedStore;
     }
 
     /**
@@ -491,14 +528,21 @@ public class Matrix {
      * @param session the session to clear.
      * @param clearCredentials true to clear the credentials.
      */
-    public synchronized void clearSession(Context context, MXSession session, Boolean clearCredentials) {
+    public synchronized void clearSession(Context context, MXSession session, boolean clearCredentials) {
         if (clearCredentials) {
             mLoginStorage.removeCredentials(session.getHomeserverConfig());
         }
 
         session.getDataHandler().removeListener(mLiveEventListener);
         session.mCallsManager.removeListener(mCallsManagerListener);
-        session.clear(context);
+
+        if (clearCredentials) {
+            session.logout(context, null);
+        } else {
+            session.clear(context);
+        }
+
+        VectorApp.removeSyncingSession(session);
 
         synchronized (LOG_TAG) {
             mMXSessions.remove(session);
@@ -510,7 +554,7 @@ public class Matrix {
      * @param context the context.
      * @param clearCredentials  true to clear the credentials.
      */
-    public synchronized void clearSessions(Context context, Boolean clearCredentials) {
+    public synchronized void clearSessions(Context context, boolean clearCredentials) {
         synchronized (LOG_TAG) {
             while (mMXSessions.size() > 0) {
                 clearSession(context, mMXSessions.get(0), clearCredentials);
@@ -564,6 +608,11 @@ public class Matrix {
             }
         }), mAppContext);
 
+        // if a device id is defined, enable the encryption
+        if (!TextUtils.isEmpty(credentials.deviceId)) {
+            session.enableCryptoWhenStarting();
+        }
+
         session.getDataHandler().addListener(mLiveEventListener);
         session.mCallsManager.addListener(mCallsManagerListener);
         return session;
@@ -573,16 +622,16 @@ public class Matrix {
      * Reload the matrix sessions.
      * The session caches are cleared before being reloaded.
      * Any opened activity is closed and the application switches to the splash screen.
-     * @param fromActivity the caller activity
+     * @param context the context
      */
-    public void reloadSessions(Activity fromActivity) {
-        ArrayList<MXSession> sessions = getMXSessions(fromActivity);
+    public void reloadSessions(final Context context) {
+        ArrayList<MXSession> sessions = getMXSessions(context);
 
         for(MXSession session : sessions) {
-            CommonActivityUtils.logout(fromActivity, session, false);
+            CommonActivityUtils.logout(context, session, false);
         }
 
-        clearSessions(fromActivity, false);
+        clearSessions(context, false);
 
         synchronized (LOG_TAG) {
             // build a new sessions list
@@ -594,11 +643,18 @@ public class Matrix {
             }
         }
 
-        Intent intent = new Intent(fromActivity, SplashActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // clear GCM token before launching the splash screen
+        Matrix.getInstance(context).getSharedGCMRegistrationManager().clearGCMData(new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(final Void anything) {
+                Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.getApplicationContext().startActivity(intent);
 
-        fromActivity.startActivity(intent);
-        fromActivity.finish();
+                if (null != VectorApp.getCurrentActivity()) {
+                    VectorApp.getCurrentActivity().finish();
+                }
+            }});
     }
 
     /**

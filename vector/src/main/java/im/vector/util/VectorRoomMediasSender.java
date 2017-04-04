@@ -28,7 +28,7 @@ import android.os.HandlerThread;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -210,7 +210,7 @@ public class VectorRoomMediasSender {
                         mSharedDataItems.remove(0);
                     }
                     sendMedias();
-                } else if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType)) {
+                } else if ((null == sharedDataItem.getUri()) &&  (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType))) {
                     sendTextMessage(sharedDataItem);
                 } else {
                     // check if it is an uri
@@ -460,6 +460,8 @@ public class VectorRoomMediasSender {
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "cannot restore the medias picker thumbnail " + e.getMessage());
+        } catch (OutOfMemoryError oom) {
+            Log.e(LOG_TAG, "cannot restore the medias picker thumbnail oom");
         }
 
         return thumbnailBitmap;
@@ -827,7 +829,7 @@ public class VectorRoomMediasSender {
                     mVectorRoomActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mVectorMessageListFragment.uploadImageContent(aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
+                            mVectorMessageListFragment.uploadImageContent(null, null, aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
                             aListener.onDone();
                         }
                     });
@@ -877,7 +879,7 @@ public class VectorRoomMediasSender {
                                             mVectorRoomActivity.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    mVectorMessageListFragment.uploadImageContent(aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
+                                                    mVectorMessageListFragment.uploadImageContent(null, null, aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
                                                     aListener.onDone();
                                                 }
                                             });
@@ -912,7 +914,7 @@ public class VectorRoomMediasSender {
             mVectorRoomActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mVectorMessageListFragment.uploadImageContent(aThumbnailURL, anImageUrl, anImageFilename, anImageMimeType);
+                    mVectorMessageListFragment.uploadImageContent(null, null, aThumbnailURL, anImageUrl, anImageFilename, anImageMimeType);
                     if (null != aListener) {
                         aListener.onDone();
                     }

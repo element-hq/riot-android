@@ -27,4 +27,12 @@ public class GCMHelper {
     public static String getRegistrationToken(Context appContext) {
         return null;
     }
+
+    /**
+     * Clear the registration token.
+     *
+     * @param appContext the application context
+     */
+    public static void clearRegistrationToken(Context appContext) {
+    }
 }

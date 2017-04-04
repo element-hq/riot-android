@@ -19,12 +19,13 @@ package im.vector.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -189,7 +190,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                     CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
                 }
 
-                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                ContactsManager.getInstance().refreshLocalContactsSnapshot();
             }
         }
     }
@@ -317,6 +318,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             tabIndexToRestore = PEOPLE_TAB_INDEX;
         }
 
+        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.vector_tabbar_background_color)));
+
         // set the tab to display & set current tab index
         mActionBar.setSelectedNavigationItem(tabIndexToRestore);
         mCurrentTabIndex = tabIndexToRestore;
@@ -356,8 +359,14 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             }
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
+            int permissionToBeGranted = CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS;
             onTabSelectSettingsFragment();
-            CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS, this);
+
+            // remove camera permission request if the user has not enough power level
+            if(!CommonActivityUtils.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
+                permissionToBeGranted &= ~CommonActivityUtils.PERMISSION_CAMERA;
+            }
+            CommonActivityUtils.checkPermissions(permissionToBeGranted, this);
             mCurrentTabIndex = SETTINGS_TAB_INDEX;
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {

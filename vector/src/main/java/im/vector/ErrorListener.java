@@ -16,7 +16,7 @@
 package im.vector;
 
 import android.app.Activity;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -26,7 +26,6 @@ import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 
-import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.store.LoginStorage;
 

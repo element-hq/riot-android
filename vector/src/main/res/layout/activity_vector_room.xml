@@ -43,12 +43,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:background="@color/room_background"
         android:layout_below="@+id/room_action_bar">
         
         <View
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="16dp">
         </View>
 
@@ -58,12 +57,16 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:text="A text here"
-            android:textColor="@color/vector_text_black_color"/>
+            android:textColor="@color/vector_text_black_color"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
 
         <RelativeLayout
             android:id="@+id/preview_actions_bar"
             android:layout_width="match_parent"
-            android:layout_height="65dp">
+            android:layout_height="65dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <Button
                 android:id="@+id/button_join_room"
@@ -91,6 +94,8 @@
             android:id="@+id/room_preview_subinvitation_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:textSize="14sp"
             android:text=""
             android:textColor="@color/vector_silver_color"/>
@@ -148,12 +153,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:layout_alignParentBottom="true">
 
                 <RelativeLayout
                     android:id="@+id/room_self_avatar_container"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -166,21 +171,34 @@
 
                 <LinearLayout
                     android:id="@+id/room_sending_message_layout"
-                    android:layout_marginLeft="16dp"
                     android:layout_alignParentRight="true"
                     android:layout_toRightOf="@id/room_self_avatar_container"
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
-                    android:minHeight="24dp"
+                    android:minHeight="56dp"
                     android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/room_encrypted_image_view"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/e2e_verified"/>
+
+                    </RelativeLayout>
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:inputType="textCapSentences|textMultiLine"
                         android:textSize="14sp"
-                        android:hint="@string/room_message_placeholder"
+                        android:hint="@string/room_message_placeholder_not_encrypted"
                         android:id="@+id/editText_messageBox"
                         android:layout_centerVertical="true"
                         android:theme="@style/SearchesAppTheme"
@@ -261,7 +279,7 @@
 
             <View
                 android:id="@+id/bottom_separator"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_alignParentLeft="true"
                 android:layout_above="@id/room_bottom_layout"
@@ -269,8 +287,9 @@
 
             <RelativeLayout
                 android:id="@+id/room_notifications_area"
-                android:layout_width="fill_parent"
-                android:layout_height="42dp"
+                android:layout_width="match_parent"
+                android:minHeight="42dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_above="@id/bottom_separator"
                 android:visibility="invisible">
@@ -297,7 +316,7 @@
 
             <View
                 android:id="@+id/room_notification_separator"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_marginLeft="13dp"
                 android:layout_height="1dp"
                 android:layout_above="@id/room_notifications_area"

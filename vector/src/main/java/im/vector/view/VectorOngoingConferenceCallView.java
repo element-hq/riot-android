@@ -24,7 +24,10 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
-import android.util.Log;
+
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
+import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -62,7 +65,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
 
     private final MXCallsManager.MXCallsManagerListener mCallsListener = new MXCallsManager.MXCallsManagerListener() {
         @Override
-        public void onIncomingCall(IMXCall call) {
+        public void onIncomingCall(IMXCall call, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
 
         }
 
@@ -201,7 +204,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      */
     public void onActivityPause() {
         if (null != mSession) {
-            mSession.mCallsManager.addListener(mCallsListener);
+            mSession.mCallsManager.removeListener(mCallsListener);
         }
     }
 }

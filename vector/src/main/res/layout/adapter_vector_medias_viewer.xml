@@ -5,8 +5,8 @@
     android:layout_height="match_parent" >
 
     <WebView android:id="@+id/media_slider_image_webview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="#000"/>
 
     <RelativeLayout
@@ -17,12 +17,12 @@
         <VideoView android:id="@+id/media_slider_videoview"
             android:layout_gravity="center"
             android:layout_centerInParent="true"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <ImageView android:id="@+id/media_slider_video_thumbnail"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="#000" />
 
         <ImageView android:id="@+id/media_slider_video_playView"

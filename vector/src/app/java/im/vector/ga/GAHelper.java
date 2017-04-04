@@ -21,9 +21,11 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import com.google.android.gms.analytics.ExceptionParser;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -65,6 +67,11 @@ public class GAHelper {
      * @return null if not defined, true / false when defined
      */
     public static Boolean useGA(Context context) {
+        // avoid getting the GA issues from the forked branches
+        if (!TextUtils.equals(VectorApp.getInstance().getPackageName(), "im.vector.alpha")) {
+            return false;
+        }
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (preferences.contains(context.getString(R.string.ga_use_settings))) {
@@ -114,6 +121,7 @@ public class GAHelper {
 
         String trackerId = context.getString(trackerResId);
         Log.d(LOG_TAG, "Tracker ID: "+trackerId);
+
         // init google analytics with this tracker ID
         if (!TextUtils.isEmpty(trackerId)) {
             Analytics.initialiseGoogleAnalytics(context, trackerId, new ExceptionParser() {
@@ -162,4 +170,54 @@ public class GAHelper {
         }
     }
 
+    /**
+     * Send a GA stats
+     * @param context the context
+     * @param category the category
+     * @param action the action
+     * @param label the label
+     * @param value the value
+     */
+    public static void sendGAStats(Context context, String category, String action, String label, long value) {
+        Boolean useGA = useGA(context);
+
+        if (null == useGA) {
+            Log.e(LOG_TAG, "Google Analytics use is not yet initialized");
+            return;
+        }
+
+        if (!useGA) {
+            Log.e(LOG_TAG, "The user decides to do not use Google Analytics");
+            return;
+        }
+
+        try {
+            // send by default a timing event
+            // check if a value is set
+            if ((null != Analytics.mTracker) && (value != Long.MAX_VALUE)) {
+                HitBuilders.TimingBuilder timingEvent = new HitBuilders.TimingBuilder();
+
+                timingEvent.setValue(value);
+
+                if (!TextUtils.isEmpty(category)) {
+                    timingEvent.setCategory(category);
+                }
+
+                if (!TextUtils.isEmpty(action)) {
+                    timingEvent.setVariable(action);
+                }
+
+                /*if (!TextUtils.isEmpty(label)) {
+                    timingEvent.setLabel(label);
+                }*/
+
+                Analytics.mTracker.send(timingEvent.build());
+            }
+
+            // default management
+            Analytics.sendEvent(category, action, label, value);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## sendGAStats failed " + e.getMessage());
+        }
+    }
 }

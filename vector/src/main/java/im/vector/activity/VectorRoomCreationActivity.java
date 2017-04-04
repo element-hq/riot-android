@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
- *
+ * Copyright 2017 Vector Creations Ltd
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,7 +21,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+
+import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,12 +32,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -49,18 +54,58 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     private final String LOG_TAG = "VRoomCreationActivity";
 
     // participants list
-    private static String PARTICIPANTS_LIST = "PARTICIPANTS_LIST";
+    private static final String PARTICIPANTS_LIST = "PARTICIPANTS_LIST";
 
     //
     private static final int INVITE_USER_REQUEST_CODE = 456;
 
     // UI items
-    private ListView mMembersListView;
     private VectorRoomCreationAdapter mAdapter;
     private View mSpinnerView;
 
     // the search is displayed at first call
     private boolean mIsFirstResume = true;
+
+    // direct message
+    private final ApiCallback<String> mCreateDirectMessageCallBack = new ApiCallback<String>() {
+        @Override
+        public void onSuccess(final String roomId) {
+            HashMap<String, Object> params = new HashMap<>();
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onSuccess - start goToRoomPage");
+            CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);
+        }
+
+        private void onError(final String message) {
+            mSpinnerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != message) {
+                        Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+                    mSpinnerView.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onMatrixError(final MatrixError e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onUnexpectedError(final Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+    };
 
     // displayed participants
     private ArrayList<ParticipantAdapterItem> mParticipants = new ArrayList<>();
@@ -78,7 +123,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
         final Intent intent = getIntent();
 
-        mSession = getSession(intent);
+        mSession = getSession(this, intent);
 
         if (mSession == null) {
             Log.e(LOG_TAG, "No MXSession.");
@@ -88,7 +133,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
         // get the UI items
         mSpinnerView = findViewById(R.id.room_creation_spinner_views);
-        mMembersListView = (ListView) findViewById(R.id.room_creation_members_list_view);
+        ListView membersListView = (ListView) findViewById(R.id.room_creation_members_list_view);
         mAdapter = new VectorRoomCreationAdapter(this, R.layout.adapter_item_vector_creation_add_member, R.layout.adapter_item_vector_add_participants, mSession);
 
         // init the content
@@ -100,7 +145,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         }
         mAdapter.addAll(mParticipants);
 
-        mMembersListView.setAdapter(mAdapter);
+        membersListView.setAdapter(mAdapter);
 
         mAdapter.setRoomCreationAdapterListener(new VectorRoomCreationAdapter.IRoomCreationAdapterListener() {
             @Override
@@ -110,7 +155,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             }
         });
 
-        mMembersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        membersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // the first one is "add a member"
@@ -232,11 +277,31 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        String existingRoomId;
 
         if (id == R.id.action_create_room) {
-            // the first entry is self so ignore
-            mParticipants.remove(0);
-            createRoom(mParticipants);
+            if (0 == mParticipants.size()) {
+                createRoom(mParticipants);
+            } else {
+                // the first entry is self so ignore
+                mParticipants.remove(0);
+
+                // standalone case : should be accepted ?
+                if (0 == mParticipants.size()) {
+                    createRoom(mParticipants);
+                } else if (mParticipants.size() > 1) {
+                    createRoom(mParticipants);
+                } else if (null != (existingRoomId = isDirectChatRoomAlreadyExist(mParticipants.get(0).mUserId))) {
+                    HashMap<String, Object> params = new HashMap<>();
+                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mParticipants.get(0).mUserId);
+                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, existingRoomId);
+                    CommonActivityUtils.goToRoomPage(this, mSession, params);
+                } else {
+                    // direct message flow
+                    mSpinnerView.setVisibility(View.VISIBLE);
+                    mSession.createRoomDirectMessage(mParticipants.get(0).mUserId, mCreateDirectMessageCallBack);
+                }
+            }
             return true;
         }
 
@@ -247,6 +312,49 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     //================================================================================
     // Room creation
     //================================================================================
+
+    /**
+     * Return the first direct chat room for a given user ID.
+     * @param aUserId user ID to search for
+     * @return a room ID if search succeed, null otherwise.
+     */
+    private String isDirectChatRoomAlreadyExist(String aUserId) {
+        if(null != mSession) {
+            IMXStore store = mSession.getDataHandler().getStore();
+
+            HashMap<String, List<String>> directChatRoomsDict;
+
+            if (null != store.getDirectChatRoomsDict()) {
+                directChatRoomsDict = new HashMap<>(store.getDirectChatRoomsDict());
+
+                if (directChatRoomsDict.containsKey(aUserId)) {
+                    ArrayList<String> roomIdsList = new ArrayList<>(directChatRoomsDict.get(aUserId));
+
+                    if (0 != roomIdsList.size()) {
+                        for(String roomId : roomIdsList) {
+                            Room room = mSession.getDataHandler().getRoom(roomId, false);
+
+                            // check if the room is already initialized
+                            if ((null != room) && room.isReady() && !room.isInvited() && !room.isLeaving()) {
+                                // test if the member did not leave the room
+                                Collection<RoomMember> members = room.getActiveMembers();
+
+                                for(RoomMember member : members) {
+                                    if (TextUtils.equals(member.getUserId(), aUserId)) {
+                                        Log.d(LOG_TAG,"## isDirectChatRoomAlreadyExist(): for user="+aUserId+" roomFound=" + roomId);
+                                        return roomId;
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Log.d(LOG_TAG,"## isDirectChatRoomAlreadyExist(): for user=" + aUserId + " no found room");
+        return null;
+    }
 
     /**
      * Create a room with a list of participants.

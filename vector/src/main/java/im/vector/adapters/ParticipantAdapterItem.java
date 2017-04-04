@@ -15,13 +15,14 @@
  */
 
 package im.vector.adapters;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.IMXStore;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
@@ -29,7 +30,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import im.vector.VectorApp;
 import im.vector.contacts.Contact;
+import im.vector.contacts.PIDsRetriever;
 import im.vector.util.VectorUtils;
 
 // Class representing a room participant.
@@ -38,10 +41,12 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     // displayed info
     public String mDisplayName;
     public String mAvatarUrl;
-    public Bitmap mAvatarBitmap;
 
     // user id
     public String mUserId;
+
+    // true when valid email or valid matrix id
+    public boolean mIsValid = true;
 
     // the data is extracted either from a room member or a contact
     public RoomMember mRoomMember;
@@ -61,6 +66,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Constructor from a room member.
+     *
      * @param member the member
      */
     public ParticipantAdapterItem(RoomMember member) {
@@ -76,6 +82,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Constructor from a matrix user.
+     *
      * @param user the matrix user.
      */
     public ParticipantAdapterItem(User user) {
@@ -87,35 +94,35 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Constructor from a contact.
+     *
      * @param contact the contact.
-     * @param context the context.
      */
-    public ParticipantAdapterItem(Contact contact, Context context) {
+    public ParticipantAdapterItem(Contact contact) {
         mDisplayName = contact.getDisplayName();
 
         if (TextUtils.isEmpty(mDisplayName)) {
             mDisplayName = contact.getContactId();
         }
-        mAvatarBitmap = contact.getThumbnail(context);
 
         mUserId = null;
         mRoomMember = null;
-
         mContact = contact;
-
         initSearchByPatternFields();
     }
 
     /**
      * Constructor from an user information.
+     *
      * @param displayName the display name
-     * @param avatarUrl the avatar url.
-     * @param userId teh userId
+     * @param avatarUrl   the avatar url.
+     * @param userId      the userId
+     * @param isValid     whether it has a valid email/matrix user id or not
      */
-    public ParticipantAdapterItem(String displayName, String avatarUrl, String userId) {
+    public ParticipantAdapterItem(String displayName, String avatarUrl, String userId, boolean isValid) {
         mDisplayName = displayName;
         mAvatarUrl = avatarUrl;
         mUserId = userId;
+        mIsValid = isValid;
 
         initSearchByPatternFields();
     }
@@ -129,11 +136,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         }
 
         if (!TextUtils.isEmpty(mUserId)) {
-            int sepPos = mUserId.indexOf(":");
-
-            if (sepPos > 0) {
-                mLowerCaseMatrixId = mUserId.substring(0, sepPos).toLowerCase();
-            }
+            mLowerCaseMatrixId = mUserId.toLowerCase();
         }
     }
 
@@ -167,8 +170,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
             if (lhs == null) {
                 return -1;
-            }
-            else if (rhs == null) {
+            } else if (rhs == null) {
                 return 1;
             }
 
@@ -179,6 +181,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     /**
      * Test if a room member fields contains a dedicated pattern.
      * The check is done with the displayname and the userId.
+     *
      * @param aPattern the pattern to search.
      * @return true if it matches.
      */
@@ -212,6 +215,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Tell whether a component of the displayName, or one of his matrix id/email has the provided prefix.
+     *
      * @param prefix the prefix
      * @return true if one item matched
      */
@@ -241,15 +245,15 @@ public class ParticipantAdapterItem implements java.io.Serializable {
             }
 
             // test components
-            for(String comp : mDisplayNameComponents) {
+            for (String comp : mDisplayNameComponents) {
                 if (comp.startsWith(prefix)) {
                     return true;
                 }
             }
         }
-
+        
         // test user id
-        if (!TextUtils.isEmpty(mUserId) && mUserId.startsWith("@" + prefix)) {
+        if (!TextUtils.isEmpty(mLowerCaseMatrixId) && mLowerCaseMatrixId.startsWith((prefix.startsWith("@") ? "" : "@") + prefix)) {
             return true;
         }
 
@@ -257,17 +261,36 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     }
 
     /**
+     * Provides the avatar bitmap
+     *
+     * @return the avatar bitmap.
+     */
+    public Bitmap getAvatarBitmap() {
+        if (null != mContact) {
+            return mContact.getThumbnail(VectorApp.getInstance());
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Init an imageView with the avatar.
-     * @param session the session
+     *
+     * @param session   the session
      * @param imageView the imageView
      */
     public void displayAvatar(MXSession session, ImageView imageView) {
-        // set the
-        if (null != mAvatarBitmap) {
-            imageView.setImageBitmap(mAvatarBitmap);
+        // sanity check
+        // it should never happen but it was reported by a Google analytics Issue
+        if (null == imageView) {
+            return;
+        }
+        // set the predefined bitmap
+        if (null != getAvatarBitmap()) {
+            imageView.setImageBitmap(getAvatarBitmap());
         } else {
-            if ((null != mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches())) {
-                imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(mUserId), "@@", true));
+            if ((null != mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches()) || !mIsValid) {
+                imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(mIsValid ? mUserId : ""), "@@", true));
             } else {
                 if (TextUtils.isEmpty(mUserId)) {
                     VectorUtils.loadUserAvatar(imageView.getContext(), session, imageView, mAvatarUrl, mDisplayName, mDisplayName);
@@ -300,42 +323,62 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Compute an unique display name.
+     *
      * @param otherDisplayNames the other display names.
      * @return an unique display name
      */
     public String getUniqueDisplayName(List<String> otherDisplayNames) {
-        boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches();
-
         // set the display name
         String displayname = mDisplayName;
-        String lowerCaseDisplayname = displayname.toLowerCase();
 
-        // detect if the username is used by several users
-        int pos = -1;
+        // for the matrix users, append the matrix id to see the difference
+        if (null == mContact) {
+            String lowerCaseDisplayname = displayname.toLowerCase();
 
-        if (null != otherDisplayNames) {
-            pos = otherDisplayNames.indexOf(lowerCaseDisplayname);
+            // detect if the username is used by several users
+            int pos = -1;
 
-            if (pos >= 0) {
-                if (pos == otherDisplayNames.lastIndexOf(lowerCaseDisplayname)) {
-                    pos = -1;
+            if (null != otherDisplayNames) {
+                pos = otherDisplayNames.indexOf(lowerCaseDisplayname);
+
+                if (pos >= 0) {
+                    if (pos == otherDisplayNames.lastIndexOf(lowerCaseDisplayname)) {
+                        pos = -1;
+                    }
                 }
             }
-        }
 
-        if ((pos >= 0) && isMatrixUserId) {
-            displayname += " (" + mUserId + ")";
-        }
-
-        // if a contact has a matrix id
-        // display the matched email address in the display name
-        if ((null != mContact) && isMatrixUserId) {
-            String firstEmail = mContact.getEmails().get(0);
-
-            if (!TextUtils.equals(displayname, firstEmail)) {
-                displayname += " (" + firstEmail + ")";
+            if (pos >= 0) {
+                displayname += " (" + mUserId + ")";
+            }
+        } else {
+            if (MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(mUserId).matches()) {
+                displayname += " (" + mUserId + ")";
             }
         }
+
         return displayname;
+    }
+
+    /**
+     * Tries to retrieve the PIDs.
+     * @return true if they are retrieved.
+     */
+    public boolean retrievePids() {
+        boolean isUpdated = false;
+
+        if (android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches()) {
+            if (null != mContact) {
+                mContact.refreshMatridIds();
+            }
+            Contact.MXID mxId = PIDsRetriever.getInstance().getMXID(mUserId);
+
+            if (null != mxId) {
+                mUserId = mxId.mMatrixId;
+                isUpdated = true;
+            }
+        }
+
+        return isUpdated;
     }
 }

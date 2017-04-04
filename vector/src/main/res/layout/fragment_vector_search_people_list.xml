@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/search_people_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -18,9 +18,9 @@
             android:title="@string/send_bug_report"/>
 
         <item
-            android:id="@+id/sliding_menu_logout"
+            android:id="@+id/sliding_menu_sign_out"
             android:icon="@drawable/ic_material_exit_to_app"
-            android:title="@string/action_logout"/>
+            android:title="@string/action_sign_out"/>
     </group>
 
     <group android:id="@+id/app_group">

@@ -1,3 +1,225 @@
+Changes in Riot 0.6.9 (2017-03-15)
+===================================================
+ 
+Features:
+ * Add the MSISDN support for the authentification, the registration and the member search.
+ * Add the encryption keys import / export.
+ * Add the unknown devices management.
+  
+Improvements:
+ * Improve the bug report management.
+ * Reduce the application loading time.
+ * Add the application / SDK version in the user agent
+ * Add the audio attachments support
+  
+Bugfixes:
+ * Fix many encryption issues.
+ * Fix several issues reported by GA.
+ * #814 : Sending or sharing .txt files fails silently.
+ * #908 : Don't close the contactPicker after selecting a member.
+ * #909 : Spelling/grammar: «Show Devices List» should be: «Show Device List.
+ * #913 : Mirrored thumbnails when sending pictures taken with front-facing camera.
+ * #918 : Handle forgotten password verification link properly.
+ * #923 : local contact section should be collapsable even when no search is started.
+ * #909 : Retry schedule is too aggressive for arbitrary endpoints.
+ * #931 : Settings: move the Devices section after the Cryptography section.
+ * #932 : Rooms details: can't open a txt file from the FILES tab of an e2e room.
+ * #933 : Search from recents: strange behaviour in the differents tab.
+ * #934 : Search from recents: no results displayed if device is turned landscape then portrait.
+ * #940 : The quick reply popup and compose box are unnecessarily small
+ * #941 : Usability: The compose window activation area is deceptively small.
+ * #949 : e2e and auth keys should be blacklisted from google backup somehow.
+ * #950 : Unknown devices: 2 press on blacklist button are needed.
+ * #952 : Launch a call in a e2e and 1:1 room with unknown devices make the call fail 
+ * #953 : Crash trying to send a message in e2e room with unknown devices.
+ * #954 : Language: "Report Bug Report"
+ * #955 : New Rageshake: no feedback or progress indication at all
+ * #957 : Voice Calling turns off screen erroneously
+ * #964 : 'Messages not sent due to unknown devices ...' is cropped in the notification area.
+ * #980 : Not an admin in a group --> "enable encryption" should not be displayed
+ * #984 : «Clear Cache» also erases my settings
+ * #989 : it sometimes takes several presses of the send button to get the message out
+ * #1010 : Room members Search with a new account displays "too many contacts" in the known section whereas there is no joined room
+ * #1011 : [e2e devices deletion] : write the user password once and allow to delete several devices
+ * #1012 : Close a member details activity should return to the calling activity 
+ * #1013 : Voip: call canceled when switching from call layout and pending call view  
+ 
+Changes in Riot 0.6.8 (2017-01-27)
+===================================================
+ 
+Improvements:
+ * The members list activity design has been improved.
+ * Add some google analytics stats.
+ * Trigger the email lookup on demand to save data connection use.
+ * Improve the settings screens to have the material design for the device with API < 21.
+  
+Bugfixes:
+ * Fix crypto backward compatibility issue (< 0.6.4).
+ * Fix an invite contacts permission request loop if it was not granted (room members invitation screen).
+ * #878 : Room activity : the very long member name overlaps the time 
+ * #636 : Log in button is not enabled when internet connection comes back.
+ * #891 : Infinite contacts permission request dialog if it is rejected
+ * #894 : matrix user id regex does not allow underscore in the name.
+
+Changes in Vector 0.6.7 (2017-01-23)
+===================================================
+ 
+Improvements:
+ * The room invitation activity design has been improved.
+  
+Bugfixes:
+ * Fix a crash when a contact with a thumbnail was invited.
+ * The users were not saved after a login.
+ * Fix several issues reported by Google Analytics.
+ * #868 : Add Leave Room Confirmation.	
+ 
+Changes in Vector 0.6.6 (2017-01-17)
+===================================================
+ 
+Improvements:
+ * Improve the camera activity management.
+ * Improve the e2e management.
+ * Improve the people invitation activity. 
+  
+Bugfixes:
+ * Fix several issues reported by Google Analytics.
+ * #791 : [UI bug] Room encryption slider remains on after rejecting the popup window by clicking outside of it.
+ * #806 : Please remove End-to-End Encryption toggle from user settings.
+ * #807 : /mefoo is turned into /me foo.
+ * #816 : Custom server URL bug.
+ * #821 : Room creation with a matrix user from the contacts list creates several empty rooms.
+ * #841 : Infinite call ringing.
+ * #842 : rageshake should prompt you to enter an explicit problem report before trying to send a report.
+ * #851 : fix_device_verify_not_displayed 
+
+Changes in Vector 0.6.5 (2016-12-19)
+===================================================
+
+Improvements:
+ * Reduce the messages encryption time.
+ * Display a lock icon for the encrypted rooms (recents page).
+ * Video call: the local preview is displayed at the bottom left.
+ * Improve the splashscreen (reduce the animated gif time and add a spinner)
+ * Display an alert when the crypto store is corrupted to let the user chooses if he wants to logout.
+ 
+Bugfixes:
+ * Fix several issues reported by GA.
+ * Do not enable the proximity sensor when the voice call is not established
+ * Fix several call issues with the Samsung devices (when the screen is turned off).
+ * #783 : Riot doesn't handle volume settings properly 
+ * #784 : Voip: Problem when call is hung up while callee goes in room view.
+ * #786 : Method to disable markdown is unclear.
+ * #787 : overlay buttons shouldn't self-hide when on voice calls 
+ 
+Changes in Vector 0.6.4 (2016-12-13)
+===================================================
+
+Features:
+ * #757 : Add devices list member details.
+
+Improvements:
+ * Improve the encryption management.
+ * The application should be ready faster.
+ 
+Bugfixes:
+ * Fix many issues reported by GA.
+ * Fix many memory leaks.
+ * #374 : Check if Event.unsigned.age can be used to detect if the event is still valid.
+ * #657 : It's too easy to accidentally ignore someone
+ * #661 : Turn the screen off during a call when the proximity sensor says phone near head
+ * #675 : Handle user link correctly 
+ * #687 : User adress instead of display name in call event
+ * #723 : Cancelling download of encrypted image does not work
+ * #706 : [Direct Message] Direct chats list from member profile doesn't show all the direct chats 
+ * #708 : vertical offset into recents list is not preserved 
+ * #749 : Layout broken with RTL languages 
+ * #754 : Memory leak when opening a room
+ * #760 : Stacked room pages when going back and forth between Call layout and Room layout
+ * #774 : Bug report / rageshake does not get user consent before sharing potentially personal data 
+ * #776 : Add a dialog to confirm the message redaction
+ 
+ 
+Changes in Vector 0.6.3 (2016-11-24)
+===================================================
+
+Bugfixes:
+ * Reduce the memory use to avoid oom crashes.
+ * The requests did not work anymore with HTTP v2 servers
+ * The application data were not properly cleared after a "clear cache"
+ * The device information was not refreshed if the device was not yet known
+
+Changes in Vector 0.6.2 (2016-11-23)
+===================================================
+
+Features:
+ * Attchments encryption v2
+ * libolm update
+ 
+Improvements:
+ * Add try/catch blocks to avoid application crashes when oom
+
+Bugfixes:
+ * #680 Unsupported TLS protocol version
+ * #712 Improve adding member from search/invite page
+ * #730 Crypto : we should be able to block the user account other devices
+ * #731 Crypto : Some device informations are not displayed whereas the messages can be decrypted
+ * #739 [e2e] Ringtone from call is different according to the encryption state of the room
+ * #742 Unable to send messages in #megolm since build 810: Network error
+
+Changes in Vector 0.6.1 (2016-11-21)
+===================================================
+
+Features:
+ * Add the current device informations in the global settings
+ 
+Improvements:
+ * Reduce the number of lags / application not responding 
+
+Changes in Vector 0.6.0 (2016-11-18)
+===================================================
+ 
+Features:
+ * Encryption (beta feature).
+ 
+Bugfixes:
+ * GA issues
+ * #503 : register users without email verification
+ * #521 : Search: Unable to submit query if hardware keyboard is active  
+ * #528 : The emotes are not properly displayed on notifications
+ * #531 : The application badge should be updated even if the device is offline.
+ * #536 : The room preview does not always display the right member info
+ * #539 : Quoting a msg overrides what I already typed
+ * #540 : All the store data is lost if there is an OOM error while saving it 
+ * #542 : Camera permission managements in the room settings
+ * #546 : Invite a left user doesn't display his displayname
+ * #547 : Add public rooms pagination 
+ * #549 : Quoting : displays "null" on membership events 
+ * #558 : global search : the back pagination does not work anymore.
+ * #560 : vector.im/{beta,staging,develop} and riot.im/{app,staging,develop} permalinks should work as well as matrix.to ones
+ * #561 : URLs containing $s aren't linkified correctly 
+ * #562 : Some redacted events were restored at next application launch
+ * #563 : Crash after opening third party notices when the device is turned vertically then horizontaly 
+ * #564 : The room search should contain the file search too.
+ * #568 : Preview on invitation : the arrow to go down is displayed when device is turned 
+ * #571 : Room photos don't appear in Browse Directory
+ * #579 : Room photo : no placeholder for one special room in the browse directory 
+ * #582 : Permalinks to users are broken 
+ * #583 : We should only intercept https://matrix.to links we recognise
+ * #587 : Leave room too hidden 
+ * #589 : Login as email is case sensistive
+ * #592 : Improve members list display 
+ * #590 : Email validation token is sent even to invalid emails
+ * #595 : Underscores have to be escaped with double backslash to prevent markdown parsing 
+ * #601 : Viewing mubot images in fullscreen shows black screen 
+ * #602 : The 1:1 room avatar must be the other member avatar if no room avatar was set 
+ * #608 : Add reject / accept button on the notification when it is a room invitation notification  
+ * #611 : Remove display name event is blank 
+ * #612 : F-Droid develop does not display commit ID after the version string in the main menu
+ * #617 : Back button in the search from a room view leads to the rooms list
+ * #700 : Fix [VoIP] video buttons still active in full screen 
+ * #715 : [Register flow] Register with a mail address fails
+ 
+
 Changes in Vector 0.5.2 (2016-09-20)
 ===================================================
 

@@ -9,7 +9,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
+
+    <!-- universal links management -->
     <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <!-- for android 4.1.* devices, reported by GA -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <!-- videocall permissions-->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -45,7 +49,8 @@
     <uses-sdk tools:overrideLibrary="io.pristine.libjingle"/>
 
     <application
-        android:allowBackup="true"
+        tools:replace="android:allowBackup"
+        android:allowBackup="false"
         android:name="im.vector.VectorApp"
         android:icon="@drawable/logo"
         android:logo="@drawable/logo"
@@ -57,6 +62,7 @@
         <activity
             android:name="im.vector.activity.LoginActivity"
             android:theme="@style/LoginAppTheme"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -115,19 +121,6 @@
         </activity>
 
         <activity
-            android:name="im.vector.activity.VectorRoomMessagesSearchActivity"
-            android:label="Vector searches"
-            android:parentActivityName="im.vector.activity.VectorRoomActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/SearchesAppTheme"
-            android:windowSoftInputMode="adjustResize">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.VectorRoomActivity"/>
-        </activity>
-
-        <activity
             android:name="im.vector.activity.VectorRoomDetailsActivity"
             android:label="@string/room_details_title"
             android:parentActivityName="im.vector.activity.VectorRoomActivity"
@@ -160,6 +153,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorRoomActivity"/>
         </activity>
+
         <activity
             android:name="im.vector.activity.LockScreenActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog"
@@ -170,8 +164,17 @@
             android:launchMode="singleTop"/>
 
         <activity
-            android:name="im.vector.activity.InComingCallActivity"
+            android:name="im.vector.activity.JoinScreenActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog"
+            android:excludeFromRecents="true"
+            android:clearTaskOnLaunch="true"
+            android:taskAffinity=""
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name="im.vector.activity.InComingCallActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
             android:taskAffinity=""
@@ -224,6 +227,7 @@
             android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"
             android:theme="@style/SearchesAppTheme"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize">
 
             <meta-data
@@ -286,6 +290,7 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="matrix.to" />
+                <data android:pathPrefix="/#/" />
             </intent-filter>
 
         </activity>
@@ -293,6 +298,24 @@
         <activity android:name=".activity.VectorFakeRoomPreviewActivity"
             android:theme="@android:style/Theme.NoDisplay">
         </activity>
+
+        <activity
+            android:name="im.vector.activity.PhoneNumberAdditionActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_add_phone_number"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="im.vector.activity.CountryPickerActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_select_country"
+            android:theme="@style/CountryPickerTheme" />
+
+        <activity
+            android:name="im.vector.activity.PhoneNumberVerificationActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_phone_number_verification"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- broadcast receiver -->
         <receiver
@@ -325,6 +348,7 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="matrix.to" />
+                <data android:pathPrefix="/#/" />
             </intent-filter>
 
             <intent-filter>

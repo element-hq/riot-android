@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,34 +23,52 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.data.IMXStore;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.Log;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
@@ -65,14 +84,6 @@ import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
@@ -87,6 +98,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     public static final String EXTRA_JUMP_TO_ROOM_PARAMS = "VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS";
 
+    // jump to a member details sheet
+    public static final String EXTRA_MEMBER_ID = "VectorHomeActivity.EXTRA_MEMBER_ID";
+
     // there are two ways to open an external link
     // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened as soon there is an event check processed (application is launched when clicking on the URI link)
     // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that an event chunk is processed.
@@ -97,6 +111,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // the home activity is launched to start a call.
     public static final String EXTRA_CALL_SESSION_ID = "VectorHomeActivity.EXTRA_CALL_SESSION_ID";
     public static final String EXTRA_CALL_ID = "VectorHomeActivity.EXTRA_CALL_ID";
+    public static final String EXTRA_CALL_UNKNOWN_DEVICES = "VectorHomeActivity.EXTRA_CALL_UNKNOWN_DEVICES";
 
     // the home activity is launched in shared files mode
     // i.e the user tries to send several files with VECTOR
@@ -113,6 +128,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
 
     private Uri mUniversalLinkToOpen = null;
+
+    private String mMemberIdToOpen = null;
 
     private View mWaitingView = null;
 
@@ -145,7 +162,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // calls
     private VectorPendingCallView mVectorPendingCallView;
 
+    private View mSyncInProgressView;
+
     private boolean mStorePermissionCheck = false;
+
+    // manage the previous first displayed item
+    private static int mScrollToIndex = -1;
 
     private final ApiCallback<Void> mSendReceiptCallback = new ApiCallback<Void>() {
         @Override
@@ -218,6 +240,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.listView_pending_callview);
+        mSyncInProgressView =  findViewById(R.id.home_recents_sync_in_progress);
 
         mVectorPendingCallView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,23 +305,47 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         mSession = Matrix.getInstance(this).getDefaultSession();
 
+        // track if the application update
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int version = preferences.getInt("VERSION_BUILD", 0);
+
+        if (version != VectorApp.VERSION_BUILD) {
+            Log.d(LOG_TAG, "The application has been updated from version " + version + " to version " + VectorApp.VERSION_BUILD);
+
+            // TODO add some dedicated actions here
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("VERSION_BUILD", VectorApp.VERSION_BUILD);
+            editor.commit();
+        }
+
         // process intent parameters
         final Intent intent = getIntent();
 
         if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
-            startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID));
+            startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>)intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
+            intent.removeExtra(EXTRA_CALL_SESSION_ID);
+            intent.removeExtra(EXTRA_CALL_ID);
+            intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
         }
 
         // the activity could be started with a spinner
         // because there is a pending action (like universalLink processing)
-        if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
+        if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, WAITING_VIEW_STOP)) {
             showWaitingView();
         } else {
             stopWaitingView();
         }
+        intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
 
         mAutomaticallyOpenedRoomParams = (Map<String, Object>) intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+        intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+
         mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+        intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+
+        mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
+        intent.removeExtra(EXTRA_MEMBER_ID);
 
         // the home activity has been launched with an universal link
         if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
@@ -310,14 +357,13 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             // detect the room could be opened without waiting the next sync
             HashMap<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
 
-            if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_KEY)) {
+            if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
                 Log.d(LOG_TAG, "Has a valid universal link");
 
-                final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_KEY);
+                final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY);
 
                 // it is a room ID ?
-                if (roomIdOrAlias.startsWith("!")) {
-
+                if (MXSession.isRoomId(roomIdOrAlias)) {
                     Log.d(LOG_TAG, "Has a valid universal link to the room ID " + roomIdOrAlias);
                     Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
@@ -330,7 +376,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // wait the next sync
                         intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
                     }
-                } else {
+                } else if (MXSession.isRoomAlias(roomIdOrAlias)){
                     Log.d(LOG_TAG, "Has a valid universal link of the room Alias " + roomIdOrAlias);
 
                     // it is a room alias
@@ -408,7 +454,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         // + other actions which require a background listener
         mLiveEventListener = new MXEventListener() {
             @Override
-            public void onLiveEventsChunkProcessed() {
+            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
                 // treat any pending URL link workflow, that was started previously
                 processIntentUniversalLink();
 
@@ -436,7 +482,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // initialize the public rooms list
         PublicRoomsManager.setSession(mSession);
-        PublicRoomsManager.refresh(null);
+        PublicRoomsManager.refreshPublicRoomsCount(null);
     }
 
     @Override
@@ -449,6 +495,22 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
         CommonActivityUtils.onTrimMemory(this, level);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+
+        if (mSession.isAlive()) {
+            mScrollToIndex = mRecentsListFragment.getFirstVisiblePosition();
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        mScrollToIndex = -1;
     }
 
     @Override
@@ -472,7 +534,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // Unregister Broadcast receiver
         stopWaitingView();
-        unregisterReceiver(mBrdRcvStopWaitingView);
+        try {
+            unregisterReceiver(mBrdRcvStopWaitingView);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onPause() : unregisterReceiver fails " + e.getMessage());
+        }
 
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
@@ -526,6 +592,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             public void onAccountInfoUpdate(MyUser myUser) {
                 refreshSlidingMenu();
             }
+
+            @Override
+            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
+                mSyncInProgressView.setVisibility(View.GONE);
+            }
         };
 
         if (mSession.isAlive()) {
@@ -574,9 +645,68 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY, this);
         }
 
+        if (null != mMemberIdToOpen) {
+            Intent startRoomInfoIntent = new Intent(VectorHomeActivity.this, VectorMemberDetailsActivity.class);
+            startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, mMemberIdToOpen);
+            startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            startActivity(startRoomInfoIntent);
+            mMemberIdToOpen = null;
+        }
+
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
         mToolbar.setBackgroundResource(R.color.vector_actionbar_background);
+
+        checkDeviceId();
+
+        if (-1 != mScrollToIndex) {
+            mRecentsListFragment.setFirstVisiblePosition(mScrollToIndex);
+            // reinit in the fragment scrolllistener
+            //mScrollToIndex = -1;
+        }
+
+        mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
+
+        displayCryptoCorruption();
+    }
+
+    /**
+     * Display an alert to warn the user that some crypto data is corrupted.
+     */
+    private void displayCryptoCorruption() {
+        if ((null != mSession) && (null != mSession.getCrypto()) && mSession.getCrypto().isCorrupted()) {
+            final String isFirstCryptoAlertKey = "isFirstCryptoAlertKey";
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+            if (preferences.getBoolean(isFirstCryptoAlertKey, true)) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(isFirstCryptoAlertKey, false);
+                editor.commit();
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage(getString(R.string.e2e_need_log_in_again));
+
+                // set dialog message
+                alertDialogBuilder
+                        .setCancelable(true)
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setPositiveButton(R.string.ok,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        CommonActivityUtils.logout(VectorApp.getCurrentActivity(), true);
+                                    }
+                                });
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
+            }
+        }
     }
 
     @Override
@@ -584,7 +714,14 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         super.onNewIntent(intent);
 
         mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+        intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+
         mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+        intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+
+        mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
+        intent.removeExtra(EXTRA_MEMBER_ID);
+
 
         // start waiting view
         if(intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
@@ -592,6 +729,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         } else {
             stopWaitingView();
         }
+        intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
+
     }
 
     @Override
@@ -628,7 +767,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
             // search in rooms content
             case R.id.ic_action_mark_all_as_read:
-                markAllMessagesAsRead();
+                if(markAllMessagesAsReadWhenOffline()) {
+                    // update badge unread count in case device is offline
+                    CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getApplicationContext());
+                } else {
+                    markAllMessagesAsRead();
+                }
                 break;
 
             default:
@@ -688,6 +832,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
                 });
             }
+
 
             private void onError(final String message) {
                 mWaitingView.post(new Runnable() {
@@ -774,6 +919,43 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     }
 
     /**
+     * Send a read receipt for the last message of the room, when the device is offline.
+     * @return true if operation was performed, false otherwise
+     */
+    private boolean markAllMessagesAsReadWhenOffline() {
+        boolean isOperationDone = false;
+
+        if(!Matrix.getInstance(this).isConnected()) {
+            ArrayList<MXSession> sessionsList = new ArrayList<>(Matrix.getMXSessions(this));
+
+            if (null == sessionsList) {
+                Log.w(LOG_TAG, "## markAllMessagesAsReadWhenOffline(): invalid session list");
+            } else {
+                for (MXSession session : sessionsList) {
+                    if (null != session) {
+                        // test if the session is still alive i.e the account has not been logged out
+                        ArrayList<Room> roomCompleteList = new ArrayList<>(session.getDataHandler().getStore().getRooms());
+
+                        if(null != roomCompleteList) {
+                            // for each room send the receipt for the latest message
+                            for (Room room : roomCompleteList) {
+                                isOperationDone |= room.sendReadReceipt(null);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(isOperationDone) {
+            // update the room badges
+            mRecentsListFragment.refresh();
+        }
+
+        return isOperationDone;
+    }
+
+    /**
      * Send a read receipt and manage the spinner screen.
      * If the read receipt is effective the waiting spinner is started,
      * otherwise {@link #markAllMessagesAsRead()} is resumed to go through
@@ -846,6 +1028,102 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // Sliding menu management
     //==============================================================================================================
 
+    /**
+     * Manage the e2e keys export.
+     */
+    private void exportKeysAndSignOut() {
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_export_e2e_keys, null);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(R.string.encryption_export_room_keys);
+        dialog.setView(dialogLayout);
+
+        final TextInputEditText passPhrase1EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+        final TextInputEditText passPhrase2EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
+        final Button exportButton = (Button) dialogLayout.findViewById(R.id.dialog_e2e_keys_export_button);
+        final TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                exportButton.setEnabled(!TextUtils.isEmpty(passPhrase1EditText.getText()) && TextUtils.equals(passPhrase1EditText.getText(), passPhrase2EditText.getText()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        passPhrase1EditText.addTextChangedListener(textWatcher);
+        passPhrase2EditText.addTextChangedListener(textWatcher);
+
+        exportButton.setEnabled(false);
+
+        final AlertDialog exportDialog = dialog.show();
+
+        exportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showWaitingView();
+
+                CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new ApiCallback<String>() {
+                    private void onDone(String message) {
+                        stopWaitingView();
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VectorHomeActivity.this);
+                        alertDialogBuilder.setMessage(message);
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.action_sign_out,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                VectorHomeActivity.this.showWaitingView();
+                                                CommonActivityUtils.logout(VectorHomeActivity.this);
+                                            }
+                                        })
+                                .setNegativeButton(R.string.cancel,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        // show it
+                        alertDialog.show();
+                    }
+
+                    @Override
+                    public void onSuccess(String filename) {
+                        onDone(VectorHomeActivity.this.getString(R.string.encryption_export_saved_as, filename));
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onDone(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onDone(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onDone(e.getLocalizedMessage());
+                    }
+                });
+
+                exportDialog.dismiss();
+            }
+        });
+    }
+
     private void refreshSlidingMenu() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -876,29 +1154,65 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         break;
                     }
 
-                    case R.id.sliding_menu_logout: {
-                        VectorHomeActivity.this.showWaitingView();
-                        CommonActivityUtils.logout(VectorHomeActivity.this);
+                    case R.id.sliding_menu_sign_out: {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VectorHomeActivity.this);
+                        alertDialogBuilder.setMessage(getString(R.string.action_sign_out_confirmation));
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.action_sign_out,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                VectorHomeActivity.this.showWaitingView();
+                                                CommonActivityUtils.logout(VectorHomeActivity.this);
+                                            }
+                                        })
+                                .setNeutralButton(R.string.encryption_export_export, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+
+                                        VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                exportKeysAndSignOut();
+                                            }
+                                        });
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        // show it
+                        alertDialog.show();
+
                         break;
                     }
 
                     case R.id.sliding_copyright_terms: {
-                        VectorUtils.displayAppCopyright(VectorHomeActivity.this);
+                        VectorUtils.displayAppCopyright();
                         break;
                     }
 
                     case R.id.sliding_menu_app_tac: {
-                        VectorUtils.displayAppTac(VectorHomeActivity.this);
+                        VectorUtils.displayAppTac();
                         break;
                     }
 
                     case R.id.sliding_menu_privacy_policy: {
-                        VectorUtils.displayAppPrivacyPolicy(VectorHomeActivity.this);
+                        VectorUtils.displayAppPrivacyPolicy();
                         break;
                     }
 
                     case R.id.sliding_menu_third_party_notices: {
-                        VectorUtils.displayThirdPartyLicenses(VectorHomeActivity.this);
+                        VectorUtils.displayThirdPartyLicenses();
                         break;
                     }
                 }
@@ -969,6 +1283,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
      * Hide the (+) button for 1 second.
      */
     private void hideRoomCreationViewWithDelay() {
+        // the recents list scrolls after restoring
+        if (-1 != mScrollToIndex) {
+            mScrollToIndex = -1;
+            return;
+        }
         synchronized (this) {
             if (null != mRoomCreationViewTimer) {
                 mRoomCreationViewTimer.cancel();
@@ -983,8 +1302,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 @Override
                 public void run() {
                     synchronized (this) {
-                        mRoomCreationViewTimer.cancel();
-                        mRoomCreationViewTimer = null;
+                        if (null != mRoomCreationViewTimer) {
+                            mRoomCreationViewTimer.cancel();
+                            mRoomCreationViewTimer = null;
+                        }
                     }
 
                     VectorHomeActivity.this.runOnUiThread(new Runnable() {
@@ -1045,9 +1366,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     /**
      * Start a call with a session Id and a call Id
      * @param sessionId the session Id
-     * @param callId teh call Id
+     * @param callId the call Id
+     * @param unknownDevices the unknown e2e devices
      */
-    public void startCall(String sessionId, String callId) {
+    public void startCall(String sessionId, String callId, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
         // sanity checks
         if ((null != sessionId) && (null != callId)) {
             final Intent intent = new Intent(VectorHomeActivity.this, InComingCallActivity.class);
@@ -1055,7 +1377,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, sessionId);
             intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, callId);
 
-            VectorHomeActivity.this.runOnUiThread(new Runnable() {
+            if (null != unknownDevices) {
+                intent.putExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES, unknownDevices);
+            }
+
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     VectorHomeActivity.this.startActivity(intent);
@@ -1091,6 +1417,46 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
                 }
             });
+        }
+    }
+
+    //==============================================================================================================
+    // encryption
+    //==============================================================================================================
+
+    private static final String NO_DEVICE_ID_WARNING_KEY = "NO_DEVICE_ID_WARNING_KEY";
+
+    /**
+     * In case of the app update for the e2e encryption, the app starts with no device id provided by the homeserver.
+     * Ask the user to login again in order to enable e2e. Ask it once
+     */
+    private void checkDeviceId() {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (preferences.getBoolean(NO_DEVICE_ID_WARNING_KEY, true)) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(NO_DEVICE_ID_WARNING_KEY, false);
+            editor.commit();
+
+            if (TextUtils.isEmpty(mSession.getCredentials().deviceId)) {
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setMessage(R.string.e2e_enabling_on_app_update)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                CommonActivityUtils.logout(VectorHomeActivity.this, true);
+                            }
+                        })
+                        .setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
+            }
         }
     }
 }

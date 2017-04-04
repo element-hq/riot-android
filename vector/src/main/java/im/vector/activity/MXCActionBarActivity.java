@@ -19,38 +19,31 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 
-import im.vector.MyPresenceManager;
-import im.vector.VectorApp;
-import im.vector.Matrix;
-import im.vector.R;
-
-import java.lang.reflect.Method;
 import java.util.ArrayList;
+
+import im.vector.Matrix;
+import im.vector.MyPresenceManager;
+import im.vector.R;
+import im.vector.VectorApp;
 
 /**
  * extends ActionBarActivity to manage the rageshake
  */
-public class MXCActionBarActivity extends ActionBarActivity {
+public class MXCActionBarActivity extends AppCompatActivity {
+    private static final String LOG_TAG = "MXCActBarActivity";
+
     public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 
@@ -83,33 +76,20 @@ public class MXCActionBarActivity extends ActionBarActivity {
         CommonActivityUtils.onTrimMemory(this, level);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (hasCorruptedStore(this)) {
-            this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    CommonActivityUtils.logout(MXCActionBarActivity.this);
-                }
-            });
-        }
-    }
-    
     /**
      * Return the used MXSession from an intent.
+     * @param context the application context
      * @param intent the intent
      * @return the MXSession if it exists.
      */
-    protected MXSession getSession(Intent intent) {
+    public static MXSession getSession(Context context, Intent intent) {
         String matrixId = null;
 
         if (intent.hasExtra(EXTRA_MATRIX_ID)) {
             matrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
         }
 
-        return Matrix.getInstance(getApplicationContext()).getSession(matrixId);
+        return Matrix.getInstance(context).getSession(matrixId);
     }
 
     public MXSession getSession() {
@@ -119,13 +99,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
     public Room getRoom() {
         return mRoom;
     }
-
-    // add left sliding menu
-    protected DrawerLayout mDrawerLayout;
-    protected ListView mDrawerList;
-    protected ActionBarDrawerToggle mDrawerToggle;
-
-    protected int mSelectedSlidingMenuIndex = -1;
 
     @Override
     public void startActivity(Intent intent) {
@@ -173,13 +146,13 @@ public class MXCActionBarActivity extends ActionBarActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Matrix.removeSessionErrorListener(this);
-
+    /**
+     * Dismiss any opened dialog.
+     * @param activity the parent activity.
+     */
+    public static void dismissDialogs(FragmentActivity activity) {
         // close any opened dialog
-        FragmentManager fm = getSupportFragmentManager();
+        FragmentManager fm = activity.getSupportFragmentManager();
         java.util.List<android.support.v4.app.Fragment> fragments = fm.getFragments();
 
         if (null != fragments) {
@@ -189,6 +162,13 @@ public class MXCActionBarActivity extends ActionBarActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Matrix.removeSessionErrorListener(this);
+        dismissDialogs(this);
     }
 
     @Override
@@ -208,44 +188,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
             MyPresenceManager.advertiseAllOnline();
         }
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if ((null != mDrawerToggle) && mDrawerToggle.onOptionsItemSelected(item)) {
-            dismissKeyboard(this);
-            return true;
-        }
-
-        if (item.getItemId() == android.R.id.home) {
-            // pop the activity to avoid creating a new instance of the parent activity
-            this.onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onMenuOpened(int featureId, Menu menu) {
-        // display the menu icon with the text
-        if (((featureId == Window.FEATURE_ACTION_BAR) || ((featureId == Window.FEATURE_OPTIONS_PANEL))) && menu != null){
-            if(menu.getClass().getSimpleName().equals("MenuBuilder")){
-                try{
-                    Method m = menu.getClass().getDeclaredMethod(
-                            "setOptionalIconsVisible", Boolean.TYPE);
-                    m.setAccessible(true);
-                    m.invoke(menu, true);
-                }
-                catch(NoSuchMethodException e){
-                    //Log.e(TAG, "onMenuOpened", e);
-                }
-                catch(Exception e){
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        return super.onMenuOpened(featureId, menu);
-    }
 
     /**
      * Dismiss the soft keyboard if one view in the activity has the focus.
@@ -257,56 +199,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
         if (view != null) {
             InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        if (null != mDrawerToggle) {
-            // Sync the toggle state after onRestoreInstanceState has occurred.
-            mDrawerToggle.syncState();
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if (null != mDrawerToggle) {
-            mDrawerToggle.onConfigurationChanged(newConfig);
-        }
-    }
-
-    /**
-     * Run the dedicated sliding menu action
-     * @param position selected menu entry
-     */
-    protected void selectDrawItem(int position) {
-    }
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            // wait that the activity sliding animation is done
-            // before performing the dedicated task
-            // 1- because it triggers weird UI effect
-            // 2- the application used to crash when logging out because adapter was refreshed with a null MXSession.
-            mSelectedSlidingMenuIndex = position;
-            mDrawerLayout.closeDrawer(mDrawerList);
-
-            // the drawer button does not replace the home button.
-            // trigger the
-            if (null == mDrawerToggle) {
-                mDrawerLayout.postDelayed(new Runnable() {
-                                              @Override
-                                              public void run() {
-                                                  selectDrawItem(mSelectedSlidingMenuIndex);
-                                                  mSelectedSlidingMenuIndex = -1;
-                                              }
-                                          }, 300);
-            }
         }
     }
 }

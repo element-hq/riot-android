@@ -17,7 +17,9 @@
 package im.vector.util;
 
 import android.text.TextUtils;
-import android.util.Log;
+
+import org.matrix.androidsdk.util.Log;
+
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -31,6 +33,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import java.util.Collection;
 import java.util.HashMap;
 
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
 
@@ -40,9 +43,9 @@ public class SlashComandsParser {
 
     // defines the command line operations
     // the user can write theses messages to perform some room events
+    public static final String CMD_EMOTE = "/me";
 
     private static final String CMD_CHANGE_DISPLAY_NAME = "/nick";
-    private static final String CMD_EMOTE = "/me";
     private static final String CMD_JOIN_ROOM = "/join";
     private static final String CMD_KICK_USER = "/kick";
     private static final String CMD_BAN_USER = "/ban";
@@ -52,19 +55,21 @@ public class SlashComandsParser {
     private static final String CMD_TOPIC = "/topic";
     private static final String CMD_INVITE = "/invite";
     private static final String CMD_PART = "/part";
+    private static final String CMD_MARKDOWN = "/markdown";
 
     /**
      * check if the text message is an IRC command.
      * If it is an IRC command, it is executed
-     * @param activity the room activity
-     * @param session the session
-     * @param room the room
-     * @param message the text message
+     *
+     * @param activity      the room activity
+     * @param session       the session
+     * @param room          the room
+     * @param textMessage   the text message
      * @param formattedBody the formatted message
-     * @param format the message format
+     * @param format        the message format
      * @return true if it is a splash command
      */
-    public static boolean manageSplashCommand(final VectorRoomActivity activity, final MXSession session, final Room room, final String message, final String formattedBody, final String format) {
+    public static boolean manageSplashCommand(final VectorRoomActivity activity, final MXSession session, final Room room, final String textMessage, final String formattedBody, final String format) {
         boolean isIRCCmd = false;
 
         // sanity checks
@@ -74,14 +79,14 @@ public class SlashComandsParser {
         }
 
         // check if it has the IRC marker
-        if ((null != message) && (message.startsWith("/"))) {
+        if ((null != textMessage) && (textMessage.startsWith("/"))) {
 
-            Log.d(LOG_TAG, "manageSplashCommand : " + message);
+            Log.d(LOG_TAG, "manageSplashCommand : " + textMessage);
 
             final ApiCallback callback = new SimpleApiCallback<Void>(activity) {
                 @Override
                 public void onSuccess(Void info) {
-                    Log.d(LOG_TAG, "manageSplashCommand : " + message + " : the operation succeeded.");
+                    Log.d(LOG_TAG, "manageSplashCommand : " + textMessage + " : the operation succeeded.");
                 }
 
                 @Override
@@ -92,42 +97,57 @@ public class SlashComandsParser {
                 }
             };
 
-            if (message.startsWith(CMD_CHANGE_DISPLAY_NAME)) {
+            String[] messageParts = null;
+
+            try {
+                messageParts = textMessage.split("\\s+");
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## manageSplashCommand() : split failed " + e.getMessage());
+            }
+
+            // test if the string cut fails
+            if ((null == messageParts) || (0 == messageParts.length)) {
+                return false;
+            }
+
+            String firstPart = messageParts[0];
+
+            if (TextUtils.equals(firstPart, CMD_CHANGE_DISPLAY_NAME)) {
                 isIRCCmd = true;
 
-                String newDisplayname = message.substring(CMD_CHANGE_DISPLAY_NAME.length()).trim();
+                String newDisplayname = textMessage.substring(CMD_CHANGE_DISPLAY_NAME.length()).trim();
 
                 if (newDisplayname.length() > 0) {
                     MyUser myUser = session.getMyUser();
 
                     myUser.updateDisplayName(newDisplayname, callback);
                 }
-            } else if (message.startsWith(CMD_TOPIC)) {
+            } else if (TextUtils.equals(firstPart, CMD_TOPIC)) {
                 isIRCCmd = true;
 
-                String newTopîc = message.substring(CMD_TOPIC.length()).trim();
+                String newTopîc = textMessage.substring(CMD_TOPIC.length()).trim();
 
                 if (newTopîc.length() > 0) {
                     room.updateTopic(newTopîc, callback);
                 }
-            } else if (message.startsWith(CMD_EMOTE)) {
+            } else if (TextUtils.equals(firstPart, CMD_EMOTE)) {
                 isIRCCmd = true;
 
-                String newMessage = message.substring(CMD_EMOTE.length()).trim();
+                String newMessage = textMessage.substring(CMD_EMOTE.length()).trim();
 
-                if (message.length() > 0) {
+                if (textMessage.length() > 0) {
                     if ((null != formattedBody) && formattedBody.length() > CMD_EMOTE.length()) {
                         activity.sendEmote(newMessage, formattedBody.substring(CMD_EMOTE.length()), format);
                     } else {
                         activity.sendEmote(newMessage, formattedBody, format);
                     }
                 }
-            } else if (message.startsWith(CMD_JOIN_ROOM)) {
+            } else if (TextUtils.equals(firstPart, CMD_JOIN_ROOM)) {
                 isIRCCmd = true;
-                String roomAlias = message.substring(CMD_JOIN_ROOM.length()).trim();
+                String roomAlias = textMessage.substring(CMD_JOIN_ROOM.length()).trim();
 
                 if (roomAlias.length() > 0) {
-                    session.joinRoom(roomAlias,new SimpleApiCallback<String>(activity) {
+                    session.joinRoom(roomAlias, new SimpleApiCallback<String>(activity) {
 
                         @Override
                         public void onSuccess(String roomId) {
@@ -146,15 +166,15 @@ public class SlashComandsParser {
                         }
                     });
                 }
-            } else if (message.startsWith(CMD_PART)) {
+            } else if (TextUtils.equals(firstPart, CMD_PART)) {
                 isIRCCmd = true;
-                String roomAlias = message.substring(CMD_PART.length()).trim();
+                String roomAlias = textMessage.substring(CMD_PART.length()).trim();
 
                 if (roomAlias.length() > 0) {
                     Room theRoom = null;
                     Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
 
-                    for(Room r : rooms) {
+                    for (Room r : rooms) {
                         RoomState state = r.getLiveState();
 
                         if (null != state) {
@@ -172,32 +192,22 @@ public class SlashComandsParser {
                         theRoom.leave(callback);
                     }
                 }
-            } else if (message.startsWith(CMD_INVITE)) {
+            } else if (TextUtils.equals(firstPart, CMD_INVITE)) {
                 isIRCCmd = true;
 
-                String params = message.substring(CMD_INVITE.length()).trim();
-                String[] paramsList = params.split(" ");
-
-                String kickedUserID = paramsList[0];
-
-                if (kickedUserID.length() > 0) {
-                    room.invite(kickedUserID, callback);
+                if (messageParts.length >= 2) {
+                    room.invite(messageParts[1], callback);
                 }
-            } else if (message.startsWith(CMD_KICK_USER)) {
+            } else if (TextUtils.equals(firstPart, CMD_KICK_USER)) {
                 isIRCCmd = true;
 
-                String params = message.substring(CMD_KICK_USER.length()).trim();
-                String[] paramsList = params.split(" ");
-
-                String kickedUserID = paramsList[0];
-
-                if (kickedUserID.length() > 0) {
-                    room.kick(kickedUserID, callback);
+                if (messageParts.length >= 2) {
+                    room.kick(messageParts[1], callback);
                 }
-            } else if (message.startsWith(CMD_BAN_USER)) {
+            } else if (TextUtils.equals(firstPart, CMD_BAN_USER)) {
                 isIRCCmd = true;
 
-                String params = message.substring(CMD_BAN_USER.length()).trim();
+                String params = textMessage.substring(CMD_BAN_USER.length()).trim();
                 String[] paramsList = params.split(" ");
 
                 String bannedUserID = paramsList[0];
@@ -206,49 +216,47 @@ public class SlashComandsParser {
                 if (bannedUserID.length() > 0) {
                     room.ban(bannedUserID, reason, callback);
                 }
-            } else if (message.startsWith(CMD_UNBAN_USER)) {
+            } else if (TextUtils.equals(firstPart, CMD_UNBAN_USER)) {
                 isIRCCmd = true;
 
-                String params = message.substring(CMD_UNBAN_USER.length()).trim();
-                String[] paramsList = params.split(" ");
-
-                String unbannedUserID = paramsList[0];
-
-                if (unbannedUserID.length() > 0) {
-                    room.unban(unbannedUserID, callback);
+                if (messageParts.length >= 2) {
+                    room.unban(messageParts[1], callback);
                 }
-            } else if (message.startsWith(CMD_SET_USER_POWER_LEVEL)) {
+
+            } else if (TextUtils.equals(firstPart, CMD_SET_USER_POWER_LEVEL)) {
                 isIRCCmd = true;
 
-                String params = message.substring(CMD_SET_USER_POWER_LEVEL.length()).trim();
-                String[] paramsList = params.split(" ");
+                if (messageParts.length >= 3) {
+                    String userID = messageParts[1];
+                    String powerLevelsAsString = messageParts[2];
 
-                String userID = paramsList[0];
-                String powerLevelsAsString  = params.substring(userID.length()).trim();
-
-                try {
-                    if ((userID.length() > 0) && (powerLevelsAsString.length() > 0)) {
-                        room.updateUserPowerLevels(userID, Integer.parseInt(powerLevelsAsString), callback);
+                    try {
+                        if ((userID.length() > 0) && (powerLevelsAsString.length() > 0)) {
+                            room.updateUserPowerLevels(userID, Integer.parseInt(powerLevelsAsString), callback);
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "mRoom.updateUserPowerLevels " + e.getMessage());
                     }
-                } catch(Exception e){
-                    Log.e(LOG_TAG, "mRoom.updateUserPowerLevels " + e.getMessage());
                 }
-            } else if (message.startsWith(CMD_RESET_USER_POWER_LEVEL)) {
+            } else if (TextUtils.equals(firstPart, CMD_RESET_USER_POWER_LEVEL)) {
                 isIRCCmd = true;
 
-                String params = message.substring(CMD_RESET_USER_POWER_LEVEL.length()).trim();
-                String[] paramsList = params.split(" ");
+                if (messageParts.length >= 2) {
+                    room.updateUserPowerLevels(messageParts[1], 0, callback);
+                }
+            } else if (TextUtils.equals(firstPart, CMD_MARKDOWN)) {
+                isIRCCmd = true;
 
-                String userID = paramsList[0];
-
-                if (userID.length() > 0) {
-                    room.updateUserPowerLevels(userID, 0, callback);
+                if (messageParts.length >= 2) {
+                    if (TextUtils.equals(messageParts[1], "on")) {
+                        VectorApp.getInstance().mMarkdownParser.setEnable(true);
+                    } else if (TextUtils.equals(messageParts[1], "off")) {
+                        VectorApp.getInstance().mMarkdownParser.setEnable(false);
+                    }
                 }
             }
         }
 
         return isIRCCmd;
     }
-
-
 }

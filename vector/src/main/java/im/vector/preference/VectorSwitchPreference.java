@@ -16,22 +16,26 @@
 
 package im.vector.preference;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.preference.SwitchPreference;
+import android.preference.CheckBoxPreference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import org.matrix.androidsdk.util.Log;
+
+import im.vector.R;
 
 /**
  * This class should fix the android issue
  * https://code.google.com/p/android/issues/detail?id=26194
  *
  */
-public class VectorSwitchPreference extends SwitchPreference {
+public class VectorSwitchPreference extends CheckBoxPreference {
     private static final String LOG_TAG = "VectorSwitchPreference";
 
 
@@ -44,6 +48,7 @@ public class VectorSwitchPreference extends SwitchPreference {
      */
     public VectorSwitchPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
     }
 
     /**
@@ -54,6 +59,13 @@ public class VectorSwitchPreference extends SwitchPreference {
      */
     public VectorSwitchPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public VectorSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init();
     }
 
     /**
@@ -63,6 +75,7 @@ public class VectorSwitchPreference extends SwitchPreference {
      */
     public VectorSwitchPreference(Context context) {
         super(context, null);
+        init();
     }
 
     @Override
@@ -108,4 +121,10 @@ public class VectorSwitchPreference extends SwitchPreference {
             }
         }
     }
+
+    private void init() {
+        // Force the use of SwitchCompat component
+        setWidgetLayoutResource(R.layout.preference_switch_layout);
+    }
+
 }

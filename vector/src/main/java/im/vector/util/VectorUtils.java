@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -35,12 +36,13 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.support.v4.util.LruCache;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewParent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -56,6 +58,7 @@ import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.ImageUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -65,10 +68,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
 
 public class VectorUtils {
@@ -85,8 +90,9 @@ public class VectorUtils {
     /**
      * Provides a permalink for a room id and an eventId.
      * The eventId is optional.
+     *
      * @param roomIdOrAlias the room id or alias.
-     * @param eventId the event id (optional)
+     * @param eventId       the event id (optional)
      * @return the permalink
      */
     public static String getPermalink(String roomIdOrAlias, String eventId) {
@@ -97,11 +103,11 @@ public class VectorUtils {
         String link = "https://matrix.to/#/" + roomIdOrAlias;
 
         if (!TextUtils.isEmpty(eventId)) {
-            link +=  "/" + eventId;
+            link += "/" + eventId;
         }
 
         // the $ character is not as a part of an url so escape it.
-        return link.replace("$","%24");
+        return link.replace("$", "%24");
     }
 
     //==============================================================================================================
@@ -110,11 +116,12 @@ public class VectorUtils {
 
     /**
      * Copy a text to the clipboard.
+     *
      * @param context the context
-     * @param text the text to copy
+     * @param text    the text to copy
      */
     public static void copyToClipboard(Context context, CharSequence text) {
-        ClipboardManager clipboard = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setPrimaryClip(ClipData.newPlainText("", text));
         Toast.makeText(context, context.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
     }
@@ -125,6 +132,7 @@ public class VectorUtils {
 
     /**
      * Returns the public room display name..
+     *
      * @param publicRoom the public room.
      * @return the room display name.
      */
@@ -146,9 +154,10 @@ public class VectorUtils {
 
     /**
      * Provide a display name for a calling room
+     *
      * @param context the application context.
      * @param session the room session.
-     * @param room the room.
+     * @param room    the room.
      * @return the calling room display name.
      */
     public static String getCallingRoomDisplayName(Context context, MXSession session, Room room) {
@@ -173,9 +182,10 @@ public class VectorUtils {
 
     /**
      * Vector client formats the room display with a different manner than the SDK one.
+     *
      * @param context the application context.
      * @param session the room session.
-     * @param room the room.
+     * @param room    the room.
      * @return the room display name.
      */
     public static String getRoomDisplayName(Context context, MXSession session, Room room) {
@@ -210,7 +220,7 @@ public class VectorUtils {
         ArrayList<RoomMember> othersActiveMembers = new ArrayList<>();
         ArrayList<RoomMember> activeMembers = new ArrayList<>();
 
-        for(RoomMember member : members) {
+        for (RoomMember member : members) {
             if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
                 if (!TextUtils.equals(member.getUserId(), myUserId)) {
                     othersActiveMembers.add(member);
@@ -242,23 +252,19 @@ public class VectorUtils {
                     } else {
                         displayName = context.getString(R.string.room_displayname_room_invite);
                     }
-                }
-                else {
+                } else {
                     displayName = context.getString(R.string.room_displayname_no_title);
                 }
             }
-        }
-        else if (othersActiveMembers.size() == 1) {
+        } else if (othersActiveMembers.size() == 1) {
             RoomMember member = othersActiveMembers.get(0);
             displayName = roomState.getMemberName(member.getUserId());
-        }
-        else if (othersActiveMembers.size() == 2) {
+        } else if (othersActiveMembers.size() == 2) {
             RoomMember member1 = othersActiveMembers.get(0);
             RoomMember member2 = othersActiveMembers.get(1);
 
             displayName = context.getString(R.string.room_displayname_two_members, roomState.getMemberName(member1.getUserId()), roomState.getMemberName(member2.getUserId()));
-        }
-        else {
+        } else {
             RoomMember member = othersActiveMembers.get(0);
             displayName = context.getString(R.string.room_displayname_more_than_two_members, roomState.getMemberName(member.getUserId()), othersActiveMembers.size() - 1);
         }
@@ -277,6 +283,7 @@ public class VectorUtils {
 
     /**
      * Provides the avatar background color from a text.
+     *
      * @param text the text.
      * @return the color.
      */
@@ -286,34 +293,36 @@ public class VectorUtils {
         if (!TextUtils.isEmpty(text)) {
             long sum = 0;
 
-            for(int i = 0; i < text.length(); i++) {
+            for (int i = 0; i < text.length(); i++) {
                 sum += text.charAt(i);
             }
 
             colorIndex = sum % mColorList.size();
         }
 
-        return mColorList.get((int)colorIndex);
+        return mColorList.get((int) colorIndex);
     }
 
     /**
      * Create a thumbnail avatar.
-     * @param context the context
-     * @param backgroundColor  the background color
-     * @param text the text to display.
+     *
+     * @param context         the context
+     * @param backgroundColor the background color
+     * @param text            the text to display.
      * @return the generated bitmap
      */
     private static Bitmap createAvatarThumbnail(Context context, int backgroundColor, String text) {
         float densityScale = context.getResources().getDisplayMetrics().density;
         // the avatar size is 42dp, convert it in pixels.
-        return createAvatar(backgroundColor, text, (int)(42 * densityScale));
+        return createAvatar(backgroundColor, text, (int) (42 * densityScale));
     }
 
     /**
      * Create an avatar bitmap from a text.
+     *
      * @param backgroundColor the background color.
-     * @param text the text to display.
-     * @param pixelsSide the avatar side in pixels
+     * @param text            the text to display.
+     * @param pixelsSide      the avatar side in pixels
      * @return the generated bitmap
      */
     private static Bitmap createAvatar(int backgroundColor, String text, int pixelsSide) {
@@ -330,7 +339,7 @@ public class VectorUtils {
         textPaint.setColor(Color.WHITE);
         // the text size is proportional to the avatar size.
         // by default, the avatar size is 42dp, the text size is 28 dp (not sp because it has to be fixed).
-        textPaint.setTextSize(pixelsSide  * 2 / 3);
+        textPaint.setTextSize(pixelsSide * 2 / 3);
 
         // get its size
         Rect textBounds = new Rect();
@@ -345,6 +354,7 @@ public class VectorUtils {
 
     /**
      * Return the char to display for a name
+     *
      * @param name the name
      * @return teh first char
      */
@@ -364,15 +374,21 @@ public class VectorUtils {
             int chars = 1;
             char first = name.charAt(idx);
 
+            // LEFT-TO-RIGHT MARK
+            if ((name.length() >= 2) && (0x200e == first)) {
+                idx++;
+                first = name.charAt(idx);
+            }
+
             // check if it’s the start of a surrogate pair
-            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > 2)) {
-                char second = name.charAt(idx+1);
+            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > (idx + 1))) {
+                char second = name.charAt(idx + 1);
                 if (second >= 0xDC00 && second <= 0xDFFF) {
                     chars++;
                 }
             }
 
-            firstChar = name.substring(idx, idx+chars);
+            firstChar = name.substring(idx, idx + chars);
         }
 
         return firstChar.toUpperCase();
@@ -380,9 +396,10 @@ public class VectorUtils {
 
     /**
      * Returns an avatar from a text.
+     *
      * @param context the context.
-     * @param aText the text.
-     * @param create create the avatar if it does not exist
+     * @param aText   the text.
+     * @param create  create the avatar if it does not exist
      * @return the avatar.
      */
     public static Bitmap getAvatar(Context context, int backgroundColor, String aText, boolean create) {
@@ -402,8 +419,9 @@ public class VectorUtils {
 
     /**
      * Set the default vector avatar for a member.
-     * @param imageView the imageView to set.
-     * @param userId the member userId.
+     *
+     * @param imageView   the imageView to set.
+     * @param userId      the member userId.
      * @param displayName the member display name.
      */
     private static void setDefaultMemberAvatar(final ImageView imageView, final String userId, final String displayName) {
@@ -431,8 +449,9 @@ public class VectorUtils {
 
     /**
      * Set the default vector room avatar.
-     * @param imageView the image view.
-     * @param roomId the room id.
+     *
+     * @param imageView   the image view.
+     * @param roomId      the room id.
      * @param displayName the room display name.
      */
     public static void setDefaultRoomVectorAvatar(ImageView imageView, String roomId, String displayName) {
@@ -441,10 +460,11 @@ public class VectorUtils {
 
     /**
      * Set the room avatar in an imageView.
-     * @param context the context
-     * @param session the session
+     *
+     * @param context   the context
+     * @param session   the session
      * @param imageView the image view
-     * @param room the room
+     * @param room      the room
      */
     public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         if (null != room) {
@@ -454,10 +474,11 @@ public class VectorUtils {
 
     /**
      * Set the call avatar in an imageView.
-     * @param context the context
-     * @param session the session
+     *
+     * @param context   the context
+     * @param session   the session
      * @param imageView the image view
-     * @param room the room
+     * @param room      the room
      */
     public static void loadCallAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         // sanity check
@@ -503,9 +524,10 @@ public class VectorUtils {
 
     /**
      * Set the room member avatar in an imageView.
-     * @param context the context
-     * @param session the session
-     * @param imageView the image view
+     *
+     * @param context    the context
+     * @param session    the session
+     * @param imageView  the image view
      * @param roomMember the room member
      */
     public static void loadRoomMemberAvatar(Context context, MXSession session, ImageView imageView, RoomMember roomMember) {
@@ -516,10 +538,11 @@ public class VectorUtils {
 
     /**
      * Set the user avatar in an imageView.
-     * @param context the context
-     * @param session the session
+     *
+     * @param context   the context
+     * @param session   the session
      * @param imageView the image view
-     * @param user the user
+     * @param user      the user
      */
     public static void loadUserAvatar(Context context, MXSession session, ImageView imageView, User user) {
         if (null != user) {
@@ -529,19 +552,20 @@ public class VectorUtils {
 
     // the background thread
     private static HandlerThread mImagesThread = null;
-    private static android.os.Handler mImagesThreadHandler  = null;
+    private static android.os.Handler mImagesThreadHandler = null;
     private static Handler mUIHandler = null;
 
     /**
      * Set the user avatar in an imageView.
-     * @param context the context
-     * @param session the session
-     * @param imageView the image view
-     * @param avatarUrl the avatar url
-     * @param userId the user id
+     *
+     * @param context     the context
+     * @param session     the session
+     * @param imageView   the image view
+     * @param avatarUrl   the avatar url
+     * @param userId      the user id
      * @param displayName the user display name
      */
-    public static void loadUserAvatar(final Context context,final MXSession session, final ImageView imageView, final String avatarUrl, final String userId, final String displayName) {
+    public static void loadUserAvatar(final Context context, final MXSession session, final ImageView imageView, final String avatarUrl, final String userId, final String displayName) {
         // sanity check
         if ((null == session) || (null == imageView) || !session.isAlive()) {
             return;
@@ -587,7 +611,7 @@ public class VectorUtils {
                 mImagesThreadHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (TextUtils.equals(tmpTag0, (String)imageView.getTag())) {
+                        if (TextUtils.equals(tmpTag0, (String) imageView.getTag())) {
                             imageView.setTag(null);
                             setDefaultMemberAvatar(imageView, userId, displayName);
 
@@ -600,7 +624,7 @@ public class VectorUtils {
                                     @Override
                                     public void run() {
                                         // test if the imageView tag has not been updated
-                                        if (TextUtils.equals(tmpTag1, (String)imageView.getTag())) {
+                                        if (TextUtils.equals(tmpTag1, (String) imageView.getTag())) {
                                             final String tmptag2 = "22" + avatarUrl + userId + displayName;
                                             imageView.setTag(tmptag2);
 
@@ -633,53 +657,74 @@ public class VectorUtils {
 
     /**
      * Provide the application version
-     * @param activity the activity
+     *
+     * @param context the application context
      * @return the version. an empty string is not found.
      */
-    public static String getApplicationVersion(final Activity activity) {
-        return  im.vector.Matrix.getInstance(activity).getVersion(false);
+    public static String getApplicationVersion(final Context context) {
+        return im.vector.Matrix.getInstance(context).getVersion(false);
     }
 
     /**
      * Display the licenses text.
-     * @param activity the activity
      */
-    public static void displayThirdPartyLicenses(final Activity activity) {
+    public static void displayThirdPartyLicenses() {
+        final Activity activity = VectorApp.getCurrentActivity();
 
-        if (null != mMainAboutDialog) {
-            mMainAboutDialog.dismiss();
-            mMainAboutDialog = null;
-        }
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                WebView view = (WebView) LayoutInflater.from(activity).inflate(R.layout.dialog_licenses, null);
-                view.loadUrl("file:///android_asset/open_source_licenses.html");
-
-                View titleView = LayoutInflater.from(activity).inflate(R.layout.dialog_licenses_header, null);
-
-                view.setScrollbarFadingEnabled(false);
-                mMainAboutDialog = new AlertDialog.Builder(activity)
-                        .setCustomTitle(titleView)
-                        .setView(view)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .create();
-
-                mMainAboutDialog.show();
+        if (null != activity) {
+            if (null != mMainAboutDialog) {
+                if (mMainAboutDialog.isShowing() && (null != mMainAboutDialog.getOwnerActivity())) {
+                    try {
+                        mMainAboutDialog.dismiss();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## displayThirdPartyLicenses() : " + e.getMessage());
+                    }
+                }
+                mMainAboutDialog = null;
             }
-        });
+
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WebView view = (WebView) LayoutInflater.from(activity).inflate(R.layout.dialog_licenses, null);
+                    view.loadUrl("file:///android_asset/open_source_licenses.html");
+
+                    View titleView = LayoutInflater.from(activity).inflate(R.layout.dialog_licenses_header, null);
+
+                    view.setScrollbarFadingEnabled(false);
+                    mMainAboutDialog = new AlertDialog.Builder(activity)
+                            .setCustomTitle(titleView)
+                            .setView(view)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mMainAboutDialog = null;
+                                }
+                            })
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    mMainAboutDialog = null;
+                                }
+                            })
+                            .create();
+
+                    mMainAboutDialog.show();
+                }
+            });
+        }
     }
 
     /**
      * Open a webview above the current activity.
-     * @param activity the activity
-     * @param url the url to open
+     *
+     * @param context the application context
+     * @param url     the url to open
      */
-    private static void displayInWebview(final Activity activity, String url) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+    private static void displayInWebview(final Context context, String url) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
-        WebView wv = new WebView(activity);
+        WebView wv = new WebView(context);
         wv.loadUrl(url);
         wv.setWebViewClient(new WebViewClient() {
             @Override
@@ -697,26 +742,29 @@ public class VectorUtils {
 
     /**
      * Display the term and conditions.
-     * @param activity the activity
      */
-    public static void displayAppTac(final Activity activity) {
-        displayInWebview(activity, "https://riot.im/tac");
+    public static void displayAppTac() {
+        if (null != VectorApp.getCurrentActivity()) {
+            displayInWebview(VectorApp.getCurrentActivity(), "https://riot.im/tac");
+        }
     }
 
     /**
      * Display the copyright.
-     * @param activity the activity
      */
-    public static void displayAppCopyright(final Activity activity) {
-        displayInWebview(activity, "https://riot.im/copyright");
+    public static void displayAppCopyright() {
+        if (null != VectorApp.getCurrentActivity()) {
+            displayInWebview(VectorApp.getCurrentActivity(), "https://riot.im/copyright");
+        }
     }
 
     /**
      * Display the privacy policy.
-     * @param activity the activity
      */
-    public static void displayAppPrivacyPolicy(final Activity activity) {
-        displayInWebview(activity, "https://riot.im/privacy");
+    public static void displayAppPrivacyPolicy() {
+        if (null != VectorApp.getCurrentActivity()) {
+            displayInWebview(VectorApp.getCurrentActivity(), "https://riot.im/privacy");
+        }
     }
 
     //==============================================================================================================
@@ -725,6 +773,7 @@ public class VectorUtils {
 
     /**
      * Return a selected bitmap from an intent.
+     *
      * @param intent the intent
      * @return the bitmap uri
      */
@@ -778,7 +827,8 @@ public class VectorUtils {
 
     /**
      * Format a time interval in seconds to a string
-     * @param context the context.
+     *
+     * @param context         the context.
      * @param secondsInterval the time interval.
      * @return the formatted string
      */
@@ -805,18 +855,17 @@ public class VectorUtils {
     /**
      * Provide the user online status from his user Id.
      * if refreshCallback is set, try to refresh the user presence if it is not known
-     * @param context the context.
-     * @param session the session.
-     * @param userId the userId.
+     *
+     * @param context         the context.
+     * @param session         the session.
+     * @param userId          the userId.
      * @param refreshCallback the presence callback.
      * @return the online status description.
      */
     public static String getUserOnlineStatus(final Context context, final MXSession session, final String userId, final SimpleApiCallback<Void> refreshCallback) {
-        String presenceText = context.getResources().getString(R.string.room_participants_offline);
-
         // sanity checks
         if ((null == session) || (null == userId)) {
-            return presenceText;
+            return null;
         }
 
         final User user = session.getDataHandler().getStore().getUser(userId);
@@ -876,9 +925,10 @@ public class VectorUtils {
 
         // unknown user
         if (null == user) {
-            return presenceText;
+            return null;
         }
 
+        String presenceText = null;
         if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
             presenceText = context.getResources().getString(R.string.room_participants_online);
         } else if (TextUtils.equals(user.presence, User.PRESENCE_UNAVAILABLE)) {
@@ -887,10 +937,12 @@ public class VectorUtils {
             presenceText = context.getResources().getString(R.string.room_participants_offline);
         }
 
-        if ((null != user.currently_active) && user.currently_active) {
-            presenceText += " " +  context.getResources().getString(R.string.room_participants_now);
-        } else if ((null != user.lastActiveAgo) && (user.lastActiveAgo > 0)) {
-            presenceText += " " + formatSecondsIntervalFloored(context, user.getAbsoluteLastActiveAgo() / 1000L) + " " + context.getResources().getString(R.string.room_participants_ago);
+        if (presenceText != null) {
+            if ((null != user.currently_active) && user.currently_active) {
+                presenceText += " " + context.getResources().getString(R.string.room_participants_now);
+            } else if ((null != user.lastActiveAgo) && (user.lastActiveAgo > 0)) {
+                presenceText += " " + formatSecondsIntervalFloored(context, user.getAbsoluteLastActiveAgo() / 1000L) + " " + context.getResources().getString(R.string.room_participants_ago);
+            }
         }
 
         return presenceText;
@@ -903,19 +955,20 @@ public class VectorUtils {
     /**
      * List the active users i.e the active rooms users (invited or joined) and the contacts with matrix id emails.
      * This function could require a long time to process so it should be called in background.
+     *
      * @param session the session.
      * @return a map indexed by the matrix id.
      */
-    public static HashMap<String, ParticipantAdapterItem> listKnownParticipants(MXSession session) {
+    public static Map<String, ParticipantAdapterItem> listKnownParticipants(MXSession session) {
         // a hash map is a lot faster than a list search
-        HashMap<String, ParticipantAdapterItem> map = new HashMap<>();
+        Map<String, ParticipantAdapterItem> map = new HashMap<>();
 
         // check known users
         Collection<User> users = session.getDataHandler().getStore().getUsers();
 
         // we don't need to populate the room members or each room
         // because an user is created for each joined / invited room member event
-        for(User user : users) {
+        for (User user : users) {
             if (!MXCallsManager.isConferenceUserId(user.user_id)) {
                 map.put(user.user_id, new ParticipantAdapterItem(user));
             }
@@ -923,7 +976,6 @@ public class VectorUtils {
 
         return map;
     }
-
 
     //==============================================================================================================
     // URL parser
@@ -937,6 +989,7 @@ public class VectorUtils {
 
     /**
      * List the URLs in a text.
+     *
      * @param text the text to parse
      * @return the list of URLss
      */
@@ -955,15 +1008,15 @@ public class VectorUtils {
                 String charAfter = "";
 
                 if (matchStart > 2) {
-                    charBef = text.substring(matchStart-2, matchStart);
+                    charBef = text.substring(matchStart - 2, matchStart);
                 }
 
-                if ((matchEnd-1) < text.length()) {
-                    charAfter = text.substring(matchEnd-1, matchEnd);
+                if ((matchEnd - 1) < text.length()) {
+                    charAfter = text.substring(matchEnd - 1, matchEnd);
                 }
 
                 // keep the link between parenthesis, it might be a link [title](link)
-                if (!TextUtils.equals(charAfter, ")") || !TextUtils.equals(charBef, "](") ) {
+                if (!TextUtils.equals(charAfter, ")") || !TextUtils.equals(charBef, "](")) {
                     String url = text.substring(matchStart, matchEnd);
 
                     if (URLs.indexOf(url) < 0) {
@@ -974,5 +1027,47 @@ public class VectorUtils {
         }
 
         return URLs;
+    }
+
+    //==============================================================================================================
+    // ExpandableListView tools
+    //==============================================================================================================
+
+    /**
+     * Provides the visible child views.
+     * The map key is the group position.
+     * The map values are the visible child views.
+     *
+     * @param expandableListView the listview
+     * @param adapter            the linked adapter
+     * @return visible views map
+     */
+    public static HashMap<Integer, List<Integer>> getVisibleChildViews(ExpandableListView expandableListView, BaseExpandableListAdapter adapter) {
+        HashMap<Integer, List<Integer>> map = new HashMap<>();
+
+        long firstPackedPosition = expandableListView.getExpandableListPosition(expandableListView.getFirstVisiblePosition());
+
+        int firstGroupPosition = ExpandableListView.getPackedPositionGroup(firstPackedPosition);
+        int firstChildPosition = ExpandableListView.getPackedPositionChild(firstPackedPosition);
+
+        long lastPackedPosition = expandableListView.getExpandableListPosition(expandableListView.getLastVisiblePosition());
+
+        int lastGroupPosition = ExpandableListView.getPackedPositionGroup(lastPackedPosition);
+        int lastChildPosition = ExpandableListView.getPackedPositionChild(lastPackedPosition);
+
+        for (int groupPos = firstGroupPosition; groupPos <= lastGroupPosition; groupPos++) {
+            ArrayList<Integer> list = new ArrayList<>();
+
+            int startChildPos = (groupPos == firstGroupPosition) ? firstChildPosition : 0;
+            int endChildPos = (groupPos == lastGroupPosition) ? lastChildPosition : adapter.getChildrenCount(groupPos) - 1;
+
+            for (int index = startChildPos; index <= endChildPos; index++) {
+                list.add(index);
+            }
+
+            map.put(groupPos, list);
+        }
+
+        return map;
     }
 }
