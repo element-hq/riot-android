@@ -155,6 +155,7 @@ public class FavouritesFragment extends AbsHomeFragment {
 
     @Override
     protected void onResetFilter() {
+        mSearchedPattern = "";
         mFavoritesAdapter.getFilter().filter("");
         updateRoomsDisplay(mFavoritesAdapter.getItemCount());
     }
@@ -294,6 +295,12 @@ public class FavouritesFragment extends AbsHomeFragment {
             private int mToPosition = -1;
 
             @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                // do not allow the drag and drop if there is a pending search
+                return makeMovementFlags(!TextUtils.isEmpty(mSearchedPattern) ? 0 : (ItemTouchHelper.UP | ItemTouchHelper.DOWN), 0);
+            }
+
+            @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 int fromPosition = viewHolder.getAdapterPosition();
 
@@ -315,14 +322,14 @@ public class FavouritesFragment extends AbsHomeFragment {
             @Override
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 super.clearView(recyclerView, viewHolder);
-                Log.e(LOG_TAG, "clearView " + mFromPosition + " " + mToPosition);
 
-                // its tag
-                String dstRoomTag = RoomTag.ROOM_TAG_FAVOURITE;
+                if ((mFromPosition > 0) && (mToPosition > 0)) {
+                    Log.d(LOG_TAG, "## initFavoritesDragDrop() : move room id " + mRoomId + " from " + mFromPosition + " to " + mToPosition);
 
-                // compute the new tag order
-                Double tagOrder = mSession.tagOrderToBeAtIndex(mToPosition, mFromPosition, dstRoomTag);
-                updateRoomTag(mSession, mRoomId, tagOrder, dstRoomTag);
+                    // compute the new tag order
+                    Double tagOrder = mSession.tagOrderToBeAtIndex(mToPosition, mFromPosition, RoomTag.ROOM_TAG_FAVOURITE);
+                    updateRoomTag(mSession, mRoomId, tagOrder, RoomTag.ROOM_TAG_FAVOURITE);
+                }
 
                 mFromPosition = -1;
                 mToPosition = -1;
@@ -335,6 +342,7 @@ public class FavouritesFragment extends AbsHomeFragment {
 
     /**
      * A room tag has been updated
+     *
      * @param errorMessage the error message if any.
      */
     private void onRoomTagUpdated(String errorMessage) {
@@ -350,10 +358,11 @@ public class FavouritesFragment extends AbsHomeFragment {
 
     /**
      * Update the room tag.
-     * @param session the session
-     * @param roomId the room id.
+     *
+     * @param session  the session
+     * @param roomId   the room id.
      * @param tagOrder the tag order.
-     * @param newtag the new tag.
+     * @param newtag   the new tag.
      */
     private void updateRoomTag(MXSession session, String roomId, Double tagOrder, String newtag) {
         Room room = session.getDataHandler().getRoom(roomId);
