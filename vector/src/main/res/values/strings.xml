@@ -28,6 +28,7 @@
     <string name="quote">Quote</string>
     <string name="share">Share</string>
     <string name="later">Later</string>
+    <string name="and">and</string>
     <string name="paste_username">Paste username</string>
     <string name="view_profile">View profile</string>
     <string name="direct_message">Direct message</string>
@@ -545,6 +546,7 @@
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
 
     <!-- invitation -->
+    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
     <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
     <string name="people_search_known_contacts">KNOWN CONTACTS (%s)</string>
     <string name="people_search_filter_text">Matrix users only</string>
@@ -552,6 +554,10 @@
 
     <string name="people_search_all_contacts">All contacts</string>
     <string name="people_search_matrix_contacts">Matrix contacts</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
 
     <!-- Presence status-->
     <string name="presence_offline">Offline</string>

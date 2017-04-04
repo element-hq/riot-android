@@ -61,6 +61,7 @@ import org.matrix.androidsdk.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -966,6 +967,93 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
+     *
+     * @param emails
+     */
+    private void inviteEmails(final Iterator<String> emails) {
+        if (!emails.hasNext()) {
+            mDefaultCallBack.onSuccess(null);
+            return;
+        }
+
+        String email = emails.next();
+        mRoom.inviteByEmail(email, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                inviteEmails(emails);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                mDefaultCallBack.onNetworkError(e);
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                mDefaultCallBack.onMatrixError(e);
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                mDefaultCallBack.onUnexpectedError(e);
+            }
+        });
+    }
+
+    /**
+     * Invite an user Ids list.
+     * @param userIds the user IDs list
+     */
+    private void inviteUserIds(List<String> userIds) {
+        final List<String> mxIds = new ArrayList<>();
+        final List<String> emails = new ArrayList<>();
+
+        for(String userId : userIds) {
+            if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
+                emails.add(userId);
+            } else {
+                mxIds.add(userId);
+            }
+        }
+
+        mProgressView.setVisibility(View.VISIBLE);
+
+        // if there are some mx ids
+        if (mxIds.size() > 0) {
+            // invite them first
+            mRoom.invite(mxIds, new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    // invite by email
+                    if (emails.size() != 0) {
+                        inviteEmails(emails.iterator());
+                    } else {
+                        mDefaultCallBack.onSuccess(null);
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    mDefaultCallBack.onNetworkError(e);
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    mDefaultCallBack.onMatrixError(e);
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    mDefaultCallBack.onUnexpectedError(e);
+                }
+            });
+        } else {
+            // invite by email
+            inviteEmails(emails.iterator());
+        }
+    }
+
+    /**
      * Activity result
      *
      * @param requestCode the request code
@@ -974,17 +1062,10 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == INVITE_USER_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
-            final String userId = data.getStringExtra(VectorRoomInviteMembersActivity.EXTRA_SELECTED_USER_ID);
+            final List<String> userIds = (List<String>)data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_OUT_SELECTED_USER_IDS);
 
-            if (null != userId) {
-                // and the new member is added.
-                mProgressView.setVisibility(View.VISIBLE);
-
-                if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
-                    mRoom.inviteByEmail(userId, mDefaultCallBack);
-                } else {
-                    mRoom.invite(Arrays.asList(userId), mDefaultCallBack);
-                }
+            if ((null != userIds) && (userIds.size() > 0)) {
+                inviteUserIds(userIds);
             }
         } else if ((requestCode == GET_MENTION_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
             final String mention = data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID);

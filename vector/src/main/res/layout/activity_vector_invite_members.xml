@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ExpandableListView
-        android:id="@+id/room_details_members_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="1dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="1px" />
+        android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/vector_dc_gray" />
+        <TextView
+            android:id="@+id/search_invite_by_id"
+            style="@style/ListHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:text="@string/people_search_invite_by_id" />
+        
+        <ExpandableListView
+            android:id="@+id/room_details_members_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="1px" />
+        
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/search_in_progress_view"
@@ -31,4 +42,4 @@
             android:indeterminate="true" />
     </RelativeLayout>
 
-</FrameLayout>
+</RelativeLayout>

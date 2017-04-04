@@ -214,12 +214,10 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == INVITE_USER_REQUEST_CODE) {
-
             if (resultCode == Activity.RESULT_OK) {
-                ParticipantAdapterItem item = (ParticipantAdapterItem) data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM);
-                mParticipants.add(item);
-
-                mAdapter.add(item);
+                List<ParticipantAdapterItem> items = (List<ParticipantAdapterItem>) data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS);
+                mParticipants.addAll(items);
+                mAdapter.addAll(items);
                 mAdapter.sort(mAlphaComparator);
             } else if (1 == mParticipants.size()) {
                 // the user cancels the first user selection so assume he wants to cancel the room creation.
