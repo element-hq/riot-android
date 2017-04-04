@@ -111,6 +111,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     // list the up to date presence to avoid refreshing it twice
     private final List<String> mUpdatedPresenceUserIds = new ArrayList<>();
 
+    // avoid dismissing the loading wheel when some new members are added
+    private boolean mIsInvitingNewMembers;
+
     // global events listener
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -163,7 +166,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 @Override
                 public void run() {
                     // stop waiting wheel
-                    mProgressView.setVisibility(View.GONE);
+                    if (!mIsInvitingNewMembers) {
+                        mProgressView.setVisibility(View.GONE);
+                    }
 
                     if (0 == aSearchCountResult) {
                         // no results found!
@@ -972,6 +977,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     private void inviteEmails(final Iterator<String> emails) {
         if (!emails.hasNext()) {
+            mIsInvitingNewMembers = false;
             mDefaultCallBack.onSuccess(null);
             return;
         }
@@ -985,16 +991,19 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
             @Override
             public void onNetworkError(Exception e) {
+                mIsInvitingNewMembers = false;
                 mDefaultCallBack.onNetworkError(e);
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
+                mIsInvitingNewMembers = false;
                 mDefaultCallBack.onMatrixError(e);
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
+                mIsInvitingNewMembers = false;
                 mDefaultCallBack.onUnexpectedError(e);
             }
         });
@@ -1016,6 +1025,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             }
         }
 
+        mIsInvitingNewMembers = true;
         mProgressView.setVisibility(View.VISIBLE);
 
         // if there are some mx ids
@@ -1025,25 +1035,24 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 @Override
                 public void onSuccess(Void info) {
                     // invite by email
-                    if (emails.size() != 0) {
-                        inviteEmails(emails.iterator());
-                    } else {
-                        mDefaultCallBack.onSuccess(null);
-                    }
+                    inviteEmails(emails.iterator());
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
+                    mIsInvitingNewMembers = false;
                     mDefaultCallBack.onNetworkError(e);
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
+                    mIsInvitingNewMembers = false;
                     mDefaultCallBack.onMatrixError(e);
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
+                    mIsInvitingNewMembers = false;
                     mDefaultCallBack.onUnexpectedError(e);
                 }
             });
