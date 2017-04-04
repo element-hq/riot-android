@@ -158,7 +158,7 @@
     <!-- universal link receiver -->
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
+    <string name="e2e_need_log_in_again">Heu de tornar a iniciar sessió per tal de generar claus de xifrat d'extrema a extrem per a aquest dispositiu i enviar la clau pública al servidor.\nAixò només s'ha de fer un cop.</string>
 
     <!-- members list Screen -->
 
