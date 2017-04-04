@@ -139,21 +139,21 @@
     <string name="auth_reset_password_success_message">La contrasenya s'ha reiniciat.\n\nLes sessions de tots els dispositius han estat tancades i no rebreu més notificacions automàtiques. Per tal de reactivar les notificacions, torneu a entrar en cada dispositiu.</string>
 
     <!-- Login Screen -->
-    <string name="login_error_must_start_http">URL must start with http[s]://</string>
-    <string name="login_error_network_error">Unable to login: Network error</string>
-    <string name="login_error_unable_login">Unable to login</string>
-    <string name="login_error_registration_network_error">Unable to register: Network error</string>
-    <string name="login_error_unable_register">Unable to register</string>
-    <string name="login_error_unable_register_mail_ownership">Unable to register : email ownership failure</string>
-    <string name="login_error_invalid_home_server">Enter valid URL</string>
+    <string name="login_error_must_start_http">La URL ha de començar per http[s]://</string>
+    <string name="login_error_network_error">No s'ha pogut iniciar la sessió: error de xarxa</string>
+    <string name="login_error_unable_login">No s'ha pogut iniciar la sessió</string>
+    <string name="login_error_registration_network_error">No s'ha pogut fer el registre: error de xarxa</string>
+    <string name="login_error_unable_register">No s'ha pogut fer el registre</string>
+    <string name="login_error_unable_register_mail_ownership">No s'ha pogut fer el registre: s'ha produït una errada en la propietat del correu electrònic</string>
+    <string name="login_error_invalid_home_server">Introduïu una URL vàlida</string>
 
-    <string name="login_error_forbidden">Invalid username/password</string>
-    <string name="login_error_unknown_token">The access token specified was not recognised</string>
-    <string name="login_error_bad_json">Malformed JSON</string>
-    <string name="login_error_not_json">Did not contain valid JSON</string>
-    <string name="login_error_limit_exceeded">Too many requests have been sent</string>
-    <string name="login_error_user_in_use">This user name is already used</string>
-    <string name="login_error_login_email_not_yet">The email link which has not been clicked yet</string>
+    <string name="login_error_forbidden">El nom d'usuari/contrasenya és invàlid</string>
+    <string name="login_error_unknown_token">No s'ha reconegut el testimoni d'accés</string>
+    <string name="login_error_bad_json">JSON malformat</string>
+    <string name="login_error_not_json">No contenia un JSON vàlid</string>
+    <string name="login_error_limit_exceeded">S'han enviat massa peticions</string>
+    <string name="login_error_user_in_use">Aquest nom d'usuari ja està en ús</string>
+    <string name="login_error_login_email_not_yet">L'enllaç del correu electrònic que encara no heu fet clic</string>
 
     <!-- universal link receiver -->
 
