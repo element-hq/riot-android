@@ -176,8 +176,8 @@
     <string name="compression_opt_list_small">Petita</string>
 
     <!-- media upload / download messages -->
-    <string name="attachment_cancel_download">"Cancel the download?</string>
-    <string name="attachment_cancel_upload">Cancel the upload?</string>
+    <string name="attachment_cancel_download">"Voleu cancel·lar la baixada?</string>
+    <string name="attachment_cancel_upload">Voleu cancel·lar la pujada?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
