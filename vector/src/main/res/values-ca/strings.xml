@@ -166,7 +166,7 @@
     <string name="read_receipts_list">Llegit per</string>
 
     <!-- accounts list Screen -->
-    <string name="choose_account">Choose account</string>
+    <string name="choose_account">Tria un compte</string>
 
     <!-- image size selection -->
     <string name="compression_options">Send as </string>
