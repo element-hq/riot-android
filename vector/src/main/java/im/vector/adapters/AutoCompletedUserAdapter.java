@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+
 import im.vector.R;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
 
-import org.matrix.androidsdk.rest.model.StrippedState;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
@@ -57,11 +57,15 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
     // cannot use the parent list
     private List<User> mUsersList = new ArrayList<>();
 
+    // tell if the current search is on matrix IDs
+    private boolean mIsSearchingMatrixId = false;
+
     /**
      * Construct an adapter which will display a list of users
-     * @param context Activity context
+     *
+     * @param context          Activity context
      * @param layoutResourceId The resource ID of the layout for each item.
-     * @param session the session
+     * @param session          the session
      */
     public AutoCompletedUserAdapter(Context context, int layoutResourceId, MXSession session) {
         super(context, layoutResourceId);
@@ -73,6 +77,7 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
 
     /**
      * Update the items list
+     *
      * @param users the users list
      */
     public void updateItems(List<User> users) {
@@ -93,11 +98,12 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
 
         User user = getItem(position);
 
-        VectorCircularImageView avatarView = (VectorCircularImageView)convertView.findViewById(R.id.item_user_auto_complete_avatar);
-        TextView userNameTextView = (TextView)convertView.findViewById(R.id.item_user_auto_complete_name);
+        VectorCircularImageView avatarView = (VectorCircularImageView) convertView.findViewById(R.id.item_user_auto_complete_avatar);
+        TextView userNameTextView = (TextView) convertView.findViewById(R.id.item_user_auto_complete_name);
 
         VectorUtils.loadUserAvatar(mContext, mSession, avatarView, user.getAvatarUrl(), user.user_id, user.displayname);
-        if (TextUtils.isEmpty(user.displayname)) {
+
+        if (!mIsSearchingMatrixId) {
             userNameTextView.setText(user.displayname);
         } else {
             userNameTextView.setText(user.user_id);
@@ -126,12 +132,19 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
             } else {
                 List<User> newValues = new ArrayList<>();
                 String prefixString = prefix.toString().toLowerCase();
+                mIsSearchingMatrixId = prefixString.startsWith("@");
 
-                for (User user : mUsersList) {
-                    if ((null != user.user_id) && user.user_id.toLowerCase().startsWith(prefixString)) {
-                        newValues.add(user);
-                    } else if ((null != user.displayname) && user.displayname.toLowerCase().startsWith(prefixString)) {
-                        newValues.add(user);
+                if (mIsSearchingMatrixId) {
+                    for (User user : mUsersList) {
+                        if ((null != user.user_id) && user.user_id.toLowerCase().startsWith(prefixString)) {
+                            newValues.add(user);
+                        }
+                    }
+                } else {
+                    for (User user : mUsersList) {
+                        if ((null != user.displayname) && user.displayname.toLowerCase().startsWith(prefixString)) {
+                            newValues.add(user);
+                        }
                     }
                 }
 
@@ -145,12 +158,18 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             clear();
-            addAll((List<User>)results.values);
+            addAll((List<User>) results.values);
             if (results.count > 0) {
                 notifyDataSetChanged();
             } else {
                 notifyDataSetInvalidated();
             }
+        }
+
+        @Override
+        public CharSequence convertResultToString(Object resultValue) {
+            User user = (User)resultValue;
+            return mIsSearchingMatrixId ? user.user_id : user.displayname;
         }
     }
 }
