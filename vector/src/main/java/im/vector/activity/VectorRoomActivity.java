@@ -37,6 +37,7 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -57,9 +58,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,6 +96,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
+import im.vector.adapters.AutoCompletedUserAdapter;
 import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.services.EventStreamService;
@@ -108,6 +112,7 @@ import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -190,7 +195,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private View mSendingMessagesLayout;
     private View mSendButtonLayout;
     private ImageView mSendImageView;
-    private EditText mEditText;
+    private MultiAutoCompleteTextView mEditText;
     private ImageView mAvatarImageView;
     private View mCanNotPostTextView;
     private ImageView mE2eImageView;
@@ -595,7 +600,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         Log.d(LOG_TAG, "Displaying " + roomId);
 
-        mEditText = (EditText) findViewById(R.id.editText_messageBox);
+        mEditText = (MultiAutoCompleteTextView)findViewById(R.id.editText_messageBox);
 
         // hide the header room as soon as the message input text area is touched
         mEditText.setOnClickListener(new View.OnClickListener() {
@@ -953,6 +958,54 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         ViewedRoomTracker.getInstance().setMatrixId(null);
     }
 
+    /**
+     * This simple Tokenizer can be used for lists where the items are
+     * separated by a comma and one or more spaces.
+     */
+    public static class RoomTokenizer implements MultiAutoCompleteTextView.Tokenizer {
+        final static List<Character> mAllowedTokens = Arrays.asList(',', ';', '.', ' ', '\n', '\t');
+
+        public int findTokenStart(CharSequence text, int cursor) {
+            int i = cursor;
+
+            while (i > 0 && !mAllowedTokens.contains(text.charAt(i - 1))) {
+                i--;
+            }
+
+            while (i < cursor && text.charAt(i) == ' ') {
+                i++;
+            }
+
+            return i;
+        }
+
+        public int findTokenEnd(CharSequence text, int cursor) {
+            int i = cursor;
+            int len = text.length();
+
+            while (i < len) {
+                if (mAllowedTokens.contains(text.charAt(i))) {
+                    return i;
+                } else {
+                    i++;
+                }
+            }
+
+            return len;
+        }
+
+        public CharSequence terminateToken(CharSequence text) {
+            int i = text.length();
+
+            while (i > 0 && text.charAt(i - 1) == ' ') {
+                i--;
+            }
+
+            return text + " ";
+        }
+    }
+
+
     @Override
     protected void onResume() {
         Log.d(LOG_TAG, "++ Resume the activity");
@@ -980,6 +1033,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     VectorRoomActivity.this.finish();
                     return;
                 }
+
+                List<User> users = new ArrayList<>();
+                Collection<RoomMember> members = mRoom.getMembers();
+
+                for(RoomMember member : members) {
+                    User user = mSession.getDataHandler().getUser(member.getUserId());
+
+                    if (null != user) {
+                        users.add(user);
+                    }
+                }
+
+                AutoCompletedUserAdapter adapter = new AutoCompletedUserAdapter(this, R.layout.item_user_auto_complete, mSession);
+                adapter.updateItems(users);
+                mEditText.setThreshold(3);
+                mEditText.setAdapter(adapter);
+                mEditText.setTokenizer(new RoomTokenizer());
             }
 
             // to do not trigger notifications for this room
