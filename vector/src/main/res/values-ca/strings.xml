@@ -190,8 +190,8 @@
     <!-- room creation dialog Screen -->
 
     <!-- room info dialog Screen -->
-    <string name="room_info_room_name">Room name</string>
-    <string name="room_info_room_topic">Room topic</string>
+    <string name="room_info_room_name">Nom de la sala</string>
+    <string name="room_info_room_topic">Tema de la sala</string>
 
     <!-- contacts list screen -->
 
