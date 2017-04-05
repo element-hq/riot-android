@@ -228,17 +228,17 @@
     <string name="media_picker_cannot_record_video">No es poden gravar vídeos"</string>
 
     <!-- permissions Android M -->
-    <string name="permissions_rationale_popup_title">Information</string>
-    <string name="permissions_rationale_msg_storage">Riot needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
-    <string name="permissions_rationale_msg_camera">Riot needs permission to access your camera to take pictures and video calls.</string>
-    <string name="permissions_rationale_msg_camera_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot needs permission to access your microphone to perform audio calls.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
-    <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
+    <string name="permissions_rationale_popup_title">Información</string>
+    <string name="permissions_rationale_msg_storage">Per poder enviar i desar adjunts, el Riot necessita permís d'accés a la galeria de fotos i vídeos.\n\nA la següent finestra emergent, doneu-li el permís d'accés i així podreu enviar fitxers des del telefon.</string>
+    <string name="permissions_rationale_msg_camera">Per poder fer fotos i vídeotrucades, el Riot necessita permís d'accés a la càmera.</string>
+    <string name="permissions_rationale_msg_camera_explanation">\n\nA la següent finestra emergent, doneu permís d'accés per tal de poder fer la trucada.</string>
+    <string name="permissions_rationale_msg_record_audio">Per tal de fer trucades de veu, el Riot necessita permís d'accés al microfon.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">\n\nA la següent finestra emergent, doneu permís d'accés per tal de poder fer la trucada.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Per tal de fer vídeotrucades, el Riot necessita permís d'accés a la càmera i al microfon.\n\nA la següent finestra emergent, doneu permís d'accés per tal de poder fer la trucada.</string>
+    <string name="permissions_rationale_msg_contacts">Per tal de trobar altres usuaris de Matrix a partir dels seus correus electrònics o dels seus números de telefon, el Riot necessita permís d'accés a l'agenda de contactes.\n\nA la següent finestra emergent, doneu permís d'accés per trobar amb quins contactes de la teva agenda pots contactar a partir de Riot.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Per tal de trobar altres usuaris de Matrix a partir dels seus correus electrònics o dels seus números de telefon, el Riot necessita permís d'accés a l'agenda de contactes.\n\nPermeteu que Riot accedeixi als vostres contactes?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
+    <string name="permissions_action_not_performed_missing_permissions">No s'ha relaitzat l'acció per falta de permisos</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Saved</string>
