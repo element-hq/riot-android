@@ -254,11 +254,11 @@
     <string name="reject">Rebutja</string>
 
     <!-- Room Preview -->
-    <string name="room_preview_invitation_format">You have been invited to join this room by %s</string>
-    <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
-    <string name="room_preview_try_join_an_unknown_room">You are trying to access %s. Would you like to join in order to participate in the discussion?</string>
-    <string name="room_preview_try_join_an_unknown_room_default">a room</string>
-    <string name="room_preview_room_interactions_disabled">This is a preview of this room. Room interactions have been disabled.</string>
+    <string name="room_preview_invitation_format">L'usuari de nom %s t'ha convidat a unir-te a aquesta sala</string>
+    <string name="room_preview_unlinked_email_warning">La invitació s'ha enviat a però aquest correu electrònic no està associat a aquest compte.\nPotser voleu iniciar una sessió amb un compte diferent o afegir aquest correu electrònic a aquest compte.</string>
+    <string name="room_preview_try_join_an_unknown_room">Esteu intentant accedir a %s. Voldríeu unir-vos per tal de participar en la discussió?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">una sala</string>
+    <string name="room_preview_room_interactions_disabled">Aquesta és una previsualització de la sala. Les interacions de la sala estan deshabilitades.</string>
 
     <!-- Chat creation -->
     <string name="room_creation_title">New Chat</string>
