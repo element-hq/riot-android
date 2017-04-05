@@ -261,14 +261,14 @@
     <string name="room_preview_room_interactions_disabled">Aquesta és una previsualització de la sala. Les interacions de la sala estan deshabilitades.</string>
 
     <!-- Chat creation -->
-    <string name="room_creation_title">New Chat</string>
-    <string name="room_creation_add_member">Add member</string>
-    <string name="room_header_active_members">%1$d/%2$d active members</string>
-    <string name="room_header_invite_members">Invite members</string>
-    <string name="room_title_members">%1$d members</string>
-    <string name="room_title_one_member">1 member</string>
-    <string name="room_e2e_alert_title">Warning!</string>
-    <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
+    <string name="room_creation_title">Xat nou</string>
+    <string name="room_creation_add_member">Afegeix un participant</string>
+    <string name="room_header_active_members">%1$d/%2$d participants actius</string>
+    <string name="room_header_invite_members">Convida participants</string>
+    <string name="room_title_members">%1$d participants</string>
+    <string name="room_title_one_member">1 participant</string>
+    <string name="room_e2e_alert_title">Avís</string>
+    <string name="room_e2e_alert_message">El xifrat d'extrem a extrem està en beta i no és del tot fiable.\n\nNo s'hi ha de confiar per a dades segures.\n\nEls dispositius encara no poden desxifrar l'històric de tot allò que ha passat abans d'unir-te a una sala.\n\nEls missatges xifrats no són visibles per aquells clients que no implementen xifratge.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
