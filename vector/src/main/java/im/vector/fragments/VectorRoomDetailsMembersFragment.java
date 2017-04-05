@@ -972,21 +972,15 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
-     *
-     * @param emails
+     * Invite an user Ids list.
+     * @param userIds the user IDs list
      */
-    private void inviteEmails(final Iterator<String> emails) {
-        if (!emails.hasNext()) {
-            mIsInvitingNewMembers = false;
-            mDefaultCallBack.onSuccess(null);
-            return;
-        }
-
-        String email = emails.next();
-        mRoom.inviteByEmail(email, new ApiCallback<Void>() {
+    private void inviteUserIds(List<String> userIds) {
+        mRoom.invite(userIds, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                inviteEmails(emails);
+                mIsInvitingNewMembers = false;
+                mDefaultCallBack.onSuccess(null);
             }
 
             @Override
@@ -1007,59 +1001,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 mDefaultCallBack.onUnexpectedError(e);
             }
         });
-    }
-
-    /**
-     * Invite an user Ids list.
-     * @param userIds the user IDs list
-     */
-    private void inviteUserIds(List<String> userIds) {
-        final List<String> mxIds = new ArrayList<>();
-        final List<String> emails = new ArrayList<>();
-
-        for(String userId : userIds) {
-            if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
-                emails.add(userId);
-            } else {
-                mxIds.add(userId);
-            }
-        }
-
-        mIsInvitingNewMembers = true;
-        mProgressView.setVisibility(View.VISIBLE);
-
-        // if there are some mx ids
-        if (mxIds.size() > 0) {
-            // invite them first
-            mRoom.invite(mxIds, new ApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    // invite by email
-                    inviteEmails(emails.iterator());
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    mIsInvitingNewMembers = false;
-                    mDefaultCallBack.onNetworkError(e);
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    mIsInvitingNewMembers = false;
-                    mDefaultCallBack.onMatrixError(e);
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    mIsInvitingNewMembers = false;
-                    mDefaultCallBack.onUnexpectedError(e);
-                }
-            });
-        } else {
-            // invite by email
-            inviteEmails(emails.iterator());
-        }
     }
 
     /**
