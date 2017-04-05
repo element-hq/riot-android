@@ -248,10 +248,10 @@
     <string name="_continue">Continua</string>
 
     <!-- Actions -->
-    <string name="remove">Remove</string>
-    <string name="join">Join</string>
-    <string name="preview">Preview</string>
-    <string name="reject">Reject</string>
+    <string name="remove">Elimina</string>
+    <string name="join">Uneix-te</string>
+    <string name="preview">Previsualitza</string>
+    <string name="reject">Rebutja</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">You have been invited to join this room by %s</string>
