@@ -184,8 +184,8 @@
     <!-- invitation members list Screen -->
 
     <!-- room creation dialog Screen -->
-    <string name="yesterday">Yesterday</string>
-    <string name="today">Today</string>
+    <string name="yesterday">Ahir</string>
+    <string name="today">Avui</string>
 
     <!-- room creation dialog Screen -->
 
