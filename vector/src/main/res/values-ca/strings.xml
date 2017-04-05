@@ -224,8 +224,8 @@
     <string name="action_ignore">IGNORA</string>
 
     <!-- medias picker string -->
-    <string name="media_picker_both_capture_title">Take a picture or a video"</string>
-    <string name="media_picker_cannot_record_video">Cannot record video"</string>
+    <string name="media_picker_both_capture_title">Fes una foto o un vídeo"</string>
+    <string name="media_picker_cannot_record_video">No es poden gravar vídeos"</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
