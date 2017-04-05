@@ -241,11 +241,11 @@
     <string name="permissions_action_not_performed_missing_permissions">No s'ha relaitzat l'acció per falta de permisos</string>
 
     <!-- medias slider string -->
-    <string name="media_slider_saved">Saved</string>
-    <string name="media_slider_saved_message">Save to downloads</string>
-    <string name="yes">YES</string>
+    <string name="media_slider_saved">Desat</string>
+    <string name="media_slider_saved_message">Desa a les baixades</string>
+    <string name="yes">SÍ</string>
     <string name="no">NO</string>
-    <string name="_continue">Continue</string>
+    <string name="_continue">Continua</string>
 
     <!-- Actions -->
     <string name="remove">Remove</string>
