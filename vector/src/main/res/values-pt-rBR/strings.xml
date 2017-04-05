@@ -620,8 +620,8 @@
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar as chaves para um arquivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Entre com a 'passphrase'</string>
-    <string name="encryption_export_confirm_passphrase">Confirme a 'passphrase'</string>
+    <string name="encryption_export_enter_passphrase">Entre com a \'passphrase\'</string>
+    <string name="encryption_export_confirm_passphrase">Confirme a \'passphrase\'</string>
     <string name="encryption_export_saved_as">As chaves de sala E2E foram salvas em \'%s\'</string>
 
     <string name="encryption_import_e2e_room_keys">Importar chaves de sala E2E</string>
