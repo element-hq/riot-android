@@ -52,19 +52,42 @@
         android:layout_marginRight="44dp"
         android:layout_marginBottom="10dp"/>
 
-    <TextView
-        android:id="@+id/action_bar_header_room_members"
+    <LinearLayout
+        android:id="@+id/action_bar_header_room_members_layout"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:layout_below="@id/action_bar_header_room_topic"
-        android:ellipsize="end"
-        android:textSize="14sp"
-        android:textColor="@color/vector_0_54_black_color"
         android:layout_marginLeft="66dp"
         android:layout_marginRight="66dp"
-        android:layout_marginBottom="19dp"/>
+        android:layout_marginBottom="19dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/action_bar_header_room_members_settings_view"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_view_headline_black_24dp" />
+
+        <TextView
+            android:id="@+id/action_bar_header_room_members_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/vector_0_54_black_color"/>
+
+        <ImageView
+            android:id="@+id/action_bar_header_room_members_invite_view"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_add_circle_outline_black_24dp" />
+
+    </LinearLayout>
+
 
     <!-- this layout is used to compute the height of a single line -->
     <!-- action_bar_header_invite_members needs it to have an icon with the same height as the text -->
