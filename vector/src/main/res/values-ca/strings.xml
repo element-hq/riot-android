@@ -204,24 +204,24 @@
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
 
     <!-- call string -->
-    <string name="call_connected">Call connected</string>
-    <string name="call_connecting">Call connecting…</string>
-    <string name="call_ended">Call ended</string>
-    <string name="call_ring">Calling…</string>
-    <string name="incoming_call">Incoming Call</string>
-    <string name="incoming_video_call">Incoming Video Call</string>
-    <string name="incoming_voice_call">Incoming Voice Call</string>
-    <string name="call_in_progress">Call In Progress</string>
+    <string name="call_connected">Trucada establerta</string>
+    <string name="call_connecting">Establint la trucada…</string>
+    <string name="call_ended">Trucada finalitzada</string>
+    <string name="call_ring">Trucant…</string>
+    <string name="incoming_call">Trucada d'entrada</string>
+    <string name="incoming_video_call">Vídeotrucada d'entrada</string>
+    <string name="incoming_voice_call">Trucada de veu d'entrada</string>
+    <string name="call_in_progress">Trucada en curs</string>
 
-    <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
-    <string name="call_error_ice_failed">Media Connection Failed</string>
-    <string name="call_error_camera_init_failed">Cannot initialize the camera</string>
-    <string name="call_error_answered_elsewhere">call answered elsewhere</string>
-    <string name="call_error_peer_hangup_elsewhere">call hung up elsewhere</string>
-    <string name="call_error_peer_cancelled_call">call cancelled</string>
+    <string name="call_error_user_not_responding">No s'està responent a la trucada.</string>
+    <string name="call_error_ice_failed">Ha fallat la connexió de mitjans</string>
+    <string name="call_error_camera_init_failed">No es pot iniciar la càmera</string>
+    <string name="call_error_answered_elsewhere">s'ha contestat la trucada des d'un altre lloc</string>
+    <string name="call_error_peer_hangup_elsewhere">s'ha penjat la trucada des d'un altre lloc</string>
+    <string name="call_error_peer_cancelled_call">trucada cancel·lada</string>
 
-    <string name="action_accept">ACCEPT</string>
-    <string name="action_ignore">IGNORE</string>
+    <string name="action_accept">ACCEPTA</string>
+    <string name="action_ignore">IGNORA</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Take a picture or a video"</string>
