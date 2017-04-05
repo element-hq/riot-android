@@ -154,13 +154,9 @@
     <string name="login_error_limit_exceeded">Te veel verzoeken waren verstuurd</string>
     <string name="login_error_user_in_use">Deze gebruikersnaam is al in gebruik</string>
     <string name="login_error_login_email_not_yet">Er is nog niet op de link in de e-mail geklikt</string>
-    
-    <!-- universal link receiver -->
 
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">Je moet opnieuw inloggen om eind-tot-eind encryptie sleutels te genereren voor dit apparaat en om de publieke sleutel naar de thuisserver te sturen.\nDit is eenmalig.\nExcuses voor het ongemak.</string>
-    
-    <!-- members list Screen -->
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Gelezen berichten</string>
@@ -180,24 +176,14 @@
     <string name="attachment_cancel_upload">Upload annuleren?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
-    
-    <!-- invitation members list Screen -->
 
     <!-- room creation dialog Screen -->
     <string name="yesterday">Gisteren</string>
     <string name="today">Vandaag</string>
-    
-    <!-- room creation dialog Screen -->
 
     <!-- room info dialog Screen -->
     <string name="room_info_room_name">Ruimtenaam</string>
     <string name="room_info_room_topic">Ruimte onderwerp</string>
-
-    <!-- contacts list screen -->
-
-    <!-- Notification settings screen -->
-
-    <!-- gcm section -->
 
     <!-- Settings keys -->
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
@@ -315,8 +301,6 @@
     <string name="people_search_known_contacts">KNOWN CONTACTS (%s)</string>
     <string name="people_search_filter_text">Matrix users only</string>
     <string name="people_search_too_many_contacts">Too many contacts, please use the search field</string>
-
-    <!-- Presence status-->
 
     <!--  Chat -->
     <string name="room_menu_search">Zoeken</string>
