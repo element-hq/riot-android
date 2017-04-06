@@ -30,10 +30,13 @@ import im.vector.R;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
 
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -113,13 +116,13 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
         @Override
         protected FilterResults performFiltering(CharSequence prefix) {
             FilterResults results = new FilterResults();
+            List<User> newValues;
 
             if (prefix == null || prefix.length() == 0) {
-                List<User> list = new ArrayList<>(mUsersList);
-                results.values = list;
-                results.count = list.size();
+                newValues = new ArrayList<>();
+                mIsSearchingMatrixId = true;
             } else {
-                List<User> newValues = new ArrayList<>();
+                newValues = new ArrayList<>();
                 String prefixString = prefix.toString().toLowerCase();
                 mIsSearchingMatrixId = prefixString.startsWith("@");
 
@@ -136,10 +139,30 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
                         }
                     }
                 }
-
-                results.values = newValues;
-                results.count = newValues.size();
             }
+
+            // sort the results
+            if (mIsSearchingMatrixId) {
+                Collections.sort(newValues, new Comparator<User>() {
+                    @Override
+                    public int compare(User user1, User user2) {
+                        return user1.user_id.compareToIgnoreCase(user2.user_id);
+                    }
+                });
+            } else {
+                Collections.sort(newValues, new Comparator<User>() {
+                    @Override
+                    public int compare(User user1, User user2) {
+                        String displayName1 = TextUtils.isEmpty(user1.displayname) ? user1.user_id : user1.displayname;
+                        String displayName2 = TextUtils.isEmpty(user2.displayname) ? user2.user_id : user2.displayname;
+
+                        return displayName1.compareToIgnoreCase(displayName2);
+                    }
+                });
+            }
+
+            results.values = newValues;
+            results.count = newValues.size();
 
             return results;
         }

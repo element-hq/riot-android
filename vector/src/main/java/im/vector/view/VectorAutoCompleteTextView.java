@@ -25,8 +25,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.Filter;
 import android.widget.FrameLayout;
-import android.widget.ListAdapter;
 import android.widget.MultiAutoCompleteTextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -51,10 +51,14 @@ import org.matrix.androidsdk.util.Log;
 public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextView {
     private static final String LOG_TAG = "VAutoCompleteTextView";
 
-    AutoCompletedUserAdapter mAdapter;
-    String mPendingText;
+    // results adapter
+    private AutoCompletedUserAdapter mAdapter;
 
-    Field mPopupCanBeUpdatedField;
+    // the pending patter,
+    private String mPendingFilter;
+
+    // trick to customize the popup
+    private Field mPopupCanBeUpdatedField;
 
     public VectorAutoCompleteTextView(Context context) {
         super(context, null);
@@ -122,10 +126,6 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
         // the minimum number of characters to display the proposals list
         setThreshold(3);
 
-        // wrap_content uses the anchor width
-        // so compute it
-        setDropDownWidth(measureAdapterWidth());
-
         // mPopupCanBeUpdated was not yet retrieved
         if (null == mPopupCanBeUpdatedField) {
             try {
@@ -138,38 +138,41 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
-     * Compute the adapter width.
-     *
-     * @return the width
+     * Compute the popup size
      */
-    private int measureAdapterWidth() {
+    private int adjustPopupSize() {
         int maxWidth = 0;
+
         ViewGroup mMeasureParent = new FrameLayout(getContext());
-        View itemView;
+        View itemView = null;
 
         final int widthMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         final int heightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         final int count = mAdapter.getCount();
         for (int i = 0; i < count; i++) {
-            itemView = mAdapter.getView(i, null, mMeasureParent);
+            itemView = mAdapter.getView(i, itemView, mMeasureParent);
             itemView.measure(widthMeasureSpec, heightMeasureSpec);
 
             maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
         }
 
+        // wrap_content uses the anchor width
+        // so compute it to fit to the items list
+        setDropDownWidth(maxWidth);
         return maxWidth;
     }
 
     @Override
-    protected void performFiltering(final CharSequence text, int keyCode) {
+    protected void performFiltering(final CharSequence text, final int start, final int end, int keyCode) {
         // cannot retrieve mPopupCanBeUpdated
         // use the default implementation
         if (null == mPopupCanBeUpdatedField) {
-            super.performFiltering(text, keyCode);
+            super.performFiltering(text, start, end, keyCode);
         } else {
+            String currentFilter = ((null == text) ? "" : text.toString()) + start + "-" + end;
 
             // check if there is a text update to force the drop down list dismiss
-            if (TextUtils.isEmpty(text) || !TextUtils.equals(text.toString(), mPendingText)) {
+            if (!TextUtils.equals(currentFilter, mPendingFilter)) {
                 dismissDropDown();
             }
 
@@ -181,15 +184,31 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             }
 
             // save the current written pattern
-            mPendingText = text.toString();
+            mPendingFilter = currentFilter;
 
             // wait 0.7s before displaying the popup
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    String currentFilter = ((null == getText()) ? "" : getText().toString()) + start + "-" + end;
+
                     // display the popup only the user did not update the edited text
-                    if (TextUtils.equals(getText().toString(), text.toString())) {
-                        mAdapter.getFilter().filter(text, VectorAutoCompleteTextView.this);
+                    if (TextUtils.equals(currentFilter, mPendingFilter)) {
+                        CharSequence subText = "";
+
+                        try {
+                            subText = text.subSequence(start, end);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## performFiltering() failed " + e.getMessage());
+                        }
+
+                        mAdapter.getFilter().filter(subText, new Filter.FilterListener() {
+                                    @Override
+                                    public void onFilterComplete(int count) {
+                                        adjustPopupSize();
+                                        VectorAutoCompleteTextView.this.onFilterComplete(count);
+                                    }
+                                });
                     }
                 }
             }, 700);
