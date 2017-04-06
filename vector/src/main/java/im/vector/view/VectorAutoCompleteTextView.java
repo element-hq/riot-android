@@ -22,7 +22,12 @@ import android.os.Looper;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.FrameLayout;
+import android.widget.ListAdapter;
+import android.widget.MultiAutoCompleteTextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -31,15 +36,20 @@ import org.matrix.androidsdk.rest.model.User;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AutoCompletedUserAdapter;
 
+import org.matrix.androidsdk.util.Log;
 
+/**
+ * Custom AppCompatMultiAutoCompleteTextView to display matrix id / displayname
+ */
 public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextView {
+    private static final String LOG_TAG = "VAutoCompleteTextView";
 
     AutoCompletedUserAdapter mAdapter;
     String mPendingText;
@@ -58,13 +68,25 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
         super(context, attrs, defStyleAttr);
     }
 
+    /**
+     * Build the auto completions list for a session.
+     *
+     * @param session the session
+     */
+    public void initAutoCompletion(MXSession session) {
+        initAutoCompletion(session, session.getDataHandler().getStore().getUsers());
+    }
 
-    public void updatesUser(MXSession session, String roomId) {
+    /**
+     * Build the auto completions list for a room
+     *
+     * @param session the session
+     * @param roomId  the room Id
+     */
+    public void initAutoCompletion(MXSession session, String roomId) {
         List<User> users = new ArrayList<>();
 
-        if (TextUtils.isEmpty(roomId)) {
-            users.addAll(session.getDataHandler().getStore().getUsers());
-        } else {
+        if (!TextUtils.isEmpty(roomId)) {
             Room room = session.getDataHandler().getStore().getRoom(roomId);
 
             if (null != room) {
@@ -80,40 +102,92 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             }
         }
 
-        mAdapter = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session);
-        mAdapter.updateItems(users);
-        setThreshold(3);
-        setAdapter(mAdapter);
-        setTokenizer(new VectorRoomActivity.RoomTokenizer());
+        initAutoCompletion(session, users);
+    }
 
+    /**
+     * Internal method to build the auto completions list.
+     *
+     * @param session the session
+     * @param users   the users list
+     */
+    private void initAutoCompletion(MXSession session, Collection<User> users) {
+        // build the adapter
+        mAdapter = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
+        setAdapter(mAdapter);
+
+        // define the parser
+        setTokenizer(new VectorAutoCompleteTokenizer());
+
+        // the minimum number of characters to display the proposals list
+        setThreshold(3);
+
+        // wrap_content uses the anchor width
+        // so compute it
+        setDropDownWidth(measureAdapterWidth());
+
+        // mPopupCanBeUpdated was not yet retrieved
         if (null == mPopupCanBeUpdatedField) {
             try {
                 mPopupCanBeUpdatedField = AutoCompleteTextView.class.getDeclaredField("mPopupCanBeUpdated");
                 mPopupCanBeUpdatedField.setAccessible(true);
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mPopupCanBeUpdated " + e.getMessage());
             }
         }
     }
 
+    /**
+     * Compute the adapter width.
+     *
+     * @return the width
+     */
+    private int measureAdapterWidth() {
+        int maxWidth = 0;
+        ViewGroup mMeasureParent = new FrameLayout(getContext());
+        View itemView;
+
+        final int widthMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        final int heightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        final int count = mAdapter.getCount();
+        for (int i = 0; i < count; i++) {
+            itemView = mAdapter.getView(i, null, mMeasureParent);
+            itemView.measure(widthMeasureSpec, heightMeasureSpec);
+
+            maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
+        }
+
+        return maxWidth;
+    }
+
     @Override
     protected void performFiltering(final CharSequence text, int keyCode) {
+        // cannot retrieve mPopupCanBeUpdated
+        // use the default implementation
         if (null == mPopupCanBeUpdatedField) {
             super.performFiltering(text, keyCode);
         } else {
-            if (!TextUtils.equals(text.toString(), mPendingText)) {
+
+            // check if there is a text update to force the drop down list dismiss
+            if (TextUtils.isEmpty(text) || !TextUtils.equals(text.toString(), mPendingText)) {
                 dismissDropDown();
             }
 
+            // allow to display the popup once again
             try {
                 mPopupCanBeUpdatedField.setBoolean(this, true);
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## performFiltering() : mPopupCanBeUpdatedField.setBoolean failed " + e.getMessage());
             }
 
+            // save the current written pattern
             mPendingText = text.toString();
 
+            // wait 0.7s before displaying the popup
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    // display the popup only the user did not update the edited text
                     if (TextUtils.equals(getText().toString(), text.toString())) {
                         mAdapter.getFilter().filter(text, VectorAutoCompleteTextView.this);
                     }
@@ -121,4 +195,51 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             }, 700);
         }
     }
+
+    /**
+     * Custom tokenizer
+     */
+    private static class VectorAutoCompleteTokenizer implements MultiAutoCompleteTextView.Tokenizer {
+        final static List<Character> mAllowedTokens = Arrays.asList(',', ';', '.', ' ', '\n', '\t');
+
+        public int findTokenStart(CharSequence text, int cursor) {
+            int i = cursor;
+
+            while (i > 0 && !mAllowedTokens.contains(text.charAt(i - 1))) {
+                i--;
+            }
+
+            while (i < cursor && text.charAt(i) == ' ') {
+                i++;
+            }
+
+            return i;
+        }
+
+        public int findTokenEnd(CharSequence text, int cursor) {
+            int i = cursor;
+            int len = text.length();
+
+            while (i < len) {
+                if (mAllowedTokens.contains(text.charAt(i))) {
+                    return i;
+                } else {
+                    i++;
+                }
+            }
+
+            return len;
+        }
+
+        public CharSequence terminateToken(CharSequence text) {
+            int i = text.length();
+
+            while (i > 0 && text.charAt(i - 1) == ' ') {
+                i--;
+            }
+
+            return text + " ";
+        }
+    }
+
 }

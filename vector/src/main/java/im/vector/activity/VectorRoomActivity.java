@@ -957,55 +957,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // to have notifications for this room
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
         ViewedRoomTracker.getInstance().setMatrixId(null);
+        mEditText.initAutoCompletion(mSession, null);
     }
-
-    /**
-     * This simple Tokenizer can be used for lists where the items are
-     * separated by a comma and one or more spaces.
-     */
-    public static class RoomTokenizer implements MultiAutoCompleteTextView.Tokenizer {
-        final static List<Character> mAllowedTokens = Arrays.asList(',', ';', '.', ' ', '\n', '\t');
-
-        public int findTokenStart(CharSequence text, int cursor) {
-            int i = cursor;
-
-            while (i > 0 && !mAllowedTokens.contains(text.charAt(i - 1))) {
-                i--;
-            }
-
-            while (i < cursor && text.charAt(i) == ' ') {
-                i++;
-            }
-
-            return i;
-        }
-
-        public int findTokenEnd(CharSequence text, int cursor) {
-            int i = cursor;
-            int len = text.length();
-
-            while (i < len) {
-                if (mAllowedTokens.contains(text.charAt(i))) {
-                    return i;
-                } else {
-                    i++;
-                }
-            }
-
-            return len;
-        }
-
-        public CharSequence terminateToken(CharSequence text) {
-            int i = text.length();
-
-            while (i > 0 && text.charAt(i - 1) == ' ') {
-                i--;
-            }
-
-            return text + " ";
-        }
-    }
-
 
     @Override
     protected void onResume() {
@@ -1034,8 +987,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     VectorRoomActivity.this.finish();
                     return;
                 }
-
-                mEditText.updatesUser(mSession, mRoom.getRoomId());
             }
 
             // to do not trigger notifications for this room
@@ -1137,6 +1088,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         displayE2eRoomAlert();
+
+        // init the auto-completion list from the room memebers
+        mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
 
         Log.d(LOG_TAG, "-- Resume the activity");
     }

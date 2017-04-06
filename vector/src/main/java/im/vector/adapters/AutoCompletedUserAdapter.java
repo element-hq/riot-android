@@ -33,6 +33,7 @@ import im.vector.view.VectorCircularImageView;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -66,28 +67,16 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
      * @param context          Activity context
      * @param layoutResourceId The resource ID of the layout for each item.
      * @param session          the session
+     * @param users            the users list
      */
-    public AutoCompletedUserAdapter(Context context, int layoutResourceId, MXSession session) {
+    public AutoCompletedUserAdapter(Context context, int layoutResourceId, MXSession session, Collection<User> users) {
         super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
         mLayoutInflater = LayoutInflater.from(mContext);
         mSession = session;
-    }
-
-    /**
-     * Update the items list
-     *
-     * @param users the users list
-     */
-    public void updateItems(List<User> users) {
-        clear();
         addAll(users);
-
         mUsersList = new ArrayList<>(users);
-
-        // trigger a full refresh
-        notifyDataSetChanged();
     }
 
     @Override
@@ -168,7 +157,7 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
 
         @Override
         public CharSequence convertResultToString(Object resultValue) {
-            User user = (User)resultValue;
+            User user = (User) resultValue;
             return mIsSearchingMatrixId ? user.user_id : user.displayname;
         }
     }
