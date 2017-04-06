@@ -108,6 +108,7 @@ import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
+import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 
@@ -195,7 +196,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private View mSendingMessagesLayout;
     private View mSendButtonLayout;
     private ImageView mSendImageView;
-    private MultiAutoCompleteTextView mEditText;
+    private VectorAutoCompleteTextView mEditText;
     private ImageView mAvatarImageView;
     private View mCanNotPostTextView;
     private ImageView mE2eImageView;
@@ -600,7 +601,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         Log.d(LOG_TAG, "Displaying " + roomId);
 
-        mEditText = (MultiAutoCompleteTextView)findViewById(R.id.editText_messageBox);
+        mEditText = (VectorAutoCompleteTextView)findViewById(R.id.editText_messageBox);
 
         // hide the header room as soon as the message input text area is touched
         mEditText.setOnClickListener(new View.OnClickListener() {
@@ -1034,22 +1035,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     return;
                 }
 
-                List<User> users = new ArrayList<>();
-                Collection<RoomMember> members = mRoom.getMembers();
-
-                for(RoomMember member : members) {
-                    User user = mSession.getDataHandler().getUser(member.getUserId());
-
-                    if (null != user) {
-                        users.add(user);
-                    }
-                }
-
-                AutoCompletedUserAdapter adapter = new AutoCompletedUserAdapter(this, R.layout.item_user_auto_complete, mSession);
-                adapter.updateItems(users);
-                mEditText.setThreshold(3);
-                mEditText.setAdapter(adapter);
-                mEditText.setTokenizer(new RoomTokenizer());
+                mEditText.updatesUser(mSession, mRoom.getRoomId());
             }
 
             // to do not trigger notifications for this room
