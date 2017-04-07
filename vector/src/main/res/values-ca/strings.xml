@@ -277,38 +277,38 @@
     <string name="format_time_d">d</string>
 
     <!--  Chat participants -->
-    <string name="room_participants_leave_prompt_title">Leave room</string>
-    <string name="room_participants_leave_prompt_msg">Are you sure you want to leave the room?</string>
-    <string name="room_participants_remove_prompt_msg">Are you sure you want to remove %s from this chat?</string>
-    <string name="room_participants_create">Create</string>
+    <string name="room_participants_leave_prompt_title">Surt de la sala</string>
+    <string name="room_participants_leave_prompt_msg">Esteu segur que voleu sortir de la sala?</string>
+    <string name="room_participants_remove_prompt_msg">Esteu segur que voleu eliminar %s d'aques xat?</string>
+    <string name="room_participants_create">Crea</string>
 
-    <string name="room_participants_online">Online</string>
-    <string name="room_participants_offline">Offline</string>
-    <string name="room_participants_idle">Idle</string>
-    <string name="room_participants_now">now</string>
-    <string name="room_participants_ago">ago</string>
+    <string name="room_participants_online">En línia</string>
+    <string name="room_participants_offline">Fora de línia</string>
+    <string name="room_participants_idle">Inactiu</string>
+    <string name="room_participants_now">ara</string>
+    <string name="room_participants_ago">fa</string>
 
-    <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
-    <string name="room_participants_header_call">CALL</string>
-    <string name="room_participants_header_direct_chats">DIRECT CHATS</string>
-    <string name="room_participants_header_devices">DEVICES</string>
+    <string name="room_participants_header_admin_tools">EINES D'ADMINISTRACIÓ</string>
+    <string name="room_participants_header_call">TRUCADA</string>
+    <string name="room_participants_header_direct_chats">XATS DIRECTES</string>
+    <string name="room_participants_header_devices">DISPOSITIUS</string>
 
-    <string name="room_participants_action_invite">Invite</string>
-    <string name="room_participants_action_leave">Leave this room</string>
-    <string name="room_participants_action_remove">Remove from this room</string>
-    <string name="room_participants_action_ban">Ban</string>
-    <string name="room_participants_action_unban">Unban</string>
-    <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
-    <string name="room_participants_action_set_moderator">Make moderator</string>
-    <string name="room_participants_action_set_admin">Make admin</string>
-    <string name="room_participants_action_ignore">Hide all messages from this user</string>
-    <string name="room_participants_action_unignore">Show all messages from this user</string>
-    <string name="room_participants_invite_search_another_user">User ID, Name or email</string>
-    <string name="room_participants_action_mention">Mention</string>
-    <string name="room_participants_action_devices_list">Show Device List</string>
-    <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
+    <string name="room_participants_action_invite">Convida</string>
+    <string name="room_participants_action_leave">Deixa aquesta sala</string>
+    <string name="room_participants_action_remove">Elimina d'aquesta sala</string>
+    <string name="room_participants_action_ban">Expulsa</string>
+    <string name="room_participants_action_unban">Reincorpora</string>
+    <string name="room_participants_action_set_default_power_level">Fes-lo usuari normal</string>
+    <string name="room_participants_action_set_moderator">Fes-lo moderador</string>
+    <string name="room_participants_action_set_admin">Fes-lo administrador</string>
+    <string name="room_participants_action_ignore">Amaga tots els missatges d'aquest usuari</string>
+    <string name="room_participants_action_unignore">Mostra tots els missatges d'aquest usuari</string>
+    <string name="room_participants_invite_search_another_user">ID de l'usuari, nom o correu electrònic</string>
+    <string name="room_participants_action_mention">Menciona</string>
+    <string name="room_participants_action_devices_list">Mostra la llista de dispositius</string>
+    <string name="room_participants_power_level_prompt">No podreu desfer aquest canvi ja que esteu donant a aquest usuari els mateixos permisos que teniu.\nN'esteu segur?</string>
 
-    <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
+    <string name="room_participants_invite_prompt_msg">"Esteu segur que voleu convidar a %s a aquest xat?"</string>
 
     <!-- invitation -->
     <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
