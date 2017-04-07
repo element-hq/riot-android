@@ -311,10 +311,10 @@
     <string name="room_participants_invite_prompt_msg">"Esteu segur que voleu convidar a %s a aquest xat?"</string>
 
     <!-- invitation -->
-    <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
-    <string name="people_search_known_contacts">KNOWN CONTACTS (%s)</string>
-    <string name="people_search_filter_text">Matrix users only</string>
-    <string name="people_search_too_many_contacts">Too many contacts, please use the search field</string>
+    <string name="people_search_local_contacts">CONTACTES LOCALS (%d)</string>
+    <string name="people_search_known_contacts">CONTACTES CONEGUTS (%s)</string>
+    <string name="people_search_filter_text">Només usuaris de Matrix</string>
+    <string name="people_search_too_many_contacts">Massa contactes, useu el camp de cerca</string>
 
     <!-- Presence status-->
 
