@@ -60,6 +60,9 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     // trick to customize the popup
     private Field mPopupCanBeUpdatedField;
 
+    // trick to fix the list width
+    private android.widget.ListPopupWindow mListPopupWindow;
+
     public VectorAutoCompleteTextView(Context context) {
         super(context, null);
     }
@@ -126,7 +129,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
         // the minimum number of characters to display the proposals list
         setThreshold(3);
 
-        // mPopupCanBeUpdated was not yet retrieved
+        // retrieve 2 private members
         if (null == mPopupCanBeUpdatedField) {
             try {
                 mPopupCanBeUpdatedField = AutoCompleteTextView.class.getDeclaredField("mPopupCanBeUpdated");
@@ -135,31 +138,42 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mPopupCanBeUpdated " + e.getMessage());
             }
         }
+
+        if (null == mListPopupWindow) {
+            try {
+                Field popup = AutoCompleteTextView.class.getDeclaredField("mPopup");
+                popup.setAccessible(true);
+                mListPopupWindow = (android.widget.ListPopupWindow)popup.get(this);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mListPopupWindow " + e.getMessage());
+            }
+        }
     }
 
     /**
      * Compute the popup size
      */
-    private int adjustPopupSize() {
-        int maxWidth = 0;
+    private void adjustPopupSize() {
+        if (null != mListPopupWindow) {
+            int maxWidth = 0;
 
-        ViewGroup mMeasureParent = new FrameLayout(getContext());
-        View itemView = null;
+            ViewGroup mMeasureParent = new FrameLayout(getContext());
+            View itemView = null;
 
-        final int widthMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-        final int heightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-        final int count = mAdapter.getCount();
-        for (int i = 0; i < count; i++) {
-            itemView = mAdapter.getView(i, itemView, mMeasureParent);
-            itemView.measure(widthMeasureSpec, heightMeasureSpec);
+            final int count = mAdapter.getCount();
 
-            maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
+            for (int i = 0; i < count; i++) {
+                itemView = mAdapter.getView(i, itemView, mMeasureParent);
+                itemView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+                maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
+            }
+
+            mListPopupWindow.setContentWidth(maxWidth);
+
+            // setDropDownWidth(maxWidth) does not work on some devices
+            // it seems working on android >= 5.1
+            // but it does not on older android platforms
         }
-
-        // wrap_content uses the anchor width
-        // so compute it to fit to the items list
-        setDropDownWidth(maxWidth);
-        return maxWidth;
     }
 
     @Override
