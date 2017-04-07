@@ -27,11 +27,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
@@ -937,21 +939,12 @@ public class EventStreamService extends Service {
         // when the event is an invitation one
         // don't check if the sender ID is known because the members list are not yet downloaded
         if (!isInvitationEvent) {
-            RoomMember member = room.getMember(senderID);
-
-            // invalid member
-            if (null == member) {
-                return;
-            }
-
-            from = member.getName();
-
             // is there any avatar url
-            if (!TextUtils.isEmpty(member.getAvatarUrl())) {
+            if (!TextUtils.isEmpty(room.getAvatarUrl())) {
                 int size = getApplicationContext().getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
 
                 // check if the thumbnail is already downloaded
-                File f = session.getMediasCache().thumbnailCacheFile(member.getAvatarUrl(), size);
+                File f = session.getMediasCache().thumbnailCacheFile(room.getAvatarUrl(), size);
 
                 if (null != f) {
                     BitmapFactory.Options options = new BitmapFactory.Options();
@@ -962,14 +955,14 @@ public class EventStreamService extends Service {
                         Log.e(LOG_TAG, "decodeFile failed with an oom");
                     }
                 } else {
-                    session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(getApplicationContext()), member.getAvatarUrl(), size);
+                    session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(getApplicationContext()), room.getAvatarUrl(), size);
                 }
             }
         }
 
-        if (null == largeBitmap) {
-            largeBitmap = VectorUtils.getAvatar(getApplicationContext(), VectorUtils.getAvatarColor(senderID), TextUtils.isEmpty(from) ? senderID : from, true);
-        }
+//        if (null == largeBitmap) {
+//            largeBitmap = VectorUtils.getAvatar(getApplicationContext(), VectorUtils.getAvatarColor(senderID), TextUtils.isEmpty(from) ? senderID : from, true);
+//        }
 
         mNotificationSessionId = session.getCredentials().userId;
         mNotificationRoomId = roomId;
@@ -977,17 +970,99 @@ public class EventStreamService extends Service {
 
         Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
 
-        mLatestNotification = NotificationUtils.buildMessageNotification(
-                EventStreamService.this,
-                from, session.getCredentials().userId,
-                Matrix.getMXSessions(getApplicationContext()).size() > 1,
-                largeBitmap,
-                CommonActivityUtils.getBadgeCount(),
-                body,
-                event.roomId,
-                getRoomName(session, room, event),
-                bingRule.isDefaultNotificationSound(bingRule.notificationSound()),
-                isInvitationEvent);
+        String roomName = getRoomName(session, room, event);
+
+        NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
+
+        // This is the group summary, and is the notification that will be displayed in earlier
+        // androids.
+        // TODO: Actual make this a useful summary. Maybe use InboxStyle?
+        NotificationCompat.Builder groupBuilder = new NotificationCompat.Builder(EventStreamService.this);
+        groupBuilder.setWhen(event.getOriginServerTs());
+        groupBuilder.setContentTitle("5 new messages in " + roomName);
+        groupBuilder.setContentText("wibble");
+        groupBuilder.setGroup("riot");
+        groupBuilder.setGroupSummary(true);
+        groupBuilder.setSmallIcon(R.drawable.message_notification_transparent);
+        groupBuilder.setOnlyAlertOnce(true);
+        groupBuilder.setColor(Color.RED);
+        nm.notify("group", NOTIF_ID_MESSAGE, groupBuilder.build());
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(EventStreamService.this);
+        builder.setWhen(event.getOriginServerTs());
+        builder.setContentTitle("5 new messages in " + roomName);
+        builder.setContentText(body);
+        builder.setAutoCancel(true);
+        builder.setSmallIcon(R.drawable.message_notification_transparent);
+        builder.setGroup("riot");  // Add to the group above
+
+
+        // MessagingStyle is a collapsible view of all recent unread messages.
+        // TODO: Change "foo" to logged in user's display name
+        NotificationCompat.MessagingStyle textStyle = new NotificationCompat.MessagingStyle("foo");
+        textStyle.setConversationTitle(roomName);
+
+        // Append unread events from oldest to latest
+        List<Event> unreadEvents = session.getDataHandler().getStore().unreadEvents(roomId, null);
+        for (Event ev: unreadEvents) {
+            EventDisplay evDisplay = new EventDisplay(getApplicationContext(), ev, roomState);
+            String bd = evDisplay.getTextualDisplay().toString();
+            if (TextUtils.isEmpty(bd)) {
+                continue;
+            }
+
+            String sender = ev.getSender();
+            String senderName = null;
+            if (!session.getCredentials().userId.equals(sender)) {
+                senderName = room.getMember(sender).getName();
+            }
+            textStyle.addMessage(bd, ev.getOriginServerTs(), senderName);
+        }
+
+        builder.setStyle(textStyle);
+
+        if (null != largeBitmap) {
+            largeBitmap = NotificationUtils.createSquareBitmap(largeBitmap);
+            builder.setLargeIcon(largeBitmap);
+        }
+
+
+        boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
+
+        // We need to set the priority of the notification. For things that go bing we set the
+        // priority to HIGH so that it pops up. For channels that don't have any bings we give a
+        // low priority, because we don't care as much about them. For rooms that have had bings in
+        // we set to a priority in between, so that they near the top but don't give a pop up.
+        if (is_bing) {
+            // So that it pops up on screen.
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+            builder.setColor(Color.RED);
+        } else if (room.getHighlightCount() > 0) {
+            // Should really check if any event made a noise, as well as only considering events
+            // since the user last dismissed the notification.
+
+            // So that icon appears in notification tray
+            builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            builder.setColor(Color.RED);
+        } else {
+            // we don't really care that much about plain notifications, and so we let these settle
+            // at the bottom.
+            // Putting to min means that the notification wont cause riot logo to appear at the
+            // top in the notification area, but will be there when expanded.
+            // TODO: Make it user configurable between PRIORITY_LOW and PRIORITY_MIN
+            builder.setPriority(NotificationCompat.PRIORITY_MIN);
+        }
+
+        Notification n = builder.build();
+        n.flags |= Notification.FLAG_SHOW_LIGHTS;
+        n.defaults |= Notification.DEFAULT_LIGHTS;
+
+        if (is_bing) {
+            n.defaults |= Notification.DEFAULT_SOUND;
+        }
+
+        nm.notify(roomId, NOTIF_ID_MESSAGE, n);
     }
 
     /**
@@ -1004,9 +1079,9 @@ public class EventStreamService extends Service {
             // if it is still defined.
             if (null != mLatestNotification) {
                 try {
-                    NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.cancelAll();
-                    nm.notify(NOTIF_ID_MESSAGE, mLatestNotification);
+                    NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
+//                    nm.cancelAll();
+                    nm.notify((int)System.currentTimeMillis(), mLatestNotification);
 
                     // turn the screen on
                     if (mGcmRegistrationManager.isScreenTurnedOn()) {
