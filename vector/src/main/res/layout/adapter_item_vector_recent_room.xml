@@ -80,6 +80,7 @@
                 android:layout_weight="0.5">
 
                 <!-- Room name - note margins values in each side (right/left) -->
+                <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
                 <TextView
                     android:id="@+id/roomSummaryAdapter_roomName"
                     android:layout_width="wrap_content"
@@ -88,7 +89,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_unread_count"
                     android:fontFamily="sans-serif-regular"
-                    android:maxLines="1"
+                    android:singleLine="true"
                     android:text="Room Name"
                     android:textColor="@color/vector_text_black_color"
                     android:textSize="16sp" />
@@ -191,6 +192,7 @@
                     android:layout_marginTop="3dp"
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_word_readable"
                     android:maxLines="1"
+                    android:ellipsize="end"
                     android:text="last room message"
                     android:textColor="@color/vector_0_54_black_color"
                     android:textSize="14sp" />
