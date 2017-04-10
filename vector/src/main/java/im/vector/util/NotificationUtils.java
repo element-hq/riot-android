@@ -151,7 +151,7 @@ public class NotificationUtils {
      * @param bitmap the bitmap to "square"
      * @return the squared bitmap
      */
-    private static Bitmap createSquareBitmap(Bitmap bitmap) {
+    public static Bitmap createSquareBitmap(Bitmap bitmap) {
         Bitmap resizedBitmap = null;
 
         if (null != bitmap) {
