@@ -38,11 +38,16 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.util.Log;
+
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -80,6 +85,7 @@ import java.util.Arrays;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -947,6 +953,23 @@ public class EventStreamService extends Service {
         }
     }
 
+    private final Comparator<Pair<Event, String>> mNotifSort = new Comparator<Pair<Event, String>>() {
+        @Override
+        public int compare(Pair<Event, String> lhs, Pair<Event, String> rhs) {
+            long t0 = lhs.first.getOriginServerTs();
+            long t1 = rhs.first.getOriginServerTs();
+
+            if (t0 > t1) {
+                return -1;
+            } else if (t0 < t1) {
+                return +1;
+            }
+
+            return 0;
+        }
+    };
+
+
     /**
      * Trigger the latest prepared notification
      * @param checkNotification true to check if the prepared notification still makes sense.
@@ -1048,12 +1071,58 @@ public class EventStreamService extends Service {
                 int sum = 0;
 
                 // TODO manage order
+                List<Pair<Event, String>> busyNotifiedList = new ArrayList<>();
+                List<Pair<Event, String>> notifiedList = new ArrayList<>();
+
                 for(String roomId : mNotifiedMessagesByRoomId.keySet()) {
                     room = session.getDataHandler().getRoom(roomId);
                     roomName = getRoomName(session, room, null);
 
-                    inboxStyle.addLine(roomName + " : " + session.getDataHandler().getStore().unreadEvents(roomId, null).size() + " unread events");
+                    Event latestEvent = null;
+                    boolean isNoisyNotified = false;
+                    List<Pair<BingRule, String>> pairs = mNotifiedMessagesByRoomId.get(roomId);
+
+                    for(Pair<BingRule, String> pair : pairs) {
+                        isNoisyNotified |= pair.first.isDefaultNotificationSound(pair.first.notificationSound());
+                        latestEvent = session.getDataHandler().getStore().getEvent(pair.second, roomId);
+                    }
+
+                    String text;
+
+                    if (room.isInvited()) {
+                        eventDisplay = new EventDisplay(getApplicationContext(), latestEvent, room.getLiveState());
+                        eventDisplay.setPrependMessagesWithAuthor(false);
+                        text = roomName + " : " + eventDisplay.getTextualDisplay().toString();
+                    } else if (1 == pairs.size()) {
+                        eventDisplay = new EventDisplay(getApplicationContext(), latestEvent, room.getLiveState());
+                        eventDisplay.setPrependMessagesWithAuthor(false);
+
+                        text = roomName + " : (" + room.getLiveState().getMemberName(latestEvent.getSender()) + ") " + eventDisplay.getTextualDisplay().toString();
+                    } else {
+                        text = roomName + " : " + session.getDataHandler().getStore().unreadEvents(roomId, null).size() + " unread events";
+                    }
+
+                    if (isNoisyNotified) {
+                        busyNotifiedList.add(new Pair<>(latestEvent, text));
+                    } else {
+                        notifiedList.add(new Pair<>(latestEvent, text));
+                    }
+
                     sum += session.getDataHandler().getStore().unreadEvents(roomId, null).size();
+                }
+
+                Collections.sort(busyNotifiedList, mNotifSort);
+
+                for(Pair<Event, String> notifiedPair : busyNotifiedList) {
+                    SpannableString notifiedLine = new SpannableString(notifiedPair.second);
+                    notifiedLine.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getApplicationContext(), R.color.vector_fuchsia_color)), 0, notifiedPair.second.length(), 0);
+                    inboxStyle.addLine(notifiedLine);
+                }
+
+                Collections.sort(notifiedList, mNotifSort);
+
+                for(Pair<Event, String> pair : notifiedList) {
+                     inboxStyle.addLine(pair.second);
                 }
 
                 inboxStyle.setBigContentTitle("Riot");
