@@ -21,6 +21,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -29,9 +30,27 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.util.Pair;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.widget.ImageView;
+
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.rest.model.bingrules.BingRule;
+import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.JoinScreenActivity;
@@ -39,8 +58,15 @@ import im.vector.activity.LockScreenActivity;
 import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.services.EventStreamService;
 
+import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -58,6 +84,36 @@ public class NotificationUtils {
 
     // the bubble radius is computed for 99
     static private int mUnreadBubbleWidth = -1;
+
+    /**
+     * Retrieve the room name.
+     * @param session the session
+     * @param room the room
+     * @param event the event
+     * @return the room name
+     */
+    public static String getRoomName(Context context, MXSession session, Room room, Event event) {
+        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+
+        // avoid displaying the room Id
+        // try to find the sender display name
+        if (TextUtils.equals(roomName, room.getRoomId())) {
+            roomName = room.getName(session.getMyUserId());
+
+            // avoid room Id as name
+            if (TextUtils.equals(roomName, room.getRoomId()) && (null != event)) {
+                User user = session.getDataHandler().getStore().getUser(event.sender);
+
+                if (null != user) {
+                    roomName = user.displayname;
+                } else {
+                    roomName = event.sender;
+                }
+            }
+        }
+
+        return roomName;
+    }
 
     /**
      * Build an incoming call notification.
@@ -491,5 +547,238 @@ public class NotificationUtils {
 
     }*/
 
+    /**
+     * This class manages the notification display.
+     * It contains the message to display and its timestamp
+     */
+    static class NotificationDisplay {
+        final long mEventTs;
+        final SpannableString mMessage;
+
+        NotificationDisplay(long ts, SpannableString message) {
+            mEventTs = ts;
+            mMessage = message;
+        }
+    }
+
+    /**
+     * NotificationDisplay comparator
+     */
+    private static final Comparator<NotificationDisplay> mNotificationDisplaySort = new Comparator<NotificationDisplay>() {
+        @Override
+        public int compare(NotificationDisplay lhs, NotificationDisplay rhs) {
+            long t0 = lhs.mEventTs;
+            long t1 = rhs.mEventTs;
+
+            if (t0 > t1) {
+                return -1;
+            } else if (t0 < t1) {
+                return +1;
+            }
+            return 0;
+        }
+    };
+
+    /**
+     * Define a notified event
+     * i.e the matched bing rules
+     */
+    public static class NotifiedEvent {
+        public final BingRule mBingRule;
+        public final String mRoomId;
+        public final String mEventId;
+
+        public NotifiedEvent(String roomId, String eventId, BingRule bingRule) {
+            mRoomId = roomId;
+            mEventId = eventId;
+            mBingRule = bingRule;
+        }
+    }
+
+    // max number of lines to display the notification text styles
+    static final int MAX_NUMBER_NOTIFICATION_LINES = 10;
+
+    public static Notification buildMessageNotification2(Context context,
+                                                         Map<String, List<NotifiedEvent>> notifiedEventsByRoomId,
+                                                         NotifiedEvent eventToNotify,
+                                                         boolean isBackground) {
+
+        // TODO manage multi accounts
+        MXSession session = Matrix.getInstance(context).getDefaultSession();
+        IMXStore store = session.getDataHandler().getStore();
+
+        Room room = store.getRoom(eventToNotify.mRoomId);
+        Event event = store.getEvent(eventToNotify.mEventId, eventToNotify.mRoomId);
+        BingRule bingRule = eventToNotify.mBingRule;
+
+        boolean isInvitationEvent = false;
+
+        EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
+        eventDisplay.setPrependMessagesWithAuthor(true);
+        String body = eventDisplay.getTextualDisplay().toString();
+
+        if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
+            try {
+                isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "prepareNotification : invitation parsing failed");
+            }
+        }
+
+        Bitmap largeBitmap = null;
+
+        // when the event is an invitation one
+        // don't check if the sender ID is known because the members list are not yet downloaded
+        if (!isInvitationEvent) {
+            // is there any avatar url
+            if (!TextUtils.isEmpty(room.getAvatarUrl())) {
+                int size = context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
+
+                // check if the thumbnail is already downloaded
+                File f = session.getMediasCache().thumbnailCacheFile(room.getAvatarUrl(), size);
+
+                if (null != f) {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    try {
+                        largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
+                    } catch (OutOfMemoryError oom) {
+                        Log.e(LOG_TAG, "decodeFile failed with an oom");
+                    }
+                } else {
+                    session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(context), room.getAvatarUrl(), size);
+                }
+            }
+        }
+
+        Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
+
+        String roomName = getRoomName(context, session, room, event);
+
+        android.support.v7.app.NotificationCompat.Builder builder = new android.support.v7.app.NotificationCompat.Builder(context);
+        builder.setWhen(event.getOriginServerTs());
+        builder.setContentTitle(roomName);
+        builder.setContentText(body);
+
+        builder.setGroup("riot");
+        builder.setGroupSummary(true);
+
+        android.support.v7.app.NotificationCompat.InboxStyle inboxStyle = new android.support.v7.app.NotificationCompat.InboxStyle();
+
+        int sum = 0;
+
+        List<NotificationDisplay> busyNotifiedList = new ArrayList<>();
+        List<NotificationDisplay> notifiedList = new ArrayList<>();
+
+        for (String roomId : notifiedEventsByRoomId.keySet()) {
+            room = session.getDataHandler().getRoom(roomId);
+            roomName = getRoomName(context, session, room, null);
+
+            Event latestEvent = null;
+            boolean isNoisyNotified = false;
+            List<NotifiedEvent> notifiedEvents = notifiedEventsByRoomId.get(roomId);
+
+            for (NotifiedEvent notifiedEvent :  notifiedEvents) {
+                isNoisyNotified |= notifiedEvent.mBingRule.isDefaultNotificationSound(notifiedEvent.mBingRule.notificationSound());
+                latestEvent = store.getEvent(notifiedEvent.mEventId, roomId);
+            }
+
+            String text;
+            String header;
+
+            eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+            eventDisplay.setPrependMessagesWithAuthor(false);
+
+            if (room.isInvited()) {
+                header = roomName + " : ";
+                text = eventDisplay.getTextualDisplay().toString();
+            } else if (1 == notifiedEvents.size()) {
+                eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                eventDisplay.setPrependMessagesWithAuthor(false);
+
+                header = roomName + " (" + room.getLiveState().getMemberName(latestEvent.getSender()) + ") : ";
+                text = eventDisplay.getTextualDisplay().toString();
+              } else {
+                header = roomName + " : ";
+                text = context.getString(R.string.notification_unread_messages, session.getDataHandler().getStore().unreadEvents(roomId, null).size());
+            }
+
+            SpannableString notifiedLine = new SpannableString(header + text);
+            notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            if (isNoisyNotified) {
+                busyNotifiedList.add(new NotificationDisplay(latestEvent.getOriginServerTs(), notifiedLine));
+            } else {
+                notifiedList.add(new NotificationDisplay(latestEvent.getOriginServerTs(), notifiedLine));
+            }
+
+            sum += session.getDataHandler().getStore().unreadEvents(roomId, null).size();
+        }
+
+        Collections.sort(busyNotifiedList, mNotificationDisplaySort);
+        Collections.sort(notifiedList, mNotificationDisplaySort);
+
+        List<NotificationDisplay> mergedNotificationIdsplaysList = new ArrayList<>();
+        mergedNotificationIdsplaysList.addAll(busyNotifiedList);
+        mergedNotificationIdsplaysList.addAll(notifiedList);
+
+        if (mergedNotificationIdsplaysList.size() > MAX_NUMBER_NOTIFICATION_LINES) {
+            mergedNotificationIdsplaysList = mergedNotificationIdsplaysList.subList(0, MAX_NUMBER_NOTIFICATION_LINES);
+        }
+
+        for (NotificationDisplay notificationDisplay : mergedNotificationIdsplaysList) {
+            SpannableString notifiedLine = notificationDisplay.mMessage;
+
+            if (busyNotifiedList.contains(notificationDisplay)) {
+                notifiedLine.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.vector_fuchsia_color)), 0, notifiedLine.length(), 0);
+            }
+            inboxStyle.addLine(notifiedLine);
+        }
+
+        inboxStyle.setBigContentTitle("Riot");
+        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages_in_room, sum, notifiedEventsByRoomId.keySet().size()));
+        builder.setStyle(inboxStyle);
+
+        if (notifiedEventsByRoomId.keySet().size() == 1) {
+            if (null != largeBitmap) {
+                largeBitmap = NotificationUtils.createSquareBitmap(largeBitmap);
+                builder.setLargeIcon(largeBitmap);
+            }
+        } else {
+
+        }
+
+        builder.setSmallIcon(R.drawable.message_notification_transparent);
+
+        int highlightCount = room.getHighlightCount();
+
+        boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
+
+        if (isBackground) {
+            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_MIN);
+        } else if (is_bing) {
+            // So that it pops up on screen.
+            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_HIGH);
+            builder.setColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color));
+        } else if (highlightCount > 0) {
+            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
+            builder.setColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color));
+        } else {
+            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_MIN);
+            builder.setColor(Color.TRANSPARENT);
+        }
+
+        // TODO add quick reply
+
+        Notification n = builder.build();
+        n.flags |= Notification.FLAG_SHOW_LIGHTS;
+        n.defaults |= Notification.DEFAULT_LIGHTS;
+
+        if (is_bing && !isBackground) {
+            n.defaults |= Notification.DEFAULT_SOUND;
+        }
+
+        return n;
+    }
     private NotificationUtils() {}
 }
