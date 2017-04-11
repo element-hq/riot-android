@@ -35,6 +35,7 @@ import android.os.PowerManager;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
@@ -77,7 +78,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -156,10 +160,8 @@ public class EventStreamService extends Service {
     /**
      * store the notifications description
      */
-    private String mNotificationSessionId = null;
-    private Map<String, NotificationCompat.MessagingStyle> mNotificationMessagesListByRoomId = new HashMap<>();
-    private Map<String, String> mLatestEventIdByRoomId = new HashMap<>();
-
+    private LinkedHashMap<String, Pair<BingRule, Event>> mPendingNotifications = new LinkedHashMap<>();
+    private Map<String, List<Pair<BingRule, String>>> mNotifiedMessagesByRoomId = null;
 
     /**
      * call in progress (foreground notification)
@@ -175,16 +177,6 @@ public class EventStreamService extends Service {
      * true when the service is in foreground ie the GCM registration failed or is disabled.
      */
     private boolean mIsForeground = false;
-
-    /**
-     * the latest built notification
-     */
-    private Notification mLatestNotification = null;
-
-    /**
-     * list the notifications found between two onLiveEventsChunkProcessed()
-     */
-    private final ArrayList<String> mPendingNotifications = new ArrayList<>();
 
     /**
      * GCM manager
@@ -720,19 +712,6 @@ public class EventStreamService extends Service {
     //================================================================================
 
     /**
-     * Compute an event unique identifier.
-     * @param event the event
-     * @return the uid identifier
-     */
-    private static String computeEventUID(Event event) {
-        if (null != event) {
-            return (event.roomId + "-" + event.eventId);
-        } else {
-            return "invalid";
-        }
-    }
-
-    /**
      * @return the polling thread listener notification
      */
     @SuppressLint("NewApi")
@@ -813,7 +792,6 @@ public class EventStreamService extends Service {
      * @param bingRule the bing rule
      */
     private void prepareCallNotification(Event event, BingRule bingRule) {
-
         // display only the invitation messages by now
         // because the other ones are not displayed.
         if (!event.getType().equals(Event.EVENT_TYPE_CALL_INVITE)) {
@@ -860,19 +838,9 @@ public class EventStreamService extends Service {
      * @param bingRule the bing rule
      */
     public void prepareNotification(Event event, RoomState roomState, BingRule bingRule) {
-        String uid = computeEventUID(event);
-
-        if (mPendingNotifications.indexOf(uid) >= 0) {
+        if (mPendingNotifications.containsKey(event.eventId)) {
             Log.d(LOG_TAG, "prepareNotification : don't bing - the event was already binged");
-            checkNotification();
             return;
-        }
-
-        mPendingNotifications.add(uid);
-
-        // define a bing rule if it is not provided
-        if (null == bingRule) {
-            bingRule = mDefaultBingRule;
         }
 
         if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
@@ -893,7 +861,6 @@ public class EventStreamService extends Service {
             return;
         }
 
-        String senderID = event.getSender();
         // FIXME: Support event contents with no body
         if (!event.getContent().getAsJsonObject().has("body")) {
             // only the membership events are supported
@@ -922,185 +889,8 @@ public class EventStreamService extends Service {
             return;
         }
 
-        boolean isInvitationEvent = false;
-       
-        EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, roomState);
-        eventDisplay.setPrependMessagesWithAuthor(false);
-        String body = eventDisplay.getTextualDisplay().toString();
-
-        if (TextUtils.isEmpty(body)) {
-            Log.e(LOG_TAG, "prepareNotification : the event " + event.eventId + " cannot be displayed");
-            return;
-        }
-
-        if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
-            try {
-                isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "prepareNotification : invitation parsing failed");
-            }
-        }
-
-        Bitmap largeBitmap = null;
-
-        // when the event is an invitation one
-        // don't check if the sender ID is known because the members list are not yet downloaded
-        if (!isInvitationEvent) {
-            // is there any avatar url
-            if (!TextUtils.isEmpty(room.getAvatarUrl())) {
-                int size = getApplicationContext().getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
-
-                // check if the thumbnail is already downloaded
-                File f = session.getMediasCache().thumbnailCacheFile(room.getAvatarUrl(), size);
-
-                if (null != f) {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    try {
-                        largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
-                    } catch (OutOfMemoryError oom) {
-                        Log.e(LOG_TAG, "decodeFile failed with an oom");
-                    }
-                } else {
-                    session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(getApplicationContext()), room.getAvatarUrl(), size);
-                }
-            }
-        }
-
-        mNotificationSessionId = session.getCredentials().userId;
-
-        Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
-
-        String roomName = getRoomName(session, room, event);
-
-        NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(EventStreamService.this);
-        builder.setWhen(event.getOriginServerTs());
-        builder.setContentTitle(roomName);
-        builder.setContentText(body);
-        builder.setSmallIcon(R.drawable.message_notification_transparent);
-
-        builder.setGroup("riot");
-        builder.setGroupSummary(true);
-
-        if (!isInvitationEvent) {
-            NotificationCompat.MessagingStyle textStyle = new NotificationCompat.MessagingStyle("foo");
-            textStyle.setConversationTitle(roomName);
-
-            // Append unread events from oldest to latest
-            List<Event> unreadEvents = session.getDataHandler().getStore().unreadEvents(roomId, null);
-            for (Event ev : unreadEvents) {
-                EventDisplay evDisplay = new EventDisplay(getApplicationContext(), ev, roomState);
-                String bd = evDisplay.getTextualDisplay().toString();
-                if (TextUtils.isEmpty(bd)) {
-                    continue;
-                }
-
-                String sender = ev.getSender();
-                String senderName = null;
-                if (!session.getCredentials().userId.equals(sender)) {
-                    senderName = room.getMember(sender).getName();
-                }
-                textStyle.addMessage(bd, ev.getOriginServerTs(), senderName);
-            }
-
-            mNotificationMessagesListByRoomId.put(roomId, textStyle);
-            mLatestEventIdByRoomId.put(roomId, event.eventId);
-            builder.setStyle(textStyle);
-        }
-
-        if (null != largeBitmap) {
-            largeBitmap = NotificationUtils.createSquareBitmap(largeBitmap);
-            builder.setLargeIcon(largeBitmap);
-        }
-
-        int highlightCount = room.getHighlightCount();
-        int notificationCount = room.getNotificationCount();
-
-        boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
-
-        if (is_bing) {
-            // So that it pops up on screen.
-            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-            builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.vector_fuchsia_color));
-        } else if (highlightCount > 0) {
-            builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-            builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.vector_fuchsia_color));
-        } else {
-            builder.setPriority(NotificationCompat.PRIORITY_MIN);
-            builder.setColor(Color.TRANSPARENT);
-        }
-
-        TaskStackBuilder stackBuilder;
-        Intent intent;
-
-        intent = new Intent(getBaseContext(), VectorRoomActivity.class);
-        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-        intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
-
-        stackBuilder = TaskStackBuilder.create(getBaseContext())
-                .addParentStack(VectorRoomActivity.class)
-                .addNextIntent(intent);
-
-
-        // android 4.3 issue
-        // use a generator for the private requestCode.
-        // When using 0, the intent is not created/launched when the user taps on the notification.
-        //
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-
-        Notification n = builder.build();
-        n.flags |= Notification.FLAG_SHOW_LIGHTS;
-        n.defaults |= Notification.DEFAULT_LIGHTS;
-
-
-
-        if (is_bing) {
-            n.defaults |= Notification.DEFAULT_SOUND;
-        }
-
-        nm.notify(roomId, NOTIF_ID_MESSAGE, n);
+        mPendingNotifications.put(event.eventId, new Pair<>(bingRule, event));
     }
-
-    /**
-     * Trigger the latest prepared notification
-     * @param checkNotification true to check if the prepared notification still makes sense.
-     */
-    public void triggerPreparedNotification(boolean checkNotification) {
-        if (null != mLatestNotification) {
-            if (checkNotification) {
-                // check first if the message has not been read
-                checkNotification();
-            }
-
-            // if it is still defined.
-            if (null != mLatestNotification) {
-                try {
-                    NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
-//                    nm.cancelAll();
-                    nm.notify((int)System.currentTimeMillis(), mLatestNotification);
-
-                    // turn the screen on
-                    if (mGcmRegistrationManager.isScreenTurnedOn()) {
-                        // turn the screen on for 3 seconds
-                        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "MXEventListener");
-                        wl.acquire(3000);
-                        wl.release();
-                    }
-
-
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "onLiveEventsChunkProcessed crashed " + e.getLocalizedMessage());
-                }
-
-                mLatestNotification = null;
-            }
-        }
-    }
-
 
     /**
      * Cancel the push notifications for a dedicated roomId.
@@ -1127,33 +917,8 @@ public class EventStreamService extends Service {
         }
 
         // reset the identifiers
-        mNotificationSessionId = null;
-        mNotificationMessagesListByRoomId.clear();
-        mLatestEventIdByRoomId.clear();
-        mLatestNotification = null;
-    }
-
-    /**
-     * Clear any displayed notification for a dedicated room and session id.
-     * @param accountId the account id.
-     * @param roomId the room id.
-     */
-    private void cancelNotifications(String accountId, String roomId) {
-        Log.d(LOG_TAG, "cancelNotifications " + accountId + " - " + roomId);
-
-        // sanity checks
-        if ((null != accountId) && (null != roomId) && mNotificationMessagesListByRoomId.containsKey(roomId)) {
-
-            NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
-            try {
-                nm.cancel(roomId, NOTIF_ID_MESSAGE);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## cancelNotifications() failed " + e.getMessage());
-            }
-
-            mNotificationMessagesListByRoomId.remove(roomId);
-            mLatestEventIdByRoomId.remove(roomId);
-        }
+        mPendingNotifications.clear();
+        mNotifiedMessagesByRoomId.clear();
     }
 
     /**
@@ -1171,7 +936,171 @@ public class EventStreamService extends Service {
      */
     public static void checkDisplayedNotifications() {
         if (null != mActiveEventStreamService) {
-            mActiveEventStreamService.checkNotification();
+            mActiveEventStreamService.triggerPreparedNotification(false);
+        }
+    }
+
+    private void cancelNotifications(String accountId, String roomId) {
+        if (mNotifiedMessagesByRoomId.containsKey(roomId)) {
+            mNotifiedMessagesByRoomId = null;
+            triggerPreparedNotification(false);
+        }
+    }
+
+    /**
+     * Trigger the latest prepared notification
+     * @param checkNotification true to check if the prepared notification still makes sense.
+     */
+    public void triggerPreparedNotification(boolean checkNotification) {
+        Pair<BingRule, Event> eventToNotify = getEventToNotify();
+
+        if (null != eventToNotify) {
+            mNotifiedMessagesByRoomId = null;
+        }
+
+        boolean isNotifUpdated = refreshNotifiedMessagesList();
+
+        if (isNotifUpdated) {
+            // TODO add multi sessions
+            MXSession session = Matrix.getInstance(getBaseContext()).getDefaultSession();
+
+            NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
+
+            // no more notifications
+            if (mNotifiedMessagesByRoomId.size() == 0) {
+                nm.cancel(NOTIF_ID_MESSAGE);
+            } else {
+                boolean isBackgroundNotif = (null == eventToNotify);
+                Event event;
+                Room room;
+                BingRule bingRule;
+
+                // use the first notified event to refresh the notification
+                if (isBackgroundNotif) {
+                    String roomId = mNotifiedMessagesByRoomId.keySet().iterator().next();
+                    Pair<BingRule, String> pair = mNotifiedMessagesByRoomId.get(roomId).get(0);
+
+                    room = session.getDataHandler().getStore().getRoom(roomId);
+                    event = session.getDataHandler().getStore().getEvent(pair.second, roomId);
+                    bingRule = pair.first;
+                } else {
+                    event = eventToNotify.second;
+                    room = session.getDataHandler().getStore().getRoom(event.roomId);
+                    bingRule = eventToNotify.first;
+                }
+
+                boolean isInvitationEvent = false;
+
+                EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, room.getLiveState());
+                eventDisplay.setPrependMessagesWithAuthor(true);
+                String body = eventDisplay.getTextualDisplay().toString();
+
+                if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
+                    try {
+                        isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "prepareNotification : invitation parsing failed");
+                    }
+                }
+
+                Bitmap largeBitmap = null;
+
+                // when the event is an invitation one
+                // don't check if the sender ID is known because the members list are not yet downloaded
+                if (!isInvitationEvent) {
+                    // is there any avatar url
+                    if (!TextUtils.isEmpty(room.getAvatarUrl())) {
+                        int size = getApplicationContext().getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
+
+                        // check if the thumbnail is already downloaded
+                        File f = session.getMediasCache().thumbnailCacheFile(room.getAvatarUrl(), size);
+
+                        if (null != f) {
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                            try {
+                                largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
+                            } catch (OutOfMemoryError oom) {
+                                Log.e(LOG_TAG, "decodeFile failed with an oom");
+                            }
+                        } else {
+                            session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(getApplicationContext()), room.getAvatarUrl(), size);
+                        }
+                    }
+                }
+
+                //mNotificationSessionId = session.getCredentials().userId;
+
+                Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
+
+                String roomName = getRoomName(session, room, event);
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(EventStreamService.this);
+                builder.setWhen(event.getOriginServerTs());
+                builder.setContentTitle(roomName);
+                builder.setContentText(body);
+
+                builder.setGroup("riot");
+                builder.setGroupSummary(true);
+
+                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
+                int sum = 0;
+
+                // TODO manage order
+                for(String roomId : mNotifiedMessagesByRoomId.keySet()) {
+                    room = session.getDataHandler().getRoom(roomId);
+                    roomName = getRoomName(session, room, null);
+
+                    inboxStyle.addLine(roomName + " : " + session.getDataHandler().getStore().unreadEvents(roomId, null).size() + " unread events");
+                    sum += session.getDataHandler().getStore().unreadEvents(roomId, null).size();
+                }
+
+                inboxStyle.setBigContentTitle("Riot");
+                inboxStyle.setSummaryText(sum + " unread messages in " + mNotifiedMessagesByRoomId.keySet().size() + " rooms");
+                builder.setStyle(inboxStyle);
+
+                if (mNotifiedMessagesByRoomId.keySet().size() == 1) {
+                    if (null != largeBitmap) {
+                        largeBitmap = NotificationUtils.createSquareBitmap(largeBitmap);
+                        builder.setLargeIcon(largeBitmap);
+                    }
+                } else {
+
+                }
+
+                builder.setSmallIcon(R.drawable.message_notification_transparent);
+
+                int highlightCount = room.getHighlightCount();
+
+                boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
+
+                if (isBackgroundNotif) {
+                    builder.setPriority(NotificationCompat.PRIORITY_MIN);
+                } else if (is_bing) {
+                    // So that it pops up on screen.
+                    builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+                    builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.vector_fuchsia_color));
+                } else if (highlightCount > 0) {
+                    builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.vector_fuchsia_color));
+                } else {
+                    builder.setPriority(NotificationCompat.PRIORITY_MIN);
+                    builder.setColor(Color.TRANSPARENT);
+                }
+
+                // TODO add quick reply
+
+                Notification n = builder.build();
+                n.flags |= Notification.FLAG_SHOW_LIGHTS;
+                n.defaults |= Notification.DEFAULT_LIGHTS;
+
+                if (is_bing && !isBackgroundNotif) {
+                    n.defaults |= Notification.DEFAULT_SOUND;
+                }
+
+                nm.notify(NOTIF_ID_MESSAGE, n);
+            }
         }
     }
 
@@ -1179,64 +1108,131 @@ public class EventStreamService extends Service {
      * Check if the current displayed notification must be cleared
      * because it doesn't make sense anymore.
      */
-    private void checkNotification() {
-        //Log.d(LOG_TAG, "checkNotification : session ID" + mNotificationSessionId + " - Notif ID " + mNotificationRoomId + " - Event id " + mNotificationEventId);
+    private Pair<BingRule, Event> getEventToNotify() {
+        // TODO add multi sessions
+        MXSession session = Matrix.getInstance(getBaseContext()).getDefaultSession();
+        // notified only the latest unread message
+        List<Pair<BingRule, Event>> pairs = new ArrayList<>(mPendingNotifications.values());
 
-        for(String roomId : mNotificationMessagesListByRoomId.keySet()) {
-            boolean clearNotification = true;
+        Collections.reverse(pairs);
 
-            MXSession session = Matrix.getInstance(this).getSession(mNotificationSessionId);
+        for(Pair<BingRule, Event> pair : pairs) {
+            Event event = pair.second;
+            Room room = session.getDataHandler().getRoom(event.roomId);
 
-            if (null != session) {
-                Room room = session.getDataHandler().getRoom(roomId);
+            // test if the message has not been read
+            if ((null != room) && !room.isEventRead(event.eventId)) {
+                // test if the message is displayable
+                EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, room.getLiveState());
+                eventDisplay.setPrependMessagesWithAuthor(false);
+                String body = eventDisplay.getTextualDisplay().toString();
 
-                if (null != room) {
-                    Log.d(LOG_TAG, "checkNotification :  the room exists");
+                if (!TextUtils.isEmpty(body)) {
+                    mPendingNotifications.clear();
+                    return pair;
+                }
+            }
+        }
 
-                    // invitation notification
-                    if (!mLatestEventIdByRoomId.containsKey(roomId)) {
-                        Log.d(LOG_TAG, "checkNotification :  room invitation case");
-                        clearNotification = !room.isInvited();
-                    } else {
-                        Log.d(LOG_TAG, "checkNotification :  event case");
-                        clearNotification = room.isEventRead(mLatestEventIdByRoomId.get(roomId));
+        mPendingNotifications.clear();
+        return null;
+    }
 
-                        if (!clearNotification) {
-                            NotificationCompat.MessagingStyle messagingStyle = mNotificationMessagesListByRoomId.get(roomId);
-                            List<Event> unreadEvents = session.getDataHandler().getStore().unreadEvents(roomId, null);
+    //private LinkedHashMap<String, Event> mPendingNotifications = new LinkedHashMap<>();
+    //private Map<String, List<Pair<BingRule, String>>> mNotifiedMessagesByRoomId = null;
+    /**
+     * Refresh the notified messages list if it was not yet done.
+     * @return true if there is an update
+     */
+    private boolean refreshNotifiedMessagesList() {
+        // TODO add multi sessions
+        MXSession session = Matrix.getInstance(getBaseContext()).getDefaultSession();
+        IMXStore store = session.getDataHandler().getStore();
 
-                            // update the unread messages list
-                            //
-                            if ((null != messagingStyle) &&
-                                    (null != unreadEvents) &&
-                                    (messagingStyle.getMessages().size() != unreadEvents.size())) {
-                                messagingStyle.getMessages().clear();
+        if (null == mNotifiedMessagesByRoomId) {
+            mNotifiedMessagesByRoomId = new HashMap<>();
+            Collection<Room> rooms = store.getRooms();
 
-                                for (Event ev: unreadEvents) {
-                                    EventDisplay evDisplay = new EventDisplay(getApplicationContext(), ev, room.getLiveState());
-                                    String bd = evDisplay.getTextualDisplay().toString();
-                                    if (TextUtils.isEmpty(bd)) {
-                                        continue;
+            for(Room room : rooms) {
+                // invitation : add the dedicated event
+                if (room.isInvited()) {
+                    Collection<Event> events = store.getRoomMessages(room.getRoomId());
+
+                    if (null != events) {
+                        for (Event event : events) {
+                            if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
+                                try {
+                                    if ("invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString())) {
+                                        BingRule rule = session.fulfillRule(event);
+
+                                        if (null != rule) {
+                                            List<Pair<BingRule, String>> list = new ArrayList<>();
+                                            list.add(new Pair<>(rule, event.eventId));
+
+                                            mNotifiedMessagesByRoomId.put(room.getRoomId(), list);
+                                        }
                                     }
-
-                                    String sender = ev.getSender();
-                                    String senderName = null;
-                                    if (!session.getCredentials().userId.equals(sender)) {
-                                        senderName = room.getMember(sender).getName();
-                                    }
-                                    messagingStyle.addMessage(bd, ev.getOriginServerTs(), senderName);
+                                } catch (Exception e) {
+                                    Log.e(LOG_TAG, "initNotifiedMessagesList : invitation parsing failed");
                                 }
                             }
                         }
                     }
                 } else {
-                    Log.d(LOG_TAG, "checkNotification :  the room does not exist");
+                    List<Event> unreadEvents = session.getDataHandler().getStore().unreadEvents(room.getRoomId(), null);
+
+                    if ((null != unreadEvents) && unreadEvents.size() > 0) {
+                        List<Pair<BingRule, String>> list = new ArrayList<>();
+
+                        for (Event event : unreadEvents) {
+                            BingRule rule = session.fulfillRule(event);
+                            if (null != rule) {
+                                list.add(new Pair<>(rule, event.eventId));
+                            }
+                        }
+
+                        if (list.size() > 0) {
+                            mNotifiedMessagesByRoomId.put(room.getRoomId(), list);
+                        }
+                    }
                 }
             }
 
-            if (clearNotification) {
-                cancelNotifications(mNotificationSessionId, roomId);
+            return true;
+        } else {
+            boolean isUpdated = false;
+            List<String> roomIds = new ArrayList<>(mNotifiedMessagesByRoomId.keySet());
+
+            for(String roomId : roomIds) {
+                Room room = store.getRoom(roomId);
+
+                // the room does not exist anymore
+                if (null == room) {
+                    mNotifiedMessagesByRoomId.remove(roomId);
+                    isUpdated = true;
+                } else {
+                    List<Pair<BingRule, String>> events = mNotifiedMessagesByRoomId.get(roomId);
+
+                    // search for the read messages
+                    for(int i = 0; i < events.size(); ) {
+                        Pair<BingRule, String> pair = events.get(i);
+
+                        if (room.isEventRead(pair.second)) {
+                            events.remove(i);
+                            isUpdated = true;
+                        } else {
+                            i++;
+                        }
+                    }
+
+                    if (0 == events.size()) {
+                        mNotifiedMessagesByRoomId.remove(roomId);
+                        isUpdated = true;
+                    }
+                }
             }
+
+            return isUpdated;
         }
     }
 
