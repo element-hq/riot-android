@@ -13,13 +13,13 @@
         android:layout_toLeftOf="@+id/open_chat_header_arrow"
         android:orientation="vertical">
 
+        <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
         <TextView
             android:id="@+id/room_action_bar_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
-            android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 

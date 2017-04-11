@@ -92,6 +92,7 @@
             android:src="@drawable/admin_icon"
             android:visibility="gone" />
 
+        <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
         <TextView
             android:id="@+id/filtered_list_name"
             android:layout_width="wrap_content"
@@ -101,7 +102,7 @@
             android:layout_marginRight="16dp"
             android:layout_toLeftOf="@id/filtered_list_actions_list"
             android:layout_toRightOf="@id/filtered_list_avatar"
-            android:maxLines="1"
+            android:singleLine="true"
             android:text="A member name"
             android:textColor="@color/vector_21_black"
             android:textSize="16sp"
@@ -116,6 +117,7 @@
             android:layout_marginRight="16dp"
             android:layout_toLeftOf="@id/filtered_list_actions_list"
             android:maxLines="1"
+            android:ellipsize="end"
             android:text="A member status"
             android:textColor="@color/vector_80_gray"
             android:textSize="14sp" />

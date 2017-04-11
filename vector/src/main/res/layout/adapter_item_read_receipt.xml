@@ -28,21 +28,23 @@
         android:layout_marginRight="8dp"
         android:orientation="vertical">
 
+        <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
         <TextView
             android:id="@+id/accountAdapter_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
+            android:singleLine="true"
             android:textSize="16sp"
             android:fontFamily="sans-serif-regular"
             android:textColor="@color/vector_text_black_color"
             android:text="Some Person's Name" />
 
+        <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
         <TextView
             android:id="@+id/read_receipt_ts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="1"
+            android:singleLine="true"
             android:textSize="14sp"
             android:layout_marginTop="3dp"
             android:layout_marginRight="26dp"
