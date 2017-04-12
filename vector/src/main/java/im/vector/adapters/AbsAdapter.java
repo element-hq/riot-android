@@ -385,7 +385,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         }
     }
 
-    public class InvitationViewHolder extends RecyclerView.ViewHolder {
+    protected abstract class BasicRoomViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.room_avatar)
         ImageView vRoomAvatar;
@@ -399,40 +399,70 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         @BindView(R.id.room_unread_count)
         TextView vRoomUnreadCount;
 
-        @BindView(R.id.recents_invite_reject_button)
-        Button vRejectButton;
+        @BindView(R.id.room_avatar_direct_chat_icon)
+        View vRoomDirectChatIcon;
 
-        @BindView(R.id.recents_invite_preview_button)
-        Button vPreViewButton;
+        @BindView(R.id.room_avatar_encrypted_icon)
+        View vRoomEncryptedIcon;
 
         @BindColor(R.color.vector_fuchsia_color)
         int mFuchsiaColor;
+        @BindColor(R.color.vector_green_color)
+        int mGreenColor;
+        @BindColor(R.color.vector_silver_color)
+        int mSilverColor;
 
-        InvitationViewHolder(View itemView) {
+        BasicRoomViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        void populateViews(final Room room) {
-            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(room.getRoomId());
+        void populateViews(final Room room, final RoomSummary roomSummary,
+                           final String unreadCount, final int bingUnreadColor,
+                           final boolean isDirectChat) {
+            int unreadMsgCount = roomSummary.getUnreadEventsCount();
+            if (unreadMsgCount > 0) {
+                vRoomUnreadCount.setText(unreadCount);
+                vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
+                GradientDrawable shape = new GradientDrawable();
+                shape.setShape(GradientDrawable.RECTANGLE);
+                shape.setCornerRadius(100);
+                shape.setColor(bingUnreadColor);
+                vRoomUnreadCount.setBackground(shape);
+                vRoomUnreadCount.setVisibility(View.VISIBLE);
+            } else {
+                vRoomUnreadCount.setVisibility(View.GONE);
+            }
 
             final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
             vRoomName.setText(roomName);
-            vRoomName.setTypeface(null, Typeface.BOLD);
+            vRoomName.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
             VectorUtils.loadRoomAvatar(mContext, mSession, vRoomAvatar, room);
 
             // get last message to be displayed
             CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(mContext, mSession, roomSummary);
             vRoomLastMessage.setText(lastMsgToDisplay);
 
-            // display an exclamation mark like the webclient
-            vRoomUnreadCount.setText("!");
-            vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadius(100);
-            shape.setColor(mFuchsiaColor);
-            vRoomUnreadCount.setBackground(shape);
+            vRoomDirectChatIcon.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
+            vRoomEncryptedIcon.setVisibility(room.isEncrypted()? View.VISIBLE : View.INVISIBLE);
+        }
+    }
+
+    class InvitationViewHolder extends BasicRoomViewHolder {
+
+        @BindView(R.id.recents_invite_reject_button)
+        Button vRejectButton;
+
+        @BindView(R.id.recents_invite_preview_button)
+        Button vPreViewButton;
+
+        InvitationViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        void populateViews(final Room room) {
+            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(room.getRoomId());
+            super.populateViews(room, roomSummary, "!", mFuchsiaColor, room.isDirectChatInvitation());
 
             vPreViewButton.setOnClickListener(new View.OnClickListener() {
                 @Override

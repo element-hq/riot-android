@@ -18,8 +18,6 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -38,7 +36,6 @@ import org.matrix.androidsdk.rest.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.Matrix;
@@ -103,6 +100,7 @@ public class PeopleAdapter extends AbsAdapter {
         View itemView;
 
         if (viewType == 0) {
+            //TODO replace by a empty view ?
             itemView = inflater.inflate(R.layout.adapter_section_header_local, viewGroup, false);
             itemView.setBackgroundColor(Color.MAGENTA);
             return new HeaderViewHolder(itemView);
@@ -245,7 +243,7 @@ public class PeopleAdapter extends AbsAdapter {
      * *********************************************************************************************
      */
 
-    class RoomViewHolder extends RecyclerView.ViewHolder {
+    class RoomViewHolder extends BasicRoomViewHolder {
 
         @BindView(R.id.room_avatar)
         ImageView vRoomAvatar;
@@ -265,16 +263,14 @@ public class PeopleAdapter extends AbsAdapter {
         @BindView(R.id.indicator_unread_message)
         View vRoomUnreadIndicator;
 
-        @BindColor(R.color.vector_fuchsia_color)
-        int mFuchsiaColor;
-        @BindColor(R.color.vector_green_color)
-        int mGreenColor;
-        @BindColor(R.color.vector_silver_color)
-        int mSilverColor;
+        @BindView(R.id.room_avatar_direct_chat_icon)
+        View vRoomDirectChatIcon;
+
+        @BindView(R.id.room_avatar_encrypted_icon)
+        View vRoomEncryptedIcon;
 
         private RoomViewHolder(final View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
         }
 
         private void populateViews(final Room room) {
@@ -292,27 +288,7 @@ public class PeopleAdapter extends AbsAdapter {
                 bingUnreadColor = Color.TRANSPARENT;
             }
 
-            if (unreadMsgCount > 0) {
-                vRoomUnreadCount.setText(String.valueOf(unreadMsgCount));
-                vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
-                GradientDrawable shape = new GradientDrawable();
-                shape.setShape(GradientDrawable.RECTANGLE);
-                shape.setCornerRadius(100);
-                shape.setColor(bingUnreadColor);
-                vRoomUnreadCount.setBackground(shape);
-                vRoomUnreadCount.setVisibility(View.VISIBLE);
-            } else {
-                vRoomUnreadCount.setVisibility(View.GONE);
-            }
-
-            final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-            vRoomName.setText(roomName);
-            vRoomName.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
-            VectorUtils.loadRoomAvatar(mContext, mSession, vRoomAvatar, room);
-
-            // get last message to be displayed
-            CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(mContext, mSession, roomSummary);
-            vRoomLastMessage.setText(lastMsgToDisplay);
+            super.populateViews(room, roomSummary, String.valueOf(unreadMsgCount), bingUnreadColor, true);
 
             // set bing view background colour
             vRoomUnreadIndicator.setBackgroundColor(bingUnreadColor);
