@@ -65,6 +65,10 @@ public class HomeFragment extends AbsHomeFragment {
      */
 
     @Override
+    protected void onFloatingButtonClick() {
+    }
+
+    @Override
     protected void onMarkAllAsRead() {
 
     }

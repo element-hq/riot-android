@@ -1022,10 +1022,10 @@ public class VectorHomeActivity extends AppCompatActivity {
     /**
      * Open the room creation with inviting people.
      */
-    private void invitePeopleToNewRoom() {
+    public void invitePeopleToNewRoom() {
         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
         settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-        VectorHomeActivity.this.startActivity(settingsIntent);
+        startActivity(settingsIntent);
     }
 
     /**

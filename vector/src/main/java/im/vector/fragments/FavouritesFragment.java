@@ -65,6 +65,10 @@ public class FavouritesFragment extends AbsHomeFragment {
      */
 
     @Override
+    protected void onFloatingButtonClick() {
+    }
+
+    @Override
     protected void onMarkAllAsRead() {
 
     }

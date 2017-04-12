@@ -187,6 +187,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     }
 
     @Override
+    protected void onFloatingButtonClick() {
+        mActivity.invitePeopleToNewRoom();
+    }
+
+    @Override
     protected void onFilter(final String pattern, final OnFilterListener listener) {
         mAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
             @Override

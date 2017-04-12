@@ -81,6 +81,16 @@ public abstract class AbsHomeFragment extends Fragment {
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER)) {
             mCurrentFilter = savedInstanceState.getString(CURRENT_FILTER);
         }
+
+        View fab = getActivity().findViewById(R.id.floating_action_button);
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onFloatingButtonClick();
+                }
+            });
+        }
     }
 
     @Override
@@ -150,6 +160,8 @@ public abstract class AbsHomeFragment extends Fragment {
      */
 
     protected abstract void onMarkAllAsRead();
+
+    protected abstract void onFloatingButtonClick();
 
     protected abstract void onFilter(final String pattern, final OnFilterListener listener);
 
