@@ -31,6 +31,9 @@ public class SimpleDividerItemDecoration extends DividerItemDecoration {
     private final int mOrientation;
     private final int mLeftMargin;
 
+    // No divider will be drawn for children with this tag
+    private static final String NO_DIVIDER_TAG = "without-divider";
+
     public SimpleDividerItemDecoration(final Context context, final int orientation, final int leftMargin) {
         super(context, orientation);
         mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider);
@@ -43,7 +46,7 @@ public class SimpleDividerItemDecoration extends DividerItemDecoration {
         if (parent.getLayoutManager() == null) {
             return;
         }
-        if (mOrientation == VERTICAL || mLeftMargin <= 0) {
+        if (mOrientation == HORIZONTAL || mLeftMargin <= 0) {
             super.onDraw(canvas, parent, state);
         } else {
             canvas.save();
@@ -52,14 +55,17 @@ public class SimpleDividerItemDecoration extends DividerItemDecoration {
             int childCount = parent.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View child = parent.getChildAt(i);
+                View nextChild = parent.getChildAt(i + 1);
+                if (!String.valueOf(child.getTag()).contains(NO_DIVIDER_TAG)
+                        && (nextChild != null && !String.valueOf(nextChild.getTag()).contains(NO_DIVIDER_TAG))) {
+                    RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
 
-                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+                    int top = child.getBottom() + params.bottomMargin;
+                    int bottom = top + mDivider.getIntrinsicHeight();
 
-                int top = child.getBottom() + params.bottomMargin;
-                int bottom = top + mDivider.getIntrinsicHeight();
-
-                mDivider.setBounds(mLeftMargin, top, right, bottom);
-                mDivider.draw(canvas);
+                    mDivider.setBounds(mLeftMargin, top, right, bottom);
+                    mDivider.draw(canvas);
+                }
             }
             canvas.restore();
         }

@@ -1,96 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<im.vector.view.DrawerScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/direct_chats_header"
-            style="@style/ListHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tag="sticky-header"
-            android:text="@string/direct_chats_header" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/direct_chats_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/direct_chats_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/search_no_results" />
-
-        <TextView
-            android:id="@+id/local_contacts_header"
-            style="@style/ListHeader"
-            android:tag="sticky-header-footer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="6dp"
-            android:text="@string/local_address_book_header" />
-
-        <!-- Workaround for https://code.google.com/p/android/issues/detail?id=201613 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@color/list_header_background"
-            android:paddingLeft="10dp">
-
-            <CheckBox
-                android:id="@+id/matrix_only_filter_checkbox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/matrix_only_filter"
-                android:textColor="@color/vector_text_black_color"
-                android:theme="@style/CheckBoxTheme" />
-
-        </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/local_contact_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/local_contact_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/search_no_results" />
-
-        <TextView
-            android:id="@+id/known_contacts_header"
-            style="@style/ListHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tag="sticky-header-footer"
-            android:text="@string/known_contacts_header" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/known_contact_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/known_contact_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/search_no_results" />
-    </LinearLayout>
-</im.vector.view.DrawerScrollView>
+</RelativeLayout>

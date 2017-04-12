@@ -40,12 +40,26 @@ public class RoomUtils {
      * Return comparator to sort rooms by date
      *
      * @param session
+     * @return comparator
      */
     public static Comparator<Room> getRoomsDateComparator(final MXSession session) {
         return new Comparator<Room>() {
             public int compare(Room aLeftObj, Room aRightObj) {
                 final RoomSummary leftRoomSummary = session.getDataHandler().getStore().getSummary(aLeftObj.getRoomId());
                 final RoomSummary rightRoomSummary = session.getDataHandler().getStore().getSummary(aRightObj.getRoomId());
+
+                return getRoomSummaryComparator().compare(leftRoomSummary, rightRoomSummary);
+            }
+        };
+    }
+
+    /**
+     * Return a comparator to sort summaries by lastest event
+     * @return
+     */
+    public static Comparator<RoomSummary> getRoomSummaryComparator(){
+        return new Comparator<RoomSummary>() {
+            public int compare(RoomSummary leftRoomSummary, RoomSummary rightRoomSummary) {
                 int retValue;
                 long deltaTimestamp;
 

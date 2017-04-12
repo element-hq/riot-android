@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/wrapper_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:tag="without-divider">
+
+    <TextView
+        android:id="@+id/section_title"
+        style="@style/ListHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#22ff0000"
+        android:tag="sticky"
+        android:text="Default section header" />
+
+    <!-- Workaround for https://code.google.com/p/android/issues/detail?id=201613 -->
+    <LinearLayout
+        android:id="@+id/matrix_only_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f262ff"
+        android:paddingLeft="10dp"
+        android:tag="no-sticky">
+
+        <CheckBox
+            android:id="@+id/matrix_only_filter_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/matrix_only_filter"
+            android:textColor="@color/vector_text_black_color"
+            android:theme="@style/CheckBoxTheme" />
+
+    </LinearLayout>
+</LinearLayout>

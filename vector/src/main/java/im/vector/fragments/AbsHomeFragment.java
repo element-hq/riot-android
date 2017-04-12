@@ -39,6 +39,7 @@ import im.vector.activity.VectorHomeActivity;
 public abstract class AbsHomeFragment extends Fragment {
 
     private static final String LOG_TAG = AbsHomeFragment.class.getSimpleName();
+    private static final String CURRENT_FILTER = "CURRENT_FILTER";
 
     // Butterknife unbinder
     private Unbinder mUnBinder;
@@ -76,6 +77,10 @@ public abstract class AbsHomeFragment extends Fragment {
 
         mActivity = (VectorHomeActivity) getActivity();
         mSession = Matrix.getInstance(getActivity()).getDefaultSession();
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER)) {
+            mCurrentFilter = savedInstanceState.getString(CURRENT_FILTER);
+        }
     }
 
     @Override
@@ -87,6 +92,12 @@ public abstract class AbsHomeFragment extends Fragment {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(CURRENT_FILTER, mCurrentFilter);
     }
 
     @Override
