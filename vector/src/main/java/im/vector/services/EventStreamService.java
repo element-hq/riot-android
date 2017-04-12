@@ -371,15 +371,21 @@ public class EventStreamService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (null == intent) {
-            Log.e(LOG_TAG, "onStartCommand : null intent");
+            Log.e(LOG_TAG, "onStartCommand : null intent -> restart the service");
 
-            if (null != mActiveEventStreamService) {
-                Log.e(LOG_TAG, "onStartCommand : null intent with an active events stream service");
-            } else {
-                Log.e(LOG_TAG, "onStartCommand : null intent with no events stream service");
+            mSessions = new ArrayList<>();
+            mSessions.addAll(Matrix.getInstance(getApplicationContext()).getSessions());
+
+            mMatrixIds = new ArrayList<>();
+
+            for(MXSession session : mSessions) {
+                session.getDataHandler().getStore().open();
+                mMatrixIds.add(session.getMyUserId());
             }
 
-            return START_NOT_STICKY;
+            start(true);
+
+            return START_STICKY;
         }
 
         StreamAction action = StreamAction.values()[intent.getIntExtra(EXTRA_STREAM_ACTION, StreamAction.IDLE.ordinal())];
@@ -403,7 +409,7 @@ public class EventStreamService extends Service {
         switch (action) {
             case START:
             case RESUME:
-                start();
+                start(false);
                 break;
             case STOP:
                 Log.d(LOG_TAG, "## onStartCommand(): service stopped");
@@ -467,8 +473,10 @@ public class EventStreamService extends Service {
 
     /**
      * internal start.
+     *
+     * @param catchupWhenStarted true to trigger a catchup the service when it is ready
      */
-    private void start() {
+    private void start(final boolean catchupWhenStarted) {
         StreamAction state = getServiceState();
 
         if (state == StreamAction.START) {
@@ -502,6 +510,9 @@ public class EventStreamService extends Service {
             // the store is ready (no data loading in progress...)
             if (store.isReady()) {
                 startEventStream(session, store);
+                if (catchupWhenStarted) {
+                    catchup(true);
+                }
             } else {
                 final MXSession fSession = session;
                 // wait that the store is ready  before starting the events listener
@@ -509,6 +520,10 @@ public class EventStreamService extends Service {
                     @Override
                     public void onStoreReady(String accountId) {
                         startEventStream(fSession, store);
+
+                        if (catchupWhenStarted) {
+                            catchup(true);
+                        }
                     }
 
                     @Override
@@ -913,7 +928,7 @@ public class EventStreamService extends Service {
         }
 
         boolean isInvitationEvent = false;
-       
+
         EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, roomState);
         eventDisplay.setPrependMessagesWithAuthor(false);
         String body = eventDisplay.getTextualDisplay().toString();
