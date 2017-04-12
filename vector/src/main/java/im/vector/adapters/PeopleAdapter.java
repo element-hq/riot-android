@@ -53,7 +53,7 @@ public class PeopleAdapter extends AbsAdapter {
 
     private static final int TYPE_CONTACT = 2;
 
-    private AdapterSection<Room> mRoomsSection;
+    private AdapterSection<Room> mDirectChatsSection;
     private AdapterSection<ParticipantAdapterItem> mLocalContactsSection;
     private AdapterSection<ParticipantAdapterItem> mKnownContactsSection;
 
@@ -70,9 +70,9 @@ public class PeopleAdapter extends AbsAdapter {
 
         mListener = listener;
 
-        mRoomsSection = new AdapterSection<>(context.getString(R.string.direct_chats_header), -1,
+        mDirectChatsSection = new AdapterSection<>(context.getString(R.string.direct_chats_header), -1,
                 R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession));
-        mRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_conversation_placeholder), context.getString(R.string.no_result_placeholder));
+        mDirectChatsSection.setEmptyViewPlaceholder(context.getString(R.string.no_conversation_placeholder), context.getString(R.string.no_result_placeholder));
 
         mLocalContactsSection = new AdapterSection<>(context.getString(R.string.local_address_book_header),
                 R.layout.adapter_local_contacts_sticky_header_subview, R.layout.adapter_item_contact_view, TYPE_HEADER_LOCAL_CONTACTS, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), ParticipantAdapterItem.alphaComparator);
@@ -82,7 +82,7 @@ public class PeopleAdapter extends AbsAdapter {
                 R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), ParticipantAdapterItem.getComparator(mSession));
         mKnownContactsSection.setEmptyViewPlaceholder(context.getString(R.string.people_search_too_many_contacts), context.getString(R.string.no_result_placeholder));
 
-        addSection(mRoomsSection);
+        addSection(mDirectChatsSection);
         addSection(mLocalContactsSection);
         addSection(mKnownContactsSection);
     }
@@ -138,7 +138,7 @@ public class PeopleAdapter extends AbsAdapter {
             case 2:
                 final ContactViewHolder contactViewHolder = (ContactViewHolder) viewHolder;
                 final ParticipantAdapterItem item = (ParticipantAdapterItem) getItemForPosition(position);
-                contactViewHolder.populateViews(item);
+                contactViewHolder.populateViews(item, position);
                 break;
         }
     }
@@ -146,7 +146,7 @@ public class PeopleAdapter extends AbsAdapter {
     @Override
     protected int applyFilter(String pattern) {
         int nbResults = 0;
-        nbResults += filterRooms(mRoomsSection, pattern);
+        nbResults += filterRooms(mDirectChatsSection, pattern);
         nbResults += filterLocalContacts(pattern);
         nbResults += filterKnownContacts(pattern);
 
@@ -160,9 +160,9 @@ public class PeopleAdapter extends AbsAdapter {
      */
 
     public void setRoom(final List<Room> rooms) {
-        mRoomsSection.setItems(rooms, mCurrentFilterPattern);
+        mDirectChatsSection.setItems(rooms, mCurrentFilterPattern);
         if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
-            filterRooms(mRoomsSection, String.valueOf(mCurrentFilterPattern));
+            filterRooms(mDirectChatsSection, String.valueOf(mCurrentFilterPattern));
         }
         updateSections();
     }
@@ -183,6 +183,29 @@ public class PeopleAdapter extends AbsAdapter {
             filterKnownContacts(null);
         }
         updateSections();
+    }
+
+    /**
+     * Refresh direct chats data
+     */
+    public void refreshDirectChats() {
+        refreshSection(mDirectChatsSection);
+    }
+
+    /**
+     * Update the known contact corresponding to the given user id
+     *
+     * @param user
+     */
+    public void updateKnownContact(final User user) {
+        int headerPos = getSectionHeaderPosition(mKnownContactsSection) + 1;
+        List<ParticipantAdapterItem> knownContacts = mKnownContactsSection.getFilteredItems();
+        for (int i = 0; i < knownContacts.size(); i++) {
+            ParticipantAdapterItem item = knownContacts.get(i);
+            if (TextUtils.equals(user.user_id, item.mUserId)) {
+                notifyItemChanged(headerPos + i);
+            }
+        }
     }
 
     /*
@@ -324,7 +347,7 @@ public class PeopleAdapter extends AbsAdapter {
             ButterKnife.bind(this, itemView);
         }
 
-        private void populateViews(final ParticipantAdapterItem participant) {
+        private void populateViews(final ParticipantAdapterItem participant, final int position) {
             participant.displayAvatar(mSession, vContactAvatar);
             vContactName.setText(participant.getUniqueDisplayName(null));
 
@@ -343,7 +366,7 @@ public class PeopleAdapter extends AbsAdapter {
                     vContactDesc.setText(participant.mContact.getPhonenumbers().get(0).mRawPhoneNumber);
                 }
             } else {
-                loadContactPresence(vContactDesc, participant);
+                loadContactPresence(vContactDesc, participant, position);
                 vContactBadge.setVisibility(View.GONE);
             }
 
@@ -360,8 +383,10 @@ public class PeopleAdapter extends AbsAdapter {
          *
          * @param textView
          * @param item
+         * @param position
          */
-        private void loadContactPresence(final TextView textView, final ParticipantAdapterItem item) {
+        private void loadContactPresence(final TextView textView, final ParticipantAdapterItem item,
+                                         final int position) {
             User user = null;
             MXSession matchedSession = null;
             // retrieve the linked user
@@ -381,7 +406,7 @@ public class PeopleAdapter extends AbsAdapter {
                     public void onSuccess(Void info) {
                         if (textView != null) {
                             textView.setText(VectorUtils.getUserOnlineStatus(mContext, finalMatchedSession, item.mUserId, null));
-                            notifyDataSetChanged();
+                            notifyItemChanged(position);
                         }
                     }
                 });

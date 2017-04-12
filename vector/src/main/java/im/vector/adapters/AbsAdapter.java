@@ -181,7 +181,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         switch (viewType) {
             case -1:
                 final HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
-                for (Pair<Integer, AdapterSection> adapterSection : getSectionsArray()) {
+                for (Pair<Integer, AdapterSection> adapterSection : mSections) {
                     if (adapterSection.first == position) {
                         if (adapterSection.second.hideWhenEmpty() && adapterSection.second.getItems().isEmpty()) {
                             headerViewHolder.itemView.setVisibility(View.GONE);
@@ -326,6 +326,29 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      */
     protected List<Pair<Integer, AdapterSection>> getSectionsArray() {
         return mSections;
+    }
+
+    /**
+     * Get the position of the header of the given section
+     *
+     * @param section
+     * @return section header position
+     */
+    protected int getSectionHeaderPosition(final AdapterSection section) {
+        for (Pair<Integer, AdapterSection> adapterSection : mSections) {
+            if (adapterSection.second == section) {
+                return adapterSection.first;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Refresh data of a section
+     */
+    public void refreshSection(final AdapterSection section) {
+        int startPos = getSectionHeaderPosition(section) +1;
+        notifyItemRangeChanged(startPos, startPos + section.getNbItems() -1);
     }
 
     public void onFilterDone(CharSequence currentPattern) {

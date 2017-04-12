@@ -109,11 +109,15 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEventsListener = new MXEventListener() {
+
+            @Override
+            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
+                mAdapter.refreshDirectChats();
+            }
+
             @Override
             public void onPresenceUpdate(final Event event, final User user) {
-                //TODO
-//                mLocalContactAdapter.updateItemWithUser(user);
-//                mKnownContactAdapter.updateItemWithUser(user);
+                mAdapter.updateKnownContact(user);
             }
 
             @Override
