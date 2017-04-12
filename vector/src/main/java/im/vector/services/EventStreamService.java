@@ -18,38 +18,25 @@
 package im.vector.services;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.util.Log;
 
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -61,36 +48,29 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.store.MXStoreListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.EventDisplay;
+
 import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.VectorCallViewActivity;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
-import im.vector.activity.VectorRoomActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.util.NotificationUtils;
 import im.vector.util.VectorCallSoundManager;
-import im.vector.util.VectorUtils;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * A foreground service in charge of controlling whether the event stream is running or not.
@@ -100,7 +80,7 @@ public class EventStreamService extends Service {
     private static final String LOG_TAG = "EventStreamService";
 
     /**
-     *  static instance
+     * static instance
      */
     private static EventStreamService mActiveEventStreamService = null;
 
@@ -146,7 +126,7 @@ public class EventStreamService extends Service {
     /**
      * Default bing rule
      */
-    private static final BingRule mDefaultBingRule = new BingRule("ruleKind", "aPattern" , true, true, false);
+    private static final BingRule mDefaultBingRule = new BingRule("ruleKind", "aPattern", true, true, false);
 
     /**
      * Managed sessions
@@ -166,7 +146,7 @@ public class EventStreamService extends Service {
     /**
      * store the notifications description
      */
-    private LinkedHashMap<String, NotificationUtils.NotifiedEvent> mPendingNotifications = new LinkedHashMap<>();
+    private final LinkedHashMap<String, NotificationUtils.NotifiedEvent> mPendingNotifications = new LinkedHashMap<>();
     private Map<String, List<NotificationUtils.NotifiedEvent>> mNotifiedEventsByRoomId = null;
 
     /**
@@ -297,7 +277,7 @@ public class EventStreamService extends Service {
 
         @Override
         public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
-            triggerPreparedNotification(true);
+            refreshMessagesNotification();
             mPendingNotifications.clear();
 
             // do not suspend the application if there is some active calls
@@ -335,10 +315,11 @@ public class EventStreamService extends Service {
 
     /**
      * Add some accounts to the current service.
+     *
      * @param matrixIds the account identifiers to add.
      */
     public void startAccounts(List<String> matrixIds) {
-        for(String matrixId : matrixIds) {
+        for (String matrixId : matrixIds) {
             // not yet started
             if (mMatrixIds.indexOf(matrixId) < 0) {
                 MXSession session = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
@@ -355,10 +336,11 @@ public class EventStreamService extends Service {
 
     /**
      * Stop some accounts of the current service.
+     *
      * @param matrixIds the account identifiers to add.
      */
     public void stopAccounts(List<String> matrixIds) {
-        for(String matrixId : matrixIds) {
+        for (String matrixId : matrixIds) {
             // not yet started
             if (mMatrixIds.indexOf(matrixId) >= 0) {
                 MXSession session = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
@@ -400,7 +382,7 @@ public class EventStreamService extends Service {
 
                 mSessions = new ArrayList<>();
 
-                for(String matrixId : mMatrixIds) {
+                for (String matrixId : mMatrixIds) {
                     mSessions.add(Matrix.getInstance(getApplicationContext()).getSession(matrixId));
                 }
 
@@ -445,8 +427,9 @@ public class EventStreamService extends Service {
 
     /**
      * Start the even stream.
+     *
      * @param session the session
-     * @param store the store
+     * @param store   the store
      */
     private void startEventStream(final MXSession session, final IMXStore store) {
         session.getDataHandler().checkPermanentStorageData();
@@ -466,6 +449,7 @@ public class EventStreamService extends Service {
 
     /**
      * Update the current thread state.
+     *
      * @param newState the new state.
      */
     private void setServiceState(StreamAction newState) {
@@ -497,7 +481,7 @@ public class EventStreamService extends Service {
 
         mActiveEventStreamService = this;
 
-        for(MXSession session : mSessions) {
+        for (MXSession session : mSessions) {
             if (null == session.getDataHandler()) {
                 Log.e(LOG_TAG, "start : the session is not anymore valid.");
                 return;
@@ -567,7 +551,7 @@ public class EventStreamService extends Service {
         }
 
         if (mSessions != null) {
-            for(MXSession session : mSessions) {
+            for (MXSession session : mSessions) {
                 if (session.isAlive()) {
                     session.stopEventStream();
                     session.getDataHandler().removeListener(mEventsListener);
@@ -591,7 +575,7 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "onStartCommand pause from state " + state);
 
             if (mSessions != null) {
-                for(MXSession session : mSessions) {
+                for (MXSession session : mSessions) {
                     session.pauseEventStream();
                 }
 
@@ -604,6 +588,7 @@ public class EventStreamService extends Service {
 
     /**
      * internal catchup method.
+     *
      * @param checkState true to check if the current state allow to perform a catchup
      */
     private void catchup(boolean checkState) {
@@ -646,7 +631,7 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "## resume : resume the service");
 
         if (mSessions != null) {
-            for(MXSession session : mSessions) {
+            for (MXSession session : mSessions) {
                 session.resumeEventStream();
             }
         }
@@ -753,7 +738,7 @@ public class EventStreamService extends Service {
                 Method deprecatedMethod = notification.getClass().getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
                 deprecatedMethod.invoke(notification, this, getString(R.string.app_name), NOTIFICATION_SUB_TITLE, pi);
             } catch (Exception ex) {
-                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg="+ex.getMessage());
+                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.getMessage());
             }
         }
 
@@ -763,7 +748,8 @@ public class EventStreamService extends Service {
     /**
      * Prepare a call notification.
      * Only the incoming calls are managed by now and have a dedicated notification.
-     * @param event the event
+     *
+     * @param event    the event
      * @param bingRule the bing rule
      */
     private void prepareCallNotification(Event event, BingRule bingRule) {
@@ -808,9 +794,10 @@ public class EventStreamService extends Service {
 
     /**
      * Prepare a notification for the expected event.
-     * @param event the event
+     *
+     * @param event     the event
      * @param roomState the room state
-     * @param bingRule the bing rule
+     * @param bingRule  the bing rule
      */
     public void prepareNotification(Event event, RoomState roomState, BingRule bingRule) {
         if (mPendingNotifications.containsKey(event.eventId)) {
@@ -864,19 +851,25 @@ public class EventStreamService extends Service {
             return;
         }
 
+        // define a bing rule if it is not provided
+        if (null == bingRule) {
+            bingRule = mDefaultBingRule;
+        }
+
         mPendingNotifications.put(event.eventId, new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, bingRule));
     }
 
     /**
      * Cancel the push notifications for a dedicated roomId.
      * If the roomId is null, cancel all the push notification.
+     *
      * @param accountId the account id
-     * @param roomId the room id.
+     * @param roomId    the room id.
      */
     public static void cancelNotificationsForRoomId(String accountId, String roomId) {
         Log.d(LOG_TAG, "cancelNotificationsForRoomId " + accountId + " - " + roomId);
         if (null != mActiveEventStreamService) {
-            mActiveEventStreamService.cancelNotifications(accountId ,roomId);
+            mActiveEventStreamService.cancelNotifications(accountId, roomId);
         }
     }
 
@@ -916,27 +909,27 @@ public class EventStreamService extends Service {
      */
     public static void checkDisplayedNotifications() {
         if (null != mActiveEventStreamService) {
-            mActiveEventStreamService.triggerPreparedNotification(false);
+            mActiveEventStreamService.refreshMessagesNotification();
         }
     }
 
     /**
      * Cancel notifications for a dedicated room.
+     *
      * @param accountId the account
-     * @param roomId the room Id
+     * @param roomId    the room Id
      */
     private void cancelNotifications(String accountId, String roomId) {
         if (mNotifiedEventsByRoomId.containsKey(roomId)) {
             mNotifiedEventsByRoomId = null;
-            triggerPreparedNotification(false);
+            refreshMessagesNotification();
         }
     }
 
     /**
-     * Trigger the latest prepared notification
-     * @param checkNotification true to check if the prepared notification still makes sense.
+     * Refresh the messages notification.
      */
-    public void triggerPreparedNotification(boolean checkNotification) {
+    public void refreshMessagesNotification() {
         NotificationUtils.NotifiedEvent eventToNotify = getEventToNotify();
 
         if (refreshNotifiedMessagesList()) {
@@ -956,7 +949,7 @@ public class EventStreamService extends Service {
                     long ts = 0;
 
                     // search the oldest message to refresh the notification
-                    for(String roomId : mNotifiedEventsByRoomId.keySet()) {
+                    for (String roomId : mNotifiedEventsByRoomId.keySet()) {
                         List<NotificationUtils.NotifiedEvent> events = mNotifiedEventsByRoomId.get(roomId);
                         NotificationUtils.NotifiedEvent notifiedEvent = events.get(events.size() - 1);
 
@@ -969,7 +962,7 @@ public class EventStreamService extends Service {
                     }
                 }
 
-                Notification notif = NotificationUtils.buildMessageNotification2(getApplicationContext(),
+                Notification notif = NotificationUtils.buildMessageNotification(getApplicationContext(),
                         mNotifiedEventsByRoomId,
                         eventToNotify,
                         isBackgroundNotif);
@@ -1021,7 +1014,8 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * Refresh the notified messages list if it was not yet done.
+     * Refresh the notified messages list.
+     *
      * @return true if there is an update
      */
     private boolean refreshNotifiedMessagesList() {
@@ -1029,11 +1023,12 @@ public class EventStreamService extends Service {
         MXSession session = Matrix.getInstance(getBaseContext()).getDefaultSession();
         IMXStore store = session.getDataHandler().getStore();
 
+        // initialise the map it was not yet done (after restarting the application for example)
         if (null == mNotifiedEventsByRoomId) {
             mNotifiedEventsByRoomId = new HashMap<>();
             Collection<Room> rooms = store.getRooms();
 
-            for(Room room : rooms) {
+            for (Room room : rooms) {
                 // invitation : add the dedicated event
                 if (room.isInvited()) {
                     Collection<Event> events = store.getRoomMessages(room.getRoomId());
@@ -1078,11 +1073,11 @@ public class EventStreamService extends Service {
             }
 
             return true;
-        } else {
+        } else { // test if there is an update (if some messages have been read for example)
             boolean isUpdated = false;
             List<String> roomIds = new ArrayList<>(mNotifiedEventsByRoomId.keySet());
 
-            for(String roomId : roomIds) {
+            for (String roomId : roomIds) {
                 Room room = store.getRoom(roomId);
 
                 // the room does not exist anymore
@@ -1098,7 +1093,7 @@ public class EventStreamService extends Service {
                     if (room.isEventRead(events.get(0).mEventId)) {
                         // if the latest message has been read
                         // we have to find out the unread messages
-                        if (!room.isEventRead(events.get(events.size()-1).mEventId)) {
+                        if (!room.isEventRead(events.get(events.size() - 1).mEventId)) {
                             // search for the read messages
                             for (int i = 0; i < events.size(); ) {
                                 NotificationUtils.NotifiedEvent event = events.get(i);
@@ -1133,10 +1128,11 @@ public class EventStreamService extends Service {
 
     /**
      * Display a permanent notification when there is an incoming call.
-     * @param session the session
-     * @param room the room
-     * @param event the event
-     * @param callId the callId
+     *
+     * @param session  the session
+     * @param room     the room
+     * @param event    the event
+     * @param callId   the callId
      * @param bingRule the bing rule.
      */
     private void displayIncomingCallNotification(MXSession session, Room room, Event event, String callId, BingRule bingRule) {
@@ -1184,8 +1180,9 @@ public class EventStreamService extends Service {
 
     /**
      * Display a call in progress notificatin.
+     *
      * @param session the session
-     * @param callId the callId
+     * @param callId  the callId
      */
     public void displayCallInProgressNotification(MXSession session, Room room, String callId) {
         if (null != callId) {

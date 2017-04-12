@@ -138,7 +138,7 @@ public class MatrixGcmListenerService extends GcmListenerService {
                             }
 
                             eventStreamService.prepareNotification(event, roomState, session.getDataHandler().getBingRulesManager().fulfilledBingRule(event));
-                            eventStreamService.triggerPreparedNotification(false);
+                            eventStreamService.refreshMessagesNotification();
 
                             Log.d(LOG_TAG, "## onMessageReceived() : trigger a notification");
                         } else {
