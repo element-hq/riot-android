@@ -16,12 +16,10 @@
 
 package im.vector.fragments;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -135,7 +133,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
         mAdapter.onFilterDone(mCurrentFilter);
 
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+        if (!ContactsManager.getInstance().isContactBookAccessRequested()) {
             CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, getActivity(), this);
         }
     }
