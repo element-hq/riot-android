@@ -16,18 +16,32 @@
 
 package im.vector.util;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventDisplay;
+import org.matrix.androidsdk.util.Log;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Comparator;
 
 import im.vector.Matrix;
@@ -35,6 +49,22 @@ import im.vector.R;
 import im.vector.adapters.AdapterUtils;
 
 public class RoomUtils {
+
+    private static final String LOG_TAG = RoomUtils.class.getSimpleName();
+
+    public interface MoreActionListener {
+        void onToggleRoomNotifications(MXSession session, String roomId);
+
+        void onToggleDirectChat(MXSession session, String roomId);
+
+        void moveToFavorites(MXSession session, String roomId);
+
+        void moveToConversations(MXSession session, String roomId);
+
+        void moveToLowPriority(MXSession session, String roomId);
+
+        void onLeaveRoom(MXSession session, String roomId);
+    }
 
     /**
      * Return comparator to sort rooms by date
@@ -55,9 +85,10 @@ public class RoomUtils {
 
     /**
      * Return a comparator to sort summaries by lastest event
+     *
      * @return
      */
-    public static Comparator<RoomSummary> getRoomSummaryComparator(){
+    public static Comparator<RoomSummary> getRoomSummaryComparator() {
         return new Comparator<RoomSummary>() {
             public int compare(RoomSummary leftRoomSummary, RoomSummary rightRoomSummary) {
                 int retValue;
@@ -173,5 +204,185 @@ public class RoomUtils {
         }
 
         return displayNameRetValue;
+    }
+
+    /**
+     * Display the room action popup.
+     *
+     * @param context
+     * @param session
+     * @param childRoom  the room in which the actions should be triggered in.
+     * @param actionView the anchor view.
+     * @param isFavorite true if it is a favorite room
+     * @param isLowPrior true it it is a low priority room
+     * @param listener
+     */
+    @SuppressLint("NewApi")
+    public static void displayPopupMenu(final Context context, final MXSession session, final Room childRoom,
+                                        final View actionView, final boolean isFavorite, final boolean isLowPrior,
+                                        final MoreActionListener listener) {
+        // sanity check
+        if (null == childRoom) {
+            return;
+        }
+
+        final PopupMenu popup;
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            popup = new PopupMenu(context, actionView, Gravity.END);
+        } else {
+            popup = new PopupMenu(context, actionView);
+        }
+        popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
+
+        MenuItem item;
+
+        final BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+
+        if (bingRulesManager.isRoomNotificationsDisabled(childRoom)) {
+            item = popup.getMenu().getItem(0);
+            item.setIcon(null);
+        }
+
+        if (!isFavorite) {
+            item = popup.getMenu().getItem(1);
+            item.setIcon(null);
+        }
+
+        if (!isLowPrior) {
+            item = popup.getMenu().getItem(2);
+            item.setIcon(null);
+        }
+
+        if (session.getDirectChatRoomIdsList().indexOf(childRoom.getRoomId()) < 0) {
+            item = popup.getMenu().getItem(3);
+            item.setIcon(null);
+        }
+
+        // force to display the icon
+        try {
+            Field[] fields = popup.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## displayPopupMenu() : failed " + e.getMessage());
+        }
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(final MenuItem item) {
+                if (listener != null) {
+                    switch (item.getItemId()) {
+                        case R.id.ic_action_select_notifications: {
+                            listener.onToggleRoomNotifications(session, childRoom.getRoomId());
+                            break;
+                        }
+                        case R.id.ic_action_select_fav: {
+                            if (isFavorite) {
+                                listener.moveToConversations(session, childRoom.getRoomId());
+                            } else {
+                                listener.moveToFavorites(session, childRoom.getRoomId());
+                            }
+                            break;
+                        }
+                        case R.id.ic_action_select_deprioritize: {
+                            if (isLowPrior) {
+                                listener.moveToConversations(session, childRoom.getRoomId());
+                            } else {
+                                listener.moveToLowPriority(session, childRoom.getRoomId());
+                            }
+                            break;
+                        }
+                        case R.id.ic_action_select_remove: {
+                            listener.onLeaveRoom(session, childRoom.getRoomId());
+                            break;
+                        }
+                        case R.id.ic_action_select_direct_chat: {
+                            listener.onToggleDirectChat(session, childRoom.getRoomId());
+                            break;
+                        }
+                    }
+                }
+                return false;
+            }
+        });
+
+        popup.show();
+    }
+
+    /**
+     * Display a confirmation dialog when user wants to leave a room
+     *
+     * @param context
+     * @param onClickListener
+     */
+    public static void showLeaveRoomDialog(final Context context, final DialogInterface.OnClickListener onClickListener) {
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.room_participants_leave_prompt_title)
+                .setMessage(R.string.room_participants_leave_prompt_msg)
+                .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        onClickListener.onClick(dialog, which);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    /**
+     * Update the room tag.
+     *
+     * @param session the session
+     * @param roomId  the room id
+     * @param newtag  the new tag
+     */
+    public static void updateRoomTag(MXSession session, String roomId, String newtag, ApiCallback<Void> apiCallback) {
+        Room room = session.getDataHandler().getRoom(roomId);
+
+        if (null != room) {
+            String oldTag = null;
+
+            // retrieve the tag from the room info
+            RoomAccountData accountData = room.getAccountData();
+
+            if ((null != accountData) && accountData.hasTags()) {
+                oldTag = accountData.getKeys().iterator().next();
+            }
+
+            // and work
+            room.replaceTag(oldTag, newtag, null, apiCallback);
+        }
+    }
+
+    public static void toggleDirectChat(MXSession session, String roomId, ApiCallback<Void> apiCallback) {
+        Room room = session.getDataHandler().getRoom(roomId);
+        if (null != room) {
+            session.toggleDirectChatRoom(roomId, null, apiCallback);
+        }
+    }
+
+    public static void toggleNotifications(MXSession session, String roomId, BingRulesManager.onBingRuleUpdateListener listener) {
+        Room room = session.getDataHandler().getRoom(roomId);
+
+        if (null != room) {
+            BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+            bingRulesManager.muteRoomNotifications(room, !bingRulesManager.isRoomNotificationsDisabled(room), listener);
+        }
     }
 }

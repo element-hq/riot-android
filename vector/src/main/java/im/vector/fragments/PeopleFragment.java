@@ -31,7 +31,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 
-import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -50,7 +49,6 @@ import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
-import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.PeopleAdapter;
 import im.vector.contacts.Contact;
@@ -60,7 +58,7 @@ import im.vector.util.VectorUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
-public class PeopleFragment extends AbsHomeFragment implements ContactsManager.ContactsManagerListener, AbsAdapter.InvitationListener {
+public class PeopleFragment extends AbsHomeFragment implements ContactsManager.ContactsManagerListener {
 
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
 
@@ -242,7 +240,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             public void onSelectItem(ParticipantAdapterItem contact, int position) {
                 onContactSelected(contact);
             }
-        }, this);
+        }, this, this);
         mRecycler.setAdapter(mAdapter);
 
         View checkBox = mAdapter.getSectionViewForSectionIndex(2).findViewById(R.id.matrix_only_filter_checkbox);
@@ -481,17 +479,5 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     @Override
     public void onContactPresenceUpdate(Contact contact, String matrixId) {
         //TODO
-    }
-
-    @Override
-    public void onPreviewRoom(MXSession session, String roomId) {
-        Log.i(LOG_TAG, "onPreviewRoom " + roomId);
-        mActivity.onPreviewRoom(session, roomId);
-    }
-
-    @Override
-    public void onRejectInvitation(MXSession session, String roomId) {
-        Log.i(LOG_TAG, "onRejectInvitation " + roomId);
-        mActivity.onRejectInvitation(session, roomId);
     }
 }

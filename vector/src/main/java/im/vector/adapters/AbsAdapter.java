@@ -72,6 +72,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     protected final MXSession mSession;
 
     private final InvitationListener mInvitationListener;
+    private final MoreRoomActionListener mMoreActionListener;
 
     /*
      * *********************************************************************************************
@@ -79,10 +80,11 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      * *********************************************************************************************
      */
 
-    protected AbsAdapter(final Context context, final InvitationListener listener) {
+    protected AbsAdapter(final Context context, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
         mContext = context;
         mSession = Matrix.getInstance(context).getDefaultSession();
-        mInvitationListener = listener;
+        mInvitationListener = invitationListener;
+        mMoreActionListener = moreActionListener;
 
         registerAdapterDataObserver(new AdapterDataObserver());
 
@@ -347,8 +349,8 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      * Refresh data of a section
      */
     public void refreshSection(final AdapterSection section) {
-        int startPos = getSectionHeaderPosition(section) +1;
-        notifyItemRangeChanged(startPos, startPos + section.getNbItems() -1);
+        int startPos = getSectionHeaderPosition(section) + 1;
+        notifyItemRangeChanged(startPos, startPos + section.getNbItems() - 1);
     }
 
     public void onFilterDone(CharSequence currentPattern) {
@@ -428,6 +430,12 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         @BindView(R.id.room_avatar_encrypted_icon)
         View vRoomEncryptedIcon;
 
+        @BindView(R.id.room_more_action_click_area)
+        View vRoomMoreActionClickArea;
+
+        @BindView(R.id.room_more_action_anchor)
+        View vRoomMoreActionAnchor;
+
         @BindColor(R.color.vector_fuchsia_color)
         int mFuchsiaColor;
         @BindColor(R.color.vector_green_color)
@@ -467,7 +475,16 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
             vRoomLastMessage.setText(lastMsgToDisplay);
 
             vRoomDirectChatIcon.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
-            vRoomEncryptedIcon.setVisibility(room.isEncrypted()? View.VISIBLE : View.INVISIBLE);
+            vRoomEncryptedIcon.setVisibility(room.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
+
+            vRoomMoreActionClickArea.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mMoreActionListener) {
+                        mMoreActionListener.onMoreActionClick(vRoomMoreActionAnchor, room);
+                    }
+                }
+            });
         }
     }
 
@@ -552,6 +569,10 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         void onPreviewRoom(MXSession session, String roomId);
 
         void onRejectInvitation(MXSession session, String roomId);
+    }
+
+    public interface MoreRoomActionListener {
+        void onMoreActionClick(View itemView, Room room);
     }
 
     /*

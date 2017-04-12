@@ -804,7 +804,7 @@ public class VectorHomeActivity extends AppCompatActivity {
     /**
      * SHow teh waiting view
      */
-    private void showWaitingView() {
+    public void showWaitingView() {
         if (null != mWaitingView) {
             mWaitingView.setVisibility(View.VISIBLE);
         }

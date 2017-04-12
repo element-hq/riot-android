@@ -65,8 +65,8 @@ public class PeopleAdapter extends AbsAdapter {
      * *********************************************************************************************
      */
 
-    public PeopleAdapter(final Context context, final OnSelectItemListener listener, final InvitationListener invitationListener) {
-        super(context, invitationListener);
+    public PeopleAdapter(final Context context, final OnSelectItemListener listener, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
+        super(context, invitationListener, moreActionListener);
 
         mListener = listener;
 

@@ -16,6 +16,7 @@
 
 package im.vector.fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
@@ -23,8 +24,14 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomTag;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
 import butterknife.ButterKnife;
@@ -32,11 +39,13 @@ import butterknife.Unbinder;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.VectorHomeActivity;
+import im.vector.adapters.AbsAdapter;
+import im.vector.util.RoomUtils;
 
 /**
  * Abstract fragment providing the universal search
  */
-public abstract class AbsHomeFragment extends Fragment {
+public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.InvitationListener, AbsAdapter.MoreRoomActionListener, RoomUtils.MoreActionListener {
 
     private static final String LOG_TAG = AbsHomeFragment.class.getSimpleName();
     private static final String CURRENT_FILTER = "CURRENT_FILTER";
@@ -128,6 +137,99 @@ public abstract class AbsHomeFragment extends Fragment {
 
     /*
      * *********************************************************************************************
+     * Listeners
+     * *********************************************************************************************
+     */
+
+    @Override
+    public void onPreviewRoom(MXSession session, String roomId) {
+        Log.i(LOG_TAG, "onPreviewRoom " + roomId);
+        mActivity.onPreviewRoom(session, roomId);
+    }
+
+    @Override
+    public void onRejectInvitation(MXSession session, String roomId) {
+        Log.i(LOG_TAG, "onRejectInvitation " + roomId);
+        mActivity.onRejectInvitation(session, roomId);
+    }
+
+    @Override
+    public void onMoreActionClick(View itemView, Room room) {
+        // User clicked on the "more actions" area
+        RoomUtils.displayPopupMenu(mActivity, mSession, room, itemView, false, false, this);
+    }
+
+    @Override
+    public void onToggleRoomNotifications(MXSession session, String roomId) {
+        mActivity.showWaitingView();
+        RoomUtils.toggleNotifications(session, roomId, new BingRulesManager.onBingRuleUpdateListener() {
+            @Override
+            public void onBingRuleUpdateSuccess() {
+                onRequestDone(null);
+            }
+
+            @Override
+            public void onBingRuleUpdateFailure(final String errorMessage) {
+                onRequestDone(errorMessage);
+            }
+        });
+    }
+
+    @Override
+    public void onToggleDirectChat(MXSession session, String roomId) {
+        mActivity.showWaitingView();
+        RoomUtils.toggleDirectChat(session, roomId, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                onRequestDone(null);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onRequestDone(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onRequestDone(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onRequestDone(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    @Override
+    public void moveToFavorites(MXSession session, String roomId) {
+        updateTag(roomId, RoomTag.ROOM_TAG_FAVOURITE);
+    }
+
+    @Override
+    public void moveToConversations(MXSession session, String roomId) {
+        updateTag(roomId, null);
+    }
+
+    @Override
+    public void moveToLowPriority(MXSession session, String roomId) {
+        updateTag(roomId, RoomTag.ROOM_TAG_LOW_PRIORITY);
+    }
+
+    @Override
+    public void onLeaveRoom(final MXSession session, final String roomId) {
+        RoomUtils.showLeaveRoomDialog(getActivity(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (mActivity != null && !mActivity.isFinishing()) {
+                    mActivity.onRejectInvitation(session, roomId);
+                }
+            }
+        });
+    }
+
+    /*
+     * *********************************************************************************************
      * Public methods
      * *********************************************************************************************
      */
@@ -148,6 +250,62 @@ public abstract class AbsHomeFragment extends Fragment {
                 @Override
                 public void onFilterDone(int nbItems) {
                     mCurrentFilter = pattern;
+                }
+            });
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Private methods
+     * *********************************************************************************************
+     */
+
+    /**
+     * Change the tag of the given room with the provided one
+     *
+     * @param roomId
+     * @param newTag
+     */
+    private void updateTag(final String roomId, final String newTag) {
+        mActivity.showWaitingView();
+        RoomUtils.updateRoomTag(mSession, roomId, newTag, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                onRequestDone(null);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onRequestDone(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onRequestDone(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onRequestDone(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    /**
+     * Handle the end of any request : hide loading wheel and display error message if there is any
+     *
+     * @param errorMessage
+     */
+    private void onRequestDone(final String errorMessage) {
+        if (mActivity != null && !mActivity.isFinishing()) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mActivity.stopWaitingView();
+                    if (!TextUtils.isEmpty(errorMessage)) {
+                        Toast.makeText(mActivity, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
