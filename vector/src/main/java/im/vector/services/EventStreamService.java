@@ -939,25 +939,34 @@ public class EventStreamService extends Service {
     public void triggerPreparedNotification(boolean checkNotification) {
         NotificationUtils.NotifiedEvent eventToNotify = getEventToNotify();
 
-        if (null != eventToNotify) {
-            mNotifiedEventsByRoomId = null;
-        }
-
-        boolean isNotifUpdated = refreshNotifiedMessagesList();
-
-        if (isNotifUpdated) {
-            // TODO add multi sessions
+        if (refreshNotifiedMessagesList()) {
             NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
             // no more notifications
             if (mNotifiedEventsByRoomId.size() == 0) {
                 nm.cancel(NOTIF_ID_MESSAGE);
             } else {
+                // a background notification is triggered when some read receipts have been received
                 boolean isBackgroundNotif = (null == eventToNotify);
-                // use the first notified event to refresh the notification
+
                 if (isBackgroundNotif) {
-                    String roomId = mNotifiedEventsByRoomId.keySet().iterator().next();
-                    eventToNotify = mNotifiedEventsByRoomId.get(roomId).get(0);
+
+                    // TODO add multi sessions
+                    IMXStore store = Matrix.getInstance(getBaseContext()).getDefaultSession().getDataHandler().getStore();
+                    long ts = 0;
+
+                    // search the oldest message to refresh the notification
+                    for(String roomId : mNotifiedEventsByRoomId.keySet()) {
+                        List<NotificationUtils.NotifiedEvent> events = mNotifiedEventsByRoomId.get(roomId);
+                        NotificationUtils.NotifiedEvent notifiedEvent = events.get(events.size() - 1);
+
+                        Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
+
+                        if (event.getOriginServerTs() > ts) {
+                            eventToNotify = notifiedEvent;
+                            ts = event.getOriginServerTs();
+                        }
+                    }
                 }
 
                 Notification notif = NotificationUtils.buildMessageNotification2(getApplicationContext(),
@@ -975,35 +984,39 @@ public class EventStreamService extends Service {
      * because it doesn't make sense anymore.
      */
     private NotificationUtils.NotifiedEvent getEventToNotify() {
-        // TODO add multi sessions
-        MXSession session = Matrix.getInstance(getBaseContext()).getDefaultSession();
-        IMXStore store = session.getDataHandler().getStore();
+        if (mPendingNotifications.size() > 0) {
+            // TODO add multi sessions
+            MXSession session = Matrix.getInstance(getBaseContext()).getDefaultSession();
+            IMXStore store = session.getDataHandler().getStore();
 
-        // notified only the latest unread message
-        List<NotificationUtils.NotifiedEvent> eventsToNotify = new ArrayList<>(mPendingNotifications.values());
+            // notified only the latest unread message
+            List<NotificationUtils.NotifiedEvent> eventsToNotify = new ArrayList<>(mPendingNotifications.values());
 
-        Collections.reverse(eventsToNotify);
+            Collections.reverse(eventsToNotify);
 
-        for(NotificationUtils.NotifiedEvent eventToNotify : eventsToNotify) {
-            Room room = store.getRoom(eventToNotify.mRoomId);
+            for (NotificationUtils.NotifiedEvent eventToNotify : eventsToNotify) {
+                Room room = store.getRoom(eventToNotify.mRoomId);
 
-            // test if the message has not been read
-            if ((null != room) && !room.isEventRead(eventToNotify.mEventId)) {
-                Event event = store.getEvent(eventToNotify.mEventId, eventToNotify.mRoomId);
+                // test if the message has not been read
+                if ((null != room) && !room.isEventRead(eventToNotify.mEventId)) {
+                    Event event = store.getEvent(eventToNotify.mEventId, eventToNotify.mRoomId);
 
-                // test if the message is displayable
-                EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, room.getLiveState());
-                eventDisplay.setPrependMessagesWithAuthor(false);
-                String body = eventDisplay.getTextualDisplay().toString();
+                    // test if the message is displayable
+                    EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, room.getLiveState());
+                    eventDisplay.setPrependMessagesWithAuthor(false);
+                    String body = eventDisplay.getTextualDisplay().toString();
 
-                if (!TextUtils.isEmpty(body)) {
-                    mPendingNotifications.clear();
-                    return eventToNotify;
+                    if (!TextUtils.isEmpty(body)) {
+                        mPendingNotifications.clear();
+                        mNotifiedEventsByRoomId = null;
+                        return eventToNotify;
+                    }
                 }
             }
-        }
 
-        mPendingNotifications.clear();
+            // clear the list
+            mPendingNotifications.clear();
+        }
         return null;
     }
 
@@ -1097,6 +1110,8 @@ public class EventStreamService extends Service {
                                     i++;
                                 }
                             }
+                        } else {
+                            events.clear();
                         }
 
                         // all the messages have been read
@@ -1111,6 +1126,10 @@ public class EventStreamService extends Service {
             return isUpdated;
         }
     }
+
+    //================================================================================
+    // Call notification management
+    //================================================================================
 
     /**
      * Display a permanent notification when there is an incoming call.
