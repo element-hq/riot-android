@@ -400,6 +400,19 @@ public class NotificationUtils {
 
     /**
      * Add a text style for a bunch of notified events.
+     *
+     * The notification contains the notified messages from any rooms.
+     * It does not contain anymore the latest notified message.
+     *
+     * When there is only one room, it displays the MAX_NUMBER_NOTIFICATION_LINES latest messages.
+     * The busy ones are displayed in RED.
+     * The QUICK REPLY and other buttons are displayed.
+     *
+     * When there are several rooms, it displays the busy notified rooms first (sorted by latest message timestamp).
+     * Each line is
+     * - "Room Name : XX unread messages" if there are many unread messages
+     * - 'Room Name : Sender   - Message body" if there is only one unread message.
+     *
      * @param context the context
      * @param builder the notification builder
      * @param eventToNotify the latest notified event
