@@ -445,7 +445,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * Init direct chats view with data and update its display
      */
     private void initDirectChatsViews() {
-        mAdapter.setRoom(mDirectChats);
+        mAdapter.setRooms(mDirectChats);
     }
 
     /**

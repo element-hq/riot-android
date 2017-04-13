@@ -159,7 +159,7 @@ public class PeopleAdapter extends AbsAdapter {
      * *********************************************************************************************
      */
 
-    public void setRoom(final List<Room> rooms) {
+    public void setRooms(final List<Room> rooms) {
         mDirectChatsSection.setItems(rooms, mCurrentFilterPattern);
         if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
             filterRooms(mDirectChatsSection, String.valueOf(mCurrentFilterPattern));

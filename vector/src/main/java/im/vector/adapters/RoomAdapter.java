@@ -18,33 +18,43 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.rest.model.PublicRoom;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
-import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
 
-public class RoomAdapter extends AbsListAdapter<Room, RoomAdapter.RoomViewHolder> {
+public class RoomAdapter extends AbsAdapter {
 
-    private final Context mContext;
-    private final MXSession mSession;
+    private static final String LOG_TAG = RoomAdapter.class.getSimpleName();
+
+    private static final int TYPE_HEADER_PUBLIC_ROOM = 0;
+
+    private static final int TYPE_ROOM = 1;
+
+    private static final int TYPE_PUBLIC_ROOM = 2;
+
+    private AdapterSection<Room> mRoomsSection;
+    private AdapterSection<PublicRoom> mPublicRoomsSection;
+
+    private final OnSelectItemListener mListener;
 
     /*
      * *********************************************************************************************
@@ -52,10 +62,22 @@ public class RoomAdapter extends AbsListAdapter<Room, RoomAdapter.RoomViewHolder
      * *********************************************************************************************
      */
 
-    public RoomAdapter(final Context context, final OnSelectItemListener<Room> listener) {
-        super(R.layout.adapter_item_room_view, listener);
-        mContext = context;
-        mSession = Matrix.getInstance(context).getDefaultSession();
+    public RoomAdapter(final Context context, final OnSelectItemListener listener, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
+        super(context, invitationListener, moreActionListener);
+
+        mListener = listener;
+
+        mRoomsSection = new AdapterSection<>(context.getString(R.string.rooms_header), -1,
+                R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession));
+        mRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_room_placeholder), context.getString(R.string.no_result_placeholder));
+
+        mPublicRoomsSection = new AdapterSection<>(context.getString(R.string.rooms_directory_header),
+                R.layout.adapter_public_room_sticky_header_subview, R.layout.adapter_item_public_room_view,
+                TYPE_HEADER_PUBLIC_ROOM, TYPE_PUBLIC_ROOM, new ArrayList<PublicRoom>(), null);
+        mPublicRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_room_directory_placeholder), context.getString(R.string.no_result_placeholder));
+
+        addSection(mRoomsSection);
+        addSection(mPublicRoomsSection);
     }
 
     /*
@@ -65,28 +87,148 @@ public class RoomAdapter extends AbsListAdapter<Room, RoomAdapter.RoomViewHolder
      */
 
     @Override
-    protected RoomViewHolder createViewHolder(View itemView) {
-        return new RoomViewHolder(itemView);
-    }
+    protected RecyclerView.ViewHolder createSubViewHolder(ViewGroup viewGroup, int viewType) {
+        final LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
-    @Override
-    protected void populateViewHolder(RoomViewHolder viewHolder, Room item) {
-        viewHolder.populateViews(item);
-    }
+        View itemView;
 
-    @Override
-    protected List<Room> getFilterItems(List<Room> items, String aPattern) {
-        Pattern pattern = Pattern.compile(Pattern.quote(aPattern), Pattern.CASE_INSENSITIVE);
-
-        List<Room> filteredRoom = new ArrayList<>();
-        for (final Room room : items) {
-
-            final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-            if (pattern.matcher(roomName).find()) {
-                filteredRoom.add(room);
+        if (viewType == 0) {
+            //TODO replace by a empty view ?
+            itemView = inflater.inflate(R.layout.adapter_section_header_public_room, viewGroup, false);
+            itemView.setBackgroundColor(Color.MAGENTA);
+            return new HeaderViewHolder(itemView);
+        } else {
+            switch (viewType) {
+                case 1:
+                    itemView = inflater.inflate(R.layout.adapter_item_room_view, viewGroup, false);
+                    return new RoomViewHolder(itemView);
+                case 2:
+                    itemView = inflater.inflate(R.layout.adapter_item_public_room_view, viewGroup, false);
+                    return new PublicRoomViewHolder(itemView);
             }
         }
-        return filteredRoom;
+        return null;
+    }
+
+    @Override
+    protected void populateViewHolder(int viewType, RecyclerView.ViewHolder viewHolder, int position) {
+        switch (viewType) {
+            case 0:
+                // Local header
+                final HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
+                for (Pair<Integer, AdapterSection> adapterSection : getSectionsArray()) {
+                    if (adapterSection.first == position) {
+                        headerViewHolder.populateViews(adapterSection.second);
+                        break;
+                    }
+                }
+                break;
+            case 1:
+                final RoomViewHolder roomViewHolder = (RoomViewHolder) viewHolder;
+                final Room room = (Room) getItemForPosition(position);
+                roomViewHolder.populateViews(room);
+                break;
+            case 2:
+                final PublicRoomViewHolder publicRoomViewHolder = (PublicRoomViewHolder) viewHolder;
+                final PublicRoom publicRoom = (PublicRoom) getItemForPosition(position);
+                publicRoomViewHolder.populateViews(publicRoom);
+                break;
+        }
+    }
+
+    @Override
+    protected int applyFilter(String pattern) {
+        int nbResults = 0;
+        nbResults += filterRooms(mRoomsSection, pattern);
+        nbResults += filterPublicRooms(pattern);
+
+        return nbResults;
+    }
+
+    /*
+     * *********************************************************************************************
+     * Public methods
+     * *********************************************************************************************
+     */
+
+    public void setRooms(final List<Room> rooms) {
+        mRoomsSection.setItems(rooms, mCurrentFilterPattern);
+        if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
+            filterRooms(mRoomsSection, String.valueOf(mCurrentFilterPattern));
+        }
+        updateSections();
+    }
+
+    public void setPublicRooms(final List<PublicRoom> publicRooms) {
+        mPublicRoomsSection.setItems(publicRooms, mCurrentFilterPattern);
+        if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
+            filterPublicRooms(String.valueOf(mCurrentFilterPattern));
+        }
+        updateSections();
+    }
+
+    /**
+     * Add more public rooms to the current list
+     *
+     * @param publicRooms
+     */
+    @CallSuper
+    public void addPublicRooms(final List<PublicRoom> publicRooms) {
+        //TODO improve this by adding a "addItem" in AdapterSection object
+        final List<PublicRoom> newPublicRooms = new ArrayList<>();
+        newPublicRooms.addAll(mPublicRoomsSection.getItems());
+        newPublicRooms.addAll(publicRooms);
+        mPublicRoomsSection.setItems(newPublicRooms, mCurrentFilterPattern);
+
+        if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
+            filterPublicRooms(String.valueOf(mCurrentFilterPattern));
+        }
+        updateSections();
+    }
+
+    /**
+     * Refresh direct chats data
+     */
+    public void refreshRooms() {
+        refreshSection(mRoomsSection);
+    }
+
+    /*
+     * *********************************************************************************************
+     * Private methods
+     * *********************************************************************************************
+     */
+
+    /**
+     * Filter the local contacts with the given pattern
+     *
+     * @param patternStr
+     * @return nb of items matching the filter
+     */
+    private int filterPublicRooms(final String patternStr) {
+        if (!TextUtils.isEmpty(patternStr)) {
+            List<PublicRoom> filteredPublicRoom = new ArrayList<>();
+            for (final PublicRoom publicRoom : mPublicRoomsSection.getItems()) {
+                filteredPublicRoom.add(publicRoom);
+            }
+            mPublicRoomsSection.setFilteredItems(filteredPublicRoom, patternStr);
+        } else {
+            mPublicRoomsSection.resetFilter();
+        }
+
+        return mPublicRoomsSection.getFilteredItems().size();
+    }
+
+    /**
+     * Remove the room of the given id from the adapter
+     *
+     * @param roomId
+     */
+    public void removeRoom(final String roomId) {
+        Room room = mSession.getDataHandler().getRoom(roomId);
+        if (mRoomsSection.removeItem(room)) {
+            updateSections();
+        }
     }
 
     /*
@@ -95,7 +237,7 @@ public class RoomAdapter extends AbsListAdapter<Room, RoomAdapter.RoomViewHolder
      * *********************************************************************************************
      */
 
-    class RoomViewHolder extends RecyclerView.ViewHolder {
+    class RoomViewHolder extends BasicRoomViewHolder {
 
         @BindView(R.id.room_avatar)
         ImageView vRoomAvatar;
@@ -115,16 +257,14 @@ public class RoomAdapter extends AbsListAdapter<Room, RoomAdapter.RoomViewHolder
         @BindView(R.id.indicator_unread_message)
         View vRoomUnreadIndicator;
 
-        @BindColor(R.color.vector_fuchsia_color)
-        int mFuchsiaColor;
-        @BindColor(R.color.vector_green_color)
-        int mGreenColor;
-        @BindColor(R.color.vector_silver_color)
-        int mSilverColor;
+        @BindView(R.id.room_avatar_direct_chat_icon)
+        View vRoomDirectChatIcon;
+
+        @BindView(R.id.room_avatar_encrypted_icon)
+        View vRoomEncryptedIcon;
 
         private RoomViewHolder(final View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
         }
 
         private void populateViews(final Room room) {
@@ -142,33 +282,75 @@ public class RoomAdapter extends AbsListAdapter<Room, RoomAdapter.RoomViewHolder
                 bingUnreadColor = Color.TRANSPARENT;
             }
 
-            if (unreadMsgCount > 0) {
-                vRoomUnreadCount.setText(String.valueOf(unreadMsgCount));
-                vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
-                GradientDrawable shape = new GradientDrawable();
-                shape.setShape(GradientDrawable.RECTANGLE);
-                shape.setCornerRadius(100);
-                shape.setColor(bingUnreadColor);
-                vRoomUnreadCount.setBackground(shape);
-                vRoomUnreadCount.setVisibility(View.VISIBLE);
-            } else {
-                vRoomUnreadCount.setVisibility(View.GONE);
-            }
-
-            final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-            vRoomName.setText(roomName);
-            vRoomName.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
-            VectorUtils.loadRoomAvatar(mContext, mSession, vRoomAvatar, room);
-
-            // get last message to be displayed
-            CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(mContext, mSession, roomSummary);
-            vRoomLastMessage.setText(lastMsgToDisplay);
+            super.populateViews(room, roomSummary, String.valueOf(unreadMsgCount), bingUnreadColor, true);
 
             // set bing view background colour
             vRoomUnreadIndicator.setBackgroundColor(bingUnreadColor);
             vRoomUnreadIndicator.setVisibility(roomSummary.isInvited() ? View.INVISIBLE : View.VISIBLE);
 
             vRoomTimestamp.setText(RoomUtils.getRoomTimestamp(mContext, roomSummary.getLatestReceivedEvent()));
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onSelectItem(room, -1);
+                }
+            });
         }
+    }
+
+    class PublicRoomViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.public_room_avatar)
+        ImageView vPublicRoomAvatar;
+
+        @BindView(R.id.public_room_name)
+        TextView vPublicRoomName;
+
+        @BindView(R.id.public_room_topic)
+        TextView vRoomTopic;
+
+        @BindView(R.id.public_room_members_count)
+        TextView vPublicRoomsMemberCountTextView;
+
+        private PublicRoomViewHolder(final View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        private void populateViews(final PublicRoom publicRoom) {
+            String roomName = !TextUtils.isEmpty(publicRoom.name) ? publicRoom.name : VectorUtils.getPublicRoomDisplayName(publicRoom);
+
+            // display the room avatar
+            vPublicRoomAvatar.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
+            VectorUtils.loadUserAvatar(mContext, mSession, vPublicRoomAvatar, publicRoom.getAvatarUrl(), publicRoom.roomId, roomName);
+
+            // set the topic
+            vRoomTopic.setText(publicRoom.topic);
+
+            // display the room name
+            vPublicRoomName.setText(roomName);
+
+            // members count
+            vPublicRoomsMemberCountTextView.setText(publicRoom.numJoinedMembers + "");
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onSelectItem(publicRoom);
+                }
+            });
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Inner classes
+     * *********************************************************************************************
+     */
+
+    public interface OnSelectItemListener {
+        void onSelectItem(Room item, int position);
+
+        void onSelectItem(PublicRoom publicRoom);
     }
 }
