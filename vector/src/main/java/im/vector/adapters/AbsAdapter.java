@@ -17,6 +17,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
@@ -58,6 +59,8 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     protected static final int TYPE_HEADER_DEFAULT = -1;
 
     protected static final int TYPE_ROOM_INVITATION = -2;
+
+    protected static final int TYPE_ROOM = -3;
 
     private StickySectionHelper mStickySectionHelper;
 
@@ -165,10 +168,10 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         Log.i(LOG_TAG, " onCreateViewHolder for viewType:" + viewType);
         final LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         switch (viewType) {
-            case -1:
+            case TYPE_HEADER_DEFAULT:
                 View headerItemView = inflater.inflate(R.layout.adapter_section_header, viewGroup, false);
                 return new HeaderViewHolder(headerItemView);
-            case -2:
+            case TYPE_ROOM_INVITATION:
                 View invitationView = inflater.inflate(R.layout.adapter_item_room_invite, viewGroup, false);
                 return new InvitationViewHolder(invitationView);
             default:
@@ -182,7 +185,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         final int viewType = getItemViewType(position);
 
         switch (viewType) {
-            case -1:
+            case TYPE_HEADER_DEFAULT:
                 final HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
                 for (Pair<Integer, AdapterSection> adapterSection : mSections) {
                     if (adapterSection.first == position) {
@@ -203,7 +206,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
                     }
                 }
                 break;
-            case -2:
+            case TYPE_ROOM_INVITATION:
                 final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
                 final Room room = (Room) getItemForPosition(position);
                 invitationViewHolder.populateViews(room);
@@ -411,7 +414,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         }
     }
 
-    protected abstract class BasicRoomViewHolder extends RecyclerView.ViewHolder {
+    protected class RoomViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.room_avatar)
         ImageView vRoomAvatar;
@@ -421,6 +424,14 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
 
         @BindView(R.id.room_message)
         TextView vRoomLastMessage;
+
+        @BindView(R.id.room_update_date)
+        @Nullable
+        TextView vRoomTimestamp;
+
+        @BindView(R.id.indicator_unread_message)
+        @Nullable
+        View vRoomUnreadIndicator;
 
         @BindView(R.id.room_unread_count)
         TextView vRoomUnreadCount;
@@ -446,17 +457,28 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         @BindColor(R.color.vector_silver_color)
         int mSilverColor;
 
-        BasicRoomViewHolder(final View itemView) {
+        RoomViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        void populateViews(final Room room, final RoomSummary roomSummary,
-                           final String unreadCount, final int bingUnreadColor,
-                           final boolean isDirectChat) {
+        void populateViews(final Room room, final boolean isDirectChat, final boolean isInvitation) {
+            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(room.getRoomId());
+
             int unreadMsgCount = roomSummary.getUnreadEventsCount();
+            int bingUnreadColor;
+            if (isInvitation || 0 != room.getHighlightCount() || roomSummary.isHighlighted()) {
+                bingUnreadColor = mFuchsiaColor;
+            } else if (0 != room.getNotificationCount()) {
+                bingUnreadColor = mGreenColor;
+            } else if (0 != unreadMsgCount) {
+                bingUnreadColor = mSilverColor;
+            } else {
+                bingUnreadColor = Color.TRANSPARENT;
+            }
+
             if (unreadMsgCount > 0) {
-                vRoomUnreadCount.setText(unreadCount);
+                vRoomUnreadCount.setText(isInvitation ? "!" : String.valueOf(unreadMsgCount));
                 vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
                 GradientDrawable shape = new GradientDrawable();
                 shape.setShape(GradientDrawable.RECTANGLE);
@@ -480,6 +502,17 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
             vRoomDirectChatIcon.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
             vRoomEncryptedIcon.setVisibility(room.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
 
+
+            if (vRoomUnreadIndicator != null) {
+                // set bing view background colour
+                vRoomUnreadIndicator.setBackgroundColor(bingUnreadColor);
+                vRoomUnreadIndicator.setVisibility(roomSummary.isInvited() ? View.INVISIBLE : View.VISIBLE);
+            }
+
+            if (vRoomTimestamp != null) {
+                vRoomTimestamp.setText(RoomUtils.getRoomTimestamp(mContext, roomSummary.getLatestReceivedEvent()));
+            }
+
             if (vRoomMoreActionClickArea != null && vRoomMoreActionAnchor != null) {
                 vRoomMoreActionClickArea.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -493,7 +526,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         }
     }
 
-    class InvitationViewHolder extends BasicRoomViewHolder {
+    class InvitationViewHolder extends RoomViewHolder {
 
         @BindView(R.id.recents_invite_reject_button)
         Button vRejectButton;
@@ -506,8 +539,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         }
 
         void populateViews(final Room room) {
-            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(room.getRoomId());
-            super.populateViews(room, roomSummary, "!", mFuchsiaColor, room.isDirectChatInvitation());
+            super.populateViews(room, room.isDirectChatInvitation(), true);
 
             vPreViewButton.setOnClickListener(new View.OnClickListener() {
                 @Override

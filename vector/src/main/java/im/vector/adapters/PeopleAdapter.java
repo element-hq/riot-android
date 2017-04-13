@@ -29,7 +29,6 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.User;
 
@@ -49,9 +48,7 @@ public class PeopleAdapter extends AbsAdapter {
 
     private static final int TYPE_HEADER_LOCAL_CONTACTS = 0;
 
-    private static final int TYPE_ROOM = 1;
-
-    private static final int TYPE_CONTACT = 2;
+    private static final int TYPE_CONTACT = 1;
 
     private AdapterSection<Room> mDirectChatsSection;
     private AdapterSection<ParticipantAdapterItem> mLocalContactsSection;
@@ -99,17 +96,17 @@ public class PeopleAdapter extends AbsAdapter {
 
         View itemView;
 
-        if (viewType == 0) {
+        if (viewType == TYPE_HEADER_LOCAL_CONTACTS) {
             //TODO replace by a empty view ?
             itemView = inflater.inflate(R.layout.adapter_section_header_local, viewGroup, false);
             itemView.setBackgroundColor(Color.MAGENTA);
             return new HeaderViewHolder(itemView);
         } else {
             switch (viewType) {
-                case 1:
+                case TYPE_ROOM:
                     itemView = inflater.inflate(R.layout.adapter_item_room_view, viewGroup, false);
                     return new RoomViewHolder(itemView);
-                case 2:
+                case TYPE_CONTACT:
                     itemView = inflater.inflate(R.layout.adapter_item_contact_view, viewGroup, false);
                     return new ContactViewHolder(itemView);
             }
@@ -120,7 +117,7 @@ public class PeopleAdapter extends AbsAdapter {
     @Override
     protected void populateViewHolder(int viewType, RecyclerView.ViewHolder viewHolder, int position) {
         switch (viewType) {
-            case 0:
+            case TYPE_HEADER_LOCAL_CONTACTS:
                 // Local header
                 final HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
                 for (Pair<Integer, AdapterSection> adapterSection : getSectionsArray()) {
@@ -130,12 +127,18 @@ public class PeopleAdapter extends AbsAdapter {
                     }
                 }
                 break;
-            case 1:
+            case TYPE_ROOM:
                 final RoomViewHolder roomViewHolder = (RoomViewHolder) viewHolder;
                 final Room room = (Room) getItemForPosition(position);
-                roomViewHolder.populateViews(room);
+                roomViewHolder.populateViews(room, true, false);
+                roomViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onSelectItem(room, -1);
+                    }
+                });
                 break;
-            case 2:
+            case TYPE_CONTACT:
                 final ContactViewHolder contactViewHolder = (ContactViewHolder) viewHolder;
                 final ParticipantAdapterItem item = (ParticipantAdapterItem) getItemForPosition(position);
                 contactViewHolder.populateViews(item, position);
@@ -277,68 +280,6 @@ public class PeopleAdapter extends AbsAdapter {
      * View holder
      * *********************************************************************************************
      */
-
-    class RoomViewHolder extends BasicRoomViewHolder {
-
-        @BindView(R.id.room_avatar)
-        ImageView vRoomAvatar;
-
-        @BindView(R.id.room_name)
-        TextView vRoomName;
-
-        @BindView(R.id.room_message)
-        TextView vRoomLastMessage;
-
-        @BindView(R.id.room_update_date)
-        TextView vRoomTimestamp;
-
-        @BindView(R.id.room_unread_count)
-        TextView vRoomUnreadCount;
-
-        @BindView(R.id.indicator_unread_message)
-        View vRoomUnreadIndicator;
-
-        @BindView(R.id.room_avatar_direct_chat_icon)
-        View vRoomDirectChatIcon;
-
-        @BindView(R.id.room_avatar_encrypted_icon)
-        View vRoomEncryptedIcon;
-
-        private RoomViewHolder(final View itemView) {
-            super(itemView);
-        }
-
-        private void populateViews(final Room room) {
-            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(room.getRoomId());
-
-            int unreadMsgCount = roomSummary.getUnreadEventsCount();
-            int bingUnreadColor;
-            if (0 != room.getHighlightCount() || roomSummary.isHighlighted()) {
-                bingUnreadColor = mFuchsiaColor;
-            } else if (0 != room.getNotificationCount()) {
-                bingUnreadColor = mGreenColor;
-            } else if (0 != unreadMsgCount) {
-                bingUnreadColor = mSilverColor;
-            } else {
-                bingUnreadColor = Color.TRANSPARENT;
-            }
-
-            super.populateViews(room, roomSummary, String.valueOf(unreadMsgCount), bingUnreadColor, true);
-
-            // set bing view background colour
-            vRoomUnreadIndicator.setBackgroundColor(bingUnreadColor);
-            vRoomUnreadIndicator.setVisibility(roomSummary.isInvited() ? View.INVISIBLE : View.VISIBLE);
-
-            vRoomTimestamp.setText(RoomUtils.getRoomTimestamp(mContext, roomSummary.getLatestReceivedEvent()));
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onSelectItem(room, -1);
-                }
-            });
-        }
-    }
 
     class ContactViewHolder extends RecyclerView.ViewHolder {
 
