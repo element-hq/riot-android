@@ -107,6 +107,18 @@ public abstract class AbsListAdapter<T, R extends RecyclerView.ViewHolder> exten
         return mFilteredItems.size();
     }
 
+    /**
+     * Provides a copy of the items list.
+     * @return a copy of the items list
+     */
+    public List<T> getItems() {
+        if (null != mFilteredItems) {
+            return new ArrayList<>(mFilteredItems);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
     @Override
     public Filter getFilter() {
         return mFilter;
@@ -134,6 +146,25 @@ public abstract class AbsListAdapter<T, R extends RecyclerView.ViewHolder> exten
             getFilter().filter(mCurrentFilterPattern, listener);
         } else {
             getFilter().filter(mCurrentFilterPattern);
+        }
+    }
+
+
+    /**
+     * Add more items to the current list
+     *
+     * @param items
+     */
+    @CallSuper
+    public void addItems(final List<T> items) {
+        if (items != null) {
+            mItems.addAll(items);
+            mFilteredItems.addAll(items);
+
+            notifyDataSetChanged();
+
+            // does not seem to work
+            //notifyItemRangeInserted(curSize, items.size());
         }
     }
 

@@ -65,7 +65,9 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -86,6 +88,7 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.ViewedRoomTracker;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.PeopleFragment;
@@ -424,20 +427,8 @@ public class VectorHomeActivity extends AppCompatActivity {
             });
         }
 
-        mEventsListener = new MXEventListener() {
-            @Override
-            public void onAccountInfoUpdate(MyUser myUser) {
-                refreshSlidingMenu();
-            }
-
-            @Override
-            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
-                mSyncInProgressView.setVisibility(View.GONE);
-            }
-        };
-
         if (mSession.isAlive()) {
-            mSession.getDataHandler().addListener(mEventsListener);
+            addEventsListener();
         }
 
         if (null != mFloatingActionButton) {
@@ -570,7 +561,7 @@ public class VectorHomeActivity extends AppCompatActivity {
         }
 
         if (mSession.isAlive()) {
-            mSession.getDataHandler().removeListener(mEventsListener);
+            removeEventsListener();
         }
 
         synchronized (this) {
@@ -726,7 +717,6 @@ public class VectorHomeActivity extends AppCompatActivity {
 
         if (fragment != null) {
             resetFilter();
-
             mFragmentManager.beginTransaction()
                     .replace(R.id.home_recents_list_anchor, fragment, tag)
                     .addToBackStack(tag)
@@ -856,22 +846,24 @@ public class VectorHomeActivity extends AppCompatActivity {
     private void markAllMessagesAsRead() {
         showWaitingView();
 
-        final Fragment fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_HOME);
         mSession.markRoomsAsRead(mSession.getDataHandler().getStore().getRooms(), new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                if (fragment != null && fragment instanceof VectorRecentsListFragment) {
-                    ((VectorRecentsListFragment) fragment).refresh();
+                Fragment fragment = getSelectedFragment();
+
+                if (null != fragment) {
+                    if (fragment instanceof VectorRecentsListFragment) {
+                        ((VectorRecentsListFragment) fragment).refresh();
+                    } else if (fragment instanceof AbsHomeFragment) {
+                        ((AbsHomeFragment) fragment).onSummariesUpdate();
+                    }
                 }
                 stopWaitingView();
             }
 
             private void onError(String errorMessage) {
                 Log.e(LOG_TAG, "## markAllMessagesAsRead() failed " + errorMessage);
-                if (fragment != null && fragment instanceof VectorRecentsListFragment) {
-                    ((VectorRecentsListFragment) fragment).refresh();
-                }
-                stopWaitingView();
+                onSuccess(null);
             }
 
             @Override
@@ -891,15 +883,12 @@ public class VectorHomeActivity extends AppCompatActivity {
         });
     }
 
-
     /**
-     * Communicate the search pattern to the currently displayed fragment
-     * Note: fragments will handle the search using @{@link android.widget.Filter} which means
-     * asynchronous filtering operations
+     * Provides the selected fragment.
      *
-     * @param pattern
+     * @return the displayed fragment
      */
-    private void applyFilter(final String pattern) {
+    private Fragment getSelectedFragment() {
         Fragment fragment = null;
         switch (mCurrentMenuId) {
             case R.id.bottom_action_home:
@@ -915,6 +904,19 @@ public class VectorHomeActivity extends AppCompatActivity {
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROOMS);
                 break;
         }
+
+        return fragment;
+    }
+
+    /**
+     * Communicate the search pattern to the currently displayed fragment
+     * Note: fragments will handle the search using @{@link android.widget.Filter} which means
+     * asynchronous filtering operations
+     *
+     * @param pattern
+     */
+    private void applyFilter(final String pattern) {
+        Fragment fragment = getSelectedFragment();
 
         if (fragment != null && fragment instanceof AbsHomeFragment) {
             //TODO loading wheel ?
@@ -1626,6 +1628,151 @@ public class VectorHomeActivity extends AppCompatActivity {
                         .create()
                         .show();
             }
+        }
+    }
+
+    //==============================================================================================================
+    // Events listener
+    //==============================================================================================================
+
+    /**
+     * Warn the displayed fragment about summary updates.
+     */
+    private void dispatchOnSummariesUpdate() {
+        Fragment fragment = getSelectedFragment();
+
+        if ((null != fragment) && (fragment instanceof AbsHomeFragment)) {
+            ((AbsHomeFragment) fragment).onSummariesUpdate();
+        }
+    }
+
+    /**
+     * Add a MXEventListener to the session listeners.
+     */
+    private void addEventsListener() {
+        mEventsListener = new MXEventListener() {
+            // set to true when a refresh must be triggered
+            private boolean mRefreshOnChunkEnd = false;
+
+            private void onForceRefresh() {
+                if (View.VISIBLE != mSyncInProgressView.getVisibility()) {
+                    dispatchOnSummariesUpdate();
+                }
+            }
+
+            @Override
+            public void onAccountInfoUpdate(MyUser myUser) {
+                refreshSlidingMenu();
+            }
+
+            @Override
+            public void onInitialSyncComplete(String toToken) {
+                Log.d(LOG_TAG, "## onInitialSyncComplete()");
+                dispatchOnSummariesUpdate();
+            }
+
+            @Override
+            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
+                if ((VectorApp.getCurrentActivity() == VectorHomeActivity.this) && mRefreshOnChunkEnd) {
+                    dispatchOnSummariesUpdate();
+                }
+
+                mRefreshOnChunkEnd = false;
+
+                mSyncInProgressView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onLiveEvent(final Event event, final RoomState roomState) {
+                String eventType = event.getType();
+
+                // refresh the UI at the end of the next events chunk
+                mRefreshOnChunkEnd |= ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
+                        Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
+                        Event.EVENT_TYPE_TAGS.equals(eventType) ||
+                        Event.EVENT_TYPE_REDACTION.equals(eventType) ||
+                        Event.EVENT_TYPE_RECEIPT.equals(eventType) ||
+                        Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType) ||
+                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
+
+                // highlight notified messages
+                // the SDK only highlighted invitation messages
+                // it lets the application chooses the behaviour.
+                ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
+                String viewedRoomId = rTracker.getViewedRoomId();
+                String fromMatrixId = rTracker.getMatrixId();
+                String matrixId = mSession.getCredentials().userId;
+
+                // If we're not currently viewing this room or not sent by myself, increment the unread count
+                if ((!TextUtils.equals(event.roomId, viewedRoomId) || !TextUtils.equals(matrixId, fromMatrixId)) && !TextUtils.equals(event.getSender(), matrixId)) {
+                    RoomSummary summary = mSession.getDataHandler().getStore().getSummary(event.roomId);
+                    if (null != summary) {
+                        summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(mSession, event));
+                    }
+                }
+            }
+
+            @Override
+            public void onReceiptEvent(String roomId, List<String> senderIds) {
+                // refresh only if the current user read some messages (to update the unread messages counters)
+                mRefreshOnChunkEnd |= (senderIds.indexOf(mSession.getCredentials().userId) >= 0);
+            }
+
+            @Override
+            public void onRoomTagEvent(String roomId) {
+                mRefreshOnChunkEnd = true;
+            }
+
+            @Override
+            public void onStoreReady() {
+                onForceRefresh();
+            }
+
+            @Override
+            public void onLeaveRoom(final String roomId) {
+                // clear any pending notification for this room
+                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
+                onForceRefresh();
+            }
+
+            @Override
+            public void onNewRoom(String roomId) {
+                onForceRefresh();
+            }
+
+            @Override
+            public void onJoinRoom(String roomId) {
+                onForceRefresh();
+            }
+
+            @Override
+            public void onDirectMessageChatRoomsListUpdate() {
+                mRefreshOnChunkEnd = true;
+            }
+
+            @Override
+            public void onEventDecrypted(Event event) {
+                RoomSummary summary = mSession.getDataHandler().getStore().getSummary(event.roomId);
+
+                if (null != summary) {
+                    // test if the latest event is refreshed
+                    Event latestReceivedEvent = summary.getLatestReceivedEvent();
+                    if ((null != latestReceivedEvent) && TextUtils.equals(latestReceivedEvent.eventId, event.eventId)) {
+                        dispatchOnSummariesUpdate();
+                    }
+                }
+            }
+        };
+
+        mSession.getDataHandler().addListener(mEventsListener);
+    }
+
+    /**
+     * Remove the MXEventListener to the session listeners.
+     */
+    private void removeEventsListener() {
+        if (mSession.isAlive()) {
+            mSession.getDataHandler().removeListener(mEventsListener);
         }
     }
 }

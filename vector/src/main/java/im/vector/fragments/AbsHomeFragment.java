@@ -268,6 +268,12 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         }
     }
 
+    /**
+     * A room summary has been updated
+     */
+    public void onSummariesUpdate() {
+    }
+
     /*
      * *********************************************************************************************
      * Private methods
