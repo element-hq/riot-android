@@ -33,6 +33,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
@@ -42,7 +43,11 @@ import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -352,7 +357,7 @@ public class RoomUtils {
      * @param roomId  the room id
      * @param newtag  the new tag
      */
-    public static void updateRoomTag(MXSession session, String roomId, String newtag, ApiCallback<Void> apiCallback) {
+    public static void updateRoomTag(final MXSession session, final String roomId, final String newtag, final ApiCallback<Void> apiCallback) {
         Room room = session.getDataHandler().getRoom(roomId);
 
         if (null != room) {
@@ -370,19 +375,55 @@ public class RoomUtils {
         }
     }
 
-    public static void toggleDirectChat(MXSession session, String roomId, ApiCallback<Void> apiCallback) {
+    /**
+     * Add or remove the given room from direct chats
+     *
+     * @param session
+     * @param roomId
+     * @param apiCallback
+     */
+    public static void toggleDirectChat(final MXSession session, String roomId, final ApiCallback<Void> apiCallback) {
         Room room = session.getDataHandler().getRoom(roomId);
         if (null != room) {
             session.toggleDirectChatRoom(roomId, null, apiCallback);
         }
     }
 
-    public static void toggleNotifications(MXSession session, String roomId, BingRulesManager.onBingRuleUpdateListener listener) {
+    /**
+     * Enable or disable notifications for the given room
+     *
+     * @param session
+     * @param roomId
+     * @param listener
+     */
+    public static void toggleNotifications(final MXSession session, final String roomId, final BingRulesManager.onBingRuleUpdateListener listener) {
         Room room = session.getDataHandler().getRoom(roomId);
 
         if (null != room) {
             BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
             bingRulesManager.muteRoomNotifications(room, !bingRulesManager.isRoomNotificationsDisabled(room), listener);
         }
+    }
+
+    /**
+     * Get whether the room of the given is a direct chat
+     *
+     * @param roomId
+     * @return true if direct chat
+     */
+    public static boolean isDirectChat(final MXSession session, final String roomId) {
+        final IMXStore store = session.getDataHandler().getStore();
+        final Map<String, List<String>> directChatRoomsDict;
+
+        if (store.getDirectChatRoomsDict() != null) {
+            directChatRoomsDict = new HashMap<>(store.getDirectChatRoomsDict());
+
+            if (directChatRoomsDict.containsKey(session.getMyUserId())) {
+                List<String> roomIdsList = new ArrayList<>(directChatRoomsDict.get(session.getMyUserId()));
+                return roomIdsList.contains(roomId);
+            }
+        }
+
+        return false;
     }
 }

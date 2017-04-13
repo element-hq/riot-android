@@ -34,6 +34,8 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
+import java.util.Set;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import im.vector.Matrix;
@@ -58,6 +60,8 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     protected String mCurrentFilter;
 
     protected MXSession mSession;
+
+    protected OnRoomChangedListener mOnRoomChangedListener;
 
     /*
      * *********************************************************************************************
@@ -156,7 +160,10 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     @Override
     public void onMoreActionClick(View itemView, Room room) {
         // User clicked on the "more actions" area
-        RoomUtils.displayPopupMenu(mActivity, mSession, room, itemView, false, false, this);
+        final Set<String> tags = room.getAccountData().getKeys();
+        final boolean isFavorite = tags != null && tags.contains(RoomTag.ROOM_TAG_FAVOURITE);
+        final boolean isLowPriority = tags != null && tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY);
+        RoomUtils.displayPopupMenu(mActivity, mSession, room, itemView, isFavorite, isLowPriority, this);
     }
 
     @Override
@@ -176,12 +183,15 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     }
 
     @Override
-    public void onToggleDirectChat(MXSession session, String roomId) {
+    public void onToggleDirectChat(MXSession session, final String roomId) {
         mActivity.showWaitingView();
         RoomUtils.toggleDirectChat(session, roomId, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 onRequestDone(null);
+                if (mOnRoomChangedListener != null) {
+                    mOnRoomChangedListener.onToggleDirectChat(roomId, RoomUtils.isDirectChat(mSession, roomId));
+                }
             }
 
             @Override
@@ -223,6 +233,9 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
             public void onClick(DialogInterface dialog, int which) {
                 if (mActivity != null && !mActivity.isFinishing()) {
                     mActivity.onRejectInvitation(session, roomId);
+                    if (mOnRoomChangedListener != null) {
+                        mOnRoomChangedListener.onRoomLeft(roomId);
+                    }
                 }
             }
         });
@@ -333,5 +346,12 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
 
     public interface OnFilterListener {
         void onFilterDone(final int nbItems);
+    }
+
+    public interface OnRoomChangedListener {
+
+        void onToggleDirectChat(final String roomId, final boolean isDirectChat);
+
+        void onRoomLeft(final String roomId);
     }
 }

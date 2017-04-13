@@ -19,6 +19,7 @@ package im.vector.adapters;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -431,9 +432,11 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         View vRoomEncryptedIcon;
 
         @BindView(R.id.room_more_action_click_area)
+        @Nullable
         View vRoomMoreActionClickArea;
 
         @BindView(R.id.room_more_action_anchor)
+        @Nullable
         View vRoomMoreActionAnchor;
 
         @BindColor(R.color.vector_fuchsia_color)
@@ -477,14 +480,16 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
             vRoomDirectChatIcon.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
             vRoomEncryptedIcon.setVisibility(room.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
 
-            vRoomMoreActionClickArea.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mMoreActionListener) {
-                        mMoreActionListener.onMoreActionClick(vRoomMoreActionAnchor, room);
+            if (vRoomMoreActionClickArea != null && vRoomMoreActionAnchor != null) {
+                vRoomMoreActionClickArea.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (null != mMoreActionListener) {
+                            mMoreActionListener.onMoreActionClick(vRoomMoreActionAnchor, room);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 

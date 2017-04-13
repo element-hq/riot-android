@@ -58,7 +58,7 @@ import im.vector.util.VectorUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
-public class PeopleFragment extends AbsHomeFragment implements ContactsManager.ContactsManagerListener {
+public class PeopleFragment extends AbsHomeFragment implements ContactsManager.ContactsManagerListener, AbsHomeFragment.OnRoomChangedListener {
 
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
 
@@ -132,6 +132,8 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         };
 
         prepareViews();
+
+        mOnRoomChangedListener = this;
 
         mAdapter.onFilterDone(mCurrentFilter);
 
@@ -479,5 +481,17 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     @Override
     public void onContactPresenceUpdate(Contact contact, String matrixId) {
         //TODO
+    }
+
+    @Override
+    public void onToggleDirectChat(String roomId, boolean isDirectChat) {
+        if(!isDirectChat){
+           mAdapter.removeDirectChat(roomId);
+        }
+    }
+
+    @Override
+    public void onRoomLeft(String roomId) {
+        mAdapter.removeDirectChat(roomId);
     }
 }

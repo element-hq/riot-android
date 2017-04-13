@@ -260,6 +260,18 @@ public class PeopleAdapter extends AbsAdapter {
         return filteredKnownContacts.size();
     }
 
+    /**
+     * Remove the room of the given id from the adapter
+     *
+     * @param roomId
+     */
+    public void removeDirectChat(final String roomId) {
+        Room room = mSession.getDataHandler().getRoom(roomId);
+        if (mDirectChatsSection.removeItem(room)) {
+            updateSections();
+        }
+    }
+
     /*
      * *********************************************************************************************
      * View holder

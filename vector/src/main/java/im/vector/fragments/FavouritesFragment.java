@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import im.vector.R;
 
-public class FavouritesFragment extends AbsHomeFragment {
+public class FavouritesFragment extends AbsHomeFragment implements AbsHomeFragment.OnRoomChangedListener {
 
     /*
      * *********************************************************************************************
@@ -94,5 +94,21 @@ public class FavouritesFragment extends AbsHomeFragment {
 
     private void initViews() {
         // TODO
+    }
+
+    /*
+     * *********************************************************************************************
+     * Listeners
+     * *********************************************************************************************
+     */
+
+    @Override
+    public void onToggleDirectChat(String roomId, boolean isDirectChat) {
+
+    }
+
+    @Override
+    public void onRoomLeft(String roomId) {
+
     }
 }

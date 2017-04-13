@@ -130,4 +130,14 @@ public class AdapterSection<T> {
     public boolean hideWhenEmpty() {
         return mIsHiddenWhenEmpty;
     }
+
+    public boolean removeItem(final T object) {
+        if (mFilteredItems.contains(object)) {
+            mFilteredItems.remove(object);
+            updateTitle();
+            return true;
+        }
+        mItems.remove(object);
+        return false;
+    }
 }
