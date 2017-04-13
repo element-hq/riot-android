@@ -258,7 +258,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      * @param position
      * @return
      */
-    protected Object getItemForPosition(final int position) {
+    public Object getItemForPosition(final int position) {
         for (int i = 0; i < mSections.size(); i++) {
             Pair<Integer, AdapterSection> section = mSections.get(i);
             if (position > section.first) {

@@ -52,6 +52,7 @@ import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
 import im.vector.util.RoomDirectoryData;
 import im.vector.util.RoomUtils;
@@ -214,7 +215,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             }
         }, this, this);
         mRecycler.setAdapter(mAdapter);
-
 
         View spinner = mAdapter.getSectionViewForSectionIndex(2).findViewById(R.id.public_rooms_selector);
         if (spinner != null && spinner instanceof Spinner) {
@@ -392,37 +392,13 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-//            LinearLayoutManager layoutManager = (LinearLayoutManager) mRoomDirectoryRecyclerView.getLayoutManager();
-//
-//            int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-//
-//            // as a ScrollView is used, findLastVisibleItemPosition is not valid (always the last list item)
-//            if (0 != mRoomDirectoryRecyclerView.getChildCount()) {
-//
-//                // compute the item height in pixels
-//                if (-1 == mPublicCellHeight) {
-//                    mPublicCellHeight = (mRoomDirectoryRecyclerView.getMeasuredHeight() + mRoomDirectoryRecyclerView.getChildCount() - 1) / mRoomDirectoryRecyclerView.getLayoutManager().getChildCount();
-//                }
-//
-//                // compute the first item position
-//                int[] recyclerPosition = {0, 0};
-//                mRoomDirectoryRecyclerView.getLocationOnScreen(recyclerPosition);
-//
-//                int firstPosition = 0;
-//                int offsetY = recyclerPosition[1];
-//
-//                if (offsetY < 0) {
-//                    firstPosition = (-offsetY) / mPublicCellHeight;
-//                }
-//
-//                // compute the last visible item position
-//                lastVisibleItemPosition = firstPosition + (mScrollView.getHeight() + mPublicCellHeight - 1) / mPublicCellHeight;
-//            }
-//
-//            // detect if the last visible item is going to be displayed
-//            if (!isForwardPaginating() && (lastVisibleItemPosition != RecyclerView.NO_POSITION) && (lastVisibleItemPosition >= (mRoomDirectoryRecyclerView.getAdapter().getItemCount() - 10))) {
-//                forwardPaginate();
-//            }
+            LinearLayoutManager layoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
+            int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
+            // we load public rooms 20 by 20, when the 10th one becomes visible, starts loading the next 20
+            AdapterSection section = mAdapter.getSectionViewForSectionIndex(2).getSection();
+            if (!isForwardPaginating() && mAdapter.getItemForPosition(lastVisibleItemPosition) == section.getItems().get(section.getItems().size()-10)) {
+                forwardPaginate();
+            }
         }
     };
 
