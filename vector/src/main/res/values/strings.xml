@@ -120,7 +120,7 @@
     <string name="no_conversation_placeholder">No conversation</string>
     <string name="no_local_contact_placeholder">No local contact</string>
     <string name="no_room_placeholder">No room</string>
-    <string name="no_room_directory_placeholder">No room directory</string>
+    <string name="no_public_room_placeholder">No public room</string>
     <string name="no_result_placeholder">No result</string>
 
     <!-- Rooms fragment -->

@@ -74,7 +74,7 @@ public class RoomAdapter extends AbsAdapter {
         mPublicRoomsSection = new AdapterSection<>(context.getString(R.string.rooms_directory_header),
                 R.layout.adapter_public_room_sticky_header_subview, R.layout.adapter_item_public_room_view,
                 TYPE_HEADER_PUBLIC_ROOM, TYPE_PUBLIC_ROOM, new ArrayList<PublicRoom>(), null);
-        mPublicRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_room_directory_placeholder), context.getString(R.string.no_result_placeholder));
+        mPublicRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_public_room_placeholder), context.getString(R.string.no_result_placeholder));
 
         addSection(mRoomsSection);
         addSection(mPublicRoomsSection);
