@@ -970,8 +970,14 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
                         // create alert dialog
                         AlertDialog alertDialog = alertDialogBuilder.create();
-                        // show it
-                        alertDialog.show();
+
+                        // A crash has been reported by GA
+                        try {
+                            // show it
+                            alertDialog.show();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## exportKeysAndSignOut() failed " + e.getMessage());
+                        }
                     }
 
                     @Override
