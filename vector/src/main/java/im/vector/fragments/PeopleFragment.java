@@ -109,25 +109,8 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         mEventsListener = new MXEventListener() {
 
             @Override
-            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
-                mAdapter.refreshDirectChats();
-            }
-
-            @Override
             public void onPresenceUpdate(final Event event, final User user) {
                 mAdapter.updateKnownContact(user);
-            }
-
-            @Override
-            public void onNewRoom(String roomId) {
-                Log.i(LOG_TAG, "onNewRoom " + roomId);
-                mAdapter.setInvitation(mActivity.getRoomInvitations());
-            }
-
-            @Override
-            public void onLeaveRoom(final String roomId) {
-                Log.i(LOG_TAG, "onLeaveRoom " + roomId);
-                mAdapter.setInvitation(mActivity.getRoomInvitations());
             }
         };
 
@@ -268,9 +251,8 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      */
     private void initDirectChatsData() {
         final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
+        mDirectChats.clear();
         if (directChatIds != null && !directChatIds.isEmpty()) {
-            mDirectChats = new ArrayList<>();
-
             for (String roomId : directChatIds) {
                 mDirectChats.add(mSession.getDataHandler().getRoom(roomId));
             }
@@ -461,6 +443,15 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * Listeners
      * *********************************************************************************************
      */
+
+    @Override
+    public void onSummariesUpdate() {
+        super.onSummariesUpdate();
+        mAdapter.setInvitation(mActivity.getRoomInvitations());
+
+        initDirectChatsData();
+        initDirectChatsViews();
+    }
 
     @Override
     public void onRefresh() {

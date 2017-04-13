@@ -42,7 +42,6 @@ import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,7 +54,6 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
 import im.vector.util.RoomDirectoryData;
-import im.vector.util.RoomUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
@@ -75,9 +73,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
     @BindView(R.id.room_directory_loading_view)
     View mLoadingMoreDirectoryRooms;
-
-    // public rooms management
-    private List<PublicRoom> mPublicRoomsList = new ArrayList<>();
 
     // rooms management
     private RoomAdapter mAdapter;
@@ -185,10 +180,14 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      * Public methods
      * *********************************************************************************************
      */
+
     @Override
     public void onSummariesUpdate() {
         super.onSummariesUpdate();
-        mAdapter.notifyDataSetChanged();
+
+        refreshRooms();
+
+        mAdapter.setInvitation(mActivity.getRoomInvitations());
     }
 
     /*
@@ -236,7 +235,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
         // update/retrieve the complete summary list
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
-        Collections.sort(roomSummaries, RoomUtils.getRoomSummaryComparator());
 
         List<Room> rooms = new ArrayList<>();
 
@@ -304,9 +302,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
     // spinner text
     private ArrayAdapter<CharSequence> mRoomDirectoryAdapter;
-
-    // Cell height
-    private int mPublicCellHeight = -1;
 
     /**
      * Handle a public room selection
