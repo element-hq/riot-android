@@ -1034,7 +1034,7 @@ public class VectorHomeActivity extends AppCompatActivity {
     /**
      * Create a room and open the dedicated activity
      */
-    private void createRoom() {
+    public void createRoom() {
         showWaitingView();
         mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
             @Override

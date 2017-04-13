@@ -150,6 +150,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
     @Override
     protected void onFloatingButtonClick() {
+        mActivity.createRoom();
     }
 
     @Override

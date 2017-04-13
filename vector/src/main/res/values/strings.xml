@@ -127,7 +127,6 @@
     <string name="rooms_header">Rooms</string>
     <string name="rooms_directory_header">Room directory</string>
 
-
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
     <string name="send_bug_report">Bug Report</string>
