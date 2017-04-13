@@ -127,6 +127,8 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         super.onResume();
 
         refreshRooms();
+
+        mAdapter.setInvitation(mActivity.getRoomInvitations());
     }
 
     @Override
