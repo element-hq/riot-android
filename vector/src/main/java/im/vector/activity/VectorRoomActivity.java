@@ -109,6 +109,7 @@ import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
+import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 
@@ -189,7 +190,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private View mSendingMessagesLayout;
     private View mSendButtonLayout;
     private ImageView mSendImageView;
-    private EditText mEditText;
+    private VectorAutoCompleteTextView mEditText;
     private ImageView mAvatarImageView;
     private View mCanNotPostTextView;
     private ImageView mE2eImageView;
@@ -602,7 +603,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         Log.d(LOG_TAG, "Displaying " + roomId);
 
-        mEditText = (EditText) findViewById(R.id.editText_messageBox);
+        mEditText = (VectorAutoCompleteTextView)findViewById(R.id.editText_messageBox);
 
         // hide the header room as soon as the message input text area is touched
         mEditText.setOnClickListener(new View.OnClickListener() {
@@ -951,6 +952,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // to have notifications for this room
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
         ViewedRoomTracker.getInstance().setMatrixId(null);
+        mEditText.initAutoCompletion(mSession, null);
     }
 
     @Override
@@ -1081,6 +1083,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         displayE2eRoomAlert();
+
+        // init the auto-completion list from the room members
+        mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
 
         Log.d(LOG_TAG, "-- Resume the activity");
     }

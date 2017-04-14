@@ -637,4 +637,8 @@
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
     <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.\nЭто означает, что эти устройства могут не пренадлежать тем пользователям, на которых они претендуют. \nПеред продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.\n\nНеизвестные устройства:</string>
+
+    <!-- Notifications -->
+    <string name="notification_unread_messages">%d unread messages</string>
+    <string name="notification_unread_messages_in_room">%1$d unread messages in %2$d rooms"</string>
 </resources>
