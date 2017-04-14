@@ -1293,7 +1293,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // hide the view
                         mVectorPendingCallView.checkPendingCall();
                         // clear call in progress notification
-                        EventStreamService.checkDisplayedNotification();
+                        EventStreamService.checkDisplayedNotifications();
                         // and play a lovely sound
                         VectorCallSoundManager.startEndCallSound();
                     }

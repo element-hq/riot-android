@@ -1,5 +1,6 @@
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,12 +123,12 @@ public class MatrixGcmListenerService extends GcmListenerService {
                             }
                         }
 
-                        if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTED) && session.isCryptoEnabled()) {
-                            session.getCrypto().decryptEvent(event, null);
+                            if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTED) && session.isCryptoEnabled()) {
+                                session.getCrypto().decryptEvent(event, null);
                         }
 
                         eventStreamService.prepareNotification(event, roomState, session.getDataHandler().getBingRulesManager().fulfilledBingRule(event));
-                        eventStreamService.triggerPreparedNotification(false);
+                        eventStreamService.refreshMessagesNotification();
 
                         Log.d(LOG_TAG, "## onMessageReceived() : trigger a notification");
                     } else {
