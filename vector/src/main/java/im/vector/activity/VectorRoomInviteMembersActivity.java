@@ -52,6 +52,7 @@ import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
+import im.vector.view.VectorAutoCompleteTextView;
 
 /**
  * This class provides a way to search other user to invite them in a dedicated room
@@ -406,7 +407,9 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         dialog.setTitle(R.string.people_search_invite_by_id_dialog_title);
         dialog.setView(dialogLayout);
 
-        final EditText inviteTextView = (EditText) dialogLayout.findViewById(R.id.invite_by_id_edit_text);
+        final VectorAutoCompleteTextView inviteTextView = (VectorAutoCompleteTextView) dialogLayout.findViewById(R.id.invite_by_id_edit_text);
+        inviteTextView.initAutoCompletion(mSession);
+        inviteTextView.setProvideMatrixIdOnly(true);
 
         dialog.setPositiveButton(R.string.invite, new DialogInterface.OnClickListener() {
             @Override

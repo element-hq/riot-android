@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/invite_by_id_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -17,18 +18,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputLayout
+        <im.vector.view.VectorAutoCompleteTextView
+            android:id="@+id/invite_by_id_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/invite_by_id_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/people_search_invite_by_id_dialog_hint" />
-        </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="10dp"
+            android:hint="@string/people_search_invite_by_id_dialog_hint" />
     </ScrollView>
 </LinearLayout>

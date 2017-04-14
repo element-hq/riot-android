@@ -63,6 +63,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     // trick to fix the list width
     private android.widget.ListPopupWindow mListPopupWindow;
 
+
     public VectorAutoCompleteTextView(Context context) {
         super(context, null);
     }
@@ -148,6 +149,15 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mListPopupWindow " + e.getMessage());
             }
         }
+    }
+
+    /**
+     * Tells if the pasted text is always the user matrix id
+     * even if the matched pattern is a display name.
+     * @param provideMatrixIdOnly true to always paste an user Id.
+     */
+    public void setProvideMatrixIdOnly(boolean provideMatrixIdOnly) {
+        mAdapter.setProvideMatrixIdOnly(provideMatrixIdOnly);
     }
 
     /**
