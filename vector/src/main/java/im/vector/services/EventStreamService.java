@@ -18,7 +18,7 @@
 package im.vector.services;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
@@ -112,6 +113,7 @@ public class EventStreamService extends Service {
      */
     public static final String EXTRA_STREAM_ACTION = "EventStreamService.EXTRA_STREAM_ACTION";
     public static final String EXTRA_MATRIX_IDS = "EventStreamService.EXTRA_MATRIX_IDS";
+    public static final String EXTRA_AUTO_RESTART_ACTION = "EventStreamService.EXTRA_AUTO_RESTART_ACTION";
 
     /**
      * Notification identifiers
@@ -180,6 +182,12 @@ public class EventStreamService extends Service {
      * GCM manager
      */
     private GcmRegistrationManager mGcmRegistrationManager;
+
+    /**
+     * Tell if the service must be suspended after started.
+     * It is used when the service is automatically restarted by Android.
+     */
+    private boolean mSuspendWhenStarted = false;
 
     /**
      * @return the event stream instance
@@ -370,17 +378,47 @@ public class EventStreamService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (null == intent) {
-            Log.e(LOG_TAG, "onStartCommand : null intent");
+        // no intent : restarted by Android
+        // EXTRA_AUTO_RESTART_ACTION : restarted by the service itself (
+        if ((null == intent) || intent.hasExtra(EXTRA_AUTO_RESTART_ACTION)) {
+            boolean restart = false;
 
-            if (null != mActiveEventStreamService) {
-                Log.e(LOG_TAG, "onStartCommand : null intent with an active events stream service");
+            if (null == intent) {
+                Log.e(LOG_TAG, "onStartCommand : null intent -> restart the service");
+                restart = true;
+            } else if  (StreamAction.IDLE == mServiceState) {
+                Log.e(LOG_TAG, "onStartCommand : automatically restart the service");
+                restart = true;
             } else {
-                Log.e(LOG_TAG, "onStartCommand : null intent with no events stream service");
+                Log.e(LOG_TAG, "onStartCommand : EXTRA_AUTO_RESTART_ACTION has been set but mServiceState = " + mServiceState);
             }
 
-            return START_NOT_STICKY;
+            if (restart) {
+                List<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
+
+                if ((null == sessions) || sessions.isEmpty()) {
+                    Log.e(LOG_TAG, "onStartCommand : no session");
+                    return START_NOT_STICKY;
+                }
+
+                mSessions = new ArrayList<>();
+                mSessions.addAll(Matrix.getInstance(getApplicationContext()).getSessions());
+
+                mMatrixIds = new ArrayList<>();
+
+                for (MXSession session : mSessions) {
+                    session.getDataHandler().getStore().open();
+                    mMatrixIds.add(session.getMyUserId());
+                }
+
+                mSuspendWhenStarted = true;
+                start();
+
+                return START_STICKY;
+            }
         }
+
+        mSuspendWhenStarted = false;
 
         StreamAction action = StreamAction.values()[intent.getIntExtra(EXTRA_STREAM_ACTION, StreamAction.IDLE.ordinal())];
 
@@ -422,6 +460,31 @@ public class EventStreamService extends Service {
         }
 
         return START_STICKY;
+    }
+
+    /**
+     * onTaskRemoved is called when the user swipes the application from the active applications.
+     * On some devices, the service is not automatically restarted.
+     */
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Log.d(LOG_TAG, "## onTaskRemoved()");
+
+        stop();
+
+        // restart the services after 3 seconds
+        Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
+        restartServiceIntent.setPackage(getPackageName());
+        restartServiceIntent.putExtra(EXTRA_AUTO_RESTART_ACTION, EXTRA_AUTO_RESTART_ACTION);
+        PendingIntent restartPendingIntent = PendingIntent.getService(getApplicationContext(), 1, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        AlarmManager myAlarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        myAlarmService.set(
+                AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime() + 3000,
+                restartPendingIntent);
+
+        super.onTaskRemoved(rootIntent);
     }
 
     @Override
@@ -502,6 +565,9 @@ public class EventStreamService extends Service {
             // the store is ready (no data loading in progress...)
             if (store.isReady()) {
                 startEventStream(session, store);
+                if (mSuspendWhenStarted) {
+                    catchup(false);
+                }
             } else {
                 final MXSession fSession = session;
                 // wait that the store is ready  before starting the events listener
@@ -509,6 +575,10 @@ public class EventStreamService extends Service {
                     @Override
                     public void onStoreReady(String accountId) {
                         startEventStream(fSession, store);
+
+                        if (mSuspendWhenStarted) {
+                            catchup(false);
+                        }
                     }
 
                     @Override
@@ -913,7 +983,7 @@ public class EventStreamService extends Service {
         }
 
         boolean isInvitationEvent = false;
-       
+
         EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, roomState);
         eventDisplay.setPrependMessagesWithAuthor(false);
         String body = eventDisplay.getTextualDisplay().toString();

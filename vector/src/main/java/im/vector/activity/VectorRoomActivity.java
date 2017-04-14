@@ -959,17 +959,30 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
         if (null != mRoom) {
-            // to do not trigger notifications for this room
-            // because it is displayed.
-            ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
-
             // check if the room has been left from another client.
             if (mRoom.isReady()) {
-                if ((null == mRoom.getMember(mMyUserId)) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+                if (null == mRoom.getMember(mMyUserId)) {
+                    Log.e(LOG_TAG, "## onResume() : the user is not anymore a member of the room.");
+                    VectorRoomActivity.this.finish();
+                    return;
+                }
+
+                if (!mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+                    Log.e(LOG_TAG, "## onResume() : the user is not anymore a member of the room.");
+                    VectorRoomActivity.this.finish();
+                    return;
+                }
+
+                if (mRoom.isLeaving()) {
+                    Log.e(LOG_TAG, "## onResume() : the user is leaving the room.");
                     VectorRoomActivity.this.finish();
                     return;
                 }
             }
+
+            // to do not trigger notifications for this room
+            // because it is displayed.
+            ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
 
             // listen for room name or topic changes
             mRoom.addEventListener(mRoomEventListener);
@@ -1057,20 +1070,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             mCallId = null;
-        }
-
-        if (null != mRoom) {
-            // check if the room has been left from another activity
-            if (mRoom.isLeaving() || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
-
-                runOnUiThread(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      VectorRoomActivity.this.finish();
-                                  }
-                              }
-                );
-            }
         }
 
         // the pending call view is only displayed with "active " room
@@ -2653,44 +2652,47 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 @Override
                 public void onClick(View v) {
                     Log.d(LOG_TAG, "The user clicked on Join.");
+                    
+                    if (null != sRoomPreviewData) {
+                        Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
 
-                    Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
+                        String signUrl = null;
 
-                    String signUrl = null;
+                        if (null != roomEmailInvitation) {
+                            signUrl = roomEmailInvitation.signUrl;
+                        }
 
-                    if (null != roomEmailInvitation) {
-                        signUrl = roomEmailInvitation.signUrl;
+                        setProgressVisibility(View.VISIBLE);
+
+                        room.joinWithThirdPartySigned(sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void info) {
+                                onJoined();
+                            }
+
+                            private void onError(String errorMessage) {
+                                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                                setProgressVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onError(e.getLocalizedMessage());
+                            }
+                        });
+                    } else {
+                        VectorRoomActivity.this.finish();
                     }
-
-                    setProgressVisibility(View.VISIBLE);
-
-                    room.joinWithThirdPartySigned(sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void info) {
-                            onJoined();
-                        }
-
-                        private void onError(String errorMessage) {
-                            CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
-                            setProgressVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            onError(e.getLocalizedMessage());
-                        }
-
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            onError(e.getLocalizedMessage());
-                        }
-
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            onError(e.getLocalizedMessage());
-                        }
-                    });
-
                 }
             });
 

@@ -80,6 +80,7 @@
                 android:layout_weight="0.5">
 
                 <!-- Room name - note margins values in each side (right/left) -->
+                <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
                 <TextView
                     android:id="@+id/roomSummaryAdapter_roomName"
                     android:layout_width="wrap_content"
@@ -190,7 +191,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_word_readable"
-                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:text="last room message"
                     android:textColor="@color/vector_0_54_black_color"
                     android:textSize="14sp" />
@@ -212,52 +214,53 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginBottom="20dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <View
                 android:id="@+id/recents_invite_sep1"
-                android:background="@android:color/white"
-                android:layout_weight="0.20"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.20"
+                android:background="@android:color/white" />
 
             <Button
                 android:id="@+id/recents_invite_reject_button"
-                android:layout_weight="0.26"
                 android:layout_width="0dp"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="14sp"
                 android:layout_height="match_parent"
+                android:layout_weight="0.26"
                 android:background="@color/vector_green_color"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/reject"
                 android:textColor="@android:color/white"
-                android:text="@string/reject"/>
+                android:textSize="14sp" />
 
             <View
                 android:id="@+id/recents_invite_sep2"
-                android:background="@android:color/white"
-                android:layout_weight="0.04"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.04"
+                android:background="@android:color/white" />
 
             <Button
                 android:id="@+id/recents_invite_preview_button"
-                android:layout_weight="0.26"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="14sp"
+                android:layout_weight="0.26"
                 android:background="@color/vector_green_color"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/preview"
                 android:textColor="@android:color/white"
-                android:text="@string/preview"/>
+                android:textSize="14sp" />
 
             <View
                 android:id="@+id/recents_invite_sep3"
-                android:background="@android:color/white"
-                android:layout_weight="0.20"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.20"
+                android:background="@android:color/white" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -267,12 +270,12 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="73dp"
-        android:background="@color/vector_line_separator_gray_color"/>
+        android:background="@color/vector_line_separator_gray_color" />
 
     <View
         android:id="@+id/recents_groups_separator_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/vector_line_separator_gray_color"/>
+        android:background="@color/vector_line_separator_gray_color" />
 
 </LinearLayout>

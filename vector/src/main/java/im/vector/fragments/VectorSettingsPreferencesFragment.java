@@ -1996,7 +1996,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             mSession.getCrypto().getDeviceInfo(userId, deviceId, new SimpleApiCallback<MXDeviceInfo>() {
                 @Override
                 public void onSuccess(final MXDeviceInfo deviceInfo) {
-                    if ((null != deviceInfo) && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
+                    if ((null != deviceInfo) && !TextUtils.isEmpty(deviceInfo.fingerprint()) && (null != getActivity())) {
                         VectorCustomActionEditTextPreference cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_information_device_key));
 
                         if (null != cryptoInfoTextPreference) {
