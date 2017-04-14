@@ -55,6 +55,7 @@ import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
 import im.vector.util.RoomDirectoryData;
 import im.vector.view.EmptyViewItemDecoration;
+import im.vector.view.SectionView;
 import im.vector.view.SimpleDividerItemDecoration;
 
 public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.OnRoomChangedListener {
@@ -215,7 +216,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         }, this, this);
         mRecycler.setAdapter(mAdapter);
 
-        View spinner = mAdapter.getSectionViewForSectionIndex(2).findViewById(R.id.public_rooms_selector);
+        View spinner = mAdapter.findSectionSubViewById(R.id.public_rooms_selector);
         if (spinner != null && spinner instanceof Spinner) {
             mPublicRoomsSelector = (Spinner) spinner;
         }
@@ -390,8 +391,9 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             LinearLayoutManager layoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
             int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
             // we load public rooms 20 by 20, when the 10th one becomes visible, starts loading the next 20
-            AdapterSection section = mAdapter.getSectionViewForSectionIndex(2).getSection();
-            if (!isForwardPaginating() && mAdapter.getItemForPosition(lastVisibleItemPosition) == section.getItems().get(section.getItems().size()-10)) {
+            SectionView sectionView = mAdapter.getSectionViewForSectionIndex(2);
+            AdapterSection section = sectionView != null ? sectionView.getSection() : null;
+            if (section != null && !isForwardPaginating() && mAdapter.getItemForPosition(lastVisibleItemPosition) == section.getItems().get(section.getItems().size() - 10)) {
                 forwardPaginate();
             }
         }

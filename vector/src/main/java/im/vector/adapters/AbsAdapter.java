@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -249,7 +250,21 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      * @return section view
      */
     public SectionView getSectionViewForSectionIndex(int index) {
-        return mStickySectionHelper.getSectionViewForSectionIndex(index);
+        return mStickySectionHelper != null ? mStickySectionHelper.getSectionViewForSectionIndex(index) : null;
+    }
+
+    /**
+     * Get a view from section views
+     * Used to add listeners on header sub view
+     *
+     * @param viewId
+     * @return view
+     */
+    public View findSectionSubViewById(@IdRes final int viewId) {
+        if (mStickySectionHelper != null) {
+            return mStickySectionHelper.findSectionSubViewById(viewId);
+        }
+        return null;
     }
 
     /**

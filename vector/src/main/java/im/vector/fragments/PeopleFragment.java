@@ -18,6 +18,7 @@ package im.vector.fragments;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DividerItemDecoration;
@@ -40,6 +41,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,6 +63,8 @@ import im.vector.view.SimpleDividerItemDecoration;
 public class PeopleFragment extends AbsHomeFragment implements ContactsManager.ContactsManagerListener, AbsHomeFragment.OnRoomChangedListener {
 
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
+
+    private static final String MATRIX_USER_ONLY = "MATRIX_USER_ONLY";
 
     @BindString(R.string.local_address_book_header)
     String mLocalContactsHeaderText;
@@ -118,11 +122,17 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
         mOnRoomChangedListener = this;
 
+        if (savedInstanceState != null && savedInstanceState.getBoolean(MATRIX_USER_ONLY) && mMatrixUserOnlyCheckbox != null) {
+            mMatrixUserOnlyCheckbox.setChecked(true);
+        }
+
         mAdapter.onFilterDone(mCurrentFilter);
 
         if (!ContactsManager.getInstance().isContactBookAccessRequested()) {
             CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, getActivity(), this);
         }
+
+        initKnownContacts();
     }
 
     @Override
@@ -139,6 +149,12 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         initContactsViews();
 
         mAdapter.setInvitation(mActivity.getRoomInvitations());
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(MATRIX_USER_ONLY, mMatrixUserOnlyCheckbox != null && mMatrixUserOnlyCheckbox.isChecked());
     }
 
     @Override
@@ -228,13 +244,13 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         }, this, this);
         mRecycler.setAdapter(mAdapter);
 
-        View checkBox = mAdapter.getSectionViewForSectionIndex(2).findViewById(R.id.matrix_only_filter_checkbox);
+        View checkBox = mAdapter.findSectionSubViewById(R.id.matrix_only_filter_checkbox);
         if (checkBox != null && checkBox instanceof CheckBox) {
             mMatrixUserOnlyCheckbox = (CheckBox) checkBox;
             mMatrixUserOnlyCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    showMatrixUsersOnly(isChecked);
+                    initContactsViews();
                 }
             });
         }
@@ -268,25 +284,36 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         if (mContactsSnapshotSession == -1 || mContactsSnapshotSession != ContactsManager.getInstance().getLocalContactsSnapshotSession()) {
             // First time on the screen or contact data outdated
             mLocalContacts.clear();
-            mKnownContacts.clear();
-
-            List<ParticipantAdapterItem> participants = new ArrayList<>();
-            participants.addAll(VectorUtils.listKnownParticipants(mSession).values());
-            participants.addAll(getContacts());
-
+            List<ParticipantAdapterItem> participants = new ArrayList<>(getContacts());
             // Build lists
             for (ParticipantAdapterItem item : participants) {
                 if (item.mContact != null) {
-                    //TODO
-//                    if (!mMatrixUserOnlyCheckbox.isChecked() || !item.mContact.getMatrixIdMediums().isEmpty()) {
-//                        mLocalContacts.add(item);
-//                    }
                     mLocalContacts.add(item);
-                } else {
-                    mKnownContacts.add(item);
                 }
             }
         }
+    }
+
+    /**
+     * Get the known contacts list, sort it by presence and give it to adapter
+     */
+    private void initKnownContacts() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                List<ParticipantAdapterItem> participants = new ArrayList<>(VectorUtils.listKnownParticipants(mSession).values());
+                Collections.sort(participants, ParticipantAdapterItem.getComparator(mSession));
+                mKnownContacts.clear();
+                mKnownContacts.addAll(participants);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void args) {
+                mAdapter.setKnownContacts(mKnownContacts);
+            }
+        }.execute();
     }
 
     /*
@@ -294,10 +321,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * User action management
      * *********************************************************************************************
      */
-
-    public void showMatrixUsersOnly(final boolean isChecked) {
-        mAdapter.setLocalContacts(isChecked ? getMatrixUsers() : mLocalContacts);
-    }
 
     /**
      * Handle the click on a direct chat
@@ -434,8 +457,9 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * Init contacts views with data and update their display
      */
     private void initContactsViews() {
-        mAdapter.setLocalContacts(mLocalContacts);
-        mAdapter.setKnownContacts(mKnownContacts);
+        mAdapter.setLocalContacts(mMatrixUserOnlyCheckbox != null && mMatrixUserOnlyCheckbox.isChecked()
+                ? getMatrixUsers()
+                : mLocalContacts);
     }
 
     /*
@@ -465,7 +489,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         if (!mLocalContacts.containsAll(newContactList)) {
             mLocalContacts.clear();
             mLocalContacts.addAll(newContactList);
-            mAdapter.setLocalContacts(mLocalContacts);
+            initContactsViews();
         }
     }
 

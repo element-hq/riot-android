@@ -76,7 +76,7 @@ public class PeopleAdapter extends AbsAdapter {
         mLocalContactsSection.setEmptyViewPlaceholder(context.getString(R.string.no_local_contact_placeholder), context.getString(R.string.no_result_placeholder));
 
         mKnownContactsSection = new AdapterSection<>(context.getString(R.string.known_contacts_header), -1,
-                R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), ParticipantAdapterItem.getComparator(mSession));
+                R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), null);
         mKnownContactsSection.setEmptyViewPlaceholder(context.getString(R.string.people_search_too_many_contacts), context.getString(R.string.no_result_placeholder));
 
         addSection(mDirectChatsSection);

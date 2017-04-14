@@ -149,6 +149,18 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
         return mSectionViews.get(index).second;
     }
 
+    public View findSectionSubViewById(int viewId) {
+        if (mSectionViews != null) {
+            for (Pair<Integer, SectionView> sectionViewPair : mSectionViews) {
+                final View viewFound = sectionViewPair.second.findViewById(viewId);
+                if (viewFound != null) {
+                    return viewFound;
+                }
+            }
+        }
+        return null;
+    }
+
     /*
      * *********************************************************************************************
      * Private methods
