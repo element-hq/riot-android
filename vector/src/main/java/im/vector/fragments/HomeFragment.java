@@ -66,6 +66,7 @@ public class HomeFragment extends AbsHomeFragment implements AbsHomeFragment.OnR
 
     @Override
     protected void onFloatingButtonClick() {
+        //TODO clean VectorRecentsListFragment to not handle the fab there
     }
 
     @Override
