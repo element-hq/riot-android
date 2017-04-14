@@ -65,6 +65,26 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
     private boolean mIsSearchingMatrixId = false;
 
     /**
+     * Comparators
+     */
+    private static final Comparator<User> mUserComparatorByUserId = new Comparator<User>() {
+        @Override
+        public int compare(User user1, User user2) {
+            return user1.user_id.compareToIgnoreCase(user2.user_id);
+        }
+    };
+
+    private static final Comparator<User> mUserComparatorByDisplayname =  new Comparator<User>() {
+        @Override
+        public int compare(User user1, User user2) {
+            String displayName1 = TextUtils.isEmpty(user1.displayname) ? user1.user_id : user1.displayname;
+            String displayName2 = TextUtils.isEmpty(user2.displayname) ? user2.user_id : user2.displayname;
+
+            return displayName1.compareToIgnoreCase(displayName2);
+        }
+    };
+
+    /**
      * Construct an adapter which will display a list of users
      *
      * @param context          Activity context
@@ -143,22 +163,9 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
 
             // sort the results
             if (mIsSearchingMatrixId) {
-                Collections.sort(newValues, new Comparator<User>() {
-                    @Override
-                    public int compare(User user1, User user2) {
-                        return user1.user_id.compareToIgnoreCase(user2.user_id);
-                    }
-                });
+                Collections.sort(newValues, mUserComparatorByUserId);
             } else {
-                Collections.sort(newValues, new Comparator<User>() {
-                    @Override
-                    public int compare(User user1, User user2) {
-                        String displayName1 = TextUtils.isEmpty(user1.displayname) ? user1.user_id : user1.displayname;
-                        String displayName2 = TextUtils.isEmpty(user2.displayname) ? user2.user_id : user2.displayname;
-
-                        return displayName1.compareToIgnoreCase(displayName2);
-                    }
-                });
+                Collections.sort(newValues, mUserComparatorByDisplayname);
             }
 
             results.values = newValues;
