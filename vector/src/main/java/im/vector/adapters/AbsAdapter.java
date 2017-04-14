@@ -63,8 +63,11 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
 
     protected static final int TYPE_ROOM = -3;
 
+    // Helper handling the sticky view for each section
     private StickySectionHelper mStickySectionHelper;
 
+    // List of sections with the position of their header view
+    /// Ex <0, section 1 with 2 items>, <3, section 2>
     private List<Pair<Integer, AdapterSection>> mSections;
 
     protected CharSequence mCurrentFilterPattern;
@@ -112,8 +115,8 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                updateSections();
                 mCurrentFilterPattern = constraint;
+                updateSections();
 
                 if (mStickySectionHelper != null) {
                     mStickySectionHelper.resetSticky(mSections);
@@ -268,10 +271,10 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     }
 
     /**
-     * Get the item at teh given position in the adapter
+     * Get the item at the given position in the adapter
      *
      * @param position
-     * @return
+     * @return item at the given position
      */
     public Object getItemForPosition(final int position) {
         for (int i = 0; i < mSections.size(); i++) {
@@ -299,6 +302,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      * Add a section at the given index
      *
      * @param section
+     * @param index
      */
     protected void addSection(AdapterSection section, int index) {
         int headerPos = 0;
@@ -329,7 +333,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     /**
      * Get the list of sections currently managed by the adapter
      *
-     * @return
+     * @return list of sections
      */
     protected List<AdapterSection> getSections() {
         List<AdapterSection> list = new ArrayList<>();
@@ -346,7 +350,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      * @return
      */
     protected List<Pair<Integer, AdapterSection>> getSectionsArray() {
-        return mSections;
+        return new ArrayList<>(mSections);
     }
 
     /**

@@ -580,7 +580,7 @@ public class CommonActivityUtils {
      * @param fragment                      the calling fragment that is requesting the permissions
      * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
      */
-    public static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Activity aCallingActivity, final Fragment fragment) {
+    private static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Activity aCallingActivity, final Fragment fragment) {
         boolean isPermissionGranted = false;
 
         // sanity check
@@ -791,6 +791,17 @@ public class CommonActivityUtils {
      */
     public static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Activity aCallingActivity) {
         return checkPermissions(aPermissionsToBeGrantedBitMap, aCallingActivity, null);
+    }
+
+    /**
+     * See {@link #checkPermissions(int, Activity, Fragment)}
+     *
+     * @param aPermissionsToBeGrantedBitMap
+     * @param fragment
+     * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
+     */
+    public static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Fragment fragment) {
+        return checkPermissions(aPermissionsToBeGrantedBitMap, fragment.getActivity(), fragment);
     }
 
     /**

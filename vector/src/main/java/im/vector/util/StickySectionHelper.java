@@ -39,11 +39,11 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
     private List<Pair<Integer, SectionView>> mSectionViews = new ArrayList<>();
 
-    private int headerTop = 0;
-    private int headerBottom = 0;
+    private int mHeaderTop = 0;
+    private int mHeaderBottom = 0;
 
-    private int footerTop = 0;
-    private int footerBottom = 0;
+    private int mFooterTop = 0;
+    private int mFooterBottom = 0;
 
     public StickySectionHelper(RecyclerView recyclerView, List<Pair<Integer, AdapterSection>> sections) {
         mRecyclerView = recyclerView;
@@ -93,7 +93,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
         Log.i(LOG_TAG, "onLayoutChange bottom " + bottom + " oldBottom " + oldBottom);
 
-        if (bottom != oldBottom && bottom > footerBottom) {
+        if (bottom != oldBottom && bottom > mFooterBottom) {
             // Calculate the coordinates (header/footer) of section views
             computeSectionViewsCoordinates(v, mSectionViews);
         } else {
@@ -132,8 +132,8 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
             mSectionViews.clear();
             mSectionViews.addAll(newList);
 
-            setBottom(footerBottom);
-            headerBottom = 0;
+            setBottom(mFooterBottom);
+            mHeaderBottom = 0;
 
             // Calculate the coordinates (header/footer) of section views
             computeSectionViewsCoordinates(mRecyclerView, mSectionViews);
@@ -141,8 +141,8 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
     }
 
     public void setBottom(int bottom) {
-        footerTop = bottom;
-        footerBottom = bottom;
+        mFooterTop = bottom;
+        mFooterBottom = bottom;
     }
 
     public SectionView getSectionViewForSectionIndex(int index) {
@@ -169,7 +169,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
     private void computeSectionViewsCoordinates(View v, List<Pair<Integer, SectionView>> sectionViews) {
         setBottom(v.getBottom());
-        headerBottom = 0;
+        mHeaderBottom = 0;
 
         Log.i(LOG_TAG, "computeSectionViewsCoordinates");
         if (!sectionViews.isEmpty()) {
@@ -187,9 +187,9 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                     current.setHeaderBottom(0);
 //                    current.setTranslationY(0 - current.getStickyHeaderHeight());
                 } else {
-                    current.setHeaderTop(headerBottom);
-                    current.setHeaderBottom(headerBottom + current.getStickyHeaderHeight());
-                    headerBottom += sectionHeight;
+                    current.setHeaderTop(mHeaderBottom);
+                    current.setHeaderBottom(mHeaderBottom + current.getStickyHeaderHeight());
+                    mHeaderBottom += sectionHeight;
                 }
             }
 
@@ -201,9 +201,9 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
                 current.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                 int sectionheight = current.getStickyHeaderHeight();
-                current.setFooterTop(footerTop - current.getStickyHeaderHeight());
-                current.setFooterBottom(footerTop);
-                footerTop -= sectionheight;
+                current.setFooterTop(mFooterTop - current.getStickyHeaderHeight());
+                current.setFooterBottom(mFooterTop);
+                mFooterTop -= sectionheight;
             }
         }
 

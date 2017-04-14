@@ -129,7 +129,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         mAdapter.onFilterDone(mCurrentFilter);
 
         if (!ContactsManager.getInstance().isContactBookAccessRequested()) {
-            CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, getActivity(), this);
+            CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
         }
 
         initKnownContacts();
