@@ -16,24 +16,34 @@
 
 package im.vector.activity;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -42,6 +52,7 @@ import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
+import im.vector.view.VectorAutoCompleteTextView;
 
 /**
  * This class provides a way to search other user to invite them in a dedicated room
@@ -49,23 +60,40 @@ import im.vector.util.VectorUtils;
 public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private static final String LOG_TAG = "VectorInviteMembersAct";
 
-    // search in the room
+    // room identifier
     public static final String EXTRA_ROOM_ID = "VectorInviteMembersActivity.EXTRA_ROOM_ID";
+
+    // participants to hide in the list
     public static final String EXTRA_HIDDEN_PARTICIPANT_ITEMS = "VectorInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS";
-    public static final String EXTRA_SELECTED_USER_ID = "VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID";
-    public static final String EXTRA_SELECTED_PARTICIPANT_ITEM = "VectorInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM";
+
     // boolean : true displays a dialog to confirm the member selection
     public static final String EXTRA_ADD_CONFIRMATION_DIALOG = "VectorInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG";
 
+    // the selected user ids list
+    public static final String EXTRA_OUT_SELECTED_USER_IDS = "VectorInviteMembersActivity.EXTRA_OUT_SELECTED_USER_IDS";
+
+    // the selected participants list
+    public static final String EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS = "VectorInviteMembersActivity.EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS";
 
     // account data
     private String mMatrixId;
 
     // main UI items
     private ExpandableListView mListView;
+
+    // load
     private View mLoadingView;
-    private List<ParticipantAdapterItem> mParticipantItems = new ArrayList<>();
+
+    // participants list
+    private List<ParticipantAdapterItem> mHiddenParticipantItems = new ArrayList<>();
+
+    // adapter
     private VectorParticipantsAdapter mAdapter;
+
+    // dummy link to open a dedicated dialog to invite members with matrix id, email or MSISDN
+    private View mInviteByIdTextView;
+
+    // tell if a confirmation dialog must be displayed to validate the user ids list
     private boolean mAddConfirmationDialog;
 
     // retrieve a matrix Id from an email
@@ -154,14 +182,19 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         }
 
         if (intent.hasExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS)) {
-            mParticipantItems = (List<ParticipantAdapterItem>) intent.getSerializableExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS);
+            mHiddenParticipantItems = (List<ParticipantAdapterItem>) intent.getSerializableExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS);
         }
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
 
+        if (null != roomId) {
+            mRoom = mSession.getDataHandler().getStore().getRoom(roomId);
+        }
+
         // tell if a confirmation dialog must be displayed.
         mAddConfirmationDialog = intent.getBooleanExtra(EXTRA_ADD_CONFIRMATION_DIALOG, false);
 
+        //
         setContentView(R.layout.activity_vector_invite_members);
 
         // the user defines a
@@ -179,7 +212,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 R.layout.adapter_item_vector_add_participants,
                 R.layout.adapter_item_vector_people_header,
                 mSession, roomId, true);
-        mAdapter.setHiddenParticipantItems(mParticipantItems);
+        mAdapter.setHiddenParticipantItems(mHiddenParticipantItems);
         mListView.setAdapter(mAdapter);
 
         mListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -189,22 +222,18 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
                 if (item instanceof ParticipantAdapterItem && ((ParticipantAdapterItem) item).mIsValid) {
                     ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem) item;
-
-                    if (mAddConfirmationDialog) {
-                        displaySelectionConfirmationDialog(participantAdapterItem);
-                    } else {
-                        // returns the selected user
-                        Intent intent = new Intent();
-                        intent.putExtra(EXTRA_SELECTED_USER_ID, participantAdapterItem.mUserId);
-                        intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, participantAdapterItem);
-
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-
+                    finish(new ArrayList<>(Arrays.asList(participantAdapterItem)));
                     return true;
                 }
                 return false;
+            }
+        });
+
+        mInviteByIdTextView = findViewById(R.id.search_invite_by_id);
+        mInviteByIdTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayInviteByUserId();
             }
         });
 
@@ -249,18 +278,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     protected void onPatternUpdate(boolean isTypingUpdate) {
         String pattern = mPatternToSearchEditText.getText().toString();
 
-        ParticipantAdapterItem firstEntry = null;
-
-        if (!TextUtils.isEmpty(pattern)) {
-            // remove useless spaces
-            pattern = pattern.trim();
-
-            // test if the pattern is a valid email or matrix id
-            boolean isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
-                    MXSession.isUserId(pattern);
-            firstEntry = new ParticipantAdapterItem(pattern, null, pattern, isValid);
-        }
-
         // display a spinner while the other room members are listed
         if (!mAdapter.isKnownMembersInitialized()) {
             mLoadingView.setVisibility(View.VISIBLE);
@@ -274,7 +291,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             return;
         }
 
-        mAdapter.setSearchedPattern(pattern, firstEntry, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
+        mAdapter.setSearchedPattern(pattern, null, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
             public void onSearchEnd(final int count) {
                 mListView.post(new Runnable() {
@@ -290,44 +307,177 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     /**
      * Display a selection confirmation dialog.
      *
-     * @param participantAdapterItem the selected participant
+     * @param participantAdapterItems the selected participants
      */
-    private void displaySelectionConfirmationDialog(final ParticipantAdapterItem participantAdapterItem) {
-        final String userId = participantAdapterItem.mUserId;
+    private void finish(final ArrayList<ParticipantAdapterItem> participantAdapterItems) {
+        final List<String> hiddenUserIds = new ArrayList<>();
+        final ArrayList<String> userIds = new ArrayList<>();
+        final ArrayList<String> displayNames = new ArrayList<>();
 
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(VectorRoomInviteMembersActivity.this);
-        builder.setTitle(R.string.dialog_title_confirmation);
+        // list the hidden user Ids
+        for(ParticipantAdapterItem item : mHiddenParticipantItems) {
+            hiddenUserIds.add(item.mUserId);
+        }
 
-        String displayName = userId;
-
-        if (MXSession.isUserId(userId)) {
-            User user = mSession.getDataHandler().getStore().getUser(userId);
-            if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
-                displayName = user.displayname;
+        // if a room is defined
+        if (null != mRoom) {
+            // the room members must not be added again
+            Collection<RoomMember> members = mRoom.getLiveState().getDisplayableMembers();
+            for (RoomMember member : members) {
+                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                    hiddenUserIds.add(member.getUserId());
+                }
             }
         }
 
-        builder.setMessage(getString(R.string.room_participants_invite_prompt_msg, displayName));
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        // build the output lists
+        for (ParticipantAdapterItem item : participantAdapterItems) {
+            // check if the user id can be added
+            if (!hiddenUserIds.contains(item.mUserId)) {
+                userIds.add(item.mUserId);
+                // display name
+                if (MXSession.isUserId(item.mUserId)) {
+                    User user = mSession.getDataHandler().getStore().getUser(item.mUserId);
+                    if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
+                        displayNames.add(user.displayname);
+                    } else {
+                        displayNames.add(item.mUserId);
+                    }
+                } else {
+                    displayNames.add(item.mUserId);
+                }
+            }
+        }
+
+        // a confirmation dialog has been requested
+        if (mAddConfirmationDialog && (displayNames.size() > 0)) {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(VectorRoomInviteMembersActivity.this);
+            builder.setTitle(R.string.dialog_title_confirmation);
+
+            String message = "";
+
+            if (displayNames.size() == 1) {
+                message = displayNames.get(0);
+            } else {
+                for (int i = 0; i < (displayNames.size() - 2); i++) {
+                    message += displayNames.get(i) + ", ";
+                }
+
+                message += displayNames.get(displayNames.size() - 2) + " " + getText(R.string.and) + " " + displayNames.get(displayNames.size() - 1);
+            }
+
+            builder.setMessage(getString(R.string.room_participants_invite_prompt_msg, message));
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // returns the selected users
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_OUT_SELECTED_USER_IDS, userIds);
+                    intent.putExtra(EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS, participantAdapterItems);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // nothing to do
+                }
+            });
+
+            builder.show();
+        } else {
+            // returns the selected users
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_OUT_SELECTED_USER_IDS, userIds);
+            intent.putExtra(EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS, participantAdapterItems);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
+
+    /**
+     * Display the invitation dialog.
+     */
+    private void displayInviteByUserId() {
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_invite_by_id, null);
+
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(R.string.people_search_invite_by_id_dialog_title);
+        dialog.setView(dialogLayout);
+
+        final VectorAutoCompleteTextView inviteTextView = (VectorAutoCompleteTextView) dialogLayout.findViewById(R.id.invite_by_id_edit_text);
+        inviteTextView.initAutoCompletion(mSession);
+        inviteTextView.setProvideMatrixIdOnly(true);
+
+        dialog.setPositiveButton(R.string.invite, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // returns the selected user
-                Intent intent = new Intent();
-                intent.putExtra(EXTRA_SELECTED_USER_ID, participantAdapterItem.mUserId);
-                intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, participantAdapterItem);
-
-                setResult(RESULT_OK, intent);
-                finish();
+                // will be overridden to avoid dismissing the dialog while displaying the progress
             }
         });
 
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // nothing to do
+                dialog.dismiss();
             }
         });
 
-        builder.show();
+        final AlertDialog inviteDialog = dialog.show();
+        final Button inviteButton = inviteDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+        if (null != inviteButton) {
+            inviteButton.setEnabled(false);
+
+            inviteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String text = inviteTextView.getText().toString();
+                    ArrayList<ParticipantAdapterItem> items = new ArrayList<>();
+                    List<Pattern> patterns = Arrays.asList(MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER, android.util.Patterns.EMAIL_ADDRESS);
+
+                    for (Pattern pattern : patterns) {
+                        Matcher matcher = pattern.matcher(text);
+                        while (matcher.find()) {
+                            try {
+                                String userId = text.substring(matcher.start(0), matcher.end(0));
+                                items.add(new ParticipantAdapterItem(userId, null, userId, true));
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## displayInviteByUserId() " + e.getMessage());
+                            }
+                        }
+                    }
+
+                    finish(items);
+
+                    inviteDialog.dismiss();
+                }
+            });
+        }
+
+        inviteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (null != inviteButton) {
+                    String text = inviteTextView.getText().toString();
+
+                    boolean containMXID = MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(text).find();
+                    boolean containEmailAddress = android.util.Patterns.EMAIL_ADDRESS.matcher(text).find();
+
+                    inviteButton.setEnabled(containMXID || containEmailAddress);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 }

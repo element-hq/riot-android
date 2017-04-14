@@ -191,16 +191,16 @@
 
                     </RelativeLayout>
 
-                    <EditText
+                    <im.vector.view.VectorAutoCompleteTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:inputType="textCapSentences|textMultiLine"
                         android:textSize="14sp"
+                        android:dropDownAnchor="@+id/room_sending_message_layout"
                         android:hint="@string/room_message_placeholder_not_encrypted"
                         android:id="@+id/editText_messageBox"
-                        android:layout_centerVertical="true"
                         android:theme="@style/SearchesAppTheme"
                         android:background="@android:color/transparent"
                         android:textCursorDrawable="@drawable/searches_cursor_background"

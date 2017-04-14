@@ -1,78 +1,77 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/bug_report_body_view"
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/bug_report_progress_text_view"
-            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/send_bug_report_progress"/>
+            android:text="@string/send_bug_report_progress"
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/bug_report_progress_view"
             style="?android:attr/progressBarStyleHorizontal"
-            android:visibility="gone"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
-            android:progressTint="@color/vector_green_color"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:max="100"
-            android:progress="50"/>
+            android:progress="50"
+            android:progressTint="@color/vector_green_color"
+            android:visibility="gone" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/send_bug_report_description"/>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:text="@string/send_bug_report_description" />
+
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/bug_report_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/send_bug_report_placeholder"/>
+                        android:hint="@string/send_bug_report_placeholder" />
                 </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="@string/send_bug_report_logs_description"/>
+                    android:layout_marginTop="10dp"
+                    android:text="@string/send_bug_report_logs_description" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -81,16 +80,16 @@
 
                     <CheckBox
                         android:id="@+id/bug_report_button_include_logs"
-                        android:checked="true"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="@string/send_bug_report_include_logs"/>
+                        android:text="@string/send_bug_report_include_logs" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -100,16 +99,16 @@
 
                     <CheckBox
                         android:id="@+id/bug_report_button_include_crash_logs"
-                        android:checked="true"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="@string/send_bug_report_include_crash_logs"/>
+                        android:text="@string/send_bug_report_include_crash_logs" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

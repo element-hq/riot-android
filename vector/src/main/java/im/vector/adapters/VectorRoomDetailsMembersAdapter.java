@@ -714,8 +714,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         }
 
         // 2 - display member name
-        // Specific member name: member is "You" - at 0 position we must find the logged user, we then do not display its name, but R.string.you
-        String memberName = (isLoggedUserPosition && !isSearchMode) ? (String)mContext.getText(R.string.you) : participant.mDisplayName;
+        String memberName = participant.mDisplayName;
 
         // detect if the displayname is used several times
         if (!TextUtils.isEmpty(memberName)) {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="72dp">
 
@@ -9,54 +8,56 @@
         android:id="@+id/file_search_thumbnail"
         android:layout_width="72dp"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop" />
 
     <!-- Message timestamp -->
     <TextView
         android:id="@+id/search_file_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:text="370Kb"
-        android:fontFamily="sans-serif-light"
-        android:textColor="@color/vector_silver_color"
-        android:layout_marginTop="18dp"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="12dp"/>
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="18dp"
+        android:fontFamily="sans-serif-light"
+        android:text="370Kb"
+        android:textColor="@color/vector_silver_color"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/file_search_filename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/file_search_thumbnail"
-        android:layout_toLeftOf="@id/search_file_size"
-        android:layout_marginTop="15dp"
-        android:singleLine="true"
-        android:textSize="16sp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_toLeftOf="@id/search_file_size"
+        android:layout_toRightOf="@id/file_search_thumbnail"
         android:fontFamily="sans-serif-regular"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="File name"
         android:textColor="@color/vector_text_black_color"
-        android:text="File name" />
+        android:textSize="16sp" />
 
     <!-- Last message of the room -->
     <TextView
         android:id="@+id/file_search_room_name"
-        android:layout_alignLeft="@id/file_search_filename"
-        android:layout_alignParentBottom="true"
-        android:singleLine="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:layout_marginRight="26dp"
+        android:layout_alignLeft="@id/file_search_filename"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="18dp"
+        android:layout_marginRight="26dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="Room name and date"
         android:textColor="@color/vector_0_54_black_color"
-        android:text="Room name and date" />
-    
+        android:textSize="14sp" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/vector_dc_gray"/>
+        android:background="@color/vector_dc_gray" />
 </RelativeLayout>

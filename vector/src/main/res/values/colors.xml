@@ -10,9 +10,6 @@
 
     <color name="chat_gray_text">#FFAAAAAA</color>
     <color name="chat_encoding_background">#AAAAAAAA</color>
-    <color name="room_summary_unread_background">#ede</color>
-    <color name="room_summary_highlight_background">#FF88BBFF</color>
-    <color name="room_summary_public_highlight_background">#FFFFFFDD</color>
     <color name="vector_deemed_background_view_gray_color">#339D9D9D</color>
 
     <!-- action bar color -->
@@ -36,16 +33,12 @@
     <color name="vector_0_87_black_color">#DC000000</color>
     <color name="vector_line_separator_gray_color">#339D9D9D</color>
     <color name="vector_recents_header_background_color">#77F2F2F2</color>
-    <color name="vector_recents_bing_gray_color">#E2E2E2</color>
 
     <!-- tabbar color-->
     <color name="vector_tabbar_background_color">#FFF2F2F2</color>
     <color name="vector_search_hint_color">#333C3C3C</color>
 
     <!-- colors to check their uses -->
-    <color name="vector_background">#FFFAFAFA</color>
-    <color name="vector_title_color">#FFFFFF</color>
-    <color name="vector_border_color">#FF3C3C3C</color>
 
     <!-- NavigationView color-->
     <color name="vector_4d_gray">#FF4D4D4D</color>
@@ -67,7 +60,6 @@
     <color name="vector_d8_gray">#FFD8D8D8</color>
 
     <color name="vector_74_gray">#FF747474</color>
-    <color name="vector_25_black">#25000000</color>
     <color name="vector_33_black">#33000000</color>
 
     <color name="vector_white_alpha_50">#80ffffff</color>

@@ -245,6 +245,9 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
      */
     private void setDevicesKnown(List<Pair<String, List<MXDeviceInfo>>> devicesList) {
         if (null != mUnknownDevicesMap) {
+            // release the static members list
+            mUnknownDevicesMap = null;
+
             List<MXDeviceInfo> dis = new ArrayList<>();
 
             for (Pair<String, List<MXDeviceInfo>> item : devicesList) {
@@ -257,7 +260,6 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                     if (mIsSendAnywayTapped && (null != mListener)) {
                         mListener.onSendAnyway();
                     }
-                    mUnknownDevicesMap = null;
                     mListener = null;
                 }
 

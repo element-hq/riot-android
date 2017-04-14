@@ -74,6 +74,7 @@ public class VideoRecordProgressView extends View {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, attrArray);
         int width = typedArray.getDimensionPixelSize(0, 0);
         int height = typedArray.getDimensionPixelSize(1, 0);
+        typedArray.recycle();
         mRectF = new RectF(0, 0, width, height);
         mPaint = new Paint();
     }

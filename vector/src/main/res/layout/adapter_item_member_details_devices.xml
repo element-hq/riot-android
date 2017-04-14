@@ -1,60 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@android:color/white"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
 
     <TextView
         android:id="@+id/device_name"
-        android:singleLine="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:text="device name.."/>
+        android:text="device name.." />
 
     <TextView
         android:id="@+id/device_id"
-        android:singleLine="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:layout_below="@+id/device_name"
-        android:text="device id.."
-        android:layout_marginTop="0dp" />
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="0dp"
+        android:text="device id.." />
 
     <ImageView
         android:id="@+id/device_e2e_icon"
         android:layout_width="14dp"
         android:layout_height="14dp"
-        android:layout_marginRight="16dp"
-        android:layout_alignParentRight="true"
         android:layout_alignBottom="@id/device_id"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
         android:src="@drawable/e2e_verified" />
 
     <LinearLayout
         android:id="@+id/container_buttons"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/device_id"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_below="@+id/device_id"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_marginTop="2dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_verify"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="0dp"
-            android:layout_weight="45"
             android:layout_height="25dp"
+            android:layout_weight="45"
             android:background="@color/vector_green_color"
-            android:textColor="@android:color/white"
-            android:text="@string/encryption_information_verify" />
+            android:text="@string/encryption_information_verify"
+            android:textColor="@android:color/white" />
 
         <Space
             android:layout_width="0dp"
@@ -65,17 +63,17 @@
             android:id="@+id/button_block"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="0dp"
-            android:layout_weight="45"
             android:layout_height="25dp"
+            android:layout_weight="45"
             android:background="@color/vector_green_color"
-            android:textColor="@android:color/white"
-            android:text="@string/encryption_information_block" />
+            android:text="@string/encryption_information_block"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/vector_dc_gray"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"/>
+        android:background="@color/vector_dc_gray" />
 </RelativeLayout>
