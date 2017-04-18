@@ -16,12 +16,12 @@
  */
 package im.vector.gcm;
 
-import android.content.Context;
-
 import org.matrix.androidsdk.util.Log;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import im.vector.VectorApp;
 
 public class GCMHelper {
 
@@ -29,20 +29,23 @@ public class GCMHelper {
 
     /**
      * Retrieves the GCM registration token.
-     *
-     * @return the registration token.
      */
-    public static String getRegistrationToken(Context context) {
-        String registrationToken;
+    public static String getRegistrationToken() {
+        String registrationToken = null;
 
         try {
-            FirebaseApp.initializeApp(context);
+            if (null == VectorApp.getInstance()) {
+                Log.e(LOG_TAG, "## getRegistrationToken() : No active application");
+            } else {
+                FirebaseApp.initializeApp(VectorApp.getInstance());
+            }
+            // try to get the token anyway
             registrationToken = FirebaseInstanceId.getInstance().getToken();
             Log.d(LOG_TAG, "## getRegistrationToken(): " + registrationToken);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "getRegistrationToken() : failed " + e.getMessage());
-            registrationToken = null;
+            Log.e(LOG_TAG, "## getRegistrationToken() : failed " + e.getMessage());
         }
+
 
         return registrationToken;
     }

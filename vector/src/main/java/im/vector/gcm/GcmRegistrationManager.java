@@ -216,7 +216,7 @@ public final class GcmRegistrationManager {
         String registrationToken = getStoredRegistrationToken();
 
         if (registrationToken == null) {
-            registrationToken = GCMHelper.getRegistrationToken(mContext);
+            registrationToken = GCMHelper.getRegistrationToken();
         }
         return registrationToken;
     }
@@ -293,9 +293,16 @@ public final class GcmRegistrationManager {
 
     /**
      * Reset the GCM registration.
-     * @param register set to true to trigger a fresh registration.
      */
-    public void resetGCMRegistration(final boolean register) {
+    public void resetGCMRegistration() {
+        resetGCMRegistration(null);
+    }
+
+    /**
+     * Reset the GCM registration.
+     * @param newToken the new registration token
+     */
+    public void resetGCMRegistration(final String newToken) {
         Log.d(LOG_TAG, "resetGCMRegistration");
 
         if (RegistrationState.SERVER_REGISTERED == mRegistrationState) {
@@ -313,7 +320,7 @@ public final class GcmRegistrationManager {
                 @Override
                 public void onThirdPartyUnregistered() {
                     Log.d(LOG_TAG, "resetGCMRegistration : unregistration is done --> start the registration process");
-                    resetGCMRegistration(register);
+                    resetGCMRegistration(newToken);
                 }
 
                 @Override
@@ -322,11 +329,13 @@ public final class GcmRegistrationManager {
                 }
             });
         } else {
+            final boolean clearEverything = TextUtils.isEmpty(newToken);
+
             Log.d(LOG_TAG, "resetGCMRegistration : Clear the GCM data");
-            clearGCMData(new SimpleApiCallback<Void>() {
+            clearGCMData(clearEverything, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    if (register) {
+                    if (!clearEverything) {
                         Log.d(LOG_TAG, "resetGCMRegistration : make a full registration process.");
                         register(null);
                     } else {
@@ -1069,15 +1078,20 @@ public final class GcmRegistrationManager {
 
     /**
      * Clear the GCM data
+     * @param clearRegistrationToken true to clear the provided GCM token
+     * @param callback the asynchronous callback
      */
-    public void clearGCMData(final ApiCallback callback) {
+    public void clearGCMData(final boolean clearRegistrationToken, final ApiCallback callback) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
                 setStoredRegistrationToken(null);
                 mRegistrationToken = null;
                 mRegistrationState = RegistrationState.UNREGISTRATED;
-                GCMHelper.clearRegistrationToken();
+
+                if (clearRegistrationToken) {
+                    GCMHelper.clearRegistrationToken();
+                }
                 return null;
             }
 

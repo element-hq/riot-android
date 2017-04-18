@@ -17,6 +17,7 @@
 
 package im.vector.gcm;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import org.matrix.androidsdk.util.Log;
@@ -36,11 +37,9 @@ public class MatrixInstanceIDListenerService extends FirebaseInstanceIdService {
     // [START refresh_token]
     @Override
     public void onTokenRefresh() {
-        Log.d(LOG_TAG, "onTokenRefresh");
-        /*String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: " + refreshedToken);
-        // TODO: Implement this method to send any registration to your app's servers.
-        sendRegistrationToServer(refreshedToken);*/
-    }
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d(LOG_TAG, "onTokenRefresh " + refreshedToken);
 
+        Matrix.getInstance(this).getSharedGCMRegistrationManager().resetGCMRegistration(refreshedToken);
+    }
 }
