@@ -787,7 +787,7 @@ public class EventStreamService extends Service {
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this);
         notifBuilder.setSmallIcon(R.drawable.permanent_notification_transparent);
         notifBuilder.setWhen(System.currentTimeMillis());
-        notifBuilder.setContentTitle(getString(R.string.app_name));
+        notifBuilder.setContentTitle(getString(R.string.riot_app_name));
         notifBuilder.setContentText(NOTIFICATION_SUB_TITLE);
         notifBuilder.setContentIntent(pi);
 
@@ -807,7 +807,7 @@ public class EventStreamService extends Service {
             // reflection at runtime, to avoid compiler error: "Cannot resolve method.."
             try {
                 Method deprecatedMethod = notification.getClass().getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
-                deprecatedMethod.invoke(notification, this, getString(R.string.app_name), NOTIFICATION_SUB_TITLE, pi);
+                deprecatedMethod.invoke(notification, this, getString(R.string.riot_app_name), NOTIFICATION_SUB_TITLE, pi);
             } catch (Exception ex) {
                 Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.getMessage());
             }

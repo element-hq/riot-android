@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Riot</string>
+    <string name="riot_app_name">Riot</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url" translatable="false">https://vector.im</string>

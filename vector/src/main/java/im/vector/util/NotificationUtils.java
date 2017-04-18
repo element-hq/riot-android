@@ -378,7 +378,7 @@ public class NotificationUtils {
             inboxStyle.addLine(notifiedLine);
         }
 
-        inboxStyle.setBigContentTitle(context.getString(R.string.app_name));
+        inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name));
         inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages_in_room, sum, notifiedEventsByRoomId.keySet().size()));
         builder.setStyle(inboxStyle);
 
@@ -632,7 +632,7 @@ public class NotificationUtils {
         builder.setContentTitle(roomName);
         builder.setContentText(body);
 
-        builder.setGroup(context.getString(R.string.app_name));
+        builder.setGroup(context.getString(R.string.riot_app_name));
         builder.setGroupSummary(true);
 
         boolean hasNoisyNotifications = addTextStyle(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId); //addMultiRoomsTextStyle(context, builder, notifiedEventsByRoomId);
