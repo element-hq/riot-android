@@ -1111,7 +1111,7 @@ public class EventStreamService extends Service {
                                     if ("invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString())) {
                                         BingRule rule = session.fulfillRule(event);
 
-                                        if (null != rule) {
+                                        if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
                                             List<NotificationUtils.NotifiedEvent> list = new ArrayList<>();
                                             list.add(new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, rule));
                                             mNotifiedEventsByRoomId.put(room.getRoomId(), list);
@@ -1131,7 +1131,8 @@ public class EventStreamService extends Service {
 
                         for (Event event : unreadEvents) {
                             BingRule rule = session.fulfillRule(event);
-                            if (null != rule) {
+
+                            if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
                                 list.add(new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, rule));
                             }
                         }
