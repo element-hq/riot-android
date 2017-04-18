@@ -21,12 +21,16 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.JsonParser;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.model.Event;
+
+import java.util.Map;
+
 import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
@@ -35,7 +39,7 @@ import im.vector.services.EventStreamService;
 /**
  * Class implementing GcmListenerService.
  */
-public class MatrixGcmListenerService extends GcmListenerService {
+public class MatrixGcmListenerService extends FirebaseMessagingService {
 
     private static final String LOG_TAG = "GcmListenerService";
     private Boolean mCheckLaunched = false;
@@ -46,20 +50,20 @@ public class MatrixGcmListenerService extends GcmListenerService {
      * @param bundle the GCM data
      * @return the event
      */
-    private Event parseEvent(Bundle bundle) {
+    private Event parseEvent(Map<String, String> data) {
         // accept only event with room id.
-        if ((null == bundle) || !bundle.containsKey("room_id")) {
+        if ((null == data) || !data.containsKey("room_id")) {
             return null;
         }
 
         Event event = new Event();
 
         try {
-            event.eventId = bundle.getString("id");
-            event.sender = bundle.getString("sender");
-            event.roomId = bundle.getString("room_id");
-            event.setType(bundle.getString("type"));
-            event.updateContent((new JsonParser()).parse(bundle.getString("content")).getAsJsonObject());
+            event.eventId = data.get("id");
+            event.sender = data.get("sender");
+            event.roomId = data.get("room_id");
+            event.setType(data.get("type"));
+            event.updateContent((new JsonParser()).parse(data.get("content")).getAsJsonObject());
 
             return event;
         } catch (Exception e) {
@@ -76,7 +80,7 @@ public class MatrixGcmListenerService extends GcmListenerService {
      * @param data Data bundle containing message data as key/value pairs.
      *             For Set of keys use data.keySet().
      */
-    private void onMessageReceivedInternal(final Bundle data) {
+    private void onMessageReceivedInternal(final Map<String, String> data) {
         try {
             // privacy
                 /*for (String key : data.keySet()) {
@@ -164,7 +168,10 @@ public class MatrixGcmListenerService extends GcmListenerService {
      *             For Set of keys use data.keySet().
      */
     @Override
-    public void onMessageReceived(final String from, final Bundle data) {
+    public void onMessageReceived(RemoteMessage message) {
+        final String from = message.getFrom();
+        final Map<String, String> data = message.getData();
+
         Log.d(LOG_TAG, "## onMessageReceived() --------------------------------");
 
         if (null == mUIhandler) {

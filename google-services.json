@@ -1,42 +1,46 @@
 {
   "project_info": {
-    "project_id": "vector-alpha",
     "project_number": "912726360885",
-    "name": "Vector Alpha"
+    "firebase_url": "https://vector-alpha.firebaseio.com",
+    "project_id": "vector-alpha",
+    "storage_bucket": "vector-alpha.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:912726360885:android:448c9b63161abc9c",
-        "client_id": "android:im.vector.alpha",
-        "client_type": 1,
         "android_client_info": {
           "package_name": "im.vector.alpha"
         }
       },
-      "oauth_client": [],
-      "api_key": [],
+      "oauth_client": [
+        {
+          "client_id": "912726360885-rsae0i66rgqt6ivnudu1pv4tksg9i8b2.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "912726360885-e87n3jva9uoj4vbidvijq78ebg02asv2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFZX8IhIfgzdOZvxDP_ISO5WYoU7jmQ5c"
+        }
+      ],
       "services": {
         "analytics_service": {
           "status": 1
-        },
-        "cloud_messaging_service": {
-          "status": 2,
-          "apns_config": []
         },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
         },
-        "google_signin_service": {
-          "status": 1
-        },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }
   ],
-  "client_info": [],
-  "ARTIFACT_VERSION": "1"
+  "configuration_version": "1"
 }

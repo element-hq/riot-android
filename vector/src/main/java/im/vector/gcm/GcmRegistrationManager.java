@@ -1077,7 +1077,7 @@ public final class GcmRegistrationManager {
                 setStoredRegistrationToken(null);
                 mRegistrationToken = null;
                 mRegistrationState = RegistrationState.UNREGISTRATED;
-                GCMHelper.clearRegistrationToken(mContext);
+                GCMHelper.clearRegistrationToken();
                 return null;
             }
 
