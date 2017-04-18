@@ -991,7 +991,7 @@ public class EventStreamService extends Service {
      * @param roomId    the room Id
      */
     private void cancelNotifications(String accountId, String roomId) {
-        if (mNotifiedEventsByRoomId.containsKey(roomId)) {
+        if ((null != mNotifiedEventsByRoomId) && mNotifiedEventsByRoomId.containsKey(roomId)) {
             mNotifiedEventsByRoomId = null;
             refreshMessagesNotification();
         }
@@ -1007,7 +1007,7 @@ public class EventStreamService extends Service {
             NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
             // no more notifications
-            if (mNotifiedEventsByRoomId.size() == 0) {
+            if ((null == mNotifiedEventsByRoomId) || mNotifiedEventsByRoomId.size() == 0) {
                 nm.cancel(NOTIF_ID_MESSAGE);
             } else {
                 // a background notification is triggered when some read receipts have been received
