@@ -121,15 +121,14 @@ public class MatrixGcmListenerService extends GcmListenerService {
                             } catch (Exception e) {
                                 Log.e(LOG_TAG, "Fail to retrieve the roomState of " + event.roomId);
                             }
-                        }
 
                             if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTED) && session.isCryptoEnabled()) {
                                 session.getCrypto().decryptEvent(event, null);
+                            }
+
+                            eventStreamService.prepareNotification(event, roomState, session.getDataHandler().getBingRulesManager().fulfilledBingRule(event));
+                            eventStreamService.refreshMessagesNotification();
                         }
-
-                        eventStreamService.prepareNotification(event, roomState, session.getDataHandler().getBingRulesManager().fulfilledBingRule(event));
-                        eventStreamService.refreshMessagesNotification();
-
                         Log.d(LOG_TAG, "## onMessageReceived() : trigger a notification");
                     } else {
                         Log.d(LOG_TAG, "## onMessageReceived() : fail to parse the notification data");
