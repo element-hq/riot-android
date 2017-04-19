@@ -368,11 +368,11 @@
     <string name="room_event_action_cancel_download">Cancel·la la baixada</string>
 
     <!-- Room display name -->
-    <string name="room_displayname_invite_from">Invite from %s</string>
-    <string name="room_displayname_room_invite">Room Invite</string>
-    <string name="room_displayname_two_members">%1$s and %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s and %2$d others</string>
-    <string name="room_displayname_no_title">Empty room</string>
+    <string name="room_displayname_invite_from">Convideu des de %s</string>
+    <string name="room_displayname_room_invite">Convideu a la sala</string>
+    <string name="room_displayname_two_members">%1$s i %2$s</string>
+    <string name="room_displayname_more_than_two_members">%1$s i %2$d més</string>
+    <string name="room_displayname_no_title">Sala buida</string>
 
     <!-- Search -->
     <string name="search_hint">Search</string>
