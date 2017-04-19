@@ -12,12 +12,12 @@
         android:name="${applicationId}.permission.C2D_MESSAGE" />
 
     <application
-        tools:replace="android:allowBackup"
+        tools:replace="allowBackup,label"
         android:allowBackup="false"
         android:name="im.vector.VectorApp"
         android:icon="@drawable/logo"
         android:logo="@drawable/logo"
-        android:label="@string/app_name"
+        android:label="@string/riot_app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme" >
 
