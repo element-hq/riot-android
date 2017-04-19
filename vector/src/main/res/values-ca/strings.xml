@@ -402,11 +402,11 @@
     <string name="directory_searching_title">Cercant al directori..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notifications</string>
-    <string name="room_settings_favourite">Favourite</string>
-    <string name="room_settings_de_prioritize">De-prioritize</string>
-    <string name="room_settings_direct_chat">Direct Chat</string>
-    <string name="room_settings_leave_conversation">Leave Conversation</string>
+    <string name="room_settings_notifications">Notificacions</string>
+    <string name="room_settings_favourite">Preferit</string>
+    <string name="room_settings_de_prioritize">Treu prioritat</string>
+    <string name="room_settings_direct_chat">Xat directe</string>
+    <string name="room_settings_leave_conversation">Deixa la conversa</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>
