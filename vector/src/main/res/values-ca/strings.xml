@@ -338,17 +338,17 @@
     <string name="room_new_messages_notification">%1$d missatges nous</string>
 
     <!-- unrecognized SSL certificate -->
-    <string name="ssl_trust">Trust</string>
-    <string name="ssl_do_not_trust">Do not trust</string>
-    <string name="ssl_logout_account">Logout</string>
-    <string name="ssl_remain_offline">Ignore</string>
-    <string name="ssl_fingerprint_hash">Fingerprint (%s):</string>
-    <string name="ssl_could_not_verify">Could not verify identity of remote server.</string>
-    <string name="ssl_cert_not_trust">This could mean that someone is maliciously intercepting your traffic, or that your phone does not trust the certificate provided by the remote server.</string>
-    <string name="ssl_cert_new_account_expl">If the server administrator has said that this is expected, ensure that the fingerprint below matches the fingerprint provided by them.</string>
-    <string name="ssl_unexpected_existing_expl">The certificate has changed from one that was trusted by your phone. This is HIGHLY UNUSUAL. It is recommended that you DO NOT ACCEPT this new certificate.</string>
-    <string name="ssl_expected_existing_expl">The certificate has changed from a previously trusted one to one that is not trusted. The server may have renewed its certificate. Contact the server administrator for the expected fingerprint.</string>
-    <string name="ssl_only_accept">ONLY accept the certificate if the server administrator has published a fingerprint that matches the one above.</string>
+    <string name="ssl_trust">Confia</string>
+    <string name="ssl_do_not_trust">No hi confiïs</string>
+    <string name="ssl_logout_account">Surt</string>
+    <string name="ssl_remain_offline">Ignora</string>
+    <string name="ssl_fingerprint_hash">Empremta digital (%s):</string>
+    <string name="ssl_could_not_verify">No s'ha pogut verificar la identitat del servidor remot.</string>
+    <string name="ssl_cert_not_trust">Això pot voler dir que algú està interceptant el tràfic maliciosament o que aquest telefon no confia en el certificat proporcionat pel servidor remot.</string>
+    <string name="ssl_cert_new_account_expl">Si l'administrador del servidor diu que això és correcte, assegureu-vos que la següent empremta digital coincideix amb la que us ha donat.</string>
+    <string name="ssl_unexpected_existing_expl">El certificat ha canviat respecte aquell en el qual el telefon confia. Això NO ÉS GENS HABITUAL. Es recomana que NO ACCEPTEU el certificat nou.</string>
+    <string name="ssl_expected_existing_expl">El certificat en el que confiàveu ha canviat per un en el que no confieu. El servidor pot haver renovat el certificat. Contacteu amb l'administrador del servidor per saber l'empremta digital esperada.</string>
+    <string name="ssl_only_accept">NOMÉS accepteu el certificat si l'administrador del servidor ha publicat una empremta digital que coincideixi amb l'anterior.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
