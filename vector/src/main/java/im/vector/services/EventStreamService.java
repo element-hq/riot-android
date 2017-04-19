@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -151,6 +152,8 @@ public class EventStreamService extends Service {
      */
     private final LinkedHashMap<String, NotificationUtils.NotifiedEvent> mPendingNotifications = new LinkedHashMap<>();
     private Map<String, List<NotificationUtils.NotifiedEvent>> mNotifiedEventsByRoomId = null;
+    private static HandlerThread mNotificationHandlerThread = null;
+    private static android.os.Handler mNotificationsHandler = null;
 
     /**
      * call in progress (foreground notification)
@@ -286,8 +289,13 @@ public class EventStreamService extends Service {
 
         @Override
         public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
-            refreshMessagesNotification();
-            mPendingNotifications.clear();
+            getNotificationsHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    refreshMessagesNotification();
+                    mPendingNotifications.clear();
+                }
+            });
 
             // do not suspend the application if there is some active calls
             if ((StreamAction.CATCHUP == mServiceState) || (StreamAction.PAUSE == mServiceState)) {
@@ -945,6 +953,36 @@ public class EventStreamService extends Service {
     }
 
     /**
+     * Provide the notifications handler
+     * @return the notifications handler.
+     */
+    private android.os.Handler getNotificationsHandler() {
+        if (null == mNotificationHandlerThread) {
+            try {
+                mNotificationHandlerThread = new HandlerThread("NotificationsService_" + System.currentTimeMillis(), Thread.MIN_PRIORITY);
+                mNotificationHandlerThread.start();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getNotificationsHandler failed : " + e.getMessage());
+            }
+        }
+
+        if (null == mNotificationsHandler) {
+            try {
+                mNotificationsHandler = new android.os.Handler(mNotificationHandlerThread.getLooper());
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getNotificationsHandler failed : " + e.getMessage());
+            }
+        }
+
+        // never returns a null handler
+        if (null == mNotificationsHandler) {
+            return new android.os.Handler(getMainLooper());
+        } else {
+            return mNotificationsHandler;
+        }
+    }
+
+    /**
      * Clear any displayed notification.
      */
     private void clearNotification() {
@@ -955,14 +993,19 @@ public class EventStreamService extends Service {
             Log.e(LOG_TAG, "## clearNotification() failed " + e.getMessage());
         }
 
-        // reset the identifiers
-        if (null != mPendingNotifications) {
-            mPendingNotifications.clear();
-        }
+        getNotificationsHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                // reset the identifiers
+                if (null != mPendingNotifications) {
+                    mPendingNotifications.clear();
+                }
 
-        if (null != mNotifiedEventsByRoomId) {
-            mNotifiedEventsByRoomId.clear();
-        }
+                if (null != mNotifiedEventsByRoomId) {
+                    mNotifiedEventsByRoomId.clear();
+                }
+            }
+        });
     }
 
     /**
@@ -980,7 +1023,12 @@ public class EventStreamService extends Service {
      */
     public static void checkDisplayedNotifications() {
         if (null != mActiveEventStreamService) {
-            mActiveEventStreamService.refreshMessagesNotification();
+            mActiveEventStreamService.getNotificationsHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    mActiveEventStreamService.refreshMessagesNotification();
+                }
+            });
         }
     }
 
@@ -990,31 +1038,41 @@ public class EventStreamService extends Service {
      * @param accountId the account
      * @param roomId    the room Id
      */
-    private void cancelNotifications(String accountId, String roomId) {
-        if ((null != mNotifiedEventsByRoomId) && mNotifiedEventsByRoomId.containsKey(roomId)) {
-            mNotifiedEventsByRoomId = null;
-            refreshMessagesNotification();
-        }
+    private void cancelNotifications(final String accountId, final String roomId) {
+        getNotificationsHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                if ((null != mNotifiedEventsByRoomId) && mNotifiedEventsByRoomId.containsKey(roomId)) {
+                    mNotifiedEventsByRoomId = null;
+                    refreshMessagesNotification();
+                }
+            }
+        });
     }
 
     /**
      * Refresh the messages notification.
+     * Must always be called in getNotificationsHandler() thread.
      */
     public void refreshMessagesNotification() {
         NotificationUtils.NotifiedEvent eventToNotify = getEventToNotify();
 
         if (refreshNotifiedMessagesList()) {
-            NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
+            final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
             // no more notifications
             if ((null == mNotifiedEventsByRoomId) || mNotifiedEventsByRoomId.size() == 0) {
-                nm.cancel(NOTIF_ID_MESSAGE);
+                new Handler(getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        nm.cancel(NOTIF_ID_MESSAGE);
+                    }
+                });
             } else {
                 // a background notification is triggered when some read receipts have been received
-                boolean isBackgroundNotif = (null == eventToNotify);
+                final boolean isBackgroundNotif = (null == eventToNotify);
 
                 if (isBackgroundNotif) {
-
                     // TODO add multi sessions
                     IMXStore store = Matrix.getInstance(getBaseContext()).getDefaultSession().getDataHandler().getStore();
                     long ts = 0;
@@ -1033,12 +1091,18 @@ public class EventStreamService extends Service {
                     }
                 }
 
-                Notification notif = NotificationUtils.buildMessageNotification(getApplicationContext(),
-                        mNotifiedEventsByRoomId,
-                        eventToNotify,
-                        isBackgroundNotif);
+                final NotificationUtils.NotifiedEvent fEventToNotify = eventToNotify;
+                new Handler(getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Notification notif = NotificationUtils.buildMessageNotification(getApplicationContext(),
+                                mNotifiedEventsByRoomId,
+                                fEventToNotify,
+                                isBackgroundNotif);
 
-                nm.notify(NOTIF_ID_MESSAGE, notif);
+                        nm.notify(NOTIF_ID_MESSAGE, notif);
+                    }
+                });
             }
         }
     }
