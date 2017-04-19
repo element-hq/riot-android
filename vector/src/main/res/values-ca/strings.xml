@@ -384,14 +384,14 @@
     <string name="tab_title_search_files">FITXERS</string>
 
     <!-- Room recents -->
-    <string name="room_recents_join">JOIN</string>
-    <string name="room_recents_directory">DIRECTORY</string>
-    <string name="room_recents_favourites">FAVORITES</string>
-    <string name="room_recents_conversations">ROOMS</string>
-    <string name="room_recents_low_priority">LOW PRIORITY</string>
-    <string name="room_recents_invites">INVITES</string>
-    <string name="room_recents_start_chat">Start chat</string>
-    <string name="room_recents_create_room">Create room</string>
+    <string name="room_recents_join">UNEIX-TE</string>
+    <string name="room_recents_directory">DIRECTORI</string>
+    <string name="room_recents_favourites">PREFERITS</string>
+    <string name="room_recents_conversations">SALES</string>
+    <string name="room_recents_low_priority">PRIORITAT BAIXA</string>
+    <string name="room_recents_invites">CONVIDA</string>
+    <string name="room_recents_start_chat">Inicia un xat</string>
+    <string name="room_recents_create_room">Crea una sala</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
