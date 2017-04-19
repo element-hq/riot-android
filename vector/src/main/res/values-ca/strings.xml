@@ -375,13 +375,13 @@
     <string name="room_displayname_no_title">Sala buida</string>
 
     <!-- Search -->
-    <string name="search_hint">Search</string>
-    <string name="search_members_hint">Filter room members</string>
-    <string name="search_no_results">No results</string>
-    <string name="tab_title_search_rooms">ROOMS</string>
-    <string name="tab_title_search_messages">MESSAGES</string>
-    <string name="tab_title_search_people">PEOPLE</string>
-    <string name="tab_title_search_files">FILES</string>
+    <string name="search_hint">Cerca</string>
+    <string name="search_members_hint">Filtra els participants de la sala</string>
+    <string name="search_no_results">No hi ha resultats</string>
+    <string name="tab_title_search_rooms">SALES</string>
+    <string name="tab_title_search_messages">MISSATGES</string>
+    <string name="tab_title_search_people">PARTICIPANTS</string>
+    <string name="tab_title_search_files">FITXERS</string>
 
     <!-- Room recents -->
     <string name="room_recents_join">JOIN</string>
