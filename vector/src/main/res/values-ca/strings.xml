@@ -362,10 +362,10 @@
     <string name="room_details_people_present_group_name">S'HAN UNIT</string>
 
     <!-- Room events -->
-    <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
-    <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>
-    <string name="room_event_action_cancel_upload">Cancel Upload</string>
-    <string name="room_event_action_cancel_download">Cancel Download</string>
+    <string name="room_event_action_report_prompt_reason">Motiu per informar d'aquest contingut</string>
+    <string name="room_event_action_report_prompt_ignore_user">Voleu amagar tots els missatges d'aquest usuari?</string>
+    <string name="room_event_action_cancel_upload">Cancel·la la pujada</string>
+    <string name="room_event_action_cancel_download">Cancel·la la baixada</string>
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invite from %s</string>
