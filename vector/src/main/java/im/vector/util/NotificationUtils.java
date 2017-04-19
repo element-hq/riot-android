@@ -382,7 +382,6 @@ public class NotificationUtils {
         inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages_in_room, sum, notifiedEventsByRoomId.keySet().size()));
         builder.setStyle(inboxStyle);
 
-
         // Build the pending intent for when the notification is clicked
         Intent roomIntentTap;
         roomIntentTap = new Intent(context, VectorHomeActivity.class);
@@ -537,6 +536,7 @@ public class NotificationUtils {
 
             // Build the pending intent for when the notification is clicked
             Intent roomIntentTap;
+
             if (isInvitationEvent) {
                 // for invitation the room preview must be displayed
                 roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(session.getMyUserId(), roomId, context, VectorFakeRoomPreviewActivity.class);
@@ -551,6 +551,8 @@ public class NotificationUtils {
             TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context)
                     .addParentStack(VectorRoomActivity.class)
                     .addNextIntent(roomIntentTap);
+
+            builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
 
             builder.addAction(
                     R.drawable.vector_notification_open,
