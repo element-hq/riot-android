@@ -119,7 +119,7 @@ import im.vector.view.VectorPendingCallView;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends AppCompatActivity {
+public class VectorHomeActivity extends AppCompatActivity implements VectorRecentsListFragment.IVectorRecentsScrollEventListener  {
 
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
@@ -171,10 +171,12 @@ public class VectorHomeActivity extends AppCompatActivity {
     @BindView(R.id.listView_spinner_views)
     View mWaitingView;
 
-    private Timer mRoomCreationViewTimer = null;
 
     @BindView(R.id.floating_action_button)
     FloatingActionButton mFloatingActionButton;
+
+    // mFloatingActionButton is hidden for 1s when there is scroll
+    private Timer mFloatingActionButtonTimer;
 
     private MXEventListener mEventsListener;
     private MXEventListener mLiveEventListener;
@@ -208,9 +210,6 @@ public class VectorHomeActivity extends AppCompatActivity {
 
     private boolean mStorePermissionCheck = false;
 
-    // manage the previous first displayed item
-    private static int mScrollToIndex = -1;
-
     // a shared files intent is waiting the store init
     private Intent mSharedFilesIntent = null;
 
@@ -225,6 +224,9 @@ public class VectorHomeActivity extends AppCompatActivity {
 
     // The current item selected (bottom navigation)
     private int mCurrentMenuId;
+
+    // the current displayed fragment
+    private String mCurrentFragmentTag;
 
     private List<Room> mDirectChatInvitations;
     private List<Room> mRoomInvitations;
@@ -579,9 +581,9 @@ public class VectorHomeActivity extends AppCompatActivity {
         }
 
         synchronized (this) {
-            if (null != mRoomCreationViewTimer) {
-                mRoomCreationViewTimer.cancel();
-                mRoomCreationViewTimer = null;
+            if (null != mFloatingActionButtonTimer) {
+                mFloatingActionButtonTimer.cancel();
+                mFloatingActionButtonTimer = null;
             }
         }
 
@@ -687,7 +689,7 @@ public class VectorHomeActivity extends AppCompatActivity {
         }
 
         Fragment fragment = null;
-        String tag = null;
+
         switch (item.getItemId()) {
             case R.id.bottom_action_home:
                 Log.e(LOG_TAG, "onNavigationItemSelected HOME");
@@ -698,7 +700,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     // Use old fragment for now
                     fragment = VectorRecentsListFragment.newInstance(mSession.getCredentials().userId, R.layout.fragment_vector_recents_list);
                 }
-                tag = TAG_FRAGMENT_HOME;
+                mCurrentFragmentTag = TAG_FRAGMENT_HOME;
                 setTitle(R.string.bottom_action_home);
                 break;
             case R.id.bottom_action_favourites:
@@ -708,7 +710,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     Log.e(LOG_TAG, "onNavigationItemSelected NEW FAVOURITES");
                     fragment = FavouritesFragment.newInstance();
                 }
-                tag = TAG_FRAGMENT_FAVOURITES;
+                mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
                 setTitle(R.string.bottom_action_favourites);
                 break;
             case R.id.bottom_action_people:
@@ -718,7 +720,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     Log.e(LOG_TAG, "onNavigationItemSelected NEW PEOPLE");
                     fragment = PeopleFragment.newInstance();
                 }
-                tag = TAG_FRAGMENT_PEOPLE;
+                mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
                 setTitle(R.string.bottom_action_people);
                 break;
             case R.id.bottom_action_rooms:
@@ -728,9 +730,17 @@ public class VectorHomeActivity extends AppCompatActivity {
                     Log.e(LOG_TAG, "onNavigationItemSelected NEW ROOMS");
                     fragment = RoomsFragment.newInstance();
                 }
-                tag = TAG_FRAGMENT_ROOMS;
+                mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
                 setTitle(R.string.bottom_action_rooms);
                 break;
+        }
+
+        synchronized (this) {
+            if (null != mFloatingActionButtonTimer) {
+                mFloatingActionButtonTimer.cancel();
+                mFloatingActionButtonTimer = null;
+            }
+            mFloatingActionButton.show();
         }
 
         // don't display the fab for the favorites tab
@@ -741,8 +751,8 @@ public class VectorHomeActivity extends AppCompatActivity {
         if (fragment != null) {
             resetFilter();
             mFragmentManager.beginTransaction()
-                    .replace(R.id.home_recents_list_anchor, fragment, tag)
-                    .addToBackStack(tag)
+                    .replace(R.id.home_recents_list_anchor, fragment, mCurrentFragmentTag)
+                    .addToBackStack(mCurrentFragmentTag)
                     .commit();
         }
     }
@@ -850,6 +860,50 @@ public class VectorHomeActivity extends AppCompatActivity {
         if (view != null) {
             final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    /**
+     * Hide the floating action button for 1 second
+     *
+     * @param fragmentTag the calling fragment tag
+     */
+    public void hideFloatingActionButton(String fragmentTag) {
+        synchronized (this) {
+            // check if the calling fragment is the current one
+            // during the fragment switch, the unplugged one might call this method
+            // before the new one is plugged.
+            // for example, if the switch is performed while the current list is scrolling.
+            if (TextUtils.equals(mCurrentFragmentTag, fragmentTag)) {
+                if (null != mFloatingActionButtonTimer) {
+                    mFloatingActionButtonTimer.cancel();
+                }
+
+                if (null != mFloatingActionButton) {
+                    mFloatingActionButton.hide();
+
+                    mFloatingActionButtonTimer = new Timer();
+                    mFloatingActionButtonTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            synchronized (this) {
+                                if (null != mFloatingActionButtonTimer) {
+                                    mFloatingActionButtonTimer.cancel();
+                                    mFloatingActionButtonTimer = null;
+                                }
+                            }
+                            VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (null != mFloatingActionButton) {
+                                        mFloatingActionButton.show();
+                                    }
+                                }
+                            });
+                        }
+                    }, 1000);
+                }
+            }
         }
     }
 
@@ -1525,49 +1579,6 @@ public class VectorHomeActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Hide the (+) button for 1 second.
-     */
-    private void hideRoomCreationViewWithDelay() {
-        // the recents list scrolls after restoring
-        if (-1 != mScrollToIndex) {
-            mScrollToIndex = -1;
-            return;
-        }
-        synchronized (this) {
-            if (null != mRoomCreationViewTimer) {
-                mRoomCreationViewTimer.cancel();
-            }
-
-            if (null != mFloatingActionButton) {
-                mFloatingActionButton.hide();
-            }
-
-            mRoomCreationViewTimer = new Timer();
-            mRoomCreationViewTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    synchronized (this) {
-                        if (null != mRoomCreationViewTimer) {
-                            mRoomCreationViewTimer.cancel();
-                            mRoomCreationViewTimer = null;
-                        }
-                    }
-
-                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (null != mFloatingActionButton) {
-                                mFloatingActionButton.show();
-                            }
-                        }
-                    });
-                }
-            }, 1000);
-        }
-    }
-
-
     //==============================================================================================================
     // VOIP call management
     //==============================================================================================================
@@ -2021,6 +2032,35 @@ public class VectorHomeActivity extends AppCompatActivity {
     private void removeEventsListener() {
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
+        }
+    }
+
+    //==============================================================================================================
+    // IVectorRecentsScrollEventListener
+    //==============================================================================================================
+
+    // display the directory group if the user overscrolls for about 0.5 s
+    @Override
+    public void onRecentsListOverScrollUp() {
+    }
+
+    // warn the user scrolls up
+    @Override
+    public void onRecentsListScrollUp() {
+        hideFloatingActionButton(TAG_FRAGMENT_HOME);
+    }
+
+    // warn when the user scrolls downs
+    @Override
+    public void onRecentsListScrollDown() {
+        hideFloatingActionButton(TAG_FRAGMENT_HOME);
+    }
+
+    // warn when the list content can be fully displayed without scrolling
+    @Override
+    public void onRecentsListFitsScreen() {
+        if ((null != mFloatingActionButton) && !mFloatingActionButton.isShown()) {
+            mFloatingActionButton.show();
         }
     }
 }

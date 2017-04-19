@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +63,16 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     protected MXSession mSession;
 
     protected OnRoomChangedListener mOnRoomChangedListener;
+
+    protected final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            // warn only if there is dy i.e the list has been really scrolled not refreshed
+            if ((null != mActivity) && (0 != dy)) {
+                mActivity.hideFloatingActionButton(AbsHomeFragment.this.getTag());
+            }
+        }
+    };
 
     /*
      * *********************************************************************************************

@@ -53,6 +53,7 @@ import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
+import im.vector.contacts.ContactsManager;
 import im.vector.util.RoomDirectoryData;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SectionView;
@@ -126,6 +127,15 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         refreshRooms();
 
         mAdapter.setInvitation(mActivity.getRoomInvitations());
+
+        mRecycler.addOnScrollListener(mScrollListener);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        mRecycler.removeOnScrollListener(mScrollListener);
     }
 
     @Override

@@ -149,6 +149,8 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         initContactsViews();
 
         mAdapter.setInvitation(mActivity.getRoomInvitations());
+
+        mRecycler.addOnScrollListener(mScrollListener);
     }
 
     @Override
@@ -160,10 +162,13 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     @Override
     public void onPause() {
         super.onPause();
+
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
         }
         ContactsManager.getInstance().removeListener(this);
+
+        mRecycler.removeOnScrollListener(mScrollListener);
     }
 
     @Override
