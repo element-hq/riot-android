@@ -394,12 +394,12 @@
     <string name="room_recents_create_room">Crea una sala</string>
 
     <!-- Directory -->
-    <string name="directory_search_results_title">Browse directory</string>
-    <string name="directory_search_room">%1$d room</string>
-    <string name="directory_search_rooms">%1$d rooms</string>
-    <string name="directory_search_room_for">%1$d room found for %2$s</string>
-    <string name="directory_search_rooms_for">%1$s rooms found for %2$s</string>
-    <string name="directory_searching_title">Searching directory..</string>
+    <string name="directory_search_results_title">Navega pel directpri</string>
+    <string name="directory_search_room">%1$d sala</string>
+    <string name="directory_search_rooms">%1$d sales</string>
+    <string name="directory_search_room_for">%1$d sala trobada per %2$s</string>
+    <string name="directory_search_rooms_for">%1$s sales trobades per %2$s</string>
+    <string name="directory_searching_title">Cercant al directori..</string>
 
     <!-- home room settings -->
     <string name="room_settings_notifications">Notifications</string>
