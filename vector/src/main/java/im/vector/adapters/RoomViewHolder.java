@@ -106,10 +106,19 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
      */
     public void populateViews(final Room room, final boolean isDirectChat, final boolean isInvitation) {
         final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(room.getRoomId());
+        final Room childRoom =  mSession.getDataHandler().getStore().getRoom(roomSummary.getRoomId());
 
         int unreadMsgCount = roomSummary.getUnreadEventsCount();
+        int highlightCount = 0;
+        int notificationCount = 0;
+
+        if (null != childRoom) {
+            highlightCount = childRoom.getHighlightCount();
+            notificationCount = childRoom.getNotificationCount();
+        }
+
         int bingUnreadColor;
-        if (isInvitation || 0 != room.getHighlightCount() || roomSummary.isHighlighted()) {
+        if (isInvitation || (0 != highlightCount) || roomSummary.isHighlighted()) {
             bingUnreadColor = mFuchsiaColor;
         } else if (0 != room.getNotificationCount()) {
             bingUnreadColor = mGreenColor;
@@ -119,8 +128,8 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             bingUnreadColor = Color.TRANSPARENT;
         }
 
-        if (unreadMsgCount > 0) {
-            vRoomUnreadCount.setText(isInvitation ? "!" : String.valueOf(unreadMsgCount));
+        if (isInvitation || (notificationCount > 0)) {
+            vRoomUnreadCount.setText(isInvitation ? "!" : String.valueOf(notificationCount));
             vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
