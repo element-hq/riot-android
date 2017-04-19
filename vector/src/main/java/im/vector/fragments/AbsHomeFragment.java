@@ -35,6 +35,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
+import java.util.List;
 import java.util.Set;
 
 import butterknife.ButterKnife;
@@ -341,13 +342,49 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         }
     }
 
+    /**
+     * Mark all the fragment rooms as read
+     */
+    private void onMarkAllAsRead() {
+        mActivity.showWaitingView();
+
+        mSession.markRoomsAsRead(getRooms(), new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                onSummariesUpdate();
+                mActivity.stopWaitingView();
+                mActivity.refreshUnreadBadges();
+            }
+
+            private void onError(String errorMessage) {
+                Log.e(LOG_TAG, "## markAllMessagesAsRead() failed " + errorMessage);
+                onSuccess(null);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onError(e.getMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onError(e.getMessage());
+            }
+        });
+    }
+
     /*
      * *********************************************************************************************
      * Abstract methods
      * *********************************************************************************************
      */
 
-    protected abstract void onMarkAllAsRead();
+    protected abstract List<Room> getRooms();
 
     protected abstract void onFloatingButtonClick();
 

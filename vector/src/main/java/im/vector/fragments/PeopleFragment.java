@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,7 +36,9 @@ import android.widget.Filter;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
@@ -190,7 +193,8 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      */
 
     @Override
-    protected void onMarkAllAsRead() {
+    protected List<Room> getRooms() {
+        return new ArrayList<>(mDirectChats);
     }
 
     @Override

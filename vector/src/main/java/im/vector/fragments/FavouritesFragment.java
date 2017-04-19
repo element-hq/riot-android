@@ -73,6 +73,9 @@ public class FavouritesFragment extends AbsHomeFragment {
     // the activity
     private VectorHomeActivity mActivity;
 
+    // the favorite rooms list
+    private List<Room> mFavorites = new ArrayList<>();
+
     // detect i
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
@@ -140,8 +143,8 @@ public class FavouritesFragment extends AbsHomeFragment {
     }
 
     @Override
-    protected void onMarkAllAsRead() {
-
+    protected List<Room> getRooms() {
+        return new ArrayList<>(mFavorites);
     }
 
     @Override
@@ -222,7 +225,8 @@ public class FavouritesFragment extends AbsHomeFragment {
      */
     private void refreshFavorites() {
         final List<String> favouriteRoomIdList = mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
-        final List<Room> favRooms = new ArrayList<>(favouriteRoomIdList.size());
+
+        mFavorites.clear();
 
         if (0 != favouriteRoomIdList.size()) {
             IMXStore store = mSession.getDataHandler().getStore();
@@ -233,7 +237,7 @@ public class FavouritesFragment extends AbsHomeFragment {
                     Room room = store.getRoom(summary.getRoomId());
 
                     if (null != room) {
-                        favRooms.add(room);
+                        mFavorites.add(room);
                     }
                 }
             }
@@ -244,11 +248,11 @@ public class FavouritesFragment extends AbsHomeFragment {
                 }
             };
 
-            Collections.sort(favRooms, favComparator);
+            Collections.sort(mFavorites, favComparator);
         }
 
-        mFavoritesAdapter.setRooms(favRooms);
-        updateRoomsDisplay(favRooms.size());
+        mFavoritesAdapter.setRooms(mFavorites);
+        updateRoomsDisplay(mFavorites.size());
     }
 
     /**

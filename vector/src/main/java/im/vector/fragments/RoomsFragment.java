@@ -82,6 +82,9 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     // the selected room directory
     private RoomDirectoryData mSelectedRoomDirectory;
 
+    // rooms list
+    private List<Room> mRooms = new ArrayList<>();
+
     /*
      * *********************************************************************************************
      * Static methods
@@ -153,8 +156,8 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      */
 
     @Override
-    protected void onMarkAllAsRead() {
-
+    protected List<Room> getRooms() {
+        return new ArrayList<>(mRooms);
     }
 
     @Override
@@ -184,7 +187,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             }
         });
     }
-
 
     /*
      * *********************************************************************************************
@@ -248,7 +250,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
         List<String> directChatRoomIds = mSession.getDirectChatRoomIdsList();
 
-        List<Room> rooms = new ArrayList<>();
+        mRooms.clear();
 
         for (RoomSummary summary : roomSummaries) {
             // don't display the invitations
@@ -256,12 +258,12 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 Room room = store.getRoom(summary.getRoomId());
 
                 if ((null != room) && !directChatRoomIds.contains(room.getRoomId()) && !room.getAccountData().hasTags()) {
-                    rooms.add(room);
+                    mRooms.add(room);
                 }
             }
         }
         
-        mAdapter.setRooms(rooms);
+        mAdapter.setRooms(mRooms);
     }
 
     /**

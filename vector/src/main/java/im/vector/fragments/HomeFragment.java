@@ -22,6 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.data.Room;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import im.vector.R;
 
 public class HomeFragment extends AbsHomeFragment implements AbsHomeFragment.OnRoomChangedListener {
@@ -70,8 +75,8 @@ public class HomeFragment extends AbsHomeFragment implements AbsHomeFragment.OnR
     }
 
     @Override
-    protected void onMarkAllAsRead() {
-
+    protected List<Room> getRooms() {
+        return new ArrayList<>();
     }
 
     @Override

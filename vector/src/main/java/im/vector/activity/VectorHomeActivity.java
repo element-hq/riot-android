@@ -931,44 +931,39 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
      * Send a read receipt to the latest message of each room in the current session.
      */
     private void markAllMessagesAsRead() {
-        showWaitingView();
+        // the other fragments have their own management
+        if (TextUtils.equals(mCurrentFragmentTag, TAG_FRAGMENT_HOME)) {
+            showWaitingView();
 
-        mSession.markRoomsAsRead(mSession.getDataHandler().getStore().getRooms(), new ApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void info) {
-                Fragment fragment = getSelectedFragment();
-
-                if (null != fragment) {
-                    if (fragment instanceof VectorRecentsListFragment) {
-                        ((VectorRecentsListFragment) fragment).refresh();
-                    } else if (fragment instanceof AbsHomeFragment) {
-                        ((AbsHomeFragment) fragment).onSummariesUpdate();
-                    }
+            mSession.markRoomsAsRead(mSession.getDataHandler().getStore().getRooms(), new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    ((VectorRecentsListFragment)getSelectedFragment()).refresh();
+                    stopWaitingView();
+                    refreshUnreadBadges();
                 }
-                stopWaitingView();
-                refreshUnreadBadges();
-            }
 
-            private void onError(String errorMessage) {
-                Log.e(LOG_TAG, "## markAllMessagesAsRead() failed " + errorMessage);
-                onSuccess(null);
-            }
+                private void onError(String errorMessage) {
+                    Log.e(LOG_TAG, "## markAllMessagesAsRead() failed " + errorMessage);
+                    onSuccess(null);
+                }
 
-            @Override
-            public void onNetworkError(Exception e) {
-                onError(e.getMessage());
-            }
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError(e.getMessage());
+                }
 
-            @Override
-            public void onMatrixError(MatrixError e) {
-                onError(e.getMessage());
-            }
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError(e.getMessage());
+                }
 
-            @Override
-            public void onUnexpectedError(Exception e) {
-                onError(e.getMessage());
-            }
-        });
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError(e.getMessage());
+                }
+            });
+        }
     }
 
     /**
@@ -1794,7 +1789,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     /**
      * Refresh the badges
      */
-    private void refreshUnreadBadges() {
+    public void refreshUnreadBadges() {
         Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
 
         for(Integer id : mBadgeViewByIndex.keySet()) {
