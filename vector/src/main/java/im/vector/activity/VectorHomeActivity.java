@@ -733,6 +733,9 @@ public class VectorHomeActivity extends AppCompatActivity {
                 break;
         }
 
+        // don't display the fab for the favorites tab
+        mFloatingActionButton.setVisibility((item.getItemId() != R.id.bottom_action_favourites) ? View.VISIBLE : View.GONE);
+
         mCurrentMenuId = item.getItemId();
 
         if (fragment != null) {
@@ -829,6 +832,14 @@ public class VectorHomeActivity extends AppCompatActivity {
         if (null != mWaitingView) {
             mWaitingView.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * Tells if the waiting view is currently displayed
+     * @return true if the waiting view is displayed
+     */
+    public boolean isWaitingViewVisible() {
+        return (null != mWaitingView) && (View.VISIBLE == mWaitingView.getVisibility());
     }
 
     /**

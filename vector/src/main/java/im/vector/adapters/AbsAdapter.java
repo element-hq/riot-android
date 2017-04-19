@@ -17,11 +17,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,23 +28,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomSummary;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.util.RoomUtils;
 import im.vector.util.StickySectionHelper;
 import im.vector.util.VectorUtils;
 import im.vector.view.SectionView;
@@ -80,7 +72,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     protected final MXSession mSession;
 
     private final InvitationListener mInvitationListener;
-    private final MoreRoomActionListener mMoreActionListener;
+    protected final MoreRoomActionListener mMoreActionListener;
 
     /*
      * *********************************************************************************************
@@ -433,118 +425,6 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         }
     }
 
-    protected class RoomViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.room_avatar)
-        ImageView vRoomAvatar;
-
-        @BindView(R.id.room_name)
-        TextView vRoomName;
-
-        @BindView(R.id.room_message)
-        TextView vRoomLastMessage;
-
-        @BindView(R.id.room_update_date)
-        @Nullable
-        TextView vRoomTimestamp;
-
-        @BindView(R.id.indicator_unread_message)
-        @Nullable
-        View vRoomUnreadIndicator;
-
-        @BindView(R.id.room_unread_count)
-        TextView vRoomUnreadCount;
-
-        @BindView(R.id.room_avatar_direct_chat_icon)
-        View vRoomDirectChatIcon;
-
-        @BindView(R.id.room_avatar_encrypted_icon)
-        View vRoomEncryptedIcon;
-
-        @BindView(R.id.room_more_action_click_area)
-        @Nullable
-        View vRoomMoreActionClickArea;
-
-        @BindView(R.id.room_more_action_anchor)
-        @Nullable
-        View vRoomMoreActionAnchor;
-
-        @BindColor(R.color.vector_fuchsia_color)
-        int mFuchsiaColor;
-        @BindColor(R.color.vector_green_color)
-        int mGreenColor;
-        @BindColor(R.color.vector_silver_color)
-        int mSilverColor;
-
-        RoomViewHolder(final View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        void populateViews(final Room room, final boolean isDirectChat, final boolean isInvitation) {
-            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(room.getRoomId());
-
-            int unreadMsgCount = roomSummary.getUnreadEventsCount();
-            int bingUnreadColor;
-            if (isInvitation || 0 != room.getHighlightCount() || roomSummary.isHighlighted()) {
-                bingUnreadColor = mFuchsiaColor;
-            } else if (0 != room.getNotificationCount()) {
-                bingUnreadColor = mGreenColor;
-            } else if (0 != unreadMsgCount) {
-                bingUnreadColor = mSilverColor;
-            } else {
-                bingUnreadColor = Color.TRANSPARENT;
-            }
-
-            if (unreadMsgCount > 0) {
-                vRoomUnreadCount.setText(isInvitation ? "!" : String.valueOf(unreadMsgCount));
-                vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
-                GradientDrawable shape = new GradientDrawable();
-                shape.setShape(GradientDrawable.RECTANGLE);
-                shape.setCornerRadius(100);
-                shape.setColor(bingUnreadColor);
-                vRoomUnreadCount.setBackground(shape);
-                vRoomUnreadCount.setVisibility(View.VISIBLE);
-            } else {
-                vRoomUnreadCount.setVisibility(View.GONE);
-            }
-
-            final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-            vRoomName.setText(roomName);
-            vRoomName.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
-            VectorUtils.loadRoomAvatar(mContext, mSession, vRoomAvatar, room);
-
-            // get last message to be displayed
-            CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(mContext, mSession, roomSummary);
-            vRoomLastMessage.setText(lastMsgToDisplay);
-
-            vRoomDirectChatIcon.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
-            vRoomEncryptedIcon.setVisibility(room.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
-
-
-            if (vRoomUnreadIndicator != null) {
-                // set bing view background colour
-                vRoomUnreadIndicator.setBackgroundColor(bingUnreadColor);
-                vRoomUnreadIndicator.setVisibility(roomSummary.isInvited() ? View.INVISIBLE : View.VISIBLE);
-            }
-
-            if (vRoomTimestamp != null) {
-                vRoomTimestamp.setText(RoomUtils.getRoomTimestamp(mContext, roomSummary.getLatestReceivedEvent()));
-            }
-
-            if (vRoomMoreActionClickArea != null && vRoomMoreActionAnchor != null) {
-                vRoomMoreActionClickArea.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (null != mMoreActionListener) {
-                            mMoreActionListener.onMoreActionClick(vRoomMoreActionAnchor, room);
-                        }
-                    }
-                });
-            }
-        }
-    }
-
     class InvitationViewHolder extends RoomViewHolder {
 
         @BindView(R.id.recents_invite_reject_button)
@@ -554,7 +434,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         Button vPreViewButton;
 
         InvitationViewHolder(View itemView) {
-            super(itemView);
+            super(mContext, mSession, itemView, AbsAdapter.this.mMoreActionListener);
         }
 
         void populateViews(final Room room) {

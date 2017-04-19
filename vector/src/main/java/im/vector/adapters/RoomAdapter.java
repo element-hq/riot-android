@@ -98,7 +98,7 @@ public class RoomAdapter extends AbsAdapter {
             switch (viewType) {
                 case TYPE_ROOM:
                     itemView = inflater.inflate(R.layout.adapter_item_room_view, viewGroup, false);
-                    return new RoomViewHolder(itemView);
+                    return new RoomViewHolder(mContext, mSession, itemView, mMoreActionListener);
                 case TYPE_PUBLIC_ROOM:
                     itemView = inflater.inflate(R.layout.adapter_item_public_room_view, viewGroup, false);
                     return new PublicRoomViewHolder(itemView);

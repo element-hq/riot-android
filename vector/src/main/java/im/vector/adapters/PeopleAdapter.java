@@ -105,7 +105,7 @@ public class PeopleAdapter extends AbsAdapter {
             switch (viewType) {
                 case TYPE_ROOM:
                     itemView = inflater.inflate(R.layout.adapter_item_room_view, viewGroup, false);
-                    return new RoomViewHolder(itemView);
+                    return new RoomViewHolder(mContext, mSession, itemView, mMoreActionListener);
                 case TYPE_CONTACT:
                     itemView = inflater.inflate(R.layout.adapter_item_contact_view, viewGroup, false);
                     return new ContactViewHolder(itemView);

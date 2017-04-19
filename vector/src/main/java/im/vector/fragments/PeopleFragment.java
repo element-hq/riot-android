@@ -186,7 +186,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     @Override
     protected void onMarkAllAsRead() {
-
     }
 
     @Override
