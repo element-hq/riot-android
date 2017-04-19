@@ -236,6 +236,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
         // update/retrieve the complete summary list
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
+        List<String> directChatRoomIds = mSession.getDirectChatRoomIdsList();
 
         List<Room> rooms = new ArrayList<>();
 
@@ -244,12 +245,12 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             if (!summary.isInvited()) {
                 Room room = store.getRoom(summary.getRoomId());
 
-                if (null != room) {
+                if ((null != room) && !directChatRoomIds.contains(room.getRoomId()) && !room.getAccountData().hasTags()) {
                     rooms.add(room);
                 }
             }
         }
-
+        
         mAdapter.setRooms(rooms);
     }
 

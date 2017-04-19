@@ -102,8 +102,8 @@
             android:layout_alignParentBottom="true"
             android:background="@android:color/white"
             app:itemBackground="@android:color/white"
-            app:itemIconTint="@color/vector_green_color"
-            app:itemTextColor="@color/vector_green_color"
+            app:itemIconTint="@color/home_bottom_nav_view_tint"
+            app:itemTextColor="@color/home_bottom_nav_view_tint"
             app:menu="@menu/bottom_navigation_main" />
     </RelativeLayout>
 

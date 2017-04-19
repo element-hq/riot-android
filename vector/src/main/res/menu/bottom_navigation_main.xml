@@ -3,21 +3,21 @@
     <item
         android:id="@+id/bottom_action_home"
         android:enabled="true"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/bottom_action_home" />
+        android:icon="@drawable/ic_home_black_24dp" />
+
     <item
         android:id="@+id/bottom_action_favourites"
         android:enabled="true"
-        android:icon="@drawable/ic_star_black_24dp"
-        android:title="@string/bottom_action_favourites" />
+        android:icon="@drawable/ic_star_black_24dp" />
+
     <item
         android:id="@+id/bottom_action_people"
         android:enabled="true"
-        android:icon="@drawable/ic_person_black_24dp"
-        android:title="@string/bottom_action_people" />
+        android:icon="@drawable/ic_person_black_24dp" />
+
     <item
         android:id="@+id/bottom_action_rooms"
         android:enabled="true"
-        android:icon="@drawable/ic_people_black_24dp"
-        android:title="@string/bottom_action_rooms" />
+        android:icon="@drawable/ic_people_black_24dp"/>
+
 </menu>
