@@ -352,14 +352,14 @@
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
-    <string name="room_details_title">Room Details</string>
-    <string name="room_details_people">People</string>
-    <string name="room_details_files">Files</string>
-    <string name="room_details_settings">Settings</string>
-    <string name="room_details_selected">selected</string>
-    <string name="malformed_id">Malformed ID. Should be an email address or a Matrix ID like \'@localpart:domain\'</string>
-    <string name="room_details_people_invited_group_name">INVITED</string>
-    <string name="room_details_people_present_group_name">JOINED</string>
+    <string name="room_details_title">Detalls de la sala</string>
+    <string name="room_details_people">Participants</string>
+    <string name="room_details_files">Fitxers</string>
+    <string name="room_details_settings">Configuració</string>
+    <string name="room_details_selected">seleccionat</string>
+    <string name="malformed_id">L'ID és incorrecte. Ha de ser una adreça de correu electrònic o un identificador de Matrix com \'@partlocal:domini\'</string>
+    <string name="room_details_people_invited_group_name">CONVIDATS</string>
+    <string name="room_details_people_present_group_name">S'HAN UNIT</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
