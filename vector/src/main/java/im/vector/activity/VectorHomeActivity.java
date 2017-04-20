@@ -57,6 +57,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
@@ -86,6 +87,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -1653,6 +1655,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
             if (mRefreshBadgeOnChunkEnd) {
                 refreshUnreadBadges();
+                mRefreshBadgeOnChunkEnd = false;
             }
         }
 
@@ -1791,8 +1794,19 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
      * Refresh the badges
      */
     public void refreshUnreadBadges() {
-        Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
-        BingRulesManager bingRulesManager = mSession.getDataHandler().getBingRulesManager();
+        MXDataHandler dataHandler = mSession.getDataHandler();
+
+        BingRulesManager bingRulesManager = dataHandler.getBingRulesManager();
+        Collection<RoomSummary> summaries2 = dataHandler.getStore().getSummaries();
+        HashMap<Room, RoomSummary> roomSummaryByRoom = new HashMap<>();
+
+        for(RoomSummary summary : summaries2) {
+            Room room = dataHandler.getStore().getRoom(summary.getRoomId());
+
+            if (null != room) {
+                roomSummaryByRoom.put(room, summary);
+            }
+        }
 
         for(Integer id : mBadgeViewByIndex.keySet()) {
             UnreadCounterBadgeView badgeView = mBadgeViewByIndex.get(id);
@@ -1802,47 +1816,46 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             int roomCount = 0;
             boolean mustBeHighlighted = false;
 
-            List<String> filteredRoomIds = null;
+            // use a map because contains is faster
+            HashSet<String> filteredRoomIdsSet = null;
 
             if (id == R.id.bottom_action_favourites) {
                 List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
 
-                filteredRoomIds = new ArrayList<>();
+                filteredRoomIdsSet = new HashSet<>();
 
                 for(Room room : favRooms) {
-                    filteredRoomIds.add(room.getRoomId());
+                    filteredRoomIdsSet.add(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_people) {
-                filteredRoomIds = mSession.getDirectChatRoomIdsList();
+                filteredRoomIdsSet = new HashSet<>();
+                filteredRoomIdsSet.addAll(mSession.getDirectChatRoomIdsList());
             } else if (id == R.id.bottom_action_rooms) {
                 List<String> directChatRoomIds = mSession.getDirectChatRoomIdsList();
 
-                filteredRoomIds = new ArrayList<>();
+                filteredRoomIdsSet = new HashSet<>();
 
-                // keep only the rooms with no tag
-                for(RoomSummary summary : summaries) {
-                    Room childRoom = mSession.getDataHandler().getStore().getRoom(summary.getRoomId());
-                    if ((null != childRoom) && !directChatRoomIds.contains(childRoom.getRoomId()) && !childRoom.getAccountData().hasTags()) {
-                        filteredRoomIds.add(childRoom.getRoomId());
+                for(Room room : roomSummaryByRoom.keySet()) {
+                    if (!directChatRoomIds.contains(room.getRoomId()) && !room.getAccountData().hasTags()) {
+                        filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
             }
 
-            if ((null == filteredRoomIds) || !filteredRoomIds.isEmpty()) {
-                for(RoomSummary summary : summaries) {
-                    Room childRoom = mSession.getDataHandler().getStore().getRoom(summary.getRoomId());
+            if ((null == filteredRoomIdsSet) || !filteredRoomIdsSet.isEmpty()) {
+                for(Room room : roomSummaryByRoom.keySet()) {
 
                     // test if the room is allowed
-                    if ((null != childRoom) && ((null == filteredRoomIds) || filteredRoomIds.contains(summary.getRoomId()))) {
-                        highlightCount += childRoom.getHighlightCount();
+                    if ((null == filteredRoomIdsSet) || filteredRoomIdsSet.contains(room.getRoomId())) {
+                        highlightCount += room.getHighlightCount();
 
-                        if (childRoom.isInvited()) {
+                        if (room.isInvited()) {
                             roomCount++;
                         } else {
-                            int notificationCount = childRoom.getNotificationCount();
+                            int notificationCount = room.getNotificationCount();
 
-                            if (bingRulesManager.isRoomMentionOnly(childRoom)) {
-                                notificationCount = childRoom.getHighlightCount();
+                            if (bingRulesManager.isRoomMentionOnly(room)) {
+                                notificationCount = room.getHighlightCount();
                             }
 
                             if (notificationCount > 0) {
@@ -1850,7 +1863,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                             }
                         }
 
-                        mustBeHighlighted |= summary.isHighlighted();
+                        mustBeHighlighted |= roomSummaryByRoom.get(room).isHighlighted();
                     }
                 }
             }
