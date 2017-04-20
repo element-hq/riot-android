@@ -31,6 +31,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -301,6 +302,16 @@ public class PeopleAdapter extends AbsAdapter {
         }
 
         private void populateViews(final ParticipantAdapterItem participant, final int position) {
+            if (null == participant) {
+                Log.e(LOG_TAG, "## populateViews() : null participant");
+                return;
+            }
+
+            if (position >= getItemCount()) {
+                Log.e(LOG_TAG, "## populateViews() : position out of bound " + position + " / " + getItemCount());
+                return;
+            }
+
             participant.displayAvatar(mSession, vContactAvatar);
             vContactName.setText(participant.getUniqueDisplayName(null));
 
