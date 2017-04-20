@@ -27,6 +27,7 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
@@ -56,7 +57,6 @@ import im.vector.store.LoginStorage;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 /**
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
@@ -112,18 +112,27 @@ public class Matrix {
                 if (mRefreshUnreadCounter) {
                     GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
 
-                    // perform update: if the GCM is not available or if GCM registration failed
+                    // perform update: if the GCM is not yet available or if GCM registration failed
                     if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
-                        int unreadCount = 0;
+                        int roomCount = 0;
 
                         for (MXSession session : instance.mMXSessions) {
                             if (session.isAlive()) {
+                                BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
                                 Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
 
-                                if (null != rooms) {
-                                    for (Room room : rooms) {
-                                        if ((0 != room.getNotificationCount()) || (0 != room.getHighlightCount())) {
-                                            unreadCount++;
+                                for(Room room : rooms) {
+                                    if (room.isInvited()) {
+                                        roomCount++;
+                                    } else {
+                                        int notificationCount = room.getNotificationCount();
+
+                                        if (bingRulesManager.isRoomMentionOnly(room)) {
+                                            notificationCount = room.getHighlightCount();
+                                        }
+
+                                        if (notificationCount > 0) {
+                                            roomCount++;
                                         }
                                     }
                                 }
@@ -131,7 +140,7 @@ public class Matrix {
                         }
 
                         // update the badge counter
-                        CommonActivityUtils.updateBadgeCount(instance.mAppContext, unreadCount);
+                        CommonActivityUtils.updateBadgeCount(instance.mAppContext, roomCount);
                     }
                 }
 

@@ -74,6 +74,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.Log;
 
@@ -1791,13 +1792,14 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
      */
     public void refreshUnreadBadges() {
         Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
+        BingRulesManager bingRulesManager = mSession.getDataHandler().getBingRulesManager();
 
         for(Integer id : mBadgeViewByIndex.keySet()) {
             UnreadCounterBadgeView badgeView = mBadgeViewByIndex.get(id);
 
             // compute the badge value and its displays
             int highlightCount = 0;
-            int notificationCount = 0;
+            int roomCount = 0;
             boolean mustBeHighlighted = false;
 
             List<String> filteredRoomIds = null;
@@ -1833,15 +1835,29 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     // test if the room is allowed
                     if ((null != childRoom) && ((null == filteredRoomIds) || filteredRoomIds.contains(summary.getRoomId()))) {
                         highlightCount += childRoom.getHighlightCount();
-                        notificationCount += childRoom.getNotificationCount();
+
+                        if (childRoom.isInvited()) {
+                            roomCount++;
+                        } else {
+                            int notificationCount = childRoom.getNotificationCount();
+
+                            if (bingRulesManager.isRoomMentionOnly(childRoom)) {
+                                notificationCount = childRoom.getHighlightCount();
+                            }
+
+                            if (notificationCount > 0) {
+                                roomCount++;
+                            }
+                        }
+
                         mustBeHighlighted |= summary.isHighlighted();
                     }
                 }
             }
 
-            badgeView.updateCounter(notificationCount,
+            badgeView.updateCounter(roomCount,
                     ((0 != highlightCount) || mustBeHighlighted) ? UnreadCounterBadgeView.HIGHLIGHTED :
-                            ((0 != notificationCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
+                            ((0 != roomCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
         }
     }
 
