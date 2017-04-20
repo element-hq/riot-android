@@ -34,6 +34,7 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -259,6 +260,10 @@ public class PeopleAdapter extends AbsAdapter {
             }
 
         }
+
+        // The sort is done in the adapter to save loading time
+        // see PeopleFragment.initKnownContacts
+        Collections.sort(filteredKnownContacts, ParticipantAdapterItem.getComparator(mSession));
         mKnownContactsSection.setFilteredItems(filteredKnownContacts, pattern);
 
         return filteredKnownContacts.size();

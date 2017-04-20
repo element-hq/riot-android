@@ -83,6 +83,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     private List<Room> mDirectChats = new ArrayList<>();
     private List<ParticipantAdapterItem> mLocalContacts = new ArrayList<>();
+    // the known contacts are not sorted
     private List<ParticipantAdapterItem> mKnownContacts = new ArrayList<>();
 
     // way to detect that the contacts list has been updated
@@ -310,10 +311,14 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
             @Override
             protected Void doInBackground(Void... params) {
-                List<ParticipantAdapterItem> participants = new ArrayList<>(VectorUtils.listKnownParticipants(mSession).values());
-                Collections.sort(participants, ParticipantAdapterItem.getComparator(mSession));
+                // do not sort anymore the full known participants list
+                // as they are not displayed unfiltered
+                // it saves a lot of times
+                // eg with about 17000 items
+                // sort requires about 2 seconds
+                // sort a 1000 items subset during a search requires about 75ms
                 mKnownContacts.clear();
-                mKnownContacts.addAll(participants);
+                mKnownContacts.addAll(new ArrayList<>(VectorUtils.listKnownParticipants(mSession).values()));
                 return null;
             }
 
