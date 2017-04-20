@@ -29,7 +29,10 @@ import org.matrix.androidsdk.rest.model.User;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import im.vector.VectorApp;
@@ -190,6 +193,8 @@ public class ParticipantAdapterItem implements java.io.Serializable {
      * @return
      */
     public static Comparator<ParticipantAdapterItem> getComparator(final MXSession session) {
+        final IMXStore fStore = session.getDataHandler().getStore();
+
         return new Comparator<ParticipantAdapterItem>() {
             /**
              * Compare 2 string and returns sort order.
@@ -207,10 +212,35 @@ public class ParticipantAdapterItem implements java.io.Serializable {
                 return String.CASE_INSENSITIVE_ORDER.compare(s1, s2);
             }
 
+            // use a local users cache to avoid crashes while sorting
+            // eg the user presence is updated during the search
+            Map<String, User> mUsersMap = new HashMap<>();
+            HashSet<String> mUnknownUsers = new HashSet<>();
+
+            private User getUser(String userId) {
+                if (mUsersMap.containsKey(userId)) {
+                    return mUsersMap.get(userId);
+                }
+
+                if (mUnknownUsers.contains(userId)) {
+                    return null;
+                }
+
+                User user = fStore.getUser(userId);
+
+                if (null == user) {
+                    mUnknownUsers.add(userId);
+                } else {
+                    mUsersMap.put(userId, user);
+                }
+
+                return user;
+            }
+
             @Override
             public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
-                User userA = session.getDataHandler().getUser(part1.mUserId);
-                User userB = session.getDataHandler().getUser(part2.mUserId);
+                User userA = getUser(part1.mUserId);
+                User userB = getUser(part2.mUserId);
 
                 String userADisplayName = part1.getComparisonDisplayName();
                 String userBDisplayName = part2.getComparisonDisplayName();
