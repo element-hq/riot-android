@@ -26,6 +26,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -52,6 +54,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -927,7 +930,29 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     @OnTextChanged(value = R.id.filter_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void onFilter(Editable s) {
-        applyFilter(s.toString());
+        // compute an unique pattern
+        final String filter = s.toString() + "-" + mCurrentMenuId;
+
+        // wait before really triggering the search
+        // else a search is triggered for each new character
+        // eg "matt" triggers
+        // 1 - search for m
+        // 2 - search for ma
+        // 3 - search for mat
+        // 4 - search for matt
+        // whereas only one search should have been triggered
+        // else it might trigger some lags evenif the search is done in a background thread
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                String currentFilter = mFilterInput.getText().toString() + "-" + mCurrentMenuId;;
+
+                // display if the pattern matched
+                if (TextUtils.equals(currentFilter, filter)) {
+                    applyFilter(mFilterInput.getText().toString().toString());
+                }
+            }
+        }, 500);
     }
 
     /**
