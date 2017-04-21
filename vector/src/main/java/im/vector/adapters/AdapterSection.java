@@ -24,9 +24,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class AdapterSection<T> {
-    private final String mTitle;
 
-    private String mTitleFormatted;
+    protected final String mTitle;
+    protected String mTitleFormatted;
     // Place holder if no item for the section
     private String mNoItemPlaceholder;
     // Place holder if no result after search
@@ -43,7 +43,7 @@ public class AdapterSection<T> {
 
     private Comparator<T> mComparator;
 
-    private CharSequence mCurrentFilterPattern;
+    protected CharSequence mCurrentFilterPattern;
 
     private boolean mIsHiddenWhenEmpty;
 
@@ -95,7 +95,7 @@ public class AdapterSection<T> {
     /**
      * Update the title depending on the number of items
      */
-    private void updateTitle() {
+    protected void updateTitle() {
         if (getNbItems() > 0) {
             mTitleFormatted = mTitle.concat(" (" + getNbItems() + ")");
         } else {

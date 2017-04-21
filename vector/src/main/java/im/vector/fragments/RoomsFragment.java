@@ -53,7 +53,6 @@ import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
-import im.vector.contacts.ContactsManager;
 import im.vector.util.RoomDirectoryData;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SectionView;
@@ -68,13 +67,14 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     //
     private static final String SELECTED_ROOM_DIRECTORY = "SELECTED_ROOM_DIRECTORY";
 
-    Spinner mPublicRoomsSelector;
+    // dummy spinner to select the public rooms
+    private Spinner mPublicRoomsSelector;
+
+    // estimated number of public rooms
+    private Integer mEstimatedPublicRoomCount = null;
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecycler;
-
-    @BindView(R.id.room_directory_loading_view)
-    View mLoadingMoreDirectoryRooms;
 
     // rooms management
     private RoomAdapter mAdapter;
@@ -120,7 +120,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             mSelectedRoomDirectory = (RoomDirectoryData) savedInstanceState.getSerializable(SELECTED_ROOM_DIRECTORY);
         }
 
-        initPublicRooms();
+        initPublicRooms(false);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     @Override
     public void onPause() {
         super.onPause();
-
+        mEstimatedPublicRoomCount = null;
         mRecycler.removeOnScrollListener(mScrollListener);
     }
 
@@ -174,6 +174,9 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 if (listener != null) {
                     listener.onFilterDone(count);
                 }
+
+                // trigger the public rooms search to avoid unexpected list refresh
+                initPublicRooms(false);
             }
         });
     }
@@ -184,6 +187,9 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             @Override
             public void onFilterComplete(int count) {
                 Log.i(LOG_TAG, "onResetFilter " + count);
+
+                // trigger the public rooms search to avoid unexpected list refresh
+                initPublicRooms(false);
             }
         });
     }
@@ -197,9 +203,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     @Override
     public void onSummariesUpdate() {
         super.onSummariesUpdate();
-
         refreshRooms();
-
         mAdapter.setInvitation(mActivity.getRoomInvitations());
     }
 
@@ -352,9 +356,11 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                     CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
                 }
             } else {
-                // TODO add a spinner
+                mActivity.showWaitingView();
+
                 roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                     private void onDone() {
+                        mActivity.stopWaitingView();
                         CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                     }
 
@@ -388,12 +394,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         }
     }
 
-
-    // tells if a forward pagination is in progress
-    private boolean isForwardPaginating() {
-        return View.VISIBLE == mLoadingMoreDirectoryRooms.getVisibility();
-    }
-
     /**
      * Scroll events listener to forward paginate when it is required.
      */
@@ -403,10 +403,12 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             super.onScrolled(recyclerView, dx, dy);
             LinearLayoutManager layoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
             int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
+
             // we load public rooms 20 by 20, when the 10th one becomes visible, starts loading the next 20
-            SectionView sectionView = mAdapter.getSectionViewForSectionIndex(2);
+            SectionView sectionView = mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1);
             AdapterSection section = sectionView != null ? sectionView.getSection() : null;
-            if (section != null && !isForwardPaginating() && mAdapter.getItemForPosition(lastVisibleItemPosition) == section.getItems().get(section.getItems().size() - 10)) {
+
+            if ((section != null) && (section.getItems().size() >= 10) && mAdapter.getItemForPosition(lastVisibleItemPosition) == section.getItems().get(section.getItems().size() - 10)) {
                 forwardPaginate();
             }
         }
@@ -448,19 +450,82 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         if (Activity.RESULT_OK == resultCode) {
             if (requestCode == DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE) {
                 mSelectedRoomDirectory = (RoomDirectoryData) data.getSerializableExtra(RoomDirectoryPickerActivity.EXTRA_OUT_ROOM_DIRECTORY_DATA);
-
-                initPublicRooms();
+                mAdapter.setPublicRooms(new ArrayList<PublicRoom>());
+                initPublicRooms(true);
             }
         }
     }
 
     /**
-     * Init the public rooms.
+     * Display the public rooms loading view
      */
-    private void initPublicRooms() {
+    private void showPublicRoomsLoadingView() {
+        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1).showLoadingView();
+    }
+
+    /**
+     * Hide the public rooms loading view
+     */
+    private void hidePublicRoomsLoadingView() {
+        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1).hideLoadingView();
+    }
+
+    /**
+     * Init the public rooms.
+     *
+     * @param displayOnTop true to display the public rooms in full screen
+     */
+    private void initPublicRooms(final boolean displayOnTop) {
         refreshDirectorySourceSpinner();
 
-        mLoadingMoreDirectoryRooms.setVisibility(View.VISIBLE);
+        showPublicRoomsLoadingView();
+
+        mAdapter.setNoMorePublicRooms(false);
+
+        if (null == mEstimatedPublicRoomCount) {
+            mSession.getEventsApiClient().getPublicRoomsCount(
+                    mSelectedRoomDirectory.getServerUrl(),
+                    mSelectedRoomDirectory.getThirdPartyInstanceId(),
+                    mSelectedRoomDirectory.isIncludedAllNetworks(),
+                    new ApiCallback<Integer>() {
+                        private void onDone(int count) {
+                            mEstimatedPublicRoomCount = count;
+                            mAdapter.setEstimatedPublicRoomsCount(count);
+
+                            // next step
+                            initPublicRooms(displayOnTop);
+                        }
+
+                        @Override
+                        public void onSuccess(Integer count) {
+                            if (null != count) {
+                                onDone(count);
+                            } else {
+                                onDone(-1);
+                            }
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage());
+                            onDone(-1);
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage());
+                            onDone(-1);
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage());
+                            onDone(-1);
+                        }
+                    }
+            );
+            return;
+        }
 
         PublicRoomsManager.getInstance().startPublicRoomsSearch(mSelectedRoomDirectory.getServerUrl(),
                 mSelectedRoomDirectory.getThirdPartyInstanceId(),
@@ -469,10 +534,27 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                     @Override
                     public void onSuccess(List<PublicRoom> publicRooms) {
                         if (null != getActivity()) {
+                            mAdapter.setNoMorePublicRooms(publicRooms.size() < PublicRoomsManager.PUBLIC_ROOMS_LIMIT);
                             mAdapter.setPublicRooms(publicRooms);
                             addPublicRoomsListener();
 
-                            mLoadingMoreDirectoryRooms.setVisibility(View.GONE);
+                            // trick to display the full public rooms list
+                            if (displayOnTop) {
+                                // wait that the list is refreshed
+                                mRecycler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        SectionView publicSectionView = mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1);
+
+                                        // simulate a click on the header is to display the full list
+                                        if ((null != publicSectionView) && !publicSectionView.isStickyHeader()) {
+                                            publicSectionView.callOnClick();
+                                        }
+                                    }
+                                });
+                            }
+
+                            hidePublicRoomsLoadingView();
                         }
                     }
 
@@ -480,8 +562,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                         if (null != getActivity()) {
                             Log.e(LOG_TAG, "## startPublicRoomsSearch() failed " + message);
                             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
-                            mLoadingMoreDirectoryRooms.setVisibility(View.GONE);
+                            hidePublicRoomsLoadingView();
                         }
                     }
 
@@ -506,18 +587,22 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      * Trigger a forward room pagination
      */
     private void forwardPaginate() {
+        if (PublicRoomsManager.getInstance().isRequestInProgress()) {
+            return;
+        }
+
         boolean isForwarding = PublicRoomsManager.getInstance().forwardPaginate(new ApiCallback<List<PublicRoom>>() {
             @Override
             public void onSuccess(final List<PublicRoom> publicRooms) {
                 if (null != getActivity()) {
-                    mAdapter.addPublicRooms(publicRooms);
-
                     // unplug the scroll listener if there is no more data to find
                     if (!PublicRoomsManager.getInstance().hasMoreResults()) {
+                        mAdapter.setNoMorePublicRooms(true);
                         removePublicRoomsListener();
                     }
 
-                    mLoadingMoreDirectoryRooms.setVisibility(View.GONE);
+                    mAdapter.addPublicRooms(publicRooms);
+                    hidePublicRoomsLoadingView();
                 }
             }
 
@@ -527,7 +612,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 }
 
-                mLoadingMoreDirectoryRooms.setVisibility(View.GONE);
+                hidePublicRoomsLoadingView();
             }
 
             @Override
@@ -546,7 +631,11 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             }
         });
 
-        mLoadingMoreDirectoryRooms.setVisibility(isForwarding ? View.VISIBLE : View.GONE);
+        if (isForwarding) {
+            showPublicRoomsLoadingView();
+        } else {
+            hidePublicRoomsLoadingView();
+        }
     }
 
     /**

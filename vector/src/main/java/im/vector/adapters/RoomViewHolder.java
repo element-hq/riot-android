@@ -22,6 +22,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +39,8 @@ import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
 
 public class RoomViewHolder extends RecyclerView.ViewHolder {
+    private static final String LOG_TAG = PeopleAdapter.class.getSimpleName();
+
     @BindView(R.id.room_avatar)
     ImageView vRoomAvatar;
 
@@ -105,6 +108,12 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
      * @param isInvitation true when the room is an invitation one
      */
     public void populateViews(final Room room, final boolean isDirectChat, final boolean isInvitation) {
+        // sanity check
+        if (null == room) {
+            Log.e(LOG_TAG, "## populateViews() : null room");
+            return;
+        }
+
         final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(room.getRoomId());
         final Room childRoom =  mSession.getDataHandler().getStore().getRoom(roomSummary.getRoomId());
 

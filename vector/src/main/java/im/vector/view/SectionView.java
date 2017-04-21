@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,7 +41,12 @@ public class SectionView extends RelativeLayout {
     private int mFooterTop;
     private int mFooterBottom;
 
+    // header subview
     private View mSubView;
+
+    // header items
+    private TextView mTitleView;
+    private ProgressBar mLoadingView;
 
     public SectionView(Context context, AdapterSection section) {
         super(context);
@@ -63,30 +69,67 @@ public class SectionView extends RelativeLayout {
         setup(section);
     }
 
+    /**
+     * Init the section header
+     * @param section the section description
+     */
     private void setup(final AdapterSection section) {
         mSection = section;
 
         setBackgroundColor(ContextCompat.getColor(getContext(), R.color.list_header_background));
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
+        // inflate the layout
         View headerView = inflate(getContext(), R.layout.adapter_sticky_header, null);
-        TextView titleView = (TextView) headerView.findViewById(R.id.section_title);
-        titleView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        titleView.setText(section.getTitle());
+
+        // extract the UI items
+        mTitleView = (TextView) headerView.findViewById(R.id.section_title);
+        mTitleView.setText(section.getTitle());
+
+        mLoadingView = (ProgressBar)headerView.findViewById(R.id.section_loading);
+        mLoadingView.setVisibility(View.INVISIBLE);
+
+        // custom subview ?
         if (section.getHeaderSubView() != -1) {
             // Inflate subview
             mSubView = inflate(getContext(), section.getHeaderSubView(), null);
             LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.BELOW, titleView.getId());
+            params.addRule(RelativeLayout.BELOW, headerView.getId());
             mSubView.setLayoutParams(params);
             // Add to parent before title so when we fold it, it goes behind the title
             addView(mSubView);
         }
+
         addView(headerView);
     }
 
+    /**
+     * Refresh the title
+     */
     public void updateTitle() {
-        TextView titleView = (TextView) findViewById(R.id.section_title);
-        titleView.setText(mSection.getTitle());
+        mTitleView.setText(mSection.getTitle());
+    }
+
+    /**
+     * Display the loading wheel
+     */
+    public void showLoadingView() {
+        mLoadingView.setVisibility(View.VISIBLE);
+        mLoadingView.animate();
+    }
+
+    /**
+     * Hide the loading wheel
+     */
+    public void hideLoadingView() {
+        mLoadingView.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * @return true if the loading view is visible
+     */
+    public boolean isLoadingViewVisisble() {
+        return (View.INVISIBLE == mLoadingView.getVisibility());
     }
 
     @Override

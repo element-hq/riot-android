@@ -323,6 +323,13 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     }
 
     /**
+     * @return the number of sections
+     */
+    public int getSectionsCount() {
+        return mSections.size();
+    }
+
+    /**
      * Get the list of sections currently managed by the adapter
      *
      * @return list of sections

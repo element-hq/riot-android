@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import org.matrix.androidsdk.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,7 @@ public class RoomAdapter extends AbsAdapter {
     private static final int TYPE_PUBLIC_ROOM = 1;
 
     private AdapterSection<Room> mRoomsSection;
-    private AdapterSection<PublicRoom> mPublicRoomsSection;
+    private PublicRoomsAdapterSection mPublicRoomsSection;
 
     private final OnSelectItemListener mListener;
 
@@ -68,7 +69,7 @@ public class RoomAdapter extends AbsAdapter {
                 R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession));
         mRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_room_placeholder), context.getString(R.string.no_result_placeholder));
 
-        mPublicRoomsSection = new AdapterSection<>(context.getString(R.string.rooms_directory_header),
+        mPublicRoomsSection = new PublicRoomsAdapterSection(context.getString(R.string.rooms_directory_header),
                 R.layout.adapter_public_room_sticky_header_subview, R.layout.adapter_item_public_room_view,
                 TYPE_HEADER_PUBLIC_ROOM, TYPE_PUBLIC_ROOM, new ArrayList<PublicRoom>(), null);
         mPublicRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_public_room_placeholder), context.getString(R.string.no_result_placeholder));
@@ -142,8 +143,11 @@ public class RoomAdapter extends AbsAdapter {
     @Override
     protected int applyFilter(String pattern) {
         int nbResults = 0;
+
         nbResults += filterRooms(mRoomsSection, pattern);
-        nbResults += filterPublicRooms(pattern);
+
+        // The public rooms search is done by a server request.
+        // The result is also paginated so it make no sense to be done in the adapter
 
         return nbResults;
     }
@@ -164,10 +168,15 @@ public class RoomAdapter extends AbsAdapter {
 
     public void setPublicRooms(final List<PublicRoom> publicRooms) {
         mPublicRoomsSection.setItems(publicRooms, mCurrentFilterPattern);
-        if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
-            filterPublicRooms(String.valueOf(mCurrentFilterPattern));
-        }
         updateSections();
+    }
+
+    public void setEstimatedPublicRoomsCount(int estimatedCtunt) {
+        mPublicRoomsSection.setEstimatedPublicRoomsCount(estimatedCtunt);
+    }
+
+    public void setNoMorePublicRooms(boolean noMore) {
+        mPublicRoomsSection.setHasMoreResults(noMore);
     }
 
     /**
@@ -177,61 +186,12 @@ public class RoomAdapter extends AbsAdapter {
      */
     @CallSuper
     public void addPublicRooms(final List<PublicRoom> publicRooms) {
-        //TODO improve this by adding a "addItem" in AdapterSection object
         final List<PublicRoom> newPublicRooms = new ArrayList<>();
+
         newPublicRooms.addAll(mPublicRoomsSection.getItems());
         newPublicRooms.addAll(publicRooms);
         mPublicRoomsSection.setItems(newPublicRooms, mCurrentFilterPattern);
-
-        if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
-            filterPublicRooms(String.valueOf(mCurrentFilterPattern));
-        }
         updateSections();
-    }
-
-    /**
-     * Refresh direct chats data
-     */
-    public void refreshRooms() {
-        refreshSection(mRoomsSection);
-    }
-
-    /*
-     * *********************************************************************************************
-     * Private methods
-     * *********************************************************************************************
-     */
-
-    /**
-     * Filter the local contacts with the given pattern
-     *
-     * @param patternStr
-     * @return nb of items matching the filter
-     */
-    private int filterPublicRooms(final String patternStr) {
-        if (!TextUtils.isEmpty(patternStr)) {
-            List<PublicRoom> filteredPublicRoom = new ArrayList<>();
-            for (final PublicRoom publicRoom : mPublicRoomsSection.getItems()) {
-                filteredPublicRoom.add(publicRoom);
-            }
-            mPublicRoomsSection.setFilteredItems(filteredPublicRoom, patternStr);
-        } else {
-            mPublicRoomsSection.resetFilter();
-        }
-
-        return mPublicRoomsSection.getFilteredItems().size();
-    }
-
-    /**
-     * Remove the room of the given id from the adapter
-     *
-     * @param roomId
-     */
-    public void removeRoom(final String roomId) {
-        Room room = mSession.getDataHandler().getRoom(roomId);
-        if (mRoomsSection.removeItem(room)) {
-            updateSections();
-        }
     }
 
     /*
@@ -259,6 +219,11 @@ public class RoomAdapter extends AbsAdapter {
         }
 
         private void populateViews(final PublicRoom publicRoom) {
+            if (null == publicRoom) {
+                Log.e(LOG_TAG, "## populateViews() : null publicRoom");
+                return;
+            }
+
             String roomName = !TextUtils.isEmpty(publicRoom.name) ? publicRoom.name : VectorUtils.getPublicRoomDisplayName(publicRoom);
 
             // display the room avatar
