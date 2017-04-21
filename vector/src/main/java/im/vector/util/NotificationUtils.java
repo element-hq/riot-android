@@ -326,22 +326,34 @@ public class NotificationUtils {
 
             if (room.isInvited()) {
                 header = roomName + ": ";
-                text = eventDisplay.getTextualDisplay().toString();
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+                text = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
             } else if (1 == notifiedEvents.size()) {
                 eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
                 eventDisplay.setPrependMessagesWithAuthor(false);
 
                 header = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
-                text = eventDisplay.getTextualDisplay().toString();
+
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+
+                // the event might have been redacted
+                if (!TextUtils.isEmpty(textualDisplay)) {
+                    text = textualDisplay.toString();
+                } else {
+                    text = "";
+                }
             } else {
                 header = roomName + ": ";
                 text = context.getString(R.string.notification_unread_messages, session.getDataHandler().getStore().unreadEvents(roomId, null).size());
             }
 
-            SpannableString notifiedLine = new SpannableString(header + text);
-            notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            notificationsList.add(new NotificationDisplay(latestEvent.getOriginServerTs(), notifiedLine));
-            sum += session.getDataHandler().getStore().unreadEvents(roomId, null).size();
+            // ad the line if it makes sense
+            if (!TextUtils.isEmpty(text)) {
+                SpannableString notifiedLine = new SpannableString(header + text);
+                notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                notificationsList.add(new NotificationDisplay(latestEvent.getOriginServerTs(), notifiedLine));
+                sum += session.getDataHandler().getStore().unreadEvents(roomId, null).size();
+            }
         }
 
         Collections.sort(notificationsList, mNotificationDisplaySort);
@@ -429,12 +441,11 @@ public class NotificationUtils {
             Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
             EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
             eventDisplay.setPrependMessagesWithAuthor(true);
+            CharSequence textualDisplay = eventDisplay.getTextualDisplay();
 
-            SpannableString notifiedLine = new SpannableString(eventDisplay.getTextualDisplay().toString());
-            if (notifiedEvent.mBingRule.isDefaultNotificationSound(notifiedEvent.mBingRule.notificationSound())) {
-                notifiedLine.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.vector_fuchsia_color)), 0, notifiedLine.length(), 0);
+            if (!TextUtils.isEmpty(textualDisplay)) {
+                inboxStyle.addLine(new SpannableString(textualDisplay));
             }
-            inboxStyle.addLine(notifiedLine);
         }
 
         inboxStyle.setBigContentTitle(roomName);
@@ -458,7 +469,8 @@ public class NotificationUtils {
 
                 EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
                 eventDisplay.setPrependMessagesWithAuthor(false);
-                String body = eventDisplay.getTextualDisplay().toString();
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+                String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
 
                 quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, body);
 
@@ -555,7 +567,8 @@ public class NotificationUtils {
 
         EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
         eventDisplay.setPrependMessagesWithAuthor(true);
-        String body = eventDisplay.getTextualDisplay().toString();
+        CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+        String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
 
         if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
             try {
