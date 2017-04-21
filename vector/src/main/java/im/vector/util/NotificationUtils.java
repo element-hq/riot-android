@@ -411,6 +411,11 @@ public class NotificationUtils {
                                                   boolean isInvitationEvent,
                                                   Map<String, List<NotifiedEvent>> notifiedEventsByRoomId) {
 
+        // nothing to do
+        if (0 == notifiedEventsByRoomId.size()) {
+            return;
+        }
+
         // when there are several rooms, the text style is not the same
         if (notifiedEventsByRoomId.size() > 1) {
             addTextStyleWithSeveralRooms(context, builder, notifiedEventsByRoomId);
@@ -554,7 +559,6 @@ public class NotificationUtils {
                                                          Map<String, List<NotifiedEvent>> notifiedEventsByRoomId,
                                                          NotifiedEvent eventToNotify,
                                                          boolean isBackground) {
-
         // TODO manage multi accounts
         MXSession session = Matrix.getInstance(context).getDefaultSession();
         IMXStore store = session.getDataHandler().getStore();
@@ -616,7 +620,11 @@ public class NotificationUtils {
         builder.setGroup(context.getString(R.string.riot_app_name));
         builder.setGroupSummary(true);
 
-        addTextStyle(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId); //addMultiRoomsTextStyle(context, builder, notifiedEventsByRoomId);
+        try {
+            addTextStyle(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.getMessage());
+        }
 
         // only one room : display the large bitmap (it should be the room avatar
         // several rooms : display the Riot avatar
