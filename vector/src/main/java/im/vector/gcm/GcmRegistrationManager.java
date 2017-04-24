@@ -61,7 +61,7 @@ public final class GcmRegistrationManager {
     private static final String PREFS_ALLOW_NOTIFICATIONS = "GcmRegistrationManager.PREFS_ALLOW_NOTIFICATIONS";
     private static final String PREFS_TURN_SCREEN_ON = "GcmRegistrationManager.PREFS_TURN_SCREEN_ON";
     private static final String PREFS_ALLOW_BACKGROUND_SYNC = "GcmRegistrationManager.PREFS_ALLOW_BACKGROUND_SYNC";
-    private static final String PREFS_PUSHER_REGISTRATION_TOKEN_KEY = "PREFS_PUSHER_REGISTRATION_TOKEN_KEY";
+    private static final String PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM = "PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM";
 
     private static final String PREFS_SYNC_TIMEOUT = "GcmRegistrationManager.PREFS_SYNC_TIMEOUT";
     private static final String PREFS_SYNC_DELAY = "GcmRegistrationManager.PREFS_SYNC_DELAY";
@@ -216,7 +216,7 @@ public final class GcmRegistrationManager {
         String registrationToken = getStoredRegistrationToken();
 
         if (registrationToken == null) {
-            registrationToken = GCMHelper.getRegistrationToken(mContext);
+            registrationToken = GCMHelper.getRegistrationToken();
         }
         return registrationToken;
     }
@@ -293,9 +293,16 @@ public final class GcmRegistrationManager {
 
     /**
      * Reset the GCM registration.
-     * @param register set to true to trigger a fresh registration.
      */
-    public void resetGCMRegistration(final boolean register) {
+    public void resetGCMRegistration() {
+        resetGCMRegistration(null);
+    }
+
+    /**
+     * Reset the GCM registration.
+     * @param newToken the new registration token
+     */
+    public void resetGCMRegistration(final String newToken) {
         Log.d(LOG_TAG, "resetGCMRegistration");
 
         if (RegistrationState.SERVER_REGISTERED == mRegistrationState) {
@@ -313,7 +320,7 @@ public final class GcmRegistrationManager {
                 @Override
                 public void onThirdPartyUnregistered() {
                     Log.d(LOG_TAG, "resetGCMRegistration : unregistration is done --> start the registration process");
-                    resetGCMRegistration(register);
+                    resetGCMRegistration(newToken);
                 }
 
                 @Override
@@ -322,11 +329,13 @@ public final class GcmRegistrationManager {
                 }
             });
         } else {
+            final boolean clearEverything = TextUtils.isEmpty(newToken);
+
             Log.d(LOG_TAG, "resetGCMRegistration : Clear the GCM data");
-            clearGCMData(new SimpleApiCallback<Void>() {
+            clearGCMData(clearEverything, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    if (register) {
+                    if (!clearEverything) {
                         Log.d(LOG_TAG, "resetGCMRegistration : make a full registration process.");
                         register(null);
                     } else {
@@ -1050,7 +1059,7 @@ public final class GcmRegistrationManager {
      * @return the GCM registration stored for this version of the app or null if none is stored.
      */
     private String getStoredRegistrationToken() {
-        return getGcmSharedPreferences().getString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, null);
+        return getGcmSharedPreferences().getString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM, null);
     }
 
     /**
@@ -1061,7 +1070,7 @@ public final class GcmRegistrationManager {
         Log.d(LOG_TAG, "Saving registration token");
 
         if (!getGcmSharedPreferences().edit()
-                .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, registrationToken)
+                .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM, registrationToken)
                 .commit()) {
             Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
         }
@@ -1069,15 +1078,20 @@ public final class GcmRegistrationManager {
 
     /**
      * Clear the GCM data
+     * @param clearRegistrationToken true to clear the provided GCM token
+     * @param callback the asynchronous callback
      */
-    public void clearGCMData(final ApiCallback callback) {
+    public void clearGCMData(final boolean clearRegistrationToken, final ApiCallback callback) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
                 setStoredRegistrationToken(null);
                 mRegistrationToken = null;
                 mRegistrationState = RegistrationState.UNREGISTRATED;
-                GCMHelper.clearRegistrationToken(mContext);
+
+                if (clearRegistrationToken) {
+                    GCMHelper.clearRegistrationToken();
+                }
                 return null;
             }
 

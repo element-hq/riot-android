@@ -348,7 +348,7 @@ public class CommonActivityUtils {
         }
 
         // reset the GCM
-        Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration(false);
+        Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
         // clear the preferences when the application goes to the login screen.
         if (goToLoginPage) {
             Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
