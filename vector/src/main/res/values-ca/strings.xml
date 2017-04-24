@@ -419,97 +419,97 @@
 
     <!-- Vector Settings -->
 
-    <string name="settings_profile_picture">Profile Picture</string>
-    <string name="settings_display_name">Display Name</string>
-    <string name="settings_email_address">Email</string>
-    <string name="settings_add_email_address">Add email address</string>
-    <string name="settings_phone_number">Phone</string>
-    <string name="settings_add_phone_number">Add phone number</string>
-    <string name="settings_summary_app_info_link">Application system info screen</string>
-    <string name="settings_title_app_info_link">Application info</string>
+    <string name="settings_profile_picture">Foto del perfil</string>
+    <string name="settings_display_name">Nom a mostrar</string>
+    <string name="settings_email_address">Correu electrònic</string>
+    <string name="settings_add_email_address">Afegeix una adreça de correu electrònic</string>
+    <string name="settings_phone_number">Telefon</string>
+    <string name="settings_add_phone_number">Afegeix un número de telefon</string>
+    <string name="settings_summary_app_info_link">Pantalla d'informació del sistema de l'aplicació</string>
+    <string name="settings_title_app_info_link">Informació de l'aplicació</string>
 
-    <string name="settings_enable_all_notif">Enable notifications for this account</string>
-    <string name="settings_enable_this_device">Enable notifications for this device</string>
-    <string name="settings_turn_screen_on">Turn the screen on for 3 seconds</string>
+    <string name="settings_enable_all_notif">Habilita les notificacions d'aquest compte</string>
+    <string name="settings_enable_this_device">Habilita les notificacions d'aquest dispositiu</string>
+    <string name="settings_turn_screen_on">Encén la pantalla durant 3 segons</string>
 
-    <string name="settings_containing_my_name">Msgs containing my name</string>
-    <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
-    <string name="settings_messages_in_group_chat">Msgs in group chats</string>
-    <string name="settings_invited_to_room">When i\'m invited to a room</string>
-    <string name="settings_call_invitations">Call invitations</string>
-    <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
+    <string name="settings_containing_my_name">Missatges que contenen el meu nom</string>
+    <string name="settings_messages_in_one_to_one">Missatges en xats entre dos</string>
+    <string name="settings_messages_in_group_chat">Missatges en xats de grup</string>
+    <string name="settings_invited_to_room">Quan em convidin a una sala</string>
+    <string name="settings_call_invitations">Invitacions de trucada</string>
+    <string name="settings_messages_sent_by_bot">Missatges enviats per un bot</string>
 
-    <string name="settings_background_sync">Background synchronization</string>
-    <string name="settings_enable_background_sync">Enable background sync</string>
-    <string name="settings_set_sync_timeout">Sync request timeout</string>
-    <string name="settings_set_sync_delay">Delay between two sync requests</string>
-    <string name="settings_second">second</string>
-    <string name="settings_seconds">seconds</string>
+    <string name="settings_background_sync">Sincronització en segon pla</string>
+    <string name="settings_enable_background_sync">Habilita la sincronització en segon pla</string>
+    <string name="settings_set_sync_timeout">Temps màxim d'espera de la petició de sincronització</string>
+    <string name="settings_set_sync_delay">Temps entre dues peticions de sincronització</string>
+    <string name="settings_second">segon</string>
+    <string name="settings_seconds">segons</string>
 
-    <string name="settings_version">Version</string>
-    <string name="settings_olm_version">olm version</string>
-    <string name="settings_app_term_conditions">Terms &amp; conditions</string>
-    <string name="settings_third_party_notices">Third party notices</string>
+    <string name="settings_version">Versió</string>
+    <string name="settings_olm_version">Versió d'olm</string>
+    <string name="settings_app_term_conditions">Termes i condicions</string>
+    <string name="settings_third_party_notices">Avisos de terceres parts</string>
     <string name="settings_copyright">Copyright</string>
-    <string name="settings_privacy_policy">Privacy policy</string>
-    <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_privacy_policy">Política de privacitat</string>
+    <string name="settings_clear_cache">Buida la memòria cau</string>
     <!--string name="settings_room_privacy_label">Privacy</string-->
 
 
-    <string name="settings_user_settings">User settings</string>
-    <string name="settings_notifications">Notifications</string>
-    <string name="settings_ignored_users">Ignored users</string>
-    <string name="settings_other">Other</string>
-    <string name="settings_advanced">Advanced</string>
-    <string name="settings_cryptography">Cryptography</string>
-    <string name="settings_notifications_targets">Notification Targets</string>
-    <string name="settings_contact">Local contacts</string>
-    <string name="settings_contacts_app_permission">Contacts permission</string>
-    <string name="settings_contacts_phonebook_country">Phonebook country</string>
-    <string name="settings_devices_list">Devices</string>
-    <string name="devices_details_dialog_title">Device details</string>
+    <string name="settings_user_settings">Configuració de l'usuari</string>
+    <string name="settings_notifications">Notificacions</string>
+    <string name="settings_ignored_users">Usuaris ignorats</string>
+    <string name="settings_other">Altres</string>
+    <string name="settings_advanced">Avançat</string>
+    <string name="settings_cryptography">Criptografia</string>
+    <string name="settings_notifications_targets">Objectius de notificacions</string>
+    <string name="settings_contact">Contactes locals</string>
+    <string name="settings_contacts_app_permission">Permís dels contactes</string>
+    <string name="settings_contacts_phonebook_country">País de l'agenda de telèfons</string>
+    <string name="settings_devices_list">Dispositius</string>
+    <string name="devices_details_dialog_title">Detalls del dispositiu</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Name</string>
-    <string name="devices_details_device_name">Device Name</string>
-    <string name="devices_details_last_seen_title">Last seen</string>
+    <string name="devices_details_name_title">Nom</string>
+    <string name="devices_details_device_name">Nom del dispositiu</string>
+    <string name="devices_details_last_seen_title">Últim cop vist</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
-    <string name="devices_delete_dialog_text">This operation requires additional authentication.\nTo continue, please enter your password.</string>
-    <string name="devices_delete_dialog_title">Authentication</string>
-    <string name="devices_delete_pswd">Password:</string>
-    <string name="devices_delete_submit_button_label">Submit</string>
+    <string name="devices_delete_dialog_text">Aquesta operació necessita que us autentiqueu.\nPer tal de continuar, introduïu la vostra contrasenya.</string>
+    <string name="devices_delete_dialog_title">Autenticació</string>
+    <string name="devices_delete_pswd">Contrasenya:</string>
+    <string name="devices_delete_submit_button_label">Tramet</string>
 
-    <string name="settings_logged_in">Logged in as</string>
-    <string name="settings_home_server">Home Server</string>
-    <string name="settings_identity_server">Identity Server</string>
+    <string name="settings_logged_in">Registrat com a</string>
+    <string name="settings_home_server">Servidor</string>
+    <string name="settings_identity_server">Identitat del servidor</string>
 
-    <string name="account_email_validation_title">Verification Pending</string>
-    <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
-    <string name="account_email_validation_error">Unable to verify email address. Please check your email and click on the link it contains. Once this is done, click continue</string>
+    <string name="account_email_validation_title">Verificació pendent</string>
+    <string name="account_email_validation_message">Mireu el correu electrònic feu clic en l'enllaç que s'ha enviat. Un cop fet això, feu clic per continuar.</string>
+    <string name="account_email_validation_error">No ha estat possible verificar l'adreça de correu electrònic. Mireu el correu electrònic feu clic en l'enllaç que s'ha enviat. Un cop fet això, feu clic per continuar</string>
 
-    <string name="settings_change_password">Change password</string>
-    <string name="settings_old_password">old password</string>
-    <string name="settings_new_password">new password</string>
-    <string name="settings_confirm_password">confirm password</string>
-    <string name="settings_fail_to_update_password">Fail to update password</string>
-    <string name="settings_password_updated">Your password has been updated</string>
-    <string name="settings_unignore_user">Show all messages from %s?</string>
+    <string name="settings_change_password">Canvia la contrasenya</string>
+    <string name="settings_old_password">contrasenya antiga</string>
+    <string name="settings_new_password">contrasenya nova</string>
+    <string name="settings_confirm_password">confirma la contrasenya</string>
+    <string name="settings_fail_to_update_password">No s'ha pogut actualitzar la contrasenya</string>
+    <string name="settings_password_updated">La contrasenya s'ha actualitzat</string>
+    <string name="settings_unignore_user">Mostra tots els missatges des de %s?</string>
 
-    <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
+    <string name="settings_delete_notification_targets_confirmation">Esteu segur que voleu esborrar aquesta notificació?</string>
 
-    <string name="settings_delete_threepid_confirmation">Are you sure you want to remove the %1$s %2$s?</string>
+    <string name="settings_delete_threepid_confirmation">Esteu segur que voleu esborrar el %1$s %2$s?</string>
 
-    <string name="settings_select_country">Choose a country</string>
+    <string name="settings_select_country">Escull un país</string>
 
-    <string name="settings_phone_number_country_label">Country</string>
-    <string name="settings_phone_number_country_error">Please choose a country</string>
-    <string name="settings_phone_number_label">Phone number</string>
-    <string name="settings_phone_number_error">Invalid phone number for the selected country</string>
-    <string name="settings_phone_number_verification">Phone verification</string>
-    <string name="settings_phone_number_verification_instruction">"We've sent an SMS with an activation code. Please enter this code below."</string>
-    <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
-    <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
-    <string name="settings_phone_number_code">Code</string>
+    <string name="settings_phone_number_country_label">País</string>
+    <string name="settings_phone_number_country_error">Escolliu un país</string>
+    <string name="settings_phone_number_label">Númeoro de telefon</string>
+    <string name="settings_phone_number_error">El número de telefon no és vàlid per al país escollit</string>
+    <string name="settings_phone_number_verification">Verificació del telefon</string>
+    <string name="settings_phone_number_verification_instruction">"S'ha enviat un SMS amb un codi d'activació. Introduïu aquest a continuació."</string>
+    <string name="settings_phone_number_verification_error_empty_code">Introduïu un codi d'activació</string>
+    <string name="settings_phone_number_verification_error">S'ha produït un error mentre es validava el número de telefon</string>
+    <string name="settings_phone_number_code">Codi</string>
 
     <!-- Room Settings -->
 
