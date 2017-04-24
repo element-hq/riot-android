@@ -46,6 +46,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.Log;
@@ -469,6 +470,37 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
 
         return mScrollEventListener;
+    }
+
+    /**
+     * Apply a filter to the rooms list
+     * @param pattern the pattern to search
+     */
+    public void applyFilter(String pattern) {
+        // will be done while resuming
+        if (null == mRecentsListView) {
+            return;
+        }
+
+        mAdapter.setSearchPattern(pattern);
+
+        mRecentsListView.post(new Runnable() {
+            @Override
+            public void run() {
+                expandsAllSections();
+            }
+        });
+    }
+
+    /**
+     * Expands all existing sections.
+     */
+    private void expandsAllSections() {
+        final int groupCount = mAdapter.getGroupCount();
+
+        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+            mRecentsListView.expandGroup(groupIndex);
+        }
     }
 
     /**

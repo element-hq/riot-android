@@ -85,6 +85,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     // search mode
     private String mSearchedPattern;
+
+    // search mode set to true : display nothing if the search pattern is empty
+    // search mode set to false : display all the known entries if the search pattern is empty
     private final boolean mIsSearchMode;
     // when set to true, avoid empty history by displaying the directory group
     private final boolean mDisplayDirectoryGroupWhenEmpty;
@@ -212,16 +215,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @return true of the pattern is found.
      */
     private boolean isMatchedPattern(Room room) {
-        boolean res = true;
+        boolean  res = !mIsSearchMode;
 
-        // test only in search
-        if (mIsSearchMode) {
-            res = false;
-
-            if (!TextUtils.isEmpty(mSearchedPattern)) {
-                String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, room);
-                res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().contains(mSearchedPattern)));
-            }
+        if (!TextUtils.isEmpty(mSearchedPattern)) {
+            String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, room);
+            res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().contains(mSearchedPattern)));
         }
 
         return res;
