@@ -551,7 +551,7 @@
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualsevol que conegui l\'enllaç de la sala, excepte els convidats, inclosos els convidats</string>
 
     <!-- Room settings: banned users -->
-    <string name="room_settings_banned_users_title">Banned users</string>
+    <string name="room_settings_banned_users_title">Usuaris expulsats</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Advanced</string>
