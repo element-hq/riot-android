@@ -531,12 +531,12 @@
     <string name="room_settings_tag_pref_entry_value_none">cap</string>
 
     <!-- room settings : access and visibility -->
-    <string name="room_settings_category_access_visibility_title">Access and visibility</string>
-    <string name="room_settings_directory_visibility">List this room in room directory</string>
-    <string name="room_settings_room_access_rules_pref_title">Room Access</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
-    <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
-    <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
+    <string name="room_settings_category_access_visibility_title">Accés i visibilitat</string>
+    <string name="room_settings_directory_visibility">Llista aquesta sala al directori de sales</string>
+    <string name="room_settings_room_access_rules_pref_title">Accés a la sala</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Permisos de lectura de l'històric de la sala</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Qui pot llegir l'històric?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Qui pot accedir a la sala?</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Anyone</string>
