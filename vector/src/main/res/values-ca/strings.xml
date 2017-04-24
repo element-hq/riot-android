@@ -545,7 +545,7 @@
     <string name="room_settings_read_history_entry_members_only_joined">Només els participants (des de que s'uneixen a la sala)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
-    <string name="room_settings_room_access_warning">To link to a room it must have an address.</string>
+    <string name="room_settings_room_access_warning">La sala ha de tenir una adreça per tal d'unir-s'hi.</string>
     <string name="room_settings_room_access_entry_only_invited">Només les persones convidades</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Qualsevol que conegui l\'enllaç de la sala, excepte els convidats</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualsevol que conegui l\'enllaç de la sala, excepte els convidats, inclosos els convidats</string>
