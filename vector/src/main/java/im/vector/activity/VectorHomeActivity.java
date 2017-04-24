@@ -54,7 +54,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -70,8 +69,6 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -84,8 +81,6 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -749,6 +744,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             mFloatingActionButton.show();
         }
 
+        // clear waiting view
+        stopWaitingView();
+
         // don't display the fab for the favorites tab
         mFloatingActionButton.setVisibility((item.getItemId() != R.id.bottom_action_favourites) ? View.VISIBLE : View.GONE);
 
@@ -966,8 +964,14 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             mSession.markRoomsAsRead(mSession.getDataHandler().getStore().getRooms(), new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    ((VectorRecentsListFragment)getSelectedFragment()).refresh();
-                    stopWaitingView();
+                    Fragment currentFragment = getSelectedFragment();
+
+                    // the user could have switched to another fragment
+                    if (currentFragment instanceof VectorRecentsListFragment) {
+                        ((VectorRecentsListFragment)currentFragment).refresh();
+                        stopWaitingView();
+                    }
+
                     refreshUnreadBadges();
                 }
 
