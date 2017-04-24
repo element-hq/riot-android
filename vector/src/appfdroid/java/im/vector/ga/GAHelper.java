@@ -16,14 +16,23 @@
 package im.vector.ga;
 ;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 
 import org.matrix.androidsdk.util.Log;
+
+import im.vector.VectorApp;
 
 public class GAHelper {
 
     //==============================================================================================================
     // Google analytics
     //==============================================================================================================
+
+    // default exception handler
+    private static Thread.UncaughtExceptionHandler mDefaultExceptionHandler = null;
+
 
     /**
      * Tells if the GA use can be updated
@@ -54,6 +63,20 @@ public class GAHelper {
      * Initialize the google analytics
      */
     public static void initGoogleAnalytics(Context context) {
+        if (null == mDefaultExceptionHandler) {
+            mDefaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+        }
+
+        Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException (Thread thread, Throwable e) {
+                VectorApp.uncaughtException(thread.getName(), e);
+
+                if (null != mDefaultExceptionHandler) {
+                    mDefaultExceptionHandler.uncaughtException(thread, e);
+                }
+            }
+        });
     }
 
     /**
