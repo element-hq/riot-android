@@ -39,7 +39,6 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
     private List<Pair<Integer, SectionView>> mSectionViews = new ArrayList<>();
 
-    private int mHeaderTop = 0;
     private int mHeaderBottom = 0;
 
     private int mFooterTop = 0;
@@ -116,6 +115,11 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
      * *********************************************************************************************
      */
 
+    /**
+     * Reset the section views position
+     *
+     * @param sections updated list of sections
+     */
     public void resetSticky(List<Pair<Integer, AdapterSection>> sections) {
         Log.e(LOG_TAG, "resetSticky");
 
@@ -140,11 +144,23 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
         }
     }
 
+    /**
+     * Init the footer top and bottom with a new bottom value
+     * (footer top will be updated after section views have been processed)
+     *
+     * @param bottom new bottom
+     */
     public void setBottom(int bottom) {
         mFooterTop = bottom;
         mFooterBottom = bottom;
     }
 
+    /**
+     * Get a section view by its index
+     *
+     * @param index of the section view we are looking for
+     * @return section view
+     */
     public SectionView getSectionViewForSectionIndex(int index) {
         return mSectionViews.get(index).second;
     }
@@ -167,6 +183,16 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
      * *********************************************************************************************
      */
 
+    /**
+     * For each section view, calculate its "Y" coordinates corresponding to:
+     * - top coordinate when sticky on top
+     * - bottom coordinate when sticky on top
+     * - top coordinate when sticky on bottom
+     * - bottom coordinate when sticky on bottom
+     *
+     * @param v            view used to retrieve the footer bottom
+     * @param sectionViews list of section views
+     */
     private void computeSectionViewsCoordinates(View v, List<Pair<Integer, SectionView>> sectionViews) {
         setBottom(v.getBottom());
         mHeaderBottom = 0;
@@ -199,10 +225,10 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                 //SectionView next = i + 1 < sectionViews.size() ? sectionViews.get(i + 1).second : null;
 
                 current.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                int sectionheight = current.getStickyHeaderHeight();
+                int sectionHeight = current.getStickyHeaderHeight();
                 current.setFooterTop(mFooterTop - current.getStickyHeaderHeight());
                 current.setFooterBottom(mFooterTop);
-                mFooterTop -= sectionheight;
+                mFooterTop -= sectionHeight;
             }
         }
 
@@ -213,13 +239,17 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
         updateStickySection(-1);
     }
 
+    /**
+     * Update the section views position to take into account the scroll of the given value
+     *
+     * @param dy scroll value
+     */
     private void updateStickySection(int dy) {
         Log.e(LOG_TAG, "updateStickySection " + dy);
 
         // header is out of screen, check if header or footer
-        int firstVisiPos = mLayoutManager.findFirstVisibleItemPosition();
-        int lastVisiPos = mLayoutManager.findLastVisibleItemPosition();
-
+        int firstVisiblePos = mLayoutManager.findFirstVisibleItemPosition();
+        int lastVisiblePos = mLayoutManager.findLastVisibleItemPosition();
 
         for (int i = mSectionViews.size() - 1; i >= 0; i--) {
             SectionView previous = i > 0 ? mSectionViews.get(i - 1).second : null;
@@ -235,18 +265,21 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                     previous.onFoldSubView(current, dy);
                 }
             } else {
-                if (currentPos < firstVisiPos) {
+                if (currentPos < firstVisiblePos) {
                     current.updatePosition(current.getHeaderTop());
-                } else if (currentPos > lastVisiPos) {
+                } else if (currentPos > lastVisiblePos) {
                     current.updatePosition(current.getFooterTop());
                 }
             }
-
-            // updatePosition already calls requestLayout
-            //current.requestLayout();
         }
     }
 
+    /**
+     * Get the adapter position of the header corresponding to the given section view
+     *
+     * @param sectionView section view
+     * @return adapter position
+     */
     private int getPositionForSectionView(SectionView sectionView) {
 
         for (Pair<Integer, SectionView> section : mSectionViews) {
@@ -257,6 +290,12 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
         return -1;
     }
 
+    /**
+     * Remove the given view from its parent
+     *
+     * @param view to remove from its parent
+     * @return parent
+     */
     private static ViewGroup removeViewFromParent(final View view) {
         final ViewParent parent = view.getParent();
         if (parent instanceof ViewGroup) {
