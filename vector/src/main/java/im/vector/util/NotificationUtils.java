@@ -565,6 +565,17 @@ public class NotificationUtils {
 
         Room room = store.getRoom(eventToNotify.mRoomId);
         Event event = store.getEvent(eventToNotify.mEventId, eventToNotify.mRoomId);
+
+        // sanity check
+        if ((null == room) || (null == event)) {
+            if (null == room) {
+                Log.e(LOG_TAG, "## buildMessageNotification() : null room " + eventToNotify.mRoomId);
+            } else {
+                Log.e(LOG_TAG, "## buildMessageNotification() : null event " + eventToNotify.mEventId + " " + eventToNotify.mRoomId));
+            }
+            return null;
+        }
+
         BingRule bingRule = eventToNotify.mBingRule;
 
         boolean isInvitationEvent = false;

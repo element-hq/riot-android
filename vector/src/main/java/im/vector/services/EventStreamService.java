@@ -1102,8 +1102,11 @@ public class EventStreamService extends Service {
                                     fEventToNotify,
                                     isBackgroundNotif);
 
+                            // the notification cannot be built
                             if (null != notif) {
                                 nm.notify(NOTIF_ID_MESSAGE, notif);
+                            } else {
+                                nm.cancel(NOTIF_ID_MESSAGE);
                             }
                         }
                     }
