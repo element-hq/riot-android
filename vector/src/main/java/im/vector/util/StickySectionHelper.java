@@ -173,12 +173,11 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
         Log.i(LOG_TAG, "computeSectionViewsCoordinates");
         if (!sectionViews.isEmpty()) {
-
             // Compute header
             for (int i = 0; i < sectionViews.size(); i++) {
-                SectionView previous = i > 0 ? sectionViews.get(i - 1).second : null;
+                //SectionView previous = i > 0 ? sectionViews.get(i - 1).second : null;
                 SectionView current = sectionViews.get(i).second;
-                SectionView next = i + 1 < sectionViews.size() ? sectionViews.get(i + 1).second : null;
+                //SectionView next = i + 1 < sectionViews.size() ? sectionViews.get(i + 1).second : null;
 
                 current.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                 int sectionHeight = current.getStickyHeaderHeight();
@@ -195,9 +194,9 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
             // Compute footer
             for (int i = sectionViews.size() - 1; i >= 0; i--) {
-                SectionView previous = i > 0 ? sectionViews.get(i - 1).second : null;
+                //SectionView previous = i > 0 ? sectionViews.get(i - 1).second : null;
                 SectionView current = sectionViews.get(i).second;
-                SectionView next = i + 1 < sectionViews.size() ? sectionViews.get(i + 1).second : null;
+                //SectionView next = i + 1 < sectionViews.size() ? sectionViews.get(i + 1).second : null;
 
                 current.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                 int sectionheight = current.getStickyHeaderHeight();
@@ -216,11 +215,16 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
     private void updateStickySection(int dy) {
         Log.e(LOG_TAG, "updateStickySection " + dy);
+
+        // header is out of screen, check if header or footer
+        int firstVisiPos = mLayoutManager.findFirstVisibleItemPosition();
+        int lastVisiPos = mLayoutManager.findLastVisibleItemPosition();
+
+
         for (int i = mSectionViews.size() - 1; i >= 0; i--) {
             SectionView previous = i > 0 ? mSectionViews.get(i - 1).second : null;
             int currentPos = mSectionViews.get(i).first;
             SectionView current = mSectionViews.get(i).second;
-            SectionView next = i + 1 < mSectionViews.size() ? mSectionViews.get(i + 1).second : null;
 
             RecyclerView.ViewHolder holder = mRecyclerView.findViewHolderForLayoutPosition(currentPos);
             Log.e(LOG_TAG, "updateStickySection holder for " + current.getSection().getTitle() + " is " + holder);
@@ -231,16 +235,15 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                     previous.onFoldSubView(current, dy);
                 }
             } else {
-                // header is out of screen, check if header or footer
-                int firstVisiPos = mLayoutManager.findFirstVisibleItemPosition();
-                int lastVisiPos = mLayoutManager.findLastVisibleItemPosition();
                 if (currentPos < firstVisiPos) {
                     current.updatePosition(current.getHeaderTop());
                 } else if (currentPos > lastVisiPos) {
                     current.updatePosition(current.getFooterTop());
                 }
             }
-            current.requestLayout();
+
+            // updatePosition already calls requestLayout
+            //current.requestLayout();
         }
     }
 

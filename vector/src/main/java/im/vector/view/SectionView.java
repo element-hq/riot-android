@@ -159,21 +159,30 @@ public class SectionView extends RelativeLayout {
      * @param dy
      */
     public void onFoldSubView(final SectionView nextSection, int dy) {
+        // nothing to do
+        if (0 == dy) {
+            return;
+        }
+
         Log.d(LOG_TAG, "onFoldSubView dy " + dy);
         if (mSubView != null) {
             if (nextSection.getTop() <= getBottom()) {
                 int translation;
-                if (dy > 0) {
-                    translation = Math.max(nextSection.getTop() - getBottom(), 0);
-                    mSubView.setTranslationY(translation);
-                } else if (dy < 0) {
-                    translation = Math.min(nextSection.getTop() - getBottom(), 0);
+
+                if (-(nextSection.getTop() - getBottom()) > mSubView.getMeasuredHeight()) {
+                    translation = 0;
+                } else {
+                    if (dy > 0) {
+                        translation = Math.max(nextSection.getTop() - getBottom(), 0);
+                    } else {
+                        translation = Math.min(nextSection.getTop() - getBottom(), 0);
+                    }
+                }
+
+                if (mSubView.getTranslationY() != translation) {
                     mSubView.setTranslationY(translation);
                 }
 
-                if (-(nextSection.getTop() - getBottom()) > mSubView.getMeasuredHeight()) {
-                    mSubView.setTranslationY(0);
-                }
             } else if (mSubView.getTranslationY() < 0) {
                 mSubView.setTranslationY(0);
             }
@@ -268,11 +277,13 @@ public class SectionView extends RelativeLayout {
         int newTranslationY = Math.max(mHeaderTop, topMargin);
         newTranslationY = Math.min(newTranslationY, mFooterTop);
 
-        Log.e(LOG_TAG, "sectionview " + mSection.getTitle() + " updatePosition translation y " + newTranslationY);
+        if (getTranslationY() != newTranslationY) {
+            Log.e(LOG_TAG, "sectionview " + mSection.getTitle() + " updatePosition translation y " + newTranslationY);
 
-        setTranslationY(newTranslationY);
-        requestLayout();
-        invalidate();
+            setTranslationY(newTranslationY);
+            requestLayout();
+            invalidate();
+        }
     }
 }
 
