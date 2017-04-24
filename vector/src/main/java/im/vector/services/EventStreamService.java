@@ -1108,6 +1108,9 @@ public class EventStreamService extends Service {
                             } else {
                                 nm.cancel(NOTIF_ID_MESSAGE);
                             }
+                        } else {
+                            Log.e(LOG_TAG, "## refreshMessagesNotification() : mNotifiedEventsByRoomId is empty");
+                            nm.cancel(NOTIF_ID_MESSAGE);
                         }
                     }
                 });
