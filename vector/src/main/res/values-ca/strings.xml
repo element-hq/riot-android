@@ -554,16 +554,16 @@
     <string name="room_settings_banned_users_title">Usuaris expulsats</string>
 
     <!-- advanced -->
-    <string name="room_settings_category_advanced_title">Advanced</string>
-    <string name="room_settings_room_internal_id">This room\'s internal ID</string>
-    <string name="room_settings_addresses_pref_title">Addresses</string>
-    <string name="room_settings_labs_pref_title">Labs</string>
-    <string name="room_settings_labs_warning_message">These are experimental features that may break in unexpected ways. Use with caution.</string>
-    <string name="room_settings_labs_end_to_end">End-to-End Encryption</string>
-    <string name="room_settings_labs_end_to_end_is_active">End-to-End Encryption is active</string>
-    <string name="room_settings_labs_end_to_end_warnings">You need to logout to be able to enable the encryption.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices in this room from this device.</string>
+    <string name="room_settings_category_advanced_title">Avançat</string>
+    <string name="room_settings_room_internal_id">Id intern de la sala</string>
+    <string name="room_settings_addresses_pref_title">Adreces</string>
+    <string name="room_settings_labs_pref_title">Laboratori</string>
+    <string name="room_settings_labs_warning_message">Aquestes característiques són experimentals i poden fallar de forma inesperada. Useu amb precaució.</string>
+    <string name="room_settings_labs_end_to_end">Encriptació d'extrem a extrem</string>
+    <string name="room_settings_labs_end_to_end_is_active">L'encriptació d'extrem a extrem està acitva</string>
+    <string name="room_settings_labs_end_to_end_warnings">Necessiteu desconnectar-vos per poder habilitar l'encriptació.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Encripta només per a dispositius verificats</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">No enviïs missatges encriptats en aquesta sala des d'aquest dispositiu a dispositius no verificats.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
