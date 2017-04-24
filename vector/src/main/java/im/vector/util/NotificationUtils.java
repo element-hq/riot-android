@@ -571,7 +571,7 @@ public class NotificationUtils {
             if (null == room) {
                 Log.e(LOG_TAG, "## buildMessageNotification() : null room " + eventToNotify.mRoomId);
             } else {
-                Log.e(LOG_TAG, "## buildMessageNotification() : null event " + eventToNotify.mEventId + " " + eventToNotify.mRoomId));
+                Log.e(LOG_TAG, "## buildMessageNotification() : null event " + eventToNotify.mEventId + " " + eventToNotify.mRoomId);
             }
             return null;
         }
