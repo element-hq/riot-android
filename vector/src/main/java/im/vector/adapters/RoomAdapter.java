@@ -21,7 +21,6 @@ import android.graphics.Color;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +30,7 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class RoomAdapter extends AbsAdapter {
         mListener = listener;
 
         mRoomsSection = new AdapterSection<>(context.getString(R.string.rooms_header), -1,
-                R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession));
+                R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession, false));
         mRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_room_placeholder), context.getString(R.string.no_result_placeholder));
 
         mPublicRoomsSection = new PublicRoomsAdapterSection(context.getString(R.string.rooms_directory_header),

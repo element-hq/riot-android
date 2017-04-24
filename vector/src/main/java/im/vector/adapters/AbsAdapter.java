@@ -372,7 +372,9 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      */
     public void refreshSection(final AdapterSection section) {
         int startPos = getSectionHeaderPosition(section) + 1;
-        notifyItemRangeChanged(startPos, startPos + section.getNbItems() - 1);
+        if (section.getNbItems() > 0 && startPos > 0) {
+            notifyItemRangeChanged(startPos, startPos + section.getNbItems() - 1);
+        }
     }
 
     public void onFilterDone(CharSequence currentPattern) {
@@ -383,22 +385,22 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      * Filter the given section (of rooms) with the given pattern
      *
      * @param section
-     * @param pattern
+     * @param filterPattern
      * @return nb of items matching the filter
      */
-    protected int filterRooms(final AdapterSection<Room> section, final String pattern) {
-        if (!TextUtils.isEmpty(pattern)) {
+    protected int filterRooms(final AdapterSection<Room> section, final String filterPattern) {
+        if (!TextUtils.isEmpty(filterPattern)) {
             List<Room> filteredRoom = new ArrayList<>();
-            for (final Room room : section.getItems()) {
 
+            Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
+            List<Room> sectionItems = new ArrayList<>(section.getItems());
+            for (final Room room : sectionItems) {
                 final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-                if (Pattern.compile(Pattern.quote(pattern), Pattern.CASE_INSENSITIVE)
-                        .matcher(roomName)
-                        .find()) {
+                if (pattern.matcher(roomName).find()) {
                     filteredRoom.add(room);
                 }
             }
-            section.setFilteredItems(filteredRoom, pattern);
+            section.setFilteredItems(filteredRoom, filterPattern);
         } else {
             section.resetFilter();
         }

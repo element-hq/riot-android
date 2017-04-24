@@ -39,7 +39,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
@@ -70,7 +69,7 @@ public class PeopleAdapter extends AbsAdapter {
         mListener = listener;
 
         mDirectChatsSection = new AdapterSection<>(context.getString(R.string.direct_chats_header), -1,
-                R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession));
+                R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession, false));
         mDirectChatsSection.setEmptyViewPlaceholder(context.getString(R.string.no_conversation_placeholder), context.getString(R.string.no_result_placeholder));
 
         mLocalContactsSection = new AdapterSection<>(context.getString(R.string.local_address_book_header),
@@ -230,7 +229,8 @@ public class PeopleAdapter extends AbsAdapter {
             List<ParticipantAdapterItem> filteredLocalContacts = new ArrayList<>();
             final String formattedPattern = pattern.toLowerCase().trim().toLowerCase();
 
-            for (final ParticipantAdapterItem item : mLocalContactsSection.getItems()) {
+            List<ParticipantAdapterItem> sectionItems = new ArrayList<>(mLocalContactsSection.getItems());
+            for (final ParticipantAdapterItem item : sectionItems) {
                 if (item.startsWith(formattedPattern)) {
                     filteredLocalContacts.add(item);
                 }
@@ -253,7 +253,8 @@ public class PeopleAdapter extends AbsAdapter {
         List<ParticipantAdapterItem> filteredKnownContacts = new ArrayList<>();
         if (!TextUtils.isEmpty(pattern)) {
             final String formattedPattern = pattern.toLowerCase().trim().toLowerCase();
-            for (final ParticipantAdapterItem item : mKnownContactsSection.getItems()) {
+            List<ParticipantAdapterItem> sectionItems = new ArrayList<>(mKnownContactsSection.getItems());
+            for (final ParticipantAdapterItem item : sectionItems) {
                 if (item.startsWith(formattedPattern)) {
                     filteredKnownContacts.add(item);
                 }
@@ -356,31 +357,16 @@ public class PeopleAdapter extends AbsAdapter {
          */
         private void loadContactPresence(final TextView textView, final ParticipantAdapterItem item,
                                          final int position) {
-            User user = null;
-            MXSession matchedSession = null;
-            // retrieve the linked user
-            ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
-
-            for (MXSession session : sessions) {
-                if (null == user) {
-                    matchedSession = session;
-                    user = session.getDataHandler().getUser(item.mUserId);
-                }
-            }
-
-            if (null != user) {
-                final MXSession finalMatchedSession = matchedSession;
-                final String presence = VectorUtils.getUserOnlineStatus(mContext, matchedSession, item.mUserId, new SimpleApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        if (textView != null) {
-                            textView.setText(VectorUtils.getUserOnlineStatus(mContext, finalMatchedSession, item.mUserId, null));
-                            notifyItemChanged(position);
-                        }
+            final String presence = VectorUtils.getUserOnlineStatus(mContext, mSession, item.mUserId, new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    if (textView != null) {
+                        textView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, item.mUserId, null));
+                        notifyItemChanged(position);
                     }
-                });
-                textView.setText(presence);
-            }
+                }
+            });
+            textView.setText(presence);
         }
     }
 

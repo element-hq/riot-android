@@ -84,6 +84,7 @@ import java.lang.reflect.Field;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1263,11 +1264,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     mRoomInvitations.add(room);
                 }
             }
-            Collections.sort(mDirectChatInvitations, RoomUtils.getRoomsDateComparator(mSession));
-            Collections.sort(mRoomInvitations, RoomUtils.getRoomsDateComparator(mSession));
+
             // the invitations are sorted from the oldest to the more recent one
-            Collections.reverse(mDirectChatInvitations);
-            Collections.reverse(mRoomInvitations);
+            Comparator<Room> invitationComparator = RoomUtils.getRoomsDateComparator(mSession, true);
+            Collections.sort(mDirectChatInvitations, invitationComparator);
+            Collections.sort(mRoomInvitations, invitationComparator);
         }
 
         List<Room> roomInvites = new ArrayList<>();

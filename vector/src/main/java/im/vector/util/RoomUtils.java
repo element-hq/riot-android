@@ -75,25 +75,27 @@ public class RoomUtils {
      * Return comparator to sort rooms by date
      *
      * @param session
+     * @param reverseOrder
      * @return comparator
      */
-    public static Comparator<Room> getRoomsDateComparator(final MXSession session) {
+    public static Comparator<Room> getRoomsDateComparator(final MXSession session, final boolean reverseOrder) {
         return new Comparator<Room>() {
             public int compare(Room aLeftObj, Room aRightObj) {
                 final RoomSummary leftRoomSummary = session.getDataHandler().getStore().getSummary(aLeftObj.getRoomId());
                 final RoomSummary rightRoomSummary = session.getDataHandler().getStore().getSummary(aRightObj.getRoomId());
 
-                return getRoomSummaryComparator().compare(leftRoomSummary, rightRoomSummary);
+                return getRoomSummaryComparator(reverseOrder).compare(leftRoomSummary, rightRoomSummary);
             }
         };
     }
 
     /**
-     * Return a comparator to sort summaries by lastest event
+     * Return a comparator to sort summaries by latest event
      *
-     * @return
+     * @param reverseOrder
+     * @return ordered list
      */
-    public static Comparator<RoomSummary> getRoomSummaryComparator() {
+    public static Comparator<RoomSummary> getRoomSummaryComparator(final boolean reverseOrder) {
         return new Comparator<RoomSummary>() {
             public int compare(RoomSummary leftRoomSummary, RoomSummary rightRoomSummary) {
                 int retValue;
@@ -112,7 +114,7 @@ public class RoomUtils {
                     retValue = 0;
                 }
 
-                return retValue;
+                return reverseOrder ? -retValue : retValue;
             }
         };
     }
