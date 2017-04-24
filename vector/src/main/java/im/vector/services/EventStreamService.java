@@ -1095,12 +1095,23 @@ public class EventStreamService extends Service {
                 new Handler(getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Notification notif = NotificationUtils.buildMessageNotification(getApplicationContext(),
-                                mNotifiedEventsByRoomId,
-                                fEventToNotify,
-                                isBackgroundNotif);
+                        // check if the notification has not been cancelled
+                        if ((null != mNotifiedEventsByRoomId) && (mNotifiedEventsByRoomId.size() > 0)) {
+                            Notification notif = NotificationUtils.buildMessageNotification(getApplicationContext(),
+                                    mNotifiedEventsByRoomId,
+                                    fEventToNotify,
+                                    isBackgroundNotif);
 
-                        nm.notify(NOTIF_ID_MESSAGE, notif);
+                            // the notification cannot be built
+                            if (null != notif) {
+                                nm.notify(NOTIF_ID_MESSAGE, notif);
+                            } else {
+                                nm.cancel(NOTIF_ID_MESSAGE);
+                            }
+                        } else {
+                            Log.e(LOG_TAG, "## refreshMessagesNotification() : mNotifiedEventsByRoomId is empty");
+                            nm.cancel(NOTIF_ID_MESSAGE);
+                        }
                     }
                 });
             }
