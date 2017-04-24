@@ -21,7 +21,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,15 +35,12 @@ import android.widget.Filter;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -290,7 +286,9 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     private void initContactsData() {
         ContactsManager.getInstance().retrievePids();
 
-        if (mContactsSnapshotSession == -1 || mContactsSnapshotSession != ContactsManager.getInstance().getLocalContactsSnapshotSession()) {
+        if (mContactsSnapshotSession == -1
+                || mContactsSnapshotSession != ContactsManager.getInstance().getLocalContactsSnapshotSession()
+                || !ContactsManager.getInstance().didPopulateLocalContacts()) {
             // First time on the screen or contact data outdated
             mLocalContacts.clear();
             List<ParticipantAdapterItem> participants = new ArrayList<>(getContacts());
