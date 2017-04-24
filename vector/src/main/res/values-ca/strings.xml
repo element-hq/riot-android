@@ -514,12 +514,12 @@
     <!-- Room Settings -->
 
     <!-- room global settings-->
-    <string name="room_settings_room_photo">Room Photo</string>
-    <string name="room_settings_room_name">Room Name</string>
-    <string name="room_settings_topic">Topic</string>
-    <string name="room_settings_room_tag">Room Tag</string>
-    <string name="room_settings_tag_pref_dialog_title">Tagged as:</string>
-    <string name="room_settings_mute_notifs">Mute Notifications</string>
+    <string name="room_settings_room_photo">Foto de la sala</string>
+    <string name="room_settings_room_name">Nom de la sala</string>
+    <string name="room_settings_topic">Tema</string>
+    <string name="room_settings_room_tag">Etiqueta de la sala</string>
+    <string name="room_settings_tag_pref_dialog_title">Etiquetat com a:</string>
+    <string name="room_settings_mute_notifs">Silencia les notificacions</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favourite</string>
