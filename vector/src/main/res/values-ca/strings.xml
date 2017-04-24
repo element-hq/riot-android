@@ -539,10 +539,10 @@
     <string name="room_settings_room_access_rules_pref_dialog_title">Qui pot accedir a la sala?</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
-    <string name="room_settings_read_history_entry_anyone">Anyone</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Members only (since the point in time of selecting this option)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Members only (since they were invited)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Members only (since they joined)</string>
+    <string name="room_settings_read_history_entry_anyone">Ningú</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Només els participants (a partir del moment en què es selecciona aquesta opció)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Només els participants (des de que són convidats)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Només els participants (des de que s'uneixen a la sala)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">To link to a room it must have an address.</string>
