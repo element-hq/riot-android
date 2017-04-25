@@ -157,23 +157,16 @@ public class BugReporter {
                 }
 
                 if (!mIsCancelled) {
-                    String version = "";
-
-                    if (null != Matrix.getInstance(context).getDefaultSession()) {
-                        version += "User : " + Matrix.getInstance(context).getDefaultSession().getMyUserId() + "\n";
-                    }
-
-                    version += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
-                    version += Matrix.getApplicationName() + " version: " + Matrix.getInstance(context).getVersion(true) + "\n";
-                    version += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
-                    version += "Olm version:  " + Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true) + "\n";
-
                     // build the multi part request
                     BugReporterMultipartBody.Builder builder = new BugReporterMultipartBody.Builder()
                             .addFormDataPart("text", bugDescription)
                             .addFormDataPart("app", "riot-android")
                             .addFormDataPart("user_agent", "Android")
-                            .addFormDataPart("version", version);
+                            .addFormDataPart("version", Matrix.getInstance(context).getVersion(true))
+                            .addFormDataPart("matrix_sdk_version", Matrix.getInstance(context).getDefaultSession().getVersion(true))
+                            .addFormDataPart("olm_version", Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true))
+                            .addFormDataPart("device", Build.MODEL.trim())
+                            .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME);
 
                     // add the gzipped files
                     for (File file : gzippedFiles) {
