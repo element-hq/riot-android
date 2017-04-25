@@ -18,29 +18,16 @@
 package im.vector.util;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.Modifier;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.zip.GZIPOutputStream;
 
 import android.app.Activity;
@@ -53,8 +40,6 @@ import android.os.Build;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.matrix.androidsdk.rest.json.ConditionDeserializer;
-import org.matrix.androidsdk.rest.model.bingrules.Condition;
 import org.matrix.androidsdk.util.Log;
 
 import android.text.Editable;
@@ -69,298 +54,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-import com.squareup.okhttp.internal.Util;
-
-import okio.Buffer;
-import okio.BufferedSink;
-import okio.ByteString;
 
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.Matrix;
-import okio.BufferedSink;
-import okio.ByteString;
 
 /**
  * BugReporter creates and sends the bug reports.
  */
 public class BugReporter {
     private static final String LOG_TAG = "BugReporter";
-
-    public static class MultipartBody extends RequestBody {
-        /**
-         * The media-type multipart/form-data follows the rules of all multipart MIME data streams as
-         * outlined in RFC 2046. In forms, there are a series of fields to be supplied by the user who
-         * fills out the form. Each field has a name. Within a given form, the names are unique.
-         */
-        public static final MediaType FORM = MediaType.parse("multipart/form-data");
-
-        private static final byte[] COLONSPACE = {':', ' '};
-        private static final byte[] CRLF = {'\r', '\n'};
-        private static final byte[] DASHDASH = {'-', '-'};
-
-        private final ByteString boundary;
-        private final MediaType originalType;
-        private final MediaType contentType;
-        private final List<Part> parts;
-        private long contentLength = -1L;
-
-        MultipartBody(ByteString boundary, MediaType type, List<Part> parts) {
-            this.boundary = boundary;
-            this.originalType = type;
-            this.contentType = MediaType.parse(type + "; boundary=" + boundary.utf8());
-            this.parts = Util.immutableList(parts);
-        }
-
-        public MediaType type() {
-            return originalType;
-        }
-
-        public String boundary() {
-            return boundary.utf8();
-        }
-
-        /** The number of parts in this multipart body. */
-        public int size() {
-            return parts.size();
-        }
-
-        public List<Part> parts() {
-            return parts;
-        }
-
-        public Part part(int index) {
-            return parts.get(index);
-        }
-
-        /** A combination of {@link #type()} and {@link #boundary()}. */
-        @Override public MediaType contentType() {
-            return contentType;
-        }
-
-        @Override public long contentLength() throws IOException {
-            long result = contentLength;
-            if (result != -1L) return result;
-            return contentLength = writeOrCountBytes(null, true);
-        }
-
-        @Override public void writeTo(BufferedSink sink) throws IOException {
-            writeOrCountBytes(sink, false);
-        }
-
-        /**
-         * Either writes this request to {@code sink} or measures its content length. We have one method
-         * do double-duty to make sure the counting and content are consistent, particularly when it comes
-         * to awkward operations like measuring the encoded length of header strings, or the
-         * length-in-digits of an encoded integer.
-         */
-        private long writeOrCountBytes(BufferedSink sink, boolean countBytes) throws IOException {
-            long byteCount = 0L;
-
-            Buffer byteCountBuffer = null;
-            if (countBytes) {
-                sink = byteCountBuffer = new Buffer();
-            }
-
-            for (int p = 0, partCount = parts.size(); p < partCount; p++) {
-                Part part = parts.get(p);
-                Headers headers = part.headers;
-                RequestBody body = part.body;
-
-                sink.write(DASHDASH);
-                sink.write(boundary);
-                sink.write(CRLF);
-
-                if (headers != null) {
-                    for (int h = 0, headerCount = headers.size(); h < headerCount; h++) {
-                        sink.writeUtf8(headers.name(h))
-                                .write(COLONSPACE)
-                                .writeUtf8(headers.value(h))
-                                .write(CRLF);
-                    }
-                }
-
-                MediaType contentType = body.contentType();
-                if (contentType != null) {
-                    sink.writeUtf8("Content-Type: ")
-                            .writeUtf8(contentType.toString())
-                            .write(CRLF);
-                }
-
-                int contentLength = (int)body.contentLength();
-                if (contentLength != -1) {
-                    sink.writeUtf8("Content-Length: ")
-                            .writeUtf8(contentLength+"")
-                            .write(CRLF);
-                } else if (countBytes) {
-                    // We can't measure the body's size without the sizes of its components.
-                    byteCountBuffer.clear();
-                    return -1L;
-                }
-
-                sink.write(CRLF);
-
-                if (countBytes) {
-                    byteCount += contentLength;
-                } else {
-                    body.writeTo(sink);
-                }
-
-                sink.write(CRLF);
-            }
-
-            sink.write(DASHDASH);
-            sink.write(boundary);
-            sink.write(DASHDASH);
-            sink.write(CRLF);
-
-            if (countBytes) {
-                byteCount += byteCountBuffer.size();
-                byteCountBuffer.clear();
-            }
-
-            return byteCount;
-        }
-
-        /**
-         * Appends a quoted-string to a StringBuilder.
-         *
-         * <p>RFC 2388 is rather vague about how one should escape special characters in form-data
-         * parameters, and as it turns out Firefox and Chrome actually do rather different things, and
-         * both say in their comments that they're not really sure what the right approach is. We go with
-         * Chrome's behavior (which also experimentally seems to match what IE does), but if you actually
-         * want to have a good chance of things working, please avoid double-quotes, newlines, percent
-         * signs, and the like in your field names.
-         */
-        static StringBuilder appendQuotedString(StringBuilder target, String key) {
-            target.append('"');
-            for (int i = 0, len = key.length(); i < len; i++) {
-                char ch = key.charAt(i);
-                switch (ch) {
-                    case '\n':
-                        target.append("%0A");
-                        break;
-                    case '\r':
-                        target.append("%0D");
-                        break;
-                    case '"':
-                        target.append("%22");
-                        break;
-                    default:
-                        target.append(ch);
-                        break;
-                }
-            }
-            target.append('"');
-            return target;
-        }
-
-        public static final class Part {
-            public static Part create(RequestBody body) {
-                return create(null, body);
-            }
-
-            public static Part create(Headers headers, RequestBody body) {
-                if (body == null) {
-                    throw new NullPointerException("body == null");
-                }
-                if (headers != null && headers.get("Content-Type") != null) {
-                    throw new IllegalArgumentException("Unexpected header: Content-Type");
-                }
-                if (headers != null && headers.get("Content-Length") != null) {
-                    throw new IllegalArgumentException("Unexpected header: Content-Length");
-                }
-                return new Part(headers, body);
-            }
-
-            public static Part createFormData(String name, String value) {
-                return createFormData(name, null, RequestBody.create(null, value));
-            }
-
-            public static Part createFormData(String name, String filename, RequestBody body) {
-                if (name == null) {
-                    throw new NullPointerException("name == null");
-                }
-                StringBuilder disposition = new StringBuilder("form-data; name=");
-                appendQuotedString(disposition, name);
-
-                if (filename != null) {
-                    disposition.append("; filename=");
-                    appendQuotedString(disposition, filename);
-                }
-
-                return create(Headers.of("Content-Disposition", disposition.toString()), body);
-            }
-
-            final Headers headers;
-            final RequestBody body;
-
-            private Part(Headers headers, RequestBody body) {
-                this.headers = headers;
-                this.body = body;
-            }
-
-            public Headers headers() {
-                return headers;
-            }
-
-            public RequestBody body() {
-                return body;
-            }
-        }
-
-        public static final class Builder {
-            private final ByteString boundary;
-            private MediaType type = MultipartBody.FORM;
-            private final List<Part> parts = new ArrayList<>();
-
-            public Builder() {
-                this(UUID.randomUUID().toString());
-            }
-
-            public Builder(String boundary) {
-                this.boundary = ByteString.encodeUtf8(boundary);
-            }
-            
-            /** Add a form data part to the body. */
-            public Builder addFormDataPart(String name, String value) {
-                return addPart(Part.createFormData(name, value));
-            }
-
-            /** Add a form data part to the body. */
-            public Builder addFormDataPart(String name, String filename, RequestBody body) {
-                return addPart(Part.createFormData(name, filename, body));
-            }
-
-            /** Add a part to the body. */
-            public Builder addPart(Part part) {
-                if (part == null) throw new NullPointerException("part == null");
-                parts.add(part);
-                return this;
-            }
-
-            /** Assemble the specified parts into a request body. */
-            public MultipartBody build() {
-                if (parts.isEmpty()) {
-                    throw new IllegalStateException("Multipart body must have at least one part.");
-                }
-                return new MultipartBody(boundary, type, parts);
-            }
-        }
-    }
 
     /**
      * Bug report upload listener
@@ -380,6 +89,7 @@ public class BugReporter {
 
         /**
          * The upload progress (in percent)
+         *
          * @param progress the upload progress
          */
         void onProgress(int progress);
@@ -390,79 +100,12 @@ public class BugReporter {
         void onUploadSucceed();
     }
 
-    /**
-     * GSON management
-     */
-    private static final Gson gson = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .excludeFieldsWithModifiers(Modifier.PRIVATE, Modifier.STATIC)
-            .registerTypeAdapter(Condition.class, new ConditionDeserializer())
-            .create();
+    // the http client
+    private static final OkHttpClient mOkHttpClient = new OkHttpClient();
 
-    /**
-     * GZip a file
-     *
-     * @param fin the input file
-     * @return the gzipped file
-     */
-    private static File compressFile(File fin) {
-        File dstFile = new File(fin.getParent(), fin.getName() + ".gz");
+    // the pending bug report call
+    private static Call mBugReportCall = null;
 
-        if (dstFile.exists()) {
-            dstFile.delete();
-        }
-
-        FileOutputStream fos = null;
-        GZIPOutputStream gos = null;
-        InputStream inputStream = null;
-        try {
-            fos = new FileOutputStream(dstFile);
-            gos = new GZIPOutputStream(fos);
-
-            inputStream = new FileInputStream(fin);
-            try {
-                int n;
-
-                byte[] buffer = new byte[2048];
-                while ((n = inputStream.read(buffer)) != -1) {
-                    gos.write(buffer, 0, n);
-                }
-
-                gos.close();
-                inputStream.close();
-            } finally {
-                try {
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## compressFile() failed to close inputStream " + e.getMessage());
-                }
-            }
-
-            return dstFile;
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## compressFile() failed " + e.getMessage());
-        } catch (OutOfMemoryError oom) {
-            Log.e(LOG_TAG, "## compressFile() failed " + oom.getMessage());
-        } finally {
-            try {
-
-                if (null != fos) {
-                    fos.close();
-                }
-
-                if (null != gos) {
-                    gos.close();
-                }
-
-                if (null != inputStream) {
-                    inputStream.close();
-                }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## compressFile() failed to close inputStream " + e.getMessage());
-            }
-        }
-
-        return null;
-    }
 
     // boolean to cancel the bug report
     private static boolean mIsCancelled = false;
@@ -478,11 +121,7 @@ public class BugReporter {
         new AsyncTask<Void, Integer, String>() {
             @Override
             protected String doInBackground(Void... voids) {
-                File bugReportFile = new File(context.getApplicationContext().getFilesDir(), "bug_report");
-
-                if (bugReportFile.exists()) {
-                    bugReportFile.delete();
-                }
+                String serverError = null;
 
                 ArrayList<File> gzippedFiles = new ArrayList<>();
 
@@ -498,91 +137,142 @@ public class BugReporter {
                             }
                         }
                     }
+
+                    // for debug purpose
+                    /*if (!mIsCancelled) {
+                        File gzippedLogcat = saveLogCat(context, false);
+
+                        if (null != gzippedLogcat) {
+                            gzippedFiles.add(gzippedLogcat);
+                        }
+                    }*/
                 }
 
                 if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
-                    // TODO add locat
-                    // getLogCatError()
+                    File gzippedLogcat = saveLogCat(context, true);
+
+                    if (null != gzippedLogcat) {
+                        gzippedFiles.add(gzippedLogcat);
+                    }
                 }
 
-                /*
+                if (!mIsCancelled) {
+                    String version = "";
 
-                body.append('text', opts.userText || "User did not supply any additional text.");
-    body.append('app', 'riot-web');
-    body.append('version', version);
-    body.append('user_agent', userAgent);
+                    if (null != Matrix.getInstance(context).getDefaultSession()) {
+                        version += "User : " + Matrix.getInstance(context).getDefaultSession().getMyUserId() + "\n";
+                    }
 
-                 */
-                String version = "";
+                    version += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
+                    version += Matrix.getApplicationName() + " version: " + Matrix.getInstance(context).getVersion(true) + "\n";
+                    version += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
+                    version += "Olm version:  " + Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true) + "\n";
 
-                if (null != Matrix.getInstance(context).getDefaultSession()) {
-                    version += "User : " + Matrix.getInstance(context).getDefaultSession().getMyUserId() + "\n";
+                    // build the multi part request
+                    BugReporterMultipartBody.Builder builder = new BugReporterMultipartBody.Builder()
+                            .addFormDataPart("text", bugDescription)
+                            .addFormDataPart("app", "riot-android")
+                            .addFormDataPart("user_agent", "Android")
+                            .addFormDataPart("version", version);
+
+                    // add the gzipped files
+                    for (File file : gzippedFiles) {
+                        builder.addFormDataPart("compressed-log", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
+                    }
+
+                    BugReporterMultipartBody requestBody = builder.build();
+
+                    // add a progress listener
+                    requestBody.setWriteListener(new BugReporterMultipartBody.WriteListener() {
+                        @Override
+                        public void onWrite(long totalWritten, long contentLength) {
+                            int percentage;
+
+                            if (-1 != contentLength) {
+                                if (totalWritten > contentLength) {
+                                    percentage = 100;
+                                } else {
+                                    percentage = (int) (totalWritten * 100 / contentLength);
+                                }
+                            } else {
+                                percentage = 0;
+                            }
+
+                            if (mIsCancelled && (null != mBugReportCall)) {
+                                mBugReportCall.cancel();
+                            }
+
+                            Log.d(LOG_TAG, "## onWrite() : " + percentage + "%");
+                            publishProgress(percentage);
+                        }
+                    });
+
+                    // build the request
+                    Request request = new Request.Builder()
+                            .url(context.getResources().getString(R.string.bug_report_url))
+                            .post(requestBody)
+                            .build();
+
+                    int responseCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
+                    Response response = null;
+
+                    // trigger the request
+                    try {
+                        mBugReportCall = mOkHttpClient.newCall(request);
+                        response = mBugReportCall.execute();
+                        responseCode = response.code();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "response " + e.getMessage());
+                    }
+
+                    // if the upload failed, try to retrieve the reason
+                    if (responseCode != HttpURLConnection.HTTP_OK) {
+                        if ((null == response) || (null == response.body())) {
+                            serverError = "Failed with error " + responseCode;
+                        } else {
+                            InputStream is = response.body().byteStream();
+
+                            if (null != is) {
+                                try {
+                                    int ch;
+                                    StringBuilder b = new StringBuilder();
+                                    while ((ch = is.read()) != -1) {
+                                        b.append((char) ch);
+                                    }
+                                    serverError = b.toString();
+                                    is.close();
+
+                                    // check if the error message
+                                    try {
+                                        JSONObject responseJSON = new JSONObject(serverError);
+                                        serverError = responseJSON.getString("error");
+                                    } catch (JSONException e) {
+                                        Log.e(LOG_TAG, "doInBackground ; Json conversion failed " + e.getMessage());
+                                    }
+
+                                    // should never happen
+                                    if (null == serverError) {
+                                        serverError = "Failed with error " + responseCode;
+                                    }
+                                } catch (Exception e) {
+                                    Log.e(LOG_TAG, "## sendBugReport() : failed to parse error " + e.getMessage());
+                                } finally {
+                                    try {
+                                        is.close();
+                                    } catch (Exception e) {
+                                        Log.e(LOG_TAG, "## sendBugReport() : failed to close the error stream " + e.getMessage());
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
-                version += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
-                version += "Vector version: " + Matrix.getInstance(context).getVersion(true) + "\n";
-                version += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
-                version += "Olm version:  " + Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true) + "\n";
-
-
-                MultipartBody.Builder builder = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("text", bugDescription)
-                        .addFormDataPart("app", "Android")
-                        .addFormDataPart("user_agent", "Android")
-                        .addFormDataPart("version", version);
-
-
-                for(File file : gzippedFiles) {
-                    builder.addFormDataPart("compressed-log", file.getName(),
-                            RequestBody.create(MediaType.parse("application/octet-stream"), file));
-                }
-
-                       // .addFormDataPart("image", "logo-square.png",
-                          //      RequestBody.create( MediaType.parse("image/png"), new File("website/static/logo-square.png"))
-                        //
-                RequestBody requestBody =  builder.build();
-
-                Request request = new Request.Builder()
-                        //.header("Authorization", "Client-ID")
-                        .url(context.getResources().getString(R.string.bug_report_url))
-                        .post(requestBody)
-                        .build();
-
-                OkHttpClient client = new OkHttpClient();
-
-                Response response = null;
-
-                try {
-                    Call call = client.newCall(request);
-
-                    //call.cancel();
-
-                    response = call.execute();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "response " + e.getMessage());
-                }
-
-                Log.e(LOG_TAG, "test " + response);
-
-
-                /*try () {
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-                    System.out.println(response.body().string());
-                }*/
-
-
-
-
-
-
-
-                return "";
+                return serverError;
             }
 
             @Override
-            protected void onProgressUpdate(Integer ... progress) {
+            protected void onProgressUpdate(Integer... progress) {
                 super.onProgressUpdate(progress);
 
                 if (null != listener) {
@@ -596,6 +286,8 @@ public class BugReporter {
 
             @Override
             protected void onPostExecute(String reason) {
+                mBugReportCall = null;
+
                 if (null != listener) {
                     try {
                         if (mIsCancelled) {
@@ -621,7 +313,7 @@ public class BugReporter {
 
         // no current activity so cannot display an alert
         if (null == currentActivity) {
-            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, true,  "", null);
+            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, true, "", null);
             return;
         }
 
@@ -692,7 +384,7 @@ public class BugReporter {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgress(0);
 
-                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(),includeCrashLogsButton.isChecked(),  bugReportText.getText().toString(), new IMXBugReportListener() {
+                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), includeCrashLogsButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
                         @Override
                         public void onUploadFailed(String reason) {
                             try {
@@ -785,6 +477,10 @@ public class BugReporter {
         });
     }
 
+    //==============================================================================================================
+    // Screenshot management
+    //==============================================================================================================
+
     /**
      * Take a screenshot of the display.
      *
@@ -822,8 +518,44 @@ public class BugReporter {
         return null;
     }
 
+    //==============================================================================================================
+    // Logcat management
+    //==============================================================================================================
+
+    /**
+     * Save the logcat
+     *
+     * @param context       the context
+     * @param isErrorLogcat true to save the error logcat
+     * @return the file if the operation succeeds
+     */
+    private static File saveLogCat(Context context, boolean isErrorLogcat) {
+        File logCatErrFile = new File(context.getCacheDir().getAbsolutePath(), isErrorLogcat ? "logCatError.log" : "logError.log");
+
+        if (logCatErrFile.exists()) {
+            logCatErrFile.delete();
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(logCatErrFile);
+            OutputStreamWriter osw = new OutputStreamWriter(fos);
+            getLogCatError(osw, isErrorLogcat);
+            osw.close();
+
+            fos.flush();
+            fos.close();
+
+            return compressFile(logCatErrFile);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString());
+        }
+
+        return null;
+    }
+
     private static final int BUFFER_SIZE = 1024 * 1024 * 5;
-    private static final String[] LOGCAT_CMD = new String[]{
+
+    private static final String[] LOGCAT_CMD_ERROR = new String[]{
             "logcat", ///< Run 'logcat' command
             "-d",  ///< Dump the log rather than continue outputting it
             "-v", // formatting
@@ -834,32 +566,134 @@ public class BugReporter {
                     "*:S" ///< Everything else silent, so don't pick it..
     };
 
+    private static final String[] LOGCAT_CMD_DEBUG = new String[]{
+            "logcat",
+            "-d",
+            "-v",
+            "threadtime",
+            "Retrofit:S",
+            "ProgressBar:S",
+            "AbsListView:S",
+            "dalvikvm:S",
+            "OpenGLRenderer:S",
+            "NativeCrypto:S",
+            "VelocityTracker:S",
+            "MaliEGL:S",
+            "GraphicBuffer:S",
+            "WifiStateMachine:S",
+            "ActivityThread:S",
+            "PowerManagerService:S",
+            "BufferQueue:S",
+            "KeyguardUpdateMonitor:S",
+            "wpa_supplicant:S",
+            "ANRManager:S",
+            "InputReader:S",
+            "PowerUI:S",
+            "BatteryService:S",
+            "qdhwcomposer:S",
+            "ServiceDumpSys:S",
+            "DisplayPowerController:S",
+            "View:S",
+            "ListView:S",
+            "Posix:S",
+            "chatty:S",
+            "ViewRootImpl:S",
+            "TextView:S",
+            "MotionRecognitionManager:S",
+            "DisplayListCanvas:S",
+            "AudioManager:S",
+            "irsc_util:S",
+            "QCamera2HWI:S",
+            "audio_hw_primary:S",
+            "msm8974_platform:S",
+            "ACDB-LOADER:S",
+            "platform_parser:S",
+            "audio_hw_ssr:S",
+            "audio_hw_spkr_prot:S",
+            "Thermal-Lib:S",
+            "AudioFlinger:S",
+            "EffectDiracSound:S",
+            "BufferProvider:S",
+            "MonoPipe:S",
+            "bt_a2dp_hw:S",
+            "r_submix:S",
+            "AudioPolicyManagerCustom:S",
+            "RadioService:S",
+            "mediaserver:S",
+            "ListenService:S",
+            "InstallerConnection:S",
+            "SystemServer:S",
+            "SystemServiceManager:S",
+            "BaseMiuiBroadcastManager:S",
+            "BatteryStatsImpl:S",
+            "IntentFirewall:S",
+            "ServiceThread:S",
+            "AppOps:S",
+            "DisplayManagerService:S",
+            "SELinuxMMAC:S",
+            "PackageManager:S",
+            "PackageParser:S",
+            "PreinstallApp:S",
+            "VoldConnector:S",
+            "SoundTriggerHelper:S",
+            "AutomaticBrightnessController:S",
+            "KeyguardServiceDelegate:S",
+            "VoiceInteractionManagerService:S",
+            "SystemServer:S",
+            "UsbAlsaManager:S",
+            "Telecom:S",
+            "LocationManagerInjector:S",
+            "LocationPolicy:S",
+            "MmsServiceBroker:S",
+            "MountService:S",
+            "ACodec:S",
+            "OMXNodeInstance:S",
+            "MM_OSAL:S",
+            "OMXNodeInstance:S",
+            "SoftMPEG4Encoder:S",
+            "audio_hw_extn:S",
+            "audio_hw_fm:S",
+            "ContextImpl:S",
+            "ActiveAndroid:S",
+            "bt_a2dp_hw:S",
+            "BroadcastQueueInjector:S",
+            "AutoStartManagerService:S",
+            "Ext4Crypt:S",
+            "MccTable:S",
+            "DiracAPI:S",
+            "skia:S",
+            "libc-netbsd:S",
+            "chromium:S",
+            "v8:S",
+            "PreferenceGroup:S",
+            "Preference:S",
+            "*:*"
+    };
 
     /**
      * Retrieves the logs
-     * @return the logs.
+     *
+     * @param streamWriter  the stream writer
+     * @param isErrorLogCat true to save the error logs
      */
-    private static String getLogCatError() {
+    private static void getLogCatError(OutputStreamWriter streamWriter, boolean isErrorLogCat) {
         Process logcatProc;
 
         try {
-            logcatProc = Runtime.getRuntime().exec(LOGCAT_CMD);
+            logcatProc = Runtime.getRuntime().exec(isErrorLogCat ? LOGCAT_CMD_ERROR : LOGCAT_CMD_DEBUG);
         } catch (IOException e1) {
-            return "";
+            return;
         }
 
         BufferedReader reader = null;
-        String response = "";
         try {
             String separator = System.getProperty("line.separator");
-            StringBuilder sb = new StringBuilder();
             reader = new BufferedReader(new InputStreamReader(logcatProc.getInputStream()), BUFFER_SIZE);
             String line;
             while ((line = reader.readLine()) != null) {
-                sb.append(line);
-                sb.append(separator);
+                streamWriter.append(line);
+                streamWriter.append(separator);
             }
-            response = sb.toString();
         } catch (IOException e) {
             Log.e(LOG_TAG, "getLog fails with " + e.getLocalizedMessage());
         } finally {
@@ -871,6 +705,67 @@ public class BugReporter {
                 }
             }
         }
-        return response;
+    }
+
+    //==============================================================================================================
+    // File compression management
+    //==============================================================================================================
+
+    /**
+     * GZip a file
+     *
+     * @param fin the input file
+     * @return the gzipped file
+     */
+    private static File compressFile(File fin) {
+        Log.d(LOG_TAG, "## compressFile() : compress " + fin.getName());
+
+        File dstFile = new File(fin.getParent(), fin.getName() + ".gz");
+
+        if (dstFile.exists()) {
+            dstFile.delete();
+        }
+
+        FileOutputStream fos = null;
+        GZIPOutputStream gos = null;
+        InputStream inputStream = null;
+        try {
+            fos = new FileOutputStream(dstFile);
+            gos = new GZIPOutputStream(fos);
+
+            inputStream = new FileInputStream(fin);
+            int n;
+
+            byte[] buffer = new byte[2048];
+            while ((n = inputStream.read(buffer)) != -1) {
+                gos.write(buffer, 0, n);
+            }
+
+            gos.close();
+            inputStream.close();
+
+            Log.d(LOG_TAG, "## compressFile() : " + fin.length() + " compressed to " + dstFile.length() + " bytes");
+            return dstFile;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## compressFile() failed " + e.getMessage());
+        } catch (OutOfMemoryError oom) {
+            Log.e(LOG_TAG, "## compressFile() failed " + oom.getMessage());
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                }
+                if (null != gos) {
+                    gos.close();
+                }
+                if (null != inputStream) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## compressFile() failed to close inputStream " + e.getMessage());
+            }
+        }
+
+        return null;
     }
 }
