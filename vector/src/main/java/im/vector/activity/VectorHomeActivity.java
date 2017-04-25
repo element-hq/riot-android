@@ -1861,13 +1861,19 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             } else if (id == R.id.bottom_action_people) {
                 filteredRoomIdsSet = new HashSet<>();
                 filteredRoomIdsSet.addAll(mSession.getDirectChatRoomIdsList());
+                // Add direct chat invitations
+                for (Room room : roomSummaryByRoom.keySet()) {
+                    if (room.isDirectChatInvitation()) {
+                        filteredRoomIdsSet.add(room.getRoomId());
+                    }
+                }
             } else if (id == R.id.bottom_action_rooms) {
                 List<String> directChatRoomIds = mSession.getDirectChatRoomIdsList();
 
                 filteredRoomIdsSet = new HashSet<>();
 
                 for(Room room : roomSummaryByRoom.keySet()) {
-                    if (!directChatRoomIds.contains(room.getRoomId()) && !room.getAccountData().hasTags()) {
+                    if (!directChatRoomIds.contains(room.getRoomId()) && !room.getAccountData().hasTags() && !room.isDirectChatInvitation()) {
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
