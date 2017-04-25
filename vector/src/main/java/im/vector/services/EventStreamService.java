@@ -31,49 +31,46 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.support.v7.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
-import org.matrix.androidsdk.util.Log;
-
 import android.view.View;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
-import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.store.MXStoreListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.EventDisplay;
-
-import im.vector.VectorApp;
-import im.vector.Matrix;
-import im.vector.R;
-import im.vector.ViewedRoomTracker;
-import im.vector.activity.VectorCallViewActivity;
-import im.vector.activity.VectorHomeActivity;
-import im.vector.gcm.GcmRegistrationManager;
-import im.vector.util.NotificationUtils;
-import im.vector.util.VectorCallSoundManager;
+import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import im.vector.Matrix;
+import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.ViewedRoomTracker;
+import im.vector.activity.VectorCallViewActivity;
+import im.vector.activity.VectorHomeActivity;
+import im.vector.gcm.GcmRegistrationManager;
+import im.vector.util.NotificationUtils;
+import im.vector.util.VectorCallSoundManager;
 
 /**
  * A foreground service in charge of controlling whether the event stream is running or not.
@@ -1167,6 +1164,11 @@ public class EventStreamService extends Service {
     private boolean refreshNotifiedMessagesList() {
         // TODO add multi sessions
         MXSession session = Matrix.getInstance(getBaseContext()).getDefaultSession();
+
+        if (session == null) {
+            return false;
+        }
+
         IMXStore store = session.getDataHandler().getStore();
 
         // initialise the map it was not yet done (after restarting the application for example)
