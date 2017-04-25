@@ -370,7 +370,7 @@ public class NotificationUtils {
         }
 
         inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name));
-        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages_in_room, sum, roomsCount);
+        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages_in_room, sum, roomsCount));
         builder.setStyle(inboxStyle);
 
         // Build the pending intent for when the notification is clicked
