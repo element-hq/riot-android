@@ -1034,9 +1034,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private void applyFilter(final String pattern) {
         Fragment fragment = getSelectedFragment();
 
-        if (fragment != null && fragment instanceof AbsHomeFragment) {
-            //TODO loading wheel ?
+        if (fragment instanceof AbsHomeFragment) {
             ((AbsHomeFragment) fragment).applyFilter(pattern.trim());
+        } else if (fragment instanceof VectorRecentsListFragment) {
+            ((VectorRecentsListFragment) fragment).applyFilter(pattern.trim());
         }
 
         //TODO add listener to know when filtering is done and dismiss the keyboard

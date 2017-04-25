@@ -218,17 +218,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     }
 
     /**
-     * Expands all existing sections.
-     */
-    private void expandsAllSections() {
-        final int groupCount = mAdapter.getGroupCount();
-
-        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-            mRecentsListView.expandGroup(groupIndex);
-        }
-    }
-
-    /**
      * Search a pattern in the room
      * @param pattern the pattern to search
      * @param onSearchResultListener the search listener.
@@ -239,7 +228,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             return;
         }
 
-        mAdapter.setSearchPattern(pattern);
+        super.applyFilter(pattern);
 
         if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
             PublicRoomsManager.getInstance().startPublicRoomsSearch(null, null, false, mAdapter.getSearchedPattern(), new ApiCallback<List<PublicRoom>>() {
@@ -273,7 +262,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         mRecentsListView.post(new Runnable() {
             @Override
             public void run() {
-                expandsAllSections();
                 onSearchResultListener.onSearchSucceed(1);
             }
         });
