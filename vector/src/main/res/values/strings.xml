@@ -73,15 +73,15 @@
     <string name="local_address_book_header">Local address book</string>
     <string name="known_contacts_header">Known contacts</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
-    <string name="no_conversation_placeholder">No conversation</string>
-    <string name="no_local_contact_placeholder">No local contact</string>
-    <string name="no_result_placeholder">No result</string>
+    <string name="no_conversation_placeholder">No conversations</string>
+    <string name="no_local_contact_placeholder">No local contacts</string>
+    <string name="no_result_placeholder">No results</string>
 
     <!-- Rooms fragment -->
     <string name="rooms_header">Rooms</string>
     <string name="rooms_directory_header">Room directory</string>
-    <string name="no_room_placeholder">No room</string>
-    <string name="no_public_room_placeholder">No public room available</string>
+    <string name="no_room_placeholder">No rooms</string>
+    <string name="no_public_room_placeholder">No public rooms available</string>
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
