@@ -308,6 +308,8 @@ public class NotificationUtils {
         android.support.v7.app.NotificationCompat.InboxStyle inboxStyle = new android.support.v7.app.NotificationCompat.InboxStyle();
 
         int sum = 0;
+        int roomsCount = 0;
+
 
         List<NotificationDisplay> notificationsList = new ArrayList<>();
 
@@ -353,6 +355,7 @@ public class NotificationUtils {
                 notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 notificationsList.add(new NotificationDisplay(latestEvent.getOriginServerTs(), notifiedLine));
                 sum += session.getDataHandler().getStore().unreadEvents(roomId, null).size();
+                roomsCount++;
             }
         }
 
@@ -367,7 +370,7 @@ public class NotificationUtils {
         }
 
         inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name));
-        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages_in_room, sum, notifiedEventsByRoomId.keySet().size()));
+        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages_in_room, sum, roomsCount);
         builder.setStyle(inboxStyle);
 
         // Build the pending intent for when the notification is clicked

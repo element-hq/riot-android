@@ -1055,11 +1055,18 @@ public class EventStreamService extends Service {
      * Must always be called in getNotificationsHandler() thread.
      */
     public void refreshMessagesNotification() {
+        final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
+
         NotificationUtils.NotifiedEvent eventToNotify = getEventToNotify();
-
-        if (refreshNotifiedMessagesList()) {
-            final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
-
+        if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+            mNotifiedEventsByRoomId = null;
+            new Handler(getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    nm.cancel(NOTIF_ID_MESSAGE);
+                }
+            });
+        } else if (refreshNotifiedMessagesList()) {
             // no more notifications
             if ((null == mNotifiedEventsByRoomId) || mNotifiedEventsByRoomId.size() == 0) {
                 new Handler(getMainLooper()).post(new Runnable() {
@@ -1077,14 +1084,20 @@ public class EventStreamService extends Service {
                     IMXStore store = Matrix.getInstance(getBaseContext()).getDefaultSession().getDataHandler().getStore();
                     long ts = 0;
 
+                    List<String> roomIds = new ArrayList<>(mNotifiedEventsByRoomId.keySet());
+
                     // search the oldest message to refresh the notification
-                    for (String roomId : mNotifiedEventsByRoomId.keySet()) {
+                    for (String roomId : roomIds) {
                         List<NotificationUtils.NotifiedEvent> events = mNotifiedEventsByRoomId.get(roomId);
                         NotificationUtils.NotifiedEvent notifiedEvent = events.get(events.size() - 1);
 
                         Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
 
-                        if (event.getOriginServerTs() > ts) {
+                        // detect if the event still exists
+                        if (null == event) {
+                            Log.e(LOG_TAG, "## refreshMessagesNotification() : the event " + notifiedEvent.mEventId + " in room " + notifiedEvent.mRoomId + " does not exist anymore");
+                            mNotifiedEventsByRoomId.remove(roomId);
+                        } else if (event.getOriginServerTs() > ts) {
                             eventToNotify = notifiedEvent;
                             ts = event.getOriginServerTs();
                         }
@@ -1092,13 +1105,15 @@ public class EventStreamService extends Service {
                 }
 
                 final NotificationUtils.NotifiedEvent fEventToNotify = eventToNotify;
+                final Map<String, List<NotificationUtils.NotifiedEvent>> fNotifiedEventsByRoomId = new HashMap<>(mNotifiedEventsByRoomId);
+
                 new Handler(getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
                         // check if the notification has not been cancelled
-                        if ((null != mNotifiedEventsByRoomId) && (mNotifiedEventsByRoomId.size() > 0)) {
+                        if (fNotifiedEventsByRoomId.size() > 0) {
                             Notification notif = NotificationUtils.buildMessageNotification(getApplicationContext(),
-                                    mNotifiedEventsByRoomId,
+                                    new HashMap<>(fNotifiedEventsByRoomId),
                                     fEventToNotify,
                                     isBackgroundNotif);
 
@@ -1138,12 +1153,15 @@ public class EventStreamService extends Service {
 
                 // test if the message has not been read
                 if ((null != room) && !room.isEventRead(eventToNotify.mEventId)) {
+                    String body = null;
                     Event event = store.getEvent(eventToNotify.mEventId, eventToNotify.mRoomId);
 
-                    // test if the message is displayable
-                    EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, room.getLiveState());
-                    eventDisplay.setPrependMessagesWithAuthor(false);
-                    String body = eventDisplay.getTextualDisplay().toString();
+                    if (null != event) {
+                        // test if the message is displayable
+                        EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, room.getLiveState());
+                        eventDisplay.setPrependMessagesWithAuthor(false);
+                        body = eventDisplay.getTextualDisplay().toString();
+                    }
 
                     if (!TextUtils.isEmpty(body)) {
                         mPendingNotifications.clear();
