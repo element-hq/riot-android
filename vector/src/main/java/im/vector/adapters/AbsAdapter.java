@@ -189,6 +189,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
                             headerViewHolder.itemView.setVisibility(View.GONE);
                             headerViewHolder.itemView.getLayoutParams().height = 0;
                             headerViewHolder.itemView.requestLayout();
+                            headerViewHolder.populateViews(null);
                         } else {
                             if (headerViewHolder.itemView.getVisibility() != View.VISIBLE) {
                                 headerViewHolder.itemView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
@@ -426,7 +427,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
 
         void populateViews(AdapterSection item) {
             mSection = item;
-            vSectionTitle.setText(item.getTitle());
+            vSectionTitle.setText(item != null ? item.getTitle() : null);
         }
 
         public AdapterSection getSection() {
