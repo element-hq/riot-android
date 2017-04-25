@@ -16,22 +16,8 @@
         android:tag="sticky"
         android:text="Default section header" />
 
-    <!-- Workaround for https://code.google.com/p/android/issues/detail?id=201613 -->
-    <LinearLayout
-        android:id="@+id/matrix_only_filter"
+    <include
+        layout="@layout/adapter_local_contacts_sticky_header_subview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#f262ff"
-        android:paddingLeft="10dp"
-        android:tag="no-sticky">
-
-        <CheckBox
-            android:id="@+id/matrix_only_filter_checkbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/matrix_only_filter"
-            android:textColor="@color/vector_text_black_color"
-            android:theme="@style/CheckBoxTheme" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 </LinearLayout>

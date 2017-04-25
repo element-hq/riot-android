@@ -16,10 +16,9 @@
         android:tag="sticky"
         android:text="Default section header" />
 
-    <Spinner
-        android:id="@+id/public_rooms_selector"
-        style="@style/ListHeader"
+    <include
+        layout="@layout/adapter_public_room_sticky_header_subview"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:spinnerMode="dropdown" />
+        android:layout_height="40dp" />
+
 </LinearLayout>

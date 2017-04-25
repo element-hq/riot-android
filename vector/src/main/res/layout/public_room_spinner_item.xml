@@ -3,9 +3,10 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     style="?android:attr/spinnerItemStyle"
-    android:maxLines="1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
+    android:fontFamily="sans-serif-medium"
+    android:maxLines="1"
     android:textAlignment="inherit"
-    android:background="@android:drawable/btn_dropdown"/>
+    android:textColor="@color/list_header_spinner_text" />

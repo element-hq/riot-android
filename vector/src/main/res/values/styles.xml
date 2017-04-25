@@ -304,4 +304,8 @@
         <item name="colorAccent">@color/vector_green_color</item>
     </style>
 
+    <style name="SpinnerTheme">
+        <item name="colorControlNormal">@color/list_header_spinner</item>
+    </style>
+
 </resources>

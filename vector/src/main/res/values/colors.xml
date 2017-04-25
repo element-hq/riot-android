@@ -65,5 +65,7 @@
     <color name="vector_white_alpha_50">#80ffffff</color>
 
     <color name="list_header_background">#f6f6f6</color>
+    <color name="list_header_spinner_text">#7f3c3c3c</color>
+    <color name="list_header_spinner">#2e3c3c3c</color>
 
 </resources>
