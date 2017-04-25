@@ -1,12 +1,13 @@
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
- *
+ * Copyright 2017 Vector Creations Ltd
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,9 +17,6 @@
 
 package im.vector.ga;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import com.google.android.gms.analytics.ExceptionParser;
 import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -26,6 +24,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import android.content.Context;
+
 import org.matrix.androidsdk.util.Log;
 
 public class Analytics {
@@ -53,30 +52,25 @@ public class Analytics {
         // overwrite the exception parser to be more useful.
         Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
         if (handler != null && handler instanceof ExceptionReporter) { // this handler is the GA one
-            ExceptionReporter exceptionReporter = (ExceptionReporter)handler;
+            ExceptionReporter exceptionReporter = (ExceptionReporter) handler;
             exceptionReporter.setExceptionParser(callback);
             Thread.setDefaultUncaughtExceptionHandler(exceptionReporter);
 
             Log.d(LOG_TAG, "Analytics active.");
-        }
-        else {
+        } else {
             Log.e(LOG_TAG, "Cannot set custom exception parser.");
         }
 
         return mAnalytics;
     }
 
-    public static String getStackTrace(Throwable throwable) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw, true);
-        throwable.printStackTrace(pw);
-        return sw.getBuffer().toString();
-    }
-
-    public static void sendEvent(String category, String action, String label) {
-        sendEvent(category, action, label, Long.MAX_VALUE);
-    }
-
+    /**
+     * Send the GA stats event
+     * @param category the category
+     * @param action the action
+     * @param label the label
+     * @param value the value
+     */
     public static void sendEvent(String category, String action, String label, long value) {
         // add sanity check, GA could have been disabled.
         if (null != mTracker) {
