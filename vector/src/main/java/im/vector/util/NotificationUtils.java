@@ -385,6 +385,54 @@ public class NotificationUtils {
                 .addNextIntent(roomIntentTap);
 
         builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        // wearable
+        try {
+            long ts = 0;
+            Event latestEvent = null;
+
+            // search the oldest message
+            for (String roomId : notifiedEventsByRoomId.keySet()) {
+                List<NotifiedEvent> notifiedEvents = notifiedEventsByRoomId.get(roomId);
+                Event event = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
+
+                if ((null != event) && (event.getOriginServerTs() > ts)) {
+                    ts = event.getOriginServerTs();
+                    latestEvent = event;
+                }
+            }
+
+            // if there is a valid latest message
+            if (null != latestEvent) {
+                Room room = store.getRoom(latestEvent.roomId);
+
+                if (null != room) {
+                    EventDisplay eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                    eventDisplay.setPrependMessagesWithAuthor(false);
+                    String roomName = getRoomName(context, session, room, null);
+
+                    String message = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
+
+                    CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+
+                    // the event might have been redacted
+                    if (!TextUtils.isEmpty(textualDisplay)) {
+                        message += textualDisplay.toString();
+                    }
+
+                    NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
+                    NotificationCompat.Action action =
+                            new NotificationCompat.Action.Builder(R.drawable.message_notification_transparent,
+                                    message,
+                                    stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+                                    .build();
+                    wearableExtender.addAction(action);
+                    builder.extend(wearableExtender);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.getMessage());
+        }
     }
 
     /**
@@ -547,6 +595,39 @@ public class NotificationUtils {
                     R.drawable.vector_notification_open,
                     context.getString(R.string.action_open),
                     stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            // wearable
+            if (!isInvitationEvent) {
+                try {
+                    Event latestEvent = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
+
+                    // if there is a valid latest message
+                    if (null != latestEvent) {
+                        EventDisplay eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                        eventDisplay.setPrependMessagesWithAuthor(false);
+
+                        String message = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
+
+                        CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+
+                        // the event might have been redacted
+                        if (!TextUtils.isEmpty(textualDisplay)) {
+                            message += textualDisplay.toString();
+                        }
+
+                        NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
+                        NotificationCompat.Action action =
+                                new NotificationCompat.Action.Builder(R.drawable.message_notification_transparent,
+                                        message,
+                                        stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+                                        .build();
+                        wearableExtender.addAction(action);
+                        builder.extend(wearableExtender);
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -667,11 +748,6 @@ public class NotificationUtils {
             builder.setColor(Color.TRANSPARENT);
         }
 
-        try {
-            builder.extend(new NotificationCompat.WearableExtender());
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : WearableExtender failed " + e.getMessage());
-        }
 
         Notification n = builder.build();
 
