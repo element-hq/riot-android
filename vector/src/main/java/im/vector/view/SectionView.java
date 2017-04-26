@@ -71,6 +71,7 @@ public class SectionView extends RelativeLayout {
 
     /**
      * Init the section header
+     *
      * @param section the section description
      */
     private void setup(final AdapterSection section) {
@@ -86,7 +87,7 @@ public class SectionView extends RelativeLayout {
         mTitleView = (TextView) headerView.findViewById(R.id.section_title);
         mTitleView.setText(section.getTitle());
 
-        mLoadingView = (ProgressBar)headerView.findViewById(R.id.section_loading);
+        mLoadingView = (ProgressBar) headerView.findViewById(R.id.section_loading);
         mLoadingView.setVisibility(View.INVISIBLE);
 
         // custom subview ?
@@ -158,33 +159,13 @@ public class SectionView extends RelativeLayout {
      * @param nextSection
      * @param dy
      */
-    public void onFoldSubView(final SectionView nextSection, int dy) {
-        // nothing to do
-        if (0 == dy) {
-            return;
-        }
-
-        Log.d(LOG_TAG, "onFoldSubView dy " + dy);
-        if (mSubView != null) {
-            if (nextSection.getTop() <= getBottom()) {
-                int translation;
-
-                if (-(nextSection.getTop() - getBottom()) > mSubView.getMeasuredHeight()) {
-                    translation = 0;
-                } else {
-                    if (dy > 0) {
-                        translation = Math.max(nextSection.getTop() - getBottom(), 0);
-                    } else {
-                        translation = Math.min(nextSection.getTop() - getBottom(), 0);
-                    }
-                }
-
-                if (mSubView.getTranslationY() != translation) {
-                    mSubView.setTranslationY(translation);
-                }
-
-            } else if (mSubView.getTranslationY() < 0) {
-                mSubView.setTranslationY(0);
+    public void onFoldSubView(final SectionView nextSection, final int dy) {
+        if (mSubView != null && getHeaderTop() == getTranslationY()) {
+            final float nextSectionDistance = nextSection.getTranslationY() - getTranslationY() - getMeasuredHeight();
+            final float translation = Math.min(0, nextSectionDistance);
+            if (mSubView.getTranslationY() != translation) {
+                Log.d(LOG_TAG, "onFoldSubView new translation " + translation);
+                mSubView.setTranslationY(translation);
             }
         }
     }
