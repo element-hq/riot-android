@@ -6,25 +6,27 @@
     android:background="@color/vector_recents_header_background_color">
 
     <RelativeLayout
+        android:id="@+id/heading_layout"
         android:layout_width="match_parent"
         android:layout_height="42dp">
+
         <TextView
             android:id="@+id/heading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text = "Header"
-            android:fontFamily="sans-serif-medium"
             android:layout_marginLeft="18dp"
-            android:textSize="14sp"
-            android:textColor="@color/vector_text_black_color"/>
+            android:fontFamily="sans-serif-medium"
+            android:text="Header"
+            android:textColor="@color/vector_text_black_color"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/heading_image"
-            android:layout_centerVertical="true"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginRight="15dp"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp" />
     </RelativeLayout>
 </RelativeLayout>
