@@ -16,22 +16,22 @@
 
 package im.vector.activity;
 
-import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Filter;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -51,7 +51,7 @@ import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
 
-public class RoomDirectoryPickerActivity extends AppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener, SearchView.OnQueryTextListener {
+public class RoomDirectoryPickerActivity extends AppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
     // LOG TAG
     private static final String LOG_TAG = "RoomDirPickerActivity";
 
@@ -61,7 +61,6 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
     private MXSession mSession;
     private RoomDirectoryAdapter mRoomDirectoryAdapter;
 
-    private SearchView mSearchView;
     @BindView(R.id.room_directory_loading)
     View mLoadingView;
 
@@ -117,17 +116,6 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_directory_server_picker, menu);
-
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        if (searchItem != null) {
-            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-            mSearchView.setMaxWidth(Integer.MAX_VALUE);
-            mSearchView.setSubmitButtonEnabled(false);
-            mSearchView.setQueryHint(getString(R.string.search_hint));
-            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            mSearchView.setOnQueryTextListener(this);
-        }
         return true;
     }
 
@@ -139,15 +127,16 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
             return true;
         }
 
+        if (item.getItemId() == R.id.action_add_custom_hs) {
+            displayCustomDirectoryDialog();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mSearchView != null) {
-            mSearchView.setOnQueryTextListener(null);
-        }
     }
 
     /**
@@ -210,6 +199,64 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
         });
     }
 
+    /**
+     * Display a dialog to enter a custom HS url.
+     */
+    private void displayCustomDirectoryDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_directory_picker, null);
+        alert.setView(dialogView);
+
+        final EditText editText = (EditText) dialogView.findViewById(R.id.directory_picker_edit_text);
+
+        alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                final String serverUrl = editText.getText().toString().trim();
+
+                if (!TextUtils.isEmpty(serverUrl)) {
+                    mLoadingView.setVisibility(View.VISIBLE);
+                    mSession.getEventsApiClient().getPublicRoomsCount(serverUrl, new ApiCallback<Integer>() {
+                        @Override
+                        public void onSuccess(Integer count) {
+                            Intent intent = new Intent();
+                            intent.putExtra(EXTRA_OUT_ROOM_DIRECTORY_DATA, new RoomDirectoryData(serverUrl, serverUrl, null, null, false));
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+
+                        private void onError(String error) {
+                            Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
+                            mLoadingView.setVisibility(View.GONE);
+                            Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onError(e.getMessage());
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onError(e.getMessage());
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onError(e.getMessage());
+                        }
+                    });
+                }
+            }
+        });
+
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+
+        alert.show();
+    }
+
     /*
     * *********************************************************************************************
     * UI
@@ -227,14 +274,6 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
         refreshDirectoryServersList();
     }
 
-    private void filterServersList(final String pattern) {
-        mRoomDirectoryAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
-            @Override
-            public void onFilterComplete(int count) {
-            }
-        });
-    }
-
     /*
     * *********************************************************************************************
     * Listener
@@ -243,57 +282,9 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
 
     @Override
     public void onSelectRoomDirectory(final RoomDirectoryData directoryServerData) {
-        // test if the server exists
-        if (!TextUtils.isEmpty(mSearchView.getQuery()) && TextUtils.equals(directoryServerData.getServerUrl(), mSearchView.getQuery())) {
-            mLoadingView.setVisibility(View.VISIBLE);
-
-            mSession.getEventsApiClient().getPublicRoomsCount(directoryServerData.getServerUrl(), new ApiCallback<Integer>() {
-                @Override
-                public void onSuccess(Integer count) {
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_OUT_ROOM_DIRECTORY_DATA, directoryServerData);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-
-                private void onError(String error) {
-                    Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
-                    mLoadingView.setVisibility(View.GONE);
-                    Toast.makeText(RoomDirectoryPickerActivity.this, R.string.room_directory_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onError(e.getMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onError(e.getMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onError(e.getMessage());
-                }
-            });
-        } else {
-            Intent intent = new Intent();
-            intent.putExtra(EXTRA_OUT_ROOM_DIRECTORY_DATA, directoryServerData);
-            setResult(RESULT_OK, intent);
-            finish();
-        }
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_OUT_ROOM_DIRECTORY_DATA, directoryServerData);
+        setResult(RESULT_OK, intent);
+        finish();
     }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        filterServersList(newText);
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return true;
-    }
-
 }
