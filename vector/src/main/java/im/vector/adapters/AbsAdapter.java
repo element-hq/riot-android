@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -39,13 +38,12 @@ import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.StickySectionHelper;
 import im.vector.util.VectorUtils;
 import im.vector.view.SectionView;
 
-public abstract class AbsAdapter extends RecyclerView.Adapter implements Filterable {
+public abstract class AbsAdapter extends AbsFilterableAdapter {
 
     private static final String LOG_TAG = AbsAdapter.class.getSimpleName();
 
@@ -62,14 +60,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     /// Ex <0, section 1 with 2 items>, <3, section 2>
     private List<Pair<Integer, AdapterSection>> mSections;
 
-    protected CharSequence mCurrentFilterPattern;
-
     private final AdapterSection<Room> mInviteSection;
-
-    private Filter mFilter;
-
-    protected final Context mContext;
-    protected final MXSession mSession;
 
     private final InvitationListener mInvitationListener;
     protected final MoreRoomActionListener mMoreActionListener;
@@ -81,40 +72,14 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      */
 
     protected AbsAdapter(final Context context, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
-        mContext = context;
-        mSession = Matrix.getInstance(context).getDefaultSession();
+        super(context);
+
         mInvitationListener = invitationListener;
         mMoreActionListener = moreActionListener;
 
         registerAdapterDataObserver(new AdapterDataObserver());
 
         mSections = new ArrayList<>();
-
-        mFilter = new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                final FilterResults results = new FilterResults();
-
-                String filterPattern = null;
-                if (!TextUtils.isEmpty(constraint)) {
-                    filterPattern = constraint.toString().trim();
-                }
-
-                results.count = applyFilter(filterPattern) + filterRooms(mInviteSection, filterPattern);
-
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                mCurrentFilterPattern = constraint;
-                updateSections();
-
-                if (mStickySectionHelper != null) {
-                    mStickySectionHelper.resetSticky(mSections);
-                }
-            }
-        };
 
         mInviteSection = new AdapterSection<>(context.getString(R.string.room_recents_invites), -1, R.layout.adapter_item_room_view,
                 TYPE_HEADER_DEFAULT, TYPE_ROOM_INVITATION, new ArrayList<Room>(), null);
@@ -214,8 +179,32 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     }
 
     @Override
-    public Filter getFilter() {
-        return mFilter;
+    protected Filter createFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults results = new FilterResults();
+
+                String filterPattern = null;
+                if (!TextUtils.isEmpty(constraint)) {
+                    filterPattern = constraint.toString().trim();
+                }
+
+                results.count = applyFilter(filterPattern) + filterRooms(mInviteSection, filterPattern);
+
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mCurrentFilterPattern = constraint;
+                updateSections();
+
+                if (mStickySectionHelper != null) {
+                    mStickySectionHelper.resetSticky(mSections);
+                }
+            }
+        };
     }
 
     /*
@@ -376,10 +365,6 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         if (section.getNbItems() > 0 && startPos > 0) {
             notifyItemRangeChanged(startPos, startPos + section.getNbItems() - 1);
         }
-    }
-
-    public void onFilterDone(CharSequence currentPattern) {
-        mCurrentFilterPattern = currentPattern;
     }
 
     /**

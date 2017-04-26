@@ -67,9 +67,6 @@ public class FavouritesFragment extends AbsHomeFragment {
     // rooms management
     private FavoriteAdapter mFavoritesAdapter;
 
-    // the searched pattern
-    private String mSearchedPattern;
-
     // the activity
     private VectorHomeActivity mActivity;
 
@@ -115,9 +112,8 @@ public class FavouritesFragment extends AbsHomeFragment {
 
         initViews();
 
-        if (savedInstanceState != null) {
-            // Restore adapter items
-        }
+        // Eventually restore the pattern of adapter after orientation change
+        mFavoritesAdapter.onFilterDone(mCurrentFilter);
     }
 
     @Override
@@ -149,24 +145,24 @@ public class FavouritesFragment extends AbsHomeFragment {
 
     @Override
     protected void onFilter(String pattern, final OnFilterListener listener) {
-        if (!TextUtils.equals(mSearchedPattern, pattern)) {
-            mSearchedPattern = pattern;
-
-            mFavoritesAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
-                @Override
-                public void onFilterComplete(int count) {
-                    updateRoomsDisplay(count);
-                    listener.onFilterDone(count);
-                }
-            });
-        }
+        mFavoritesAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int count) {
+                listener.onFilterDone(count);
+                updateRoomsDisplay(count);
+            }
+        });
     }
 
     @Override
     protected void onResetFilter() {
-        mSearchedPattern = "";
-        mFavoritesAdapter.getFilter().filter("");
-        updateRoomsDisplay(mFavoritesAdapter.getItemCount());
+        mFavoritesAdapter.getFilter().filter("", new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int count) {
+                Log.i(LOG_TAG, "onResetFilter " + count);
+                updateRoomsDisplay(mFavoritesAdapter.getItemCount());
+            }
+        });
     }
 
     /*
@@ -216,8 +212,8 @@ public class FavouritesFragment extends AbsHomeFragment {
      * @param count the matched rooms count
      */
     private void updateRoomsDisplay(int count) {
-        mFavoritesPlaceHolder.setVisibility((0 == count) && !TextUtils.isEmpty(mSearchedPattern) ? View.VISIBLE : View.GONE);
-        mFavoritesRecyclerView.setVisibility((0 != count) ? View.VISIBLE : View.GONE);
+        mFavoritesPlaceHolder.setVisibility(0 == count ? View.VISIBLE : View.GONE);
+        mFavoritesRecyclerView.setVisibility(0 != count ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -309,7 +305,7 @@ public class FavouritesFragment extends AbsHomeFragment {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 // do not allow the drag and drop if there is a pending search
-                return makeMovementFlags(!TextUtils.isEmpty(mSearchedPattern) ? 0 : (ItemTouchHelper.UP | ItemTouchHelper.DOWN), 0);
+                return makeMovementFlags(!TextUtils.isEmpty(mCurrentFilter) ? 0 : (ItemTouchHelper.UP | ItemTouchHelper.DOWN), 0);
             }
 
             @Override

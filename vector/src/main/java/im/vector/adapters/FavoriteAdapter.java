@@ -19,28 +19,21 @@ package im.vector.adapters;
 import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.Filterable;
 
-import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import im.vector.Matrix;
 import im.vector.util.VectorUtils;
 
-public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implements Filterable {
-
-    private final Context mContext;
-    private final MXSession mSession;
+public class FavoriteAdapter extends AbsFilterableAdapter<RoomViewHolder> {
 
     private final int mLayoutRes;
     private final List<Room> mRooms;
@@ -56,14 +49,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
      */
 
     public FavoriteAdapter(final Context context, @LayoutRes final int layoutRes, final OnFavoritesListener listener, AbsAdapter.MoreRoomActionListener moreActionListener) {
+        super(context);
+
         mLayoutRes = layoutRes;
         mRooms = new ArrayList<>();
         mFilteredRooms = new ArrayList<>();
         mListener = listener;
         mMoreActionListener = moreActionListener;
-
-        mContext = context;
-        mSession =  Matrix.getInstance(context).getDefaultSession();
     }
 
     /*
@@ -97,27 +89,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
     }
 
     @Override
-    public Filter getFilter() {
+    protected Filter createFilter() {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 final FilterResults results = new FilterResults();
 
-                mFilteredRooms.clear();
-                if (TextUtils.isEmpty(constraint)) {
-                    mFilteredRooms.addAll(mRooms);
-                } else {
-                    final String filterPattern = constraint.toString().trim();
-                    for (final Room room : mRooms) {
-
-                        final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-                        if (Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE)
-                                .matcher(roomName)
-                                .find()) {
-                            mFilteredRooms.add(room);
-                        }
-                    }
-                }
+                filterFavourites(constraint);
 
                 results.values = mFilteredRooms;
                 results.count = mFilteredRooms.size();
@@ -149,8 +127,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
             mRooms.clear();
             mRooms.addAll(rooms);
 
-            mFilteredRooms.clear();
-            mFilteredRooms.addAll(rooms);
+            filterFavourites(mCurrentFilterPattern);
         }
 
         notifyDataSetChanged();
@@ -158,6 +135,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
 
     /**
      * Provides the item at the dedicated position
+     *
      * @param position the position
      * @return the item
      */
@@ -168,6 +146,36 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
 
         return null;
     }
+
+    /*
+     * *********************************************************************************************
+     * Private methods
+     * *********************************************************************************************
+     */
+
+    /**
+     * Filter the favourites list according to the given pattern
+     *
+     * @param constraint
+     */
+    private void filterFavourites(CharSequence constraint) {
+        mFilteredRooms.clear();
+        if (TextUtils.isEmpty(constraint)) {
+            mFilteredRooms.addAll(mRooms);
+        } else {
+            final String filterPattern = constraint.toString().trim();
+            for (final Room room : mRooms) {
+
+                final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
+                if (Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE)
+                        .matcher(roomName)
+                        .find()) {
+                    mFilteredRooms.add(room);
+                }
+            }
+        }
+    }
+
 
     /*
      * *********************************************************************************************
