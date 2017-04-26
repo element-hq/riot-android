@@ -34,6 +34,7 @@ import android.widget.Filter;
 
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
@@ -272,10 +273,16 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      */
     private void initDirectChatsData() {
         final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
+        final IMXStore store = mSession.getDataHandler().getStore();
+
         mDirectChats.clear();
         if (directChatIds != null && !directChatIds.isEmpty()) {
             for (String roomId : directChatIds) {
-                mDirectChats.add(mSession.getDataHandler().getRoom(roomId));
+                Room room = store.getRoom(roomId);
+
+                if ((null != room) && !room.isConferenceUserRoom()) {
+                    mDirectChats.add(mSession.getDataHandler().getRoom(roomId));
+                }
             }
         }
     }

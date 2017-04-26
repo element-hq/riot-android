@@ -1863,7 +1863,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 filteredRoomIdsSet.addAll(mSession.getDirectChatRoomIdsList());
                 // Add direct chat invitations
                 for (Room room : roomSummaryByRoom.keySet()) {
-                    if (room.isDirectChatInvitation()) {
+                    if (room.isDirectChatInvitation() && !room.isConferenceUserRoom()) {
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
