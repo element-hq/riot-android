@@ -100,6 +100,10 @@ public class BugReporter {
         void onUploadSucceed();
     }
 
+    // filenames
+    private static final String LOG_CAT_ERROR_FILENAME = "logCatError.log";
+    private static final String LOG_CAT_FILENAME = "logCat.log";
+
     // the http client
     private static final OkHttpClient mOkHttpClient = new OkHttpClient();
 
@@ -523,7 +527,7 @@ public class BugReporter {
      * @return the file if the operation succeeds
      */
     private static File saveLogCat(Context context, boolean isErrorLogcat) {
-        File logCatErrFile = new File(context.getCacheDir().getAbsolutePath(), isErrorLogcat ? "logCatError.log" : "logError.log");
+        File logCatErrFile = new File(context.getCacheDir().getAbsolutePath(), isErrorLogcat ? LOG_CAT_ERROR_FILENAME : LOG_CAT_FILENAME);
 
         if (logCatErrFile.exists()) {
             logCatErrFile.delete();
