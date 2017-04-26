@@ -671,7 +671,9 @@
 
     <!-- directory activity  -->
     <string name="select_room_directory">Select a room directory</string>
-    <string name="room_directory_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
+    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
+    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
+    <string name="directory_server_placeholder">Homeserver URL</string>
 
     <!-- Notifications -->
     <string name="notification_unread_messages">%d unread messages</string>

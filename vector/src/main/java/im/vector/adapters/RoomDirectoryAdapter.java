@@ -25,8 +25,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,17 +38,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.util.RoomDirectoryData;
 
-public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdapter.RoomDirectoryViewHolder> implements Filterable {
+public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdapter.RoomDirectoryViewHolder> {
 
     private static final String LOG_TAG = "RoomDirectoryAdapter";
 
     private List<RoomDirectoryData> mList;
-    private List<RoomDirectoryData> mFilteredList;
 
     private final OnSelectRoomDirectoryListener mListener;
 
@@ -62,20 +58,17 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
 
     public RoomDirectoryAdapter(final List<RoomDirectoryData> serversList, final OnSelectRoomDirectoryListener listener) {
         mList = (null == serversList) ? new ArrayList<RoomDirectoryData>() : new ArrayList<>(serversList);
-        mFilteredList = new ArrayList<>(mList);
         mListener = listener;
     }
 
     /**
      * Update the servers list
+     *
      * @param serversList the new servers list
      */
     public void updateDirectoryServersList(List<RoomDirectoryData> serversList) {
         mList.clear();
         mList.addAll(serversList);
-
-        mFilteredList.clear();
-        mFilteredList.addAll(serversList);
         notifyDataSetChanged();
     }
 
@@ -94,47 +87,12 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
 
     @Override
     public void onBindViewHolder(RoomDirectoryAdapter.RoomDirectoryViewHolder viewHolder, int position) {
-        viewHolder.populateViews(mFilteredList.get(position));
+        viewHolder.populateViews(mList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mFilteredList.size();
-    }
-
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                mFilteredList.clear();
-                final FilterResults results = new FilterResults();
-
-                if (TextUtils.isEmpty(constraint)) {
-                    mFilteredList.addAll(mList);
-                } else {
-                    final String filterPattern = constraint.toString().trim();
-                    mFilteredList.add(new RoomDirectoryData(filterPattern, filterPattern, null, null, false));
-
-                    Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
-
-                    for (final RoomDirectoryData serverData : mList) {
-                        if (serverData.isMatched(pattern)) {
-                            mFilteredList.add(serverData);
-                        }
-                    }
-                }
-                results.values = mFilteredList;
-                results.count = mFilteredList.size();
-
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                notifyDataSetChanged();
-            }
-        };
+        return mList.size();
     }
 
     /*
@@ -199,6 +157,7 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
 
     /**
      * Download the room avatar.
+     *
      * @param imageView the image view
      * @param avatarURL the avatar url
      */
@@ -244,7 +203,7 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
                     List<WeakReference<ImageView>> weakImageViews = mPendingDownloadByUrl.get(avatarURL);
                     mPendingDownloadByUrl.remove(avatarURL);
 
-                    for(WeakReference<ImageView> weakImageView : weakImageViews) {
+                    for (WeakReference<ImageView> weakImageView : weakImageViews) {
                         ImageView imageViewToUpdate = weakImageView.get();
 
                         if ((null != imageViewToUpdate) && TextUtils.equals((String) imageView.getTag(), avatarURL)) {
