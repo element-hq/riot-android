@@ -37,7 +37,9 @@ public class GCMHelper {
             if (null == VectorApp.getInstance()) {
                 Log.e(LOG_TAG, "## getRegistrationToken() : No active application");
             } else {
-                FirebaseApp.initializeApp(VectorApp.getInstance());
+                if (null == FirebaseApp.initializeApp(VectorApp.getInstance())) {
+                    Log.e(LOG_TAG, "## getRegistrationToken() : cannot initialise FirebaseApp");
+                }
             }
             // try to get the token anyway
             registrationToken = FirebaseInstanceId.getInstance().getToken();
