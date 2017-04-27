@@ -48,6 +48,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
     TextView vRoomName;
 
     @BindView(R.id.room_message)
+    @Nullable
     TextView vRoomLastMessage;
 
     @BindView(R.id.room_update_date)
@@ -156,12 +157,13 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         VectorUtils.loadRoomAvatar(mContext, mSession, vRoomAvatar, room);
 
         // get last message to be displayed
-        CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(mContext, mSession, roomSummary);
-        vRoomLastMessage.setText(lastMsgToDisplay);
+        if (vRoomLastMessage != null) {
+            CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(mContext, mSession, roomSummary);
+            vRoomLastMessage.setText(lastMsgToDisplay);
+        }
 
         vRoomDirectChatIcon.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
         vRoomEncryptedIcon.setVisibility(room.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
-
 
         if (vRoomUnreadIndicator != null) {
             // set bing view background colour

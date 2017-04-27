@@ -150,7 +150,7 @@ public class PeopleAdapter extends AbsAdapter {
     @Override
     protected int applyFilter(String pattern) {
         int nbResults = 0;
-        nbResults += filterRooms(mDirectChatsSection, pattern);
+        nbResults += filterRoomSection(mDirectChatsSection, pattern);
         nbResults += filterLocalContacts(pattern);
         nbResults += filterKnownContacts(pattern);
 
@@ -166,7 +166,7 @@ public class PeopleAdapter extends AbsAdapter {
     public void setRooms(final List<Room> rooms) {
         mDirectChatsSection.setItems(rooms, mCurrentFilterPattern);
         if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
-            filterRooms(mDirectChatsSection, String.valueOf(mCurrentFilterPattern));
+            filterRoomSection(mDirectChatsSection, String.valueOf(mCurrentFilterPattern));
         }
         updateSections();
     }

@@ -144,7 +144,7 @@ public class RoomAdapter extends AbsAdapter {
     protected int applyFilter(String pattern) {
         int nbResults = 0;
 
-        nbResults += filterRooms(mRoomsSection, pattern);
+        nbResults += filterRoomSection(mRoomsSection, pattern);
 
         // The public rooms search is done by a server request.
         // The result is also paginated so it make no sense to be done in the adapter
@@ -161,7 +161,7 @@ public class RoomAdapter extends AbsAdapter {
     public void setRooms(final List<Room> rooms) {
         mRoomsSection.setItems(rooms, mCurrentFilterPattern);
         if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
-            filterRooms(mRoomsSection, String.valueOf(mCurrentFilterPattern));
+            filterRoomSection(mRoomsSection, String.valueOf(mCurrentFilterPattern));
         }
         updateSections();
     }

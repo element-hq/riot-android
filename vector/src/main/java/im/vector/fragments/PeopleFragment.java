@@ -45,7 +45,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
@@ -65,11 +64,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
 
     private static final String MATRIX_USER_ONLY = "MATRIX_USER_ONLY";
-
-    @BindString(R.string.local_address_book_header)
-    String mLocalContactsHeaderText;
-    @BindString(R.string.known_contacts_header)
-    String mKnownContactsHeaderText;
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecycler;
@@ -119,7 +113,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             }
         };
 
-        prepareViews();
+        initViews();
 
         mOnRoomChangedListener = this;
 
@@ -232,7 +226,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     /**
      * Prepare views
      */
-    private void prepareViews() {
+    private void initViews() {
         int margin = (int) getResources().getDimension(R.dimen.item_decoration_left_margin);
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mRecycler.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, margin));

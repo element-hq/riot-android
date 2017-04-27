@@ -34,13 +34,12 @@ import org.matrix.androidsdk.data.Room;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
+import im.vector.util.RoomUtils;
 import im.vector.util.StickySectionHelper;
-import im.vector.util.VectorUtils;
 import im.vector.view.SectionView;
 
 public abstract class AbsAdapter extends AbsFilterableAdapter {
@@ -190,7 +189,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
                     filterPattern = constraint.toString().trim();
                 }
 
-                results.count = applyFilter(filterPattern) + filterRooms(mInviteSection, filterPattern);
+                results.count = applyFilter(filterPattern) + filterRoomSection(mInviteSection, filterPattern);
 
                 return results;
             }
@@ -221,7 +220,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
     public void setInvitation(final List<Room> rooms) {
         mInviteSection.setItems(rooms, mCurrentFilterPattern);
         if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
-            filterRooms(mInviteSection, String.valueOf(mCurrentFilterPattern));
+            filterRoomSection(mInviteSection, String.valueOf(mCurrentFilterPattern));
         }
 
         updateSections();
@@ -368,24 +367,15 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
     }
 
     /**
-     * Filter the given section (of rooms) with the given pattern
+     * Filter the given section of rooms with the given pattern
      *
      * @param section
      * @param filterPattern
      * @return nb of items matching the filter
      */
-    protected int filterRooms(final AdapterSection<Room> section, final String filterPattern) {
+    protected int filterRoomSection(final AdapterSection<Room> section, final String filterPattern) {
         if (!TextUtils.isEmpty(filterPattern)) {
-            List<Room> filteredRoom = new ArrayList<>();
-
-            Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
-            List<Room> sectionItems = new ArrayList<>(section.getItems());
-            for (final Room room : sectionItems) {
-                final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-                if (pattern.matcher(roomName).find()) {
-                    filteredRoom.add(room);
-                }
-            }
+            List<Room> filteredRoom = RoomUtils.getFilteredRooms(mContext, mSession, section.getItems(), filterPattern);
             section.setFilteredItems(filteredRoom, filterPattern);
         } else {
             section.resetFilter();

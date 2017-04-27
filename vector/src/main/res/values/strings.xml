@@ -68,6 +68,9 @@
     <!-- Home screen -->
     <string name="home_filter_placeholder">Filter</string>
 
+    <!-- Home fragment -->
+    <string name="low_priority_header">Low priority</string>
+
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
     <string name="local_address_book_header">Local address book</string>

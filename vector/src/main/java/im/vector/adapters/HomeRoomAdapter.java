@@ -19,7 +19,6 @@ package im.vector.adapters;
 import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,16 +28,16 @@ import org.matrix.androidsdk.data.Room;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
-import im.vector.util.VectorUtils;
+import im.vector.util.RoomUtils;
 
-public class FavoriteAdapter extends AbsFilterableAdapter<RoomViewHolder> {
+public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
+    private static final String LOG_TAG = HomeRoomAdapter.class.getSimpleName();
 
     private final int mLayoutRes;
     private final List<Room> mRooms;
     private final List<Room> mFilteredRooms;
-    private final OnFavoritesListener mListener;
+    private final OnSelectRoomListener mListener;
 
     private final AbsAdapter.MoreRoomActionListener mMoreActionListener;
 
@@ -48,12 +47,14 @@ public class FavoriteAdapter extends AbsFilterableAdapter<RoomViewHolder> {
      * *********************************************************************************************
      */
 
-    public FavoriteAdapter(final Context context, @LayoutRes final int layoutRes, final OnFavoritesListener listener, AbsAdapter.MoreRoomActionListener moreActionListener) {
+    public HomeRoomAdapter(final Context context, @LayoutRes final int layoutRes, final OnSelectRoomListener listener,
+                           AbsAdapter.MoreRoomActionListener moreActionListener) {
         super(context);
 
-        mLayoutRes = layoutRes;
         mRooms = new ArrayList<>();
         mFilteredRooms = new ArrayList<>();
+
+        mLayoutRes = layoutRes;
         mListener = listener;
         mMoreActionListener = moreActionListener;
     }
@@ -78,7 +79,7 @@ public class FavoriteAdapter extends AbsFilterableAdapter<RoomViewHolder> {
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onSelectFavorite(room, viewHolder.getAdapterPosition());
+                mListener.onSelectRoom(room, viewHolder.getAdapterPosition());
             }
         });
     }
@@ -95,7 +96,7 @@ public class FavoriteAdapter extends AbsFilterableAdapter<RoomViewHolder> {
             protected FilterResults performFiltering(CharSequence constraint) {
                 final FilterResults results = new FilterResults();
 
-                filterFavourites(constraint);
+                filterRooms(constraint);
 
                 results.values = mFilteredRooms;
                 results.count = mFilteredRooms.size();
@@ -126,10 +127,8 @@ public class FavoriteAdapter extends AbsFilterableAdapter<RoomViewHolder> {
         if (rooms != null) {
             mRooms.clear();
             mRooms.addAll(rooms);
-
-            filterFavourites(mCurrentFilterPattern);
+            filterRooms(mCurrentFilterPattern);
         }
-
         notifyDataSetChanged();
     }
 
@@ -154,28 +153,14 @@ public class FavoriteAdapter extends AbsFilterableAdapter<RoomViewHolder> {
      */
 
     /**
-     * Filter the favourites list according to the given pattern
+     * Filter the room list according to the given pattern
      *
      * @param constraint
      */
-    private void filterFavourites(CharSequence constraint) {
+    private void filterRooms(CharSequence constraint) {
         mFilteredRooms.clear();
-        if (TextUtils.isEmpty(constraint)) {
-            mFilteredRooms.addAll(mRooms);
-        } else {
-            final String filterPattern = constraint.toString().trim();
-            for (final Room room : mRooms) {
-
-                final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-                if (Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE)
-                        .matcher(roomName)
-                        .find()) {
-                    mFilteredRooms.add(room);
-                }
-            }
-        }
+        mFilteredRooms.addAll(RoomUtils.getFilteredRooms(mContext, mSession, mRooms, constraint));
     }
-
 
     /*
      * *********************************************************************************************
@@ -183,7 +168,7 @@ public class FavoriteAdapter extends AbsFilterableAdapter<RoomViewHolder> {
      * *********************************************************************************************
      */
 
-    public interface OnFavoritesListener {
-        void onSelectFavorite(Room room, int position);
+    public interface OnSelectRoomListener {
+        void onSelectRoom(Room room, int position);
     }
 }

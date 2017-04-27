@@ -79,9 +79,8 @@ import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.Log;
 
-import java.util.ArrayList;
 import java.lang.reflect.Field;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -104,9 +103,9 @@ import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
+import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
-import im.vector.fragments.VectorRecentsListFragment;
 import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -121,7 +120,7 @@ import im.vector.view.VectorPendingCallView;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends AppCompatActivity implements VectorRecentsListFragment.IVectorRecentsScrollEventListener  {
+public class VectorHomeActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
@@ -694,42 +693,36 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         switch (item.getItemId()) {
             case R.id.bottom_action_home:
-                Log.e(LOG_TAG, "onNavigationItemSelected HOME");
+                Log.d(LOG_TAG, "onNavigationItemSelected HOME");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_HOME);
                 if (fragment == null) {
-                    Log.e(LOG_TAG, "onNavigationItemSelected NEW HOME");
-                    //fragment = HomeFragment.newInstance();
-                    // Use old fragment for now
-                    fragment = VectorRecentsListFragment.newInstance(mSession.getCredentials().userId, R.layout.fragment_vector_recents_list);
+                    fragment = HomeFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
                 setTitle(R.string.bottom_action_home);
                 break;
             case R.id.bottom_action_favourites:
-                Log.e(LOG_TAG, "onNavigationItemSelected FAVOURITES");
+                Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_FAVOURITES);
                 if (fragment == null) {
-                    Log.e(LOG_TAG, "onNavigationItemSelected NEW FAVOURITES");
                     fragment = FavouritesFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
                 setTitle(R.string.bottom_action_favourites);
                 break;
             case R.id.bottom_action_people:
-                Log.e(LOG_TAG, "onNavigationItemSelected PEOPLE");
+                Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_PEOPLE);
                 if (fragment == null) {
-                    Log.e(LOG_TAG, "onNavigationItemSelected NEW PEOPLE");
                     fragment = PeopleFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
                 setTitle(R.string.bottom_action_people);
                 break;
             case R.id.bottom_action_rooms:
-                Log.e(LOG_TAG, "onNavigationItemSelected ROOMS");
+                Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROOMS);
                 if (fragment == null) {
-                    Log.e(LOG_TAG, "onNavigationItemSelected NEW ROOMS");
                     fragment = RoomsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
@@ -965,14 +958,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             mSession.markRoomsAsRead(mSession.getDataHandler().getStore().getRooms(), new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    Fragment currentFragment = getSelectedFragment();
-
-                    // the user could have switched to another fragment
-                    if (currentFragment instanceof VectorRecentsListFragment) {
-                        ((VectorRecentsListFragment)currentFragment).refresh();
-                        stopWaitingView();
-                    }
-
                     refreshUnreadBadges();
                 }
 
@@ -1036,8 +1021,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         if (fragment instanceof AbsHomeFragment) {
             ((AbsHomeFragment) fragment).applyFilter(pattern.trim());
-        } else if (fragment instanceof VectorRecentsListFragment) {
-            ((VectorRecentsListFragment) fragment).applyFilter(pattern.trim());
         }
 
         //TODO add listener to know when filtering is done and dismiss the keyboard
@@ -2093,35 +2076,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private void removeEventsListener() {
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
-        }
-    }
-
-    //==============================================================================================================
-    // IVectorRecentsScrollEventListener
-    //==============================================================================================================
-
-    // display the directory group if the user overscrolls for about 0.5 s
-    @Override
-    public void onRecentsListOverScrollUp() {
-    }
-
-    // warn the user scrolls up
-    @Override
-    public void onRecentsListScrollUp() {
-        hideFloatingActionButton(TAG_FRAGMENT_HOME);
-    }
-
-    // warn when the user scrolls downs
-    @Override
-    public void onRecentsListScrollDown() {
-        hideFloatingActionButton(TAG_FRAGMENT_HOME);
-    }
-
-    // warn when the list content can be fully displayed without scrolling
-    @Override
-    public void onRecentsListFitsScreen() {
-        if ((null != mFloatingActionButton) && !mFloatingActionButton.isShown()) {
-            mFloatingActionButton.show();
         }
     }
 }
