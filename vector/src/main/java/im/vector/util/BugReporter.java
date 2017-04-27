@@ -160,12 +160,23 @@ public class BugReporter {
                     }
                 }
 
+                String userId = null;
+
+                if (null != Matrix.getInstance(context).getDefaultSession()) {
+                    userId = Matrix.getInstance(context).getDefaultSession().getMyUserId();
+                }
+
+                if (TextUtils.isEmpty(userId)) {
+                    userId = "";
+                }
+
                 if (!mIsCancelled) {
                     // build the multi part request
                     BugReporterMultipartBody.Builder builder = new BugReporterMultipartBody.Builder()
                             .addFormDataPart("text", bugDescription)
                             .addFormDataPart("app", "riot-android")
                             .addFormDataPart("user_agent", "Android")
+                            .addFormDataPart("user_id", userId)
                             .addFormDataPart("version", Matrix.getInstance(context).getVersion(true))
                             .addFormDataPart("matrix_sdk_version", Matrix.getInstance(context).getDefaultSession().getVersion(true))
                             .addFormDataPart("olm_version", Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true))
