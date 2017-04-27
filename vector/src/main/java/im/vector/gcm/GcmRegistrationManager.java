@@ -215,7 +215,8 @@ public final class GcmRegistrationManager {
     public String getGCMRegistrationToken() {
         String registrationToken = getStoredRegistrationToken();
 
-        if (registrationToken == null) {
+        if (TextUtils.isEmpty(registrationToken)) {
+            Log.d(LOG_TAG, "## getGCMRegistrationToken() : undefined token -> getting a nex one");
             registrationToken = GCMHelper.getRegistrationToken();
         }
         return registrationToken;
