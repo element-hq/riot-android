@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -70,10 +71,12 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
 
     public VectorAutoCompleteTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.setInputType(this.getInputType() & (this.getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
     }
 
     public VectorAutoCompleteTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.setInputType(this.getInputType() & (this.getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
     }
 
     /**

@@ -18,6 +18,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,15 +59,17 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
     private IEnablingActions mActionListener;
 
     // actions list
+    private List<AdapterMemberActionItems> mUncategorizedActionsList = new ArrayList<>();
     private List<AdapterMemberActionItems> mAdminActionsList = new ArrayList<>();
     private List<AdapterMemberActionItems> mCallActionsList = new ArrayList<>();
     private List<AdapterMemberActionItems> mDirectCallsList = new ArrayList<>();
     private List<AdapterMemberActionItems> mDevicesList = new ArrayList<>();
 
     // list of actions list
-    private ArrayList<List<AdapterMemberActionItems>> mActionsList = new ArrayList<>();
+    private List<List<AdapterMemberActionItems>> mActionsList = new ArrayList<>();
 
-    // group position
+    // group positions
+    private int mUncategorizedGroupPosition = -1;
     private int mAdminGroupPosition = -1;
     private int mCallGroupPosition = -1;
     private int mDirectCallsGroupPosition = -1;
@@ -163,6 +166,15 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
     }
 
     /**
+     * Update the uncategorized actions list
+     *
+     * @param uncategorizedActionsList the uncategorized actions list
+     */
+    public void setUncategorizedActionsList(List<AdapterMemberActionItems> uncategorizedActionsList) {
+        mUncategorizedActionsList = uncategorizedActionsList;
+    }
+
+    /**
      * Update the admin actions list
      *
      * @param adminActionsList the admin actions list
@@ -204,10 +216,18 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         mActionsList = new ArrayList<>();
 
         int groupPos = 0;
+        mUncategorizedGroupPosition = -1;
         mAdminGroupPosition = -1;
         mCallGroupPosition = -1;
         mDirectCallsGroupPosition = -1;
         mDevicesGroupPosition = -1;
+
+
+        if (0 != mUncategorizedActionsList.size()) {
+            mActionsList.add(mUncategorizedActionsList);
+            mUncategorizedGroupPosition = groupPos;
+            groupPos++;
+        }
 
         if (0 != mAdminActionsList.size()) {
             mActionsList.add(mAdminActionsList);
@@ -289,14 +309,11 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
         }
 
-        TextView sectionNameTxtView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading);
+        ((TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading)).setText(getGroupTitle(groupPosition));
+        convertView.findViewById(org.matrix.androidsdk.R.id.heading_image).setVisibility(View.GONE);
 
-        if (null != sectionNameTxtView) {
-            sectionNameTxtView.setText(getGroupTitle(groupPosition));
-        }
-
-        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
-        imageView.setVisibility(View.GONE);
+        // mUncategorizedGroupPosition has no header
+        convertView.findViewById(R.id.heading_layout).setVisibility((groupPosition == mUncategorizedGroupPosition) ? View.GONE : View.VISIBLE);
 
         return convertView;
     }
@@ -346,7 +363,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         // room selection
         if (null != currentItem.mRoom) {
             // room name
-            viewHolder.mActionDescTextView.setTextColor(mContext.getResources().getColor(R.color.material_grey_900));
+            viewHolder.mActionDescTextView.setTextColor(ContextCompat.getColor(mContext, R.color.material_grey_900));
             viewHolder.mActionDescTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, currentItem.mRoom));
 
             // room avatar
@@ -373,10 +390,10 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             viewHolder.mActionImageView.setImageResource(currentItem.mIconResourceId);
 
             // update the text colour: specific colour is required for the remove action
-            int colourTxt = mContext.getResources().getColor(R.color.material_grey_900);
+            int colourTxt = ContextCompat.getColor(mContext, R.color.material_grey_900);
 
             if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
-                colourTxt = mContext.getResources().getColor(R.color.vector_fuchsia_color);
+                colourTxt = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
             }
 
             viewHolder.mActionDescTextView.setTextColor(colourTxt);
