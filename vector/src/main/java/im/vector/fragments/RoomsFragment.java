@@ -261,7 +261,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             if (!summary.isInvited()) {
                 Room room = store.getRoom(summary.getRoomId());
 
-                if ((null != room) && !directChatRoomIds.contains(room.getRoomId()) && !room.getAccountData().hasTags()) {
+                if ((null != room) && !directChatRoomIds.contains(room.getRoomId()) && !room.getAccountData().hasTags() && !room.isConferenceUserRoom()) {
                     mRooms.add(room);
                 }
             }
