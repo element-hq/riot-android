@@ -7,6 +7,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TODO home fragment" />
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:text="Coming soon..." />
 
 </LinearLayout>

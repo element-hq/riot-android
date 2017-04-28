@@ -79,9 +79,8 @@ import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.Log;
 
-import java.util.ArrayList;
 import java.lang.reflect.Field;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -104,6 +103,7 @@ import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
+import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.VectorRecentsListFragment;
@@ -715,9 +715,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_HOME);
                 if (fragment == null) {
                     Log.e(LOG_TAG, "onNavigationItemSelected NEW HOME");
-                    //fragment = HomeFragment.newInstance();
+                    fragment = HomeFragment.newInstance();
                     // Use old fragment for now
-                    fragment = VectorRecentsListFragment.newInstance(mSession.getCredentials().userId, R.layout.fragment_vector_recents_list);
+//                    fragment = VectorRecentsListFragment.newInstance(mSession.getCredentials().userId, R.layout.fragment_vector_recents_list);
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
                 setTitle(R.string.bottom_action_home);
