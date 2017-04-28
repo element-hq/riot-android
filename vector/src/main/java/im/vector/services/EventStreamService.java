@@ -534,6 +534,10 @@ public class EventStreamService extends Service {
 
         if (state == StreamAction.START) {
             Log.e(LOG_TAG, "start : Already started.");
+
+            for (MXSession session : mSessions) {
+                session.refreshNetworkConnection();
+            }
             return;
         } else if ((state == StreamAction.PAUSE) || (state == StreamAction.CATCHUP)) {
             Log.e(LOG_TAG, "start : Resuming active stream.");
