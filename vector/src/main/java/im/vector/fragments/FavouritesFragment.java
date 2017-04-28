@@ -44,13 +44,10 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
@@ -178,9 +175,9 @@ public class FavouritesFragment extends AbsHomeFragment {
         mFavoritesAdapter = new HomeRoomAdapter(getContext(), R.layout.adapter_item_room_view, new HomeRoomAdapter.OnSelectRoomListener() {
             @Override
             public void onSelectRoom(Room room, int position) {
-                onFavoriteSelected(room, position);
+                openRoom(room);
             }
-        }, this);
+        }, null, this);
 
         mFavoritesRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, margin));
         mFavoritesRecyclerView.addItemDecoration(new EmptyViewItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, 40, 16, 14));
@@ -259,48 +256,6 @@ public class FavouritesFragment extends AbsHomeFragment {
             mFavoritesAdapter.setRooms(mFavorites);
             updateRoomsDisplay(mFavorites.size());
         }
-    }
-
-    /**
-     * Handle a room selection
-     *
-     * @param room     the room
-     * @param position the room index in the list
-     */
-    private void onFavoriteSelected(Room room, int position) {
-        final String roomId;
-        // cannot join a leaving room
-        if (room == null || room.isLeaving()) {
-            roomId = null;
-        } else {
-            roomId = room.getRoomId();
-        }
-
-        if (roomId != null) {
-            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(roomId);
-
-            if (null != roomSummary) {
-                room.sendReadReceipt(null);
-
-                // Reset the highlight
-                if (roomSummary.setHighlighted(false)) {
-                    mSession.getDataHandler().getStore().flushSummary(roomSummary);
-                }
-            }
-
-            // Update badge unread count in case device is offline
-            CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
-
-            // Launch corresponding room activity
-            HashMap<String, Object> params = new HashMap<>();
-            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
-            CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
-        }
-
-        // Refresh the adapter item
-        mFavoritesAdapter.notifyItemChanged(position);
     }
 
     /**

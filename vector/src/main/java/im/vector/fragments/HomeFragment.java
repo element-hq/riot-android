@@ -47,6 +47,9 @@ import im.vector.view.HomeSectionView;
 public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
     private static final String LOG_TAG = HomeFragment.class.getSimpleName();
 
+    @BindView(R.id.invitations_section)
+    HomeSectionView mInvitationsSection;
+
     @BindView(R.id.favourites_section)
     HomeSectionView mFavouritesSection;
 
@@ -59,6 +62,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     @BindView(R.id.low_priority_section)
     HomeSectionView mLowPrioritySection;
 
+    private HomeRoomAdapter mInvitationsAdapter;
     private HomeRoomAdapter mFavouritesAdapter;
     private HomeRoomAdapter mPeopleAdapter;
     private HomeRoomAdapter mRoomsAdapter;
@@ -169,32 +173,44 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      */
 
     private void initViews() {
-        ///TODO move some pieces in custom view
+        // Invitations
+        mInvitationsSection.setTitle(R.string.invitations_header);
+        mInvitationsSection.setHideIfEmpty(true);
+        mInvitationsSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
+        mInvitationsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false),
+                R.layout.adapter_item_room_invite, false, this, this, this);
+        mInvitationsAdapter = mInvitationsSection.getAdapter();
+
         // Favourites
         mFavouritesSection.setTitle(R.string.bottom_action_favourites);
-        mFavouritesSection.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        mFavouritesSection.getRecyclerView().setHasFixedSize(true);
-        mFavouritesAdapter = new HomeRoomAdapter(getContext(), R.layout.adapter_item_circular_room_view, this, this);
-        mFavouritesSection.attachAdapter(mFavouritesAdapter);
+        mFavouritesSection.setHideIfEmpty(true);
+        mFavouritesSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
+        mFavouritesSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+                R.layout.adapter_item_circular_room_view, true, this, null, this);
+        mFavouritesAdapter = mFavouritesSection.getAdapter();
+
         // People
         mDirectChatsSection.setTitle(R.string.bottom_action_people);
-        mDirectChatsSection.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        mDirectChatsSection.getRecyclerView().setHasFixedSize(true);
-        mPeopleAdapter = new HomeRoomAdapter(getContext(), R.layout.adapter_item_circular_room_view, this, this);
-        mDirectChatsSection.attachAdapter(mPeopleAdapter);
+        mDirectChatsSection.setPlaceholders(getString(R.string.no_conversation_placeholder), getString(R.string.no_result_placeholder));
+        mDirectChatsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+                R.layout.adapter_item_circular_room_view, true, this, null, this);
+        mPeopleAdapter = mDirectChatsSection.getAdapter();
+
         // Rooms
         mRoomsSection.setTitle(R.string.bottom_action_rooms);
-        mRoomsSection.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        mRoomsSection.getRecyclerView().setHasFixedSize(true);
-        mRoomsAdapter = new HomeRoomAdapter(getContext(), R.layout.adapter_item_circular_room_view, this, this);
-        mRoomsSection.attachAdapter(mRoomsAdapter);
+        mRoomsSection.setPlaceholders(getString(R.string.no_room_placeholder), getString(R.string.no_result_placeholder));
+        mRoomsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+                R.layout.adapter_item_circular_room_view, true, this, null, this);
+        mRoomsAdapter = mRoomsSection.getAdapter();
+
         // Low priority
         mLowPrioritySection.setTitle(R.string.low_priority_header);
-        mLowPrioritySection.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        mLowPrioritySection.getRecyclerView().setHasFixedSize(true);
-        mLowPrioritySection.getRecyclerView().setNestedScrollingEnabled(false);
-        mLowPriorityAdapter = new HomeRoomAdapter(getContext(), R.layout.adapter_item_room_view, this, this);
-        mLowPrioritySection.attachAdapter(mLowPriorityAdapter);
+        mLowPrioritySection.setHideIfEmpty(true);
+        mLowPrioritySection.setPlaceholders(null, getString(R.string.no_result_placeholder));
+        mLowPrioritySection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+                R.layout.adapter_item_circular_room_view, false, this, null, this);
+        mLowPriorityAdapter = mLowPrioritySection.getAdapter();
+
         //TODO solution to calculate the number of low priority rooms that can be displayed when we arrive on the screen + load rest while scrolling
     }
 
@@ -254,6 +270,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         sortAndDisplay(otherRooms, dateComparator, mRoomsAdapter);
 
         mActivity.stopWaitingView();
+
+        mInvitationsAdapter.setRooms(mActivity.getRoomInvitations());
     }
 
     /**
@@ -292,7 +310,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     @Override
     public void onSelectRoom(Room room, int position) {
-
+        openRoom(room);
     }
 
 }

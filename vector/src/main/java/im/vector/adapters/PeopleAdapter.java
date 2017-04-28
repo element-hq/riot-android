@@ -106,7 +106,7 @@ public class PeopleAdapter extends AbsAdapter {
             switch (viewType) {
                 case TYPE_ROOM:
                     itemView = inflater.inflate(R.layout.adapter_item_room_view, viewGroup, false);
-                    return new RoomViewHolder(mContext, mSession, itemView, mMoreActionListener);
+                    return new RoomViewHolder(itemView);
                 case TYPE_CONTACT:
                     itemView = inflater.inflate(R.layout.adapter_item_contact_view, viewGroup, false);
                     return new ContactViewHolder(itemView);
@@ -131,7 +131,7 @@ public class PeopleAdapter extends AbsAdapter {
             case TYPE_ROOM:
                 final RoomViewHolder roomViewHolder = (RoomViewHolder) viewHolder;
                 final Room room = (Room) getItemForPosition(position);
-                roomViewHolder.populateViews(room, true, false);
+                roomViewHolder.populateViews(mContext, mSession, room, true, false, mMoreActionListener);
                 roomViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

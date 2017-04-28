@@ -83,40 +83,30 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
     @BindColor(R.color.vector_silver_color)
     int mSilverColor;
 
-    // the session
-    private MXSession mSession;
-
-    // the context
-    private Context mContext;
-
-    // the more actions listener
-    AbsAdapter.MoreRoomActionListener mMoreActionListener;
-
-    public RoomViewHolder(final Context context, final MXSession session, final View itemView, final AbsAdapter.MoreRoomActionListener moreRoomActionListener) {
+    public RoomViewHolder(final View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-
-        mContext = context;
-        mSession = session;
-
-        mMoreActionListener = moreRoomActionListener;
     }
 
     /**
      * Refresh the holder layout
-     * @param room the room
-     * @param isDirectChat true when the room is a direct chat one
-     * @param isInvitation true when the room is an invitation one
+     *
+     * @param room                   the room
+     * @param isDirectChat           true when the room is a direct chat one
+     * @param isInvitation           true when the room is an invitation one
+     * @param moreRoomActionListener
      */
-    public void populateViews(final Room room, final boolean isDirectChat, final boolean isInvitation) {
+    public void populateViews(final Context context, final MXSession session, final Room room,
+                              final boolean isDirectChat, final boolean isInvitation,
+                              final AbsAdapter.MoreRoomActionListener moreRoomActionListener) {
         // sanity check
         if (null == room) {
             Log.e(LOG_TAG, "## populateViews() : null room");
             return;
         }
 
-        final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(room.getRoomId());
-        final Room childRoom =  mSession.getDataHandler().getStore().getRoom(roomSummary.getRoomId());
+        final RoomSummary roomSummary = session.getDataHandler().getStore().getSummary(room.getRoomId());
+        final Room childRoom = session.getDataHandler().getStore().getRoom(roomSummary.getRoomId());
 
         int unreadMsgCount = roomSummary.getUnreadEventsCount();
         int highlightCount = 0;
@@ -151,14 +141,14 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             vRoomUnreadCount.setVisibility(View.GONE);
         }
 
-        final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
+        final String roomName = VectorUtils.getRoomDisplayName(context, session, room);
         vRoomName.setText(roomName);
         vRoomName.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
-        VectorUtils.loadRoomAvatar(mContext, mSession, vRoomAvatar, room);
+        VectorUtils.loadRoomAvatar(context, session, vRoomAvatar, room);
 
         // get last message to be displayed
         if (vRoomLastMessage != null) {
-            CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(mContext, mSession, roomSummary);
+            CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(context, session, roomSummary);
             vRoomLastMessage.setText(lastMsgToDisplay);
         }
 
@@ -172,15 +162,15 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         }
 
         if (vRoomTimestamp != null) {
-            vRoomTimestamp.setText(RoomUtils.getRoomTimestamp(mContext, roomSummary.getLatestReceivedEvent()));
+            vRoomTimestamp.setText(RoomUtils.getRoomTimestamp(context, roomSummary.getLatestReceivedEvent()));
         }
 
         if (vRoomMoreActionClickArea != null && vRoomMoreActionAnchor != null) {
             vRoomMoreActionClickArea.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (null != mMoreActionListener) {
-                        mMoreActionListener.onMoreActionClick(vRoomMoreActionAnchor, room);
+                    if (null != moreRoomActionListener) {
+                        moreRoomActionListener.onMoreActionClick(vRoomMoreActionAnchor, room);
                     }
                 }
             });

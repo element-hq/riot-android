@@ -38,14 +38,22 @@ public abstract class AbsFilterableAdapter<T extends RecyclerView.ViewHolder> ex
     protected CharSequence mCurrentFilterPattern;
     protected Filter mFilter;
 
+    protected final AbsAdapter.InvitationListener mInvitationListener;
+    protected final AbsAdapter.MoreRoomActionListener mMoreActionListener;
+
     /*
      * *********************************************************************************************
      * Constructor
      * *********************************************************************************************
      */
 
-    public AbsFilterableAdapter(final Context context) {
+    public AbsFilterableAdapter(final Context context, final AbsAdapter.InvitationListener invitationListener,
+                                final AbsAdapter.MoreRoomActionListener moreActionListener) {
         mContext = context;
+
+        mInvitationListener = invitationListener;
+        mMoreActionListener = moreActionListener;
+
         mSession = Matrix.getInstance(context).getDefaultSession();
         mFilter = createFilter();
     }

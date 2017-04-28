@@ -29,12 +29,14 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -42,7 +44,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AbsAdapter;
 import im.vector.util.RoomUtils;
 
@@ -284,6 +288,44 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
      * A room summary has been updated
      */
     public void onSummariesUpdate() {
+    }
+
+    /**
+     * Open the selected room
+     *
+     * @param room
+     */
+    public void openRoom(final Room room) {
+        final String roomId;
+        // cannot join a leaving room
+        if (room == null || room.isLeaving()) {
+            roomId = null;
+        } else {
+            roomId = room.getRoomId();
+        }
+
+        if (roomId != null) {
+            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(roomId);
+
+            if (null != roomSummary) {
+                room.sendReadReceipt(null);
+
+                // Reset the highlight
+                if (roomSummary.setHighlighted(false)) {
+                    mSession.getDataHandler().getStore().flushSummary(roomSummary);
+                }
+            }
+
+            // Update badge unread count in case device is offline
+            CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
+
+            // Launch corresponding room activity
+            HashMap<String, Object> params = new HashMap<>();
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+            CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
+        }
     }
 
     /*

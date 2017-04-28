@@ -25,7 +25,6 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.TextView;
 
@@ -61,9 +60,6 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
 
     private final AdapterSection<Room> mInviteSection;
 
-    private final InvitationListener mInvitationListener;
-    protected final MoreRoomActionListener mMoreActionListener;
-
     /*
      * *********************************************************************************************
      * Constructor
@@ -71,10 +67,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      */
 
     protected AbsAdapter(final Context context, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
-        super(context);
-
-        mInvitationListener = invitationListener;
-        mMoreActionListener = moreActionListener;
+        super(context, invitationListener, moreActionListener);
 
         registerAdapterDataObserver(new AdapterDataObserver());
 
@@ -170,7 +163,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
             case TYPE_ROOM_INVITATION:
                 final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
                 final Room room = (Room) getItemForPosition(position);
-                invitationViewHolder.populateViews(room);
+                invitationViewHolder.populateViews(mContext, mSession, room, mInvitationListener, mMoreActionListener);
                 break;
             default:
                 populateViewHolder(viewType, viewHolder, position);
@@ -407,41 +400,6 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
 
         public AdapterSection getSection() {
             return mSection;
-        }
-    }
-
-    class InvitationViewHolder extends RoomViewHolder {
-
-        @BindView(R.id.recents_invite_reject_button)
-        Button vRejectButton;
-
-        @BindView(R.id.recents_invite_preview_button)
-        Button vPreViewButton;
-
-        InvitationViewHolder(View itemView) {
-            super(mContext, mSession, itemView, AbsAdapter.this.mMoreActionListener);
-        }
-
-        void populateViews(final Room room) {
-            super.populateViews(room, room.isDirectChatInvitation(), true);
-
-            vPreViewButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mInvitationListener) {
-                        mInvitationListener.onPreviewRoom(mSession, room.getRoomId());
-                    }
-                }
-            });
-
-            vRejectButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mInvitationListener) {
-                        mInvitationListener.onRejectInvitation(mSession, room.getRoomId());
-                    }
-                }
-            });
         }
     }
 

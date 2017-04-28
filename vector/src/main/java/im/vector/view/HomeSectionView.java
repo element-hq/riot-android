@@ -2,12 +2,13 @@ package im.vector.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
+import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
 
 public class HomeSectionView extends RelativeLayout {
@@ -28,7 +30,15 @@ public class HomeSectionView extends RelativeLayout {
     @BindView(R.id.section_recycler_view)
     RecyclerView mRecyclerView;
 
-    HomeRoomAdapter mAdapter;
+    @BindView(R.id.section_placeholder)
+    TextView mPlaceHolder;
+
+    private HomeRoomAdapter mAdapter;
+
+    private boolean mHideIfEmpty;
+    private String mNoItemPlaceholder;
+    private String mNoResultPlaceholder;
+    private String mCurrentFilter;
 
     public HomeSectionView(Context context) {
         super(context);
@@ -51,12 +61,16 @@ public class HomeSectionView extends RelativeLayout {
         setup();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mAdapter = null; // might be necessary to avoid memory leak?
+    }
+
     private void setup() {
         inflate(getContext(), R.layout.home_section_view, this);
         ButterKnife.bind(this);
 
-        //TODO move to xml layout/drawable
-        mBadge.setTypeface(null, Typeface.BOLD);
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.RECTANGLE);
         shape.setCornerRadius(100);
@@ -64,29 +78,63 @@ public class HomeSectionView extends RelativeLayout {
         mBadge.setBackground(shape);
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        mAdapter = null; // might be necessary to avoid memory leak?
-    }
-
-    public RecyclerView getRecyclerView() {
-        return mRecyclerView;
-    }
-
     public void setTitle(@StringRes final int title) {
         mHeader.setText(title);
     }
 
-    public void attachAdapter(final HomeRoomAdapter adapter) {
-        mRecyclerView.setAdapter(adapter);
-        mAdapter = adapter;
+    public void setPlaceholders(final String noItemPlaceholder, final String noResultPlaceholder) {
+        mNoItemPlaceholder = noItemPlaceholder;
+        mNoResultPlaceholder = noResultPlaceholder;
+        mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
+    }
+
+    public void setHideIfEmpty(final boolean hideIfEmpty) {
+        mHideIfEmpty = hideIfEmpty;
+        setVisibility(mHideIfEmpty && (mAdapter == null || mAdapter.getItemCount() == 0) ? GONE : VISIBLE);
+    }
+
+    public void setupRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
+                                  final boolean nestedScrollEnabled, final HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener,
+                                  final AbsAdapter.InvitationListener invitationListener,
+                                  final AbsAdapter.MoreRoomActionListener moreActionListener) {
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setNestedScrollingEnabled(nestedScrollEnabled);
+
+        mAdapter = new HomeRoomAdapter(getContext(), itemResId, onSelectRoomListener, invitationListener, moreActionListener);
+        mRecyclerView.setAdapter(mAdapter);
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
-                mBadge.setText(String.valueOf(mAdapter.getItemCount()));
+                onDataUpdated(mAdapter.getItemCount());
             }
         });
+    }
+
+    /**
+     * Update the views to reflect the new number of items
+     *
+     * @param nbItems
+     */
+    private void onDataUpdated(final int nbItems) {
+        setVisibility(mHideIfEmpty && nbItems == 0 ? GONE : VISIBLE);
+        mBadge.setText(String.valueOf(nbItems));
+        mRecyclerView.setVisibility(nbItems == 0 ? GONE : VISIBLE);
+        mPlaceHolder.setVisibility(nbItems == 0 ? VISIBLE : GONE);
+    }
+
+    public void onFilter(final String pattern) {
+        // TODO filter + update placeholder
+        //mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
+        //onDataUpdated();
+    }
+
+    public HomeRoomAdapter getAdapter() {
+        return mAdapter;
+    }
+
+    public RecyclerView getRecyclerView() {
+        return mRecyclerView;
     }
 }

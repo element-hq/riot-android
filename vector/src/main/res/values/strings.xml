@@ -69,6 +69,7 @@
     <string name="home_filter_placeholder">Filter</string>
 
     <!-- Home fragment -->
+    <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>
 
     <!-- People fragment -->

@@ -27,7 +27,7 @@
         android:layout_marginRight="10dp"
         android:background="#AAff00ff"
         android:gravity="center"
-        android:minWidth="25dp"
+        android:minWidth="30dp"
         android:textColor="@android:color/white"
         android:textSize="12sp"
         tools:text="12" />
@@ -37,8 +37,8 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_alignRight="@+id/room_avatar"
-        android:layout_alignTop="@+id/room_avatar"
-        android:layout_marginRight="14dp"
+        android:layout_below="@+id/room_unread_count"
+        android:layout_marginRight="12dp"
         android:src="@drawable/icon_person"
         android:visibility="invisible"
         tools:visibility="visible" />

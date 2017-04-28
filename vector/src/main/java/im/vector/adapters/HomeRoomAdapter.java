@@ -29,6 +29,7 @@ import org.matrix.androidsdk.data.Room;
 import java.util.ArrayList;
 import java.util.List;
 
+import im.vector.R;
 import im.vector.util.RoomUtils;
 
 public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
@@ -48,8 +49,8 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
      */
 
     public HomeRoomAdapter(final Context context, @LayoutRes final int layoutRes, final OnSelectRoomListener listener,
-                           AbsAdapter.MoreRoomActionListener moreActionListener) {
-        super(context);
+                           final AbsAdapter.InvitationListener invitationListener, final AbsAdapter.MoreRoomActionListener moreActionListener) {
+        super(context, invitationListener, moreActionListener);
 
         mRooms = new ArrayList<>();
         mFilteredRooms = new ArrayList<>();
@@ -69,19 +70,25 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
     public RoomViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         final LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         final View view = layoutInflater.inflate(mLayoutRes, viewGroup, false);
-        return new RoomViewHolder(mContext, mSession, view, mMoreActionListener);
+        return mLayoutRes == R.layout.adapter_item_room_invite ? new InvitationViewHolder(view) : new RoomViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final RoomViewHolder viewHolder, int position) {
         final Room room = mFilteredRooms.get(position);
-        viewHolder.populateViews(room, mSession.getDirectChatRoomIdsList().contains(room.getRoomId()), false);
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onSelectRoom(room, viewHolder.getAdapterPosition());
-            }
-        });
+        if (mLayoutRes == R.layout.adapter_item_room_invite) {
+            final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
+            invitationViewHolder.populateViews(mContext, mSession, room, mInvitationListener, mMoreActionListener);
+        } else {
+            viewHolder.populateViews(mContext, mSession, room, mSession.getDirectChatRoomIdsList().contains(room.getRoomId()), false, mMoreActionListener);
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onSelectRoom(room, viewHolder.getAdapterPosition());
+                }
+            });
+            // TODO onlongclick
+        }
     }
 
     @Override

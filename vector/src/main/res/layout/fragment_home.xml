@@ -9,6 +9,11 @@
         android:orientation="vertical">
 
         <im.vector.view.HomeSectionView
+            android:id="@+id/invitations_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <im.vector.view.HomeSectionView
             android:id="@+id/favourites_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
