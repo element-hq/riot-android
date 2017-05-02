@@ -52,6 +52,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.FavoriteAdapter;
+import im.vector.util.RoomUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
@@ -340,7 +341,31 @@ public class FavouritesFragment extends AbsHomeFragment {
 
                     // compute the new tag order
                     Double tagOrder = mSession.tagOrderToBeAtIndex(mToPosition, mFromPosition, RoomTag.ROOM_TAG_FAVOURITE);
-                    updateRoomTag(mSession, mRoomId, tagOrder, RoomTag.ROOM_TAG_FAVOURITE);
+
+                    // show a spinner
+                    mActivity.showWaitingView();
+
+                    RoomUtils.updateRoomTag(mSession, mRoomId, tagOrder, RoomTag.ROOM_TAG_FAVOURITE, new ApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            // wait the room tag echo
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onRoomTagUpdated(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onRoomTagUpdated(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onRoomTagUpdated(e.getLocalizedMessage());
+                        }
+                    });
                 }
 
                 mFromPosition = -1;
@@ -365,64 +390,6 @@ public class FavouritesFragment extends AbsHomeFragment {
 
         if (!TextUtils.isEmpty(errorMessage)) {
             Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    /**
-     * Update the room tag.
-     *
-     * @param session  the session
-     * @param roomId   the room id.
-     * @param tagOrder the tag order.
-     * @param newtag   the new tag.
-     */
-    private void updateRoomTag(MXSession session, String roomId, Double tagOrder, String newtag) {
-        Room room = session.getDataHandler().getRoom(roomId);
-
-        if (null != room) {
-            String oldTag = null;
-
-            // retrieve the tag from the room info
-            RoomAccountData accountData = room.getAccountData();
-
-            if ((null != accountData) && accountData.hasTags()) {
-                oldTag = accountData.getKeys().iterator().next();
-            }
-
-            // if the tag order is not provided, compute it
-            if (null == tagOrder) {
-                tagOrder = 0.0;
-
-                if (null != newtag) {
-                    tagOrder = session.tagOrderToBeAtIndex(0, Integer.MAX_VALUE, newtag);
-                }
-            }
-
-            // show a spinner
-            mActivity.showWaitingView();
-
-            // and work
-            room.replaceTag(oldTag, newtag, tagOrder, new ApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    // wait the room tag echo
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onRoomTagUpdated(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onRoomTagUpdated(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onRoomTagUpdated(e.getLocalizedMessage());
-                }
-            });
         }
     }
 }
