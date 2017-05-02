@@ -795,40 +795,6 @@ public class VectorHomeActivity extends AppCompatActivity {
             }
         });
 
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // ignore any action if there is a pending one
-                if (View.VISIBLE != mWaitingView.getVisibility()) {
-                    Context context = VectorHomeActivity.this;
-
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_start_chat), context.getString(R.string.room_recents_create_room)};
-                    dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface d, int n) {
-                            d.cancel();
-                            if (0 == n) {
-                                invitePeopleToNewRoom();
-                            } else {
-                                createRoom();
-                            }
-                        }
-                    });
-
-                    dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            invitePeopleToNewRoom();
-                        }
-                    });
-
-                    dialog.setNegativeButton(R.string.cancel, null);
-                    dialog.show();
-                }
-            }
-        });
-
         addUnreadBadges();
     }
 
