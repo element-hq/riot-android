@@ -55,7 +55,7 @@ public class EmptyViewItemDecoration extends DividerItemDecoration {
         if (mOrientation == VERTICAL && isDecorated(view, parent)) {
             outRect.set(0, 0, 0, (int) mEmptyViewHeight);
         } else {
-            super.getItemOffsets(outRect, view, parent, state);
+            outRect.set(0, 0, 0, 0);
         }
     }
 
