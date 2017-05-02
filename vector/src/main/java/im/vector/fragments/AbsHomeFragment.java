@@ -229,17 +229,17 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
 
     @Override
     public void moveToFavorites(MXSession session, String roomId) {
-        updateTag(roomId, RoomTag.ROOM_TAG_FAVOURITE);
+        updateTag(roomId, null, RoomTag.ROOM_TAG_FAVOURITE);
     }
 
     @Override
     public void moveToConversations(MXSession session, String roomId) {
-        updateTag(roomId, null);
+        updateTag(roomId, null, null);
     }
 
     @Override
     public void moveToLowPriority(MXSession session, String roomId) {
-        updateTag(roomId, RoomTag.ROOM_TAG_LOW_PRIORITY);
+        updateTag(roomId, null, RoomTag.ROOM_TAG_LOW_PRIORITY);
     }
 
     @Override
@@ -338,11 +338,12 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
      * Change the tag of the given room with the provided one
      *
      * @param roomId
+     * @param newTagOrder
      * @param newTag
      */
-    private void updateTag(final String roomId, final String newTag) {
+    private void updateTag(final String roomId, Double newTagOrder,  final String newTag) {
         mActivity.showWaitingView();
-        RoomUtils.updateRoomTag(mSession, roomId, newTag, new ApiCallback<Void>() {
+        RoomUtils.updateRoomTag(mSession, roomId, newTagOrder, newTag, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 onRequestDone(null);

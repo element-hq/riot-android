@@ -368,13 +368,15 @@ public class RoomUtils {
     }
 
     /**
-     * Update the room tag.
+     * Update a room Tag
      *
      * @param session the session
-     * @param roomId  the room id
-     * @param newtag  the new tag
+     * @param roomId the room Id
+     * @param aTagOrder the new tag order
+     * @param newTag the new Tag
+     * @param apiCallback the asynchronous callback
      */
-    public static void updateRoomTag(final MXSession session, final String roomId, final String newtag, final ApiCallback<Void> apiCallback) {
+    public static void updateRoomTag(final MXSession session, final String roomId, final Double aTagOrder, final String newTag, final ApiCallback<Void> apiCallback) {
         Room room = session.getDataHandler().getRoom(roomId);
 
         if (null != room) {
@@ -387,8 +389,19 @@ public class RoomUtils {
                 oldTag = accountData.getKeys().iterator().next();
             }
 
+            Double tagOrder = aTagOrder;
+
+            // if the tag order is not provided, compute it
+            if (null == tagOrder) {
+                tagOrder = 0.0;
+
+                if (null != newTag) {
+                    tagOrder = session.tagOrderToBeAtIndex(0, Integer.MAX_VALUE, newTag);
+                }
+            }
+
             // and work
-            room.replaceTag(oldTag, newtag, null, apiCallback);
+            room.replaceTag(oldTag, newTag, tagOrder, apiCallback);
         }
     }
 
