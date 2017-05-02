@@ -107,7 +107,9 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         initViews();
 
         // Eventually restore the pattern of adapter after orientation change
-        mFavouritesAdapter.onFilterDone(mCurrentFilter);
+        for (HomeSectionView homeSectionView : mHomeSectionViews) {
+            homeSectionView.getAdapter().onFilterDone(mCurrentFilter);
+        }
 
         mActivity.showWaitingView();
     }
