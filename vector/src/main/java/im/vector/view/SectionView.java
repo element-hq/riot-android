@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -41,12 +42,15 @@ public class SectionView extends RelativeLayout {
     private int mFooterTop;
     private int mFooterBottom;
 
+    private boolean mIsExpanded;
+
     // header subview
     private View mSubView;
 
     // header items
     private TextView mTitleView;
     private ProgressBar mLoadingView;
+    private ImageView mExpandIcon;
 
     public SectionView(Context context, AdapterSection section) {
         super(context);
@@ -90,6 +94,8 @@ public class SectionView extends RelativeLayout {
         mLoadingView = (ProgressBar) headerView.findViewById(R.id.section_loading);
         mLoadingView.setVisibility(View.INVISIBLE);
 
+        mExpandIcon = (ImageView) headerView.findViewById(R.id.section_expand_ic);
+
         // custom subview ?
         if (section.getHeaderSubView() != -1) {
             // Inflate subview
@@ -131,6 +137,25 @@ public class SectionView extends RelativeLayout {
      */
     public boolean isLoadingViewVisisble() {
         return (View.INVISIBLE == mLoadingView.getVisibility());
+    }
+
+    /**
+     * Update the expand icon
+     *
+     * @param isExpanded
+     */
+    public void setExpanded(final boolean isExpanded) {
+        mExpandIcon.setImageResource(isExpanded ? R.drawable.ic_material_expand_less_black : R.drawable.ic_material_expand_more_black);
+        mIsExpanded = isExpanded;
+    }
+
+    /**
+     * Get whether the section is currently expanded or not
+     *
+     * @return true if expanded
+     */
+    public boolean isExpanded() {
+        return mIsExpanded;
     }
 
     @Override
