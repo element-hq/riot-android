@@ -69,6 +69,7 @@
     <string name="send_bug_report_sent">Bugiraportti lähetettiin</string>
     <string name="send_bug_report_failed">Bugiraporttia ei voitu lähettää (%s)</string>
     <string name="send_bug_report_progress">Lähetetään (%s%%)</string>
+    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
 
     <string name="send_files_in">Send into</string>
     <string name="read_receipt">Luettu</string>

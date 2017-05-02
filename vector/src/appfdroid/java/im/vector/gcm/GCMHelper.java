@@ -15,24 +15,19 @@
  */
 package im.vector.gcm;
 
-import android.content.Context;
-
 public class GCMHelper {
 
     /**
      * Retrieves the GCM registration token.
-     * @param appContext the application context
      * @return the registration token.
      */
-    public static String getRegistrationToken(Context appContext) {
+    public static String getRegistrationToken() {
         return null;
     }
 
     /**
      * Clear the registration token.
-     *
-     * @param appContext the application context
      */
-    public static void clearRegistrationToken(Context appContext) {
+    public static void clearRegistrationToken() {
     }
 }

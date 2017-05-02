@@ -114,8 +114,17 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
         }
 
         private void populateViews(final RoomDirectoryData server) {
-            vServerTextView.setText(server.getDisplayName());
-            setAvatar(vAvatarView, server.getAvatarUrl(), server.isIncludedAllNetworks() ? null : vServerTextView.getContext().getResources().getDrawable(R.drawable.network_matrix));
+            if (server.isIncludedAllNetworks()) {
+                vServerTextView.setText(vServerTextView.getContext().getString(R.string.directory_server_all_rooms_on_server, server.getDisplayName()));
+            } else {
+                if (TextUtils.equals("Matrix",server.getDisplayName())) {
+                    vServerTextView.setText(vServerTextView.getContext().getString(R.string.directory_server_native_rooms, server.getDisplayName()));
+                } else{
+                    vServerTextView.setText(server.getDisplayName());
+                }
+            }
+
+            setAvatar(vAvatarView, server.getAvatarUrl(), vServerTextView.getContext().getResources().getDrawable(R.drawable.network_matrix));
 
             vMainView.setOnClickListener(new View.OnClickListener() {
                 @Override

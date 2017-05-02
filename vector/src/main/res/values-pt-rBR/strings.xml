@@ -67,6 +67,7 @@
     <string name="send_bug_report_sent">O relatório de erro (bug) foi enviado com sucesso</string>
     <string name="send_bug_report_failed">O envio do relatório de erro (bug) falhou (%s)</string>
     <string name="send_bug_report_progress">Andamento (%s%%)</string>
+    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
 
     <string name="send_files_in">Enviar para</string>
     <string name="read_receipt">Ler</string>

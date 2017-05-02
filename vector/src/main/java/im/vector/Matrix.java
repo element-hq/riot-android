@@ -386,6 +386,8 @@ public class Matrix {
             return null;
         }
 
+        boolean appDidCrash = VectorApp.getInstance().didAppCrash();
+
         ArrayList<String> matrixIds = new ArrayList<>();
         sessions = new ArrayList<>();
 
@@ -393,6 +395,15 @@ public class Matrix {
             // avoid duplicated accounts.
             if (config.getCredentials() != null && matrixIds.indexOf(config.getCredentials().userId) < 0) {
                 MXSession session = createSession(config);
+
+                // if the application crashed
+                if (appDidCrash) {
+                    // clear the session data
+                    session.clear(VectorApp.getInstance());
+                    // and open it again
+                    session = createSession(config);
+                }
+
                 sessions.add(session);
                 matrixIds.add(config.getCredentials().userId);
             }
@@ -653,7 +664,7 @@ public class Matrix {
         }
 
         // clear GCM token before launching the splash screen
-        Matrix.getInstance(context).getSharedGCMRegistrationManager().clearGCMData(new SimpleApiCallback<Void>() {
+        Matrix.getInstance(context).getSharedGCMRegistrationManager().clearGCMData(false, new SimpleApiCallback<Void>() {
             @Override
             public void onSuccess(final Void anything) {
                 Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);

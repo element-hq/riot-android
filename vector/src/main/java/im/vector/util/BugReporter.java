@@ -18,26 +18,17 @@
 package im.vector.util;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.Modifier;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.zip.GZIPOutputStream;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -49,8 +40,6 @@ import android.os.Build;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.matrix.androidsdk.rest.json.ConditionDeserializer;
-import org.matrix.androidsdk.rest.model.bingrules.Condition;
 import org.matrix.androidsdk.util.Log;
 
 import android.text.Editable;
@@ -65,12 +54,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -100,6 +89,7 @@ public class BugReporter {
 
         /**
          * The upload progress (in percent)
+         *
          * @param progress the upload progress
          */
         void onProgress(int progress);
@@ -110,61 +100,16 @@ public class BugReporter {
         void onUploadSucceed();
     }
 
-    /**
-     * GSON management
-     */
-    private static final Gson gson = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .excludeFieldsWithModifiers(Modifier.PRIVATE, Modifier.STATIC)
-            .registerTypeAdapter(Condition.class, new ConditionDeserializer())
-            .create();
+    // filenames
+    private static final String LOG_CAT_ERROR_FILENAME = "logCatError.log";
+    private static final String LOG_CAT_FILENAME = "logCat.log";
 
-    /**
-     * Read the file content as String
-     *
-     * @param fin the input file
-     * @return the file content as String
-     */
-    private static String convertStreamToString(File fin) {
-        Reader reader = null;
+    // the http client
+    private static final OkHttpClient mOkHttpClient = new OkHttpClient();
 
-        try {
-            Writer writer = new StringWriter();
-            InputStream inputStream = new FileInputStream(fin);
-            try {
-                reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-                int n;
+    // the pending bug report call
+    private static Call mBugReportCall = null;
 
-                char[] buffer = new char[2048];
-                while ((n = reader.read(buffer)) != -1) {
-                    writer.write(buffer, 0, n);
-                }
-            } finally {
-                try {
-                    if (null != reader) {
-                        reader.close();
-                    }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## convertStreamToString() failed to close inputStream " + e.getMessage());
-                }
-            }
-            return writer.toString();
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## convertStreamToString() failed " + e.getMessage());
-        } catch (OutOfMemoryError oom) {
-            Log.e(LOG_TAG, "## convertStreamToString() failed " + oom.getMessage());
-        } finally {
-            try {
-                if (null != reader) {
-                    reader.close();
-                }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## convertStreamToString() failed to close inputStream " + e.getMessage());
-            }
-        }
-
-        return "";
-    }
 
     // boolean to cancel the bug report
     private static boolean mIsCancelled = false;
@@ -180,209 +125,162 @@ public class BugReporter {
         new AsyncTask<Void, Integer, String>() {
             @Override
             protected String doInBackground(Void... voids) {
-                File bugReportFile = new File(context.getApplicationContext().getFilesDir(), "bug_report");
-
-                if (bugReportFile.exists()) {
-                    bugReportFile.delete();
-                }
-
                 String serverError = null;
-                FileWriter fileWriter = null;
 
-                try {
-                    fileWriter = new FileWriter(bugReportFile);
-                    JsonWriter jsonWriter = new JsonWriter(fileWriter);
-                    jsonWriter.beginObject();
+                ArrayList<File> gzippedFiles = new ArrayList<>();
 
-                    // android bug report
-                    jsonWriter.name("user_agent").value( "Android");
+                if (withDevicesLogs) {
+                    List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
 
-                    // logs list
-                    jsonWriter.name("logs");
-                    jsonWriter.beginArray();
+                    for (File f : files) {
+                        if (!mIsCancelled) {
+                            File gzippedFile = compressFile(f);
 
-                    // the logs are optional
-                    if (withDevicesLogs) {
-                        List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
-                        for (File f : files) {
-                            if (!mIsCancelled) {
-                                jsonWriter.beginObject();
-                                jsonWriter.name("lines").value(convertStreamToString(f));
-                                jsonWriter.endObject();
-                                jsonWriter.flush();
+                            if (null != gzippedFile) {
+                                gzippedFiles.add(gzippedFile);
                             }
                         }
                     }
 
-                    if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
-                        jsonWriter.beginObject();
-                        jsonWriter.name("lines").value(getLogCatError());
-                        jsonWriter.endObject();
-                        jsonWriter.flush();
-                    }
+                    // for debug purpose
+                    /*if (!mIsCancelled) {
+                        File gzippedLogcat = saveLogCat(context, false);
 
-                    jsonWriter.endArray();
+                        if (null != gzippedLogcat) {
+                            gzippedFiles.add(gzippedLogcat);
+                        }
+                    }*/
+                }
 
-                    jsonWriter.name("text").value(bugDescription);
+                if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
+                    File gzippedLogcat = saveLogCat(context, true);
 
-                    String version = "";
-
-                    if (null != Matrix.getInstance(context).getDefaultSession()) {
-                        version += "User : " + Matrix.getInstance(context).getDefaultSession().getMyUserId() + "\n";
-                    }
-
-                    version += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
-                    version += "Vector version: " + Matrix.getInstance(context).getVersion(true) + "\n";
-                    version += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
-                    version += "Olm version:  " + Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true) + "\n";
-
-                    jsonWriter.name("version").value(version);
-
-                    jsonWriter.endObject();
-                    jsonWriter.close();
-
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "doInBackground ; failed to collect the bug report data " + e.getMessage());
-                    serverError = e.getLocalizedMessage();
-                } catch (OutOfMemoryError oom) {
-                    Log.e(LOG_TAG, "doInBackground ; failed to collect the bug report data " + oom.getMessage());
-                    serverError = oom.getMessage();
-
-                    if (TextUtils.isEmpty(serverError)) {
-                        serverError = "Out of memory";
+                    if (null != gzippedLogcat) {
+                        gzippedFiles.add(gzippedLogcat);
                     }
                 }
 
-                try {
-                    if (null != fileWriter) {
-                        fileWriter.close();
-                    }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "doInBackground ; failed to close fileWriter " + e.getMessage());
+                String userId = null;
+
+                if (null != Matrix.getInstance(context).getDefaultSession()) {
+                    userId = Matrix.getInstance(context).getDefaultSession().getMyUserId();
                 }
 
-                if (TextUtils.isEmpty(serverError) && !mIsCancelled) {
+                if (TextUtils.isEmpty(userId)) {
+                    userId = "";
+                }
 
-                    // the screenshot is defined here
-                    // File screenFile = new File(VectorApp.mLogsDirectoryFile, "screenshot.jpg");
-                    InputStream inputStream = null;
-                    HttpURLConnection conn = null;
+                if (!mIsCancelled) {
+                    // build the multi part request
+                    BugReporterMultipartBody.Builder builder = new BugReporterMultipartBody.Builder()
+                            .addFormDataPart("text", bugDescription)
+                            .addFormDataPart("app", "riot-android")
+                            .addFormDataPart("user_agent", "Android")
+                            .addFormDataPart("user_id", userId)
+                            .addFormDataPart("version", Matrix.getInstance(context).getVersion(true))
+                            .addFormDataPart("matrix_sdk_version", Matrix.getInstance(context).getDefaultSession().getVersion(true))
+                            .addFormDataPart("olm_version", Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true))
+                            .addFormDataPart("device", Build.MODEL.trim())
+                            .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME);
+
+                    // add the gzipped files
+                    for (File file : gzippedFiles) {
+                        builder.addFormDataPart("compressed-log", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
+                    }
+
+                    BugReporterMultipartBody requestBody = builder.build();
+
+                    // add a progress listener
+                    requestBody.setWriteListener(new BugReporterMultipartBody.WriteListener() {
+                        @Override
+                        public void onWrite(long totalWritten, long contentLength) {
+                            int percentage;
+
+                            if (-1 != contentLength) {
+                                if (totalWritten > contentLength) {
+                                    percentage = 100;
+                                } else {
+                                    percentage = (int) (totalWritten * 100 / contentLength);
+                                }
+                            } else {
+                                percentage = 0;
+                            }
+
+                            if (mIsCancelled && (null != mBugReportCall)) {
+                                mBugReportCall.cancel();
+                            }
+
+                            Log.d(LOG_TAG, "## onWrite() : " + percentage + "%");
+                            publishProgress(percentage);
+                        }
+                    });
+
+                    // build the request
+                    Request request = new Request.Builder()
+                            .url(context.getResources().getString(R.string.bug_report_url))
+                            .post(requestBody)
+                            .build();
+
+                    int responseCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
+                    Response response = null;
+
+                    // trigger the request
                     try {
-                        inputStream = new FileInputStream(bugReportFile);
-                        final int dataLen = inputStream.available();
+                        mBugReportCall = mOkHttpClient.newCall(request);
+                        response = mBugReportCall.execute();
+                        responseCode = response.code();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "response " + e.getMessage());
+                    }
 
-                        // should never happen
-                        if (0 == dataLen) {
-                            return "No data";
-                        }
-
-                        URL url = new URL(context.getResources().getString(R.string.bug_report_url));
-                        conn = (HttpURLConnection) url.openConnection();
-                        conn.setDoInput(true);
-                        conn.setDoOutput(true);
-                        conn.setUseCaches(false);
-                        conn.setRequestMethod("POST");
-                        conn.setRequestProperty("Content-Type", "application/json");
-                        conn.setRequestProperty("Content-Length", Integer.toString(dataLen));
-                        // avoid caching data before really sending them.
-                        conn.setFixedLengthStreamingMode(inputStream.available());
-
-                        conn.connect();
-
-                        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-
-                        byte[] buffer = new byte[8192];
-
-                        // read file and write it into form...
-                        int bytesRead;
-                        int totalWritten = 0;
-
-                        while (!mIsCancelled && (bytesRead = inputStream.read(buffer, 0, buffer.length)) > 0) {
-                            dos.write(buffer, 0, bytesRead);
-                            totalWritten += bytesRead;
-                            publishProgress(totalWritten * 100 / dataLen);
-                        }
-
-                        dos.flush();
-                        dos.close();
-
-                        int mResponseCode;
-
-                        try {
-                            // Read the SERVER RESPONSE
-                            mResponseCode = conn.getResponseCode();
-                        } catch (EOFException eofEx) {
-                            mResponseCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
-                        }
-
-                        // if the upload failed, try to retrieve the reason
-                        if (mResponseCode != HttpURLConnection.HTTP_OK) {
-                            serverError = null;
-                            InputStream is = conn.getErrorStream();
+                    // if the upload failed, try to retrieve the reason
+                    if (responseCode != HttpURLConnection.HTTP_OK) {
+                        if ((null == response) || (null == response.body())) {
+                            serverError = "Failed with error " + responseCode;
+                        } else {
+                            InputStream is = response.body().byteStream();
 
                             if (null != is) {
-                                int ch;
-                                StringBuilder b = new StringBuilder();
-                                while ((ch = is.read()) != -1) {
-                                    b.append((char) ch);
-                                }
-                                serverError = b.toString();
-                                is.close();
-
-                                // check if the error message
                                 try {
-                                    JSONObject responseJSON = new JSONObject(serverError);
-                                    serverError = responseJSON.getString("error");
-                                } catch (JSONException e) {
-                                    Log.e(LOG_TAG, "doInBackground ; Json conversion failed " + e.getMessage());
+                                    int ch;
+                                    StringBuilder b = new StringBuilder();
+                                    while ((ch = is.read()) != -1) {
+                                        b.append((char) ch);
+                                    }
+                                    serverError = b.toString();
+                                    is.close();
+
+                                    // check if the error message
+                                    try {
+                                        JSONObject responseJSON = new JSONObject(serverError);
+                                        serverError = responseJSON.getString("error");
+                                    } catch (JSONException e) {
+                                        Log.e(LOG_TAG, "doInBackground ; Json conversion failed " + e.getMessage());
+                                    }
+
+                                    // should never happen
+                                    if (null == serverError) {
+                                        serverError = "Failed with error " + responseCode;
+                                    }
+                                } catch (Exception e) {
+                                    Log.e(LOG_TAG, "## sendBugReport() : failed to parse error " + e.getMessage());
+                                } finally {
+                                    try {
+                                        is.close();
+                                    } catch (Exception e) {
+                                        Log.e(LOG_TAG, "## sendBugReport() : failed to close the error stream " + e.getMessage());
+                                    }
                                 }
-
-                                // should never happen
-                                if (null == serverError) {
-                                    serverError = "Failed with error " + mResponseCode;
-                                }
-
-                                is.close();
                             }
-                        }
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "doInBackground ; failed with error " + e.getClass() + " - " + e.getMessage());
-                        serverError = e.getLocalizedMessage();
-
-                        if (TextUtils.isEmpty(serverError)) {
-                            serverError = "Failed to upload";
-                        }
-                    } catch (OutOfMemoryError oom) {
-                        Log.e(LOG_TAG, "doInBackground ; failed to send the bug report " + oom.getMessage());
-                        serverError = oom.getLocalizedMessage();
-
-                        if (TextUtils.isEmpty(serverError)) {
-                            serverError = "Out ouf memory";
-                        }
-
-                    } finally {
-                        try {
-                            if (null != conn) {
-                                conn.disconnect();
-                            }
-                        } catch (Exception e2) {
-                            Log.e(LOG_TAG, "doInBackground : conn.disconnect() failed " + e2.getMessage());
-                        }
-                    }
-
-                    if (null != inputStream) {
-                        try {
-                            inputStream.close();
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "doInBackground ; failed to close the inputStream " + e.getMessage());
                         }
                     }
                 }
+
                 return serverError;
             }
 
             @Override
-            protected void onProgressUpdate(Integer ... progress) {
+            protected void onProgressUpdate(Integer... progress) {
                 super.onProgressUpdate(progress);
 
                 if (null != listener) {
@@ -396,6 +294,8 @@ public class BugReporter {
 
             @Override
             protected void onPostExecute(String reason) {
+                mBugReportCall = null;
+
                 if (null != listener) {
                     try {
                         if (mIsCancelled) {
@@ -421,7 +321,7 @@ public class BugReporter {
 
         // no current activity so cannot display an alert
         if (null == currentActivity) {
-            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, true,  "", null);
+            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, true, "", null);
             return;
         }
 
@@ -492,7 +392,7 @@ public class BugReporter {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgress(0);
 
-                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(),includeCrashLogsButton.isChecked(),  bugReportText.getText().toString(), new IMXBugReportListener() {
+                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), includeCrashLogsButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
                         @Override
                         public void onUploadFailed(String reason) {
                             try {
@@ -585,6 +485,10 @@ public class BugReporter {
         });
     }
 
+    //==============================================================================================================
+    // Screenshot management
+    //==============================================================================================================
+
     /**
      * Take a screenshot of the display.
      *
@@ -622,8 +526,44 @@ public class BugReporter {
         return null;
     }
 
+    //==============================================================================================================
+    // Logcat management
+    //==============================================================================================================
+
+    /**
+     * Save the logcat
+     *
+     * @param context       the context
+     * @param isErrorLogcat true to save the error logcat
+     * @return the file if the operation succeeds
+     */
+    private static File saveLogCat(Context context, boolean isErrorLogcat) {
+        File logCatErrFile = new File(context.getCacheDir().getAbsolutePath(), isErrorLogcat ? LOG_CAT_ERROR_FILENAME : LOG_CAT_FILENAME);
+
+        if (logCatErrFile.exists()) {
+            logCatErrFile.delete();
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(logCatErrFile);
+            OutputStreamWriter osw = new OutputStreamWriter(fos);
+            getLogCatError(osw, isErrorLogcat);
+            osw.close();
+
+            fos.flush();
+            fos.close();
+
+            return compressFile(logCatErrFile);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString());
+        }
+
+        return null;
+    }
+
     private static final int BUFFER_SIZE = 1024 * 1024 * 5;
-    private static final String[] LOGCAT_CMD = new String[]{
+
+    private static final String[] LOGCAT_CMD_ERROR = new String[]{
             "logcat", ///< Run 'logcat' command
             "-d",  ///< Dump the log rather than continue outputting it
             "-v", // formatting
@@ -634,32 +574,134 @@ public class BugReporter {
                     "*:S" ///< Everything else silent, so don't pick it..
     };
 
+    private static final String[] LOGCAT_CMD_DEBUG = new String[]{
+            "logcat",
+            "-d",
+            "-v",
+            "threadtime",
+            "Retrofit:S",
+            "ProgressBar:S",
+            "AbsListView:S",
+            "dalvikvm:S",
+            "OpenGLRenderer:S",
+            "NativeCrypto:S",
+            "VelocityTracker:S",
+            "MaliEGL:S",
+            "GraphicBuffer:S",
+            "WifiStateMachine:S",
+            "ActivityThread:S",
+            "PowerManagerService:S",
+            "BufferQueue:S",
+            "KeyguardUpdateMonitor:S",
+            "wpa_supplicant:S",
+            "ANRManager:S",
+            "InputReader:S",
+            "PowerUI:S",
+            "BatteryService:S",
+            "qdhwcomposer:S",
+            "ServiceDumpSys:S",
+            "DisplayPowerController:S",
+            "View:S",
+            "ListView:S",
+            "Posix:S",
+            "chatty:S",
+            "ViewRootImpl:S",
+            "TextView:S",
+            "MotionRecognitionManager:S",
+            "DisplayListCanvas:S",
+            "AudioManager:S",
+            "irsc_util:S",
+            "QCamera2HWI:S",
+            "audio_hw_primary:S",
+            "msm8974_platform:S",
+            "ACDB-LOADER:S",
+            "platform_parser:S",
+            "audio_hw_ssr:S",
+            "audio_hw_spkr_prot:S",
+            "Thermal-Lib:S",
+            "AudioFlinger:S",
+            "EffectDiracSound:S",
+            "BufferProvider:S",
+            "MonoPipe:S",
+            "bt_a2dp_hw:S",
+            "r_submix:S",
+            "AudioPolicyManagerCustom:S",
+            "RadioService:S",
+            "mediaserver:S",
+            "ListenService:S",
+            "InstallerConnection:S",
+            "SystemServer:S",
+            "SystemServiceManager:S",
+            "BaseMiuiBroadcastManager:S",
+            "BatteryStatsImpl:S",
+            "IntentFirewall:S",
+            "ServiceThread:S",
+            "AppOps:S",
+            "DisplayManagerService:S",
+            "SELinuxMMAC:S",
+            "PackageManager:S",
+            "PackageParser:S",
+            "PreinstallApp:S",
+            "VoldConnector:S",
+            "SoundTriggerHelper:S",
+            "AutomaticBrightnessController:S",
+            "KeyguardServiceDelegate:S",
+            "VoiceInteractionManagerService:S",
+            "SystemServer:S",
+            "UsbAlsaManager:S",
+            "Telecom:S",
+            "LocationManagerInjector:S",
+            "LocationPolicy:S",
+            "MmsServiceBroker:S",
+            "MountService:S",
+            "ACodec:S",
+            "OMXNodeInstance:S",
+            "MM_OSAL:S",
+            "OMXNodeInstance:S",
+            "SoftMPEG4Encoder:S",
+            "audio_hw_extn:S",
+            "audio_hw_fm:S",
+            "ContextImpl:S",
+            "ActiveAndroid:S",
+            "bt_a2dp_hw:S",
+            "BroadcastQueueInjector:S",
+            "AutoStartManagerService:S",
+            "Ext4Crypt:S",
+            "MccTable:S",
+            "DiracAPI:S",
+            "skia:S",
+            "libc-netbsd:S",
+            "chromium:S",
+            "v8:S",
+            "PreferenceGroup:S",
+            "Preference:S",
+            "*:*"
+    };
 
     /**
      * Retrieves the logs
-     * @return the logs.
+     *
+     * @param streamWriter  the stream writer
+     * @param isErrorLogCat true to save the error logs
      */
-    private static String getLogCatError() {
+    private static void getLogCatError(OutputStreamWriter streamWriter, boolean isErrorLogCat) {
         Process logcatProc;
 
         try {
-            logcatProc = Runtime.getRuntime().exec(LOGCAT_CMD);
+            logcatProc = Runtime.getRuntime().exec(isErrorLogCat ? LOGCAT_CMD_ERROR : LOGCAT_CMD_DEBUG);
         } catch (IOException e1) {
-            return "";
+            return;
         }
 
         BufferedReader reader = null;
-        String response = "";
         try {
             String separator = System.getProperty("line.separator");
-            StringBuilder sb = new StringBuilder();
             reader = new BufferedReader(new InputStreamReader(logcatProc.getInputStream()), BUFFER_SIZE);
             String line;
             while ((line = reader.readLine()) != null) {
-                sb.append(line);
-                sb.append(separator);
+                streamWriter.append(line);
+                streamWriter.append(separator);
             }
-            response = sb.toString();
         } catch (IOException e) {
             Log.e(LOG_TAG, "getLog fails with " + e.getLocalizedMessage());
         } finally {
@@ -671,6 +713,67 @@ public class BugReporter {
                 }
             }
         }
-        return response;
+    }
+
+    //==============================================================================================================
+    // File compression management
+    //==============================================================================================================
+
+    /**
+     * GZip a file
+     *
+     * @param fin the input file
+     * @return the gzipped file
+     */
+    private static File compressFile(File fin) {
+        Log.d(LOG_TAG, "## compressFile() : compress " + fin.getName());
+
+        File dstFile = new File(fin.getParent(), fin.getName() + ".gz");
+
+        if (dstFile.exists()) {
+            dstFile.delete();
+        }
+
+        FileOutputStream fos = null;
+        GZIPOutputStream gos = null;
+        InputStream inputStream = null;
+        try {
+            fos = new FileOutputStream(dstFile);
+            gos = new GZIPOutputStream(fos);
+
+            inputStream = new FileInputStream(fin);
+            int n;
+
+            byte[] buffer = new byte[2048];
+            while ((n = inputStream.read(buffer)) != -1) {
+                gos.write(buffer, 0, n);
+            }
+
+            gos.close();
+            inputStream.close();
+
+            Log.d(LOG_TAG, "## compressFile() : " + fin.length() + " compressed to " + dstFile.length() + " bytes");
+            return dstFile;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## compressFile() failed " + e.getMessage());
+        } catch (OutOfMemoryError oom) {
+            Log.e(LOG_TAG, "## compressFile() failed " + oom.getMessage());
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                }
+                if (null != gos) {
+                    gos.close();
+                }
+                if (null != inputStream) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## compressFile() failed to close inputStream " + e.getMessage());
+            }
+        }
+
+        return null;
     }
 }

@@ -308,6 +308,8 @@ public class NotificationUtils {
         android.support.v7.app.NotificationCompat.InboxStyle inboxStyle = new android.support.v7.app.NotificationCompat.InboxStyle();
 
         int sum = 0;
+        int roomsCount = 0;
+
 
         List<NotificationDisplay> notificationsList = new ArrayList<>();
 
@@ -353,6 +355,7 @@ public class NotificationUtils {
                 notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 notificationsList.add(new NotificationDisplay(latestEvent.getOriginServerTs(), notifiedLine));
                 sum += session.getDataHandler().getStore().unreadEvents(roomId, null).size();
+                roomsCount++;
             }
         }
 
@@ -367,7 +370,7 @@ public class NotificationUtils {
         }
 
         inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name));
-        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages_in_room, sum, notifiedEventsByRoomId.keySet().size()));
+        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages_in_room, sum, roomsCount));
         builder.setStyle(inboxStyle);
 
         // Build the pending intent for when the notification is clicked
@@ -382,6 +385,54 @@ public class NotificationUtils {
                 .addNextIntent(roomIntentTap);
 
         builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        // wearable
+        try {
+            long ts = 0;
+            Event latestEvent = null;
+
+            // search the oldest message
+            for (String roomId : notifiedEventsByRoomId.keySet()) {
+                List<NotifiedEvent> notifiedEvents = notifiedEventsByRoomId.get(roomId);
+                Event event = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
+
+                if ((null != event) && (event.getOriginServerTs() > ts)) {
+                    ts = event.getOriginServerTs();
+                    latestEvent = event;
+                }
+            }
+
+            // if there is a valid latest message
+            if (null != latestEvent) {
+                Room room = store.getRoom(latestEvent.roomId);
+
+                if (null != room) {
+                    EventDisplay eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                    eventDisplay.setPrependMessagesWithAuthor(false);
+                    String roomName = getRoomName(context, session, room, null);
+
+                    String message = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
+
+                    CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+
+                    // the event might have been redacted
+                    if (!TextUtils.isEmpty(textualDisplay)) {
+                        message += textualDisplay.toString();
+                    }
+
+                    NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
+                    NotificationCompat.Action action =
+                            new NotificationCompat.Action.Builder(R.drawable.message_notification_transparent,
+                                    message,
+                                    stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+                                    .build();
+                    wearableExtender.addAction(action);
+                    builder.extend(wearableExtender);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.getMessage());
+        }
     }
 
     /**
@@ -544,6 +595,39 @@ public class NotificationUtils {
                     R.drawable.vector_notification_open,
                     context.getString(R.string.action_open),
                     stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            // wearable
+            if (!isInvitationEvent) {
+                try {
+                    Event latestEvent = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
+
+                    // if there is a valid latest message
+                    if (null != latestEvent) {
+                        EventDisplay eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                        eventDisplay.setPrependMessagesWithAuthor(false);
+
+                        String message = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
+
+                        CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+
+                        // the event might have been redacted
+                        if (!TextUtils.isEmpty(textualDisplay)) {
+                            message += textualDisplay.toString();
+                        }
+
+                        NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
+                        NotificationCompat.Action action =
+                                new NotificationCompat.Action.Builder(R.drawable.message_notification_transparent,
+                                        message,
+                                        stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+                                        .build();
+                        wearableExtender.addAction(action);
+                        builder.extend(wearableExtender);
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -663,6 +747,7 @@ public class NotificationUtils {
             builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
             builder.setColor(Color.TRANSPARENT);
         }
+
 
         Notification n = builder.build();
 

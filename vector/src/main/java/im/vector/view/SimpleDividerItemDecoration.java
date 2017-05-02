@@ -18,6 +18,7 @@ package im.vector.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -39,6 +40,11 @@ public class SimpleDividerItemDecoration extends DividerItemDecoration {
         mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider);
         mLeftMargin = leftMargin;
         mOrientation = orientation;
+    }
+
+    @Override
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        outRect.set(0, 0, 0, 0);
     }
 
     @Override
