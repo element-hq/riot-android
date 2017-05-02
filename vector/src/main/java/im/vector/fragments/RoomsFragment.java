@@ -35,6 +35,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -43,6 +44,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
@@ -252,7 +254,8 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
         // update/retrieve the complete summary list
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
-        List<String> directChatRoomIds = mSession.getDirectChatRoomIdsList();
+        HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());
+        HashSet<String> favoritesRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
 
         mRooms.clear();
 
@@ -261,7 +264,14 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             if (!summary.isInvited()) {
                 Room room = store.getRoom(summary.getRoomId());
 
-                if ((null != room) && !directChatRoomIds.contains(room.getRoomId()) && !room.getAccountData().hasTags() && !room.isConferenceUserRoom()) {
+                // test
+                if ((null != room) && // if the room still exists
+                        !room.isConferenceUserRoom() && // not a VOIP conference room
+                        (favoritesRoomIds.contains(room.getRoomId()) || // favorites
+                                (!room.getAccountData().hasTags() && !directChatRoomIds.contains(room.getRoomId())) // no tag and not a direct chat
+                        )
+                        )
+                {
                     mRooms.add(room);
                 }
             }
