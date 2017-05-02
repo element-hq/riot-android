@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.widget.Filter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import butterknife.ButterKnife;
 import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
+import im.vector.fragments.AbsHomeFragment;
 
 public class HomeSectionView extends RelativeLayout {
 
@@ -90,7 +92,7 @@ public class HomeSectionView extends RelativeLayout {
 
     public void setHideIfEmpty(final boolean hideIfEmpty) {
         mHideIfEmpty = hideIfEmpty;
-        setVisibility(mHideIfEmpty && (mAdapter == null || mAdapter.getItemCount() == 0) ? GONE : VISIBLE);
+        setVisibility(mHideIfEmpty && (mAdapter == null || mAdapter.isEmpty()) ? GONE : VISIBLE);
     }
 
     public void setupRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
@@ -107,27 +109,34 @@ public class HomeSectionView extends RelativeLayout {
             @Override
             public void onChanged() {
                 super.onChanged();
-                onDataUpdated(mAdapter.getItemCount());
+                onDataUpdated();
             }
         });
     }
 
     /**
      * Update the views to reflect the new number of items
-     *
-     * @param nbItems
      */
-    private void onDataUpdated(final int nbItems) {
-        setVisibility(mHideIfEmpty && nbItems == 0 ? GONE : VISIBLE);
-        mBadge.setText(String.valueOf(nbItems));
-        mRecyclerView.setVisibility(nbItems == 0 ? GONE : VISIBLE);
-        mPlaceHolder.setVisibility(nbItems == 0 ? VISIBLE : GONE);
+    private void onDataUpdated() {
+        setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
+        mBadge.setText(String.valueOf(mAdapter.getBadgeCount()));
+        mBadge.setVisibility(mAdapter.getBadgeCount() == 0 ? GONE : VISIBLE);
+        mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
+        mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);
     }
 
-    public void onFilter(final String pattern) {
-        // TODO filter + update placeholder
-        //mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
-        //onDataUpdated();
+    public void onFilter(final String pattern, final AbsHomeFragment.OnFilterListener listener) {
+        mAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int count) {
+                if (listener != null) {
+                    listener.onFilterDone(count);
+                }
+                mCurrentFilter = pattern;
+                mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
+                onDataUpdated();
+            }
+        });
     }
 
     public HomeRoomAdapter getAdapter() {

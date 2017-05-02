@@ -39,7 +39,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/section_header"
-        android:gravity="center_horizontal"
         android:padding="16dp"
         android:textColor="@color/vector_80_gray"
         android:textSize="14dp"

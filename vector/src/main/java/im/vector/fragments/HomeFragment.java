@@ -19,11 +19,9 @@ package im.vector.fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
 
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
@@ -31,6 +29,7 @@ import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -67,6 +66,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     private HomeRoomAdapter mPeopleAdapter;
     private HomeRoomAdapter mRoomsAdapter;
     private HomeRoomAdapter mLowPriorityAdapter;
+
+    private List<HomeSectionView> mHomeSectionViews;
 
     private final MXEventListener mEventsListener = new MXEventListener() {
         //TODO
@@ -148,22 +149,16 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     @Override
     protected void onFilter(String pattern, final OnFilterListener listener) {
-        mFavouritesAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
-            @Override
-            public void onFilterComplete(int count) {
-                listener.onFilterDone(count);
-            }
-        });
+        for (HomeSectionView homeSectionView : mHomeSectionViews) {
+            homeSectionView.onFilter(pattern, listener);
+        }
     }
 
     @Override
     protected void onResetFilter() {
-        mFavouritesAdapter.getFilter().filter("", new Filter.FilterListener() {
-            @Override
-            public void onFilterComplete(int count) {
-                Log.i(LOG_TAG, "onResetFilter " + count);
-            }
-        });
+        for (HomeSectionView homeSectionView : mHomeSectionViews) {
+            homeSectionView.onFilter("", null);
+        }
     }
 
     /*
@@ -211,7 +206,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
                 R.layout.adapter_item_circular_room_view, false, this, null, this);
         mLowPriorityAdapter = mLowPrioritySection.getAdapter();
 
-        //TODO solution to calculate the number of low priority rooms that can be displayed when we arrive on the screen + load rest while scrolling
+        mHomeSectionViews = Arrays.asList(mInvitationsSection, mFavouritesSection, mDirectChatsSection, mRoomsSection, mLowPrioritySection);
     }
 
     @Override
@@ -311,6 +306,15 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     @Override
     public void onSelectRoom(Room room, int position) {
         openRoom(room);
+    }
+
+    @Override
+    public void onLongClickRoom(View v, Room room, int position) {
+        // User clicked on the "more actions" area
+        final Set<String> tags = room.getAccountData().getKeys();
+        final boolean isFavorite = tags != null && tags.contains(RoomTag.ROOM_TAG_FAVOURITE);
+        final boolean isLowPriority = tags != null && tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY);
+        RoomUtils.displayPopupMenu(getActivity(), mSession, room, v, isFavorite, isLowPriority, this);
     }
 
 }

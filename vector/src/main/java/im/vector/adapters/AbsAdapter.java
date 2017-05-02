@@ -189,7 +189,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                mCurrentFilterPattern = constraint;
+                onFilterDone(constraint);
                 updateSections();
 
                 if (mStickySectionHelper != null) {

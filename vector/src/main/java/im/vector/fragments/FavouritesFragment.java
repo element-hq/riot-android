@@ -52,7 +52,7 @@ import im.vector.adapters.HomeRoomAdapter;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
-public class FavouritesFragment extends AbsHomeFragment {
+public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
     private static final String LOG_TAG = "FavouritesFragment";
 
     @BindView(R.id.favorites_recycler_view)
@@ -172,12 +172,7 @@ public class FavouritesFragment extends AbsHomeFragment {
         mFavoritesRecyclerView.setHasFixedSize(true);
         mFavoritesRecyclerView.setNestedScrollingEnabled(false);
 
-        mFavoritesAdapter = new HomeRoomAdapter(getContext(), R.layout.adapter_item_room_view, new HomeRoomAdapter.OnSelectRoomListener() {
-            @Override
-            public void onSelectRoom(Room room, int position) {
-                openRoom(room);
-            }
-        }, null, this);
+        mFavoritesAdapter = new HomeRoomAdapter(getContext(), R.layout.adapter_item_room_view, this, null, this);
 
         mFavoritesRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, margin));
         mFavoritesRecyclerView.addItemDecoration(new EmptyViewItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, 40, 16, 14));
@@ -382,5 +377,21 @@ public class FavouritesFragment extends AbsHomeFragment {
                 }
             });
         }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Listeners
+     * *********************************************************************************************
+     */
+
+    @Override
+    public void onSelectRoom(Room room, int position) {
+        openRoom(room);
+    }
+
+    @Override
+    public void onLongClickRoom(View v, Room room, int position) {
+
     }
 }

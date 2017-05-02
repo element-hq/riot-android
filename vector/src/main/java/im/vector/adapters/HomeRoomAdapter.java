@@ -74,7 +74,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final RoomViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final RoomViewHolder viewHolder, final int position) {
         final Room room = mFilteredRooms.get(position);
         if (mLayoutRes == R.layout.adapter_item_room_invite) {
             final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
@@ -87,7 +87,13 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
                     mListener.onSelectRoom(room, viewHolder.getAdapterPosition());
                 }
             });
-            // TODO onlongclick
+            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mListener.onLongClickRoom(v, room, position);
+                    return true;
+                }
+            });
         }
     }
 
@@ -113,6 +119,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
+                onFilterDone(constraint);
                 notifyDataSetChanged();
             }
         };
@@ -153,6 +160,36 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
         return null;
     }
 
+    /**
+     * Return whether the section (not filtered) is empty or not
+     *
+     * @return true if empty
+     */
+    public boolean isEmpty() {
+        return mRooms.isEmpty();
+    }
+
+    /**
+     * Return whether the section (filtered) is empty or not
+     *
+     * @return true if empty
+     */
+    public boolean hasNoResult() {
+        return mFilteredRooms.isEmpty();
+    }
+
+    /**
+     * Return the sum of notifications for all the displayed rooms
+     * @return
+     */
+    public int getBadgeCount() {
+        int badgeCount = 0;
+        for (Room room : mFilteredRooms) {
+            badgeCount += room.getNotificationCount();
+        }
+        return badgeCount;
+    }
+
     /*
      * *********************************************************************************************
      * Private methods
@@ -177,5 +214,6 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
 
     public interface OnSelectRoomListener {
         void onSelectRoom(Room room, int position);
+        void onLongClickRoom(View v, Room room, int position);
     }
 }
