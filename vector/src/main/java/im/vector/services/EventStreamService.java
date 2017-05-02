@@ -530,6 +530,7 @@ public class EventStreamService extends Service {
      * internal start.
      */
     private void start() {
+        final GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
         StreamAction state = getServiceState();
 
         if (state == StreamAction.START) {
@@ -554,7 +555,8 @@ public class EventStreamService extends Service {
 
         mActiveEventStreamService = this;
 
-        for (MXSession session : mSessions) {
+
+        for (final MXSession session : mSessions) {
             if (null == session.getDataHandler()) {
                 Log.e(LOG_TAG, "start : the session is not anymore valid.");
                 return;
@@ -568,6 +570,11 @@ public class EventStreamService extends Service {
             if (store.isReady()) {
                 startEventStream(session, store);
                 if (mSuspendWhenStarted) {
+                    if (null != gcmRegistrationManager) {
+                        session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
+                        session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                    }
+
                     catchup(false);
                 }
             } else {
@@ -579,6 +586,11 @@ public class EventStreamService extends Service {
                         startEventStream(fSession, store);
 
                         if (mSuspendWhenStarted) {
+                            if (null != gcmRegistrationManager) {
+                                session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
+                                session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                            }
+
                             catchup(false);
                         }
                     }
