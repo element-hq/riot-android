@@ -63,12 +63,6 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     @BindView(R.id.low_priority_section)
     HomeSectionView mLowPrioritySection;
 
-    private HomeRoomAdapter mInvitationsAdapter;
-    private HomeRoomAdapter mFavouritesAdapter;
-    private HomeRoomAdapter mPeopleAdapter;
-    private HomeRoomAdapter mRoomsAdapter;
-    private HomeRoomAdapter mLowPriorityAdapter;
-
     private List<HomeSectionView> mHomeSectionViews;
 
     private final MXEventListener mEventsListener = new MXEventListener() {
@@ -108,7 +102,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
         // Eventually restore the pattern of adapter after orientation change
         for (HomeSectionView homeSectionView : mHomeSectionViews) {
-            homeSectionView.getAdapter().onFilterDone(mCurrentFilter);
+            homeSectionView.setCurrentFilter(mCurrentFilter);
         }
 
         mActivity.showWaitingView();
@@ -207,38 +201,33 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         mInvitationsSection.setHideIfEmpty(true);
         mInvitationsSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
         mInvitationsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false),
-                R.layout.adapter_item_room_invite, false, this, this, this);
-        mInvitationsAdapter = mInvitationsSection.getAdapter();
+                R.layout.adapter_item_room_invite, false, this, this, null);
 
         // Favourites
         mFavouritesSection.setTitle(R.string.bottom_action_favourites);
         mFavouritesSection.setHideIfEmpty(true);
         mFavouritesSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
         mFavouritesSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
-                R.layout.adapter_item_circular_room_view, true, this, null, this);
-        mFavouritesAdapter = mFavouritesSection.getAdapter();
+                R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // People
         mDirectChatsSection.setTitle(R.string.bottom_action_people);
         mDirectChatsSection.setPlaceholders(getString(R.string.no_conversation_placeholder), getString(R.string.no_result_placeholder));
         mDirectChatsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
-                R.layout.adapter_item_circular_room_view, true, this, null, this);
-        mPeopleAdapter = mDirectChatsSection.getAdapter();
+                R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // Rooms
         mRoomsSection.setTitle(R.string.bottom_action_rooms);
         mRoomsSection.setPlaceholders(getString(R.string.no_room_placeholder), getString(R.string.no_result_placeholder));
         mRoomsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
-                R.layout.adapter_item_circular_room_view, true, this, null, this);
-        mRoomsAdapter = mRoomsSection.getAdapter();
+                R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // Low priority
         mLowPrioritySection.setTitle(R.string.low_priority_header);
         mLowPrioritySection.setHideIfEmpty(true);
         mLowPrioritySection.setPlaceholders(null, getString(R.string.no_result_placeholder));
         mLowPrioritySection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
-                R.layout.adapter_item_circular_room_view, false, this, null, this);
-        mLowPriorityAdapter = mLowPrioritySection.getAdapter();
+                R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         mHomeSectionViews = Arrays.asList(mInvitationsSection, mFavouritesSection, mDirectChatsSection, mRoomsSection, mLowPrioritySection);
     }
@@ -293,24 +282,23 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         Comparator<Room> lowPriorityComparator = RoomUtils.getTaggedRoomComparator(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
         Comparator<Room> dateComparator = RoomUtils.getRoomsDateComparator(mSession, false);
 
-        sortAndDisplay(favourites, favComparator, mFavouritesAdapter);
-        sortAndDisplay(directChats, dateComparator, mPeopleAdapter);
-        sortAndDisplay(lowPriorities, lowPriorityComparator, mLowPriorityAdapter);
-        sortAndDisplay(otherRooms, dateComparator, mRoomsAdapter);
+        sortAndDisplay(favourites, favComparator, mFavouritesSection);
+        sortAndDisplay(directChats, dateComparator, mDirectChatsSection);
+        sortAndDisplay(lowPriorities, lowPriorityComparator, mLowPrioritySection);
+        sortAndDisplay(otherRooms, dateComparator, mRoomsSection);
 
         mActivity.stopWaitingView();
 
-        mInvitationsAdapter.setRooms(mActivity.getRoomInvitations());
+        mInvitationsSection.setRooms(mActivity.getRoomInvitations());
     }
 
     /**
      * Sort the given room list with the given comparator then attach it to the given adapter
-     *
-     * @param rooms
+     *  @param rooms
      * @param comparator
-     * @param adapter
+     * @param section
      */
-    public void sortAndDisplay(final List<Room> rooms, final Comparator comparator, final HomeRoomAdapter adapter) {
+    public void sortAndDisplay(final List<Room> rooms, final Comparator comparator, final HomeSectionView section) {
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 
             @Override
@@ -323,7 +311,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
             @Override
             protected void onPostExecute(Void args) {
-                adapter.setRooms(rooms);
+                section.setRooms(rooms);
                 mSortingAsyncTasks.remove(this);
             }
         };

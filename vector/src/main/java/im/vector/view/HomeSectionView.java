@@ -14,6 +14,10 @@ import android.widget.Filter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.matrix.androidsdk.data.Room;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
@@ -69,6 +73,15 @@ public class HomeSectionView extends RelativeLayout {
         mAdapter = null; // might be necessary to avoid memory leak?
     }
 
+    /*
+     * *********************************************************************************************
+     * Private methods
+     * *********************************************************************************************
+     */
+
+    /**
+     * Setup the view
+     */
     private void setup() {
         inflate(getContext(), R.layout.home_section_view, this);
         ButterKnife.bind(this);
@@ -80,21 +93,64 @@ public class HomeSectionView extends RelativeLayout {
         mBadge.setBackground(shape);
     }
 
+    /**
+     * Update the views to reflect the new number of items
+     */
+    private void onDataUpdated() {
+        setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
+        mBadge.setText(String.valueOf(mAdapter.getBadgeCount()));
+        mBadge.setVisibility(mAdapter.getBadgeCount() == 0 ? GONE : VISIBLE);
+        mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
+        mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);
+    }
+
+    /*
+     * *********************************************************************************************
+     * Public methods
+     * *********************************************************************************************
+     */
+
+    /**
+     * Set the title of the section
+     *
+     * @param title new title
+     */
     public void setTitle(@StringRes final int title) {
         mHeader.setText(title);
     }
 
+    /**
+     * Set the placeholders to display when there are no items/results
+     *
+     * @param noItemPlaceholder   placeholder when no items
+     * @param noResultPlaceholder placeholder when no results after a filter had been applied
+     */
     public void setPlaceholders(final String noItemPlaceholder, final String noResultPlaceholder) {
         mNoItemPlaceholder = noItemPlaceholder;
         mNoResultPlaceholder = noResultPlaceholder;
         mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
     }
 
+    /**
+     * Set whether the section should be hidden when there are no items
+     *
+     * @param hideIfEmpty
+     */
     public void setHideIfEmpty(final boolean hideIfEmpty) {
         mHideIfEmpty = hideIfEmpty;
         setVisibility(mHideIfEmpty && (mAdapter == null || mAdapter.isEmpty()) ? GONE : VISIBLE);
     }
 
+    /**
+     * Setup the recycler and its adapter with the given params
+     *
+     * @param layoutManager        layout manager
+     * @param itemResId            cell layout
+     * @param nestedScrollEnabled  whether nested scroll should be enabled
+     * @param onSelectRoomListener listener for room click
+     * @param invitationListener   listener for invite buttons
+     * @param moreActionListener   listener for room menu
+     */
     public void setupRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
                                   final boolean nestedScrollEnabled, final HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener,
                                   final AbsAdapter.InvitationListener invitationListener,
@@ -115,16 +171,11 @@ public class HomeSectionView extends RelativeLayout {
     }
 
     /**
-     * Update the views to reflect the new number of items
+     * Filter section items with the given filter
+     *
+     * @param pattern
+     * @param listener
      */
-    private void onDataUpdated() {
-        setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
-        mBadge.setText(String.valueOf(mAdapter.getBadgeCount()));
-        mBadge.setVisibility(mAdapter.getBadgeCount() == 0 ? GONE : VISIBLE);
-        mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
-        mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);
-    }
-
     public void onFilter(final String pattern, final AbsHomeFragment.OnFilterListener listener) {
         mAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
             @Override
@@ -132,18 +183,31 @@ public class HomeSectionView extends RelativeLayout {
                 if (listener != null) {
                     listener.onFilterDone(count);
                 }
-                mCurrentFilter = pattern;
-                mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
+                setCurrentFilter(pattern);
                 onDataUpdated();
             }
         });
     }
 
-    public HomeRoomAdapter getAdapter() {
-        return mAdapter;
+    /**
+     * Set the current filter
+     *
+     * @param filter
+     */
+    public void setCurrentFilter(final String filter) {
+        mCurrentFilter = filter;
+        mAdapter.onFilterDone(mCurrentFilter);
+        mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
     }
 
-    public RecyclerView getRecyclerView() {
-        return mRecyclerView;
+    /**
+     * Set rooms of the section
+     *
+     * @param rooms
+     */
+    public void setRooms(final List<Room> rooms) {
+        if (mAdapter != null) {
+            mAdapter.setRooms(rooms);
+        }
     }
 }

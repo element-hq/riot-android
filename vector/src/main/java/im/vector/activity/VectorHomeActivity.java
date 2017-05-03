@@ -766,7 +766,7 @@ public class VectorHomeActivity extends AppCompatActivity {
         if (fragment != null) {
             resetFilter();
             mFragmentManager.beginTransaction()
-                    .replace(R.id.home_recents_list_anchor, fragment, mCurrentFragmentTag)
+                    .replace(R.id.fragment_container, fragment, mCurrentFragmentTag)
                     .addToBackStack(mCurrentFragmentTag)
                     .commit();
         }
