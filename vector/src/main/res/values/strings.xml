@@ -676,7 +676,7 @@
     <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
     <string name="directory_server_placeholder">Homeserver URL</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
-    <string name="directory_server_native_rooms">Native %s rooms</string>
+    <string name="directory_server_native_rooms">All native %s rooms</string>
 
     <!-- Notifications -->
     <string name="notification_unread_messages">%d unread messages</string>
