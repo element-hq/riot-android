@@ -394,9 +394,9 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         mSession.markRoomsAsRead(getRooms(), new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                onSummariesUpdate();
                 mActivity.stopWaitingView();
                 mActivity.refreshUnreadBadges();
+                onSummariesUpdate();
             }
 
             private void onError(String errorMessage) {

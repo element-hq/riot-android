@@ -114,8 +114,9 @@ public class HomeSectionView extends RelativeLayout {
      */
     private void onDataUpdated() {
         setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
-        mBadge.setText(String.valueOf(mAdapter.getBadgeCount()));
-        mBadge.setVisibility(mAdapter.getBadgeCount() == 0 ? GONE : VISIBLE);
+        final int badgeCount = mAdapter.getBadgeCount();
+        mBadge.setText(String.valueOf(badgeCount));
+        mBadge.setVisibility(badgeCount == 0 ? GONE : VISIBLE);
         mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
         mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);
     }

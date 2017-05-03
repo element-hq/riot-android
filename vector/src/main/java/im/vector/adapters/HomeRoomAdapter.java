@@ -180,12 +180,17 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
 
     /**
      * Return the sum of notifications for all the displayed rooms
-     * @return
+     *
+     * @return badge value
      */
     public int getBadgeCount() {
         int badgeCount = 0;
         for (Room room : mFilteredRooms) {
-            badgeCount += room.getNotificationCount();
+            if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room)) {
+                badgeCount += room.getHighlightCount();
+            } else {
+                badgeCount += room.getNotificationCount();
+            }
         }
         return badgeCount;
     }
@@ -214,6 +219,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
 
     public interface OnSelectRoomListener {
         void onSelectRoom(Room room, int position);
+
         void onLongClickRoom(View v, Room room, int position);
     }
 }
