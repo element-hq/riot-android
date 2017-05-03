@@ -25,9 +25,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -35,17 +33,15 @@ import org.matrix.androidsdk.data.Room;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.RoomUtils;
 import im.vector.util.StickySectionHelper;
-import im.vector.util.VectorUtils;
 import im.vector.view.SectionView;
 
-public abstract class AbsAdapter extends RecyclerView.Adapter implements Filterable {
+public abstract class AbsAdapter extends AbsFilterableAdapter {
 
     private static final String LOG_TAG = AbsAdapter.class.getSimpleName();
 
@@ -62,17 +58,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     /// Ex <0, section 1 with 2 items>, <3, section 2>
     private List<Pair<Integer, AdapterSection>> mSections;
 
-    protected CharSequence mCurrentFilterPattern;
-
     private final AdapterSection<Room> mInviteSection;
-
-    private Filter mFilter;
-
-    protected final Context mContext;
-    protected final MXSession mSession;
-
-    private final InvitationListener mInvitationListener;
-    protected final MoreRoomActionListener mMoreActionListener;
 
     /*
      * *********************************************************************************************
@@ -81,40 +67,11 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
      */
 
     protected AbsAdapter(final Context context, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
-        mContext = context;
-        mSession = Matrix.getInstance(context).getDefaultSession();
-        mInvitationListener = invitationListener;
-        mMoreActionListener = moreActionListener;
+        super(context, invitationListener, moreActionListener);
 
         registerAdapterDataObserver(new AdapterDataObserver());
 
         mSections = new ArrayList<>();
-
-        mFilter = new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                final FilterResults results = new FilterResults();
-
-                String filterPattern = null;
-                if (!TextUtils.isEmpty(constraint)) {
-                    filterPattern = constraint.toString().trim();
-                }
-
-                results.count = applyFilter(filterPattern) + filterRooms(mInviteSection, filterPattern);
-
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                mCurrentFilterPattern = constraint;
-                updateSections();
-
-                if (mStickySectionHelper != null) {
-                    mStickySectionHelper.resetSticky(mSections);
-                }
-            }
-        };
 
         mInviteSection = new AdapterSection<>(context.getString(R.string.room_recents_invites), -1, R.layout.adapter_item_room_view,
                 TYPE_HEADER_DEFAULT, TYPE_ROOM_INVITATION, new ArrayList<Room>(), null);
@@ -206,7 +163,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
             case TYPE_ROOM_INVITATION:
                 final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
                 final Room room = (Room) getItemForPosition(position);
-                invitationViewHolder.populateViews(room);
+                invitationViewHolder.populateViews(mContext, mSession, room, mInvitationListener, mMoreActionListener);
                 break;
             default:
                 populateViewHolder(viewType, viewHolder, position);
@@ -214,8 +171,32 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     }
 
     @Override
-    public Filter getFilter() {
-        return mFilter;
+    protected Filter createFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults results = new FilterResults();
+
+                String filterPattern = null;
+                if (!TextUtils.isEmpty(constraint)) {
+                    filterPattern = constraint.toString().trim();
+                }
+
+                results.count = applyFilter(filterPattern) + filterRoomSection(mInviteSection, filterPattern);
+
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                onFilterDone(constraint);
+                updateSections();
+
+                if (mStickySectionHelper != null) {
+                    mStickySectionHelper.resetSticky(mSections);
+                }
+            }
+        };
     }
 
     /*
@@ -232,7 +213,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
     public void setInvitation(final List<Room> rooms) {
         mInviteSection.setItems(rooms, mCurrentFilterPattern);
         if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
-            filterRooms(mInviteSection, String.valueOf(mCurrentFilterPattern));
+            filterRoomSection(mInviteSection, String.valueOf(mCurrentFilterPattern));
         }
 
         updateSections();
@@ -378,29 +359,16 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
         }
     }
 
-    public void onFilterDone(CharSequence currentPattern) {
-        mCurrentFilterPattern = currentPattern;
-    }
-
     /**
-     * Filter the given section (of rooms) with the given pattern
+     * Filter the given section of rooms with the given pattern
      *
      * @param section
      * @param filterPattern
      * @return nb of items matching the filter
      */
-    protected int filterRooms(final AdapterSection<Room> section, final String filterPattern) {
+    protected int filterRoomSection(final AdapterSection<Room> section, final String filterPattern) {
         if (!TextUtils.isEmpty(filterPattern)) {
-            List<Room> filteredRoom = new ArrayList<>();
-
-            Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
-            List<Room> sectionItems = new ArrayList<>(section.getItems());
-            for (final Room room : sectionItems) {
-                final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-                if (pattern.matcher(roomName).find()) {
-                    filteredRoom.add(room);
-                }
-            }
+            List<Room> filteredRoom = RoomUtils.getFilteredRooms(mContext, mSession, section.getItems(), filterPattern);
             section.setFilteredItems(filteredRoom, filterPattern);
         } else {
             section.resetFilter();
@@ -432,41 +400,6 @@ public abstract class AbsAdapter extends RecyclerView.Adapter implements Filtera
 
         public AdapterSection getSection() {
             return mSection;
-        }
-    }
-
-    class InvitationViewHolder extends RoomViewHolder {
-
-        @BindView(R.id.recents_invite_reject_button)
-        Button vRejectButton;
-
-        @BindView(R.id.recents_invite_preview_button)
-        Button vPreViewButton;
-
-        InvitationViewHolder(View itemView) {
-            super(mContext, mSession, itemView, AbsAdapter.this.mMoreActionListener);
-        }
-
-        void populateViews(final Room room) {
-            super.populateViews(room, room.isDirectChatInvitation(), true);
-
-            vPreViewButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mInvitationListener) {
-                        mInvitationListener.onPreviewRoom(mSession, room.getRoomId());
-                    }
-                }
-            });
-
-            vRejectButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mInvitationListener) {
-                        mInvitationListener.onRejectInvitation(mSession, room.getRoomId());
-                    }
-                }
-            });
         }
     }
 

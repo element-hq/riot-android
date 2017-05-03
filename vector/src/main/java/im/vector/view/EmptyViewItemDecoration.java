@@ -18,9 +18,9 @@ package im.vector.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -29,6 +29,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.View;
 
+import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.AdapterSection;
 
@@ -37,6 +38,7 @@ public class EmptyViewItemDecoration extends DividerItemDecoration {
     private final float mTextSize;
     private final float mEmptyViewHeight;
     private final float mEmptyViewLeftMargin;
+    private final int mTextColor;
 
     public EmptyViewItemDecoration(final Context context, final int orientation,
                                    final int emptyViewHeight, final int emptyViewLeftMargin,
@@ -48,6 +50,7 @@ public class EmptyViewItemDecoration extends DividerItemDecoration {
         mTextSize = textSize * density;
         mEmptyViewHeight = emptyViewHeight * density;
         mEmptyViewLeftMargin = emptyViewLeftMargin * density;
+        mTextColor = ContextCompat.getColor(context, R.color.vector_80_gray);
     }
 
     @Override
@@ -84,7 +87,7 @@ public class EmptyViewItemDecoration extends DividerItemDecoration {
                         TextPaint textPaint = new TextPaint();
                         textPaint.setAntiAlias(true);
                         textPaint.setTextSize(mTextSize);
-                        textPaint.setColor(Color.GRAY);
+                        textPaint.setColor(mTextColor);
                         textPaint.setTextAlign(Paint.Align.LEFT);
                         int width = (int) textPaint.measureText(emptyViewPlaceholder);
                         StaticLayout layout = new StaticLayout(emptyViewPlaceholder, textPaint, width, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);

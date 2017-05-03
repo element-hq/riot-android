@@ -33,7 +33,6 @@ import android.widget.CompoundButton;
 import android.widget.Filter;
 
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
@@ -42,15 +41,12 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMemberDetailsActivity;
-import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.PeopleAdapter;
 import im.vector.contacts.Contact;
@@ -65,11 +61,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
 
     private static final String MATRIX_USER_ONLY = "MATRIX_USER_ONLY";
-
-    @BindString(R.string.local_address_book_header)
-    String mLocalContactsHeaderText;
-    @BindString(R.string.known_contacts_header)
-    String mKnownContactsHeaderText;
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecycler;
@@ -119,7 +110,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             }
         };
 
-        prepareViews();
+        initViews();
 
         mOnRoomChangedListener = this;
 
@@ -232,7 +223,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     /**
      * Prepare views
      */
-    private void prepareViews() {
+    private void initViews() {
         int margin = (int) getResources().getDimension(R.dimen.item_decoration_left_margin);
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mRecycler.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, margin));
@@ -240,7 +231,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         mAdapter = new PeopleAdapter(getActivity(), new PeopleAdapter.OnSelectItemListener() {
             @Override
             public void onSelectItem(Room room, int position) {
-                onRoomSelected(room, position);
+               openRoom(room);
             }
 
             @Override
@@ -339,48 +330,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * User action management
      * *********************************************************************************************
      */
-
-    /**
-     * Handle the click on a direct chat
-     *
-     * @param room
-     * @param adapterPosition
-     */
-    private void onRoomSelected(final Room room, final int adapterPosition) {
-        final String roomId;
-        // cannot join a leaving room
-        if (room == null || room.isLeaving()) {
-            roomId = null;
-        } else {
-            roomId = room.getRoomId();
-        }
-
-        if (roomId != null) {
-            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(roomId);
-
-            if (null != roomSummary) {
-                room.sendReadReceipt(null);
-
-                // Reset the highlight
-                if (roomSummary.setHighlighted(false)) {
-                    mSession.getDataHandler().getStore().flushSummary(roomSummary);
-                }
-            }
-
-            // Update badge unread count in case device is offline
-            CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
-
-            // Launch corresponding room activity
-            HashMap<String, Object> params = new HashMap<>();
-            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
-            CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
-        }
-
-        // Refresh the adapter item
-        mAdapter.notifyItemChanged(adapterPosition);
-    }
 
     /**
      * Handle the click on a local or known contact

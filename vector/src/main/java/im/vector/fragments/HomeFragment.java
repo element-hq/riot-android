@@ -16,20 +16,62 @@
 
 package im.vector.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomAccountData;
+import org.matrix.androidsdk.data.RoomTag;
+import org.matrix.androidsdk.listeners.MXEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import butterknife.BindView;
 import im.vector.R;
+import im.vector.adapters.HomeRoomAdapter;
+import im.vector.util.RoomUtils;
+import im.vector.view.HomeSectionView;
 
-public class HomeFragment extends AbsHomeFragment implements AbsHomeFragment.OnRoomChangedListener {
+public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
+    private static final String LOG_TAG = HomeFragment.class.getSimpleName();
+
+    @BindView(R.id.invitations_section)
+    HomeSectionView mInvitationsSection;
+
+    @BindView(R.id.favourites_section)
+    HomeSectionView mFavouritesSection;
+
+    @BindView(R.id.direct_chats_section)
+    HomeSectionView mDirectChatsSection;
+
+    @BindView(R.id.rooms_section)
+    HomeSectionView mRoomsSection;
+
+    @BindView(R.id.low_priority_section)
+    HomeSectionView mLowPrioritySection;
+
+    private List<HomeSectionView> mHomeSectionViews;
+
+    private final MXEventListener mEventsListener = new MXEventListener() {
+        //TODO
+    };
+
+    private List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
+
+    private AlertDialog mFabDialog;
 
     /*
      * *********************************************************************************************
@@ -58,8 +100,39 @@ public class HomeFragment extends AbsHomeFragment implements AbsHomeFragment.OnR
 
         initViews();
 
-        if (savedInstanceState != null) {
-            // Restore adapter items
+        // Eventually restore the pattern of adapter after orientation change
+        for (HomeSectionView homeSectionView : mHomeSectionViews) {
+            homeSectionView.setCurrentFilter(mCurrentFilter);
+        }
+
+        mActivity.showWaitingView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mSession.getDataHandler().addListener(mEventsListener);
+        initData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSession.getDataHandler().removeListener(mEventsListener);
+        if (mFabDialog != null) {
+            // Prevent leak after orientation changed
+            mFabDialog.dismiss();
+            mFabDialog = null;
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Cancel running async tasks to prevent memory leaks
+        for (AsyncTask asyncTask : mSortingAsyncTasks) {
+            asyncTask.cancel(true);
         }
     }
 
@@ -71,24 +144,49 @@ public class HomeFragment extends AbsHomeFragment implements AbsHomeFragment.OnR
 
     @Override
     protected void onFloatingButtonClick() {
-        //TODO clean VectorRecentsListFragment to not handle the fab there
+        // ignore any action if there is a pending one
+        if (!mActivity.isWaitingViewVisible()) {
+            CharSequence items[] = new CharSequence[]{getString(R.string.room_recents_start_chat), getString(R.string.room_recents_create_room)};
+            mFabDialog = new AlertDialog.Builder(mActivity)
+                    .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface d, int n) {
+                            d.cancel();
+                            if (0 == n) {
+                                mActivity.invitePeopleToNewRoom();
+                            } else {
+                                mActivity.createRoom();
+                            }
+                        }
+                    })
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mActivity.invitePeopleToNewRoom();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
     }
 
     @Override
     protected List<Room> getRooms() {
-        return new ArrayList<>();
+        return new ArrayList<>(mSession.getDataHandler().getStore().getRooms());
     }
 
     @Override
-    protected void onFilter(String pattern, OnFilterListener listener) {
-        Toast.makeText(getActivity(), "home onFilter "+pattern, Toast.LENGTH_SHORT).show();
-        //TODO adapter getFilter().filter(pattern, listener)
-        //TODO call listener.onFilterDone(); when complete
+    protected void onFilter(String pattern, final OnFilterListener listener) {
+        for (HomeSectionView homeSectionView : mHomeSectionViews) {
+            homeSectionView.onFilter(pattern, listener);
+        }
     }
 
     @Override
     protected void onResetFilter() {
-
+        for (HomeSectionView homeSectionView : mHomeSectionViews) {
+            homeSectionView.onFilter("", null);
+        }
     }
 
     /*
@@ -98,7 +196,128 @@ public class HomeFragment extends AbsHomeFragment implements AbsHomeFragment.OnR
      */
 
     private void initViews() {
-        // TODO
+        // Invitations
+        mInvitationsSection.setTitle(R.string.invitations_header);
+        mInvitationsSection.setHideIfEmpty(true);
+        mInvitationsSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
+        mInvitationsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false),
+                R.layout.adapter_item_room_invite, false, this, this, null);
+
+        // Favourites
+        mFavouritesSection.setTitle(R.string.bottom_action_favourites);
+        mFavouritesSection.setHideIfEmpty(true);
+        mFavouritesSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
+        mFavouritesSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+                R.layout.adapter_item_circular_room_view, true, this, null, null);
+
+        // People
+        mDirectChatsSection.setTitle(R.string.bottom_action_people);
+        mDirectChatsSection.setPlaceholders(getString(R.string.no_conversation_placeholder), getString(R.string.no_result_placeholder));
+        mDirectChatsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+                R.layout.adapter_item_circular_room_view, true, this, null, null);
+
+        // Rooms
+        mRoomsSection.setTitle(R.string.bottom_action_rooms);
+        mRoomsSection.setPlaceholders(getString(R.string.no_room_placeholder), getString(R.string.no_result_placeholder));
+        mRoomsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+                R.layout.adapter_item_circular_room_view, true, this, null, null);
+
+        // Low priority
+        mLowPrioritySection.setTitle(R.string.low_priority_header);
+        mLowPrioritySection.setHideIfEmpty(true);
+        mLowPrioritySection.setPlaceholders(null, getString(R.string.no_result_placeholder));
+        mLowPrioritySection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+                R.layout.adapter_item_circular_room_view, true, this, null, null);
+
+        mHomeSectionViews = Arrays.asList(mInvitationsSection, mFavouritesSection, mDirectChatsSection, mRoomsSection, mLowPrioritySection);
+    }
+
+    @Override
+    public void onSummariesUpdate() {
+        if (!mActivity.isWaitingViewVisible()) {
+            initData();
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Data management
+     * *********************************************************************************************
+     */
+
+    /**
+     * Init the rooms data
+     */
+    private void initData() {
+        final List<Room> favourites = new ArrayList<>();
+        final List<Room> directChats = new ArrayList<>();
+        final List<Room> lowPriorities = new ArrayList<>();
+        final List<Room> otherRooms = new ArrayList<>();
+
+        final Collection<Room> roomCollection = mSession.getDataHandler().getStore().getRooms();
+        final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
+
+        for (Room room : roomCollection) {
+            if (!room.isConferenceUserRoom()) {
+                final RoomAccountData accountData = room.getAccountData();
+                final Set<String> tags = new HashSet<>();
+
+                if (accountData != null && accountData.hasTags()) {
+                    tags.addAll(accountData.getKeys());
+                }
+
+                if (tags.contains(RoomTag.ROOM_TAG_FAVOURITE)) {
+                    favourites.add(room);
+                } else if (tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
+                    lowPriorities.add(room);
+                } else if (directChatIds.contains(room.getRoomId())) {
+                    directChats.add(room);
+                } else {
+                    otherRooms.add(room);
+                }
+            }
+        }
+
+        Comparator<Room> favComparator = RoomUtils.getTaggedRoomComparator(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
+        Comparator<Room> lowPriorityComparator = RoomUtils.getTaggedRoomComparator(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
+        Comparator<Room> dateComparator = RoomUtils.getRoomsDateComparator(mSession, false);
+
+        sortAndDisplay(favourites, favComparator, mFavouritesSection);
+        sortAndDisplay(directChats, dateComparator, mDirectChatsSection);
+        sortAndDisplay(lowPriorities, lowPriorityComparator, mLowPrioritySection);
+        sortAndDisplay(otherRooms, dateComparator, mRoomsSection);
+
+        mActivity.stopWaitingView();
+
+        mInvitationsSection.setRooms(mActivity.getRoomInvitations());
+    }
+
+    /**
+     * Sort the given room list with the given comparator then attach it to the given adapter
+     *
+     * @param rooms
+     * @param comparator
+     * @param section
+     */
+    public void sortAndDisplay(final List<Room> rooms, final Comparator comparator, final HomeSectionView section) {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                if (!isCancelled()) {
+                    Collections.sort(rooms, comparator);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void args) {
+                section.setRooms(rooms);
+                mSortingAsyncTasks.remove(this);
+            }
+        };
+        mSortingAsyncTasks.add(task);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     /*
@@ -108,12 +327,17 @@ public class HomeFragment extends AbsHomeFragment implements AbsHomeFragment.OnR
      */
 
     @Override
-    public void onToggleDirectChat(String roomId, boolean isDirectChat) {
-
+    public void onSelectRoom(Room room, int position) {
+        openRoom(room);
     }
 
     @Override
-    public void onRoomLeft(String roomId) {
-
+    public void onLongClickRoom(View v, Room room, int position) {
+        // User clicked on the "more actions" area
+        final Set<String> tags = room.getAccountData().getKeys();
+        final boolean isFavorite = tags != null && tags.contains(RoomTag.ROOM_TAG_FAVOURITE);
+        final boolean isLowPriority = tags != null && tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY);
+        RoomUtils.displayPopupMenu(getActivity(), mSession, room, v, isFavorite, isLowPriority, this);
     }
+
 }

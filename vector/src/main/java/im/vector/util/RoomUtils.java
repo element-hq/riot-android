@@ -48,6 +48,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -115,6 +116,20 @@ public class RoomUtils {
                 }
 
                 return reverseOrder ? -retValue : retValue;
+            }
+        };
+    }
+
+    /**
+     * Get a comparator to sort tagged rooms
+     *
+     * @param taggedRoomsById
+     * @return comparator
+     */
+    public static Comparator<Room> getTaggedRoomComparator(final List<String> taggedRoomsById) {
+        return new Comparator<Room>() {
+            public int compare(Room r1, Room r2) {
+                return taggedRoomsById.indexOf(r1.getRoomId()) - taggedRoomsById.indexOf(r2.getRoomId());
             }
         };
     }
@@ -440,5 +455,30 @@ public class RoomUtils {
         }
 
         return false;
+    }
+
+    /**
+     * Create a list of rooms by filtering the given list with the given pattern
+     *
+     * @param roomsToFilter
+     * @param constraint
+     * @return filtered rooms
+     */
+    public static List<Room> getFilteredRooms(final Context context, final MXSession session,
+                                              final List<Room> roomsToFilter, final CharSequence constraint) {
+        final String filterPattern = constraint != null ? constraint.toString().trim() : null;
+        if (!TextUtils.isEmpty(filterPattern)) {
+            List<Room> filteredRoom = new ArrayList<>();
+            Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
+            for (final Room room : roomsToFilter) {
+                final String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+                if (pattern.matcher(roomName).find()) {
+                    filteredRoom.add(room);
+                }
+            }
+            return filteredRoom;
+        } else {
+            return roomsToFilter;
+        }
     }
 }
