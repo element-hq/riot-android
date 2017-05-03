@@ -1745,6 +1745,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         public void onDirectMessageChatRoomsListUpdate() {
             mRefreshBadgeOnChunkEnd = true;
         }
+
+        @Override
+        public void onRoomTagEvent(String roomId) {
+            mRefreshBadgeOnChunkEnd = true;
+        }
     };
 
     /**
@@ -1892,9 +1897,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
                 for(Room room : roomSummaryByRoom.keySet()) {
                     if (!room.isConferenceUserRoom() && // not a VOIP conference room
-                            (favoritesRoomIds.contains(room.getRoomId()) || // favorites
-                                    (!room.getAccountData().hasTags() && !directChatRoomIds.contains(room.getRoomId())) // no tag and not a direct chat
-                            )) {
+                            !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
+                            (!room.getAccountData().hasTags() || favoritesRoomIds.contains(room.getRoomId()))) {
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
