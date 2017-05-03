@@ -201,6 +201,7 @@ public class HomeSectionView extends RelativeLayout {
                     listener.onFilterDone(count);
                 }
                 setCurrentFilter(pattern);
+                mRecyclerView.getLayoutManager().scrollToPosition(0);
                 onDataUpdated();
             }
         });
