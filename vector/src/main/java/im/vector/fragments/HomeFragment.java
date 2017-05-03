@@ -172,7 +172,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     @Override
     protected List<Room> getRooms() {
-        return new ArrayList<>();
+        return new ArrayList<>(mSession.getDataHandler().getStore().getRooms());
     }
 
     @Override
@@ -294,7 +294,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     /**
      * Sort the given room list with the given comparator then attach it to the given adapter
-     *  @param rooms
+     *
+     * @param rooms
      * @param comparator
      * @param section
      */

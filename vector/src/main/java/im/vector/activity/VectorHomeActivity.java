@@ -549,9 +549,6 @@ public class VectorHomeActivity extends AppCompatActivity {
                 startActivity(searchIntent);
                 break;
             case R.id.ic_action_mark_all_as_read:
-                //TODO temporary line, remove this when HomeFragment will be plugged
-                markAllMessagesAsRead();
-
                 // Will be handle by fragments
                 retCode = false;
                 break;
@@ -928,43 +925,6 @@ public class VectorHomeActivity extends AppCompatActivity {
                 }
             }
         }, 500);
-    }
-
-    /**
-     * Send a read receipt to the latest message of each room in the current session.
-     */
-    private void markAllMessagesAsRead() {
-        // the other fragments have their own management
-        if (TextUtils.equals(mCurrentFragmentTag, TAG_FRAGMENT_HOME)) {
-            showWaitingView();
-
-            mSession.markRoomsAsRead(mSession.getDataHandler().getStore().getRooms(), new ApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    refreshUnreadBadges();
-                }
-
-                private void onError(String errorMessage) {
-                    Log.e(LOG_TAG, "## markAllMessagesAsRead() failed " + errorMessage);
-                    onSuccess(null);
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onError(e.getMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onError(e.getMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onError(e.getMessage());
-                }
-            });
-        }
     }
 
     /**
