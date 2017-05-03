@@ -29,6 +29,8 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +38,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -62,6 +65,9 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     @BindView(R.id.low_priority_section)
     HomeSectionView mLowPrioritySection;
+
+    @BindView(R.id.historical_section)
+    HomeSectionView mHistoricalSection;
 
     private List<HomeSectionView> mHomeSectionViews;
 
@@ -229,7 +235,26 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         mLowPrioritySection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
-        mHomeSectionViews = Arrays.asList(mInvitationsSection, mFavouritesSection, mDirectChatsSection, mRoomsSection, mLowPrioritySection);
+        // Historical
+        mHistoricalSection.setTitle(R.string.historical_header);
+        mHistoricalSection.setHideIfEmpty(false);
+        mHistoricalSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+                R.layout.adapter_item_circular_room_view, true, this, null, null);
+
+        if (!mSession.getDataHandler().areLeftRoomsSynced() && !mSession.getDataHandler().isRetrievingLeftRooms()) {
+            mHistoricalSection.setPlaceholders(getString(R.string.load_history_placeholder), getString(R.string.load_history_placeholder));
+            mHistoricalSection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    retrieveRoomHistory();
+                }
+            });
+        } else {
+            mHistoricalSection.setPlaceholders(getString(R.string.no_history_placeholder), getString(R.string.no_result_placeholder));
+        }
+
+        mHomeSectionViews = Arrays.asList(mInvitationsSection, mFavouritesSection, mDirectChatsSection,
+                mRoomsSection, mLowPrioritySection, mHistoricalSection);
     }
 
     @Override
@@ -249,6 +274,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      * Init the rooms data
      */
     private void initData() {
+        // Main sections
         final List<Room> favourites = new ArrayList<>();
         final List<Room> directChats = new ArrayList<>();
         final List<Room> lowPriorities = new ArrayList<>();
@@ -287,14 +313,38 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         sortAndDisplay(lowPriorities, lowPriorityComparator, mLowPrioritySection);
         sortAndDisplay(otherRooms, dateComparator, mRoomsSection);
 
-        mActivity.stopWaitingView();
-
         mInvitationsSection.setRooms(mActivity.getRoomInvitations());
+
+        // History
+        initHistoryData(RoomUtils.getRoomsDateComparator(mSession, false));
+
+        mActivity.stopWaitingView();
+    }
+
+    /**
+     * Init history rooms data
+     *
+     * @param roomsComparator
+     */
+    private void initHistoryData(final Comparator<Room> roomsComparator) {
+        final List<Room> historicalRooms = new ArrayList<>(mSession.getDataHandler().getLeftRooms());
+        for (Iterator<Room> iterator = historicalRooms.iterator(); iterator.hasNext(); ) {
+            final Room room = iterator.next();
+            if (room.isConferenceUserRoom()) {
+                iterator.remove();
+            }
+        }
+        if (roomsComparator != null) {
+            sortAndDisplay(historicalRooms, roomsComparator, mHistoricalSection);
+        } else {
+            mHistoricalSection.setRooms(historicalRooms);
+        }
     }
 
     /**
      * Sort the given room list with the given comparator then attach it to the given adapter
-     *  @param rooms
+     *
+     * @param rooms
      * @param comparator
      * @param section
      */
@@ -317,6 +367,48 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         };
         mSortingAsyncTasks.add(task);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    /**
+     * Start history retrieval
+     */
+    private void retrieveRoomHistory() {
+        mHistoricalSection.setPlaceholders(getString(R.string.loading_placeholder), getString(R.string.load_history_placeholder));
+        mSession.getDataHandler().retrieveLeftRooms(new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onHistoryRetrieved();
+                    }
+                });
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+
+            }
+        });
+    }
+
+    /**
+     * Update UI after history has been retrieved
+     */
+    private void onHistoryRetrieved() {
+        initHistoryData(RoomUtils.getRoomsDateComparator(mSession, false));
+        mHistoricalSection.setPlaceholders(getString(R.string.no_history_placeholder), getString(R.string.no_result_placeholder));
+        mHistoricalSection.setOnClickListener(null);
     }
 
     /*

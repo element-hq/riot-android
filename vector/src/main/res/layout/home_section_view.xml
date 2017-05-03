@@ -25,6 +25,7 @@
         android:paddingTop="3dp"
         android:textSize="12dp"
         android:textStyle="bold"
+        android:visibility="gone"
         tools:text="12" />
 
     <android.support.v7.widget.RecyclerView

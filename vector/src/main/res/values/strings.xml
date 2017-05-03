@@ -71,6 +71,10 @@
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>
+    <string name="historical_header">Historical</string>
+    <string name="load_history_placeholder">Tap to load</string>
+    <string name="loading_placeholder">Loading…</string>
+    <string name="no_history_placeholder">No history</string>
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
