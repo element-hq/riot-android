@@ -19,33 +19,26 @@ package im.vector.adapters;
 import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.Filterable;
 
-import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
-import im.vector.Matrix;
-import im.vector.util.VectorUtils;
+import im.vector.R;
+import im.vector.util.RoomUtils;
 
-public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implements Filterable {
-
-    private final Context mContext;
-    private final MXSession mSession;
+public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
+    private static final String LOG_TAG = HomeRoomAdapter.class.getSimpleName();
 
     private final int mLayoutRes;
     private final List<Room> mRooms;
     private final List<Room> mFilteredRooms;
-    private final OnFavoritesListener mListener;
+    private final OnSelectRoomListener mListener;
 
     private final AbsAdapter.MoreRoomActionListener mMoreActionListener;
 
@@ -55,15 +48,16 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
      * *********************************************************************************************
      */
 
-    public FavoriteAdapter(final Context context, @LayoutRes final int layoutRes, final OnFavoritesListener listener, AbsAdapter.MoreRoomActionListener moreActionListener) {
-        mLayoutRes = layoutRes;
+    public HomeRoomAdapter(final Context context, @LayoutRes final int layoutRes, final OnSelectRoomListener listener,
+                           final AbsAdapter.InvitationListener invitationListener, final AbsAdapter.MoreRoomActionListener moreActionListener) {
+        super(context, invitationListener, moreActionListener);
+
         mRooms = new ArrayList<>();
         mFilteredRooms = new ArrayList<>();
+
+        mLayoutRes = layoutRes;
         mListener = listener;
         mMoreActionListener = moreActionListener;
-
-        mContext = context;
-        mSession =  Matrix.getInstance(context).getDefaultSession();
     }
 
     /*
@@ -76,19 +70,31 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
     public RoomViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         final LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         final View view = layoutInflater.inflate(mLayoutRes, viewGroup, false);
-        return new RoomViewHolder(mContext, mSession, view, mMoreActionListener);
+        return mLayoutRes == R.layout.adapter_item_room_invite ? new InvitationViewHolder(view) : new RoomViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final RoomViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final RoomViewHolder viewHolder, final int position) {
         final Room room = mFilteredRooms.get(position);
-        viewHolder.populateViews(room, mSession.getDirectChatRoomIdsList().contains(room.getRoomId()), false);
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onSelectFavorite(room, viewHolder.getAdapterPosition());
-            }
-        });
+        if (mLayoutRes == R.layout.adapter_item_room_invite) {
+            final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
+            invitationViewHolder.populateViews(mContext, mSession, room, mInvitationListener, mMoreActionListener);
+        } else {
+            viewHolder.populateViews(mContext, mSession, room, mSession.getDirectChatRoomIdsList().contains(room.getRoomId()), false, mMoreActionListener);
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onSelectRoom(room, viewHolder.getAdapterPosition());
+                }
+            });
+            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mListener.onLongClickRoom(v, room, position);
+                    return true;
+                }
+            });
+        }
     }
 
     @Override
@@ -97,27 +103,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
     }
 
     @Override
-    public Filter getFilter() {
+    protected Filter createFilter() {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 final FilterResults results = new FilterResults();
 
-                mFilteredRooms.clear();
-                if (TextUtils.isEmpty(constraint)) {
-                    mFilteredRooms.addAll(mRooms);
-                } else {
-                    final String filterPattern = constraint.toString().trim();
-                    for (final Room room : mRooms) {
-
-                        final String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, room);
-                        if (Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE)
-                                .matcher(roomName)
-                                .find()) {
-                            mFilteredRooms.add(room);
-                        }
-                    }
-                }
+                filterRooms(constraint);
 
                 results.values = mFilteredRooms;
                 results.count = mFilteredRooms.size();
@@ -127,6 +119,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
+                onFilterDone(constraint);
                 notifyDataSetChanged();
             }
         };
@@ -148,16 +141,14 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
         if (rooms != null) {
             mRooms.clear();
             mRooms.addAll(rooms);
-
-            mFilteredRooms.clear();
-            mFilteredRooms.addAll(rooms);
+            filterRooms(mCurrentFilterPattern);
         }
-
         notifyDataSetChanged();
     }
 
     /**
      * Provides the item at the dedicated position
+     *
      * @param position the position
      * @return the item
      */
@@ -169,13 +160,60 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RoomViewHolder> implem
         return null;
     }
 
+    /**
+     * Return whether the section (not filtered) is empty or not
+     *
+     * @return true if empty
+     */
+    public boolean isEmpty() {
+        return mRooms.isEmpty();
+    }
+
+    /**
+     * Return whether the section (filtered) is empty or not
+     *
+     * @return true if empty
+     */
+    public boolean hasNoResult() {
+        return mFilteredRooms.isEmpty();
+    }
+
+    /**
+     * Return the sum of notifications for all the displayed rooms
+     * @return
+     */
+    public int getBadgeCount() {
+        int badgeCount = 0;
+        for (Room room : mFilteredRooms) {
+            badgeCount += room.getNotificationCount();
+        }
+        return badgeCount;
+    }
+
+    /*
+     * *********************************************************************************************
+     * Private methods
+     * *********************************************************************************************
+     */
+
+    /**
+     * Filter the room list according to the given pattern
+     *
+     * @param constraint
+     */
+    private void filterRooms(CharSequence constraint) {
+        mFilteredRooms.clear();
+        mFilteredRooms.addAll(RoomUtils.getFilteredRooms(mContext, mSession, mRooms, constraint));
+    }
+
     /*
      * *********************************************************************************************
      * Listeners
      * *********************************************************************************************
      */
 
-    public interface OnFavoritesListener {
-        void onSelectFavorite(Room room, int position);
+    public interface OnSelectRoomListener {
+        void onSelectRoom(Room room, int position);
+        void onLongClickRoom(View v, Room room, int position);
     }
 }

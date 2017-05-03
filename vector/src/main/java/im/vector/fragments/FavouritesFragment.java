@@ -16,6 +16,7 @@
 
 package im.vector.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,13 +27,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Filter;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.data.store.IMXStore;
@@ -43,20 +42,16 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorHomeActivity;
-import im.vector.activity.VectorRoomActivity;
-import im.vector.adapters.FavoriteAdapter;
+import im.vector.adapters.HomeRoomAdapter;
 import im.vector.util.RoomUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
-public class FavouritesFragment extends AbsHomeFragment {
+public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
     private static final String LOG_TAG = "FavouritesFragment";
 
     @BindView(R.id.favorites_recycler_view)
@@ -66,13 +61,7 @@ public class FavouritesFragment extends AbsHomeFragment {
     TextView mFavoritesPlaceHolder;
 
     // rooms management
-    private FavoriteAdapter mFavoritesAdapter;
-
-    // the searched pattern
-    private String mSearchedPattern;
-
-    // the activity
-    private VectorHomeActivity mActivity;
+    private HomeRoomAdapter mFavoritesAdapter;
 
     // the favorite rooms list
     private List<Room> mFavorites = new ArrayList<>();
@@ -112,13 +101,10 @@ public class FavouritesFragment extends AbsHomeFragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mActivity = (VectorHomeActivity) getActivity();
-
         initViews();
 
-        if (savedInstanceState != null) {
-            // Restore adapter items
-        }
+        // Eventually restore the pattern of adapter after orientation change
+        mFavoritesAdapter.onFilterDone(mCurrentFilter);
     }
 
     @Override
@@ -139,6 +125,7 @@ public class FavouritesFragment extends AbsHomeFragment {
      * Abstract methods implementation
      * *********************************************************************************************
      */
+
     @Override
     protected void onFloatingButtonClick() {
     }
@@ -150,24 +137,24 @@ public class FavouritesFragment extends AbsHomeFragment {
 
     @Override
     protected void onFilter(String pattern, final OnFilterListener listener) {
-        if (!TextUtils.equals(mSearchedPattern, pattern)) {
-            mSearchedPattern = pattern;
-
-            mFavoritesAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
-                @Override
-                public void onFilterComplete(int count) {
-                    updateRoomsDisplay(count);
-                    listener.onFilterDone(count);
-                }
-            });
-        }
+        mFavoritesAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int count) {
+                updateRoomsDisplay(count);
+                listener.onFilterDone(count);
+            }
+        });
     }
 
     @Override
     protected void onResetFilter() {
-        mSearchedPattern = "";
-        mFavoritesAdapter.getFilter().filter("");
-        updateRoomsDisplay(mFavoritesAdapter.getItemCount());
+        mFavoritesAdapter.getFilter().filter("", new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int count) {
+                Log.i(LOG_TAG, "onResetFilter " + count);
+                updateRoomsDisplay(mFavoritesAdapter.getItemCount());
+            }
+        });
     }
 
     /*
@@ -184,12 +171,7 @@ public class FavouritesFragment extends AbsHomeFragment {
         mFavoritesRecyclerView.setHasFixedSize(true);
         mFavoritesRecyclerView.setNestedScrollingEnabled(false);
 
-        mFavoritesAdapter = new FavoriteAdapter(getContext(), R.layout.adapter_item_room_view, new FavoriteAdapter.OnFavoritesListener() {
-            @Override
-            public void onSelectFavorite(Room room, int position) {
-                onFavoriteSelected(room, position);
-            }
-        }, this);
+        mFavoritesAdapter = new HomeRoomAdapter(getContext(), R.layout.adapter_item_room_view, this, null, this);
 
         mFavoritesRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, margin));
         mFavoritesRecyclerView.addItemDecoration(new EmptyViewItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, 40, 16, 14));
@@ -217,8 +199,8 @@ public class FavouritesFragment extends AbsHomeFragment {
      * @param count the matched rooms count
      */
     private void updateRoomsDisplay(int count) {
-        mFavoritesPlaceHolder.setVisibility((0 == count) && !TextUtils.isEmpty(mSearchedPattern) ? View.VISIBLE : View.GONE);
-        mFavoritesRecyclerView.setVisibility((0 != count) ? View.VISIBLE : View.GONE);
+        mFavoritesPlaceHolder.setVisibility(0 == count ? View.VISIBLE : View.GONE);
+        mFavoritesRecyclerView.setVisibility(0 != count ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -243,59 +225,31 @@ public class FavouritesFragment extends AbsHomeFragment {
                 }
             }
 
-            Comparator<Room> favComparator = new Comparator<Room>() {
-                public int compare(Room r1, Room r2) {
-                    return favouriteRoomIdList.indexOf(r1.getRoomId()) - favouriteRoomIdList.indexOf(r2.getRoomId());
+            // Sort and display
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    Comparator<Room> favComparator = new Comparator<Room>() {
+                        public int compare(Room r1, Room r2) {
+                            return favouriteRoomIdList.indexOf(r1.getRoomId()) - favouriteRoomIdList.indexOf(r2.getRoomId());
+                        }
+                    };
+
+                    Collections.sort(mFavorites, favComparator);
+                    return null;
                 }
-            };
 
-            Collections.sort(mFavorites, favComparator);
-        }
-
-        mFavoritesAdapter.setRooms(mFavorites);
-        updateRoomsDisplay(mFavorites.size());
-    }
-
-    /**
-     * Handle a room selection
-     *
-     * @param room     the room
-     * @param position the room index in the list
-     */
-    private void onFavoriteSelected(Room room, int position) {
-        final String roomId;
-        // cannot join a leaving room
-        if (room == null || room.isLeaving()) {
-            roomId = null;
+                @Override
+                protected void onPostExecute(Void args) {
+                    mFavoritesAdapter.setRooms(mFavorites);
+                    updateRoomsDisplay(mFavorites.size());
+                }
+            }.execute();
         } else {
-            roomId = room.getRoomId();
+            mFavoritesAdapter.setRooms(mFavorites);
+            updateRoomsDisplay(mFavorites.size());
         }
-
-        if (roomId != null) {
-            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(roomId);
-
-            if (null != roomSummary) {
-                room.sendReadReceipt(null);
-
-                // Reset the highlight
-                if (roomSummary.setHighlighted(false)) {
-                    mSession.getDataHandler().getStore().flushSummary(roomSummary);
-                }
-            }
-
-            // Update badge unread count in case device is offline
-            CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
-
-            // Launch corresponding room activity
-            HashMap<String, Object> params = new HashMap<>();
-            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
-            CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
-        }
-
-        // Refresh the adapter item
-        mFavoritesAdapter.notifyItemChanged(position);
     }
 
     /**
@@ -310,7 +264,7 @@ public class FavouritesFragment extends AbsHomeFragment {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 // do not allow the drag and drop if there is a pending search
-                return makeMovementFlags(!TextUtils.isEmpty(mSearchedPattern) ? 0 : (ItemTouchHelper.UP | ItemTouchHelper.DOWN), 0);
+                return makeMovementFlags(!TextUtils.isEmpty(mCurrentFilter) ? 0 : (ItemTouchHelper.UP | ItemTouchHelper.DOWN), 0);
             }
 
             @Override
@@ -391,5 +345,21 @@ public class FavouritesFragment extends AbsHomeFragment {
         if (!TextUtils.isEmpty(errorMessage)) {
             Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
         }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Listeners
+     * *********************************************************************************************
+     */
+
+    @Override
+    public void onSelectRoom(Room room, int position) {
+        openRoom(room);
+    }
+
+    @Override
+    public void onLongClickRoom(View v, Room room, int position) {
+
     }
 }

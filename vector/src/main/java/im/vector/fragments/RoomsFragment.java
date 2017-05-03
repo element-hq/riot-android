@@ -222,7 +222,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         mAdapter = new RoomAdapter(getActivity(), new RoomAdapter.OnSelectItemListener() {
             @Override
             public void onSelectItem(Room room, int position) {
-                onRoomSelected(room, position);
+                openRoom(room);
             }
 
             @Override
@@ -268,48 +268,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         }
         
         mAdapter.setRooms(mRooms);
-    }
-
-    /**
-     * Handle a room selection
-     *
-     * @param room     the room
-     * @param position the room index in the list
-     */
-    private void onRoomSelected(Room room, int position) {
-        final String roomId;
-        // cannot join a leaving room
-        if (room == null || room.isLeaving()) {
-            roomId = null;
-        } else {
-            roomId = room.getRoomId();
-        }
-
-        if (roomId != null) {
-            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(roomId);
-
-            if (null != roomSummary) {
-                room.sendReadReceipt(null);
-
-                // Reset the highlight
-                if (roomSummary.setHighlighted(false)) {
-                    mSession.getDataHandler().getStore().flushSummary(roomSummary);
-                }
-            }
-
-            // Update badge unread count in case device is offline
-            CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
-
-            // Launch corresponding room activity
-            HashMap<String, Object> params = new HashMap<>();
-            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
-            CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
-        }
-
-        // Refresh the adapter item
-        mAdapter.notifyItemChanged(position);
     }
 
     /*
