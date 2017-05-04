@@ -24,11 +24,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -38,6 +41,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -551,7 +555,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                 if (R.id.bottom_action_people == mCurrentMenuId) {
                     searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_TAB_INDEX, VectorUnifiedSearchActivity.SEARCH_PEOPLE_TAB_POSITION);
                 }
-                
+
                 startActivity(searchIntent);
                 break;
             case R.id.ic_action_mark_all_as_read:
@@ -720,6 +724,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
                 setTitle(R.string.bottom_action_home);
+                updateTabStyle(R.color.tab_home, R.color.tab_home_secondary);
                 break;
             case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
@@ -729,6 +734,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
                 setTitle(R.string.bottom_action_favourites);
+                updateTabStyle(R.color.tab_favourites, R.color.tab_favourites_secondary);
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -738,6 +744,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
                 setTitle(R.string.bottom_action_people);
+                updateTabStyle(R.color.tab_people, R.color.tab_people_secondary);
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -747,6 +754,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
                 setTitle(R.string.bottom_action_rooms);
+                updateTabStyle(R.color.tab_rooms, R.color.tab_rooms_secondary);
                 break;
         }
 
@@ -772,6 +780,23 @@ public class VectorHomeActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container, fragment, mCurrentFragmentTag)
                     .addToBackStack(mCurrentFragmentTag)
                     .commit();
+        }
+    }
+
+    /**
+     * Update UI colors to match the selected tab
+     *
+     * @param primaryColorId
+     * @param secondaryColorId
+     */
+    private void updateTabStyle(@ColorRes final int primaryColorId, @ColorRes final int secondaryColorId) {
+        final int primaryColor = ContextCompat.getColor(this, primaryColorId);
+        final int secondaryColor = ContextCompat.getColor(this, secondaryColorId);
+        mToolbar.setBackgroundColor(primaryColor);
+        mFloatingActionButton.setBackgroundTintList(ColorStateList.valueOf(primaryColor));
+        mFloatingActionButton.setRippleColor(secondaryColor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(secondaryColor);
         }
     }
 
@@ -830,6 +855,7 @@ public class VectorHomeActivity extends AppCompatActivity {
 
     /**
      * Tells if the waiting view is currently displayed
+     *
      * @return true if the waiting view is displayed
      */
     public boolean isWaitingViewVisible() {
@@ -923,7 +949,7 @@ public class VectorHomeActivity extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                String currentFilter = mFilterInput.getText().toString() + "-" + mCurrentMenuId;;
+                String currentFilter = mFilterInput.getText().toString() + "-" + mCurrentMenuId;
 
                 // display if the pattern matched
                 if (TextUtils.equals(currentFilter, filter)) {
@@ -1785,7 +1811,7 @@ public class VectorHomeActivity extends AppCompatActivity {
     private void removeMenuShiftMode() {
         int childCount = mBottomNavigationView.getChildCount();
 
-        for(int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++) {
             if (mBottomNavigationView.getChildAt(i) instanceof BottomNavigationMenuView) {
                 BottomNavigationMenuView bottomNavigationMenuView = (BottomNavigationMenuView) mBottomNavigationView.getChildAt(i);
 
@@ -1807,14 +1833,14 @@ public class VectorHomeActivity extends AppCompatActivity {
      */
     private void addUnreadBadges() {
         final float scale = getResources().getDisplayMetrics().density;
-        int badgeOffsetX =  (int)(18 * scale + 0.5f);
-        int badgeOffsetY = (int)(7 * scale + 0.5f);
+        int badgeOffsetX = (int) (18 * scale + 0.5f);
+        int badgeOffsetY = (int) (7 * scale + 0.5f);
 
         removeMenuShiftMode();
 
         int largeTextHeight = getResources().getDimensionPixelSize(android.support.design.R.dimen.design_bottom_navigation_active_text_size);
 
-        for(int menuIndex = 0; menuIndex < mBottomNavigationView.getMenu().size(); menuIndex++) {
+        for (int menuIndex = 0; menuIndex < mBottomNavigationView.getMenu().size(); menuIndex++) {
             try {
                 int itemId = mBottomNavigationView.getMenu().getItem(menuIndex).getItemId();
                 BottomNavigationItemView navigationItemView = (BottomNavigationItemView) mBottomNavigationView.findViewById(itemId);
@@ -1823,7 +1849,7 @@ public class VectorHomeActivity extends AppCompatActivity {
 
                 Field marginField = navigationItemView.getClass().getDeclaredField("mDefaultMargin");
                 marginField.setAccessible(true);
-                marginField.setInt(navigationItemView, marginField.getInt(navigationItemView) + (largeTextHeight /2));
+                marginField.setInt(navigationItemView, marginField.getInt(navigationItemView) + (largeTextHeight / 2));
                 marginField.setAccessible(false);
 
                 Field shiftAmountField = navigationItemView.getClass().getDeclaredField("mShiftAmount");
@@ -1839,9 +1865,9 @@ public class VectorHomeActivity extends AppCompatActivity {
                     UnreadCounterBadgeView badgeView = new UnreadCounterBadgeView(iconView.getContext());
 
                     // compute the new position
-                    FrameLayout.LayoutParams iconViewLayoutParams = (FrameLayout.LayoutParams)iconView.getLayoutParams();
+                    FrameLayout.LayoutParams iconViewLayoutParams = (FrameLayout.LayoutParams) iconView.getLayoutParams();
                     FrameLayout.LayoutParams badgeLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-                    badgeLayoutParams.setMargins(iconViewLayoutParams.leftMargin +  badgeOffsetX, iconViewLayoutParams.topMargin - badgeOffsetY, iconViewLayoutParams.rightMargin, iconViewLayoutParams.bottomMargin);
+                    badgeLayoutParams.setMargins(iconViewLayoutParams.leftMargin + badgeOffsetX, iconViewLayoutParams.topMargin - badgeOffsetY, iconViewLayoutParams.rightMargin, iconViewLayoutParams.bottomMargin);
                     badgeLayoutParams.gravity = iconViewLayoutParams.gravity;
 
                     ((FrameLayout) iconView.getParent()).addView(badgeView, badgeLayoutParams);
@@ -1865,7 +1891,7 @@ public class VectorHomeActivity extends AppCompatActivity {
         Collection<RoomSummary> summaries2 = dataHandler.getStore().getSummaries();
         HashMap<Room, RoomSummary> roomSummaryByRoom = new HashMap<>();
 
-        for(RoomSummary summary : summaries2) {
+        for (RoomSummary summary : summaries2) {
             Room room = dataHandler.getStore().getRoom(summary.getRoomId());
 
             if (null != room) {
@@ -1873,7 +1899,7 @@ public class VectorHomeActivity extends AppCompatActivity {
             }
         }
 
-        for(Integer id : mBadgeViewByIndex.keySet()) {
+        for (Integer id : mBadgeViewByIndex.keySet()) {
             UnreadCounterBadgeView badgeView = mBadgeViewByIndex.get(id);
 
             // compute the badge value and its displays
@@ -1889,7 +1915,7 @@ public class VectorHomeActivity extends AppCompatActivity {
 
                 filteredRoomIdsSet = new HashSet<>();
 
-                for(Room room : favRooms) {
+                for (Room room : favRooms) {
                     filteredRoomIdsSet.add(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_people) {

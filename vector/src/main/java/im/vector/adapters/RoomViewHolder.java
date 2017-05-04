@@ -62,8 +62,8 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.room_unread_count)
     TextView vRoomUnreadCount;
 
-    @BindView(R.id.room_avatar_direct_chat_icon)
-    View vRoomDirectChatIcon;
+    @BindView(R.id.direct_chat_indicator)
+    View mDirectChatIndicator;
 
     @BindView(R.id.room_avatar_encrypted_icon)
     View vRoomEncryptedIcon;
@@ -152,7 +152,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             vRoomLastMessage.setText(lastMsgToDisplay);
         }
 
-        vRoomDirectChatIcon.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
+        mDirectChatIndicator.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
         vRoomEncryptedIcon.setVisibility(room.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
 
         if (vRoomUnreadIndicator != null) {

@@ -2,29 +2,46 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/circular_room_view"
-    android:layout_width="100dp"
+    android:layout_width="90dp"
     android:layout_height="wrap_content"
     android:paddingBottom="10dp"
     android:paddingTop="10dp"
     tools:background="#22ff0000">
 
-    <im.vector.view.VectorCircularImageView
-        android:id="@+id/room_avatar"
+    <RelativeLayout
+        android:id="@+id/room_avatar_view"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        tools:background="#2200ff00"
-        tools:src="@drawable/ic_material_search_black" />
+        android:layout_height="58dp"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/direct_chat_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:visibility="gone"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/direct_chat_background" />
+
+        <im.vector.view.VectorCircularImageView
+            android:id="@+id/room_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            tools:background="#2200ff00"
+            tools:src="@drawable/ic_material_search_black" />
+    </RelativeLayout>
 
     <!-- unread count badge -->
     <TextView
         android:id="@+id/room_unread_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/room_avatar"
-        android:layout_alignTop="@+id/room_avatar"
+        android:layout_alignRight="@+id/room_avatar_view"
+        android:layout_alignTop="@+id/room_avatar_view"
         android:layout_marginRight="10dp"
         android:background="#AAff00ff"
         android:gravity="center"
@@ -34,22 +51,11 @@
         tools:text="12" />
 
     <ImageView
-        android:id="@+id/room_avatar_direct_chat_icon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignRight="@+id/room_avatar"
-        android:layout_below="@+id/room_unread_count"
-        android:layout_marginRight="12dp"
-        android:src="@drawable/icon_person"
-        android:visibility="invisible"
-        tools:visibility="visible" />
-
-    <ImageView
         android:id="@+id/room_avatar_encrypted_icon"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_alignBottom="@+id/room_avatar"
-        android:layout_alignRight="@+id/room_avatar"
+        android:layout_alignBottom="@+id/room_avatar_view"
+        android:layout_alignRight="@+id/room_avatar_view"
         android:layout_marginRight="15dp"
         android:src="@drawable/e2e_verified"
         android:visibility="invisible"
@@ -59,7 +65,7 @@
         android:id="@+id/room_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/room_avatar"
+        android:layout_below="@+id/room_avatar_view"
         android:layout_marginTop="6dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-regular"
@@ -68,7 +74,7 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:textColor="@color/vector_text_black_color"
-        android:textSize="14sp"
+        android:textSize="12sp"
         tools:background="#220000ff"
         tools:text="Room name a bit long to be displayed completely" />
 
