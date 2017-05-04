@@ -44,11 +44,12 @@ import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.util.RoomUtils;
 import im.vector.view.HomeSectionView;
 
-public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
+public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener, RoomUtils.HistoricalRoomActionListener {
     private static final String LOG_TAG = HomeFragment.class.getSimpleName();
 
     @BindView(R.id.invitations_section)
@@ -419,16 +420,50 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     @Override
     public void onSelectRoom(Room room, int position) {
-        openRoom(room);
+        if (room.isLeft()) {
+            CommonActivityUtils.previewRoom(mActivity, mSession, room.getRoomId(), "", null);
+        } else {
+            openRoom(room);
+        }
     }
 
     @Override
     public void onLongClickRoom(View v, Room room, int position) {
-        // User clicked on the "more actions" area
-        final Set<String> tags = room.getAccountData().getKeys();
-        final boolean isFavorite = tags != null && tags.contains(RoomTag.ROOM_TAG_FAVOURITE);
-        final boolean isLowPriority = tags != null && tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY);
-        RoomUtils.displayPopupMenu(getActivity(), mSession, room, v, isFavorite, isLowPriority, this);
+        if (room.isLeft()) {
+            RoomUtils.displayHistoricalRoomMenu(getActivity(), room, v, this);
+        } else {
+            // User clicked on the "more actions" area
+            final Set<String> tags = room.getAccountData().getKeys();
+            final boolean isFavorite = tags != null && tags.contains(RoomTag.ROOM_TAG_FAVOURITE);
+            final boolean isLowPriority = tags != null && tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY);
+            RoomUtils.displayPopupMenu(getActivity(), mSession, room, v, isFavorite, isLowPriority, this);
+        }
     }
 
+    @Override
+    public void onForgotRoom(Room room) {
+        mActivity.showWaitingView();
+        room.forget(new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                initHistoryData(RoomUtils.getRoomsDateComparator(mSession, false));
+                onRequestDone(null);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onRequestDone(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onRequestDone(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onRequestDone(e.getLocalizedMessage());
+            }
+        });
+    }
 }

@@ -54,7 +54,7 @@ import im.vector.view.SimpleDividerItemDecoration;
 public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
     private static final String LOG_TAG = "FavouritesFragment";
 
-    @BindView(R.id.favorites_recycler_view)
+    @BindView(R.id.recyclerview)
     RecyclerView mFavoritesRecyclerView;
 
     @BindView(R.id.favorites_placeholder)

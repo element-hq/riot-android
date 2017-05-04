@@ -328,6 +328,25 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         }
     }
 
+    /**
+     * Handle the end of any request : hide loading wheel and display error message if there is any
+     *
+     * @param errorMessage
+     */
+    public void onRequestDone(final String errorMessage) {
+        if (mActivity != null && !mActivity.isFinishing()) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mActivity.stopWaitingView();
+                    if (!TextUtils.isEmpty(errorMessage)) {
+                        Toast.makeText(mActivity, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
     /*
      * *********************************************************************************************
      * Private methods
@@ -364,25 +383,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
                 onRequestDone(e.getLocalizedMessage());
             }
         });
-    }
-
-    /**
-     * Handle the end of any request : hide loading wheel and display error message if there is any
-     *
-     * @param errorMessage
-     */
-    private void onRequestDone(final String errorMessage) {
-        if (mActivity != null && !mActivity.isFinishing()) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mActivity.stopWaitingView();
-                    if (!TextUtils.isEmpty(errorMessage)) {
-                        Toast.makeText(mActivity, errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
     }
 
     /**

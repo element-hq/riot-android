@@ -72,6 +72,10 @@ public class RoomUtils {
         void onLeaveRoom(MXSession session, String roomId);
     }
 
+    public interface HistoricalRoomActionListener {
+        void onForgotRoom(Room room);
+    }
+
     /**
      * Return comparator to sort rooms by date
      *
@@ -82,8 +86,8 @@ public class RoomUtils {
     public static Comparator<Room> getRoomsDateComparator(final MXSession session, final boolean reverseOrder) {
         return new Comparator<Room>() {
             public int compare(Room aLeftObj, Room aRightObj) {
-                final RoomSummary leftRoomSummary = session.getDataHandler().getStore().getSummary(aLeftObj.getRoomId());
-                final RoomSummary rightRoomSummary = session.getDataHandler().getStore().getSummary(aRightObj.getRoomId());
+                final RoomSummary leftRoomSummary = session.getDataHandler().getStore(aLeftObj.getRoomId()).getSummary(aLeftObj.getRoomId());
+                final RoomSummary rightRoomSummary = session.getDataHandler().getStore(aRightObj.getRoomId()).getSummary(aRightObj.getRoomId());
 
                 return getRoomSummaryComparator(reverseOrder).compare(leftRoomSummary, rightRoomSummary);
             }
@@ -341,6 +345,65 @@ public class RoomUtils {
     }
 
     /**
+     * Display the historical room action popup
+     *
+     * @param context
+     * @param room
+     * @param actionView
+     * @param listener
+     */
+    public static void displayHistoricalRoomMenu(final Context context, final Room room,
+                                                 final View actionView, final HistoricalRoomActionListener listener) {
+        // sanity check
+        if (room == null) {
+            return;
+        }
+
+        final PopupMenu popup;
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            popup = new PopupMenu(context, actionView, Gravity.END);
+        } else {
+            popup = new PopupMenu(context, actionView);
+        }
+        popup.getMenuInflater().inflate(R.menu.historical_room_settings, popup.getMenu());
+
+        // force to display the icon
+        try {
+            Field[] fields = popup.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## displayPopupMenu() : failed " + e.getMessage());
+        }
+
+        if (listener != null) {
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(final MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_forget_room: {
+                            listener.onForgotRoom(room);
+                            break;
+                        }
+                    }
+                    return false;
+                }
+            });
+        }
+
+        popup.show();
+    }
+
+    /**
      * Display a confirmation dialog when user wants to leave a room
      *
      * @param context
@@ -370,10 +433,10 @@ public class RoomUtils {
     /**
      * Update a room Tag
      *
-     * @param session the session
-     * @param roomId the room Id
-     * @param aTagOrder the new tag order
-     * @param newTag the new Tag
+     * @param session     the session
+     * @param roomId      the room Id
+     * @param aTagOrder   the new tag order
+     * @param newTag      the new Tag
      * @param apiCallback the asynchronous callback
      */
     public static void updateRoomTag(final MXSession session, final String roomId, final Double aTagOrder, final String newTag, final ApiCallback<Void> apiCallback) {

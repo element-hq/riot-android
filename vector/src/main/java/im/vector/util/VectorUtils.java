@@ -81,6 +81,8 @@ public class VectorUtils {
 
     private static final String LOG_TAG = "VectorUtils";
 
+    private static final String PERMALINK_URI = "https://matrix.to/#/";
+
     //public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
 
@@ -101,7 +103,7 @@ public class VectorUtils {
             return null;
         }
 
-        String link = "https://matrix.to/#/" + roomIdOrAlias;
+        String link = PERMALINK_URI + roomIdOrAlias;
 
         if (!TextUtils.isEmpty(eventId)) {
             link += "/" + eventId;
