@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/action_forget_room"
-        android:icon="@drawable/vector_leave_room_black"
-        android:title="@string/room_settings_forget"/>
-
-</menu>

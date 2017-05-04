@@ -31,6 +31,7 @@ import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,7 +74,15 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     private List<HomeSectionView> mHomeSectionViews;
 
     private final MXEventListener mEventsListener = new MXEventListener() {
-        //TODO
+        @Override
+        public void onJoinRoom(String roomId) {
+            initHistoricalRoomsData();
+        }
+
+        @Override
+        public void onLeaveRoom(final String roomId) {
+            initHistoricalRoomsData();
+        }
     };
 
     private List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
@@ -119,7 +128,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     public void onResume() {
         super.onResume();
         mSession.getDataHandler().addListener(mEventsListener);
-        initData();
+        initActiveRoomsData();
+        initHistoricalRoomsData();
     }
 
     @Override
@@ -261,7 +271,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     @Override
     public void onSummariesUpdate() {
         if (!mActivity.isWaitingViewVisible()) {
-            initData();
+            Log.d(LOG_TAG, "onSummariesUpdate");
+            initActiveRoomsData();
         }
     }
 
@@ -274,7 +285,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     /**
      * Init the rooms data
      */
-    private void initData() {
+    private void initActiveRoomsData() {
         // Main sections
         final List<Room> favourites = new ArrayList<>();
         final List<Room> directChats = new ArrayList<>();
@@ -316,18 +327,13 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
         mInvitationsSection.setRooms(mActivity.getRoomInvitations());
 
-        // History
-        initHistoryData(RoomUtils.getRoomsDateComparator(mSession, false));
-
         mActivity.stopWaitingView();
     }
 
     /**
      * Init history rooms data
-     *
-     * @param roomsComparator
      */
-    private void initHistoryData(final Comparator<Room> roomsComparator) {
+    private void initHistoricalRoomsData() {
         final List<Room> historicalRooms = new ArrayList<>(mSession.getDataHandler().getLeftRooms());
         for (Iterator<Room> iterator = historicalRooms.iterator(); iterator.hasNext(); ) {
             final Room room = iterator.next();
@@ -335,11 +341,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
                 iterator.remove();
             }
         }
-        if (roomsComparator != null) {
-            sortAndDisplay(historicalRooms, roomsComparator, mHistoricalSection);
-        } else {
-            mHistoricalSection.setRooms(historicalRooms);
-        }
+        sortAndDisplay(historicalRooms, RoomUtils.getHistoricalRoomsComparator(mSession, false), mHistoricalSection);
     }
 
     /**
@@ -388,17 +390,17 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
             @Override
             public void onNetworkError(Exception e) {
-
+                onRequestDone(e.getLocalizedMessage());
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
-
+                onRequestDone(e.getLocalizedMessage());
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
-
+                onRequestDone(e.getLocalizedMessage());
             }
         });
     }
@@ -407,7 +409,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      * Update UI after history has been retrieved
      */
     private void onHistoryRetrieved() {
-        initHistoryData(RoomUtils.getRoomsDateComparator(mSession, false));
+        initHistoricalRoomsData();
         mHistoricalSection.setPlaceholders(getString(R.string.no_history_placeholder), getString(R.string.no_result_placeholder));
         mHistoricalSection.setOnClickListener(null);
     }
@@ -421,7 +423,28 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     @Override
     public void onSelectRoom(Room room, int position) {
         if (room.isLeft()) {
-            CommonActivityUtils.previewRoom(mActivity, mSession, room.getRoomId(), "", null);
+            mActivity.showWaitingView();
+            CommonActivityUtils.previewRoom(mActivity, mSession, room.getRoomId(), "", new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    onRequestDone(null);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onRequestDone(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onRequestDone(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onRequestDone(e.getLocalizedMessage());
+                }
+            });
         } else {
             openRoom(room);
         }
@@ -430,7 +453,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     @Override
     public void onLongClickRoom(View v, Room room, int position) {
         if (room.isLeft()) {
-            RoomUtils.displayHistoricalRoomMenu(getActivity(), room, v, this);
+            RoomUtils.displayHistoricalRoomMenu(getActivity(), mSession, room, v, null);
         } else {
             // User clicked on the "more actions" area
             final Set<String> tags = room.getAccountData().getKeys();
@@ -446,7 +469,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         room.forget(new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                initHistoryData(RoomUtils.getRoomsDateComparator(mSession, false));
+                initHistoricalRoomsData();
                 onRequestDone(null);
             }
 
