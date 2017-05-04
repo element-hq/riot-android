@@ -1752,6 +1752,11 @@ public class VectorHomeActivity extends AppCompatActivity {
         public void onDirectMessageChatRoomsListUpdate() {
             mRefreshBadgeOnChunkEnd = true;
         }
+
+        @Override
+        public void onRoomTagEvent(String roomId) {
+            mRefreshBadgeOnChunkEnd = true;
+        }
     };
 
     /**
@@ -1892,12 +1897,15 @@ public class VectorHomeActivity extends AppCompatActivity {
                     }
                 }
             } else if (id == R.id.bottom_action_rooms) {
-                List<String> directChatRoomIds = mSession.getDirectChatRoomIdsList();
+                HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());
+                HashSet<String> favoritesRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
 
                 filteredRoomIdsSet = new HashSet<>();
 
                 for(Room room : roomSummaryByRoom.keySet()) {
-                    if (!directChatRoomIds.contains(room.getRoomId()) && !room.getAccountData().hasTags() && !room.isDirectChatInvitation()) {
+                    if (!room.isConferenceUserRoom() && // not a VOIP conference room
+                            !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
+                            (!room.getAccountData().hasTags() || favoritesRoomIds.contains(room.getRoomId()))) {
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
@@ -1905,7 +1913,6 @@ public class VectorHomeActivity extends AppCompatActivity {
 
             if ((null == filteredRoomIdsSet) || !filteredRoomIdsSet.isEmpty()) {
                 for(Room room : roomSummaryByRoom.keySet()) {
-
                     // test if the room is allowed
                     if ((null == filteredRoomIdsSet) || filteredRoomIdsSet.contains(room.getRoomId())) {
                         highlightCount += room.getHighlightCount();
