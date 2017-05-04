@@ -146,7 +146,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     protected void onFloatingButtonClick() {
         // ignore any action if there is a pending one
         if (!mActivity.isWaitingViewVisible()) {
-            CharSequence items[] = new CharSequence[]{getString(R.string.room_recents_start_chat), getString(R.string.room_recents_create_room)};
+            CharSequence items[] = new CharSequence[]{getString(R.string.room_recents_start_chat), getString(R.string.room_recents_create_room), getString(R.string.room_recents_join_room)};
             mFabDialog = new AlertDialog.Builder(mActivity)
                     .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                         @Override
@@ -154,8 +154,10 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
                             d.cancel();
                             if (0 == n) {
                                 mActivity.invitePeopleToNewRoom();
-                            } else {
+                            } else if (1 == n) {
                                 mActivity.createRoom();
+                            } else {
+                                mActivity.joinARoom();
                             }
                         }
                     })

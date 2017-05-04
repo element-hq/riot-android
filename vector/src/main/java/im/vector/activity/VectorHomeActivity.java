@@ -47,6 +47,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -1123,6 +1124,103 @@ public class VectorHomeActivity extends AppCompatActivity {
                 onError(e.getLocalizedMessage());
             }
         });
+    }
+
+    /**
+     * Offer to join a room by alias or Id
+     */
+    public void joinARoom() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        View dialogView = inflater.inflate(R.layout.dialog_join_room_by_id, null);
+        alertDialogBuilder.setView(dialogView);
+
+        final EditText textInput = (EditText) dialogView.findViewById(R.id.join_room_edit_text);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton(R.string.join,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                showWaitingView();
+
+                                String text = textInput.getText().toString().trim();
+
+                                mSession.joinRoom(text, new ApiCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String roomId) {
+                                        stopWaitingView();
+
+                                        HashMap<String, Object> params = new HashMap<>();
+                                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                                        CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
+                                    }
+
+                                    private void onError(final String message) {
+                                        mWaitingView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (null != message) {
+                                                    Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                                                }
+                                                stopWaitingView();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onMatrixError(final MatrixError e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(final Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+                                });
+                            }
+                        })
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+        final Button joinButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+        if (null != joinButton) {
+            joinButton.setEnabled(false);
+            textInput.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    String text = textInput.getText().toString().trim();
+                    joinButton.setEnabled(MXSession.isRoomId(text) || MXSession.isRoomAlias(text));
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
+        }
     }
 
     /**
