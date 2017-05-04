@@ -753,6 +753,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (null != childRoom) {
             highlightCount = childRoom.getHighlightCount();
             notificationCount = childRoom.getNotificationCount();
+
+            if (childRoom.getDataHandler().getBingRulesManager().isRoomMentionOnly(childRoom)) {
+                notificationCount = highlightCount;
+            }
         }
 
         // get last message to be displayed
