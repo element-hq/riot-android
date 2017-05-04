@@ -547,6 +547,11 @@ public class VectorHomeActivity extends AppCompatActivity {
             // search in rooms content
             case R.id.ic_action_search_room:
                 final Intent searchIntent = new Intent(this, VectorUnifiedSearchActivity.class);
+
+                if (R.id.bottom_action_people == mCurrentMenuId) {
+                    searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_TAB_INDEX, VectorUnifiedSearchActivity.SEARCH_PEOPLE_TAB_POSITION);
+                }
+                
                 startActivity(searchIntent);
                 break;
             case R.id.ic_action_mark_all_as_read:
