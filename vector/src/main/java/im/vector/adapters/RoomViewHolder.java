@@ -106,25 +106,21 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         }
 
         final RoomSummary roomSummary = session.getDataHandler().getStore().getSummary(room.getRoomId());
-        final Room childRoom = session.getDataHandler().getStore().getRoom(roomSummary.getRoomId());
-
         int unreadMsgCount = roomSummary.getUnreadEventsCount();
         int highlightCount = 0;
         int notificationCount = 0;
 
-        if (null != childRoom) {
-            highlightCount = childRoom.getHighlightCount();
-            notificationCount = childRoom.getNotificationCount();
+        highlightCount = room.getHighlightCount();
+        notificationCount = room.getNotificationCount();
 
-            if (childRoom.getDataHandler().getBingRulesManager().isRoomMentionOnly(room)) {
-                notificationCount = highlightCount;
-            }
+        if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room)) {
+            notificationCount = highlightCount;
         }
 
         int bingUnreadColor;
         if (isInvitation || (0 != highlightCount) || roomSummary.isHighlighted()) {
             bingUnreadColor = mFuchsiaColor;
-        } else if (0 != room.getNotificationCount()) {
+        } else if (0 != notificationCount) {
             bingUnreadColor = mGreenColor;
         } else if (0 != unreadMsgCount) {
             bingUnreadColor = mSilverColor;
