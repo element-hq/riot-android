@@ -598,57 +598,57 @@
 
 
     <!-- encryption dialog -->
-    <string name="encryption_information_title">End-to-end encryption information</string>
+    <string name="encryption_information_title">Informació de l'encriptació d'extrem a extrem</string>
 
-    <string name="encryption_information_device_info">Event information</string>
-    <string name="encryption_information_user_id">User id</string>
-    <string name="encryption_information_curve25519_identity_key">Curve25519 identity key</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">Claimed Ed25519 fingerprint key</string>
-    <string name="encryption_information_algorithm">Algorithm</string>
-    <string name="encryption_information_session_id">Session ID</string>
-    <string name="encryption_information_decryption_error">Decryption error</string>
+    <string name="encryption_information_device_info">Informació d'events</string>
+    <string name="encryption_information_user_id">Id de l'usuari</string>
+    <string name="encryption_information_curve25519_identity_key">Clau de la identitat Curve25519</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Empremta digital Ed25519 reclamada</string>
+    <string name="encryption_information_algorithm">Algoritme</string>
+    <string name="encryption_information_session_id">ID de la sessió</string>
+    <string name="encryption_information_decryption_error">Error de desencriptació</string>
 
-    <string name="encryption_information_sender_device_information">Sender device information</string>
-    <string name="encryption_information_device_name">Device name</string>
-    <string name="encryption_information_name">Name</string>
-    <string name="encryption_information_device_id">Device ID</string>
-    <string name="encryption_information_device_key">Device key</string>
-    <string name="encryption_information_verification">Verification</string>
-    <string name="encryption_information_ed25519_fingerprint">Ed25519 fingerprint</string>
+    <string name="encryption_information_sender_device_information">Informació del dispositiu que envia</string>
+    <string name="encryption_information_device_name">Nom del dispositiu</string>
+    <string name="encryption_information_name">Nom</string>
+    <string name="encryption_information_device_id">ID del dispositiu</string>
+    <string name="encryption_information_device_key">Clau del dispositiu</string>
+    <string name="encryption_information_verification">Verificació</string>
+    <string name="encryption_information_ed25519_fingerprint">Empremta digital Ed25519</string>
 
-    <string name="encryption_export_e2e_room_keys">Export E2E room keys</string>
-    <string name="encryption_export_room_keys">Export room keys</string>
-    <string name="encryption_export_room_keys_summary">Export the keys to a local file</string>
-    <string name="encryption_export_export">Export</string>
-    <string name="encryption_export_enter_passphrase">Enter passphrase</string>
-    <string name="encryption_export_confirm_passphrase">Confirm passphrase</string>
-    <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'</string>
+    <string name="encryption_export_e2e_room_keys">Exporta les claus de la sala E2E</string>
+    <string name="encryption_export_room_keys">Exporta les claus de la sala</string>
+    <string name="encryption_export_room_keys_summary">Exporta les claus a un fitxer local</string>
+    <string name="encryption_export_export">Exporta</string>
+    <string name="encryption_export_enter_passphrase">Introduïu una contrasenya</string>
+    <string name="encryption_export_confirm_passphrase">Confirmeu la contrasenya</string>
+    <string name="encryption_export_saved_as">Les claus E2E de la sala s'han desat a \'%s\'</string>
 
-    <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
-    <string name="encryption_import_room_keys">Import room keys</string>
-    <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
-    <string name="encryption_import_import">Import</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device</string>
+    <string name="encryption_import_e2e_room_keys">Importa les claus E2E de la sala</string>
+    <string name="encryption_import_room_keys">Importa les claus de la sala</string>
+    <string name="encryption_import_room_keys_summary">Importa les claus de la sala des d'un fitxer local</string>
+    <string name="encryption_import_import">Importa</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Encripta només per a dispositius verificats</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">No enviïs mai missatges encriptats a dispositius no verificats des d'aquest dispositiu</string>
 
-    <string name="encryption_information_not_verified">NOT Verified</string>
-    <string name="encryption_information_verified">Verified</string>
-    <string name="encryption_information_blocked">Blacklisted</string>
+    <string name="encryption_information_not_verified">NO verificat</string>
+    <string name="encryption_information_verified">Verificat</string>
+    <string name="encryption_information_blocked">Bloquejat</string>
 
-    <string name="encryption_information_unknown_device">unknown device</string>
-    <string name="encryption_information_none">none</string>
+    <string name="encryption_information_unknown_device">dispositiu desconegut</string>
+    <string name="encryption_information_none">cap</string>
 
-    <string name="encryption_information_verify">Verify</string>
-    <string name="encryption_information_unverify">Unverify</string>
-    <string name="encryption_information_block">Blacklist</string>
-    <string name="encryption_information_unblock">Unblacklist</string>
+    <string name="encryption_information_verify">Verifica</string>
+    <string name="encryption_information_unverify">No verifiquis</string>
+    <string name="encryption_information_block">Bloqueja</string>
+    <string name="encryption_information_unblock">Deixa de bloquejar</string>
 
-    <string name="encryption_information_verify_device">Verify device</string>
-    <string name="encryption_information_verify_device_warning"> To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn\'t, then someone else is intercepting this device and you probably want to press the block button instead.\nIn future this verification process will be more sophisticated.</string>
-    <string name="encryption_information_verify_key_match">I verify that the keys match</string>
+    <string name="encryption_information_verify_device">Verifica el dispositiu</string>
+    <string name="encryption_information_verify_device_warning"> Per tal de verificar que es pot confiar amb aquest dispositiu, contacteu amb el seu propietari per algun altre mitjà (per exemple en persona o trucant-lo) i pregunteu-li si la clau que veu a les seves preferències d'usuari coincideix amb la clau següent:</string>
+    <string name="encryption_information_verify_device_warning2">Si coincideix, prem el botó per verificar. Si no coincideix, algú està interceptant aquest dispositiu i probablement voleu prémer el botó per bloquejar-lo. En un futur aquest procés de verificació serà més sofisticat.</string>
+    <string name="encryption_information_verify_key_match">Verifica que les claus coincideixen</string>
 
-    <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
+    <string name="e2e_enabling_on_app_update">El Riot ara permet l'ús d'encriptació d'extrem a extrem però us heu de tronar a connectar per tal d'activar-la.\n\nHo podeu fer ara o més tard des de les preferències de l'aplicació.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Room contains unknown devices</string>
