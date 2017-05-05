@@ -21,6 +21,12 @@
             android:id="@+id/sliding_menu_sign_out"
             android:icon="@drawable/ic_material_exit_to_app"
             android:title="@string/action_sign_out"/>
+
+        <item
+            android:id="@+id/sliding_menu_check_for_update"
+            android:icon="@drawable/icons_settings"
+            android:title="Check for updates"
+            android:visible="false"/>
     </group>
 
     <group android:id="@+id/app_group">

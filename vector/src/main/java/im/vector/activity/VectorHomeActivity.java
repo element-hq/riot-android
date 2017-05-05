@@ -113,6 +113,7 @@ import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
+import im.vector.util.CheckForUpdates;
 import im.vector.util.RoomUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
@@ -1539,6 +1540,13 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                         break;
                     }
 
+                    case R.id.sliding_menu_check_for_update: {
+                        if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY, VectorHomeActivity.this)) {
+                            CheckForUpdates.checkForUpdates();
+                        }
+                        break;
+                    }
+
                     case R.id.sliding_menu_sign_out: {
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VectorHomeActivity.this);
                         alertDialogBuilder.setMessage(getString(R.string.action_sign_out_confirmation));
@@ -1634,6 +1642,12 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         if (null != aboutMenuItem) {
             String version = this.getString(R.string.room_sliding_menu_version) + " " + VectorUtils.getApplicationVersion(this);
             aboutMenuItem.setTitle(version);
+        }
+
+        String jenkinsJobUrl = getApplicationContext().getString(R.string.jenkins_job_url);
+        if (jenkinsJobUrl != null && !jenkinsJobUrl.isEmpty()) {
+            MenuItem checkForUpdatesMenuItem = menuNav.findItem(R.id.sliding_menu_check_for_update);
+            checkForUpdatesMenuItem.setVisible(true);
         }
 
         // init the main menu

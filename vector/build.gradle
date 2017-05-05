@@ -34,12 +34,16 @@ android {
         debug {
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+            resValue "string", "jenkins_job_url", "\"${jenkinsJobUrl()}\""
+            resValue "integer", "jenkins_build_number", "${jenkinsBuildNumber()}"
             minifyEnabled false
         }
 
         release {
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+            resValue "string", "jenkins_job_url", "\"${jenkinsJobUrl()}\""
+            resValue "integer", "jenkins_build_number", "${jenkinsBuildNumber()}"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -87,6 +91,29 @@ android {
 
         maven {
             url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+    }
+}
+
+def jenkinsBuildNumber() {
+    if (project.hasProperty("JENKINS_BUILD_NUMBER")) {
+        return JENKINS_BUILD_NUMBER
+    } else if (System.getenv("BUILD_NUMBER")) {
+        return Integer.parseInt(System.getenv("BUILD_NUMBER"))
+    } else {
+        return 0
+    }
+}
+
+def jenkinsJobUrl() {
+    if (project.hasProperty("JENKINS_JOB_URL")) {
+        return JENKINS_JOB_URL
+    } else {
+        String url = System.getenv("JOB_URL");
+        if (url == null) {
+            return ""
+        } else {
+            return url
         }
     }
 }
