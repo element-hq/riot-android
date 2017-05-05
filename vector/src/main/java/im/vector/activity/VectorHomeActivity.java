@@ -54,11 +54,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -822,6 +824,21 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
 		// init the search view
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        // Remove unwanted left margin
+        LinearLayout searchEditFrame = (LinearLayout) mSearchView.findViewById(R.id.search_edit_frame);
+        if (searchEditFrame != null) {
+            ViewGroup.MarginLayoutParams searchEditFrameParams = (ViewGroup.MarginLayoutParams) searchEditFrame.getLayoutParams();
+            searchEditFrameParams.leftMargin = 0;
+            searchEditFrame.setLayoutParams(searchEditFrameParams);
+        }
+        ImageView searchIcon = (ImageView) mSearchView.findViewById(R.id.search_mag_icon);
+        if (searchIcon != null) {
+            ViewGroup.MarginLayoutParams searchIconParams = (ViewGroup.MarginLayoutParams) searchIcon.getLayoutParams();
+            searchIconParams.leftMargin = 0;
+            searchIcon.setLayoutParams(searchIconParams);
+        }
+        mToolbar.setContentInsetStartWithNavigation(0);
+
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setSubmitButtonEnabled(false);
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
