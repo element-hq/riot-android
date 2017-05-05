@@ -27,6 +27,13 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <!-- home activity -->
+    <style name="HomeActivityTheme" parent="AppTheme.NoActionBar">
+        <item name="editTextColor">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">@color/vector_white_alpha_50</item>
+    </style>
+
     <!-- NoActionBar + FullScreen -->
     <style name="AppTheme.NoActionBar.FullScreen" parent="@style/AppTheme.NoActionBar">
         <item name="android:windowFullscreen">true</item>

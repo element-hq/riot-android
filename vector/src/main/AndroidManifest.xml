@@ -90,7 +90,7 @@
         </activity>
         <activity
             android:name="im.vector.activity.VectorHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/HomeActivityTheme"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_home">
         </activity>

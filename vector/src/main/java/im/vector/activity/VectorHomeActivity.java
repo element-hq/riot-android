@@ -18,6 +18,7 @@
 package im.vector.activity;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,16 +47,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -98,8 +98,6 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnEditorAction;
-import butterknife.OnTextChanged;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
@@ -125,7 +123,7 @@ import im.vector.view.VectorPendingCallView;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends AppCompatActivity {
+public class VectorHomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
@@ -211,8 +209,8 @@ public class VectorHomeActivity extends AppCompatActivity {
     @BindView(R.id.home_recents_sync_in_progress)
     View mSyncInProgressView;
 
-    @BindView(R.id.filter_input)
-    EditText mFilterInput;
+    @BindView(R.id.search_view)
+    SearchView mSearchView;
 
     private boolean mStorePermissionCheck = false;
 
@@ -549,7 +547,7 @@ public class VectorHomeActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             // search in rooms content
-            case R.id.ic_action_search_room:
+            case R.id.ic_action_global_search:
                 final Intent searchIntent = new Intent(this, VectorUnifiedSearchActivity.class);
 
                 if (R.id.bottom_action_people == mCurrentMenuId) {
@@ -690,8 +688,6 @@ public class VectorHomeActivity extends AppCompatActivity {
     private void setupNavigation() {
         // Toolbar
         setSupportActionBar(mToolbar);
-        mToolbar.setTitle(R.string.title_activity_home);
-        setTitle(R.string.title_activity_home);
 
         // Bottom navigation view
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -723,7 +719,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = HomeFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
-                setTitle(R.string.bottom_action_home);
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
                 updateTabStyle(R.color.tab_home, R.color.tab_home_secondary);
                 break;
             case R.id.bottom_action_favourites:
@@ -733,7 +729,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = FavouritesFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
-                setTitle(R.string.bottom_action_favourites);
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
                 updateTabStyle(R.color.tab_favourites, R.color.tab_favourites_secondary);
                 break;
             case R.id.bottom_action_people:
@@ -743,7 +739,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = PeopleFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
-                setTitle(R.string.bottom_action_people);
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
                 updateTabStyle(R.color.tab_people, R.color.tab_people_secondary);
                 break;
             case R.id.bottom_action_rooms:
@@ -753,7 +749,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = RoomsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
-                setTitle(R.string.bottom_action_rooms);
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
                 updateTabStyle(R.color.tab_rooms, R.color.tab_rooms_secondary);
                 break;
         }
@@ -824,14 +820,22 @@ public class VectorHomeActivity extends AppCompatActivity {
         });
 
         addUnreadBadges();
+
+		// init the search view
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setSubmitButtonEnabled(false);
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setOnQueryTextListener(this);
     }
 
     /**
      * Reset the filter
      */
     private void resetFilter() {
-        mFilterInput.setText("");
-        mFilterInput.clearFocus();
+        mSearchView.setQuery("", false);
+        mSearchView.clearFocus();
         hideKeyboard();
     }
 
@@ -922,20 +926,10 @@ public class VectorHomeActivity extends AppCompatActivity {
      * User action management
      * *********************************************************************************************
      */
-
-    @OnEditorAction(R.id.filter_input)
-    public boolean onSubmitFilter(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            applyFilter(mFilterInput.getText().toString());
-            return true;
-        }
-        return false;
-    }
-
-    @OnTextChanged(value = R.id.filter_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    public void onFilter(Editable s) {
+    @Override
+    public boolean onQueryTextChange(String newText) {
         // compute an unique pattern
-        final String filter = s.toString() + "-" + mCurrentMenuId;
+        final String filter = newText + "-" + mCurrentMenuId;
 
         // wait before really triggering the search
         // else a search is triggered for each new character
@@ -949,14 +943,21 @@ public class VectorHomeActivity extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                String currentFilter = mFilterInput.getText().toString() + "-" + mCurrentMenuId;
+                String queryText = mSearchView.getQuery().toString();
+                String currentFilter = queryText + "-" + mCurrentMenuId;;
 
                 // display if the pattern matched
                 if (TextUtils.equals(currentFilter, filter)) {
-                    applyFilter(mFilterInput.getText().toString().toString());
+                    applyFilter(queryText);
                 }
             }
         }, 500);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return true;
     }
 
     /**
