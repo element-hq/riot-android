@@ -586,7 +586,7 @@
     <string name="room_settings_addresses_e2e_prompt_message">L'encriptació d'extrem a extrem està en fase beta i no és del tot fiable.\n\nEncara no hi heu de confiar per enviar dades de manera segura.\n\nEls dispositius encara no poden desencriptar l'històric anterior a unir-se a la sala.\n\nUn cop s'ha activat l'encriptació no es pot tornar a desactivar (de moment).\n\nEls missatges encriptats no són visibles en clients que encara no implementen l'encriptació.</string>
 
     <!-- Directory -->
-    <string name="directory_title">Directory</string>
+    <string name="directory_title">Directori</string>
 
     <!-- GA use -->
     <string name="ga_use_alert_message">Do you accept to help us to improve the application behaviour and to send crash reports ?</string>
