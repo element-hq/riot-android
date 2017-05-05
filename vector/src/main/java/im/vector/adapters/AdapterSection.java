@@ -48,6 +48,7 @@ public class AdapterSection<T> {
     protected CharSequence mCurrentFilterPattern;
 
     private boolean mIsHiddenWhenEmpty;
+    private boolean mIsHiddenWhenNoFilter;
 
     public AdapterSection(String title, int headerSubViewResId, int contentResId, int headerViewType,
                           int contentViewType, List<T> items, Comparator<T> comparator) {
@@ -113,7 +114,7 @@ public class AdapterSection<T> {
      *
      * @param titleToFormat
      */
-    protected void formatTitle(final String titleToFormat){
+    protected void formatTitle(final String titleToFormat) {
         SpannableString spannableString = new SpannableString(titleToFormat.toUpperCase());
         spannableString.setSpan(new ForegroundColorSpan(0x4D3C3C3C),
                 mTitle.length(), titleToFormat.length(), 0);
@@ -239,6 +240,33 @@ public class AdapterSection<T> {
      */
     public boolean hideWhenEmpty() {
         return mIsHiddenWhenEmpty;
+    }
+
+    /**
+     * Set whether the section should be hidden when there is no filter
+     *
+     * @return
+     */
+    public void setIsHiddenWhenNoFilter(final boolean isHiddenWhenNoFilter) {
+        mIsHiddenWhenNoFilter = isHiddenWhenNoFilter;
+    }
+
+    /**
+     * Get whether the section should be hidden when there is no filter
+     *
+     * @return
+     */
+    public boolean hideWhenNoFilter() {
+        return mIsHiddenWhenNoFilter;
+    }
+
+    /**
+     * Get whether the section should be hidden depending on its internal state
+     *
+     * @return true if should be hidden
+     */
+    public boolean shouldBeHidden() {
+        return (mIsHiddenWhenEmpty && getItems().isEmpty()) || (mIsHiddenWhenNoFilter && TextUtils.isEmpty(mCurrentFilterPattern));
     }
 
     /**

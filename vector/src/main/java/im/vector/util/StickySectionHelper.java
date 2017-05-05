@@ -190,11 +190,13 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
                 current.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                 int sectionHeight = current.getStickyHeaderHeight();
-                if (current.getSection().hideWhenEmpty() && current.getSection().getItems().isEmpty()) {
+                if (current.getSection().shouldBeHidden()) {
+                    current.setVisibility(View.GONE);
                     current.setHeaderTop(0 - current.getStickyHeaderHeight());
                     current.setHeaderBottom(0);
 //                    current.setTranslationY(0 - current.getStickyHeaderHeight());
                 } else {
+                    current.setVisibility(View.VISIBLE);
                     current.setHeaderTop(mHeaderBottom);
                     current.setHeaderBottom(mHeaderBottom + current.getStickyHeaderHeight());
                     mHeaderBottom += sectionHeight;
@@ -211,7 +213,9 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                 int sectionHeight = current.getStickyHeaderHeight();
                 current.setFooterTop(mFooterTop - current.getStickyHeaderHeight());
                 current.setFooterBottom(mFooterTop);
-                mFooterTop -= sectionHeight;
+                if(!current.getSection().shouldBeHidden()){
+                    mFooterTop -= sectionHeight;
+                }
             }
         }
 
