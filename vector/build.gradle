@@ -58,7 +58,7 @@ android {
             versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "true"
             resValue "string", "allow_ga_use", "true"
-            resValue "string", "flavor_description", ""
+            resValue "string", "flavor_description", "GooglePlay"
         }
 
         appfdroid {
