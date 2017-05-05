@@ -89,6 +89,10 @@
     <string name="rooms_directory_header">Room directory</string>
     <string name="no_room_placeholder">No rooms</string>
     <string name="no_public_room_placeholder">No public rooms available</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 user</item>
+        <item quantity="other">%d users</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
