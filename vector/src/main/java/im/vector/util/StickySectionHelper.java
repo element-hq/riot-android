@@ -56,34 +56,9 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
             sectionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!sectionView.isExpanded()) {
-                        // Expand
-                        int pos = getPositionForSectionView(sectionView);
-                        if (pos >= 0) {
-                            mLayoutManager.scrollToPositionWithOffset(pos, sectionView.getHeaderTop());
-                        }
-                    } else {
-                        // Collapse
-                        for (int i = 0; i < mSectionViews.size(); i++) {
-                            if (mSectionViews.get(i).second == sectionView
-                                    && sectionView.isExpanded()
-                                    && sectionView.isStickyHeader()) {
-                                SectionView next = i + 1 < mSectionViews.size() ? mSectionViews.get(i + 1).second : null;
-                                SectionView previous = i > 0 ? mSectionViews.get(i - 1).second : null;
-                                if (next != null) {
-                                    int pos = getPositionForSectionView(next);
-                                    if (pos >= 0) {
-                                        mLayoutManager.scrollToPositionWithOffset(pos, next.getHeaderTop());
-                                    }
-                                } else if (previous != null) {
-                                    int pos = getPositionForSectionView(previous);
-                                    if (pos >= 0) {
-                                        mLayoutManager.scrollToPositionWithOffset(pos, previous.getHeaderTop());
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    int pos = getPositionForSectionView(sectionView);
+                    mRecyclerView.stopScroll();
+                    mLayoutManager.scrollToPositionWithOffset(pos, sectionView.getHeaderTop());
                 }
             });
             mSectionViews.add(new Pair<>(section.first, sectionView));
@@ -279,10 +254,6 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                     current.updatePosition(current.getFooterTop());
                 }
             }
-
-            SectionView next = i + 1 < mSectionViews.size() ? mSectionViews.get(i + 1).second : null;
-            current.setExpanded((!current.isStickyHeader() && !current.isStickyFooter())
-                    || (current.isStickyHeader() && (next == null || !next.isStickyHeader())));
         }
     }
 

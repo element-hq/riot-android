@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!-- textAllCaps="true" prevent spannable string -->
     <TextView
         android:id="@+id/section_title"
         style="@style/ListHeader"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAllCaps="false" />
 
     <ProgressBar
         android:id="@+id/section_loading"
@@ -23,14 +25,5 @@
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/section_title"
         android:indeterminate="true" />
-
-    <ImageView
-        android:id="@+id/section_expand_ic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_material_expand_more_black" />
 </RelativeLayout>
 
