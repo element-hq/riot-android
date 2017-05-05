@@ -24,13 +24,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.data.Room;
+
 import im.vector.R;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.util.CallUtilities;
 import im.vector.util.VectorUtils;
-
-import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.data.Room;
 
 /**
  * This class displays the pending call information.
@@ -48,10 +49,13 @@ public class VectorPendingCallView extends RelativeLayout {
     private Handler mUIHandler;
 
     // the UI items
+    private View mMainView;
     private TextView mCallDescriptionTextView;
     private TextView mCallStatusTextView;
 
-    /** set to true to hide the line displaying the call status **/
+    /**
+     * set to true to hide the line displaying the call status
+     **/
     private boolean mIsCallStatusHidden;
 
     // the call listener
@@ -116,6 +120,8 @@ public class VectorPendingCallView extends RelativeLayout {
         View.inflate(getContext(), R.layout.vector_pending_call_view, this);
 
         // retrieve the UI items
+        mMainView = findViewById(R.id.main_view);
+
         mCallDescriptionTextView = (TextView) findViewById(R.id.pending_call_room_name_textview);
         mCallDescriptionTextView.setVisibility(View.GONE);
 
@@ -238,9 +244,19 @@ public class VectorPendingCallView extends RelativeLayout {
 
     /**
      * Enable/disable the display of the status active call.
+     *
      * @param aIsEnabled true to display the call status, false otherwise
      */
-    public void enableCallStatusDisplay(boolean aIsEnabled){
+    public void enableCallStatusDisplay(boolean aIsEnabled) {
         mIsCallStatusHidden = !aIsEnabled;
+    }
+
+    /**
+     * Update the background color of the call view
+     *
+     * @param primaryColor
+     */
+    public void updateBackgroundColor(int primaryColor) {
+        mMainView.setBackgroundColor(primaryColor);
     }
 }

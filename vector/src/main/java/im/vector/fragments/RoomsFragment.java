@@ -112,6 +112,8 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        setFragmentColors(R.color.tab_rooms, R.color.tab_rooms_secondary);
+
         initViews();
 
         mOnRoomChangedListener = this;

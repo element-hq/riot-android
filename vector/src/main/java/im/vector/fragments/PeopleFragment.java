@@ -110,6 +110,8 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             }
         };
 
+        setFragmentColors(R.color.tab_people, R.color.tab_people_secondary);
+
         initViews();
 
         mOnRoomChangedListener = this;

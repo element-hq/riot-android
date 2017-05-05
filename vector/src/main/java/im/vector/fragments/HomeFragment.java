@@ -98,6 +98,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        setFragmentColors(R.color.tab_home, R.color.tab_home_secondary);
+
         initViews();
 
         // Eventually restore the pattern of adapter after orientation change

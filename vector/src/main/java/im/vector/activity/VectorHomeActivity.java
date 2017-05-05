@@ -32,7 +32,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -42,7 +41,6 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -61,6 +59,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -175,7 +174,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     @BindView(R.id.listView_spinner_views)
     View mWaitingView;
 
-
     @BindView(R.id.floating_action_button)
     FloatingActionButton mFloatingActionButton;
 
@@ -207,7 +205,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     VectorPendingCallView mVectorPendingCallView;
 
     @BindView(R.id.home_recents_sync_in_progress)
-    View mSyncInProgressView;
+    ProgressBar mSyncInProgressView;
 
     @BindView(R.id.search_view)
     SearchView mSearchView;
@@ -720,7 +718,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
-                updateTabStyle(R.color.tab_home, R.color.tab_home_secondary);
                 break;
             case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
@@ -730,7 +727,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
-                updateTabStyle(R.color.tab_favourites, R.color.tab_favourites_secondary);
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -740,7 +736,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
-                updateTabStyle(R.color.tab_people, R.color.tab_people_secondary);
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -750,7 +745,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
-                updateTabStyle(R.color.tab_rooms, R.color.tab_rooms_secondary);
                 break;
         }
 
@@ -778,18 +772,23 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                     .commit();
         }
     }
-
     /**
      * Update UI colors to match the selected tab
      *
-     * @param primaryColorId
-     * @param secondaryColorId
+     * @param primaryColor
+     * @param secondaryColor
      */
-    private void updateTabStyle(@ColorRes final int primaryColorId, @ColorRes final int secondaryColorId) {
-        final int primaryColor = ContextCompat.getColor(this, primaryColorId);
-        final int secondaryColor = ContextCompat.getColor(this, secondaryColorId);
+    public void updateTabStyle(final int primaryColor, final int secondaryColor) {
         mToolbar.setBackgroundColor(primaryColor);
         mFloatingActionButton.setBackgroundTintList(ColorStateList.valueOf(primaryColor));
+        mVectorPendingCallView.updateBackgroundColor(primaryColor);
+        mSyncInProgressView.setBackgroundColor(primaryColor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mSyncInProgressView.setIndeterminateTintList(ColorStateList.valueOf(secondaryColor));
+        } else {
+            mSyncInProgressView.getIndeterminateDrawable().setColorFilter(
+                    secondaryColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        }
         mFloatingActionButton.setRippleColor(secondaryColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(secondaryColor);
