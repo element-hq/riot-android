@@ -566,24 +566,24 @@
     <string name="room_settings_never_send_to_unverified_devices_summary">No enviïs missatges encriptats en aquesta sala des d'aquest dispositiu a dispositius no verificats.</string>
 
     <!-- Room settings: advanced addresses -->
-    <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
-    <string name="room_settings_addresses_add_new_address">New address (e.g #foo:matrix.org")</string>
+    <string name="room_settings_addresses_no_local_addresses">Aquesta sala no té adreces locals</string>
+    <string name="room_settings_addresses_add_new_address">Adreça nova (per exemple #foo:matrix.org")</string>
 
-    <string name="room_settings_addresses_invalid_format_dialog_title">Invalid alias format</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' is not a valid format for an alias</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified. The default main address for this room will be picked randomly"</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_title">Main address warnings</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Format d'àlies invàlid</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' no és un format d'àlies vàlid</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">No tindreu especificada una adreça principal. El nom de la sala per defecte serà un nom a l'atzar"</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Avisos de l'adreça principal</string>
 
-    <string name="room_settings_set_main_address">Set as Main Address</string>
-    <string name="room_settings_unset_main_address">Unset as Main Address</string>
-    <string name="room_settings_copy_room_id">Copy Room ID</string>
-    <string name="room_settings_copy_room_address">Copy Room Address</string>
+    <string name="room_settings_set_main_address">Estableix com a adreça principal</string>
+    <string name="room_settings_unset_main_address">Treu com a adreça principal</string>
+    <string name="room_settings_copy_room_id">Copia l'ID de la sala</string>
+    <string name="room_settings_copy_room_address">Copia l'adreça de la sala</string>
 
-    <string name="room_settings_addresses_e2e_enabled">Encryption is enabled in this room.</string>
-    <string name="room_settings_addresses_e2e_disabled">Encryption is disabled in this room.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Enable encryption \n(warning: cannot be disabled again!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Warning!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nOnce encryption is enabled for a room it cannot be turned off again (for now).\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
+    <string name="room_settings_addresses_e2e_enabled">L'encriptació està activada en aquesta sala.</string>
+    <string name="room_settings_addresses_e2e_disabled">L'encriptació està desactivada en aquesta sala.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Activa l'encriptació \n(avís: no es podrà tornar a desactivar!)</string>
+    <string name="room_settings_addresses_e2e_prompt_title">Avís!</string>
+    <string name="room_settings_addresses_e2e_prompt_message">L'encriptació d'extrem a extrem està en fase beta i no és del tot fiable.\n\nEncara no hi heu de confiar per enviar dades de manera segura.\n\nEls dispositius encara no poden desencriptar l'històric anterior a unir-se a la sala.\n\nUn cop s'ha activat l'encriptació no es pot tornar a desactivar (de moment).\n\nEls missatges encriptats no són visibles en clients que encara no implementen l'encriptació.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
