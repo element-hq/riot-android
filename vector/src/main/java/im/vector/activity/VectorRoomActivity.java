@@ -3131,6 +3131,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             });
         }
 
+        if (null != mActionBarHeaderActiveMembersTextView) {
+            mActionBarHeaderActiveMembersTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    launchRoomDetails(VectorRoomDetailsActivity.PEOPLE_TAB_INDEX);
+                }
+            });
+        }
+
         if (null != mActionBarHeaderActiveMembersInviteButton) {
             mActionBarHeaderActiveMembersInviteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
