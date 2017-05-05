@@ -26,6 +26,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.Filter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -107,6 +108,16 @@ public class HomeSectionView extends RelativeLayout {
         shape.setCornerRadius(100);
         shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_white_alpha_50));
         mBadge.setBackground(shape);
+
+        mHeader.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mRecyclerView != null) {
+                    mRecyclerView.stopScroll();
+                    mRecyclerView.scrollToPosition(0);
+                }
+            }
+        });
     }
 
     /**
