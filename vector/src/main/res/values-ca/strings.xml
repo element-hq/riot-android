@@ -594,7 +594,7 @@
     <string name="ga_use_disable_alert_message">S'ha de reiniciar l'aplicació per tal de desactivar els informes d'error.</string>
 
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
+    <string name="failed_to_load_timeline_position">%s ha intentat carregar un moment concret de la línia de temps d'aquesta sala però no l'ha trobat.</string>
 
 
     <!-- encryption dialog -->
