@@ -754,7 +754,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             highlightCount = childRoom.getHighlightCount();
             notificationCount = childRoom.getNotificationCount();
 
-            if (childRoom.getDataHandler().getBingRulesManager().isRoomMentionOnly(childRoom)) {
+            if (mMxSession.getDataHandler().getBingRulesManager().isRoomMentionOnly(childRoom)) {
                 notificationCount = highlightCount;
             }
         }

@@ -94,7 +94,8 @@ public class EventStreamService extends Service {
         PAUSE,
         RESUME,
         CATCHUP,
-        GCM_STATUS_UPDATE
+        GCM_STATUS_UPDATE,
+        AUTO_RESTART
     }
 
     // notification sub title,  when sync polling thread is enabled:
@@ -377,9 +378,13 @@ public class EventStreamService extends Service {
         // no intent : restarted by Android
         // EXTRA_AUTO_RESTART_ACTION : restarted by the service itself (
         if ((null == intent) || intent.hasExtra(EXTRA_AUTO_RESTART_ACTION)) {
+
             boolean restart = false;
 
-            if (null == intent) {
+            if (StreamAction.AUTO_RESTART == mServiceState) {
+                Log.e(LOG_TAG, "onStartCommand : auto restart in progress ignore current command");
+                return START_STICKY;
+            } else if (null == intent) {
                 Log.e(LOG_TAG, "onStartCommand : null intent -> restart the service");
                 restart = true;
             } else if  (StreamAction.IDLE == mServiceState) {
@@ -408,7 +413,14 @@ public class EventStreamService extends Service {
                 }
 
                 mSuspendWhenStarted = true;
+
                 start();
+
+                // if the service successfully restarts
+                if (StreamAction.START == mServiceState) {
+                    // update the state to a dedicated one
+                    setServiceState(StreamAction.AUTO_RESTART);
+                }
 
                 return START_STICKY;
             }
@@ -530,10 +542,15 @@ public class EventStreamService extends Service {
      * internal start.
      */
     private void start() {
+        final GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
         StreamAction state = getServiceState();
 
         if (state == StreamAction.START) {
             Log.e(LOG_TAG, "start : Already started.");
+
+            for (MXSession session : mSessions) {
+                session.refreshNetworkConnection();
+            }
             return;
         } else if ((state == StreamAction.PAUSE) || (state == StreamAction.CATCHUP)) {
             Log.e(LOG_TAG, "start : Resuming active stream.");
@@ -550,7 +567,7 @@ public class EventStreamService extends Service {
 
         mActiveEventStreamService = this;
 
-        for (MXSession session : mSessions) {
+        for (final MXSession session : mSessions) {
             if (null == session.getDataHandler()) {
                 Log.e(LOG_TAG, "start : the session is not anymore valid.");
                 return;
@@ -564,6 +581,11 @@ public class EventStreamService extends Service {
             if (store.isReady()) {
                 startEventStream(session, store);
                 if (mSuspendWhenStarted) {
+                    if (null != gcmRegistrationManager) {
+                        session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
+                        session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                    }
+
                     catchup(false);
                 }
             } else {
@@ -575,6 +597,11 @@ public class EventStreamService extends Service {
                         startEventStream(fSession, store);
 
                         if (mSuspendWhenStarted) {
+                            if (null != gcmRegistrationManager) {
+                                session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
+                                session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                            }
+
                             catchup(false);
                         }
                     }

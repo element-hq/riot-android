@@ -1639,6 +1639,12 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // encrypt to unverified devices
         final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference)findPreference(getString(R.string.room_settings_never_send_to_unverified_devices_title));
 
+        // reported by GA
+        if (null == sendToUnverifiedDevicesPref) {
+            Log.e(LOG_TAG, "## refreshEndToEnd() : sendToUnverifiedDevicesPref is null");
+            return;
+        }
+
         // test if the crypto is
         if (null == mSession.getCrypto()) {
             mAdvandceSettingsCategory.removePreference(sendToUnverifiedDevicesPref);
