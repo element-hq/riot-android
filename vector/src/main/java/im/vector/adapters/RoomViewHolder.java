@@ -106,10 +106,31 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             return;
         }
 
+        if (null == session) {
+            Log.e(LOG_TAG, "## populateViews() : null session");
+            return;
+        }
+
+        if (null == session.getDataHandler()) {
+            Log.e(LOG_TAG, "## populateViews() : null dataHandler");
+            return;
+        }
+
+        if (null == session.getDataHandler().getStore()) {
+            Log.e(LOG_TAG, "## populateViews() : null Store");
+            return;
+        }
+
         final RoomSummary roomSummary = session.getDataHandler().getStore().getSummary(room.getRoomId());
+
+        if (null == roomSummary) {
+            Log.e(LOG_TAG, "## populateViews() : null roomSummary");
+            return;
+        }
+
         int unreadMsgCount = roomSummary.getUnreadEventsCount();
-        int highlightCount = 0;
-        int notificationCount = 0;
+        int highlightCount;
+        int notificationCount;
 
         highlightCount = room.getHighlightCount();
         notificationCount = room.getNotificationCount();
