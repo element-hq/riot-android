@@ -38,22 +38,25 @@ public class PublicRoomsAdapterSection extends AdapterSection<PublicRoom> {
     }
 
     @Override
-    protected void updateTitle() {
+    protected void updateTitle(){
+        String newTitle;
         if (TextUtils.isEmpty(mCurrentFilterPattern)) {
             if (mEstimatedPublicRoomsCount > 0) {
-                mTitleFormatted = mTitle.concat(" (" + mEstimatedPublicRoomsCount + ")");
+                newTitle = mTitle.concat("   " + mEstimatedPublicRoomsCount);
             } else {
-                mTitleFormatted = mTitle;
+                newTitle = mTitle;
             }
         } else if (getNbItems() > 0) {
             if (mHasMoreResults) {
-                mTitleFormatted = mTitle.concat(" (" + getNbItems() + ")");
+                newTitle = mTitle.concat("   " + getNbItems());
             } else {
-                mTitleFormatted = mTitle.concat(" (>" + getNbItems() + ")");
+                newTitle = mTitle.concat("   >" + getNbItems());
             }
         } else {
-            mTitleFormatted = mTitle;
+            newTitle = mTitle;
         }
+
+        formatTitle(newTitle);
     }
 
     /**

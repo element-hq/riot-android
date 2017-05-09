@@ -19,8 +19,10 @@ package im.vector.fragments;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -79,6 +81,9 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         }
     };
 
+    protected int mPrimaryColor = -1;
+    protected int mSecondaryColor = -1;
+
     /*
      * *********************************************************************************************
      * Fragment lifecycle
@@ -119,6 +124,15 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
                     onFloatingButtonClick();
                 }
             });
+        }
+    }
+
+    @Override
+    @CallSuper
+    public void onResume() {
+        super.onResume();
+        if (mPrimaryColor != -1) {
+            mActivity.updateTabStyle(mPrimaryColor, mSecondaryColor != -1 ? mSecondaryColor : mPrimaryColor);
         }
     }
 
@@ -329,22 +343,14 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     }
 
     /**
-     * Handle the end of any request : hide loading wheel and display error message if there is any
+     * Define colors of the fragment
      *
-     * @param errorMessage
+     * @param primaryColorId color for header, floating button
+     * @param secondaryColorId color for status bar
      */
-    public void onRequestDone(final String errorMessage) {
-        if (mActivity != null && !mActivity.isFinishing()) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mActivity.stopWaitingView();
-                    if (!TextUtils.isEmpty(errorMessage)) {
-                        Toast.makeText(mActivity, errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
+    public void setFragmentColors(@ColorRes final int primaryColorId, @ColorRes final int secondaryColorId){
+        mPrimaryColor = ContextCompat.getColor(mActivity, primaryColorId);
+        mSecondaryColor = ContextCompat.getColor(mActivity, secondaryColorId);
     }
 
     /*
@@ -386,6 +392,25 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     }
 
     /**
+     * Handle the end of any request : hide loading wheel and display error message if there is any
+     *
+     * @param errorMessage
+     */
+    protected void onRequestDone(final String errorMessage) {
+        if (mActivity != null && !mActivity.isFinishing()) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mActivity.stopWaitingView();
+                    if (!TextUtils.isEmpty(errorMessage)) {
+                        Toast.makeText(mActivity, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    /**
      * Mark all the fragment rooms as read
      */
     private void onMarkAllAsRead() {
@@ -394,9 +419,9 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         mSession.markRoomsAsRead(getRooms(), new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                onSummariesUpdate();
                 mActivity.stopWaitingView();
                 mActivity.refreshUnreadBadges();
+                onSummariesUpdate();
             }
 
             private void onError(String errorMessage) {

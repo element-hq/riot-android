@@ -47,7 +47,7 @@
     <string name="action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
     <string name="action_voice_call">Voice Call</string>
     <string name="action_video_call">Video Call</string>
-    <string name="action_search_room">Search room</string>
+    <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Mark all as read</string>
     <string name="action_quick_reply">Quick reply</string>
     <string name="action_open">Open</string>
@@ -66,7 +66,10 @@
     <string name="bottom_action_rooms">Rooms</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder">Filter</string>
+    <string name="home_filter_placeholder_home">Search for rooms</string>
+    <string name="home_filter_placeholder_favorites">Search for favourites</string>
+    <string name="home_filter_placeholder_people">Search for people</string>
+    <string name="home_filter_placeholder_rooms">Search for rooms</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -90,6 +93,10 @@
     <string name="rooms_directory_header">Room directory</string>
     <string name="no_room_placeholder">No rooms</string>
     <string name="no_public_room_placeholder">No public rooms available</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 user</item>
+        <item quantity="other">%d users</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
@@ -416,6 +423,9 @@
     <string name="room_recents_invites">INVITES</string>
     <string name="room_recents_start_chat">Start chat</string>
     <string name="room_recents_create_room">Create room</string>
+    <string name="room_recents_join_room">Join room</string>
+    <string name="room_recents_join_room_title">Join a room</string>
+    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
@@ -685,7 +695,7 @@
     <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
     <string name="directory_server_placeholder">Homeserver URL</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
-    <string name="directory_server_native_rooms">Native %s rooms</string>
+    <string name="directory_server_native_rooms">All native %s rooms</string>
 
     <!-- Notifications -->
     <string name="notification_unread_messages">%d unread messages</string>

@@ -18,13 +18,16 @@
 package im.vector.activity;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -42,20 +45,23 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,8 +99,6 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnEditorAction;
-import butterknife.OnTextChanged;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
@@ -120,7 +124,7 @@ import im.vector.view.VectorPendingCallView;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends AppCompatActivity {
+public class VectorHomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
@@ -172,7 +176,6 @@ public class VectorHomeActivity extends AppCompatActivity {
     @BindView(R.id.listView_spinner_views)
     View mWaitingView;
 
-
     @BindView(R.id.floating_action_button)
     FloatingActionButton mFloatingActionButton;
 
@@ -204,10 +207,10 @@ public class VectorHomeActivity extends AppCompatActivity {
     VectorPendingCallView mVectorPendingCallView;
 
     @BindView(R.id.home_recents_sync_in_progress)
-    View mSyncInProgressView;
+    ProgressBar mSyncInProgressView;
 
-    @BindView(R.id.filter_input)
-    EditText mFilterInput;
+    @BindView(R.id.search_view)
+    SearchView mSearchView;
 
     private boolean mStorePermissionCheck = false;
 
@@ -544,14 +547,16 @@ public class VectorHomeActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             // search in rooms content
-            case R.id.ic_action_search_room:
+            case R.id.ic_action_global_search:
                 final Intent searchIntent = new Intent(this, VectorUnifiedSearchActivity.class);
+
+                if (R.id.bottom_action_people == mCurrentMenuId) {
+                    searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_TAB_INDEX, VectorUnifiedSearchActivity.SEARCH_PEOPLE_TAB_POSITION);
+                }
+
                 startActivity(searchIntent);
                 break;
             case R.id.ic_action_mark_all_as_read:
-                //TODO temporary line, remove this when HomeFragment will be plugged
-                markAllMessagesAsRead();
-
                 // Will be handle by fragments
                 retCode = false;
                 break;
@@ -683,8 +688,6 @@ public class VectorHomeActivity extends AppCompatActivity {
     private void setupNavigation() {
         // Toolbar
         setSupportActionBar(mToolbar);
-        mToolbar.setTitle(R.string.title_activity_home);
-        setTitle(R.string.title_activity_home);
 
         // Bottom navigation view
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -716,7 +719,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = HomeFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
-                setTitle(R.string.bottom_action_home);
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
                 break;
             case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
@@ -725,7 +728,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = FavouritesFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
-                setTitle(R.string.bottom_action_favourites);
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -734,7 +737,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = PeopleFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
-                setTitle(R.string.bottom_action_people);
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -743,7 +746,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     fragment = RoomsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
-                setTitle(R.string.bottom_action_rooms);
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
                 break;
         }
 
@@ -771,6 +774,28 @@ public class VectorHomeActivity extends AppCompatActivity {
                     .commit();
         }
     }
+    /**
+     * Update UI colors to match the selected tab
+     *
+     * @param primaryColor
+     * @param secondaryColor
+     */
+    public void updateTabStyle(final int primaryColor, final int secondaryColor) {
+        mToolbar.setBackgroundColor(primaryColor);
+        mFloatingActionButton.setBackgroundTintList(ColorStateList.valueOf(primaryColor));
+        mVectorPendingCallView.updateBackgroundColor(primaryColor);
+        mSyncInProgressView.setBackgroundColor(primaryColor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mSyncInProgressView.setIndeterminateTintList(ColorStateList.valueOf(secondaryColor));
+        } else {
+            mSyncInProgressView.getIndeterminateDrawable().setColorFilter(
+                    secondaryColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+        mFloatingActionButton.setRippleColor(secondaryColor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(secondaryColor);
+        }
+    }
 
     /**
      * Init views
@@ -796,14 +821,37 @@ public class VectorHomeActivity extends AppCompatActivity {
         });
 
         addUnreadBadges();
+
+		// init the search view
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        // Remove unwanted left margin
+        LinearLayout searchEditFrame = (LinearLayout) mSearchView.findViewById(R.id.search_edit_frame);
+        if (searchEditFrame != null) {
+            ViewGroup.MarginLayoutParams searchEditFrameParams = (ViewGroup.MarginLayoutParams) searchEditFrame.getLayoutParams();
+            searchEditFrameParams.leftMargin = 0;
+            searchEditFrame.setLayoutParams(searchEditFrameParams);
+        }
+        ImageView searchIcon = (ImageView) mSearchView.findViewById(R.id.search_mag_icon);
+        if (searchIcon != null) {
+            ViewGroup.MarginLayoutParams searchIconParams = (ViewGroup.MarginLayoutParams) searchIcon.getLayoutParams();
+            searchIconParams.leftMargin = 0;
+            searchIcon.setLayoutParams(searchIconParams);
+        }
+        mToolbar.setContentInsetStartWithNavigation(0);
+
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setSubmitButtonEnabled(false);
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setOnQueryTextListener(this);
     }
 
     /**
      * Reset the filter
      */
     private void resetFilter() {
-        mFilterInput.setText("");
-        mFilterInput.clearFocus();
+        mSearchView.setQuery("", false);
+        mSearchView.clearFocus();
         hideKeyboard();
     }
 
@@ -827,6 +875,7 @@ public class VectorHomeActivity extends AppCompatActivity {
 
     /**
      * Tells if the waiting view is currently displayed
+     *
      * @return true if the waiting view is displayed
      */
     public boolean isWaitingViewVisible() {
@@ -893,20 +942,10 @@ public class VectorHomeActivity extends AppCompatActivity {
      * User action management
      * *********************************************************************************************
      */
-
-    @OnEditorAction(R.id.filter_input)
-    public boolean onSubmitFilter(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            applyFilter(mFilterInput.getText().toString());
-            return true;
-        }
-        return false;
-    }
-
-    @OnTextChanged(value = R.id.filter_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    public void onFilter(Editable s) {
+    @Override
+    public boolean onQueryTextChange(String newText) {
         // compute an unique pattern
-        final String filter = s.toString() + "-" + mCurrentMenuId;
+        final String filter = newText + "-" + mCurrentMenuId;
 
         // wait before really triggering the search
         // else a search is triggered for each new character
@@ -920,51 +959,21 @@ public class VectorHomeActivity extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                String currentFilter = mFilterInput.getText().toString() + "-" + mCurrentMenuId;;
+                String queryText = mSearchView.getQuery().toString();
+                String currentFilter = queryText + "-" + mCurrentMenuId;;
 
                 // display if the pattern matched
                 if (TextUtils.equals(currentFilter, filter)) {
-                    applyFilter(mFilterInput.getText().toString().toString());
+                    applyFilter(queryText);
                 }
             }
         }, 500);
+        return true;
     }
 
-    /**
-     * Send a read receipt to the latest message of each room in the current session.
-     */
-    private void markAllMessagesAsRead() {
-        // the other fragments have their own management
-        if (TextUtils.equals(mCurrentFragmentTag, TAG_FRAGMENT_HOME)) {
-            showWaitingView();
-
-            mSession.markRoomsAsRead(mSession.getDataHandler().getStore().getRooms(), new ApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    refreshUnreadBadges();
-                }
-
-                private void onError(String errorMessage) {
-                    Log.e(LOG_TAG, "## markAllMessagesAsRead() failed " + errorMessage);
-                    onSuccess(null);
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onError(e.getMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onError(e.getMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onError(e.getMessage());
-                }
-            });
-        }
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return true;
     }
 
     /**
@@ -1163,6 +1172,103 @@ public class VectorHomeActivity extends AppCompatActivity {
                 onError(e.getLocalizedMessage());
             }
         });
+    }
+
+    /**
+     * Offer to join a room by alias or Id
+     */
+    public void joinARoom() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        View dialogView = inflater.inflate(R.layout.dialog_join_room_by_id, null);
+        alertDialogBuilder.setView(dialogView);
+
+        final EditText textInput = (EditText) dialogView.findViewById(R.id.join_room_edit_text);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton(R.string.join,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                showWaitingView();
+
+                                String text = textInput.getText().toString().trim();
+
+                                mSession.joinRoom(text, new ApiCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String roomId) {
+                                        stopWaitingView();
+
+                                        HashMap<String, Object> params = new HashMap<>();
+                                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                                        CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
+                                    }
+
+                                    private void onError(final String message) {
+                                        mWaitingView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (null != message) {
+                                                    Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                                                }
+                                                stopWaitingView();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onMatrixError(final MatrixError e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(final Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+                                });
+                            }
+                        })
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+        final Button joinButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+        if (null != joinButton) {
+            joinButton.setEnabled(false);
+            textInput.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    String text = textInput.getText().toString().trim();
+                    joinButton.setEnabled(MXSession.isRoomId(text) || MXSession.isRoomAlias(text));
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
+        }
     }
 
     /**
@@ -1694,6 +1800,11 @@ public class VectorHomeActivity extends AppCompatActivity {
         public void onDirectMessageChatRoomsListUpdate() {
             mRefreshBadgeOnChunkEnd = true;
         }
+
+        @Override
+        public void onRoomTagEvent(String roomId) {
+            mRefreshBadgeOnChunkEnd = true;
+        }
     };
 
     /**
@@ -1717,7 +1828,7 @@ public class VectorHomeActivity extends AppCompatActivity {
     private void removeMenuShiftMode() {
         int childCount = mBottomNavigationView.getChildCount();
 
-        for(int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++) {
             if (mBottomNavigationView.getChildAt(i) instanceof BottomNavigationMenuView) {
                 BottomNavigationMenuView bottomNavigationMenuView = (BottomNavigationMenuView) mBottomNavigationView.getChildAt(i);
 
@@ -1739,14 +1850,14 @@ public class VectorHomeActivity extends AppCompatActivity {
      */
     private void addUnreadBadges() {
         final float scale = getResources().getDisplayMetrics().density;
-        int badgeOffsetX =  (int)(18 * scale + 0.5f);
-        int badgeOffsetY = (int)(7 * scale + 0.5f);
+        int badgeOffsetX = (int) (18 * scale + 0.5f);
+        int badgeOffsetY = (int) (7 * scale + 0.5f);
 
         removeMenuShiftMode();
 
         int largeTextHeight = getResources().getDimensionPixelSize(android.support.design.R.dimen.design_bottom_navigation_active_text_size);
 
-        for(int menuIndex = 0; menuIndex < mBottomNavigationView.getMenu().size(); menuIndex++) {
+        for (int menuIndex = 0; menuIndex < mBottomNavigationView.getMenu().size(); menuIndex++) {
             try {
                 int itemId = mBottomNavigationView.getMenu().getItem(menuIndex).getItemId();
                 BottomNavigationItemView navigationItemView = (BottomNavigationItemView) mBottomNavigationView.findViewById(itemId);
@@ -1755,7 +1866,7 @@ public class VectorHomeActivity extends AppCompatActivity {
 
                 Field marginField = navigationItemView.getClass().getDeclaredField("mDefaultMargin");
                 marginField.setAccessible(true);
-                marginField.setInt(navigationItemView, marginField.getInt(navigationItemView) + (largeTextHeight /2));
+                marginField.setInt(navigationItemView, marginField.getInt(navigationItemView) + (largeTextHeight / 2));
                 marginField.setAccessible(false);
 
                 Field shiftAmountField = navigationItemView.getClass().getDeclaredField("mShiftAmount");
@@ -1771,9 +1882,9 @@ public class VectorHomeActivity extends AppCompatActivity {
                     UnreadCounterBadgeView badgeView = new UnreadCounterBadgeView(iconView.getContext());
 
                     // compute the new position
-                    FrameLayout.LayoutParams iconViewLayoutParams = (FrameLayout.LayoutParams)iconView.getLayoutParams();
+                    FrameLayout.LayoutParams iconViewLayoutParams = (FrameLayout.LayoutParams) iconView.getLayoutParams();
                     FrameLayout.LayoutParams badgeLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-                    badgeLayoutParams.setMargins(iconViewLayoutParams.leftMargin +  badgeOffsetX, iconViewLayoutParams.topMargin - badgeOffsetY, iconViewLayoutParams.rightMargin, iconViewLayoutParams.bottomMargin);
+                    badgeLayoutParams.setMargins(iconViewLayoutParams.leftMargin + badgeOffsetX, iconViewLayoutParams.topMargin - badgeOffsetY, iconViewLayoutParams.rightMargin, iconViewLayoutParams.bottomMargin);
                     badgeLayoutParams.gravity = iconViewLayoutParams.gravity;
 
                     ((FrameLayout) iconView.getParent()).addView(badgeView, badgeLayoutParams);
@@ -1797,7 +1908,7 @@ public class VectorHomeActivity extends AppCompatActivity {
         Collection<RoomSummary> summaries2 = dataHandler.getStore().getSummaries();
         HashMap<Room, RoomSummary> roomSummaryByRoom = new HashMap<>();
 
-        for(RoomSummary summary : summaries2) {
+        for (RoomSummary summary : summaries2) {
             Room room = dataHandler.getStore().getRoom(summary.getRoomId());
 
             if (null != room) {
@@ -1805,7 +1916,7 @@ public class VectorHomeActivity extends AppCompatActivity {
             }
         }
 
-        for(Integer id : mBadgeViewByIndex.keySet()) {
+        for (Integer id : mBadgeViewByIndex.keySet()) {
             UnreadCounterBadgeView badgeView = mBadgeViewByIndex.get(id);
 
             // compute the badge value and its displays
@@ -1821,7 +1932,7 @@ public class VectorHomeActivity extends AppCompatActivity {
 
                 filteredRoomIdsSet = new HashSet<>();
 
-                for(Room room : favRooms) {
+                for (Room room : favRooms) {
                     filteredRoomIdsSet.add(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_people) {
@@ -1834,12 +1945,15 @@ public class VectorHomeActivity extends AppCompatActivity {
                     }
                 }
             } else if (id == R.id.bottom_action_rooms) {
-                List<String> directChatRoomIds = mSession.getDirectChatRoomIdsList();
+                HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());
+                HashSet<String> favoritesRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
 
                 filteredRoomIdsSet = new HashSet<>();
 
                 for(Room room : roomSummaryByRoom.keySet()) {
-                    if (!directChatRoomIds.contains(room.getRoomId()) && !room.getAccountData().hasTags() && !room.isDirectChatInvitation()) {
+                    if (!room.isConferenceUserRoom() && // not a VOIP conference room
+                            !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
+                            (!room.getAccountData().hasTags() || favoritesRoomIds.contains(room.getRoomId()))) {
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
@@ -1847,7 +1961,6 @@ public class VectorHomeActivity extends AppCompatActivity {
 
             if ((null == filteredRoomIdsSet) || !filteredRoomIdsSet.isEmpty()) {
                 for(Room room : roomSummaryByRoom.keySet()) {
-
                     // test if the room is allowed
                     if ((null == filteredRoomIdsSet) || filteredRoomIdsSet.contains(room.getRoomId())) {
                         highlightCount += room.getHighlightCount();
