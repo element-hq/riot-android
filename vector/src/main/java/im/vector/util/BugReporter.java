@@ -40,6 +40,7 @@ import android.os.Build;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 
 import android.text.Editable;
@@ -160,14 +161,22 @@ public class BugReporter {
                     }
                 }
 
+                MXSession session = Matrix.getInstance(context).getDefaultSession();
+
+                String deviceId = null;
                 String userId = null;
 
-                if (null != Matrix.getInstance(context).getDefaultSession()) {
-                    userId = Matrix.getInstance(context).getDefaultSession().getMyUserId();
+                if (null != session) {
+                    userId = session.getMyUserId();
+                    deviceId = session.getCredentials().deviceId;
                 }
 
                 if (TextUtils.isEmpty(userId)) {
                     userId = "";
+                }
+
+                if (TextUtils.isEmpty(deviceId)) {
+                    deviceId = "";
                 }
 
                 if (!mIsCancelled) {
@@ -177,6 +186,7 @@ public class BugReporter {
                             .addFormDataPart("app", "riot-android")
                             .addFormDataPart("user_agent", "Android")
                             .addFormDataPart("user_id", userId)
+                            .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", Matrix.getInstance(context).getVersion(true))
                             .addFormDataPart("matrix_sdk_version", Matrix.getInstance(context).getDefaultSession().getVersion(true))
                             .addFormDataPart("olm_version", Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true))
