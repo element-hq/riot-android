@@ -1255,6 +1255,7 @@ public class EventStreamService extends Service {
                             BingRule rule = session.fulfillRule(event);
 
                             if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
+                                Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
                                 list.add(new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, rule));
                             }
                         }
