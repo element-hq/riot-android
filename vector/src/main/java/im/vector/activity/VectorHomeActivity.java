@@ -604,6 +604,23 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             }).show();
         }
 
+        if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
+            final AlertDialog.Builder appCrashedAlert = new AlertDialog.Builder(this);
+
+            appCrashedAlert.setMessage(getApplicationContext().getString(R.string.send_bug_report_app_crashed)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    BugReporter.sendBugReport();
+                }
+            }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            }).show();
+
+            VectorApp.getInstance().clearAppCrashStatus();
+        }
+
         if (!mStorePermissionCheck) {
             mStorePermissionCheck = true;
             CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY, this);
@@ -970,8 +987,14 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
                         // create alert dialog
                         AlertDialog alertDialog = alertDialogBuilder.create();
-                        // show it
-                        alertDialog.show();
+
+                        // A crash has been reported by GA
+                        try {
+                            // show it
+                            alertDialog.show();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## exportKeysAndSignOut() failed " + e.getMessage());
+                        }
                     }
 
                     @Override
@@ -1287,7 +1310,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // hide the view
                         mVectorPendingCallView.checkPendingCall();
                         // clear call in progress notification
-                        EventStreamService.checkDisplayedNotification();
+                        EventStreamService.checkDisplayedNotifications();
                         // and play a lovely sound
                         VectorCallSoundManager.startEndCallSound();
                     }

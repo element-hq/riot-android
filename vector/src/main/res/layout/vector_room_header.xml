@@ -19,6 +19,7 @@
             android:layout_height="84dp" />
     </RelativeLayout>
 
+    <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
     <TextView
         android:id="@+id/action_bar_header_room_title"
         android:layout_width="wrap_content"
@@ -31,7 +32,7 @@
         android:layout_marginTop="14dp"
         android:ellipsize="end"
         android:gravity="center_horizontal"
-        android:maxLines="1"
+        android:singleLine="true"
         android:text="a room name here"
         android:textColor="@android:color/white"
         android:textSize="20sp" />

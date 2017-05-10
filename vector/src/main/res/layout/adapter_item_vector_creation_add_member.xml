@@ -13,6 +13,7 @@
         android:layout_marginLeft="16dp"
         android:src="@drawable/ic_material_add_circle" />
 
+    <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
     <TextView
         android:id="@+id/room_creation_add_member_texview"
         android:layout_width="wrap_content"
@@ -22,7 +23,7 @@
         android:layout_marginRight="16dp"
         android:layout_toLeftOf="@id/filtered_list_actions_list"
         android:layout_toRightOf="@id/filtered_list_avatar"
-        android:maxLines="1"
+        android:singleLine="true"
         android:text="@string/room_creation_add_member"
         android:textColor="@color/vector_21_black"
         android:textSize="16sp"

@@ -61,6 +61,7 @@
 
     <string name="send_bug_report_include_logs">Lähetä lokit</string>
     <string name="send_bug_report_include_crash_logs">Lähetä kaatumislokit</string>
+    <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Bugiraportti</string>
     <string name="send_bug_report_description">Kuvaile bugia. Mitä teit? Mitä odotit tapahtuvan? Mitä tapahtui?</string>
     <string name="send_bug_report_placeholder">Kuvaile ongelmaa</string>
@@ -69,6 +70,7 @@
     <string name="send_bug_report_sent">Bugiraportti lähetettiin</string>
     <string name="send_bug_report_failed">Bugiraporttia ei voitu lähettää (%s)</string>
     <string name="send_bug_report_progress">Lähetetään (%s%%)</string>
+    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
 
     <string name="send_files_in">Send into</string>
     <string name="read_receipt">Luettu</string>
@@ -163,13 +165,8 @@
     <string name="login_error_user_in_use">Käyttäjätunnus on jo käytössä</string>
     <string name="login_error_login_email_not_yet">Sähköpostiisi lähetetty linkki, jota ei ole vielä seurattu</string> <!-- ??? -->
 
-    <!-- universal link receiver -->
-    <!-- ??? -->
-
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">Sinun pitää kirjautua sisään uudelleen luodaksesi salausavaimet tälle laitteelle.\nTämä tapahtuu vain kerran.\nPahoittelemme häiriötä.</string>
-
-    <!-- members list Screen -->
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lukukuittaukset</string>
@@ -190,32 +187,13 @@
     <string name="attachment_remaining_time_seconds">%d sek</string>
     <string name="attachment_remaining_time_minutes">%1$d min %2$d sek</string>
 
-    <!-- invitation members list Screen -->
-    <!-- all of these ??? -->
-
     <!-- room creation dialog Screen -->
     <string name="yesterday">Eilen</string>
     <string name="today">Tänään</string>
 
-    <!-- room creation dialog Screen -->
-
     <!-- room info dialog Screen -->
     <string name="room_info_room_name">Huoneen nimi</string>
     <string name="room_info_room_topic">Huoneen aihe</string>
-
-    <!-- contacts list screen -->
-
-    <!-- Notification settings screen -->
-    <!-- ??? -->
-    <!-- ??? -->
-    <!-- ??? -->
-    <!-- ??? -->
-
-    <!-- gcm section -->
-    <!-- should these be translated? -->
-
-    <!-- ??? -->
-    <!-- ??? god help me -->
 
     <!-- Settings keys -->
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
@@ -335,9 +313,6 @@
     <string name="people_search_known_contacts">TUNNETUT KÄYTTÄJÄT (%s)</string>
     <string name="people_search_filter_text">Vain Matrix-käyttäjät</string>
     <string name="people_search_too_many_contacts">Liian monta käyttäjää, käytä hakukenttää</string>
-
-    <!-- Presence status-->
-    <!-- ??? online, offline? -->
 
     <!--  Chat -->
     <string name="room_menu_search">Etsi</string>
@@ -676,4 +651,8 @@
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Huoneessa on tuntemattomia laitteita</string>
     <string name="unknown_devices_alert_message">Huoneessa on tuntemattomia laitteita joita ei ole vahvistettu.\nLaitteet eivät välttämättä kuulu väitetyille omistajilleen.\nJokainen uusi laite kannattaa vahvistaa ennen kuin jatkat, mutta voit myös lähettää viestit vahvistamattomille laitteille.\n\nTuntemattomat laitteet:</string>
+
+    <!-- Notifications -->
+    <string name="notification_unread_notified_messages">%d unread notified messages</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d unread messages in %2$d rooms"</string>
 </resources>

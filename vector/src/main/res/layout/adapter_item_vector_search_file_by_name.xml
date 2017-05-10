@@ -35,6 +35,7 @@
         android:layout_toRightOf="@id/file_search_thumbnail"
         android:fontFamily="sans-serif-regular"
         android:maxLines="1"
+        android:ellipsize="end"
         android:text="File name"
         android:textColor="@color/vector_text_black_color"
         android:textSize="16sp" />
@@ -49,6 +50,7 @@
         android:layout_marginBottom="18dp"
         android:layout_marginRight="26dp"
         android:maxLines="1"
+        android:ellipsize="end"
         android:text="Room name and date"
         android:textColor="@color/vector_0_54_black_color"
         android:textSize="14sp" />

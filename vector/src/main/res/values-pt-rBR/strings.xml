@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="resouces_language">pt</string>
-    <string name="resouces_country">PT</string>
+    <string name="resouces_country">BR</string>
 
     <!-- titles -->
     <string name="title_activity_home">Mensagens</string>
@@ -642,5 +642,5 @@
 
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d unread notified messages</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread messages in %2$d rooms"</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
 </resources>

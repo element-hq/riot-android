@@ -59,6 +59,7 @@
     
     <string name="send_bug_report_include_logs">Отправить журналы</string>
     <string name="send_bug_report_include_crash_logs">Отправить журналы ошибок</string>
+    <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Отчёт об ошибке</string>
     <string name="send_bug_report_description">Пожалуйста опишите ошибку. Что вы делали? Что вы ожидали получить? Что произошло?</string>
     <string name="send_bug_report_placeholder">Опишите проблему здесь</string>
@@ -67,6 +68,7 @@
     <string name="send_bug_report_sent">Отчёт об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчёта об ошибке (%s)</string>
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
+    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
     
     <string name="send_files_in">Предать в</string>
     <string name="read_receipt">Read</string>
@@ -154,13 +156,9 @@
     <string name="login_error_limit_exceeded">Отправлено слишком много запросов</string>
     <string name="login_error_user_in_use">Логин уже используется</string>
     <string name="login_error_login_email_not_yet">Вы не перешли по высланной в email ссылке</string>
-    
-    <!-- universal link receiver -->
 
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">Вам необходимо перелогиниться, для генерации E2E ключей шифрования для этого устройства и отправки их на сервер.\nЭто однократная операция.\nИзвините за неудобства.</string>
-    
-    <!-- members list Screen -->
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
@@ -180,24 +178,14 @@
     <string name="attachment_cancel_upload">Отменить загрузку?</string>
     <string name="attachment_remaining_time_seconds">%d с</string>
     <string name="attachment_remaining_time_minutes">%1$dм %2$dс</string>
-    
-    <!-- invitation members list Screen -->
 
     <!-- room creation dialog Screen -->
     <string name="yesterday">Вчера</string>
     <string name="today">Сегодня</string>
-    
-    <!-- room creation dialog Screen -->
 
     <!-- room info dialog Screen -->
     <string name="room_info_room_name">Название Комнаты</string>
     <string name="room_info_room_topic">Тема комнаты</string>
-
-    <!-- contacts list screen -->
-
-    <!-- Notification settings screen -->
-
-    <!-- gcm section -->
 
     <!-- Settings keys -->
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
@@ -315,8 +303,6 @@
     <string name="people_search_known_contacts">Известные Контакты (%s)</string>
     <string name="people_search_filter_text">Только зарегистрированные</string>
     <string name="people_search_too_many_contacts">Слишком много контактов, используйте поле поиска</string>
-
-    <!-- Presence status-->
 
     <!--  Chat -->
     <string name="room_menu_search">Поиск</string>
@@ -653,4 +639,8 @@
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
     <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.\nЭто означает, что эти устройства могут не пренадлежать тем пользователям, на которых они претендуют. \nПеред продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.\n\nНеизвестные устройства:</string>
+
+    <!-- Notifications -->
+    <string name="notification_unread_notified_messages">%d unread notified messages</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
 </resources>

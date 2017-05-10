@@ -8,6 +8,7 @@
         android:layout_height="14dp"
         android:background="@android:color/transparent" />
 
+    <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
     <TextView
         android:id="@+id/messagesAdapter_sender"
         android:layout_width="wrap_content"
@@ -15,7 +16,7 @@
         android:layout_gravity="left"
         android:ellipsize="end"
         android:fontFamily="sans-serif-bold"
-        android:maxLines="1"
+        android:singleLine="true"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:textColor="@color/vector_0_54_black_color"
