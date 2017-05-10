@@ -201,8 +201,14 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
      * @param count the matched rooms count
      */
     private void updateRoomsDisplay(int count) {
-        mFavoritesPlaceHolder.setVisibility(0 == count ? View.VISIBLE : View.GONE);
-        mFavoritesRecyclerView.setVisibility(0 != count ? View.VISIBLE : View.GONE);
+        // theses both fields should never be null but a crash was reported by GA.
+        if (null != mFavoritesPlaceHolder) {
+            mFavoritesPlaceHolder.setVisibility(0 == count ? View.VISIBLE : View.GONE);
+        }
+
+        if (null != mFavoritesRecyclerView) {
+            mFavoritesRecyclerView.setVisibility(0 != count ? View.VISIBLE : View.GONE);
+        }
     }
 
     /**
