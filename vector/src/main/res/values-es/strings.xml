@@ -641,6 +641,6 @@
     <string name="unknown_devices_alert_message">Esta sala contiene dispositivos desconocidos que no sa han verificado.\nEsto significa que no hay garantía que los dispositivos pertenecen a las personas que dicen ser.\nReccomendamos que los verifiques todos anted de continuar, Pero si puede reenviar el mensaje si verificación si lo necesitas.\n\nDispositivos desconocidos:</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_messages">%d unread messages</string>
-    <string name="notification_unread_messages_in_room">%1$d unread messages in %2$d rooms"</string>
+    <string name="notification_unread_notified_messages">%d unread notified messages</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
 </resources>

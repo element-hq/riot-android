@@ -652,6 +652,6 @@
     <string name="unknown_devices_alert_message">Huoneessa on tuntemattomia laitteita joita ei ole vahvistettu.\nLaitteet eivät välttämättä kuulu väitetyille omistajilleen.\nJokainen uusi laite kannattaa vahvistaa ennen kuin jatkat, mutta voit myös lähettää viestit vahvistamattomille laitteille.\n\nTuntemattomat laitteet:</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_messages">%d unread messages</string>
-    <string name="notification_unread_messages_in_room">%1$d unread messages in %2$d rooms"</string>
+    <string name="notification_unread_notified_messages">%d unread notified messages</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d unread messages in %2$d rooms"</string>
 </resources>

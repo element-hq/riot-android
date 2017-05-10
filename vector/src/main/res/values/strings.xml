@@ -693,6 +693,6 @@
     <string name="directory_server_native_rooms">All native %s rooms</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_messages">%d unread messages</string>
-    <string name="notification_unread_messages_in_room">%1$d unread messages in %2$d rooms"</string>
+    <string name="notification_unread_notified_messages">%d unread notified messages</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
 </resources>

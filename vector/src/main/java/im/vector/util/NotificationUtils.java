@@ -346,7 +346,7 @@ public class NotificationUtils {
                 }
             } else {
                 header = roomName + ": ";
-                text = context.getString(R.string.notification_unread_messages, session.getDataHandler().getStore().unreadEvents(roomId, null).size());
+                text = context.getString(R.string.notification_unread_notified_messages, notifiedEvents.size());
             }
 
             // ad the line if it makes sense
@@ -354,7 +354,7 @@ public class NotificationUtils {
                 SpannableString notifiedLine = new SpannableString(header + text);
                 notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 notificationsList.add(new NotificationDisplay(latestEvent.getOriginServerTs(), notifiedLine));
-                sum += session.getDataHandler().getStore().unreadEvents(roomId, null).size();
+                sum += notifiedEvents.size();
                 roomsCount++;
             }
         }
@@ -370,7 +370,7 @@ public class NotificationUtils {
         }
 
         inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name));
-        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages_in_room, sum, roomsCount));
+        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages_in_room, sum, roomsCount));
         builder.setStyle(inboxStyle);
 
         // Build the pending intent for when the notification is clicked
@@ -507,7 +507,7 @@ public class NotificationUtils {
         inboxStyle.setBigContentTitle(roomName);
 
         if (unreadCount > MAX_NUMBER_NOTIFICATION_LINES) {
-            inboxStyle.setSummaryText(context.getString(R.string.notification_unread_messages, unreadCount));
+            inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages, unreadCount));
         }
 
         builder.setStyle(inboxStyle);
