@@ -61,6 +61,7 @@
 
     <string name="send_bug_report_include_logs">Lähetä lokit</string>
     <string name="send_bug_report_include_crash_logs">Lähetä kaatumislokit</string>
+    <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Bugiraportti</string>
     <string name="send_bug_report_description">Kuvaile bugia. Mitä teit? Mitä odotit tapahtuvan? Mitä tapahtui?</string>
     <string name="send_bug_report_placeholder">Kuvaile ongelmaa</string>

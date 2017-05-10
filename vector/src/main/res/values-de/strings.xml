@@ -59,6 +59,7 @@
 
     <string name="send_bug_report_include_logs">Sende Bericht</string>
     <string name="send_bug_report_include_crash_logs">Sende Absturzbericht</string>
+    <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Problem melden</string>
     <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du getan? Was wolltest du das passiert? Was passierte?</string>
     <string name="send_bug_report_placeholder">Beschreibe hier dein Problem (Vorzugsweise auf Englisch)</string>

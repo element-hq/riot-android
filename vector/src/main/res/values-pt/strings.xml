@@ -59,6 +59,7 @@
 
     <string name="send_bug_report_include_logs">Enviar logs</string>
     <string name="send_bug_report_include_crash_logs">Enviar logs da falha</string>
+    <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Reportar erro (bug)</string>
     <string name="send_bug_report_description">Por favor, descreva o erro (bug). O que você fez? O que você esperava ocorrer? O que aconteceu?</string>
     <string name="send_bug_report_placeholder">Descreva o seu problema aqui</string>
