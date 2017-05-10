@@ -245,7 +245,7 @@
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Has sido invitado por %s a entrar a esta sala.</string>
     <string name="room_preview_unlinked_email_warning">Esta invitación fue enviado a %s, que no esta asociado con esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
-    <string name="room_preview_try_join_an_unknown_room">Estás intentando entara a %s. ¿Desea entrar para participar en la conversacion?</string>
+    <string name="room_preview_try_join_an_unknown_room">Estás intentando entrar a %s. ¿Desea entrar para participar en la conversación?</string>
     <string name="room_preview_try_join_an_unknown_room_default">una sala</string>
     <string name="room_preview_room_interactions_disabled">Esto es un preestreno de esta sala. Los interacciones estan impedidos.</string>
 
