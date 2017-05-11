@@ -218,7 +218,7 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Información</string>
-    <string name="permissions_rationale_msg_storage">Riot necesita tu permiso para entrar en tu almacenaje de fotos y videos para enviar y guardar archivos.\n\nPorfavor permite el acceso en el siguiente mensaje para poder enviar achivos desde su dispostivo.</string>
+    <string name="permissions_rationale_msg_storage">Riot necesita tu permiso para entrar en tu almacenaje de fotos y videos para enviar y guardar archivos.\n\nPor favor permite el acceso en el siguiente mensaje para poder enviar achivos desde su dispostivo.</string>
     <string name="permissions_rationale_msg_camera">Riot necesita tu permiso para usar tu camara para tomar fotos y hacer llamadas de video.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
     <string name="permissions_rationale_msg_record_audio">Riot necesita tu permiso para usar tu micrófono para hacer llamadas de voz.</string>
