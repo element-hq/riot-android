@@ -17,7 +17,7 @@
     <string name="send">Enviar</string>
     <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
-    <string name="redact">Redactar</string>
+    <string name="redact">Borrar</string>
     <string name="quote">Citar</string>
     <string name="share">Compartir</string>
     <string name="later">Luego</string>
