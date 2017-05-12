@@ -63,7 +63,7 @@
     <string name="send_bug_report">Informe de Error</string>
     <string name="send_bug_report_description">Por favor describe el error. ¿Qué hiciste? ¿Qué esperabas que sucediera, qué sucedió realmente?</string>
     <string name="send_bug_report_placeholder">Describe tu problema aquí</string>
-    <string name="send_bug_report_logs_description">Para la diagnostica de problemas, informes de este cliente se enviarán junto a este reporte de error. Si prefiere solamnte enviar el texto de arriba, desmarque:</string>
+    <string name="send_bug_report_logs_description">Para la diagnostica de problemas, informes de este cliente se enviarán junto a este reporte de error. Si prefiere solamente enviar el texto de arriba, desmarque:</string>
     <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaria enviar un reporte de error?</string>
     <string name="send_bug_report_sent">El reporte de error ha sido enviado</string>
     <string name="send_bug_report_failed">El reporte de error no se pudo enviar (%s)</string>
