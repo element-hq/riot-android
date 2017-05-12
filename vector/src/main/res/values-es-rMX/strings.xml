@@ -428,7 +428,7 @@
 
     <string name="settings_background_sync">Sincronización interna</string>
     <string name="settings_enable_background_sync">Encender sincronización interna</string>
-    <string name="settings_set_sync_timeout">Vencimiento de peticones de sncronización</string>
+    <string name="settings_set_sync_timeout">Vencimiento de peticones de sincronización</string>
     <string name="settings_set_sync_delay">El tardar entre dos peticiones de sincronización</string>
     <string name="settings_second">segundo</string>
     <string name="settings_seconds">segundos</string>
