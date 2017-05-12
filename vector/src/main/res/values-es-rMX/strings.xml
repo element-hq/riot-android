@@ -366,7 +366,7 @@
     <string name="search_members_hint">Buscar miembros</string>
     <string name="search_no_results">No hay resultados</string>
     <string name="tab_title_search_rooms">SALAS</string>
-    <string name="tab_title_search_messages">MENSAGES</string>
+    <string name="tab_title_search_messages">MENSAJES</string>
     <string name="tab_title_search_people">PERSONAS</string>
     <string name="tab_title_search_files">ARCHIVOS</string>
 
