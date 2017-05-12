@@ -529,7 +529,7 @@
     <string name="room_settings_read_history_entry_anyone">Todos</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Solamente miembros (desde seleccionar esta opción)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Solamente miembros (desde su invitación)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Solamente miembros (desde entrar la sala)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Solamente miembros (desde entrar a la sala)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Para hacer enlace a una sala debe tener una dirección.</string>
