@@ -143,7 +143,7 @@
     <!-- Login Screen -->
     <string name="login_error_must_start_http">El enlace sólo puede comenzar con http[s]://</string>
     <string name="login_error_network_error">Sesión falló: Error con la red</string>
-    <string name="login_error_unable_login">Sesion falló</string>
+    <string name="login_error_unable_login">Sesión falló</string>
     <string name="login_error_registration_network_error">Inscripción falló: error con la red</string>
     <string name="login_error_unable_register">Inscripción falló</string>
     <string name="login_error_unable_register_mail_ownership">Inscripción falló : el correo electrónico ya esta utilizado por otra cuenta</string>
@@ -592,7 +592,7 @@
     <string name="encryption_information_curve25519_identity_key">Claves de identidad de Curve25519</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Clave huella de Ed25519 pretendida</string>
     <string name="encryption_information_algorithm">Algorithmo</string>
-    <string name="encryption_information_session_id">Identificación de sesion</string>
+    <string name="encryption_information_session_id">Identificación de sesión</string>
     <string name="encryption_information_decryption_error">Error en descifrar</string>
 
     <string name="encryption_information_sender_device_information">Información del dispositivo del enviador</string>
