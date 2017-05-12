@@ -461,7 +461,7 @@
     <string name="devices_details_last_seen_title">Ultima vez visto</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
-    <string name="devices_delete_dialog_text">Esta operación requiere autenticación addicional.\nPara continuar, escribe su contraseña.</string>
+    <string name="devices_delete_dialog_text">Esta operación requiere autenticación adicional.\nPara continuar, escribe su contraseña.</string>
     <string name="devices_delete_dialog_title">Autenticación</string>
     <string name="devices_delete_pswd">Contraseña:</string>
     <string name="devices_delete_submit_button_label">Enviar</string>
