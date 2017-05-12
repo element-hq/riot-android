@@ -523,7 +523,7 @@
     <string name="room_settings_room_access_rules_pref_title">Acceso a la Sala</string>
     <string name="room_settings_room_read_history_rules_pref_title">Historial y Legibilidad de la Sala</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">¿Quien puede leer el historial?</string>
-    <string name="room_settings_room_access_rules_pref_dialog_title">¿Quien puede entrar la sala?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">¿Quien puede entrar a la sala?</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Todos</string>
