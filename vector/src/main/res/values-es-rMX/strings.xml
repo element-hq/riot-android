@@ -393,7 +393,7 @@
     <string name="room_settings_favourite">Destacar</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Chat Directo</string>
-    <string name="room_settings_leave_conversation">Salir la Conversacion</string>
+    <string name="room_settings_leave_conversation">Salir de la Conversacion</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Mensajes</string>
