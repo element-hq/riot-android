@@ -16,8 +16,8 @@
     <im.vector.view.VectorCircularImageView
         android:id="@+id/room_avatar"
         android:layout_toRightOf="@+id/indicator_unread_message"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/chat_avatar_size"
+        android:layout_height="@dimen/chat_avatar_size"
         android:layout_centerInParent="true"
         tools:src="@color/presence_unknown" />
 
