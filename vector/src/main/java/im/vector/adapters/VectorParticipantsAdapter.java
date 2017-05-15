@@ -570,10 +570,12 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             mRoomContactsSectionPosition = mFirstEntryPosition + 1;
         }
 
-        if (roomContactsList.size() > 0) {
-            Collections.sort(roomContactsList, mSortMethod);
+        if (!TextUtils.isEmpty(mPattern)) {
+            if (roomContactsList.size() > 0) {
+                Collections.sort(roomContactsList, mSortMethod);
+            }
+            mParticipantsListsList.add(roomContactsList);
         }
-        mParticipantsListsList.add(roomContactsList);
 
         if (null != searchListener) {
             int length = 0;
@@ -712,7 +714,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
         View matrixView = convertView.findViewById(R.id.people_header_matrix_contacts_layout);
-        View knownContactsView = convertView.findViewById(R.id.people_header_known_contacts_layout);
 
         if (groupPosition != mRoomContactsSectionPosition || mParticipantsListsList.get(groupPosition).size() > 0) {
             if (isExpanded) {
@@ -736,7 +737,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             }
             // display a search toggle for the local contacts
             matrixView.setVisibility(((groupPosition == mLocalContactsSectionPosition) && groupShouldBeExpanded) ? View.VISIBLE : View.GONE);
-            knownContactsView.setVisibility(View.GONE);
 
             // matrix user checkbox
             CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.contacts_filter_checkbox);
@@ -772,10 +772,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         } else {
             imageView.setImageDrawable(null);
             matrixView.setVisibility(View.GONE);
-            if (TextUtils.isEmpty(mPattern)) {
-                // display info message when search is empty and there are some unused participants
-                knownContactsView.setVisibility(couldHaveUnusedParticipants() ? View.VISIBLE : View.GONE);
-            }
         }
 
         return convertView;
