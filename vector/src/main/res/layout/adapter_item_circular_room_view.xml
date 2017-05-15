@@ -8,40 +8,32 @@
     android:paddingTop="10dp"
     tools:background="#22ff0000">
 
-    <RelativeLayout
-        android:id="@+id/room_avatar_view"
+    <im.vector.view.VectorCircularImageView
+        android:id="@+id/room_avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        tools:background="#2200ff00"
+        tools:src="@drawable/ic_material_search_black" />
+
+    <ImageView
+        android:id="@+id/direct_chat_indicator"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:layout_centerHorizontal="true">
-
-        <ImageView
-            android:id="@+id/direct_chat_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="15dp"
-            android:visibility="gone"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/direct_chat_background" />
-
-        <im.vector.view.VectorCircularImageView
-            android:id="@+id/room_avatar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_centerInParent="true"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            tools:background="#2200ff00"
-            tools:src="@drawable/ic_material_search_black" />
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/room_avatar"
+        android:layout_alignLeft="@+id/room_avatar"
+        android:layout_alignRight="@+id/room_avatar"
+        android:layout_alignTop="@+id/room_avatar"
+        android:background="@drawable/direct_chat_background"
+        android:visibility="gone" />
 
     <!-- unread count badge -->
     <TextView
         android:id="@+id/room_unread_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/room_avatar_view"
-        android:layout_alignTop="@+id/room_avatar_view"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/room_avatar"
         android:layout_marginRight="10dp"
         android:background="#AAff00ff"
         android:gravity="center"
@@ -54,8 +46,8 @@
         android:id="@+id/room_avatar_encrypted_icon"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_alignBottom="@+id/room_avatar_view"
-        android:layout_alignRight="@+id/room_avatar_view"
+        android:layout_alignBottom="@+id/room_avatar"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="15dp"
         android:src="@drawable/e2e_verified"
         android:visibility="invisible"
@@ -65,7 +57,7 @@
         android:id="@+id/room_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/room_avatar_view"
+        android:layout_below="@+id/room_avatar"
         android:layout_marginTop="6dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-regular"

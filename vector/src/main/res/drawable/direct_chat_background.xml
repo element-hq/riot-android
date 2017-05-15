@@ -2,5 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
 
-    <solid android:color="@color/direct_chat_indicator" />
+    <stroke
+        android:width="4dp"
+        android:color="@color/direct_chat_indicator" />
 </shape>
