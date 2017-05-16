@@ -66,6 +66,9 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     // the favorite rooms list
     private List<Room> mFavorites = new ArrayList<>();
 
+    // Touch helper to handle the drag and drop on items
+    private ItemTouchHelper mDragAndDropTouchHelper;
+
     // detect i
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
@@ -252,11 +255,14 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
                 protected void onPostExecute(Void args) {
                     mFavoritesAdapter.setRooms(mFavorites);
                     updateRoomsDisplay(mFavorites.size());
+
+                    mDragAndDropTouchHelper.attachToRecyclerView(mFavorites.size() > 1 ? mFavoritesRecyclerView : null);
                 }
             }.execute();
         } else {
             mFavoritesAdapter.setRooms(mFavorites);
             updateRoomsDisplay(mFavorites.size());
+            mDragAndDropTouchHelper.attachToRecyclerView(null);
         }
     }
 
@@ -335,8 +341,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
             }
         };
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(mFavoritesRecyclerView);
+        mDragAndDropTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
     }
 
     /**
