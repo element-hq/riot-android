@@ -99,7 +99,6 @@
             android:name="im.vector.activity.VectorRoomActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_room"
-            android:launchMode="singleTop"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity

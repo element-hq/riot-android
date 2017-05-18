@@ -21,16 +21,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Browser;
 import android.support.v4.app.FragmentManager;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -64,21 +61,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
-
-import im.vector.Matrix;
-import im.vector.R;
-import im.vector.VectorApp;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.MXCActionBarActivity;
-import im.vector.activity.VectorHomeActivity;
-import im.vector.activity.VectorMemberDetailsActivity;
-import im.vector.activity.VectorRoomActivity;
-import im.vector.activity.VectorMediasViewerActivity;
-import im.vector.adapters.VectorMessagesAdapter;
-import im.vector.db.VectorContentProvider;
-import im.vector.receiver.VectorUniversalLinkReceiver;
-import im.vector.util.SlidableMediaInfo;
-import im.vector.util.VectorUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,6 +69,21 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+
+import im.vector.Matrix;
+import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.MXCActionBarActivity;
+import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorMediasViewerActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.activity.VectorRoomActivity;
+import im.vector.adapters.VectorMessagesAdapter;
+import im.vector.db.VectorContentProvider;
+import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.util.SlidableMediaInfo;
+import im.vector.util.VectorUtils;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
     private static final String LOG_TAG = "VectorMessageListFrg";
@@ -245,6 +243,17 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     public void setIsRoomEncrypted(boolean isEncrypted) {
         ((VectorMessagesAdapter) mAdapter).mIsRoomEncrypted = isEncrypted;
         mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Specify the first unread message if we are not in preview mode
+     *
+     * @param firstUnreadEventId
+     */
+    public void setUnreadEvent(final String firstUnreadEventId) {
+        if (mAdapter != null && !mAdapter.isPreviewMode()) {
+            mAdapter.setUnreadEvent(firstUnreadEventId);
+        }
     }
 
     /**

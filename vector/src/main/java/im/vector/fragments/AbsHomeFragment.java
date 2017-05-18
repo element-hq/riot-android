@@ -322,7 +322,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
             final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(roomId);
 
             if (null != roomSummary) {
-                room.sendReadReceipt(null);
+                room.sendReadReceipt();
 
                 // Reset the highlight
                 if (roomSummary.setHighlighted(false)) {
