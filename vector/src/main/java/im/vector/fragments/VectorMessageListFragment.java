@@ -246,14 +246,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /**
-     * Specify the first unread message if we are not in preview mode
+     * Get the message adapter
      *
-     * @param firstUnreadEventId
+     * @return messagez adapter
      */
-    public void setUnreadEvent(final String firstUnreadEventId) {
-        if (mAdapter != null && !mAdapter.isPreviewMode()) {
-            mAdapter.setUnreadEvent(firstUnreadEventId);
-        }
+    public MessagesAdapter getMessageAdapter() {
+        return mAdapter;
     }
 
     /**

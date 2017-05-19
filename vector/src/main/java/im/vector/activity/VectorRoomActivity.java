@@ -132,6 +132,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      **/
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
     /**
+     * whether the preview is to display unread messages
+     */
+    public static final String EXTRA_IS_UNREAD_PREVIEW_MODE = "EXTRA_IS_UNREAD_PREVIEW_MODE";
+    /**
      * the forwarded data (list of media uris)
      **/
     public static final String EXTRA_ROOM_INTENT = "EXTRA_ROOM_INTENT";
@@ -281,6 +285,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     // when an activity is opened from this one.
     // It should not but it does.
     private boolean mIsHeaderViewDisplayed = false;
+
+    // True if we are in preview mode to display unread message
+    private boolean mIsUnreadPreviewMode;
 
     /** **/
     private final ApiCallback<Void> mDirectMessageListener = new SimpleApiCallback<Void>(this) {
@@ -747,38 +754,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mJumpToUnreadLabel.setPaintFlags(mJumpToUnreadLabel.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         mCloseJumpToUnreadView = findViewById(R.id.close_jump_to_first_unread);
 
-        mJumpToUnreadLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openPreviewToFirstUnread();
-            }
-        });
-        mCloseJumpToUnreadView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRoom.markAllAsRead(new ApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        checkUnreadMessage();
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        checkUnreadMessage();
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        checkUnreadMessage();
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        checkUnreadMessage();
-                    }
-                });
-            }
-        });
+        mIsUnreadPreviewMode = intent.getBooleanExtra(EXTRA_IS_UNREAD_PREVIEW_MODE, false);
+        if (!mIsUnreadPreviewMode) {
+            mJumpToUnreadLabel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openPreviewToFirstUnread();
+                }
+            });
+            mCloseJumpToUnreadView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    markAllAsRead();
+                }
+            });
+        }
 
         mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
 
@@ -851,12 +841,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         FragmentManager fm = getSupportFragmentManager();
         mVectorMessageListFragment = (VectorMessageListFragment) fm.findFragmentByTag(TAG_FRAGMENT_MATRIX_MESSAGE_LIST);
-
         if (mVectorMessageListFragment == null) {
             Log.d(LOG_TAG, "Create VectorMessageListFragment");
 
             // this fragment displays messages and handles all message logic
-            mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, roomId, mEventId, (null == sRoomPreviewData) ? null : VectorMessageListFragment.PREVIEW_MODE_READ_ONLY, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            final String previewMode =  (null == sRoomPreviewData) ? (mIsUnreadPreviewMode
+                    ? VectorMessageListFragment.PREVIEW_MODE_UNREAD_MESSAGE : null) : VectorMessageListFragment.PREVIEW_MODE_READ_ONLY;
+            mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, roomId, mEventId,
+                    previewMode,
+                    org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mVectorMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
         } else {
             Log.d(LOG_TAG, "Reuse VectorMessageListFragment");
@@ -1250,8 +1243,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
         }
-
         mFirstVisibleEvent = mVectorMessageListFragment.getEvent(firstVisibleItem);
+
         checkUnreadMessage();
     }
 
@@ -1266,6 +1259,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             String readReceiptEventId = summary.getReadReceiptEventId();
 
             if (!readMarkerEventId.equals(readReceiptEventId)) {
+                // There are unread messages
                 List<Event> roomMessages = new ArrayList<>(mRoom.getDataHandler().getStore().getRoomMessages(mRoom.getRoomId()));
                 final Event lastReadEvent = mRoom.getDataHandler().getStore().getEvent(readMarkerEventId, mRoom.getRoomId());
                 final int lastReadEventIndex = roomMessages.indexOf(lastReadEvent);
@@ -1273,17 +1267,48 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 if (lastUnreadEventIndex != -1 && lastUnreadEventIndex < roomMessages.size()) {
                     mFirstUnreadEvent = roomMessages.get(lastUnreadEventIndex);
                     if (mFirstVisibleEvent != null) {
+                        // Check if first unread message is out of screen
                         hasUnreadMessageHidden = mFirstVisibleEvent.getOriginServerTs() > mFirstUnreadEvent.getOriginServerTs();
                     }
                 }
             } else {
+                // No unread message
                 mFirstUnreadEvent = null;
             }
         }
         Log.d(LOG_TAG, "## hasUnreadMessageHidden " + hasUnreadMessageHidden);
-        mJumpToUnreadView.setVisibility(hasUnreadMessageHidden ? View.VISIBLE : View.GONE);
+        mJumpToUnreadView.setVisibility(!mIsUnreadPreviewMode && hasUnreadMessageHidden ? View.VISIBLE : View.GONE);
 
-        mVectorMessageListFragment.setUnreadEvent(mFirstUnreadEvent.eventId);
+        if (mVectorMessageListFragment.getMessageAdapter() != null) {
+            mVectorMessageListFragment.getMessageAdapter().setUnreadEvent(mFirstUnreadEvent!= null ? mFirstUnreadEvent.eventId : null);
+        }
+    }
+
+    /**
+     * Mark all messages as read (read marker event will be same as read receipt event)
+     */
+    private void markAllAsRead() {
+        mRoom.markAllAsRead(new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                checkUnreadMessage();
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                checkUnreadMessage();
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                checkUnreadMessage();
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                checkUnreadMessage();
+            }
+        });
     }
 
     /**
@@ -1295,6 +1320,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
             intent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             intent.putExtra(VectorRoomActivity.EXTRA_EVENT_ID, mFirstUnreadEvent.eventId);
+            intent.putExtra(VectorRoomActivity.EXTRA_IS_UNREAD_PREVIEW_MODE, true);
             startActivity(intent);
         }
     }
