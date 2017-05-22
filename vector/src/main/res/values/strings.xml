@@ -4,7 +4,7 @@
     <string name="resouces_country">UK</string>
 
     <!-- titles -->
-    <string name="app_name">Riot</string>
+    <string name="app_name">noepitome</string>
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_room">Room</string>
     <string name="title_activity_public_rooms">Public Rooms</string>
@@ -62,7 +62,7 @@
     <!-- server urls -->
     <string name="vector_im_server_url">https://vector.im</string>
     <string name="matrix_org_server_url">https://matrix.org</string>
-    <string name="default_hs_server_url">https://matrix.org</string>
+    <string name="default_hs_server_url">https://noepito.me</string>
     <string name="default_identity_server_url">https://vector.im</string>
 
     <!-- actions -->
@@ -907,7 +907,7 @@
 
     <string name="encryption_information_verify_device">Verify device</string>
     <string name="encryption_information_verify_device_warning"> To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesnt, then someone else is intercepting this device and you probably want to press the block button instead.\nIn future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn't, then someone else is intercepting this device and you probably want to press the block button instead.\nIn future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
