@@ -71,7 +71,9 @@ public class AccountCreationActivity extends Activity {
 
         Intent intent = getIntent();
 
-        mHomeServerUrl = "https://matrix.org/";
+        // default HS url, changed to ne
+        //mHomeServerUrl = "https://matrix.org/";
+        mHomeServerUrl = "https://noepito.me/";
 
         if (intent.hasExtra(EXTRA_HOME_SERVER_ID)) {
             mHomeServerUrl = intent.getStringExtra(EXTRA_HOME_SERVER_ID);
