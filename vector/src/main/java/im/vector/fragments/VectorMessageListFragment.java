@@ -33,6 +33,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -246,9 +247,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /**
+     * Get the message list view
+     *
+     * @return message list view
+     */
+    public ListView getMessageListView() {
+        return mMessageListView;
+    }
+
+    /**
      * Get the message adapter
      *
-     * @return messagez adapter
+     * @return message adapter
      */
     public MessagesAdapter getMessageAdapter() {
         return mAdapter;

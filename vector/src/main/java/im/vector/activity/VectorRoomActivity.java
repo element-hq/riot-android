@@ -55,11 +55,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
@@ -597,7 +599,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // use a toolbar instead of the actionbar
         // to be able to display an expandable header
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.room_toolbar);
-        this.setSupportActionBar(mToolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // set the default custom action bar layout,
@@ -865,7 +867,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // in timeline mode (i.e search in the forward and backward room history)
         // or in room preview mode
         // the edition items are not displayed
-        if (!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData)) {
+        if ((!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData))) {
             mNotificationsArea.setVisibility(View.GONE);
             findViewById(R.id.bottom_separator).setVisibility(View.GONE);
             findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
@@ -955,6 +957,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     @Override
     public void onDestroy() {
+        Log.e(LOG_TAG, "++ onDestroy the activity");
         if (null != mVectorMessageListFragment) {
             mVectorMessageListFragment.onDestroy();
         }
@@ -966,9 +969,51 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         super.onDestroy();
     }
 
+    /**
+     * Update the read marker position
+     */
+    private void saveNewReadMarker() {
+        // Update the read marker to the last message completely displayed
+        final ListView messageListView = mVectorMessageListFragment.getMessageListView();
+        if (messageListView != null && mVectorMessageListFragment.getMessageAdapter() != null) {
+            int lastVisiblePos = messageListView.getLastVisiblePosition();
+            String newReadMarkerEventId = null;
+            if (lastVisiblePos >= messageListView.getCount() - 1) {
+                // lastVisiblePos is footer position, not the last message
+                // set read marker to the last message
+                final Event lastMessageEvent = mVectorMessageListFragment.getEvent(lastVisiblePos - 1);
+                if (lastMessageEvent != null) {
+                    newReadMarkerEventId = lastMessageEvent.eventId;
+                    Log.e(LOG_TAG, "saveNewReadMarker C " + newReadMarkerEventId);
+                }
+            } else {
+                final View lastVisibleMessageView = messageListView.getChildAt(messageListView.getChildCount() - 1);
+                if (lastVisibleMessageView.getBottom() <= messageListView.getBottom()) {
+                    // Last visible message is entirely displayed, move read marker to that message
+                    newReadMarkerEventId = mVectorMessageListFragment.getEvent(lastVisiblePos).eventId;
+                    Log.e(LOG_TAG, "saveNewReadMarker A " + newReadMarkerEventId);
+                } else {
+                    // Move read marker to the message before the last visible one
+                    newReadMarkerEventId = mVectorMessageListFragment.getEvent(lastVisiblePos - 1).eventId;
+                    Log.e(LOG_TAG, "saveNewReadMarker B " + newReadMarkerEventId);
+                }
+            }
+
+            if (!TextUtils.isEmpty(newReadMarkerEventId)) {
+                // Update read marker
+                mRoom.setReadMakerEventId(newReadMarkerEventId);
+            }
+        }
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
+
+        if (mVectorMessageListFragment.getMessageAdapter().isUnreadViewMode()) {
+            saveNewReadMarker();
+        }
+
         // warn other member that the typing is ended
         cancelTypingNotification();
 
@@ -996,8 +1041,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     @Override
     protected void onResume() {
-        Log.d(LOG_TAG, "++ Resume the activity");
         super.onResume();
+        Log.e(LOG_TAG, "++ Resume the activity");
 
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
@@ -1070,6 +1115,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         updateRoomHeaderMembersStatus();
 
         checkSendEventStatus();
+
+        checkUnreadMessage();
 
         enableActionBarHeader(mIsHeaderViewDisplayed);
 
@@ -1245,7 +1292,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
         mFirstVisibleEvent = mVectorMessageListFragment.getEvent(firstVisibleItem);
 
-        checkUnreadMessage();
+        if(!mVectorMessageListFragment.getMessageAdapter().isUnreadViewMode()){
+            checkUnreadMessage();
+        }
     }
 
     /**
@@ -1257,8 +1306,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (summary != null) {
             String readMarkerEventId = summary.getReadMarkerEventId();
             String readReceiptEventId = summary.getReadReceiptEventId();
+            Log.e(LOG_TAG, "## checkUnreadMessage readMarkerEventId" + readMarkerEventId);
+            Log.e(LOG_TAG, "## checkUnreadMessage readReceiptEventId" + readReceiptEventId);
 
             if (!readMarkerEventId.equals(readReceiptEventId)) {
+                Log.e(LOG_TAG, "## checkUnreadMessage UNREAD MESSAGE");
                 // There are unread messages
                 List<Event> roomMessages = new ArrayList<>(mRoom.getDataHandler().getStore().getRoomMessages(mRoom.getRoomId()));
                 final Event lastReadEvent = mRoom.getDataHandler().getStore().getEvent(readMarkerEventId, mRoom.getRoomId());
@@ -1267,21 +1319,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 if (lastUnreadEventIndex != -1 && lastUnreadEventIndex < roomMessages.size()) {
                     mFirstUnreadEvent = roomMessages.get(lastUnreadEventIndex);
                     if (mFirstVisibleEvent != null) {
+                        MessageRow firstUnreadRow = mVectorMessageListFragment.getMessageAdapter().getMessageRow(mFirstUnreadEvent.eventId);
+                        int firstUnreadAdapterPosition = mVectorMessageListFragment.getMessageAdapter().getPosition(firstUnreadRow);
+                        int firstUnreadListPosition = firstUnreadAdapterPosition - mVectorMessageListFragment.getMessageListView().getFirstVisiblePosition();
                         // Check if first unread message is out of screen
-                        hasUnreadMessageHidden = mFirstVisibleEvent.getOriginServerTs() > mFirstUnreadEvent.getOriginServerTs();
+                        hasUnreadMessageHidden = mFirstVisibleEvent.getOriginServerTs() > mFirstUnreadEvent.getOriginServerTs()
+                                || mVectorMessageListFragment.getMessageListView().getChildAt(firstUnreadListPosition).getTop() < 0;
                     }
                 }
             } else {
                 // No unread message
                 mFirstUnreadEvent = null;
             }
+
+            if (mVectorMessageListFragment.getMessageAdapter() != null) {
+                mVectorMessageListFragment.getMessageAdapter().updateReadMarker(readMarkerEventId, readReceiptEventId);
+            }
         }
         Log.d(LOG_TAG, "## hasUnreadMessageHidden " + hasUnreadMessageHidden);
         mJumpToUnreadView.setVisibility(!mIsUnreadPreviewMode && hasUnreadMessageHidden ? View.VISIBLE : View.GONE);
-
-        if (mVectorMessageListFragment.getMessageAdapter() != null) {
-            mVectorMessageListFragment.getMessageAdapter().setUnreadEvent(mFirstUnreadEvent!= null ? mFirstUnreadEvent.eventId : null);
-        }
     }
 
     /**
@@ -2501,7 +2557,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             // in context mode, add search to the title.
-            if (!TextUtils.isEmpty(mEventId)) {
+            if (!TextUtils.isEmpty(mEventId) && !mIsUnreadPreviewMode) {
                 titleToApply = getResources().getText(R.string.search) + " : " + titleToApply;
             }
         } else if (null != sRoomPreviewData) {
