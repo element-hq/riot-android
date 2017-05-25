@@ -12,7 +12,7 @@
 
             <stroke
                 android:width="50dp"
-                android:color="@color/room_background" />
+                android:color="?attr/room_background" />
         </shape>
     </item>
 

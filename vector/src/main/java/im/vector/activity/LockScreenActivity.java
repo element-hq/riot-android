@@ -47,6 +47,7 @@ import org.matrix.androidsdk.rest.model.Message;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 
 /**
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
@@ -70,6 +71,7 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
 
         // kill any running alert
         if (null != mLockScreenActivity) {

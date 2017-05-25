@@ -45,6 +45,7 @@ import im.vector.R;
 import im.vector.adapters.VectorMediasViewerAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.util.SlidableMediaInfo;
+import im.vector.util.ThemeUtils;
 
 public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
@@ -105,6 +106,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.d(LOG_TAG, "onCreate : restart the application");

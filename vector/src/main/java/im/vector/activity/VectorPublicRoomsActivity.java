@@ -24,6 +24,7 @@ import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.MXSession;
 import im.vector.R;
 import im.vector.fragments.VectorPublicRoomsListFragment;
+import im.vector.util.ThemeUtils;
 
 /**
  * Displays a list of public rooms
@@ -41,6 +42,7 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_vector_public_rooms);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {

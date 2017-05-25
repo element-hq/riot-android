@@ -37,6 +37,7 @@ import org.matrix.androidsdk.call.IMXCall;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 
@@ -134,6 +135,7 @@ public class InComingCallActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setFinishOnTouchOutside(false);

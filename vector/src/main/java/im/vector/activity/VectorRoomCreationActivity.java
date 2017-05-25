@@ -47,6 +47,7 @@ import java.util.List;
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomCreationAdapter;
+import im.vector.util.ThemeUtils;
 
 
 public class VectorRoomCreationActivity extends MXCActionBarActivity {
@@ -113,6 +114,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_vector_room_creation);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {

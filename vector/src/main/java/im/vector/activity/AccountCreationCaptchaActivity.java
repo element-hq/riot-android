@@ -33,6 +33,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 
 import java.net.URLDecoder;
 import java.util.Formatter;
@@ -78,6 +79,7 @@ public class AccountCreationCaptchaActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
 
         setContentView(R.layout.activity_vector_registration_captcha);
 

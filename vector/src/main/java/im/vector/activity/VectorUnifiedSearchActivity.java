@@ -36,6 +36,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.VectorUnifiedSearchFragmentPagerAdapter;
 import im.vector.contacts.ContactsManager;
+import im.vector.util.ThemeUtils;
 
 /**
  * Displays a generic activity search method
@@ -76,6 +77,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_vector_unified_search);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {

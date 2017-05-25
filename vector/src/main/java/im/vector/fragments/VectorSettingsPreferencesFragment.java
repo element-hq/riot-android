@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -100,6 +101,7 @@ import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -286,6 +288,25 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 public boolean onPreferenceClick(Preference preference) {
                     VectorUtils.displayAppTac();
                     return false;
+                }
+            });
+        }
+
+        // Themes
+        ListPreference themePreference = (ListPreference) findPreference("Theme");
+        if (null != themePreference) {
+            themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (newValue instanceof String) {
+                        ThemeUtils.setTheme((String)newValue);
+                    }
+                    // Display a message to the user
+                    CharSequence text = "You may need to restart the app to see these changes.";
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(appContext, text, duration);
+                    toast.show();
+                    return true;
                 }
             });
         }

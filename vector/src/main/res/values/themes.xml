@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--TODO decide whether these themes are the right base-->
+    <style name="Theme.Vector.Light.Base" parent="@style/Theme.AppCompat.Light.NoActionBar" />
+    <style name="Theme.Vector.Dark.Base" parent="@style/Theme.AppCompat.NoActionBar"/>
+
+    <style name="Theme.Vector.Light.Common" parent="Theme.Vector.Light.Base">
+        <item name="room_background">#FFFFFF</item>
+
+    </style>
+
+    <style name="Theme.Vector.Dark.Common" parent="Theme.Vector.Dark.Base">
+        <item name="room_background">#000000</item>
+    </style>
+
+    <style name="Theme.Vector.Light" parent="Theme.Vector.Light.Common" />
+    <style name="Theme.Vector.Dark" parent="Theme.Vector.Dark.Common" />
+</resources>

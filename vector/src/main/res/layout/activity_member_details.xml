@@ -6,7 +6,7 @@
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/room_background"
+    android:background="?attr/room_background"
     android:orientation="vertical">
 
     <RelativeLayout

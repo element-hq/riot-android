@@ -28,6 +28,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
 import im.vector.Matrix;
+import im.vector.util.ThemeUtils;
 
 /**
  * JoinScreenActivity is a dummy activity to join / reject a room invitation
@@ -46,6 +47,7 @@ public class JoinScreenActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
 
         Intent intent = getIntent();
 

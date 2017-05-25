@@ -51,6 +51,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
+import im.vector.util.ThemeUtils;
 
 public class RoomDirectoryPickerActivity extends AppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
     // LOG TAG
@@ -86,6 +87,7 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_room_directory_picker);
         ButterKnife.bind(this);
 

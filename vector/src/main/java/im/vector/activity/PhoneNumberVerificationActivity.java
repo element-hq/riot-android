@@ -42,6 +42,7 @@ import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 
 public class PhoneNumberVerificationActivity extends AppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
 
@@ -84,6 +85,7 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_phone_number_verification);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

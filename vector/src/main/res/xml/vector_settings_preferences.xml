@@ -148,7 +148,7 @@
             android:title="@string/room_settings_labs_end_to_end_is_active" />
 
     </im.vector.preference.VectorPreferenceCategory>
-    
+
     <im.vector.preference.VectorDividerCategory />
 
     <!-- ************ Cryptography section ************ -->
@@ -243,6 +243,14 @@
     <PreferenceCategory
         android:title="@string/settings_other"
         android:key="@string/settings_other" >
+
+        <ListPreference
+            android:defaultValue="light"
+            android:entries="@array/theme_readables"
+            android:entryValues="@array/theme_codes"
+            android:key="@string/settings_theme"
+            android:summary="%s"
+            android:title="@string/settings_theme"></ListPreference>
 
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/ga_use_settings"

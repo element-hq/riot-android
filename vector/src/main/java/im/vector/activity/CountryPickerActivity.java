@@ -35,6 +35,7 @@ import im.vector.R;
 import im.vector.adapters.CountryAdapter;
 import im.vector.util.CountryPhoneData;
 import im.vector.util.PhoneNumberUtils;
+import im.vector.util.ThemeUtils;
 
 public class CountryPickerActivity extends AppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
 
@@ -72,6 +73,7 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_country_picker);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/room_background"
+        android:background="?attr/room_background"
         android:layout_below="@+id/room_sync_in_progress">
 
         <View
@@ -198,7 +198,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/room_background"
+            android:background="?attr/room_background"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
             android:layout_alignParentTop="true"

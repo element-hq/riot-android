@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="room_background">#FFFFFFFF</color>
 
     <color name="presence_online">#38af00</color>
     <color name="presence_unavailable">#fc0</color>

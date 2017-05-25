@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import im.vector.Matrix;
 import im.vector.util.SharedDataItem;
+import im.vector.util.ThemeUtils;
 
 /**
  * Dummy activity used to manage the shared
@@ -41,6 +42,7 @@ public class VectorSharedFilesActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
 
         // retrieve the current intent
         Intent anIntent = getIntent();
