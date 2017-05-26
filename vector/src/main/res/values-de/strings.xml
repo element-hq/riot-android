@@ -68,7 +68,7 @@
     <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich gesendet</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht gesendet werden (%s)</string>
     <string name="send_bug_report_progress">Fortschritt (%s%%)</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_app_crashed">Die Anwendung ist während der letzten Benutzung abgestürzt. Möchtest du eine Fehlermeldung übermitteln?</string>
 
     <string name="send_files_in">Sende Datei nach</string>
     <string name="read_receipt">Gelesen</string>
