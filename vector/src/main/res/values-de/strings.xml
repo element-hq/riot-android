@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="resouces_language">de</string>
     <string name="resouces_country">DE</string>
@@ -59,7 +59,7 @@
 
     <string name="send_bug_report_include_logs">Sende Bericht</string>
     <string name="send_bug_report_include_crash_logs">Sende Absturzbericht</string>
-    <string name="send_bug_report_include_screenshot">Send screenshot</string>
+    <string name="send_bug_report_include_screenshot">Screenshot übermitteln</string>
     <string name="send_bug_report">Problem melden</string>
     <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du getan? Was wolltest du das passiert? Was passierte?</string>
     <string name="send_bug_report_placeholder">Beschreibe hier dein Problem (Vorzugsweise auf Englisch)</string>
@@ -307,8 +307,8 @@
     <!--  Chat -->
     <string name="room_menu_search">Suche</string>
     <string name="room_one_user_is_typing">%s schreibt…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s schreiben…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; andere schreiben…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s schreiben…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; andere schreiben…</string>
     <string name="room_message_placeholder_encrypted">Verschlüsselte Nachricht senden…</string>
     <string name="room_message_placeholder_not_encrypted">Nachricht senden (nicht verschlüsselt)…</string>
     <string name="room_offline_notification">Verbindung zum Server unterbrochen.</string>
