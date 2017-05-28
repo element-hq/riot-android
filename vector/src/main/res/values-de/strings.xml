@@ -641,6 +641,6 @@
     <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Geräte, die noch nicht verifiziert wurden.\nEs gibt also keine Garantie, dass diese Geräte wirklich zu dem angegebenen Nutzer gehören.\nWir empfehlen, den Verifizierungsprozess für jedes Gerät zu durchlaufen bevor du fortfährst. Du kannst die Nachricht aber auch ohne Verifizierung senden, wenn du das vorziehst.\n\nUnbekannte Geräte:</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d unread notified messages</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
+    <string name="notification_unread_notified_messages">%d ungelesene Benachrichtigungen</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d ungelesene Benachrichtigungen in %2$d Räumen</string>
 </resources>
