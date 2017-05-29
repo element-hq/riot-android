@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+def useGoogleServices = true;
 
 android {
     compileSdkVersion 25
@@ -71,6 +72,7 @@ android {
             resValue "string", "allow_gcm_use", "false"
             resValue "string", "allow_ga_use", "false"
             resValue "string", "flavor_description", "FDroid"
+            useGoogleServices = false;
         }
     }
 
@@ -95,11 +97,6 @@ android {
 
 def gitRevision() {
     def cmd = "git rev-parse --short HEAD"
-    return cmd.execute().text.trim()
-}
-
-def gitRevisionUnixDate() {
-    def cmd = "git show -s --format=%ct HEAD^{commit}"
     return cmd.execute().text.trim()
 }
 
@@ -152,4 +149,8 @@ dependencies {
     // fdroid flavor only
 }
 
-apply plugin: 'com.google.gms.google-services'
+// try if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid")) {
+// but it does not work
+if (useGoogleServices == true) {
+    apply plugin: 'com.google.gms.google-services'
+}
