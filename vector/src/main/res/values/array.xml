@@ -16,12 +16,12 @@
 
     <!-- access rules: Who can access this room? -->
     <string-array name="room_access_rules_entries">
-        <item>Only people who have been invited</item>
-        <item>Anyone who knows the room\'s link, apart from guests</item>
-        <item>Anyone who knows the room\'s link, including guests</item>
+        <item>@string/room_settings_room_access_entry_only_invited</item>
+        <item>@string/room_settings_room_access_entry_anyone_with_link_apart_guest</item>
+        <item>@string/room_settings_room_access_entry_anyone_with_link_including_guest</item>
     </string-array>
     
-    <string-array name="room_access_rules_values">
+    <string-array name="room_access_rules_values" translatable="false">
         <item>1</item>
         <item>2</item>
         <item>3</item>

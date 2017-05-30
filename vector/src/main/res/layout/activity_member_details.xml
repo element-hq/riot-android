@@ -6,22 +6,22 @@
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/room_background">
+    android:background="@color/room_background"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/member_details_action_bar"
         android:layout_width="match_parent"
-        android:background="@color/vector_green_color"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/vector_green_color">
 
         <RelativeLayout
             android:id="@+id/action_bar_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:visibility="visible"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:visibility="visible">
 
             <!-- the member avatar-->
             <RelativeLayout
@@ -30,59 +30,60 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true">
 
-                <include layout="@layout/vector_large_round_avatar"
+                <include
                     android:id="@+id/memberDetails_roundAvatar"
+                    layout="@layout/vector_large_round_avatar"
                     android:layout_width="84dp"
-                    android:layout_height="84dp"/>
+                    android:layout_height="84dp" />
             </RelativeLayout>
 
             <ImageView
                 android:id="@+id/member_avatar_badge"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_alignRight="@id/member_avatar_container"
+                android:layout_alignTop="@id/member_avatar_container"
                 android:layout_marginRight="-7dp"
                 android:layout_marginTop="-0dp"
                 android:src="@drawable/admin_icon"
-                android:layout_alignRight="@id/member_avatar_container"
-                android:layout_alignTop="@id/member_avatar_container"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <!-- the member name -->
+            <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
             <TextView
                 android:id="@+id/member_details_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_below="@id/member_avatar_container"
+                android:layout_marginTop="10dp"
                 android:singleLine="true"
-                android:ellipsize="end"
-                android:textSize="20sp"
+                android:gravity="center_horizontal"
                 android:textColor="@android:color/white"
-                android:layout_marginTop="10dp" />
+                android:textSize="20sp" />
 
             <!-- the member presence -->
             <TextView
                 android:id="@+id/member_details_presence"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_below="@id/member_details_name"
+                android:layout_marginBottom="16dp"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:textSize="14sp"
+                android:gravity="center_horizontal"
                 android:textColor="@color/vector_0_54_black_color"
-                android:layout_marginBottom="16dp" />
+                android:textSize="14sp" />
         </RelativeLayout>
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/member_details_toolbar"
-            android:layout_alignParentTop="true"
+            style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetEnd="0dp"
-            app:contentInsetStart="0dp"
+            android:layout_alignParentTop="true"
             android:background="@android:color/transparent"
-            style="@style/VectorToolbarStyle">
+            app:contentInsetEnd="0dp"
+            app:contentInsetStart="0dp">
 
         </android.support.v7.widget.Toolbar>
     </RelativeLayout>
@@ -93,43 +94,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/member_details_action_bar"
-        android:dividerHeight="0dp"
-        android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
-        android:divider="#00000000"/>
+        android:divider="#00000000"
+        android:dividerHeight="0dp"
+        android:listSelector="@android:color/transparent" />
 
-    <include layout="@layout/adapter_item_vector_recent_header"
+    <include
         android:id="@+id/devices_header_view"
-        android:layout_below="@+id/member_details_action_bar"
-        android:visibility="gone"
+        layout="@layout/adapter_item_vector_recent_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/member_details_action_bar"
+        android:visibility="gone" />
 
     <!-- devices list view: displayed when ExpandableListView is hidden -->
     <ListView
         android:id="@+id/member_details_devices_list_view"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/devices_header_view"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#00000000"
         android:dividerHeight="0dp"
         android:listSelector="@android:color/transparent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="#00000000" />
+        android:visibility="gone" />
 
     <!-- progress bar view, displayed when an action in the list view is pressed -->
-    <include layout="@layout/progress_bar_view"
+    <include
         android:id="@+id/member_details_list_view_progress_bar"
+        layout="@layout/progress_bar_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <!-- display the avatar in fullscreen -->
     <RelativeLayout
         android:id="@+id/member_details_fullscreen_avatar_layout"
-        android:background="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/black"
         android:visibility="gone">
 
         <ProgressBar

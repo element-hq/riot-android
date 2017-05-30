@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
- *
+ * Copyright 2017 Vector Creations Ltd
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -212,7 +213,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
         if (0 == mAdapter.getCount()) {
             mInitializationSpinnerView.setVisibility(View.VISIBLE);
 
-            PublicRoomsManager.startPublicRoomsSearch(null, mPattern, new ApiCallback<List<PublicRoom>>() {
+            PublicRoomsManager.getInstance().startPublicRoomsSearch(null, null, false, mPattern, new ApiCallback<List<PublicRoom>>() {
                 @Override
                 public void onSuccess(List<PublicRoom> publicRooms) {
                     if (null != getActivity()) {
@@ -252,7 +253,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
      * Trigger a forward room pagination
      */
     private void forwardPaginate() {
-        boolean hasStarted = PublicRoomsManager.forwardPaginate(new ApiCallback<List<PublicRoom>>() {
+        boolean hasStarted = PublicRoomsManager.getInstance().forwardPaginate(new ApiCallback<List<PublicRoom>>() {
             @Override
             public void onSuccess(List<PublicRoom> publicRooms) {
                 if (null != getActivity()) {
@@ -260,7 +261,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
                     mAdapter.addAll(publicRooms);
 
                     // unplug the scroll listener if there is no more data to find
-                    if (!PublicRoomsManager.hasMoreResults()) {
+                    if (!PublicRoomsManager.getInstance().hasMoreResults()) {
                         mRecentsListView.setOnScrollListener(null);
                     }
                 }

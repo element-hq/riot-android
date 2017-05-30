@@ -141,7 +141,6 @@ public class SplashActivity extends MXCActionBarActivity {
 
         for(final MXSession session : mSessions) {
             final MXSession fSession = session;
-            session.getDataHandler().getStore().open();
 
             final IMXEventListener eventListener = new MXEventListener() {
                 private void onReady() {
@@ -237,6 +236,8 @@ public class SplashActivity extends MXCActionBarActivity {
             };
 
             if (!fSession.getDataHandler().isInitialSyncComplete()) {
+                session.getDataHandler().getStore().open();
+
                 mListeners.put(fSession, eventListener);
                 fSession.getDataHandler().addListener(eventListener);
 

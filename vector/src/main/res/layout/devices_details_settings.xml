@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/device_container_layout"
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/device_id_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:text="@string/devices_details_id_title"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/devices_details_id_title"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/device_id"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:textSize="12sp"
-            android:text="device id"/>
+            android:layout_height="wrap_content"
+            android:text="device id"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/device_name_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:text="@string/devices_details_name_title"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/devices_details_name_title"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/device_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="Name.."/>
+            android:text="Name.."
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/device_last_seen_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:text="@string/devices_details_last_seen_title"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/devices_details_last_seen_title"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/device_last_seen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="x.x.x.x @ 01/01 00:00:00" />
+            android:text="x.x.x.x @ 01/01 00:00:00"
+            android:textSize="12sp" />
     </LinearLayout>
 </ScrollView>

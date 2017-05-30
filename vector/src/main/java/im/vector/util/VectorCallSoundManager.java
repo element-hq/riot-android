@@ -218,7 +218,7 @@ public class VectorCallSoundManager {
                 values.put(MediaStore.MediaColumns.TITLE, filename);
                 values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/ogg");
                 values.put(MediaStore.MediaColumns.SIZE, file.length());
-                values.put(MediaStore.Audio.Media.ARTIST, R.string.app_name);
+                values.put(MediaStore.Audio.Media.ARTIST, R.string.riot_app_name);
                 values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
                 values.put(MediaStore.Audio.Media.IS_NOTIFICATION, true);
                 values.put(MediaStore.Audio.Media.IS_ALARM, true);

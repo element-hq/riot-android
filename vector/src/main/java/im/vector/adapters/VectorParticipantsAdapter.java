@@ -880,12 +880,14 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         // bound checks
         if (groupPosition >= mParticipantsListsList.size()) {
+            Log.e(LOG_TAG, "## getChildView() : invalid group position");
             return convertView;
         }
 
         List<ParticipantAdapterItem> list = mParticipantsListsList.get(groupPosition);
 
         if (childPosition >= list.size()) {
+            Log.e(LOG_TAG, "## getChildView() : invalid child position");
             return convertView;
         }
 
@@ -896,6 +898,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         final TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
         final TextView statusTextView = (TextView) convertView.findViewById(R.id.filtered_list_status);
         final ImageView matrixUserBadge = (ImageView) convertView.findViewById(R.id.filtered_list_matrix_user);
+
+        // reported by GA
+        // it should never happen but it happened...
+        if ((null == thumbView) || (null == nameTextView) || (null == statusTextView) || (null == matrixUserBadge)) {
+            Log.e(LOG_TAG, "## getChildView() : some ui items are null");
+            return convertView;
+        }
 
         // display the avatar
         participant.displayAvatar(mSession, thumbView);

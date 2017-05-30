@@ -15,39 +15,39 @@
             android:id="@+id/bing_indicator_unread_message"
             android:layout_width="8dp"
             android:layout_height="match_parent"
-            android:layout_marginRight="9dp"
-            android:background="@android:color/darker_gray"
+            android:layout_alignParentLeft="true"
             android:layout_marginBottom="1dp"
-            android:layout_alignParentLeft="true" />
+            android:layout_marginRight="9dp"
+            android:background="@android:color/darker_gray" />
 
         <!-- Avatar -->
         <im.vector.view.VectorCircularImageView
             android:id="@+id/room_avatar_image_view"
             android:layout_width="@dimen/chat_avatar_size"
             android:layout_height="@dimen/chat_avatar_size"
-            android:layout_toRightOf="@id/bing_indicator_unread_message"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/bing_indicator_unread_message" />
 
         <ImageView
             android:id="@+id/room_avatar_direct_chat_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_alignTop="@+id/room_avatar_image_view"
             android:layout_alignLeft="@+id/room_avatar_image_view"
-            android:visibility="gone"
-            android:src="@drawable/icon_person" />
+            android:layout_alignTop="@+id/room_avatar_image_view"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/icon_person"
+            android:visibility="gone" />
 
 
         <ImageView
             android:id="@+id/room_avatar_encrypted_icon"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_marginLeft="35dp"
             android:layout_alignBottom="@+id/room_avatar_image_view"
             android:layout_alignLeft="@+id/room_avatar_image_view"
-            android:visibility="gone"
-            android:src="@drawable/e2e_verified" />
+            android:layout_marginLeft="35dp"
+            android:src="@drawable/e2e_verified"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/roomSummaryAdapter_show_more_layout"
@@ -61,18 +61,18 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_material_chevron_right_black"/>
+                android:src="@drawable/ic_material_chevron_right_black" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_centerVertical="true"
             android:layout_marginLeft="17dp"
             android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/roomSummaryAdapter_show_more_layout"
             android:layout_toRightOf="@id/room_avatar_image_view"
-            android:layout_toLeftOf="@id/roomSummaryAdapter_show_more_layout">
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -80,60 +80,61 @@
                 android:layout_weight="0.5">
 
                 <!-- Room name - note margins values in each side (right/left) -->
+                <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
                 <TextView
                     android:id="@+id/roomSummaryAdapter_roomName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_unread_count"
-                    android:singleLine="true"
-                    android:textSize="16sp"
                     android:fontFamily="sans-serif-regular"
+                    android:singleLine="true"
+                    android:text="Room Name"
                     android:textColor="@color/vector_text_black_color"
-                    android:layout_alignParentBottom="true"
-                    android:text="Room Name" />
+                    android:textSize="16sp" />
 
                 <!-- unread count badge -->
                 <TextView
                     android:id="@+id/roomSummaryAdapter_unread_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:text="XXX"
-                    android:textSize="14sp"
+                    android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_ts"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
                     android:minWidth="25dp"
                     android:paddingLeft="7dp"
                     android:paddingRight="7dp"
-                    android:gravity="center"
-                    android:fontFamily="sans-serif-light"
+                    android:text="XXX"
                     android:textColor="@android:color/white"
-                    android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
-                    android:layout_toLeftOf="@+id/roomSummaryAdapter_ts"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginRight="5dp"/>
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
                 <!-- Message timestamp -->
                 <TextView
                     android:id="@+id/roomSummaryAdapter_ts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="Jan 1 00:00"
-                    android:fontFamily="sans-serif-light"
-                    android:textColor="@color/vector_0_54_black_color"
                     android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
                     android:layout_alignParentBottom="true"
-                    android:layout_toLeftOf="@+id/roomSummaryAdapter_action_image" />
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_action_image"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Jan 1 00:00"
+                    android:textColor="@color/vector_0_54_black_color"
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/roomSummaryAdapter_action_image"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_marginLeft="10dp"
-                    android:visibility="gone"
                     android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_right_view"
                     android:src="@drawable/vector_actions_9b"
-                    android:layout_toLeftOf="@+id/roomSummaryAdapter_right_view" />
+                    android:visibility="gone" />
 
                 <!-- this view is a dummy one, it is used to be able
                      to hide roomSummaryAdapter_action_image properly-->
@@ -141,7 +142,7 @@
                     android:id="@+id/roomSummaryAdapter_right_view"
                     android:layout_width="0dp"
                     android:layout_height="15dp"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentRight="true" />
 
                 <RelativeLayout
                     android:id="@+id/roomSummaryAdapter_action"
@@ -151,34 +152,34 @@
                     android:background="@android:color/transparent">
 
                     <View
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"
                         android:id="@+id/roomSummaryAdapter_action_anchor"
                         android:layout_width="1dp"
-                        android:layout_height="1dp" />
+                        android:layout_height="1dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp" />
                 </RelativeLayout>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_weight="0.5"
-                android:layout_height="0dp">
+                android:layout_height="0dp"
+                android:layout_weight="0.5">
 
                 <ImageView
                     android:id="@+id/roomSummaryAdapter_guest_access"
-                    android:layout_marginTop="3dp"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_marginRight="5dp"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="3dp"
                     android:src="@drawable/ic_guest_access_black"
                     android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/roomSummaryAdapter_word_readable"
-                    android:layout_marginTop="3dp"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
+                    android:layout_marginTop="3dp"
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_guest_access"
                     android:src="@drawable/ic_word_readable_black"
                     android:visibility="gone" />
@@ -186,14 +187,15 @@
                 <!-- Last message of the room -->
                 <TextView
                     android:id="@+id/roomSummaryAdapter_roomMessage"
-                    android:layout_toLeftOf="@+id/roomSummaryAdapter_word_readable"
-                    android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:textSize="14sp"
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_word_readable"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="last room message"
                     android:textColor="@color/vector_0_54_black_color"
-                    android:text="last room message" />
+                    android:textSize="14sp" />
 
             </RelativeLayout>
 
@@ -201,9 +203,9 @@
 
         <View
             android:id="@+id/roomSummaryAdapter_action_click_area"
-            android:layout_alignParentRight="true"
             android:layout_width="40dp"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
     <!-- invitation section -->
@@ -212,52 +214,53 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginBottom="20dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <View
                 android:id="@+id/recents_invite_sep1"
-                android:background="@android:color/white"
-                android:layout_weight="0.20"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.20"
+                android:background="@android:color/white" />
 
             <Button
                 android:id="@+id/recents_invite_reject_button"
-                android:layout_weight="0.26"
                 android:layout_width="0dp"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="14sp"
                 android:layout_height="match_parent"
+                android:layout_weight="0.26"
                 android:background="@color/vector_green_color"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/reject"
                 android:textColor="@android:color/white"
-                android:text="@string/reject"/>
+                android:textSize="14sp" />
 
             <View
                 android:id="@+id/recents_invite_sep2"
-                android:background="@android:color/white"
-                android:layout_weight="0.04"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.04"
+                android:background="@android:color/white" />
 
             <Button
                 android:id="@+id/recents_invite_preview_button"
-                android:layout_weight="0.26"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="14sp"
+                android:layout_weight="0.26"
                 android:background="@color/vector_green_color"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/preview"
                 android:textColor="@android:color/white"
-                android:text="@string/preview"/>
+                android:textSize="14sp" />
 
             <View
                 android:id="@+id/recents_invite_sep3"
-                android:background="@android:color/white"
-                android:layout_weight="0.20"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.20"
+                android:background="@android:color/white" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -267,12 +270,12 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="73dp"
-        android:background="@color/vector_line_separator_gray_color"/>
+        android:background="@color/vector_line_separator_gray_color" />
 
     <View
         android:id="@+id/recents_groups_separator_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/vector_line_separator_gray_color"/>
+        android:background="@color/vector_line_separator_gray_color" />
 
 </LinearLayout>

@@ -176,6 +176,18 @@ public class RegistrationManager {
     }
 
     /**
+     * Set the supported flow stages for the current home server)
+     *
+     * @param registrationFlowResponse
+     */
+    public void setSupportedRegistrationFlows(final RegistrationFlowResponse registrationFlowResponse) {
+        if (registrationFlowResponse != null) {
+            mRegistrationResponse = registrationFlowResponse;
+            analyzeRegistrationStages(registrationFlowResponse);
+        }
+    }
+
+    /**
      * Make a register request to check whether a username is available or not
      *
      * @param context
@@ -185,6 +197,7 @@ public class RegistrationManager {
         if (getLoginRestClient() != null) {
             final RegistrationParams params = new RegistrationParams();
             params.username = mUsername;
+            params.password = mPassword;
 
             register(context, params, new InternalRegistrationListener() {
                 @Override
@@ -212,11 +225,12 @@ public class RegistrationManager {
      */
     public void attemptRegistration(final Context context, final RegistrationListener listener) {
         final String registrationType;
-        if (!TextUtils.isEmpty(mRegistrationResponse.session)) {
+        if (mRegistrationResponse != null && !TextUtils.isEmpty(mRegistrationResponse.session)) {
             Map<String, Object> authParams;
             if (mPhoneNumber != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && !TextUtils.isEmpty(mPhoneNumber.sid)) {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_MSISDN;
-                authParams = getThreePidAuthParams(mPhoneNumber.clientSecret, mHsConfig.getIdentityServerUri().getHost(), mPhoneNumber.sid, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
+                authParams = getThreePidAuthParams(mPhoneNumber.clientSecret, mHsConfig.getIdentityServerUri().getHost(),
+                        mPhoneNumber.sid, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN, mRegistrationResponse.session);
             } else if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                 if (TextUtils.isEmpty(mEmail.sid)) {
                     // Email token needs to be requested before doing validation
@@ -231,7 +245,8 @@ public class RegistrationManager {
                     return;
                 } else {
                     registrationType = LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY;
-                    authParams = getThreePidAuthParams(mEmail.clientSecret, mHsConfig.getIdentityServerUri().getHost(), mEmail.sid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
+                    authParams = getThreePidAuthParams(mEmail.clientSecret, mHsConfig.getIdentityServerUri().getHost(),
+                            mEmail.sid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, mRegistrationResponse.session);
                 }
             } else if (!TextUtils.isEmpty(mCaptchaResponse) && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA;
@@ -254,13 +269,20 @@ public class RegistrationManager {
             }
 
             final RegistrationParams params = new RegistrationParams();
-            params.username = mUsername;
-            params.password = mPassword;
-            if (!authParams.isEmpty()) {
+            if (!registrationType.equals(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
+                if (mUsername != null) {
+                    params.username = mUsername;
+                }
+                if (mPassword != null) {
+                    params.password = mPassword;
+                }
+                params.bind_email = mEmail != null;
+                params.bind_msisdn = mPhoneNumber != null;
+            }
+
+            if (authParams != null && !authParams.isEmpty()) {
                 params.auth = authParams;
             }
-            params.bind_email = mEmail != null;
-            params.bind_msisdn = mPhoneNumber != null;
 
             register(context, params, new InternalRegistrationListener() {
                 @Override
@@ -314,8 +336,12 @@ public class RegistrationManager {
 
         RegistrationParams registrationParams = new RegistrationParams();
         registrationParams.auth = getThreePidAuthParams(aClientSecret, CommonActivityUtils.removeUrlScheme(aIdentityServer),
-                aSid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
+                aSid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, aSessionId);
+
         // Note: username, password and bind_email must not be set in registrationParams
+        mUsername = null;
+        mPassword = null;
+        clearThreePid();
 
         register(context, registrationParams, new InternalRegistrationListener() {
             @Override
@@ -481,7 +507,7 @@ public class RegistrationManager {
      */
     public String getCaptchaPublicKey() {
         String publicKey = null;
-        if (null != mRegistrationResponse.params) {
+        if (mRegistrationResponse != null && mRegistrationResponse.params != null) {
             Object recaptchaParamsAsVoid = mRegistrationResponse.params.get(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
             if (null != recaptchaParamsAsVoid) {
                 try {
@@ -586,14 +612,13 @@ public class RegistrationManager {
     }
 
     /**
-     * Set the flow stages for the current home server)
+     * Set the flow stages for the current home server
      *
      * @param registrationFlowResponse
      */
     private void setRegistrationFlowResponse(final RegistrationFlowResponse registrationFlowResponse) {
         if (registrationFlowResponse != null) {
             mRegistrationResponse = registrationFlowResponse;
-            analyzeRegistrationStages(registrationFlowResponse);
         }
     }
 
@@ -682,10 +707,11 @@ public class RegistrationManager {
      * @param host
      * @param sid          received by requestToken request
      * @param medium       type of three pid
+     * @param sessionId    session id
      * @return map of params
      */
     private Map<String, Object> getThreePidAuthParams(final String clientSecret, final String host,
-                                                      final String sid, final String medium) {
+                                                      final String sid, final String medium, final String sessionId) {
         Map<String, Object> authParams = new HashMap<>();
         Map<String, String> pidsCredentialsAuth = new HashMap<>();
         pidsCredentialsAuth.put(JSON_KEY_CLIENT_SECRET, clientSecret);
@@ -693,7 +719,7 @@ public class RegistrationManager {
         pidsCredentialsAuth.put(JSON_KEY_SID, sid);
         authParams.put(JSON_KEY_TYPE, medium);
         authParams.put(JSON_KEY_THREEPID_CREDS, pidsCredentialsAuth);
-        authParams.put(JSON_KEY_SESSION, mRegistrationResponse.session);
+        authParams.put(JSON_KEY_SESSION, sessionId);
         return authParams;
     }
 

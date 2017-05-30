@@ -1,5 +1,6 @@
 /* 
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +16,16 @@
  */
 package im.vector.ga;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
 
 import com.google.android.gms.analytics.ExceptionParser;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
-import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 
@@ -39,8 +37,12 @@ public class GAHelper {
     // Google analytics
     //==============================================================================================================
 
+    // default exception handler
+    private static Thread.UncaughtExceptionHandler mDefaultExceptionHandler = null;
+
     /**
      * Tells if the GA use can be updated
+     *
      * @return true if it can be updated
      */
     public static boolean isGAUseUpdatable() {
@@ -49,8 +51,9 @@ public class GAHelper {
 
     /**
      * Update the GA use.
+     *
      * @param context the context
-     * @param value the new value
+     * @param value   the new value
      */
     public static void setUseGA(Context context, boolean value) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -63,6 +66,7 @@ public class GAHelper {
 
     /**
      * Tells if GA can be used
+     *
      * @param context the context
      * @return null if not defined, true / false when defined
      */
@@ -99,72 +103,53 @@ public class GAHelper {
     /**
      * Initialize the google analytics
      */
-    public static void initGoogleAnalytics(Context context) {
+    public static void initGoogleAnalytics(final Context context) {
+        int trackerResId = 0;
+
         Boolean useGA = useGA(context);
 
         if (null == useGA) {
             Log.e(LOG_TAG, "Google Analytics use is not yet initialized");
-            return;
-        }
-
-        if (!useGA) {
+        } else if (!useGA) {
             Log.e(LOG_TAG, "The user decides to do not use Google Analytics");
-            return;
+        } else {
+            // pull tracker resource ID from res/values/analytics.xml
+            trackerResId = context.getResources().getIdentifier("ga_trackingId", "string", context.getPackageName());
+
+            if (trackerResId == 0) {
+                Log.e(LOG_TAG, "Unable to find tracker id for Google Analytics");
+            }
         }
 
-        // pull tracker resource ID from res/values/analytics.xml
-        int trackerResId = context.getResources().getIdentifier("ga_trackingId", "string", context.getPackageName());
-        if (trackerResId == 0) {
-            Log.e(LOG_TAG, "Unable to find tracker id for Google Analytics");
-            return;
+        String trackerId = null;
+
+        if (0 != trackerResId) {
+            trackerId = context.getString(trackerResId);
         }
 
-        String trackerId = context.getString(trackerResId);
-        Log.d(LOG_TAG, "Tracker ID: "+trackerId);
+        Log.d(LOG_TAG, "Tracker ID: " + trackerId);
+
+        if (null == mDefaultExceptionHandler) {
+            mDefaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+        }
 
         // init google analytics with this tracker ID
         if (!TextUtils.isEmpty(trackerId)) {
             Analytics.initialiseGoogleAnalytics(context, trackerId, new ExceptionParser() {
                 @Override
                 public String getDescription(String threadName, Throwable throwable) {
-                    StringBuilder b = new StringBuilder();
-                    String appName = Matrix.getApplicationName();
+                    return VectorApp.uncaughtException(threadName, throwable);
+                }
+            });
+        } else {
+            Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                @Override
+                public void uncaughtException(Thread thread, Throwable e) {
+                    VectorApp.uncaughtException(thread.getName(), e);
 
-                    b.append(appName + " Build : " + VectorApp.VERSION_BUILD + "\n");
-                    b.append(appName + " Version : " + VectorApp.VECTOR_VERSION_STRING + "\n");
-                    b.append("SDK Version : " + VectorApp.SDK_VERSION_STRING + "\n");
-                    b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n");
-
-                    b.append("Memory statuses \n");
-
-                    long freeSize = 0L;
-                    long totalSize = 0L;
-                    long usedSize = -1L;
-                    try {
-                        Runtime info = Runtime.getRuntime();
-                        freeSize = info.freeMemory();
-                        totalSize = info.totalMemory();
-                        usedSize = totalSize - freeSize;
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if (null != mDefaultExceptionHandler) {
+                        mDefaultExceptionHandler.uncaughtException(thread, e);
                     }
-                    b.append("usedSize   " + (usedSize / 1048576L) + " MB\n");
-                    b.append("freeSize   " + (freeSize / 1048576L) + " MB\n");
-                    b.append("totalSize   " + (totalSize / 1048576L) + " MB\n");
-                    
-                    b.append("Thread: ");
-                    b.append(threadName);
-
-                    Activity a = VectorApp.getCurrentActivity();
-                    if (a != null) {
-                        b.append(", Activity:");
-                        b.append(a.getLocalClassName());
-                    }
-
-                    b.append(", Exception: ");
-                    b.append(Analytics.getStackTrace(throwable));
-                    Log.e("FATAL EXCEPTION", b.toString());
-                    return b.toString();
                 }
             });
         }
@@ -172,11 +157,12 @@ public class GAHelper {
 
     /**
      * Send a GA stats
-     * @param context the context
+     *
+     * @param context  the context
      * @param category the category
-     * @param action the action
-     * @param label the label
-     * @param value the value
+     * @param action   the action
+     * @param label    the label
+     * @param value    the value
      */
     public static void sendGAStats(Context context, String category, String action, String label, long value) {
         Boolean useGA = useGA(context);

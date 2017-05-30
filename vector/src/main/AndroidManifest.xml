@@ -49,12 +49,12 @@
     <uses-sdk tools:overrideLibrary="io.pristine.libjingle"/>
 
     <application
-        tools:replace="android:allowBackup"
+        tools:replace="allowBackup,label"
         android:allowBackup="false"
         android:name="im.vector.VectorApp"
         android:icon="@drawable/logo"
         android:logo="@drawable/logo"
-        android:label="@string/app_name"
+        android:label="@string/riot_app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme" >
 
@@ -286,13 +286,10 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="matrix.to" />
-                <data android:pathPrefix="/#/" />
             </intent-filter>
-
         </activity>
 
         <activity android:name=".activity.VectorFakeRoomPreviewActivity"
@@ -348,7 +345,6 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="matrix.to" />
-                <data android:pathPrefix="/#/" />
             </intent-filter>
 
             <intent-filter>

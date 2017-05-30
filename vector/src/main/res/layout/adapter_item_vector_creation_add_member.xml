@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@android:color/white"
     android:layout_width="match_parent"
-    android:layout_height="74dp">
+    android:layout_height="74dp"
+    android:background="@android:color/white">
 
     <ImageView
         android:id="@+id/filtered_list_avatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
-        android:src="@drawable/ic_material_add_circle"
-        android:layout_centerVertical="true" />
+        android:src="@drawable/ic_material_add_circle" />
 
+    <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
     <TextView
         android:id="@+id/room_creation_add_member_texview"
-        android:layout_toRightOf="@id/filtered_list_avatar"
-        android:layout_centerVertical="true"
-        android:singleLine="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="16sp"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_toLeftOf="@id/filtered_list_actions_list"
+        android:layout_toRightOf="@id/filtered_list_avatar"
+        android:singleLine="true"
+        android:text="@string/room_creation_add_member"
         android:textColor="@color/vector_21_black"
-        android:text="@string/room_creation_add_member" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/vector_dc_gray"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"/>
+        android:background="@color/vector_dc_gray" />
 
 </RelativeLayout>

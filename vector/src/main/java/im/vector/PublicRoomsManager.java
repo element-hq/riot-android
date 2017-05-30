@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@
 package im.vector;
 
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -45,52 +47,73 @@ public class PublicRoomsManager {
     }
 
     // session
-    private static MXSession mSession;
+    private MXSession mSession;
 
     // refresh status
-    private static boolean mCountRefreshInProgress = false;
+    private boolean mCountRefreshInProgress = false;
 
     // define the number of public rooms
-    private static Integer mPublicRoomsCount = null;
+    private Integer mPublicRoomsCount = null;
 
     // request key to avoid dispatching invalid data
-    private static String mRequestKey = null;
+    private String mRequestKey = null;
 
     // pagination information
-    private static String mRequestServer = null;
-    private static String mSearchedPattern = null;
-    private static String mForwardPaginationToken = null;
+
+    private String mRequestServer;
+    private String mSearchedPattern;
+    private String mForwardPaginationToken;
+    private String mThirdPartyInstanceId;
+    private boolean mIncludeAllNetworks;
 
     // public room listeners
-    private static final ArrayList<PublicRoomsManagerListener> mListeners = new ArrayList<>();
+    private final List<PublicRoomsManagerListener> mListeners = new ArrayList<>();
+
+    // the singleton
+    private static PublicRoomsManager sPublicRoomsManager = null;
+
+    /**
+     * Retrieve the current instance
+     *
+     * @return
+     */
+    public static PublicRoomsManager getInstance() {
+        if (null == sPublicRoomsManager) {
+            sPublicRoomsManager = new PublicRoomsManager();
+        }
+
+        return sPublicRoomsManager;
+    }
 
     /**
      * Set the current session
+     *
      * @param session the session
      */
-    public static void setSession(MXSession session) {
+    public void setSession(MXSession session) {
         mSession = session;
     }
 
     /**
      * @return true if there is a public room requests in progress
      */
-    public static boolean isRequestInProgress() {
+    public boolean isRequestInProgress() {
         return !TextUtils.isEmpty(mRequestKey);
     }
 
     /**
      * @return true if there are some other public rooms to find.
      */
-    public static boolean hasMoreResults() {
+    public boolean hasMoreResults() {
         return !TextUtils.isEmpty(mForwardPaginationToken);
     }
 
     /**
      * Trigger a public rooms request.
+     *
      * @param callback the asynchronous callback.
      */
-    private static void launchPublicRoomsRequest(final ApiCallback<List<PublicRoom>> callback) {
+    private void launchPublicRoomsRequest(final ApiCallback<List<PublicRoom>> callback) {
         final String fToken = mRequestKey;
 
         // GA issue
@@ -99,7 +122,7 @@ public class PublicRoomsManager {
         }
 
         //final String server, final String pattern, final String since, final ApiCallback<PublicRoomsResponse> callback
-        mSession.getEventsApiClient().loadPublicRooms(mRequestServer, mSearchedPattern, mForwardPaginationToken, PUBLIC_ROOMS_LIMIT, new ApiCallback<PublicRoomsResponse>() {
+        mSession.getEventsApiClient().loadPublicRooms(mRequestServer, mThirdPartyInstanceId, mIncludeAllNetworks, mSearchedPattern, mForwardPaginationToken, PUBLIC_ROOMS_LIMIT, new ApiCallback<PublicRoomsResponse>() {
             @Override
             public void onSuccess(PublicRoomsResponse publicRoomsResponse) {
                 // check if the request response is still expected
@@ -174,19 +197,24 @@ public class PublicRoomsManager {
 
     /**
      * Start a new public rooms search
-     * @param server set the server in which searches, null if any
-     * @param pattern the pattern to search
-     * @param callback the asynchronous callback
+     *
+     * @param server               set the server in which searches, null if any
+     * @param thirdPartyInstanceId the third party instance id (optional)
+     * @param includeAllNetworks   true to search in all the connected network
+     * @param pattern              the pattern to search
+     * @param callback             the asynchronous callback
      */
-    public static void startPublicRoomsSearch(final String server, final String pattern, final ApiCallback<List<PublicRoom>> callback) {
+    public void startPublicRoomsSearch(final String server, final String thirdPartyInstanceId, final boolean includeAllNetworks, final String pattern, final ApiCallback<List<PublicRoom>> callback) {
         Log.d(LOG_TAG, "## startPublicRoomsSearch() " + " : server " + server + " pattern " + pattern);
 
         // on android, a request cannot be cancelled
         // so define a key to detect if the request makes senses
-        mRequestKey =  "startPublicRoomsSearch" + System.currentTimeMillis();
+        mRequestKey = "startPublicRoomsSearch" + System.currentTimeMillis();
 
         // init the parameters
         mRequestServer = server;
+        mThirdPartyInstanceId = thirdPartyInstanceId;
+        mIncludeAllNetworks = includeAllNetworks;
         mSearchedPattern = pattern;
         mForwardPaginationToken = null;
 
@@ -195,10 +223,11 @@ public class PublicRoomsManager {
 
     /**
      * Forward paginate the public rooms search.
+     *
      * @param callback the asynchronous callback
      * @return true if the pagination starts
      */
-    public static boolean forwardPaginate(final ApiCallback<List<PublicRoom>> callback) {
+    public boolean forwardPaginate(final ApiCallback<List<PublicRoom>> callback) {
         Log.d(LOG_TAG, "## forwardPaginate() " + " : server " + mRequestServer + " pattern " + mSearchedPattern + " mForwardPaginationToken " + mForwardPaginationToken);
 
         if (isRequestInProgress()) {
@@ -213,7 +242,7 @@ public class PublicRoomsManager {
 
         // on android, a request cannot be cancelled
         // so define a key to detect if the request makes senses
-        mRequestKey =  "forwardPaginate" + System.currentTimeMillis();
+        mRequestKey = "forwardPaginate" + System.currentTimeMillis();
 
         launchPublicRoomsRequest(callback);
 
@@ -223,15 +252,16 @@ public class PublicRoomsManager {
     /**
      * @return the number of public rooms
      */
-    public static Integer getPublicRoomsCount() {
+    public Integer getPublicRoomsCount() {
         return mPublicRoomsCount;
     }
 
     /**
      * Remove a listener
+     *
      * @param listener the listener to remove
      */
-    public static void removeListener(PublicRoomsManagerListener listener) {
+    public void removeListener(PublicRoomsManagerListener listener) {
         if (null != listener) {
             mListeners.remove(listener);
         }
@@ -239,9 +269,10 @@ public class PublicRoomsManager {
 
     /**
      * Refresh the public rooms count
+     *
      * @param listener the update listener
      */
-    public static void refreshPublicRoomsCount(final PublicRoomsManagerListener listener) {
+    public void refreshPublicRoomsCount(final PublicRoomsManagerListener listener) {
         if (null != mSession) {
             if (mCountRefreshInProgress) {
                 if (null != listener) {

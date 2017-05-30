@@ -191,7 +191,7 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
 
         switch (titleId) {
             case R.string.tab_title_search_rooms: {
-                res = PublicRoomsManager.isRequestInProgress();
+                res = PublicRoomsManager.getInstance().isRequestInProgress();
                 ((VectorSearchRoomsListFragment) fragment).searchPattern(pattern, listener);
                 break;
             }

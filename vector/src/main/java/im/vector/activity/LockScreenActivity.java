@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 
+import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.util.Log;
 
 import android.view.View;
@@ -169,17 +170,25 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
 
                     @Override
                     public void onNetworkError(Exception e) {
-                        Log.d(LOG_TAG, "Send message : onNetworkError " + e.getLocalizedMessage());
+                        Log.d(LOG_TAG, "Send message : onNetworkError " + e.getMessage());
+                        CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
-                        Log.d(LOG_TAG, "Send message : onMatrixError " + e.getLocalizedMessage());
+                        Log.d(LOG_TAG, "Send message : onMatrixError " + e.getMessage());
+
+                        if (e instanceof MXCryptoError) {
+                            CommonActivityUtils.displayToast(LockScreenActivity.this, ((MXCryptoError) e).getDetailedErrorDescription());
+                        } else {
+                            CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
+                        }
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        Log.d(LOG_TAG, "Send message : onUnexpectedError " + e.getLocalizedMessage());
+                        Log.d(LOG_TAG, "Send message : onUnexpectedError " + e.getMessage());
+                        CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
                     }
                 });
 
