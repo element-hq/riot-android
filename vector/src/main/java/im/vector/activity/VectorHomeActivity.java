@@ -1337,12 +1337,12 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                     mRoomInvitations.add(room);
                 }
             }
-
-            // the invitations are sorted from the oldest to the more recent one
-            Comparator<Room> invitationComparator = RoomUtils.getRoomsDateComparator(mSession, true);
-            Collections.sort(mDirectChatInvitations, invitationComparator);
-            Collections.sort(mRoomInvitations, invitationComparator);
         }
+
+        // the invitations are sorted from the oldest to the more recent one
+        Comparator<Room> invitationComparator = RoomUtils.getRoomsDateComparator(mSession, true);
+        Collections.sort(mDirectChatInvitations, invitationComparator);
+        Collections.sort(mRoomInvitations, invitationComparator);
 
         List<Room> roomInvites = new ArrayList<>();
         switch (mCurrentMenuId) {
@@ -1355,6 +1355,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             default:
                 roomInvites.addAll(mDirectChatInvitations);
                 roomInvites.addAll(mRoomInvitations);
+                Collections.sort(roomInvites, invitationComparator);
                 break;
         }
 
