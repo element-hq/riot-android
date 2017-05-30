@@ -346,6 +346,7 @@
     <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
     <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
     <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+
     <!--  Chat -->
     <string name="room_menu_search">Search</string>
     <string name="room_one_user_is_typing">%s is typing…</string>

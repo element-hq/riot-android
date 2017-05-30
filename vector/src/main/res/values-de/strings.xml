@@ -5,7 +5,7 @@
 
     <!-- titles -->
     <string name="title_activity_home">Nachrichten</string>
-    <string name="title_activity_room">Raum</string>
+    <string name="title_activity_room">"Raum</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="title_activity_member_details">Nutzerdetails</string>
 
@@ -39,13 +39,15 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenzgespräche stehen in verschlüsslten Räumen nicht zur Verfügung</string>
     <string name="send_anyway">Trotzdem senden</string>
     <string name="or">oder</string>
+    <string name="and">and</string>
+    <string name="invite">Invite</string>
 
     <!-- actions -->
     <string name="action_sign_out">Abmelden</string>
     <string name="action_sign_out_confirmation">Aus Sicherheitsgründen werden beim Abmelden alle Verschlüsselungsschlüssel gelöscht. Dadurch werden die vorher verschlüsselten Chats für dich unlesbar, wenn du dich wieder anmeldest.\nWähle Exportieren um die Schlüssel zu sichern bevor du dich abmeldest.</string>
     <string name="action_voice_call">Sprachanruf</string>
     <string name="action_video_call">Videoanruf</string>
-    <string name="action_search_room">Raum suchen</string>
+    <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Alle als gelesen markieren</string>
     <string name="action_quick_reply">Antworten</string>
     <string name="action_open">Öffnen</string>
@@ -56,6 +58,41 @@
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Bestätigung</string>
     <string name="dialog_title_warning">Warnung</string>
+
+    <!-- Bottom navigation buttons -->
+    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_favourites">Favourites</string>
+    <string name="bottom_action_people">People</string>
+    <string name="bottom_action_rooms">Rooms</string>
+
+    <!-- Home screen -->
+    <string name="home_filter_placeholder_home">Search for rooms</string>
+    <string name="home_filter_placeholder_favorites">Search for favourites</string>
+    <string name="home_filter_placeholder_people">Search for people</string>
+    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+
+    <!-- Home fragment -->
+    <string name="invitations_header">Invites</string>
+    <string name="low_priority_header">Low priority</string>
+
+    <!-- People fragment -->
+    <string name="direct_chats_header">Conversations</string>
+    <string name="local_address_book_header">Local address book</string>
+    <string name="known_contacts_header">Known contacts</string>
+    <string name="matrix_only_filter">Matrix contacts only</string>
+    <string name="no_conversation_placeholder">No conversations</string>
+    <string name="no_local_contact_placeholder">No local contacts</string>
+    <string name="no_result_placeholder">No results</string>
+
+    <!-- Rooms fragment -->
+    <string name="rooms_header">Rooms</string>
+    <string name="rooms_directory_header">Room directory</string>
+    <string name="no_room_placeholder">No rooms</string>
+    <string name="no_public_room_placeholder">No public rooms available</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 user</item>
+        <item quantity="other">%d users</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Sende Bericht</string>
     <string name="send_bug_report_include_crash_logs">Sende Absturzbericht</string>
@@ -299,10 +336,15 @@
     <string name="room_participants_invite_prompt_msg">"Bist du sicher, dass du %s in diesen Chat einladen willst?"</string>
 
     <!-- invitation -->
+    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
     <string name="people_search_local_contacts">LOKALE KONTAKTE (%d)</string>
     <string name="people_search_known_contacts">BEKANNTE KONTAKTE (%s)</string>
     <string name="people_search_filter_text">Nur Matrix-Nutzer</string>
     <string name="people_search_too_many_contacts">Zu viele Kontakte, bitte nutze das Suchfeld</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Suche</string>
@@ -378,6 +420,9 @@
     <string name="room_recents_invites">EINLADUNGEN</string>
     <string name="room_recents_start_chat">Chat starten</string>
     <string name="room_recents_create_room">Raum erstellen</string>
+    <string name="room_recents_join_room">Join room</string>
+    <string name="room_recents_join_room_title">Join a room</string>
+    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Verzeichnis durchsuchen</string>
@@ -639,6 +684,14 @@
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Raum enthält unbekannte Geräte</string>
     <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Geräte, die noch nicht verifiziert wurden.\nEs gibt also keine Garantie, dass diese Geräte wirklich zu dem angegebenen Nutzer gehören.\nWir empfehlen, den Verifizierungsprozess für jedes Gerät zu durchlaufen bevor du fortfährst. Du kannst die Nachricht aber auch ohne Verifizierung senden, wenn du das vorziehst.\n\nUnbekannte Geräte:</string>
+
+    <!-- directory activity  -->
+    <string name="select_room_directory">Select a room directory</string>
+    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
+    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
+    <string name="directory_server_placeholder">Homeserver URL</string>
+    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
+    <string name="directory_server_native_rooms">All native %s rooms</string>
 
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d ungelesene Benachrichtigungen</string>

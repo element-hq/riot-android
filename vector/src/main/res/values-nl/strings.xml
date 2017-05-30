@@ -39,13 +39,15 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Vergadergesprekken zijn niet ondersteund in versleutelde ruimtes</string>
     <string name="send_anyway">Toch sturen</string>
     <string name="or">of</string>
+    <string name="and">and</string>
+    <string name="invite">Invite</string>
 
     <!-- actions -->
     <string name="action_sign_out">Uitloggen</string>
     <string name="action_sign_out_confirmation">Uitloggen?</string>
     <string name="action_voice_call">Spraakoproep</string>
     <string name="action_video_call">Videogesprek</string>
-    <string name="action_search_room">Zoek ruimte</string>
+    <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Alles als gelezen markeren</string>
     <string name="action_quick_reply">Snel reageren</string>
     <string name="action_open">Open</string>
@@ -56,6 +58,41 @@
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Bevestiging</string>
     <string name="dialog_title_warning">Waarschuwing</string>
+
+    <!-- Bottom navigation buttons -->
+    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_favourites">Favourites</string>
+    <string name="bottom_action_people">People</string>
+    <string name="bottom_action_rooms">Rooms</string>
+
+    <!-- Home screen -->
+    <string name="home_filter_placeholder_home">Search for rooms</string>
+    <string name="home_filter_placeholder_favorites">Search for favourites</string>
+    <string name="home_filter_placeholder_people">Search for people</string>
+    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+
+    <!-- Home fragment -->
+    <string name="invitations_header">Invites</string>
+    <string name="low_priority_header">Low priority</string>
+
+    <!-- People fragment -->
+    <string name="direct_chats_header">Conversations</string>
+    <string name="local_address_book_header">Local address book</string>
+    <string name="known_contacts_header">Known contacts</string>
+    <string name="matrix_only_filter">Matrix contacts only</string>
+    <string name="no_conversation_placeholder">No conversations</string>
+    <string name="no_local_contact_placeholder">No local contacts</string>
+    <string name="no_result_placeholder">No results</string>
+
+    <!-- Rooms fragment -->
+    <string name="rooms_header">Rooms</string>
+    <string name="rooms_directory_header">Room directory</string>
+    <string name="no_room_placeholder">No rooms</string>
+    <string name="no_public_room_placeholder">No public rooms available</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 user</item>
+        <item quantity="other">%d users</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Logboek versturen</string>
     <string name="send_bug_report_include_crash_logs">Crash logboek versturen</string>
@@ -299,10 +336,15 @@
     <string name="room_participants_invite_prompt_msg">"Weet je zeker dat je %s in dit gesprek wil uitnodigen?"</string>
 
     <!-- invitation -->
+    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
     <string name="people_search_local_contacts">LOKALE CONTACTEN (%d)</string>
     <string name="people_search_known_contacts">BEKENDE CONTACTEN (%s)</string>
     <string name="people_search_filter_text">Alleen Matrix gebruikers</string>
     <string name="people_search_too_many_contacts">Te veel contacten, gebruik het zoekveld.</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Zoeken</string>
@@ -378,6 +420,9 @@
     <string name="room_recents_invites">UITNODIGINGEN</string>
     <string name="room_recents_start_chat">Start chat</string>
     <string name="room_recents_create_room">Ruimte maken</string>
+    <string name="room_recents_join_room">Join room</string>
+    <string name="room_recents_join_room_title">Join a room</string>
+    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Adresboek doorbladeren</string>
@@ -640,6 +685,14 @@
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Deze ruimte bevat onbekende apparaten</string>
     <string name="unknown_devices_alert_message">Deze ruimte bevat onbekende apparaten die niet geen geverifieerd.\nDit betekent dat er geen garantie is dat de apparaten bij de gebruikers horen waar het beweert dat het bij hoort.\nWe raden je aan om bij elk apparaat door het verificatieprocces heen te gaan voordat je doorgaat, maar je kan het bericht opnieuw versturen zonder te verifiëren als je dat prefereert.\n\nOnbekende apparaten:</string>
+
+    <!-- directory activity  -->
+    <string name="select_room_directory">Select a room directory</string>
+    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
+    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
+    <string name="directory_server_placeholder">Homeserver URL</string>
+    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
+    <string name="directory_server_native_rooms">All native %s rooms</string>
 
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d ongelezen genotificeerde berichten</string>
