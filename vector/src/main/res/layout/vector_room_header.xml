@@ -12,100 +12,103 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp">
 
-        <include layout="@layout/vector_room_header_round_avatar"
+        <include
+            android:id="@+id/room_avatar"
+            layout="@layout/vector_room_header_round_avatar"
             android:layout_width="84dp"
-            android:layout_height="84dp"
-            android:id="@+id/room_avatar"/>
+            android:layout_height="84dp" />
     </RelativeLayout>
 
+    <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
     <TextView
         android:id="@+id/action_bar_header_room_title"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:layout_below="@id/room_avatar_container"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="14dp"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:singleLine="true"
         android:text="a room name here"
         android:textColor="@android:color/white"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="10dp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/action_bar_header_room_topic"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:layout_below="@id/action_bar_header_room_title"
-        android:maxLines="3"
-        android:ellipsize="end"
-        android:text="a topic here"
-        android:textSize="14sp"
-        android:autoLink="web"
-        android:textColor="#FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="44dp"
         android:layout_marginRight="44dp"
-        android:layout_marginBottom="10dp"/>
+        android:autoLink="web"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:maxLines="3"
+        android:text="a topic here"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/action_bar_header_room_members"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:layout_below="@id/action_bar_header_room_topic"
-        android:ellipsize="end"
-        android:textSize="14sp"
-        android:textColor="@color/vector_0_54_black_color"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="19dp"
         android:layout_marginLeft="66dp"
         android:layout_marginRight="66dp"
-        android:layout_marginBottom="19dp"/>
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:textColor="@color/vector_0_54_black_color"
+        android:textSize="14sp" />
 
     <!-- this layout is used to compute the height of a single line -->
     <!-- action_bar_header_invite_members needs it to have an icon with the same height as the text -->
     <RelativeLayout
         android:id="@+id/action_bar_header_line_height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/action_bar_header_room_topic"
         android:layout_marginBottom="19dp"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:visibility="invisible">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="measurement text"/>
+            android:text="measurement text"
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/action_bar_header_invite_members"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignTop="@+id/action_bar_header_line_height"
         android:layout_alignBottom="@+id/action_bar_header_line_height"
+        android:layout_alignTop="@+id/action_bar_header_line_height"
+        android:layout_centerHorizontal="true"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/header_invite_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_black"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_add_black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/vector_0_54_black_color"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/header_invite_icon"
-            android:text="@string/room_header_invite_members"/>
+            android:text="@string/room_header_invite_members"
+            android:textColor="@color/vector_0_54_black_color"
+            android:textSize="14sp" />
 
     </RelativeLayout>
 

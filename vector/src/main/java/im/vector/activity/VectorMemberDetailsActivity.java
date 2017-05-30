@@ -145,25 +145,19 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         @Override
         public void onMatrixError(MatrixError e) {
             Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onMatrixError Msg=" + e.getLocalizedMessage());
-            if (null != mRoomActionsListener) {
-                mRoomActionsListener.onMatrixError(e);
-            }
+            mRoomActionsListener.onMatrixError(e);
         }
 
         @Override
         public void onNetworkError(Exception e) {
             Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onNetworkError Msg=" + e.getLocalizedMessage());
-            if (null != mRoomActionsListener) {
-                mRoomActionsListener.onNetworkError(e);
-            }
+            mRoomActionsListener.onNetworkError(e);
         }
 
         @Override
         public void onUnexpectedError(Exception e) {
             Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onUnexpectedError Msg=" + e.getLocalizedMessage());
-            if (null != mRoomActionsListener) {
-                mRoomActionsListener.onUnexpectedError(e);
-            }
+            mRoomActionsListener.onUnexpectedError(e);
         }
     };
 
@@ -299,10 +293,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             @Override
             public void onMatrixError(MatrixError e) {
                 if (e instanceof MXCryptoError) {
-                    MXCryptoError cryptoError = (MXCryptoError)e;
+                    MXCryptoError cryptoError = (MXCryptoError) e;
 
                     if (MXCryptoError.UNKNOWN_DEVICES_CODE.equals(cryptoError.errcode)) {
-                        CommonActivityUtils.displayUnknownDevicesDialog(mSession, VectorMemberDetailsActivity.this, (MXUsersDevicesMap<MXDeviceInfo>)cryptoError.mExceptionData, new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
+                        CommonActivityUtils.displayUnknownDevicesDialog(mSession, VectorMemberDetailsActivity.this, (MXUsersDevicesMap<MXDeviceInfo>) cryptoError.mExceptionData, new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
                             @Override
                             public void onSendAnyway() {
                                 startCall(isVideo);
@@ -680,7 +674,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
         }
 
-        if (0 != mDevicesListViewAdapter.getCount()) {
+        if ((null != mDevicesListViewAdapter) && (0 != mDevicesListViewAdapter.getCount())) {
             isAdapterPopulated = true;
         }
 
@@ -774,6 +768,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         PowerLevels powerLevels = null;
         int memberPowerLevel = 50;
         int selfPowerLevel = 50;
+        int adminCount = 0;
 
         if (null != mRoom) {
             powerLevels = mRoom.getLiveState().getPowerLevels();
@@ -793,6 +788,13 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
                 mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
             }
+
+            // compute the number of administrators
+            for (Integer powerLevel : powerLevels.users.values()) {
+                if ((null != powerLevel) && (powerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN)) {
+                    adminCount++;
+                }
+            }
         }
 
         // Check user's power level before allowing an action (kick, ban, ...)
@@ -801,7 +803,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 supportedActions.add(ITEM_ACTION_LEAVE);
             }
 
-            if ((null != powerLevels) && (selfPowerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS))) {
+            // Check whether the user is admin (in this case he may reduce his power level to become moderator or less, EXCEPT if he is the only admin).
+            if ((adminCount > 1) && (null != powerLevels) && (selfPowerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS))) {
                 // Check whether the user is admin (in this case he may reduce his power level to become moderator).
                 if (selfPowerLevel >= VECTOR_ROOM_ADMIN_LEVEL) {
                     supportedActions.add(ITEM_ACTION_SET_MODERATOR);
@@ -843,6 +846,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                             supportedActions.add(ITEM_ACTION_SET_DEFAULT_POWER_LEVEL);
                         }
                     }
+
                     // Check conditions to be able to kick someone
                     if ((selfPowerLevel >= powerLevels.kick) && (selfPowerLevel > memberPowerLevel)) {
                         supportedActions.add(ITEM_ACTION_KICK);
@@ -914,10 +918,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             Log.w(LOG_TAG, "## updateListViewItemsContent(): list view adapter not initialized");
         } else {
             // reset action lists & allocate items list
-            ArrayList<VectorMemberDetailsAdapter.AdapterMemberActionItems> adminActions = new ArrayList<>();
-            ArrayList<VectorMemberDetailsAdapter.AdapterMemberActionItems> callActions = new ArrayList<>();
-            ArrayList<VectorMemberDetailsAdapter.AdapterMemberActionItems> directMessagesActions = new ArrayList<>();
-            ArrayList<VectorMemberDetailsAdapter.AdapterMemberActionItems> devicesActions = new ArrayList<>();
+            List<VectorMemberDetailsAdapter.AdapterMemberActionItems> uncategorizedActions = new ArrayList<>();
+            List<VectorMemberDetailsAdapter.AdapterMemberActionItems> adminActions = new ArrayList<>();
+            List<VectorMemberDetailsAdapter.AdapterMemberActionItems> callActions = new ArrayList<>();
+            List<VectorMemberDetailsAdapter.AdapterMemberActionItems> directMessagesActions = new ArrayList<>();
+            List<VectorMemberDetailsAdapter.AdapterMemberActionItems> devicesActions = new ArrayList<>();
 
             ArrayList<Integer> supportedActionsList = supportedActionsList();
 
@@ -943,14 +948,14 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             if (supportedActionsList.indexOf(ITEM_ACTION_LEAVE) >= 0) {
                 imageResource = R.drawable.vector_leave_room_black;
                 actionText = getResources().getString(R.string.room_participants_action_leave);
-                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_LEAVE));
+                uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_LEAVE));
             }
 
-            // build the "default" item
-            if (supportedActionsList.indexOf(ITEM_ACTION_SET_DEFAULT_POWER_LEVEL) >= 0) {
+            // build the "make admin" item
+            if (supportedActionsList.indexOf(ITEM_ACTION_SET_ADMIN) >= 0) {
                 imageResource = R.drawable.ic_verified_user_black;
-                actionText = getResources().getString(R.string.room_participants_action_set_default_power_level);
-                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_DEFAULT_POWER_LEVEL));
+                actionText = getResources().getString(R.string.room_participants_action_set_admin);
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_ADMIN));
             }
 
             // build the "moderator" item
@@ -960,11 +965,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_MODERATOR));
             }
 
-            // build the "make admin" item
-            if (supportedActionsList.indexOf(ITEM_ACTION_SET_ADMIN) >= 0) {
+            // build the "default" item
+            if (supportedActionsList.indexOf(ITEM_ACTION_SET_DEFAULT_POWER_LEVEL) >= 0) {
                 imageResource = R.drawable.ic_verified_user_black;
-                actionText = getResources().getString(R.string.room_participants_action_set_admin);
-                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_ADMIN));
+                actionText = getResources().getString(R.string.room_participants_action_set_default_power_level);
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_DEFAULT_POWER_LEVEL));
             }
 
             // build the "remove from" item (ban)
@@ -992,23 +997,24 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             if (supportedActionsList.indexOf(ITEM_ACTION_IGNORE) >= 0) {
                 imageResource = R.drawable.ic_person_outline_black;
                 actionText = getResources().getString(R.string.room_participants_action_ignore);
-                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_IGNORE));
+                uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_IGNORE));
             }
 
             // build the "unignore" item
             if (supportedActionsList.indexOf(ITEM_ACTION_UNIGNORE) >= 0) {
                 imageResource = R.drawable.ic_person_black;
                 actionText = getResources().getString(R.string.room_participants_action_unignore);
-                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNIGNORE));
+                uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNIGNORE));
             }
 
             // build the "mention" item
             if (supportedActionsList.indexOf(ITEM_ACTION_MENTION) >= 0) {
                 imageResource = R.drawable.ic_comment_black;
                 actionText = getResources().getString(R.string.room_participants_action_mention);
-                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MENTION));
+                uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MENTION));
             }
 
+            mListViewAdapter.setUncategorizedActionsList(uncategorizedActions);
             mListViewAdapter.setAdminActionsList(adminActions);
             mListViewAdapter.setCallActionsList(callActions);
 
@@ -1234,7 +1240,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         String userId = mMemberId;
 
         if (null != mRoomMember) {
-            avatarUrl = mRoomMember.avatarUrl;
+            avatarUrl = mRoomMember.getAvatarUrl();
 
             if (TextUtils.isEmpty(avatarUrl)) {
                 userId = mRoomMember.getUserId();
@@ -1382,7 +1388,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // use the room member if it exists
             if (null != mRoomMember) {
                 String displayname = mRoomMember.displayname;
-                String avatarUrl = mRoomMember.avatarUrl;
+                String avatarUrl = mRoomMember.getAvatarUrl();
 
                 // if there is no avatar or displayname , try to find one from the known user
                 // it is always better than the vector avatar or the matrid id.

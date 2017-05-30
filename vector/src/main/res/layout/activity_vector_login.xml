@@ -1,79 +1,79 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/login_actions_bar"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
-        android:layout_height="56dp">
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/vector_silver_color"/>
+            android:background="@color/vector_silver_color" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/vector_silver_color"/>
+            android:background="@color/vector_silver_color" />
 
         <Button
             android:id="@+id/button_login"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
             android:layout_width="94dp"
             android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
             android:background="@color/vector_green_color"
-            android:textColor="@android:color/white"
-            android:text="@string/auth_login"/>
+            android:text="@string/auth_login"
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/button_register"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
             android:layout_width="94dp"
             android:layout_height="36dp"
-            android:textColor="@color/vector_green_color"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:background="@android:color/white"
-            android:text="@string/auth_register"/>
+            android:text="@string/auth_register"
+            android:textColor="@color/vector_green_color" />
 
         <Button
             android:id="@+id/button_reset_password"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
             android:layout_width="150dp"
             android:layout_height="36dp"
-            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
             android:background="@color/vector_green_color"
+            android:text="@string/auth_send_reset_email"
             android:textColor="@android:color/white"
-            android:text="@string/auth_send_reset_email"/>
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/button_forgot_email_validate"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="@color/vector_green_color"
+            android:text="@string/auth_send_reset_email"
             android:textColor="@android:color/white"
-            android:text="@string/auth_send_reset_email"/>
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/button_submit"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
             android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
             android:background="@color/vector_green_color"
             android:minWidth="94dp"
             android:text="@string/auth_submit"
@@ -107,47 +107,47 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
                 <ImageView
                     android:id="@+id/login_large_logo"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/logo_login">
-                </ImageView>
+                    android:src="@drawable/logo_login"></ImageView>
             </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/main_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="19dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp">
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="19dp"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/login_inputs_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <EditText
                         android:id="@+id/login_user_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:hint="@string/auth_user_id_placeholder"/>
+                        android:hint="@string/auth_user_id_placeholder"
+                        android:maxLines="1" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="4dp"
-                        android:textSize="16sp"
-                        android:text="@string/or" />
+                        android:text="@string/or"
+                        android:textSize="16sp" />
 
                     <LinearLayout
                         android:id="@+id/login_phone_number"
@@ -163,7 +163,7 @@
                             android:clickable="false"
                             android:drawableRight="@drawable/ic_material_expand_more_black"
                             android:focusable="false"
-                            android:singleLine="true"
+                            android:maxLines="1"
                             android:visibility="gone"
                             tools:text="FR" />
 
@@ -173,7 +173,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/auth_phone_number_placeholder"
                             android:inputType="phone"
-                            android:singleLine="true"
+                            android:maxLines="1"
                             tools:text="0600000000" />
                     </LinearLayout>
 
@@ -181,11 +181,11 @@
                         android:id="@+id/login_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:inputType="textPassword"
+                        android:layout_marginTop="10dp"
                         android:ems="10"
                         android:hint="@string/auth_password_placeholder"
-                        android:layout_marginTop="10dp" />
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -197,68 +197,68 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/auth_reset_password_message"/>
+                        android:text="@string/auth_reset_password_message" />
 
                     <EditText
                         android:id="@+id/forget_email_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:hint="@string/auth_email_placeholder"/>
+                        android:hint="@string/auth_email_placeholder"
+                        android:maxLines="1" />
 
                     <EditText
                         android:id="@+id/forget_new_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:inputType="textPassword"
+                        android:layout_marginTop="10dp"
                         android:ems="10"
                         android:hint="@string/auth_new_password_placeholder"
-                        android:layout_marginTop="10dp" />
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
 
                     <EditText
                         android:id="@+id/forget_confirm_new_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:inputType="textPassword"
+                        android:layout_marginTop="10dp"
                         android:ems="10"
                         android:hint="@string/auth_repeat_new_password_placeholder"
-                        android:layout_marginTop="10dp" />
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/creation_inputs_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     tools:visibility="visible">
 
                     <EditText
                         android:id="@+id/creation_your_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:hint="@string/auth_user_name_placeholder" />
+                        android:hint="@string/auth_user_name_placeholder"
+                        android:maxLines="1" />
 
                     <EditText
                         android:id="@+id/creation_password1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:inputType="textPassword"
                         android:ems="10"
-                        android:hint="@string/auth_password_placeholder"/>
+                        android:hint="@string/auth_password_placeholder"
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
 
                     <EditText
                         android:id="@+id/creation_password2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:inputType="textPassword"
                         android:ems="10"
-                        android:hint="@string/auth_repeat_password_placeholder"/>
+                        android:hint="@string/auth_repeat_password_placeholder"
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
 
                 </LinearLayout>
 
@@ -272,9 +272,9 @@
                         android:id="@+id/instructions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
                         android:layout_marginTop="24dp"
-                        android:text="@string/auth_add_email_phone_message" />
+                        android:text="@string/auth_add_email_phone_message"
+                        android:textSize="16sp" />
 
                     <EditText
                         android:id="@+id/registration_email"
@@ -296,11 +296,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="6dp"
-                            android:visibility="gone"
                             android:clickable="false"
                             android:drawableRight="@drawable/ic_material_expand_more_black"
                             android:focusable="false"
-                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:visibility="gone"
                             tools:text="FR" />
 
                         <EditText
@@ -309,7 +309,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/auth_phone_number_placeholder"
                             android:inputType="phone"
-                            android:singleLine="true"
+                            android:maxLines="1"
                             tools:text="0600000000" />
                     </LinearLayout>
                 </LinearLayout>
@@ -358,7 +358,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hs_url"
-                            android:singleLine="true" />
+                            android:maxLines="1" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -372,7 +372,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/identity_url"
-                            android:singleLine="true" />
+                            android:maxLines="1" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -380,21 +380,21 @@
                     android:id="@+id/login_forgot_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="5dp"
-                    android:textSize="14sp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/auth_forgot_password"
                     android:textColor="@color/vector_green_color"
-                    android:text="@string/auth_forgot_password"/>
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/flow_progress_message_textview"
-                android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="A text here"
                 android:textSize="16sp"
-                android:visibility="gone"
-                android:text="A text here" />
+                android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>
@@ -408,10 +408,10 @@
 
         <ProgressBar
             android:id="@+id/search_progress"
-            android:layout_centerInParent="true"
-            android:layout_height="60dp"
             android:layout_width="60dp"
-            android:indeterminate="true"/>
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:indeterminate="true" />
     </RelativeLayout>
 
 </RelativeLayout>

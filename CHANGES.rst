@@ -1,16 +1,40 @@
+Changes in Riot 0.6.10 (2017-05-30)
+===================================================
+ 
+Features:
+ * Add some lanagues supports
+ * Add auto-complete text editor.
+ * Use FCM instead of GCM.
+ 
+Improvements:
+ * Add a new notification design.
+ * Offer to send a bug report when the application crashes.
+ * Use the new bug report API.
+  
+Bugfixes:
+ * Fix many issues reported by GA.
+ * #1041 : matrix.to links are broken. 
+ * #1052 : People tab in room details: 'you' displayed instead of your displayname/matrix id.
+ * #1053 : 'I have verified my mail' button is missing
+ * #1077 : Highlight phone numbers, email addresses, etc.
+ * #1093 : Cannot decrypt attachments on Android 4.2.X
+ * #1118 : show syncing throbber in room view
+ * #1186 : Infinite back pagination whereas the app is in background
+ * Fix some cryptography issues.
+ 
 Changes in Riot 0.6.9 (2017-03-15)
 ===================================================
  
 Features:
- * Add the MSISDN support for the authentification, the registration and the member search.
- * Add the encryption keys import / export.
- * Add the unknown devices management.
+ * Add MSISDN support for authentication, registration and member search.
+ * Add encryption keys import / export.
+ * Add unknown devices management.
   
 Improvements:
- * Improve the bug report management.
- * Reduce the application loading time.
- * Add the application / SDK version in the user agent
- * Add the audio attachments support
+ * Improve bug report management.
+ * Reduce application loading time.
+ * Add application / SDK version in the user agent
+ * Add audio attachments support
   
 Bugfixes:
  * Fix many encryption issues.

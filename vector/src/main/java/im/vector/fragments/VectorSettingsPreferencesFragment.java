@@ -1375,8 +1375,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Refresh the pushers list
      */
     private void refreshPushersList() {
-        GcmRegistrationManager registrationManager = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
-        List<Pusher> pushersList = new ArrayList<>(registrationManager.mPushersList);
+        final GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
+        final List<Pusher> pushersList = new ArrayList<>(gcmRegistrationManager.mPushersList);
 
         if (pushersList.isEmpty()) {
             getPreferenceScreen().removePreference(mPushersSettingsCategory);
@@ -1399,18 +1399,68 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             int index = 0;
 
-            for (Pusher pusher : mDisplayedPushers) {
-                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
-
-                // fix https://github.com/vector-im/vector-android/issues/192
-                // It appears that the server sends some invalid pushers where the device and the app are
-                // invalid. In all these cases the language is set to null.
+            for (final Pusher pusher : mDisplayedPushers) {
                 if (null != pusher.lang) {
+                    boolean isThisDeviceTarget = TextUtils.equals(gcmRegistrationManager.getGCMRegistrationToken(), pusher.pushkey);
+
+                    VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity(), isThisDeviceTarget ? Typeface.BOLD : Typeface.NORMAL);
                     preference.setTitle(pusher.deviceDisplayName);
                     preference.setSummary(pusher.appDisplayName);
                     preference.setKey(PUSHER_PREFERENCE_KEY_BASE + index);
                     index++;
                     mPushersSettingsCategory.addPreference(preference);
+
+                    // the user cannot remove the self device target
+                    if (!isThisDeviceTarget) {
+                        preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                            @Override
+                            public boolean onPreferenceLongClick(Preference preference) {
+                                final String dialogMessage = getString(R.string.settings_delete_notification_targets_confirmation);
+                                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                                        .setTitle(R.string.dialog_title_confirmation)
+                                        .setMessage(dialogMessage)
+                                        .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+
+                                                displayLoadingView();
+                                                gcmRegistrationManager.unregister(mSession, pusher, new ApiCallback<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void info) {
+                                                        refreshPushersList();
+                                                        onCommonDone(null);
+                                                    }
+
+                                                    @Override
+                                                    public void onNetworkError(Exception e) {
+                                                        onCommonDone(e.getLocalizedMessage());
+                                                    }
+
+                                                    @Override
+                                                    public void onMatrixError(MatrixError e) {
+                                                        onCommonDone(e.getLocalizedMessage());
+                                                    }
+
+                                                    @Override
+                                                    public void onUnexpectedError(Exception e) {
+                                                        onCommonDone(e.getLocalizedMessage());
+                                                    }
+                                                });
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .create()
+                                        .show();
+                                return true;
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -1946,7 +1996,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             mSession.getCrypto().getDeviceInfo(userId, deviceId, new SimpleApiCallback<MXDeviceInfo>() {
                 @Override
                 public void onSuccess(final MXDeviceInfo deviceInfo) {
-                    if ((null != deviceInfo) && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
+                    if ((null != deviceInfo) && !TextUtils.isEmpty(deviceInfo.fingerprint()) && (null != getActivity())) {
                         VectorCustomActionEditTextPreference cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_information_device_key));
 
                         if (null != cryptoInfoTextPreference) {

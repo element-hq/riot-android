@@ -2,72 +2,72 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="@string/encryption_information_verify_device_warning"/>
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_verify_device_warning"
+            android:textSize="12sp" />
 
         <TextView
-            android:layout_marginTop="5dp"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_device_name"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_device_name"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_device_info_device_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="a device name"/>
+            android:text="a device name"
+            android:textSize="12sp" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_device_id"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_device_id"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_device_info_device_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="a device id"/>
+            android:text="a device id"
+            android:textSize="12sp" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_device_key"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_device_key"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_device_info_device_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="a device key"/>
+            android:text="a device key"
+            android:textSize="12sp" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="@string/encryption_information_verify_device_warning2"/>
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_verify_device_warning2"
+            android:textSize="12sp" />
     </LinearLayout>
 </ScrollView>

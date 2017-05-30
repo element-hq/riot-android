@@ -897,11 +897,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                     enableLoadingScreen(false);
 
-                    mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
-                    refreshDisplay();
-
                     // refresh the messages
                     hideMainLayoutAndToast(getResources().getString(R.string.auth_reset_password_email_validation_message, email));
+
+                    mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
+                    refreshDisplay();
 
                     mForgotPid = new HashMap<>();
                     mForgotPid.put("client_secret", thirdPid.clientSecret);
@@ -1204,6 +1204,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private void submitEmailToken(final String aToken, final String aClientSecret, final String aSid, final String aSessionId, final String aHomeServer, final String aIdentityServer) {
         final HomeserverConnectionConfig homeServerConfig = mHomeserverConnectionConfig = new HomeserverConnectionConfig(Uri.parse(aHomeServer), Uri.parse(aIdentityServer), null, new ArrayList<Fingerprint>(), false);
+        RegistrationManager.getInstance().setHsConfig(getHsConfig());
         Log.d(LOG_TAG, "## submitEmailToken(): IN");
 
         if (mMode == MODE_ACCOUNT_CREATION) {
@@ -1395,6 +1396,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                 }
 
                                 if (null != registrationFlowResponse) {
+                                    RegistrationManager.getInstance().setSupportedRegistrationFlows(registrationFlowResponse);
                                     onRegistrationFlow(registrationFlowResponse);
                                 } else {
                                     onFailureDuringAuthRequest(e);

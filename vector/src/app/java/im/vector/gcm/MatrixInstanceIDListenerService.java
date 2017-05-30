@@ -17,24 +17,29 @@
 
 package im.vector.gcm;
 
-import org.matrix.androidsdk.util.Log;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 
-import com.google.android.gms.iid.InstanceIDListenerService;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 
-public class MatrixInstanceIDListenerService extends InstanceIDListenerService {
+public class MatrixInstanceIDListenerService extends FirebaseInstanceIdService {
 
     private static final String LOG_TAG = "MatrixInstanceIDLS";
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
-     * the previous token had been compromised. This call is initiated by the
-     * InstanceID provider.
+     * the previous token had been compromised. Note that this is also called
+     * when the InstanceID token is initially generated, so this is where
+     * you retrieve the token.
      */
+    // [START refresh_token]
     @Override
     public void onTokenRefresh() {
-        Log.d(LOG_TAG, "onTokenRefresh");
-        Matrix.getInstance(this).getSharedGCMRegistrationManager().resetGCMRegistration(true);
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d(LOG_TAG, "onTokenRefresh " + refreshedToken);
+
+        Matrix.getInstance(this).getSharedGCMRegistrationManager().resetGCMRegistration(refreshedToken);
     }
 }

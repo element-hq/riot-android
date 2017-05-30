@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
- *
+ * Copyright 2017 Vector Creations Ltd
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -532,7 +533,7 @@ public class VectorUtils {
      */
     public static void loadRoomMemberAvatar(Context context, MXSession session, ImageView imageView, RoomMember roomMember) {
         if (null != roomMember) {
-            VectorUtils.loadUserAvatar(context, session, imageView, roomMember.avatarUrl, roomMember.getUserId(), roomMember.displayname);
+            VectorUtils.loadUserAvatar(context, session, imageView, roomMember.getAvatarUrl(), roomMember.getUserId(), roomMember.displayname);
         }
     }
 

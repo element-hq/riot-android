@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="riot_app_name">Riot</string>
+
+    <!-- server urls -->
+    <string name="vector_im_server_url" translatable="false">https://vector.im</string>
+    <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
+    <string name="default_hs_server_url" translatable="false">https://matrix.org</string>
+    <string name="default_identity_server_url" translatable="false">https://vector.im</string>
+
+    <!--string name="settings_room_privacy_label">Privacy</string-->
+    <string name="devices_divider" translatable="false">devices_devider</string>
+    <string name="cryptography_divider" translatable="false">cryptography_divider</string>
+
+    <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
+    <string name="room_settings_read_history_entry_value_anyone" translatable="false">world_readable</string>
+    <string name="room_settings_read_history_entry_value_members_only_option_time_shared" translatable="false">shared</string>
+    <string name="room_settings_read_history_entry_value_members_only_invited" translatable="false">invited</string>
+    <string name="room_settings_read_history_entry_value_members_only_joined" translatable="false">joined</string>
+</resources>

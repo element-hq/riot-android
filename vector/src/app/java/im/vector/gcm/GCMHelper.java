@@ -16,15 +16,12 @@
  */
 package im.vector.gcm;
 
-import android.content.Context;
-import android.widget.ExpandableListView;
-
 import org.matrix.androidsdk.util.Log;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 
-import im.vector.R;
+import im.vector.VectorApp;
 
 public class GCMHelper {
 
@@ -32,38 +29,37 @@ public class GCMHelper {
 
     /**
      * Retrieves the GCM registration token.
-     *
-     * @param appContext the application context
-     * @return the registration token.
      */
-    public static String getRegistrationToken(Context appContext) {
-        String registrationToken;
+    public static String getRegistrationToken() {
+        String registrationToken = null;
 
         try {
-            Log.d(LOG_TAG, "Getting the GCM Registration Token");
-            registrationToken = InstanceID.getInstance(appContext).getToken(appContext.getString(R.string.gcm_defaultSenderId),
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
-            Log.d(LOG_TAG, "GCM Registration Token: " + registrationToken);
+            if (null == VectorApp.getInstance()) {
+                Log.e(LOG_TAG, "## getRegistrationToken() : No active application");
+            } else {
+                if (null == FirebaseApp.initializeApp(VectorApp.getInstance())) {
+                    Log.e(LOG_TAG, "## getRegistrationToken() : cannot initialise FirebaseApp");
+                }
+            }
+            // try to get the token anyway
+            registrationToken = FirebaseInstanceId.getInstance().getToken();
+            Log.d(LOG_TAG, "## getRegistrationToken(): " + registrationToken);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "getRegistrationToken failed with exception : " + e.getMessage());
-            registrationToken = null;
+            Log.e(LOG_TAG, "## getRegistrationToken() : failed " + e.getMessage());
         }
+
 
         return registrationToken;
     }
 
     /**
      * Clear the registration token.
-     *
-     * @param appContext the application context
      */
-    public static void clearRegistrationToken(Context appContext) {
+    public static void clearRegistrationToken() {
         try {
-            InstanceID.getInstance(appContext).deleteToken(appContext.getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE);
-            InstanceID.getInstance(appContext).deleteInstanceID();
+            FirebaseInstanceId.getInstance().deleteInstanceId();
         } catch (Exception e) {
-            Log.e(LOG_TAG, "clearRegistrationToken failed with exception : " + e.getMessage());
+            Log.e(LOG_TAG, "##clearRegistrationToken() failed " + e.getMessage());
         }
     }
 }

@@ -43,6 +43,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.RequestPhoneNumberValidationResponse;
 import org.matrix.androidsdk.rest.model.ThreePid;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -70,6 +71,10 @@ public class PhoneNumberAdditionActivity extends AppCompatActivity implements Te
     // Ex "+33"
     private String mCurrentPhonePrefix;
     private Phonenumber.PhoneNumber mCurrentPhoneNumber;
+
+    // True when a phone number is submitted
+    // Used to prevent user to submit several times in a row
+    private boolean mIsSubmittingPhone;
 
      /*
      * *********************************************************************************************
@@ -110,6 +115,12 @@ public class PhoneNumberAdditionActivity extends AppCompatActivity implements Te
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));
 
         initViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mIsSubmittingPhone = false;
     }
 
     @Override
@@ -242,40 +253,52 @@ public class PhoneNumberAdditionActivity extends AppCompatActivity implements Te
      * @param phoneNumber
      */
     private void addPhoneNumber(final Phonenumber.PhoneNumber phoneNumber) {
-        mLoadingView.setVisibility(View.VISIBLE);
+        if (!mIsSubmittingPhone) {
+            mIsSubmittingPhone = true;
 
-        final String e164phone = PhoneNumberUtils.getE164format(phoneNumber);
-        // Extract from phone number object instead of using mCurrentRegionCode just in case
-        final String countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
-        final ThreePid pid = new ThreePid(e164phone, countryCode, ThreePid.MEDIUM_MSISDN);
+            mLoadingView.setVisibility(View.VISIBLE);
 
-        mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<RequestPhoneNumberValidationResponse>() {
-            @Override
-            public void onSuccess(RequestPhoneNumberValidationResponse response) {
-                mLoadingView.setVisibility(View.GONE);
-                Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
-                        mSession.getCredentials().userId, pid);
-                startActivityForResult(intent, REQUEST_VERIFICATION);
-            }
+            final String e164phone = PhoneNumberUtils.getE164format(phoneNumber);
+            // Extract from phone number object instead of using mCurrentRegionCode just in case
+            final String countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
+            final ThreePid pid = new ThreePid(e164phone, countryCode, ThreePid.MEDIUM_MSISDN);
 
-            @Override
-            public void onNetworkError(Exception e) {
-                onSubmitPhoneError(e.getLocalizedMessage());
-            }
+            mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<RequestPhoneNumberValidationResponse>() {
+                @Override
+                public void onSuccess(RequestPhoneNumberValidationResponse response) {
+                    mLoadingView.setVisibility(View.GONE);
+                    Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
+                            mSession.getCredentials().userId, pid);
+                    startActivityForResult(intent, REQUEST_VERIFICATION);
+                }
 
-            @Override
-            public void onMatrixError(MatrixError e) {
-                onSubmitPhoneError(e.getLocalizedMessage());
-            }
+                @Override
+                public void onNetworkError(Exception e) {
+                    onSubmitPhoneError(e.getLocalizedMessage());
+                }
 
-            @Override
-            public void onUnexpectedError(Exception e) {
-                onSubmitPhoneError(e.getLocalizedMessage());
-            }
-        });
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onSubmitPhoneError(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onSubmitPhoneError(e.getLocalizedMessage());
+                }
+            });
+        } else {
+            Log.e(LOG_TAG, "Already submitting");
+        }
     }
 
+    /**
+     * Handle phone submission error
+     *
+     * @param errorMessage
+     */
     private void onSubmitPhoneError(final String errorMessage) {
+        mIsSubmittingPhone = false;
         mLoadingView.setVisibility(View.GONE);
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
