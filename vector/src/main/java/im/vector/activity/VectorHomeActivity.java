@@ -1907,12 +1907,17 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         BingRulesManager bingRulesManager = dataHandler.getBingRulesManager();
         Collection<RoomSummary> summaries2 = dataHandler.getStore().getSummaries();
         HashMap<Room, RoomSummary> roomSummaryByRoom = new HashMap<>();
+        HashSet<String> directChatInvitations = new HashSet<>();
 
         for (RoomSummary summary : summaries2) {
             Room room = dataHandler.getStore().getRoom(summary.getRoomId());
 
             if (null != room) {
                 roomSummaryByRoom.put(room, summary);
+
+                if (!room.isConferenceUserRoom() && room.isInvited() && room.isDirectChatInvitation()) {
+                    directChatInvitations.add(room.getRoomId());
+                }
             }
         }
 
@@ -1947,6 +1952,8 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             } else if (id == R.id.bottom_action_rooms) {
                 HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());
                 HashSet<String> favoritesRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
+
+                directChatRoomIds.addAll(directChatInvitations);
 
                 filteredRoomIdsSet = new HashSet<>();
 
