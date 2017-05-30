@@ -45,7 +45,7 @@
         android:orientation="vertical"
         android:background="@color/room_background"
         android:layout_below="@+id/room_action_bar">
-        
+
         <View
             android:layout_width="match_parent"
             android:layout_height="16dp">
@@ -332,10 +332,20 @@
             </RelativeLayout>
 
             <ProgressBar
+                android:id="@+id/room_sync_in_progress"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:visibility="gone"
+                android:background="@color/vector_green_color"
+                android:indeterminate="true"/>
+
+            <ProgressBar
                 android:id="@+id/loading_room_paginate_back_progress"
                 android:layout_height="40dp"
                 android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
+                android:layout_below="@id/room_sync_in_progress"
                 android:visibility="gone"
                 android:indeterminate="true" />
 
