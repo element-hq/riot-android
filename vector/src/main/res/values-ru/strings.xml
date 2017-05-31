@@ -8,6 +8,7 @@
     <string name="title_activity_room">Комнаты</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_member_details">Информация об участнике</string>
+    <string name="title_activity_historical">Historical</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -49,6 +50,7 @@
     <string name="action_video_call">Видео вызов</string>
     <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Отметить всё как прочитанное</string>
+    <string name="action_historical">Historical</string>
     <string name="action_quick_reply">Быстрый ответ</string>
     <string name="action_open">Открыть</string>
     <string name="action_close">Закрыть</string>
@@ -440,6 +442,7 @@
     <string name="room_settings_de_prioritize">Не срочно</string>
     <string name="room_settings_direct_chat">Прямой чат</string>
     <string name="room_settings_leave_conversation">Покинуть обсуждение</string>
+    <string name="room_settings_forget">Forget</string>
     
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Сообщения</string>
@@ -698,4 +701,7 @@
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d unread notified messages</string>
     <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
+
+    <!-- historical -->
+    <string name="historical_placeholder">Search for historical</string>
 </resources>
