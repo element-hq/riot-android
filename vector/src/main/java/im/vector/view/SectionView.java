@@ -259,7 +259,7 @@ public class SectionView extends RelativeLayout {
         newTranslationY = Math.min(newTranslationY, mFooterTop);
 
         if (getTranslationY() != newTranslationY) {
-            Log.e(LOG_TAG, "sectionview " + mSection.getTitle() + " updatePosition translation y " + newTranslationY);
+            Log.d(LOG_TAG, "sectionview " + mSection.getTitle() + " updatePosition translation y " + newTranslationY);
 
             setTranslationY(newTranslationY);
             requestLayout();
