@@ -8,6 +8,7 @@
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configurações</string>
     <string name="title_activity_member_details">Detalhes dos integrantes</string>
+    <string name="title_activity_historical">Historical</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -49,6 +50,7 @@
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Marcar como lido</string>
+    <string name="action_historical">Historical</string>
     <string name="action_quick_reply">Resposta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Fechar</string>
@@ -438,6 +440,7 @@
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Conversa direta</string>
     <string name="room_settings_leave_conversation">Deixar a conversa</string>
+    <string name="room_settings_forget">Forget</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Mensagens</string>
@@ -696,4 +699,7 @@
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d unread notified messages</string>
     <string name="notification_unread_notified_messages_in_room">%1$d unread messages in %2$d rooms"</string>
+
+    <!-- historical -->
+    <string name="historical_placeholder">Search for historical</string>
 </resources>

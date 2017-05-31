@@ -8,6 +8,7 @@
     <string name="title_activity_room">Ruimte</string>
     <string name="title_activity_settings">Instellingen</string>
     <string name="title_activity_member_details">Deelnemer Details</string>
+    <string name="title_activity_historical">Historical</string>
 
     <!-- button names -->
     <string name="ok">Akkoord</string>
@@ -49,6 +50,7 @@
     <string name="action_video_call">Videogesprek</string>
     <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Alles als gelezen markeren</string>
+    <string name="action_historical">Historical</string>
     <string name="action_quick_reply">Snel reageren</string>
     <string name="action_open">Open</string>
     <string name="action_close">Sluit</string>
@@ -438,6 +440,7 @@
     <string name="room_settings_de_prioritize">De-prioriteren</string>
     <string name="room_settings_direct_chat">Privé chat</string>
     <string name="room_settings_leave_conversation">Gesprek Verlaten</string>
+    <string name="room_settings_forget">Forget</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Berichten</string>
@@ -697,4 +700,7 @@
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d ongelezen genotificeerde berichten</string>
     <string name="notification_unread_notified_messages_in_room">%1$d ongelezen berichten in %2$d ruimtes</string>
+
+    <!-- historical -->
+    <string name="historical_placeholder">Search for historical</string>
 </resources>

@@ -30,6 +30,7 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.store.IMXStore;
 
 import butterknife.BindColor;
 import butterknife.BindView;
@@ -116,12 +117,14 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             return;
         }
 
-        if (null == session.getDataHandler().getStore()) {
+        IMXStore store = session.getDataHandler().getStore(room.getRoomId());
+
+        if (null == store) {
             Log.e(LOG_TAG, "## populateViews() : null Store");
             return;
         }
 
-        final RoomSummary roomSummary = session.getDataHandler().getStore().getSummary(room.getRoomId());
+        final RoomSummary roomSummary = store.getSummary(room.getRoomId());
 
         if (null == roomSummary) {
             Log.e(LOG_TAG, "## populateViews() : null roomSummary");
