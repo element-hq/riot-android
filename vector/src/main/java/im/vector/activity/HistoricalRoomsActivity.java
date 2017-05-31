@@ -30,7 +30,10 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -166,6 +169,21 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
         mHistoricalRecyclerView.setAdapter(mHistoricalAdapter);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        // Remove unwanted left margin
+        LinearLayout searchEditFrame = (LinearLayout) mSearchView.findViewById(R.id.search_edit_frame);
+        if (searchEditFrame != null) {
+            ViewGroup.MarginLayoutParams searchEditFrameParams = (ViewGroup.MarginLayoutParams) searchEditFrame.getLayoutParams();
+            searchEditFrameParams.leftMargin = 0;
+            searchEditFrame.setLayoutParams(searchEditFrameParams);
+        }
+        ImageView searchIcon = (ImageView) mSearchView.findViewById(R.id.search_mag_icon);
+        if (searchIcon != null) {
+            ViewGroup.MarginLayoutParams searchIconParams = (ViewGroup.MarginLayoutParams) searchIcon.getLayoutParams();
+            searchIconParams.leftMargin = 0;
+            searchIcon.setLayoutParams(searchIconParams);
+        }
+        mToolbar.setContentInsetStartWithNavigation(0);
+
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setSubmitButtonEnabled(false);
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
