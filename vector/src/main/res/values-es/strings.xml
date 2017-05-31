@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="resouces_language">es</string>
     <string name="resouces_country">ES</string>
@@ -308,8 +308,8 @@
     <!--  Chat -->
     <string name="room_menu_search">Buscar</string>
     <string name="room_one_user_is_typing">%s esta escribiendo…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s están escribiendo…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; otros están escribiendo…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s están escribiendo…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; otros están escribiendo…</string>
     <string name="room_message_placeholder_encrypted">Enviar mensaje cifrado…</string>
     <string name="room_message_placeholder_not_encrypted">Enviar mensaje (descifrado)…</string>
     <string name="room_offline_notification">La conexión a la servidora se perdió.</string>
@@ -346,7 +346,7 @@
     <string name="room_details_selected">seleccionado</string>
     <string name="malformed_id">Identificación malformada. Debe ser correo electrónico o identificación de Matrix como \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITADO</string>
-    <string name="room_details_people_present_group_name">ENTRO</string>
+    <string name="room_details_people_present_group_name">ENTRÓ</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Razón por reportar este contenido</string>
