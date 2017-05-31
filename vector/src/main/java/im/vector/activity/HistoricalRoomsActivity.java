@@ -184,6 +184,7 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
         MXDataHandler dataHandler = mSession.getDataHandler();
 
         if (!dataHandler.areLeftRoomsSynced()) {
+            mHistoricalAdapter.setRooms(new ArrayList<Room>());
             mWaitingView.setVisibility(View.VISIBLE);
             dataHandler.retrieveLeftRooms(new ApiCallback<Void>() {
                 @Override

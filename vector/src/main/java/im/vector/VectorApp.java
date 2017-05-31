@@ -278,6 +278,10 @@ public class VectorApp extends Application {
                 session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
                 session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
                 removeSyncingSession(session);
+
+                if (session.getDataHandler().areLeftRoomsSynced()) {
+                    session.getDataHandler().releaseLeftRooms();
+                }
             }
         }
 
