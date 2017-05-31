@@ -49,6 +49,7 @@ import org.matrix.androidsdk.data.store.MXStoreListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
@@ -272,6 +273,23 @@ public class EventStreamService extends Service {
     };
 
     /**
+     * Track bing rules updates
+     */
+    private final BingRulesManager.onBingRulesUpdateListener mBingRulesUpdatesListener = new BingRulesManager.onBingRulesUpdateListener() {
+        @Override
+        public void onBingRulesUpdate() {
+            getNotificationsHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(LOG_TAG, "## on bing rules update");
+                    mNotifiedEventsByRoomId = null;
+                    refreshMessagesNotification();
+                }
+            });
+        }
+    };
+
+    /**
      * Live events listener
      */
     private final MXEventListener mEventsListener = new MXEventListener() {
@@ -343,6 +361,7 @@ public class EventStreamService extends Service {
                 mMatrixIds.add(matrixId);
                 session.getDataHandler().addListener(mEventsListener);
                 session.getDataHandler().getCallsManager().addListener(mCallsManagerListener);
+                session.getDataHandler().getBingRulesManager().addBingRulesUpdateListener(mBingRulesUpdatesListener);
                 // perform a full sync
                 session.startEventStream(null);
             }
@@ -365,7 +384,7 @@ public class EventStreamService extends Service {
                     session.stopEventStream();
                     session.getDataHandler().removeListener(mEventsListener);
                     session.getDataHandler().getCallsManager().removeListener(mCallsManagerListener);
-
+                    session.getDataHandler().getBingRulesManager().removeBingRulesUpdateListener(mBingRulesUpdatesListener);
                     mSessions.remove(session);
                     mMatrixIds.remove(matrixId);
                 }
@@ -575,6 +594,8 @@ public class EventStreamService extends Service {
 
             session.getDataHandler().addListener(mEventsListener);
             session.getDataHandler().getCallsManager().addListener(mCallsManagerListener);
+            session.getDataHandler().getBingRulesManager().addBingRulesUpdateListener(mBingRulesUpdatesListener);
+
             final IMXStore store = session.getDataHandler().getStore();
 
             // the store is ready (no data loading in progress...)
@@ -659,6 +680,7 @@ public class EventStreamService extends Service {
                     session.stopEventStream();
                     session.getDataHandler().removeListener(mEventsListener);
                     session.getDataHandler().getCallsManager().removeListener(mCallsManagerListener);
+                    session.getDataHandler().getBingRulesManager().removeBingRulesUpdateListener(mBingRulesUpdatesListener);
                 }
             }
         }
@@ -1214,7 +1236,16 @@ public class EventStreamService extends Service {
             return false;
         }
 
+        // not yet loaded
+        if (!session.getDataHandler().getBingRulesManager().isReady()) {
+            return false;
+        }
+
         IMXStore store = session.getDataHandler().getStore();
+
+        if (!store.areReceiptsReady()) {
+            return false;
+        }
 
         // initialise the map it was not yet done (after restarting the application for example)
         if (null == mNotifiedEventsByRoomId) {
@@ -1255,7 +1286,9 @@ public class EventStreamService extends Service {
                             BingRule rule = session.fulfillRule(event);
 
                             if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
+                                Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
                                 list.add(new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, rule));
+                                Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
                             }
                         }
 
@@ -1276,6 +1309,7 @@ public class EventStreamService extends Service {
 
                 // the room does not exist anymore
                 if (null == room) {
+                    Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the room " + roomId + " does not exist anymore");
                     mNotifiedEventsByRoomId.remove(roomId);
                     isUpdated = true;
                 } else {
@@ -1293,6 +1327,8 @@ public class EventStreamService extends Service {
                                 NotificationUtils.NotifiedEvent event = events.get(i);
 
                                 if (room.isEventRead(event.mEventId)) {
+                                    Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");
+
                                     events.remove(i);
                                     isUpdated = true;
                                 } else {
@@ -1305,6 +1341,7 @@ public class EventStreamService extends Service {
 
                         // all the messages have been read
                         if (0 == events.size()) {
+                            Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : no more unread messages in " + roomId);
                             mNotifiedEventsByRoomId.remove(roomId);
                             isUpdated = true;
                         }

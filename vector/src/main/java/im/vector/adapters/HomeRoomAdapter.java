@@ -74,7 +74,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final RoomViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final RoomViewHolder viewHolder, int position) {
         final Room room = mFilteredRooms.get(position);
         if (mLayoutRes == R.layout.adapter_item_room_invite) {
             final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
@@ -90,7 +90,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
             viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    mListener.onLongClickRoom(v, room, position);
+                    mListener.onLongClickRoom(v, room, viewHolder.getAdapterPosition());
                     return true;
                 }
             });

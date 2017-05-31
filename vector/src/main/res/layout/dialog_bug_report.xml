@@ -116,6 +116,25 @@
                         android:layout_marginLeft="10dp"
                         android:text="@string/send_bug_report_include_crash_logs" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/bug_report_button_include_screenshot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/send_bug_report_include_screenshot" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

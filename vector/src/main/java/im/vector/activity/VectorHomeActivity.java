@@ -76,6 +76,7 @@ import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -1337,12 +1338,12 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                     mRoomInvitations.add(room);
                 }
             }
-
-            // the invitations are sorted from the oldest to the more recent one
-            Comparator<Room> invitationComparator = RoomUtils.getRoomsDateComparator(mSession, true);
-            Collections.sort(mDirectChatInvitations, invitationComparator);
-            Collections.sort(mRoomInvitations, invitationComparator);
         }
+
+        // the invitations are sorted from the oldest to the more recent one
+        Comparator<Room> invitationComparator = RoomUtils.getRoomsDateComparator(mSession, true);
+        Collections.sort(mDirectChatInvitations, invitationComparator);
+        Collections.sort(mRoomInvitations, invitationComparator);
 
         List<Room> roomInvites = new ArrayList<>();
         switch (mCurrentMenuId) {
@@ -1355,6 +1356,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             default:
                 roomInvites.addAll(mDirectChatInvitations);
                 roomInvites.addAll(mRoomInvitations);
+                Collections.sort(roomInvites, invitationComparator);
                 break;
         }
 
@@ -1903,40 +1905,36 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
      */
     public void refreshUnreadBadges() {
         MXDataHandler dataHandler = mSession.getDataHandler();
+        IMXStore store = dataHandler.getStore();
 
         BingRulesManager bingRulesManager = dataHandler.getBingRulesManager();
-        Collection<RoomSummary> summaries2 = dataHandler.getStore().getSummaries();
+        Collection<RoomSummary> summaries2 = store.getSummaries();
         HashMap<Room, RoomSummary> roomSummaryByRoom = new HashMap<>();
+        HashSet<String> directChatInvitations = new HashSet<>();
 
         for (RoomSummary summary : summaries2) {
-            Room room = dataHandler.getStore().getRoom(summary.getRoomId());
+            Room room = store.getRoom(summary.getRoomId());
 
             if (null != room) {
                 roomSummaryByRoom.put(room, summary);
+
+                if (!room.isConferenceUserRoom() && room.isInvited() && room.isDirectChatInvitation()) {
+                    directChatInvitations.add(room.getRoomId());
+                }
             }
         }
 
         for (Integer id : mBadgeViewByIndex.keySet()) {
-            UnreadCounterBadgeView badgeView = mBadgeViewByIndex.get(id);
-
-            // compute the badge value and its displays
-            int highlightCount = 0;
-            int roomCount = 0;
-            boolean mustBeHighlighted = false;
-
             // use a map because contains is faster
-            HashSet<String> filteredRoomIdsSet = null;
+            HashSet<String> filteredRoomIdsSet = new HashSet<>();
 
             if (id == R.id.bottom_action_favourites) {
                 List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
-
-                filteredRoomIdsSet = new HashSet<>();
 
                 for (Room room : favRooms) {
                     filteredRoomIdsSet.add(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_people) {
-                filteredRoomIdsSet = new HashSet<>();
                 filteredRoomIdsSet.addAll(mSession.getDirectChatRoomIdsList());
                 // Add direct chat invitations
                 for (Room room : roomSummaryByRoom.keySet()) {
@@ -1948,7 +1946,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());
                 HashSet<String> favoritesRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
 
-                filteredRoomIdsSet = new HashSet<>();
+                directChatRoomIds.addAll(directChatInvitations);
 
                 for(Room room : roomSummaryByRoom.keySet()) {
                     if (!room.isConferenceUserRoom() && // not a VOIP conference room
@@ -1957,35 +1955,43 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
-            }
-
-            if ((null == filteredRoomIdsSet) || !filteredRoomIdsSet.isEmpty()) {
-                for(Room room : roomSummaryByRoom.keySet()) {
-                    // test if the room is allowed
-                    if ((null == filteredRoomIdsSet) || filteredRoomIdsSet.contains(room.getRoomId())) {
-                        highlightCount += room.getHighlightCount();
-
-                        if (room.isInvited()) {
-                            roomCount++;
-                        } else {
-                            int notificationCount = room.getNotificationCount();
-
-                            if (bingRulesManager.isRoomMentionOnly(room)) {
-                                notificationCount = room.getHighlightCount();
-                            }
-
-                            if (notificationCount > 0) {
-                                roomCount++;
-                            }
-                        }
-
-                        mustBeHighlighted |= roomSummaryByRoom.get(room).isHighlighted();
+            } else if (id == R.id.bottom_action_home) {
+                // keep all the rooms except the conference call ones
+                for (Room room : roomSummaryByRoom.keySet()) {
+                    if (!room.isConferenceUserRoom()) {
+                        filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
             }
 
-            badgeView.updateCounter(roomCount,
-                    ((0 != highlightCount) || mustBeHighlighted) ? UnreadCounterBadgeView.HIGHLIGHTED :
+            // compute the badge value and its displays
+            int highlightCount = 0;
+            int roomCount = 0;
+
+            for(String roomId : filteredRoomIdsSet) {
+                Room room = store.getRoom(roomId);
+
+                if (null != room) {
+                    highlightCount += room.getHighlightCount();
+
+                    if (room.isInvited()) {
+                        roomCount++;
+                    } else {
+                        int notificationCount = room.getNotificationCount();
+
+                        if (bingRulesManager.isRoomMentionOnly(room)) {
+                            notificationCount = room.getHighlightCount();
+                        }
+
+                        if (notificationCount > 0) {
+                            roomCount++;
+                        }
+                    }
+                }
+            }
+
+            mBadgeViewByIndex.get(id).updateCounter(roomCount,
+                    (0 != highlightCount) ? UnreadCounterBadgeView.HIGHLIGHTED :
                             ((0 != roomCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
         }
     }
@@ -2093,22 +2099,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                         Event.EVENT_TYPE_RECEIPT.equals(eventType) ||
                         Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType) ||
                         Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
-
-                // highlight notified messages
-                // the SDK only highlighted invitation messages
-                // it lets the application chooses the behaviour.
-                ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
-                String viewedRoomId = rTracker.getViewedRoomId();
-                String fromMatrixId = rTracker.getMatrixId();
-                String matrixId = mSession.getCredentials().userId;
-
-                // If we're not currently viewing this room or not sent by myself, increment the unread count
-                if ((!TextUtils.equals(event.roomId, viewedRoomId) || !TextUtils.equals(matrixId, fromMatrixId)) && !TextUtils.equals(event.getSender(), matrixId)) {
-                    RoomSummary summary = mSession.getDataHandler().getStore().getSummary(event.roomId);
-                    if (null != summary) {
-                        summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(mSession, event));
-                    }
-                }
             }
 
             @Override
