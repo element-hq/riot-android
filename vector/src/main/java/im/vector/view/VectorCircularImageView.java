@@ -24,13 +24,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.AttributeSet;
+
 import org.matrix.androidsdk.util.Log;
-import android.widget.ImageView;
 
 /**
  * Display a circular image.
  */
-public class VectorCircularImageView extends ImageView {
+public class VectorCircularImageView extends android.support.v7.widget.AppCompatImageView {
     private static final String LOG_TAG = "VCirImageView";
 
     public VectorCircularImageView(Context context) {

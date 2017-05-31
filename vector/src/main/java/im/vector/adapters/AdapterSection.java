@@ -16,7 +16,9 @@
 
 package im.vector.adapters;
 
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +28,7 @@ import java.util.List;
 public class AdapterSection<T> {
 
     protected final String mTitle;
-    protected String mTitleFormatted;
+    protected SpannableString mTitleFormatted;
     // Place holder if no item for the section
     private String mNoItemPlaceholder;
     // Place holder if no result after search
@@ -46,6 +48,7 @@ public class AdapterSection<T> {
     protected CharSequence mCurrentFilterPattern;
 
     private boolean mIsHiddenWhenEmpty;
+    private boolean mIsHiddenWhenNoFilter;
 
     public AdapterSection(String title, int headerSubViewResId, int contentResId, int headerViewType,
                           int contentViewType, List<T> items, Comparator<T> comparator) {
@@ -96,11 +99,26 @@ public class AdapterSection<T> {
      * Update the title depending on the number of items
      */
     protected void updateTitle() {
+        String newTitle;
         if (getNbItems() > 0) {
-            mTitleFormatted = mTitle.concat(" (" + getNbItems() + ")");
+            newTitle = mTitle.concat("   " + getNbItems());
         } else {
-            mTitleFormatted = mTitle;
+            newTitle = mTitle;
         }
+
+        formatTitle(newTitle);
+    }
+
+    /**
+     * Format the given title
+     *
+     * @param titleToFormat
+     */
+    protected void formatTitle(final String titleToFormat) {
+        SpannableString spannableString = new SpannableString(titleToFormat.toUpperCase());
+        spannableString.setSpan(new ForegroundColorSpan(0x4D3C3C3C),
+                mTitle.length(), titleToFormat.length(), 0);
+        mTitleFormatted = spannableString;
     }
 
     /**
@@ -108,7 +126,7 @@ public class AdapterSection<T> {
      *
      * @return
      */
-    public String getTitle() {
+    public SpannableString getTitle() {
         return mTitleFormatted;
     }
 
@@ -222,6 +240,33 @@ public class AdapterSection<T> {
      */
     public boolean hideWhenEmpty() {
         return mIsHiddenWhenEmpty;
+    }
+
+    /**
+     * Set whether the section should be hidden when there is no filter
+     *
+     * @return
+     */
+    public void setIsHiddenWhenNoFilter(final boolean isHiddenWhenNoFilter) {
+        mIsHiddenWhenNoFilter = isHiddenWhenNoFilter;
+    }
+
+    /**
+     * Get whether the section should be hidden when there is no filter
+     *
+     * @return
+     */
+    public boolean hideWhenNoFilter() {
+        return mIsHiddenWhenNoFilter;
+    }
+
+    /**
+     * Get whether the section should be hidden depending on its internal state
+     *
+     * @return true if should be hidden
+     */
+    public boolean shouldBeHidden() {
+        return (mIsHiddenWhenEmpty && getItems().isEmpty()) || (mIsHiddenWhenNoFilter && TextUtils.isEmpty(mCurrentFilterPattern));
     }
 
     /**

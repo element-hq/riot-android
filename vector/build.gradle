@@ -34,12 +34,14 @@ android {
         debug {
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+            resValue "string", "git_branch_name", "\"${gitBranchName()}\""
             minifyEnabled false
         }
 
         release {
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+            resValue "string", "git_branch_name", "\"${gitBranchName()}\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -58,7 +60,7 @@ android {
             versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "true"
             resValue "string", "allow_ga_use", "true"
-            resValue "string", "flavor_description", ""
+            resValue "string", "flavor_description", "GooglePlay"
         }
 
         appfdroid {
@@ -96,13 +98,13 @@ def gitRevision() {
     return cmd.execute().text.trim()
 }
 
-def gitRevisionUnixDate() {
-    def cmd = "git show -s --format=%ct HEAD^{commit}"
+def gitRevisionDate() {
+    def cmd = "git show -s --format=%ci HEAD^{commit}"
     return cmd.execute().text.trim()
 }
 
-def gitRevisionDate() {
-    def cmd = "git show -s --format=%ci HEAD^{commit}"
+def gitBranchName() {
+    def cmd = "git name-rev --name-only HEAD"
     return cmd.execute().text.trim()
 }
 
@@ -147,4 +149,7 @@ dependencies {
     // fdroid flavor only
 }
 
-apply plugin: 'com.google.gms.google-services'
+
+if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid")) {
+    apply plugin: 'com.google.gms.google-services'
+}

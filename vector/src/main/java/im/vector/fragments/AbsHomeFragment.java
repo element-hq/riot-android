@@ -19,8 +19,10 @@ package im.vector.fragments;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -79,6 +81,9 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         }
     };
 
+    protected int mPrimaryColor = -1;
+    protected int mSecondaryColor = -1;
+
     /*
      * *********************************************************************************************
      * Fragment lifecycle
@@ -119,6 +124,15 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
                     onFloatingButtonClick();
                 }
             });
+        }
+    }
+
+    @Override
+    @CallSuper
+    public void onResume() {
+        super.onResume();
+        if (mPrimaryColor != -1) {
+            mActivity.updateTabStyle(mPrimaryColor, mSecondaryColor != -1 ? mSecondaryColor : mPrimaryColor);
         }
     }
 
@@ -309,11 +323,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
 
             if (null != roomSummary) {
                 room.sendReadReceipt(null);
-
-                // Reset the highlight
-                if (roomSummary.setHighlighted(false)) {
-                    mSession.getDataHandler().getStore().flushSummary(roomSummary);
-                }
             }
 
             // Update badge unread count in case device is offline
@@ -326,6 +335,17 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
 
             CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
         }
+    }
+
+    /**
+     * Define colors of the fragment
+     *
+     * @param primaryColorId color for header, floating button
+     * @param secondaryColorId color for status bar
+     */
+    public void setFragmentColors(@ColorRes final int primaryColorId, @ColorRes final int secondaryColorId){
+        mPrimaryColor = ContextCompat.getColor(mActivity, primaryColorId);
+        mSecondaryColor = ContextCompat.getColor(mActivity, secondaryColorId);
     }
 
     /*
@@ -371,7 +391,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
      *
      * @param errorMessage
      */
-    private void onRequestDone(final String errorMessage) {
+    protected void onRequestDone(final String errorMessage) {
         if (mActivity != null && !mActivity.isFinishing()) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override

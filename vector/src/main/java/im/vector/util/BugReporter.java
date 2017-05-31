@@ -34,12 +34,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 
 import android.text.Editable;
@@ -101,8 +103,10 @@ public class BugReporter {
     }
 
     // filenames
-    private static final String LOG_CAT_ERROR_FILENAME = "logCatError.log";
-    private static final String LOG_CAT_FILENAME = "logCat.log";
+    private static final String LOG_CAT_ERROR_FILENAME = "logcatError.log";
+    private static final String LOG_CAT_FILENAME = "logcat.log";
+    private static final String LOG_CAT_SCREENSHOT_FILENAME = "screenshot.png";
+
 
     // the http client
     private static final OkHttpClient mOkHttpClient = new OkHttpClient();
@@ -117,17 +121,20 @@ public class BugReporter {
     /**
      * Send a bug report.
      *
-     * @param context         the application context
-     * @param withDevicesLogs true to include the device logs
-     * @param withCrashLogs   true to include the crash logs
+     * @param context the application context
+     * @param withDevicesLogs true to include the device log
+     * @param withCrashLogs true to include the crash logs
+     * @param withScreenshot true to include the screenshot
+     * @param bugDescription the bug description
+     * @param listener the listener
      */
-    private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final String bugDescription, final IMXBugReportListener listener) {
+    private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final boolean withScreenshot, final String bugDescription, final IMXBugReportListener listener) {
         new AsyncTask<Void, Integer, String>() {
             @Override
             protected String doInBackground(Void... voids) {
                 String serverError = null;
 
-                ArrayList<File> gzippedFiles = new ArrayList<>();
+                List<File> gzippedFiles = new ArrayList<>();
 
                 if (withDevicesLogs) {
                     List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
@@ -141,33 +148,32 @@ public class BugReporter {
                             }
                         }
                     }
-
-                    // for debug purpose
-                    /*if (!mIsCancelled) {
-                        File gzippedLogcat = saveLogCat(context, false);
-
-                        if (null != gzippedLogcat) {
-                            gzippedFiles.add(gzippedLogcat);
-                        }
-                    }*/
                 }
 
                 if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
-                    File gzippedLogcat = saveLogCat(context, true);
+                    File gzippedLogcat = saveLogCat(context, false);
 
                     if (null != gzippedLogcat) {
                         gzippedFiles.add(gzippedLogcat);
                     }
                 }
 
+                MXSession session = Matrix.getInstance(context).getDefaultSession();
+
+                String deviceId = null;
                 String userId = null;
 
-                if (null != Matrix.getInstance(context).getDefaultSession()) {
-                    userId = Matrix.getInstance(context).getDefaultSession().getMyUserId();
+                if (null != session) {
+                    userId = session.getMyUserId();
+                    deviceId = session.getCredentials().deviceId;
                 }
 
                 if (TextUtils.isEmpty(userId)) {
                     userId = "";
+                }
+
+                if (TextUtils.isEmpty(deviceId)) {
+                    deviceId = "";
                 }
 
                 if (!mIsCancelled) {
@@ -177,7 +183,9 @@ public class BugReporter {
                             .addFormDataPart("app", "riot-android")
                             .addFormDataPart("user_agent", "Android")
                             .addFormDataPart("user_id", userId)
+                            .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", Matrix.getInstance(context).getVersion(true))
+                            .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
                             .addFormDataPart("matrix_sdk_version", Matrix.getInstance(context).getDefaultSession().getVersion(true))
                             .addFormDataPart("olm_version", Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true))
                             .addFormDataPart("device", Build.MODEL.trim())
@@ -187,6 +195,41 @@ public class BugReporter {
                     for (File file : gzippedFiles) {
                         builder.addFormDataPart("compressed-log", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
                     }
+
+                    if (withScreenshot) {
+                        Bitmap bitmap = takeScreenshot();
+
+                        if (null != bitmap) {
+                            File logCatScreenshotFile = new File(context.getCacheDir().getAbsolutePath(), LOG_CAT_SCREENSHOT_FILENAME);
+
+                            if (logCatScreenshotFile.exists()) {
+                                logCatScreenshotFile.delete();
+                            }
+
+                            try {
+                                FileOutputStream fos = new FileOutputStream(logCatScreenshotFile);
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                                fos.flush();
+                                fos.close();
+
+                                builder.addFormDataPart("file", logCatScreenshotFile.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), logCatScreenshotFile));
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString());
+                            }
+                        }
+                    }
+
+                    // add some github tags
+                    try {
+                        PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+                        builder.addFormDataPart("label", pInfo.versionName);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## sendBugReport() : cannot retrieve the appname " + e.getMessage());
+                    }
+
+                    builder.addFormDataPart("label", context.getResources().getString(R.string.flavor_description));
+                    builder.addFormDataPart("label", context.getString(R.string.git_branch_name));
+
 
                     BugReporterMultipartBody requestBody = builder.build();
 
@@ -321,7 +364,7 @@ public class BugReporter {
 
         // no current activity so cannot display an alert
         if (null == currentActivity) {
-            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, true, "", null);
+            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, true, true, "", null);
             return;
         }
 
@@ -336,6 +379,7 @@ public class BugReporter {
         final EditText bugReportText = (EditText) dialogLayout.findViewById(R.id.bug_report_edit_text);
         final CheckBox includeLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_logs);
         final CheckBox includeCrashLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_crash_logs);
+        final CheckBox includeScreenShotButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_screenshot);
 
         final ProgressBar progressBar = (ProgressBar) dialogLayout.findViewById(R.id.bug_report_progress_view);
         final TextView progressTextView = (TextView) dialogLayout.findViewById(R.id.bug_report_progress_text_view);
@@ -385,6 +429,7 @@ public class BugReporter {
                     sendButton.setEnabled(false);
                     includeLogsButton.setEnabled(false);
                     includeCrashLogsButton.setEnabled(false);
+                    includeScreenShotButton.setEnabled(false);
 
                     progressTextView.setVisibility(View.VISIBLE);
                     progressTextView.setText(appContext.getString(R.string.send_bug_report_progress, 0 + ""));
@@ -392,7 +437,7 @@ public class BugReporter {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgress(0);
 
-                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), includeCrashLogsButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
+                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), includeCrashLogsButton.isChecked(), includeScreenShotButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
                         @Override
                         public void onUploadFailed(String reason) {
                             try {
@@ -409,6 +454,7 @@ public class BugReporter {
                                 sendButton.setEnabled(true);
                                 includeLogsButton.setEnabled(true);
                                 includeCrashLogsButton.setEnabled(true);
+                                includeScreenShotButton.setEnabled(true);
                                 cancelButton.setEnabled(true);
 
                                 progressTextView.setVisibility(View.GONE);

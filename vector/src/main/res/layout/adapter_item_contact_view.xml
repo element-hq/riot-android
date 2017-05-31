@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contact_view"
     android:layout_width="match_parent"
     android:layout_height="74dp"
     android:paddingLeft="16dp"
@@ -8,8 +9,8 @@
 
     <im.vector.view.VectorCircularImageView
         android:id="@+id/contact_avatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/chat_avatar_size"
+        android:layout_height="@dimen/chat_avatar_size"
         android:layout_centerVertical="true" />
 
     <ImageView

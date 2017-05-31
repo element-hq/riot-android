@@ -56,34 +56,9 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
             sectionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!sectionView.isExpanded()) {
-                        // Expand
-                        int pos = getPositionForSectionView(sectionView);
-                        if (pos >= 0) {
-                            mLayoutManager.scrollToPositionWithOffset(pos, sectionView.getHeaderTop());
-                        }
-                    } else {
-                        // Collapse
-                        for (int i = 0; i < mSectionViews.size(); i++) {
-                            if (mSectionViews.get(i).second == sectionView
-                                    && sectionView.isExpanded()
-                                    && sectionView.isStickyHeader()) {
-                                SectionView next = i + 1 < mSectionViews.size() ? mSectionViews.get(i + 1).second : null;
-                                SectionView previous = i > 0 ? mSectionViews.get(i - 1).second : null;
-                                if (next != null) {
-                                    int pos = getPositionForSectionView(next);
-                                    if (pos >= 0) {
-                                        mLayoutManager.scrollToPositionWithOffset(pos, next.getHeaderTop());
-                                    }
-                                } else if (previous != null) {
-                                    int pos = getPositionForSectionView(previous);
-                                    if (pos >= 0) {
-                                        mLayoutManager.scrollToPositionWithOffset(pos, previous.getHeaderTop());
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    int pos = getPositionForSectionView(sectionView);
+                    mRecyclerView.stopScroll();
+                    mLayoutManager.scrollToPositionWithOffset(pos, sectionView.getHeaderTop());
                 }
             });
             mSectionViews.add(new Pair<>(section.first, sectionView));
@@ -129,7 +104,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
      * @param sections updated list of sections
      */
     public void resetSticky(List<Pair<Integer, AdapterSection>> sections) {
-        Log.e(LOG_TAG, "resetSticky");
+        Log.d(LOG_TAG, "resetSticky");
 
         if (!mSectionViews.isEmpty()) {
             List<Pair<Integer, SectionView>> newList = new ArrayList<>();
@@ -215,11 +190,13 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
                 current.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                 int sectionHeight = current.getStickyHeaderHeight();
-                if (current.getSection().hideWhenEmpty() && current.getSection().getItems().isEmpty()) {
+                if (current.getSection().shouldBeHidden()) {
+                    current.setVisibility(View.GONE);
                     current.setHeaderTop(0 - current.getStickyHeaderHeight());
                     current.setHeaderBottom(0);
 //                    current.setTranslationY(0 - current.getStickyHeaderHeight());
                 } else {
+                    current.setVisibility(View.VISIBLE);
                     current.setHeaderTop(mHeaderBottom);
                     current.setHeaderBottom(mHeaderBottom + current.getStickyHeaderHeight());
                     mHeaderBottom += sectionHeight;
@@ -236,7 +213,9 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                 int sectionHeight = current.getStickyHeaderHeight();
                 current.setFooterTop(mFooterTop - current.getStickyHeaderHeight());
                 current.setFooterBottom(mFooterTop);
-                mFooterTop -= sectionHeight;
+                if(!current.getSection().shouldBeHidden()){
+                    mFooterTop -= sectionHeight;
+                }
             }
         }
 
@@ -253,7 +232,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
      * @param dy scroll value
      */
     private void updateStickySection(int dy) {
-        Log.e(LOG_TAG, "updateStickySection " + dy);
+        Log.d(LOG_TAG, "updateStickySection " + dy);
 
         // header is out of screen, check if header or footer
         int firstVisiblePos = mLayoutManager.findFirstVisibleItemPosition();
@@ -265,9 +244,9 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
             SectionView current = mSectionViews.get(i).second;
 
             RecyclerView.ViewHolder holder = mRecyclerView.findViewHolderForLayoutPosition(currentPos);
-            Log.e(LOG_TAG, "updateStickySection holder for " + current.getSection().getTitle() + " is " + holder);
+            Log.d(LOG_TAG, "updateStickySection holder for " + current.getSection().getTitle() + " is " + holder);
             if (holder != null) {
-                Log.e(LOG_TAG, "updateStickySection holder top " + holder.itemView.getTop() + " bottom " + holder.itemView.getBottom());
+                Log.d(LOG_TAG, "updateStickySection holder top " + holder.itemView.getTop() + " bottom " + holder.itemView.getBottom());
                 current.updatePosition(holder.itemView.getTop());
                 if (previous != null) {
                     previous.onFoldSubView(current, dy);
@@ -279,10 +258,6 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                     current.updatePosition(current.getFooterTop());
                 }
             }
-
-            SectionView next = i + 1 < mSectionViews.size() ? mSectionViews.get(i + 1).second : null;
-            current.setExpanded((!current.isStickyHeader() && !current.isStickyFooter())
-                    || (current.isStickyHeader() && (next == null || !next.isStickyHeader())));
         }
     }
 

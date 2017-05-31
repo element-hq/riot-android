@@ -518,13 +518,18 @@ public class CommonActivityUtils {
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             if ((null != sessions) && (sessions.size() > 0)) {
-                Log.d(LOG_TAG, "restart EventStreamService");
+                Log.e(LOG_TAG, "## startEventStreamService() : restart EventStreamService");
 
                 for (MXSession session : sessions) {
                     boolean isSessionReady = session.getDataHandler().getStore().isReady();
 
                     if (!isSessionReady) {
+                        Log.e(LOG_TAG, "## startEventStreamService() : the session " + session.getMyUserId() + " is not opened");
                         session.getDataHandler().getStore().open();
+                    } else {
+                        // it seems that the crypto is not always restarted properly after a crash
+                        Log.e(LOG_TAG, "## startEventStreamService() : check if the crypto of the session " + session.getMyUserId());
+                        session.checkCrypto();
                     }
 
                     // session to activate

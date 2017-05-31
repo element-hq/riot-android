@@ -467,9 +467,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if(null != room) {
                 room.sendReadReceipt(null);
             }
-
-            // reset the highlight
-            retCode = roomSummary.setHighlighted(false);
         }
 
         return retCode;
@@ -753,6 +750,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (null != childRoom) {
             highlightCount = childRoom.getHighlightCount();
             notificationCount = childRoom.getNotificationCount();
+
+            if (mMxSession.getDataHandler().getBingRulesManager().isRoomMentionOnly(childRoom)) {
+                notificationCount = highlightCount;
+            }
         }
 
         // get last message to be displayed
@@ -778,7 +779,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         // set bing view background colour
         int bingUnreadColor;
-        if ((0 != highlightCount) || childRoomSummary.isHighlighted()) {
+        if (0 != highlightCount) {
             bingUnreadColor = fushiaColor;
         } else if (0 != notificationCount) {
             bingUnreadColor = vectorGreenColor;

@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/active_room_actions">
 
-    <item
-        android:id="@+id/ic_action_select_notifications"
-        android:icon="@drawable/ic_material_done"
-        android:title="@string/room_settings_notifications"/>
+        <item
+            android:id="@+id/ic_action_select_notifications"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_notifications" />
 
-    <item
-        android:id="@+id/ic_action_select_fav"
-        android:icon="@drawable/ic_material_done"
-        android:title="@string/room_settings_favourite"/>
+        <item
+            android:id="@+id/ic_action_select_fav"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_favourite" />
 
-    <item
-        android:id="@+id/ic_action_select_deprioritize"
-        android:icon="@drawable/ic_material_done"
-        android:title="@string/room_settings_de_prioritize"/>
+        <item
+            android:id="@+id/ic_action_select_deprioritize"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_de_prioritize" />
 
-    <item
-        android:id="@+id/ic_action_select_direct_chat"
-        android:icon="@drawable/ic_material_done"
-        android:title="@string/room_settings_direct_chat"/>
+        <item
+            android:id="@+id/ic_action_select_direct_chat"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_direct_chat" />
 
-    <item
-        android:id="@+id/ic_action_select_remove"
-        android:icon="@drawable/vector_leave_room_black"
-        android:title="@string/room_settings_leave_conversation"/>
+        <item
+            android:id="@+id/ic_action_select_remove"
+            android:icon="@drawable/vector_leave_room_black"
+            android:title="@string/room_settings_leave_conversation" />
+    </group>
 
+    <group android:id="@+id/historical_room_actions">
+        <item
+            android:id="@+id/action_forget_room"
+            android:icon="@drawable/vector_leave_room_black"
+            android:title="@string/room_settings_forget" />
+    </group>
 </menu>

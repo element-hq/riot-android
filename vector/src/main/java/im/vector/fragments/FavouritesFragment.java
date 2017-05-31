@@ -54,7 +54,7 @@ import im.vector.view.SimpleDividerItemDecoration;
 public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
     private static final String LOG_TAG = "FavouritesFragment";
 
-    @BindView(R.id.favorites_recycler_view)
+    @BindView(R.id.recyclerview)
     RecyclerView mFavoritesRecyclerView;
 
     @BindView(R.id.favorites_placeholder)
@@ -65,6 +65,9 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
 
     // the favorite rooms list
     private List<Room> mFavorites = new ArrayList<>();
+
+    // Touch helper to handle the drag and drop on items
+    private ItemTouchHelper mDragAndDropTouchHelper;
 
     // detect i
     private final MXEventListener mEventsListener = new MXEventListener() {
@@ -100,6 +103,8 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        setFragmentColors(R.color.tab_favourites, R.color.tab_favourites_secondary);
 
         initViews();
 
@@ -199,8 +204,14 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
      * @param count the matched rooms count
      */
     private void updateRoomsDisplay(int count) {
-        mFavoritesPlaceHolder.setVisibility(0 == count ? View.VISIBLE : View.GONE);
-        mFavoritesRecyclerView.setVisibility(0 != count ? View.VISIBLE : View.GONE);
+        // theses both fields should never be null but a crash was reported by GA.
+        if (null != mFavoritesPlaceHolder) {
+            mFavoritesPlaceHolder.setVisibility(0 == count ? View.VISIBLE : View.GONE);
+        }
+
+        if (null != mFavoritesRecyclerView) {
+            mFavoritesRecyclerView.setVisibility(0 != count ? View.VISIBLE : View.GONE);
+        }
     }
 
     /**
@@ -244,11 +255,14 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
                 protected void onPostExecute(Void args) {
                     mFavoritesAdapter.setRooms(mFavorites);
                     updateRoomsDisplay(mFavorites.size());
+
+                    mDragAndDropTouchHelper.attachToRecyclerView(mFavorites.size() > 1 ? mFavoritesRecyclerView : null);
                 }
             }.execute();
         } else {
             mFavoritesAdapter.setRooms(mFavorites);
             updateRoomsDisplay(mFavorites.size());
+            mDragAndDropTouchHelper.attachToRecyclerView(null);
         }
     }
 
@@ -327,8 +341,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
             }
         };
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(mFavoritesRecyclerView);
+        mDragAndDropTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
     }
 
     /**

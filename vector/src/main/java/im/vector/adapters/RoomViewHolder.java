@@ -62,8 +62,9 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.room_unread_count)
     TextView vRoomUnreadCount;
 
-    @BindView(R.id.room_avatar_direct_chat_icon)
-    View vRoomDirectChatIcon;
+    @BindView(R.id.direct_chat_indicator)
+    @Nullable
+    View mDirectChatIndicator;
 
     @BindView(R.id.room_avatar_encrypted_icon)
     View vRoomEncryptedIcon;
@@ -105,22 +106,43 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             return;
         }
 
+        if (null == session) {
+            Log.e(LOG_TAG, "## populateViews() : null session");
+            return;
+        }
+
+        if (null == session.getDataHandler()) {
+            Log.e(LOG_TAG, "## populateViews() : null dataHandler");
+            return;
+        }
+
+        if (null == session.getDataHandler().getStore()) {
+            Log.e(LOG_TAG, "## populateViews() : null Store");
+            return;
+        }
+
         final RoomSummary roomSummary = session.getDataHandler().getStore().getSummary(room.getRoomId());
-        final Room childRoom = session.getDataHandler().getStore().getRoom(roomSummary.getRoomId());
+
+        if (null == roomSummary) {
+            Log.e(LOG_TAG, "## populateViews() : null roomSummary");
+            return;
+        }
 
         int unreadMsgCount = roomSummary.getUnreadEventsCount();
-        int highlightCount = 0;
-        int notificationCount = 0;
+        int highlightCount;
+        int notificationCount;
 
-        if (null != childRoom) {
-            highlightCount = childRoom.getHighlightCount();
-            notificationCount = childRoom.getNotificationCount();
+        highlightCount = roomSummary.getHighlightCount();
+        notificationCount = roomSummary.getNotificationCount();
+
+        if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room)) {
+            notificationCount = highlightCount;
         }
 
         int bingUnreadColor;
-        if (isInvitation || (0 != highlightCount) || roomSummary.isHighlighted()) {
+        if (isInvitation || (0 != highlightCount)) {
             bingUnreadColor = mFuchsiaColor;
-        } else if (0 != room.getNotificationCount()) {
+        } else if (0 != notificationCount) {
             bingUnreadColor = mGreenColor;
         } else if (0 != unreadMsgCount) {
             bingUnreadColor = mSilverColor;
@@ -152,7 +174,9 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             vRoomLastMessage.setText(lastMsgToDisplay);
         }
 
-        vRoomDirectChatIcon.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
+        if (mDirectChatIndicator != null) {
+            mDirectChatIndicator.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
+        }
         vRoomEncryptedIcon.setVisibility(room.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
 
         if (vRoomUnreadIndicator != null) {

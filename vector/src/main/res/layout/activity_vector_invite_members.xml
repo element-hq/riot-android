@@ -17,7 +17,7 @@
         android:id="@+id/room_details_members_list"
         android:layout_below="@+id/search_invite_by_id"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:divider="@android:color/transparent"
         android:dividerHeight="1px" />
 

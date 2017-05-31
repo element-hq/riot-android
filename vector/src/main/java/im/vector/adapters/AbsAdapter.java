@@ -142,7 +142,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
                 final HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
                 for (Pair<Integer, AdapterSection> adapterSection : mSections) {
                     if (adapterSection.first == position) {
-                        if (adapterSection.second.hideWhenEmpty() && adapterSection.second.getItems().isEmpty()) {
+                        if (adapterSection.second.shouldBeHidden()) {
                             headerViewHolder.itemView.setVisibility(View.GONE);
                             headerViewHolder.itemView.getLayoutParams().height = 0;
                             headerViewHolder.itemView.requestLayout();

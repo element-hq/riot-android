@@ -105,26 +105,31 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
         final View vMainView;
         final ImageView vAvatarView;
         final TextView vServerTextView;
+        final TextView vDescriptionTextView;
 
         private RoomDirectoryViewHolder(final View itemView) {
             super(itemView);
             vMainView = itemView;
             vAvatarView = (ImageView) itemView.findViewById(R.id.room_directory_avatar);
             vServerTextView = (TextView) itemView.findViewById(R.id.room_directory_display_name);
+            vDescriptionTextView = (TextView) itemView.findViewById(R.id.room_directory_description);
         }
 
         private void populateViews(final RoomDirectoryData server) {
+            vServerTextView.setText(server.getDisplayName());
+
+            String description = null;
+
             if (server.isIncludedAllNetworks()) {
-                vServerTextView.setText(vServerTextView.getContext().getString(R.string.directory_server_all_rooms_on_server, server.getDisplayName()));
-            } else {
-                if (TextUtils.equals("Matrix",server.getDisplayName())) {
-                    vServerTextView.setText(vServerTextView.getContext().getString(R.string.directory_server_native_rooms, server.getDisplayName()));
-                } else{
-                    vServerTextView.setText(server.getDisplayName());
-                }
+                description = vServerTextView.getContext().getString(R.string.directory_server_all_rooms_on_server, server.getDisplayName());
+            } else if (TextUtils.equals("Matrix",server.getDisplayName())) {
+                description = vServerTextView.getContext().getString(R.string.directory_server_native_rooms, server.getDisplayName());
             }
 
-            setAvatar(vAvatarView, server.getAvatarUrl(), vServerTextView.getContext().getResources().getDrawable(R.drawable.network_matrix));
+            vDescriptionTextView.setText(description);
+            vDescriptionTextView.setVisibility(!TextUtils.isEmpty(description) ? View.VISIBLE : View.GONE);
+
+            setAvatar(vAvatarView, server.getAvatarUrl(), server.isIncludedAllNetworks() ? null : vServerTextView.getContext().getResources().getDrawable(R.drawable.network_matrix));
 
             vMainView.setOnClickListener(new View.OnClickListener() {
                 @Override

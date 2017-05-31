@@ -19,6 +19,7 @@ package im.vector.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.CallSuper;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -227,7 +228,7 @@ public class RoomAdapter extends AbsAdapter {
             String roomName = !TextUtils.isEmpty(publicRoom.name) ? publicRoom.name : VectorUtils.getPublicRoomDisplayName(publicRoom);
 
             // display the room avatar
-            vPublicRoomAvatar.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
+            vPublicRoomAvatar.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
             VectorUtils.loadUserAvatar(mContext, mSession, vPublicRoomAvatar, publicRoom.getAvatarUrl(), publicRoom.roomId, roomName);
 
             // set the topic
@@ -237,7 +238,8 @@ public class RoomAdapter extends AbsAdapter {
             vPublicRoomName.setText(roomName);
 
             // members count
-            vPublicRoomsMemberCountTextView.setText(publicRoom.numJoinedMembers + "");
+            vPublicRoomsMemberCountTextView.setText(mContext.getResources().getQuantityString(R.plurals.public_room_nb_users,
+                    publicRoom.numJoinedMembers, publicRoom.numJoinedMembers));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
