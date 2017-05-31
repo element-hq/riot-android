@@ -104,7 +104,7 @@ def gitRevisionDate() {
 }
 
 def gitBranchName() {
-    def cmd = "git rev-parse --abbrev-ref HEAD"
+    def cmd = "git name-rev --name-only HEAD"
     return cmd.execute().text.trim()
 }
 
