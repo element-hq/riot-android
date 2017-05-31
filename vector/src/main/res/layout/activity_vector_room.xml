@@ -121,18 +121,30 @@
         android:id="@+id/jump_to_first_unread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/room_ongoing_conference_call_view"
         android:background="@android:color/white"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="visible"
+        android:layout_below="@+id/room_preview_info_layout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:id="@+id/jump_to_first_unread_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/jump_to_unread"/>
 
         <TextView
             android:id="@+id/jump_to_first_unread_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/close_jump_to_first_unread"
+            android:layout_toRightOf="@+id/jump_to_first_unread_icon"
+            android:gravity="center_vertical"
             android:paddingBottom="12dp"
-            android:paddingLeft="16dp"
+            android:paddingLeft="10dp"
             android:paddingTop="12dp"
             android:text="@string/room_jump_to_first_unread" />
 
