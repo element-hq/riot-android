@@ -323,11 +323,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
 
             if (null != roomSummary) {
                 room.sendReadReceipt(null);
-
-                // Reset the highlight
-                if (roomSummary.setHighlighted(false)) {
-                    mSession.getDataHandler().getStore().flushSummary(roomSummary);
-                }
             }
 
             // Update badge unread count in case device is offline

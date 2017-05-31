@@ -1967,7 +1967,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             // compute the badge value and its displays
             int highlightCount = 0;
             int roomCount = 0;
-            boolean mustBeHighlighted = false;
 
             for(String roomId : filteredRoomIdsSet) {
                 Room room = store.getRoom(roomId);
@@ -1988,13 +1987,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                             roomCount++;
                         }
                     }
-
-                    mustBeHighlighted |= roomSummaryByRoom.get(room).isHighlighted();
                 }
             }
 
             mBadgeViewByIndex.get(id).updateCounter(roomCount,
-                    ((0 != highlightCount) || mustBeHighlighted) ? UnreadCounterBadgeView.HIGHLIGHTED :
+                    (0 != highlightCount) ? UnreadCounterBadgeView.HIGHLIGHTED :
                             ((0 != roomCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
         }
     }
@@ -2102,22 +2099,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                         Event.EVENT_TYPE_RECEIPT.equals(eventType) ||
                         Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType) ||
                         Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
-
-                // highlight notified messages
-                // the SDK only highlighted invitation messages
-                // it lets the application chooses the behaviour.
-                ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
-                String viewedRoomId = rTracker.getViewedRoomId();
-                String fromMatrixId = rTracker.getMatrixId();
-                String matrixId = mSession.getCredentials().userId;
-
-                // If we're not currently viewing this room or not sent by myself, increment the unread count
-                if ((!TextUtils.equals(event.roomId, viewedRoomId) || !TextUtils.equals(matrixId, fromMatrixId)) && !TextUtils.equals(event.getSender(), matrixId)) {
-                    RoomSummary summary = mSession.getDataHandler().getStore().getSummary(event.roomId);
-                    if (null != summary) {
-                        summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(mSession, event));
-                    }
-                }
             }
 
             @Override

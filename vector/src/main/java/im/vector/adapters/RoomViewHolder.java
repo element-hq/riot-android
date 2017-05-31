@@ -132,15 +132,15 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         int highlightCount;
         int notificationCount;
 
-        highlightCount = room.getHighlightCount();
-        notificationCount = room.getNotificationCount();
+        highlightCount = roomSummary.getHighlightCount();
+        notificationCount = roomSummary.getNotificationCount();
 
         if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room)) {
             notificationCount = highlightCount;
         }
 
         int bingUnreadColor;
-        if (isInvitation || (0 != highlightCount) || roomSummary.isHighlighted()) {
+        if (isInvitation || (0 != highlightCount)) {
             bingUnreadColor = mFuchsiaColor;
         } else if (0 != notificationCount) {
             bingUnreadColor = mGreenColor;
