@@ -96,6 +96,14 @@
         </activity>
 
         <activity
+            android:name="im.vector.activity.HistoricalRoomsActivity"
+            android:theme="@style/HomeActivityTheme"
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName="im.vector.activity.VectorHomeActivity"
+            android:label="@string/title_activity_historical">
+        </activity>
+
+        <activity
             android:name="im.vector.activity.VectorRoomActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_room"

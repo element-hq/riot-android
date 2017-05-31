@@ -239,7 +239,7 @@ public class VectorUtils {
             }
         });
 
-        String displayName = "";
+        String displayName;
 
         if (othersActiveMembers.size() == 0) {
             if (activeMembers.size() == 1) {
@@ -256,6 +256,8 @@ public class VectorUtils {
                 } else {
                     displayName = context.getString(R.string.room_displayname_no_title);
                 }
+            } else {
+                displayName = context.getString(R.string.room_displayname_no_title);
             }
         } else if (othersActiveMembers.size() == 1) {
             RoomMember member = othersActiveMembers.get(0);

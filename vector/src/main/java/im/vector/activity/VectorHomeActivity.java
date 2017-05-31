@@ -557,6 +557,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
                 startActivity(searchIntent);
                 break;
+
+            // search in rooms content
+            case R.id.ic_action_historical:
+                startActivity(new Intent(this, HistoricalRoomsActivity.class));
+                break;
             case R.id.ic_action_mark_all_as_read:
                 // Will be handle by fragments
                 retCode = false;

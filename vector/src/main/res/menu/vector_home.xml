@@ -8,6 +8,11 @@
         android:icon="@drawable/ic_material_search_white"
         app:showAsAction="collapseActionView" />
 
+    <item android:id="@+id/ic_action_historical"
+        android:title="historical"
+        android:icon="@drawable/ic_material_search_white"
+        app:showAsAction="collapseActionView" />
+
     <item android:id="@+id/ic_action_mark_all_as_read"
         android:title="@string/action_mark_all_as_read"
         android:icon="@drawable/ic_material_done_all_white"
