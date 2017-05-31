@@ -76,6 +76,7 @@ import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -1904,14 +1905,15 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
      */
     public void refreshUnreadBadges() {
         MXDataHandler dataHandler = mSession.getDataHandler();
+        IMXStore store = dataHandler.getStore();
 
         BingRulesManager bingRulesManager = dataHandler.getBingRulesManager();
-        Collection<RoomSummary> summaries2 = dataHandler.getStore().getSummaries();
+        Collection<RoomSummary> summaries2 = store.getSummaries();
         HashMap<Room, RoomSummary> roomSummaryByRoom = new HashMap<>();
         HashSet<String> directChatInvitations = new HashSet<>();
 
         for (RoomSummary summary : summaries2) {
-            Room room = dataHandler.getStore().getRoom(summary.getRoomId());
+            Room room = store.getRoom(summary.getRoomId());
 
             if (null != room) {
                 roomSummaryByRoom.put(room, summary);
@@ -1923,26 +1925,16 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         }
 
         for (Integer id : mBadgeViewByIndex.keySet()) {
-            UnreadCounterBadgeView badgeView = mBadgeViewByIndex.get(id);
-
-            // compute the badge value and its displays
-            int highlightCount = 0;
-            int roomCount = 0;
-            boolean mustBeHighlighted = false;
-
             // use a map because contains is faster
-            HashSet<String> filteredRoomIdsSet = null;
+            HashSet<String> filteredRoomIdsSet = new HashSet<>();
 
             if (id == R.id.bottom_action_favourites) {
                 List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
-
-                filteredRoomIdsSet = new HashSet<>();
 
                 for (Room room : favRooms) {
                     filteredRoomIdsSet.add(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_people) {
-                filteredRoomIdsSet = new HashSet<>();
                 filteredRoomIdsSet.addAll(mSession.getDirectChatRoomIdsList());
                 // Add direct chat invitations
                 for (Room room : roomSummaryByRoom.keySet()) {
@@ -1956,8 +1948,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
                 directChatRoomIds.addAll(directChatInvitations);
 
-                filteredRoomIdsSet = new HashSet<>();
-
                 for(Room room : roomSummaryByRoom.keySet()) {
                     if (!room.isConferenceUserRoom() && // not a VOIP conference room
                             !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
@@ -1965,34 +1955,45 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
-            }
-
-            if ((null == filteredRoomIdsSet) || !filteredRoomIdsSet.isEmpty()) {
-                for(Room room : roomSummaryByRoom.keySet()) {
-                    // test if the room is allowed
-                    if ((null == filteredRoomIdsSet) || filteredRoomIdsSet.contains(room.getRoomId())) {
-                        highlightCount += room.getHighlightCount();
-
-                        if (room.isInvited()) {
-                            roomCount++;
-                        } else {
-                            int notificationCount = room.getNotificationCount();
-
-                            if (bingRulesManager.isRoomMentionOnly(room)) {
-                                notificationCount = room.getHighlightCount();
-                            }
-
-                            if (notificationCount > 0) {
-                                roomCount++;
-                            }
-                        }
-
-                        mustBeHighlighted |= roomSummaryByRoom.get(room).isHighlighted();
+            } else if (id == R.id.bottom_action_home) {
+                // keep all the rooms except the conference call ones
+                for (Room room : roomSummaryByRoom.keySet()) {
+                    if (!room.isConferenceUserRoom()) {
+                        filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
             }
 
-            badgeView.updateCounter(roomCount,
+            // compute the badge value and its displays
+            int highlightCount = 0;
+            int roomCount = 0;
+            boolean mustBeHighlighted = false;
+
+            for(String roomId : filteredRoomIdsSet) {
+                Room room = store.getRoom(roomId);
+
+                if (null != room) {
+                    highlightCount += room.getHighlightCount();
+
+                    if (room.isInvited()) {
+                        roomCount++;
+                    } else {
+                        int notificationCount = room.getNotificationCount();
+
+                        if (bingRulesManager.isRoomMentionOnly(room)) {
+                            notificationCount = room.getHighlightCount();
+                        }
+
+                        if (notificationCount > 0) {
+                            roomCount++;
+                        }
+                    }
+
+                    mustBeHighlighted |= roomSummaryByRoom.get(room).isHighlighted();
+                }
+            }
+
+            mBadgeViewByIndex.get(id).updateCounter(roomCount,
                     ((0 != highlightCount) || mustBeHighlighted) ? UnreadCounterBadgeView.HIGHLIGHTED :
                             ((0 != roomCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
         }
