@@ -957,7 +957,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     @Override
     public void onDestroy() {
-        Log.e(LOG_TAG, "++ onDestroy the activity");
         if (null != mVectorMessageListFragment) {
             mVectorMessageListFragment.onDestroy();
         }
@@ -984,18 +983,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 final Event lastMessageEvent = mVectorMessageListFragment.getEvent(lastVisiblePos - 1);
                 if (lastMessageEvent != null) {
                     newReadMarkerEventId = lastMessageEvent.eventId;
-                    Log.e(LOG_TAG, "saveNewReadMarker C " + newReadMarkerEventId);
                 }
             } else {
                 final View lastVisibleMessageView = messageListView.getChildAt(messageListView.getChildCount() - 1);
                 if (lastVisibleMessageView.getBottom() <= messageListView.getBottom()) {
                     // Last visible message is entirely displayed, move read marker to that message
                     newReadMarkerEventId = mVectorMessageListFragment.getEvent(lastVisiblePos).eventId;
-                    Log.e(LOG_TAG, "saveNewReadMarker A " + newReadMarkerEventId);
                 } else {
                     // Move read marker to the message before the last visible one
                     newReadMarkerEventId = mVectorMessageListFragment.getEvent(lastVisiblePos - 1).eventId;
-                    Log.e(LOG_TAG, "saveNewReadMarker B " + newReadMarkerEventId);
                 }
             }
 
@@ -1042,7 +1038,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(LOG_TAG, "++ Resume the activity");
 
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
@@ -1401,11 +1396,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             intent.putExtra(VectorRoomActivity.EXTRA_IS_UNREAD_PREVIEW_MODE, true);
             startActivity(intent);
         }
-    }
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        Log.e(LOG_TAG, "onNewIntent");
     }
 
     @Override
