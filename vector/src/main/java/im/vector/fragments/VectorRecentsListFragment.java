@@ -564,23 +564,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                                 Event.EVENT_TYPE_RECEIPT.equals(eventType) ||
                                 Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType) ||
                                 Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
-
-                        // highlight notified messages
-                        // the SDK only highlighted invitation messages
-                        // it lets the application chooses the behaviour.
-                        ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
-                        String viewedRoomId = rTracker.getViewedRoomId();
-                        String fromMatrixId = rTracker.getMatrixId();
-                        MXSession session = VectorRecentsListFragment.this.mSession;
-                        String matrixId = session.getCredentials().userId;
-
-                        // If we're not currently viewing this room or not sent by myself, increment the unread count
-                        if ((!TextUtils.equals(event.roomId, viewedRoomId) || !TextUtils.equals(matrixId, fromMatrixId)) && !TextUtils.equals(event.getSender(), matrixId)) {
-                            RoomSummary summary = session.getDataHandler().getStore().getSummary(event.roomId);
-                            if (null != summary) {
-                                summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(session, event));
-                            }
-                        }
                     }
                 });
             }
