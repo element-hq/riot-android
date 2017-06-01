@@ -421,6 +421,11 @@ public class EventStreamService extends Service {
                     return START_NOT_STICKY;
                 }
 
+                if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
+                    Log.e(LOG_TAG, "onStartCommand : no auto restart because the application crashed");
+                    return START_NOT_STICKY;
+                }
+                
                 mSessions = new ArrayList<>();
                 mSessions.addAll(Matrix.getInstance(getApplicationContext()).getSessions());
 
