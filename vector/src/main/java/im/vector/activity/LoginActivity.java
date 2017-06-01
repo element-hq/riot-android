@@ -1014,18 +1014,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                         enableLoadingScreen(false);
 
-                        showMainLayout();
-
                         if (cancel) {
+                            showMainLayout();
                             mMode = MODE_LOGIN;
                             refreshDisplay();
-                        } else {
-                            LoginActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.auth_reset_password_success_message), Toast.LENGTH_LONG).show();
-                                }
-                            });
                         }
                     }
                 }
