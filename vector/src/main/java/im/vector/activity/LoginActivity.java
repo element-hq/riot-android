@@ -1348,6 +1348,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (mMode == MODE_ACCOUNT_CREATION) {
                                 Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
                                 onError(getString(R.string.login_error_registration_network_error) + " : " + e.getLocalizedMessage());
+                                setActionButtonsEnabled(false);
                             }
                         }
 
