@@ -914,17 +914,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
              * Display a toast to warn that the operation failed
              * @param errorMessage the error message.
              */
-            private void onError(String errorMessage) {
+            private void onError(final String errorMessage) {
                 Log.e(LOG_TAG, "onForgotPasswordClick : requestEmailValidationToken fails with error " + errorMessage);
 
                 if (mMode == MODE_FORGOT_PASSWORD) {
                     enableLoadingScreen(false);
-
-                    // display the dedicated
-                    Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    mMode = MODE_LOGIN;
-                    showMainLayout();
-                    refreshDisplay();
+                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 }
             }
 
