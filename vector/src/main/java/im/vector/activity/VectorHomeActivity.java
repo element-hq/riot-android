@@ -41,6 +41,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -966,7 +967,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             @Override
             public void run() {
                 String queryText = mSearchView.getQuery().toString();
-                String currentFilter = queryText + "-" + mCurrentMenuId;;
+                String currentFilter = queryText + "-" + mCurrentMenuId;
 
                 // display if the pattern matched
                 if (TextUtils.equals(currentFilter, filter)) {
@@ -1648,7 +1649,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_material_menu_white));
+            getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white));
         }
 
         Menu menuNav = navigationView.getMenu();

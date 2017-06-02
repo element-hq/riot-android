@@ -13,7 +13,7 @@
         android:layout_height="@dimen/chat_avatar_size"
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
-        tools:src="@color/material_blue_100" />
+        tools:src="#22000000" />
 
     <RelativeLayout
         android:layout_width="wrap_content"

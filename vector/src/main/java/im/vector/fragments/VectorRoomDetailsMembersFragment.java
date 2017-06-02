@@ -59,9 +59,8 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -850,7 +849,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        kickUsers(Arrays.asList(participantItem.mUserId), 0);
+                                        kickUsers(Collections.singletonList(participantItem.mUserId), 0);
                                     }
                                 });
                             }

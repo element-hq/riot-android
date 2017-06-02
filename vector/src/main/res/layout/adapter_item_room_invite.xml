@@ -18,7 +18,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@+id/indicator_unread_message"
-            tools:src="@color/material_blue_100" />
+            tools:src="#22000000" />
 
         <ImageView
             android:id="@+id/room_avatar_direct_chat_icon"

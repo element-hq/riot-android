@@ -16,7 +16,7 @@
 
 package im.vector.preference;
 
-import android.content.Context;;
+import android.content.Context;
 import android.util.AttributeSet;
 
 import org.matrix.androidsdk.MXSession;
