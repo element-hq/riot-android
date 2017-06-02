@@ -270,6 +270,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     // It should not but it does.
     private boolean mIsHeaderViewDisplayed = false;
 
+    // progress bar to warn that the sync is not yet done
+    private View mSyncInProgressView;
+
     /** **/
     private final ApiCallback<Void> mDirectMessageListener = new SimpleApiCallback<Void>(this) {
         @Override
@@ -325,6 +328,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     }
                 });
             }
+        }
+
+        @Override
+        public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
+            mSyncInProgressView.setVisibility(View.GONE);
         }
     };
 
@@ -562,6 +570,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.room_pending_call_view);
         mVectorOngoingConferenceCallView = (VectorOngoingConferenceCallView) findViewById(R.id.room_ongoing_conference_call_view);
         mE2eImageView = (ImageView) findViewById(R.id.room_encrypted_image_view);
+        mSyncInProgressView = findViewById(R.id.room_sync_in_progress);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
         findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
@@ -992,6 +1001,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mRoom.addEventListener(mRoomEventListener);
 
             mEditText.setHint(mRoom.isEncrypted() ? R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
+
+            mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
         }
 
         mSession.getDataHandler().addListener(mGlobalEventListener);
