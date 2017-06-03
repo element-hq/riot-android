@@ -266,7 +266,7 @@
     <string name="room_two_users_are_typing">%1$s &amp; %2$s 正在打字…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s 和其他人正在打字…</string>
     <string name="room_message_placeholder_encrypted">发送一条加密消息…</string>
-    <string name="room_message_placeholder_not_encrypted">发送一条消息 （非加密）...</string>
+    <string name="room_message_placeholder_not_encrypted">发送一条消息 （非加密）…</string>
     <string name="room_offline_notification">到服务器的连接已经丢失。</string>
     <string name="room_unsent_messages_notification">消息没发送。现在 %1$s 还是 %2$s？</string>
     <string name="room_unknown_devices_messages_notification">因为未知设备的存在导致消息没发送。现在 %1$s 还是 %2$s？</string>
@@ -412,4 +412,157 @@
     <string name="unknown_devices_alert_title">聊天室有未知设备</string>
     <string name="notification_unread_notified_messages">%d条未读的已通知的消息</string>
     <string name="notification_unread_notified_messages_in_room">" 在%2$d个聊天室的%1$d条未读的已通知的消息"</string>
-</resources>
+<string name="later">稍后</string>
+    <string name="permalink">永久链接</string>
+    <string name="rename">重命名</string>
+    <string name="report_content">报告内容</string>
+    <string name="active_call">活跃的通话</string>
+    <string name="ongoing_conference_call">" 正在进行的会议通话。以语音或视频的形式加入。"</string>
+    <string name="ongoing_conference_call_voice">视频</string>
+    <string name="missing_permissions_to_start_conf_call">你需要邀请的权限来在这个聊天室开始一个会议</string>
+    <string name="send_anyway">无论任何都发送</string>
+    <string name="send_bug_report">错误报告</string>
+    <string name="send_bug_report_logs_description">为了诊断问题，这个客户端的日志会随这个错误报告发送。如果你只想发送上面的文字，请取消选择：</string>
+    <string name="send_bug_report_sent">错误报告已经成功发送</string>
+    <string name="send_bug_report_failed">错误报告发送失败（%s）</string>
+    <string name="read_receipt">阅读</string>
+
+    <string name="auth_invalid_token">无效令牌</string>
+    <string name="auth_threepid_warning_message">同时用电子邮箱和手机号注册还不被支持直到API存在。只有电话号码会被考虑。
+
+你可以在设置中把你的电子邮箱加入到你的描述中。</string>
+    <string name="auth_username_in_use">用户名正在被使用</string>
+    <string name="login_error_unable_register_mail_ownership">无法注册：电子邮箱所有权失败</string>
+    <string name="login_error_unknown_token">指定的访问令牌没被识别</string>
+    <string name="login_error_bad_json">有缺陷的JSON</string>
+    <string name="login_error_login_email_not_yet">还未被点击的电子邮件链接</string>
+
+    <string name="attachment_remaining_time_minutes">%1$d分 %2$d秒</string>
+
+    <string name="call_ring">正在呼叫…</string>
+    <string name="incoming_call">到来的呼叫</string>
+    <string name="incoming_video_call">到来的视频通话</string>
+    <string name="incoming_voice_call">到来的语音通话</string>
+    <string name="call_in_progress">呼叫进行中</string>
+
+    <string name="call_error_user_not_responding">远程端接听失败。</string>
+    <string name="call_error_ice_failed">媒体连接失败</string>
+    <string name="call_error_camera_init_failed">无法初始化相机</string>
+    <string name="call_error_answered_elsewhere">呼叫在另一端被接听</string>
+    <string name="call_error_peer_hangup_elsewhere">呼叫在另一端被挂起</string>
+    <string name="call_error_peer_cancelled_call">呼叫被取消</string>
+
+    <string name="action_accept">接受</string>
+    <string name="action_ignore">忽略</string>
+
+    <string name="permissions_rationale_popup_title">信息</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+请在下个弹出窗口允许访问从而能进行呼叫。</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+请在下个弹出窗口允许访问从而能进行呼叫。</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot需要访问你相机和麦克风的权限来进行视频通话。
+
+请在下个弹出窗口允许访问从而能进行呼叫。</string>
+    <string name="permissions_action_not_performed_missing_permissions">对不起.. 因为缺少的权限，行动没有被操作</string>
+
+    <string name="media_slider_saved_message">保存至下载</string>
+    <string name="remove">移除</string>
+    <string name="room_preview_unlinked_email_warning">这个邀请被发送至%s，它没和这个账户关联。
+你可能希望用一个不同的账户登录，或者把这个电子邮箱加入到这个账户。</string>
+    <string name="room_preview_room_interactions_disabled">这是这个聊天室的一个预览。聊天室交互已禁用。</string>
+
+    <string name="room_header_active_members">%1$d/%2$d 活跃成员</string>
+    <string name="room_title_members">%1$d 成员</string>
+    <string name="room_e2e_alert_message">端到端加密在beta阶段，可能不可靠。
+
+你不应该相信它来保护你的数据。
+
+设备还将无法解密在它们加入聊天室之前的历史记录。
+
+加密消息对还没有实现加密的客户端将会不可见。</string>
+
+    <string name="room_participants_header_call">呼叫</string>
+    <string name="room_participants_power_level_prompt">你将不能撤销这个修改，因为你正在让这个用户有和你相同的特权级别。
+你确定吗？</string>
+
+    <string name="ssl_cert_not_trust">这可能意味着有人正恶意地拦截你的流量，或者你的电话不信任远程服务器提供的证书。</string>
+    <string name="ssl_cert_new_account_expl">如果服务器管理员说这是预料之中的，请确保以下的指纹和他们提供的指纹匹配。</string>
+    <string name="room_event_action_report_prompt_reason">报告这个内容的原因</string>
+    <string name="room_recents_directory">目录</string>
+    <string name="room_recents_invites">邀请</string>
+    <string name="directory_search_results_title">浏览目录</string>
+    <string name="directory_search_room">%1$d 个聊天室</string>
+    <string name="directory_search_rooms">%1$d 个聊天室</string>
+    <string name="directory_searching_title">搜索目录..</string>
+
+    <string name="room_settings_favourite">最喜爱</string>
+    <string name="room_sliding_menu_term_and_conditions">使用条款</string>
+    <string name="settings_display_name">昵称</string>
+    <string name="settings_summary_app_info_link">应用程序系统信息窗口</string>
+    <string name="settings_turn_screen_on">打开屏幕3秒</string>
+
+    <string name="settings_call_invitations">呼叫邀请</string>
+    <string name="settings_app_term_conditions">使用条款</string>
+    <string name="settings_other">其他</string>
+    <string name="settings_notifications_targets">通知目标</string>
+    <string name="settings_logged_in">登录为</string>
+    <string name="account_email_validation_message">请检查你的电子邮箱并点击里面包含的链接。完成时请点击继续。</string>
+    <string name="account_email_validation_error">无法验证电子邮箱地址。请检查你的电子邮件并点击里面包含的链接。完成时请点击继续</string>
+
+    <string name="settings_delete_notification_targets_confirmation">你确认你要移除这个通知目标吗？</string>
+
+    <string name="settings_delete_threepid_confirmation">你确认你要移除%1$s %2$s吗?</string>
+
+    <string name="settings_phone_number_error">无效的已选国家的电话号码</string>
+    <string name="room_settings_room_photo">聊天室图片</string>
+    <string name="room_settings_room_tag">聊天室标记</string>
+    <string name="room_settings_tag_pref_dialog_title">标记为：</string>
+    <string name="room_settings_mute_notifs">静默通知</string>
+
+    <string name="room_settings_tag_pref_entry_favourite">最喜爱</string>
+    <string name="room_settings_tag_pref_entry_low_priority">低优先级</string>
+    <string name="room_settings_tag_pref_entry_none">无</string>
+    <string name="room_settings_tag_pref_no_tag">未标记</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">最喜爱</string>
+    <string name="room_settings_tag_pref_entry_value_low_priority">低</string>
+    <string name="room_settings_tag_pref_entry_value_none">无</string>
+
+    <string name="room_settings_room_access_warning">要链接一个房间，它必须有一个地址。</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">只对已验证的设备加密</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">你没有指定主地址。这个聊天室的默认主地址会被随机选取</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">主地址警告</string>
+
+    <string name="room_settings_set_main_address">设置为主地址</string>
+    <string name="room_settings_unset_main_address">取消设置为主地址</string>
+    <string name="room_settings_copy_room_id">复制聊天室ID</string>
+    <string name="room_settings_copy_room_address">复制聊天室地址</string>
+
+    <string name="room_settings_addresses_e2e_prompt_message">端到端加密在beta阶段，可能不可靠。
+
+你不应该相信它来保护你的数据。
+
+设备还将无法解密在它们加入聊天室之前的历史记录。
+
+一旦加密对一个聊天室启用了，它不能再关闭（对于现在来说）。
+
+加密消息对还没有实现加密的客户端将会不可见。</string>
+
+    <string name="ga_use_alert_message">你接受帮助我们改善应用程序的行为并发送崩溃报告吗？</string>
+    <string name="ga_use_settings">自动发送崩溃报告</string>
+    <string name="ga_use_disable_alert_message">你需要重启应用程序来禁用崩溃报告。</string>
+
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">声称的Ed25519指纹密钥</string>
+    <string name="encryption_information_blocked">已列入黑名单</string>
+
+    <string name="encryption_information_none">无</string>
+
+    <string name="encryption_information_block">列入黑名单</string>
+    <string name="encryption_information_unblock">移出黑名单</string>
+
+    <string name="e2e_enabling_on_app_update">Riot现在支持端到端加密，但你需要再次登录来启用它。
+
+你可以现在或稍后从应用设置中做这件事。</string>
+
+    </resources>
