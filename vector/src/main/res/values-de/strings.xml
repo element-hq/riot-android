@@ -28,7 +28,7 @@
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
     <string name="active_call">Aktives Gespräch</string>
-    <string name="ongoing_conference_call"> Konferenzgespräch läuft. Mit Sprache oder Video betreten.</string>
+    <string name="ongoing_conference_call">" Konferenzgespräch läuft. Per Sprach-Chat oder per Video-Chat beitreten."</string>
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Kann Gespräch nicht starten. Bitte später erneut probieren</string>
@@ -36,7 +36,7 @@
     <string name="missing_permissions_to_start_conf_call">Dir fehlt das Recht ein Konferenzgespräch in diesem Raum zu starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Kann Gespräch nicht starten</string>
     <string name="device_information">Geräteinformationen</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Konferenzgespräche stehen in verschlüsslten Räumen nicht zur Verfügung</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konferenzgespräche werden in verschlüsselten Räumen nicht unterstützt</string>
     <string name="send_anyway">Trotzdem senden</string>
     <string name="or">oder</string>
 
@@ -44,8 +44,8 @@
     <string name="action_sign_out">Abmelden</string>
     <string name="action_sign_out_confirmation">Aus Sicherheitsgründen werden beim Abmelden alle Verschlüsselungsschlüssel gelöscht. Dadurch werden die vorher verschlüsselten Chats für dich unlesbar, wenn du dich wieder anmeldest.\nWähle Exportieren um die Schlüssel zu sichern bevor du dich abmeldest.</string>
     <string name="action_voice_call">Sprachanruf</string>
-    <string name="action_video_call">Videoanruf</string>
-    <string name="action_search_room">Raum suchen</string>
+    <string name="action_video_call">Video-Anruf</string>
+    <string name="action_search_room">Raum durchsuchen</string>
     <string name="action_mark_all_as_read">Alle als gelesen markieren</string>
     <string name="action_quick_reply">Antworten</string>
     <string name="action_open">Öffnen</string>
@@ -82,7 +82,7 @@
     <string name="identity_url">Identitätsserver-URL</string>
     <string name="user">Benutzer</string>
     <string name="users">Benutzer</string>
-    <string name="search">Suche</string>
+    <string name="search">Suchen</string>
 
     <string name="start_new_chat">Neuen Chat starten</string>
     <string name="start_voice_call">Sprach-Anruf starten</string>
@@ -187,7 +187,7 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
 
     <!-- room info dialog Screen -->
     <string name="room_info_room_name">Raumname</string>
-    <string name="room_info_room_topic">Raumthema</string>
+    <string name="room_info_room_topic">Raum-Thema</string>
 
     <!-- Settings keys -->
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
@@ -215,16 +215,18 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Foto oder Video aufnehmen</string>
-    <string name="media_picker_cannot_record_video">Kann Video nicht aufnehmen"</string>
+    <string name="media_picker_cannot_record_video">Video kann nicht aufgenommen werden</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
     <string name="permissions_rationale_msg_storage">Riot benötigt die Berechtigung, auf deine Fotos und Videos zugreifen zu können, um Anhänge zu senden und zu speichern.\n\nBitte erlaube den Zugriff im nächsten Dialog, um Dateien von deinem Gerät zu versenden.</string>
     <string name="permissions_rationale_msg_camera">Riot benötigt die Berechtigung, auf deine Kamera zugreifen zu können, um Bilder aufzunehmen und Video-Anrufe durchzuführen.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu tätigen.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe zu tätigen.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu tätigen.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot benötigt die Berechtigung, auf deine Kamera und dein Mikrofon zugreifen zu können, um Video-Anrufe zu tätigen.\n\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu tätigen.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot benötigt die Berechtigung, auf deine Kamera und dein Mikrofon zugreifen zu können, um Video-Anrufe tätigen zu können.
+
+Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu starten.</string>
     <string name="permissions_rationale_msg_contacts">Riot benötigt die Berechtigung, auf deine Kontakte im Adressbuch zugreifen zu können, um andere Matrix-Nutzer aufgrund ihrer E-Mail-Adresse und Telefonnummer zu finden.\n\nBitte erlaube den Zugriff im nächsten Dialog, um Kontakte im Adressbuch zu finden, die über Riot erreichbar sind.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot benötigt die Berechtigung, auf deine Adressbuch-Kontakte zugreifen zu dürfen, um andere Matrix-Nutzer anhand ihrer E-Mail-Adresse und/oder ihrer Telefonnummer finden zu können.
 
@@ -293,8 +295,8 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_participants_action_set_default_power_level">Zum normalen Nutzer machen</string>
     <string name="room_participants_action_set_moderator">Zum Moderator machen</string>
     <string name="room_participants_action_set_admin">Zum Admin machen</string>
-    <string name="room_participants_action_ignore">Verberge alle Nachrichten dieses Nutzers</string>
-    <string name="room_participants_action_unignore">Zeige alle Nachrichten dieses Nutzers</string>
+    <string name="room_participants_action_ignore">Alle Nachrichten dieses Nutzers verbergen</string>
+    <string name="room_participants_action_unignore">Alle Nachrichten dieses Nutzers anzeigen</string>
     <string name="room_participants_invite_search_another_user">Nutzer-ID, Name oder E-Mail-Adresse</string>
     <string name="room_participants_action_mention">Erwähnen</string>
     <string name="room_participants_action_devices_list">Geräteliste anzeigen</string>
@@ -306,17 +308,17 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="people_search_local_contacts">LOKALE KONTAKTE (%d)</string>
     <string name="people_search_known_contacts">BEKANNTE KONTAKTE (%s)</string>
     <string name="people_search_filter_text">Nur Matrix-Nutzer</string>
-    <string name="people_search_too_many_contacts">Zu viele Kontakte, bitte nutze das Suchfeld</string>
+    <string name="people_search_too_many_contacts">"Zu viele Kontakte, bitte das Suchfeld  benutzen"</string>
 
     <!--  Chat -->
-    <string name="room_menu_search">Suche</string>
+    <string name="room_menu_search">Suchen</string>
     <string name="room_one_user_is_typing">%s schreibt…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s schreiben…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; andere schreiben…</string>
     <string name="room_message_placeholder_encrypted">Verschlüsselte Nachricht senden…</string>
     <string name="room_message_placeholder_not_encrypted">Nachricht senden (nicht verschlüsselt)…</string>
     <string name="room_offline_notification">Verbindung zum Server unterbrochen.</string>
-    <string name="room_unsent_messages_notification">Nachrichten nicht gesendet. %1$s oder %2$s?</string>
+    <string name="room_unsent_messages_notification">Nachrichten konnten nicht gesendet werden. %1$s oder %2$s?</string>
     <string name="room_unknown_devices_messages_notification">Nachrichten wurden nicht gesendet, da unbekannte Geräte anwesend sind. %1$s oder %2$s?</string>
     <string name="room_prompt_resend">Alles erneut senden</string>
     <string name="room_prompt_cancel">senden abbrechen</string>
@@ -365,7 +367,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_displayname_no_title">Leerer Raum</string>
 
     <!-- Search -->
-    <string name="search_hint">Suche</string>
+    <string name="search_hint">Suchen</string>
     <string name="search_members_hint">Raummitglieder filtern</string>
     <string name="search_no_results">Keine Suchergebnisse</string>
     <string name="tab_title_search_rooms">RÄUME</string>
@@ -389,7 +391,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="directory_search_rooms">%1$d Räume</string>
     <string name="directory_search_room_for">%1$d Raum gefunden für %2$s</string>
     <string name="directory_search_rooms_for">%1$s Räume gefunden für %2$s</string>
-    <string name="directory_searching_title">Durchsuche Verzeichnis…</string>
+    <string name="directory_searching_title">Verzeichnis wird durchsucht…</string>
 
     <!-- home room settings -->
     <string name="room_settings_notifications">Benachrichtigungen</string>
@@ -451,7 +453,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="settings_ignored_users">Ignorierte Nutzer</string>
     <string name="settings_other">Sonstiges</string>
     <string name="settings_advanced">Erweitert</string>
-    <string name="settings_cryptography">Kryptographie</string>
+    <string name="settings_cryptography">Verschlüsselung</string>
     <string name="settings_notifications_targets">Benachrichtigungsziele</string>
     <string name="settings_contact">Lokale Kontakte</string>
     <string name="settings_contacts_app_permission">Kontaktzugriffsberechtigung</string>
@@ -512,11 +514,11 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_settings_mute_notifs">Benachrichtigungen stummschalten</string>
 
     <!-- Room settings: Room tag -->
-    <string name="room_settings_tag_pref_entry_favourite">Favoriten</string>
+    <string name="room_settings_tag_pref_entry_favourite">Als Favorit setzen</string>
     <string name="room_settings_tag_pref_entry_low_priority">Niedrige Priorität</string>
     <string name="room_settings_tag_pref_entry_none">Keine</string>
     <string name="room_settings_tag_pref_no_tag">Nicht getaggt</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">Favorit</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">Als Favorit setzen</string>
     <string name="room_settings_tag_pref_entry_value_low_priority">niedrige Priorität</string>
     <string name="room_settings_tag_pref_entry_value_none">keine</string>
 
@@ -548,7 +550,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_settings_room_internal_id">Interne ID dieses Raumes</string>
     <string name="room_settings_addresses_pref_title">Adressen</string>
     <string name="room_settings_labs_pref_title">Labor</string>
-    <string name="room_settings_labs_warning_message">Dies sind experimentelle Funktionen, die unerwarte Fehler produzieren können. Mit Vorsicht zu benutzen.</string>
+    <string name="room_settings_labs_warning_message">Dies sind experimentelle Funktionen, die in unerwarteter Weise Fehler verursachen können. Mit Vorsicht zu verwenden.</string>
     <string name="room_settings_labs_end_to_end">Ende-zu-Ende-Verschlüsselung</string>
     <string name="room_settings_labs_end_to_end_is_active">Ende-zu-Ende-Verschlüsselung ist aktiv</string>
     <string name="room_settings_labs_end_to_end_warnings">Du musst dich abmelden, um die Verschlüsselung aktivieren zu können.</string>
