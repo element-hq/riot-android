@@ -186,11 +186,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         super.onPause();
 
         if (mAdapter instanceof VectorMessagesAdapter) {
-            ((VectorMessagesAdapter) mAdapter).onPause();
-        }
+            VectorMessagesAdapter adapter = ((VectorMessagesAdapter) mAdapter);
 
-        if (null != mAdapter) {
-            mAdapter.setMessagesAdapterEventsListener(null);
+            adapter.setVectorMessagesAdapterActionsListener(null);
+            adapter.onPause();
         }
     }
 
@@ -198,8 +197,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onResume() {
         super.onResume();
-        if (null != mAdapter) {
-            mAdapter.setMessagesAdapterEventsListener(this);
+        if (mAdapter instanceof VectorMessagesAdapter) {
+            VectorMessagesAdapter adapter = ((VectorMessagesAdapter) mAdapter);
+            adapter.setVectorMessagesAdapterActionsListener(this);
         }
     }
 
@@ -229,7 +229,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        return new VectorMessagesAdapter(mSession, getActivity().getApplicationContext(), getMXMediasCache());
+        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediasCache());
     }
 
     /**
