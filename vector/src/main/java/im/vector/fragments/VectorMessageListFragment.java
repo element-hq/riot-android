@@ -188,6 +188,19 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (mAdapter instanceof VectorMessagesAdapter) {
             ((VectorMessagesAdapter) mAdapter).onPause();
         }
+
+        if (null != mAdapter) {
+            mAdapter.setMessagesAdapterEventsListener(null);
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (null != mAdapter) {
+            mAdapter.setMessagesAdapterEventsListener(this);
+        }
     }
 
     /**
@@ -198,6 +211,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     public void onDetach() {
         super.onDetach();
         mHostActivityListener = null;
+
+        mBackProgressView = null;
+        mForwardProgressView = null;
+        mMainProgressView = null;
     }
 
     @Override
@@ -212,9 +229,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        VectorMessagesAdapter vectorMessagesAdapter = new VectorMessagesAdapter(mSession, getActivity(), getMXMediasCache());
-        vectorMessagesAdapter.setVectorMessagesAdapterActionsListener(this);
-        return vectorMessagesAdapter;
+        return new VectorMessagesAdapter(mSession, getActivity().getApplicationContext(), getMXMediasCache());
     }
 
     /**
