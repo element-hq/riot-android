@@ -333,15 +333,18 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
             final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
+            Log.d(LOG_TAG, "Has shared intent");
 
             if (mSession.getDataHandler().getStore().isReady()) {
                 this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d(LOG_TAG, "shared intent : The store is ready -> display sendFilesTo");
                         CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
                     }
                 });
             } else {
+                Log.d(LOG_TAG, "shared intent : Wait that the store is ready");
                 mSharedFilesIntent = sharedFilesIntent;
             }
 
@@ -397,6 +400,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                     VectorHomeActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            Log.d(LOG_TAG, "shared intent : the store is now ready, display sendFilesTo");
                             CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, mSharedFilesIntent);
                             mSharedFilesIntent = null;
                         }

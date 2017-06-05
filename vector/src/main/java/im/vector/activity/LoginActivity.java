@@ -914,17 +914,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
              * Display a toast to warn that the operation failed
              * @param errorMessage the error message.
              */
-            private void onError(String errorMessage) {
+            private void onError(final String errorMessage) {
                 Log.e(LOG_TAG, "onForgotPasswordClick : requestEmailValidationToken fails with error " + errorMessage);
 
                 if (mMode == MODE_FORGOT_PASSWORD) {
                     enableLoadingScreen(false);
-
-                    // display the dedicated
-                    Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    mMode = MODE_LOGIN;
-                    showMainLayout();
-                    refreshDisplay();
+                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -1014,18 +1009,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                         enableLoadingScreen(false);
 
-                        showMainLayout();
-
                         if (cancel) {
+                            showMainLayout();
                             mMode = MODE_LOGIN;
                             refreshDisplay();
-                        } else {
-                            LoginActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.auth_reset_password_success_message), Toast.LENGTH_LONG).show();
-                                }
-                            });
                         }
                     }
                 }
@@ -1361,6 +1348,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (mMode == MODE_ACCOUNT_CREATION) {
                                 Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
                                 onError(getString(R.string.login_error_registration_network_error) + " : " + e.getLocalizedMessage());
+                                setActionButtonsEnabled(false);
                             }
                         }
 
