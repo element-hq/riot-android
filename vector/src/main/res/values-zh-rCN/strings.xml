@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resend">重新发送</string>
+<resources>
+    <string name="resend">重新发送</string>
     <string name="quote">引用</string>
     <string name="share">分享</string>
     <string name="forward">转发</string>
@@ -565,4 +566,54 @@
 
 你可以现在或稍后从应用设置中做这件事。</string>
 
-    </resources>
+    <string name="resouces_country">ZH</string>
+    <string name="resouces_language">zh-cn</string>
+    <string name="ok">OK</string>
+    <string name="redact">纂</string>
+    <string name="send_bug_report_alert_message">你似乎在沮丧地摇晃手机。您要提交错误报告吗？</string>
+    <string name="send_files_in">发送到</string>
+    <string name="e2e_need_log_in_again">您需要重新登录才能为此设备生成端到端加密密钥，并将公钥提交给您的家庭服务商。\n这是一次关闭。\n由于不便，请谅解</string>
+    <string name="read_receipts_list">阅读收据清单</string>
+    <string name="compression_options">发送为</string>
+    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
+    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
+    <string name="permissions_rationale_msg_contacts">Riot需要访问您的通讯录联系人的权限，才能根据其电子邮件和电话号码查找其他Matrix用户。\n\n请允许在下一个弹出窗口中访问以发现从Riot可访问的通讯录用户。</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot需要访问您的通讯录联系人的权限，才能根据其电子邮件和电话号码查找其他Matrix用户。\n\n允许Riot访问您的联系人？</string>
+
+    <string name="room_participants_idle">闲</string>
+    <string name="room_participants_now">现在</string>
+    <string name="room_participants_ago">前</string>
+
+    <string name="people_search_filter_text">仅限Matrix用户</string>
+    <string name="ssl_unexpected_existing_expl">证书已从您的手机信任的证书中更改。这是非常不寻常的。建议您不要接受此新证书。</string>
+    <string name="ssl_expected_existing_expl">证书已从以前受信任的一个更改为不受信任的证书。服务器可能已更新其证书。联系服务器管理员以获取预期的指纹。</string>
+    <string name="ssl_only_accept">如果服务器管理员已经发布了与上述相匹配的指纹，则只接受该证书。</string>
+    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
+    <string name="room_details_people">人</string>
+    <string name="malformed_id">格式不正确的ID。应该是一个电子邮件地址或Matrix ID，如“@ localpart：domain \”</string>
+    <string name="tab_title_search_people">人</string>
+    <string name="directory_search_room_for">%1$d 找到的房间 %2$s</string>
+    <string name="directory_search_rooms_for">%1$s 找到的房间 %2$s</string>
+    <string name="room_sliding_menu_third_party_notices">第三方通知</string>
+    <string name="settings_profile_picture">档案图片</string>
+    <string name="settings_third_party_notices">第三方通知</string>
+    <string name="settings_contacts_phonebook_country">电话本国家</string>
+    <string name="devices_details_id_title">ID</string>
+    <string name="devices_details_name_title">名称</string>
+    <string name="devices_details_last_seen_title">最后一次露面</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_details_time_format">HH:mm:ss</string>
+    <string name="settings_home_server">Home Server</string>
+    <string name="settings_identity_server">Identity Server</string>
+    <string name="account_email_validation_title">验证待定</string>
+    <string name="settings_phone_number_code">码</string>
+    <string name="room_settings_category_access_visibility_title">访问和可见性</string>
+    <string name="room_settings_room_access_rules_pref_title">房间通道</string>
+    <string name="room_settings_labs_pref_title">Labs</string>
+    <string name="room_settings_labs_end_to_end_is_active">端到端加密处于活动状态</string>
+    <string name="failed_to_load_timeline_position">%s 正在尝试在这个房间的时间轴上加载一个特定的点，但无法找到它.</string>
+    <string name="encryption_information_name">名称</string>
+    <string name="encryption_information_verify_device_warning">要验证此设备是否可信任，请使用其他方式（例如亲自或打电话）联系其所有者，并询问他们在其设备的用户设置中看到的密钥是否与以下密钥相匹配：</string>
+    <string name="encryption_information_verify_device_warning2">如果匹配，请按下面的验证按钮。如果没有，那么其他人正在拦截此设备，而您可能想要按阻止按钮。\n在将来，此验证过程将会更加复杂。</string>
+    <string name="unknown_devices_alert_message">这个房间包含未经验证的未知设备。\n这意味着不保证设备属于他们声称的用户。\n我们建议您在继续操作之前，先阅读每个设备的验证过程，但可以重新发送消息而不验证您是否喜欢。\n\n未知设备：</string>
+</resources>
