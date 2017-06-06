@@ -409,7 +409,7 @@
     <string name="settings_profile_picture">Foto de Perfil</string>
     <string name="settings_display_name">Nombre Visible</string>
     <string name="settings_email_address">Correo Electrónico</string>
-    <string name="settings_add_email_address">Añadir correo electróico</string>
+    <string name="settings_add_email_address">Añadir correo electrónico</string>
     <string name="settings_phone_number">Número Telefónico</string>
     <string name="settings_add_phone_number">Añadir número telefónico</string>
     <string name="settings_summary_app_info_link">Página de la información del sistema de la aplicación</string>
