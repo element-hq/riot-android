@@ -1958,7 +1958,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
                 directChatRoomIds.addAll(directChatInvitations);
 
-                for(Room room : roomSummaryByRoom.keySet()) {
+                for (Room room : roomSummaryByRoom.keySet()) {
                     if (!room.isConferenceUserRoom() && // not a VOIP conference room
                             !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
                             (!room.getAccountData().hasTags() || favoritesRoomIds.contains(room.getRoomId()))) {
@@ -1978,7 +1978,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             int highlightCount = 0;
             int roomCount = 0;
 
-            for(String roomId : filteredRoomIdsSet) {
+            for (String roomId : filteredRoomIdsSet) {
                 Room room = store.getRoom(roomId);
 
                 if (null != room) {
@@ -2000,9 +2000,14 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 }
             }
 
-            mBadgeViewByIndex.get(id).updateCounter(roomCount,
-                    (0 != highlightCount) ? UnreadCounterBadgeView.HIGHLIGHTED :
-                            ((0 != roomCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
+            int status = (0 != highlightCount) ? UnreadCounterBadgeView.HIGHLIGHTED :
+                    ((0 != roomCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT);
+
+            if (id == R.id.bottom_action_favourites) {
+                mBadgeViewByIndex.get(id).updateText((roomCount > 0) ? "\u2022" : "", status);
+            } else {
+                mBadgeViewByIndex.get(id).updateCounter(roomCount, status);
+            }
         }
     }
 

@@ -19,6 +19,7 @@ import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.IntDef;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -73,12 +74,26 @@ public class UnreadCounterBadgeView extends RelativeLayout {
     public void updateCounter(int value, @Status int status) {
         if (value > 0) {
             if (value > 999) {
-                mCounterTextView.setText((value / 1000) + "." + ((value % 1000) / 100) + "K");
+                updateText((value / 1000) + "." + ((value % 1000) / 100) + "K", status);
             } else {
-                mCounterTextView.setText(value + "");
+                updateText(value + "", status);
             }
-            setVisibility(View.VISIBLE);
+        } else {
+            updateText(null, status);
+        }
+    }
 
+    /**
+     * Update the badge value and its status
+     *
+     * @param text  the new text value
+     * @param status the new status
+     */
+    public void updateText(String text, @Status int status) {
+        if (!TextUtils.isEmpty(text)) {
+            mCounterTextView.setText(text);
+
+            setVisibility(View.VISIBLE);
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(100);
@@ -91,7 +106,7 @@ public class UnreadCounterBadgeView extends RelativeLayout {
             }
             mParentView.setBackground(shape);
         } else {
-            setVisibility(View.INVISIBLE);
+            setVisibility(View.GONE);
         }
     }
 }
