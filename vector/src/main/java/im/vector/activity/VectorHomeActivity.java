@@ -96,6 +96,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -1934,7 +1935,12 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             }
         }
 
-        for (Integer id : mBadgeViewByIndex.keySet()) {
+        Set<Integer> menuIndexes = new HashSet<>(mBadgeViewByIndex.keySet());
+
+        // the badges are not anymore displayed on the home tab
+        menuIndexes.remove(R.id.bottom_action_home);
+
+        for (Integer id : menuIndexes) {
             // use a map because contains is faster
             HashSet<String> filteredRoomIdsSet = new HashSet<>();
 
@@ -1962,13 +1968,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                     if (!room.isConferenceUserRoom() && // not a VOIP conference room
                             !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
                             (!room.getAccountData().hasTags() || favoritesRoomIds.contains(room.getRoomId()))) {
-                        filteredRoomIdsSet.add(room.getRoomId());
-                    }
-                }
-            } else if (id == R.id.bottom_action_home) {
-                // keep all the rooms except the conference call ones
-                for (Room room : roomSummaryByRoom.keySet()) {
-                    if (!room.isConferenceUserRoom()) {
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
