@@ -16,8 +16,6 @@
 
 package im.vector.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -113,6 +111,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         super.onResume();
         mSession.getDataHandler().addListener(mEventsListener);
         initData();
+
+        if (null != mHomeSectionViews) {
+            for (HomeSectionView homeSectionView : mHomeSectionViews) {
+                homeSectionView.scrollToPosition(0);
+            }
+        }
     }
 
     @Override
