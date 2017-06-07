@@ -40,7 +40,7 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenzgespräche werden in verschlüsselten Räumen nicht unterstützt</string>
     <string name="send_anyway">Trotzdem senden</string>
     <string name="or">oder</string>
-    <string name="and">and</string>
+    <string name="and">und</string>
     <string name="invite">Invite</string>
 
     <!-- actions -->
