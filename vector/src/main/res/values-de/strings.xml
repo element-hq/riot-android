@@ -50,7 +50,7 @@
     <string name="action_video_call">Videoanruf</string>
     <string name="action_global_search">Globale Suche</string>
     <string name="action_mark_all_as_read">Alle als gelesen markieren</string>
-    <string name="action_historical">Historical</string>
+    <string name="action_historical">Historisch</string>
     <string name="action_quick_reply">Antworten</string>
     <string name="action_open">Öffnen</string>
     <string name="action_close">Schließen</string>
