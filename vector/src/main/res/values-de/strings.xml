@@ -41,7 +41,7 @@
     <string name="send_anyway">Trotzdem senden</string>
     <string name="or">oder</string>
     <string name="and">und</string>
-    <string name="invite">Invite</string>
+    <string name="invite">Einladen</string>
 
     <!-- actions -->
     <string name="action_sign_out">Abmelden</string>
