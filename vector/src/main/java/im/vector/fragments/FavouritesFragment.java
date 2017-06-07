@@ -130,11 +130,6 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
      * Abstract methods implementation
      * *********************************************************************************************
      */
-
-    @Override
-    protected void onFloatingButtonClick() {
-    }
-
     @Override
     protected List<Room> getRooms() {
         return new ArrayList<>(mFavorites);

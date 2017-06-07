@@ -84,7 +84,6 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Field;
@@ -107,7 +106,6 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.ViewedRoomTracker;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.HomeFragment;
@@ -237,6 +235,9 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
     private List<Room> mDirectChatInvitations;
     private List<Room> mRoomInvitations;
+
+    // floating action bar dialog
+    private AlertDialog mFabDialog;
 
      /*
      * *********************************************************************************************
@@ -622,6 +623,12 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             }
         }
 
+        if (mFabDialog != null) {
+            // Prevent leak after orientation changed
+            mFabDialog.dismiss();
+            mFabDialog = null;
+        }
+
         removeBadgeEventsListener();
     }
 
@@ -856,6 +863,15 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
+
+        if (null != mFloatingActionButton) {
+            mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onFloatingButtonClick();
+                }
+            });
+        }
     }
 
     /**
@@ -1126,9 +1142,79 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     }
 
     /**
+     * Process the content of the current intent to detect universal link data.
+     * If data present, it means that the app was started through an URL link, but due
+     * to the App was not initialized properly, it has been required to re start the App.
+     * <p>
+     * To indicate the App has finished its Login/Splash/Home flow, a resume action
+     * is sent to the receiver.
+     */
+    private void processIntentUniversalLink() {
+        Intent intent;
+        Uri uri;
+
+        if (null != (intent = getIntent())) {
+            if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                Log.d(LOG_TAG, "## processIntentUniversalLink(): EXTRA_UNIVERSAL_LINK_URI present1");
+                uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+
+                if (null != uri) {
+                    Intent myBroadcastIntent = new Intent(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK_RESUME);
+
+                    myBroadcastIntent.putExtras(getIntent().getExtras());
+                    myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
+                    sendBroadcast(myBroadcastIntent);
+
+                    showWaitingView();
+
+                    // use only once, remove since it has been used
+                    intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+                    Log.d(LOG_TAG, "## processIntentUniversalLink(): Broadcast BROADCAST_ACTION_UNIVERSAL_LINK_RESUME sent");
+                }
+            }
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Floating button management
+     * *********************************************************************************************
+     */
+
+    private void onFloatingButtonClick() {
+        // ignore any action if there is a pending one
+        if (!isWaitingViewVisible()) {
+            CharSequence items[] = new CharSequence[]{getString(R.string.room_recents_start_chat), getString(R.string.room_recents_create_room), getString(R.string.room_recents_join_room)};
+            mFabDialog = new AlertDialog.Builder(this)
+                    .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface d, int n) {
+                            d.cancel();
+                            if (0 == n) {
+                                invitePeopleToNewRoom();
+                            } else if (1 == n) {
+                                createRoom();
+                            } else {
+                                joinARoom();
+                            }
+                        }
+                    })
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            invitePeopleToNewRoom();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
+    }
+
+
+    /**
      * Open the room creation with inviting people.
      */
-    public void invitePeopleToNewRoom() {
+    private void invitePeopleToNewRoom() {
         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
         settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
         startActivity(settingsIntent);
@@ -1137,7 +1223,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     /**
      * Create a room and open the dedicated activity
      */
-    public void createRoom() {
+    private void createRoom() {
         showWaitingView();
         mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
             @Override
@@ -1155,7 +1241,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                     }
                 });
             }
-
 
             private void onError(final String message) {
                 mWaitingView.post(new Runnable() {
@@ -1189,7 +1274,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     /**
      * Offer to join a room by alias or Id
      */
-    public void joinARoom() {
+    private void joinARoom() {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -1280,40 +1365,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 public void afterTextChanged(Editable s) {
                 }
             });
-        }
-    }
-
-    /**
-     * Process the content of the current intent to detect universal link data.
-     * If data present, it means that the app was started through an URL link, but due
-     * to the App was not initialized properly, it has been required to re start the App.
-     * <p>
-     * To indicate the App has finished its Login/Splash/Home flow, a resume action
-     * is sent to the receiver.
-     */
-    private void processIntentUniversalLink() {
-        Intent intent;
-        Uri uri;
-
-        if (null != (intent = getIntent())) {
-            if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-                Log.d(LOG_TAG, "## processIntentUniversalLink(): EXTRA_UNIVERSAL_LINK_URI present1");
-                uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-
-                if (null != uri) {
-                    Intent myBroadcastIntent = new Intent(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK_RESUME);
-
-                    myBroadcastIntent.putExtras(getIntent().getExtras());
-                    myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
-                    sendBroadcast(myBroadcastIntent);
-
-                    showWaitingView();
-
-                    // use only once, remove since it has been used
-                    intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-                    Log.d(LOG_TAG, "## processIntentUniversalLink(): Broadcast BROADCAST_ACTION_UNIVERSAL_LINK_RESUME sent");
-                }
-            }
         }
     }
 

@@ -71,8 +71,6 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     private List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
 
-    private AlertDialog mFabDialog;
-
     /*
      * *********************************************************************************************
      * Static methods
@@ -121,11 +119,6 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     public void onPause() {
         super.onPause();
         mSession.getDataHandler().removeListener(mEventsListener);
-        if (mFabDialog != null) {
-            // Prevent leak after orientation changed
-            mFabDialog.dismiss();
-            mFabDialog = null;
-        }
     }
 
     @Override
@@ -143,36 +136,6 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      * Abstract methods implementation
      * *********************************************************************************************
      */
-
-    @Override
-    protected void onFloatingButtonClick() {
-        // ignore any action if there is a pending one
-        if (!mActivity.isWaitingViewVisible()) {
-            CharSequence items[] = new CharSequence[]{getString(R.string.room_recents_start_chat), getString(R.string.room_recents_create_room), getString(R.string.room_recents_join_room)};
-            mFabDialog = new AlertDialog.Builder(mActivity)
-                    .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface d, int n) {
-                            d.cancel();
-                            if (0 == n) {
-                                mActivity.invitePeopleToNewRoom();
-                            } else if (1 == n) {
-                                mActivity.createRoom();
-                            } else {
-                                mActivity.joinARoom();
-                            }
-                        }
-                    })
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mActivity.invitePeopleToNewRoom();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
-        }
-    }
 
     @Override
     protected List<Room> getRooms() {

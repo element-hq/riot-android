@@ -312,46 +312,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             }
         });
 
-        //TODO remove this when HomeFragment will be done
-        View fab = getActivity().findViewById(R.id.floating_action_button);
-        if (fab != null && getActivity() instanceof VectorHomeActivity) {
-            final VectorHomeActivity activity = (VectorHomeActivity) getActivity();
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = getActivity();
-
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_start_chat), context.getString(R.string.room_recents_create_room)};
-                    dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface d, int n) {
-                            if (activity != null && !activity.isFinishing()) {
-                                d.cancel();
-                                if (0 == n) {
-                                    activity.invitePeopleToNewRoom();
-                                } else {
-                                    activity.createRoom();
-                                }
-                            }
-                        }
-                    });
-
-                    dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (activity != null && !activity.isFinishing()) {
-                                activity.invitePeopleToNewRoom();
-                            }
-                        }
-                    });
-
-                    dialog.setNegativeButton(R.string.cancel, null);
-                    dialog.show();
-                }
-            });
-        }
-
         return v;
     }
 

@@ -115,16 +115,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER)) {
             mCurrentFilter = savedInstanceState.getString(CURRENT_FILTER);
         }
-
-        View fab = getActivity().findViewById(R.id.floating_action_button);
-        if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onFloatingButtonClick();
-                }
-            });
-        }
     }
 
     @Override
@@ -158,7 +148,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     public void onDestroyView() {
         super.onDestroyView();
         mUnBinder.unbind();
-
         mCurrentFilter = null;
     }
 
@@ -340,10 +329,10 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     /**
      * Define colors of the fragment
      *
-     * @param primaryColorId color for header, floating button
+     * @param primaryColorId   color for header, floating button
      * @param secondaryColorId color for status bar
      */
-    public void setFragmentColors(@ColorRes final int primaryColorId, @ColorRes final int secondaryColorId){
+    public void setFragmentColors(@ColorRes final int primaryColorId, @ColorRes final int secondaryColorId) {
         mPrimaryColor = ContextCompat.getColor(mActivity, primaryColorId);
         mSecondaryColor = ContextCompat.getColor(mActivity, secondaryColorId);
     }
@@ -361,7 +350,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
      * @param newTagOrder
      * @param newTag
      */
-    private void updateTag(final String roomId, Double newTagOrder,  final String newTag) {
+    private void updateTag(final String roomId, Double newTagOrder, final String newTag) {
         mActivity.showWaitingView();
         RoomUtils.updateRoomTag(mSession, roomId, newTagOrder, newTag, new ApiCallback<Void>() {
             @Override
@@ -448,8 +437,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
      */
 
     protected abstract List<Room> getRooms();
-
-    protected abstract void onFloatingButtonClick();
 
     protected abstract void onFilter(final String pattern, final OnFilterListener listener);
 

@@ -165,11 +165,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     }
 
     @Override
-    protected void onFloatingButtonClick() {
-        mActivity.createRoom();
-    }
-
-    @Override
     protected void onFilter(String pattern, final OnFilterListener listener) {
         mAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
             @Override
