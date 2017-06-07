@@ -172,8 +172,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
             } else {
                 initContactsData();
-                initContactsViews();
             }
+
+            // refresh the contact views
+            // the placeholders might need to be updated
+            initContactsViews();
         }
     }
 
