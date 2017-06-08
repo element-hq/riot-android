@@ -6,7 +6,6 @@
     <string name="forward">转发</string>
     <string name="action_voice_call">音频通话</string>
     <string name="action_video_call">视频通话</string>
-    <string name="action_search_room">搜索聊天室</string>
     <string name="action_mark_all_as_read">将所有标记为已读</string>
     <string name="action_quick_reply">快速回复</string>
     <string name="copied_to_clipboard">复制到剪贴板</string>
@@ -616,4 +615,67 @@
     <string name="encryption_information_verify_device_warning">要验证此设备是否可信任，请使用其他方式（例如亲自或打电话）联系其所有者，并询问他们在其设备的用户设置中看到的密钥是否与以下密钥相匹配：</string>
     <string name="encryption_information_verify_device_warning2">如果匹配，请按下面的验证按钮。如果没有，那么其他人正在拦截此设备，而您可能想要按阻止按钮。\n在将来，此验证过程将会更加复杂。</string>
     <string name="unknown_devices_alert_message">这个房间包含未经验证的未知设备。\n这意味着不保证设备属于他们声称的用户。\n我们建议您在继续操作之前，先阅读每个设备的验证过程，但可以重新发送消息而不验证您是否喜欢。\n\n未知设备：</string>
+
+    <string name="title_activity_historical">historical</string>
+    <string name="and">and</string>
+    <string name="invite">Invite</string>
+    <string name="action_global_search">Global search</string>
+    <string name="bottom_action_home">家</string>
+    <string name="bottom_action_favourites">Favourites</string>
+    <string name="bottom_action_people">People</string>
+    <string name="bottom_action_rooms">Rooms</string>
+
+    <string name="home_filter_placeholder_home">Search for rooms</string>
+    <string name="home_filter_placeholder_favorites">Search for favourites</string>
+    <string name="home_filter_placeholder_people">Search for people</string>
+    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+
+    <!-- Home fragment -->
+    <string name="invitations_header">Invites</string>
+    <string name="low_priority_header">Low priority</string>
+
+    <!-- People fragment -->
+    <string name="direct_chats_header">Conversations</string>
+    <string name="local_address_book_header">Local address book</string>
+    <string name="known_contacts_header">Known contacts</string>
+    <string name="matrix_only_filter">Matrix contacts only</string>
+    <string name="no_conversation_placeholder">No conversations</string>
+    <string name="no_local_contact_placeholder">No local contacts</string>
+    <string name="no_result_placeholder">No results</string>
+
+    <!-- Rooms fragment -->
+    <string name="rooms_header">Rooms</string>
+    <string name="rooms_directory_header">Room directory</string>
+    <string name="no_room_placeholder">No rooms</string>
+    <string name="no_public_room_placeholder">No public rooms available</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 user</item>
+        <item quantity="other">%d users</item>
+    </plurals>
+
+    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="room_settings_forget">Forget</string>
+
+    <!-- directory activity  -->
+    <string name="select_room_directory">Select a room directory</string>
+    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
+    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
+    <string name="directory_server_placeholder">Homeserver URL</string>
+    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
+    <string name="directory_server_native_rooms">All native %s rooms</string>
+
+    <!-- historical -->
+    <string name="historical_placeholder">Search for historical</string>
+
+    <string name="action_historical">Historical</string>
+
+    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
+    <string name="room_recents_join_room">Join room</string>
+    <string name="room_recents_join_room_title">Join a room</string>
+    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
+
+
+
 </resources>
