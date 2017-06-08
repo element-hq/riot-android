@@ -61,7 +61,9 @@ public final class GcmRegistrationManager {
     private static final String PREFS_ALLOW_NOTIFICATIONS = "GcmRegistrationManager.PREFS_ALLOW_NOTIFICATIONS";
     private static final String PREFS_TURN_SCREEN_ON = "GcmRegistrationManager.PREFS_TURN_SCREEN_ON";
     private static final String PREFS_ALLOW_BACKGROUND_SYNC = "GcmRegistrationManager.PREFS_ALLOW_BACKGROUND_SYNC";
+
     private static final String PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM = "PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM";
+    private static final String PREFS_PUSHER_REGISTRATION_TOKEN_KEY = "PREFS_PUSHER_REGISTRATION_TOKEN_KEY";
 
     private static final String PREFS_SYNC_TIMEOUT = "GcmRegistrationManager.PREFS_SYNC_TIMEOUT";
     private static final String PREFS_SYNC_DELAY = "GcmRegistrationManager.PREFS_SYNC_DELAY";
@@ -177,7 +179,45 @@ public final class GcmRegistrationManager {
             return;
         }
 
-        if (mRegistrationState == RegistrationState.UNREGISTRATED) {
+        // remove the GCM registration token after switching to the FCM one
+        if (null != getOldStoredRegistrationToken()) {
+            Log.d(LOG_TAG, "checkRegistrations : remove the GCM registration token after switching to the FCM one");
+
+            mRegistrationToken = getOldStoredRegistrationToken();
+
+            addSessionsRegistrationListener(new ThirdPartyRegistrationListener() {
+                @Override
+                public void onThirdPartyRegistered() {
+                }
+
+                @Override
+                public void onThirdPartyRegistrationFailed() {
+                }
+
+                private void onGCMUnregistred() {
+                    Log.d(LOG_TAG, "resetGCMRegistration : remove the GCM registration token done");
+                    clearOldStoredRegistrationToken();
+                    mRegistrationToken = null;
+
+                    // reset the registration state
+                    mRegistrationState = RegistrationState.UNREGISTRATED;
+                    // try again
+                    checkRegistrations();
+                }
+
+                @Override
+                public void onThirdPartyUnregistered() {
+                    onGCMUnregistred();
+                }
+
+                @Override
+                public void onThirdPartyUnregistrationFailed() {
+                    onGCMUnregistred();
+                }
+            });
+
+            unregister(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), 0);
+        } else if (mRegistrationState == RegistrationState.UNREGISTRATED) {
             Log.d(LOG_TAG, "checkPusherRegistration : try to register to GCM server");
 
             registerToGCM(new GCMRegistrationListener() {
@@ -802,7 +842,7 @@ public final class GcmRegistrationManager {
     /**
      * Unregister a session from the 3rd-party app server
      * @param session the session.
-     * @param listener the lisneter
+     * @param listener the listener
      */
     public void unregister(final MXSession session, final ThirdPartyRegistrationListener listener) {
         Log.d(LOG_TAG, "unregister " + session.getMyUserId());
@@ -1061,6 +1101,25 @@ public final class GcmRegistrationManager {
      */
     private String getStoredRegistrationToken() {
         return getGcmSharedPreferences().getString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM, null);
+    }
+
+    /**
+     * @return the old registration token (after updating GCM to FCM)
+     */
+    private String getOldStoredRegistrationToken() {
+        return getGcmSharedPreferences().getString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, null);
+    }
+
+    /**
+     * Remove the old registration token
+     */
+    private void clearOldStoredRegistrationToken() {
+        Log.d(LOG_TAG, "Remove old registration token");
+        if (!getGcmSharedPreferences().edit()
+                .remove(PREFS_PUSHER_REGISTRATION_TOKEN_KEY)
+                .commit()) {
+            Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
+        }
     }
 
     /**
