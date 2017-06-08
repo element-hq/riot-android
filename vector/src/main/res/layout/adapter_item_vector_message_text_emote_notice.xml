@@ -110,4 +110,6 @@
 
     <include layout="@layout/message_separator" />
 
+    <include layout="@layout/message_read_marker" />
+
 </LinearLayout>

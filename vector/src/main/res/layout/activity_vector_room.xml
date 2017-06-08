@@ -159,6 +159,18 @@
             android:paddingRight="16dp"
             android:src="@drawable/vector_leave_room_black" />
 
+        <ProgressBar
+            android:id="@+id/jump_to_read_spinner"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/jump_to_first_unread_label"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/jump_to_first_unread_label"
+            android:layout_margin="2dp"
+            android:indeterminate="true"
+            android:paddingRight="2dp" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
