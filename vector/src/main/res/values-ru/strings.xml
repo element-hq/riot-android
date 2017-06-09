@@ -21,18 +21,18 @@
     <string name="redact">Удалить</string>
     <string name="quote">Цитата</string>
     <string name="share">Поделиться</string>
-    <string name="later">Later</string>
+    <string name="later">Позже</string>
     <string name="forward">Переслать</string>
     <string name="permalink">Ссылка</string>
     <string name="view_source">Просмотр исходного</string>
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
-    <string name="report_content">Report content</string>
-    <string name="active_call">Active call</string>
+    <string name="report_content">Содержание отчета</string>
+    <string name="active_call">Активный вызов</string>
     <string name="ongoing_conference_call">Входящий конференц звонок. Присоединитесь с голосом или видео.</string>
     <string name="ongoing_conference_call_voice">голос</string>
     <string name="ongoing_conference_call_video">видео</string>
-    <string name="cannot_start_call">Не удалось осуществить вызов, попробуте позже.</string>
+    <string name="cannot_start_call">Не удалось осуществить вызов, попробуте позже</string>
     <string name="missing_permissions_warning">"Из-за отсутствия разрешений некоторые функции могут быть недоступны..</string>
     <string name="missing_permissions_to_start_conf_call">Вам нужно разрешение на приглашение для начала конференции в этой комнате</string>
     <string name="missing_permissions_title_to_start_conf_call">Не удалось осуществить вызов</string>
@@ -109,10 +109,10 @@
     <string name="send_bug_report_sent">Отчёт об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчёта об ошибке (%s)</string>
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_app_crashed">Программа при последнем пользовании закрылась с ошибкой. Хотели бы вы отправить отчёт о ошибке?</string>
     
     <string name="send_files_in">Предать в</string>
-    <string name="read_receipt">Read</string>
+    <string name="read_receipt">Прочитан</string>
 
     <string name="join_room">Войти в Комнату</string>
     <string name="username">Логин</string>
@@ -159,11 +159,11 @@
     <string name="auth_missing_password">Отсутствует пароль</string>
     <string name="auth_invalid_email">"Не похоже, что введён корректный email"</string>
     <string name="auth_invalid_phone">"Не похоже, что введён корректный телефонный номер"</string>
-    <string name="auth_email_already_defined">Этот email уже используется</string>
+    <string name="auth_email_already_defined">Этот email уже используется.</string>
     <string name="auth_missing_email">Отсутствует email</string>
     <string name="auth_missing_phone">Отстутсвует номер телефона</string>
     <string name="auth_missing_email_or_phone">Отсутствует номер телефона или email</string>
-    <string name="auth_invalid_token">Invalid token</string>
+    <string name="auth_invalid_token">Токен не действителен</string>
     <string name="auth_password_dont_match">Пароли не совпадают</string>
     <string name="auth_forgot_password">Забыли пароль?</string>
     <string name="auth_use_server_options">Использовать особые параметры сервера</string>
@@ -233,13 +233,13 @@
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
 
     <!-- call string -->
-    <string name="call_connected">Call connected</string>
-    <string name="call_connecting">Call connecting…</string>
-    <string name="call_ended">Call ended</string>
-    <string name="call_ring">Calling…</string>
-    <string name="incoming_call">Incoming Call</string>
-    <string name="incoming_video_call">Incoming Video Call</string>
-    <string name="incoming_voice_call">Incoming Voice Call</string>
+    <string name="call_connected">Вызов соеденен</string>
+    <string name="call_connecting">Вызов соеденяеться…</string>
+    <string name="call_ended">Вызов закончен</string>
+    <string name="call_ring">Звонок…</string>
+    <string name="incoming_call">Входящий вызов</string>
+    <string name="incoming_video_call">Входящий видио вызов</string>
+    <string name="incoming_voice_call">Входящий аудио вызов</string>
     <string name="call_in_progress">Call In Progress</string>
     
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>

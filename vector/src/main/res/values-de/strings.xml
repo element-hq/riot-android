@@ -360,7 +360,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s schreiben…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; andere schreiben…</string>
     <string name="room_message_placeholder_encrypted">Verschlüsselte Nachricht senden…</string>
-    <string name="room_message_placeholder_not_encrypted">Nachricht senden (nicht verschlüsselt)…</string>
+    <string name="room_message_placeholder_not_encrypted">Nachricht senden (unverschlüsselt)…</string>
     <string name="room_offline_notification">Verbindung zum Server unterbrochen.</string>
     <string name="room_unsent_messages_notification">Nachrichten konnten nicht gesendet werden. %1$s oder %2$s?</string>
     <string name="room_unknown_devices_messages_notification">Nachrichten wurden nicht gesendet, da unbekannte Geräte anwesend sind. %1$s oder %2$s?</string>
