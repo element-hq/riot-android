@@ -249,14 +249,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
             }
         }
 
-        Comparator<Room> favComparator = RoomUtils.getTaggedRoomComparator(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
-        Comparator<Room> lowPriorityComparator = RoomUtils.getTaggedRoomComparator(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
-        Comparator<Room> dateComparator = RoomUtils.getRoomsDateComparator(mSession, false);
+        Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, false);
 
-        sortAndDisplay(favourites, favComparator, mFavouritesSection);
-        sortAndDisplay(directChats, dateComparator, mDirectChatsSection);
-        sortAndDisplay(lowPriorities, lowPriorityComparator, mLowPrioritySection);
-        sortAndDisplay(otherRooms, dateComparator, mRoomsSection);
+        sortAndDisplay(favourites, notificationComparator, mFavouritesSection);
+        sortAndDisplay(directChats, notificationComparator, mDirectChatsSection);
+        sortAndDisplay(lowPriorities, notificationComparator, mLowPrioritySection);
+        sortAndDisplay(otherRooms, notificationComparator, mRoomsSection);
 
         mActivity.stopWaitingView();
 

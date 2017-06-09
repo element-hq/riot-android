@@ -749,7 +749,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // update the mute notifications preference
         if(null != mRoomMuteNotificationsSwitch) {
-            boolean isChecked = mBingRulesManager.isRoomNotificationsDisabled(mRoom);
+            boolean isChecked = mBingRulesManager.isRoomNotificationsDisabled(mRoom.getRoomId());
             mRoomMuteNotificationsSwitch.setChecked(isChecked);
         }
 
@@ -1075,12 +1075,12 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // get new and previous values
         boolean isNotificationsMuted = mRoomMuteNotificationsSwitch.isChecked();
-        boolean previousValue = mBingRulesManager.isRoomNotificationsDisabled(mRoom);
+        boolean previousValue = mBingRulesManager.isRoomNotificationsDisabled(mRoom.getRoomId());
 
         // update only, if values are different
         if(isNotificationsMuted != previousValue) {
             displayLoadingView();
-            mBingRulesManager.muteRoomNotifications(mRoom, isNotificationsMuted, new BingRulesManager.onBingRuleUpdateListener() {
+            mBingRulesManager.muteRoomNotifications(mRoom.getRoomId(), isNotificationsMuted, new BingRulesManager.onBingRuleUpdateListener() {
                 @Override
                 public void onBingRuleUpdateSuccess() {
                     Log.d(LOG_TAG, "##onRoomMuteNotificationsPreferenceChanged(): update succeed");

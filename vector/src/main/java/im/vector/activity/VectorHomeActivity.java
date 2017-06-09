@@ -2039,7 +2039,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                     } else {
                         int notificationCount = room.getNotificationCount();
 
-                        if (bingRulesManager.isRoomMentionOnly(room)) {
+                        if (bingRulesManager.isRoomMentionOnly(roomId)) {
                             notificationCount = room.getHighlightCount();
                         }
 

@@ -186,7 +186,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
     public int getBadgeCount() {
         int badgeCount = 0;
         for (Room room : mFilteredRooms) {
-            if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room)) {
+            if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room.getRoomId())) {
                 badgeCount += room.getHighlightCount();
             } else {
                 badgeCount += room.getNotificationCount();
