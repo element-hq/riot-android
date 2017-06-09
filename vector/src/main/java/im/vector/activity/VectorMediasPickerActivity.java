@@ -522,12 +522,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private void onSwitchCamera() {
         // can only switch if the device has more than two camera
         if (Camera.getNumberOfCameras() >= 2) {
-
-            // stop camera
-            if (null != mCameraTextureView) {
-                mCamera.stopPreview();
+            // reported by GA
+            if (null == mCamera) {
+                // stop camera
+                if (null != mCameraTextureView) {
+                    mCamera.stopPreview();
+                }
+                mCamera.release();
             }
-            mCamera.release();
             mCamera = null;
 
             if (mCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
