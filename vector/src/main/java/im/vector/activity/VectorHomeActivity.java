@@ -89,7 +89,6 @@ import im.vector.view.VectorPendingCallView;
  * new rooms.
  */
 public class VectorHomeActivity extends AppCompatActivity implements VectorRecentsListFragment.IVectorRecentsScrollEventListener {
-
     private static final String LOG_TAG = "VectorHomeActivity";
 
     // shared instance
@@ -155,7 +154,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private android.support.v7.widget.Toolbar mToolbar;
     private MXSession mSession;
     private DrawerLayout mDrawerLayout;
-    private IMXStore mReadReceiptStore;
 
     // calls
     private VectorPendingCallView mVectorPendingCallView;
@@ -287,7 +285,15 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         final Intent intent = getIntent();
 
         if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
-            startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>)intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
+            // fix issue #1276
+            // if there is a saved instance, it means that onSaveInstanceState has been called.
+            // theses parameters must only be used at activity creation.
+            // The activity might have been created after being killed by android while the application is in background
+            if (null == savedInstanceState) {
+                startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
+            } else {
+                Log.d(LOG_TAG, "## onCreate() : ignore call params because null != savedInstanceState");
+            }
             intent.removeExtra(EXTRA_CALL_SESSION_ID);
             intent.removeExtra(EXTRA_CALL_ID);
             intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
@@ -295,24 +301,39 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // the activity could be started with a spinner
         // because there is a pending action (like universalLink processing)
-        if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, WAITING_VIEW_STOP)) {
-            showWaitingView();
+        // fix issue #1276
+        // if there is a saved instance, it means that onSaveInstanceState has been called.
+        // theses parameters must only be used at activity creation.
+        // The activity might have been created after being killed by android while the application is in background
+        if (null == savedInstanceState) {
+            if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, WAITING_VIEW_STOP)) {
+                showWaitingView();
+            } else {
+                stopWaitingView();
+            }
         } else {
-            stopWaitingView();
+            Log.d(LOG_TAG, "## onCreate() : ignore EXTRA_WAITING_VIEW_STATUS because null != savedInstanceState");
         }
         intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
 
-        mAutomaticallyOpenedRoomParams = (Map<String, Object>) intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-        intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+        // fix issue #1276
+        // if there is a saved instance, it means that onSaveInstanceState has been called.
+        // theses parameters must only be used at activity creation.
+        // The activity might have been created after being killed by android while the application is in background
+        if (null == savedInstanceState) {
+            mAutomaticallyOpenedRoomParams = (Map<String, Object>) intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+            mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+            mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
+        } else {
+            Log.d(LOG_TAG, "## onCreate() : ignore some params because null != savedInstanceState");
+        }
 
-        mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
         intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
-
-        mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
+        intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
         intent.removeExtra(EXTRA_MEMBER_ID);
 
         // the home activity has been launched with an universal link
-        if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+        if ((null == savedInstanceState) && (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI))) {
             Log.d(LOG_TAG, "Has an universal link");
 
             final Uri uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
@@ -364,24 +385,33 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 }
             }
         } else {
+            intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
             Log.d(LOG_TAG, "create with no universal link");
         }
 
+        // fix issue #1276
+        // if there is a saved instance, it means that onSaveInstanceState has been called.
+        // theses parameters must only be used at activity creation.
+        // The activity might have been created after being killed by android while the application is in background
         if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
-            final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
-            Log.d(LOG_TAG, "Has shared intent");
+            if (null == savedInstanceState) {
+                final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
+                Log.d(LOG_TAG, "Has shared intent");
 
-            if (mSession.getDataHandler().getStore().isReady()) {
-                this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(LOG_TAG, "shared intent : The store is ready -> display sendFilesTo");
-                        CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
-                    }
-                });
+                if (mSession.getDataHandler().getStore().isReady()) {
+                    this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(LOG_TAG, "shared intent : The store is ready -> display sendFilesTo");
+                            CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
+                        }
+                    });
+                } else {
+                    Log.d(LOG_TAG, "shared intent : Wait that the store is ready");
+                    mSharedFilesIntent = sharedFilesIntent;
+                }
             } else {
-                Log.d(LOG_TAG, "shared intent : Wait that the store is ready");
-                mSharedFilesIntent = sharedFilesIntent;
+                Log.d(LOG_TAG, "## onCreate() : ignore EXTRA_SHARED_INTENT_PARAMS because null != savedInstanceState");
             }
 
             // ensure that it should be called once
@@ -707,7 +737,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
         intent.removeExtra(EXTRA_MEMBER_ID);
 
-
         // start waiting view
         if(intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
             showWaitingView();
@@ -715,7 +744,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             stopWaitingView();
         }
         intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
-
     }
 
     @Override
