@@ -89,6 +89,7 @@ import im.vector.view.VectorPendingCallView;
  * new rooms.
  */
 public class VectorHomeActivity extends AppCompatActivity implements VectorRecentsListFragment.IVectorRecentsScrollEventListener {
+
     private static final String LOG_TAG = "VectorHomeActivity";
 
     // shared instance
@@ -154,6 +155,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private android.support.v7.widget.Toolbar mToolbar;
     private MXSession mSession;
     private DrawerLayout mDrawerLayout;
+    private IMXStore mReadReceiptStore;
 
     // calls
     private VectorPendingCallView mVectorPendingCallView;
@@ -284,117 +286,104 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         // process intent parameters
         final Intent intent = getIntent();
 
-        if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
+        if (null != savedInstanceState) {
             // fix issue #1276
             // if there is a saved instance, it means that onSaveInstanceState has been called.
-            // theses parameters must only be used at activity creation.
+            // theses parameters must only be used once.
             // The activity might have been created after being killed by android while the application is in background
-            if (null == savedInstanceState) {
-                startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
-            } else {
-                Log.d(LOG_TAG, "## onCreate() : ignore call params because null != savedInstanceState");
-            }
+            intent.removeExtra(EXTRA_SHARED_INTENT_PARAMS);
             intent.removeExtra(EXTRA_CALL_SESSION_ID);
             intent.removeExtra(EXTRA_CALL_ID);
             intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
-        }
+            intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
+            intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+            intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+            intent.removeExtra(EXTRA_MEMBER_ID);
+            intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+        } else {
 
-        // the activity could be started with a spinner
-        // because there is a pending action (like universalLink processing)
-        // fix issue #1276
-        // if there is a saved instance, it means that onSaveInstanceState has been called.
-        // theses parameters must only be used at activity creation.
-        // The activity might have been created after being killed by android while the application is in background
-        if (null == savedInstanceState) {
+            if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
+                startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
+                intent.removeExtra(EXTRA_CALL_SESSION_ID);
+                intent.removeExtra(EXTRA_CALL_ID);
+                intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
+            }
+
+            // the activity could be started with a spinner
+            // because there is a pending action (like universalLink processing)
             if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, WAITING_VIEW_STOP)) {
                 showWaitingView();
             } else {
                 stopWaitingView();
             }
-        } else {
-            Log.d(LOG_TAG, "## onCreate() : ignore EXTRA_WAITING_VIEW_STATUS because null != savedInstanceState");
-        }
-        intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
+            intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
 
-        // fix issue #1276
-        // if there is a saved instance, it means that onSaveInstanceState has been called.
-        // theses parameters must only be used at activity creation.
-        // The activity might have been created after being killed by android while the application is in background
-        if (null == savedInstanceState) {
             mAutomaticallyOpenedRoomParams = (Map<String, Object>) intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+            intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+
             mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+            intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+
             mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
-        } else {
-            Log.d(LOG_TAG, "## onCreate() : ignore some params because null != savedInstanceState");
-        }
+            intent.removeExtra(EXTRA_MEMBER_ID);
 
-        intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
-        intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-        intent.removeExtra(EXTRA_MEMBER_ID);
+            // the home activity has been launched with an universal link
+            if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                Log.d(LOG_TAG, "Has an universal link");
 
-        // the home activity has been launched with an universal link
-        if ((null == savedInstanceState) && (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI))) {
-            Log.d(LOG_TAG, "Has an universal link");
+                final Uri uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+                intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
 
-            final Uri uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-            intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+                // detect the room could be opened without waiting the next sync
+                HashMap<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
 
-            // detect the room could be opened without waiting the next sync
-            HashMap<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
+                if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
+                    Log.d(LOG_TAG, "Has a valid universal link");
 
-            if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
-                Log.d(LOG_TAG, "Has a valid universal link");
+                    final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY);
 
-                final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY);
+                    // it is a room ID ?
+                    if (MXSession.isRoomId(roomIdOrAlias)) {
+                        Log.d(LOG_TAG, "Has a valid universal link to the room ID " + roomIdOrAlias);
+                        Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
-                // it is a room ID ?
-                if (MXSession.isRoomId(roomIdOrAlias)) {
-                    Log.d(LOG_TAG, "Has a valid universal link to the room ID " + roomIdOrAlias);
-                    Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
-
-                    if (null != room) {
-                        Log.d(LOG_TAG, "Has a valid universal link to a known room");
-                        // open the room asap
-                        mUniversalLinkToOpen = uri;
-                    } else {
-                        Log.d(LOG_TAG, "Has a valid universal link but the room is not yet known");
-                        // wait the next sync
-                        intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
-                    }
-                } else if (MXSession.isRoomAlias(roomIdOrAlias)){
-                    Log.d(LOG_TAG, "Has a valid universal link of the room Alias " + roomIdOrAlias);
-
-                    // it is a room alias
-                    // convert the room alias to room Id
-                    mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new SimpleApiCallback<String>() {
-                        @Override
-                        public void onSuccess(String roomId) {
-                            Log.d(LOG_TAG, "Retrieve the room ID " + roomId);
-
-                            getIntent().putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
-
-                            // the room exists, opens it
-                            if (null != mSession.getDataHandler().getRoom(roomId, false)) {
-                                Log.d(LOG_TAG, "Find the room from room ID : process it");
-                                processIntentUniversalLink();
-                            } else {
-                                Log.d(LOG_TAG, "Don't know the room");
-                            }
+                        if (null != room) {
+                            Log.d(LOG_TAG, "Has a valid universal link to a known room");
+                            // open the room asap
+                            mUniversalLinkToOpen = uri;
+                        } else {
+                            Log.d(LOG_TAG, "Has a valid universal link but the room is not yet known");
+                            // wait the next sync
+                            intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
                         }
-                    });
-                }
-            }
-        } else {
-            intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-            Log.d(LOG_TAG, "create with no universal link");
-        }
+                    } else if (MXSession.isRoomAlias(roomIdOrAlias)) {
+                        Log.d(LOG_TAG, "Has a valid universal link of the room Alias " + roomIdOrAlias);
 
-        // fix issue #1276
-        // if there is a saved instance, it means that onSaveInstanceState has been called.
-        // theses parameters must only be used at activity creation.
-        // The activity might have been created after being killed by android while the application is in background
-        if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
-            if (null == savedInstanceState) {
+                        // it is a room alias
+                        // convert the room alias to room Id
+                        mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new SimpleApiCallback<String>() {
+                            @Override
+                            public void onSuccess(String roomId) {
+                                Log.d(LOG_TAG, "Retrieve the room ID " + roomId);
+
+                                getIntent().putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
+
+                                // the room exists, opens it
+                                if (null != mSession.getDataHandler().getRoom(roomId, false)) {
+                                    Log.d(LOG_TAG, "Find the room from room ID : process it");
+                                    processIntentUniversalLink();
+                                } else {
+                                    Log.d(LOG_TAG, "Don't know the room");
+                                }
+                            }
+                        });
+                    }
+                }
+            } else {
+                Log.d(LOG_TAG, "create with no universal link");
+            }
+
+            if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
                 final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
                 Log.d(LOG_TAG, "Has shared intent");
 
@@ -410,12 +399,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     Log.d(LOG_TAG, "shared intent : Wait that the store is ready");
                     mSharedFilesIntent = sharedFilesIntent;
                 }
-            } else {
-                Log.d(LOG_TAG, "## onCreate() : ignore EXTRA_SHARED_INTENT_PARAMS because null != savedInstanceState");
-            }
 
-            // ensure that it should be called once
-            intent.removeExtra(EXTRA_SHARED_INTENT_PARAMS);
+                // ensure that it should be called once
+                intent.removeExtra(EXTRA_SHARED_INTENT_PARAMS);
+            }
         }
 
         // check if  there is some valid session
@@ -737,6 +724,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
         intent.removeExtra(EXTRA_MEMBER_ID);
 
+
         // start waiting view
         if(intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
             showWaitingView();
@@ -744,6 +732,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             stopWaitingView();
         }
         intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
+
     }
 
     @Override
