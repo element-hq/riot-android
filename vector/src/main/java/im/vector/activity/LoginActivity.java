@@ -1110,7 +1110,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 // login was started in email validation mode
                 mIsMailValidationPending = true;
                 mMode = MODE_ACCOUNT_CREATION;
-                Matrix.getInstance(this).clearSessions(this, true);
+                Matrix.getInstance(this).clearSessions(this, true, null);
                 retCode = true;
             }
         } else {

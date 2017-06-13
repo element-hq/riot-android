@@ -60,6 +60,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
@@ -76,6 +77,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -160,7 +162,37 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
     public static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
 
-    public static void logout(Context context, MXSession session, boolean clearCredentials) {
+    /**
+     * Logout a sessions list
+     *
+     * @param context the context
+     * @param sessions the sessions list
+     * @param clearCredentials  true to clear the credentials
+     * @param callback the asynchronous callback
+     */
+    public static void logout(Context context, List<MXSession> sessions, boolean clearCredentials, final SimpleApiCallback<Void> callback) {
+        logout(context, sessions.iterator(), clearCredentials, callback);
+    }
+
+    /**
+     * Internal method to logout a sessions list
+     *
+     * @param context the context
+     * @param sessions the sessions iterator
+     * @param clearCredentials  true to clear the credentials
+     * @param callback the asynchronous callback
+     */
+    private static void logout(final Context context, final Iterator<MXSession> sessions, final boolean clearCredentials, final SimpleApiCallback<Void> callback) {
+        if (!sessions.hasNext()) {
+            if (null != callback) {
+                callback.onSuccess(null);
+            }
+
+            return;
+        }
+
+        MXSession session = sessions.next();
+
         if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
@@ -179,7 +211,12 @@ public class CommonActivityUtils {
             Matrix.getInstance(context).getSharedGCMRegistrationManager().unregister(session, null);
 
             // clear credentials
-            Matrix.getInstance(context).clearSession(context, session, clearCredentials);
+            Matrix.getInstance(context).clearSession(context, session, clearCredentials, new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    logout(context, sessions, clearCredentials, callback);
+                }
+            });
         }
     }
 
@@ -309,7 +346,7 @@ public class CommonActivityUtils {
      * @param activity      the caller activity
      * @param goToLoginPage true to jump to the login page
      */
-    public static void logout(final Activity activity, boolean goToLoginPage) {
+    public static void logout(final Activity activity, final boolean goToLoginPage) {
         // if no activity is provided, use the application context instead.
         final Context context = (null == activity) ? VectorApp.getInstance().getApplicationContext() : activity;
 
@@ -355,31 +392,34 @@ public class CommonActivityUtils {
         }
 
         // clear credentials
-        Matrix.getInstance(context).clearSessions(context, true);
+        Matrix.getInstance(context).clearSessions(context, true, new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                // ensure that corrupted values are cleared
+                Matrix.getInstance(context).getLoginStorage().clear();
 
-        // ensure that corrupted values are cleared
-        Matrix.getInstance(context).getLoginStorage().clear();
+                // clear the tmp store list
+                Matrix.getInstance(context).clearTmpStoresList();
 
-        // clear the tmp store list
-        Matrix.getInstance(context).clearTmpStoresList();
+                // reset the contacts
+                PIDsRetriever.getInstance().reset();
+                ContactsManager.getInstance().reset();
 
-        // reset the contacts
-        PIDsRetriever.getInstance().reset();
-        ContactsManager.getInstance().reset();
+                MXMediasCache.clearThumbnailsCache(context);
 
-        MXMediasCache.clearThumbnailsCache(context);
-
-        if (goToLoginPage) {
-            if (null != activity) {
-                // go to login page
-                activity.startActivity(new Intent(activity, LoginActivity.class));
-                activity.finish();
-            } else {
-                Intent intent = new Intent(context, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                context.startActivity(intent);
+                if (goToLoginPage) {
+                    if (null != activity) {
+                        // go to login page
+                        activity.startActivity(new Intent(activity, LoginActivity.class));
+                        activity.finish();
+                    } else {
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        context.startActivity(intent);
+                    }
+                }
             }
-        }
+        });
     }
 
     /**

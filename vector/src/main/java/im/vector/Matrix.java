@@ -26,6 +26,7 @@ import android.text.TextUtils;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.util.Log;
 
@@ -56,6 +57,8 @@ import im.vector.store.LoginStorage;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -539,7 +542,7 @@ public class Matrix {
      * @param session the session to clear.
      * @param clearCredentials true to clear the credentials.
      */
-    public synchronized void clearSession(Context context, MXSession session, boolean clearCredentials) {
+    public synchronized void clearSession(final Context context, final MXSession session, final boolean clearCredentials, final SimpleApiCallback<Void> aCallback) {
         if (clearCredentials) {
             mLoginStorage.removeCredentials(session.getHomeserverConfig());
         }
@@ -547,16 +550,25 @@ public class Matrix {
         session.getDataHandler().removeListener(mLiveEventListener);
         session.mCallsManager.removeListener(mCallsManagerListener);
 
+        SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                VectorApp.removeSyncingSession(session);
+
+                synchronized (LOG_TAG) {
+                    mMXSessions.remove(session);
+                }
+
+                if (null != aCallback) {
+                    aCallback.onSuccess(null);
+                }
+            }
+        };
+
         if (clearCredentials) {
-            session.logout(context, null);
+            session.logout(context, callback);
         } else {
-            session.clear(context);
-        }
-
-        VectorApp.removeSyncingSession(session);
-
-        synchronized (LOG_TAG) {
-            mMXSessions.remove(session);
+            session.clear(context, callback);
         }
     }
 
@@ -565,12 +577,39 @@ public class Matrix {
      * @param context the context.
      * @param clearCredentials  true to clear the credentials.
      */
-    public synchronized void clearSessions(Context context, boolean clearCredentials) {
+    public synchronized void clearSessions(Context context, boolean clearCredentials, ApiCallback<Void> callback) {
+        List<MXSession> sessions;
+
         synchronized (LOG_TAG) {
-            while (mMXSessions.size() > 0) {
-                clearSession(context, mMXSessions.get(0), clearCredentials);
-            }
+            sessions = new ArrayList<>(mMXSessions);
         }
+
+        clearSessions(context, sessions.iterator(), clearCredentials, callback);
+    }
+
+    /**
+     * Internal routine to clear the sessions data
+     *
+     * @param context the context
+     * @param iterator the sessions iterator
+     * @param clearCredentials true to clear the credentials.
+     * @param callback the asynchronous callback
+     */
+    private synchronized void clearSessions(final Context context, final Iterator<MXSession> iterator, final boolean clearCredentials, final ApiCallback<Void> callback) {
+        if (!iterator.hasNext()) {
+            if (null != callback) {
+                callback.onSuccess(null);
+            }
+            return;
+        }
+
+        clearSession(context, iterator.next(), clearCredentials, new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                clearSessions(context, iterator, clearCredentials, callback);
+            }
+        });
+
     }
 
     /**
@@ -636,36 +675,33 @@ public class Matrix {
      * @param context the context
      */
     public void reloadSessions(final Context context) {
-        ArrayList<MXSession> sessions = getMXSessions(context);
-
-        for(MXSession session : sessions) {
-            CommonActivityUtils.logout(context, session, false);
-        }
-
-        clearSessions(context, false);
-
-        synchronized (LOG_TAG) {
-            // build a new sessions list
-            ArrayList<HomeserverConnectionConfig> configs = mLoginStorage.getCredentialsList();
-
-            for(HomeserverConnectionConfig config : configs) {
-                MXSession session = createSession(config);
-                mMXSessions.add(session);
-            }
-        }
-
-        // clear GCM token before launching the splash screen
-        Matrix.getInstance(context).getSharedGCMRegistrationManager().clearGCMData(false, new SimpleApiCallback<Void>() {
+        CommonActivityUtils.logout(context, getMXSessions(context), false, new SimpleApiCallback<Void>() {
             @Override
-            public void onSuccess(final Void anything) {
-                Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                context.getApplicationContext().startActivity(intent);
+            public void onSuccess(Void info) {
+                synchronized (LOG_TAG) {
+                    // build a new sessions list
+                    ArrayList<HomeserverConnectionConfig> configs = mLoginStorage.getCredentialsList();
 
-                if (null != VectorApp.getCurrentActivity()) {
-                    VectorApp.getCurrentActivity().finish();
+                    for(HomeserverConnectionConfig config : configs) {
+                        MXSession session = createSession(config);
+                        mMXSessions.add(session);
+                    }
                 }
-            }});
+
+                // clear GCM token before launching the splash screen
+                Matrix.getInstance(context).getSharedGCMRegistrationManager().clearGCMData(false, new SimpleApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(final Void anything) {
+                        Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        context.getApplicationContext().startActivity(intent);
+
+                        if (null != VectorApp.getCurrentActivity()) {
+                            VectorApp.getCurrentActivity().finish();
+                        }
+                    }});
+            }
+        });
     }
 
     /**
