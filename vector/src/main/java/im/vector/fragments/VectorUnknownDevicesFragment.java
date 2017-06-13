@@ -101,16 +101,19 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
     private static List<Pair<String, List<MXDeviceInfo>>> getDevicesList() {
         List<Pair<String, List<MXDeviceInfo>>> res = new ArrayList<>();
 
-        List<String> userIds = mUnknownDevicesMap.getUserIds();
+        // sanity check
+        if (null != mUnknownDevicesMap) {
+            List<String> userIds = mUnknownDevicesMap.getUserIds();
 
-        for (String userId : userIds) {
-            List<MXDeviceInfo> deviceInfos = new ArrayList<>();
-            List<String> deviceIds = mUnknownDevicesMap.getUserDeviceIds(userId);
+            for (String userId : userIds) {
+                List<MXDeviceInfo> deviceInfos = new ArrayList<>();
+                List<String> deviceIds = mUnknownDevicesMap.getUserDeviceIds(userId);
 
-            for (String deviceId : deviceIds) {
-                deviceInfos.add(mUnknownDevicesMap.getObject(deviceId, userId));
+                for (String deviceId : deviceIds) {
+                    deviceInfos.add(mUnknownDevicesMap.getObject(deviceId, userId));
+                }
+                res.add(new Pair<>(userId, deviceInfos));
             }
-            res.add(new Pair<>(userId, deviceInfos));
         }
 
         return res;
