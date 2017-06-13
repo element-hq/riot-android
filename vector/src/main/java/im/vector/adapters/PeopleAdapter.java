@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
@@ -58,7 +59,8 @@ public class PeopleAdapter extends AbsAdapter {
 
     private final OnSelectItemListener mListener;
 
-    private Context mContext;
+    private final String mNoContactAccessPlaceholder;
+    private final  String mNoResultPlaceholder;
 
     /*
      * *********************************************************************************************
@@ -68,9 +70,11 @@ public class PeopleAdapter extends AbsAdapter {
 
     public PeopleAdapter(final Context context, final OnSelectItemListener listener, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
         super(context, invitationListener, moreActionListener);
-
-        mContext = context;
         mListener = listener;
+
+        // ButterKnife.bind(this); cannot be applied here
+        mNoContactAccessPlaceholder = context.getString(R.string.no_contact_access_placeholder);
+        mNoResultPlaceholder = context.getString(R.string.no_result_placeholder);
 
         mDirectChatsSection = new AdapterSection<>(context.getString(R.string.direct_chats_header), -1,
                 R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession, false));
@@ -78,7 +82,7 @@ public class PeopleAdapter extends AbsAdapter {
 
         mLocalContactsSection = new AdapterSection<>(context.getString(R.string.local_address_book_header),
                 R.layout.adapter_local_contacts_sticky_header_subview, R.layout.adapter_item_contact_view, TYPE_HEADER_LOCAL_CONTACTS, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), ParticipantAdapterItem.alphaComparator);
-        mLocalContactsSection.setEmptyViewPlaceholder(context.getString(ContactsManager.getInstance().isContactBookAccessAllowed() ? R.string.no_local_contact_placeholder : R.string.no_contact_access_placeholder ), context.getString(R.string.no_result_placeholder));
+        mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ? mNoContactAccessPlaceholder : mNoResultPlaceholder);
 
         mKnownContactsSection = new AdapterSection<>(context.getString(R.string.known_contacts_header), -1,
                 R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), null);
@@ -178,7 +182,7 @@ public class PeopleAdapter extends AbsAdapter {
 
     public void setLocalContacts(final List<ParticipantAdapterItem> localContacts) {
         // updates the placeholder according to the local contacts permissions
-        mLocalContactsSection.setEmptyViewPlaceholder(mContext.getString(ContactsManager.getInstance().isContactBookAccessAllowed() ? R.string.no_local_contact_placeholder : R.string.no_contact_access_placeholder ), mContext.getString(R.string.no_result_placeholder));
+        mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ? mNoContactAccessPlaceholder : mNoResultPlaceholder);
         mLocalContactsSection.setItems(localContacts, mCurrentFilterPattern);
         if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
             filterLocalContacts(String.valueOf(mCurrentFilterPattern));
