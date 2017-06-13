@@ -154,7 +154,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         }
 
         if (isInvitation || (notificationCount > 0)) {
-            vRoomUnreadCount.setText(isInvitation ? "!" : String.valueOf(notificationCount));
+            vRoomUnreadCount.setText(isInvitation ? "!" : RoomUtils.formatUnreadMessagesCounter(notificationCount));
             vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);

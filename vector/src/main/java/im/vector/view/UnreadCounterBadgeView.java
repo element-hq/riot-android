@@ -29,6 +29,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import im.vector.R;
+import im.vector.util.RoomUtils;
 
 public class UnreadCounterBadgeView extends RelativeLayout {
     // the background settings
@@ -72,15 +73,7 @@ public class UnreadCounterBadgeView extends RelativeLayout {
      * @param status the new status
      */
     public void updateCounter(int value, @Status int status) {
-        if (value > 0) {
-            if (value > 999) {
-                updateText((value / 1000) + "." + ((value % 1000) / 100) + "K", status);
-            } else {
-                updateText(value + "", status);
-            }
-        } else {
-            updateText(null, status);
-        }
+        updateText(RoomUtils.formatUnreadMessagesCounter(value), status);
     }
 
     /**

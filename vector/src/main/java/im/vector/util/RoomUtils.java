@@ -547,4 +547,22 @@ public class RoomUtils {
             return roomsToFilter;
         }
     }
+
+    /**
+     * Format the unread messages counter.
+     *
+     * @param count the count
+     * @return the formatted value
+     */
+    public static String formatUnreadMessagesCounter(int count) {
+        if (count > 0) {
+            if (count > 999) {
+                return (count / 1000) + "." + ((count % 1000) / 100) + "K";
+            } else {
+                return String.valueOf(count);
+            }
+        } else {
+            return null;
+        }
+    }
 }
