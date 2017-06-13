@@ -300,58 +300,123 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         // process intent parameters
         final Intent intent = getIntent();
 
-        if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
-            startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
+        if (null != savedInstanceState) {
+            // fix issue #1276
+            // if there is a saved instance, it means that onSaveInstanceState has been called.
+            // theses parameters must only be used once.
+            // The activity might have been created after being killed by android while the application is in background
+            intent.removeExtra(EXTRA_SHARED_INTENT_PARAMS);
             intent.removeExtra(EXTRA_CALL_SESSION_ID);
             intent.removeExtra(EXTRA_CALL_ID);
             intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
-        }
-
-        // the activity could be started with a spinner
-        // because there is a pending action (like universalLink processing)
-        if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, WAITING_VIEW_STOP)) {
-            showWaitingView();
+            intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
+            intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+            intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+            intent.removeExtra(EXTRA_MEMBER_ID);
+            intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
         } else {
-            stopWaitingView();
-        }
-        intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
 
-        mAutomaticallyOpenedRoomParams = (Map<String, Object>) intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-        intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-
-        mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
-        intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
-
-        mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
-        intent.removeExtra(EXTRA_MEMBER_ID);
-
-        // the home activity has been launched with an universal link
-        if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-            Log.d(LOG_TAG, "Has an universal link");
-            handleUniversalLink(intent);
-        } else {
-            Log.d(LOG_TAG, "create with no universal link");
-        }
-
-        if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
-            final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
-            Log.d(LOG_TAG, "Has shared intent");
-
-            if (mSession.getDataHandler().getStore().isReady()) {
-                this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(LOG_TAG, "shared intent : The store is ready -> display sendFilesTo");
-                        CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
-                    }
-                });
-            } else {
-                Log.d(LOG_TAG, "shared intent : Wait that the store is ready");
-                mSharedFilesIntent = sharedFilesIntent;
+            if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
+                startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
+                intent.removeExtra(EXTRA_CALL_SESSION_ID);
+                intent.removeExtra(EXTRA_CALL_ID);
+                intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
             }
 
-            // ensure that it should be called once
-            intent.removeExtra(EXTRA_SHARED_INTENT_PARAMS);
+            // the activity could be started with a spinner
+            // because there is a pending action (like universalLink processing)
+            if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, WAITING_VIEW_STOP)) {
+                showWaitingView();
+            } else {
+                stopWaitingView();
+            }
+            intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
+
+            mAutomaticallyOpenedRoomParams = (Map<String, Object>) intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+            intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+
+            mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+            intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+
+            mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
+            intent.removeExtra(EXTRA_MEMBER_ID);
+
+            // the home activity has been launched with an universal link
+            if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                Log.d(LOG_TAG, "Has an universal link");
+
+                final Uri uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+                intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+
+                // detect the room could be opened without waiting the next sync
+                HashMap<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
+
+                if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
+                    Log.d(LOG_TAG, "Has a valid universal link");
+
+                    final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY);
+
+                    // it is a room ID ?
+                    if (MXSession.isRoomId(roomIdOrAlias)) {
+                        Log.d(LOG_TAG, "Has a valid universal link to the room ID " + roomIdOrAlias);
+                        Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
+
+                        if (null != room) {
+                            Log.d(LOG_TAG, "Has a valid universal link to a known room");
+                            // open the room asap
+                            mUniversalLinkToOpen = uri;
+                        } else {
+                            Log.d(LOG_TAG, "Has a valid universal link but the room is not yet known");
+                            // wait the next sync
+                            intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
+                        }
+                    } else if (MXSession.isRoomAlias(roomIdOrAlias)) {
+                        Log.d(LOG_TAG, "Has a valid universal link of the room Alias " + roomIdOrAlias);
+
+                        // it is a room alias
+                        // convert the room alias to room Id
+                        mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new SimpleApiCallback<String>() {
+                            @Override
+                            public void onSuccess(String roomId) {
+                                Log.d(LOG_TAG, "Retrieve the room ID " + roomId);
+
+                                getIntent().putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
+
+                                // the room exists, opens it
+                                if (null != mSession.getDataHandler().getRoom(roomId, false)) {
+                                    Log.d(LOG_TAG, "Find the room from room ID : process it");
+                                    processIntentUniversalLink();
+                                } else {
+                                    Log.d(LOG_TAG, "Don't know the room");
+                                }
+                            }
+                        });
+                    }
+                }
+            } else {
+                Log.d(LOG_TAG, "create with no universal link");
+            }
+
+            if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
+                final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
+                Log.d(LOG_TAG, "Has shared intent");
+
+                if (mSession.getDataHandler().getStore().isReady()) {
+                    this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(LOG_TAG, "shared intent : The store is ready -> display sendFilesTo");
+                            CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
+                        }
+                    });
+                } else {
+                    Log.d(LOG_TAG, "shared intent : Wait that the store is ready");
+                    mSharedFilesIntent = sharedFilesIntent;
+                }
+
+                // ensure that it should be called once
+                intent.removeExtra(EXTRA_SHARED_INTENT_PARAMS);
+            }
         }
 
         // check if  there is some valid session

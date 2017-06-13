@@ -14,9 +14,8 @@ buildscript {
 
 // global properties used in sub modules
 ext {
-    // add 01 at the end to be able to update a google play release if a previous one failed.
-    versionCodeProp = 61201
-    versionNameProp = "0.6.12-dev"
+    versionCodeProp = 61301
+    versionNameProp = "0.6.13-dev"
 }
 
 allprojects {
