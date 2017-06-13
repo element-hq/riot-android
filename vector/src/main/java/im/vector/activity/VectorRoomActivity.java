@@ -851,17 +851,26 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // some medias must be sent while opening the chat
         if (intent.hasExtra(EXTRA_ROOM_INTENT)) {
-            final Intent mediaIntent = intent.getParcelableExtra(EXTRA_ROOM_INTENT);
+            // fix issue #1276
+            // if there is a saved instance, it means that onSaveInstanceState has been called.
+            // theses parameters must only be used at activity creation.
+            // The activity might have been created after being killed by android while the application is in background
+            if (null == savedInstanceState) {
+                final Intent mediaIntent = intent.getParcelableExtra(EXTRA_ROOM_INTENT);
 
-            // sanity check
-            if (null != mediaIntent) {
-                mEditText.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        intent.removeExtra(EXTRA_ROOM_INTENT);
-                        sendMediasIntent(mediaIntent);
-                    }
-                }, 1000);
+                // sanity check
+                if (null != mediaIntent) {
+                    mEditText.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            intent.removeExtra(EXTRA_ROOM_INTENT);
+                            sendMediasIntent(mediaIntent);
+                        }
+                    }, 1000);
+                }
+            } else {
+                intent.removeExtra(EXTRA_ROOM_INTENT);
+                Log.e(LOG_TAG, "## onCreate() : ignore EXTRA_ROOM_INTENT because savedInstanceState != null");
             }
         }
 
