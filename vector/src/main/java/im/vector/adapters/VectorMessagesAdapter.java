@@ -935,7 +935,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
                     if (readMarkerView != null) {
                         // Show the read marker
-                        animateReadMarkerView(readMarkerView);
+                        animateReadMarkerView(event, readMarkerView);
                     }
                 } else {
                     View avatarView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_left);

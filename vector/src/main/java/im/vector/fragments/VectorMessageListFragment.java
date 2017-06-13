@@ -46,6 +46,7 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
+import org.matrix.androidsdk.data.EventTimeline;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -262,6 +263,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      */
     public MessagesAdapter getMessageAdapter() {
         return mAdapter;
+    }
+
+    /**
+     * Get the event timeline
+     *
+     * @return
+     */
+    public EventTimeline getEventTimeline() {
+        return mEventTimeLine;
     }
 
     /**

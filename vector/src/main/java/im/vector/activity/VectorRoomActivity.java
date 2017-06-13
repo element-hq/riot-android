@@ -29,7 +29,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,13 +54,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
@@ -105,6 +102,7 @@ import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
+import im.vector.util.ReadMarkerManager;
 import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
 import im.vector.util.SlashComandsParser;
@@ -181,9 +179,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private static final int REQUEST_ROOM_AVATAR_CODE = 3;
     private static final int INVITE_USER_REQUEST_CODE = 4;
 
-    // number of messages from the store that we allow to load for the "jump to first unread message"
-    private static final int UNREAD_BACK_PAGINATE_EVENT_COUNT = 100;
-
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
     private Room mRoom;
@@ -234,13 +229,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private Boolean mIsScrolledToTheBottom;
     private Event mLatestDisplayedEvent; // the event at the bottom of the list
 
-    // Views allowing to open preview starting at the first unread message
-    private View mJumpToUnreadView;
-    private TextView mJumpToUnreadLabel;
-    private View mCloseJumpToUnreadView;
-    private View mJumpToUnreadViewSpinner;
-    private String mLastReadEventId; // the last read event
-    private Event mFirstVisibleEvent; // the first event currently displayed
+    private ReadMarkerManager mReadMarkerManager;
 
     // room preview
     private View mRoomPreviewLayout;
@@ -614,6 +603,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mEventId = intent.getStringExtra(EXTRA_EVENT_ID);
         mDefaultRoomName = intent.getStringExtra(EXTRA_DEFAULT_NAME);
         mDefaultTopic = intent.getStringExtra(EXTRA_DEFAULT_TOPIC);
+        mIsUnreadPreviewMode = intent.getBooleanExtra(EXTRA_IS_UNREAD_PREVIEW_MODE, false);
 
         // the user has tapped on the "View" notification button
         if ((null != intent.getAction()) && (intent.getAction().startsWith(NotificationUtils.TAP_TO_VIEW_ACTION))) {
@@ -754,37 +744,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mNotificationsArea = findViewById(R.id.room_notifications_area);
         mNotificationIconImageView = (ImageView) mNotificationsArea.findViewById(R.id.room_notification_icon);
         mNotificationTextView = (TextView) mNotificationsArea.findViewById(R.id.room_notification_message);
-
-        mJumpToUnreadView = findViewById(R.id.jump_to_first_unread);
-        mJumpToUnreadLabel = (TextView) findViewById(R.id.jump_to_first_unread_label);
-        mJumpToUnreadLabel.setPaintFlags(mJumpToUnreadLabel.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        mCloseJumpToUnreadView = findViewById(R.id.close_jump_to_first_unread);
-        mJumpToUnreadViewSpinner = findViewById(R.id.jump_to_read_spinner);
-
-        mIsUnreadPreviewMode = intent.getBooleanExtra(EXTRA_IS_UNREAD_PREVIEW_MODE, false);
-        if (!mIsUnreadPreviewMode) {
-            mJumpToUnreadLabel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!TextUtils.isEmpty(mLastReadEventId)) {
-                        final Event lastReadEvent = mRoom.getDataHandler().getStore().getEvent(mLastReadEventId, mRoom.getRoomId());
-                        if (lastReadEvent == null) {
-                            // Event is not in store, open preview
-                            openPreviewToGivenEvent(mLastReadEventId);
-                        } else {
-                            // Event is in memory, scroll up to it
-                            scrollUpToGivenEvent(lastReadEvent);
-                        }
-                    }
-                }
-            });
-            mCloseJumpToUnreadView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    forgetReadMarker();
-                }
-            });
-        }
 
         mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
 
@@ -949,6 +908,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // the both flags are only used once
         intent.removeExtra(EXTRA_EXPAND_ROOM_HEADER);
 
+        // Init read marker manager
+        if (mIsUnreadPreviewMode || (mRoom != null && mRoom.getLiveTimeLine() != null && mRoom.getLiveTimeLine().isLiveTimeline())) {
+            mReadMarkerManager = new ReadMarkerManager(this, mVectorMessageListFragment, mSession, mRoom,
+                    mIsUnreadPreviewMode ? ReadMarkerManager.PREVIEW_MODE : ReadMarkerManager.LIVE_MODE,
+                    findViewById(R.id.jump_to_first_unread));
+        }
+
         Log.d(LOG_TAG, "End of create");
     }
 
@@ -982,46 +948,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         super.onDestroy();
     }
 
-    /**
-     * Update the read marker position
-     */
-    private void saveNewReadMarker() {
-        // Update the read marker to the last message completely displayed
-        final ListView messageListView = mVectorMessageListFragment.getMessageListView();
-        if (messageListView != null && mVectorMessageListFragment.getMessageAdapter() != null) {
-            int lastVisiblePos = messageListView.getLastVisiblePosition();
-            String newReadMarkerEventId = null;
-            if (lastVisiblePos >= messageListView.getCount() - 1) {
-                // lastVisiblePos is footer position, not the last message
-                // set read marker to the last message
-                final Event lastMessageEvent = mVectorMessageListFragment.getEvent(lastVisiblePos - 1);
-                if (lastMessageEvent != null) {
-                    newReadMarkerEventId = lastMessageEvent.eventId;
-                }
-            } else {
-                final View lastVisibleMessageView = messageListView.getChildAt(messageListView.getChildCount() - 1);
-                if (lastVisibleMessageView.getBottom() <= messageListView.getBottom()) {
-                    // Last visible message is entirely displayed, move read marker to that message
-                    newReadMarkerEventId = mVectorMessageListFragment.getEvent(lastVisiblePos).eventId;
-                } else {
-                    // Move read marker to the message before the last visible one
-                    newReadMarkerEventId = mVectorMessageListFragment.getEvent(lastVisiblePos - 1).eventId;
-                }
-            }
-
-            if (!TextUtils.isEmpty(newReadMarkerEventId)) {
-                // Update read marker
-                mRoom.setReadMakerEventId(newReadMarkerEventId);
-            }
-        }
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
 
-        if (mIsUnreadPreviewMode) {
-            saveNewReadMarker();
+        if (mReadMarkerManager != null) {
+            mReadMarkerManager.onPause();
         }
 
         // warn other member that the typing is ended
@@ -1125,8 +1057,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         checkSendEventStatus();
 
-        checkUnreadMessage();
-
         enableActionBarHeader(mIsHeaderViewDisplayed);
 
         // refresh the UI : the timezone could have been updated
@@ -1181,6 +1111,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // init the auto-completion list from the room members
         mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
+
+
+        if (mReadMarkerManager != null) {
+            mReadMarkerManager.onResume();
+        }
 
         Log.d(LOG_TAG, "-- Resume the activity");
     }
@@ -1281,7 +1216,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 @Override
                 public void onSuccess(Void info) {
                     if (!isFinishing() && mVectorMessageListFragment.getMessageAdapter() != null) {
-                        mVectorMessageListFragment.getMessageAdapter().updateReadReceipt(mLatestDisplayedEvent.eventId);
+                        mVectorMessageListFragment.getMessageAdapter().updateReadMarker(mRoom.getReadMarkerEventId(), mLatestDisplayedEvent.eventId);
                     }
                 }
 
@@ -1306,7 +1241,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     @Override
     public void onScroll(int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        Event eventAtBottom = mVectorMessageListFragment.getEvent(firstVisibleItem + visibleItemCount - 1);
+        final Event eventAtBottom = mVectorMessageListFragment.getEvent(firstVisibleItem + visibleItemCount - 1);
+        final Event eventAtTop = mVectorMessageListFragment.getEvent(firstVisibleItem);
 
         if ((null != eventAtBottom) && ((null == mLatestDisplayedEvent) || !TextUtils.equals(eventAtBottom.eventId, mLatestDisplayedEvent.eventId))) {
 
@@ -1321,202 +1257,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
         }
-        mFirstVisibleEvent = mVectorMessageListFragment.getEvent(firstVisibleItem);
 
-        if(!mIsUnreadPreviewMode){
-            checkUnreadMessage();
+        if (mReadMarkerManager != null) {
+            mReadMarkerManager.onScroll(firstVisibleItem,visibleItemCount, totalItemCount, eventAtTop, eventAtBottom);
         }
     }
 
-    /**
-     * Check if there are unread messages that should be handled
-     */
-    private void checkUnreadMessage(){
-        if(mRoom == null){
-            return;
-        }
-
-        boolean hasUnreadMessageHidden = false;
-        RoomSummary summary = mRoom.getDataHandler().getStore().getSummary(mRoom.getRoomId());
-        if (summary != null) {
-            String readMarkerEventId = summary.getReadMarkerEventId();
-            String readReceiptEventId = summary.getReadReceiptEventId();
-            Log.d(LOG_TAG, "## checkUnreadMessage readMarkerEventId " + readMarkerEventId+" readReceiptEventId "+readReceiptEventId);
-
-            synchronized (this){
-                if (readMarkerEventId != null && !readMarkerEventId.equals(readReceiptEventId)) {
-                    if (!MXSession.isMessageId(readMarkerEventId)) {
-                        // Read marker is invalid, ignore it as it should not occur
-                        mLastReadEventId = null;
-                    } else {
-                        Log.d(LOG_TAG, "## checkUnreadMessage: we have unread messages");
-                        // There are unread messages
-                        List<Event> roomMessages = new ArrayList<>(mRoom.getDataHandler().getStore().getRoomMessages(mRoom.getRoomId()));
-                        final Event readMarkerEvent = mRoom.getDataHandler().getStore().getEvent(readMarkerEventId, mRoom.getRoomId());
-                        if (readMarkerEvent == null) {
-                            // Event is not in store so we assume it is further in the past
-                            // Note: preview will be opened to the last read since we have no way to
-                            // determine the event id of the first unread
-                            mLastReadEventId = readMarkerEventId;
-                            hasUnreadMessageHidden = true;
-                        } else {
-                            // Event is in the store
-                            final int lastReadEventIndex = roomMessages.indexOf(readMarkerEvent);
-                            final int firstUnreadEventIndex = lastReadEventIndex != -1 ? lastReadEventIndex + 1 : -1;
-                            if (firstUnreadEventIndex != -1 && firstUnreadEventIndex < roomMessages.size()) {
-                                final Event firstUnreadEvent = roomMessages.get(firstUnreadEventIndex);
-                                mLastReadEventId = readMarkerEvent.eventId;
-                                if (mFirstVisibleEvent != null && firstUnreadEvent != null) {
-                                    MessageRow firstUnreadRow = mVectorMessageListFragment.getMessageAdapter().getMessageRow(mLastReadEventId);
-                                    int firstUnreadAdapterPosition = mVectorMessageListFragment.getMessageAdapter().getPosition(firstUnreadRow);
-                                    int firstUnreadListPosition = firstUnreadAdapterPosition - mVectorMessageListFragment.getMessageListView().getFirstVisiblePosition();
-                                    // Check if first unread message is out of screen
-                                    final ListView listView = mVectorMessageListFragment.getMessageListView();
-                                    final View firstUnreadView = listView != null ? listView.getChildAt(firstUnreadListPosition) : null;
-                                    // Display if the first unread message is older than the first visible message and if the first unread message is entirely visible
-                                    hasUnreadMessageHidden = mFirstVisibleEvent.getOriginServerTs() > firstUnreadEvent.getOriginServerTs()
-                                            || (firstUnreadView != null && firstUnreadView.getTop() < 0);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    // No unread message
-                    mLastReadEventId = null;
-                }
-
-                if (mVectorMessageListFragment.getMessageAdapter() != null) {
-                    mVectorMessageListFragment.getMessageAdapter().updateReadMarker(readMarkerEventId, readReceiptEventId);
-                }
-            }
-        }
-
-        if (!mIsUnreadPreviewMode && hasUnreadMessageHidden) {
-            mJumpToUnreadViewSpinner.setVisibility(View.GONE);
-            mCloseJumpToUnreadView.setVisibility(View.VISIBLE);
-            mJumpToUnreadView.setVisibility(View.VISIBLE);
-        } else {
-            mJumpToUnreadView.setVisibility(View.GONE);
+    @Override
+    public void onScrollStateChanged(int scrollState) {
+        if (mReadMarkerManager != null) {
+            mReadMarkerManager.onScrollStateChanged(scrollState);
         }
     }
-
-    /**
-     * Forget the current read marker (read marker event will be same as read receipt event)
-     */
-    private void forgetReadMarker() {
-        mRoom.forgetReadMarker(new ApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void info) {
-                checkUnreadMessage();
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                checkUnreadMessage();
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                checkUnreadMessage();
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                checkUnreadMessage();
-            }
-        });
-    }
-
-    /**
-     * Open the room in preview mode to the given event id
-     *
-     * @param eventId
-     */
-    private void openPreviewToGivenEvent(final String eventId) {
-        if (!TextUtils.isEmpty(eventId)) {
-            Intent intent = new Intent(this, VectorRoomActivity.class);
-            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-            intent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-            intent.putExtra(VectorRoomActivity.EXTRA_EVENT_ID, eventId);
-            intent.putExtra(VectorRoomActivity.EXTRA_IS_UNREAD_PREVIEW_MODE, true);
-            startActivity(intent);
-        }
-    }
-
-    /**
-     * Scroll up to the given event id or open preview as a last resort
-     *
-     * @param event event we want to scroll up to
-     */
-    private void scrollUpToGivenEvent(final Event event) {
-        if (event != null) {
-            mCloseJumpToUnreadView.setVisibility(View.GONE);
-            mJumpToUnreadViewSpinner.setVisibility(View.VISIBLE);
-            Log.e(LOG_TAG, "scrollUpToGivenEvent " + event.eventId);
-            if (!scrollToAdapterEvent(event.eventId)) {
-                Log.e(LOG_TAG, "scrollUpToGivenEvent load more events in adapter" + event.eventId);
-                mRoom.getLiveTimeLine().backPaginate(UNREAD_BACK_PAGINATE_EVENT_COUNT, new ApiCallback<Integer>() {
-                    @Override
-                    public void onSuccess(Integer info) {
-                        if (!isFinishing()) {
-                            mVectorMessageListFragment.getMessageAdapter().notifyDataSetChanged();
-                            if (!scrollToAdapterEvent(event.eventId)) {
-                                openPreviewToGivenEvent(event.eventId);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        openPreviewToGivenEvent(event.eventId);
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        openPreviewToGivenEvent(event.eventId);
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        openPreviewToGivenEvent(event.eventId);
-                    }
-                });
-            }
-        }
-    }
-
-    /**
-     * Try to scroll to the given event
-     *
-     * @param eventId
-     * @return true if event was in adapter and have been scrolled to
-     */
-    private boolean scrollToAdapterEvent(final String eventId) {
-        final MessageRow lastReadRow = mVectorMessageListFragment.getMessageAdapter() != null
-                ? mVectorMessageListFragment.getMessageAdapter().getMessageRow(eventId)
-                : null;
-        Log.e(LOG_TAG, "scrollToAdapterEvent row " + lastReadRow);
-        if (lastReadRow != null) {
-            final int lastReadRowIndex = mVectorMessageListFragment.getMessageAdapter().getPosition(lastReadRow);
-            // Scroll to the first unread row if possible, last read otherwise
-            final int targetRow = lastReadRowIndex < mVectorMessageListFragment.getMessageListView().getCount() - 1
-                    ? lastReadRowIndex + 1 : lastReadRowIndex;
-            Log.e(LOG_TAG, "scrollToAdapterEvent setSelection " + lastReadRowIndex);
-            // Scroll to the last read so we can see the beginning of the first unread (in majority of cases)
-            final int distanceFromTop = (int) (getResources().getDisplayMetrics().density * 100);
-            mVectorMessageListFragment.getMessageListView().post(new Runnable() {
-                @Override
-                public void run() {
-                    mVectorMessageListFragment.getMessageListView().setSelectionFromTop(targetRow, distanceFromTop);
-                }
-            });
-            return true;
-        } else {
-            Log.e(LOG_TAG, "scrollToAdapterEvent need to load more events in adapter");
-            return false;
-        }
-    }
-
 
     @Override
     public void onLatestEventDisplay(boolean isDisplayed) {
@@ -2429,6 +2181,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (mReadMarkerManager != null) {
+                            mReadMarkerManager.handleJumpToBottom();
+                        }
                         mVectorMessageListFragment.scrollToBottom(0);
                     }
                 });
