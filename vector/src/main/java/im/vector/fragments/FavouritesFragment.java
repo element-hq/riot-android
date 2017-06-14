@@ -233,16 +233,30 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
 
             // Sort and display
             new AsyncTask<Void, Void, Void>() {
-
                 @Override
                 protected Void doInBackground(Void... params) {
-                    Comparator<Room> favComparator = new Comparator<Room>() {
-                        public int compare(Room r1, Room r2) {
-                            return favouriteRoomIdList.indexOf(r1.getRoomId()) - favouriteRoomIdList.indexOf(r2.getRoomId());
-                        }
-                    };
+                    try {
+                        Comparator<Room> favComparator = new Comparator<Room>() {
+                            public int compare(Room r1, Room r2) {
+                                int pos1 = -1;
+                                int pos2 = -1;
 
-                    Collections.sort(mFavorites, favComparator);
+                                if ((null != r1) && (null != r1.getRoomId())) {
+                                    pos1 = favouriteRoomIdList.indexOf(r1.getRoomId());
+                                }
+
+                                if ((null != r2) && (null != r2.getRoomId())) {
+                                    pos2 = favouriteRoomIdList.indexOf(r2.getRoomId());
+                                }
+
+                                return pos1 - pos2;
+                            }
+                        };
+
+                        Collections.sort(mFavorites, favComparator);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## refreshFavorites() : sort failed with error " + e.getMessage());
+                    }
                     return null;
                 }
 

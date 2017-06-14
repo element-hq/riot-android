@@ -252,7 +252,11 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
             @Override
             protected Void doInBackground(Void... params) {
                 if (!isCancelled()) {
-                    Collections.sort(historicalRooms, RoomUtils.getHistoricalRoomsComparator(mSession, false));
+                    try {
+                        Collections.sort(historicalRooms, RoomUtils.getHistoricalRoomsComparator(mSession, false));
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## initHistoricalRoomsData() : sort failed " + e.getMessage());
+                    }
                 }
                 return null;
             }

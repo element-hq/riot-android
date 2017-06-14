@@ -19,6 +19,7 @@ package im.vector.fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -276,7 +277,11 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
             @Override
             protected Void doInBackground(Void... params) {
                 if (!isCancelled()) {
-                    Collections.sort(rooms, comparator);
+                    try {
+                        Collections.sort(rooms, comparator);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.getMessage());
+                    }
                 }
                 return null;
             }
