@@ -130,196 +130,205 @@ public class BugReporter {
      * @param listener the listener
      */
     private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final boolean withScreenshot, final String bugDescription, final IMXBugReportListener listener) {
+        // sanity check
+        if (null == context) {
+            Log.e(LOG_TAG, "## sendBugReport() : null context");
+            return;
+        }
+
         new AsyncTask<Void, Integer, String>() {
             @Override
             protected String doInBackground(Void... voids) {
                 String serverError = null;
+                try {
+                    List<File> gzippedFiles = new ArrayList<>();
 
-                List<File> gzippedFiles = new ArrayList<>();
+                    if (withDevicesLogs) {
+                        List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
 
-                if (withDevicesLogs) {
-                    List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
+                        for (File f : files) {
+                            if (!mIsCancelled) {
+                                File gzippedFile = compressFile(f);
 
-                    for (File f : files) {
-                        if (!mIsCancelled) {
-                            File gzippedFile = compressFile(f);
-
-                            if (null != gzippedFile) {
-                                gzippedFiles.add(gzippedFile);
-                            }
-                        }
-                    }
-                }
-
-                if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
-                    File gzippedLogcat = saveLogCat(context, false);
-
-                    if (null != gzippedLogcat) {
-                        gzippedFiles.add(gzippedLogcat);
-                    }
-                }
-
-                MXSession session = Matrix.getInstance(context).getDefaultSession();
-
-                String deviceId = null;
-                String userId = null;
-
-                if (null != session) {
-                    userId = session.getMyUserId();
-                    deviceId = session.getCredentials().deviceId;
-                }
-
-                if (TextUtils.isEmpty(userId)) {
-                    userId = "";
-                }
-
-                if (TextUtils.isEmpty(deviceId)) {
-                    deviceId = "";
-                }
-
-                if (!mIsCancelled) {
-                    // build the multi part request
-                    BugReporterMultipartBody.Builder builder = new BugReporterMultipartBody.Builder()
-                            .addFormDataPart("text", bugDescription)
-                            .addFormDataPart("app", "riot-android")
-                            .addFormDataPart("user_agent", "Android")
-                            .addFormDataPart("user_id", userId)
-                            .addFormDataPart("device_id", deviceId)
-                            .addFormDataPart("version", Matrix.getInstance(context).getVersion(true))
-                            .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
-                            .addFormDataPart("matrix_sdk_version", Matrix.getInstance(context).getDefaultSession().getVersion(true))
-                            .addFormDataPart("olm_version", Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true))
-                            .addFormDataPart("device", Build.MODEL.trim())
-                            .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME)
-                            .addFormDataPart("locale", Locale.getDefault().toString())
-                            .addFormDataPart("app_language", context.getString(R.string.resouces_language) + "_" + context.getString(R.string.resouces_country));
-
-                    // add the gzipped files
-                    for (File file : gzippedFiles) {
-                        builder.addFormDataPart("compressed-log", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
-                    }
-
-                    if (withScreenshot) {
-                        Bitmap bitmap = takeScreenshot();
-
-                        if (null != bitmap) {
-                            File logCatScreenshotFile = new File(context.getCacheDir().getAbsolutePath(), LOG_CAT_SCREENSHOT_FILENAME);
-
-                            if (logCatScreenshotFile.exists()) {
-                                logCatScreenshotFile.delete();
-                            }
-
-                            try {
-                                FileOutputStream fos = new FileOutputStream(logCatScreenshotFile);
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                                fos.flush();
-                                fos.close();
-
-                                builder.addFormDataPart("file", logCatScreenshotFile.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), logCatScreenshotFile));
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString());
-                            }
-                        }
-                    }
-
-                    // add some github tags
-                    try {
-                        PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-                        builder.addFormDataPart("label", pInfo.versionName);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## sendBugReport() : cannot retrieve the appname " + e.getMessage());
-                    }
-
-                    builder.addFormDataPart("label", context.getResources().getString(R.string.flavor_description));
-                    builder.addFormDataPart("label", context.getString(R.string.git_branch_name));
-
-
-                    BugReporterMultipartBody requestBody = builder.build();
-
-                    // add a progress listener
-                    requestBody.setWriteListener(new BugReporterMultipartBody.WriteListener() {
-                        @Override
-                        public void onWrite(long totalWritten, long contentLength) {
-                            int percentage;
-
-                            if (-1 != contentLength) {
-                                if (totalWritten > contentLength) {
-                                    percentage = 100;
-                                } else {
-                                    percentage = (int) (totalWritten * 100 / contentLength);
+                                if (null != gzippedFile) {
+                                    gzippedFiles.add(gzippedFile);
                                 }
-                            } else {
-                                percentage = 0;
                             }
-
-                            if (mIsCancelled && (null != mBugReportCall)) {
-                                mBugReportCall.cancel();
-                            }
-
-                            Log.d(LOG_TAG, "## onWrite() : " + percentage + "%");
-                            publishProgress(percentage);
                         }
-                    });
-
-                    // build the request
-                    Request request = new Request.Builder()
-                            .url(context.getResources().getString(R.string.bug_report_url))
-                            .post(requestBody)
-                            .build();
-
-                    int responseCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
-                    Response response = null;
-
-                    // trigger the request
-                    try {
-                        mBugReportCall = mOkHttpClient.newCall(request);
-                        response = mBugReportCall.execute();
-                        responseCode = response.code();
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "response " + e.getMessage());
                     }
 
-                    // if the upload failed, try to retrieve the reason
-                    if (responseCode != HttpURLConnection.HTTP_OK) {
-                        if ((null == response) || (null == response.body())) {
-                            serverError = "Failed with error " + responseCode;
-                        } else {
-                            InputStream is = response.body().byteStream();
+                    if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
+                        File gzippedLogcat = saveLogCat(context, false);
 
-                            if (null != is) {
+                        if (null != gzippedLogcat) {
+                            gzippedFiles.add(gzippedLogcat);
+                        }
+                    }
+
+                    MXSession session = Matrix.getInstance(context).getDefaultSession();
+
+                    String deviceId = null;
+                    String userId = null;
+
+                    if (null != session) {
+                        userId = session.getMyUserId();
+                        deviceId = session.getCredentials().deviceId;
+                    }
+
+                    if (TextUtils.isEmpty(userId)) {
+                        userId = "";
+                    }
+
+                    if (TextUtils.isEmpty(deviceId)) {
+                        deviceId = "";
+                    }
+
+                    if (!mIsCancelled) {
+                        // build the multi part request
+                        BugReporterMultipartBody.Builder builder = new BugReporterMultipartBody.Builder()
+                                .addFormDataPart("text", bugDescription)
+                                .addFormDataPart("app", "riot-android")
+                                .addFormDataPart("user_agent", "Android")
+                                .addFormDataPart("user_id", userId)
+                                .addFormDataPart("device_id", deviceId)
+                                .addFormDataPart("version", Matrix.getInstance(context).getVersion(true))
+                                .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
+                                .addFormDataPart("matrix_sdk_version", Matrix.getInstance(context).getDefaultSession().getVersion(true))
+                                .addFormDataPart("olm_version", Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true))
+                                .addFormDataPart("device", Build.MODEL.trim())
+                                .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME)
+                                .addFormDataPart("locale", Locale.getDefault().toString())
+                                .addFormDataPart("app_language", context.getString(R.string.resouces_language) + "_" + context.getString(R.string.resouces_country));
+
+                        // add the gzipped files
+                        for (File file : gzippedFiles) {
+                            builder.addFormDataPart("compressed-log", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
+                        }
+
+                        if (withScreenshot) {
+                            Bitmap bitmap = takeScreenshot();
+
+                            if (null != bitmap) {
+                                File logCatScreenshotFile = new File(context.getCacheDir().getAbsolutePath(), LOG_CAT_SCREENSHOT_FILENAME);
+
+                                if (logCatScreenshotFile.exists()) {
+                                    logCatScreenshotFile.delete();
+                                }
+
                                 try {
-                                    int ch;
-                                    StringBuilder b = new StringBuilder();
-                                    while ((ch = is.read()) != -1) {
-                                        b.append((char) ch);
-                                    }
-                                    serverError = b.toString();
-                                    is.close();
+                                    FileOutputStream fos = new FileOutputStream(logCatScreenshotFile);
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                                    fos.flush();
+                                    fos.close();
 
-                                    // check if the error message
-                                    try {
-                                        JSONObject responseJSON = new JSONObject(serverError);
-                                        serverError = responseJSON.getString("error");
-                                    } catch (JSONException e) {
-                                        Log.e(LOG_TAG, "doInBackground ; Json conversion failed " + e.getMessage());
-                                    }
-
-                                    // should never happen
-                                    if (null == serverError) {
-                                        serverError = "Failed with error " + responseCode;
-                                    }
+                                    builder.addFormDataPart("file", logCatScreenshotFile.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), logCatScreenshotFile));
                                 } catch (Exception e) {
-                                    Log.e(LOG_TAG, "## sendBugReport() : failed to parse error " + e.getMessage());
-                                } finally {
+                                    Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString());
+                                }
+                            }
+                        }
+
+                        // add some github tags
+                        try {
+                            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+                            builder.addFormDataPart("label", pInfo.versionName);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## sendBugReport() : cannot retrieve the appname " + e.getMessage());
+                        }
+
+                        builder.addFormDataPart("label", context.getResources().getString(R.string.flavor_description));
+                        builder.addFormDataPart("label", context.getString(R.string.git_branch_name));
+
+
+                        BugReporterMultipartBody requestBody = builder.build();
+
+                        // add a progress listener
+                        requestBody.setWriteListener(new BugReporterMultipartBody.WriteListener() {
+                            @Override
+                            public void onWrite(long totalWritten, long contentLength) {
+                                int percentage;
+
+                                if (-1 != contentLength) {
+                                    if (totalWritten > contentLength) {
+                                        percentage = 100;
+                                    } else {
+                                        percentage = (int) (totalWritten * 100 / contentLength);
+                                    }
+                                } else {
+                                    percentage = 0;
+                                }
+
+                                if (mIsCancelled && (null != mBugReportCall)) {
+                                    mBugReportCall.cancel();
+                                }
+
+                                Log.d(LOG_TAG, "## onWrite() : " + percentage + "%");
+                                publishProgress(percentage);
+                            }
+                        });
+
+                        // build the request
+                        Request request = new Request.Builder()
+                                .url(context.getResources().getString(R.string.bug_report_url))
+                                .post(requestBody)
+                                .build();
+
+                        int responseCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
+                        Response response = null;
+
+                        // trigger the request
+                        try {
+                            mBugReportCall = mOkHttpClient.newCall(request);
+                            response = mBugReportCall.execute();
+                            responseCode = response.code();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "response " + e.getMessage());
+                        }
+
+                        // if the upload failed, try to retrieve the reason
+                        if (responseCode != HttpURLConnection.HTTP_OK) {
+                            if ((null == response) || (null == response.body())) {
+                                serverError = "Failed with error " + responseCode;
+                            } else {
+                                InputStream is = response.body().byteStream();
+
+                                if (null != is) {
                                     try {
+                                        int ch;
+                                        StringBuilder b = new StringBuilder();
+                                        while ((ch = is.read()) != -1) {
+                                            b.append((char) ch);
+                                        }
+                                        serverError = b.toString();
                                         is.close();
+
+                                        // check if the error message
+                                        try {
+                                            JSONObject responseJSON = new JSONObject(serverError);
+                                            serverError = responseJSON.getString("error");
+                                        } catch (JSONException e) {
+                                            Log.e(LOG_TAG, "doInBackground ; Json conversion failed " + e.getMessage());
+                                        }
+
+                                        // should never happen
+                                        if (null == serverError) {
+                                            serverError = "Failed with error " + responseCode;
+                                        }
                                     } catch (Exception e) {
-                                        Log.e(LOG_TAG, "## sendBugReport() : failed to close the error stream " + e.getMessage());
+                                        Log.e(LOG_TAG, "## sendBugReport() : failed to parse error " + e.getMessage());
+                                    } finally {
+                                        try {
+                                            is.close();
+                                        } catch (Exception e) {
+                                            Log.e(LOG_TAG, "## sendBugReport() : failed to close the error stream " + e.getMessage());
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                } catch (Exception e) {
+                    serverError = e.getLocalizedMessage();
                 }
 
                 return serverError;
