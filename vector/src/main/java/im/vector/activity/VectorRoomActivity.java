@@ -2175,16 +2175,19 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     @Override
                     public void onClick(View v) {
                         mVectorMessageListFragment.scrollToBottom(0);
+                        if (mReadMarkerManager != null) {
+                            mReadMarkerManager.handleJumpToBottom();
+                        }
                     }
                 });
 
                 mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        mVectorMessageListFragment.scrollToBottom(0);
                         if (mReadMarkerManager != null) {
                             mReadMarkerManager.handleJumpToBottom();
                         }
-                        mVectorMessageListFragment.scrollToBottom(0);
                     }
                 });
 
