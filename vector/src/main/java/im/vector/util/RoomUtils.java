@@ -86,11 +86,48 @@ public class RoomUtils {
      */
     public static Comparator<Room> getRoomsDateComparator(final MXSession session, final boolean reverseOrder) {
         return new Comparator<Room>() {
-            public int compare(Room aLeftObj, Room aRightObj) {
-                final RoomSummary leftRoomSummary = session.getDataHandler().getStore().getSummary(aLeftObj.getRoomId());
-                final RoomSummary rightRoomSummary = session.getDataHandler().getStore().getSummary(aRightObj.getRoomId());
+            private Comparator<RoomSummary> mRoomSummaryComparator;
+            private HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
 
-                return getRoomSummaryComparator(reverseOrder).compare(leftRoomSummary, rightRoomSummary);
+            /**
+             * Retrieve the room summary comparator
+             * @return comparator
+             */
+            private Comparator<RoomSummary> getSummaryComparator() {
+                if (null == mRoomSummaryComparator) {
+                    mRoomSummaryComparator = getRoomSummaryComparator(reverseOrder);
+                }
+                return mRoomSummaryComparator;
+            }
+
+            /**
+             * Retrieve a summary from its room id
+             * @param roomId
+             * @return the summary
+             */
+            private RoomSummary getSummary(String roomId) {
+                if (TextUtils.isEmpty(roomId)) {
+                    return null;
+                }
+
+                RoomSummary summary = mSummaryByRoomIdMap.get(roomId);
+
+                if (null == summary) {
+                    summary = session.getDataHandler().getStore().getSummary(roomId);
+
+                    if (null != summary) {
+                        mSummaryByRoomIdMap.put(roomId, summary);
+                    }
+                }
+
+                return summary;
+            }
+
+            public int compare(Room aLeftObj, Room aRightObj) {
+                final RoomSummary leftRoomSummary = getSummary(aLeftObj.getRoomId());
+                final RoomSummary rightRoomSummary = getSummary(aRightObj.getRoomId());
+
+                return getSummaryComparator().compare(leftRoomSummary, rightRoomSummary);
             }
         };
     }
@@ -106,11 +143,49 @@ public class RoomUtils {
      */
     public static Comparator<Room> getNotifCountRoomsComparator(final MXSession session, final boolean reverseOrder) {
         return new Comparator<Room>() {
-            public int compare(Room aLeftObj, Room aRightObj) {
-                final RoomSummary leftRoomSummary = session.getDataHandler().getStore().getSummary(aLeftObj.getRoomId());
-                final RoomSummary rightRoomSummary = session.getDataHandler().getStore().getSummary(aRightObj.getRoomId());
+            private Comparator<RoomSummary> mRoomSummaryComparator;
+            private HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
 
-                return getNotifCountRoomSummaryComparator(session, reverseOrder).compare(leftRoomSummary, rightRoomSummary);
+            /**
+             * Retrieve the room summary comparator
+             * @return comparator
+             */
+            private Comparator<RoomSummary> getSummaryComparator() {
+                if (null == mRoomSummaryComparator) {
+                    mRoomSummaryComparator = getNotifCountRoomSummaryComparator(session.getDataHandler().getBingRulesManager(), reverseOrder);
+                }
+                return mRoomSummaryComparator;
+            }
+
+            /**
+             * Retrieve a summary from its room id
+             * @param roomId
+             * @return the summary
+             */
+            private RoomSummary getSummary(String roomId) {
+                if (TextUtils.isEmpty(roomId)) {
+                    return null;
+                }
+
+                RoomSummary summary = mSummaryByRoomIdMap.get(roomId);
+
+                if (null == summary) {
+                    summary = session.getDataHandler().getStore().getSummary(roomId);
+
+                    if (null != summary) {
+                        mSummaryByRoomIdMap.put(roomId, summary);
+                    }
+                }
+
+                return summary;
+            }
+
+
+            public int compare(Room aLeftObj, Room aRightObj) {
+                final RoomSummary leftRoomSummary = getSummary(aLeftObj.getRoomId());
+                final RoomSummary rightRoomSummary = getSummary(aRightObj.getRoomId());
+
+                return getSummaryComparator().compare(leftRoomSummary, rightRoomSummary);
             }
         };
     }
@@ -169,10 +244,10 @@ public class RoomUtils {
      * 2- the notified rooms (sub sorted by date)
      * 3- latest event timestamp
      *
-     * @param session the session
+     * @param bingRulesManager the bing rules manager
      * @return comparator
      */
-    public static Comparator<RoomSummary> getNotifCountRoomSummaryComparator(final MXSession session, final boolean reverseOrder) {
+    public static Comparator<RoomSummary> getNotifCountRoomSummaryComparator(final BingRulesManager bingRulesManager, final boolean reverseOrder) {
         return new Comparator<RoomSummary>() {
             public int compare(RoomSummary leftRoomSummary, RoomSummary rightRoomSummary) {
                 int retValue;
@@ -184,7 +259,7 @@ public class RoomUtils {
                     leftHighlightCount = leftRoomSummary.getHighlightCount();
                     leftNotificationCount = leftRoomSummary.getNotificationCount();
 
-                    if (session.getDataHandler().getBingRulesManager().isRoomMentionOnly(leftRoomSummary.getRoomId())) {
+                    if (bingRulesManager.isRoomMentionOnly(leftRoomSummary.getRoomId())) {
                         leftNotificationCount = leftHighlightCount;
                     }
                 }
@@ -193,7 +268,7 @@ public class RoomUtils {
                     rightHighlightCount = rightRoomSummary.getHighlightCount();
                     rightNotificationCount = rightRoomSummary.getNotificationCount();
 
-                    if (session.getDataHandler().getBingRulesManager().isRoomMentionOnly(rightRoomSummary.getRoomId())) {
+                    if (bingRulesManager.isRoomMentionOnly(rightRoomSummary.getRoomId())) {
                         rightNotificationCount = rightHighlightCount;
                     }
                 }
