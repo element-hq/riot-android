@@ -37,6 +37,7 @@ import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.fragments.VectorUnknownDevicesFragment;
 
 /**
  * extends ActionBarActivity to manage the rageshake
@@ -157,7 +158,9 @@ public class MXCActionBarActivity extends AppCompatActivity {
 
         if (null != fragments) {
             for (Fragment fragment : fragments) {
-                if (fragment instanceof DialogFragment) {
+                // VectorUnknownDevicesFragment must not be dismissed
+                // The user has to update the device statuses
+                if ((fragment instanceof DialogFragment) && !(fragment instanceof VectorUnknownDevicesFragment)) {
                     ((DialogFragment) fragment).dismissAllowingStateLoss();
                 }
             }
