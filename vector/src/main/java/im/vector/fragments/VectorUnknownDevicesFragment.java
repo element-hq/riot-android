@@ -29,7 +29,6 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.MXSession;
@@ -40,9 +39,6 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -264,6 +260,8 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                         mListener.onSendAnyway();
                     }
                     mListener = null;
+                    // ensure that the fragment won't be displayed anymore
+                    dismissAllowingStateLoss();
                 }
 
                 @Override
