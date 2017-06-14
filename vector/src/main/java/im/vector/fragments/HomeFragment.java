@@ -16,7 +16,6 @@
 
 package im.vector.fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -67,8 +66,6 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     private final MXEventListener mEventsListener = new MXEventListener() {
         //TODO
     };
-
-    private List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
 
     /*
      * *********************************************************************************************
@@ -124,16 +121,6 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     public void onPause() {
         super.onPause();
         mSession.getDataHandler().removeListener(mEventsListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // Cancel running async tasks to prevent memory leaks
-        for (AsyncTask asyncTask : mSortingAsyncTasks) {
-            asyncTask.cancel(true);
-        }
     }
 
     /*
@@ -272,28 +259,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      * @param section
      */
     public void sortAndDisplay(final List<Room> rooms, final Comparator comparator, final HomeSectionView section) {
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (!isCancelled()) {
-                    try {
-                        Collections.sort(rooms, comparator);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.getMessage());
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void args) {
-                section.setRooms(rooms);
-                mSortingAsyncTasks.remove(this);
-            }
-        };
-        mSortingAsyncTasks.add(task);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        try {
+            Collections.sort(rooms, comparator);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.getMessage());
+        }
+        section.setRooms(rooms);
     }
 
     /*

@@ -16,7 +16,6 @@
 
 package im.vector.fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -231,48 +230,34 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
                 }
             }
 
-            // Sort and display
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    try {
-                        Comparator<Room> favComparator = new Comparator<Room>() {
-                            public int compare(Room r1, Room r2) {
-                                int pos1 = -1;
-                                int pos2 = -1;
+            try {
+                Comparator<Room> favComparator = new Comparator<Room>() {
+                    public int compare(Room r1, Room r2) {
+                        int pos1 = -1;
+                        int pos2 = -1;
 
-                                if ((null != r1) && (null != r1.getRoomId())) {
-                                    pos1 = favouriteRoomIdList.indexOf(r1.getRoomId());
-                                }
+                        if ((null != r1) && (null != r1.getRoomId())) {
+                            pos1 = favouriteRoomIdList.indexOf(r1.getRoomId());
+                        }
 
-                                if ((null != r2) && (null != r2.getRoomId())) {
-                                    pos2 = favouriteRoomIdList.indexOf(r2.getRoomId());
-                                }
+                        if ((null != r2) && (null != r2.getRoomId())) {
+                            pos2 = favouriteRoomIdList.indexOf(r2.getRoomId());
+                        }
 
-                                return pos1 - pos2;
-                            }
-                        };
-
-                        Collections.sort(mFavorites, favComparator);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## refreshFavorites() : sort failed with error " + e.getMessage());
+                        return pos1 - pos2;
                     }
-                    return null;
-                }
+                };
 
-                @Override
-                protected void onPostExecute(Void args) {
-                    mFavoritesAdapter.setRooms(mFavorites);
-                    updateRoomsDisplay(mFavorites.size());
-
-                    mDragAndDropTouchHelper.attachToRecyclerView(mFavorites.size() > 1 ? mFavoritesRecyclerView : null);
-                }
-            }.execute();
-        } else {
-            mFavoritesAdapter.setRooms(mFavorites);
-            updateRoomsDisplay(mFavorites.size());
-            mDragAndDropTouchHelper.attachToRecyclerView(null);
+                Collections.sort(mFavorites, favComparator);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## refreshFavorites() : sort failed with error " + e.getMessage());
+            }
         }
+
+        mFavoritesAdapter.setRooms(mFavorites);
+        updateRoomsDisplay(mFavorites.size());
+
+        mDragAndDropTouchHelper.attachToRecyclerView(mFavorites.size() > 1 ? mFavoritesRecyclerView : null);
     }
 
     /**

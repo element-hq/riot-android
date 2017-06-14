@@ -86,14 +86,51 @@ public class RoomUtils {
      */
     public static Comparator<Room> getRoomsDateComparator(final MXSession session, final boolean reverseOrder) {
         return new Comparator<Room>() {
-            public int compare(Room aLeftObj, Room aRightObj) {
-                final RoomSummary leftRoomSummary = session.getDataHandler().getStore().getSummary(aLeftObj.getRoomId());
-                final RoomSummary rightRoomSummary = session.getDataHandler().getStore().getSummary(aRightObj.getRoomId());
+            private Comparator<RoomSummary> mRoomSummaryComparator;
+            private HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
 
-                return getRoomSummaryComparator(reverseOrder).compare(leftRoomSummary, rightRoomSummary);
+            /**
+             * Retrieve the room summary comparator
+             * @return comparator
+             */
+            private Comparator<RoomSummary> getSummaryComparator() {
+                if (null == mRoomSummaryComparator) {
+                    mRoomSummaryComparator = getRoomSummaryComparator(reverseOrder);
+                }
+                return mRoomSummaryComparator;
+            }
+
+            /**
+             * Retrieve a summary from its room id
+             * @param roomId
+             * @return the summary
+             */
+            private RoomSummary getSummary(String roomId) {
+                if (TextUtils.isEmpty(roomId)) {
+                    return null;
+                }
+
+                RoomSummary summary = mSummaryByRoomIdMap.get(roomId);
+
+                if (null == summary) {
+                    summary = session.getDataHandler().getStore().getSummary(roomId);
+
+                    if (null != summary) {
+                        mSummaryByRoomIdMap.put(roomId, summary);
+                    }
+                }
+
+                return summary;
+            }
+
+            public int compare(Room aLeftObj, Room aRightObj) {
+                final RoomSummary leftRoomSummary = getSummary(aLeftObj.getRoomId());
+                final RoomSummary rightRoomSummary = getSummary(aRightObj.getRoomId());
+
+                return getSummaryComparator().compare(leftRoomSummary, rightRoomSummary);
             }
         };
-    }
+    };
 
     /**
      * Return comparator to sort historical rooms by date
