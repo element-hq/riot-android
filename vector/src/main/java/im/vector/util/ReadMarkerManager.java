@@ -456,7 +456,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
         Log.e(LOG_TAG, "setReadMarkerToLastVisibleRow row ");
         // Update the read marker to the last message completely displayed
         final ListView messageListView = mVectorMessageListFragment.getMessageListView();
-        if (messageListView != null && mVectorMessageListFragment.getMessageAdapter() != null) {
+        if (messageListView != null && messageListView.getChildCount() != 0 && mVectorMessageListFragment.getMessageAdapter() != null) {
             Event newReadMarkerEvent;
             final int lastVisiblePos = messageListView.getLastVisiblePosition();
             //final MessageRow lastVisibleRow = mVectorMessageListFragment.getMessageAdapter().getItem(lastVisiblePos);
