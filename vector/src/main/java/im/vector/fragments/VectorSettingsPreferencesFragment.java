@@ -1504,6 +1504,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             int index = 0;
             final Preference addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY);
+
+            // reported by GA
+            if (null == addEmailBtn) {
+                return;
+            }
+            
             int order = addEmailBtn.getOrder();
 
             for (final ThirdPartyIdentifier email3PID : currentEmail3PID) {
