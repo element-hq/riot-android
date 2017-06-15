@@ -909,7 +909,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         intent.removeExtra(EXTRA_EXPAND_ROOM_HEADER);
 
         // Init read marker manager
-        if (mIsUnreadPreviewMode || (mRoom != null && mRoom.getLiveTimeLine() != null && mRoom.getLiveTimeLine().isLiveTimeline())) {
+        if (mIsUnreadPreviewMode || (mRoom != null && mRoom.getLiveTimeLine() != null && mRoom.getLiveTimeLine().isLiveTimeline() && TextUtils.isEmpty(mEventId))) {
             mReadMarkerManager = new ReadMarkerManager(this, mVectorMessageListFragment, mSession, mRoom,
                     mIsUnreadPreviewMode ? ReadMarkerManager.PREVIEW_MODE : ReadMarkerManager.LIVE_MODE,
                     findViewById(R.id.jump_to_first_unread));
