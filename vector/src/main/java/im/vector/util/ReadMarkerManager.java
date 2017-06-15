@@ -110,6 +110,9 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                 jumpToUnreadLabel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        // Make sure read marker didn't change
+                        updateReadMarkerValue();
+
                         if (!TextUtils.isEmpty(mReadMarkerEventId)) {
                             final Event lastReadEvent = mRoom.getDataHandler().getStore().getEvent(mReadMarkerEventId, mRoom.getRoomId());
                             if (lastReadEvent == null) {
@@ -192,13 +195,14 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
             int showReadMarkerLine = -1;
             boolean updateReadMarker = false;
             final String readReceiptEventId = mRoomSummary.getReadReceiptEventId();
-            if (!mReadMarkerEventId.equals(readReceiptEventId)) {
+            if (mReadMarkerEventId != null && !mReadMarkerEventId.equals(readReceiptEventId)) {
                 if (isLiveMode() && !mHasJumpedToFirstUnread) {
                     // Catching up as scrolling up
                     // Check if the first unread has been reached by scrolling up
                     Log.e(LOG_TAG, "## checkUnreadMessage : Check if the first unread has been reached by scrolling up");
                     MessageRow unreadRow = mVectorMessageListFragment.getMessageAdapter().getMessageRow(mReadMarkerEventId);
-                    if (unreadRow != null && unreadRow.getEvent().getOriginServerTs() >= mFirstVisibleEvent.getOriginServerTs()) {
+                    if (unreadRow != null && unreadRow.getEvent() != null && mFirstVisibleEvent != null
+                            && unreadRow.getEvent().getOriginServerTs() >= mFirstVisibleEvent.getOriginServerTs()) {
                         Log.e(LOG_TAG, "## checkUnreadMessage : first unread has been reached by scrolling up");
                         forgetReadMarker();
                     }
@@ -221,8 +225,20 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
         Log.e(LOG_TAG, "handleJumpToBottom " + mReadMarkerEventId);
         // Set flag to be sure we check unread messages after updating the "Jump to" view
         // since on onScrollStateChanged will not be triggered
-        mVectorMessageListFragment.getMessageAdapter().updateReadMarker(mReadMarkerEventId, mRoomSummary.getReadReceiptEventId());
         mHasJumpedToBottom = true;
+
+        if (isLiveMode() && mHasJumpedToFirstUnread) {
+            setReadMarkerToLastVisibleRow();
+            mHasJumpedToFirstUnread = false;
+        }
+        mVectorMessageListFragment.getMessageAdapter().updateReadMarker(mReadMarkerEventId, mRoomSummary.getReadReceiptEventId());
+        mVectorMessageListFragment.scrollToBottom(0);
+    }
+
+    private void updateReadMarkerValue() {
+        mReadMarkerEventId = mRoomSummary.getReadMarkerEventId();
+        final String readReceiptEventId = mRoomSummary.getReadReceiptEventId();
+        mVectorMessageListFragment.getMessageAdapter().updateReadMarker(mReadMarkerEventId, mRoomSummary.getReadReceiptEventId());
     }
 
     /*
@@ -238,8 +254,8 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
         Log.e(LOG_TAG, "############ updateJumpToBanner START");
         boolean showJumpToView = false;
 
+        mReadMarkerEventId = mRoomSummary.getReadMarkerEventId();
         if (mRoomSummary != null && mReadMarkerEventId != null && !mHasJumpedToFirstUnread) {
-            mReadMarkerEventId = mRoomSummary.getReadMarkerEventId();
             final String readReceiptEventId = mRoomSummary.getReadReceiptEventId();
 
             Log.d(LOG_TAG, "## updateJumpToBanner readMarkerEventId " + mReadMarkerEventId + " readReceiptEventId " + readReceiptEventId);
@@ -316,7 +332,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
      * @param eventId
      * @return event if found
      */
-    private Event getEvent(final String eventId){
+    private Event getEvent(final String eventId) {
         MessageRow readMarkerRow = mVectorMessageListFragment.getMessageAdapter().getMessageRow(eventId);
         Event readMarkerEvent = readMarkerRow != null ? readMarkerRow.getEvent() : null;
         if (readMarkerEvent == null) {
@@ -399,7 +415,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                 : null;
         Log.e(LOG_TAG, "scrollToAdapterEvent row " + lastReadRow);
         if (lastReadRow != null) {
-            scrollToRow(lastReadRow);
+            scrollToRow(lastReadRow, true);
             return true;
         } else {
             Log.e(LOG_TAG, "scrollToAdapterEvent need to load more events in adapter or eventId is not displayed");
@@ -412,7 +428,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                 // Event should be in adapter
                 final MessageRow closestRowFromEvent = mVectorMessageListFragment.getMessageAdapter().getClosestRow(event);
                 if (closestRowFromEvent != null) {
-                    scrollToRow(closestRowFromEvent);
+                    scrollToRow(closestRowFromEvent, closestRowFromEvent.getEvent().eventId.equals(event.eventId));
                     return true;
                 }
                 return false;
@@ -426,16 +442,17 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
      * Scroll to the given message row
      *
      * @param messageRow
+     * @param isLastRead
      */
-    private void scrollToRow(final MessageRow messageRow) {
-        mVectorMessageListFragment.scrollToRow(messageRow);
+    private void scrollToRow(final MessageRow messageRow, final boolean isLastRead) {
+        mVectorMessageListFragment.scrollToRow(messageRow, isLastRead);
         mHasJumpedToFirstUnread = true;
     }
 
     /**
      * Update the read marker position to put it on the last visible row
      */
-    private void setReadMarkerToLastVisibleRow() {
+    public void setReadMarkerToLastVisibleRow() {
         Log.e(LOG_TAG, "setReadMarkerToLastVisibleRow row ");
         // Update the read marker to the last message completely displayed
         final ListView messageListView = mVectorMessageListFragment.getMessageListView();
@@ -455,15 +472,14 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
             }
 
             // Update read marker
-            if (!isLiveMode()) {
-                // In preview mode, check events from adapter and only update if new read marker is more recent
-                final long currentReadMarkerTs = mVectorMessageListFragment.getMessageAdapter().getMessageRow(mReadMarkerEventId).getEvent().getOriginServerTs();
+            // In preview mode, check events from adapter and only update if new read marker is more recent
+            final Event currentReadMarkerEvent = getEvent(mReadMarkerEventId);
+            if (currentReadMarkerEvent != null) {
+                final long currentReadMarkerTs = currentReadMarkerEvent.getOriginServerTs();
                 final long newReadMarkerTs = mVectorMessageListFragment.getMessageAdapter().getClosestRow(newReadMarkerEvent).getEvent().getOriginServerTs();
                 if (newReadMarkerTs > currentReadMarkerTs) {
                     mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
                 }
-            } else {
-                mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
             }
         }
     }
@@ -513,7 +529,9 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
     @Override
     public void onReadMarkerDisplayed(Event event, View view) {
         Log.e(LOG_TAG, "onReadMarkerDisplayed for " + event.eventId);
-        checkUnreadMessage();
+        if (!mActivity.isFinishing()) {
+            checkUnreadMessage();
+        }
     }
 
 }
