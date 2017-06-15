@@ -212,6 +212,9 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                     if (mLastVisibleEvent.eventId.equals(mRoomSummary.getLatestReceivedEvent().eventId)) {
                         Log.e(LOG_TAG, "## checkUnreadMessage : last received event has been reached by scrolling down");
                         markAllAsRead();
+                    } else if (!isLiveMode()){
+                        Log.e(LOG_TAG, "## checkUnreadMessage : preview mode, set read marker to last visible row");
+                        setReadMarkerToLastVisibleRow();
                     }
                 }
             }
