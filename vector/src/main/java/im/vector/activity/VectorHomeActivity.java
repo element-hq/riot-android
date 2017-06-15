@@ -2074,6 +2074,12 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
+
+                // remove the low priority rooms
+                List<Room> lowPriorRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
+                for (Room room : lowPriorRooms) {
+                    filteredRoomIdsSet.remove(room.getRoomId());
+                }
             } else if (id == R.id.bottom_action_rooms) {
                 HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());
                 HashSet<String> favoritesRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
