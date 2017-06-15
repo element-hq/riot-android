@@ -160,7 +160,7 @@ public class MXCActionBarActivity extends AppCompatActivity {
             for (Fragment fragment : fragments) {
                 // VectorUnknownDevicesFragment must not be dismissed
                 // The user has to update the device statuses
-                if ((fragment instanceof DialogFragment) && !(fragment instanceof VectorUnknownDevicesFragment)) {
+                if (fragment instanceof DialogFragment) {
                     ((DialogFragment) fragment).dismissAllowingStateLoss();
                 }
             }

@@ -25,6 +25,7 @@ import android.os.Bundle;
 
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 
+import android.support.v4.app.FragmentTransaction;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -228,6 +229,14 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
         }
 
         return builder.create();
+    }
+
+
+    @Override
+    public void dismissAllowingStateLoss() {
+        super.dismissAllowingStateLoss();
+        // Ensure that the map is released when the fragment is dismissed.
+        mUnknownDevicesMap = null;
     }
 
     @Override
