@@ -138,7 +138,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         highlightCount = roomSummary.getHighlightCount();
         notificationCount = roomSummary.getNotificationCount();
 
-        if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room)) {
+        if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room.getRoomId())) {
             notificationCount = highlightCount;
         }
 

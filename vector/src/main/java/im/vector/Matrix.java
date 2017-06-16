@@ -131,7 +131,7 @@ public class Matrix {
                                     } else {
                                         int notificationCount = room.getNotificationCount();
 
-                                        if (bingRulesManager.isRoomMentionOnly(room)) {
+                                        if (bingRulesManager.isRoomMentionOnly(room.getRoomId())) {
                                             notificationCount = room.getHighlightCount();
                                         }
 

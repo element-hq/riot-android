@@ -777,43 +777,39 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     @Override
     public void onToggleRoomNotifications(MXSession session, String roomId) {
-        Room room = session.getDataHandler().getRoom(roomId);
+        BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
 
-        if (null != room) {
-            BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+        showWaitingView();
 
-            showWaitingView();
-
-            bingRulesManager.muteRoomNotifications(room, !bingRulesManager.isRoomNotificationsDisabled(room), new BingRulesManager.onBingRuleUpdateListener() {
-                @Override
-                public void onBingRuleUpdateSuccess() {
-                    if (null != getActivity()) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideWaitingView();
-                            }
-                        });
-                    }
+        bingRulesManager.muteRoomNotifications(roomId, !bingRulesManager.isRoomNotificationsDisabled(roomId), new BingRulesManager.onBingRuleUpdateListener() {
+            @Override
+            public void onBingRuleUpdateSuccess() {
+                if (null != getActivity()) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideWaitingView();
+                        }
+                    });
                 }
+            }
 
-                @Override
-                public void onBingRuleUpdateFailure(final String errorMessage) {
-                    if (null != getActivity()) {
-                        getActivity().runOnUiThread(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
-                                        hideWaitingView();
-                                    }
+            @Override
+            public void onBingRuleUpdateFailure(final String errorMessage) {
+                if (null != getActivity()) {
+                    getActivity().runOnUiThread(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                                    hideWaitingView();
                                 }
-                        );
-                    }
-
+                            }
+                    );
                 }
-            });
-        }
+
+            }
+        });
     }
 
     @Override
