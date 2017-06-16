@@ -82,7 +82,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
     public ReadMarkerManager(final VectorRoomActivity activity, final VectorMessageListFragment messageListFragment,
                              final MXSession session, final Room room,
                              @UpdateMode final int updateMode, final View jumpToFirstUnreadView) {
-        Log.d(LOG_TAG, "Create ReadMarkerManager instance ");
+        Log.e(LOG_TAG, "Create ReadMarkerManager instance ");
         if (room == null) {
             return;
         }
@@ -95,6 +95,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
         mRoomSummary = mRoom.getDataHandler().getStore().getSummary(mRoom.getRoomId());
 
         mReadMarkerEventId = mRoomSummary.getReadMarkerEventId();
+        Log.e(LOG_TAG, "Create ReadMarkerManager instance "+mReadMarkerEventId+" for room "+mRoom.getRoomId());
 
         mUpdateMode = updateMode;
 
