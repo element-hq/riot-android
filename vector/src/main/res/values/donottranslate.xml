@@ -17,4 +17,9 @@
     <string name="room_settings_read_history_entry_value_members_only_option_time_shared" translatable="false">shared</string>
     <string name="room_settings_read_history_entry_value_members_only_invited" translatable="false">invited</string>
     <string name="room_settings_read_history_entry_value_members_only_joined" translatable="false">joined</string>
+
+    <string-array
+        name="room_directory_servers" translatable="false" >
+        <item>matrix.org</item>
+    </string-array>
 </resources>

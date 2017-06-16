@@ -41,6 +41,7 @@ import org.matrix.androidsdk.rest.model.ThirdPartyProtocol;
 import org.matrix.androidsdk.rest.model.ThirdPartyProtocolInstance;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -148,17 +149,26 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
         mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
             private void onDone(List<RoomDirectoryData> list) {
                 mLoadingView.setVisibility(View.GONE);
-                // all the connected network
-                list.add(0, RoomDirectoryData.getIncludeAllServers());
+                String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
+                String userHSUrl = mSession.getHomeserverConfig().getHomeserverUri().getHost();
 
+                List<String> hsUrlsList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
+
+                int insertionIndex = 0;
+
+                // Add user's HS
+                list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(mSession, userHSUrl, userHSName));
+
+                // Add user's HS but for Matrix public rooms only
                 if (!list.isEmpty()) {
-                    list.add(1, RoomDirectoryData.getDefault());
+                    list.add(insertionIndex++, RoomDirectoryData.getDefault());
                 }
 
-                // if the user uses his own home server
-                if (!mSession.getMyUserId().endsWith(":" + RoomDirectoryData.DEFAULT_HOME_SERVER_URL)) {
-                    String server = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
-                    list.add(new RoomDirectoryData(server, server, null, null, false));
+                // Add custom directory servers
+                for(String hsURL : hsUrlsList) {
+                    if (!TextUtils.equals(userHSUrl, hsURL)) {
+                        list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(mSession, hsURL, hsURL));
+                    }
                 }
 
                 mRoomDirectoryAdapter.updateDirectoryServersList(list);
