@@ -459,7 +459,6 @@ public class EventStreamService extends Service {
         if (intent.hasExtra(EXTRA_MATRIX_IDS)) {
             if (null == mMatrixIds) {
                 mMatrixIds = new ArrayList<>(Arrays.asList(intent.getStringArrayExtra(EXTRA_MATRIX_IDS)));
-
                 mSessions = new ArrayList<>();
 
                 for (String matrixId : mMatrixIds) {
@@ -472,9 +471,15 @@ public class EventStreamService extends Service {
 
         switch (action) {
             case START:
-            case RESUME:
+            case RESUME: {
+                if ((null == mSessions) || mSessions.isEmpty()) {
+                    Log.e(LOG_TAG, "onStartCommand : empty sessions list with action " + action);
+                    return START_NOT_STICKY;
+                }
+
                 start();
                 break;
+            }
             case STOP:
                 Log.d(LOG_TAG, "## onStartCommand(): service stopped");
                 stopSelf();
