@@ -2033,7 +2033,16 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
      */
     public void refreshUnreadBadges() {
         MXDataHandler dataHandler = mSession.getDataHandler();
+        // fix a crash reported by GA
+        if (null == dataHandler) {
+            return;
+        }
+
         IMXStore store = dataHandler.getStore();
+        // fix a crash reported by GA
+        if (null == store) {
+            return;
+        }
 
         BingRulesManager bingRulesManager = dataHandler.getBingRulesManager();
         Collection<RoomSummary> summaries2 = store.getSummaries();
