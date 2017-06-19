@@ -636,6 +636,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         });
 
+        mEditText.setAddColonOnFirstItem(true);
+
         mSendingMessagesLayout = findViewById(R.id.room_sending_message_layout);
         mSendImageView = (ImageView) findViewById(R.id.room_send_image_view);
         mSendButtonLayout = findViewById(R.id.room_send_layout);
