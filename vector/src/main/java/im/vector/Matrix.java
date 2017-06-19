@@ -553,6 +553,11 @@ public class Matrix {
      * @param clearCredentials true to clear the credentials.
      */
     public synchronized void clearSession(final Context context, final MXSession session, final boolean clearCredentials, final SimpleApiCallback<Void> aCallback) {
+        if (!session.isAlive()) {
+            Log.e(LOG_TAG, "## clearSession() " + session.getMyUserId() + " is already released");
+            return;
+        }
+
         if (clearCredentials) {
             mLoginStorage.removeCredentials(session.getHomeserverConfig());
         }
