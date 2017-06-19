@@ -27,6 +27,7 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 
 import im.vector.R;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
 
@@ -207,7 +208,9 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
         @Override
         public CharSequence convertResultToString(Object resultValue) {
             User user = (User) resultValue;
-            return (mIsSearchingMatrixId || mProvideMatrixIdOnly) ? user.user_id : user.displayname;
+            return (mIsSearchingMatrixId || mProvideMatrixIdOnly) ?
+                    user.user_id :
+                    VectorRoomActivity.sanitizeDisplayname(user.displayname);
         }
     }
 }
