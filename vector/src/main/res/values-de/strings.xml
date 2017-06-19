@@ -63,39 +63,39 @@
 
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
-    <string name="bottom_action_favourites">Favourites</string>
-    <string name="bottom_action_people">People</string>
-    <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_favourites">Favoriten</string>
+    <string name="bottom_action_people">Personen</string>
+    <string name="bottom_action_rooms">Räume</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Search for rooms</string>
-    <string name="home_filter_placeholder_favorites">Search for favourites</string>
-    <string name="home_filter_placeholder_people">Search for people</string>
-    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+    <string name="home_filter_placeholder_home">Nach Räumen suchen</string>
+    <string name="home_filter_placeholder_favorites">Nach Favoriten suchen</string>
+    <string name="home_filter_placeholder_people">Nach Personen suchen</string>
+    <string name="home_filter_placeholder_rooms">Nach Räumen suchen</string>
 
     <!-- Home fragment -->
-    <string name="invitations_header">Invites</string>
-    <string name="low_priority_header">Low priority</string>
+    <string name="invitations_header">Einladungen</string>
+    <string name="low_priority_header">Niedrige Priorität</string>
 
     <!-- People fragment -->
-    <string name="direct_chats_header">Conversations</string>
-    <string name="local_address_book_header">Local address book</string>
-    <string name="known_contacts_header">Known contacts</string>
-    <string name="matrix_only_filter">Matrix contacts only</string>
-    <string name="no_conversation_placeholder">No conversations</string>
+    <string name="direct_chats_header">Konversationen</string>
+    <string name="local_address_book_header">Lokales Adressbuch</string>
+    <string name="known_contacts_header">Bekannte Kontakte</string>
+    <string name="matrix_only_filter">Nur Matrix-Kontakte</string>
+    <string name="no_conversation_placeholder">Keine Konversationen</string>
     <string name="no_local_contact_placeholder">No local contacts</string>
-    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
-    <string name="no_result_placeholder">No results</string>
+    <string name="no_contact_access_placeholder">Du hast Riot nicht erlaubt auf deine lokalen Kontakte zuzugreifen</string>
+    <string name="no_result_placeholder">Keine Ergebnisse</string>
 
     <!-- Rooms fragment -->
-    <string name="rooms_header">Rooms</string>
-    <string name="rooms_directory_header">Room directory</string>
-    <string name="no_room_placeholder">No rooms</string>
-    <string name="no_public_room_placeholder">No public rooms available</string>
+    <string name="rooms_header">Räume</string>
+    <string name="rooms_directory_header">Raum-Verzeichnis</string>
+    <string name="no_room_placeholder">Keine Räume</string>
+    <string name="no_public_room_placeholder">Keine öffentl. Räume verfügbar</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 user</item>
-        <item quantity="other">%d users</item>
-    </plurals>
+	<item quantity="one">1 Nutzer</item>
+	<item quantity="other">%d Nutzer</item>
+</plurals>
 
     <string name="send_bug_report_include_logs">Sende Bericht</string>
     <string name="send_bug_report_include_crash_logs">Sende Absturzbericht</string>
@@ -219,7 +219,7 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="attachment_cancel_download">Download abbrechen?</string>
     <string name="attachment_cancel_upload">Upload abbrechen?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
-    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+    <string name="attachment_remaining_time_minutes">%1$dm:%2$ds</string>
 
     <!-- room creation dialog Screen -->
     <string name="yesterday">Gestern</string>
@@ -345,15 +345,15 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_participants_invite_prompt_msg">"Bist du sicher, dass du %s in diesen Chat einladen willst?"</string>
 
     <!-- invitation -->
-    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
+    <string name="people_search_invite_by_id"><u>Mit ID einladen</u></string>
     <string name="people_search_local_contacts">LOKALE KONTAKTE (%d)</string>
     <string name="people_search_known_contacts">BEKANNTE KONTAKTE (%s)</string>
     <string name="people_search_filter_text">Nur Matrix-Nutzer</string>
     <string name="people_search_too_many_contacts">"Zu viele Kontakte, bitte das Suchfeld  benutzen"</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Nutzer mit ID einladen</string>
+    <string name="people_search_invite_by_id_dialog_description">Bitte gebe eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-Mail or Matrix-ID</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Suchen</string>
@@ -429,9 +429,9 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_recents_invites">EINLADUNGEN</string>
     <string name="room_recents_start_chat">Gespräch beginnen</string>
     <string name="room_recents_create_room">Raum erstellen</string>
-    <string name="room_recents_join_room">Join room</string>
-    <string name="room_recents_join_room_title">Join a room</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
+    <string name="room_recents_join_room">Raum beitreten</string>
+    <string name="room_recents_join_room_title">Einem Raum beitreten</string>
+    <string name="room_recents_join_room_prompt">Gebe eine Raum-ID oder einen Raum-Alias ein</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Verzeichnis durchsuchen</string>
@@ -447,7 +447,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_settings_de_prioritize">Niedrige Priorität</string>
     <string name="room_settings_direct_chat">Direkter Chat</string>
     <string name="room_settings_leave_conversation">Konversation verlassen</string>
-    <string name="room_settings_forget">Forget</string>
+    <string name="room_settings_forget">Vergessen</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Nachrichten</string>
@@ -706,18 +706,18 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Geräte, die noch nicht verifiziert wurden.\nEs gibt also keine Garantie, dass diese Geräte wirklich zu dem angegebenen Nutzer gehören.\nWir empfehlen, den Verifizierungsprozess für jedes Gerät zu durchlaufen bevor du fortfährst. Du kannst die Nachricht aber auch ohne Verifizierung senden, wenn du das vorziehst.\n\nUnbekannte Geräte:</string>
 
     <!-- directory activity  -->
-    <string name="select_room_directory">Select a room directory</string>
-    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
-    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
-    <string name="directory_server_placeholder">Homeserver URL</string>
-    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
-    <string name="directory_server_native_rooms">All native %s rooms</string>
+    <string name="select_room_directory">Wähle Raum-Verzeichnis</string>
+    <string name="directory_server_fail_to_retrieve_server">Der Server kann nicht verfügbar oder überlastet sein</string>
+    <string name="directory_server_type_homeserver">Gebe einen Heimserver ein um seine öffentlichen Räume aufzulisten</string>
+    <string name="directory_server_placeholder">Heimserver-URL</string>
+    <string name="directory_server_all_rooms_on_server">Alle Räume auf dem %s-Server</string>
+    <string name="directory_server_native_rooms">Alle nativen %s-Räume</string>
 
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d ungelesene Benachrichtigungen</string>
     <string name="notification_unread_notified_messages_in_room">%1$d ungelesene Benachrichtigungen in %2$d Räumen</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Search for historical</string>
+    <string name="historical_placeholder">Suche nach historischen</string>
 
 </resources>
