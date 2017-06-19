@@ -27,6 +27,13 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <!-- home activity -->
+    <style name="HomeActivityTheme" parent="AppTheme.NoActionBar">
+        <item name="editTextColor">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">@color/vector_white_alpha_50</item>
+    </style>
+
     <!-- NoActionBar + FullScreen -->
     <style name="AppTheme.NoActionBar.FullScreen" parent="@style/AppTheme.NoActionBar">
         <item name="android:windowFullscreen">true</item>
@@ -188,6 +195,9 @@
         <item name="android:textColorHint">@color/vector_white_alpha_50</item>
     </style>
 
+    <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar">
+    </style>
+
     <style name="LoginEditTextStyle" parent="@android:style/Widget.EditText">
         <item name="android:textSize">16sp</item>
     </style>
@@ -280,6 +290,26 @@
         <item name="colorControlNormal">@color/vector_74_gray</item>
         <item name="colorControlActivated">@color/vector_74_gray</item>
         <item name="android:textColorHint">@color/vector_74_gray</item>
+    </style>
+
+    <style name="ListHeader">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/vector_text_black_color</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:background">@color/list_header_background</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+
+    <style name="CheckBoxTheme">
+        <item name="colorAccent">@color/vector_green_color</item>
+    </style>
+
+    <style name="SpinnerTheme">
+        <item name="colorControlNormal">@color/list_header_spinner</item>
     </style>
 
 </resources>

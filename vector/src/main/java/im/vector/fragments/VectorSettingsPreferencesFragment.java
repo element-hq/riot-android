@@ -1504,6 +1504,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             int index = 0;
             final Preference addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY);
+
+            // reported by GA
+            if (null == addEmailBtn) {
+                return;
+            }
+            
             int order = addEmailBtn.getOrder();
 
             for (final ThirdPartyIdentifier email3PID : currentEmail3PID) {
@@ -2238,12 +2244,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             });
 
-            builder.setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    displayDeviceDeletionDialog(fDeviceInfo);
-                }
-            });
+            // disable the deletion for our own device
+            if (!TextUtils.equals(mSession.getCrypto().getMyDevice().deviceId, fDeviceInfo.device_id)) {
+                builder.setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        displayDeviceDeletionDialog(fDeviceInfo);
+                    }
+                });
+            }
 
             builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override

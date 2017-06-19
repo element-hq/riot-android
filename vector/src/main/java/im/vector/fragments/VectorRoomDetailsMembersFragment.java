@@ -59,7 +59,7 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -109,6 +109,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
     // list the up to date presence to avoid refreshing it twice
     private final List<String> mUpdatedPresenceUserIds = new ArrayList<>();
+
+    // avoid dismissing the loading wheel when some new members are added
+    private boolean mIsInvitingNewMembers;
 
     // global events listener
     private final MXEventListener mEventListener = new MXEventListener() {
@@ -162,7 +165,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 @Override
                 public void run() {
                     // stop waiting wheel
-                    mProgressView.setVisibility(View.GONE);
+                    if (!mIsInvitingNewMembers) {
+                        mProgressView.setVisibility(View.GONE);
+                    }
 
                     if (0 == aSearchCountResult) {
                         // no results found!
@@ -844,7 +849,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        kickUsers(Arrays.asList(participantItem.mUserId), 0);
+                                        kickUsers(Collections.singletonList(participantItem.mUserId), 0);
                                     }
                                 });
                             }
@@ -966,6 +971,38 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
+     * Invite an user Ids list.
+     * @param userIds the user IDs list
+     */
+    private void inviteUserIds(List<String> userIds) {
+        mRoom.invite(userIds, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                mIsInvitingNewMembers = false;
+                mDefaultCallBack.onSuccess(null);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                mIsInvitingNewMembers = false;
+                mDefaultCallBack.onNetworkError(e);
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                mIsInvitingNewMembers = false;
+                mDefaultCallBack.onMatrixError(e);
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                mIsInvitingNewMembers = false;
+                mDefaultCallBack.onUnexpectedError(e);
+            }
+        });
+    }
+
+    /**
      * Activity result
      *
      * @param requestCode the request code
@@ -974,17 +1011,10 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == INVITE_USER_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
-            final String userId = data.getStringExtra(VectorRoomInviteMembersActivity.EXTRA_SELECTED_USER_ID);
+            final List<String> userIds = (List<String>)data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_OUT_SELECTED_USER_IDS);
 
-            if (null != userId) {
-                // and the new member is added.
-                mProgressView.setVisibility(View.VISIBLE);
-
-                if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
-                    mRoom.inviteByEmail(userId, mDefaultCallBack);
-                } else {
-                    mRoom.invite(Arrays.asList(userId), mDefaultCallBack);
-                }
+            if ((null != userIds) && (userIds.size() > 0)) {
+                inviteUserIds(userIds);
             }
         } else if ((requestCode == GET_MENTION_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
             final String mention = data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID);

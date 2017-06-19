@@ -28,6 +28,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.zip.GZIPOutputStream;
 
 import android.app.Activity;
@@ -106,6 +107,7 @@ public class BugReporter {
     private static final String LOG_CAT_ERROR_FILENAME = "logcatError.log";
     private static final String LOG_CAT_FILENAME = "logcat.log";
     private static final String LOG_CAT_SCREENSHOT_FILENAME = "screenshot.png";
+    private static final String CRASH_FILENAME = "crash.log";
 
 
     // the http client
@@ -156,6 +158,15 @@ public class BugReporter {
                     if (null != gzippedLogcat) {
                         gzippedFiles.add(gzippedLogcat);
                     }
+
+                    File crashDescription = getCrashFile(context);
+                    if (crashDescription.exists()) {
+                        File compressedCrashDescription = compressFile(crashDescription);
+
+                        if (null != compressedCrashDescription) {
+                            gzippedFiles.add(compressedCrashDescription);
+                        }
+                    }
                 }
 
                 MXSession session = Matrix.getInstance(context).getDefaultSession();
@@ -189,7 +200,9 @@ public class BugReporter {
                             .addFormDataPart("matrix_sdk_version", Matrix.getInstance(context).getDefaultSession().getVersion(true))
                             .addFormDataPart("olm_version", Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true))
                             .addFormDataPart("device", Build.MODEL.trim())
-                            .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME);
+                            .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME)
+                            .addFormDataPart("locale", Locale.getDefault().toString())
+                            .addFormDataPart("app_language", context.getString(R.string.resouces_language) + "_" + context.getString(R.string.resouces_country));
 
                     // add the gzipped files
                     for (File file : gzippedFiles) {
@@ -230,6 +243,10 @@ public class BugReporter {
                     builder.addFormDataPart("label", context.getResources().getString(R.string.flavor_description));
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name));
 
+                    if (getCrashFile(context).exists()) {
+                        builder.addFormDataPart("label", "crash");
+                        deleteCrashFile(context);
+                    }
 
                     BugReporterMultipartBody requestBody = builder.build();
 
@@ -529,6 +546,59 @@ public class BugReporter {
             public void afterTextChanged(Editable s) {
             }
         });
+    }
+
+    //==============================================================================================================
+    // crash report management
+    //==============================================================================================================
+
+    /**
+     * Provides the crash file
+     * @param context the context
+     * @return the crash file
+     */
+    private static File getCrashFile(Context context) {
+        return new File(context.getCacheDir().getAbsolutePath(), CRASH_FILENAME);
+    }
+
+    /**
+     * Remove the crash file
+     * @param context
+     */
+    public static void deleteCrashFile(Context context) {
+        File crashFile = getCrashFile(context);
+
+        if (crashFile.exists()) {
+            crashFile.delete();
+        }
+    }
+
+    /**
+     * Save the crash report
+     *
+     * @param context       the context
+     * @param crashDescription teh crash description
+     */
+    public static void saveCrashReport(Context context, String crashDescription) {
+        File crashFile = getCrashFile(context);
+
+        if (crashFile.exists()) {
+            crashFile.delete();
+        }
+
+        if (!TextUtils.isEmpty(crashDescription)) {
+            try {
+                FileOutputStream fos = new FileOutputStream(crashFile);
+                OutputStreamWriter osw = new OutputStreamWriter(fos);
+                osw.write(crashDescription);
+                osw.close();
+
+                fos.flush();
+                fos.close();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## saveCrashReport() : fail to write " + e.toString());
+            }
+        }
     }
 
     //==============================================================================================================

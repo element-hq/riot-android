@@ -134,7 +134,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_right_view"
                     android:src="@drawable/vector_actions_9b"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <!-- this view is a dummy one, it is used to be able
                      to hide roomSummaryAdapter_action_image properly-->

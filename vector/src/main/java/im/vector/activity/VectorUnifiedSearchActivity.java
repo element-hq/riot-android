@@ -44,11 +44,18 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private static final String LOG_TAG = "VectorUniSrchActivity";
 
     public static final String EXTRA_ROOM_ID = "VectorUnifiedSearchActivity.EXTRA_ROOM_ID";
+    public static final String EXTRA_TAB_INDEX = "VectorUnifiedSearchActivity.EXTRA_TAB_INDEX";
 
     // activity life cycle management:
     // - Bundle keys
     private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
     private static final String KEY_STATE_SEARCH_PATTERN = "SEARCH_PATTERN";
+
+    // item position when it is a search in no room
+    public static final int SEARCH_ROOMS_TAB_POSITION = 0;
+    public static final int SEARCH_MESSAGES_TAB_POSITION = 1;
+    public static final int SEARCH_PEOPLE_TAB_POSITION = 2;
+    public static final int SEARCH_FILES_TAB_POSITION = 3;
 
     // search fragments
     private MXSession mSession;
@@ -134,7 +141,12 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         TabLayout tabLayout = (TabLayout) findViewById(R.id.search_filter_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        mPosition = (null != savedInstanceState)? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
+        // the tab i
+        if ((null != getIntent()) && getIntent().hasExtra(EXTRA_TAB_INDEX)) {
+            mPosition = getIntent().getIntExtra(EXTRA_TAB_INDEX, 0);
+        } else{
+            mPosition = (null != savedInstanceState) ? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
+        }
         mViewPager.setCurrentItem(mPosition);
 
         // restore the searched pattern

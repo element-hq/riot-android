@@ -239,7 +239,7 @@ public class VectorUtils {
             }
         });
 
-        String displayName = "";
+        String displayName;
 
         if (othersActiveMembers.size() == 0) {
             if (activeMembers.size() == 1) {
@@ -256,6 +256,8 @@ public class VectorUtils {
                 } else {
                     displayName = context.getString(R.string.room_displayname_no_title);
                 }
+            } else {
+                displayName = context.getString(R.string.room_displayname_no_title);
             }
         } else if (othersActiveMembers.size() == 1) {
             RoomMember member = othersActiveMembers.get(0);
@@ -961,11 +963,11 @@ public class VectorUtils {
      * @return a map indexed by the matrix id.
      */
     public static Map<String, ParticipantAdapterItem> listKnownParticipants(MXSession session) {
-        // a hash map is a lot faster than a list search
-        Map<String, ParticipantAdapterItem> map = new HashMap<>();
-
         // check known users
         Collection<User> users = session.getDataHandler().getStore().getUsers();
+
+        // a hash map is a lot faster than a list search
+        Map<String, ParticipantAdapterItem> map = new HashMap<>(users.size());
 
         // we don't need to populate the room members or each room
         // because an user is created for each joined / invited room member event

@@ -55,6 +55,7 @@ import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.util.BugReporter;
 import im.vector.util.RageShake;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
@@ -278,6 +279,10 @@ public class VectorApp extends Application {
                 session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
                 session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
                 removeSyncingSession(session);
+
+                if (session.getDataHandler().areLeftRoomsSynced()) {
+                    session.getDataHandler().releaseLeftRooms();
+                }
             }
         }
 
@@ -627,10 +632,6 @@ public class VectorApp extends Application {
      * @return the exception description
      */
     public static String uncaughtException(String threadName, Throwable throwable) {
-        if (null != VectorApp.getInstance()) {
-            VectorApp.getInstance().setAppCrashed();
-        }
-
         StringBuilder b = new StringBuilder();
         String appName = Matrix.getApplicationName();
 
@@ -673,17 +674,26 @@ public class VectorApp extends Application {
         b.append(sw.getBuffer().toString());
         Log.e("FATAL EXCEPTION", b.toString());
 
-        return b.toString();
+        String bugDescription = b.toString();
+
+        if (null != VectorApp.getInstance()) {
+            VectorApp.getInstance().setAppCrashed(bugDescription);
+        }
+
+        return bugDescription;
     }
 
     /**
      * Warn that the application crashed
+     * @param description the crash description
      */
-    private void setAppCrashed() {
+    private void setAppCrashed(String description) {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(PREFS_CRASH_KEY, true);
         editor.commit();
+
+        BugReporter.saveCrashReport(this, description);
     }
 
     /**

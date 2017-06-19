@@ -6,4 +6,6 @@
 
     <dimen name="navigation_view_height">172dp</dimen>
     <dimen name="navigation_avatar_top_margin">20dp</dimen>
+
+    <dimen name="item_decoration_left_margin">72dp</dimen>
 </resources>

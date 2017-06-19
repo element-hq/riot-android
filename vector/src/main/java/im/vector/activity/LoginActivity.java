@@ -95,8 +95,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     private final static int REGISTER_POLLING_PERIOD = 10 * 1000;
 
-    public static final int REQUEST_REGISTRATION_COUNTRY = 1245;
-    public static final int REQUEST_LOGIN_COUNTRY = 5678;
+    private static final int REQUEST_REGISTRATION_COUNTRY = 1245;
+    private static final int REQUEST_LOGIN_COUNTRY = 5678;
 
     // activity modes
     // either the user logs in
@@ -135,10 +135,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private static final String SAVED_IS_SERVER_URL_EXPANDED = "SAVED_IS_SERVER_URL_EXPANDED";
     private static final String SAVED_HOME_SERVER_URL = "SAVED_HOME_SERVER_URL";
     private static final String SAVED_IDENTITY_SERVER_URL = "SAVED_IDENTITY_SERVER_URL";
-
-    // mail validation
-    private static final String BROADCAST_ACTION_MAIL_VALIDATION = "im.vector.activity.BROADCAST_ACTION_MAIL_VALIDATION";
-    private static final String EXTRA_IS_STOP_REQUIRED = "EXTRA_IS_STOP_REQUIRED";
 
     // activity mode
     private int mMode = MODE_LOGIN;
@@ -248,7 +244,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     // the next link parameters were not managed
     private boolean mIsMailValidationPending;
-    private boolean mIsUserNameAvailable;
 
     // use to reset the password when the user click on the email validation
     private HashMap<String, String> mForgotPid = null;
@@ -467,7 +462,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mIsUserNameAvailable = false;
                 onRegisterClick(true);
             }
         });
@@ -1116,7 +1110,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 // login was started in email validation mode
                 mIsMailValidationPending = true;
                 mMode = MODE_ACCOUNT_CREATION;
-                Matrix.getInstance(this).clearSessions(this, true);
+                Matrix.getInstance(this).clearSessions(this, true, null);
                 retCode = true;
             }
         } else {
@@ -1208,12 +1202,27 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 @Override
                 public void onSuccess(Boolean isSuccess) {
                     if (isSuccess) {
-                        // the validation of mail ownership succeed, just resume the registration flow
-                        // next step: just register
-                        Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
-                        mMode = MODE_ACCOUNT_CREATION;
-                        enableLoadingScreen(true);
-                        RegistrationManager.getInstance().registerAfterEmailValidation(LoginActivity.this, aClientSecret, aSid, aIdentityServer, aSessionId, LoginActivity.this);
+                        // if aSessionId is null, it means that this request has been triggered by clicking on a "forgot password" link
+                        if (null == aSessionId) {
+                            Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - the password update is in progress");
+
+                            mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
+
+                            mForgotPid = new HashMap<>();
+                            mForgotPid.put("client_secret", aClientSecret);
+                            mForgotPid.put("id_server", homeServerConfig.getIdentityServerUri().getHost());
+                            mForgotPid.put("sid", aSid);
+                            
+                            mIsPasswordResetted = false;
+                            onForgotOnEmailValidated(homeServerConfig);
+                        } else {
+                            // the validation of mail ownership succeed, just resume the registration flow
+                            // next step: just register
+                            Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
+                            mMode = MODE_ACCOUNT_CREATION;
+                            enableLoadingScreen(true);
+                            RegistrationManager.getInstance().registerAfterEmailValidation(LoginActivity.this, aClientSecret, aSid, aIdentityServer, aSessionId, LoginActivity.this);
+                        }
                     } else {
                         Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failed (success=false)");
                         errorHandler(getString(R.string.login_error_unable_register_mail_ownership));
@@ -1423,17 +1432,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void showMainLayout() {
         mMainLayout.setVisibility(View.VISIBLE);
         mProgressTextView.setVisibility(View.GONE);
-    }
-
-    /**
-     * @return the registration session
-     */
-    private String getRegistrationSession() {
-        if (null != mRegistrationResponse) {
-            return mRegistrationResponse.session;
-        } else {
-            return null;
-        }
     }
 
     /**

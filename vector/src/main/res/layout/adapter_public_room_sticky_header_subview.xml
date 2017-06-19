@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Spinner
+        android:id="@+id/public_rooms_selector"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:spinnerMode="dropdown"
+        android:theme="@style/SpinnerTheme"
+        tools:listitem="@layout/public_room_spinner_item" />
+
+</LinearLayout>
