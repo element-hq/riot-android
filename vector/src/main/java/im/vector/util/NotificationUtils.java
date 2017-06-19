@@ -375,12 +375,16 @@ public class NotificationUtils {
         inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages_in_room, sum, roomsCount));
         builder.setStyle(inboxStyle);
 
+        TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context);
         Intent roomIntentTap;
         // sanity check
         if ((null == eventToNotify) || TextUtils.isEmpty(eventToNotify.mRoomId)) {
             // Build the pending intent for when the notification is clicked
             roomIntentTap = new Intent(context, VectorHomeActivity.class);
         } else {
+            // add the home page the activity stack
+            stackBuilderTap.addNextIntentWithParentStack(new Intent(context, VectorHomeActivity.class));
+
             if (isInvitationEvent) {
                 // for invitation the room preview must be displayed
                 roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(session.getMyUserId(), eventToNotify.mRoomId, context, VectorFakeRoomPreviewActivity.class);
@@ -392,12 +396,7 @@ public class NotificationUtils {
 
         // the action must be unique else the parameters are ignored
         roomIntentTap.setAction(TAP_TO_VIEW_ACTION + ((int) (System.currentTimeMillis())));
-
-        // Recreate the back stack
-        TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context)
-                .addParentStack(VectorRoomActivity.class)
-                .addNextIntent(roomIntentTap);
-
+        stackBuilderTap.addNextIntent(roomIntentTap);
         builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
 
         // offer to open the rooms list
@@ -614,7 +613,7 @@ public class NotificationUtils {
 
             // Recreate the back stack
             TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context)
-                    .addParentStack(VectorRoomActivity.class)
+                    .addNextIntentWithParentStack(new Intent(context, VectorHomeActivity.class))
                     .addNextIntent(roomIntentTap);
 
             builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
