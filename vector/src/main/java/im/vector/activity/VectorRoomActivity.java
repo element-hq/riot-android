@@ -478,6 +478,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 }
             });
         }
+
+        @Override
+        public void onReadMarkerEvent(String roomId) {
+            if (mReadMarkerManager != null) {
+                mReadMarkerManager.onReadMarkerChanged(roomId);
+            }
+        }
     };
 
     private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
