@@ -296,7 +296,7 @@
     <string name="room_title_members">%1$d deelnemers</string>
     <string name="room_title_one_member">1 deelnemer</string>
     <string name="room_e2e_alert_title">Waarschuwing!</string>
-    <string name="room_e2e_alert_message">Eind-tot-eind versleuteling is nog in beta en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden kunnen ontsleutelen.\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
+    <string name="room_e2e_alert_message">Eind-tot-eind versleuteling is nog in beta en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden ontsleutelen.\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
