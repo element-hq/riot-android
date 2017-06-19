@@ -300,8 +300,10 @@ public class NotificationUtils {
      * @param notifiedEventsByRoomId the notified events by room ids
      */
     private static void addTextStyleWithSeveralRooms(Context context,
-                                                  android.support.v7.app.NotificationCompat.Builder builder,
-                                                  Map<String, List<NotifiedEvent>> notifiedEventsByRoomId) {
+                                                     android.support.v7.app.NotificationCompat.Builder builder,
+                                                     NotifiedEvent eventToNotify,
+                                                     boolean isInvitationEvent,
+                                                     Map<String, List<NotifiedEvent>> notifiedEventsByRoomId) {
         // TODO manage multi accounts
         MXSession session = Matrix.getInstance(context).getDefaultSession();
         IMXStore store = session.getDataHandler().getStore();
@@ -373,18 +375,44 @@ public class NotificationUtils {
         inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages_in_room, sum, roomsCount));
         builder.setStyle(inboxStyle);
 
-        // Build the pending intent for when the notification is clicked
         Intent roomIntentTap;
-        roomIntentTap = new Intent(context, VectorHomeActivity.class);
+        // sanity check
+        if ((null == eventToNotify) || TextUtils.isEmpty(eventToNotify.mRoomId)) {
+            // Build the pending intent for when the notification is clicked
+            roomIntentTap = new Intent(context, VectorHomeActivity.class);
+        } else {
+            if (isInvitationEvent) {
+                // for invitation the room preview must be displayed
+                roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(session.getMyUserId(), eventToNotify.mRoomId, context, VectorFakeRoomPreviewActivity.class);
+            } else {
+                roomIntentTap = new Intent(context, VectorRoomActivity.class);
+                roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, eventToNotify.mRoomId);
+            }
+        }
+
         // the action must be unique else the parameters are ignored
         roomIntentTap.setAction(TAP_TO_VIEW_ACTION + ((int) (System.currentTimeMillis())));
 
         // Recreate the back stack
         TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context)
-                .addParentStack(VectorHomeActivity.class)
+                .addParentStack(VectorRoomActivity.class)
                 .addNextIntent(roomIntentTap);
 
         builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        // offer to open the rooms list
+        {
+            Intent openIntentTap = new Intent(context, VectorHomeActivity.class);
+
+            // Recreate the back stack
+            TaskStackBuilder viewAllTask = TaskStackBuilder.create(context)
+                    .addNextIntent(openIntentTap);
+
+            builder.addAction(
+                    R.drawable.ic_home_black_24dp,
+                    context.getString(R.string.bottom_action_home),
+                    viewAllTask.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+        }
 
         // wearable
         try {
@@ -469,7 +497,7 @@ public class NotificationUtils {
 
         // when there are several rooms, the text style is not the same
         if (notifiedEventsByRoomId.size() > 1) {
-            addTextStyleWithSeveralRooms(context, builder, notifiedEventsByRoomId);
+            addTextStyleWithSeveralRooms(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId);
             return;
         }
 
