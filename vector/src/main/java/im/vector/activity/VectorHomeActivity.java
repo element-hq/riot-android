@@ -523,7 +523,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         }
 
         if (null != mFloatingActionButton) {
-            mFloatingActionButton.show();
+            if (mCurrentMenuId == R.id.bottom_action_favourites) {
+                mFloatingActionButton.setVisibility(View.GONE);
+            } else {
+                mFloatingActionButton.show();
+            }
         }
 
         this.runOnUiThread(new Runnable() {
