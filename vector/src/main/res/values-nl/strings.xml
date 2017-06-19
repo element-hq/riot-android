@@ -346,7 +346,7 @@
     <string name="people_search_too_many_contacts">Te veel contacten, gebruik het zoekveld.</string>
 
     <string name="people_search_invite_by_id_dialog_title">Gebruiker bij ID uitnodigen</string>
-    <string name="people_search_invite_by_id_dialog_description">Vul één of meer e-mailaddressen of Matrix ID's in</string>
+    <string name="people_search_invite_by_id_dialog_description">Vul één of meer e-mailaddressen of Matrix ID\'s in</string>
     <string name="people_search_invite_by_id_dialog_hint">E-mail of Matrix ID</string>
 
     <!--  Chat -->
