@@ -1942,7 +1942,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param displayName the display name to sanitize
      * @return the sanitized display name
      */
-    private static String sanitizeDisplayname(String displayName) {
+    public static String sanitizeDisplayname(String displayName) {
         // sanity checks
         if (!TextUtils.isEmpty(displayName)) {
             final String ircPattern = " (IRC)";
