@@ -8,7 +8,7 @@
     <string name="title_activity_room">Ruimte</string>
     <string name="title_activity_settings">Instellingen</string>
     <string name="title_activity_member_details">Deelnemer Details</string>
-    <string name="title_activity_historical">Historical</string>
+    <string name="title_activity_historical">Historisch</string>
 
     <!-- button names -->
     <string name="ok">Akkoord</string>
@@ -40,17 +40,17 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Vergadergesprekken zijn niet ondersteund in versleutelde ruimtes</string>
     <string name="send_anyway">Toch sturen</string>
     <string name="or">of</string>
-    <string name="and">and</string>
-    <string name="invite">Invite</string>
+    <string name="and">en</string>
+    <string name="invite">Uitnodigen</string>
 
     <!-- actions -->
     <string name="action_sign_out">Uitloggen</string>
     <string name="action_sign_out_confirmation">Uitloggen?</string>
     <string name="action_voice_call">Spraakoproep</string>
     <string name="action_video_call">Videogesprek</string>
-    <string name="action_global_search">Global search</string>
+    <string name="action_global_search">Globaal zoeken</string>
     <string name="action_mark_all_as_read">Alles als gelezen markeren</string>
-    <string name="action_historical">Historical</string>
+    <string name="action_historical">Historisch</string>
     <string name="action_quick_reply">Snel reageren</string>
     <string name="action_open">Open</string>
     <string name="action_close">Sluit</string>
@@ -63,38 +63,38 @@
 
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
-    <string name="bottom_action_favourites">Favourites</string>
-    <string name="bottom_action_people">People</string>
-    <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_favourites">Favorieten</string>
+    <string name="bottom_action_people">Personen</string>
+    <string name="bottom_action_rooms">Ruimtes</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Search for rooms</string>
-    <string name="home_filter_placeholder_favorites">Search for favourites</string>
-    <string name="home_filter_placeholder_people">Search for people</string>
-    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+    <string name="home_filter_placeholder_home">Zoek naar ruimtes</string>
+    <string name="home_filter_placeholder_favorites">Zoek naar favorieten</string>
+    <string name="home_filter_placeholder_people">Zoek naar personen</string>
+    <string name="home_filter_placeholder_rooms">Zoek naar ruimtes</string>
 
     <!-- Home fragment -->
-    <string name="invitations_header">Invites</string>
-    <string name="low_priority_header">Low priority</string>
+    <string name="invitations_header">Uitnodigingen</string>
+    <string name="low_priority_header">Lage prioriteit</string>
 
     <!-- People fragment -->
-    <string name="direct_chats_header">Conversations</string>
-    <string name="local_address_book_header">Local address book</string>
-    <string name="known_contacts_header">Known contacts</string>
-    <string name="matrix_only_filter">Matrix contacts only</string>
-    <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_local_contact_placeholder">No local contacts</string>
-    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
-    <string name="no_result_placeholder">No results</string>
+    <string name="direct_chats_header">Gesprekken</string>
+    <string name="local_address_book_header">Lokale contactenlijst</string>
+    <string name="known_contacts_header">Bekende contacten</string>
+    <string name="matrix_only_filter">Alleen Matrix contacten</string>
+    <string name="no_conversation_placeholder">Geen gesprekken</string>
+    <string name="no_local_contact_placeholder">Geen lokale contacten</string>
+    <string name="no_contact_access_placeholder">Je hebt Riot geen toegang tot je lokale contacten gegeven</string>
+    <string name="no_result_placeholder">Geen resultaten</string>
 
     <!-- Rooms fragment -->
-    <string name="rooms_header">Rooms</string>
-    <string name="rooms_directory_header">Room directory</string>
-    <string name="no_room_placeholder">No rooms</string>
-    <string name="no_public_room_placeholder">No public rooms available</string>
+    <string name="rooms_header">Ruimtes</string>
+    <string name="rooms_directory_header">Ruimte adresboek</string>
+    <string name="no_room_placeholder">Geen ruimtes</string>
+    <string name="no_public_room_placeholder">Geen publieke ruimtes beschikbaar</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 user</item>
-        <item quantity="other">%d users</item>
+        <item quantity="one">1 gebruiker</item>
+        <item quantity="other">%d gebruikers</item>
     </plurals>
 
     <string name="send_bug_report_include_logs">Logboek versturen</string>
@@ -259,10 +259,10 @@
     <string name="permissions_rationale_popup_title">%s permissies</string>
     <string name="permissions_rationale_msg_storage">%s heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.\n\n</string>
     <string name="permissions_rationale_msg_camera">%s heeft toegang nodig tot je camera om afbeeldingen en video oproepen te maken..</string>
-    <string name="permissions_rationale_msg_camera_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
+    <string name="permissions_rationale_msg_camera_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de camera om een oproep te maken.</string>
     <string name="permissions_rationale_msg_record_audio">%s heeft toegang nodig tot je microfoon om spraakoproepen te maken</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de microfoon om een oproep te maken.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot heeft permissie nodig om je camera en microfoon te gebruiken voor videogesprekken.\n\nGeef toegang op de volgende pop-ups om een oproep te maken.</string>
     <string name="permissions_rationale_msg_contacts">Je adresboek e-mails worden geupload om matrix IDs te zoeken.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Je adresboek e-mails zijn geupload voor het zoeken van matix IDs.\nGeef je %s toegang tot je contacten ?</string>
 
@@ -296,7 +296,7 @@
     <string name="room_title_members">%1$d deelnemers</string>
     <string name="room_title_one_member">1 deelnemer</string>
     <string name="room_e2e_alert_title">Waarschuwing!</string>
-    <string name="room_e2e_alert_message">Eind-tot-eind versleuteling is nog in beta en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden kunnen ontsleutelen.\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
+    <string name="room_e2e_alert_message">Eind-tot-eind versleuteling is nog in beta en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden ontsleutelen.\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
@@ -339,15 +339,15 @@
     <string name="room_participants_invite_prompt_msg">"Weet je zeker dat je %s in dit gesprek wil uitnodigen?"</string>
 
     <!-- invitation -->
-    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
+    <string name="people_search_invite_by_id"><u>Bij ID uitnodigen</u></string>
     <string name="people_search_local_contacts">LOKALE CONTACTEN (%d)</string>
     <string name="people_search_known_contacts">BEKENDE CONTACTEN (%s)</string>
     <string name="people_search_filter_text">Alleen Matrix gebruikers</string>
     <string name="people_search_too_many_contacts">Te veel contacten, gebruik het zoekveld.</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Gebruiker bij ID uitnodigen</string>
+    <string name="people_search_invite_by_id_dialog_description">Vul één of meer e-mailaddressen of Matrix ID\'s in</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-mail of Matrix ID</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Zoeken</string>
@@ -370,7 +370,7 @@
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrouwen</string>
-    <string name="ssl_do_not_trust">Niet vertrouwe</string>
+    <string name="ssl_do_not_trust">Niet vertrouwen</string>
     <string name="ssl_logout_account">Uitloggen</string>
     <string name="ssl_remain_offline">Negeren</string>
     <string name="ssl_fingerprint_hash">Vingerafdruk (%s):</string>
@@ -384,7 +384,7 @@
 
     <!-- Room Details -->
     <string name="room_details_title">Ruimte Details</string>
-    <string name="room_details_people">Mensen</string>
+    <string name="room_details_people">Personen</string>
     <string name="room_details_files">Bestanden</string>
     <string name="room_details_settings">Instellingen</string>
     <string name="room_details_selected">geselecteerd</string>
@@ -411,7 +411,7 @@
     <string name="search_no_results">Geen resultaten</string>
     <string name="tab_title_search_rooms">RUIMTES</string>
     <string name="tab_title_search_messages">BERICHTEN</string>
-    <string name="tab_title_search_people">MENSEN</string>
+    <string name="tab_title_search_people">PERSONEN</string>
     <string name="tab_title_search_files">BESTANDEN</string>
 
     <!-- Room recents -->
@@ -582,7 +582,7 @@
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Om naar een ruimte te verwijzen moeten het een adres hebben.</string>
-    <string name="room_settings_room_access_entry_only_invited">Alleen mensen die uitgenodigd zijn</string>
+    <string name="room_settings_room_access_entry_only_invited">Alleen personen die uitgenodigd zijn</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Iedereen die de link van de ruimte weet, met uitzondering van gasten </string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Iedereen die de link van de ruimte weet, inclusief gasten</string>
 
@@ -691,17 +691,17 @@
     <string name="unknown_devices_alert_message">Deze ruimte bevat onbekende apparaten die niet geen geverifieerd.\nDit betekent dat er geen garantie is dat de apparaten bij de gebruikers horen waar het beweert dat het bij hoort.\nWe raden je aan om bij elk apparaat door het verificatieprocces heen te gaan voordat je doorgaat, maar je kan het bericht opnieuw versturen zonder te verifiëren als je dat prefereert.\n\nOnbekende apparaten:</string>
 
     <!-- directory activity  -->
-    <string name="select_room_directory">Select a room directory</string>
-    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
-    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
-    <string name="directory_server_placeholder">Homeserver URL</string>
-    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
-    <string name="directory_server_native_rooms">All native %s rooms</string>
+    <string name="select_room_directory">Selecteer een ruimte adresboek</string>
+    <string name="directory_server_fail_to_retrieve_server">Het kan zijn dat de server niet beschikbaar of overbelast is</string>
+    <string name="directory_server_type_homeserver">Typ een thuisserver om de publieke ruimte ervan te weergeven</string>
+    <string name="directory_server_placeholder">Thuisserver URL</string>
+    <string name="directory_server_all_rooms_on_server">Alle ruimtes op %s server</string>
+    <string name="directory_server_native_rooms">Alle lokale %s ruimtes</string>
 
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d ongelezen genotificeerde berichten</string>
     <string name="notification_unread_notified_messages_in_room">%1$d ongelezen berichten in %2$d ruimtes</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Search for historical</string>
+    <string name="historical_placeholder">Zoek voor historisch</string>
 </resources>

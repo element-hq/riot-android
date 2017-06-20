@@ -397,7 +397,6 @@ public class EventStreamService extends Service {
         // no intent : restarted by Android
         // EXTRA_AUTO_RESTART_ACTION : restarted by the service itself (
         if ((null == intent) || intent.hasExtra(EXTRA_AUTO_RESTART_ACTION)) {
-
             boolean restart = false;
 
             if (StreamAction.AUTO_RESTART == mServiceState) {
@@ -408,6 +407,12 @@ public class EventStreamService extends Service {
                 restart = true;
             } else if  (StreamAction.IDLE == mServiceState) {
                 Log.e(LOG_TAG, "onStartCommand : automatically restart the service");
+                restart = true;
+            } else if (StreamAction.STOP == mServiceState) {
+                // it might have some race conditions when the service is restarted by android
+                // the state should first switch from STOP to IDLE : android restarts the service with no parameters
+                // the AUTO_RESTART timer should be triggered
+                Log.e(LOG_TAG, "onStartCommand : automatically restart the service even if the service is stopped");
                 restart = true;
             } else {
                 Log.e(LOG_TAG, "onStartCommand : EXTRA_AUTO_RESTART_ACTION has been set but mServiceState = " + mServiceState);
