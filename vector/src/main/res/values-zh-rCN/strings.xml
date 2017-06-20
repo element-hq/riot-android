@@ -677,6 +677,5 @@
     <string name="room_recents_join_room_title">Join a room</string>
     <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
-
-
+    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
 </resources>

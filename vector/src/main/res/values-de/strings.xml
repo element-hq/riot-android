@@ -287,6 +287,9 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="preview">Vorschau</string>
     <string name="reject">Ablehnen</string>
 
+    <!-- Room -->
+    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Du wurdest von %s eingeladen, diesen Raum zu betreten</string>
     <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet, der nicht mit diesem Account verknüpft ist.\nDu möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adresse zu diesem Account hinzufügen.</string>
