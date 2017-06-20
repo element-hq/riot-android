@@ -149,9 +149,7 @@ public class Matrix {
                 }
 
                 // TODO find a way to detect which session is synced
-                for (MXSession session : instance.mMXSessions) {
-                    VectorApp.removeSyncingSession(session);
-                }
+                VectorApp.clearSyncingSessions();
             }
 
             mRefreshUnreadCounter = false;

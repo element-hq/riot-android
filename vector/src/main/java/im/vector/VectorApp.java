@@ -43,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -278,13 +279,14 @@ public class VectorApp extends Application {
                 session.setIsOnline(false);
                 session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
                 session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
-                removeSyncingSession(session);
 
                 if (session.getDataHandler().areLeftRoomsSynced()) {
                     session.getDataHandler().releaseLeftRooms();
                 }
             }
         }
+
+        clearSyncingSessions();
 
         PIDsRetriever.getInstance().onAppBackgrounded();
 
@@ -522,7 +524,7 @@ public class VectorApp extends Application {
     /**
      * syncing sessions
      */
-    private static ArrayList<MXSession> mSyncingSessions = new ArrayList<>();
+    private static HashSet<MXSession> mSyncingSessions = new HashSet<>();
 
     /**
      * Add a session in the syncing sessions list
@@ -530,9 +532,7 @@ public class VectorApp extends Application {
      */
     public static void addSyncingSession(MXSession session) {
         synchronized (mSyncingSessions) {
-            if ((null != session) && (mSyncingSessions.indexOf(session) < 0)) {
-                mSyncingSessions.add(session);
-            }
+            mSyncingSessions.add(session);
         }
     }
 
@@ -549,6 +549,15 @@ public class VectorApp extends Application {
     }
 
     /**
+     * Clear syncing sessions list
+     */
+    public static void clearSyncingSessions() {
+        synchronized (mSyncingSessions) {
+            mSyncingSessions.clear();
+        }
+    }
+
+    /**
      * Tell if a session is syncing
      * @param session the session
      * @return true if the session is syncing
@@ -558,7 +567,7 @@ public class VectorApp extends Application {
 
         if (null != session) {
             synchronized (mSyncingSessions) {
-                isSyncing = (mSyncingSessions.indexOf(session) >= 0);
+                isSyncing = mSyncingSessions.contains(session);
             }
         }
 
