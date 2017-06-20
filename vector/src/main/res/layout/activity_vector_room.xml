@@ -39,13 +39,23 @@
         </android.support.v7.widget.Toolbar>
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/room_sync_in_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:background="@color/vector_green_color"
+        android:layout_below="@+id/room_action_bar"
+        android:indeterminate="true"/>
+
     <LinearLayout
         android:id="@+id/room_preview_info_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/room_background"
-        android:layout_below="@+id/room_action_bar">
+        android:layout_below="@+id/room_sync_in_progress">
 
         <View
             android:layout_width="match_parent"
@@ -395,16 +405,6 @@
                 android:layout_above="@id/room_notification_separator"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
-
-            <ProgressBar
-                android:id="@+id/room_sync_in_progress"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:visibility="gone"
-                android:background="@color/vector_green_color"
-                android:indeterminate="true"/>
 
             <ProgressBar
                 android:id="@+id/loading_room_paginate_back_progress"
