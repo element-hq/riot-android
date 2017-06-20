@@ -1307,7 +1307,7 @@ public class EventStreamService extends Service {
 
                                 if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
                                     list.add(new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, rule));
-                                    Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
+                                    //Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
                                 }
                             }
 
@@ -1351,7 +1351,7 @@ public class EventStreamService extends Service {
                                     NotificationUtils.NotifiedEvent event = events.get(i);
 
                                     if (room.isEventRead(event.mEventId)) {
-                                        Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");
+                                       // Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");
 
                                         events.remove(i);
                                         isUpdated = true;
@@ -1365,7 +1365,7 @@ public class EventStreamService extends Service {
 
                             // all the messages have been read
                             if (0 == events.size()) {
-                                Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : no more unread messages in " + roomId);
+                                //Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : no more unread messages in " + roomId);
                                 mNotifiedEventsByRoomId.remove(roomId);
                                 isUpdated = true;
                             }
