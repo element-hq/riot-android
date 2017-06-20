@@ -930,6 +930,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         View readMarkerView = convertView.findViewById(R.id.message_read_marker);
 
         if (null != highlightMakerView) {
+            // align marker view with the message
+            ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
+            highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+
             if (TextUtils.equals(mSearchedEventId, event.eventId)) {
                 if (mIsUnreadViewMode) {
                     highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
@@ -941,17 +945,12 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     View avatarView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_left);
                     ViewGroup.LayoutParams avatarLayout = avatarView.getLayoutParams();
 
-                    // align marker view with the message
-                    ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
-
                     if (isMergedView) {
                         highlightMakerLayout.setMargins(avatarLayout.width + 5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
 
                     } else {
                         highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
                     }
-
-                    highlightMakerView.setLayoutParams(highlightMakerLayout);
 
                     // move left the body
                     View bodyLayoutView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body_layout);
@@ -963,6 +962,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             } else {
                 highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
             }
+
+            highlightMakerView.setLayoutParams(highlightMakerLayout);
         }
 
         // download / upload progress layout
