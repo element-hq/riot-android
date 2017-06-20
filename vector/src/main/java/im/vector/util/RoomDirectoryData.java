@@ -16,6 +16,10 @@
 
 package im.vector.util;
 
+import android.text.TextUtils;
+
+import org.matrix.androidsdk.MXSession;
+
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
@@ -24,11 +28,7 @@ import java.util.regex.Pattern;
  */
 public class RoomDirectoryData implements Serializable {
 
-    public static final String DEFAULT_HOME_SERVER_URL = "matrix.org";
     public static final String DEFAULT_HOME_SERVER_NAME = "Matrix";
-
-    private static RoomDirectoryData sIncludeAllServers = null;
-    private static RoomDirectoryData sDefault = null;
 
     /**
      * The display name
@@ -56,15 +56,20 @@ public class RoomDirectoryData implements Serializable {
     final String mAvatarUrl;
 
     /**
-     * Provides the default value which defines the all the existing servers
-     * @return the RoomDirectoryData
+     * Creator
+     *
+     * @param session the session
+     * @param serverUrl the home server url
+     * @param serverName the home server displayname
+     * @return a new instance
      */
-    public static RoomDirectoryData getIncludeAllServers() {
-        if (null == sIncludeAllServers) {
-            sIncludeAllServers =  new RoomDirectoryData(null, DEFAULT_HOME_SERVER_URL, null, null, true);
+    public static RoomDirectoryData getIncludeAllServers(MXSession session, String serverUrl, String serverName) {
+        // the self server url should be null
+        if (TextUtils.equals(session.getHomeserverConfig().getHomeserverUri().getHost(), serverUrl)) {
+            return new RoomDirectoryData(null, serverName, null, null, true);
+        } else {
+            return new RoomDirectoryData(serverUrl, serverName, null, null, true);
         }
-
-        return sIncludeAllServers;
     }
 
     /**
@@ -72,11 +77,7 @@ public class RoomDirectoryData implements Serializable {
      * @return the default value
      */
     public static RoomDirectoryData getDefault() {
-        if (null == sDefault) {
-            sDefault =  new RoomDirectoryData(null, DEFAULT_HOME_SERVER_NAME, null, null, false);
-        }
-
-        return sDefault;
+        return new RoomDirectoryData(null, DEFAULT_HOME_SERVER_NAME, null, null, false);
     }
 
     /**
@@ -114,27 +115,5 @@ public class RoomDirectoryData implements Serializable {
 
     public boolean isIncludedAllNetworks() {
         return mIncludeAllNetworks;
-    }
-
-    /**
-     * Tells if it matches a pattern
-     *
-     * @param pattern the pattern
-     * @return true if it matches
-     */
-    public boolean isMatched(Pattern pattern) {
-        boolean isMatched = false;
-
-        if (null != pattern) {
-            if (null != mServerUrl) {
-                isMatched = pattern.matcher(mServerUrl.toLowerCase()).find();
-            }
-
-            if (!isMatched && (null != mDisplayName)) {
-                isMatched = pattern.matcher(mDisplayName.toLowerCase()).find();
-            }
-        }
-
-        return isMatched;
     }
 }

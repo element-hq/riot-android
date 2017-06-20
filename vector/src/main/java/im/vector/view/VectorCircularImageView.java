@@ -23,6 +23,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.util.LruCache;
 import android.util.AttributeSet;
 
 import org.matrix.androidsdk.util.Log;
@@ -63,6 +64,14 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
         }
     }
 
+    // We use a lru cache to reduce the screen loading time.
+    // Create a RoundedBitmapDrawable might be slow
+    static LruCache<String, RoundedBitmapDrawable> mCache = new LruCache<String, RoundedBitmapDrawable>(4 * 1024 * 1024) {
+        @Override
+        protected int sizeOf (String key, RoundedBitmapDrawable drawable) {
+            return drawable.getBitmap().getRowBytes() * drawable.getBitmap().getHeight(); // size in bytes
+        }
+    };
 
     /**
      * Update the bitmap.
@@ -74,6 +83,16 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
             // convert the bitmap to a square bitmap
             int width = bm.getWidth();
             int height = bm.getHeight();
+
+            String key = bm.toString() + width + "-" + height;
+
+            // We use a lru cache to reduce the screen loading time.
+            // Create a RoundedBitmapDrawable might be slow
+            RoundedBitmapDrawable cachedDrawable = mCache.get(key);
+            if (null != cachedDrawable) {
+                super.setImageDrawable(cachedDrawable);
+                return;
+            }
 
             if (width == height) {
                 // nothing to do
@@ -109,12 +128,15 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
 
             try {
                 // create a rounded bitmap
-                RoundedBitmapDrawable img = RoundedBitmapDrawableFactory.create(getResources(), bm);
-                img.setAntiAlias(true);
-                img.setCornerRadius(height / 2.0f);
+                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), bm);
+                drawable.setAntiAlias(true);
+                drawable.setCornerRadius(height / 2.0f);
+
+                // save it in a cache
+                mCache.put(key, drawable);
 
                 // apply it to the image
-                super.setImageDrawable(img);
+                super.setImageDrawable(drawable);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## setImageBitmap - RoundedBitmapDrawableFactory.create " + e.getMessage());
                 super.setImageBitmap(null);

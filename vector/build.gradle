@@ -98,18 +98,13 @@ def gitRevision() {
     return cmd.execute().text.trim()
 }
 
-def gitRevisionUnixDate() {
-    def cmd = "git show -s --format=%ct HEAD^{commit}"
-    return cmd.execute().text.trim()
-}
-
 def gitRevisionDate() {
     def cmd = "git show -s --format=%ci HEAD^{commit}"
     return cmd.execute().text.trim()
 }
 
 def gitBranchName() {
-    def cmd = "git rev-parse --abbrev-ref HEAD"
+    def cmd = "git name-rev --name-only HEAD"
     return cmd.execute().text.trim()
 }
 
@@ -154,4 +149,7 @@ dependencies {
     // fdroid flavor only
 }
 
-apply plugin: 'com.google.gms.google-services'
+
+if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid")) {
+    apply plugin: 'com.google.gms.google-services'
+}

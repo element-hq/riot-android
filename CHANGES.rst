@@ -1,3 +1,41 @@
+Changes in Riot 0.6.12 (2017-06-12)
+=======================================================
+
+Bugfixes:
+ * #1302 : No room / few rooms are displayed an application update / first launch.
+
+Changes in Riot 0.6.11 (2017-06-08)
+===================================================
+  
+Bugfixes:
+ * #1291 : don't receive anymore notifications after updating to the 0.6.10 version
+ * #1292 : No more room after updating the application on 0.6.10 and killing it during the loading Unregisteer the GCM token before registrating the FCM one.
+
+Changes in Riot 0.6.10 (2017-05-30)
+===================================================
+ 
+Features:
+ * Add some lanagues supports
+ * Add auto-complete text editor.
+ * Use FCM instead of GCM.
+ 
+Improvements:
+ * Add a new notification design.
+ * Offer to send a bug report when the application crashes.
+ * Use the new bug report API.
+  
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * #1041 : matrix.to links are broken. 
+ * #1052 : People tab in room details: 'you' displayed instead of your displayname/matrix id.
+ * #1053 : 'I have verified my mail' button is missing
+ * #1077 : Highlight phone numbers, email addresses, etc.
+ * #1093 : Cannot decrypt attachments on Android 4.2.X
+ * #1118 : show syncing throbber in room view
+ * #1186 : Infinite back pagination whereas the app is in background
+ * Fix some cryptography issues.
+ 
 Changes in Riot 0.6.9 (2017-03-15)
 ===================================================
  

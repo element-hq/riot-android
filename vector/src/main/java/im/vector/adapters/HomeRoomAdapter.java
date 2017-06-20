@@ -74,7 +74,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final RoomViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final RoomViewHolder viewHolder, int position) {
         final Room room = mFilteredRooms.get(position);
         if (mLayoutRes == R.layout.adapter_item_room_invite) {
             final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
@@ -90,7 +90,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
             viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    mListener.onLongClickRoom(v, room, position);
+                    mListener.onLongClickRoom(v, room, viewHolder.getAdapterPosition());
                     return true;
                 }
             });
@@ -186,10 +186,13 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
     public int getBadgeCount() {
         int badgeCount = 0;
         for (Room room : mFilteredRooms) {
-            if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room)) {
-                badgeCount += room.getHighlightCount();
-            } else {
-                badgeCount += room.getNotificationCount();
+            // sanity checks : reported by GA
+            if (null != room.getDataHandler() && (null != room.getDataHandler().getBingRulesManager())) {
+                if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room.getRoomId())) {
+                    badgeCount += room.getHighlightCount();
+                } else {
+                    badgeCount += room.getNotificationCount();
+                }
             }
         }
         return badgeCount;

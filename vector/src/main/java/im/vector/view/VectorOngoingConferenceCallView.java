@@ -147,15 +147,23 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         String voiceString = getContext().getString(R.string.ongoing_conference_call_voice);
         int pos = ss.toString().indexOf(voiceString);
 
-        ss.setSpan(voiceClickableSpan, pos, pos + voiceString.length() , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new UnderlineSpan(), pos, pos + voiceString.length(), 0);
+        if (pos >= 0) {
+            ss.setSpan(voiceClickableSpan, pos, pos + voiceString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new UnderlineSpan(), pos, pos + voiceString.length(), 0);
+        } else {
+            Log.e(LOG_TAG, "## initView() : cannot find " + voiceString + " in " +  ss.toString());
+        }
 
         String videoString = getContext().getString(R.string.ongoing_conference_call_video);
         pos = ss.toString().indexOf(videoString);
 
-        ss.setSpan(videoClickableSpan, pos, pos + videoString.length() , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new UnderlineSpan(), pos, pos + videoString.length(), 0);
-
+        if (pos >= 0) {
+            ss.setSpan(videoClickableSpan, pos, pos + videoString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new UnderlineSpan(), pos, pos + videoString.length(), 0);
+        } else {
+            Log.e(LOG_TAG, "## initView() : cannot find " + videoString + " in " +  ss.toString());
+        }
+        
         textView.setText(ss);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
     }

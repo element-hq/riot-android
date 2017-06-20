@@ -239,4 +239,12 @@ public class HomeSectionView extends RelativeLayout {
             mAdapter.setRooms(rooms);
         }
     }
+
+    /**
+     * Scrolls the list to display the item first
+     * @param index the item index
+     */
+    public void scrollToPosition(int index) {
+        mRecyclerView.scrollToPosition(index);
+    }
 }

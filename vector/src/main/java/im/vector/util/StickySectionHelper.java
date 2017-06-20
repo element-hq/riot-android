@@ -104,7 +104,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
      * @param sections updated list of sections
      */
     public void resetSticky(List<Pair<Integer, AdapterSection>> sections) {
-        Log.e(LOG_TAG, "resetSticky");
+        Log.d(LOG_TAG, "resetSticky");
 
         if (!mSectionViews.isEmpty()) {
             List<Pair<Integer, SectionView>> newList = new ArrayList<>();
@@ -232,7 +232,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
      * @param dy scroll value
      */
     private void updateStickySection(int dy) {
-        Log.e(LOG_TAG, "updateStickySection " + dy);
+        Log.d(LOG_TAG, "updateStickySection " + dy);
 
         // header is out of screen, check if header or footer
         int firstVisiblePos = mLayoutManager.findFirstVisibleItemPosition();
@@ -244,9 +244,9 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
             SectionView current = mSectionViews.get(i).second;
 
             RecyclerView.ViewHolder holder = mRecyclerView.findViewHolderForLayoutPosition(currentPos);
-            Log.e(LOG_TAG, "updateStickySection holder for " + current.getSection().getTitle() + " is " + holder);
+            Log.d(LOG_TAG, "updateStickySection holder for " + current.getSection().getTitle() + " is " + holder);
             if (holder != null) {
-                Log.e(LOG_TAG, "updateStickySection holder top " + holder.itemView.getTop() + " bottom " + holder.itemView.getBottom());
+                Log.d(LOG_TAG, "updateStickySection holder top " + holder.itemView.getTop() + " bottom " + holder.itemView.getBottom());
                 current.updatePosition(holder.itemView.getTop());
                 if (previous != null) {
                     previous.onFoldSubView(current, dy);

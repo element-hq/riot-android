@@ -8,6 +8,7 @@
     <string name="title_activity_room">Room</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_member_details">Member Details</string>
+    <string name="title_activity_historical">Historical</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -49,6 +50,7 @@
     <string name="action_video_call">Video Call</string>
     <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Mark all as read</string>
+    <string name="action_historical">Historical</string>
     <string name="action_quick_reply">Quick reply</string>
     <string name="action_open">Open</string>
     <string name="action_close">Close</string>
@@ -82,6 +84,7 @@
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
     <string name="no_local_contact_placeholder">No local contacts</string>
+    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
 
     <!-- Rooms fragment -->
@@ -349,6 +352,7 @@
     <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
     <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
     <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+
     <!--  Chat -->
     <string name="room_menu_search">Search</string>
     <string name="room_one_user_is_typing">%s is typing…</string>
@@ -441,6 +445,7 @@
     <string name="room_settings_de_prioritize">De-prioritize</string>
     <string name="room_settings_direct_chat">Direct Chat</string>
     <string name="room_settings_leave_conversation">Leave Conversation</string>
+    <string name="room_settings_forget">Forget</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>
@@ -699,4 +704,8 @@
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d unread notified messages</string>
     <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
+
+    <!-- historical -->
+    <string name="historical_placeholder">Search for historical</string>
+
 </resources>

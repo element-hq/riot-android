@@ -284,6 +284,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     // True if we are in preview mode to display unread message
     private boolean mIsUnreadPreviewMode;
 
+    // progress bar to warn that the sync is not yet done
+    private View mSyncInProgressView;
+
     /** **/
     private final ApiCallback<Void> mDirectMessageListener = new SimpleApiCallback<Void>(this) {
         @Override
@@ -339,6 +342,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     }
                 });
             }
+        }
+
+        @Override
+        public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
+            mSyncInProgressView.setVisibility(View.GONE);
         }
     };
 
@@ -586,6 +594,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.room_pending_call_view);
         mVectorOngoingConferenceCallView = (VectorOngoingConferenceCallView) findViewById(R.id.room_ongoing_conference_call_view);
         mE2eImageView = (ImageView) findViewById(R.id.room_encrypted_image_view);
+        mSyncInProgressView = findViewById(R.id.room_sync_in_progress);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
         findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
@@ -644,6 +653,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 return false;
             }
         });
+
+        mEditText.setAddColonOnFirstItem(true);
 
         mSendingMessagesLayout = findViewById(R.id.room_sending_message_layout);
         mSendImageView = (ImageView) findViewById(R.id.room_send_image_view);
@@ -863,17 +874,26 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // some medias must be sent while opening the chat
         if (intent.hasExtra(EXTRA_ROOM_INTENT)) {
-            final Intent mediaIntent = intent.getParcelableExtra(EXTRA_ROOM_INTENT);
+            // fix issue #1276
+            // if there is a saved instance, it means that onSaveInstanceState has been called.
+            // theses parameters must only be used at activity creation.
+            // The activity might have been created after being killed by android while the application is in background
+            if (null == savedInstanceState) {
+                final Intent mediaIntent = intent.getParcelableExtra(EXTRA_ROOM_INTENT);
 
-            // sanity check
-            if (null != mediaIntent) {
-                mEditText.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        intent.removeExtra(EXTRA_ROOM_INTENT);
-                        sendMediasIntent(mediaIntent);
-                    }
-                }, 1000);
+                // sanity check
+                if (null != mediaIntent) {
+                    mEditText.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            intent.removeExtra(EXTRA_ROOM_INTENT);
+                            sendMediasIntent(mediaIntent);
+                        }
+                    }, 1000);
+                }
+            } else {
+                intent.removeExtra(EXTRA_ROOM_INTENT);
+                Log.e(LOG_TAG, "## onCreate() : ignore EXTRA_ROOM_INTENT because savedInstanceState != null");
             }
         }
 
@@ -990,6 +1010,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     @Override
     protected void onResume() {
+        Log.d(LOG_TAG, "++ Resume the activity");
         super.onResume();
 
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
@@ -1024,6 +1045,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mRoom.addEventListener(mRoomEventListener);
 
             mEditText.setHint(mRoom.isEncrypted() ? R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
+
+            mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
         }
 
         mSession.getDataHandler().addListener(mGlobalEventListener);
@@ -1994,7 +2017,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param displayName the display name to sanitize
      * @return the sanitized display name
      */
-    private static String sanitizeDisplayname(String displayName) {
+    public static String sanitizeDisplayname(String displayName) {
         // sanity checks
         if (!TextUtils.isEmpty(displayName)) {
             final String ircPattern = " (IRC)";

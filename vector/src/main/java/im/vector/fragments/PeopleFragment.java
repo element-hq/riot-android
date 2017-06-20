@@ -32,7 +32,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 
+import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
@@ -42,6 +44,7 @@ import org.matrix.androidsdk.util.Log;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.R;
@@ -172,8 +175,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
             } else {
                 initContactsData();
-                initContactsViews();
             }
+
+            // refresh the contact views
+            // the placeholders might need to be updated
+            initContactsViews();
         }
     }
 
@@ -186,11 +192,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     @Override
     protected List<Room> getRooms() {
         return new ArrayList<>(mDirectChats);
-    }
-
-    @Override
-    protected void onFloatingButtonClick() {
-        mActivity.invitePeopleToNewRoom();
     }
 
     @Override
@@ -266,7 +267,9 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      */
     private void initDirectChatsData() {
         final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
-        final IMXStore store = mSession.getDataHandler().getStore();
+        final MXDataHandler dataHandler = mSession.getDataHandler();
+        final IMXStore store = dataHandler.getStore();
+
 
         mDirectChats.clear();
         if (directChatIds != null && !directChatIds.isEmpty()) {
@@ -274,7 +277,10 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                 Room room = store.getRoom(roomId);
 
                 if ((null != room) && !room.isConferenceUserRoom()) {
-                    mDirectChats.add(mSession.getDataHandler().getRoom(roomId));
+                    final Set<String> tags = room.getAccountData().getKeys();
+                    if ((null == tags) || !tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
+                        mDirectChats.add(dataHandler.getRoom(roomId));
+                    }
                 }
             }
         }

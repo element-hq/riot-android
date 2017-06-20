@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="resouces_language">ru</string>
     <string name="resouces_country">RU</string>
@@ -8,6 +8,7 @@
     <string name="title_activity_room">Комнаты</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_member_details">Информация об участнике</string>
+    <string name="title_activity_historical">Historical</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -20,18 +21,18 @@
     <string name="redact">Удалить</string>
     <string name="quote">Цитата</string>
     <string name="share">Поделиться</string>
-    <string name="later">Later</string>
+    <string name="later">Позже</string>
     <string name="forward">Переслать</string>
     <string name="permalink">Ссылка</string>
     <string name="view_source">Просмотр исходного</string>
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
-    <string name="report_content">Report content</string>
-    <string name="active_call">Active call</string>
+    <string name="report_content">Содержание отчета</string>
+    <string name="active_call">Активный вызов</string>
     <string name="ongoing_conference_call">Входящий конференц звонок. Присоединитесь с голосом или видео.</string>
     <string name="ongoing_conference_call_voice">голос</string>
     <string name="ongoing_conference_call_video">видео</string>
-    <string name="cannot_start_call">Не удалось осуществить вызов, попробуте позже.</string>
+    <string name="cannot_start_call">Не удалось осуществить вызов, попробуте позже</string>
     <string name="missing_permissions_warning">"Из-за отсутствия разрешений некоторые функции могут быть недоступны..</string>
     <string name="missing_permissions_to_start_conf_call">Вам нужно разрешение на приглашение для начала конференции в этой комнате</string>
     <string name="missing_permissions_title_to_start_conf_call">Не удалось осуществить вызов</string>
@@ -39,14 +40,17 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц звонки не поддерживаются в зашифрованных комнатах</string>
     <string name="send_anyway">Отправить всё равно</string>
     <string name="or">или</string>
+    <string name="and">and</string>
+    <string name="invite">Invite</string>
 
     <!-- actions -->
     <string name="action_sign_out">Выйти</string>
     <string name="action_sign_out_confirmation">Для безопасности при выходе из системы удаляются все ключи шифрования, что делает невозможным чтение предыдущей зашифрованной истории чата.\n Выберите экспорт, чтобы сделать резервную копию истории чата, перед выходом из системы.</string>
     <string name="action_voice_call">Голосовой вызов</string>
     <string name="action_video_call">Видео вызов</string>
-    <string name="action_search_room">Поиск Комнаты</string>
+    <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Отметить всё как прочитанное</string>
+    <string name="action_historical">Historical</string>
     <string name="action_quick_reply">Быстрый ответ</string>
     <string name="action_open">Открыть</string>
     <string name="action_close">Закрыть</string>
@@ -56,6 +60,44 @@
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Подтверждение</string>
     <string name="dialog_title_warning">Предупреждение</string>
+
+    <!-- Bottom navigation buttons -->
+    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_favourites">Favourites</string>
+    <string name="bottom_action_people">People</string>
+    <string name="bottom_action_rooms">Rooms</string>
+
+    <!-- Home screen -->
+    <string name="home_filter_placeholder_home">Search for rooms</string>
+    <string name="home_filter_placeholder_favorites">Search for favourites</string>
+    <string name="home_filter_placeholder_people">Search for people</string>
+    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+
+    <!-- Home fragment -->
+    <string name="invitations_header">Invites</string>
+    <string name="low_priority_header">Low priority</string>
+
+    <!-- People fragment -->
+    <string name="direct_chats_header">Conversations</string>
+    <string name="local_address_book_header">Local address book</string>
+    <string name="known_contacts_header">Known contacts</string>
+    <string name="matrix_only_filter">Matrix contacts only</string>
+    <string name="no_conversation_placeholder">No conversations</string>
+    <string name="no_local_contact_placeholder">No local contacts</string>
+    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
+    <string name="no_result_placeholder">No results</string>
+
+    <!-- Rooms fragment -->
+    <string name="rooms_header">Rooms</string>
+    <string name="rooms_directory_header">Room directory</string>
+    <string name="no_room_placeholder">No rooms</string>
+    <string name="no_public_room_placeholder">No public rooms available</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">%d users</item>
+        <item quantity="few">%d users</item>
+        <item quantity="many">%d users</item>
+        <item quantity="other">%d users</item>
+    </plurals>
     
     <string name="send_bug_report_include_logs">Отправить журналы</string>
     <string name="send_bug_report_include_crash_logs">Отправить журналы ошибок</string>
@@ -68,10 +110,10 @@
     <string name="send_bug_report_sent">Отчёт об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчёта об ошибке (%s)</string>
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_app_crashed">Программа при последнем пользовании закрылась с ошибкой. Хотели бы вы отправить отчёт о ошибке?</string>
     
     <string name="send_files_in">Предать в</string>
-    <string name="read_receipt">Read</string>
+    <string name="read_receipt">Прочитан</string>
 
     <string name="join_room">Войти в Комнату</string>
     <string name="username">Логин</string>
@@ -118,11 +160,11 @@
     <string name="auth_missing_password">Отсутствует пароль</string>
     <string name="auth_invalid_email">"Не похоже, что введён корректный email"</string>
     <string name="auth_invalid_phone">"Не похоже, что введён корректный телефонный номер"</string>
-    <string name="auth_email_already_defined">Этот email уже используется</string>
+    <string name="auth_email_already_defined">Этот email уже используется.</string>
     <string name="auth_missing_email">Отсутствует email</string>
     <string name="auth_missing_phone">Отстутсвует номер телефона</string>
     <string name="auth_missing_email_or_phone">Отсутствует номер телефона или email</string>
-    <string name="auth_invalid_token">Invalid token</string>
+    <string name="auth_invalid_token">Токен не действителен</string>
     <string name="auth_password_dont_match">Пароли не совпадают</string>
     <string name="auth_forgot_password">Забыли пароль?</string>
     <string name="auth_use_server_options">Использовать особые параметры сервера</string>
@@ -192,13 +234,13 @@
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
 
     <!-- call string -->
-    <string name="call_connected">Call connected</string>
-    <string name="call_connecting">Call connecting…</string>
-    <string name="call_ended">Call ended</string>
-    <string name="call_ring">Calling…</string>
-    <string name="incoming_call">Incoming Call</string>
-    <string name="incoming_video_call">Incoming Video Call</string>
-    <string name="incoming_voice_call">Incoming Voice Call</string>
+    <string name="call_connected">Вызов соеденен</string>
+    <string name="call_connecting">Вызов соеденяеться…</string>
+    <string name="call_ended">Вызов закончен</string>
+    <string name="call_ring">Звонок…</string>
+    <string name="incoming_call">Входящий вызов</string>
+    <string name="incoming_video_call">Входящий видио вызов</string>
+    <string name="incoming_voice_call">Входящий аудио вызов</string>
     <string name="call_in_progress">Call In Progress</string>
     
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
@@ -299,16 +341,21 @@
     <string name="room_participants_invite_prompt_msg">"Вы уверены что хотите пригласить %s в этот чат?"</string>
     
     <!-- invitation -->
+    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
     <string name="people_search_local_contacts">Локальные Контакты (%d)</string>
     <string name="people_search_known_contacts">Известные Контакты (%s)</string>
     <string name="people_search_filter_text">Только зарегистрированные</string>
     <string name="people_search_too_many_contacts">Слишком много контактов, используйте поле поиска</string>
 
+    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+
     <!--  Chat -->
     <string name="room_menu_search">Поиск</string>
     <string name="room_one_user_is_typing">%s печатает…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s печатают…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; и другие печатают…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s печатают…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; и другие печатают…</string>
     <string name="room_message_placeholder_encrypted">Отправить зашифрованное сообщение…</string>
     <string name="room_message_placeholder_not_encrypted">Отправить сообщение…</string>
     <string name="room_offline_notification">Соединение с сервером потеряно.</string>
@@ -378,6 +425,9 @@
     <string name="room_recents_invites">ПРИГЛАШЕНИЯ</string>
     <string name="room_recents_start_chat">Начать чат</string>
     <string name="room_recents_create_room">Создать чат</string>
+    <string name="room_recents_join_room">Join room</string>
+    <string name="room_recents_join_room_title">Join a room</string>
+    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
     
     <!-- Directory -->
     <string name="directory_search_results_title">Просмотр каталога</string>
@@ -393,6 +443,7 @@
     <string name="room_settings_de_prioritize">Не срочно</string>
     <string name="room_settings_direct_chat">Прямой чат</string>
     <string name="room_settings_leave_conversation">Покинуть обсуждение</string>
+    <string name="room_settings_forget">Forget</string>
     
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Сообщения</string>
@@ -640,7 +691,18 @@
     <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
     <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.\nЭто означает, что эти устройства могут не пренадлежать тем пользователям, на которых они претендуют. \nПеред продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.\n\nНеизвестные устройства:</string>
 
+    <!-- directory activity  -->
+    <string name="select_room_directory">Select a room directory</string>
+    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
+    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
+    <string name="directory_server_placeholder">Homeserver URL</string>
+    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
+    <string name="directory_server_native_rooms">All native %s rooms</string>
+
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d unread notified messages</string>
     <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
+
+    <!-- historical -->
+    <string name="historical_placeholder">Search for historical</string>
 </resources>

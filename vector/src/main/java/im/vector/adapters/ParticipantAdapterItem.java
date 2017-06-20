@@ -27,7 +27,7 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,7 +44,7 @@ import im.vector.util.VectorUtils;
 public class ParticipantAdapterItem implements java.io.Serializable {
 
     private static final Pattern FACEBOOK_EMAIL_ADDRESS = Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}\\@facebook.com");
-    private static final List<Pattern> mBlackedListEmails = Arrays.asList(FACEBOOK_EMAIL_ADDRESS);
+    private static final List<Pattern> mBlackedListEmails = Collections.singletonList(FACEBOOK_EMAIL_ADDRESS);
 
     // displayed info
     public String mDisplayName;

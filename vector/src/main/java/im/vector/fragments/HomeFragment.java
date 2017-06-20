@@ -16,11 +16,9 @@
 
 package im.vector.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,10 +67,6 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         //TODO
     };
 
-    private List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
-
-    private AlertDialog mFabDialog;
-
     /*
      * *********************************************************************************************
      * Static methods
@@ -115,27 +109,18 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         super.onResume();
         mSession.getDataHandler().addListener(mEventsListener);
         initData();
+
+        if (null != mHomeSectionViews) {
+            for (HomeSectionView homeSectionView : mHomeSectionViews) {
+                homeSectionView.scrollToPosition(0);
+            }
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mSession.getDataHandler().removeListener(mEventsListener);
-        if (mFabDialog != null) {
-            // Prevent leak after orientation changed
-            mFabDialog.dismiss();
-            mFabDialog = null;
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // Cancel running async tasks to prevent memory leaks
-        for (AsyncTask asyncTask : mSortingAsyncTasks) {
-            asyncTask.cancel(true);
-        }
     }
 
     /*
@@ -143,36 +128,6 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      * Abstract methods implementation
      * *********************************************************************************************
      */
-
-    @Override
-    protected void onFloatingButtonClick() {
-        // ignore any action if there is a pending one
-        if (!mActivity.isWaitingViewVisible()) {
-            CharSequence items[] = new CharSequence[]{getString(R.string.room_recents_start_chat), getString(R.string.room_recents_create_room), getString(R.string.room_recents_join_room)};
-            mFabDialog = new AlertDialog.Builder(mActivity)
-                    .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface d, int n) {
-                            d.cancel();
-                            if (0 == n) {
-                                mActivity.invitePeopleToNewRoom();
-                            } else if (1 == n) {
-                                mActivity.createRoom();
-                            } else {
-                                mActivity.joinARoom();
-                            }
-                        }
-                    })
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mActivity.invitePeopleToNewRoom();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
-        }
-    }
 
     @Override
     protected List<Room> getRooms() {
@@ -262,7 +217,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
 
         for (Room room : roomCollection) {
-            if (!room.isConferenceUserRoom()) {
+            if (!room.isConferenceUserRoom() && !room.isInvited() &&!room.isDirectChatInvitation()) {
                 final RoomAccountData accountData = room.getAccountData();
                 final Set<String> tags = new HashSet<>();
 
@@ -282,14 +237,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
             }
         }
 
-        Comparator<Room> favComparator = RoomUtils.getTaggedRoomComparator(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
-        Comparator<Room> lowPriorityComparator = RoomUtils.getTaggedRoomComparator(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
-        Comparator<Room> dateComparator = RoomUtils.getRoomsDateComparator(mSession, false);
+        Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, false);
 
-        sortAndDisplay(favourites, favComparator, mFavouritesSection);
-        sortAndDisplay(directChats, dateComparator, mDirectChatsSection);
-        sortAndDisplay(lowPriorities, lowPriorityComparator, mLowPrioritySection);
-        sortAndDisplay(otherRooms, dateComparator, mRoomsSection);
+        sortAndDisplay(favourites, notificationComparator, mFavouritesSection);
+        sortAndDisplay(directChats, notificationComparator, mDirectChatsSection);
+        sortAndDisplay(lowPriorities, notificationComparator, mLowPrioritySection);
+        sortAndDisplay(otherRooms, notificationComparator, mRoomsSection);
 
         mActivity.stopWaitingView();
 
@@ -304,24 +257,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      * @param section
      */
     public void sortAndDisplay(final List<Room> rooms, final Comparator comparator, final HomeSectionView section) {
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (!isCancelled()) {
-                    Collections.sort(rooms, comparator);
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void args) {
-                section.setRooms(rooms);
-                mSortingAsyncTasks.remove(this);
-            }
-        };
-        mSortingAsyncTasks.add(task);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        try {
+            Collections.sort(rooms, comparator);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.getMessage());
+        }
+        section.setRooms(rooms);
     }
 
     /*

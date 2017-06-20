@@ -522,12 +522,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private void onSwitchCamera() {
         // can only switch if the device has more than two camera
         if (Camera.getNumberOfCameras() >= 2) {
-
-            // stop camera
-            if (null != mCameraTextureView) {
-                mCamera.stopPreview();
+            // reported by GA
+            if (null == mCamera) {
+                // stop camera
+                if (null != mCameraTextureView) {
+                    mCamera.stopPreview();
+                }
+                mCamera.release();
             }
-            mCamera.release();
             mCamera = null;
 
             if (mCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
@@ -562,128 +564,140 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Define the camera rotation (preview and recording).
      */
     private void initCameraSettings() {
-        android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
-        android.hardware.Camera.getCameraInfo(mCameraId, info);
+        try {
+            android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
+            android.hardware.Camera.getCameraInfo(mCameraId, info);
 
-        int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
-        int degrees = 0;
-        switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break; // portrait
-            case Surface.ROTATION_90: degrees = 90; break; // landscape
-            case Surface.ROTATION_180: degrees = 180; break;
-            case Surface.ROTATION_270: degrees = 270; break; // landscape
-        }
+            int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
+            int degrees = 0;
+            switch (rotation) {
+                case Surface.ROTATION_0:
+                    degrees = 0;
+                    break; // portrait
+                case Surface.ROTATION_90:
+                    degrees = 90;
+                    break; // landscape
+                case Surface.ROTATION_180:
+                    degrees = 180;
+                    break;
+                case Surface.ROTATION_270:
+                    degrees = 270;
+                    break; // landscape
+            }
 
-        int previewRotation;
-        int imageRotation;
+            int previewRotation;
+            int imageRotation;
 
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            imageRotation = previewRotation = (info.orientation + degrees) % 360;
-            previewRotation = (360 - previewRotation) % 360;  // compensate the mirror
-        } else {  // back-facing
-            imageRotation = previewRotation = (info.orientation - degrees + 360) % 360;
-        }
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                imageRotation = previewRotation = (info.orientation + degrees) % 360;
+                previewRotation = (360 - previewRotation) % 360;  // compensate the mirror
+            } else {  // back-facing
+                imageRotation = previewRotation = (info.orientation - degrees + 360) % 360;
+            }
 
-        mCameraOrientation = previewRotation;
-        mCamera.setDisplayOrientation(previewRotation);
+            mCameraOrientation = previewRotation;
+            mCamera.setDisplayOrientation(previewRotation);
 
-        Camera.Parameters params = mCamera.getParameters();
+            Camera.Parameters params = mCamera.getParameters();
 
-        // apply the rotation
-        params.setRotation(imageRotation);
+            // apply the rotation
+            params.setRotation(imageRotation);
 
-        if (!mIsVideoMode) {
-            // set the best quality
-            List<Camera.Size> supportedSizes = params.getSupportedPictureSizes();
-            if (supportedSizes.size() > 0) {
+            if (!mIsVideoMode) {
+                // set the best quality
+                List<Camera.Size> supportedSizes = params.getSupportedPictureSizes();
+                if (supportedSizes.size() > 0) {
 
-                // search the highest image quality
-                // they are not always sorted in the same order (sometimes it is asc sort ..)
-                Camera.Size maxSizePicture = supportedSizes.get(0);
-                long mult = maxSizePicture.width * maxSizePicture.height;
+                    // search the highest image quality
+                    // they are not always sorted in the same order (sometimes it is asc sort ..)
+                    Camera.Size maxSizePicture = supportedSizes.get(0);
+                    long mult = maxSizePicture.width * maxSizePicture.height;
 
-                for (int i = 1; i < supportedSizes.size(); i++) {
-                    Camera.Size curSizePicture = supportedSizes.get(i);
-                    long curMult = curSizePicture.width * curSizePicture.height;
+                    for (int i = 1; i < supportedSizes.size(); i++) {
+                        Camera.Size curSizePicture = supportedSizes.get(i);
+                        long curMult = curSizePicture.width * curSizePicture.height;
 
-                    if (curMult > mult) {
-                        mult = curMult;
-                        maxSizePicture = curSizePicture;
+                        if (curMult > mult) {
+                            mult = curMult;
+                            maxSizePicture = curSizePicture;
+                        }
                     }
+
+                    // and use it.
+                    params.setPictureSize(maxSizePicture.width, maxSizePicture.height);
                 }
-
-                // and use it.
-                params.setPictureSize(maxSizePicture.width, maxSizePicture.height);
-            }
-
-            try {
-                mCamera.setParameters(params);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## initCameraSettings(): set size fails EXCEPTION Msg=" + e.getMessage());
-            }
-        }
-
-        // set the preview size to have the same aspect ratio than the picture size
-        List<Camera.Size> supportedPreviewSizes = params.getSupportedPreviewSizes();
-
-        if (supportedPreviewSizes.size() > 0) {
-            int cameraAR;
-
-            if (mIsVideoMode) {
-                mCamcorderProfile = getCamcorderProfile(mCameraId);
-                cameraAR = mCamcorderProfile.videoFrameWidth * 100 / mCamcorderProfile.videoFrameHeight;
-
-            } else {
-                Camera.Size picturesSize =  params.getPictureSize();
-                cameraAR = picturesSize.width * 100 / picturesSize.height;
-            }
-
-            Camera.Size bestPreviewSize = null;
-            int resolution = 0;
-
-            for(Camera.Size previewSize : supportedPreviewSizes) {
-                int previewAR = previewSize.width * 100 / previewSize.height;
-
-                if (previewAR == cameraAR) {
-                    int mult = previewSize.height * previewSize.width;
-                    if (mult > resolution) {
-                        bestPreviewSize = previewSize;
-                        resolution = mult;
-                    }
-                }
-            }
-
-            if (null != bestPreviewSize) {
-                params.setPreviewSize(bestPreviewSize.width, bestPreviewSize.height);
 
                 try {
                     mCamera.setParameters(params);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## initCameraSettings(): set preview size fails EXCEPTION Msg=" + e.getMessage());
+                    Log.e(LOG_TAG, "## initCameraSettings(): set size fails EXCEPTION Msg=" + e.getMessage());
                 }
             }
-        }
 
-        if (!mIsVideoMode) {
-            // set auto focus
-            try {
-                params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-                mCamera.setParameters(params);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## initCameraSettings(): set auto focus fails EXCEPTION Msg=" + e.getMessage());
+            // set the preview size to have the same aspect ratio than the picture size
+            List<Camera.Size> supportedPreviewSizes = params.getSupportedPreviewSizes();
+
+            if (supportedPreviewSizes.size() > 0) {
+                int cameraAR;
+
+                if (mIsVideoMode) {
+                    mCamcorderProfile = getCamcorderProfile(mCameraId);
+                    cameraAR = mCamcorderProfile.videoFrameWidth * 100 / mCamcorderProfile.videoFrameHeight;
+
+                } else {
+                    Camera.Size picturesSize = params.getPictureSize();
+                    cameraAR = picturesSize.width * 100 / picturesSize.height;
+                }
+
+                Camera.Size bestPreviewSize = null;
+                int resolution = 0;
+
+                for (Camera.Size previewSize : supportedPreviewSizes) {
+                    int previewAR = previewSize.width * 100 / previewSize.height;
+
+                    if (previewAR == cameraAR) {
+                        int mult = previewSize.height * previewSize.width;
+                        if (mult > resolution) {
+                            bestPreviewSize = previewSize;
+                            resolution = mult;
+                        }
+                    }
+                }
+
+                if (null != bestPreviewSize) {
+                    params.setPreviewSize(bestPreviewSize.width, bestPreviewSize.height);
+
+                    try {
+                        mCamera.setParameters(params);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## initCameraSettings(): set preview size fails EXCEPTION Msg=" + e.getMessage());
+                    }
+                }
             }
 
-            // set jpeg quality
-            try {
-                params.setPictureFormat(ImageFormat.JPEG);
-                params.setJpegQuality(JPEG_QUALITY_MAX);
-                mCamera.setParameters(params);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## initCameraSettings(): set jpeg quality fails EXCEPTION Msg=" + e.getMessage());
-            }
-        }
+            if (!mIsVideoMode) {
+                // set auto focus
+                try {
+                    params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                    mCamera.setParameters(params);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## initCameraSettings(): set auto focus fails EXCEPTION Msg=" + e.getMessage());
+                }
 
-        resizeCameraPreviewTexture();
+                // set jpeg quality
+                try {
+                    params.setPictureFormat(ImageFormat.JPEG);
+                    params.setJpegQuality(JPEG_QUALITY_MAX);
+                    mCamera.setParameters(params);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## initCameraSettings(): set jpeg quality fails EXCEPTION Msg=" + e.getMessage());
+                }
+            }
+
+            resizeCameraPreviewTexture();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## ## initCameraSettings(): failed " + e.getMessage());
+        }
     }
 
 

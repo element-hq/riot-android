@@ -2,12 +2,13 @@
 <resources>
     <string name="resouces_language">nl</string>
     <string name="resouces_country">NL</string>
-    
+
     <!-- titles -->
     <string name="title_activity_home">Berichten</string>
     <string name="title_activity_room">Ruimte</string>
     <string name="title_activity_settings">Instellingen</string>
     <string name="title_activity_member_details">Deelnemer Details</string>
+    <string name="title_activity_historical">Historisch</string>
 
     <!-- button names -->
     <string name="ok">Akkoord</string>
@@ -25,8 +26,8 @@
     <string name="permalink">Permalink</string>
     <string name="view_source">Bekijk bron</string>
     <string name="delete">Verwijderen</string>
-    <string name="rename">Rename</string>
-    <string name="report_content">Content melden</string>
+    <string name="rename">Herbenoemen</string>
+    <string name="report_content">Inhoud melden</string>
     <string name="active_call">Actief gesprek</string>
     <string name="ongoing_conference_call"> Lopend vergadergesprek. Neem deel met microfoon of camera.</string>
     <string name="ongoing_conference_call_voice">microfoon</string>
@@ -37,16 +38,19 @@
     <string name="missing_permissions_title_to_start_conf_call">Kan het gesprek niet starten</string>
     <string name="device_information">Toestel informatie</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Vergadergesprekken zijn niet ondersteund in versleutelde ruimtes</string>
-    <string name="send_anyway">Send Anyway</string>
-    <string name="or">or</string>
+    <string name="send_anyway">Toch sturen</string>
+    <string name="or">of</string>
+    <string name="and">en</string>
+    <string name="invite">Uitnodigen</string>
 
     <!-- actions -->
     <string name="action_sign_out">Uitloggen</string>
     <string name="action_sign_out_confirmation">Uitloggen?</string>
     <string name="action_voice_call">Spraakoproep</string>
     <string name="action_video_call">Videogesprek</string>
-    <string name="action_search_room">Zoek ruimte</string>
+    <string name="action_global_search">Globaal zoeken</string>
     <string name="action_mark_all_as_read">Alles als gelezen markeren</string>
+    <string name="action_historical">Historisch</string>
     <string name="action_quick_reply">Snel reageren</string>
     <string name="action_open">Open</string>
     <string name="action_close">Sluit</string>
@@ -54,21 +58,57 @@
     <string name="disable">Deactiveren</string>
 
     <!-- dialog titles -->
-    <string name="dialog_title_confirmation">Confirmation</string>
-    <string name="dialog_title_warning">Warning</string>
+    <string name="dialog_title_confirmation">Bevestiging</string>
+    <string name="dialog_title_warning">Waarschuwing</string>
 
-    <string name="send_bug_report_include_logs">Send logs</string>
-    <string name="send_bug_report_include_crash_logs">Send crash logs</string>
-    <string name="send_bug_report_include_screenshot">Send screenshot</string>
-    <string name="send_bug_report">Bug Report</string>
-    <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
-    <string name="send_bug_report_placeholder">Describe your problem here</string>
-    <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:</string>
-    <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
-    <string name="send_bug_report_sent">The bug report has been successfully sent</string>
-    <string name="send_bug_report_failed">The bug report failed to be sent (%s)</string>
-    <string name="send_bug_report_progress">Progress (%s%%)</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <!-- Bottom navigation buttons -->
+    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_favourites">Favorieten</string>
+    <string name="bottom_action_people">Personen</string>
+    <string name="bottom_action_rooms">Ruimtes</string>
+
+    <!-- Home screen -->
+    <string name="home_filter_placeholder_home">Zoek naar ruimtes</string>
+    <string name="home_filter_placeholder_favorites">Zoek naar favorieten</string>
+    <string name="home_filter_placeholder_people">Zoek naar personen</string>
+    <string name="home_filter_placeholder_rooms">Zoek naar ruimtes</string>
+
+    <!-- Home fragment -->
+    <string name="invitations_header">Uitnodigingen</string>
+    <string name="low_priority_header">Lage prioriteit</string>
+
+    <!-- People fragment -->
+    <string name="direct_chats_header">Gesprekken</string>
+    <string name="local_address_book_header">Lokale contactenlijst</string>
+    <string name="known_contacts_header">Bekende contacten</string>
+    <string name="matrix_only_filter">Alleen Matrix contacten</string>
+    <string name="no_conversation_placeholder">Geen gesprekken</string>
+    <string name="no_local_contact_placeholder">Geen lokale contacten</string>
+    <string name="no_contact_access_placeholder">Je hebt Riot geen toegang tot je lokale contacten gegeven</string>
+    <string name="no_result_placeholder">Geen resultaten</string>
+
+    <!-- Rooms fragment -->
+    <string name="rooms_header">Ruimtes</string>
+    <string name="rooms_directory_header">Ruimte adresboek</string>
+    <string name="no_room_placeholder">Geen ruimtes</string>
+    <string name="no_public_room_placeholder">Geen publieke ruimtes beschikbaar</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 gebruiker</item>
+        <item quantity="other">%d gebruikers</item>
+    </plurals>
+
+    <string name="send_bug_report_include_logs">Logboek versturen</string>
+    <string name="send_bug_report_include_crash_logs">Crash logboek versturen</string>
+    <string name="send_bug_report_include_screenshot">Schermafbeelding versturen</string>
+    <string name="send_bug_report">Foutmelding</string>
+    <string name="send_bug_report_description">Beschrijf de fout. Wat deed je? Wat verwachtte je dat er zou gebeuren? Wat gebeurde er echt?</string>
+    <string name="send_bug_report_placeholder">Beschrijf hier je probleem</string>
+    <string name="send_bug_report_logs_description">Om het probleem te kunnen diagnoseren, worden logboeken van deze applicatie met de foutmelding verstuurd. Als je liever alleen de bovenstaande tekst verstuurd, haal dan het vinkje weg:</string>
+    <string name="send_bug_report_alert_message">Het ziet er naar uit dat je de telefoon in frustratie schudt. Wil je een foutmelding indienen?</string>
+    <string name="send_bug_report_sent">De foutmelding is succesvol verstuurd</string>
+    <string name="send_bug_report_failed">Het is niet gelukt de foutmelding te versturen (%s)</string>
+    <string name="send_bug_report_progress">Progressie (%s%%)</string>
+    <string name="send_bug_report_app_crashed">De applicatie was de vorige keer gecrasht. Wil je een foutmelding indienen?</string>
 
     <string name="send_files_in">Versturen als</string>
     <string name="read_receipt">Lees</string>
@@ -94,22 +134,22 @@
     <!-- Authentication -->
     <string name="auth_login">Inloggen</string>
     <string name="auth_register">Registreren</string>
-    <string name="auth_submit">Submit</string>
-    <string name="auth_skip">Skip</string>
+    <string name="auth_submit">Indienen</string>
+    <string name="auth_skip">Overslaan</string>
     <string name="auth_send_reset_email">Verstuur reset e-mail</string>
     <string name="auth_return_to_login">Ga terug naar het loginscherm</string>
     <string name="auth_user_id_placeholder">E-mail of gebruikersnaam</string>
     <string name="auth_password_placeholder">Wachtwoord</string>
     <string name="auth_new_password_placeholder">Nieuw wachtwoord</string>
     <string name="auth_user_name_placeholder">Gebruikersnaam</string>
-    <string name="auth_add_email_message">"Add an email address to your account to let users discover you, and let you reset password."</string>
-    <string name="auth_add_phone_message">"Add a phone number to your account to let users discover you."</string>
-    <string name="auth_add_email_phone_message">"Add an email address and/or a phone number to your account to let users discover you.\n\nEmail address will also let you reset your password."</string>
-    <string name="auth_add_email_and_phone_message">"Add an email address and a phone number to your account to let users discover you.\n\nEmail address will also let you reset your password."</string>
+    <string name="auth_add_email_message">"Voeg een e-mailadres aan je account toe zodat gebruikers je kunnen vinden en zodat je het wachtwoord kan veranderen."</string>
+    <string name="auth_add_phone_message">"Voeg een telefoonnummer toe zodat gebruikers je kunnen vinden."</string>
+    <string name="auth_add_email_phone_message">"Voeg een e-mailadres en/of telefoonnummer aan je account toe zodat gebruikers je kunnen vinden.\n\nHet e-mailadres maakt het ook mogelijk om je wachtwoord te veranderen."</string>
+    <string name="auth_add_email_and_phone_message">"Voeg een e-mailadres en een telefoonnummeraan je account toe zodat gebruikers je kunnen vinden.\n\nHet e-mailadres maakt het ook mogelijk om je wachtwoord te veranderen."</string>
     <string name="auth_email_placeholder">E-mailadres</string>
-    <string name="auth_opt_email_placeholder">Email address (optional)</string>
-    <string name="auth_phone_number_placeholder">Phone number</string>
-    <string name="auth_opt_phone_number_placeholder">Phone number (optional)</string>
+    <string name="auth_opt_email_placeholder">E-mailadres (optioneel)</string>
+    <string name="auth_phone_number_placeholder">Telefoonnummer</string>
+    <string name="auth_opt_phone_number_placeholder">Telefoonnummer (optioneel)</string>
     <string name="auth_repeat_password_placeholder">Wachtwoord herhalen</string>
     <string name="auth_repeat_new_password_placeholder">Nieuw wachtwoord bevestigen</string>
     <string name="auth_invalid_login_param">Verkeerde gebruikersnaam en/of wachtwoord</string>
@@ -117,18 +157,18 @@
     <string name="auth_invalid_password">Wachtwoord te kort (min 6)</string>
     <string name="auth_missing_password">Het wachtwoord mist</string>
     <string name="auth_invalid_email">Incorrect e-mailadres</string>
-    <string name="auth_invalid_phone">"This doesn't look like a valid phone number"</string>
+    <string name="auth_invalid_phone">"Dit is geen geldig telefoonnummer"</string>
     <string name="auth_email_already_defined">Dit e-mailadres is al in gebruik.</string>
     <string name="auth_missing_email">Het e-mailadres mist</string>
-    <string name="auth_missing_phone">Missing phone number</string>
-    <string name="auth_missing_email_or_phone">Missing email address or phone number</string>
-    <string name="auth_invalid_token">Invalid token</string>
+    <string name="auth_missing_phone">Het telefoonnummer mist</string>
+    <string name="auth_missing_email_or_phone">Het e-mailadres of telefoonnummer mist</string>
+    <string name="auth_invalid_token">Ongeldig bewijs</string>
     <string name="auth_password_dont_match">Wachtwoorden komen niet overeen</string>
     <string name="auth_forgot_password">Wachtwoord vergeten?</string>
     <string name="auth_use_server_options">Gebruik aangepaste serverinstellingen (geavanceerd)</string>
     <string name="auth_email_validation_message">Bekijk je e-mail om verder te gaan met het registreren</string>
-    <string name="auth_threepid_warning_message">Registration with email and phone number at once is not supported yet until the api exists. Only the phone number will be taken into account.\n\nYou may add your email to your profile in settings.</string>
-    <string name="auth_recaptcha_message">Deze thuisserver wil graag weten of je geen robot bent</string>
+    <string name="auth_threepid_warning_message">Registratie met een e-mailadres en telefoonnummer tegelijkertijd is nog niet ondersteund totdat de api bestaat. Alleen het telefoonnummer zal meegenomen worden.\n\nJe kan je e-mailadres aan je profiel toevoegen in de instellingen.</string>
+    <string name="auth_recaptcha_message">Deze thuisserver wil graag weten of je een robot bent</string>
     <string name="auth_username_in_use">Gebruikersnaam al in gebruik</string>
     <string name="auth_home_server">Thuisserver:</string>
     <string name="auth_identity_server">Identiteitsserver:</string>
@@ -139,7 +179,7 @@
     <string name="auth_reset_password_email_validation_message">Een e-mail is naar  %s verstuurd. Zodra je op de link in de e-mail hebt geklikt, klik hieronder.</string>
     <string name="auth_reset_password_error_unauthorized">Het verifiëren is mislukt: Wees er zeker van dat je op de link in de e-mail hebt geklikt.</string>
     <string name="auth_reset_password_success_message">Je wachtwoord is gereset.\n\nJe bent op alle apparaten uitgelogd en zal niet langer push notificaties ontvangen. Om notificaties op nieuw aan te zetten, log op elk apparaat opnieuw in.</string>
-    
+
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL moet met http[s]:// beginnen</string>
     <string name="login_error_network_error">Inloggen mislukt: Netwerk fout</string>
@@ -158,21 +198,21 @@
     <string name="login_error_login_email_not_yet">Er is nog niet op de link in de e-mail geklikt</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Je moet opnieuw inloggen om eind-tot-eind encryptie sleutels te genereren voor dit apparaat en om de publieke sleutel naar de thuisserver te sturen.\nDit is eenmalig.\nExcuses voor het ongemak.</string>
+    <string name="e2e_need_log_in_again">Je moet opnieuw inloggen om eind-tot-eind versleuteling sleutels te genereren voor dit apparaat en om de publieke sleutel naar de thuisserver te sturen.\nDit is eenmalig.\nExcuses voor het ongemak.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Gelezen berichten</string>
-    
+
     <!-- accounts list Screen -->
     <string name="choose_account">Account kiezen</string>
-    
+
     <!-- image size selection -->
     <string name="compression_options">Versturen als </string>
     <string name="compression_opt_list_original">Origineel</string>
     <string name="compression_opt_list_large">Groot</string>
     <string name="compression_opt_list_medium">Medium</string>
     <string name="compression_opt_list_small">Klein</string>
-    
+
     <!-- media upload / download messages -->
     <string name="attachment_cancel_download">"Download annuleren?</string>
     <string name="attachment_cancel_upload">Upload annuleren?</string>
@@ -200,54 +240,54 @@
     <string name="incoming_video_call">Inkomend videogesprek</string>
     <string name="incoming_voice_call">Inkomende spraakoproep</string>
     <string name="call_in_progress">Oproep in verloop</string>
-    
+
     <string name="call_error_user_not_responding">Het is de andere kant niet gelukt om op te nemen.</string>
     <string name="call_error_ice_failed">Media verbinding is mislukt</string>
     <string name="call_error_camera_init_failed">Kan de camera niet initialiseren</string>
     <string name="call_error_answered_elsewhere">oproep ergens anders opgenomen</string>
     <string name="call_error_peer_hangup_elsewhere">De oproep is ergens anders opgehangen</string>
     <string name="call_error_peer_cancelled_call">de oproep is geannuleerd</string>
-    
+
     <string name="action_accept">ACCEPTEREN</string>
     <string name="action_ignore">NEGEREN</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Een afbeelding of video maken"</string>
     <string name="media_picker_cannot_record_video">Kan geen video opnemen"</string>
-    
+
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">%s permissies</string>
     <string name="permissions_rationale_msg_storage">%s heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.\n\n</string>
     <string name="permissions_rationale_msg_camera">%s heeft toegang nodig tot je camera om afbeeldingen en video oproepen te maken..</string>
-    <string name="permissions_rationale_msg_camera_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
+    <string name="permissions_rationale_msg_camera_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de camera om een oproep te maken.</string>
     <string name="permissions_rationale_msg_record_audio">%s heeft toegang nodig tot je microfoon om spraakoproepen te maken</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de microfoon om een oproep te maken.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot heeft permissie nodig om je camera en microfoon te gebruiken voor videogesprekken.\n\nGeef toegang op de volgende pop-ups om een oproep te maken.</string>
     <string name="permissions_rationale_msg_contacts">Je adresboek e-mails worden geupload om matrix IDs te zoeken.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Je adresboek e-mails zijn geupload voor het zoeken van matix IDs.\nGeef je %s toegang tot je contacten ?</string>
-    
+
     <string name="permissions_action_not_performed_missing_permissions">Sorry.. De actie is niet ondernomen door missende permissies</string>
-    
+
     <!-- medias slider string -->
     <string name="media_slider_saved">Opgeslagen</string>
     <string name="media_slider_saved_message">In downloads opslaan</string>
     <string name="yes">JA</string>
     <string name="no">NEE</string>
     <string name="_continue">Ga verder</string>
-    
+
     <!-- Actions -->
     <string name="remove">Verwijderen</string>
     <string name="join">Toetreden</string>
     <string name="preview">Voorvertoning</string>
     <string name="reject">Afwijzen</string>
-    
+
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Je bent uitgenodigd om deze ruimte toe te treden bij %s</string>
     <string name="room_preview_unlinked_email_warning">Deze uitnodiging is naar %s verstuurd. Maar diegene is niet geassocieerd met dit account.\nMisschien wil je met een ander account inloggen of deze e-mail aan dit account toevoegen.</string>
     <string name="room_preview_try_join_an_unknown_room">Je probeert aan %s deel te nemen. Zou je willen toetreden om aan de discussie deel te nemen?</string>
     <string name="room_preview_try_join_an_unknown_room_default">een ruimte</string>
     <string name="room_preview_room_interactions_disabled">Dit is een voorvertoning van de ruimte. Ruimte interacties zijn uitgezet.</string>
-    
+
     <!-- Chat creation -->
     <string name="room_creation_title">Nieuwe Chat</string>
     <string name="room_creation_add_member">Deelnemer toevoegen</string>
@@ -255,15 +295,15 @@
     <string name="room_header_invite_members">Deelnemers uitnodigen</string>
     <string name="room_title_members">%1$d deelnemers</string>
     <string name="room_title_one_member">1 deelnemer</string>
-    <string name="room_e2e_alert_title">Warning!</string>
-    <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
+    <string name="room_e2e_alert_title">Waarschuwing!</string>
+    <string name="room_e2e_alert_message">Eind-tot-eind versleuteling is nog in beta en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden ontsleutelen.\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
     <string name="format_time_m">m</string>
     <string name="format_time_h">u</string>
     <string name="format_time_d">d</string>
-    
+
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Ruimte verlaten</string>
     <string name="room_participants_leave_prompt_msg">Weet je zeker dat je de ruimte wilt verlaten?</string>
@@ -280,7 +320,7 @@
     <string name="room_participants_header_call">OPROEP</string>
     <string name="room_participants_header_direct_chats">PRIVE CHATS</string>
     <string name="room_participants_header_devices">APPARATEN</string>
-    
+
     <string name="room_participants_action_invite">Uitnodigen</string>
     <string name="room_participants_action_leave">Deze ruimte verlaten</string>
     <string name="room_participants_action_remove">Van deze ruimte verwijderen</string>
@@ -296,13 +336,18 @@
     <string name="room_participants_action_devices_list">Laat de lijst met apparaten zien</string>
     <string name="room_participants_power_level_prompt">Je kan deze veranderingen niet ongedaan maken want je promoot de gebruiker tot dezelfde rechten als jezelf.\n Weet je het zeker?</string>
 
-    <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
+    <string name="room_participants_invite_prompt_msg">"Weet je zeker dat je %s in dit gesprek wil uitnodigen?"</string>
 
     <!-- invitation -->
-    <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
-    <string name="people_search_known_contacts">KNOWN CONTACTS (%s)</string>
-    <string name="people_search_filter_text">Matrix users only</string>
-    <string name="people_search_too_many_contacts">Too many contacts, please use the search field</string>
+    <string name="people_search_invite_by_id"><u>Bij ID uitnodigen</u></string>
+    <string name="people_search_local_contacts">LOKALE CONTACTEN (%d)</string>
+    <string name="people_search_known_contacts">BEKENDE CONTACTEN (%s)</string>
+    <string name="people_search_filter_text">Alleen Matrix gebruikers</string>
+    <string name="people_search_too_many_contacts">Te veel contacten, gebruik het zoekveld.</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Gebruiker bij ID uitnodigen</string>
+    <string name="people_search_invite_by_id_dialog_description">Vul één of meer e-mailaddressen of Matrix ID\'s in</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-mail of Matrix ID</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Zoeken</string>
@@ -310,22 +355,22 @@
     <string name="room_two_users_are_typing">%1$s &#038; %2$s zijn aan het typen…</string>
     <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; anderen zijn aan het typen…</string>
     <string name="room_offline_notification">De verbinding met de server is verbroken.</string>
-    <string name="room_message_placeholder_encrypted">Send an encrypted message…</string>
-    <string name="room_message_placeholder_not_encrypted">Send a message (unencrypted)…</string>
-    <string name="room_unsent_messages_notification">Berichten niet verstuurd. %1$s of %2$s now?</string>
-    <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown devices being present. %1$s or %2$s now?</string>
-    <string name="room_prompt_resend">Resend all</string>
-    <string name="room_prompt_cancel">cancel all</string>
+    <string name="room_message_placeholder_encrypted">Verstuur een versleuteld bericht…</string>
+    <string name="room_message_placeholder_not_encrypted">Verstuur een bericht (niet versleuteld)…</string>
+    <string name="room_unsent_messages_notification">Berichten niet verstuurd. Nu %1$s of %2$s?</string>
+    <string name="room_unknown_devices_messages_notification">Berichten zijn niet verstuurd omdat er onbekende apparaten aanwezig zijn. Nu %1$s of %2$s?</string>
+    <string name="room_prompt_resend">Alles opnieuw versturen</string>
+    <string name="room_prompt_cancel">Alles annuleren</string>
     <string name="room_resend_unsent_messages">Verstuur niet verstuurde berichten</string>
     <string name="room_delete_unsent_messages">Verwijder niet gestuurde berichten</string>
     <string name="room_message_file_not_found">Bestand niet gevonden</string>
     <string name="room_do_not_have_permission_to_post">Je hebt niet de permissie om dit naar deze ruimte te sturen</string>
     <string name="room_new_message_notification">1 nieuw bericht</string>
     <string name="room_new_messages_notification">%1$d nieuwe berichten</string>
-    
+
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrouwen</string>
-    <string name="ssl_do_not_trust">Niet vertrouwe</string>
+    <string name="ssl_do_not_trust">Niet vertrouwen</string>
     <string name="ssl_logout_account">Uitloggen</string>
     <string name="ssl_remain_offline">Negeren</string>
     <string name="ssl_fingerprint_hash">Vingerafdruk (%s):</string>
@@ -336,39 +381,39 @@
     <string name="ssl_expected_existing_expl">Het certificaat is veranderd van een vertrouwd certificaat naar een certificaat dat niet vertrouwd is. De server heeft misschien zijn certificaat vernieuwd. Contacteer de serverbeheerder voor het verwachte vingerafdruk.</string>
     <string name="ssl_only_accept">Accepteer ALLEEN het certificaat als de serverbeheerder een vingerafdruk heeft gepubliceerd dat overeenkomt met degene hierboven.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
-    
+
     <!-- Room Details -->
     <string name="room_details_title">Ruimte Details</string>
-    <string name="room_details_people">Mensen</string>
+    <string name="room_details_people">Personen</string>
     <string name="room_details_files">Bestanden</string>
     <string name="room_details_settings">Instellingen</string>
     <string name="room_details_selected">geselecteerd</string>
     <string name="malformed_id">Incorrecte ID. Het moet een e-mailadres of een Matrix ID moeten zijn dat lijkt op \'@localpart:domein\'</string>
     <string name="room_details_people_invited_group_name">UITGENODIGD</string>
     <string name="room_details_people_present_group_name">TOEGETREDEN</string>
-    
+
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reden voor het aangeven van deze content</string>
     <string name="room_event_action_report_prompt_ignore_user">Wil je alle berichten van deze gebruiker ontzichtbaar maken?</string>
     <string name="room_event_action_cancel_upload">Upload annuleren</string>
     <string name="room_event_action_cancel_download">Download annuleren</string>
-    
+
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Uitnodiging van %s</string>
     <string name="room_displayname_room_invite">Ruimte uitnodiging</string>
     <string name="room_displayname_two_members">%1$s en %2$s</string>
     <string name="room_displayname_more_than_two_members">%1$s en %2$d anderen</string>
     <string name="room_displayname_no_title">Lege ruimte</string>
-    
+
     <!-- Search -->
     <string name="search_hint">Zoeken</string>
     <string name="search_members_hint">Zoek bij naam of id</string>
     <string name="search_no_results">Geen resultaten</string>
     <string name="tab_title_search_rooms">RUIMTES</string>
     <string name="tab_title_search_messages">BERICHTEN</string>
-    <string name="tab_title_search_people">MENSEN</string>
+    <string name="tab_title_search_people">PERSONEN</string>
     <string name="tab_title_search_files">BESTANDEN</string>
-    
+
     <!-- Room recents -->
     <string name="room_recents_join">TREED TOE</string>
     <string name="room_recents_directory">ADRESBOEK</string>
@@ -378,7 +423,10 @@
     <string name="room_recents_invites">UITNODIGINGEN</string>
     <string name="room_recents_start_chat">Start chat</string>
     <string name="room_recents_create_room">Ruimte maken</string>
-    
+    <string name="room_recents_join_room">Join room</string>
+    <string name="room_recents_join_room_title">Join a room</string>
+    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
+
     <!-- Directory -->
     <string name="directory_search_results_title">Adresboek doorbladeren</string>
     <string name="directory_search_room">%1$d ruimte</string>
@@ -393,7 +441,8 @@
     <string name="room_settings_de_prioritize">De-prioriteren</string>
     <string name="room_settings_direct_chat">Privé chat</string>
     <string name="room_settings_leave_conversation">Gesprek Verlaten</string>
-    
+    <string name="room_settings_forget">Forget</string>
+
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Berichten</string>
     <string name="room_sliding_menu_settings">Instellingen</string>
@@ -413,25 +462,25 @@
     <string name="settings_add_phone_number">Add phone number</string>
     <string name="settings_summary_app_info_link">Applicatiesysteem informatiescherm</string>
     <string name="settings_title_app_info_link">Applicatie informatie</string>
-    
+
     <string name="settings_enable_all_notif">Notificaties voor dit account aanzetten</string>
     <string name="settings_enable_this_device">Notificaties voor dit apparaat aanzetten</string>
     <string name="settings_turn_screen_on">Het scherm voor drie seconden aanzetten</string>
-    
+
     <string name="settings_containing_my_name">Naambevattende berichten</string>
     <string name="settings_messages_in_one_to_one">Berichten in privé-chats</string>
     <string name="settings_messages_in_group_chat">Berichten in groepchats</string>
     <string name="settings_invited_to_room">Wanneer ik voor een groep ben uitgenodigd</string>
     <string name="settings_call_invitations">Gesprek uitnodigingen</string>
     <string name="settings_messages_sent_by_bot">Door de robot verstuurde berichten</string>
-    
+
     <string name="settings_background_sync">Synchronisatie in de achtergrond</string>
     <string name="settings_enable_background_sync">Achtergrond sync aanzetten</string>
     <string name="settings_set_sync_timeout">Sync verzoek is verlopen</string>
     <string name="settings_set_sync_delay">Pauze tussen twee sync verzoeken</string>
     <string name="settings_second">seconde</string>
     <string name="settings_seconds">seconden</string>
-    
+
     <string name="settings_version">Versie</string>
     <string name="settings_olm_version">olm versie</string>
     <string name="settings_app_term_conditions">Algemene voorwaarden</string>
@@ -440,8 +489,8 @@
     <string name="settings_privacy_policy">Privacybeleid</string>
     <string name="settings_clear_cache">Cache verwijderen</string>
     <!--string name="settings_room_privacy_label">Privacy</string-->
-    
-    
+
+
     <string name="settings_user_settings">Gebruikersinstellingen</string>
     <string name="settings_notifications">Notificaties</string>
     <string name="settings_ignored_users">Genegeerde gebruikers</string>
@@ -449,9 +498,9 @@
     <string name="settings_advanced">Geavanceerd</string>
     <string name="settings_cryptography">Cryptografie</string>
     <string name="settings_notifications_targets">Notificatie doelen</string>
-    <string name="settings_contact">Local contacts</string>
-    <string name="settings_contacts_app_permission">Contacts permission</string>
-    <string name="settings_contacts_phonebook_country">Phonebook country</string>
+    <string name="settings_contact">Lokale contacten</string>
+    <string name="settings_contacts_app_permission">Contacten permissie</string>
+    <string name="settings_contacts_phonebook_country">Telefoonboek land</string>
     <string name="settings_devices_list">Apparaten</string>
     <string name="devices_details_dialog_title">Apparaat details</string>
     <string name="devices_details_id_title">ID</string>
@@ -461,19 +510,19 @@
     <string name="devices_details_last_seen_title">Laatst gezien</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
-    <string name="devices_delete_dialog_text">Deze actie vereist addictionele authenticatie.\nVoor je wachtwoord in om verder te gaan.</string>
+    <string name="devices_delete_dialog_text">Deze actie vereist additionele authenticatie.\nVoer je wachtwoord in om verder te gaan.</string>
     <string name="devices_delete_dialog_title">Authenticatie</string>
     <string name="devices_delete_pswd">Wachtwoord:</string>
     <string name="devices_delete_submit_button_label">Sturen</string>
-    
+
     <string name="settings_logged_in">Ingelogd als</string>
     <string name="settings_home_server">Thuisserver</string>
     <string name="settings_identity_server">Identiteitsserver</string>
-    
+
     <string name="account_email_validation_title">Verificatie afwachtend</string>
     <string name="account_email_validation_message">Bekijk je e-mail en klik op de link dat de e-mail bevat. Zodra dit gedaan is, klik op verder gaan.</string>
     <string name="account_email_validation_error">Het verifïeren van het e-mailadres is mislukt. Bekijk je e-mail en klik op de link dat de e-mail bevat. Zodra dit gedaan is, klik op verder gaan</string>
-    
+
     <string name="settings_change_password">Wachtwoord veranderen</string>
     <string name="settings_old_password">oud wachtwoord</string>
     <string name="settings_new_password">nieuw wachtwoord</string>
@@ -482,24 +531,24 @@
     <string name="settings_password_updated">Je wachtwoord is gewijzigd</string>
     <string name="settings_unignore_user">Alle berichten van %s laten zien?</string>
 
-    <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
+    <string name="settings_delete_notification_targets_confirmation">Weet je zeker dat je dit notificatiedoel wilt verwijderen?</string>
 
-    <string name="settings_delete_threepid_confirmation">Are you sure you want to remove the %1$s %2$s?</string>
+    <string name="settings_delete_threepid_confirmation">Weet je zeker dat je de %1$s %2$s wilt verwijderen?</string>
 
-    <string name="settings_select_country">Choose a country</string>
+    <string name="settings_select_country">Kies een land</string>
 
-    <string name="settings_phone_number_country_label">Country</string>
-    <string name="settings_phone_number_country_error">Please choose a country</string>
-    <string name="settings_phone_number_label">Phone number</string>
-    <string name="settings_phone_number_error">Invalid phone number for the selected country</string>
-    <string name="settings_phone_number_verification">Phone verification</string>
-    <string name="settings_phone_number_verification_instruction">"We've sent an SMS with an activation code. Please enter this code below."</string>
-    <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
-    <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
+    <string name="settings_phone_number_country_label">Land</string>
+    <string name="settings_phone_number_country_error">Kies een land</string>
+    <string name="settings_phone_number_label">Telefoonnummer</string>
+    <string name="settings_phone_number_error">Ongeldig telefoonnummer voor het geselecteerde land</string>
+    <string name="settings_phone_number_verification">Telefoon verificatie</string>
+    <string name="settings_phone_number_verification_instruction">"We hebben je een SMS met een activeringscode gestuurd. Vul deze code hieronder in."</string>
+    <string name="settings_phone_number_verification_error_empty_code">Voer een activeringscode in</string>
+    <string name="settings_phone_number_verification_error">Er is een fout opgetreden tijdens het valideren van het telefoonnummer</string>
     <string name="settings_phone_number_code">Code</string>
 
     <!-- Room Settings -->
-    
+
     <!-- room global settings-->
     <string name="room_settings_room_photo">Ruimte afbeelding</string>
     <string name="room_settings_room_name">Ruimtenaam</string>
@@ -507,7 +556,7 @@
     <string name="room_settings_room_tag">Ruimte label</string>
     <string name="room_settings_tag_pref_dialog_title">Gelabeld als:</string>
     <string name="room_settings_mute_notifs">Notificaties dempen</string>
-    
+
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favoriet</string>
     <string name="room_settings_tag_pref_entry_low_priority">Lage prioriteit</string>
@@ -516,7 +565,7 @@
     <string name="room_settings_tag_pref_entry_value_favourite">favoriet</string>
     <string name="room_settings_tag_pref_entry_value_low_priority">laag</string>
     <string name="room_settings_tag_pref_entry_value_none">geen</string>
-    
+
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Toegankelijk- en zichtbaarheid</string>
     <string name="room_settings_directory_visibility">Vermeld deze ruimte in het adresboek</string>
@@ -524,7 +573,7 @@
     <string name="room_settings_room_read_history_rules_pref_title">Leesbaarheid van de geschiedenis</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Wie kan de geschiedenis lezen?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Wie heeft toegang tot deze ruimte?</string>
-    
+
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Iedereen</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Alleen deelnemers (vanaf de tijd dat deze optie is geselecteerd)</string>
@@ -533,68 +582,68 @@
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Om naar een ruimte te verwijzen moeten het een adres hebben.</string>
-    <string name="room_settings_room_access_entry_only_invited">Alleen mensen die uitgenodigd zijn</string>
+    <string name="room_settings_room_access_entry_only_invited">Alleen personen die uitgenodigd zijn</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Iedereen die de link van de ruimte weet, met uitzondering van gasten </string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Iedereen die de link van de ruimte weet, inclusief gasten</string>
-    
+
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Verbannen gebruikers</string>
-    
+
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Geavanceerd</string>
     <string name="room_settings_room_internal_id">Interne ID van deze ruimte</string>
     <string name="room_settings_addresses_pref_title">Adressen</string>
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="room_settings_labs_warning_message">Dit zijn experimentele functies die op onverwachte manieren kunnen breken. Wees behoedzaam bij het gebruik van deze functies.</string>
-    <string name="room_settings_labs_end_to_end">Eind-tot-Eind Encrypty</string>
-    <string name="room_settings_labs_end_to_end_warnings">Je moet uitloggen om encryptie aan te zetten.</string>
-    <string name="room_settings_labs_end_to_end_is_active">End-to-End Encryption is active</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices in this room from this device.</string>
+    <string name="room_settings_labs_end_to_end">Eind-tot-Eind Versleuteling</string>
+    <string name="room_settings_labs_end_to_end_warnings">Je moet uitloggen om de versleuteling aan te zetten.</string>
+    <string name="room_settings_labs_end_to_end_is_active">Eind-tot-Eind versleuteling is actief</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Alleen naar geverifieerde apparaten versturen</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Nooit in deze ruimte niet geverifieerde apparaten berichten sturen vanaf dit apparaat.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Deze ruimte heeft geen lokale adressen</string>
     <string name="room_settings_addresses_add_new_address">Nieuw addres (bijv. #foo:matrix.org")</string>
-    
+
     <string name="room_settings_addresses_invalid_format_dialog_title">Ongeldig alias formaat</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' is niet een geldige alias formaat</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Je zal geen standaard adres gespecificeerd hebben. Het standaard adres voor deze ruimte zal willekeurig gekozen worden"</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Standaard adres waarschuwingen</string>
-    
+
     <string name="room_settings_set_main_address">Als standaard adres instellen</string>
     <string name="room_settings_unset_main_address">Niet als standaard adres instellen</string>
     <string name="room_settings_copy_room_id">Ruimte ID kopïeren</string>
     <string name="room_settings_copy_room_address">Ruimte adres kopïeren</string>
 
-    <string name="room_settings_addresses_e2e_enabled">Encryption is enabled in this room.</string>
-    <string name="room_settings_addresses_e2e_disabled">Encryption is disabled in this room.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Enable encryption \n(warning: cannot be disabled again!)</string>
+    <string name="room_settings_addresses_e2e_enabled">Versleuteling is aan in deze ruimte.</string>
+    <string name="room_settings_addresses_e2e_disabled">Versleuteling is uit in deze ruimte.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Zet versleuteling aan \n(waarschuwing: dit kan niet meer uitgezet worden!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Waarschuwing!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Eind-tot-eind encryptie is experimenteel en zal misschien niet betrouwbaar zijn.\n\nJe zou het nog niet moeten vertrouwen voor gevoelige gegevens.\n\nApparaten zullen de geschiedenis nog niet kunnen ontsleutelen van voordat ze de ruimte toetraden.\n\nZodra encryptie aan staat kan het niet meer worden uitgezet (voor nu).\n\nVersleutelde berichten zullen niet zichbaar zijn op programma\'s dat nog niet encryptie implementeren.</string>
+    <string name="room_settings_addresses_e2e_prompt_message">Eind-tot-eind versleuteling is experimenteel en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden kunnen ontsleutelen.\n\nZodra de versleuteling aan staat kan het niet meer worden uitgezet (voor nu).\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
 
     <!-- Directory -->
     <string name="directory_title">Adresboek</string>
-    
+
     <!-- GA use -->
     <string name="ga_use_alert_message">Wil je om ons te helpen met het verbeteren van de applicatie doormiddel van het doorsturen van crashes ?</string>
     <string name="ga_use_settings">Automatisch crash rapporten versturen</string>
     <string name="ga_use_disable_alert_message">Je moet de applicatie herstarten om de crash vermeldingen uit te schakelen.</string>
-    
+
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s probeerde een specifiek punt in de geschiedenis van deze ruimte te laden, maar kon het niet vinden.</string>
-    
-    
+
+
     <!-- encryption dialog -->
-    <string name="encryption_information_title">Eind-tot-eind encryptie informatie</string>
-    
+    <string name="encryption_information_title">Eind-tot-eind versleuteling informatie</string>
+
     <string name="encryption_information_device_info">Evenement informatie</string>
     <string name="encryption_information_user_id">Gebruiker id</string>
     <string name="encryption_information_curve25519_identity_key">Curve25519 identiteitssleutel</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Geclaimde Ed25519 vingerafdrukssleutel</string>
     <string name="encryption_information_algorithm">Algoritme</string>
     <string name="encryption_information_session_id">Sessie ID</string>
-    <string name="encryption_information_decryption_error">Decryptie fout</string>
-    
+    <string name="encryption_information_decryption_error">Ontsleutelingsfout</string>
+
     <string name="encryption_information_sender_device_information">Verstuurder apparaat informatie</string>
     <string name="encryption_information_device_name">Apparaatnaam</string>
     <string name="encryption_information_name">Naam</string>
@@ -603,45 +652,56 @@
     <string name="encryption_information_verification">Verificatie</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 vingerafdruk</string>
 
-    <string name="encryption_export_e2e_room_keys">Export E2E room keys</string>
-    <string name="encryption_export_room_keys">Export room keys</string>
-    <string name="encryption_export_room_keys_summary">Export the keys to a local file</string>
-    <string name="encryption_export_export">Export</string>
-    <string name="encryption_export_enter_passphrase">Enter passphrase</string>
-    <string name="encryption_export_confirm_passphrase">Confirm passphrase</string>
-    <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'</string>
+    <string name="encryption_export_e2e_room_keys">Exporteer E2E ruimte sleutels</string>
+    <string name="encryption_export_room_keys">Exporteer ruimte sleutels</string>
+    <string name="encryption_export_room_keys_summary">Exporteer de sleutels naar een lokaal bestand</string>
+    <string name="encryption_export_export">Exporteer</string>
+    <string name="encryption_export_enter_passphrase">Enter wachtzin</string>
+    <string name="encryption_export_confirm_passphrase">Bevestig wachtzin</string>
+    <string name="encryption_export_saved_as">De E2E ruimte sletuels zijn in \'%s\' opgeslagen</string>
 
-    <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
-    <string name="encryption_import_room_keys">Import room keys</string>
-    <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
-    <string name="encryption_import_import">Import</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device</string>
+    <string name="encryption_import_e2e_room_keys">Importeer E2E ruimte sleutels</string>
+    <string name="encryption_import_room_keys">Importeer ruimte sleutels</string>
+    <string name="encryption_import_room_keys_summary">Importeer de sleutels uit een lokaal bestand</string>
+    <string name="encryption_import_import">Importeer</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Versleutel alleen naar geverifieerde apparaten</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Verstuur nooit versleutelde berichten naar niet geverifieerde apparaten vanaf dit apparaat</string>
 
-    <string name="encryption_information_not_verified">NIET Geverifïeerd</string>
-    <string name="encryption_information_verified">Geverifïeerd</string>
-    <string name="encryption_information_blocked">Geblockeerd</string>
-    
+    <string name="encryption_information_not_verified">NIET Geverifieerd</string>
+    <string name="encryption_information_verified">Geverifieerd</string>
+    <string name="encryption_information_blocked">Geblokkeerd</string>
+
     <string name="encryption_information_unknown_device">onbekend apparaat</string>
     <string name="encryption_information_none">geen</string>
-    
+
     <string name="encryption_information_verify">Verifïeren</string>
     <string name="encryption_information_unverify">Ontverifïeren</string>
     <string name="encryption_information_block">Blokkeringslijst</string>
     <string name="encryption_information_unblock">Deblokkeringslijst</string>
-    
+
     <string name="encryption_information_verify_device">Verifïeer apparaat</string>
     <string name="encryption_information_verify_device_warning"> Om te verifïeren dat dit apparaat vertrouwd kan worden, contacteer de eigenaar via een andere methode (bijv. persoonlijk of via een telefoontje) en vraag diegene of de sleutel die ze zien in hun Gebruikersinstellingen van dit apparaat overeenkomt met de sleutel hieronder:</string>
     <string name="encryption_information_verify_device_warning2">Als het overeenkomt, druk op de verifïeren knop hieronder. Als het niet overeenkomt, dan onderschept iemand anders het apparaat en wil je waarschijnlijk in plaats daar van op de blokkeren knop drukken.\nIn de toekomst zal dit verificatie proces wat meer worden vermakkelijkt.</string>
     <string name="encryption_information_verify_key_match">Ik verifïeer dat de sleutels overeenkomen</string>
-    
-    <string name="e2e_enabling_on_app_update">Riot ondersteund nu eind-tot-eind encryptie maar je moet opnieuw inloggen om het aan te zetten.\n\nJe kan het nu of later doen vanaf de applicatie instellingen.</string>
+
+    <string name="e2e_enabling_on_app_update">Riot ondersteund nu eind-tot-eind sleuteling maar je moet opnieuw inloggen om het aan te zetten.\n\nJe kan het nu of later doen vanaf de applicatie instellingen</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Room contains unknown devices</string>
-    <string name="unknown_devices_alert_message">This room contains unknown devices which have not been verified.\nThis means there is no guarantee that the devices belong to the users they claim to.\nWe recommend you go through the verification process for each device before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown devices:</string>
+    <string name="unknown_devices_alert_title">Deze ruimte bevat onbekende apparaten</string>
+    <string name="unknown_devices_alert_message">Deze ruimte bevat onbekende apparaten die niet geen geverifieerd.\nDit betekent dat er geen garantie is dat de apparaten bij de gebruikers horen waar het beweert dat het bij hoort.\nWe raden je aan om bij elk apparaat door het verificatieprocces heen te gaan voordat je doorgaat, maar je kan het bericht opnieuw versturen zonder te verifiëren als je dat prefereert.\n\nOnbekende apparaten:</string>
+
+    <!-- directory activity  -->
+    <string name="select_room_directory">Selecteer een ruimte adresboek</string>
+    <string name="directory_server_fail_to_retrieve_server">Het kan zijn dat de server niet beschikbaar of overbelast is</string>
+    <string name="directory_server_type_homeserver">Typ een thuisserver om de publieke ruimte ervan te weergeven</string>
+    <string name="directory_server_placeholder">Thuisserver URL</string>
+    <string name="directory_server_all_rooms_on_server">Alle ruimtes op %s server</string>
+    <string name="directory_server_native_rooms">Alle lokale %s ruimtes</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d unread notified messages</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread messages in %2$d rooms"</string>
+    <string name="notification_unread_notified_messages">%d ongelezen genotificeerde berichten</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d ongelezen berichten in %2$d ruimtes</string>
+
+    <!-- historical -->
+    <string name="historical_placeholder">Zoek voor historisch</string>
 </resources>

@@ -51,8 +51,8 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -595,7 +595,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
 
             // force the refresh to ensure that the devices list is up-to-date
-            mSession.getCrypto().getDeviceList().downloadKeys(Arrays.asList(mMemberId), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
+            mSession.getCrypto().getDeviceList().downloadKeys(Collections.singletonList(mMemberId), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
                 // common default error handler
                 private void onError(String aErrorMsg) {
                     Toast.makeText(VectorMemberDetailsActivity.this, aErrorMsg, Toast.LENGTH_LONG).show();

@@ -30,6 +30,7 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.store.IMXStore;
 
 import butterknife.BindColor;
 import butterknife.BindView;
@@ -116,12 +117,14 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             return;
         }
 
-        if (null == session.getDataHandler().getStore()) {
+        IMXStore store = session.getDataHandler().getStore(room.getRoomId());
+
+        if (null == store) {
             Log.e(LOG_TAG, "## populateViews() : null Store");
             return;
         }
 
-        final RoomSummary roomSummary = session.getDataHandler().getStore().getSummary(room.getRoomId());
+        final RoomSummary roomSummary = store.getSummary(room.getRoomId());
 
         if (null == roomSummary) {
             Log.e(LOG_TAG, "## populateViews() : null roomSummary");
@@ -132,15 +135,15 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         int highlightCount;
         int notificationCount;
 
-        highlightCount = room.getHighlightCount();
-        notificationCount = room.getNotificationCount();
+        highlightCount = roomSummary.getHighlightCount();
+        notificationCount = roomSummary.getNotificationCount();
 
-        if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room)) {
+        if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room.getRoomId())) {
             notificationCount = highlightCount;
         }
 
         int bingUnreadColor;
-        if (isInvitation || (0 != highlightCount) || roomSummary.isHighlighted()) {
+        if (isInvitation || (0 != highlightCount)) {
             bingUnreadColor = mFuchsiaColor;
         } else if (0 != notificationCount) {
             bingUnreadColor = mGreenColor;
@@ -151,7 +154,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         }
 
         if (isInvitation || (notificationCount > 0)) {
-            vRoomUnreadCount.setText(isInvitation ? "!" : String.valueOf(notificationCount));
+            vRoomUnreadCount.setText(isInvitation ? "!" : RoomUtils.formatUnreadMessagesCounter(notificationCount));
             vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);

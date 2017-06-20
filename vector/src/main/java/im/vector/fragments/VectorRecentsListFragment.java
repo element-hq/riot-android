@@ -312,46 +312,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             }
         });
 
-        //TODO remove this when HomeFragment will be done
-        View fab = getActivity().findViewById(R.id.floating_action_button);
-        if (fab != null && getActivity() instanceof VectorHomeActivity) {
-            final VectorHomeActivity activity = (VectorHomeActivity) getActivity();
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = getActivity();
-
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_start_chat), context.getString(R.string.room_recents_create_room)};
-                    dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface d, int n) {
-                            if (activity != null && !activity.isFinishing()) {
-                                d.cancel();
-                                if (0 == n) {
-                                    activity.invitePeopleToNewRoom();
-                                } else {
-                                    activity.createRoom();
-                                }
-                            }
-                        }
-                    });
-
-                    dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (activity != null && !activity.isFinishing()) {
-                                activity.invitePeopleToNewRoom();
-                            }
-                        }
-                    });
-
-                    dialog.setNegativeButton(R.string.cancel, null);
-                    dialog.show();
-                }
-            });
-        }
-
         return v;
     }
 
@@ -639,23 +599,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                                 Event.EVENT_TYPE_RECEIPT.equals(eventType) ||
                                 Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType) ||
                                 Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
-
-                        // highlight notified messages
-                        // the SDK only highlighted invitation messages
-                        // it lets the application chooses the behaviour.
-                        ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
-                        String viewedRoomId = rTracker.getViewedRoomId();
-                        String fromMatrixId = rTracker.getMatrixId();
-                        MXSession session = VectorRecentsListFragment.this.mSession;
-                        String matrixId = session.getCredentials().userId;
-
-                        // If we're not currently viewing this room or not sent by myself, increment the unread count
-                        if ((!TextUtils.equals(event.roomId, viewedRoomId) || !TextUtils.equals(matrixId, fromMatrixId)) && !TextUtils.equals(event.getSender(), matrixId)) {
-                            RoomSummary summary = session.getDataHandler().getStore().getSummary(event.roomId);
-                            if (null != summary) {
-                                summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(session, event));
-                            }
-                        }
                     }
                 });
             }
@@ -834,43 +777,39 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     @Override
     public void onToggleRoomNotifications(MXSession session, String roomId) {
-        Room room = session.getDataHandler().getRoom(roomId);
+        BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
 
-        if (null != room) {
-            BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+        showWaitingView();
 
-            showWaitingView();
-
-            bingRulesManager.muteRoomNotifications(room, !bingRulesManager.isRoomNotificationsDisabled(room), new BingRulesManager.onBingRuleUpdateListener() {
-                @Override
-                public void onBingRuleUpdateSuccess() {
-                    if (null != getActivity()) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideWaitingView();
-                            }
-                        });
-                    }
+        bingRulesManager.muteRoomNotifications(roomId, !bingRulesManager.isRoomNotificationsDisabled(roomId), new BingRulesManager.onBingRuleUpdateListener() {
+            @Override
+            public void onBingRuleUpdateSuccess() {
+                if (null != getActivity()) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideWaitingView();
+                        }
+                    });
                 }
+            }
 
-                @Override
-                public void onBingRuleUpdateFailure(final String errorMessage) {
-                    if (null != getActivity()) {
-                        getActivity().runOnUiThread(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
-                                        hideWaitingView();
-                                    }
+            @Override
+            public void onBingRuleUpdateFailure(final String errorMessage) {
+                if (null != getActivity()) {
+                    getActivity().runOnUiThread(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                                    hideWaitingView();
                                 }
-                        );
-                    }
-
+                            }
+                    );
                 }
-            });
-        }
+
+            }
+        });
     }
 
     @Override

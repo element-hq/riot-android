@@ -69,7 +69,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 import im.vector.Matrix;
@@ -186,7 +186,20 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         super.onPause();
 
         if (mAdapter instanceof VectorMessagesAdapter) {
-            ((VectorMessagesAdapter) mAdapter).onPause();
+            VectorMessagesAdapter adapter = ((VectorMessagesAdapter) mAdapter);
+
+            adapter.setVectorMessagesAdapterActionsListener(null);
+            adapter.onPause();
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdapter instanceof VectorMessagesAdapter) {
+            VectorMessagesAdapter adapter = ((VectorMessagesAdapter) mAdapter);
+            adapter.setVectorMessagesAdapterActionsListener(this);
         }
     }
 
@@ -198,6 +211,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     public void onDetach() {
         super.onDetach();
         mHostActivityListener = null;
+
+        mBackProgressView = null;
+        mForwardProgressView = null;
+        mMainProgressView = null;
     }
 
     @Override
@@ -212,9 +229,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        VectorMessagesAdapter vectorMessagesAdapter = new VectorMessagesAdapter(mSession, getActivity(), getMXMediasCache());
-        vectorMessagesAdapter.setVectorMessagesAdapterActionsListener(this);
-        return vectorMessagesAdapter;
+        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediasCache());
     }
 
     /**
@@ -440,7 +455,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         dialog.show();
 
         if (null == deviceInfo) {
-            mSession.getCrypto().getDeviceList().downloadKeys(Arrays.asList(event.getSender()), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
+            mSession.getCrypto().getDeviceList().downloadKeys(Collections.singletonList(event.getSender()), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
                 @Override
                 public void onSuccess(MXUsersDevicesMap<MXDeviceInfo> info) {
                     if (dialog.isShowing()) {

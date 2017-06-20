@@ -397,7 +397,6 @@ public class EventStreamService extends Service {
         // no intent : restarted by Android
         // EXTRA_AUTO_RESTART_ACTION : restarted by the service itself (
         if ((null == intent) || intent.hasExtra(EXTRA_AUTO_RESTART_ACTION)) {
-
             boolean restart = false;
 
             if (StreamAction.AUTO_RESTART == mServiceState) {
@@ -409,6 +408,12 @@ public class EventStreamService extends Service {
             } else if  (StreamAction.IDLE == mServiceState) {
                 Log.e(LOG_TAG, "onStartCommand : automatically restart the service");
                 restart = true;
+            } else if (StreamAction.STOP == mServiceState) {
+                // it might have some race conditions when the service is restarted by android
+                // the state should first switch from STOP to IDLE : android restarts the service with no parameters
+                // the AUTO_RESTART timer should be triggered
+                Log.e(LOG_TAG, "onStartCommand : automatically restart the service even if the service is stopped");
+                restart = true;
             } else {
                 Log.e(LOG_TAG, "onStartCommand : EXTRA_AUTO_RESTART_ACTION has been set but mServiceState = " + mServiceState);
             }
@@ -418,6 +423,11 @@ public class EventStreamService extends Service {
 
                 if ((null == sessions) || sessions.isEmpty()) {
                     Log.e(LOG_TAG, "onStartCommand : no session");
+                    return START_NOT_STICKY;
+                }
+
+                if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
+                    Log.e(LOG_TAG, "onStartCommand : no auto restart because the application crashed");
                     return START_NOT_STICKY;
                 }
 
@@ -454,7 +464,6 @@ public class EventStreamService extends Service {
         if (intent.hasExtra(EXTRA_MATRIX_IDS)) {
             if (null == mMatrixIds) {
                 mMatrixIds = new ArrayList<>(Arrays.asList(intent.getStringArrayExtra(EXTRA_MATRIX_IDS)));
-
                 mSessions = new ArrayList<>();
 
                 for (String matrixId : mMatrixIds) {
@@ -467,9 +476,15 @@ public class EventStreamService extends Service {
 
         switch (action) {
             case START:
-            case RESUME:
+            case RESUME: {
+                if ((null == mSessions) || mSessions.isEmpty()) {
+                    Log.e(LOG_TAG, "onStartCommand : empty sessions list with action " + action);
+                    return START_NOT_STICKY;
+                }
+
                 start();
                 break;
+            }
             case STOP:
                 Log.d(LOG_TAG, "## onStartCommand(): service stopped");
                 stopSelf();
@@ -1243,6 +1258,10 @@ public class EventStreamService extends Service {
 
         IMXStore store = session.getDataHandler().getStore();
 
+        if (null == store) {
+            return false;
+        }
+
         if (!store.areReceiptsReady()) {
             return false;
         }
@@ -1271,30 +1290,33 @@ public class EventStreamService extends Service {
                                         }
                                     }
                                 } catch (Exception e) {
-                                    Log.e(LOG_TAG, "initNotifiedMessagesList : invitation parsing failed");
+                                    Log.e(LOG_TAG, "##refreshNotifiedMessagesList() : invitation parsing failed");
                                 }
                             }
                         }
                     }
                 } else {
-                    List<Event> unreadEvents = session.getDataHandler().getStore().unreadEvents(room.getRoomId(), null);
+                    try {
+                        List<Event> unreadEvents = store.unreadEvents(room.getRoomId(), null);
 
-                    if ((null != unreadEvents) && unreadEvents.size() > 0) {
-                        List<NotificationUtils.NotifiedEvent> list = new ArrayList<>();
+                        if ((null != unreadEvents) && unreadEvents.size() > 0) {
+                            List<NotificationUtils.NotifiedEvent> list = new ArrayList<>();
 
-                        for (Event event : unreadEvents) {
-                            BingRule rule = session.fulfillRule(event);
+                            for (Event event : unreadEvents) {
+                                BingRule rule = session.fulfillRule(event);
 
-                            if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
-                                Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
-                                list.add(new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, rule));
-                                Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
+                                if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
+                                    list.add(new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, rule));
+                                    Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
+                                }
+                            }
+
+                            if (list.size() > 0) {
+                                mNotifiedEventsByRoomId.put(room.getRoomId(), list);
                             }
                         }
-
-                        if (list.size() > 0) {
-                            mNotifiedEventsByRoomId.put(room.getRoomId(), list);
-                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "##refreshNotifiedMessagesList(): failed checking the unread " + e.getMessage());
                     }
                 }
             }
@@ -1302,51 +1324,56 @@ public class EventStreamService extends Service {
             return true;
         } else { // test if there is an update (if some messages have been read for example)
             boolean isUpdated = false;
-            List<String> roomIds = new ArrayList<>(mNotifiedEventsByRoomId.keySet());
 
-            for (String roomId : roomIds) {
-                Room room = store.getRoom(roomId);
+            try {
+                List<String> roomIds = new ArrayList<>(mNotifiedEventsByRoomId.keySet());
 
-                // the room does not exist anymore
-                if (null == room) {
-                    Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the room " + roomId + " does not exist anymore");
-                    mNotifiedEventsByRoomId.remove(roomId);
-                    isUpdated = true;
-                } else {
-                    // the messages are sorted from the oldest to the latest
-                    List<NotificationUtils.NotifiedEvent> events = mNotifiedEventsByRoomId.get(roomId);
+                for (String roomId : roomIds) {
+                    Room room = store.getRoom(roomId);
 
-                    // if the oldest event has been read
-                    // something has been updated
-                    if (room.isEventRead(events.get(0).mEventId)) {
-                        // if the latest message has been read
-                        // we have to find out the unread messages
-                        if (!room.isEventRead(events.get(events.size() - 1).mEventId)) {
-                            // search for the read messages
-                            for (int i = 0; i < events.size(); ) {
-                                NotificationUtils.NotifiedEvent event = events.get(i);
+                    // the room does not exist anymore
+                    if (null == room) {
+                        Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the room " + roomId + " does not exist anymore");
+                        mNotifiedEventsByRoomId.remove(roomId);
+                        isUpdated = true;
+                    } else {
+                        // the messages are sorted from the oldest to the latest
+                        List<NotificationUtils.NotifiedEvent> events = mNotifiedEventsByRoomId.get(roomId);
 
-                                if (room.isEventRead(event.mEventId)) {
-                                    Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");
+                        // if the oldest event has been read
+                        // something has been updated
+                        if (room.isEventRead(events.get(0).mEventId)) {
+                            // if the latest message has been read
+                            // we have to find out the unread messages
+                            if (!room.isEventRead(events.get(events.size() - 1).mEventId)) {
+                                // search for the read messages
+                                for (int i = 0; i < events.size(); ) {
+                                    NotificationUtils.NotifiedEvent event = events.get(i);
 
-                                    events.remove(i);
-                                    isUpdated = true;
-                                } else {
-                                    i++;
+                                    if (room.isEventRead(event.mEventId)) {
+                                        Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");
+
+                                        events.remove(i);
+                                        isUpdated = true;
+                                    } else {
+                                        i++;
+                                    }
                                 }
+                            } else {
+                                events.clear();
                             }
-                        } else {
-                            events.clear();
-                        }
 
-                        // all the messages have been read
-                        if (0 == events.size()) {
-                            Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : no more unread messages in " + roomId);
-                            mNotifiedEventsByRoomId.remove(roomId);
-                            isUpdated = true;
+                            // all the messages have been read
+                            if (0 == events.size()) {
+                                Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : no more unread messages in " + roomId);
+                                mNotifiedEventsByRoomId.remove(roomId);
+                                isUpdated = true;
+                            }
                         }
                     }
                 }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "##refreshNotifiedMessagesList(): failed while building mNotifiedEventsByRoomId " + e.getMessage());
             }
 
             return isUpdated;

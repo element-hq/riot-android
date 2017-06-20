@@ -41,6 +41,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -76,13 +77,13 @@ import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Field;
@@ -94,6 +95,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -104,7 +106,6 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.ViewedRoomTracker;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.HomeFragment;
@@ -235,6 +236,9 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     private List<Room> mDirectChatInvitations;
     private List<Room> mRoomInvitations;
 
+    // floating action bar dialog
+    private AlertDialog mFabDialog;
+
      /*
      * *********************************************************************************************
      * Static methods
@@ -296,55 +300,123 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         // process intent parameters
         final Intent intent = getIntent();
 
-        if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
-            startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
+        if (null != savedInstanceState) {
+            // fix issue #1276
+            // if there is a saved instance, it means that onSaveInstanceState has been called.
+            // theses parameters must only be used once.
+            // The activity might have been created after being killed by android while the application is in background
+            intent.removeExtra(EXTRA_SHARED_INTENT_PARAMS);
             intent.removeExtra(EXTRA_CALL_SESSION_ID);
             intent.removeExtra(EXTRA_CALL_ID);
             intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
-        }
-
-        // the activity could be started with a spinner
-        // because there is a pending action (like universalLink processing)
-        if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, WAITING_VIEW_STOP)) {
-            showWaitingView();
+            intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
+            intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+            intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+            intent.removeExtra(EXTRA_MEMBER_ID);
+            intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
         } else {
-            stopWaitingView();
-        }
-        intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
 
-        mAutomaticallyOpenedRoomParams = (Map<String, Object>) intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-        intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-
-        mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
-        intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
-
-        mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
-        intent.removeExtra(EXTRA_MEMBER_ID);
-
-        // the home activity has been launched with an universal link
-        if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-            Log.d(LOG_TAG, "Has an universal link");
-            handleUniversalLink(intent);
-        } else {
-            Log.d(LOG_TAG, "create with no universal link");
-        }
-
-        if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
-            final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
-
-            if (mSession.getDataHandler().getStore().isReady()) {
-                this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
-                    }
-                });
-            } else {
-                mSharedFilesIntent = sharedFilesIntent;
+            if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
+                startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
+                intent.removeExtra(EXTRA_CALL_SESSION_ID);
+                intent.removeExtra(EXTRA_CALL_ID);
+                intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
             }
 
-            // ensure that it should be called once
-            intent.removeExtra(EXTRA_SHARED_INTENT_PARAMS);
+            // the activity could be started with a spinner
+            // because there is a pending action (like universalLink processing)
+            if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, WAITING_VIEW_STOP)) {
+                showWaitingView();
+            } else {
+                stopWaitingView();
+            }
+            intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
+
+            mAutomaticallyOpenedRoomParams = (Map<String, Object>) intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+            intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+
+            mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+            intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+
+            mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
+            intent.removeExtra(EXTRA_MEMBER_ID);
+
+            // the home activity has been launched with an universal link
+            if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                Log.d(LOG_TAG, "Has an universal link");
+
+                final Uri uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+                intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+
+                // detect the room could be opened without waiting the next sync
+                HashMap<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
+
+                if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
+                    Log.d(LOG_TAG, "Has a valid universal link");
+
+                    final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY);
+
+                    // it is a room ID ?
+                    if (MXSession.isRoomId(roomIdOrAlias)) {
+                        Log.d(LOG_TAG, "Has a valid universal link to the room ID " + roomIdOrAlias);
+                        Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
+
+                        if (null != room) {
+                            Log.d(LOG_TAG, "Has a valid universal link to a known room");
+                            // open the room asap
+                            mUniversalLinkToOpen = uri;
+                        } else {
+                            Log.d(LOG_TAG, "Has a valid universal link but the room is not yet known");
+                            // wait the next sync
+                            intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
+                        }
+                    } else if (MXSession.isRoomAlias(roomIdOrAlias)) {
+                        Log.d(LOG_TAG, "Has a valid universal link of the room Alias " + roomIdOrAlias);
+
+                        // it is a room alias
+                        // convert the room alias to room Id
+                        mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new SimpleApiCallback<String>() {
+                            @Override
+                            public void onSuccess(String roomId) {
+                                Log.d(LOG_TAG, "Retrieve the room ID " + roomId);
+
+                                getIntent().putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
+
+                                // the room exists, opens it
+                                if (null != mSession.getDataHandler().getRoom(roomId, false)) {
+                                    Log.d(LOG_TAG, "Find the room from room ID : process it");
+                                    processIntentUniversalLink();
+                                } else {
+                                    Log.d(LOG_TAG, "Don't know the room");
+                                }
+                            }
+                        });
+                    }
+                }
+            } else {
+                Log.d(LOG_TAG, "create with no universal link");
+            }
+
+            if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
+                final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
+                Log.d(LOG_TAG, "Has shared intent");
+
+                if (mSession.getDataHandler().getStore().isReady()) {
+                    this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(LOG_TAG, "shared intent : The store is ready -> display sendFilesTo");
+                            CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
+                        }
+                    });
+                } else {
+                    Log.d(LOG_TAG, "shared intent : Wait that the store is ready");
+                    mSharedFilesIntent = sharedFilesIntent;
+                }
+
+                // ensure that it should be called once
+                intent.removeExtra(EXTRA_SHARED_INTENT_PARAMS);
+            }
         }
 
         // check if  there is some valid session
@@ -395,6 +467,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                     VectorHomeActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            Log.d(LOG_TAG, "shared intent : the store is now ready, display sendFilesTo");
                             CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, mSharedFilesIntent);
                             mSharedFilesIntent = null;
                         }
@@ -450,7 +523,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         }
 
         if (null != mFloatingActionButton) {
-            mFloatingActionButton.show();
+            if (mCurrentMenuId == R.id.bottom_action_favourites) {
+                mFloatingActionButton.setVisibility(View.GONE);
+            } else {
+                mFloatingActionButton.show();
+            }
         }
 
         this.runOnUiThread(new Runnable() {
@@ -497,6 +574,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    BugReporter.deleteCrashFile(VectorHomeActivity.this);
                 }
             }).show();
 
@@ -556,6 +634,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
                 startActivity(searchIntent);
                 break;
+
+            // search in rooms content
+            case R.id.ic_action_historical:
+                startActivity(new Intent(this, HistoricalRoomsActivity.class));
+                break;
             case R.id.ic_action_mark_all_as_read:
                 // Will be handle by fragments
                 retCode = false;
@@ -608,6 +691,12 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 mFloatingActionButtonTimer.cancel();
                 mFloatingActionButtonTimer = null;
             }
+        }
+
+        if (mFabDialog != null) {
+            // Prevent leak after orientation changed
+            mFabDialog.dismiss();
+            mFabDialog = null;
         }
 
         removeBadgeEventsListener();
@@ -844,6 +933,15 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
+
+        if (null != mFloatingActionButton) {
+            mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onFloatingButtonClick();
+                }
+            });
+        }
     }
 
     /**
@@ -960,7 +1058,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             @Override
             public void run() {
                 String queryText = mSearchView.getQuery().toString();
-                String currentFilter = queryText + "-" + mCurrentMenuId;;
+                String currentFilter = queryText + "-" + mCurrentMenuId;
 
                 // display if the pattern matched
                 if (TextUtils.equals(currentFilter, filter)) {
@@ -1114,9 +1212,79 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     }
 
     /**
+     * Process the content of the current intent to detect universal link data.
+     * If data present, it means that the app was started through an URL link, but due
+     * to the App was not initialized properly, it has been required to re start the App.
+     * <p>
+     * To indicate the App has finished its Login/Splash/Home flow, a resume action
+     * is sent to the receiver.
+     */
+    private void processIntentUniversalLink() {
+        Intent intent;
+        Uri uri;
+
+        if (null != (intent = getIntent())) {
+            if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                Log.d(LOG_TAG, "## processIntentUniversalLink(): EXTRA_UNIVERSAL_LINK_URI present1");
+                uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+
+                if (null != uri) {
+                    Intent myBroadcastIntent = new Intent(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK_RESUME);
+
+                    myBroadcastIntent.putExtras(getIntent().getExtras());
+                    myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
+                    sendBroadcast(myBroadcastIntent);
+
+                    showWaitingView();
+
+                    // use only once, remove since it has been used
+                    intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+                    Log.d(LOG_TAG, "## processIntentUniversalLink(): Broadcast BROADCAST_ACTION_UNIVERSAL_LINK_RESUME sent");
+                }
+            }
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Floating button management
+     * *********************************************************************************************
+     */
+
+    private void onFloatingButtonClick() {
+        // ignore any action if there is a pending one
+        if (!isWaitingViewVisible()) {
+            CharSequence items[] = new CharSequence[]{getString(R.string.room_recents_start_chat), getString(R.string.room_recents_create_room), getString(R.string.room_recents_join_room)};
+            mFabDialog = new AlertDialog.Builder(this)
+                    .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface d, int n) {
+                            d.cancel();
+                            if (0 == n) {
+                                invitePeopleToNewRoom();
+                            } else if (1 == n) {
+                                createRoom();
+                            } else {
+                                joinARoom();
+                            }
+                        }
+                    })
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            invitePeopleToNewRoom();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
+    }
+
+
+    /**
      * Open the room creation with inviting people.
      */
-    public void invitePeopleToNewRoom() {
+    private void invitePeopleToNewRoom() {
         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
         settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
         startActivity(settingsIntent);
@@ -1125,7 +1293,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     /**
      * Create a room and open the dedicated activity
      */
-    public void createRoom() {
+    private void createRoom() {
         showWaitingView();
         mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
             @Override
@@ -1143,7 +1311,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                     }
                 });
             }
-
 
             private void onError(final String message) {
                 mWaitingView.post(new Runnable() {
@@ -1177,7 +1344,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     /**
      * Offer to join a room by alias or Id
      */
-    public void joinARoom() {
+    private void joinARoom() {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -1271,40 +1438,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         }
     }
 
-    /**
-     * Process the content of the current intent to detect universal link data.
-     * If data present, it means that the app was started through an URL link, but due
-     * to the App was not initialized properly, it has been required to re start the App.
-     * <p>
-     * To indicate the App has finished its Login/Splash/Home flow, a resume action
-     * is sent to the receiver.
-     */
-    private void processIntentUniversalLink() {
-        Intent intent;
-        Uri uri;
-
-        if (null != (intent = getIntent())) {
-            if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-                Log.d(LOG_TAG, "## processIntentUniversalLink(): EXTRA_UNIVERSAL_LINK_URI present1");
-                uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-
-                if (null != uri) {
-                    Intent myBroadcastIntent = new Intent(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK_RESUME);
-
-                    myBroadcastIntent.putExtras(getIntent().getExtras());
-                    myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
-                    sendBroadcast(myBroadcastIntent);
-
-                    showWaitingView();
-
-                    // use only once, remove since it has been used
-                    intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-                    Log.d(LOG_TAG, "## processIntentUniversalLink(): Broadcast BROADCAST_ACTION_UNIVERSAL_LINK_RESUME sent");
-                }
-            }
-        }
-    }
-
     /*
      * *********************************************************************************************
      * Room invitation management
@@ -1337,12 +1470,12 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                     mRoomInvitations.add(room);
                 }
             }
-
-            // the invitations are sorted from the oldest to the more recent one
-            Comparator<Room> invitationComparator = RoomUtils.getRoomsDateComparator(mSession, true);
-            Collections.sort(mDirectChatInvitations, invitationComparator);
-            Collections.sort(mRoomInvitations, invitationComparator);
         }
+
+        // the invitations are sorted from the oldest to the more recent one
+        Comparator<Room> invitationComparator = RoomUtils.getRoomsDateComparator(mSession, true);
+        Collections.sort(mDirectChatInvitations, invitationComparator);
+        Collections.sort(mRoomInvitations, invitationComparator);
 
         List<Room> roomInvites = new ArrayList<>();
         switch (mCurrentMenuId) {
@@ -1355,6 +1488,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             default:
                 roomInvites.addAll(mDirectChatInvitations);
                 roomInvites.addAll(mRoomInvitations);
+                Collections.sort(roomInvites, invitationComparator);
                 break;
         }
 
@@ -1641,7 +1775,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_material_menu_white));
+            getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white));
         }
 
         Menu menuNav = navigationView.getMenu();
@@ -1903,40 +2037,50 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
      */
     public void refreshUnreadBadges() {
         MXDataHandler dataHandler = mSession.getDataHandler();
+        // fix a crash reported by GA
+        if (null == dataHandler) {
+            return;
+        }
+
+        IMXStore store = dataHandler.getStore();
+        // fix a crash reported by GA
+        if (null == store) {
+            return;
+        }
 
         BingRulesManager bingRulesManager = dataHandler.getBingRulesManager();
-        Collection<RoomSummary> summaries2 = dataHandler.getStore().getSummaries();
+        Collection<RoomSummary> summaries2 = store.getSummaries();
         HashMap<Room, RoomSummary> roomSummaryByRoom = new HashMap<>();
+        HashSet<String> directChatInvitations = new HashSet<>();
 
         for (RoomSummary summary : summaries2) {
-            Room room = dataHandler.getStore().getRoom(summary.getRoomId());
+            Room room = store.getRoom(summary.getRoomId());
 
             if (null != room) {
                 roomSummaryByRoom.put(room, summary);
+
+                if (!room.isConferenceUserRoom() && room.isInvited() && room.isDirectChatInvitation()) {
+                    directChatInvitations.add(room.getRoomId());
+                }
             }
         }
 
-        for (Integer id : mBadgeViewByIndex.keySet()) {
-            UnreadCounterBadgeView badgeView = mBadgeViewByIndex.get(id);
+        Set<Integer> menuIndexes = new HashSet<>(mBadgeViewByIndex.keySet());
 
-            // compute the badge value and its displays
-            int highlightCount = 0;
-            int roomCount = 0;
-            boolean mustBeHighlighted = false;
+        // the badges are not anymore displayed on the home tab
+        menuIndexes.remove(R.id.bottom_action_home);
 
+        for (Integer id : menuIndexes) {
             // use a map because contains is faster
-            HashSet<String> filteredRoomIdsSet = null;
+            HashSet<String> filteredRoomIdsSet = new HashSet<>();
 
             if (id == R.id.bottom_action_favourites) {
                 List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
-
-                filteredRoomIdsSet = new HashSet<>();
 
                 for (Room room : favRooms) {
                     filteredRoomIdsSet.add(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_people) {
-                filteredRoomIdsSet = new HashSet<>();
                 filteredRoomIdsSet.addAll(mSession.getDirectChatRoomIdsList());
                 // Add direct chat invitations
                 for (Room room : roomSummaryByRoom.keySet()) {
@@ -1944,13 +2088,19 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
+
+                // remove the low priority rooms
+                List<Room> lowPriorRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
+                for (Room room : lowPriorRooms) {
+                    filteredRoomIdsSet.remove(room.getRoomId());
+                }
             } else if (id == R.id.bottom_action_rooms) {
                 HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());
                 HashSet<String> favoritesRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
 
-                filteredRoomIdsSet = new HashSet<>();
+                directChatRoomIds.addAll(directChatInvitations);
 
-                for(Room room : roomSummaryByRoom.keySet()) {
+                for (Room room : roomSummaryByRoom.keySet()) {
                     if (!room.isConferenceUserRoom() && // not a VOIP conference room
                             !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
                             (!room.getAccountData().hasTags() || favoritesRoomIds.contains(room.getRoomId()))) {
@@ -1959,34 +2109,40 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 }
             }
 
-            if ((null == filteredRoomIdsSet) || !filteredRoomIdsSet.isEmpty()) {
-                for(Room room : roomSummaryByRoom.keySet()) {
-                    // test if the room is allowed
-                    if ((null == filteredRoomIdsSet) || filteredRoomIdsSet.contains(room.getRoomId())) {
-                        highlightCount += room.getHighlightCount();
+            // compute the badge value and its displays
+            int highlightCount = 0;
+            int roomCount = 0;
 
-                        if (room.isInvited()) {
-                            roomCount++;
-                        } else {
-                            int notificationCount = room.getNotificationCount();
+            for (String roomId : filteredRoomIdsSet) {
+                Room room = store.getRoom(roomId);
 
-                            if (bingRulesManager.isRoomMentionOnly(room)) {
-                                notificationCount = room.getHighlightCount();
-                            }
+                if (null != room) {
+                    highlightCount += room.getHighlightCount();
 
-                            if (notificationCount > 0) {
-                                roomCount++;
-                            }
+                    if (room.isInvited()) {
+                        roomCount++;
+                    } else {
+                        int notificationCount = room.getNotificationCount();
+
+                        if (bingRulesManager.isRoomMentionOnly(roomId)) {
+                            notificationCount = room.getHighlightCount();
                         }
 
-                        mustBeHighlighted |= roomSummaryByRoom.get(room).isHighlighted();
+                        if (notificationCount > 0) {
+                            roomCount++;
+                        }
                     }
                 }
             }
 
-            badgeView.updateCounter(roomCount,
-                    ((0 != highlightCount) || mustBeHighlighted) ? UnreadCounterBadgeView.HIGHLIGHTED :
-                            ((0 != roomCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT));
+            int status = (0 != highlightCount) ? UnreadCounterBadgeView.HIGHLIGHTED :
+                    ((0 != roomCount) ? UnreadCounterBadgeView.NOTIFIED : UnreadCounterBadgeView.DEFAULT);
+
+            if (id == R.id.bottom_action_favourites) {
+                mBadgeViewByIndex.get(id).updateText((roomCount > 0) ? "\u2022" : "", status);
+            } else {
+                mBadgeViewByIndex.get(id).updateCounter(roomCount, status);
+            }
         }
     }
 
@@ -2093,22 +2249,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                         Event.EVENT_TYPE_RECEIPT.equals(eventType) ||
                         Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType) ||
                         Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
-
-                // highlight notified messages
-                // the SDK only highlighted invitation messages
-                // it lets the application chooses the behaviour.
-                ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
-                String viewedRoomId = rTracker.getViewedRoomId();
-                String fromMatrixId = rTracker.getMatrixId();
-                String matrixId = mSession.getCredentials().userId;
-
-                // If we're not currently viewing this room or not sent by myself, increment the unread count
-                if ((!TextUtils.equals(event.roomId, viewedRoomId) || !TextUtils.equals(matrixId, fromMatrixId)) && !TextUtils.equals(event.getSender(), matrixId)) {
-                    RoomSummary summary = mSession.getDataHandler().getStore().getSummary(event.roomId);
-                    if (null != summary) {
-                        summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(mSession, event));
-                    }
-                }
             }
 
             @Override

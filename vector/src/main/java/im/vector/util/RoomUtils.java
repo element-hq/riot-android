@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -72,6 +73,10 @@ public class RoomUtils {
         void onLeaveRoom(MXSession session, String roomId);
     }
 
+    public interface HistoricalRoomActionListener {
+        void onForgotRoom(Room room);
+    }
+
     /**
      * Return comparator to sort rooms by date
      *
@@ -81,9 +86,122 @@ public class RoomUtils {
      */
     public static Comparator<Room> getRoomsDateComparator(final MXSession session, final boolean reverseOrder) {
         return new Comparator<Room>() {
+            private Comparator<RoomSummary> mRoomSummaryComparator;
+            private HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
+
+            /**
+             * Retrieve the room summary comparator
+             * @return comparator
+             */
+            private Comparator<RoomSummary> getSummaryComparator() {
+                if (null == mRoomSummaryComparator) {
+                    mRoomSummaryComparator = getRoomSummaryComparator(reverseOrder);
+                }
+                return mRoomSummaryComparator;
+            }
+
+            /**
+             * Retrieve a summary from its room id
+             * @param roomId
+             * @return the summary
+             */
+            private RoomSummary getSummary(String roomId) {
+                if (TextUtils.isEmpty(roomId)) {
+                    return null;
+                }
+
+                RoomSummary summary = mSummaryByRoomIdMap.get(roomId);
+
+                if (null == summary) {
+                    summary = session.getDataHandler().getStore().getSummary(roomId);
+
+                    if (null != summary) {
+                        mSummaryByRoomIdMap.put(roomId, summary);
+                    }
+                }
+
+                return summary;
+            }
+
             public int compare(Room aLeftObj, Room aRightObj) {
-                final RoomSummary leftRoomSummary = session.getDataHandler().getStore().getSummary(aLeftObj.getRoomId());
-                final RoomSummary rightRoomSummary = session.getDataHandler().getStore().getSummary(aRightObj.getRoomId());
+                final RoomSummary leftRoomSummary = getSummary(aLeftObj.getRoomId());
+                final RoomSummary rightRoomSummary = getSummary(aRightObj.getRoomId());
+
+                return getSummaryComparator().compare(leftRoomSummary, rightRoomSummary);
+            }
+        };
+    }
+
+    /**
+     * Return comparator to sort rooms by
+     * 1- the highlighted rooms (sub sorted by date)
+     * 2- the notified rooms (sub sorted by date)
+     * 3- latest event timestamp
+     *
+     * @param session the session
+     * @return comparator
+     */
+    public static Comparator<Room> getNotifCountRoomsComparator(final MXSession session, final boolean reverseOrder) {
+        return new Comparator<Room>() {
+            private Comparator<RoomSummary> mRoomSummaryComparator;
+            private HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
+
+            /**
+             * Retrieve the room summary comparator
+             * @return comparator
+             */
+            private Comparator<RoomSummary> getSummaryComparator() {
+                if (null == mRoomSummaryComparator) {
+                    mRoomSummaryComparator = getNotifCountRoomSummaryComparator(session.getDataHandler().getBingRulesManager(), reverseOrder);
+                }
+                return mRoomSummaryComparator;
+            }
+
+            /**
+             * Retrieve a summary from its room id
+             * @param roomId
+             * @return the summary
+             */
+            private RoomSummary getSummary(String roomId) {
+                if (TextUtils.isEmpty(roomId)) {
+                    return null;
+                }
+
+                RoomSummary summary = mSummaryByRoomIdMap.get(roomId);
+
+                if (null == summary) {
+                    summary = session.getDataHandler().getStore().getSummary(roomId);
+
+                    if (null != summary) {
+                        mSummaryByRoomIdMap.put(roomId, summary);
+                    }
+                }
+
+                return summary;
+            }
+
+
+            public int compare(Room aLeftObj, Room aRightObj) {
+                final RoomSummary leftRoomSummary = getSummary(aLeftObj.getRoomId());
+                final RoomSummary rightRoomSummary = getSummary(aRightObj.getRoomId());
+
+                return getSummaryComparator().compare(leftRoomSummary, rightRoomSummary);
+            }
+        };
+    }
+
+    /**
+     * Return comparator to sort historical rooms by date
+     *
+     * @param session
+     * @param reverseOrder
+     * @return comparator
+     */
+    public static Comparator<Room> getHistoricalRoomsComparator(final MXSession session, final boolean reverseOrder) {
+        return new Comparator<Room>() {
+            public int compare(Room aLeftObj, Room aRightObj) {
+                final RoomSummary leftRoomSummary = session.getDataHandler().getStore(aLeftObj.getRoomId()).getSummary(aLeftObj.getRoomId());
+                final RoomSummary rightRoomSummary = session.getDataHandler().getStore(aRightObj.getRoomId()).getSummary(aRightObj.getRoomId());
 
                 return getRoomSummaryComparator(reverseOrder).compare(leftRoomSummary, rightRoomSummary);
             }
@@ -105,6 +223,67 @@ public class RoomUtils {
                 if ((null == leftRoomSummary) || (null == leftRoomSummary.getLatestReceivedEvent())) {
                     retValue = 1;
                 } else if ((null == rightRoomSummary) || (null == rightRoomSummary.getLatestReceivedEvent())) {
+                    retValue = -1;
+                } else if ((deltaTimestamp = rightRoomSummary.getLatestReceivedEvent().getOriginServerTs()
+                        - leftRoomSummary.getLatestReceivedEvent().getOriginServerTs()) > 0) {
+                    retValue = 1;
+                } else if (deltaTimestamp < 0) {
+                    retValue = -1;
+                } else {
+                    retValue = 0;
+                }
+
+                return reverseOrder ? -retValue : retValue;
+            }
+        };
+    }
+
+    /**
+     * Return comparator to sort room summaries  by
+     * 1- the highlighted rooms (sub sorted by date)
+     * 2- the notified rooms (sub sorted by date)
+     * 3- latest event timestamp
+     *
+     * @param bingRulesManager the bing rules manager
+     * @return comparator
+     */
+    public static Comparator<RoomSummary> getNotifCountRoomSummaryComparator(final BingRulesManager bingRulesManager, final boolean reverseOrder) {
+        return new Comparator<RoomSummary>() {
+            public int compare(RoomSummary leftRoomSummary, RoomSummary rightRoomSummary) {
+                int retValue;
+                long deltaTimestamp;
+                int leftHighlightCount = 0, rightHighlightCount = 0;
+                int leftNotificationCount = 0, rightNotificationCount = 0;
+
+                if (null != leftRoomSummary) {
+                    leftHighlightCount = leftRoomSummary.getHighlightCount();
+                    leftNotificationCount = leftRoomSummary.getNotificationCount();
+
+                    if (bingRulesManager.isRoomMentionOnly(leftRoomSummary.getRoomId())) {
+                        leftNotificationCount = leftHighlightCount;
+                    }
+                }
+
+                if (null != rightRoomSummary) {
+                    rightHighlightCount = rightRoomSummary.getHighlightCount();
+                    rightNotificationCount = rightRoomSummary.getNotificationCount();
+
+                    if (bingRulesManager.isRoomMentionOnly(rightRoomSummary.getRoomId())) {
+                        rightNotificationCount = rightHighlightCount;
+                    }
+                }
+
+                if ((null == leftRoomSummary) || (null == leftRoomSummary.getLatestReceivedEvent())) {
+                    retValue = 1;
+                } else if ((null == rightRoomSummary) || (null == rightRoomSummary.getLatestReceivedEvent())) {
+                    retValue = -1;
+                } else if ((rightHighlightCount > 0) && (leftHighlightCount == 0)) {
+                    retValue = 1;
+                } else if ((rightHighlightCount == 0) && (leftHighlightCount > 0)) {
+                    retValue = -1;
+                } else if ((rightNotificationCount > 0) && (leftNotificationCount == 0)) {
+                    retValue = 1;
+                } else if ((rightNotificationCount == 0) && (leftNotificationCount > 0)) {
                     retValue = -1;
                 } else if ((deltaTimestamp = rightRoomSummary.getLatestReceivedEvent().getOriginServerTs()
                         - leftRoomSummary.getLatestReceivedEvent().getOriginServerTs()) > 0) {
@@ -229,22 +408,44 @@ public class RoomUtils {
     }
 
     /**
+     * See {@link #displayPopupMenu(Context, MXSession, Room, View, boolean, boolean, MoreActionListener, HistoricalRoomActionListener)}
+     */
+    public static void displayPopupMenu(final Context context, final MXSession session, final Room room,
+                                        final View actionView, final boolean isFavorite, final boolean isLowPrior,
+                                        @NonNull final MoreActionListener listener) {
+        if (listener != null) {
+            displayPopupMenu(context, session, room, actionView, isFavorite, isLowPrior, listener, null);
+        }
+    }
+
+
+    /**
+     * See {@link #displayPopupMenu(Context, MXSession, Room, View, boolean, boolean, MoreActionListener, HistoricalRoomActionListener)}
+     */
+    public static void displayHistoricalRoomMenu(final Context context, final MXSession session, final Room room,
+                                                 final View actionView, @NonNull final HistoricalRoomActionListener listener) {
+        if (listener != null) {
+            displayPopupMenu(context, session, room, actionView, false, false, null, listener);
+        }
+    }
+
+    /**
      * Display the room action popup.
      *
      * @param context
      * @param session
-     * @param childRoom  the room in which the actions should be triggered in.
-     * @param actionView the anchor view.
-     * @param isFavorite true if it is a favorite room
-     * @param isLowPrior true it it is a low priority room
-     * @param listener
+     * @param room               the room in which the actions should be triggered in.
+     * @param actionView         the anchor view.
+     * @param isFavorite         true if it is a favorite room
+     * @param isLowPrior         true it it is a low priority room
+     * @param moreActionListener
      */
     @SuppressLint("NewApi")
-    public static void displayPopupMenu(final Context context, final MXSession session, final Room childRoom,
-                                        final View actionView, final boolean isFavorite, final boolean isLowPrior,
-                                        final MoreActionListener listener) {
+    private static void displayPopupMenu(final Context context, final MXSession session, final Room room,
+                                         final View actionView, final boolean isFavorite, final boolean isLowPrior,
+                                         final MoreActionListener moreActionListener, final HistoricalRoomActionListener historicalRoomActionListener) {
         // sanity check
-        if (null == childRoom) {
+        if (null == room) {
             return;
         }
 
@@ -257,28 +458,88 @@ public class RoomUtils {
         }
         popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
 
-        MenuItem item;
+        if (room.isLeft()) {
+            popup.getMenu().setGroupVisible(R.id.active_room_actions, false);
+            popup.getMenu().setGroupVisible(R.id.historical_room_actions, true);
 
-        final BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+            if (historicalRoomActionListener != null) {
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(final MenuItem item) {
+                        if (item.getItemId() == R.id.action_forget_room) {
+                            historicalRoomActionListener.onForgotRoom(room);
+                        }
+                        return true;
+                    }
+                });
+            }
+        } else {
+            popup.getMenu().setGroupVisible(R.id.active_room_actions, true);
+            popup.getMenu().setGroupVisible(R.id.historical_room_actions, false);
 
-        if (bingRulesManager.isRoomNotificationsDisabled(childRoom)) {
-            item = popup.getMenu().getItem(0);
-            item.setIcon(null);
-        }
+            MenuItem item;
 
-        if (!isFavorite) {
-            item = popup.getMenu().getItem(1);
-            item.setIcon(null);
-        }
+            final BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
 
-        if (!isLowPrior) {
-            item = popup.getMenu().getItem(2);
-            item.setIcon(null);
-        }
+            if (bingRulesManager.isRoomNotificationsDisabled(room.getRoomId())) {
+                item = popup.getMenu().getItem(0);
+                item.setIcon(null);
+            }
 
-        if (session.getDirectChatRoomIdsList().indexOf(childRoom.getRoomId()) < 0) {
-            item = popup.getMenu().getItem(3);
-            item.setIcon(null);
+            if (!isFavorite) {
+                item = popup.getMenu().getItem(1);
+                item.setIcon(null);
+            }
+
+            if (!isLowPrior) {
+                item = popup.getMenu().getItem(2);
+                item.setIcon(null);
+            }
+
+            if (session.getDirectChatRoomIdsList().indexOf(room.getRoomId()) < 0) {
+                item = popup.getMenu().getItem(3);
+                item.setIcon(null);
+            }
+
+
+            if (moreActionListener != null) {
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(final MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.ic_action_select_notifications: {
+                                moreActionListener.onToggleRoomNotifications(session, room.getRoomId());
+                                break;
+                            }
+                            case R.id.ic_action_select_fav: {
+                                if (isFavorite) {
+                                    moreActionListener.moveToConversations(session, room.getRoomId());
+                                } else {
+                                    moreActionListener.moveToFavorites(session, room.getRoomId());
+                                }
+                                break;
+                            }
+                            case R.id.ic_action_select_deprioritize: {
+                                if (isLowPrior) {
+                                    moreActionListener.moveToConversations(session, room.getRoomId());
+                                } else {
+                                    moreActionListener.moveToLowPriority(session, room.getRoomId());
+                                }
+                                break;
+                            }
+                            case R.id.ic_action_select_remove: {
+                                moreActionListener.onLeaveRoom(session, room.getRoomId());
+                                break;
+                            }
+                            case R.id.ic_action_select_direct_chat: {
+                                moreActionListener.onToggleDirectChat(session, room.getRoomId());
+                                break;
+                            }
+                        }
+                        return false;
+                    }
+                });
+            }
         }
 
         // force to display the icon
@@ -297,45 +558,6 @@ public class RoomUtils {
         } catch (Exception e) {
             Log.e(LOG_TAG, "## displayPopupMenu() : failed " + e.getMessage());
         }
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(final MenuItem item) {
-                if (listener != null) {
-                    switch (item.getItemId()) {
-                        case R.id.ic_action_select_notifications: {
-                            listener.onToggleRoomNotifications(session, childRoom.getRoomId());
-                            break;
-                        }
-                        case R.id.ic_action_select_fav: {
-                            if (isFavorite) {
-                                listener.moveToConversations(session, childRoom.getRoomId());
-                            } else {
-                                listener.moveToFavorites(session, childRoom.getRoomId());
-                            }
-                            break;
-                        }
-                        case R.id.ic_action_select_deprioritize: {
-                            if (isLowPrior) {
-                                listener.moveToConversations(session, childRoom.getRoomId());
-                            } else {
-                                listener.moveToLowPriority(session, childRoom.getRoomId());
-                            }
-                            break;
-                        }
-                        case R.id.ic_action_select_remove: {
-                            listener.onLeaveRoom(session, childRoom.getRoomId());
-                            break;
-                        }
-                        case R.id.ic_action_select_direct_chat: {
-                            listener.onToggleDirectChat(session, childRoom.getRoomId());
-                            break;
-                        }
-                    }
-                }
-                return false;
-            }
-        });
 
         popup.show();
     }
@@ -427,12 +649,8 @@ public class RoomUtils {
      * @param listener
      */
     public static void toggleNotifications(final MXSession session, final String roomId, final BingRulesManager.onBingRuleUpdateListener listener) {
-        Room room = session.getDataHandler().getRoom(roomId);
-
-        if (null != room) {
-            BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
-            bingRulesManager.muteRoomNotifications(room, !bingRulesManager.isRoomNotificationsDisabled(room), listener);
-        }
+        BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+        bingRulesManager.muteRoomNotifications(roomId, !bingRulesManager.isRoomNotificationsDisabled(roomId), listener);
     }
 
     /**
@@ -479,6 +697,24 @@ public class RoomUtils {
             return filteredRoom;
         } else {
             return roomsToFilter;
+        }
+    }
+
+    /**
+     * Format the unread messages counter.
+     *
+     * @param count the count
+     * @return the formatted value
+     */
+    public static String formatUnreadMessagesCounter(int count) {
+        if (count > 0) {
+            if (count > 999) {
+                return (count / 1000) + "." + ((count % 1000) / 100) + "K";
+            } else {
+                return String.valueOf(count);
+            }
+        } else {
+            return null;
         }
     }
 }

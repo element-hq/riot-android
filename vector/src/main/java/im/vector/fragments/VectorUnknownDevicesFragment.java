@@ -25,11 +25,11 @@ import android.os.Bundle;
 
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 
+import android.support.v4.app.FragmentTransaction;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.MXSession;
@@ -40,9 +40,6 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -101,16 +98,19 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
     private static List<Pair<String, List<MXDeviceInfo>>> getDevicesList() {
         List<Pair<String, List<MXDeviceInfo>>> res = new ArrayList<>();
 
-        List<String> userIds = mUnknownDevicesMap.getUserIds();
+        // sanity check
+        if (null != mUnknownDevicesMap) {
+            List<String> userIds = mUnknownDevicesMap.getUserIds();
 
-        for (String userId : userIds) {
-            List<MXDeviceInfo> deviceInfos = new ArrayList<>();
-            List<String> deviceIds = mUnknownDevicesMap.getUserDeviceIds(userId);
+            for (String userId : userIds) {
+                List<MXDeviceInfo> deviceInfos = new ArrayList<>();
+                List<String> deviceIds = mUnknownDevicesMap.getUserDeviceIds(userId);
 
-            for (String deviceId : deviceIds) {
-                deviceInfos.add(mUnknownDevicesMap.getObject(deviceId, userId));
+                for (String deviceId : deviceIds) {
+                    deviceInfos.add(mUnknownDevicesMap.getObject(deviceId, userId));
+                }
+                res.add(new Pair<>(userId, deviceInfos));
             }
-            res.add(new Pair<>(userId, deviceInfos));
         }
 
         return res;
@@ -231,6 +231,14 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
         return builder.create();
     }
 
+
+    @Override
+    public void dismissAllowingStateLoss() {
+        super.dismissAllowingStateLoss();
+        // Ensure that the map is released when the fragment is dismissed.
+        mUnknownDevicesMap = null;
+    }
+
     @Override
     public void onDismiss(DialogInterface dialog) {
         // whatever the user clicks
@@ -261,6 +269,8 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                         mListener.onSendAnyway();
                     }
                     mListener = null;
+                    // ensure that the fragment won't be displayed anymore
+                    dismissAllowingStateLoss();
                 }
 
                 @Override
