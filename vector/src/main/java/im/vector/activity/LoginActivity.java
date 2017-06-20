@@ -570,10 +570,17 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(HOME_SERVER_URL_PREF, mHomeServerText.getText().toString().trim());
-                editor.apply();
+                String cleanedUrl = sanitizeUrl(s.toString());
+
+                if (!TextUtils.equals(cleanedUrl, s.toString())) {
+                    mHomeServerText.setText(cleanedUrl);
+                    mHomeServerText.setSelection(cleanedUrl.length());
+                } else {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(HOME_SERVER_URL_PREF, cleanedUrl);
+                    editor.apply();
+                }
             }
 
             @Override
@@ -590,10 +597,17 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(IDENTITY_SERVER_URL_PREF, mIdentityServerText.getText().toString().trim());
-                editor.apply();
+                String cleanedUrl = sanitizeUrl(s.toString());
+
+                if (!TextUtils.equals(cleanedUrl, s.toString())) {
+                    mIdentityServerText.setText(cleanedUrl);
+                    mIdentityServerText.setSelection(cleanedUrl.length());
+                } else {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(IDENTITY_SERVER_URL_PREF, cleanedUrl);
+                    editor.apply();
+                }
             }
 
             @Override
@@ -1910,6 +1924,19 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     //==============================================================================================================
     // extracted info
     //==============================================================================================================
+
+    /**
+     * Sanitize an URL
+     * @param url the url to sanitize
+     * @return the sanitized url
+     */
+    private static String sanitizeUrl(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return url;
+        }
+
+        return url.replaceAll("\\s","");
+    }
 
     /**
      * @return the homeserver config. null if the url is not valid
