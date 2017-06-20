@@ -258,7 +258,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                         Log.d(LOG_TAG, "checkUnreadMessage: first unread has been reached by scrolling up");
                         forgetReadMarker();
                     }
-                } else {
+                } else if (mLastVisibleEvent != null) {
                     // We are catching up as scrolling down
                     // Check if the last received event has been reached by scrolling down
                     if (mLastVisibleEvent.eventId.equals(mRoomSummary.getLatestReceivedEvent().eventId)) {
@@ -566,6 +566,10 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
     public void onReadMarkerDisplayed(Event event, View view) {
         Log.d(LOG_TAG, "onReadMarkerDisplayed for " + event.eventId);
         if (!mActivity.isFinishing()) {
+            if (mLastVisibleEvent == null) {
+                // In case it is triggered before any onScroll callback
+                mLastVisibleEvent = mVectorMessageListFragment.getEvent(mVectorMessageListFragment.getMessageListView().getLastVisiblePosition());
+            }
             checkUnreadMessage();
         }
     }
