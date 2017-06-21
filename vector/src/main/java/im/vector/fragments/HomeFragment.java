@@ -213,6 +213,10 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         final List<Room> lowPriorities = new ArrayList<>();
         final List<Room> otherRooms = new ArrayList<>();
 
+        if (null == mSession.getDataHandler().getStore()) {
+            Log.e(LOG_TAG, "## initData() : null store");
+            return;
+        }
         final Collection<Room> roomCollection = mSession.getDataHandler().getStore().getRooms();
         final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
 

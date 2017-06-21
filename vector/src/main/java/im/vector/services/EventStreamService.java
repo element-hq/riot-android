@@ -1143,6 +1143,12 @@ public class EventStreamService extends Service {
                 if (isBackgroundNotif) {
                     // TODO add multi sessions
                     IMXStore store = Matrix.getInstance(getBaseContext()).getDefaultSession().getDataHandler().getStore();
+
+                    if (null == store) {
+                        Log.e(LOG_TAG, "## refreshMessagesNotification() : null store");
+                        return;
+                    }
+
                     long ts = 0;
 
                     List<String> roomIds = new ArrayList<>(mNotifiedEventsByRoomId.keySet());
