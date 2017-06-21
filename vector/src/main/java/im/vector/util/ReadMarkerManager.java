@@ -521,6 +521,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                 final long newReadMarkerTs = mVectorMessageListFragment.getMessageAdapter().getClosestRow(newReadMarkerEvent).getEvent().getOriginServerTs();
                 if (newReadMarkerTs > currentReadMarkerTs) {
                     mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
+                    onReadMarkerChanged(mRoom.getRoomId());
                 }
             }
         }
