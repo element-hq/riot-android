@@ -413,7 +413,8 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
             mJumpToUnreadViewSpinner.setVisibility(View.VISIBLE);
             Log.d(LOG_TAG, "scrollUpToGivenEvent " + event.eventId);
             if (!scrollToAdapterEvent(event)) {
-                mRoom.getLiveTimeLine().backPaginate(UNREAD_BACK_PAGINATE_EVENT_COUNT, new ApiCallback<Integer>() {
+                // use the cached events list
+                mRoom.getLiveTimeLine().backPaginate(UNREAD_BACK_PAGINATE_EVENT_COUNT, true, new ApiCallback<Integer>() {
                     @Override
                     public void onSuccess(Integer info) {
                         if (!mActivity.isFinishing()) {
@@ -484,8 +485,13 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
      * @param isLastRead
      */
     private void scrollToRow(final MessageRow messageRow, final boolean isLastRead) {
-        mVectorMessageListFragment.scrollToRow(messageRow, isLastRead);
-        mHasJumpedToFirstUnread = true;
+        mVectorMessageListFragment.getMessageListView().post(new Runnable() {
+            @Override
+            public void run() {
+                mVectorMessageListFragment.scrollToRow(messageRow, isLastRead);
+                mHasJumpedToFirstUnread = true;
+            }
+        });
     }
 
     /**
