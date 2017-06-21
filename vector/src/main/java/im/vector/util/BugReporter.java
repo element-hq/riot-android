@@ -667,6 +667,8 @@ public class BugReporter {
             fos.close();
 
             return compressFile(logCatErrFile);
+        } catch (OutOfMemoryError error) {
+            Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + error.toString());
         } catch (Exception e) {
             Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString());
         }
