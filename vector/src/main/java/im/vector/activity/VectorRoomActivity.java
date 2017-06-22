@@ -178,6 +178,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public static final int GET_MENTION_REQUEST_CODE = 2;
     private static final int REQUEST_ROOM_AVATAR_CODE = 3;
     private static final int INVITE_USER_REQUEST_CODE = 4;
+    public static final int UNREAD_PREVIEW_REQUEST_CODE = 5;
 
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
@@ -859,10 +860,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // or in room preview mode
         // the edition items are not displayed
         if ((!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData))) {
-            mNotificationsArea.setVisibility(View.GONE);
-            findViewById(R.id.bottom_separator).setVisibility(View.GONE);
-            findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
-            findViewById(R.id.room_notifications_area).setVisibility(View.GONE);
+            if (!mIsUnreadPreviewMode) {
+                mNotificationsArea.setVisibility(View.GONE);
+                findViewById(R.id.bottom_separator).setVisibility(View.GONE);
+                findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
+                findViewById(R.id.room_notifications_area).setVisibility(View.GONE);
+            }
 
             View v = findViewById(R.id.room_bottom_layout);
             ViewGroup.LayoutParams params = v.getLayoutParams();
@@ -1197,6 +1200,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         }
                     });
                 }
+            } else if (requestCode == UNREAD_PREVIEW_REQUEST_CODE){
+                mVectorMessageListFragment.scrollToBottom(0);
             }
         }
     }
@@ -2138,6 +2143,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             iconId = R.drawable.error;
             textColor = R.color.vector_fuchsia_color;
             text = new SpannableString(getResources().getString(R.string.room_offline_notification));
+        } else if(mIsUnreadPreviewMode){
+            isAreaVisible = true;
+            iconId = R.drawable.scrolldown;
+            textColor = R.color.vector_text_gray_color;
+
+            mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
         } else {
             List<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
             List<Event> unknownDeviceEvents = mSession.getDataHandler().getStore().getUnknownDeviceEvents(mRoom.getRoomId());
@@ -2232,7 +2249,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         }
 
-        if (TextUtils.isEmpty(mEventId)) {
+        if (mIsUnreadPreviewMode) {
+            mNotificationsArea.setVisibility(View.VISIBLE);
+        } else if (TextUtils.isEmpty(mEventId)) {
             mNotificationsArea.setVisibility(isAreaVisible ? View.VISIBLE : View.INVISIBLE);
         }
 
