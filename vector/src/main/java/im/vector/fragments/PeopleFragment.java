@@ -17,9 +17,11 @@
 package im.vector.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,7 +65,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
 
-    private static final String MATRIX_USER_ONLY = "MATRIX_USER_ONLY";
+    private static final String MATRIX_USER_ONLY_PREF_KEY = "MATRIX_USER_ONLY_PREF_KEY";
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecycler;
@@ -119,9 +121,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
         mOnRoomChangedListener = this;
 
-        if (savedInstanceState != null && savedInstanceState.getBoolean(MATRIX_USER_ONLY) && mMatrixUserOnlyCheckbox != null) {
-            mMatrixUserOnlyCheckbox.setChecked(true);
-        }
+        mMatrixUserOnlyCheckbox.setChecked(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MATRIX_USER_ONLY_PREF_KEY, false));
 
         mAdapter.onFilterDone(mCurrentFilter);
 
@@ -148,12 +148,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         mAdapter.setInvitation(mActivity.getRoomInvitations());
 
         mRecycler.addOnScrollListener(mScrollListener);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(MATRIX_USER_ONLY, mMatrixUserOnlyCheckbox != null && mMatrixUserOnlyCheckbox.isChecked());
     }
 
     @Override
@@ -250,6 +244,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             mMatrixUserOnlyCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean(MATRIX_USER_ONLY_PREF_KEY, mMatrixUserOnlyCheckbox.isChecked());
+                    editor.commit();
+
                     initContactsViews();
                 }
             });
