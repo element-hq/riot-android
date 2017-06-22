@@ -2641,6 +2641,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     /**
+     * Dismiss the keyboard
+     */
+    public void dismissKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
+    }
+
+    /**
      * Show or hide the action bar header view according to aIsHeaderViewDisplayed
      *
      * @param aIsHeaderViewDisplayed true to show the header view, false to hide
@@ -2649,9 +2657,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         mIsHeaderViewDisplayed = aIsHeaderViewDisplayed;
         if (SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed) {
-
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
+            dismissKeyboard();
 
             // hide the name and the topic in the action bar.
             // these items are hidden when the header view is opened

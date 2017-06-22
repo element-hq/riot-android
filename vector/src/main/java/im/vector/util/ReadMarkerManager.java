@@ -114,6 +114,10 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                 jumpToUnreadLabel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        // force to dismiss the keyboard
+                        // on some devices, it is not closed
+                        activity.dismissKeyboard();
+
                         // Make sure read marker didn't change
                         updateReadMarkerValue();
 
