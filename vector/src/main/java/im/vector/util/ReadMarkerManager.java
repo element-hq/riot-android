@@ -295,7 +295,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
      * Check if we display "Jump to" banner
      */
     private synchronized void updateJumpToBanner() {
-        Log.d(LOG_TAG, "updateJumpToBanner");
+        //Log.d(LOG_TAG, "updateJumpToBanner");
         boolean showJumpToView = false;
 
         mReadMarkerEventId = mRoomSummary.getReadMarkerEventId();
