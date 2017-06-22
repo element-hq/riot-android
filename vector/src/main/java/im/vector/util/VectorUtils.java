@@ -31,7 +31,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -575,100 +574,82 @@ public class VectorUtils {
             return;
         }
 
-        if (null == mImagesThread) {
-            mImagesThread = new HandlerThread("ImagesThread", Thread.MIN_PRIORITY);
-            mImagesThread.start();
-            mImagesThreadHandler = new android.os.Handler(mImagesThread.getLooper());
-            mUIHandler = new Handler(Looper.getMainLooper());
-        }
-
+        // reset the imageView tag
         imageView.setTag(null);
 
-        // clear the caches in a background thread to avoid blocking the UI thread
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (session.getMediasCache().isAvatarThumbnailCached(avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
-                    session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
-                } else {
-                    final Bitmap bitmap = VectorUtils.getAvatar(context, VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
+        if (session.getMediasCache().isAvatarThumbnailCached(avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
+            session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+        } else {
+            if (null == mImagesThread) {
+                mImagesThread = new HandlerThread("ImagesThread", Thread.MIN_PRIORITY);
+                mImagesThread.start();
+                mImagesThreadHandler = new android.os.Handler(mImagesThread.getLooper());
+                mUIHandler = new Handler(Looper.getMainLooper());
+            }
 
-                    // test if the default avatar has been computed
-                    if (null != bitmap) {
-                        mUIHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                imageView.setImageBitmap(bitmap);
+            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
 
-                                final String tag = avatarUrl + userId + displayName;
-                                imageView.setTag(tag);
+            // test if the default avatar has been computed
+            if (null != bitmap) {
+                imageView.setImageBitmap(bitmap);
 
-                                if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
-                                    mImagesThreadHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (TextUtils.equals(tag, (String) imageView.getTag())) {
-                                                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
-                                            }
-                                        }
-                                    });
-                                }
+                final String tag = avatarUrl + userId + displayName;
+                imageView.setTag(tag);
+
+                if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
+                    mImagesThreadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (TextUtils.equals(tag, (String) imageView.getTag())) {
+                                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
                             }
-                        });
-                    } else {
-                        final String tmpTag0 = "00" + avatarUrl + "-" + userId + "--" + displayName;
+                        }
+                    });
+                }
+            } else {
+                final String tmpTag0 = "00" + avatarUrl + "-" + userId + "--" + displayName;
+                imageView.setTag(tmpTag0);
 
-                        mUIHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                imageView.setTag(tmpTag0);
+                // create the default avatar in the background thread
+                mImagesThreadHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (TextUtils.equals(tmpTag0, (String) imageView.getTag())) {
+                            imageView.setTag(null);
+                            setDefaultMemberAvatar(imageView, userId, displayName);
 
-                                // create the default avatar in the background thread
-                                mImagesThreadHandler.post(new Runnable() {
+                            if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
+                                final String tmpTag1 = "11" + avatarUrl + "-" + userId + "--" + displayName;
+                                imageView.setTag(tmpTag1);
+
+                                // wait that it is rendered to load the right one
+                                mUIHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (TextUtils.equals(tmpTag0, (String) imageView.getTag())) {
-                                            imageView.setTag(null);
-                                            setDefaultMemberAvatar(imageView, userId, displayName);
+                                        // test if the imageView tag has not been updated
+                                        if (TextUtils.equals(tmpTag1, (String) imageView.getTag())) {
+                                            final String tmptag2 = "22" + avatarUrl + userId + displayName;
+                                            imageView.setTag(tmptag2);
 
-                                            if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
-                                                final String tmpTag1 = "11" + avatarUrl + "-" + userId + "--" + displayName;
-                                                imageView.setTag(tmpTag1);
-
-                                                // wait that it is rendered to load the right one
-                                                mUIHandler.post(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        // test if the imageView tag has not been updated
-                                                        if (TextUtils.equals(tmpTag1, (String) imageView.getTag())) {
-                                                            final String tmptag2 = "22" + avatarUrl + userId + displayName;
-                                                            imageView.setTag(tmptag2);
-
-                                                            mImagesThreadHandler.post(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    // test if the imageView tag has not been updated
-                                                                    if (TextUtils.equals(tmptag2, (String) imageView.getTag())) {
-                                                                        final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
-                                                                        session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
-                                                                    }
-                                                                }
-                                                            });
-                                                        }
+                                            mImagesThreadHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    // test if the imageView tag has not been updated
+                                                    if (TextUtils.equals(tmptag2, (String) imageView.getTag())) {
+                                                        final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
+                                                        session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
                                                     }
-                                                });
-                                            }
+                                                }
+                                            });
                                         }
                                     }
                                 });
                             }
-                        });
+                        }
                     }
-                }
-                return null;
+                });
             }
-        };
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
 
     //==============================================================================================================
