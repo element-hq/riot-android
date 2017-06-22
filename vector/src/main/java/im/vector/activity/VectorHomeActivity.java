@@ -1280,6 +1280,14 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         }
     }
 
+    /**
+     * Getter for the floating action button
+     *
+     * @return
+     */
+    public FloatingActionButton getFloatingActionButton() {
+        return mFloatingActionButton;
+    }
 
     /**
      * Open the room creation with inviting people.
