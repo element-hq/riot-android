@@ -937,9 +937,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // Init read marker manager
         if (mIsUnreadPreviewMode || (mRoom != null && mRoom.getLiveTimeLine() != null && mRoom.getLiveTimeLine().isLiveTimeline() && TextUtils.isEmpty(mEventId))) {
-            mReadMarkerManager = new ReadMarkerManager(this, mVectorMessageListFragment, mSession, mRoom,
-                    mIsUnreadPreviewMode ? ReadMarkerManager.PREVIEW_MODE : ReadMarkerManager.LIVE_MODE,
-                    findViewById(R.id.jump_to_first_unread));
+            if (null == mSession.getDataHandler().getStore().getSummary(mRoom.getRoomId())) {
+                Log.e(LOG_TAG, "## onCreate() : there is no summary for this room");
+            } else {
+                mReadMarkerManager = new ReadMarkerManager(this, mVectorMessageListFragment, mSession, mRoom,
+                        mIsUnreadPreviewMode ? ReadMarkerManager.PREVIEW_MODE : ReadMarkerManager.LIVE_MODE,
+                        findViewById(R.id.jump_to_first_unread));
+            }
         }
 
         Log.d(LOG_TAG, "End of create");
