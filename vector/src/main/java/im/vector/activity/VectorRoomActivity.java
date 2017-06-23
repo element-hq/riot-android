@@ -1051,6 +1051,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mEditText.setHint(mRoom.isEncrypted() ? R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
 
             mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
+        } else {
+            mSyncInProgressView.setVisibility(View.GONE);
         }
 
         mSession.getDataHandler().addListener(mGlobalEventListener);
