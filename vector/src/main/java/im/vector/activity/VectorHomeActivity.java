@@ -991,50 +991,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         }
     }
 
-    /**
-     * Hide the floating action button for 1 second
-     *
-     * @param fragmentTag the calling fragment tag
-     */
-    public void hideFloatingActionButton(String fragmentTag) {
-        synchronized (this) {
-            // check if the calling fragment is the current one
-            // during the fragment switch, the unplugged one might call this method
-            // before the new one is plugged.
-            // for example, if the switch is performed while the current list is scrolling.
-            if (TextUtils.equals(mCurrentFragmentTag, fragmentTag)) {
-                if (null != mFloatingActionButtonTimer) {
-                    mFloatingActionButtonTimer.cancel();
-                }
-
-                if (null != mFloatingActionButton) {
-                    mFloatingActionButton.hide();
-
-                    mFloatingActionButtonTimer = new Timer();
-                    mFloatingActionButtonTimer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            synchronized (this) {
-                                if (null != mFloatingActionButtonTimer) {
-                                    mFloatingActionButtonTimer.cancel();
-                                    mFloatingActionButtonTimer = null;
-                                }
-                            }
-                            VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (null != mFloatingActionButton) {
-                                        mFloatingActionButton.show();
-                                    }
-                                }
-                            });
-                        }
-                    }, 1000);
-                }
-            }
-        }
-    }
-
     /*
      * *********************************************************************************************
      * User action management
@@ -1281,9 +1237,53 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     }
 
     /**
+     * Hide the floating action button for 1 second
+     *
+     * @param fragmentTag the calling fragment tag
+     */
+    public void hideFloatingActionButton(String fragmentTag) {
+        synchronized (this) {
+            // check if the calling fragment is the current one
+            // during the fragment switch, the unplugged one might call this method
+            // before the new one is plugged.
+            // for example, if the switch is performed while the current list is scrolling.
+            if (TextUtils.equals(mCurrentFragmentTag, fragmentTag)) {
+                if (null != mFloatingActionButtonTimer) {
+                    mFloatingActionButtonTimer.cancel();
+                }
+
+                if (null != mFloatingActionButton) {
+                    mFloatingActionButton.hide();
+
+                    mFloatingActionButtonTimer = new Timer();
+                    mFloatingActionButtonTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            synchronized (this) {
+                                if (null != mFloatingActionButtonTimer) {
+                                    mFloatingActionButtonTimer.cancel();
+                                    mFloatingActionButtonTimer = null;
+                                }
+                            }
+                            VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (null != mFloatingActionButton) {
+                                        mFloatingActionButton.show();
+                                    }
+                                }
+                            });
+                        }
+                    }, 1000);
+                }
+            }
+        }
+    }
+
+    /**
      * Getter for the floating action button
      *
-     * @return
+     * @return fab view
      */
     public FloatingActionButton getFloatingActionButton() {
         return mFloatingActionButton;
