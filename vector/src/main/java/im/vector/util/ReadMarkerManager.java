@@ -1,5 +1,6 @@
 package im.vector.util;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.IntDef;
@@ -187,7 +188,8 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
             final ListView messageListView = mVectorMessageListFragment.getMessageListView();
             if (messageListView != null && firstVisibleItem + visibleItemCount == totalItemCount &&
                     messageListView.getChildAt(messageListView.getChildCount() - 1).getBottom() == messageListView.getBottom()) {
-                Toast.makeText(mActivity, org.matrix.androidsdk.R.string.unread_messages_footer, Toast.LENGTH_SHORT).show();
+                mActivity.setResult(Activity.RESULT_OK);
+                mActivity.finish();
             }
         }
     }
