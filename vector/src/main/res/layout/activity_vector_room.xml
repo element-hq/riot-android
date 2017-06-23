@@ -364,29 +364,30 @@
             <RelativeLayout
                 android:id="@+id/room_notifications_area"
                 android:layout_width="match_parent"
-                android:minHeight="42dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_above="@id/bottom_separator"
+                android:layout_alignParentLeft="true"
+                android:minHeight="42dp"
                 android:visibility="invisible">
 
                 <ImageView
                     android:id="@+id/room_notification_icon"
-                    android:layout_marginLeft="25dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/vector_typing"/>
+                    android:layout_marginLeft="20dp"
+                    android:padding="5dp"
+                    android:src="@drawable/vector_typing" />
 
                 <TextView
                     android:id="@+id/room_notification_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="73dp"
+                    android:layout_marginLeft="68dp"
                     android:layout_marginRight="13dp"
-                    android:textColor="@color/vector_text_gray_color"
-                    android:text="a text here " />
+                    android:text="a text here "
+                    android:textColor="@color/vector_text_gray_color" />
 
             </RelativeLayout>
 

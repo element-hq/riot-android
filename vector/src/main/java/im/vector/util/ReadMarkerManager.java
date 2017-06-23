@@ -402,7 +402,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
             intent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             intent.putExtra(VectorRoomActivity.EXTRA_EVENT_ID, eventId);
             intent.putExtra(VectorRoomActivity.EXTRA_IS_UNREAD_PREVIEW_MODE, true);
-            mActivity.startActivity(intent);
+            mActivity.startActivityForResult(intent, VectorRoomActivity.UNREAD_PREVIEW_REQUEST_CODE);
         }
     }
 
