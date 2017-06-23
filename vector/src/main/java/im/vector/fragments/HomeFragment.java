@@ -17,9 +17,13 @@
 package im.vector.fragments;
 
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -45,6 +49,9 @@ import im.vector.view.HomeSectionView;
 
 public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
     private static final String LOG_TAG = HomeFragment.class.getSimpleName();
+
+    @BindView(R.id.nested_scrollview)
+    NestedScrollView mNestedScrollView;
 
     @BindView(R.id.invitations_section)
     HomeSectionView mInvitationsSection;
@@ -189,6 +196,37 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         mHomeSectionViews = Arrays.asList(mInvitationsSection, mFavouritesSection, mDirectChatsSection, mRoomsSection, mLowPrioritySection);
+
+        // Add listeners to hide the floating button when needed
+        final GestureDetectorCompat gestureDetector = new GestureDetectorCompat(mActivity, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent event) {
+                return true;
+            }
+
+            @Override
+            public boolean onFling(MotionEvent event1, MotionEvent event2,
+                                   float velocityX, float velocityY) {
+                if (mActivity.getFloatingActionButton() != null
+                        && mNestedScrollView.getBottom() > mActivity.getFloatingActionButton().getTop()) {
+                    mActivity.hideFloatingActionButton(getTag());
+                }
+                return true;
+            }
+        });
+
+        mNestedScrollView.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return mNestedScrollView.onTouchEvent(event);
+            }
+        });
+        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                mActivity.hideFloatingActionButton(getTag());
+            }
+        });
     }
 
     @Override
