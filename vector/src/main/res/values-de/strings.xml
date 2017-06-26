@@ -25,6 +25,7 @@
     <string name="forward">Weiterleiten</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">Zeige Quellcode</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
     <string name="delete">Löschen</string>
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>

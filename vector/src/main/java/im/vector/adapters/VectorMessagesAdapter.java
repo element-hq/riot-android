@@ -659,6 +659,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         }
 
         menu.findItem(R.id.ic_action_view_source).setVisible(true);
+        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()));
         menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
 
         if (!TextUtils.isEmpty(textMsg)) {

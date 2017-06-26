@@ -25,6 +25,7 @@
     <string name="forward">Переслать</string>
     <string name="permalink">Ссылка</string>
     <string name="view_source">Просмотр исходного</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
     <string name="report_content">Содержание отчета</string>

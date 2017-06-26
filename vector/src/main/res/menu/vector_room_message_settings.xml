@@ -63,6 +63,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/ic_action_view_decrypted_source"
+        android:icon="@drawable/ic_material_message_black"
+        android:title="@string/view_decrypted_source"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/ic_action_vector_permalink"
         android:icon="@drawable/ic_material_link_black"
         android:title="@string/permalink"

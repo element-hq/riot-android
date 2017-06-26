@@ -25,6 +25,7 @@
     <string name="forward">Enviar</string>
     <string name="permalink">Enlace permanente</string>
     <string name="view_source">Ver fuente</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
     <string name="delete">Borrar</string>
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
