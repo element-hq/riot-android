@@ -708,12 +708,33 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         View subLayout = convertView.findViewById(R.id.people_header_sub_layout);
+
+        // reported by GA
+        if (null == subLayout) {
+            Log.e(LOG_TAG, "## getGroupView() : null subLayout");
+            return convertView;
+        }
+
         subLayout.setVisibility((groupPosition == mFirstEntryPosition) ? View.GONE : View.VISIBLE);
+
         View loadingView = subLayout.findViewById(R.id.heading_loading_view);
+
+        // reported by GA
+        if (null == loadingView) {
+            Log.e(LOG_TAG, "## getGroupView() : null loadingView");
+            return convertView;
+        }
+
         loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.getInstance().arePIDsRetrieved() ? View.VISIBLE : View.GONE);
 
         ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
         View matrixView = convertView.findViewById(R.id.people_header_matrix_contacts_layout);
+
+        // reported by GA
+        if ((null == imageView) || (null == matrixView)) {
+            Log.e(LOG_TAG, "## getGroupView() : null UI items");
+            return convertView;
+        }
 
         if (groupPosition != mRoomContactsSectionPosition || mParticipantsListsList.get(groupPosition).size() > 0) {
             if (isExpanded) {
