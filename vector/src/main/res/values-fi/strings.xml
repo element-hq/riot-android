@@ -25,6 +25,8 @@
     <string name="forward">Lähetä edelleen</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">Lähdekoodi</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
+
     <!-- verb or noun? -->
     <!-- uh oh -->
     <string name="delete">Poista</string>

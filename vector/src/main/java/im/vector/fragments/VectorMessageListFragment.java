@@ -634,7 +634,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(event.roomId, event.eventId));
         } else if (action == R.id.ic_action_vector_report) {
             onMessageReport(event);
-        } else if (action == R.id.ic_action_view_source) {
+        } else if ((action == R.id.ic_action_view_source) || (action == R.id.ic_action_view_decrypted_source)) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -644,7 +644,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     TextView textview = (TextView) view.findViewById(R.id.event_content_text_view);
 
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    textview.setText(gson.toJson(JsonUtils.toJson(event)));
+                    textview.setText(gson.toJson(JsonUtils.toJson((action == R.id.ic_action_view_source) ? event : event.getClearEvent())));
                     builder.setView(view);
 
                     builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

@@ -25,6 +25,7 @@
     <string name="forward">Doorsturen</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">Bekijk bron</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
     <string name="delete">Verwijderen</string>
     <string name="rename">Herbenoemen</string>
     <string name="report_content">Inhoud melden</string>

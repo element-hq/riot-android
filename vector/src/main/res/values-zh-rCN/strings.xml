@@ -66,6 +66,7 @@
     <string name="send">发送</string>
     <string name="copy">复制</string>
     <string name="view_source">查看源码</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
     <string name="ongoing_conference_call_video">视频</string>
     <string name="or">或</string>
 

@@ -25,6 +25,7 @@
     <string name="forward">Forward</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">View Source</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="report_content">Report content</string>
