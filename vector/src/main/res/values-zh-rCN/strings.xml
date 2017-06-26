@@ -678,4 +678,8 @@
     <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
     <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+
+    <string name="settings_home_display">Home display</string>
+    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
+    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
 </resources>

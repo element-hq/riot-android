@@ -163,7 +163,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private PreferenceCategory mUserSettingsCategory;
     private List<String> mDisplayedEmails = new ArrayList<>();
     private List<String> mDisplayedPhoneNumber = new ArrayList<>();
-    // contacts
+    // Local contacts
     private PreferenceCategory mContactSettingsCategory;
     private VectorCustomActionEditTextPreference mContactPhonebookCountryPreference;
     // displayed pushers
@@ -457,6 +457,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // Contacts
         setContactsPreferences();
+
+        // Home display
+        setHomeDisplayPreferences();
 
         // background sync management
         mBackgroundSyncCategory = (PreferenceCategory) findPreference(getString(R.string.settings_background_sync));
@@ -1802,6 +1805,55 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 PhoneNumberUtils.setCountryCode(getActivity(), countryCode);
                 mContactPhonebookCountryPreference.setSummary(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME));
             }
+        }
+    }
+
+    //==============================================================================================================
+    // Home display management
+    //==============================================================================================================
+
+    /**
+     * Set the home display preferences
+     */
+    private void setHomeDisplayPreferences() {
+        // Missed notifications
+        final String pinMissedNotificationsKey = getString(R.string.settings_pin_missed_notifications);
+        final CheckBoxPreference pinMissedNotifications = (CheckBoxPreference) findPreference(pinMissedNotificationsKey);
+        if (null != pinMissedNotifications) {
+            pinMissedNotifications.setChecked(PreferenceManager.getDefaultSharedPreferences(getActivity())
+                    .getBoolean(pinMissedNotificationsKey, false));
+            pinMissedNotifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object aIsChecked) {
+                    boolean isChecked = (boolean) aIsChecked;
+
+                    PreferenceManager.getDefaultSharedPreferences(getActivity())
+                            .edit()
+                            .putBoolean(pinMissedNotificationsKey, isChecked)
+                            .apply();
+                    return true;
+                }
+            });
+        }
+
+        // Unread messages
+        final String pinUnreadMessagesKey = getString(R.string.settings_pin_unread_messages);
+        final CheckBoxPreference pinUnreadMessages = (CheckBoxPreference) findPreference(pinUnreadMessagesKey);
+        if (null != pinUnreadMessages) {
+            pinUnreadMessages.setChecked(PreferenceManager.getDefaultSharedPreferences(getActivity())
+                    .getBoolean(pinUnreadMessagesKey, false));
+            pinUnreadMessages.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object aIsChecked) {
+                    boolean isChecked = (boolean) aIsChecked;
+
+                    PreferenceManager.getDefaultSharedPreferences(getActivity())
+                            .edit()
+                            .putBoolean(pinUnreadMessagesKey, isChecked)
+                            .apply();
+                    return true;
+                }
+            });
         }
     }
 

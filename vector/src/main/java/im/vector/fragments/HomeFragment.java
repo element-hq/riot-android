@@ -16,7 +16,9 @@
 
 package im.vector.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -279,7 +281,10 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
             }
         }
 
-        Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, false);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final boolean pinMissedNotifications = preferences.getBoolean(getString(R.string.settings_pin_missed_notifications), false);
+        final boolean pinUnreadMessages = preferences.getBoolean(getString(R.string.settings_pin_unread_messages), false);
+        Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages);
 
         sortAndDisplay(favourites, notificationComparator, mFavouritesSection);
         sortAndDisplay(directChats, notificationComparator, mDirectChatsSection);

@@ -510,6 +510,9 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="settings_contact">Lokale Kontakte</string>
     <string name="settings_contacts_app_permission">Kontaktzugriffsberechtigung</string>
     <string name="settings_contacts_phonebook_country">Telefonbuch-Land</string>
+    <string name="settings_home_display">Home display</string>
+    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
+    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Geräte</string>
     <string name="devices_details_dialog_title">Geräte-Details</string>
     <string name="devices_details_id_title">ID</string>

@@ -45,6 +45,22 @@
 
     <im.vector.preference.VectorDividerCategory />
 
+    <PreferenceCategory
+        android:key="@string/settings_home_display"
+        android:title="@string/settings_home_display" >
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_pin_missed_notifications"
+            android:key="@string/settings_pin_missed_notifications"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_pin_unread_messages"
+            android:key="@string/settings_pin_unread_messages"/>
+
+    </PreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory/>
+
     <PreferenceCategory android:title="@string/settings_notifications">
 
         <im.vector.preference.VectorSwitchPreference

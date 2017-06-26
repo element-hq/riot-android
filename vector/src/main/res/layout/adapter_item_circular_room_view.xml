@@ -35,12 +35,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/room_avatar"
         android:layout_marginRight="10dp"
-        android:background="#AAff00ff"
         android:gravity="center"
         android:minWidth="25dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
         android:textColor="@android:color/white"
         android:textSize="12sp"
-        tools:text="12" />
+        tools:background="#AAff00ff"
+        tools:text="1.2K" />
 
     <ImageView
         android:id="@+id/room_avatar_encrypted_icon"
