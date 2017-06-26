@@ -299,6 +299,12 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
      * @param room
      */
     public void openRoom(final Room room) {
+        // sanity checks
+        // reported by GA
+        if ((null == mSession.getDataHandler()) || (null == mSession.getDataHandler().getStore())) {
+            return;
+        }
+
         final String roomId;
         // cannot join a leaving room
         if (room == null || room.isLeaving()) {
@@ -311,7 +317,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
             final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(roomId);
 
             if (null != roomSummary) {
-                room.sendReadReceipt(null);
+                room.sendReadReceipt();
             }
 
             // Update badge unread count in case device is offline

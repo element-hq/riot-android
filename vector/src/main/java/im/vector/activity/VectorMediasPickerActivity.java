@@ -32,6 +32,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
+import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaActionSound;
 import android.media.MediaPlayer;
@@ -41,21 +42,12 @@ import android.net.Uri;
 import android.opengl.GLES20;
 import android.os.Build;
 import android.os.Bundle;
-
-import im.vector.R;
-import im.vector.VectorApp;
-import im.vector.util.ResourceUtils;
-import im.vector.view.RecentMediaLayout;
-import im.vector.view.VideoRecordView;
-
-import android.hardware.Camera;
 import android.os.HandlerThread;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import org.matrix.androidsdk.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
@@ -69,6 +61,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import org.matrix.androidsdk.util.ImageUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -89,6 +82,12 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
+
+import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.util.ResourceUtils;
+import im.vector.view.RecentMediaLayout;
+import im.vector.view.VideoRecordView;
 
 /**
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
@@ -523,7 +522,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // can only switch if the device has more than two camera
         if (Camera.getNumberOfCameras() >= 2) {
             // reported by GA
-            if (null == mCamera) {
+            if (null != mCamera) {
                 // stop camera
                 if (null != mCameraTextureView) {
                     mCamera.stopPreview();

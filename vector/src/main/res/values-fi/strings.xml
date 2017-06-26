@@ -291,6 +291,9 @@
     <string name="preview">Esikatsele</string>
     <string name="reject">Kieltäydy</string>
 
+    <!-- Room -->
+    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s on kutsunut sinut huoneeseen</string>
     <string name="room_preview_unlinked_email_warning">Kutsu lähetettiin osoitteeseen %s, joka ei kuulu tälle tilille.\nVoit kirjautua sisään toisella tilillä tai lisätä sähköpostiosoitteesi tälle tilille.</string>

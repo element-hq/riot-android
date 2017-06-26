@@ -171,20 +171,17 @@ public class BugReporter {
 
                 MXSession session = Matrix.getInstance(context).getDefaultSession();
 
-                String deviceId = null;
-                String userId = null;
+                String deviceId = "undefined";
+                String userId = "undefined";
+                String matrixSdkVersion = "undefined";
+                String olmVersion =  "undefined";
+
 
                 if (null != session) {
                     userId = session.getMyUserId();
                     deviceId = session.getCredentials().deviceId;
-                }
-
-                if (TextUtils.isEmpty(userId)) {
-                    userId = "";
-                }
-
-                if (TextUtils.isEmpty(deviceId)) {
-                    deviceId = "";
+                    matrixSdkVersion = session.getVersion(true);
+                    olmVersion = session.getCryptoVersion(context, true);
                 }
 
                 if (!mIsCancelled) {
@@ -197,8 +194,8 @@ public class BugReporter {
                             .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", Matrix.getInstance(context).getVersion(true))
                             .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
-                            .addFormDataPart("matrix_sdk_version", Matrix.getInstance(context).getDefaultSession().getVersion(true))
-                            .addFormDataPart("olm_version", Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true))
+                            .addFormDataPart("matrix_sdk_version", matrixSdkVersion)
+                            .addFormDataPart("olm_version",olmVersion)
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())
@@ -670,6 +667,8 @@ public class BugReporter {
             fos.close();
 
             return compressFile(logCatErrFile);
+        } catch (OutOfMemoryError error) {
+            Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + error.toString());
         } catch (Exception e) {
             Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString());
         }

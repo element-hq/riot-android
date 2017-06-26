@@ -252,7 +252,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         // update/retrieve the complete summary list
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
         HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());
-        HashSet<String> favoritesRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE));
+        HashSet<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
 
         mRooms.clear();
 
@@ -265,7 +265,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 if ((null != room) && // if the room still exists
                         !room.isConferenceUserRoom() && // not a VOIP conference room
                         !directChatRoomIds.contains(room.getRoomId()) &&
-                        (!room.getAccountData().hasTags() || favoritesRoomIds.contains(room.getRoomId()))) {
+                        !lowPriorityRoomIds.contains(room.getRoomId())) {
                     mRooms.add(room);
                 }
             }

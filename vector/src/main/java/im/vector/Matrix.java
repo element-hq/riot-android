@@ -149,9 +149,7 @@ public class Matrix {
                 }
 
                 // TODO find a way to detect which session is synced
-                for (MXSession session : instance.mMXSessions) {
-                    VectorApp.removeSyncingSession(session);
-                }
+                VectorApp.clearSyncingSessions();
             }
 
             mRefreshUnreadCounter = false;
@@ -553,6 +551,11 @@ public class Matrix {
      * @param clearCredentials true to clear the credentials.
      */
     public synchronized void clearSession(final Context context, final MXSession session, final boolean clearCredentials, final SimpleApiCallback<Void> aCallback) {
+        if (!session.isAlive()) {
+            Log.e(LOG_TAG, "## clearSession() " + session.getMyUserId() + " is already released");
+            return;
+        }
+
         if (clearCredentials) {
             mLoginStorage.removeCredentials(session.getHomeserverConfig());
         }

@@ -15,14 +15,13 @@
  */
 package im.vector.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.MenuItem;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -60,6 +59,16 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
         // display the fragment
         mFragment = VectorSettingsPreferencesFragment.newInstance(mSession.getMyUserId());
         getFragmentManager().beginTransaction().replace(R.id.vector_settings_page, mFragment).commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

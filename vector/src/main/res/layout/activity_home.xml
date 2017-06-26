@@ -108,6 +108,6 @@
         app:headerLayout="@layout/vector_home_menu_header"
         app:itemIconTint="@color/vector_4d_gray"
         app:menu="@menu/vector_home_sliding_menu"
-        app:theme="@style/NavigationViewStyle"></android.support.design.widget.NavigationView>
+        app:theme="@style/NavigationViewStyle" />
 
 </android.support.v4.widget.DrawerLayout>

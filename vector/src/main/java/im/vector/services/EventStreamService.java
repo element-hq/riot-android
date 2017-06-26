@@ -397,7 +397,6 @@ public class EventStreamService extends Service {
         // no intent : restarted by Android
         // EXTRA_AUTO_RESTART_ACTION : restarted by the service itself (
         if ((null == intent) || intent.hasExtra(EXTRA_AUTO_RESTART_ACTION)) {
-
             boolean restart = false;
 
             if (StreamAction.AUTO_RESTART == mServiceState) {
@@ -408,6 +407,12 @@ public class EventStreamService extends Service {
                 restart = true;
             } else if  (StreamAction.IDLE == mServiceState) {
                 Log.e(LOG_TAG, "onStartCommand : automatically restart the service");
+                restart = true;
+            } else if (StreamAction.STOP == mServiceState) {
+                // it might have some race conditions when the service is restarted by android
+                // the state should first switch from STOP to IDLE : android restarts the service with no parameters
+                // the AUTO_RESTART timer should be triggered
+                Log.e(LOG_TAG, "onStartCommand : automatically restart the service even if the service is stopped");
                 restart = true;
             } else {
                 Log.e(LOG_TAG, "onStartCommand : EXTRA_AUTO_RESTART_ACTION has been set but mServiceState = " + mServiceState);
@@ -1138,6 +1143,12 @@ public class EventStreamService extends Service {
                 if (isBackgroundNotif) {
                     // TODO add multi sessions
                     IMXStore store = Matrix.getInstance(getBaseContext()).getDefaultSession().getDataHandler().getStore();
+
+                    if (null == store) {
+                        Log.e(LOG_TAG, "## refreshMessagesNotification() : null store");
+                        return;
+                    }
+
                     long ts = 0;
 
                     List<String> roomIds = new ArrayList<>(mNotifiedEventsByRoomId.keySet());
@@ -1302,7 +1313,7 @@ public class EventStreamService extends Service {
 
                                 if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
                                     list.add(new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, rule));
-                                    Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
+                                    //Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
                                 }
                             }
 
@@ -1346,7 +1357,7 @@ public class EventStreamService extends Service {
                                     NotificationUtils.NotifiedEvent event = events.get(i);
 
                                     if (room.isEventRead(event.mEventId)) {
-                                        Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");
+                                       // Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");
 
                                         events.remove(i);
                                         isUpdated = true;
@@ -1360,7 +1371,7 @@ public class EventStreamService extends Service {
 
                             // all the messages have been read
                             if (0 == events.size()) {
-                                Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : no more unread messages in " + roomId);
+                                //Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : no more unread messages in " + roomId);
                                 mNotifiedEventsByRoomId.remove(roomId);
                                 isUpdated = true;
                             }
