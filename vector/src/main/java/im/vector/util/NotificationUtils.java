@@ -520,6 +520,8 @@ public class NotificationUtils {
             notifiedEvents = notifiedEvents.subList(0, MAX_NUMBER_NOTIFICATION_LINES);
         }
 
+        SpannableString latestText = null;
+
         for (NotifiedEvent notifiedEvent : notifiedEvents) {
             Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
             EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
@@ -527,17 +529,21 @@ public class NotificationUtils {
             CharSequence textualDisplay = eventDisplay.getTextualDisplay();
 
             if (!TextUtils.isEmpty(textualDisplay)) {
-                inboxStyle.addLine(new SpannableString(textualDisplay));
+                inboxStyle.addLine(latestText = new SpannableString(textualDisplay));
             }
         }
-
         inboxStyle.setBigContentTitle(roomName);
 
-        if (unreadCount > MAX_NUMBER_NOTIFICATION_LINES) {
-            inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages, unreadCount));
-        }
+        // adapt the notification display to the number of notified messages
+        if ((1 == notifiedEvents.size()) && (null != latestText)) {
+            builder.setStyle(new android.support.v7.app.NotificationCompat.BigTextStyle().bigText(latestText));
+        } else {
+            if (unreadCount > MAX_NUMBER_NOTIFICATION_LINES) {
+                inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages, unreadCount));
+            }
 
-        builder.setStyle(inboxStyle);
+            builder.setStyle(inboxStyle);
+        }
 
         // do not offer to quick respond if the user did not dismiss the previous one
         if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
