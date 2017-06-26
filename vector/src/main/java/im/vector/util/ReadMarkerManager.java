@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
@@ -524,8 +523,12 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
             final Event currentReadMarkerEvent = getEvent(mReadMarkerEventId);
             if (currentReadMarkerEvent != null) {
                 final long currentReadMarkerTs = currentReadMarkerEvent.getOriginServerTs();
-                final long newReadMarkerTs = mVectorMessageListFragment.getMessageAdapter().getClosestRow(newReadMarkerEvent).getEvent().getOriginServerTs();
+                final Event closestEvent = mVectorMessageListFragment.getMessageAdapter().getClosestRow(newReadMarkerEvent).getEvent();
+                final long newReadMarkerTs = closestEvent.getOriginServerTs();
+                Log.v(LOG_TAG, "setReadMarkerToLastVisibleRow currentReadMarkerEvent:" + currentReadMarkerEvent.eventId
+                        + " TS:" + currentReadMarkerTs + " closestEvent:" + closestEvent.eventId + " TS:" + closestEvent.getOriginServerTs());
                 if (newReadMarkerTs > currentReadMarkerTs) {
+                    Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId + " isMessageId:" + MXSession.isMessageId(newReadMarkerEvent.eventId));
                     mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
                     onReadMarkerChanged(mRoom.getRoomId());
                 }
