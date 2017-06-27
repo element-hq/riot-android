@@ -629,7 +629,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             notificationsManager.cancelAll();
         }
 
-        Log.d(LOG_TAG, "Displaying " + roomId);
+        if (mIsUnreadPreviewMode) {
+            Log.d(LOG_TAG, "Displaying " + roomId + " in unread preview mode");
+        } else if (!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData)) {
+            Log.d(LOG_TAG, "Displaying " + roomId + " in preview mode");
+        } else {
+            Log.d(LOG_TAG, "Displaying " + roomId);
+        }
 
         mEditText = (VectorAutoCompleteTextView) findViewById(R.id.editText_messageBox);
 
