@@ -20,7 +20,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -171,7 +171,7 @@ public class PIDsRetriever {
      * @return true if the matrix Ids have been retrieved
      */
     public void retrieveMatrixIds(final Context context, final List<Contact> contacts, final boolean localUpdateOnly) {
-        Log.e(LOG_TAG, String.format("retrieveMatrixIds starts for %d contacts", contacts == null ? 0 : contacts.size()));
+        Log.d(LOG_TAG, String.format("retrieveMatrixIds starts for %d contacts", contacts == null ? 0 : contacts.size()));
         // sanity checks
         if ((null == contacts) || (0 == contacts.size())) {
             if (null != mListener) {

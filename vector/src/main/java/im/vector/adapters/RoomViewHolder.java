@@ -22,7 +22,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
