@@ -249,6 +249,11 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     private void refreshRooms() {
         IMXStore store = mSession.getDataHandler().getStore();
 
+        if (null == store) {
+            Log.e(LOG_TAG, "## refreshRooms() : null store");
+            return;
+        }
+
         // update/retrieve the complete summary list
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
         HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());

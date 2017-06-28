@@ -1464,6 +1464,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             mDirectChatInvitations.clear();
         }
 
+        if (null == mSession.getDataHandler().getStore()) {
+            Log.e(LOG_TAG, "## getRoomInvitations() : null store");
+            return new ArrayList<>();
+        }
+
         Collection<RoomSummary> roomSummaries = mSession.getDataHandler().getStore().getSummaries();
         for (RoomSummary roomSummary : roomSummaries) {
             String roomSummaryId = roomSummary.getRoomId();
