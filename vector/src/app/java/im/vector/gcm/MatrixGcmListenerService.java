@@ -86,16 +86,25 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
      */
     private void onMessageReceivedInternal(final Map<String, String> data) {
         try {
-            // privacy
-                /*for (String key : data.keySet()) {
-                    Log.d(LOG_TAG, "## onMessageReceived() >>> " + key + " : " + data.get(key));
-                }*/
-
             int unreadCount = 0;
+            String roomId = null;
+            String eventId = null;
 
             if ((null != data) && data.containsKey("unread")) {
-                unreadCount = Integer.parseInt(data.get("unread"));
+                if (data.containsKey("unread")) {
+                    unreadCount = Integer.parseInt(data.get("unread"));
+                }
+
+                if (data.containsKey("room_id")) {
+                    roomId = data.get("room_id");
+                }
+
+                if (data.containsKey("id")) {
+                    eventId = data.get("id");
+                }
             }
+
+            Log.d(LOG_TAG, "## onMessageReceived() : roomId " + roomId + " eventId " + eventId + " unread " + unreadCount );
 
             // update the badge counter
             CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
@@ -169,8 +178,6 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage message) {
         final Map<String, String> data = message.getData();
-
-        Log.d(LOG_TAG, "## onMessageReceived() --------------------------------");
 
         if (null == mUIHandler) {
             mUIHandler = new android.os.Handler(VectorApp.getInstance().getMainLooper());

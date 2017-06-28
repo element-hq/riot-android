@@ -27,6 +27,7 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 
 import im.vector.R;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
 
@@ -63,6 +64,9 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
 
     // tell if the current search is on matrix IDs
     private boolean mIsSearchingMatrixId = false;
+
+    // tells if the matrix Id is pasted even if the search is done with an username
+    private boolean mProvideMatrixIdOnly = false;
 
     /**
      * Comparators
@@ -102,6 +106,16 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
         mUsersList = new ArrayList<>(users);
     }
 
+    /**
+     * Tells if the pasted text is always the user matrix id
+     * even if the matched pattern is a display name.
+     * @param provideMatrixIdOnly true to always paste an user Id.
+     */
+    public void setProvideMatrixIdOnly(boolean provideMatrixIdOnly) {
+        mProvideMatrixIdOnly = provideMatrixIdOnly;
+    }
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
@@ -116,7 +130,13 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
         VectorUtils.loadUserAvatar(mContext, mSession, avatarView, user.getAvatarUrl(), user.user_id, user.displayname);
 
         if (!mIsSearchingMatrixId) {
-            userNameTextView.setText(user.displayname);
+            String value = user.displayname;
+
+            if (mProvideMatrixIdOnly) {
+                value += " (" + user.user_id + ")";
+            }
+
+            userNameTextView.setText(value);
         } else {
             userNameTextView.setText(user.user_id);
         }
@@ -188,7 +208,9 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
         @Override
         public CharSequence convertResultToString(Object resultValue) {
             User user = (User) resultValue;
-            return mIsSearchingMatrixId ? user.user_id : user.displayname;
+            return (mIsSearchingMatrixId || mProvideMatrixIdOnly) ?
+                    user.user_id :
+                    VectorRoomActivity.sanitizeDisplayname(user.displayname);
         }
     }
 }

@@ -51,7 +51,7 @@ import im.vector.receiver.HeadsetConnectionReceiver;
  */
 public class VectorCallSoundManager {
     /** Observer pattern class to notify sound events.
-     *  Clients listen to events by calling {@link #addSoundListener(IVectorCallSoundListener)}**/
+     *  Clients listen to events **/
     public interface IVectorCallSoundListener {
         /**
          * Call back indicating new focus events (ex: {@link AudioManager#AUDIOFOCUS_GAIN},

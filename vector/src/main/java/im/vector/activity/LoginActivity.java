@@ -95,8 +95,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     private final static int REGISTER_POLLING_PERIOD = 10 * 1000;
 
-    public static final int REQUEST_REGISTRATION_COUNTRY = 1245;
-    public static final int REQUEST_LOGIN_COUNTRY = 5678;
+    private static final int REQUEST_REGISTRATION_COUNTRY = 1245;
+    private static final int REQUEST_LOGIN_COUNTRY = 5678;
 
     // activity modes
     // either the user logs in
@@ -135,10 +135,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private static final String SAVED_IS_SERVER_URL_EXPANDED = "SAVED_IS_SERVER_URL_EXPANDED";
     private static final String SAVED_HOME_SERVER_URL = "SAVED_HOME_SERVER_URL";
     private static final String SAVED_IDENTITY_SERVER_URL = "SAVED_IDENTITY_SERVER_URL";
-
-    // mail validation
-    private static final String BROADCAST_ACTION_MAIL_VALIDATION = "im.vector.activity.BROADCAST_ACTION_MAIL_VALIDATION";
-    private static final String EXTRA_IS_STOP_REQUIRED = "EXTRA_IS_STOP_REQUIRED";
 
     // activity mode
     private int mMode = MODE_LOGIN;
@@ -248,7 +244,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     // the next link parameters were not managed
     private boolean mIsMailValidationPending;
-    private boolean mIsUserNameAvailable;
 
     // use to reset the password when the user click on the email validation
     private HashMap<String, String> mForgotPid = null;
@@ -467,7 +462,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mIsUserNameAvailable = false;
                 onRegisterClick(true);
             }
         });
@@ -576,10 +570,17 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(HOME_SERVER_URL_PREF, mHomeServerText.getText().toString().trim());
-                editor.apply();
+                String cleanedUrl = sanitizeUrl(s.toString());
+
+                if (!TextUtils.equals(cleanedUrl, s.toString())) {
+                    mHomeServerText.setText(cleanedUrl);
+                    mHomeServerText.setSelection(cleanedUrl.length());
+                } else {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(HOME_SERVER_URL_PREF, cleanedUrl);
+                    editor.apply();
+                }
             }
 
             @Override
@@ -596,10 +597,17 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(IDENTITY_SERVER_URL_PREF, mIdentityServerText.getText().toString().trim());
-                editor.apply();
+                String cleanedUrl = sanitizeUrl(s.toString());
+
+                if (!TextUtils.equals(cleanedUrl, s.toString())) {
+                    mIdentityServerText.setText(cleanedUrl);
+                    mIdentityServerText.setSelection(cleanedUrl.length());
+                } else {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(IDENTITY_SERVER_URL_PREF, cleanedUrl);
+                    editor.apply();
+                }
             }
 
             @Override
@@ -914,17 +922,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
              * Display a toast to warn that the operation failed
              * @param errorMessage the error message.
              */
-            private void onError(String errorMessage) {
+            private void onError(final String errorMessage) {
                 Log.e(LOG_TAG, "onForgotPasswordClick : requestEmailValidationToken fails with error " + errorMessage);
 
                 if (mMode == MODE_FORGOT_PASSWORD) {
                     enableLoadingScreen(false);
-
-                    // display the dedicated
-                    Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    mMode = MODE_LOGIN;
-                    showMainLayout();
-                    refreshDisplay();
+                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -1014,18 +1017,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                         enableLoadingScreen(false);
 
-                        showMainLayout();
-
                         if (cancel) {
+                            showMainLayout();
                             mMode = MODE_LOGIN;
                             refreshDisplay();
-                        } else {
-                            LoginActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.auth_reset_password_success_message), Toast.LENGTH_LONG).show();
-                                }
-                            });
                         }
                     }
                 }
@@ -1129,7 +1124,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 // login was started in email validation mode
                 mIsMailValidationPending = true;
                 mMode = MODE_ACCOUNT_CREATION;
-                Matrix.getInstance(this).clearSessions(this, true);
+                Matrix.getInstance(this).clearSessions(this, true, null);
                 retCode = true;
             }
         } else {
@@ -1221,12 +1216,27 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 @Override
                 public void onSuccess(Boolean isSuccess) {
                     if (isSuccess) {
-                        // the validation of mail ownership succeed, just resume the registration flow
-                        // next step: just register
-                        Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
-                        mMode = MODE_ACCOUNT_CREATION;
-                        enableLoadingScreen(true);
-                        RegistrationManager.getInstance().registerAfterEmailValidation(LoginActivity.this, aClientSecret, aSid, aIdentityServer, aSessionId, LoginActivity.this);
+                        // if aSessionId is null, it means that this request has been triggered by clicking on a "forgot password" link
+                        if (null == aSessionId) {
+                            Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - the password update is in progress");
+
+                            mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
+
+                            mForgotPid = new HashMap<>();
+                            mForgotPid.put("client_secret", aClientSecret);
+                            mForgotPid.put("id_server", homeServerConfig.getIdentityServerUri().getHost());
+                            mForgotPid.put("sid", aSid);
+                            
+                            mIsPasswordResetted = false;
+                            onForgotOnEmailValidated(homeServerConfig);
+                        } else {
+                            // the validation of mail ownership succeed, just resume the registration flow
+                            // next step: just register
+                            Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
+                            mMode = MODE_ACCOUNT_CREATION;
+                            enableLoadingScreen(true);
+                            RegistrationManager.getInstance().registerAfterEmailValidation(LoginActivity.this, aClientSecret, aSid, aIdentityServer, aSessionId, LoginActivity.this);
+                        }
                     } else {
                         Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failed (success=false)");
                         errorHandler(getString(R.string.login_error_unable_register_mail_ownership));
@@ -1361,6 +1371,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (mMode == MODE_ACCOUNT_CREATION) {
                                 Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
                                 onError(getString(R.string.login_error_registration_network_error) + " : " + e.getLocalizedMessage());
+                                setActionButtonsEnabled(false);
                             }
                         }
 
@@ -1435,17 +1446,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void showMainLayout() {
         mMainLayout.setVisibility(View.VISIBLE);
         mProgressTextView.setVisibility(View.GONE);
-    }
-
-    /**
-     * @return the registration session
-     */
-    private String getRegistrationSession() {
-        if (null != mRegistrationResponse) {
-            return mRegistrationResponse.session;
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -1924,6 +1924,19 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     //==============================================================================================================
     // extracted info
     //==============================================================================================================
+
+    /**
+     * Sanitize an URL
+     * @param url the url to sanitize
+     * @return the sanitized url
+     */
+    private static String sanitizeUrl(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return url;
+        }
+
+        return url.replaceAll("\\s","");
+    }
 
     /**
      * @return the homeserver config. null if the url is not valid

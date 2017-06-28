@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -63,6 +64,9 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
 
     // trick to fix the list width
     private android.widget.ListPopupWindow mListPopupWindow;
+
+    // add a colon when the inserted text is the first item of the string
+    private boolean mAddColonOnFirstItem;
 
     public VectorAutoCompleteTextView(Context context) {
         super(context, null);
@@ -154,6 +158,15 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
+     * Tells if the pasted text is always the user matrix id
+     * even if the matched pattern is a display name.
+     * @param provideMatrixIdOnly true to always paste an user Id.
+     */
+    public void setProvideMatrixIdOnly(boolean provideMatrixIdOnly) {
+        mAdapter.setProvideMatrixIdOnly(provideMatrixIdOnly);
+    }
+
+    /**
      * Compute the popup size
      */
     private void adjustPopupSize() {
@@ -176,6 +189,36 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             // setDropDownWidth(maxWidth) does not work on some devices
             // it seems working on android >= 5.1
             // but it does not on older android platforms
+        }
+    }
+
+    /**
+     * Set if a colon must be appended to the inserted text
+     * if it is the first item of the string
+     *
+     * @param addColonOnFirstItem true to insert colon
+     */
+    public void setAddColonOnFirstItem(boolean addColonOnFirstItem) {
+        mAddColonOnFirstItem = addColonOnFirstItem;
+    }
+
+    @Override
+    protected void replaceText(CharSequence text) {
+        String before = getText().toString();
+        super.replaceText(text);
+
+        if (mAddColonOnFirstItem) {
+            try {
+                Editable editableAfter = getText();
+
+                // check if the inserted becomes was the new first item
+                if ((null != before) && !before.startsWith(text.toString()) &&
+                        editableAfter.toString().startsWith(text.toString())) {
+                    editableAfter.replace(0, text.length(), text + ":");
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## replaceText() : failed " + e.getMessage());
+            }
         }
     }
 

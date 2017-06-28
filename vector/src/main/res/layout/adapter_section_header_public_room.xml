@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/wrapper_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:tag="without-divider">
+
+    <TextView
+        android:id="@+id/section_title"
+        style="@style/ListHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#22ff0000"
+        android:tag="sticky"
+        android:text="Default section header" />
+
+    <include
+        layout="@layout/adapter_public_room_sticky_header_subview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

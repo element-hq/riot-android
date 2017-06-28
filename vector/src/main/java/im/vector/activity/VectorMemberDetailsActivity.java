@@ -51,8 +51,8 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -489,7 +489,29 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
                                         if (0 != idsList.size()) {
                                             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                            mSession.ignoreUsers(idsList, mRoomActionsListener);
+                                            mSession.ignoreUsers(idsList, new ApiCallback<Void>() {
+                                                @Override
+                                                public void onSuccess(Void info) {
+                                                    // do not hide the progress bar to warn the user that something is pending
+                                                    // an initial sync should be triggered
+                                                }
+
+                                                @Override
+                                                public void onNetworkError(Exception e) {
+                                                    mRoomActionsListener.onNetworkError(e);
+                                                }
+
+                                                @Override
+                                                public void onMatrixError(MatrixError e) {
+                                                    mRoomActionsListener.onMatrixError(e);
+                                                }
+
+                                                @Override
+                                                public void onUnexpectedError(Exception e) {
+                                                    mRoomActionsListener.onUnexpectedError(e);
+                                                }
+                                            });
+
                                             Log.d(LOG_TAG, "## performItemAction(): ignoreUsers");
                                         }
                                     }
@@ -529,7 +551,29 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
                                         if (0 != idsList.size()) {
                                             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                            mSession.unIgnoreUsers(idsList, mRoomActionsListener);
+                                            mSession.unIgnoreUsers(idsList, new ApiCallback<Void>() {
+                                                @Override
+                                                public void onSuccess(Void info) {
+                                                    // do not hide the progress bar to warn the user that something is pending
+                                                    // an initial sync should be triggered
+                                                }
+
+                                                @Override
+                                                public void onNetworkError(Exception e) {
+                                                    mRoomActionsListener.onNetworkError(e);
+                                                }
+
+                                                @Override
+                                                public void onMatrixError(MatrixError e) {
+                                                    mRoomActionsListener.onMatrixError(e);
+                                                }
+
+                                                @Override
+                                                public void onUnexpectedError(Exception e) {
+                                                    mRoomActionsListener.onUnexpectedError(e);
+                                                }
+                                            });
+
                                             Log.d(LOG_TAG, "## performItemAction(): unIgnoreUsers");
                                         }
                                     }
@@ -595,7 +639,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
 
             // force the refresh to ensure that the devices list is up-to-date
-            mSession.getCrypto().getDeviceList().downloadKeys(Arrays.asList(mMemberId), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
+            mSession.getCrypto().getDeviceList().downloadKeys(Collections.singletonList(mMemberId), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
                 // common default error handler
                 private void onError(String aErrorMsg) {
                     Toast.makeText(VectorMemberDetailsActivity.this, aErrorMsg, Toast.LENGTH_LONG).show();

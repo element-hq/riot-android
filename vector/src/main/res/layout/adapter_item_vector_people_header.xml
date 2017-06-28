@@ -72,20 +72,4 @@
             android:textColor="@color/vector_text_black_color"
             android:textSize="14sp" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/people_header_known_contacts_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/white"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="12dp"
-        android:text="@string/people_search_too_many_contacts"
-        android:textColor="@color/vector_text_black_color"
-        android:textSize="14sp"
-        android:visibility="gone"
-        tools:visibility="visible" />
 </LinearLayout>

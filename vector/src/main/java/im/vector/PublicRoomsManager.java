@@ -121,7 +121,6 @@ public class PublicRoomsManager {
             return;
         }
 
-        //final String server, final String pattern, final String since, final ApiCallback<PublicRoomsResponse> callback
         mSession.getEventsApiClient().loadPublicRooms(mRequestServer, mThirdPartyInstanceId, mIncludeAllNetworks, mSearchedPattern, mForwardPaginationToken, PUBLIC_ROOMS_LIMIT, new ApiCallback<PublicRoomsResponse>() {
             @Override
             public void onSuccess(PublicRoomsResponse publicRoomsResponse) {
@@ -169,8 +168,17 @@ public class PublicRoomsManager {
                 if (TextUtils.equals(fToken, mRequestKey)) {
                     Log.d(LOG_TAG, "## launchPublicRoomsRequest() : MatrixError " + e.getLocalizedMessage());
 
-                    if (null != callback) {
-                        callback.onMatrixError(e);
+                    // mRequestServer == null means to search on its own home server
+                    // on some servers, it triggers an "internal server error"
+                    // so try with the server url
+                    if (MatrixError.UNKNOWN.equals(e.errcode) && (null == mRequestServer)) {
+                        mRequestServer = mSession.getHomeserverConfig().getHomeserverUri().getHost();
+                        Log.e(LOG_TAG, "## launchPublicRoomsRequest() : mRequestServer == null fails -> try " + mRequestServer);
+                        launchPublicRoomsRequest(callback);
+                    } else {
+                        if (null != callback) {
+                            callback.onMatrixError(e);
+                        }
                     }
                     mRequestKey = null;
                 } else {

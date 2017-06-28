@@ -8,6 +8,7 @@
     <string name="title_activity_room">Huone</string>
     <string name="title_activity_settings">Asetukset</string>
     <string name="title_activity_member_details">Jäsenen tiedot</string>
+    <string name="title_activity_historical">Historical</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -24,6 +25,8 @@
     <string name="forward">Lähetä edelleen</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">Lähdekoodi</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
+
     <!-- verb or noun? -->
     <!-- uh oh -->
     <string name="delete">Poista</string>
@@ -41,14 +44,17 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Ryhmäpuhelut eivät ole tuettuja salatuissa huoneissa</string>
     <string name="send_anyway">Lähetä silti</string>
     <string name="or">tai</string>
+    <string name="and">and</string>
+    <string name="invite">Invite</string>
 
     <!-- actions -->
     <string name="action_sign_out">Kirjaudu ulos</string>
     <string name="action_sign_out_confirmation">Turvallisuussyistä uloskirjautuminen poistaa salausavaimet. Ilman salausavaimia et voi lukea viestihistoriaa salatuissa huoneissa.\nValitse \"vie\" tehdäksesi varmuuskopio avaimista.</string>
     <string name="action_voice_call">Äänipuhelu</string>
     <string name="action_video_call">Videopuhelu</string>
-    <string name="action_search_room">Etsi huoneesta</string>
+    <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Merkitse kaikki luetuiksi</string>
+    <string name="action_historical">Historical</string>
     <string name="action_quick_reply">Pikavastaus</string>
     <string name="action_open">Avaa</string>
     <string name="action_close">Sulje</string>
@@ -58,6 +64,42 @@
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Vahvistus</string>
     <string name="dialog_title_warning">Varoitus</string>
+
+    <!-- Bottom navigation buttons -->
+    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_favourites">Favourites</string>
+    <string name="bottom_action_people">People</string>
+    <string name="bottom_action_rooms">Rooms</string>
+
+    <!-- Home screen -->
+    <string name="home_filter_placeholder_home">Search for rooms</string>
+    <string name="home_filter_placeholder_favorites">Search for favourites</string>
+    <string name="home_filter_placeholder_people">Search for people</string>
+    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+
+    <!-- Home fragment -->
+    <string name="invitations_header">Invites</string>
+    <string name="low_priority_header">Low priority</string>
+
+    <!-- People fragment -->
+    <string name="direct_chats_header">Conversations</string>
+    <string name="local_address_book_header">Local address book</string>
+    <string name="known_contacts_header">Known contacts</string>
+    <string name="matrix_only_filter">Matrix contacts only</string>
+    <string name="no_conversation_placeholder">No conversations</string>
+    <string name="no_local_contact_placeholder">No local contacts</string>
+    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
+    <string name="no_result_placeholder">No results</string>
+
+    <!-- Rooms fragment -->
+    <string name="rooms_header">Rooms</string>
+    <string name="rooms_directory_header">Room directory</string>
+    <string name="no_room_placeholder">No rooms</string>
+    <string name="no_public_room_placeholder">No public rooms available</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 user</item>
+        <item quantity="other">%d users</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Lähetä lokit</string>
     <string name="send_bug_report_include_crash_logs">Lähetä kaatumislokit</string>
@@ -251,6 +293,9 @@
     <string name="preview">Esikatsele</string>
     <string name="reject">Kieltäydy</string>
 
+    <!-- Room -->
+    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s on kutsunut sinut huoneeseen</string>
     <string name="room_preview_unlinked_email_warning">Kutsu lähetettiin osoitteeseen %s, joka ei kuulu tälle tilille.\nVoit kirjautua sisään toisella tilillä tai lisätä sähköpostiosoitteesi tälle tilille.</string>
@@ -309,10 +354,15 @@
     <string name="room_participants_invite_prompt_msg">"Haluatko kutsua käyttäjän %s tähän huoneeseen?"</string>
 
     <!-- invitation -->
+    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
     <string name="people_search_local_contacts">PAIKALLISET YHTEYSTIEDOT (%d)</string>
     <string name="people_search_known_contacts">TUNNETUT KÄYTTÄJÄT (%s)</string>
     <string name="people_search_filter_text">Vain Matrix-käyttäjät</string>
     <string name="people_search_too_many_contacts">Liian monta käyttäjää, käytä hakukenttää</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Etsi</string>
@@ -390,6 +440,9 @@
     <string name="room_recents_invites">KUTSUT</string>
     <string name="room_recents_start_chat">Aloita keskustelu</string>
     <string name="room_recents_create_room">Luo huone</string>
+    <string name="room_recents_join_room">Join room</string>
+    <string name="room_recents_join_room_title">Join a room</string>
+    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Selaa luetteloa</string>
@@ -405,6 +458,7 @@
     <string name="room_settings_de_prioritize">Matala tärkeys</string>
     <string name="room_settings_direct_chat">Yksityiskeskustelu</string>
     <string name="room_settings_leave_conversation">Poistu keskustelusta</string>
+    <string name="room_settings_forget">Forget</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Keskustelut</string>
@@ -464,6 +518,9 @@
     <string name="settings_contact">Paikalliset yhteystiedot</string>
     <string name="settings_contacts_app_permission">Osoitekirjakäyttölupa</string>
     <string name="settings_contacts_phonebook_country">Osoitekirjan maa</string>
+    <string name="settings_home_display">Home display</string>
+    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
+    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Laitteet</string>
     <string name="devices_details_dialog_title">Laitteen tiedot</string>
     <string name="devices_details_id_title">ID</string>
@@ -652,7 +709,18 @@
     <string name="unknown_devices_alert_title">Huoneessa on tuntemattomia laitteita</string>
     <string name="unknown_devices_alert_message">Huoneessa on tuntemattomia laitteita joita ei ole vahvistettu.\nLaitteet eivät välttämättä kuulu väitetyille omistajilleen.\nJokainen uusi laite kannattaa vahvistaa ennen kuin jatkat, mutta voit myös lähettää viestit vahvistamattomille laitteille.\n\nTuntemattomat laitteet:</string>
 
+    <!-- directory activity  -->
+    <string name="select_room_directory">Select a room directory</string>
+    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
+    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
+    <string name="directory_server_placeholder">Homeserver URL</string>
+    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
+    <string name="directory_server_native_rooms">All native %s rooms</string>
+
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d unread notified messages</string>
     <string name="notification_unread_notified_messages_in_room">%1$d unread messages in %2$d rooms"</string>
+
+    <!-- historical -->
+    <string name="historical_placeholder">Search for historical</string>
 </resources>

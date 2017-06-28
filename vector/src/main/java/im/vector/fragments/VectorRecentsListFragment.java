@@ -22,11 +22,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,23 +46,28 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventUtils;
+import org.matrix.androidsdk.util.Log;
+
+import java.util.HashMap;
+import java.util.List;
+
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.services.EventStreamService;
+import im.vector.util.RoomUtils;
 import im.vector.view.RecentsExpandableListView;
 
-import java.util.HashMap;
-import java.util.List;
-
-public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener {
+public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener, RoomUtils.MoreActionListener {
 
     private static final String KEY_EXPAND_STATE_INVITES_GROUP = "KEY_EXPAND_STATE_INVITES_GROUP";
     private static final String KEY_EXPAND_STATE_ROOMS_GROUP = "KEY_EXPAND_STATE_ROOMS_GROUP";
@@ -173,7 +177,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter
-        mAdapter = new VectorRoomSummaryAdapter(getActivity(), mSession, false, true, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
+        mAdapter = new VectorRoomSummaryAdapter(getActivity(), mSession, false, true, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this, this);
 
         mRecentsListView.setAdapter(mAdapter);
 
@@ -429,6 +433,37 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     /**
+     * Apply a filter to the rooms list
+     * @param pattern the pattern to search
+     */
+    public void applyFilter(String pattern) {
+        // will be done while resuming
+        if (null == mRecentsListView) {
+            return;
+        }
+
+        mAdapter.setSearchPattern(pattern);
+
+        mRecentsListView.post(new Runnable() {
+            @Override
+            public void run() {
+                expandsAllSections();
+            }
+        });
+    }
+
+    /**
+     * Expands all existing sections.
+     */
+    private void expandsAllSections() {
+        final int groupCount = mAdapter.getGroupCount();
+
+        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+            mRecentsListView.expandGroup(groupIndex);
+        }
+    }
+
+    /**
      * Refresh the summaries list
      */
     public void refresh() {
@@ -564,23 +599,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                                 Event.EVENT_TYPE_RECEIPT.equals(eventType) ||
                                 Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType) ||
                                 Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
-
-                        // highlight notified messages
-                        // the SDK only highlighted invitation messages
-                        // it lets the application chooses the behaviour.
-                        ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
-                        String viewedRoomId = rTracker.getViewedRoomId();
-                        String fromMatrixId = rTracker.getMatrixId();
-                        MXSession session = VectorRecentsListFragment.this.mSession;
-                        String matrixId = session.getCredentials().userId;
-
-                        // If we're not currently viewing this room or not sent by myself, increment the unread count
-                        if ((!TextUtils.equals(event.roomId, viewedRoomId) || !TextUtils.equals(matrixId, fromMatrixId)) && !TextUtils.equals(event.getSender(), matrixId)) {
-                            RoomSummary summary = session.getDataHandler().getStore().getSummary(event.roomId);
-                            if (null != summary) {
-                                summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(session, event));
-                            }
-                        }
                     }
                 });
             }
@@ -749,65 +767,49 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     @Override
     public void onLeaveRoom(final MXSession session, final String roomId) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.room_participants_leave_prompt_title)
-                .setMessage(R.string.room_participants_leave_prompt_msg)
-                .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        onRejectInvitation(session, roomId);
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create()
-                .show();
+        RoomUtils.showLeaveRoomDialog(getActivity(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onRejectInvitation(session, roomId);
+            }
+        });
     }
 
     @Override
     public void onToggleRoomNotifications(MXSession session, String roomId) {
-        Room room = session.getDataHandler().getRoom(roomId);
+        BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
 
-        if (null != room) {
-            BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+        showWaitingView();
 
-            showWaitingView();
-
-            bingRulesManager.muteRoomNotifications(room, !bingRulesManager.isRoomNotificationsDisabled(room), new BingRulesManager.onBingRuleUpdateListener() {
-                @Override
-                public void onBingRuleUpdateSuccess() {
-                    if (null != getActivity()) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideWaitingView();
-                            }
-                        });
-                    }
+        bingRulesManager.muteRoomNotifications(roomId, !bingRulesManager.isRoomNotificationsDisabled(roomId), new BingRulesManager.onBingRuleUpdateListener() {
+            @Override
+            public void onBingRuleUpdateSuccess() {
+                if (null != getActivity()) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideWaitingView();
+                        }
+                    });
                 }
+            }
 
-                @Override
-                public void onBingRuleUpdateFailure(final String errorMessage) {
-                    if (null != getActivity()) {
-                        getActivity().runOnUiThread(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
-                                        hideWaitingView();
-                                    }
+            @Override
+            public void onBingRuleUpdateFailure(final String errorMessage) {
+                if (null != getActivity()) {
+                    getActivity().runOnUiThread(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                                    hideWaitingView();
                                 }
-                        );
-                    }
-
+                            }
+                    );
                 }
-            });
-        }
+
+            }
+        });
     }
 
     @Override

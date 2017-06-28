@@ -1060,7 +1060,7 @@ public final class GcmRegistrationManager {
      */
     public int getBackgroundSyncDelay() {
         // on fdroid version, the default sync delay is about 10 seconds
-        if ((null == mRegistrationToken) && !getGcmSharedPreferences().contains(PREFS_SYNC_DELAY)) {
+        if ((null == mRegistrationToken) && (null == getStoredRegistrationToken()) && !getGcmSharedPreferences().contains(PREFS_SYNC_DELAY)) {
             return 10000;
         } else {
             int currentValue = 0;

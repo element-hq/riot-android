@@ -424,6 +424,8 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
                 // test if the user allows to access to the contact
                 if (isContactBookAccessAllowed()) {
+                    Log.d(LOG_TAG, "## refreshLocalContactsSnapshot() starts");
+
                     // get the names
                     Cursor namesCur = null;
 
@@ -547,6 +549,8 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
                         emailsCur.close();
                     }
+                } else {
+                    Log.d(LOG_TAG, "## refreshLocalContactsSnapshot() : permission to read contacts is not granted");
                 }
 
                 synchronized (LOG_TAG) {
@@ -554,9 +558,9 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                     mIsPopulating = false;
                 }
 
-                if (0 != mContactsList.size()) {
-                    long delta = System.currentTimeMillis() - t0;
+                long delta = System.currentTimeMillis() - t0;
 
+                if (0 != mContactsList.size()) {
                     VectorApp.sendGAStats(VectorApp.getInstance(),
                             VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
                             VectorApp.GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION,
@@ -564,6 +568,8 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                             delta
                     );
                 }
+
+                Log.d(LOG_TAG, "## refreshLocalContactsSnapshot(): retrieve " + mContactsList.size() + " contacts in " + delta + " ms");
 
                 // define the PIDs listener
                 PIDsRetriever.getInstance().setPIDsRetrieverListener(mPIDsRetrieverListener);

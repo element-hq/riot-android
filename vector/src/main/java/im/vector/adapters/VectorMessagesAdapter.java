@@ -24,7 +24,6 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,9 +39,9 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXMediaDownloadListener;
 import org.matrix.androidsdk.listeners.IMXMediaUploadListener;
@@ -53,23 +52,22 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.JsonUtils;
-
-import im.vector.VectorApp;
-import im.vector.R;
-import im.vector.util.VectorUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.security.acl.LastOwnerException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
+
+import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.util.VectorUtils;
 
 /**
  * An adapter which can display room information.
@@ -661,6 +659,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         }
 
         menu.findItem(R.id.ic_action_view_source).setVisible(true);
+        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()));
         menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
 
         if (!TextUtils.isEmpty(textMsg)) {
@@ -929,33 +928,43 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
         // search message mode
         View highlightMakerView = convertView.findViewById(R.id.messagesAdapter_highlight_message_marker);
+        View readMarkerView = convertView.findViewById(R.id.message_read_marker);
 
         if (null != highlightMakerView) {
+            // align marker view with the message
+            ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
+            highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+
             if (TextUtils.equals(mSearchedEventId, event.eventId)) {
-                View avatarView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_left);
-                ViewGroup.LayoutParams avatarLayout = avatarView.getLayoutParams();
-
-                // align marker view with the message
-                ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
-
-                if (isMergedView) {
-                    highlightMakerLayout.setMargins(avatarLayout.width + 5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
-
+                if (mIsUnreadViewMode) {
+                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+                    if (readMarkerView != null) {
+                        // Show the read marker
+                        animateReadMarkerView(event, readMarkerView);
+                    }
                 } else {
-                    highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+                    View avatarView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_left);
+                    ViewGroup.LayoutParams avatarLayout = avatarView.getLayoutParams();
+
+                    if (isMergedView) {
+                        highlightMakerLayout.setMargins(avatarLayout.width + 5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+
+                    } else {
+                        highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+                    }
+
+                    // move left the body
+                    View bodyLayoutView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body_layout);
+                    ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
+                    bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
+
+                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
                 }
-
-                highlightMakerView.setLayoutParams(highlightMakerLayout);
-
-                // move left the body
-                View bodyLayoutView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body_layout);
-                ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
-                bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-
-                highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
             } else {
                 highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
             }
+
+            highlightMakerView.setLayoutParams(highlightMakerLayout);
         }
 
         // download / upload progress layout

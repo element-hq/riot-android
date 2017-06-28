@@ -34,14 +34,12 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
@@ -86,7 +84,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter
-        mAdapter = new VectorRoomSummaryAdapter(getActivity().getApplicationContext(), mSession, true, false, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
+        mAdapter = new VectorRoomSummaryAdapter(getActivity().getApplicationContext(), mSession, true, false, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this, this);
         mRecentsListView.setAdapter(mAdapter);
         mRecentsListView.setVisibility(View.VISIBLE);
 
@@ -220,17 +218,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     }
 
     /**
-     * Expands all existing sections.
-     */
-    private void expandsAllSections() {
-        final int groupCount = mAdapter.getGroupCount();
-
-        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-            mRecentsListView.expandGroup(groupIndex);
-        }
-    }
-
-    /**
      * Search a pattern in the room
      * @param pattern the pattern to search
      * @param onSearchResultListener the search listener.
@@ -241,7 +228,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             return;
         }
 
-        mAdapter.setSearchPattern(pattern);
+        super.applyFilter(pattern);
 
         if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
             PublicRoomsManager.getInstance().startPublicRoomsSearch(null, null, false, mAdapter.getSearchedPattern(), new ApiCallback<List<PublicRoom>>() {
@@ -275,7 +262,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         mRecentsListView.post(new Runnable() {
             @Override
             public void run() {
-                expandsAllSections();
                 onSearchResultListener.onSearchSucceed(1);
             }
         });

@@ -8,6 +8,7 @@
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configuraciones</string>
     <string name="title_activity_member_details">Detalles de los miembros</string>
+    <string name="title_activity_historical">Historical</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -24,6 +25,7 @@
     <string name="forward">Enviar</string>
     <string name="permalink">Enlace permanente</string>
     <string name="view_source">Ver fuente</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
     <string name="delete">Borrar</string>
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
@@ -39,14 +41,17 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no pueden ser realizadas en salas cifradas</string>
     <string name="send_anyway">Enviar de todos modos</string>
     <string name="or">o</string>
+    <string name="and">and</string>
+    <string name="invite">Invite</string>
 
     <!-- actions -->
     <string name="action_sign_out">Cerrar la sesión</string>
     <string name="action_sign_out_confirmation">Para la seguridad, al cerrar la sesión, las claves de cifración de extremo-a-extremo serán borrados haciendo que el historial sea illegible.\nSeleccione exportar para hacer archivo de respaldo antes de cerrar la sesión.</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Video</string>
-    <string name="action_search_room">Buscar Sala</string>
+    <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Marcar todos como visto</string>
+    <string name="action_historical">Historical</string>
     <string name="action_quick_reply">Respuesta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Cerrar</string>
@@ -56,6 +61,42 @@
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmación</string>
     <string name="dialog_title_warning">Advertencia</string>
+
+    <!-- Bottom navigation buttons -->
+    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_favourites">Favourites</string>
+    <string name="bottom_action_people">People</string>
+    <string name="bottom_action_rooms">Rooms</string>
+
+    <!-- Home screen -->
+    <string name="home_filter_placeholder_home">Search for rooms</string>
+    <string name="home_filter_placeholder_favorites">Search for favourites</string>
+    <string name="home_filter_placeholder_people">Search for people</string>
+    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+
+    <!-- Home fragment -->
+    <string name="invitations_header">Invites</string>
+    <string name="low_priority_header">Low priority</string>
+
+    <!-- People fragment -->
+    <string name="direct_chats_header">Conversations</string>
+    <string name="local_address_book_header">Local address book</string>
+    <string name="known_contacts_header">Known contacts</string>
+    <string name="matrix_only_filter">Matrix contacts only</string>
+    <string name="no_conversation_placeholder">No conversations</string>
+    <string name="no_local_contact_placeholder">No local contacts</string>
+    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
+    <string name="no_result_placeholder">No results</string>
+
+    <!-- Rooms fragment -->
+    <string name="rooms_header">Rooms</string>
+    <string name="rooms_directory_header">Room directory</string>
+    <string name="no_room_placeholder">No rooms</string>
+    <string name="no_public_room_placeholder">No public rooms available</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 user</item>
+        <item quantity="other">%d users</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Enviar informes</string>
     <string name="send_bug_report_include_crash_logs">Mandar informes de fallas</string>
@@ -242,6 +283,9 @@
     <string name="preview">Preestreno</string>
     <string name="reject">Rechazar</string>
 
+    <!-- Room -->
+    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Has sido invitado por %s a entrar a esta sala.</string>
     <string name="room_preview_unlinked_email_warning">Esta invitación fue enviado a %s, que no esta asociado con esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
@@ -300,10 +344,15 @@
     <string name="room_participants_invite_prompt_msg">"¿Estás seguro que quieres invitar a %s que entre en este chat?"</string>
 
     <!-- invitation -->
+    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
     <string name="people_search_local_contacts">CONTACTOS LOCALES (%d)</string>
     <string name="people_search_known_contacts">CONTACTOS CONOCIDOS (%s)</string>
     <string name="people_search_filter_text">Solmente usuarios de Matrix</string>
     <string name="people_search_too_many_contacts">Demasiados contactos, por favor use la busqueda</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Buscar</string>
@@ -379,6 +428,9 @@
     <string name="room_recents_invites">INVITACIONES</string>
     <string name="room_recents_start_chat">Comenzar chat</string>
     <string name="room_recents_create_room">Crear sala</string>
+    <string name="room_recents_join_room">Join room</string>
+    <string name="room_recents_join_room_title">Join a room</string>
+    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar directorio</string>
@@ -394,6 +446,7 @@
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Chat Directo</string>
     <string name="room_settings_leave_conversation">Salir de la Conversacion</string>
+    <string name="room_settings_forget">Forget</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Mensajes</string>
@@ -409,7 +462,7 @@
     <string name="settings_profile_picture">Foto de Perfil</string>
     <string name="settings_display_name">Nombre Visible</string>
     <string name="settings_email_address">Correo Electrónico</string>
-    <string name="settings_add_email_address">Añadir correo electróico</string>
+    <string name="settings_add_email_address">Añadir correo electrónico</string>
     <string name="settings_phone_number">Número Telefónico</string>
     <string name="settings_add_phone_number">Añadir número telefónico</string>
     <string name="settings_summary_app_info_link">Página de la información del sistema de la aplicación</string>
@@ -453,6 +506,9 @@
     <string name="settings_contact">Contactos locales</string>
     <string name="settings_contacts_app_permission">Permiso de contactos</string>
     <string name="settings_contacts_phonebook_country">País de directorio telefónico</string>
+    <string name="settings_home_display">Home display</string>
+    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
+    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Dispositivos</string>
     <string name="devices_details_dialog_title">Información del dispositivo</string>
     <string name="devices_details_id_title">Identificación</string>
@@ -640,8 +696,19 @@
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contiene dispositivos desconocidos</string>
     <string name="unknown_devices_alert_message">Esta sala contiene dispositivos desconocidos que no sa han verificado.\nEsto significa que no hay garantía que los dispositivos pertenecen a las personas que dicen ser.\nReccomendamos que los verifiques todos antes de continuar, Pero si puede reenviar el mensaje sin verificación si lo necesitas.\n\nDispositivos desconocidos:</string>
-    
+
+    <!-- directory activity  -->
+    <string name="select_room_directory">Select a room directory</string>
+    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
+    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
+    <string name="directory_server_placeholder">Homeserver URL</string>
+    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
+    <string name="directory_server_native_rooms">All native %s rooms</string>
+
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d mensajes no leídos</string>
     <string name="notification_unread_notified_messages_in_room">%1$d mensajes no leídos en %2$d salas"</string>
+
+    <!-- historical -->
+    <string name="historical_placeholder">Search for historical</string>
 </resources>
