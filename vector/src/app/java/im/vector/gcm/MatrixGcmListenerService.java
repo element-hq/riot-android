@@ -29,6 +29,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.model.Event;
 
+import java.util.Collection;
 import java.util.Map;
 
 import im.vector.Matrix;
@@ -104,7 +105,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                 }
             }
 
-            Log.d(LOG_TAG, "## onMessageReceived() : roomId " + roomId + " eventId " + eventId + " unread " + unreadCount );
+            Log.d(LOG_TAG, "## onMessageReceivedInternal() : roomId " + roomId + " eventId " + eventId + " unread " + unreadCount );
 
             // update the badge counter
             CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
@@ -112,12 +113,12 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
             GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
 
             if (!gcmManager.areDeviceNotificationsAllowed()) {
-                Log.d(LOG_TAG, "## onMessageReceived() : the notifications are disabled");
+                Log.d(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled");
                 return;
             }
 
             if (!gcmManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
-                Log.d(LOG_TAG, "## onMessageReceived() : the background sync is disabled");
+                Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled");
 
                 EventStreamService eventStreamService = EventStreamService.getInstance();
 
@@ -144,13 +145,13 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                             eventStreamService.refreshMessagesNotification();
                         }
 
-                        Log.d(LOG_TAG, "## onMessageReceived() : trigger a notification");
+                        Log.d(LOG_TAG, "## onMessageReceivedInternal() : trigger a notification");
                     } else {
-                        Log.d(LOG_TAG, "## onMessageReceived() : fail to parse the notification data");
+                        Log.d(LOG_TAG, "## onMessageReceivedInternal() : fail to parse the notification data");
                     }
 
                 } else {
-                    Log.d(LOG_TAG, "## onMessageReceived() : there is no event service so nothing is done");
+                    Log.d(LOG_TAG, "## onMessageReceivedInternal() : there is no event service so nothing is done");
                 }
 
                 return;
@@ -162,6 +163,27 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
             if (!mCheckLaunched && (null != Matrix.getInstance(getApplicationContext()).getDefaultSession())) {
                 CommonActivityUtils.startEventStreamService(MatrixGcmListenerService.this);
                 mCheckLaunched = true;
+            }
+
+            // check if the event was not yet received
+            // a previous catchup might have already retrieved the notified event
+            if ((null != eventId) && (null != roomId)) {
+                try {
+                    Collection<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
+
+                    if ((null != sessions) && (sessions.size() > 0)) {
+                        for (MXSession session : sessions) {
+                            if (session.getDataHandler().getStore().isReady()) {
+                                if (null != session.getDataHandler().getStore().getEvent(eventId, roomId)) {
+                                    Log.e(LOG_TAG, "## onMessageReceivedInternal() : ignore the event " + eventId + " in room " + roomId + "because it is already known");
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.getMessage());
+                }
             }
 
             CommonActivityUtils.catchupEventStream(MatrixGcmListenerService.this);
