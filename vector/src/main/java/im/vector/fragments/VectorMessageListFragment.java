@@ -1067,7 +1067,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             if (fragment != null) {
                 fragment.dismissAllowingStateLoss();
             }
-            fragment = VectorReadReceiptsDialogFragment.newInstance(mSession, mRoom.getRoomId(), eventId);
+            fragment = VectorReadReceiptsDialogFragment.newInstance(mSession.getMyUserId(), mRoom.getRoomId(), eventId);
             fragment.show(fm, TAG_FRAGMENT_RECEIPTS_DIALOG);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onMoreReadReceiptClick() failed " + e.getMessage());
