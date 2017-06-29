@@ -1393,7 +1393,7 @@ public class CommonActivityUtils {
      */
     private static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session) {
         // sanity check
-        if ((null == session) || !session.isAlive()) {
+        if ((null == session) || !session.isAlive() || fromActivity.isFinishing()) {
             return;
         }
 
