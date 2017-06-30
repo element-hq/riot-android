@@ -64,12 +64,29 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-regular"
         android:gravity="center_horizontal"
-        android:maxLines="1"
+        android:maxLines="2"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:textColor="@color/vector_text_black_color"
         android:textSize="12sp"
         tools:background="#220000ff"
-        tools:text="Room name a bit long to be displayed completely" />
+        tools:text="#avery long alias:" />
+
+    <TextView
+        android:id="@+id/room_name_server"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/room_name"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-regular"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:visibility="gone"
+        android:textColor="@color/vector_text_black_color"
+        android:textSize="12sp"
+        tools:background="#220000ff"
+        tools:text="matrix.org" />
 
 </RelativeLayout>
