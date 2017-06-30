@@ -514,6 +514,9 @@ public class EventStreamService extends Service {
 
         stop();
 
+        // reset the service identifier
+        mForegroundServiceIdentifier = -1;
+
         // restart the services after 3 seconds
         Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
         restartServiceIntent.setPackage(getPackageName());
