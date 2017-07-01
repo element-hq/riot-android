@@ -18,6 +18,7 @@ package im.vector.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.AttrRes;
 import android.support.annotation.CallSuper;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -335,12 +337,16 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     /**
      * Define colors of the fragment
      *
-     * @param primaryColorId   color for header, floating button
-     * @param secondaryColorId color for status bar
+     * @param primaryColorAttr   color for header, floating button
+     * @param secondaryColorAttr color for status bar
      */
-    public void setFragmentColors(@ColorRes final int primaryColorId, @ColorRes final int secondaryColorId) {
-        mPrimaryColor = ContextCompat.getColor(mActivity, primaryColorId);
-        mSecondaryColor = ContextCompat.getColor(mActivity, secondaryColorId);
+    public void setFragmentColors(@AttrRes final int primaryColorAttr, @AttrRes final int secondaryColorAttr) {
+        TypedValue color1 = new TypedValue();
+        TypedValue color2 = new TypedValue();
+        mActivity.getTheme().resolveAttribute(primaryColorAttr, color1, true);
+        mActivity.getTheme().resolveAttribute(secondaryColorAttr, color2, true);
+        mPrimaryColor = color1.data;
+        mSecondaryColor = color2.data;
     }
 
     /*
