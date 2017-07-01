@@ -24,8 +24,8 @@
     <string name="later">Später</string>
     <string name="forward">Weiterleiten</string>
     <string name="permalink">Permalink</string>
-    <string name="view_source">Zeige Quellcode</string>
-    <string name="view_decrypted_source">Zeige entschlüsselten Quelltext</string>
+    <string name="view_source">Quellcode anzeigen</string>
+    <string name="view_decrypted_source">Entschlüsselten Quellcode anzeigen</string>
     <string name="delete">Löschen</string>
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
@@ -98,12 +98,12 @@
 	<item quantity="other">%d Nutzer</item>
 </plurals>
 
-    <string name="send_bug_report_include_logs">Sende Bericht</string>
-    <string name="send_bug_report_include_crash_logs">Sende Absturzbericht</string>
+    <string name="send_bug_report_include_logs">Logdateien übermitteln</string>
+    <string name="send_bug_report_include_crash_logs">Absturzberichte übermitteln</string>
     <string name="send_bug_report_include_screenshot">Screenshot übermitteln</string>
     <string name="send_bug_report">Problem melden</string>
     <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du getan? Was wolltest du das passiert? Was passierte?</string>
-    <string name="send_bug_report_placeholder">Beschreibe hier dein Problem (Vorzugsweise auf Englisch)</string>
+    <string name="send_bug_report_placeholder">Problem hier beschreiben (vorzugsweise auf Englisch)</string>
     <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Nutzungsprotokolle von diesem Client mit dem Fehlerbericht gesendet. Wenn du nur den obigen Text senden möchtest enferne folgenden Haken:</string>
     <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du einen Fehlerbericht senden?</string>
     <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich gesendet</string>
@@ -334,8 +334,8 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_participants_action_invite">Einladen</string>
     <string name="room_participants_action_leave">Diesen Raum verlassen</string>
     <string name="room_participants_action_remove">Aus diesem Raum entfernen</string>
-    <string name="room_participants_action_ban">Bannen</string>
-    <string name="room_participants_action_unban">Entbannen</string>
+    <string name="room_participants_action_ban">Dauerhaft aus dem Raum ausschließen</string>
+    <string name="room_participants_action_unban">Dauerhaftes Ausschließen aus dem Raum aufheben</string>
     <string name="room_participants_action_set_default_power_level">Zum normalen Nutzer machen</string>
     <string name="room_participants_action_set_moderator">Zum Moderator machen</string>
     <string name="room_participants_action_set_admin">Zum Admin machen</string>
@@ -417,7 +417,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
     <!-- Search -->
     <string name="search_hint">Suchen</string>
-    <string name="search_members_hint">Raummitglieder filtern</string>
+    <string name="search_members_hint">Raum-Mitglieder filtern</string>
     <string name="search_no_results">Keine Suchergebnisse</string>
     <string name="tab_title_search_rooms">RÄUME</string>
     <string name="tab_title_search_messages">NACHRICHTEN</string>
@@ -457,7 +457,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_sliding_menu_messages">Nachrichten</string>
     <string name="room_sliding_menu_settings">Einstellungen</string>
     <string name="room_sliding_menu_version">Version </string>
-    <string name="room_sliding_menu_term_and_conditions">Geschäftsbedingungen</string>
+    <string name="room_sliding_menu_term_and_conditions">Nutzungsbedingungen</string>
     <string name="room_sliding_menu_third_party_notices">Nutzungshinweise von Drittanbietern</string>
     <string name="room_sliding_menu_copyright">Urheberrechtserklärung</string>
     <string name="room_sliding_menu_privacy_policy">Datenschutzerklärung</string>
@@ -493,7 +493,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">OLM Version</string>
-    <string name="settings_app_term_conditions">Geschäftsbedingungen</string>
+    <string name="settings_app_term_conditions">Nutzungsbedingungen</string>
     <string name="settings_third_party_notices">Nutzungshinweise von Drittanbietern</string>
     <string name="settings_copyright">Urheberrechtserklärung</string>
     <string name="settings_privacy_policy">Datenschutzerklärung</string>
@@ -513,7 +513,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="settings_contacts_phonebook_country">Telefonbuch-Land</string>
     <string name="settings_home_display">Startseite</string>
     <string name="settings_pin_missed_notifications">Hefte Räume mit verpassten Benachrichtigungen an</string>
-    <string name="settings_pin_unread_messages">Hefte Räume mit ungelesenen Nachrichten an</string>
+    <string name="settings_pin_unread_messages">Räume mit ungelesenen Nachrichten anheften</string>
     <string name="settings_devices_list">Geräte</string>
     <string name="devices_details_dialog_title">Geräte-Details</string>
     <string name="devices_details_id_title">ID</string>
@@ -540,7 +540,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="settings_new_password">Neues Passwort</string>
     <string name="settings_confirm_password">Neues Passwort wiederholen</string>
     <string name="settings_fail_to_update_password">Ändern des Passworts fehlgeschlagen</string>
-    <string name="settings_password_updated">Dein Passwurt wurde aktualisiert</string>
+    <string name="settings_password_updated">Dein Passwort wurde aktualisiert</string>
     <string name="settings_unignore_user">Alle Nachrichten von %s anzeigen?</string>
 
     <string name="settings_delete_notification_targets_confirmation">Bist du sicher, dass du dieses Benachrichtigungsziel entfernen möchtest?</string>
@@ -565,7 +565,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_settings_room_photo">Raumbild</string>
     <string name="room_settings_room_name">Raumname</string>
     <string name="room_settings_topic">Thema</string>
-    <string name="room_settings_room_tag">Raum-Tag</string>
+    <string name="room_settings_room_tag">Raum-Markierung</string>
     <string name="room_settings_tag_pref_dialog_title">Getagged als:</string>
     <string name="room_settings_mute_notifs">Benachrichtigungen stummschalten</string>
 
@@ -580,7 +580,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Zugriff und Sichtbarkeit</string>
-    <string name="room_settings_directory_visibility">Diesen Raum im Raumverzeichnis anzeigen</string>
+    <string name="room_settings_directory_visibility">Diesen Raum im Raum-Verzeichnis anzeigen</string>
     <string name="room_settings_room_access_rules_pref_title">Raumzugriff</string>
     <string name="room_settings_room_read_history_rules_pref_title">Lesbarkeit des Chatverlaufs</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Wer kann den Chatverlauf lesen?</string>
@@ -595,8 +595,8 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Um einen Link zu einem Raum erstellen zu können, muss dieser eine Adresse haben.</string>
     <string name="room_settings_room_access_entry_only_invited">Nur eingeladene Personen</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Jeder, der den Raum-Link kennt, außer Gäste</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Jeder, der den Raum-Link kennt, auch Gäste</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Alle, die den Raum-Link kennen (ausgenommen Gäste)</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Alle, die den Raum-Link kennen (auch Gäste)</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Gebannte Nutzer</string>
@@ -646,7 +646,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
 
     <!-- GA use -->
     <string name="ga_use_alert_message">Stimmst du zu, uns zu helfen, um das Anwendungsverhalten zu verbessern und uns Absturzberichte zu senden?</string>
-    <string name="ga_use_settings">Automatisch Absturzberichte senden</string>
+    <string name="ga_use_settings">Absturzberichte automatisch übermitteln</string>
     <string name="ga_use_disable_alert_message">Du musst die Anwendung neustarten, um Absturzberichte auszuschalten.</string>
 
     <!-- matrix error -->
