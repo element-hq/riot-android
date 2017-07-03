@@ -199,7 +199,7 @@
 
         <activity
             android:name="im.vector.activity.VectorCallViewActivity"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/CallActivityTheme" />
 
         <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"

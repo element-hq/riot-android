@@ -117,6 +117,15 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <!-- call activity -->
+    <style name="CallActivityTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <!-- status bar color -->
+        <item name="android:colorPrimaryDark">@android:color/black</item>
+        <item name="colorPrimaryDark">@android:color/black</item>
+    </style>
+
     <!--  -->
     <style name="vector.PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@android:color/white</item>
