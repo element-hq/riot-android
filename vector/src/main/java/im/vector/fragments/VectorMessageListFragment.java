@@ -550,7 +550,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                    new AlertDialog.Builder(getActivity())
                             .setMessage((action == R.id.ic_action_vector_cancel_upload) ? R.string.attachment_cancel_upload : R.string.attachment_cancel_download)
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
@@ -683,7 +683,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 mRoom.report(event.eventId, -100, reason, new SimpleApiCallback<Void>(getActivity()) {
                     @Override
                     public void onSuccess(Void info) {
-                        new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        new AlertDialog.Builder(getActivity())
                                 .setMessage(R.string.room_event_action_report_prompt_ignore_user)
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
@@ -789,7 +789,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
         } else {
             // else download it
-            final String downloadId = mediasCache.downloadMedia(getActivity(), mSession.getHomeserverConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
+            final String downloadId = mediasCache.downloadMedia(getActivity().getApplicationContext(), mSession.getHomeserverConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
             mAdapter.notifyDataSetChanged();
 
             if (null != downloadId) {
@@ -798,7 +798,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
-                        if ((null != error) && error.isSupportedErrorCode()) {
+                        if ((null != error) && error.isSupportedErrorCode() && (null != VectorMessageListFragment.this.getActivity())) {
                             Toast.makeText(VectorMessageListFragment.this.getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
