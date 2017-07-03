@@ -64,7 +64,7 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-regular"
         android:gravity="center_horizontal"
-        android:maxLines="2"
+        android:lines="2"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:textColor="@color/vector_text_black_color"
