@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 OpenMarket Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,10 @@ package im.vector.util;
 
 
 import android.app.Activity;
+import android.content.Context;
+import android.support.annotation.AttrRes;
+import android.support.annotation.ColorRes;
+import android.util.TypedValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +57,18 @@ public class ThemeUtils {
             // Just in case we had some problem anywhere reading, set the theme to light.
             a.setTheme(themeMap.get("light"));
         }
+    }
+
+    /**
+     * Translates color attributes to colors
+     * @param c Context
+     * @param colorAttribute Color Attribute
+     * @return Requested Color
+     */
+    public static @ColorRes int getColor(Context c, @AttrRes final int colorAttribute) {
+        TypedValue color = new TypedValue();
+        c.getTheme().resolveAttribute(colorAttribute, color, true);
+        return color.data;
     }
 
 }
