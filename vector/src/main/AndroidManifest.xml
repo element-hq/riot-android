@@ -45,6 +45,9 @@
     <uses-permission android:name="com.anddoes.launcher.permission.UPDATE_COUNT"/>
     <uses-permission android:name="com.majeur.launcher.permission.UPDATE_BADGE"/>
 
+    <!-- bluetooth headset -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
     <!-- libjingle is designed for API >= 15 but the app should work from API >= 11 -->
     <uses-sdk tools:overrideLibrary="io.pristine.libjingle"/>
 
@@ -196,7 +199,7 @@
 
         <activity
             android:name="im.vector.activity.VectorCallViewActivity"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/CallActivityTheme" />
 
         <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"

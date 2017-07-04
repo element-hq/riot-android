@@ -413,6 +413,8 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    // update the read markers
+                    room.markAllAsRead(null);
                     HashMap<String, Object> params = new HashMap<>();
                     params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                     params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());

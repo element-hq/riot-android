@@ -22,7 +22,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +30,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.util.Log;
 
 import butterknife.BindColor;
 import butterknife.BindView;
@@ -47,6 +47,10 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.room_name)
     TextView vRoomName;
+
+    @BindView(R.id.room_name_server)
+    @Nullable
+    TextView vRoomNameServer;
 
     @BindView(R.id.room_message)
     @Nullable
@@ -166,9 +170,30 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             vRoomUnreadCount.setVisibility(View.GONE);
         }
 
-        final String roomName = VectorUtils.getRoomDisplayName(context, session, room);
-        vRoomName.setText(roomName);
+        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+        if (vRoomNameServer != null) {
+            // This view holder is for the home page, we have up to two lines to display the name
+            if (MXSession.isRoomAlias(roomName)) {
+                // Room alias, split to display the server name on second line
+                final String[] roomAliasSplitted = roomName.split(":");
+                final String firstLine = roomAliasSplitted[0] + ":";
+                final String secondLine = roomAliasSplitted[1];
+                vRoomName.setLines(1);
+                vRoomName.setText(firstLine);
+                vRoomNameServer.setText(secondLine);
+                vRoomNameServer.setVisibility(View.VISIBLE);
+                vRoomNameServer.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
+            } else {
+                // Allow the name to take two lines
+                vRoomName.setLines(2);
+                vRoomNameServer.setVisibility(View.GONE);
+                vRoomName.setText(roomName);
+            }
+        } else {
+            vRoomName.setText(roomName);
+        }
         vRoomName.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
+
         VectorUtils.loadRoomAvatar(context, session, vRoomAvatar, room);
 
         // get last message to be displayed

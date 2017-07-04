@@ -658,6 +658,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             return;
         }
 
+        if (!TextUtils.isEmpty(mSearchView.getQuery().toString())) {
+            mSearchView.setQuery("", true);
+            return;
+        }
+
         // Clear backstack
         mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 

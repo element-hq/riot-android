@@ -556,6 +556,8 @@ public class Matrix {
             return;
         }
 
+        Log.d(LOG_TAG, "## clearSession() " + session.getMyUserId() + " clearCredentials " + clearCredentials);
+
         if (clearCredentials) {
             mLoginStorage.removeCredentials(session.getHomeserverConfig());
         }
@@ -666,6 +668,7 @@ public class Matrix {
             @Override
             public void onTokenCorrupted() {
                 if (null != VectorApp.getCurrentActivity()) {
+                    Log.e(LOG_TAG, "## createSession() : onTokenCorrupted");
                     CommonActivityUtils.logout(VectorApp.getCurrentActivity());
                 }
             }
@@ -688,6 +691,8 @@ public class Matrix {
      * @param context the context
      */
     public void reloadSessions(final Context context) {
+        Log.e(LOG_TAG, "## reloadSessions");
+
         CommonActivityUtils.logout(context, getMXSessions(context), false, new SimpleApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {

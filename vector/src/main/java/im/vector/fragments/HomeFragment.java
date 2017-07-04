@@ -219,8 +219,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
         mNestedScrollView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return mNestedScrollView.onTouchEvent(event);
+                if (null != mNestedScrollView) {
+                    gestureDetector.onTouchEvent(event);
+                    return mNestedScrollView.onTouchEvent(event);
+                } else {
+                    return false;
+                }
             }
         });
         mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
