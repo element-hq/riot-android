@@ -47,6 +47,7 @@
 
     <!-- bluetooth headset -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
 
     <!-- libjingle is designed for API >= 15 but the app should work from API >= 11 -->
     <uses-sdk tools:overrideLibrary="io.pristine.libjingle"/>
