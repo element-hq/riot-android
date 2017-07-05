@@ -178,14 +178,14 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
                 final String[] roomAliasSplitted = roomName.split(":");
                 final String firstLine = roomAliasSplitted[0] + ":";
                 final String secondLine = roomAliasSplitted[1];
-                vRoomName.setMaxLines(1);
+                vRoomName.setLines(1);
                 vRoomName.setText(firstLine);
                 vRoomNameServer.setText(secondLine);
                 vRoomNameServer.setVisibility(View.VISIBLE);
                 vRoomNameServer.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
             } else {
                 // Allow the name to take two lines
-                vRoomName.setMaxLines(2);
+                vRoomName.setLines(2);
                 vRoomNameServer.setVisibility(View.GONE);
                 vRoomName.setText(roomName);
             }

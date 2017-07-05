@@ -558,6 +558,14 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                     mIsPopulating = false;
                 }
 
+                // race condition reported by GA.
+                if (null == mContactsList) {
+                    Log.d(LOG_TAG, "## ## refreshLocalContactsSnapshot() : the contacts list has been cleared while processing it");
+                    mIsRetrievingPids = false;
+                    mArePidsRetrieved = false;
+                    return;
+                }
+
                 long delta = System.currentTimeMillis() - t0;
 
                 if (0 != mContactsList.size()) {
@@ -575,7 +583,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                 PIDsRetriever.getInstance().setPIDsRetrieverListener(mPIDsRetrieverListener);
 
                 // trigger a PIDs retrieval
-                // add a network listener to ensure that the PIDS will be retreived asap a valid network will be found.
+                // add a network listener to ensure that the PIDS will be retrieved asap a valid network will be found.
                 MXSession defaultSession = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
                 if (null != defaultSession) {
                     defaultSession.getNetworkConnectivityReceiver().addEventListener(mNetworkConnectivityReceiver);

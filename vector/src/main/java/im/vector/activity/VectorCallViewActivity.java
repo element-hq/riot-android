@@ -32,6 +32,7 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import org.matrix.androidsdk.util.Log;
@@ -62,6 +63,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
@@ -70,7 +72,7 @@ import im.vector.view.VectorPendingCallView;
 /**
  * VectorCallViewActivity is the call activity.
  */
-public class VectorCallViewActivity extends VectorActivity implements SensorEventListener {
+public class VectorCallViewActivity extends AppCompatActivity implements SensorEventListener {
     private static final String LOG_TAG = "VCallViewActivity";
     private static final String HANGUP_MSG_HEADER_UI_CALL = "user hangup from header back arrow";
     private static final String HANGUP_MSG_BACK_KEY = "user hangup from back key";
@@ -504,6 +506,7 @@ public class VectorCallViewActivity extends VectorActivity implements SensorEven
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG,"## onCreate(): IN");
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_callview);
         instance = this;
 

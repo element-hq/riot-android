@@ -250,9 +250,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         });
 
         // application version
-        EditTextPreference versionTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_version));
+        VectorCustomActionEditTextPreference versionTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.settings_version));
         if (null != versionTextPreference) {
             versionTextPreference.setSummary(VectorUtils.getApplicationVersion(appContext));
+
+            versionTextPreference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                @Override
+                public boolean onPreferenceLongClick(Preference preference) {
+                    VectorUtils.copyToClipboard(appContext ,VectorUtils.getApplicationVersion(appContext));
+                    return true;
+                }
+            });
         }
 
         // olm version

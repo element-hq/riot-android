@@ -42,6 +42,7 @@ import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.util.ThemeUtils;
+import im.vector.util.RoomUtils;
 
 public class HomeSectionView extends RelativeLayout {
 
@@ -127,7 +128,7 @@ public class HomeSectionView extends RelativeLayout {
     private void onDataUpdated() {
         setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
         final int badgeCount = mAdapter.getBadgeCount();
-        mBadge.setText(String.valueOf(badgeCount));
+        mBadge.setText(RoomUtils.formatUnreadMessagesCounter(badgeCount));
         mBadge.setVisibility(badgeCount == 0 ? GONE : VISIBLE);
         mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
         mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);

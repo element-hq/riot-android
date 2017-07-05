@@ -34,6 +34,14 @@
         <item name="android:textColorHint">@color/vector_white_alpha_50</item>
     </style>
 
+    <!-- call activity -->
+    <style name="CallActivityTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <!-- status bar color -->
+        <item name="colorPrimaryDark">@android:color/black</item>
+    </style>
+
     <!-- NoActionBar + FullScreen -->
     <style name="AppTheme.NoActionBar.FullScreen" parent="@style/AppTheme.NoActionBar">
         <item name="android:windowFullscreen">true</item>

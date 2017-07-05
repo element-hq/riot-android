@@ -215,8 +215,17 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), patternValue) && (null != getActivity())) {
-                            mPatternValue = mPatternToSearchEditText.getText().toString();
+                        String text = null;
+
+                        // reported by GA
+                        try {
+                            text = mPatternToSearchEditText.getText().toString();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## afterTextChanged() failed " + e.getMessage());
+                        }
+
+                        if (TextUtils.equals(text, patternValue) && (null != getActivity())) {
+                            mPatternValue = text;
 
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
