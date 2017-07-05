@@ -445,10 +445,13 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     @Override
     public void onSummariesUpdate() {
         super.onSummariesUpdate();
-        mAdapter.setInvitation(mActivity.getRoomInvitations());
 
-        initDirectChatsData();
-        initDirectChatsViews();
+        if (isResumed()) {
+            mAdapter.setInvitation(mActivity.getRoomInvitations());
+
+            initDirectChatsData();
+            initDirectChatsViews();
+        }
     }
 
     @Override
