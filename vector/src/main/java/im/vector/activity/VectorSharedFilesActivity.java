@@ -29,12 +29,11 @@ import java.util.ArrayList;
 
 import im.vector.Matrix;
 import im.vector.util.SharedDataItem;
-import im.vector.util.ThemeUtils;
 
 /**
  * Dummy activity used to manage the shared
  */
-public class VectorSharedFilesActivity extends Activity {
+public class VectorSharedFilesActivity extends VectorActivity {
     private static final String LOG_TAG = "VectorSharedFilesAct";
 
     final String SHARED_FOLDER = "VectorShared";
@@ -42,7 +41,6 @@ public class VectorSharedFilesActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
 
         // retrieve the current intent
         Intent anIntent = getIntent();

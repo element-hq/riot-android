@@ -33,7 +33,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import im.vector.R;
-import im.vector.util.ThemeUtils;
 
 import java.net.URLDecoder;
 import java.util.Formatter;
@@ -42,7 +41,7 @@ import java.util.HashMap;
 /**
  * AccountCreationCaptchaActivity displays a webview to check captchas.
  */
-public class AccountCreationCaptchaActivity extends Activity {
+public class AccountCreationCaptchaActivity extends VectorActivity {
     private static String LOG_TAG = "ACCCaptchaActivity";
 
     public static String EXTRA_HOME_SERVER_URL = "AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL";
@@ -79,7 +78,6 @@ public class AccountCreationCaptchaActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
 
         setContentView(R.layout.activity_vector_registration_captcha);
 

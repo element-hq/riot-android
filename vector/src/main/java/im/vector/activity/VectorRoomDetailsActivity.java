@@ -108,7 +108,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");

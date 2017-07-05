@@ -42,7 +42,6 @@ import android.net.Uri;
 import android.opengl.GLES20;
 import android.os.Build;
 import android.os.Bundle;
-import im.vector.util.ThemeUtils;
 import android.os.HandlerThread;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -221,7 +220,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_vector_medias_picker);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {

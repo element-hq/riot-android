@@ -1,7 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -47,7 +47,6 @@ import java.util.List;
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomCreationAdapter;
-import im.vector.util.ThemeUtils;
 
 
 public class VectorRoomCreationActivity extends MXCActionBarActivity {
@@ -114,7 +113,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_vector_room_creation);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {

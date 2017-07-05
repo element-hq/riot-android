@@ -26,7 +26,6 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.RoomPreviewData;
 
 import im.vector.Matrix;
-import im.vector.util.ThemeUtils;
 
 /**
  * Dummy activity used to trigger the room activity in preview mode,
@@ -39,13 +38,12 @@ import im.vector.util.ThemeUtils;
  * currently displayed.
  */
 @SuppressLint("LongLogTag")
-public class VectorFakeRoomPreviewActivity extends Activity {
+public class VectorFakeRoomPreviewActivity extends VectorActivity {
     private static final String LOG_TAG = "VectorFakeRoomPreviewActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
 
         Intent receivedIntent = getIntent();
         String matrixId;

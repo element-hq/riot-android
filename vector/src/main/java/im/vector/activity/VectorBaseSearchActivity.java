@@ -44,7 +44,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import im.vector.R;
-import im.vector.util.ThemeUtils;
 
 /**
  * This class defines a base class to manage search in action bar
@@ -66,7 +65,6 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
 
         mActionBar = getSupportActionBar();
         View actionBarView = customizeActionBar();

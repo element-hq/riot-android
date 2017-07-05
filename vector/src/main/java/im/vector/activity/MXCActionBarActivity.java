@@ -19,6 +19,7 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -38,6 +39,7 @@ import im.vector.MyPresenceManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.fragments.VectorUnknownDevicesFragment;
+import im.vector.util.ThemeUtils;
 
 /**
  * extends ActionBarActivity to manage the rageshake
@@ -75,6 +77,13 @@ public class MXCActionBarActivity extends AppCompatActivity {
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
         CommonActivityUtils.onTrimMemory(this, level);
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
     }
 
     /**

@@ -544,7 +544,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_vector_room);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {

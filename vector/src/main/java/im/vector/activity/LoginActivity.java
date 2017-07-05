@@ -355,7 +355,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_vector_login);
 
         // warn that the application has started.

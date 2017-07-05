@@ -62,7 +62,6 @@ import im.vector.VectorApp;
 import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.fragments.VectorUnknownDevicesFragment;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**
@@ -1105,7 +1104,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application");

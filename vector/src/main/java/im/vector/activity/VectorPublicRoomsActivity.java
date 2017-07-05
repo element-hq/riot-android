@@ -42,7 +42,6 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_vector_public_rooms);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {

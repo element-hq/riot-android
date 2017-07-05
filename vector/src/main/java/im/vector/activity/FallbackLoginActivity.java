@@ -35,7 +35,6 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
 import im.vector.R;
-import im.vector.util.ThemeUtils;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -44,7 +43,7 @@ import java.util.HashMap;
  * FallbackLoginActivity is the fallback login activity
  * i.e this activity is created when the client does not support the
  */
-public class FallbackLoginActivity extends Activity {
+public class FallbackLoginActivity extends VectorActivity {
 
     private static final String LOG_TAG = "FallbackLoginAct";
 
@@ -57,7 +56,6 @@ public class FallbackLoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
 
         setContentView(R.layout.activity_login_fallback);
         mWebView = (WebView) findViewById(R.id.account_creation_webview);

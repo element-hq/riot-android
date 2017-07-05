@@ -40,19 +40,17 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
-import im.vector.util.ThemeUtils;
 
 /**
  * Dummy activity used to dispatch the vector URL links.
  */
 @SuppressLint("LongLogTag")
-public class VectorUniversalLinkActivity extends Activity {
+public class VectorUniversalLinkActivity extends VectorActivity {
     private static final String LOG_TAG = "VectorUniversalLinkActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
 
         String intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
 
