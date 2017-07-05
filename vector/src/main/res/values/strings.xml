@@ -640,6 +640,7 @@
     <!-- Directory -->
     <string name="directory_title">Directory</string>
     <string name="settings_theme">Theme</string>
+    <string name="theme_restart_warning">You may need to restart the app to see these changes.</string>
 
     <!-- GA use -->
     <string name="ga_use_alert_message">Do you accept to help us to improve the application behaviour and to send crash reports ?</string>

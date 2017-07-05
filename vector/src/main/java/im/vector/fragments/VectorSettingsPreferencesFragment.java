@@ -293,7 +293,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // Themes
-        ListPreference themePreference = (ListPreference) findPreference("Theme");
+        ListPreference themePreference = (ListPreference) findPreference(
+            getResources().getString(R.string.settings_theme));
         if (null != themePreference) {
             themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -302,7 +303,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         ThemeUtils.setTheme((String)newValue);
                     }
                     // Display a message to the user
-                    CharSequence text = "You may need to restart the app to see these changes.";
+                    String text = getResources().getString(R.string.theme_restart_warning);
                     int duration = Toast.LENGTH_LONG;
                     Toast toast = Toast.makeText(appContext, text, duration);
                     toast.show();
@@ -1533,7 +1534,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             if (null == addEmailBtn) {
                 return;
             }
-            
+
             int order = addEmailBtn.getOrder();
 
             for (final ThirdPartyIdentifier email3PID : currentEmail3PID) {

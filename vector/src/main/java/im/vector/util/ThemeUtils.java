@@ -22,6 +22,7 @@ import android.content.Context;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
+import android.support.annotation.IntDef;
 import android.util.TypedValue;
 
 import java.util.HashMap;
@@ -35,19 +36,16 @@ public class ThemeUtils {
 
     private static Integer currentTheme = null;
 
-    // Maps theme names to formal ID's
-    private static HashMap<String, Integer> themeMap = new HashMap<>();
-    static {
-        themeMap.put("dark", R.style.Theme_Vector_Dark);
-        themeMap.put("light", R.style.Theme_Vector_Light);
-    }
-
+    @IntDef({THEME_DARK, THEME_LIGHT})
+    public @interface ThemeList {}
+    public static final int THEME_DARK = R.style.Theme_Vector_Dark;
+    public static final int THEME_LIGHT = R.style.Theme_Vector_Light;
 
     public static void setTheme(String theme) {
-        if (themeMap.containsKey(theme)) {
-            if (themeMap.get(theme) != currentTheme) {
-                currentTheme = themeMap.get(theme);
-            }
+        if (theme.equals("light")) {
+            currentTheme = THEME_LIGHT;
+        } else if (theme.equals("dark")) {
+            currentTheme = THEME_DARK;
         }
     }
 
@@ -56,7 +54,7 @@ public class ThemeUtils {
             a.setTheme(currentTheme);
         } else {
             // Just in case we had some problem anywhere reading, set the theme to light.
-            a.setTheme(themeMap.get("light"));
+            a.setTheme(THEME_LIGHT);
         }
     }
 
