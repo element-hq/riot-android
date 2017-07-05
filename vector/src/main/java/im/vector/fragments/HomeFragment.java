@@ -237,8 +237,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     @Override
     public void onSummariesUpdate() {
-        if (!mActivity.isWaitingViewVisible()) {
-            initData();
+        super.onSummariesUpdate();
+
+        if (isResumed()) {
+            if (!mActivity.isWaitingViewVisible()) {
+                initData();
+            }
         }
     }
 

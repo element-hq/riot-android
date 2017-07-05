@@ -202,8 +202,11 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     @Override
     public void onSummariesUpdate() {
         super.onSummariesUpdate();
-        refreshRooms();
-        mAdapter.setInvitation(mActivity.getRoomInvitations());
+
+        if (isResumed()) {
+            refreshRooms();
+            mAdapter.setInvitation(mActivity.getRoomInvitations());
+        }
     }
 
     /*

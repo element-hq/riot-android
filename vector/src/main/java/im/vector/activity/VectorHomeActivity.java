@@ -2211,7 +2211,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     /**
      * Warn the displayed fragment about summary updates.
      */
-    private void dispatchOnSummariesUpdate() {
+    public void dispatchOnSummariesUpdate() {
         Fragment fragment = getSelectedFragment();
 
         if ((null != fragment) && (fragment instanceof AbsHomeFragment)) {
