@@ -20,6 +20,7 @@ package im.vector.util;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.AttrRes;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.util.TypedValue;
 
@@ -65,10 +66,9 @@ public class ThemeUtils {
      * @param colorAttribute Color Attribute
      * @return Requested Color
      */
-    public static @ColorRes int getColor(Context c, @AttrRes final int colorAttribute) {
+    public static @ColorInt int getColor(Context c, @AttrRes final int colorAttribute) {
         TypedValue color = new TypedValue();
         c.getTheme().resolveAttribute(colorAttribute, color, true);
         return color.data;
     }
-
 }

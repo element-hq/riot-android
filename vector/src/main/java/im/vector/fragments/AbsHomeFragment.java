@@ -53,6 +53,7 @@ import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AbsAdapter;
 import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 
 /**
  * Abstract fragment providing the universal search
@@ -341,12 +342,8 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
      * @param secondaryColorAttr color for status bar
      */
     public void setFragmentColors(@AttrRes final int primaryColorAttr, @AttrRes final int secondaryColorAttr) {
-        TypedValue color1 = new TypedValue();
-        TypedValue color2 = new TypedValue();
-        mActivity.getTheme().resolveAttribute(primaryColorAttr, color1, true);
-        mActivity.getTheme().resolveAttribute(secondaryColorAttr, color2, true);
-        mPrimaryColor = color1.data;
-        mSecondaryColor = color2.data;
+        mPrimaryColor = ThemeUtils.getColor(mActivity, primaryColorAttr);
+        mSecondaryColor = ThemeUtils.getColor(mActivity, secondaryColorAttr);
     }
 
     /*

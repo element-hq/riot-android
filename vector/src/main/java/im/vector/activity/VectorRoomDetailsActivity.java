@@ -108,6 +108,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // tab creation and restore tabs UI context
+        mActionBar = getSupportActionBar();
         ThemeUtils.activitySetTheme(this);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
@@ -149,9 +151,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         // UI widgets binding & init fields
         mWaitWhileSearchInProgressView = findViewById(R.id.settings_loading_layout);
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
-
-        // tab creation and restore tabs UI context
-        mActionBar = getSupportActionBar();
         createNavigationTabs(savedInstanceState, selectedTab);
     }
 
@@ -331,7 +330,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             tabIndexToRestore = PEOPLE_TAB_INDEX;
         }
 
-        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.vector_tabbar_background_color)));
+        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(ThemeUtils.getColor(this, R.attr.vector_tabbar_background_color)));
 
         // set the tab to display & set current tab index
         mActionBar.setSelectedNavigationItem(tabIndexToRestore);

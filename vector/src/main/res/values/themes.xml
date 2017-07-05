@@ -117,7 +117,7 @@
         <item name="vector_light_gray_color">#FFF2F2F2</item>
         <item name="vector_silver_color">#FFC7C7C7</item>
 
-        <item name="vector_text_black_color">#FF3C3C3C</item>
+        <item name="vector_text_black_color">#FFFFFF</item>
 
         <!-- 0_54_black gives invalid rendering so use 9D gray -->
         <item name="vector_0_54_black_color">#8E000000</item>
@@ -137,7 +137,7 @@
         <!-- FloatingActionButton -->
         <item name="vector_fuchsia_color">#ff0064</item>
 
-        <item name="vector_text_gray_color">#FF9D9D9D</item>
+        <item name="vector_text_gray_color">#FFFFFF</item>
 
         <!-- tabbar underline -->
         <item name="vector_dc_gray">#FFDCDCDC</item>
