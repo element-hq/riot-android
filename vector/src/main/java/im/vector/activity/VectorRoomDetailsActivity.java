@@ -108,8 +108,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // tab creation and restore tabs UI context
-        mActionBar = getSupportActionBar();
         ThemeUtils.activitySetTheme(this);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
@@ -151,6 +149,9 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         // UI widgets binding & init fields
         mWaitWhileSearchInProgressView = findViewById(R.id.settings_loading_layout);
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
+
+        // tab creation and restore tabs UI context
+        mActionBar = getSupportActionBar();
         createNavigationTabs(savedInstanceState, selectedTab);
     }
 
