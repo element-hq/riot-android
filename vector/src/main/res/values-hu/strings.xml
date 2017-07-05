@@ -5,7 +5,7 @@
     <string name="title_activity_home">Üzenetek</string>
     <string name="title_activity_room">Szoba</string>
     <string name="title_activity_settings">Beállítások</string>
-    <string name="title_activity_historical">Történelmi</string>
+    <string name="title_activity_historical">Előzmény</string>
 
     <string name="ok">OK</string>
     <string name="cancel">Mégse</string>
@@ -30,7 +30,7 @@
     <string name="ongoing_conference_call_video">videó</string>
     <string name="cannot_start_call">Nem sikerült hívást kezdeményezni, kérlek próbáld meg később</string>
     <string name="missing_permissions_warning">Hiányzó engedélyek miatt, pár funkció lehet, hogy hiányzik..</string>
-    <string name="missing_permissions_to_start_conf_call">Meghívásra való engedélyre van szükséged, hogy konferenciát kezdeményezz ebben a szobában.</string>
+    <string name="missing_permissions_to_start_conf_call">Meghívásra való engedélyre van szükséged, hogy konferenciát kezdeményezz ebben a szobában</string>
     <string name="missing_permissions_title_to_start_conf_call">Nem sikerült hívást kezdeményezni</string>
     <string name="device_information">Eszköz információ</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferencia hívás nem támogatott titkosított szobákban</string>
@@ -40,13 +40,13 @@
     <string name="invite">Meghívás</string>
 
     <string name="action_sign_out">Kijelentkezés</string>
-    <string name="action_sign_out_confirmation">Biztonsági okokból, kijelentkezés törölni fog minden végtől végig való titkosító kulcsot, ezáltal az előző titkosított csevegés nem lesz olvasható bejelentkezés után.
+    <string name="action_sign_out_confirmation">Biztonsági okokból, kijelentkezés törölni fog minden végtől végig való titkosító kulcsot, ezáltal az előző titkosított csevegés előzmény nem lesz olvasható bejelentkezés után.
 Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés előtt.</string>
     <string name="action_voice_call">Hanghívás</string>
     <string name="action_video_call">Videóhívás</string>
     <string name="action_global_search">Globális keresés</string>
     <string name="action_mark_all_as_read">Minden olvasottnak jelölése</string>
-    <string name="action_historical">Történelmi</string>
+    <string name="action_historical">Előzmény</string>
     <string name="action_quick_reply">Gyors válasz</string>
     <string name="action_open">Megnyit</string>
     <string name="action_close">Bezár</string>
@@ -301,7 +301,7 @@ Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az em
 
 Még nem kéne megbíznod az adataid megtartásával.
 
-A készülékeid nem lesznek képesek visszafejteni a történelmeid azelőttről, hogy becsatlakoztál a szobába.
+A készülékeid nem lesznek képesek visszafejteni a előzményeid azelőttről, hogy becsatlakoztál a szobába.
 
 A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titkosítás funkció még nem érhető el.</string>
 
@@ -558,8 +558,8 @@ A folytatáshoz, kérlek írd be a jelszavad.</string>
     <string name="room_settings_category_access_visibility_title">Hozzáférés és láthatóság</string>
     <string name="room_settings_directory_visibility">Listázza ezt a szobát a szobák könyvtárba</string>
     <string name="room_settings_room_access_rules_pref_title">Szoba hozzáfárés</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Szoba Történet Olvashatóság</string>
-    <string name="room_settings_room_read_history_rules_pref_dialog_title">Ki tud történelmet olvasni?</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Szoba Előzmény Olvashatóság</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Ki tud előzményt olvasni?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Ki tud hozzáférni a szobához?</string>
 
     <string name="room_settings_read_history_entry_anyone">Bárki</string>
@@ -607,7 +607,7 @@ A folytatáshoz, kérlek írd be a jelszavad.</string>
 
 Még nem kéne megbíznod az adataid megtartásával.
 
-A készülékeid nem lesznek képesek visszafejteni a történelmeid azelőttről, hogy becsatlakoztál a szobába.
+A készülékeid nem lesznek képesek visszafejteni a előzményeid azelőttről, hogy becsatlakoztál a szobába.
 
 A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titkosítás funkció még nem érhető el.</string>
 
