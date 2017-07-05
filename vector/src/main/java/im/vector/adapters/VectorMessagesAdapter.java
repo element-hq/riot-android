@@ -19,6 +19,7 @@ package im.vector.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
@@ -67,6 +68,7 @@ import java.util.List;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**
@@ -155,7 +157,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     public int getEncryptingMessageTextColor(Context context) {
-        return context.getResources().getColor(R.color.vector_green_color);
+        return ThemeUtils.getColor(context, R.attr.vector_green_color);
     }
 
     /**
@@ -958,7 +960,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
                     bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
 
-                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
+                    highlightMakerView.setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.vector_green_color));
                 }
             } else {
                 highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
@@ -993,30 +995,30 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     }
 
     public int presenceOnlineColor() {
-        return ContextCompat.getColor(mContext, R.color.presence_online);
+        return ThemeUtils.getColor(mContext, R.attr.presence_online);
     }
 
     public int presenceOfflineColor() {
-        return ContextCompat.getColor(mContext, R.color.presence_offline);
+        return ThemeUtils.getColor(mContext, R.attr.presence_offline);
     }
 
     public int presenceUnavailableColor() {
-        return ContextCompat.getColor(mContext, R.color.presence_unavailable);
+        return ThemeUtils.getColor(mContext, R.attr.presence_unavailable);
     }
 
     @Override
     public int getHighlightMessageTextColor(Context context) {
-        return ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
+        return ThemeUtils.getColor(mContext, R.attr.vector_fuchsia_color);
     }
 
     @Override
     public int getSearchHighlightMessageTextColor(Context context) {
-        return ContextCompat.getColor(mContext, R.color.vector_green_color);
+        return ThemeUtils.getColor(mContext, R.attr.vector_green_color);
     }
 
     @Override
     public int getNotSentMessageTextColor(Context context) {
-        return ContextCompat.getColor(mContext, R.color.vector_not_send_color);
+        return ThemeUtils.getColor(mContext, R.attr.vector_not_send_color);
     }
 
     //==============================================================================================================

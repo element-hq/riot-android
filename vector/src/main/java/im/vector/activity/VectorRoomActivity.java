@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -695,7 +696,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     };
 
 
-                    fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_text_black_color));
+                    fragment = IconAndTextDialogFragment.newInstance(icons, messages, null,
+                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.vector_text_black_color));
                     fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                         @Override
                         public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -2106,7 +2108,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         @Override
         public void updateDrawState(TextPaint ds) {
             super.updateDrawState(ds);
-            ds.setColor(getResources().getColor(R.color.vector_fuchsia_color));
+            ds.setColor(ThemeUtils.getColor(VectorRoomActivity.this, R.attr.vector_fuchsia_color));
             ds.bgColor = 0;
             ds.setUnderlineText(true);
         }
@@ -2125,7 +2127,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         @Override
         public void updateDrawState(TextPaint ds) {
             super.updateDrawState(ds);
-            ds.setColor(getResources().getColor(R.color.vector_fuchsia_color));
+            ds.setColor(ThemeUtils.getColor(VectorRoomActivity.this, R.attr.vector_fuchsia_color));
             ds.bgColor = 0;
             ds.setUnderlineText(true);
         }
@@ -2142,7 +2144,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         int iconId = -1;
-        int textColor = -1;
+        @ColorInt int textColor = -1;
+        boolean changedTextColor = false;
         boolean isAreaVisible = false;
         SpannableString text = new SpannableString("");
         boolean hasUnsentEvent = false;
@@ -2155,12 +2158,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (!Matrix.getInstance(this).isConnected()) {
             isAreaVisible = true;
             iconId = R.drawable.error;
-            textColor = R.color.vector_fuchsia_color;
+            textColor = ThemeUtils.getColor(this, R.attr.vector_fuchsia_color);
+            changedTextColor = true;
             text = new SpannableString(getResources().getString(R.string.room_offline_notification));
         } else if(mIsUnreadPreviewMode){
             isAreaVisible = true;
             iconId = R.drawable.scrolldown;
-            textColor = R.color.vector_text_gray_color;
+            textColor = ThemeUtils.getColor(this, R.attr.vector_text_gray_color);
+            changedTextColor = true;
 
             mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -2201,7 +2206,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 }
 
                 mNotificationTextView.setMovementMethod(LinkMovementMethod.getInstance());
-                textColor = R.color.vector_fuchsia_color;
+                textColor = ThemeUtils.getColor(this, R.attr.vector_fuchsia_color);
+                changedTextColor = true;
 
             } else if ((null != mIsScrolledToTheBottom) && (!mIsScrolledToTheBottom)) {
                 isAreaVisible = true;
@@ -2216,7 +2222,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                 if (unreadCount > 0) {
                     iconId = R.drawable.newmessages;
-                    textColor = R.color.vector_fuchsia_color;
+                    textColor = ThemeUtils.getColor(this, R.attr.vector_fuchsia_color);
+                    changedTextColor = true;
 
                     if (unreadCount == 1) {
                         text = new SpannableString(getResources().getString(R.string.room_new_message_notification));
@@ -2225,7 +2232,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     }
                 } else {
                     iconId = R.drawable.scrolldown;
-                    textColor = R.color.vector_text_gray_color;
+                    textColor = ThemeUtils.getColor(this, R.attr.vector_text_gray_color);
+                    changedTextColor = true;
 
                     if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                         text = new SpannableString(mLatestTypingMessage);
@@ -2259,7 +2267,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                 iconId = R.drawable.vector_typing;
                 text = new SpannableString(mLatestTypingMessage);
-                textColor = R.color.vector_text_gray_color;
+                textColor = ThemeUtils.getColor(this, R.attr.vector_text_gray_color);
+                changedTextColor = true;
             }
         }
 
@@ -2269,10 +2278,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mNotificationsArea.setVisibility(isAreaVisible ? View.VISIBLE : View.INVISIBLE);
         }
 
-        if ((-1 != iconId) && (-1 != textColor)) {
+        if ((-1 != iconId) && changedTextColor) {
             mNotificationIconImageView.setImageResource(iconId);
             mNotificationTextView.setText(text);
-            mNotificationTextView.setTextColor(getResources().getColor(textColor));
+            mNotificationTextView.setTextColor(textColor);
         }
 
         //
@@ -2720,7 +2729,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.vector_green_color));
+                mToolbar.setBackgroundColor(ThemeUtils.getColor(this, R.attr.vector_green_color));
             }
         }
     }

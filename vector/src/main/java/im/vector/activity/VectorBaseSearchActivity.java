@@ -66,9 +66,9 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActionBar = getSupportActionBar();
         ThemeUtils.activitySetTheme(this);
 
-        mActionBar = getSupportActionBar();
         View actionBarView = customizeActionBar();
 
         // add the search logic based on the text search input listener

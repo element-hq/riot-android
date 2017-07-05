@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import im.vector.R;
 import im.vector.adapters.AdapterSection;
+import im.vector.util.ThemeUtils;
 
 public class SectionView extends RelativeLayout {
 
@@ -77,7 +78,7 @@ public class SectionView extends RelativeLayout {
     private void setup(final AdapterSection section) {
         mSection = section;
 
-        setBackgroundColor(ContextCompat.getColor(getContext(), R.color.list_header_background));
+        setBackgroundColor(ThemeUtils.getColor(getContext(), R.attr.list_header_background));
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         // inflate the layout

@@ -34,6 +34,7 @@ import java.util.List;
 
 import im.vector.R;
 import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
 
@@ -393,7 +394,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             int colourTxt = ContextCompat.getColor(mContext, R.color.material_grey_900);
 
             if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
-                colourTxt = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
+                colourTxt = ThemeUtils.getColor(mContext, R.attr.vector_fuchsia_color);
             }
 
             viewHolder.mActionDescTextView.setTextColor(colourTxt);
