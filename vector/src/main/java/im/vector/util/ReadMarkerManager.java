@@ -39,6 +39,7 @@ import org.matrix.androidsdk.util.Log;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import im.vector.R;
@@ -328,7 +329,6 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                     // Read marker is invalid, ignore it as it should not occur
                     Log.e(LOG_TAG, "updateJumpToBanner: Read marker event id is invalid, ignore it as it should not occur");
                 } else {
-                    List<Event> roomMessages = new ArrayList<>(mRoom.getDataHandler().getStore().getRoomMessages(mRoom.getRoomId()));
                     final Event readMarkerEvent = getEvent(mReadMarkerEventId);
                     if (readMarkerEvent == null) {
                         // Event is not in store so we assume it is further in the past
@@ -337,25 +337,31 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                         showJumpToView = true;
                     } else {
                         // Last read event is in the store
-                        final int lastReadEventIndex = roomMessages.indexOf(readMarkerEvent);
-                        final int firstUnreadEventIndex = lastReadEventIndex != -1 ? lastReadEventIndex + 1 : -1;
-                        if (firstUnreadEventIndex != -1 && firstUnreadEventIndex < roomMessages.size()) {
-                            final Event firstUnreadEvent = roomMessages.get(firstUnreadEventIndex);
-                            if (mFirstVisibleEvent != null && firstUnreadEvent != null) {
-                                if (firstUnreadEvent.getOriginServerTs() > mFirstVisibleEvent.getOriginServerTs()) {
-                                    // Beginning of first unread message is visible
-                                    showJumpToView = false;
-                                } else if (firstUnreadEvent.getOriginServerTs() == mFirstVisibleEvent.getOriginServerTs()) {
-                                    // Check if beginning of first unread message is visible
-                                    final ListView listView = mVectorMessageListFragment.getMessageListView();
-                                    final View firstUnreadView = listView != null ? listView.getChildAt(0) : null;
-                                    showJumpToView = firstUnreadView != null && firstUnreadView.getTop() < 0;
-                                    if (mHasJumpedToFirstUnread && !showJumpToView) {
-                                        forgetReadMarker();
+                        Collection<Event> roomMessagesCol = mRoom.getDataHandler().getStore().getRoomMessages(mRoom.getRoomId());
+                        if (roomMessagesCol == null) {
+                            Log.e(LOG_TAG, "updateJumpToBanner getRoomMessages returned null instead of collection with event " + readMarkerEvent.eventId);
+                        } else {
+                            List<Event> roomMessages = new ArrayList<>(roomMessagesCol);
+                            final int lastReadEventIndex = roomMessages.indexOf(readMarkerEvent);
+                            final int firstUnreadEventIndex = lastReadEventIndex != -1 ? lastReadEventIndex + 1 : -1;
+                            if (firstUnreadEventIndex != -1 && firstUnreadEventIndex < roomMessages.size()) {
+                                final Event firstUnreadEvent = roomMessages.get(firstUnreadEventIndex);
+                                if (mFirstVisibleEvent != null && firstUnreadEvent != null) {
+                                    if (firstUnreadEvent.getOriginServerTs() > mFirstVisibleEvent.getOriginServerTs()) {
+                                        // Beginning of first unread message is visible
+                                        showJumpToView = false;
+                                    } else if (firstUnreadEvent.getOriginServerTs() == mFirstVisibleEvent.getOriginServerTs()) {
+                                        // Check if beginning of first unread message is visible
+                                        final ListView listView = mVectorMessageListFragment.getMessageListView();
+                                        final View firstUnreadView = listView != null ? listView.getChildAt(0) : null;
+                                        showJumpToView = firstUnreadView != null && firstUnreadView.getTop() < 0;
+                                        if (mHasJumpedToFirstUnread && !showJumpToView) {
+                                            forgetReadMarker();
+                                        }
+                                    } else {
+                                        // Beginning of first unread message is hidden
+                                        showJumpToView = true;
                                     }
-                                } else {
-                                    // Beginning of first unread message is hidden
-                                    showJumpToView = true;
                                 }
                             }
                         }
