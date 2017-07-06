@@ -348,6 +348,8 @@ public class CommonActivityUtils {
      * @param goToLoginPage true to jump to the login page
      */
     public static void logout(final Activity activity, final boolean goToLoginPage) {
+        Log.d(LOG_TAG, "## logout() : from " + activity + " goToLoginPage " + goToLoginPage);
+
         // if no activity is provided, use the application context instead.
         final Context context = (null == activity) ? VectorApp.getInstance().getApplicationContext() : activity;
 
@@ -1393,7 +1395,7 @@ public class CommonActivityUtils {
      */
     private static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session) {
         // sanity check
-        if ((null == session) || !session.isAlive()) {
+        if ((null == session) || !session.isAlive() || fromActivity.isFinishing()) {
             return;
         }
 

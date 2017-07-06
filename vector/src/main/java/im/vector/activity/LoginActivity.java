@@ -812,6 +812,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             Log.e(LOG_TAG, "## Exception: " + e.getMessage());
         }
 
+        Log.e(LOG_TAG, "## hasCredentials() : invalid credentials");
+
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {

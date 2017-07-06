@@ -21,7 +21,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +33,7 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -277,12 +277,14 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.ic_action_share) {
-            onAction(mViewPager.getCurrentItem(), id);
-            return true;
-        } else if (id ==  R.id.ic_action_download) {
-            onAction(mViewPager.getCurrentItem(), id);
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.ic_action_share:
+            case R.id.ic_action_download:
+                onAction(mViewPager.getCurrentItem(), id);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

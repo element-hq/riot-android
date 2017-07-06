@@ -18,7 +18,7 @@ package im.vector.util;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;

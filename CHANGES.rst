@@ -1,3 +1,18 @@
+Changes in Riot 0.6.13 (2017-07-03)
+===================================================
+ 
+Features:
+ * Add new home UI
+ * Add the read markers management
+   
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * #1308 : E2E new devices dialog disappears if screen is turned off by timeout : it does not reappear at next sent event.
+ * #1330 : Using the name completion as the first item of the message should add a colon (:)
+ * #1331 : The Events service is not properly restarted in some race conditions
+ * #1340 : sync is stuck after the application has been killed in background
+ 
 Changes in Riot 0.6.12 (2017-06-12)
 =======================================================
 

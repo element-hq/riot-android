@@ -22,7 +22,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -219,8 +219,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
         mNestedScrollView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return mNestedScrollView.onTouchEvent(event);
+                if (null != mNestedScrollView) {
+                    gestureDetector.onTouchEvent(event);
+                    return mNestedScrollView.onTouchEvent(event);
+                } else {
+                    return false;
+                }
             }
         });
         mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -233,8 +237,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     @Override
     public void onSummariesUpdate() {
-        if (!mActivity.isWaitingViewVisible()) {
-            initData();
+        super.onSummariesUpdate();
+
+        if (isResumed()) {
+            if (!mActivity.isWaitingViewVisible()) {
+                initData();
+            }
         }
     }
 

@@ -19,6 +19,8 @@ package im.vector.fragments;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.VectorReadReceiptsAdapter;
 
 /**
@@ -40,17 +43,18 @@ import im.vector.adapters.VectorReadReceiptsAdapter;
 public class VectorReadReceiptsDialogFragment extends DialogFragment {
     private static final String LOG_TAG = "ReadRctDlgFragment";
 
-    public static final String ARG_ROOM_ID = "ReadReceiptsDialogFragment.ARG_ROOM_ID";
-    public static final String ARG_EVENT_ID = "ReadReceiptsDialogFragment.ARG_EVENT_ID";
+    public static final String ARG_ROOM_ID = "VectorReadReceiptsDialogFragment.ARG_ROOM_ID";
+    public static final String ARG_EVENT_ID = "VectorReadReceiptsDialogFragment.ARG_EVENT_ID";
+    public static final String ARG_SESSION_ID = "VectorReadReceiptsDialogFragment.ARG_SESSION_ID";
 
 
-    public static VectorReadReceiptsDialogFragment newInstance(MXSession session, String roomId, String eventId) {
+    public static VectorReadReceiptsDialogFragment newInstance(String userId, String roomId, String eventId) {
         VectorReadReceiptsDialogFragment f = new VectorReadReceiptsDialogFragment();
         Bundle args = new Bundle();
+        args.putString(ARG_SESSION_ID, userId);
         args.putString(ARG_ROOM_ID, roomId);
         args.putString(ARG_EVENT_ID, eventId);
         f.setArguments(args);
-        f.setSession(session);
         return f;
     }
 
@@ -60,19 +64,17 @@ public class VectorReadReceiptsDialogFragment extends DialogFragment {
     private String mEventId;
     private MXSession mSession;
 
-
-    public void setSession(MXSession session) {
-        mSession = session;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSession = Matrix.getInstance(getContext()).getSession(getArguments().getString(ARG_SESSION_ID));
         mRoomId = getArguments().getString(ARG_ROOM_ID);
         mEventId = getArguments().getString(ARG_EVENT_ID);
 
-        if (mSession == null) {
-            throw new RuntimeException("No MXSession.");
+        // sanity check
+        if ((mSession == null) || TextUtils.isEmpty(mRoomId) ||  TextUtils.isEmpty(mEventId)) {
+            Log.e(LOG_TAG, "## onCreate() : invalid parameters");
+            dismiss();
         }
     }
 

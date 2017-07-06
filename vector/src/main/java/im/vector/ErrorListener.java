@@ -75,6 +75,7 @@ public class ErrorListener implements ApiFailureCallback {
 
                         @Override
                         public void onReject() {
+                            Log.d(LOG_TAG, "Found fingerprint: reject fingerprint");
                             CommonActivityUtils.logout(mActivity, Arrays.asList(mSession), true, null);
                         }
                     });

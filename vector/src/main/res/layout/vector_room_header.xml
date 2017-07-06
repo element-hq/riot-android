@@ -56,56 +56,52 @@
 
     <RelativeLayout
         android:id="@+id/action_bar_header_room_members_layout"
-        android:layout_below="@id/action_bar_header_room_topic"
-        android:layout_marginBottom="19dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/action_bar_header_room_topic"
+        android:layout_marginBottom="19dp">
 
-        <!-- dummy text view to compute the text height -->
         <TextView
-            android:id="@+id/action_bar_header_line_height"
+            android:id="@+id/action_bar_header_room_members_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:textSize="14sp"
-            android:text="measurement text"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:ellipsize="end"
+            android:text="a text"
+            android:textColor="@color/vector_0_54_black_color"
+            android:textSize="14sp" />
 
         <RelativeLayout
+            android:id="@+id/action_bar_header_room_members_settings_view"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignTop="@+id/action_bar_header_line_height"
-            android:layout_alignBottom="@+id/action_bar_header_line_height">
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/action_bar_header_room_members_text_view"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/action_bar_header_room_members_text_view"
+            android:layout_toLeftOf="@+id/action_bar_header_room_members_text_view">
 
             <ImageView
-                android:id="@+id/action_bar_header_room_members_settings_view"
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_list_white_24dp"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_list_white_24dp" />
+        </RelativeLayout>
 
-
-            <TextView
-                android:id="@+id/action_bar_header_room_members_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:ellipsize="end"
-                android:textSize="14sp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:text="a text"
-                android:layout_toRightOf="@+id/action_bar_header_room_members_settings_view"
-                android:textColor="@color/vector_0_54_black_color"/>
+        <RelativeLayout
+            android:id="@+id/action_bar_header_room_members_invite_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/action_bar_header_room_members_text_view"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/action_bar_header_room_members_text_view"
+            android:layout_toRightOf="@+id/action_bar_header_room_members_text_view">
 
             <ImageView
-                android:id="@+id/action_bar_header_room_members_invite_view"
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/action_bar_header_room_members_text_view"
                 android:src="@drawable/ic_add_circle_outline_white_24dp" />
         </RelativeLayout>
     </RelativeLayout>
-
-
 </RelativeLayout>

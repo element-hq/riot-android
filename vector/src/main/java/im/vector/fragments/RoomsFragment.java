@@ -202,8 +202,11 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     @Override
     public void onSummariesUpdate() {
         super.onSummariesUpdate();
-        refreshRooms();
-        mAdapter.setInvitation(mActivity.getRoomInvitations());
+
+        if (isResumed()) {
+            refreshRooms();
+            mAdapter.setInvitation(mActivity.getRoomInvitations());
+        }
     }
 
     /*
@@ -248,6 +251,11 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      */
     private void refreshRooms() {
         IMXStore store = mSession.getDataHandler().getStore();
+
+        if (null == store) {
+            Log.e(LOG_TAG, "## refreshRooms() : null store");
+            return;
+        }
 
         // update/retrieve the complete summary list
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());

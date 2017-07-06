@@ -658,6 +658,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             return;
         }
 
+        if (!TextUtils.isEmpty(mSearchView.getQuery().toString())) {
+            mSearchView.setQuery("", true);
+            return;
+        }
+
         // Clear backstack
         mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
@@ -1464,6 +1469,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
             mDirectChatInvitations.clear();
         }
 
+        if (null == mSession.getDataHandler().getStore()) {
+            Log.e(LOG_TAG, "## getRoomInvitations() : null store");
+            return new ArrayList<>();
+        }
+
         Collection<RoomSummary> roomSummaries = mSession.getDataHandler().getStore().getSummaries();
         for (RoomSummary roomSummary : roomSummaries) {
             String roomSummaryId = roomSummary.getRoomId();
@@ -2201,7 +2211,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     /**
      * Warn the displayed fragment about summary updates.
      */
-    private void dispatchOnSummariesUpdate() {
+    public void dispatchOnSummariesUpdate() {
         Fragment fragment = getSelectedFragment();
 
         if ((null != fragment) && (fragment instanceof AbsHomeFragment)) {
