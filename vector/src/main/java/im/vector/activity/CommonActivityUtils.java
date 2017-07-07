@@ -2040,7 +2040,7 @@ public class CommonActivityUtils {
      */
     public static void displayUnknownDevicesDialog(MXSession session, FragmentActivity activity, MXUsersDevicesMap<MXDeviceInfo> unknownDevices, VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
         // sanity checks
-        if ((null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
+        if (activity.isFinishing() || (null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
             return;
         }
 
