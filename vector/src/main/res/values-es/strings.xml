@@ -8,7 +8,7 @@
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configuraciones</string>
     <string name="title_activity_member_details">Detalles de los miembros</string>
-    <string name="title_activity_historical">Historical</string>
+    <string name="title_activity_historical">Historial</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
