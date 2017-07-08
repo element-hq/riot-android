@@ -25,6 +25,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -66,11 +67,19 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_vector_unified_search);
+        Toolbar mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.search_toolbar);
+        setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
-        View actionBarView = customizeActionBar();
+        mActionBar.setDisplayShowCustomEnabled(true);
+        mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
+        // View actionBarView = customizeActionBar();
+        View actionBarView = findViewById(R.id.search_edit_text_layout);
+
+        // TODO fix searching, currently these listeners are not triggering.
 
         // add the search logic based on the text search input listener
-        mPatternToSearchEditText = (EditText) actionBarView.findViewById(R.id.room_action_bar_edit_text);
+        mPatternToSearchEditText = (EditText) findViewById(R.id.search_action_bar_edit_text);
         actionBarView.postDelayed(new Runnable() {
             @Override
             public void run() {
