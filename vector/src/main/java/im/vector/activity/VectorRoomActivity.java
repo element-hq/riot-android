@@ -695,8 +695,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     };
 
 
-                    fragment = IconAndTextDialogFragment.newInstance(icons, messages, null,
-                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.vector_text_black_color));
+                    fragment = IconAndTextDialogFragment.newInstance(icons, messages,
+                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.room_background),
+                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.vector_message_text_color));
                     fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                         @Override
                         public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -1510,7 +1511,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         final Integer[] lIcons = new Integer[]{R.drawable.voice_call_black, R.drawable.video_call_black};
         final Integer[] lTexts = new Integer[]{R.string.action_voice_call, R.string.action_video_call};
 
-        IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
+        IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts,
+            ThemeUtils.getColor(this, R.attr.room_background),
+            ThemeUtils.getColor(this, R.attr.vector_message_text_color));
         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
             @Override
             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
