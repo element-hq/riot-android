@@ -94,7 +94,7 @@
     <!-- DARK THEME COLORS -->
     <style name="Theme.Vector.Dark.Common" parent="Theme.Vector.Dark.Base">
         <!-- Background color of the room -->
-        <item name="room_background">#4A4A4A</item>
+        <item name="room_background">#2d2d2d</item>
 
         <item name="presence_online">#38af00</item>
         <item name="presence_unavailable">#fc0</item>

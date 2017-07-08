@@ -16,6 +16,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/avatar_mask"/>
+        android:src="@drawable/avatar_mask_roombg" />
 
 </FrameLayout>
