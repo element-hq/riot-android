@@ -36,6 +36,8 @@
 
         <item name="vector_text_black_color">#FF3C3C3C</item>
 
+        <item name="vector_message_text_color">#000000</item>
+
         <!-- 0_54_black gives invalid rendering so use 9D gray -->
         <item name="vector_0_54_black_color">#8E000000</item>
         <item name="vector_0_87_black_color">#DC000000</item>
@@ -123,6 +125,8 @@
         <!-- Names of people, rooms and categories in the rooms overview -->
         <!-- Also of headers (and filenames) in Room Details and People Details -->
         <item name="vector_text_black_color">#d9d9d9</item>
+
+        <item name="vector_message_text_color">#d1d1d1</item>
 
         <!-- 0_54_black gives invalid rendering so use 9D gray -->
         <!-- Display name and text in input field in rooms and text in room overview -->

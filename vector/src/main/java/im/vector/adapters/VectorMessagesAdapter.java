@@ -160,6 +160,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         return ThemeUtils.getColor(context, R.attr.vector_green_color);
     }
 
+    @Override
+    public int getDefaultMessageTextColor(Context context) {
+        return ThemeUtils.getColor(context, R.attr.vector_message_text_color);
+    }
+
     /**
      * the parent fragment is paused.
      */
