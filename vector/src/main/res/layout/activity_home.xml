@@ -55,7 +55,8 @@
             <FrameLayout
                 android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="?attr/room_background" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/floating_action_button"
@@ -91,8 +92,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@android:color/white"
-            app:itemBackground="@android:color/white"
+            android:background="?attr/room_background"
+            app:itemBackground="?attr/room_background"
             app:itemIconTint="@color/home_bottom_nav_view_tint"
             app:itemTextColor="@color/home_bottom_nav_view_tint"
             app:menu="@menu/bottom_navigation_main" />
