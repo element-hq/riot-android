@@ -104,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#FFF"
+        android:background="?attr/room_background"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/vector_home_menu_header"
         app:itemIconTint="@color/vector_4d_gray"
