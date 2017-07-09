@@ -137,6 +137,7 @@ public class VectorApp extends Application {
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
+        ThemeUtils.activitySetTheme(this);
 
         instance = this;
         mActivityTransitionTimer = null;

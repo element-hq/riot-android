@@ -49,7 +49,7 @@ public class ThemeUtils {
         }
     }
 
-    public static void activitySetTheme(Activity a) {
+    public static void activitySetTheme(Context a) {
         if (currentTheme != null) {
             a.setTheme(currentTheme);
         } else {
