@@ -12,7 +12,7 @@
 
             <stroke
                 android:width="50dp"
-                android:color="@color/vector_green_color" />
+                android:color="?attr/vector_green_color" />
         </shape>
     </item>
 

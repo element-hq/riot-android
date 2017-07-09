@@ -21,7 +21,7 @@
         android:layout_marginTop="18dp"
         android:fontFamily="sans-serif-light"
         android:text="370Kb"
-        android:textColor="@color/vector_silver_color"
+        android:textColor="?attr/vector_silver_color"
         android:textSize="12sp" />
 
     <TextView
@@ -37,7 +37,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:text="File name"
-        android:textColor="@color/vector_text_black_color"
+        android:textColor="?attr/vector_text_black_color"
         android:textSize="16sp" />
 
     <!-- Last message of the room -->
@@ -52,12 +52,12 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:text="Room name and date"
-        android:textColor="@color/vector_0_54_black_color"
+        android:textColor="?attr/vector_0_54_black_color"
         android:textSize="14sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/vector_dc_gray" />
+        android:background="?attr/vector_dc_gray" />
 </RelativeLayout>

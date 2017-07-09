@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:background="@color/vector_light_gray_color">
+        android:background="?attr/vector_light_gray_color">
         <TextView
             android:id="@+id/messagesAdapter_message_header_text"
             android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:layout_marginLeft="18dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold"
-            android:textColor="@color/vector_text_black_color"
+            android:textColor="?attr/vector_text_black_color"
             android:text = "A message here" />
     </RelativeLayout>
 

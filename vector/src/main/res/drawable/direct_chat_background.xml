@@ -7,5 +7,5 @@
 
     <stroke
         android:width="4dp"
-        android:color="@color/direct_chat_indicator" />
+        android:color="?attr/direct_chat_indicator" />
 </shape>

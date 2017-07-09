@@ -25,7 +25,7 @@
         android:layout_toRightOf="@id/filtered_list_avatar"
         android:singleLine="true"
         android:text="@string/room_creation_add_member"
-        android:textColor="@color/vector_21_black"
+        android:textColor="?attr/vector_21_black"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -34,6 +34,6 @@
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:background="@color/vector_dc_gray" />
+        android:background="?attr/vector_dc_gray" />
 
 </RelativeLayout>

@@ -33,7 +33,7 @@
             android:layout_marginRight="10dp"
             android:max="100"
             android:progress="50"
-            android:progressTint="@color/vector_green_color"
+            android:progressTint="?attr/vector_green_color"
             android:visibility="gone" />
 
         <ScrollView
@@ -67,7 +67,7 @@
                         android:id="@+id/bug_report_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/vector_text_black_color"
+                        android:textColor="?attr/vector_text_black_color"
                         android:hint="@string/send_bug_report_placeholder" />
                 </android.support.design.widget.TextInputLayout>
 

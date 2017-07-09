@@ -38,8 +38,8 @@
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"
-            android:textColor="@color/vector_21_black"
-            android:textColorHint="@color/vector_search_hint_color"
+            android:textColor="?attr/vector_21_black"
+            android:textColorHint="?attr/vector_search_hint_color"
             android:textCursorDrawable="@drawable/searches_cursor_background"
             android:textSize="16sp"
             android:theme="@style/SearchesAppTheme" />
@@ -68,7 +68,7 @@
         android:id="@+id/add_participants_progress_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/vector_deemed_background_view_gray_color"
+        android:background="?attr/vector_deemed_background_view_gray_color"
         android:visibility="gone">
 
         <ProgressBar
@@ -87,7 +87,7 @@
         android:layout_marginBottom="@dimen/floating_action_button_margin"
         android:layout_marginRight="@dimen/floating_action_button_margin"
         android:src="@drawable/ic_add_white"
-        app:backgroundTint="@color/vector_fuchsia_color"
+        app:backgroundTint="?attr/vector_fuchsia_color"
         app:borderWidth="0dp"
         app:elevation="4dp" />
 

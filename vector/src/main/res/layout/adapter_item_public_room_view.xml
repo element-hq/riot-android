@@ -31,7 +31,7 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif-regular"
             android:maxLines="1"
-            android:textColor="@color/vector_text_black_color"
+            android:textColor="?attr/vector_text_black_color"
             android:textSize="16sp"
             tools:text="Room name a bit long to be displayed completely" />
 
@@ -43,7 +43,7 @@
             android:layout_below="@+id/public_room_name"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/vector_0_54_black_color"
+            android:textColor="?attr/vector_0_54_black_color"
             android:textSize="14sp"
             tools:text="First message of the room is a bit too long to be displayed" />
 
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/public_room_name"
             android:layout_alignParentRight="true"
-            android:textColor="@color/vector_0_54_black_color"
+            android:textColor="?attr/vector_0_54_black_color"
             android:textSize="12sp"
             tools:text="14 Mar" />
     </RelativeLayout>

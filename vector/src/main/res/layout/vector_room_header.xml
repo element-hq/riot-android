@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/vector_green_color">
+    android:background="?attr/vector_green_color">
 
     <RelativeLayout
         android:id="@+id/room_avatar_container"
@@ -70,7 +70,7 @@
             android:layout_marginRight="15dp"
             android:ellipsize="end"
             android:text="a text"
-            android:textColor="@color/vector_0_54_black_color"
+            android:textColor="?attr/vector_0_54_black_color"
             android:textSize="14sp" />
 
         <RelativeLayout

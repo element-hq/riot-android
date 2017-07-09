@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/section_header"
         android:padding="16dp"
-        android:textColor="@color/vector_80_gray"
+        android:textColor="?attr/vector_80_gray"
         android:textSize="14sp"
         tools:text="No items" />
 </merge>

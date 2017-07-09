@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/home_toolbar"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vector_green_color"
             android:indeterminate="true"
             android:visibility="gone" />
 
@@ -67,7 +67,7 @@
                 android:layout_marginBottom="@dimen/floating_action_button_margin"
                 android:layout_marginRight="@dimen/floating_action_button_margin"
                 android:src="@drawable/ic_add_white"
-                app:backgroundTint="@color/vector_fuchsia_color"
+                app:backgroundTint="?attr/vector_fuchsia_color"
                 app:borderWidth="0dp"
                 app:elevation="4dp" />
 
@@ -75,7 +75,7 @@
                 android:id="@+id/listView_spinner_views"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/chat_encoding_background"
+                android:background="?attr/chat_encoding_background"
                 android:visibility="gone">
 
                 <ProgressBar
@@ -107,7 +107,7 @@
         android:background="?attr/room_background"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/vector_home_menu_header"
-        app:itemIconTint="@color/vector_4d_gray"
+        app:itemIconTint="?attr/vector_4d_gray"
         app:menu="@menu/vector_home_sliding_menu"
         app:theme="@style/NavigationViewStyle" />
 

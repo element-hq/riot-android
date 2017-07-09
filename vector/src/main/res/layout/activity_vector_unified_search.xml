@@ -14,7 +14,7 @@
             android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vector_green_color"
             style="@style/VectorToolbarStyle">
 
             <RelativeLayout
@@ -35,7 +35,7 @@
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:textColorHint="@color/vector_search_hint_color"
+                    android:textColorHint="?attr/vector_search_hint_color"
                     android:textCursorDrawable="@drawable/searches_cursor_background"
                     android:textSize="20sp" />
 
@@ -114,7 +114,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:background="@color/chat_encoding_background" />
+            android:background="?attr/chat_encoding_background" />
 
         <ProgressBar
             android:layout_width="40dp"

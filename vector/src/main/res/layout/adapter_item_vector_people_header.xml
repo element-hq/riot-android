@@ -5,7 +5,7 @@
     android:id="@+id/people_header_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/vector_recents_header_background_color"
+    android:background="?attr/vector_recents_header_background_color"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -27,7 +27,7 @@
                 android:layout_marginLeft="16dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="Header"
-                android:textColor="@color/vector_text_black_color"
+                android:textColor="?attr/vector_text_black_color"
                 android:textSize="14sp" />
 
             <ProgressBar
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/people_search_filter_text"
-            android:textColor="@color/vector_text_black_color"
+            android:textColor="?attr/vector_text_black_color"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

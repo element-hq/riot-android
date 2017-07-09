@@ -9,5 +9,5 @@
     android:fontFamily="sans-serif-medium"
     android:maxLines="1"
     android:textAlignment="inherit"
-    android:textColor="@color/list_header_spinner_text"
+    android:textColor="?attr/list_header_spinner_text"
     tools:text="One long text for testing purpose" />

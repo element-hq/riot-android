@@ -25,7 +25,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="6dp"
         android:maxLines="1"
-        android:textColor="@color/vector_21_black"
+        android:textColor="?attr/vector_21_black"
         android:textSize="12sp"
         android:textStyle="bold" />
 </LinearLayout>

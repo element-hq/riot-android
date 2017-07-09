@@ -50,7 +50,7 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="45"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vector_green_color"
             android:text="@string/encryption_information_verify"
             android:textColor="@android:color/white" />
 
@@ -65,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="45"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vector_green_color"
             android:text="@string/encryption_information_block"
             android:textColor="@android:color/white" />
     </LinearLayout>
@@ -75,5 +75,5 @@
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:background="@color/vector_dc_gray" />
+        android:background="?attr/vector_dc_gray" />
 </RelativeLayout>

@@ -20,7 +20,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/vector_green_color" />
+        android:background="?attr/vector_green_color" />
 
     <TextView
         android:id="@+id/lock_screen_sender"

@@ -13,13 +13,13 @@
         <item name="windowNoTitle">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">@color/vector_statusbar_color</item>
+        <item name="colorPrimaryDark">?attr/vector_statusbar_color</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
 
         <!-- activities background -->
-        <item name="android:windowBackground">@color/vector_activity_background_color</item>
+        <item name="android:windowBackground">?attr/vector_activity_background_color</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Swipe" parent="@style/AppTheme.NoActionBar">
@@ -31,7 +31,7 @@
     <style name="HomeActivityTheme" parent="AppTheme.NoActionBar">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:textColorHint">@color/vector_white_alpha_50</item>
+        <item name="android:textColorHint">?attr/vector_white_alpha_50</item>
     </style>
 
     <!-- call activity -->
@@ -60,8 +60,8 @@
 
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">@color/vector_actionbar_background</item>
-        <item name="background">@color/vector_actionbar_background</item>
+        <item name="android:background">?attr/vector_actionbar_background</item>
+        <item name="background">?attr/vector_actionbar_background</item>
 
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
@@ -71,12 +71,12 @@
 
     <style name="VectorToolbarTheme">
         <!-- Used to tint the back arrow, menu and spinner arrow -->
-        <item name="colorControlNormal">@color/vector_actionbar_icons_color</item>
+        <item name="colorControlNormal">?attr/vector_actionbar_icons_color</item>
     </style>
 
     <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/vector_actionbar_text_color</item>
+        <item name="android:textColor">?attr/vector_actionbar_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
     </style>
 
@@ -90,16 +90,16 @@
         <item name="android:windowActionBar">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">@color/vector_statusbar_color</item>
+        <item name="colorPrimaryDark">?attr/vector_statusbar_color</item>
 
         <!-- activities background -->
-        <item name="android:windowBackground">@color/vector_activity_background_color</item>
+        <item name="android:windowBackground">?attr/vector_activity_background_color</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
 
         <!-- android ui button -->
-        <item name="colorAccent">@color/vector_green_color</item>
+        <item name="colorAccent">?attr/vector_green_color</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
@@ -125,7 +125,7 @@
         <item name="android:actionBarDivider">@null</item>
 
         <!-- switch color -->
-        <item name="colorControlActivated">@color/vector_green_color</item>
+        <item name="colorControlActivated">?attr/vector_green_color</item>
 
     </style>
 
@@ -143,7 +143,7 @@
     <!--  -->
     <style name="vector.PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@android:color/white</item>
-        <item name="android:textColor">@color/vector_0_87_black_color</item>
+        <item name="android:textColor">?attr/vector_0_87_black_color</item>
         <item name="android:textSize">16sp</item>
         <item name="android:dropDownHorizontalOffset">0dp</item>
         <item name="android:dropDownVerticalOffset">0dp</item>
@@ -151,13 +151,13 @@
 
     <!-- actionbar icons color -->
     <style name="Vector.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/vector_actionbar_icons_color</item>
+        <item name="colorControlNormal">?attr/vector_actionbar_icons_color</item>
     </style>
 
     <!-- custom action bar -->
     <style name="Vector.Styled.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
-        <item name="android:background">@color/vector_actionbar_background</item>
-        <item name="background">@color/vector_actionbar_background</item>
+        <item name="android:background">?attr/vector_actionbar_background</item>
+        <item name="background">?attr/vector_actionbar_background</item>
 
         <!-- remove shadow under the action bar -->
         <item name="elevation">0dp</item>
@@ -171,21 +171,21 @@
 
     <!-- main text -->
     <style name="ActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/vector_actionbar_text_color</item>
+        <item name="android:textColor">?attr/vector_actionbar_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <!-- subtext text -->
     <style name="ActionBarSubTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">@color/vector_actionbar_text_color</item>
+        <item name="android:textColor">?attr/vector_actionbar_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <!-- home scroller menu -->
     <style name="NavigationViewStyle">
-        <item name="android:textColor">@color/vector_4d_gray</item>
+        <item name="android:textColor">?attr/vector_4d_gray</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -200,7 +200,7 @@
     <style name="CountryPickerTheme" parent="AppTheme.NoActionBar">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:textColorHint">@color/vector_white_alpha_50</item>
+        <item name="android:textColorHint">?attr/vector_white_alpha_50</item>
     </style>
 
     <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar">
@@ -259,11 +259,11 @@
 
     <!-- tabbar text color -->
     <style name="VectorSearches.TabText" parent="@style/Widget.AppCompat.ActionBar.TabText">
-        <item name="android:textColor">@color/vector_green_color</item>
+        <item name="android:textColor">?attr/vector_green_color</item>
     </style>
 
     <style name="VectorSearches.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/vector_green_color</item>
+        <item name="colorControlNormal">?attr/vector_green_color</item>
     </style>
 
     <style name="VectorPeopleSearches.TabLayout" parent="Widget.Design.TabLayout">
@@ -271,7 +271,7 @@
         <item name="tabMode">fixed</item>
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">@color/vector_green_color</item>
+        <item name="tabBackground">?attr/vector_green_color</item>
         <item name="tabTextColor">@android:color/white</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabIndicatorColor">@android:color/white</item>
@@ -283,29 +283,29 @@
         <item name="tabMode">fixed</item>
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">@color/vector_tabbar_background_color</item>
-        <item name="tabTextColor">@color/vector_green_color</item>
-        <item name="tabSelectedTextColor">@color/vector_green_color</item>
-        <item name="tabIndicatorColor">@color/vector_green_color</item>
+        <item name="tabBackground">?attr/vector_tabbar_background_color</item>
+        <item name="tabTextColor">?attr/vector_green_color</item>
+        <item name="tabSelectedTextColor">?attr/vector_green_color</item>
+        <item name="tabIndicatorColor">?attr/vector_green_color</item>
         <item name="tabMaxWidth">0dp</item>
     </style>
 
     <style name="TextAppearance.TextInputLayout" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/vector_74_gray</item>
+        <item name="android:textColor">?attr/vector_74_gray</item>
     </style>
 
     <style name="TextInputLayoutTheme" parent="AppTheme.NoActionBar">
-        <item name="colorControlNormal">@color/vector_74_gray</item>
-        <item name="colorControlActivated">@color/vector_74_gray</item>
-        <item name="android:textColorHint">@color/vector_74_gray</item>
+        <item name="colorControlNormal">?attr/vector_74_gray</item>
+        <item name="colorControlActivated">?attr/vector_74_gray</item>
+        <item name="android:textColorHint">?attr/vector_74_gray</item>
     </style>
 
     <style name="ListHeader">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/vector_text_black_color</item>
+        <item name="android:textColor">?attr/vector_text_black_color</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:background">@color/list_header_background</item>
+        <item name="android:background">?attr/list_header_background</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">10dp</item>
@@ -313,11 +313,11 @@
     </style>
 
     <style name="CheckBoxTheme">
-        <item name="colorAccent">@color/vector_green_color</item>
+        <item name="colorAccent">?attr/vector_green_color</item>
     </style>
 
     <style name="SpinnerTheme">
-        <item name="colorControlNormal">@color/list_header_spinner</item>
+        <item name="colorControlNormal">?attr/list_header_spinner</item>
     </style>
 
 </resources>

@@ -3,13 +3,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle" >
-            <solid android:color="@color/vector_green_color" />
+            <solid android:color="?attr/vector_green_color" />
             <padding android:bottom="2dp" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle" >
-            <solid android:color="@color/vector_tabbar_background_color" />
+            <solid android:color="?attr/vector_tabbar_background_color" />
         </shape>
     </item>
 </layer-list>
