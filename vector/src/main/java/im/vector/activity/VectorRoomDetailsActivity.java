@@ -109,6 +109,9 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO remove me when room details supports noactionbar
+        this.setTheme(R.style.AppTheme);
+
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
