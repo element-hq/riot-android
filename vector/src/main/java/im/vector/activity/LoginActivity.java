@@ -537,6 +537,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mUseCustomHomeServersCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Remove the keyboard to show the new views.
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                
+                // Check if the keyboard is open and hide it.
+                if(imm.isAcceptingText()) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                
                 mUseCustomHomeServersCheckbox.post(new Runnable() {
                     @Override
                     public void run() {
