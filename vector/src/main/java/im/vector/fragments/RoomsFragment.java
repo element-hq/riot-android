@@ -419,7 +419,10 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         }
 
         if (mPublicRoomsSelector != null) {
-            mPublicRoomsSelector.setAdapter(mRoomDirectoryAdapter);
+            // reported by GA
+            if (mRoomDirectoryAdapter != mPublicRoomsSelector.getAdapter()) {
+                mPublicRoomsSelector.setAdapter(mRoomDirectoryAdapter);
+            }
             mPublicRoomsSelector.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
