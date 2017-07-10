@@ -228,7 +228,10 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
     @Override
     public void dismissAllowingStateLoss() {
-        super.dismissAllowingStateLoss();
+        // reported by GA
+        if (null != getFragmentManager()) {
+            super.dismissAllowingStateLoss();
+        }
         // Ensure that the map is released when the fragment is dismissed.
         mUnknownDevicesMap = null;
     }
