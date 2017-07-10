@@ -46,7 +46,8 @@
 
     <!-- actions -->
     <string name="action_sign_out">Cerrar la sesión</string>
-    <string name="action_sign_out_confirmation">Para la seguridad, al cerrar la sesión, las claves de cifración de extremo-a-extremo serán borrados haciendo que el historial sea illegible.\nSeleccione exportar para hacer archivo de respaldo antes de cerrar la sesión.</string>
+    <string name="action_sign_out_confirmation">Para la seguridad, al cerrar la sesión, las claves de cifrado de extremo-a-extremo serán borradas haciendo que el historial sea ilegible.
+Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión.</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Video</string>
     <string name="action_global_search">Global search</string>
@@ -199,7 +200,9 @@
     <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifración de persona-a-persona nuevas de este dispositivo y enviar la clave pública a el servidor.\nEsto sólo ocurre una vez.\nPerdon por la inconveniencia.</string>
+    <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifrado de extremo-a-extremo nuevas de este dispositivo y enviar la clave pública a el servidor.
+Esto sólo ocurre una vez.
+Disculpe por la inconveniencia.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
@@ -301,7 +304,13 @@
     <string name="room_title_members">%1$d miembros</string>
     <string name="room_title_one_member">1 miembro</string>
     <string name="room_e2e_alert_title">¡Aviso!</string>
-    <string name="room_e2e_alert_message">La cifración de persona-a-persona esta en beta y puede ser poco fiable.\n\nNo debe usarla para proteger información.\n\nLos dispositivos no podran descifrar el historial de la sala desde antes de entrar.\n\nMensajes cifrados no serán visibles en cuentas que no implementan la cifración.</string>
+    <string name="room_e2e_alert_message">El cifrado de extremo-a-extremo está en beta y puede ser poco fiable.
+
+No debe usarla para proteger información.
+
+Los dispositivos no podrán descifrar el historial de la sala desde antes de entrar.
+
+Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrado.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
@@ -501,8 +510,8 @@
     <string name="settings_ignored_users">Usuarios ignorados</string>
     <string name="settings_other">Otro</string>
     <string name="settings_advanced">Avanzado</string>
-    <string name="settings_cryptography">Cifración</string>
-    <string name="settings_notifications_targets">Objectivos de Notificaciones</string>
+    <string name="settings_cryptography">Cifrado</string>
+    <string name="settings_notifications_targets">Objetivos de Notificaciones</string>
     <string name="settings_contact">Contactos locales</string>
     <string name="settings_contacts_app_permission">Permiso de contactos</string>
     <string name="settings_contacts_phonebook_country">País de directorio telefónico</string>
@@ -602,10 +611,10 @@
     <string name="room_settings_addresses_pref_title">Direcciones</string>
     <string name="room_settings_labs_pref_title">Laboratorios</string>
     <string name="room_settings_labs_warning_message">Estas son caracteristicas que se pueden descomponer en maneras no esperadas. Usar con precaución.</string>
-    <string name="room_settings_labs_end_to_end">Cifración de Persona-a-Persona</string>
-    <string name="room_settings_labs_end_to_end_is_active">Cifración de Persona-a-Persona está encendida</string>
-    <string name="room_settings_labs_end_to_end_warnings">Nececitas reentrar tu cuenta para encender la cifración.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Cifrar a dispositivos verificados solamente</string>
+    <string name="room_settings_labs_end_to_end">Cifrado de extremo-a-extremo</string>
+    <string name="room_settings_labs_end_to_end_is_active">El cifrado de extremo-a-extremo está encendido</string>
+    <string name="room_settings_labs_end_to_end_warnings">Necesitas reingresar a tu cuenta para encender el cifrado.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Cifrar solamente para dispositivos verificados</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Nunca enviar mensajes cifrados a dispositivos no verificados en esta sala de este dispositivo.</string>
 
     <!-- Room settings: advanced addresses -->
@@ -626,7 +635,13 @@
     <string name="room_settings_addresses_e2e_disabled">La cifración está apagada en esta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Encender cifración \n(¡Aviso: no se puede apagar!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">¡Aviso!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">La cifración de persona-a-persona esta en beta y puede ser poco fiable.\n\nNo debe usarla para proteger información.\n\nLos dispositivos no podran descifrar el historial de la sala desde antes de entrar.\n\nMensajes cifrados no serán visibles en cuentas que no implementan la cifración.</string>
+    <string name="room_settings_addresses_e2e_prompt_message">El cifrado de extremo-a-extremo está en beta y puede ser poco fiable.
+
+No debe usarla para proteger información.
+
+Los dispositivos no podrán descifrar el historial de la sala desde antes de entrar.
+
+Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directorio</string>
@@ -641,7 +656,7 @@
 
 
     <!-- encryption dialog -->
-    <string name="encryption_information_title">Información de la cifración de Persona-a-Persona</string>
+    <string name="encryption_information_title">Información del cifrado de extremo-a-extremo</string>
 
     <string name="encryption_information_device_info">Información de eventos</string>
     <string name="encryption_information_user_id">Identificación de usuario</string>
@@ -659,15 +674,15 @@
     <string name="encryption_information_verification">Verificación</string>
     <string name="encryption_information_ed25519_fingerprint">Huella Ed25519</string>
 
-    <string name="encryption_export_e2e_room_keys">Exportar claves de cifración de Persona-a-Persona de salas</string>
+    <string name="encryption_export_e2e_room_keys">Exportar claves de cifrado de extremo-a-extremo de salas</string>
     <string name="encryption_export_room_keys">Exportar claves de salas</string>
     <string name="encryption_export_room_keys_summary">Exportar las claves a un archivo local</string>
     <string name="encryption_export_export">Exportar</string>
     <string name="encryption_export_enter_passphrase">Escribir Contraseña</string>
     <string name="encryption_export_confirm_passphrase">Confirmar Contraseña</string>
-    <string name="encryption_export_saved_as">Las claves de cifración de Persona-a-Persona se guardaron en \'%s\'</string>
+    <string name="encryption_export_saved_as">Las claves de cifrado de extremo-a-extremo se guardaron en \'%s\'</string>
 
-    <string name="encryption_import_e2e_room_keys">Importar claves de cifración de Persona-a-Persona de salas</string>
+    <string name="encryption_import_e2e_room_keys">Importar claves de cifrado de E2E de las salas</string>
     <string name="encryption_import_room_keys">Importar claves de salas</string>
     <string name="encryption_import_room_keys_summary">Importar las claves de un archivo local</string>
     <string name="encryption_import_import">Importar</string>
