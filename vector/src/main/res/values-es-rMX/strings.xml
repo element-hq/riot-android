@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="resouces_language">es</string>
     <string name="resouces_country">MX</string>
@@ -8,7 +8,7 @@
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configuraciones</string>
     <string name="title_activity_member_details">Detalles de los miembros</string>
-    <string name="title_activity_historical">Historical</string>
+    <string name="title_activity_historical">Historial</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -25,7 +25,7 @@
     <string name="forward">Enviar</string>
     <string name="permalink">Enlace permanente</string>
     <string name="view_source">Ver fuente</string>
-    <string name="view_decrypted_source">View Decrypted Source</string>
+    <string name="view_decrypted_source">Ver Fuente Descifrada</string>
     <string name="delete">Borrar</string>
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
@@ -33,7 +33,7 @@
     <string name="ongoing_conference_call">Llamada de conferencia en proceso. Unir con voz o video.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">video</string>
-    <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo de nuevo más tarde.</string>
+    <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo más tarde</string>
     <string name="missing_permissions_warning">"Debido a permisos faltantes, algunas caracteristicas podrían estar ausentes..</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para realizar una llamada de conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Llamada no se puede empezar</string>
@@ -41,17 +41,18 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no pueden ser realizadas en salas cifradas</string>
     <string name="send_anyway">Enviar de todos modos</string>
     <string name="or">o</string>
-    <string name="and">and</string>
-    <string name="invite">Invite</string>
+    <string name="and">y</string>
+    <string name="invite">Invitar</string>
 
     <!-- actions -->
     <string name="action_sign_out">Cerrar la sesión</string>
-    <string name="action_sign_out_confirmation">Para la seguridad, al cerrar la sesión, las claves de cifración de extremo-a-extremo serán borrados haciendo que el historial sea illegible.\nSeleccione exportar para hacer archivo de respaldo antes de cerrar la sesión.</string>
+    <string name="action_sign_out_confirmation">Por seguridad, al cerrar la sesión, las claves de cifrado de extremo-a-extremo serán borradas haciendo que el historial sea ilegible.
+Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión.</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Video</string>
-    <string name="action_global_search">Global search</string>
+    <string name="action_global_search">Búsqueda global</string>
     <string name="action_mark_all_as_read">Marcar todos como visto</string>
-    <string name="action_historical">Historical</string>
+    <string name="action_historical">Historial</string>
     <string name="action_quick_reply">Respuesta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Cerrar</string>
@@ -64,39 +65,39 @@
 
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
-    <string name="bottom_action_favourites">Favourites</string>
-    <string name="bottom_action_people">People</string>
-    <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_favourites">Favoritos</string>
+    <string name="bottom_action_people">Personas</string>
+    <string name="bottom_action_rooms">Salas</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Search for rooms</string>
-    <string name="home_filter_placeholder_favorites">Search for favourites</string>
-    <string name="home_filter_placeholder_people">Search for people</string>
-    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+    <string name="home_filter_placeholder_home">Buscar salas</string>
+    <string name="home_filter_placeholder_favorites">Buscar favoritos</string>
+    <string name="home_filter_placeholder_people">Buscar personas</string>
+    <string name="home_filter_placeholder_rooms">Buscar salas</string>
 
     <!-- Home fragment -->
-    <string name="invitations_header">Invites</string>
-    <string name="low_priority_header">Low priority</string>
+    <string name="invitations_header">Invitaciones</string>
+    <string name="low_priority_header">Prioridad baja</string>
 
     <!-- People fragment -->
-    <string name="direct_chats_header">Conversations</string>
-    <string name="local_address_book_header">Local address book</string>
-    <string name="known_contacts_header">Known contacts</string>
-    <string name="matrix_only_filter">Matrix contacts only</string>
-    <string name="no_conversation_placeholder">No conversations</string>
+    <string name="direct_chats_header">Conversaciones</string>
+    <string name="local_address_book_header">Libreta local de direcciones</string>
+    <string name="known_contacts_header">Contactos conocidos</string>
+    <string name="matrix_only_filter">Solamente contactos Matrix</string>
+    <string name="no_conversation_placeholder">Sin conversaciones</string>
     <string name="no_local_contact_placeholder">No local contacts</string>
-    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
-    <string name="no_result_placeholder">No results</string>
+    <string name="no_contact_access_placeholder">No ha permitido a Riot acceder a sus contactos locales</string>
+    <string name="no_result_placeholder">Sin resultados</string>
 
     <!-- Rooms fragment -->
-    <string name="rooms_header">Rooms</string>
-    <string name="rooms_directory_header">Room directory</string>
-    <string name="no_room_placeholder">No rooms</string>
-    <string name="no_public_room_placeholder">No public rooms available</string>
+    <string name="rooms_header">Salas</string>
+    <string name="rooms_directory_header">Directorio de salas</string>
+    <string name="no_room_placeholder">Sin salas</string>
+    <string name="no_public_room_placeholder">No hay salas públicas disponibles</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 user</item>
-        <item quantity="other">%d users</item>
-    </plurals>
+	<item quantity="one">1 usuario</item>
+	<item quantity="other">%d usuarios</item>
+</plurals>
 
     <string name="send_bug_report_include_logs">Enviar informes</string>
     <string name="send_bug_report_include_crash_logs">Mandar informes de fallas</string>
@@ -178,7 +179,7 @@
     <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requrido.</string>
     <string name="auth_reset_password_missing_password">Una contraseña nueva es requerida.</string>
     <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez que sigas el enlace, seleccione abajo.</string>
-    <string name="auth_reset_password_error_unauthorized">Verificación de correo electronico falló: asegúrese que siguió el enlace.</string>
+    <string name="auth_reset_password_error_unauthorized">Falló la verificación de correo electrónico: asegúrese de haber hecho clic en el correo</string>
     <string name="auth_reset_password_success_message">Su contraseña fue actualizada.\n\nHaz sido desconectado de todos tus dispositivos y las notificaciones están apagadas. Para encender las notificaciones, entre su cuenta en cada dispositivo.</string>
 
     <!-- Login Screen -->
@@ -191,7 +192,7 @@
     <string name="login_error_invalid_home_server">Escribe enlace válido</string>
 
     <string name="login_error_forbidden">Nombre/Contraseña inválido</string>
-    <string name="login_error_unknown_token">El character de acesso escogido no fue reconocido.</string>
+    <string name="login_error_unknown_token">El token de acceso especificado no fue reconocido</string>
     <string name="login_error_bad_json">JSON malformado</string>
     <string name="login_error_not_json">No contenía JSON válido</string>
     <string name="login_error_limit_exceeded">Demasiadas peticiones enviadas</string>
@@ -199,7 +200,9 @@
     <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifración de persona-a-persona nuevas de este dispositivo y enviar la clave pública a el servidor.\nEsto sólo ocurre una vez.\nPerdon por la inconveniencia.</string>
+    <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifrado de extremo-a-extremo nuevas de este dispositivo y enviar la clave pública a el servidor.
+Esto sólo ocurre una vez.
+Disculpe por la inconveniencia.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
@@ -284,10 +287,10 @@
     <string name="reject">Rechazar</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+    <string name="room_jump_to_first_unread">Saltar al primer mensaje no leído.</string>
 
     <!-- Room Preview -->
-    <string name="room_preview_invitation_format">Has sido invitado por %s a entrar a esta sala.</string>
+    <string name="room_preview_invitation_format">Has sido invitado por %s a entrar a esta sala</string>
     <string name="room_preview_unlinked_email_warning">Esta invitación fue enviado a %s, que no esta asociado con esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
     <string name="room_preview_try_join_an_unknown_room">Estás intentando entrar a %s. ¿Desea entrar para participar en la conversación?</string>
     <string name="room_preview_try_join_an_unknown_room_default">una sala</string>
@@ -301,7 +304,13 @@
     <string name="room_title_members">%1$d miembros</string>
     <string name="room_title_one_member">1 miembro</string>
     <string name="room_e2e_alert_title">¡Aviso!</string>
-    <string name="room_e2e_alert_message">La cifración de persona-a-persona esta en beta y puede ser poco fiable.\n\nNo debe usarla para proteger información.\n\nLos dispositivos no podran descifrar el historial de la sala desde antes de entrar.\n\nMensajes cifrados no serán visibles en cuentas que no implementan la cifración.</string>
+    <string name="room_e2e_alert_message">El cifrado de extremo-a-extremo esta en beta y puede ser poco fiable.
+
+No debe usarlo para proteger información.
+
+Los dispositivos no podrán descifrar el historial de la sala desde antes de entrar.
+
+Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
@@ -344,21 +353,21 @@
     <string name="room_participants_invite_prompt_msg">"¿Estás seguro que quieres invitar a %s que entre en este chat?"</string>
 
     <!-- invitation -->
-    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
+    <string name="people_search_invite_by_id"><u>Invitado por ID</u></string>
     <string name="people_search_local_contacts">CONTACTOS LOCALES (%d)</string>
     <string name="people_search_known_contacts">CONTACTOS CONOCIDOS (%s)</string>
     <string name="people_search_filter_text">Solmente usuarios de Matrix</string>
     <string name="people_search_too_many_contacts">Demasiados contactos, por favor use la busqueda</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Invitar usuario por ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Ingrese una o varias direcciones de correo o ID Matrix</string>
+    <string name="people_search_invite_by_id_dialog_hint">Correo o ID Matrix</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Buscar</string>
     <string name="room_one_user_is_typing">%s esta escribiendo…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s están escribiendo…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; otros están escribiendo…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s están escribiendo…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; otros están escribiendo…</string>
     <string name="room_message_placeholder_encrypted">Enviar mensaje cifrado…</string>
     <string name="room_message_placeholder_not_encrypted">Enviar mensaje (descifrado)…</string>
     <string name="room_offline_notification">La conexión al servidor se perdió.</string>
@@ -428,8 +437,8 @@
     <string name="room_recents_invites">INVITACIONES</string>
     <string name="room_recents_start_chat">Comenzar chat</string>
     <string name="room_recents_create_room">Crear sala</string>
-    <string name="room_recents_join_room">Join room</string>
-    <string name="room_recents_join_room_title">Join a room</string>
+    <string name="room_recents_join_room">Unirse a la sala</string>
+    <string name="room_recents_join_room_title">Unirse a una sala</string>
     <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
     <!-- Directory -->
@@ -501,8 +510,8 @@
     <string name="settings_ignored_users">Usuarios ignorados</string>
     <string name="settings_other">Otro</string>
     <string name="settings_advanced">Avanzado</string>
-    <string name="settings_cryptography">Cifración</string>
-    <string name="settings_notifications_targets">Objectivos de Notificaciones</string>
+    <string name="settings_cryptography">Cifrado</string>
+    <string name="settings_notifications_targets">Objetivos de Notificaciones</string>
     <string name="settings_contact">Contactos locales</string>
     <string name="settings_contacts_app_permission">Permiso de contactos</string>
     <string name="settings_contacts_phonebook_country">País de directorio telefónico</string>
@@ -528,7 +537,7 @@
 
     <string name="account_email_validation_title">Verificación Pendiente</string>
     <string name="account_email_validation_message">Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
-    <string name="account_email_validation_error">Verificación de su correo electrónico falló. Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
+    <string name="account_email_validation_error">"No fue posible verificar su dirección de correo. Por favor revise su casilla y siga el enlace que contiene. Una vez hecho, haga clic en  continuar"</string>
 
     <string name="settings_change_password">Cambiar Contraseña</string>
     <string name="settings_old_password">Contraseña anterior</string>
@@ -602,10 +611,10 @@
     <string name="room_settings_addresses_pref_title">Direcciones</string>
     <string name="room_settings_labs_pref_title">Laboratorios</string>
     <string name="room_settings_labs_warning_message">Estas son caracteristicas que se pueden descomponer en maneras no esperadas. Usar con precaución.</string>
-    <string name="room_settings_labs_end_to_end">Cifración de Persona-a-Persona</string>
-    <string name="room_settings_labs_end_to_end_is_active">Cifración de Persona-a-Persona está encendida</string>
-    <string name="room_settings_labs_end_to_end_warnings">Nececitas reentrar tu cuenta para encender la cifración.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Cifrar a dispositivos verificados solamente</string>
+    <string name="room_settings_labs_end_to_end">Cifrado de extremo-a-extremo</string>
+    <string name="room_settings_labs_end_to_end_is_active">El cifrado de extremo-a-extremo está encendido</string>
+    <string name="room_settings_labs_end_to_end_warnings">Necesitas salir de tu cuenta para encender el cifrado.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Cifrar solamente para dispositivos verificados</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Nunca enviar mensajes cifrados a dispositivos no verificados en esta sala de este dispositivo.</string>
 
     <!-- Room settings: advanced addresses -->
@@ -626,7 +635,13 @@
     <string name="room_settings_addresses_e2e_disabled">La cifración está apagada en esta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Encender cifración \n(¡Aviso: no se puede apagar!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">¡Aviso!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">La cifración de persona-a-persona esta en beta y puede ser poco fiable.\n\nNo debe usarla para proteger información.\n\nLos dispositivos no podran descifrar el historial de la sala desde antes de entrar.\n\nMensajes cifrados no serán visibles en cuentas que no implementan la cifración.</string>
+    <string name="room_settings_addresses_e2e_prompt_message">El cifrado de extremo-a-extremo está en beta y puede ser poco fiable.
+
+No debe usarla para proteger información.
+
+Los dispositivos no podrán descifrar el historial de la sala desde antes de entrar.
+
+Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directorio</string>
@@ -659,7 +674,7 @@
     <string name="encryption_information_verification">Verificación</string>
     <string name="encryption_information_ed25519_fingerprint">Huella Ed25519</string>
 
-    <string name="encryption_export_e2e_room_keys">Exportar claves de cifración de Persona-a-Persona de salas</string>
+    <string name="encryption_export_e2e_room_keys">Exportar claves de cifrado de extremo-a-extremo de salas</string>
     <string name="encryption_export_room_keys">Exportar claves de salas</string>
     <string name="encryption_export_room_keys_summary">Exportar las claves a un archivo local</string>
     <string name="encryption_export_export">Exportar</string>
@@ -667,7 +682,7 @@
     <string name="encryption_export_confirm_passphrase">Confirmar Contraseña</string>
     <string name="encryption_export_saved_as">Las claves de cifración de Persona-a-Persona se guardaron en \'%s\'</string>
 
-    <string name="encryption_import_e2e_room_keys">Importar claves de cifración de Persona-a-Persona de salas</string>
+    <string name="encryption_import_e2e_room_keys">Importar claves de cifrado de E2E de las salas</string>
     <string name="encryption_import_room_keys">Importar claves de salas</string>
     <string name="encryption_import_room_keys_summary">Importar las claves de un archivo local</string>
     <string name="encryption_import_import">Importar</string>
@@ -691,7 +706,9 @@
     <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione Verificar. Si no, otro esta interceptando este dispositivo y vas a querer bloquearlo.\nEn el futuro, este procceso sera mas sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
-    <string name="e2e_enabling_on_app_update">Riot ahora cuenta con cifración de Persona-a-Persona pero necesitas reentrar tu cuenta para encenderla.\n\nLo puedes hacer ahora o luego desde las configuraciones de la applicación.</string>
+    <string name="e2e_enabling_on_app_update">Riot ahora cuenta con cifrado de extremo-a-extremo pero necesitas reingresar tu cuenta para encenderlo.
+
+Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contiene dispositivos desconocidos</string>
