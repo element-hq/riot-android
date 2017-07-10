@@ -563,19 +563,22 @@ public class CommonActivityUtils {
                 Log.e(LOG_TAG, "## startEventStreamService() : restart EventStreamService");
 
                 for (MXSession session : sessions) {
-                    boolean isSessionReady = session.getDataHandler().getStore().isReady();
+                    // reported by GA
+                    if ((null != session.getDataHandler()) && (null != session.getDataHandler().getStore())) {
+                        boolean isSessionReady = session.getDataHandler().getStore().isReady();
 
-                    if (!isSessionReady) {
-                        Log.e(LOG_TAG, "## startEventStreamService() : the session " + session.getMyUserId() + " is not opened");
-                        session.getDataHandler().getStore().open();
-                    } else {
-                        // it seems that the crypto is not always restarted properly after a crash
-                        Log.e(LOG_TAG, "## startEventStreamService() : check if the crypto of the session " + session.getMyUserId());
-                        session.checkCrypto();
+                        if (!isSessionReady) {
+                            Log.e(LOG_TAG, "## startEventStreamService() : the session " + session.getMyUserId() + " is not opened");
+                            session.getDataHandler().getStore().open();
+                        } else {
+                            // it seems that the crypto is not always restarted properly after a crash
+                            Log.e(LOG_TAG, "## startEventStreamService() : check if the crypto of the session " + session.getMyUserId());
+                            session.checkCrypto();
+                        }
+
+                        // session to activate
+                        matrixIds.add(session.getCredentials().userId);
                     }
-
-                    // session to activate
-                    matrixIds.add(session.getCredentials().userId);
                 }
 
                 Intent intent = new Intent(context, EventStreamService.class);
