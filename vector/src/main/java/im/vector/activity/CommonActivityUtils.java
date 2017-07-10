@@ -581,10 +581,13 @@ public class CommonActivityUtils {
                     }
                 }
 
-                Intent intent = new Intent(context, EventStreamService.class);
-                intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
-                intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
-                context.startService(intent);
+                // check size
+                if (matrixIds.size() > 0) {
+                    Intent intent = new Intent(context, EventStreamService.class);
+                    intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
+                    intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
+                    context.startService(intent);
+                }
             }
         }
     }
