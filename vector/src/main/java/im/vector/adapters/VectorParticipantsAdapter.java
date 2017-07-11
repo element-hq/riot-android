@@ -733,7 +733,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.getInstance().arePIDsRetrieved() ? View.VISIBLE : View.GONE);
 
-        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.heading_image);
         View matrixView = convertView.findViewById(R.id.people_header_matrix_contacts_layout);
 
         // reported by GA

@@ -180,25 +180,25 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final HashMap<String, Integer> mEventType = new HashMap<>();
 
     // the message text colors
-    protected int mDefaultMessageTextColor;
-    protected int mNotSentMessageTextColor;
-    protected int mSendingMessageTextColor;
-    protected int mEncryptingMessageTextColor;
-    protected int mHighlightMessageTextColor;
+    private int mDefaultMessageTextColor;
+    private int mNotSentMessageTextColor;
+    private int mSendingMessageTextColor;
+    private int mEncryptingMessageTextColor;
+    private int mHighlightMessageTextColor;
     protected int mSearchHighlightMessageTextColor;
 
-    protected final int mMaxImageWidth;
-    protected final int mMaxImageHeight;
+    private final int mMaxImageWidth;
+    private final int mMaxImageHeight;
 
     // media cache
-    protected final MXMediasCache mMediasCache;
+    private final MXMediasCache mMediasCache;
 
     // session
     protected final MXSession mSession;
 
-    protected boolean mIsSearchMode = false;
-    protected boolean mIsPreviewMode = false;
-    protected boolean mIsUnreadViewMode = false;
+    private boolean mIsSearchMode = false;
+    private boolean mIsPreviewMode = false;
+    private boolean mIsUnreadViewMode = false;
     private String mPattern = null;
     private ArrayList<MessageRow> mLiveMessagesRowList = null;
 
@@ -586,14 +586,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return user;
     }
 
-    /**
-     * Refresh the presence ring of an user.
-     *
-     * @param presenceView the presence ring view.
-     * @param userId       the user userID.
-     */
-    protected void refreshPresenceRing(ImageView presenceView, String userId) {
-    }
 
     /**
      * Return the screen size.
@@ -740,10 +732,39 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return getItemViewType(row.getEvent());
     }
 
+    /*
+     * *********************************************************************************************
+     * Read markers
+     * *********************************************************************************************
+     */
+
+    @Override
+    public void resetReadMarker() {
+        Log.d(LOG_TAG, "resetReadMarker");
+        mReadMarkerEventId = null;
+    }
+
+    @Override
+    public void updateReadMarker(final String readMarkerEventId, final String readReceiptEventId) {
+        mReadMarkerEventId = readMarkerEventId;
+        mReadReceiptEventId = readReceiptEventId;
+        if (readMarkerEventId != null && !readMarkerEventId.equals(mReadMarkerEventId)) {
+            Log.d(LOG_TAG, "updateReadMarker read marker id has changed: " + readMarkerEventId);
+            mCanShowReadMarker = true;
+            notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public boolean containsMessagesFrom(String userId) {
+        // check if the user has been displayed in the room history
+        return (null != userId) && mUserByUserId.containsKey(userId);
+    }
+
     /**
      * Animate a read marker view
      */
-    protected void animateReadMarkerView(final Event event, final View readMarkerView) {
+    private void animateReadMarkerView(final Event event, final View readMarkerView) {
         if (readMarkerView != null && mCanShowReadMarker) {
             mCanShowReadMarker = false;
             if (readMarkerView.getAnimation() == null) {
@@ -806,35 +827,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     /*
      * *********************************************************************************************
-     * Read markers
-     * *********************************************************************************************
-     */
-
-    @Override
-    public void resetReadMarker() {
-        Log.d(LOG_TAG, "resetReadMarker");
-        mReadMarkerEventId = null;
-    }
-
-    @Override
-    public void updateReadMarker(final String readMarkerEventId, final String readReceiptEventId) {
-        mReadMarkerEventId = readMarkerEventId;
-        mReadReceiptEventId = readReceiptEventId;
-        if (readMarkerEventId != null && !readMarkerEventId.equals(mReadMarkerEventId)) {
-            Log.d(LOG_TAG, "updateReadMarker read marker id has changed: " + readMarkerEventId);
-            mCanShowReadMarker = true;
-            notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public boolean containsMessagesFrom(String userId) {
-        // check if the user has been displayed in the room history
-        return (null != userId) && mUserByUserId.containsKey(userId);
-    }
-
-    /*
-     * *********************************************************************************************
      * Others
      * *********************************************************************************************
      */
@@ -864,14 +856,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
     }
 
-
     /**
      * Provides the formatted timestamp to display.
      * null means that the timestamp text must be hidden.
      * @param event the event.
      * @return  the formatted timestamp to display.
      */
-    protected String getFormattedTimestamp(Event event) {
+    private String getFormattedTimestamp(Event event) {
         String res = mEventFormattedTsMap.get(event.eventId);
 
         if (null != res) {
@@ -911,34 +902,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     /**
-     * Load avatar thumbnail
-     *
-     * @param avatarView the avatar view.
-     * @param url        the avatar url.
-     */
-    private void loadSmallAvatar(ImageView avatarView, String url) {
-        int size = getContext().getResources().getDimensionPixelSize(R.dimen.chat_small_avatar_size);
-        mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), avatarView, url, size);
-    }
-
-    /**
-     * update the typing view visibility
-     *
-     * @param avatarLayoutView the avatar layout
-     * @param status           view.GONE / View.VISIBLE
-     */
-    protected void setTypingVisibility(View avatarLayoutView, int status) {
-    }
-
-
-    /**
      * Some event should never be merged.
      * e.g. the profile info update (avatar, display name...)
      *
      * @param event the event
      * @return true if the event can be merged.
      */
-    protected boolean isMergeableEvent(Event event) {
+    private boolean isMergeableEvent(Event event) {
         boolean res = true;
 
         // user profile update should not be merged
@@ -967,14 +937,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param msgType     the message type
      * @return true if the view is merged.
      */
-    protected boolean manageSubView007(final int position, View convertView, View subView, int msgType) {
+    private boolean manageSubView(final int position, View convertView, View subView, int msgType) {
         MessageRow row = getItem(position);
         Event event = row.getEvent();
         RoomState roomState = row.getRoomState();
 
         convertView.setClickable(false);
-
-        boolean isAvatarOnRightSide = false;
 
         // isMergedView -> the message is going to be merged with the previous one
         // willBeMerged ->tell if a message separator must be displayed
@@ -1002,22 +970,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         // inherited class custom behaviour
         isMergedView = mergeView(event, position, isMergedView);
 
-        View leftTsTextLayout = convertView.findViewById(R.id.message_timestamp_layout_left);
-        View rightTsTextLayout = convertView.findViewById(R.id.message_timestamp_layout_right);
-
         // manage sender text
-        TextView textView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
-        if (null != textView) {
-            if (null == rightTsTextLayout) {
-                textView.setVisibility(View.VISIBLE);
+        TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
 
-                if (isMergedView) {
-                    textView.setText("");
-                } else {
-                    textView.setText(getUserDisplayName(event.getSender(), row.getRoomState()));
-                }
-            } else if (isMergedView || isAvatarOnRightSide) {
-                textView.setVisibility(View.GONE);
+        if (null != senderTextView) {
+            if (isMergedView) {
+                senderTextView.setVisibility(View.GONE);
             } else {
                 String eventType = event.getType();
 
@@ -1029,17 +987,17 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                         Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType) ||
                         Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
                         ) {
-                    textView.setVisibility(View.GONE);
+                    senderTextView.setVisibility(View.GONE);
                 } else {
-                    textView.setVisibility(View.VISIBLE);
-                    textView.setText(getUserDisplayName(event.getSender(), row.getRoomState()));
+                    senderTextView.setVisibility(View.VISIBLE);
+                    senderTextView.setText(getUserDisplayName(event.getSender(), row.getRoomState()));
                 }
             }
 
             final String fSenderId = event.getSender();
-            final String fDisplayName = (null == textView.getText()) ? "" : textView.getText().toString();
+            final String fDisplayName = (null == senderTextView.getText()) ? "" : senderTextView.getText().toString();
 
-            textView.setOnClickListener(new View.OnClickListener() {
+            senderTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != mVectorMessagesAdapterEventsListener) {
@@ -1049,28 +1007,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             });
         }
 
-        TextView tsTextView;
-        TextView leftTsTextView = null;
-        TextView rightTsTextView = null;
+        View tsTextLayout = convertView.findViewById(R.id.message_timestamp_layout);
+        TextView tsTextView = null;
 
-        if (null != leftTsTextLayout) {
-            leftTsTextView = (TextView) leftTsTextLayout.findViewById(R.id.messagesAdapter_timestamp);
-        }
-
-        if (null != rightTsTextLayout) {
-            rightTsTextView = (TextView) rightTsTextLayout.findViewById(R.id.messagesAdapter_timestamp);
-        }
-
-        if (isAvatarOnRightSide) {
-            tsTextView = leftTsTextView;
-            if (null != rightTsTextView) {
-                rightTsTextView.setVisibility(View.GONE);
-            }
-        } else {
-            tsTextView = rightTsTextView;
-            if (null != leftTsTextView) {
-                leftTsTextView.setVisibility(View.GONE);
-            }
+        if (null != tsTextLayout) {
+            tsTextView = (TextView) tsTextLayout.findViewById(R.id.messagesAdapter_timestamp);
         }
 
         if (null != tsTextView) {
@@ -1082,7 +1023,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 tsTextView.setVisibility(View.VISIBLE);
                 tsTextView.setText(timeStamp);
 
-                tsTextView.setGravity(isAvatarOnRightSide ? Gravity.LEFT : Gravity.RIGHT);
+                tsTextView.setGravity(Gravity.RIGHT);
             }
 
             if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
@@ -1090,29 +1031,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else {
                 tsTextView.setTextColor(mContext.getResources().getColor(R.color.chat_gray_text));
             }
+
+            tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode) ? View.VISIBLE : View.GONE);
         }
-
-        // read receipts
-        LinearLayout leftReceiversLayout = null;
-        LinearLayout rightReceiversLayout = null;
-
-        if (null != leftTsTextLayout) {
-            leftReceiversLayout = (LinearLayout) leftTsTextLayout.findViewById(R.id.messagesAdapter_receivers_list);
-
-            if (null != leftReceiversLayout) {
-                leftReceiversLayout.setVisibility(isAvatarOnRightSide ? View.VISIBLE : View.GONE);
-            }
-        }
-
-        if (null != rightTsTextLayout) {
-            rightReceiversLayout = (LinearLayout) rightTsTextLayout.findViewById(R.id.messagesAdapter_receivers_list);
-
-            if (null != rightReceiversLayout) {
-                rightReceiversLayout.setVisibility(isAvatarOnRightSide ? View.GONE : View.VISIBLE);
-            }
-        }
-
-        refreshReceiverLayout(isAvatarOnRightSide ? leftReceiversLayout : rightReceiversLayout, isAvatarOnRightSide, event.eventId, roomState);
 
         // Sender avatar
         RoomMember sender = null;
@@ -1121,57 +1042,39 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             sender = roomState.getMember(event.getSender());
         }
 
-        View avatarLeftView = convertView.findViewById(R.id.messagesAdapter_roundAvatar_left);
-        View avatarRightView = convertView.findViewById(R.id.messagesAdapter_roundAvatar_right);
-        View avatarLayoutView;
+        View avatarLayoutView = convertView.findViewById(R.id.messagesAdapter_roundAvatar);
 
-        if (isAvatarOnRightSide) {
-            avatarLayoutView = avatarRightView;
+        if (null != avatarLayoutView) {
+            final String userId = event.getSender();
 
-            if (null != avatarLeftView) {
-                avatarLeftView.setVisibility(View.GONE);
-            }
-        } else {
-            avatarLayoutView = avatarLeftView;
+            avatarLayoutView.setClickable(true);
 
-            if (null != avatarRightView) {
-                avatarRightView.setVisibility(View.GONE);
-            }
-
-            if (null != avatarLeftView) {
-                final String userId = event.getSender();
-
-                avatarLeftView.setClickable(true);
-
-                avatarLeftView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (null != mVectorMessagesAdapterEventsListener) {
-                            return mVectorMessagesAdapterEventsListener.onAvatarLongClick(userId);
-                        } else {
-                            return false;
-                        }
+            avatarLayoutView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (null != mVectorMessagesAdapterEventsListener) {
+                        return mVectorMessagesAdapterEventsListener.onAvatarLongClick(userId);
+                    } else {
+                        return false;
                     }
-                });
+                }
+            });
 
-                // click on the avatar opens the details page
-                avatarLeftView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (null != mVectorMessagesAdapterEventsListener) {
-                            mVectorMessagesAdapterEventsListener.onAvatarClick(userId);
-                        }
+            // click on the avatar opens the details page
+            avatarLayoutView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mVectorMessagesAdapterEventsListener) {
+                        mVectorMessagesAdapterEventsListener.onAvatarClick(userId);
                     }
-                });
-            }
+                }
+            });
         }
+
 
         if (null != avatarLayoutView) {
             ImageView avatarImageView = (ImageView) avatarLayoutView.findViewById(R.id.avatar_img);
-            ImageView presenceView = (ImageView) avatarLayoutView.findViewById(R.id.imageView_presenceRing);
-
             final String userId = event.getSender();
-            refreshPresenceRing(presenceView, userId);
 
             if (isMergedView) {
                 avatarLayoutView.setVisibility(View.GONE);
@@ -1211,9 +1114,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
 
                 loadMemberAvatar(avatarImageView, sender, userId, displayName, url);
-
-                // display the typing icon when required
-                setTypingVisibility(avatarLayoutView, View.GONE);
             }
         }
 
@@ -1224,36 +1124,26 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
         FrameLayout.LayoutParams subViewLinearLayout = (FrameLayout.LayoutParams) subView.getLayoutParams();
 
-        View view = convertView.findViewById(R.id.messagesAdapter_roundAvatar_left);
-        ViewGroup.LayoutParams avatarLayout = view.getLayoutParams();
 
-        if (!isAvatarOnRightSide) {
-            subViewLinearLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+        ViewGroup.LayoutParams avatarLayout = avatarLayoutView.getLayoutParams();
 
-            if (isMergedView) {
-                bodyLayout.setMargins(avatarLayout.width, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
+        subViewLinearLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 
-            } else {
-                bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-            }
-            subView.setLayoutParams(bodyLayout);
+        if (isMergedView) {
+            bodyLayout.setMargins(avatarLayout.width, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
+
         } else {
-            subViewLinearLayout.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
-
-            if (isMergedView) {
-                bodyLayout.setMargins(4, bodyLayout.topMargin, avatarLayout.width, bodyLayout.bottomMargin);
-            } else {
-                bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-            }
+            bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
         }
+        subView.setLayoutParams(bodyLayout);
 
         bodyLayoutView.setLayoutParams(bodyLayout);
         subView.setLayoutParams(subViewLinearLayout);
 
-        view = convertView.findViewById(R.id.messagesAdapter_message_separator);
+        View messageSeparatorView = convertView.findViewById(R.id.messagesAdapter_message_separator);
 
-        if (null != view) {
-            view.setVisibility((willBeMerged || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
+        if (null != messageSeparatorView) {
+            messageSeparatorView.setVisibility((willBeMerged || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
         }
 
 
@@ -1281,13 +1171,99 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
         });
 
+
+        // display the day separator
+        View headerLayout = convertView.findViewById(R.id.messagesAdapter_message_header);
+        if (null != headerLayout) {
+            String header = headerMessage(position);
+
+            if (null != header) {
+                TextView headerText = (TextView) convertView.findViewById(R.id.messagesAdapter_message_header_text);
+                headerText.setText(header);
+                headerLayout.setVisibility(View.VISIBLE);
+
+                View topHeaderMargin = headerLayout.findViewById(R.id.messagesAdapter_message_header_top_margin);
+                topHeaderMargin.setVisibility((0 == position) ? View.GONE : View.VISIBLE);
+            } else {
+                headerLayout.setVisibility(View.GONE);
+            }
+        }
+
+        // On Vector application, the read receipts are displayed in a dedicated line under the message
+        View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
+
+        if (null != avatarsListView) {
+            displayReadReceipts(avatarsListView, event.eventId, row.getRoomState());
+        }
+
+        // selection mode
+        manageSelectionMode(convertView, event);
+
+        // search message mode
+        View highlightMakerView = convertView.findViewById(R.id.messagesAdapter_highlight_message_marker);
+        View readMarkerView = convertView.findViewById(R.id.message_read_marker);
+
+        if (null != highlightMakerView) {
+            // align marker view with the message
+            ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
+            highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+
+            if (TextUtils.equals(mSearchedEventId, event.eventId)) {
+                if (mIsUnreadViewMode) {
+                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+                    if (readMarkerView != null) {
+                        // Show the read marker
+                        animateReadMarkerView(event, readMarkerView);
+                    }
+                } else {
+                    if (isMergedView) {
+                        highlightMakerLayout.setMargins(avatarLayout.width + 5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+
+                    } else {
+                        highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+                    }
+
+                    // move left the body
+                      bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
+
+                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
+                }
+            } else {
+                highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+            }
+
+            highlightMakerView.setLayoutParams(highlightMakerLayout);
+        }
+
+        // download / upload progress layout
+        if ((ROW_TYPE_IMAGE == msgType) || (ROW_TYPE_FILE == msgType) || (ROW_TYPE_VIDEO == msgType)) {
+            ViewGroup.MarginLayoutParams bodyLayoutParams = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
+            int marginLeft = bodyLayoutParams.leftMargin;
+
+            View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
+
+            if (null != downloadProgressLayout) {
+                ViewGroup.MarginLayoutParams downloadProgressLayoutParams = (ViewGroup.MarginLayoutParams) downloadProgressLayout.getLayoutParams();
+                downloadProgressLayoutParams.setMargins(marginLeft, downloadProgressLayoutParams.topMargin, downloadProgressLayoutParams.rightMargin, downloadProgressLayoutParams.bottomMargin);
+                downloadProgressLayout.setLayoutParams(downloadProgressLayoutParams);
+            }
+
+            View uploadProgressLayout = convertView.findViewById(R.id.content_upload_progress_layout);
+
+            if (null != uploadProgressLayout) {
+                ViewGroup.MarginLayoutParams uploadProgressLayoutParams = (ViewGroup.MarginLayoutParams) uploadProgressLayout.getLayoutParams();
+                uploadProgressLayoutParams.setMargins(marginLeft, uploadProgressLayoutParams.topMargin, uploadProgressLayoutParams.rightMargin, uploadProgressLayoutParams.bottomMargin);
+                uploadProgressLayout.setLayoutParams(uploadProgressLayoutParams);
+            }
+        }
+
         return isMergedView;
     }
 
     /**
      * Highlight text style
      */
-    protected CharacterStyle getHighLightTextStyle() {
+    private CharacterStyle getHighLightTextStyle() {
         return new BackgroundColorSpan(mSearchHighlightMessageTextColor);
     }
 
@@ -1489,7 +1465,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param type        the media type
      * @param show        true to show the failure items
      */
-    protected void showUploadFailure(View convertView, Event event, int type, boolean show) {
+    private void showUploadFailure(View convertView, Event event, int type, boolean show) {
         if (ROW_TYPE_FILE == type) {
             TextView fileTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_filename);
 
@@ -1930,7 +1906,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param parent      the parent view
      * @return the updated text view.
      */
-    protected View getEmoteView(final int position, View convertView, ViewGroup parent) {
+    private View getEmoteView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_EMOTE), parent, false);
         }
@@ -2531,7 +2507,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             int type = getItemViewType(position);
 
             if ((type == ROW_TYPE_IMAGE) || (type == ROW_TYPE_VIDEO)) {
-                View bodyLayoutView = inflatedView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body_layout);
+                View bodyLayoutView = inflatedView.findViewById(R.id.messagesAdapter_body_layout);
                 ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
                 ViewGroup.MarginLayoutParams e2eIconViewLayout = (ViewGroup.MarginLayoutParams) e2eIconView.getLayoutParams();
 
@@ -2723,6 +2699,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
     }
 
+    /**
+     * Compute the message header for the item at position.
+     * It might be null.
+     *
+     * @param position the event position
+     * @return the header
+     */
     protected String headerMessage(int position) {
         Date prevMessageDate = null;
         Date messageDate = null;
@@ -2748,14 +2731,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         return dateDiff(messageDate, (mReferenceDate.getTime() - messageDate.getTime()) / AdapterUtils.MS_IN_DAY);
     }
-
-    protected void refreshReceiverLayout(final LinearLayout receiversLayout, final boolean leftAlign, final String eventId, final RoomState roomState) {
-        if (null != receiversLayout) {
-            // replaced by displayReadReceipts
-            receiversLayout.setVisibility(View.GONE);
-        }
-    }
-
 
     /**
      * Display the read receipts within the dedicated vector layout.
@@ -2993,12 +2968,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         contentView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
         contentView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
 
-        TextView tsTextView = (TextView)contentView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
+        TextView tsTextView = (TextView)contentView.findViewById(R.id.messagesAdapter_timestamp);
         if (isInSelectionMode && isHighlighted) {
             tsTextView.setVisibility(View.VISIBLE);
         }
 
-        contentView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_right).setOnClickListener(new View.OnClickListener() {
+        contentView.findViewById(R.id.message_timestamp_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (TextUtils.equals(eventId, mHighlightedEventId)) {
@@ -3041,7 +3016,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         String text = null;
 
         if (null != contentView) {
-            TextView bodyTextView = (TextView)contentView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body);
+            TextView bodyTextView = (TextView)contentView.findViewById(R.id.messagesAdapter_body);
 
             if (null != bodyTextView) {
                 text = bodyTextView.getText().toString();
@@ -3051,7 +3026,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return text;
     }
 
-    protected void addContentViewListeners(final View convertView, final View contentView, final int position) {
+    private void addContentViewListeners(final View convertView, final View contentView, final int position) {
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -3083,130 +3058,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 return true;
             }
         });
-    }
-
-
-
-    protected boolean manageSubView(int position, View convertView, View subView, int msgType) {
-        MessageRow row = getItem(position);
-        Event event = row.getEvent();
-
-        // mother class implementation
-        boolean isMergedView = manageSubView007(position, convertView, subView, msgType);
-
-        // remove the message separator when it is not required
-        View view = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator);
-        if (null != view) {
-            View line = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator_line);
-
-            if (null != line) {
-                line.setBackgroundColor(Color.TRANSPARENT);
-            }
-        }
-
-        // display the day separator
-        View headerLayout = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header);
-        if (null != headerLayout) {
-            String header = headerMessage(position);
-
-            if (null != header) {
-                TextView headerText = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_text);
-                headerText.setText(header);
-                headerLayout.setVisibility(View.VISIBLE);
-
-                View topHeaderMargin = headerLayout.findViewById(R.id.messagesAdapter_message_header_top_margin);
-                topHeaderMargin.setVisibility((0 == position) ? View.GONE : View.VISIBLE);
-            } else {
-                headerLayout.setVisibility(View.GONE);
-            }
-        }
-
-        // the timestamp is hidden except for the latest message and when there is no search
-        View rightTsTextLayout = convertView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_right);
-
-        if (null != rightTsTextLayout) {
-            TextView tsTextView = (TextView)rightTsTextLayout.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
-
-            if (null != tsTextView) {
-                tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode) ? View.VISIBLE : View.GONE);
-            }
-        }
-
-        // On Vector application, the read receipts are displayed in a dedicated line under the message
-        View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
-
-        if (null != avatarsListView) {
-            displayReadReceipts(avatarsListView, event.eventId, row.getRoomState());
-        }
-
-        // selection mode
-        manageSelectionMode(convertView, event);
-
-
-        // search message mode
-        View highlightMakerView = convertView.findViewById(R.id.messagesAdapter_highlight_message_marker);
-        View readMarkerView = convertView.findViewById(R.id.message_read_marker);
-
-        if (null != highlightMakerView) {
-            // align marker view with the message
-            ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
-            highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
-
-            if (TextUtils.equals(mSearchedEventId, event.eventId)) {
-                if (mIsUnreadViewMode) {
-                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
-                    if (readMarkerView != null) {
-                        // Show the read marker
-                        animateReadMarkerView(event, readMarkerView);
-                    }
-                } else {
-                    View avatarView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_left);
-                    ViewGroup.LayoutParams avatarLayout = avatarView.getLayoutParams();
-
-                    if (isMergedView) {
-                        highlightMakerLayout.setMargins(avatarLayout.width + 5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
-
-                    } else {
-                        highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
-                    }
-
-                    // move left the body
-                    View bodyLayoutView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body_layout);
-                    ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
-                    bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-
-                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
-                }
-            } else {
-                highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
-            }
-
-            highlightMakerView.setLayoutParams(highlightMakerLayout);
-        }
-
-        // download / upload progress layout
-        if ((ROW_TYPE_IMAGE == msgType) || (ROW_TYPE_FILE == msgType) || (ROW_TYPE_VIDEO == msgType)) {
-            View bodyLayoutView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body_layout);
-            ViewGroup.MarginLayoutParams bodyLayoutParams = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
-            int marginLeft = bodyLayoutParams.leftMargin;
-
-            View downloadProgressLayout = convertView.findViewById(org.matrix.androidsdk.R.id.content_download_progress_layout);
-
-            if (null != downloadProgressLayout) {
-                ViewGroup.MarginLayoutParams downloadProgressLayoutParams = (ViewGroup.MarginLayoutParams) downloadProgressLayout.getLayoutParams();
-                downloadProgressLayoutParams.setMargins(marginLeft, downloadProgressLayoutParams.topMargin, downloadProgressLayoutParams.rightMargin, downloadProgressLayoutParams.bottomMargin);
-                downloadProgressLayout.setLayoutParams(downloadProgressLayoutParams);
-            }
-
-            View uploadProgressLayout = convertView.findViewById(org.matrix.androidsdk.R.id.content_upload_progress_layout);
-
-            if (null != uploadProgressLayout) {
-                ViewGroup.MarginLayoutParams uploadProgressLayoutParams = (ViewGroup.MarginLayoutParams) uploadProgressLayout.getLayoutParams();
-                uploadProgressLayoutParams.setMargins(marginLeft, uploadProgressLayoutParams.topMargin, uploadProgressLayoutParams.rightMargin, uploadProgressLayoutParams.bottomMargin);
-                uploadProgressLayout.setLayoutParams(uploadProgressLayoutParams);
-            }
-        }
-        return isMergedView;
     }
 
     //==============================================================================================================
@@ -3318,7 +3169,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return TextUtils.equals(mediaDownloadId, downloadId);
     }
 
-    protected void refreshDownloadViews(final Event event, final IMXMediaDownloadListener.DownloadStats downloadStats, final View downloadProgressLayout) {
+    private void refreshDownloadViews(final Event event, final IMXMediaDownloadListener.DownloadStats downloadStats, final View downloadProgressLayout) {
         if ((null != downloadStats) && isMediaDownloading(event, downloadStats.mDownloadId)) {
             downloadProgressLayout.setVisibility(View.VISIBLE);
 
@@ -3354,7 +3205,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
     }
 
-    protected void updateUploadProgress(View uploadProgressLayout, int progress) {
+    private void updateUploadProgress(View uploadProgressLayout, int progress) {
         ProgressBar progressBar = (ProgressBar) uploadProgressLayout.findViewById(R.id.media_progress_view);
 
         if (null != progressBar) {
@@ -3362,7 +3213,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
     }
 
-    protected void refreshUploadViews(final Event event, final IMXMediaUploadListener.UploadStats uploadStats, final View uploadProgressLayout) {
+    private void refreshUploadViews(final Event event, final IMXMediaUploadListener.UploadStats uploadStats, final View uploadProgressLayout) {
         if (null != uploadStats) {
             uploadProgressLayout.setVisibility(View.VISIBLE);
 

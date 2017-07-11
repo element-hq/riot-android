@@ -115,7 +115,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         }
 
         // refresh the avatar
-        ImageView avatarView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_left).findViewById(R.id.avatar_img);
+        ImageView avatarView = (ImageView) convertView.findViewById(R.id.messagesAdapter_roundAvatar).findViewById(R.id.avatar_img);
         String url = null;
         // Check whether this avatar url is updated by the current event (This happens in case of new joined member)
         JsonObject msgContent = event.getContentAsJsonObject();
@@ -133,11 +133,11 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         loadMemberAvatar(avatarView, sender, event.getSender(), displayName, url);
 
         // display the sender
-        TextView senderTextView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_sender);
+        TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
         senderTextView.setText(getUserDisplayName(event.getSender(), roomState));
 
         // display the body
-        TextView bodyTextView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body);
+        TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
         // set the message text
         EventDisplay display = new EventDisplay(mContext, event, (null != room) ? room.getLiveState() : null);
         CharSequence text = display.getTextualDisplay();
@@ -156,7 +156,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         }
 
         // display timestamp
-        TextView timeTextView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
+        TextView timeTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_timestamp);
         timeTextView.setText(AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true));
 
         // display the room name
