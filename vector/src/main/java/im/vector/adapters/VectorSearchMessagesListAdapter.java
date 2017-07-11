@@ -73,13 +73,6 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         mPattern = pattern;
     }
 
-    /**
-     * Highlight text style
-     */
-    protected CharacterStyle getHighLightTextStyle() {
-        return new BackgroundColorSpan(mSearchHighlightMessageTextColor);
-    }
-
     @Override
     protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
         return false;
@@ -130,11 +123,11 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             displayName = msgContent.get("displayname") == JsonNull.INSTANCE ? null : msgContent.get("displayname").getAsString();
         }
 
-        loadMemberAvatar(avatarView, sender, event.getSender(), displayName, url);
+        VectorMessagesAdapterHelper.loadMemberAvatar(mSession, mContext, avatarView, sender, event.getSender(), displayName, url);
 
         // display the sender
         TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
-        senderTextView.setText(getUserDisplayName(event.getSender(), roomState));
+        senderTextView.setText(VectorMessagesAdapterHelper.getUserDisplayName(event.getSender(), roomState));
 
         // display the body
         TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);

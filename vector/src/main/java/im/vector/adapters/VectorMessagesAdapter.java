@@ -53,7 +53,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -113,7 +112,6 @@ import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.activity.VectorHomeActivity;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
@@ -288,6 +286,24 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
 
     /**
+     * Return the screen size.
+     *
+     * @param size the size to set
+     */
+    @SuppressLint("NewApi")
+    @SuppressWarnings("deprecation")
+    private void getScreenSize(Point size) {
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            display.getSize(size);
+        } else {
+            size.set(display.getWidth(), display.getHeight());
+        }
+    }
+
+    /**
      * @return the max thumbnail width
      */
     public int getMaxThumbnailWith() {
@@ -312,18 +328,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     public int getSendingMessageTextColor() {
         return ContextCompat.getColor(mContext, R.color.message_sending);
-    }
-
-    public int presenceOnlineColor() {
-        return ContextCompat.getColor(mContext, R.color.presence_online);
-    }
-
-    public int presenceOfflineColor() {
-        return ContextCompat.getColor(mContext, R.color.presence_offline);
-    }
-
-    public int presenceUnavailableColor() {
-        return ContextCompat.getColor(mContext, R.color.presence_unavailable);
     }
 
     public int getHighlightMessageTextColor() {
@@ -564,49 +568,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
     }
 
-
-    /**
-     * Find the user from his user ID
-     *
-     * @param userId the user ID
-     * @return the linked User
-     */
-    private User getUser(String userId) {
-        if (mUserByUserId.containsKey(userId)) {
-            return mUserByUserId.get(userId);
-        }
-
-        IMXStore store = mSession.getDataHandler().getStore();
-        User user = store.getUser(userId);
-
-        if (null != user) {
-            mUserByUserId.put(userId, user);
-        }
-
-        return user;
-    }
-
-
-    /**
-     * Return the screen size.
-     *
-     * @param size the size to set
-     */
-    @SuppressLint("NewApi")
-    @SuppressWarnings("deprecation")
-    private void getScreenSize(Point size) {
-        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            display.getSize(size);
-        } else {
-            size.set(display.getWidth(), display.getHeight());
-        }
-    }
-
-
-
     @Override
     public int getViewTypeCount() {
         return NUM_ROW_TYPES;
@@ -620,8 +581,53 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
     }
 
+    /**
+     * Check if an event is displayable
+     *
+     * @param context   the context
+     * @param row       the row
+     * @return true if the event is managed.
+     */
+    private static boolean  isDisplayableEvent(Context context, MessageRow row) {
+        if (null == row) {
+            return false;
+        }
 
+        RoomState roomState = row.getRoomState();
+        Event event = row.getEvent();
 
+        if ((null == roomState) || (null == event)) {
+            return false;
+        }
+
+        String eventType = event.getType();
+
+        if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
+            // A message is displayable as long as it has a body
+            Message message = JsonUtils.toMessage(event.getContent());
+            return (message.body != null) && (!message.body.equals(""));
+        } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
+                || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)) {
+            EventDisplay display = new EventDisplay(context, event, roomState);
+            return display.getTextualDisplay() != null;
+        } else if (event.isCallEvent()) {
+            return Event.EVENT_TYPE_CALL_INVITE.equals(eventType) ||
+                    Event.EVENT_TYPE_CALL_ANSWER.equals(eventType) ||
+                    Event.EVENT_TYPE_CALL_HANGUP.equals(eventType)
+                    ;
+        } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)) {
+            // if we can display text for it, it's valid.
+            EventDisplay display = new EventDisplay(context, event, roomState);
+            return display.getTextualDisplay() != null;
+        } else if (Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)) {
+            return true;
+        } else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType) || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+            // if we can display text for it, it's valid.
+            EventDisplay display = new EventDisplay(context, event, roomState);
+            return event.hasContentFields() && (display.getTextualDisplay() != null);
+        }
+        return false;
+    }
 
     /**
      * Check if the row must be added to the list.
@@ -630,7 +636,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @return true if should be added
      */
     private boolean isSupportedRow(MessageRow row) {
-        boolean isSupported = isDisplayableEvent(row.getEvent(), row.getRoomState());
+        boolean isSupported = isDisplayableEvent(mContext, row);
 
         if (isSupported) {
             String eventId = row.getEvent().eventId;
@@ -652,84 +658,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         return isSupported;
-    }
-
-    /**
-     * Convert Event to view type.
-     *
-     * @param event the event to convert
-     * @return the view type.
-     */
-    private int getItemViewType(Event event) {
-        String eventId = event.eventId;
-        String eventType = event.getType();
-
-        // never cache the view type of the encypted messages
-        if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType)) {
-            return ROW_TYPE_TEXT;
-        }
-
-        // never cache the view type of encrypted events
-        if (null != eventId) {
-            Integer type = mEventType.get(eventId);
-
-            if (null != type) {
-                return type;
-            }
-        }
-
-        int viewType;
-
-        if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
-
-            String msgType = JsonUtils.getMessageMsgType(event.getContent());
-
-            if (Message.MSGTYPE_TEXT.equals(msgType)) {
-                viewType = ROW_TYPE_TEXT;
-            } else if (Message.MSGTYPE_IMAGE.equals(msgType)) {
-                viewType = ROW_TYPE_IMAGE;
-            } else if (Message.MSGTYPE_EMOTE.equals(msgType)) {
-                viewType = ROW_TYPE_EMOTE;
-            } else if (Message.MSGTYPE_NOTICE.equals(msgType)) {
-                viewType = ROW_TYPE_NOTICE;
-            } else if (Message.MSGTYPE_FILE.equals(msgType) || Message.MSGTYPE_AUDIO.equals(msgType)) {
-                viewType = ROW_TYPE_FILE;
-            } else if (Message.MSGTYPE_VIDEO.equals(msgType)) {
-                viewType = ROW_TYPE_VIDEO;
-            } else {
-                // Default is to display the body as text
-                viewType = ROW_TYPE_TEXT;
-            }
-        } else if (
-                event.isCallEvent() ||
-                        Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType) ||
-                        Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
-            viewType = ROW_TYPE_NOTICE;
-
-        } else {
-            throw new RuntimeException("Unknown event type: " + eventType);
-        }
-
-        if (null != eventId) {
-            mEventType.put(eventId, new Integer(viewType));
-        }
-
-        return viewType;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        // GA Crash
-        if (position >= getCount()) {
-            return ROW_TYPE_TEXT;
-        }
-
-        MessageRow row = getItem(position);
-        return getItemViewType(row.getEvent());
     }
 
     /*
@@ -759,6 +687,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     public boolean containsMessagesFrom(String userId) {
         // check if the user has been displayed in the room history
         return (null != userId) && mUserByUserId.containsKey(userId);
+    }
+
+    public interface ReadMarkerListener {
+        void onReadMarkerDisplayed(Event event, View view);
+    }
+
+    /**
+     * Specify a listener for read marker
+     *
+     * @param listener
+     */
+    public void setReadMarkerListener(final ReadMarkerListener listener) {
+        mReadMarkerListener = listener;
     }
 
     /**
@@ -825,6 +766,57 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
     }
 
+    /**
+     * Init the read marker
+     *
+     * @param convertView the main view
+     * @param row the message row
+     * @param isMergedView true if the message is meged
+     * @param avatarLayoutView the avatar layout
+     * @param bodyLayoutView the body layout
+     */
+    private void setReadMarker(View convertView, MessageRow row, boolean isMergedView, View avatarLayoutView, View bodyLayoutView) {
+        Event event = row.getEvent();
+
+        // search message mode
+        View highlightMakerView = convertView.findViewById(R.id.messagesAdapter_highlight_message_marker);
+        View readMarkerView = convertView.findViewById(R.id.message_read_marker);
+
+        if (null != highlightMakerView) {
+            // align marker view with the message
+            ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
+            highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+
+            if (TextUtils.equals(mSearchedEventId, event.eventId)) {
+                if (mIsUnreadViewMode) {
+                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+                    if (readMarkerView != null) {
+                        // Show the read marker
+                        animateReadMarkerView(event, readMarkerView);
+                    }
+                } else {
+                    ViewGroup.LayoutParams avatarLayout = avatarLayoutView.getLayoutParams();
+                    ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
+
+                    if (isMergedView) {
+                        highlightMakerLayout.setMargins(avatarLayout.width + 5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+                    } else {
+                        highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+                    }
+
+                    // move left the body
+                    bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
+
+                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
+                }
+            } else {
+                highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+            }
+
+            highlightMakerView.setLayoutParams(highlightMakerLayout);
+        }
+    }
+
     /*
      * *********************************************************************************************
      * Others
@@ -838,22 +830,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             mTextColorByEventId = new HashMap<>();
         }
         this.notifyDataSetChanged();
-    }
-
-
-    /**
-     * Returns an user display name for an user Id.
-     *
-     * @param userId    the user id.
-     * @param roomState the room state
-     * @return teh user display name.
-     */
-    protected String getUserDisplayName(String userId, RoomState roomState) {
-        if (null != roomState) {
-            return roomState.getMemberName(userId);
-        } else {
-            return userId;
-        }
     }
 
     /**
@@ -878,27 +854,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mEventFormattedTsMap.put(event.eventId, res);
 
         return res;
-    }
-
-    protected void loadMemberAvatar(ImageView avatarView, RoomMember member, String userId, String displayName, String url) {
-        if (!mSession.isAlive()) {
-            return;
-        }
-
-        // if there is no preferred display name, use the member one
-        if (TextUtils.isEmpty(displayName) && (null != member)) {
-            displayName = member.displayname;
-        }
-
-        if ((member != null) && (null == url)) {
-            url = member.getAvatarUrl();
-        }
-
-        if (null != member) {
-            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, member.getUserId(), displayName);
-        } else {
-            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, userId, displayName);
-        }
     }
 
     /**
@@ -939,10 +894,33 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     private boolean manageSubView(final int position, View convertView, View subView, int msgType) {
         MessageRow row = getItem(position);
+
+        convertView.setClickable(true);
+
+        // click on the avatar opens the details page
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mVectorMessagesAdapterEventsListener) {
+                    mVectorMessagesAdapterEventsListener.onRowClick(position);
+                }
+            }
+        });
+
+        // click on the avatar opens the details page
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (null != mVectorMessagesAdapterEventsListener) {
+                    return mVectorMessagesAdapterEventsListener.onRowLongClick(position);
+                }
+
+                return false;
+            }
+        });
+
         Event event = row.getEvent();
         RoomState roomState = row.getRoomState();
-
-        convertView.setClickable(false);
 
         // isMergedView -> the message is going to be merged with the previous one
         // willBeMerged ->tell if a message separator must be displayed
@@ -970,61 +948,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         // inherited class custom behaviour
         isMergedView = mergeView(event, position, isMergedView);
 
-        // manage sender text
-        TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
+        // init senders
+        VectorMessagesAdapterHelper.setSenderValue(convertView, row, isMergedView, mVectorMessagesAdapterEventsListener);
 
-        if (null != senderTextView) {
-            if (isMergedView) {
-                senderTextView.setVisibility(View.GONE);
-            } else {
-                String eventType = event.getType();
-
-                // theses events are managed like notice ones
-                // but they are dedicated behaviour i.e the sender must not be displayed
-                if (event.isCallEvent() ||
-                        Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
-                        ) {
-                    senderTextView.setVisibility(View.GONE);
-                } else {
-                    senderTextView.setVisibility(View.VISIBLE);
-                    senderTextView.setText(getUserDisplayName(event.getSender(), row.getRoomState()));
-                }
-            }
-
-            final String fSenderId = event.getSender();
-            final String fDisplayName = (null == senderTextView.getText()) ? "" : senderTextView.getText().toString();
-
-            senderTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mVectorMessagesAdapterEventsListener) {
-                        mVectorMessagesAdapterEventsListener.onSenderNameClick(fSenderId, fDisplayName);
-                    }
-                }
-            });
-        }
-
-        View tsTextLayout = convertView.findViewById(R.id.message_timestamp_layout);
-        TextView tsTextView = null;
-
-        if (null != tsTextLayout) {
-            tsTextView = (TextView) tsTextLayout.findViewById(R.id.messagesAdapter_timestamp);
-        }
+        // message timestamp
+        TextView tsTextView = VectorMessagesAdapterHelper.setTimestampValue(convertView, getFormattedTimestamp(event));
 
         if (null != tsTextView) {
-            String timeStamp = getFormattedTimestamp(event);
-
-            if (TextUtils.isEmpty(timeStamp)) {
-                tsTextView.setVisibility(View.GONE);
-            } else {
-                tsTextView.setVisibility(View.VISIBLE);
-                tsTextView.setText(timeStamp);
-
-                tsTextView.setGravity(Gravity.RIGHT);
-            }
 
             if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
@@ -1036,225 +966,36 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         // Sender avatar
-        RoomMember sender = null;
-
-        if (null != roomState) {
-            sender = roomState.getMember(event.getSender());
-        }
-
-        View avatarLayoutView = convertView.findViewById(R.id.messagesAdapter_roundAvatar);
-
-        if (null != avatarLayoutView) {
-            final String userId = event.getSender();
-
-            avatarLayoutView.setClickable(true);
-
-            avatarLayoutView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (null != mVectorMessagesAdapterEventsListener) {
-                        return mVectorMessagesAdapterEventsListener.onAvatarLongClick(userId);
-                    } else {
-                        return false;
-                    }
-                }
-            });
-
-            // click on the avatar opens the details page
-            avatarLayoutView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mVectorMessagesAdapterEventsListener) {
-                        mVectorMessagesAdapterEventsListener.onAvatarClick(userId);
-                    }
-                }
-            });
-        }
-
-
-        if (null != avatarLayoutView) {
-            ImageView avatarImageView = (ImageView) avatarLayoutView.findViewById(R.id.avatar_img);
-            final String userId = event.getSender();
-
-            if (isMergedView) {
-                avatarLayoutView.setVisibility(View.GONE);
-            } else {
-                avatarLayoutView.setVisibility(View.VISIBLE);
-                avatarImageView.setTag(null);
-
-                String url = null;
-                String displayName = null;
-
-                // Check whether this avatar url is updated by the current event (This happens in case of new joined member)
-                JsonObject msgContent = event.getContentAsJsonObject();
-
-                if (msgContent.has("avatar_url")) {
-                    url = msgContent.get("avatar_url") == JsonNull.INSTANCE ? null : msgContent.get("avatar_url").getAsString();
-                }
-
-                if (msgContent.has("membership")) {
-                    String memberShip = msgContent.get("membership") == JsonNull.INSTANCE ? null : msgContent.get("membership").getAsString();
-
-                    // the avatar url is the invited one not the inviter one.
-                    if (TextUtils.equals(memberShip, RoomMember.MEMBERSHIP_INVITE)) {
-                        url = null;
-
-                        if (null != sender) {
-                            url = sender.getAvatarUrl();
-                        }
-                    }
-
-                    if (TextUtils.equals(memberShip, RoomMember.MEMBERSHIP_JOIN)) {
-                        // in some cases, the displayname cannot be retrieved because the user member joined the room with this event
-                        // without being invited (a public room for example)
-                        if (msgContent.has("displayname")) {
-                            displayName = msgContent.get("displayname") == JsonNull.INSTANCE ? null : msgContent.get("displayname").getAsString();
-                        }
-                    }
-                }
-
-                loadMemberAvatar(avatarImageView, sender, userId, displayName, url);
-            }
-        }
+        View avatarLayoutView = VectorMessagesAdapterHelper.setSenderAvatar(mSession, mContext, convertView, row, isMergedView, mVectorMessagesAdapterEventsListener);
 
         // if the messages are merged
         // the thumbnail is hidden
         // and the subview must be moved to be aligned with the previous body
         View bodyLayoutView = convertView.findViewById(R.id.messagesAdapter_body_layout);
-        ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
-        FrameLayout.LayoutParams subViewLinearLayout = (FrameLayout.LayoutParams) subView.getLayoutParams();
+        VectorMessagesAdapterHelper.alignSubviewToAvatarView(subView, bodyLayoutView, avatarLayoutView, isMergedView);
 
-
-        ViewGroup.LayoutParams avatarLayout = avatarLayoutView.getLayoutParams();
-
-        subViewLinearLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-
-        if (isMergedView) {
-            bodyLayout.setMargins(avatarLayout.width, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-
-        } else {
-            bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-        }
-        subView.setLayoutParams(bodyLayout);
-
-        bodyLayoutView.setLayoutParams(bodyLayout);
-        subView.setLayoutParams(subViewLinearLayout);
-
+        // messages separator
         View messageSeparatorView = convertView.findViewById(R.id.messagesAdapter_message_separator);
 
         if (null != messageSeparatorView) {
             messageSeparatorView.setVisibility((willBeMerged || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
         }
 
-
-        convertView.setClickable(true);
-
-        // click on the avatar opens the details page
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mVectorMessagesAdapterEventsListener) {
-                    mVectorMessagesAdapterEventsListener.onRowClick(position);
-                }
-            }
-        });
-
-        // click on the avatar opens the details page
-        convertView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (null != mVectorMessagesAdapterEventsListener) {
-                    return mVectorMessagesAdapterEventsListener.onRowLongClick(position);
-                }
-
-                return false;
-            }
-        });
-
-
         // display the day separator
-        View headerLayout = convertView.findViewById(R.id.messagesAdapter_message_header);
-        if (null != headerLayout) {
-            String header = headerMessage(position);
+        VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
 
-            if (null != header) {
-                TextView headerText = (TextView) convertView.findViewById(R.id.messagesAdapter_message_header_text);
-                headerText.setText(header);
-                headerLayout.setVisibility(View.VISIBLE);
-
-                View topHeaderMargin = headerLayout.findViewById(R.id.messagesAdapter_message_header_top_margin);
-                topHeaderMargin.setVisibility((0 == position) ? View.GONE : View.VISIBLE);
-            } else {
-                headerLayout.setVisibility(View.GONE);
-            }
-        }
-
-        // On Vector application, the read receipts are displayed in a dedicated line under the message
-        View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
-
-        if (null != avatarsListView) {
-            displayReadReceipts(avatarsListView, event.eventId, row.getRoomState());
-        }
+        // read receipts
+        VectorMessagesAdapterHelper.displayReadReceipts(mContext, mSession, convertView, row, mIsPreviewMode, mVectorMessagesAdapterEventsListener);
 
         // selection mode
         manageSelectionMode(convertView, event);
 
-        // search message mode
-        View highlightMakerView = convertView.findViewById(R.id.messagesAdapter_highlight_message_marker);
-        View readMarkerView = convertView.findViewById(R.id.message_read_marker);
-
-        if (null != highlightMakerView) {
-            // align marker view with the message
-            ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
-            highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
-
-            if (TextUtils.equals(mSearchedEventId, event.eventId)) {
-                if (mIsUnreadViewMode) {
-                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
-                    if (readMarkerView != null) {
-                        // Show the read marker
-                        animateReadMarkerView(event, readMarkerView);
-                    }
-                } else {
-                    if (isMergedView) {
-                        highlightMakerLayout.setMargins(avatarLayout.width + 5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
-
-                    } else {
-                        highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
-                    }
-
-                    // move left the body
-                      bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-
-                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
-                }
-            } else {
-                highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
-            }
-
-            highlightMakerView.setLayoutParams(highlightMakerLayout);
-        }
+        // read marker
+        setReadMarker(convertView, row, isMergedView, avatarLayoutView, bodyLayoutView);
 
         // download / upload progress layout
         if ((ROW_TYPE_IMAGE == msgType) || (ROW_TYPE_FILE == msgType) || (ROW_TYPE_VIDEO == msgType)) {
-            ViewGroup.MarginLayoutParams bodyLayoutParams = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
-            int marginLeft = bodyLayoutParams.leftMargin;
-
-            View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
-
-            if (null != downloadProgressLayout) {
-                ViewGroup.MarginLayoutParams downloadProgressLayoutParams = (ViewGroup.MarginLayoutParams) downloadProgressLayout.getLayoutParams();
-                downloadProgressLayoutParams.setMargins(marginLeft, downloadProgressLayoutParams.topMargin, downloadProgressLayoutParams.rightMargin, downloadProgressLayoutParams.bottomMargin);
-                downloadProgressLayout.setLayoutParams(downloadProgressLayoutParams);
-            }
-
-            View uploadProgressLayout = convertView.findViewById(R.id.content_upload_progress_layout);
-
-            if (null != uploadProgressLayout) {
-                ViewGroup.MarginLayoutParams uploadProgressLayoutParams = (ViewGroup.MarginLayoutParams) uploadProgressLayout.getLayoutParams();
-                uploadProgressLayoutParams.setMargins(marginLeft, uploadProgressLayoutParams.topMargin, uploadProgressLayoutParams.rightMargin, uploadProgressLayoutParams.bottomMargin);
-                uploadProgressLayout.setLayoutParams(uploadProgressLayoutParams);
-            }
+            VectorMessagesAdapterHelper.setMediaProgressLayout(convertView, bodyLayoutView);
         }
 
         return isMergedView;
@@ -2213,46 +1954,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         uploadProgressLayout.setVisibility(((progress >= 0) && event.isSending()) ? View.VISIBLE : View.GONE);
     }
 
-    /**
-     * Check if an event should be added to the events list.
-     *
-     * @param event     the event to check.
-     * @param roomState the rooms state
-     * @return true if the event is managed.
-     */
-    private boolean isDisplayableEvent(Event event, RoomState roomState) {
-        String eventType = event.getType();
-
-        if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
-            // A message is displayable as long as it has a body
-            Message message = JsonUtils.toMessage(event.getContent());
-            return (message.body != null) && (!message.body.equals(""));
-        } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
-                || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)) {
-            EventDisplay display = new EventDisplay(mContext, event, roomState);
-            return display.getTextualDisplay() != null;
-        } else if (event.isCallEvent()) {
-            return Event.EVENT_TYPE_CALL_INVITE.equals(eventType) ||
-                    Event.EVENT_TYPE_CALL_ANSWER.equals(eventType) ||
-                    Event.EVENT_TYPE_CALL_HANGUP.equals(eventType)
-                    ;
-        } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)) {
-            // if we can display text for it, it's valid.
-            EventDisplay display = new EventDisplay(mContext, event, roomState);
-            return display.getTextualDisplay() != null;
-        } else if (Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)) {
-            return true;
-        } else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType) || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
-            // if we can display text for it, it's valid.
-            EventDisplay display = new EventDisplay(mContext, event, roomState);
-            return event.hasContentFields() && (display.getTextualDisplay() != null);
-        }
-        return false;
-    }
-
-
-
-
 
     //================================================================================
     // HTML management
@@ -2360,14 +2061,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     // Download / upload progress management
     //==============================================================================================================
 
-    /**
-     * Specify a listener for read marker
-     *
-     * @param listener
-     */
-    public void setReadMarkerListener(final ReadMarkerListener listener) {
-        mReadMarkerListener = listener;
-    }
+
 
     /*
      * *********************************************************************************************
@@ -2375,9 +2069,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * *********************************************************************************************
      */
 
-    public interface ReadMarkerListener {
-        void onReadMarkerDisplayed(Event event, View view);
-    }
+
 
 
     /**
@@ -2442,6 +2134,83 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
     }
 
+    /**
+     * Convert Event to view type.
+     *
+     * @param event the event to convert
+     * @return the view type.
+     */
+    private int getItemViewType(Event event) {
+        String eventId = event.eventId;
+        String eventType = event.getType();
+
+        // never cache the view type of the encrypted messages
+        if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType)) {
+            return ROW_TYPE_TEXT;
+        }
+
+        // never cache the view type of encrypted events
+        if (null != eventId) {
+            Integer type = mEventType.get(eventId);
+
+            if (null != type) {
+                return type;
+            }
+        }
+
+        int viewType;
+
+        if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
+
+            String msgType = JsonUtils.getMessageMsgType(event.getContent());
+
+            if (Message.MSGTYPE_TEXT.equals(msgType)) {
+                viewType = ROW_TYPE_TEXT;
+            } else if (Message.MSGTYPE_IMAGE.equals(msgType)) {
+                viewType = ROW_TYPE_IMAGE;
+            } else if (Message.MSGTYPE_EMOTE.equals(msgType)) {
+                viewType = ROW_TYPE_EMOTE;
+            } else if (Message.MSGTYPE_NOTICE.equals(msgType)) {
+                viewType = ROW_TYPE_NOTICE;
+            } else if (Message.MSGTYPE_FILE.equals(msgType) || Message.MSGTYPE_AUDIO.equals(msgType)) {
+                viewType = ROW_TYPE_FILE;
+            } else if (Message.MSGTYPE_VIDEO.equals(msgType)) {
+                viewType = ROW_TYPE_VIDEO;
+            } else {
+                // Default is to display the body as text
+                viewType = ROW_TYPE_TEXT;
+            }
+        } else if (
+                event.isCallEvent() ||
+                        Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType) ||
+                        Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType) ||
+                        Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
+                        Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType) ||
+                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType) ||
+                        Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+            viewType = ROW_TYPE_NOTICE;
+
+        } else {
+            throw new RuntimeException("Unknown event type: " + eventType);
+        }
+
+        if (null != eventId) {
+            mEventType.put(eventId, new Integer(viewType));
+        }
+
+        return viewType;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        // GA Crash
+        if (position >= getCount()) {
+            return ROW_TYPE_TEXT;
+        }
+
+        MessageRow row = getItem(position);
+        return getItemViewType(row.getEvent());
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -2730,95 +2499,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         return dateDiff(messageDate, (mReferenceDate.getTime() - messageDate.getTime()) / AdapterUtils.MS_IN_DAY);
-    }
-
-    /**
-     * Display the read receipts within the dedicated vector layout.
-     * Console application displays them on the message side.
-     * Vector application displays them in a dedicated line under the message
-     * @param avatarsListView the read receipts layout
-     * @param eventId the event Id.
-     * @param roomState the room state.
-     */
-    private void displayReadReceipts(final View avatarsListView, final String eventId, final RoomState roomState) {
-        if (!mSession.isAlive()) {
-            return;
-        }
-
-        IMXStore store = mSession.getDataHandler().getStore();
-
-        // sanity check
-        if (null == roomState) {
-            avatarsListView.setVisibility(View.GONE);
-            return;
-        }
-
-        // hide the read receipts until there is a way to retrieve them
-        // without triggering a request per message
-        if (mIsPreviewMode) {
-            avatarsListView.setVisibility(View.GONE);
-            return;
-        }
-
-        List<ReceiptData> receipts = store.getEventReceipts(roomState.roomId, eventId, true, true);
-
-        // if there is no receipt to display
-        // hide the dedicated layout
-        if ((null == receipts) || (0 == receipts.size())) {
-            avatarsListView.setVisibility(View.GONE);
-            return;
-        }
-
-        avatarsListView.setVisibility(View.VISIBLE);
-
-        ArrayList<View> imageViews = new ArrayList<>();
-
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_1).findViewById(org.matrix.androidsdk.R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_2).findViewById(org.matrix.androidsdk.R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_3).findViewById(org.matrix.androidsdk.R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_4).findViewById(org.matrix.androidsdk.R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_5).findViewById(org.matrix.androidsdk.R.id.avatar_img));
-
-        TextView moreText = (TextView)avatarsListView.findViewById(R.id.message_more_than_expected);
-
-        int index = 0;
-        int bound = Math.min(receipts.size(), imageViews.size());
-
-        for (; index < bound; index++) {
-            final ReceiptData r = receipts.get(index);
-            RoomMember member = roomState.getMember(r.userId);
-            ImageView imageView = (ImageView) imageViews.get(index);
-
-            imageView.setVisibility(View.VISIBLE);
-            imageView.setTag(null);
-
-            if (null != member) {
-                VectorUtils.loadRoomMemberAvatar(mContext, mSession, imageView, member);
-            } else {
-                // should never happen
-                VectorUtils.loadUserAvatar(mContext, mSession, imageView, null, r.userId, r.userId);
-            }
-        }
-
-        moreText.setVisibility((receipts.size() <= imageViews.size()) ? View.GONE : View.VISIBLE);
-        moreText.setText((receipts.size() - imageViews.size()) + "+");
-
-        for(; index < imageViews.size(); index++) {
-            imageViews.get(index).setVisibility(View.INVISIBLE);
-        }
-
-        if (receipts.size() > 0) {
-            avatarsListView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mVectorMessagesAdapterEventsListener) {
-                        mVectorMessagesAdapterEventsListener.onMoreReadReceiptClick(eventId);
-                    }
-                }
-            });
-        } else {
-            avatarsListView.setOnClickListener(null);
-        }
     }
 
     /**
