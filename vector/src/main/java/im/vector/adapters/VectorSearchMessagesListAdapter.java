@@ -194,8 +194,8 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mMessagesAdapterEventsListener) {
-                    mMessagesAdapterEventsListener.onContentClick(fPosition);
+                if (null != mVectorMessagesAdapterEventsListener) {
+                    mVectorMessagesAdapterEventsListener.onContentClick(fPosition);
                 }
             }
         });
@@ -204,8 +204,8 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (null != mMessagesAdapterEventsListener) {
-                    return mMessagesAdapterEventsListener.onContentLongClick(fPosition);
+                if (null != mVectorMessagesAdapterEventsListener) {
+                    return mVectorMessagesAdapterEventsListener.onContentLongClick(fPosition);
                 }
 
                 return false;
