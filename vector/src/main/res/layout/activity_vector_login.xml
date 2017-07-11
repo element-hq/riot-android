@@ -206,6 +206,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/auth_email_placeholder"
+                        android:inputType="text"
                         android:maxLines="1" />
 
                     <EditText
@@ -361,6 +362,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hs_url"
+                            android:inputType="text"
                             android:maxLines="1" />
 
                         <TextView
@@ -375,6 +377,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/identity_url"
+                            android:inputType="text"
                             android:maxLines="1" />
                     </LinearLayout>
                 </LinearLayout>
