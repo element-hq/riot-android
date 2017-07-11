@@ -419,10 +419,15 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         }
 
         if (mPublicRoomsSelector != null) {
+
             // reported by GA
+            // https://stackoverflow.com/questions/26752974/adapterdatasetobserver-was-not-registered
             if (mRoomDirectoryAdapter != mPublicRoomsSelector.getAdapter()) {
                 mPublicRoomsSelector.setAdapter(mRoomDirectoryAdapter);
+            } else {
+                mRoomDirectoryAdapter.notifyDataSetChanged();
             }
+
             mPublicRoomsSelector.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
