@@ -123,7 +123,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             displayName = msgContent.get("displayname") == JsonNull.INSTANCE ? null : msgContent.get("displayname").getAsString();
         }
 
-        VectorMessagesAdapterHelper.loadMemberAvatar(mSession, mContext, avatarView, sender, event.getSender(), displayName, url);
+        mHelper.loadMemberAvatar(avatarView, sender, event.getSender(), displayName, url);
 
         // display the sender
         TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);

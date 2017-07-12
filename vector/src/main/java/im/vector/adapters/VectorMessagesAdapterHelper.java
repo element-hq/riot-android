@@ -1,5 +1,4 @@
 /*
- * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,110 +16,88 @@
 
 package im.vector.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
-import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
-import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
-import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.store.IMXStore;
-import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.listeners.IMXMediaDownloadListener;
-import org.matrix.androidsdk.listeners.IMXMediaUploadListener;
-import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
-import org.matrix.androidsdk.listeners.MXMediaUploadListener;
-import org.matrix.androidsdk.rest.model.EncryptedEventContent;
-import org.matrix.androidsdk.rest.model.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageInfo;
-import org.matrix.androidsdk.rest.model.ImageMessage;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.rest.model.VideoInfo;
-import org.matrix.androidsdk.rest.model.VideoMessage;
 import org.matrix.androidsdk.util.EventDisplay;
-import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.view.ConsoleHtmlTagHandler;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.VectorUtils;
 
 /**
- * An adapter which can display room information.
+ * An helper to display message information
  */
 public class VectorMessagesAdapterHelper {
+    private static final String LOG_TAG = "AdapterHelper";
+
+
+    private IMessagesAdapterActionsListener mEventsListener;
+    private final MXSession mSession;
+    private final Context mContext;
+    private MatrixLinkMovementMethod mLinkMovementMethod;
+
+    VectorMessagesAdapterHelper(Context context, MXSession session) {
+        mContext = context;
+        mSession = session;
+    }
+
+    /**
+     * Define the events listener
+     *
+     * @param listener the events listener
+     */
+    void setVectorMessagesAdapterActionsListener(IMessagesAdapterActionsListener listener) {
+        mEventsListener = listener;
+    }
+
+
+    /**
+     * Define the links movement method
+     *
+     * @param method the links movement method
+     */
+    void setLinkMovementMethod(MatrixLinkMovementMethod method) {
+        mLinkMovementMethod = method;
+    }
 
     /**
      * Returns an user display name for an user Id.
@@ -143,10 +120,9 @@ public class VectorMessagesAdapterHelper {
      * @param convertView  the base view
      * @param row          the message row
      * @param isMergedView true if the cell is merged
-     * @param listener     the click events listener
      * @return the dedicated textView
      */
-    public static TextView setSenderValue(View convertView, MessageRow row, boolean isMergedView, final IMessagesAdapterActionsListener listener) {
+    public TextView setSenderValue(View convertView, MessageRow row, boolean isMergedView) {
         // manage sender text
         TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
 
@@ -177,8 +153,8 @@ public class VectorMessagesAdapterHelper {
                     senderTextView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (null != listener) {
-                                listener.onSenderNameClick(fSenderId, fDisplayName);
+                            if (null != mEventsListener) {
+                                mEventsListener.onSenderNameClick(fSenderId, fDisplayName);
                             }
                         }
                     });
@@ -196,7 +172,7 @@ public class VectorMessagesAdapterHelper {
      * @param value       the new value
      * @return the dedicated textView
      */
-    public static TextView setTimestampValue(View convertView, String value) {
+    static TextView setTimestampValue(View convertView, String value) {
         TextView tsTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_timestamp);
 
         if (null != tsTextView) {
@@ -205,7 +181,6 @@ public class VectorMessagesAdapterHelper {
             } else {
                 tsTextView.setVisibility(View.VISIBLE);
                 tsTextView.setText(value);
-                tsTextView.setGravity(Gravity.RIGHT);
             }
         }
 
@@ -215,16 +190,14 @@ public class VectorMessagesAdapterHelper {
     /**
      * Load the avatar image in the avatar view
      *
-     * @param session     the session
-     * @param context     the context
      * @param avatarView  the avatar view
      * @param member      the room member
      * @param userId      the user id
      * @param displayName the display name
      * @param url         the avatar url
      */
-    public static void loadMemberAvatar(MXSession session, Context context, ImageView avatarView, RoomMember member, String userId, String displayName, String url) {
-        if (!session.isAlive()) {
+    void loadMemberAvatar(ImageView avatarView, RoomMember member, String userId, String displayName, String url) {
+        if (!mSession.isAlive()) {
             return;
         }
 
@@ -238,24 +211,21 @@ public class VectorMessagesAdapterHelper {
         }
 
         if (null != member) {
-            VectorUtils.loadUserAvatar(context, session, avatarView, url, member.getUserId(), displayName);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, member.getUserId(), displayName);
         } else {
-            VectorUtils.loadUserAvatar(context, session, avatarView, url, userId, displayName);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, userId, displayName);
         }
     }
 
     /**
      * init the sender avatar
      *
-     * @param session      the session
-     * @param context      the context
      * @param convertView  the base view
      * @param row          the message row
      * @param isMergedView true if the cell is merged
-     * @param listener     the click events listener
      * @return the avatar layout
      */
-    public static View setSenderAvatar(MXSession session, Context context, View convertView, MessageRow row, boolean isMergedView, final IMessagesAdapterActionsListener listener) {
+    View setSenderAvatar(View convertView, MessageRow row, boolean isMergedView) {
         Event event = row.getEvent();
         RoomState roomState = row.getRoomState();
 
@@ -275,11 +245,7 @@ public class VectorMessagesAdapterHelper {
             avatarLayoutView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if (null != listener) {
-                        return listener.onAvatarLongClick(userId);
-                    } else {
-                        return false;
-                    }
+                    return (null != mEventsListener) && mEventsListener.onAvatarLongClick(userId);
                 }
             });
 
@@ -287,8 +253,8 @@ public class VectorMessagesAdapterHelper {
             avatarLayoutView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (null != listener) {
-                        listener.onAvatarClick(userId);
+                    if (null != mEventsListener) {
+                        mEventsListener.onAvatarClick(userId);
                     }
                 }
             });
@@ -335,7 +301,7 @@ public class VectorMessagesAdapterHelper {
                     }
                 }
 
-                loadMemberAvatar(session, context, avatarImageView, sender, userId, displayName, url);
+                loadMemberAvatar(avatarImageView, sender, userId, displayName, url);
             }
         }
 
@@ -350,17 +316,14 @@ public class VectorMessagesAdapterHelper {
      * @param avatarLayoutView the avatar layout
      * @param isMergedView     true if the view is merged
      */
-    public static void alignSubviewToAvatarView(View subView, View bodyLayoutView, View avatarLayoutView, boolean isMergedView) {
+    static void alignSubviewToAvatarView(View subView, View bodyLayoutView, View avatarLayoutView, boolean isMergedView) {
         ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
         FrameLayout.LayoutParams subViewLinearLayout = (FrameLayout.LayoutParams) subView.getLayoutParams();
 
         ViewGroup.LayoutParams avatarLayout = avatarLayoutView.getLayoutParams();
-
         subViewLinearLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 
-        if (isMergedView)
-
-        {
+        if (isMergedView) {
             bodyLayout.setMargins(avatarLayout.width, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
         } else
 
@@ -380,7 +343,7 @@ public class VectorMessagesAdapterHelper {
      * @param newValue    the new value
      * @param position    the item position
      */
-    public static void setHeader(View convertView, String newValue, int position) {
+    static void setHeader(View convertView, String newValue, int position) {
         // display the day separator
         View headerLayout = convertView.findViewById(R.id.messagesAdapter_message_header);
 
@@ -403,28 +366,25 @@ public class VectorMessagesAdapterHelper {
      * Console application displays them on the message side.
      * Vector application displays them in a dedicated line under the message
      *
-     * @param context       the context
-     * @param session       the session
      * @param convertView   base view
      * @param row           the message row
      * @param isPreviewMode true if preview mode
-     * @param listener      the listener
      */
-    public static void displayReadReceipts(Context context, MXSession session, View convertView, MessageRow row, boolean isPreviewMode, final IMessagesAdapterActionsListener listener) {
+    void displayReadReceipts(View convertView, MessageRow row, boolean isPreviewMode) {
         View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
 
         if (null == avatarsListView) {
             return;
         }
 
-        if (!session.isAlive()) {
+        if (!mSession.isAlive()) {
             return;
         }
 
         final String eventId = row.getEvent().eventId;
         RoomState roomState = row.getRoomState();
 
-        IMXStore store = session.getDataHandler().getStore();
+        IMXStore store = mSession.getDataHandler().getStore();
 
         // sanity check
         if (null == roomState) {
@@ -472,10 +432,10 @@ public class VectorMessagesAdapterHelper {
             imageView.setTag(null);
 
             if (null != member) {
-                VectorUtils.loadRoomMemberAvatar(context, session, imageView, member);
+                VectorUtils.loadRoomMemberAvatar(mContext, mSession, imageView, member);
             } else {
                 // should never happen
-                VectorUtils.loadUserAvatar(context, session, imageView, null, r.userId, r.userId);
+                VectorUtils.loadUserAvatar(mContext, mSession, imageView, null, r.userId, r.userId);
             }
         }
 
@@ -490,8 +450,8 @@ public class VectorMessagesAdapterHelper {
             avatarsListView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (null != listener) {
-                        listener.onMoreReadReceiptClick(eventId);
+                    if (null != mEventsListener) {
+                        mEventsListener.onMoreReadReceiptClick(eventId);
                     }
                 }
             });
@@ -503,10 +463,10 @@ public class VectorMessagesAdapterHelper {
     /**
      * Refresh the media progress layouts
      *
-     * @param convertView the convert view
+     * @param convertView    the convert view
      * @param bodyLayoutView the body layout
      */
-    public static void setMediaProgressLayout(View convertView, View bodyLayoutView) {
+    static void setMediaProgressLayout(View convertView, View bodyLayoutView) {
         ViewGroup.MarginLayoutParams bodyLayoutParams = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
         int marginLeft = bodyLayoutParams.leftMargin;
 
@@ -525,5 +485,275 @@ public class VectorMessagesAdapterHelper {
             uploadProgressLayoutParams.setMargins(marginLeft, uploadProgressLayoutParams.topMargin, uploadProgressLayoutParams.rightMargin, uploadProgressLayoutParams.bottomMargin);
             uploadProgressLayout.setLayoutParams(uploadProgressLayoutParams);
         }
+    }
+
+    /**
+     * Trap the clicked URL.
+     *
+     * @param strBuilder the input string
+     * @param span       the URL
+     */
+    private void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span) {
+        int start = strBuilder.getSpanStart(span);
+        int end = strBuilder.getSpanEnd(span);
+
+        if (start >= 0 && end >= 0) {
+            int flags = strBuilder.getSpanFlags(span);
+            ClickableSpan clickable = new ClickableSpan() {
+                public void onClick(View view) {
+                    if (null != mEventsListener) {
+                        mEventsListener.onURLClick(Uri.parse(span.getURL()));
+                    }
+                }
+            };
+            strBuilder.setSpan(clickable, start, end, flags);
+            strBuilder.removeSpan(span);
+        }
+    }
+
+    /**
+     * Highlight the pattern in the text.
+     *
+     * @param textView           the textview
+     * @param text               the text to display
+     * @param htmlFormattedText  the html formatted text
+     * @param pattern            the  pattern
+     * @param highLightTextStyle the highlight text style
+     */
+    void highlightPattern(TextView textView, Spannable text, String htmlFormattedText, String pattern, CharacterStyle highLightTextStyle) {
+        // sanity check
+        if (null == textView) {
+            return;
+        }
+
+        if (!TextUtils.isEmpty(pattern) && !TextUtils.isEmpty(text) && (text.length() >= pattern.length())) {
+
+            String lowerText = text.toString().toLowerCase();
+            String lowerPattern = pattern.toLowerCase();
+
+            int start = 0;
+            int pos = lowerText.indexOf(lowerPattern, start);
+
+            while (pos >= 0) {
+                start = pos + lowerPattern.length();
+                text.setSpan(highLightTextStyle, pos, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                text.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), pos, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                pos = lowerText.indexOf(lowerPattern, start);
+            }
+        }
+
+        final ConsoleHtmlTagHandler htmlTagHandler = new ConsoleHtmlTagHandler();
+        htmlTagHandler.mContext = mContext;
+
+        CharSequence sequence;
+
+        // an html format has been released
+        if (null != htmlFormattedText) {
+            boolean isCustomizable = !htmlFormattedText.contains("<a href=") && !htmlFormattedText.contains("<table>");
+
+            // the links are not yet supported by ConsoleHtmlTagHandler
+            // the markdown tables are not properly supported
+            sequence = Html.fromHtml(htmlFormattedText.replace("\n", "<br/>"), null, isCustomizable ? htmlTagHandler : null);
+
+            // sanity check
+            if (!TextUtils.isEmpty(sequence)) {
+                // remove trailing \n to avoid having empty lines..
+                int markStart = 0;
+                int markEnd = sequence.length() - 1;
+
+                // search first non \n character
+                for (; (markStart < sequence.length() - 1) && ('\n' == sequence.charAt(markStart)); markStart++)
+                    ;
+
+                // search latest non \n character
+                for (; (markEnd >= 0) && ('\n' == sequence.charAt(markEnd)); markEnd--) ;
+
+                // empty string ?
+                if (markEnd < markStart) {
+                    sequence = sequence.subSequence(0, 0);
+                } else {
+                    sequence = sequence.subSequence(markStart, markEnd + 1);
+                }
+            }
+        } else {
+            sequence = text;
+        }
+
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
+        URLSpan[] urls = strBuilder.getSpans(0, text.length(), URLSpan.class);
+
+        if ((null != urls) && (urls.length > 0)) {
+            for (URLSpan span : urls) {
+                makeLinkClickable(strBuilder, span);
+            }
+        }
+
+        MatrixURLSpan.refreshMatrixSpans(strBuilder, mEventsListener);
+        textView.setText(strBuilder);
+
+        if (null != mLinkMovementMethod) {
+            textView.setMovementMethod(mLinkMovementMethod);
+        }
+    }
+
+    /**
+     * Check if an event is displayable
+     *
+     * @param context the context
+     * @param row     the row
+     * @return true if the event is managed.
+     */
+    static boolean isDisplayableEvent(Context context, MessageRow row) {
+        if (null == row) {
+            return false;
+        }
+
+        RoomState roomState = row.getRoomState();
+        Event event = row.getEvent();
+
+        if ((null == roomState) || (null == event)) {
+            return false;
+        }
+
+        String eventType = event.getType();
+
+        if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
+            // A message is displayable as long as it has a body
+            Message message = JsonUtils.toMessage(event.getContent());
+            return (message.body != null) && (!message.body.equals(""));
+        } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
+                || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)) {
+            EventDisplay display = new EventDisplay(context, event, roomState);
+            return display.getTextualDisplay() != null;
+        } else if (event.isCallEvent()) {
+            return Event.EVENT_TYPE_CALL_INVITE.equals(eventType) ||
+                    Event.EVENT_TYPE_CALL_ANSWER.equals(eventType) ||
+                    Event.EVENT_TYPE_CALL_HANGUP.equals(eventType)
+                    ;
+        } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)) {
+            // if we can display text for it, it's valid.
+            EventDisplay display = new EventDisplay(context, event, roomState);
+            return display.getTextualDisplay() != null;
+        } else if (Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)) {
+            return true;
+        } else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType) || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+            // if we can display text for it, it's valid.
+            EventDisplay display = new EventDisplay(context, event, roomState);
+            return event.hasContentFields() && (display.getTextualDisplay() != null);
+        }
+        return false;
+    }
+
+
+    /**
+     * Some event should never be merged.
+     * e.g. the profile info update (avatar, display name...)
+     *
+     * @param event the event
+     * @return true if the event can be merged.
+     */
+    static boolean shouldMergeEvent(Event event) {
+        boolean res = true;
+
+        // user profile update should not be merged
+        if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+            EventContent eventContent = JsonUtils.toEventContent(event.getContentAsJsonObject());
+            EventContent prevEventContent = event.getPrevContent();
+            String prevMembership = null;
+
+            if (null != prevEventContent) {
+                prevMembership = prevEventContent.membership;
+            }
+
+            res = !TextUtils.equals(prevMembership, eventContent.membership);
+        }
+
+        return res && !event.isCallEvent();
+    }
+
+    //================================================================================
+    // HTML management
+    //================================================================================
+
+    private final HashMap<String, String> mHtmlMap = new HashMap<>();
+
+    /**
+     * Retrieves the sanitised html.
+     * !!!!!! WARNING !!!!!!
+     * IT IS NOT REMOTELY A COMPREHENSIVE SANITIZER AND SHOULD NOT BE TRUSTED FOR SECURITY PURPOSES.
+     * WE ARE EFFECTIVELY RELYING ON THE LIMITED CAPABILITIES OF THE HTML RENDERER UI TO AVOID SECURITY ISSUES LEAKING UP.
+     *
+     * @param html the html to sanitize
+     * @return the sanitised HTML
+     */
+    String getSanitisedHtml(final String html) {
+        // sanity checks
+        if (TextUtils.isEmpty(html)) {
+            return null;
+        }
+
+        String res = mHtmlMap.get(html);
+
+        if (null == res) {
+            res = sanitiseHTML(html);
+            mHtmlMap.put(html, res);
+        }
+
+        return res;
+    }
+
+    private static final List<String> mAllowedHTMLTags = Arrays.asList(
+            "font", // custom to matrix for IRC-style font coloring
+            "del", // for markdown
+            // deliberately no h1/h2 to stop people shouting.
+            "h3", "h4", "h5", "h6", "blockquote", "p", "a", "ul", "ol",
+            "nl", "li", "b", "i", "u", "strong", "em", "strike", "code", "hr", "br", "div",
+            "table", "thead", "caption", "tbody", "tr", "th", "td", "pre");
+
+    private static final Pattern mHtmlPatter = Pattern.compile("<(\\w+)[^>]*>", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * Sanitise the HTML.
+     * The matrix format does not allow the use some HTML tags.
+     *
+     * @param htmlString the html string
+     * @return the sanitised string.
+     */
+    private static String sanitiseHTML(final String htmlString) {
+        String html = htmlString;
+        Matcher matcher = mHtmlPatter.matcher(htmlString);
+
+        ArrayList<String> tagsToRemove = new ArrayList<>();
+
+        while (matcher.find()) {
+
+            try {
+                String tag = htmlString.substring(matcher.start(1), matcher.end(1));
+
+                // test if the tag is not allowed
+                if (mAllowedHTMLTags.indexOf(tag) < 0) {
+                    // add it once
+                    if (tagsToRemove.indexOf(tag) < 0) {
+                        tagsToRemove.add(tag);
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "sanitiseHTML failed " + e.getLocalizedMessage());
+            }
+        }
+
+        // some tags to remove ?
+        if (tagsToRemove.size() > 0) {
+            // append the tags to remove
+            String tagsToRemoveString = tagsToRemove.get(0);
+
+            for (int i = 1; i < tagsToRemove.size(); i++) {
+                tagsToRemoveString += "|" + tagsToRemove.get(i);
+            }
+
+            html = html.replaceAll("<\\/?(" + tagsToRemoveString + ")[^>]*>", "");
+        }
+
+        return html;
     }
 }
