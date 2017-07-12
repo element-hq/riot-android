@@ -18,25 +18,19 @@ package im.vector.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
-
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.DialogFragment;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
-
 import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -234,7 +228,10 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
     @Override
     public void dismissAllowingStateLoss() {
-        super.dismissAllowingStateLoss();
+        // reported by GA
+        if (null != getFragmentManager()) {
+            super.dismissAllowingStateLoss();
+        }
         // Ensure that the map is released when the fragment is dismissed.
         mUnknownDevicesMap = null;
     }
@@ -270,7 +267,9 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                     }
                     mListener = null;
                     // ensure that the fragment won't be displayed anymore
-                    dismissAllowingStateLoss();
+                    if (isAdded() && isResumed()) {
+                        dismissAllowingStateLoss();
+                    }
                 }
 
                 @Override

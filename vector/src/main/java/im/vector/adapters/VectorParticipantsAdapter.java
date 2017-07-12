@@ -641,7 +641,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     }
 
     private String getGroupTitle(final int position) {
-        final int groupSize = mParticipantsListsList.get(position).size();
+        int groupSize;
+        if (position < mParticipantsListsList.size()) {
+            groupSize = mParticipantsListsList.get(position).size();
+        } else {
+            Log.e(LOG_TAG, "getGroupTitle position " + position + " is invalid, mParticipantsListsList.size()=" + mParticipantsListsList.size());
+            groupSize = 0;
+        }
         if (position == mLocalContactsSectionPosition) {
             return mContext.getString(R.string.people_search_local_contacts, groupSize);
         } else if (position == mRoomContactsSectionPosition) {

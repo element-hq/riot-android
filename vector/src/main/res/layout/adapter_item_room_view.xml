@@ -109,10 +109,12 @@
             android:layout_toLeftOf="@+id/room_update_date"
             android:gravity="center"
             android:minWidth="25dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             tools:background="#AAff00ff"
-            tools:text="12" />
+            tools:text="3.6K" />
     </RelativeLayout>
 
     <View
