@@ -18,7 +18,7 @@
     <string name="send">Senden</string>
     <string name="copy">Kopieren</string>
     <string name="resend">Erneut senden</string>
-    <string name="redact">Verbergen</string>
+    <string name="redact">Entfernen</string>
     <string name="quote">Zitieren</string>
     <string name="share">Teilen</string>
     <string name="later">Später</string>
@@ -33,7 +33,7 @@
     <string name="ongoing_conference_call">" Konferenzgespräch läuft. Per Sprach-Chat oder per Video-Chat beitreten."</string>
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
-    <string name="cannot_start_call">Kann Gespräch nicht starten. Bitte später erneut probieren</string>
+    <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
     <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen eventuell einige Funktionen nicht zur Verfügung…</string>
     <string name="missing_permissions_to_start_conf_call">Dir fehlt das Recht ein Konferenzgespräch in diesem Raum zu starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Kann Gespräch nicht starten</string>
@@ -102,9 +102,9 @@
     <string name="send_bug_report_include_crash_logs">Absturzberichte übermitteln</string>
     <string name="send_bug_report_include_screenshot">Screenshot übermitteln</string>
     <string name="send_bug_report">Problem melden</string>
-    <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du getan? Was wolltest du das passiert? Was passierte?</string>
-    <string name="send_bug_report_placeholder">Problem hier beschreiben (vorzugsweise auf Englisch)</string>
-    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Nutzungsprotokolle von diesem Client mit dem Fehlerbericht gesendet. Wenn du nur den obigen Text senden möchtest enferne folgenden Haken:</string>
+    <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du genau gemacht? Was sollte passieren? Was passierte tatsächlich?</string>
+    <string name="send_bug_report_placeholder">Problembeschreibung</string>
+    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Logdateien dieses Matrix-Clients zusammen mit dem Fehlerbericht übermittelt. Wenn du nur den oben eingegebenen Text senden möchtest, bitte die nachfolgenden Haken entsprechend entfernen:</string>
     <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du einen Fehlerbericht senden?</string>
     <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich gesendet</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht gesendet werden (%s)</string>
@@ -114,8 +114,8 @@
     <string name="send_files_in">Sende Datei nach</string>
     <string name="read_receipt">Gelesen</string>
 
-    <string name="join_room">Trete Raum bei</string>
-    <string name="username">Nutzername</string>
+    <string name="join_room">Raum betreten</string>
+    <string name="username">Benutzername</string>
     <string name="create_account">Registrieren</string>
     <string name="login">Anmelden</string>
     <string name="logout">Abmelden</string>
@@ -138,7 +138,7 @@
     <string name="auth_submit">Absenden</string>
     <string name="auth_skip">Überspringen</string>
     <string name="auth_send_reset_email">Rücksetz-E-Mail senden</string>
-    <string name="auth_return_to_login">Zur Anmeldung zurückkehren</string>
+    <string name="auth_return_to_login">Zur Anmeldemaske zurückkehren</string>
     <string name="auth_user_id_placeholder">E-Mail oder Nutzername</string>
     <string name="auth_password_placeholder">Passwort</string>
     <string name="auth_new_password_placeholder">Neues Passwort</string>
@@ -289,7 +289,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="reject">Ablehnen</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Springe zur ersten ungelesenen Nachricht.</string>
+    <string name="room_jump_to_first_unread">Zur ersten ungelesenen Nachricht springen.</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Du wurdest von %s eingeladen, diesen Raum zu betreten</string>
@@ -388,19 +388,19 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="ssl_cert_not_trust">Dies kann bedeuten, dass jemand böswillig deinen Internetverkehr abfängt oder dass dein Telefon dem Zertifikat, dass der Remote-Server anbietet, nicht vertraut.</string>
     <string name="ssl_cert_new_account_expl">Wenn der Server-Administrator dir mitgeteilt hat, dass dies zu erwarten sei, stelle sicher, dass der Fingerabdruck unten mit dem von deinem Administrator bereitgestellten übereinstimmt.</string>
     <string name="ssl_unexpected_existing_expl">Das Zertifikat unterscheidet sich von dem Zertifikat, dem dein Gerät ursprünglich vertraut hat. Dies ist SEHR UNGEWÖHNLICH. Es wird empfohlen, dass du dieses neue Zertifikat NICHT AKZEPTIERST.</string>
-    <string name="ssl_expected_existing_expl">Das Zertifikat hat sich von einem vertrauten zu einem nicht vertrauten Zertifikat geändert. Der Server kann sein Zertifikat erneuert haben. Bitte frage deinen Server-Administrator nach dem zu erwartenden Fingerabdruck.</string>
+    <string name="ssl_expected_existing_expl">Das Zertifikat hat sich von einem ursprünglich vertrauenswürdigem Zertifikat in ein nicht vertrauenswürdiges Zertifikat geändert. Eventuell wurde das Zertifikat des Servers erneuert. Bitte erkundige dich beim Server-Administrator, welcher Fingerprint als vertrauenswürdig gilt.</string>
     <string name="ssl_only_accept">Akzeptiere das Zertifikat NUR dann, wenn der Server-Administrator einen Fingerprint veröffentlicht hat, der mit dem obigen übereinstimmt.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
-    <string name="room_details_title">Raumdetails</string>
+    <string name="room_details_title">Raum-Details</string>
     <string name="room_details_people">Personen</string>
     <string name="room_details_files">Dateien</string>
     <string name="room_details_settings">Einstellungen</string>
     <string name="room_details_selected">ausgewählt</string>
     <string name="malformed_id">Ungültige ID. Eine E-Mail-Adresse oder eine Matrix-ID (\'@localpart:domain\') ist erforderlich.</string>
     <string name="room_details_people_invited_group_name">EINGELADEN</string>
-    <string name="room_details_people_present_group_name">EINGETRETEN</string>
+    <string name="room_details_people_present_group_name">TEILNEHMER</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Grund für das Melden dieses Inhalts</string>
@@ -485,7 +485,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="settings_messages_sent_by_bot">Nachrichten von Bots</string>
 
     <string name="settings_background_sync">Hintergrundsynchronisierung</string>
-    <string name="settings_enable_background_sync">Aktiviere Hintergrundsynchronisierung</string>
+    <string name="settings_enable_background_sync">Hintergrundsynchronisierung aktivieren</string>
     <string name="settings_set_sync_timeout">Timeout für Synchronisierungsanfragen</string>
     <string name="settings_set_sync_delay">Verzögerung zwischen zwei Synchronisierungsanfragen</string>
     <string name="settings_second">Sekunde</string>
@@ -566,15 +566,15 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_settings_room_name">Raumname</string>
     <string name="room_settings_topic">Thema</string>
     <string name="room_settings_room_tag">Raum-Markierung</string>
-    <string name="room_settings_tag_pref_dialog_title">Getagged als:</string>
+    <string name="room_settings_tag_pref_dialog_title">Markiert als:</string>
     <string name="room_settings_mute_notifs">Benachrichtigungen stummschalten</string>
 
     <!-- Room settings: Room tag -->
-    <string name="room_settings_tag_pref_entry_favourite">Als Favorit setzen</string>
+    <string name="room_settings_tag_pref_entry_favourite">Favorit</string>
     <string name="room_settings_tag_pref_entry_low_priority">Niedrige Priorität</string>
     <string name="room_settings_tag_pref_entry_none">Keine</string>
     <string name="room_settings_tag_pref_no_tag">Nicht getaggt</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">Als Favorit setzen</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">Favorit</string>
     <string name="room_settings_tag_pref_entry_value_low_priority">niedrige Priorität</string>
     <string name="room_settings_tag_pref_entry_value_none">keine</string>
 
@@ -684,7 +684,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_import_room_keys">Raumschlüssel importieren</string>
     <string name="encryption_import_room_keys_summary">Schlüssel aus lokaler Datei importieren</string>
     <string name="encryption_import_import">Importieren</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Verschlüssele nur für verifizierte Geräte</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Verschlüsselung nur mit verifizierten Geräten durchführen</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an unbestätigte Geräte senden</string>
 
     <string name="encryption_information_not_verified">NICHT verifiziert</string>
@@ -716,7 +716,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="select_room_directory">Wähle Raum-Verzeichnis</string>
     <string name="directory_server_fail_to_retrieve_server">Der Server kann nicht verfügbar oder überlastet sein</string>
     <string name="directory_server_type_homeserver">Gebe einen Heimserver ein um seine öffentlichen Räume aufzulisten</string>
-    <string name="directory_server_placeholder">Heimserver-URL</string>
+    <string name="directory_server_placeholder">Home-Server-URL</string>
     <string name="directory_server_all_rooms_on_server">Alle Räume auf dem %s-Server</string>
     <string name="directory_server_native_rooms">Alle nativen %s-Räume</string>
 
