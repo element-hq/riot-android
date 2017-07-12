@@ -530,6 +530,10 @@
     <string name="account_email_validation_message">Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
     <string name="account_email_validation_error">Verificación de su correo electrónico falló. Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
 
+    <string name="account_email_already_used_error">This email address is already in use</string>
+    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
+    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+
     <string name="settings_change_password">Cambiar Contraseña</string>
     <string name="settings_old_password">Contraseña anterior</string>
     <string name="settings_new_password">Contraseña nueva</string>
