@@ -203,14 +203,29 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
         }
 
-
         private void onRowAdded(MessageRow row) {
-            String eventId = row.getEvent().eventId;
-            mRowsMap.put(eventId, row);
+            String addedEventId = row.getEvent().eventId;
+            mRowsMap.put(addedEventId, row);
 
-            if (mIsExpanded) {
-                mHiddenEventIds.remove(eventId);
+            if (mRowsMap.size() > 1) {
+                if (mHiddenEventIds.contains(eventId)) {
+                    mHiddenEventIds.remove(eventId);
+
+                    if (mIsExpanded) {
+                        mHiddenEventIds.removeAll(mRowsMap.keySet());
+                    } else {
+                        mHiddenEventIds.addAll(mRowsMap.keySet());
+                    }
+
+                } else {
+                    if (mIsExpanded) {
+                        mHiddenEventIds.remove(addedEventId);
+                    } else {
+                        mHiddenEventIds.add(addedEventId);
+                    }
+                }
             } else {
+                mHiddenEventIds.removeAll(mRowsMap.keySet());
                 mHiddenEventIds.add(eventId);
             }
 
@@ -254,13 +269,31 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
         }
 
-        public void removeByEventId(String eventId) {
-            if (null != eventId) {
-                MessageRow row = mRowsMap.get(eventId);
+        public boolean canAddEvent(Event event) {
+            return isEmpty() ||
+                    (AdapterUtils.zeroTimeDate(new Date(event.getOriginServerTs())).getTime() ==
+                            AdapterUtils.zeroTimeDate(new Date(getOriginServerTs())).getTime());
+        }
+
+        public void removeByEventId(String eventIdToRemove) {
+            if (null != eventIdToRemove) {
+                MessageRow row = mRowsMap.get(eventIdToRemove);
 
                 if (null != row) {
-                    mRowsMap.remove(eventId);
+                    mRowsMap.remove(eventIdToRemove);
                     mRows.remove(row);
+
+                    mHiddenEventIds.remove(eventIdToRemove);
+                }
+
+                if (isEmpty()) {
+                    MessageRow selfRow = mEventRowMap.get(eventId);
+                    if (null != selfRow) {
+                        remove(selfRow);
+                    }
+                } else if (mRowsMap.size() == 1) {
+                    mHiddenEventIds.removeAll(mRowsMap.keySet());
+                    mHiddenEventIds.add(eventId);
                 }
 
                 refreshOriginServerTs();
@@ -457,13 +490,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 MessageRow melsRow = null;
 
                 if (supportMels() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-                    if ((getCount() > 0) && (getItem(0).getEvent() instanceof MelsEvent)) {
+                    if ((getCount() > 0) && (getItem(0).getEvent() instanceof MelsEvent) && ((MelsEvent)getItem(0).getEvent()).canAddEvent(row.getEvent())) {
                         melsRow = getItem(0);
                     }
 
                     if (null == melsRow) {
                         melsRow = new MessageRow(new MelsEvent(), null);
-                        insert(melsRow, 0);
+                        super.insert(melsRow, 0);
                         mEventRowMap.put(melsRow.getEvent().eventId, row);
                     }
 
@@ -489,6 +522,41 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             super.remove(row);
+
+            int position = getPosition(row);
+            if (position >= 0) {
+                super.remove(row);
+
+                if (supportMels() && !TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+                    if ((position > 0) && (position < getCount()-1)) {
+                        Event eventBef = getItem(position-1).getEvent();
+                        Event eventAfter = getItem(position).getEvent();
+
+                        if (TextUtils.equals(eventBef.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER) &&
+                                eventAfter instanceof MelsEvent) {
+                            MelsEvent nextMelsEvent = (MelsEvent)eventAfter;
+                            MelsEvent melsEvent = null;
+
+                            for(int i = position-1; i >= 0; i--) {
+                                if (getItem(i).getEvent() instanceof MelsEvent) {
+                                    melsEvent = (MelsEvent)getItem(i).getEvent();
+                                    break;
+                                }
+                            }
+
+                            if (null != melsEvent) {
+                                List<MessageRow> nextRows =  new ArrayList<>(nextMelsEvent.getRows());
+                                if (melsEvent.canAddEvent(nextRows.get(0).getEvent())) {
+                                    for(MessageRow rowToAdd : nextRows) {
+                                        nextMelsEvent.removeByEventId(rowToAdd.getEvent().eventId);
+                                        melsEvent.add(rowToAdd);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -510,13 +578,26 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 if (supportMels() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
                     MessageRow melsRow = null;
 
-                    if ((getCount() > 0) && ((getItem(getCount()-1)).getEvent() instanceof MelsEvent)) {
-                        melsRow = getItem(getCount()-1);
+                    // search backward the mels event
+                    for(int i = getCount()-1; i >= 0; i--) {
+                        MessageRow curRow = getItem(i);
+
+                        if (curRow.getEvent() instanceof MelsEvent) {
+                            // the event can be added (same day ?)
+                            if (((MelsEvent) curRow.getEvent()).canAddEvent(row.getEvent())) {
+                                melsRow = curRow;
+                            }
+                            break;
+                        } else
+                            // there is no more room member events
+                            if (!TextUtils.equals(curRow.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+                            break;
+                        }
                     }
 
                     if (null == melsRow) {
                         melsRow = new MessageRow(new MelsEvent(), null);
-                        add(melsRow);
+                        super.add(melsRow);
                         mEventRowMap.put(melsRow.getEvent().eventId, row);
                     }
 
@@ -567,18 +648,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // loop because the list is not sorted
             for (MessageRow row : rows) {
-                long rowTs = row.getEvent().getOriginServerTs();
+                if (!(row.getEvent() instanceof MelsEvent)) {
+                    long rowTs = row.getEvent().getOriginServerTs();
 
-                // check if the row event has been received after eventTs (from)
-                if (rowTs > eventTs) {
-                    // not yet initialised
-                    if (messageRow == null) {
-                        messageRow = row;
-                    }
-                    // keep the closest row
-                    else if (rowTs < messageRow.getEvent().getOriginServerTs()) {
-                        messageRow = row;
-                        Log.d(LOG_TAG, "## getClosestRowFromTs() " + row.getEvent().eventId);
+                    // check if the row event has been received after eventTs (from)
+                    if (rowTs > eventTs) {
+                        // not yet initialised
+                        if (messageRow == null) {
+                            messageRow = row;
+                        }
+                        // keep the closest row
+                        else if (rowTs < messageRow.getEvent().getOriginServerTs()) {
+                            messageRow = row;
+                            Log.d(LOG_TAG, "## getClosestRowFromTs() " + row.getEvent().eventId);
+                        }
                     }
                 }
             }
@@ -596,18 +679,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // loop because the list is not sorted
             for (MessageRow row : rows) {
-                long rowTs = row.getEvent().getOriginServerTs();
+                if (!(row.getEvent() instanceof MelsEvent)) {
+                    long rowTs = row.getEvent().getOriginServerTs();
 
-                // check if the row event has been received before eventTs (from)
-                if (rowTs < eventTs) {
-                    // not yet initialised
-                    if (messageRow == null) {
-                        messageRow = row;
-                    }
-                    // keep the closest row
-                    else if (rowTs > messageRow.getEvent().getOriginServerTs()) {
-                        messageRow = row;
-                        Log.d(LOG_TAG, "## getClosestRowBeforeTs() " + row.getEvent().eventId);
+                    // check if the row event has been received before eventTs (from)
+                    if (rowTs < eventTs) {
+                        // not yet initialised
+                        if (messageRow == null) {
+                            messageRow = row;
+                        }
+                        // keep the closest row
+                        else if (rowTs > messageRow.getEvent().getOriginServerTs()) {
+                            messageRow = row;
+                            Log.d(LOG_TAG, "## getClosestRowBeforeTs() " + row.getEvent().eventId);
+                        }
                     }
                 }
             }
@@ -760,7 +845,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 break;
             case ROW_TYPE_NOTICE:
                 inflatedView = getNoticeView(position, convertView, parent);
-                return inflatedView;
+                break;
             case ROW_TYPE_EMOTE:
                 inflatedView = getEmoteView(position, convertView, parent);
                 break;
@@ -1056,21 +1141,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         boolean isMergedView = false;
         boolean willBeMerged = false;
 
-        if (!mIsSearchMode) {
-            if ((position > 0) && VectorMessagesAdapterHelper.shouldMergeEvent(event)) {
+        // the notices are never merged
+        if (!mIsSearchMode && (ROW_TYPE_NOTICE != msgType)) {
+            if (position > 0) {
                 MessageRow prevRow = getItem(position - 1);
                 isMergedView = TextUtils.equals(prevRow.getEvent().getSender(), event.getSender());
             }
 
             // not the last message
             if ((position + 1) < this.getCount()) {
-                MessageRow nextRow = getItem(position + 1);
-
-                if (VectorMessagesAdapterHelper.shouldMergeEvent(event) || VectorMessagesAdapterHelper.shouldMergeEvent(nextRow.getEvent())) {
-                    // the message will be merged if the message senders are not the same
-                    // or the message is an avatar / displayname update.
-                    willBeMerged = TextUtils.equals(nextRow.getEvent().getSender(), event.getSender()) && VectorMessagesAdapterHelper.shouldMergeEvent(nextRow.getEvent());
-                }
+                Event nextEvent = getItem(position + 1).getEvent();
+                int nextRowType = getItemViewType(nextEvent);
+                willBeMerged = (ROW_TYPE_NOTICE != nextRowType) && TextUtils.equals(nextEvent.getSender(), event.getSender());
             }
         }
 
@@ -1728,30 +1810,32 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             tsTextView.setVisibility(View.VISIBLE);
         }
 
-        contentView.findViewById(R.id.message_timestamp_layout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.equals(eventId, mHighlightedEventId)) {
-                    onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
-                } else {
-                    onEventTap(eventId);
+        if (!(event instanceof MelsEvent)) {
+            contentView.findViewById(R.id.message_timestamp_layout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (TextUtils.equals(eventId, mHighlightedEventId)) {
+                        onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+                    } else {
+                        onEventTap(eventId);
+                    }
                 }
-            }
-        });
+            });
 
-        contentView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (!mIsSearchMode) {
-                    onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
-                    mHighlightedEventId = eventId;
-                    notifyDataSetChanged();
-                    return true;
+            contentView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (!mIsSearchMode) {
+                        onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+                        mHighlightedEventId = eventId;
+                        notifyDataSetChanged();
+                        return true;
+                    }
+
+                    return false;
                 }
-
-                return false;
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -1854,7 +1938,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             final Event event = row.getEvent();
 
             if (mE2eIconByEventId.containsKey(event.eventId)) {
-                senderMargin.setVisibility(senderNameView.getVisibility());
+                if (null != senderMargin) {
+                    senderMargin.setVisibility(senderNameView.getVisibility());
+                }
                 e2eIconView.setVisibility(View.VISIBLE);
                 e2eIconView.setImageResource(mE2eIconByEventId.get(event.eventId));
 
@@ -1881,7 +1967,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 });
             } else {
                 e2eIconView.setVisibility(View.GONE);
-                senderMargin.setVisibility(View.GONE);
+                if (null != senderMargin) {
+                    senderMargin.setVisibility(View.GONE);
+                }
             }
         }
     }

@@ -140,8 +140,9 @@ public class VectorMessagesAdapterHelper {
                         Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType) ||
                         Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
                         Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
-                        ) {
+                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType) ||
+                        Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType) ||
+                        Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
                     senderTextView.setVisibility(View.GONE);
                 } else {
                     senderTextView.setVisibility(View.VISIBLE);
@@ -643,33 +644,6 @@ public class VectorMessagesAdapterHelper {
             return event.hasContentFields() && (display.getTextualDisplay() != null);
         }
         return false;
-    }
-
-
-    /**
-     * Some event should never be merged.
-     * e.g. the profile info update (avatar, display name...)
-     *
-     * @param event the event
-     * @return true if the event can be merged.
-     */
-    static boolean shouldMergeEvent(Event event) {
-        boolean res = true;
-
-        // user profile update should not be merged
-        if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-            EventContent eventContent = JsonUtils.toEventContent(event.getContentAsJsonObject());
-            EventContent prevEventContent = event.getPrevContent();
-            String prevMembership = null;
-
-            if (null != prevEventContent) {
-                prevMembership = prevEventContent.membership;
-            }
-
-            res = !TextUtils.equals(prevMembership, eventContent.membership);
-        }
-
-        return res && !event.isCallEvent();
     }
 
     //================================================================================

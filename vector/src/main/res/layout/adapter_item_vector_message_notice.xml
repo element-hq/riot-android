@@ -36,30 +36,6 @@
             android:orientation="vertical"
             android:paddingBottom="5dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/message_timestamp_layout"
-                    android:orientation="horizontal">
-
-                    <include layout="@layout/vector_message_sender" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/message_timestamp_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:orientation="horizontal">
-
-                    <include layout="@layout/vector_message_timestamp" />
-                </LinearLayout>
-            </RelativeLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,6 +61,16 @@
                             android:layout_height="14dp"
                             android:src="@drawable/e2e_verified" />
 
+                        <LinearLayout
+                            android:id="@+id/message_timestamp_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:orientation="horizontal">
+
+                            <include layout="@layout/vector_message_timestamp" />
+                        </LinearLayout>
+
                         <TextView
                             android:id="@+id/messagesAdapter_body"
                             android:layout_width="match_parent"
@@ -95,8 +81,8 @@
                             android:autoLink="all"
                             android:text="A body"
                             android:textIsSelectable="false"
-                            android:textSize="14sp" />
-
+                            android:textSize="14sp"
+                            android:layout_toLeftOf="@+id/message_timestamp_layout" />
                     </RelativeLayout>
 
                 </FrameLayout>
