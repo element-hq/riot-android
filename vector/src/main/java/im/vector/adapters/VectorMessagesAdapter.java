@@ -2116,6 +2116,22 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     /**
+     * Tells if the event is mReadMarkerEventId one.
+     *
+     * @param event the event to test
+     * @return
+     */
+    private boolean isReadMarkedEvent(Event event) {
+        // if the read marked event is hidden and the event is a merged one
+        if ((null != mReadMarkerEventId) && (mHiddenEventIds.contains(mReadMarkerEventId) && (event instanceof MelsEvent))) {
+            // check it is contains in it
+            return ((MelsEvent)event).contains(mReadMarkerEventId);
+        }
+
+        return event.eventId.equals(mReadMarkerEventId);
+    }
+
+    /**
      * Check whether the read marker view should be displayed for the given row
      *
      * @param inflatedView row view
@@ -2127,7 +2143,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         final View readMarkerView = inflatedView.findViewById(R.id.message_read_marker);
         if (readMarkerView != null) {
             if (event != null && !event.isDummyEvent() && mReadMarkerEventId != null && mCanShowReadMarker
-                    && event.eventId.equals(mReadMarkerEventId) && !mIsPreviewMode && !mIsSearchMode
+                    && isReadMarkedEvent(event) && !mIsPreviewMode && !mIsSearchMode
                     && (!mReadMarkerEventId.equals(mReadReceiptEventId) || position < getCount() - 1)) {
                 Log.d(LOG_TAG, " Display read marker " + event.eventId + " mReadMarkerEventId" + mReadMarkerEventId);
                 // Show the read marker
