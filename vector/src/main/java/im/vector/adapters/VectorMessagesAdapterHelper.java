@@ -191,27 +191,66 @@ public class VectorMessagesAdapterHelper {
      * Load the avatar image in the avatar view
      *
      * @param avatarView  the avatar view
-     * @param member      the room member
-     * @param userId      the user id
-     * @param displayName the display name
-     * @param url         the avatar url
+     * @param row the message row
      */
-    void loadMemberAvatar(ImageView avatarView, RoomMember member, String userId, String displayName, String url) {
+    void loadMemberAvatar(ImageView avatarView, MessageRow row) {
+        RoomState roomState = row.getRoomState();
+        Event event = row.getEvent();
+
+        RoomMember roomMember = null;
+
+        if (null != roomState) {
+            roomMember = roomState.getMember(event.getSender());
+        }
+
+        String url = null;
+        String displayName = null;
+
+        // Check whether this avatar url is updated by the current event (This happens in case of new joined member)
+        JsonObject msgContent = event.getContentAsJsonObject();
+
+        if (msgContent.has("avatar_url")) {
+            url = msgContent.get("avatar_url") == JsonNull.INSTANCE ? null : msgContent.get("avatar_url").getAsString();
+        }
+
+        if (msgContent.has("membership")) {
+            String memberShip = msgContent.get("membership") == JsonNull.INSTANCE ? null : msgContent.get("membership").getAsString();
+
+            // the avatar url is the invited one not the inviter one.
+            if (TextUtils.equals(memberShip, RoomMember.MEMBERSHIP_INVITE)) {
+                url = null;
+
+                if (null != roomMember) {
+                    url = roomMember.getAvatarUrl();
+                }
+            }
+
+            if (TextUtils.equals(memberShip, RoomMember.MEMBERSHIP_JOIN)) {
+                // in some cases, the displayname cannot be retrieved because the user member joined the room with this event
+                // without being invited (a public room for example)
+                if (msgContent.has("displayname")) {
+                    displayName = msgContent.get("displayname") == JsonNull.INSTANCE ? null : msgContent.get("displayname").getAsString();
+                }
+            }
+        }
+
+        final String userId = event.getSender();
+
         if (!mSession.isAlive()) {
             return;
         }
 
         // if there is no preferred display name, use the member one
-        if (TextUtils.isEmpty(displayName) && (null != member)) {
-            displayName = member.displayname;
+        if (TextUtils.isEmpty(displayName) && (null != roomMember)) {
+            displayName = roomMember.displayname;
         }
 
-        if ((member != null) && (null == url)) {
-            url = member.getAvatarUrl();
+        if ((roomMember != null) && (null == url)) {
+            url = roomMember.getAvatarUrl();
         }
 
-        if (null != member) {
-            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, member.getUserId(), displayName);
+        if (null != roomMember) {
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, roomMember.getUserId(), displayName);
         } else {
             VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, userId, displayName);
         }
@@ -227,13 +266,7 @@ public class VectorMessagesAdapterHelper {
      */
     View setSenderAvatar(View convertView, MessageRow row, boolean isMergedView) {
         Event event = row.getEvent();
-        RoomState roomState = row.getRoomState();
 
-        RoomMember sender = null;
-
-        if (null != roomState) {
-            sender = roomState.getMember(event.getSender());
-        }
 
         View avatarLayoutView = convertView.findViewById(R.id.messagesAdapter_roundAvatar);
 
@@ -262,7 +295,6 @@ public class VectorMessagesAdapterHelper {
 
         if (null != avatarLayoutView) {
             ImageView avatarImageView = (ImageView) avatarLayoutView.findViewById(R.id.avatar_img);
-            final String userId = event.getSender();
 
             if (isMergedView) {
                 avatarLayoutView.setVisibility(View.GONE);
@@ -270,38 +302,7 @@ public class VectorMessagesAdapterHelper {
                 avatarLayoutView.setVisibility(View.VISIBLE);
                 avatarImageView.setTag(null);
 
-                String url = null;
-                String displayName = null;
-
-                // Check whether this avatar url is updated by the current event (This happens in case of new joined member)
-                JsonObject msgContent = event.getContentAsJsonObject();
-
-                if (msgContent.has("avatar_url")) {
-                    url = msgContent.get("avatar_url") == JsonNull.INSTANCE ? null : msgContent.get("avatar_url").getAsString();
-                }
-
-                if (msgContent.has("membership")) {
-                    String memberShip = msgContent.get("membership") == JsonNull.INSTANCE ? null : msgContent.get("membership").getAsString();
-
-                    // the avatar url is the invited one not the inviter one.
-                    if (TextUtils.equals(memberShip, RoomMember.MEMBERSHIP_INVITE)) {
-                        url = null;
-
-                        if (null != sender) {
-                            url = sender.getAvatarUrl();
-                        }
-                    }
-
-                    if (TextUtils.equals(memberShip, RoomMember.MEMBERSHIP_JOIN)) {
-                        // in some cases, the displayname cannot be retrieved because the user member joined the room with this event
-                        // without being invited (a public room for example)
-                        if (msgContent.has("displayname")) {
-                            displayName = msgContent.get("displayname") == JsonNull.INSTANCE ? null : msgContent.get("displayname").getAsString();
-                        }
-                    }
-                }
-
-                loadMemberAvatar(avatarImageView, sender, userId, displayName, url);
+                loadMemberAvatar(avatarImageView, row);
             }
         }
 
