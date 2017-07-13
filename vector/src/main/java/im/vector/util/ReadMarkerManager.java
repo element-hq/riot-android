@@ -545,14 +545,18 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
             final Event currentReadMarkerEvent = getEvent(mReadMarkerEventId);
             if (currentReadMarkerEvent != null) {
                 final long currentReadMarkerTs = currentReadMarkerEvent.getOriginServerTs();
-                final Event closestEvent = mVectorMessageListFragment.getMessageAdapter().getClosestRow(newReadMarkerEvent).getEvent();
-                final long newReadMarkerTs = closestEvent.getOriginServerTs();
-                Log.v(LOG_TAG, "setReadMarkerToLastVisibleRow currentReadMarkerEvent:" + currentReadMarkerEvent.eventId
-                        + " TS:" + currentReadMarkerTs + " closestEvent:" + closestEvent.eventId + " TS:" + closestEvent.getOriginServerTs());
-                if (newReadMarkerTs > currentReadMarkerTs) {
-                    Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId + " isMessageId:" + MXSession.isMessageId(newReadMarkerEvent.eventId));
-                    mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
-                    onReadMarkerChanged(mRoom.getRoomId());
+                final MessageRow closestRow = mVectorMessageListFragment.getMessageAdapter().getClosestRow(newReadMarkerEvent);
+
+                if (null != closestRow) {
+                    final Event closestEvent = closestRow.getEvent();
+                    final long newReadMarkerTs = closestEvent.getOriginServerTs();
+                    Log.v(LOG_TAG, "setReadMarkerToLastVisibleRow currentReadMarkerEvent:" + currentReadMarkerEvent.eventId
+                            + " TS:" + currentReadMarkerTs + " closestEvent:" + closestEvent.eventId + " TS:" + closestEvent.getOriginServerTs());
+                    if (newReadMarkerTs > currentReadMarkerTs) {
+                        Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId + " isMessageId:" + MXSession.isMessageId(newReadMarkerEvent.eventId));
+                        mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
+                        onReadMarkerChanged(mRoom.getRoomId());
+                    }
                 }
             }
         }
