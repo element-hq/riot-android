@@ -371,7 +371,7 @@
     <string name="room_settings_labs_warning_message">这些是可能以意外的方式坏掉的实验性的特性。请谨慎使用。</string>
     <string name="room_settings_labs_end_to_end">端对端加密</string>
     <string name="room_settings_labs_end_to_end_warnings">你需要登出来启用加密。</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">永不从这个设备发送加密消息到未验证的设备</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">在这个聊天室永不从这个设备发送加密消息到未验证的设备。</string>
 
     <string name="room_settings_addresses_no_local_addresses">这个聊天室没有本地地址</string>
     <string name="room_settings_addresses_add_new_address">新地址（如 #foo:matrix.org）</string>
@@ -421,7 +421,7 @@
     <string name="ongoing_conference_call">" 正在进行的会议通话。以语音或视频的形式加入。"</string>
     <string name="ongoing_conference_call_voice">语音</string>
     <string name="missing_permissions_to_start_conf_call">在这个聊天室里你需要权限来邀请开始一个会议</string>
-    <string name="send_anyway">无论任何都发送</string>
+    <string name="send_anyway">总是发送</string>
     <string name="send_bug_report">Bug 报告</string>
     <string name="send_bug_report_logs_description">为了诊断问题，这个客户端的日志会随这个 bug 报告发送。如果你只想发送上面的文字，请取消选择：</string>
     <string name="send_bug_report_sent">bug 报告已经成功发送</string>
@@ -595,9 +595,9 @@
     <string name="ssl_expected_existing_expl">证书已从以前受信任的一个更改为不受信任的证书。服务器可能已更新其证书。联系服务器管理员以获取预期的指纹。</string>
     <string name="ssl_only_accept">如果服务器管理员已经发布了与上述相匹配的指纹，则只接受该证书。</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
-    <string name="room_details_people">人</string>
+    <string name="room_details_people">联系人</string>
     <string name="malformed_id">格式不正确的 ID。应该是一个电子邮件地址或 Matrix ID，如”@localpart:domain“</string>
-    <string name="tab_title_search_people">人</string>
+    <string name="tab_title_search_people">联系人</string>
     <string name="directory_search_room_for">为 %2$s 找到 %1$d 个聊天室</string>
     <string name="directory_search_rooms_for">为 %2$s 找到 %1$d 个聊天室</string>
     <string name="room_sliding_menu_third_party_notices">第三方通知</string>
@@ -633,12 +633,12 @@
     <string name="action_global_search">全局搜索</string>
     <string name="bottom_action_home">主页</string>
     <string name="bottom_action_favourites">收藏夹</string>
-    <string name="bottom_action_people">人</string>
+    <string name="bottom_action_people">联系人</string>
     <string name="bottom_action_rooms">聊天室</string>
 
     <string name="home_filter_placeholder_home">搜索聊天室</string>
     <string name="home_filter_placeholder_favorites">搜索收藏夹</string>
-    <string name="home_filter_placeholder_people">搜索人</string>
+    <string name="home_filter_placeholder_people">搜索联系人</string>
     <string name="home_filter_placeholder_rooms">搜索聊天室</string>
 
     <!-- Home fragment -->
