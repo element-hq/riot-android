@@ -1,53 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@android:color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:id="@+id/search_action_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/search_toolbar"
-            android:layout_alignParentTop="true"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/vector_green_color"
-            style="@style/VectorToolbarStyle">
-
-            <RelativeLayout
-                android:id="@+id/search_edit_text_layout"
-                android:background="@android:color/transparent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/search_action_bar_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:background="@android:color/transparent"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:fontFamily="sans-serif-medium"
-                    android:hint="@string/search_hint"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:textColorHint="?attr/vector_search_hint_color"
-                    android:textCursorDrawable="@drawable/searches_cursor_background"
-                    android:textSize="20sp" />
-
-            </RelativeLayout>
-
-
-        </android.support.v7.widget.Toolbar>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/search_background_imageview"
@@ -61,10 +15,9 @@
     <!-- fragment container -->
     <LinearLayout
         android:id="@+id/search_main_page"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_below="@id/search_toolbar"
         android:layout_centerHorizontal="true"
         android:orientation="vertical">
 
@@ -86,19 +39,19 @@
 
             <ProgressBar
                 android:id="@+id/search_load_oldest_progress"
-                android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:indeterminate="true"
-                android:visibility="gone" />
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:indeterminate="true" />
 
             <TextView
                 android:id="@+id/search_no_result_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/search_no_results"
-                android:textSize="17sp"
                 android:textStyle="bold"
-                android:visibility="gone" />
+                android:textSize="17sp"
+                android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -106,22 +59,19 @@
         android:id="@+id/search_in_progress_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/search_toolbar"
         android:visibility="gone">
-
         <View
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
+            android:layout_width="match_parent"
             android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
             android:background="?attr/chat_encoding_background" />
 
         <ProgressBar
-            android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_width="40dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:indeterminate="true" />
+            android:indeterminate="true"/>
     </RelativeLayout>
-    </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>
