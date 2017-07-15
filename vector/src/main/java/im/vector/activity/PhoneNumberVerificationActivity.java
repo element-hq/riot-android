@@ -44,7 +44,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.ThemeUtils;
 
-public class PhoneNumberVerificationActivity extends AppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
+public class PhoneNumberVerificationActivity extends VectorAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
 
     private static final String LOG_TAG = PhoneNumberVerificationActivity.class.getSimpleName();
 
@@ -85,7 +85,6 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_phone_number_verification);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

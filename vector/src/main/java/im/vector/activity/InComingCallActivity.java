@@ -45,7 +45,7 @@ import im.vector.util.VectorUtils;
  * InComingCallActivity is Dialog Activity, displayed when an incoming call (audio or a video) over IP
  * is received by the user. The user is asked to accept or ignore.
  */
-public class InComingCallActivity extends AppCompatActivity {
+public class InComingCallActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = "InComingCallActivity";
 
     // only one instance of this class should be displayed
@@ -135,7 +135,6 @@ public class InComingCallActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setFinishOnTouchOutside(false);
@@ -214,7 +213,7 @@ public class InComingCallActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-                
+
                 // create the call view to enable mMxCallListener being used,
                 // otherwise call API is not enabled
                 mMxCall.createCallView();

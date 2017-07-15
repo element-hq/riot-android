@@ -33,6 +33,8 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;

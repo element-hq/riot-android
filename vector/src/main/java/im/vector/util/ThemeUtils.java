@@ -17,16 +17,12 @@
 package im.vector.util;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.annotation.IntDef;
 import android.util.TypedValue;
 
-import java.util.HashMap;
-import java.util.Map;
 import im.vector.R;
 
 /**
@@ -53,9 +49,18 @@ public class ThemeUtils {
         if (currentTheme != null) {
             a.setTheme(currentTheme);
         } else {
-            // Just in case we had some problem anywhere reading, set the theme to light.
-            a.setTheme(THEME_LIGHT);
+            // Just in case we had some problem anywhere reading, set the theme to default.
+            a.setTheme(R.style.Theme_Vector_Light);
         }
+    }
+
+    /**
+     * A setTheme for themes that MUST have an action bar.
+     * TODO theme this properly in the future
+     * @param a
+     */
+    public static void activitySetThemeActionBar(Context a) {
+        a.setTheme(R.style.AppTheme);
     }
 
     /**

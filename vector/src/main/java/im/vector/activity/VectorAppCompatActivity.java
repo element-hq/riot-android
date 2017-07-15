@@ -1,7 +1,7 @@
 package im.vector.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,9 +10,9 @@ import im.vector.R;
 import im.vector.util.ThemeUtils;
 
 /**
- * A super activity for all vector activities
+ * A Base class for all vector activities that want to extend AppCompat
  */
-public class VectorActivity extends Activity {
+public class VectorAppCompatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
