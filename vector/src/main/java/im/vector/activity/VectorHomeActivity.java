@@ -27,6 +27,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -895,6 +896,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(secondaryColor);
         }
+
+        // Set color of toolbar search view
+        EditText edit = (EditText) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        edit.setTextColor(ThemeUtils.getColor(this, R.attr.vector_actionbar_text_color));
+        edit.setHintTextColor(ThemeUtils.getColor(this, R.attr.vector_actionbar_hint_text_color));
     }
 
     /**

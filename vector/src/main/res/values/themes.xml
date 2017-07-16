@@ -24,6 +24,7 @@
         <item name="vector_statusbar_color">#5EA584</item>
         <item name="vector_actionbar_background">#76CFA6</item>
         <item name="vector_actionbar_text_color">#FFFFFF</item>
+        <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
         <item name="vector_actionbar_icons_color">#FFFFFF</item>
 
         <!-- activities background -->
@@ -110,6 +111,7 @@
         <item name="vector_statusbar_color">#5EA584</item>
         <item name="vector_actionbar_background">#76CFA6</item>
         <item name="vector_actionbar_text_color">#FFFFFF</item>
+        <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
         <item name="vector_actionbar_icons_color">#FFFFFF</item>
 
         <!-- activities background -->

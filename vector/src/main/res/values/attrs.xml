@@ -17,6 +17,7 @@
     <!-- action bar color -->
     <attr name="vector_statusbar_color" format="color" />
     <attr name="vector_actionbar_background" format="color" />
+    <attr name="vector_actionbar_hint_text_color" format="color" />
     <attr name="vector_actionbar_text_color" format="color" />
     <attr name="vector_actionbar_icons_color" format="color" />
 
