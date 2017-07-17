@@ -152,13 +152,13 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
             convertView = this.mLayoutInflater.inflate(R.layout.adapter_item_vector_unknown_devices_header, null);
         }
 
-        TextView sectionNameTxtView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading);
+        TextView sectionNameTxtView = (TextView) convertView.findViewById(R.id.heading);
 
         if (null != sectionNameTxtView) {
             sectionNameTxtView.setText(getGroupTitle(groupPosition));
         }
 
-        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.heading_image);
 
         if (isExpanded) {
             imageView.setImageResource(R.drawable.ic_material_expand_less_black);

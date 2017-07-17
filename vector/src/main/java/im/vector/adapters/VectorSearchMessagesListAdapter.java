@@ -73,13 +73,6 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         mPattern = pattern;
     }
 
-    /**
-     * Highlight text style
-     */
-    protected CharacterStyle getHighLightTextStyle() {
-        return new BackgroundColorSpan(mSearchHighlightMessageTextColor);
-    }
-
     @Override
     protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
         return false;
@@ -115,7 +108,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         }
 
         // refresh the avatar
-        ImageView avatarView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_left).findViewById(R.id.avatar_img);
+        ImageView avatarView = (ImageView) convertView.findViewById(R.id.messagesAdapter_roundAvatar).findViewById(R.id.avatar_img);
         String url = null;
         // Check whether this avatar url is updated by the current event (This happens in case of new joined member)
         JsonObject msgContent = event.getContentAsJsonObject();
@@ -130,14 +123,14 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             displayName = msgContent.get("displayname") == JsonNull.INSTANCE ? null : msgContent.get("displayname").getAsString();
         }
 
-        loadMemberAvatar(avatarView, sender, event.getSender(), displayName, url);
+        mHelper.loadMemberAvatar(avatarView, sender, event.getSender(), displayName, url);
 
         // display the sender
-        TextView senderTextView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_sender);
-        senderTextView.setText(getUserDisplayName(event.getSender(), roomState));
+        TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
+        senderTextView.setText(VectorMessagesAdapterHelper.getUserDisplayName(event.getSender(), roomState));
 
         // display the body
-        TextView bodyTextView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body);
+        TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
         // set the message text
         EventDisplay display = new EventDisplay(mContext, event, (null != room) ? room.getLiveState() : null);
         CharSequence text = display.getTextualDisplay();
@@ -156,7 +149,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         }
 
         // display timestamp
-        TextView timeTextView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
+        TextView timeTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_timestamp);
         timeTextView.setText(AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true));
 
         // display the room name
@@ -194,8 +187,8 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mMessagesAdapterEventsListener) {
-                    mMessagesAdapterEventsListener.onContentClick(fPosition);
+                if (null != mVectorMessagesAdapterEventsListener) {
+                    mVectorMessagesAdapterEventsListener.onContentClick(fPosition);
                 }
             }
         });
@@ -204,8 +197,8 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (null != mMessagesAdapterEventsListener) {
-                    return mMessagesAdapterEventsListener.onContentLongClick(fPosition);
+                if (null != mVectorMessagesAdapterEventsListener) {
+                    return mVectorMessagesAdapterEventsListener.onContentLongClick(fPosition);
                 }
 
                 return false;

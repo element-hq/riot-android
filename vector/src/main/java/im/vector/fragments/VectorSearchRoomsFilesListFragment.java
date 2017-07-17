@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.matrix.androidsdk.adapters.MessageRow;
-import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.Message;
@@ -61,7 +61,7 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
     }
 
     @Override
-    public MessagesAdapter createMessagesAdapter() {
+    public AbstractMessagesAdapter createMessagesAdapter() {
         mIsMediaSearch = true;
         return new VectorSearchFilesListAdapter(mSession, getActivity(), (null == mRoomId), getMXMediasCache());
     }
