@@ -38,6 +38,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.client.EventsRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.util.Log;
@@ -480,7 +481,12 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         mAdapter.setNoMorePublicRooms(false);
 
         if (null == mEstimatedPublicRoomCount) {
-            mSession.getEventsApiClient().getPublicRoomsCount(
+            final EventsRestClient eventsRestClient = mSession != null ? mSession.getEventsApiClient() : null;
+            if (eventsRestClient == null) {
+                hidePublicRoomsLoadingView();
+                return;
+            }
+            eventsRestClient.getPublicRoomsCount(
                     mSelectedRoomDirectory.getServerUrl(),
                     mSelectedRoomDirectory.getThirdPartyInstanceId(),
                     mSelectedRoomDirectory.isIncludedAllNetworks(),
