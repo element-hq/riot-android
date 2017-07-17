@@ -542,6 +542,10 @@
     <string name="account_email_validation_message">Tarkista sähköpostisi ja seuraa sinne saamaasi linkkiä. Kun olet tehnyt tämän, paina "jatka".</string>
     <string name="account_email_validation_error">Sähköpostin vahvistaminen epäonnistui. Tarkista sähköpostisi ja seuraa sinne saamaasi linkkiä. Kun olet tehnyt tämän, paina "jatka".</string>
 
+    <string name="account_email_already_used_error">This email address is already in use</string>
+    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
+    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+
     <string name="settings_change_password">Vaihda salasana</string>
     <string name="settings_old_password">vanha salasana</string>
     <string name="settings_new_password">uusi salasana</string>

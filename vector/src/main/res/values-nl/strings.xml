@@ -530,6 +530,10 @@
     <string name="account_email_validation_message">Bekijk je e-mail en klik op de link dat de e-mail bevat. Zodra dit gedaan is, klik op verder gaan.</string>
     <string name="account_email_validation_error">Het verifïeren van het e-mailadres is mislukt. Bekijk je e-mail en klik op de link dat de e-mail bevat. Zodra dit gedaan is, klik op verder gaan</string>
 
+    <string name="account_email_already_used_error">This email address is already in use</string>
+    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
+    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+
     <string name="settings_change_password">Wachtwoord veranderen</string>
     <string name="settings_old_password">oud wachtwoord</string>
     <string name="settings_new_password">nieuw wachtwoord</string>
