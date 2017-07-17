@@ -80,7 +80,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
     }
 
     @Override
-    protected boolean supportEventGroup() {
+    protected boolean supportMessageRowMerge(MessageRow row) {
         return false;
     }
 

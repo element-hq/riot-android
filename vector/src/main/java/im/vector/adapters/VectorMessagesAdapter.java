@@ -324,10 +324,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
 
     /**
-     * @return true if the some events can be collapsed.
+     * Tests if the row can be inserted in a merge row.
+     *
+     * @param row the message row to test
+     * @return true if the row can be merged
      */
-    protected boolean supportEventGroup() {
-        return true;
+    protected boolean supportMessageRowMerge(MessageRow row) {
+        return EventGroup.isSupported(row);
     }
 
     @Override
@@ -354,9 +357,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (mIsSearchMode) {
             mLiveMessagesRowList.remove(row);
         } else {
-            if (supportEventGroup() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-                removeMemberShipEvent(row.getEvent().eventId);
-            }
+            removeFromEventGroup(row);
 
             // get the position before removing the item
             int position = getPosition(row);
@@ -365,11 +366,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             super.remove(row);
 
             // check merge
-            if (position >= 0) {
-                if (supportEventGroup() && !TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-                    checkEventGroupsMerge(position);
-                }
-            }
+            checkEventGroupsMerge(row, position);
         }
     }
 
@@ -1365,7 +1362,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         if (!event.isExpanded()) {
             avatarsLayout.setVisibility(View.VISIBLE);
-            List<MessageRow> messageRows = event.getRows();
             List<ImageView> avatarView = new ArrayList<>();
 
             avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_1));
@@ -1373,6 +1369,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_3));
             avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_4));
             avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_5));
+
+            List<MessageRow> messageRows = event.getAvatarRows(avatarView.size());
 
             for (int i = 0; i < avatarView.size(); i++) {
                 ImageView imageView = avatarView.get(i);
@@ -1392,7 +1390,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         headerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event.setIsExpaned(!event.isExpanded());
+                event.setIsExpanded(!event.isExpanded());
                 notifyDataSetChanged();
             }
         });
@@ -2139,13 +2137,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private boolean addToEventGroupToFront(MessageRow row) {
         MessageRow eventGroupRow = null;
 
-        if (supportEventGroup() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+        if (supportMessageRowMerge(row)) {
             if ((getCount() > 0) && (getItem(0).getEvent() instanceof EventGroup) && ((EventGroup) getItem(0).getEvent()).canAddRow(row)) {
                 eventGroupRow = getItem(0);
             }
 
             if (null == eventGroupRow) {
-                eventGroupRow = new MessageRow(new EventGroup(), null);
+                eventGroupRow = new MessageRow(new EventGroup(mHiddenEventIds), null);
                 super.insert(eventGroupRow, 0);
                 mEventRowMap.put(eventGroupRow.getEvent().eventId, row);
             }
@@ -2161,7 +2159,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param row
      */
     private void addToEventGroup(MessageRow row) {
-       if (supportEventGroup() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+       if (supportMessageRowMerge(row)) {
            MessageRow eventGroupRow = null;
 
            // search backward the EventGroup event
@@ -2182,7 +2180,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
            }
 
            if (null == eventGroupRow) {
-               eventGroupRow = new MessageRow(new EventGroup(), null);
+               eventGroupRow = new MessageRow(new EventGroup(mHiddenEventIds), null);
                super.add(eventGroupRow);
                mEventRowMap.put(eventGroupRow.getEvent().eventId, row);
            }
@@ -2192,36 +2190,42 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
 
-    List<EventGroup> mEventGroups = new ArrayList<>();
+    private List<EventGroup> mEventGroups = new ArrayList<>();
 
     /**
-     * Remove an event from the known event groups
+     * Remove a message row from the known event groups
      *
-     * @param eventId the event id
+     * @param row the message row
+     * @return true if the message has been removed
      */
-    private void removeMemberShipEvent(String eventId) {
-        for (EventGroup eventGroup : mEventGroups) {
-            if (eventGroup.contains(eventId)) {
-                eventGroup.removeByEventId(eventId);
+    private boolean removeFromEventGroup(MessageRow row) {
+        if (supportMessageRowMerge(row)) {
+            String eventId = row.getEvent().eventId;
+            for (EventGroup eventGroup : mEventGroups) {
+                if (eventGroup.contains(eventId)) {
+                    eventGroup.removeByEventId(eventId);
 
-                if (eventGroup.isEmpty()) {
-                    mEventGroups.remove(eventGroup);
-
-                    MessageRow row = mEventRowMap.get(eventGroup.eventId);
-                    super.remove(row);
+                    if (eventGroup.isEmpty()) {
+                        mEventGroups.remove(eventGroup);
+                        super.remove(row);
+                        return true;
+                    }
                 }
             }
         }
+
+        return false;
     }
 
     /**
      * This method is called after a message deletion at position 'position'.
      * It checks and merges if required two EventGroup around the deleted item.
      *
+     * @param deletedRow the deleted row
      * @param position the deleted item position
      */
-    private void checkEventGroupsMerge(int position) {
-        if ((position > 0) && (position < getCount() - 1)) {
+    private void checkEventGroupsMerge(MessageRow deletedRow, int position) {
+        if ((position > 0) && (position < getCount() - 1) && !EventGroup.isSupported(deletedRow)) {
             Event eventBef = getItem(position - 1).getEvent();
             Event eventAfter = getItem(position).getEvent();
 

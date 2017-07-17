@@ -51,10 +51,6 @@ public class EventGroup extends Event {
     /**
      * Constructors
      */
-    public EventGroup() {
-        this(new HashSet<String>());
-    }
-
     public EventGroup(Set<String> hiddenGroupIds) {
         // defines an MessageRowGroup unique ID
         eventId = "EventGroup-" + System.currentTimeMillis();
@@ -110,7 +106,6 @@ public class EventGroup extends Event {
      * @param row the added MessageRow.
      */
     private void onRowAdded(MessageRow row) {
-
         // update the map
         String addedEventId = row.getEvent().eventId;
         mRowsMap.put(addedEventId, row);
@@ -188,7 +183,7 @@ public class EventGroup extends Event {
      *
      * @param isExpanded the new expand status
      */
-    public void setIsExpaned(boolean isExpanded) {
+    public void setIsExpanded(boolean isExpanded) {
         mIsExpanded = isExpanded;
 
         if (mIsExpanded) {
@@ -241,6 +236,32 @@ public class EventGroup extends Event {
     public List<MessageRow> getRows() {
         return new ArrayList<>(mRows);
     }
+
+    /**
+     * Provides a message rows list to display unique avatars
+     * @param maxCount the max number of items
+     * @return the messages row list
+     */
+    public List<MessageRow> getAvatarRows(int maxCount) {
+        Set<String> senders = new HashSet<>();
+        List<MessageRow> rows = new ArrayList<>();
+
+        for(MessageRow row : mRows) {
+            String rowSender = row.getEvent().sender;
+
+            if ((null != rowSender) && !senders.contains(rowSender)) {
+                rows.add(row);
+                senders.add(rowSender);
+
+                if (senders.size() == maxCount) {
+                    break;
+                }
+            }
+        }
+
+        return rows;
+    }
+
 
     @Override
     public java.lang.String toString() {
