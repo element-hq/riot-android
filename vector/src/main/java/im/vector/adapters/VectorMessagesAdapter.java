@@ -91,8 +91,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     private static final String LOG_TAG = "VMessagesAdapter";
 
-    // an event is highlighted when the user taps on it
-    private String mHighlightedEventId;
+    // an event is selected when the user taps on it
+    private String mSelectedEventId;
 
     // events listeners
     protected IMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
@@ -107,6 +107,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     // when the adapter is used in search mode
     // the searched message should be highlighted
     private String mSearchedEventId = null;
+    private String mHighlightedEventId = null;
 
     // formatted time by event id
     // it avoids computing them several times
@@ -735,10 +736,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     public void onEventTap(String eventId) {
         // the tap to select is only enabled when the adapter is not in search mode.
         if (!mIsSearchMode) {
-            if (null == mHighlightedEventId) {
-                mHighlightedEventId = eventId;
+            if (null == mSelectedEventId) {
+                mSelectedEventId = eventId;
             } else {
-                mHighlightedEventId = null;
+                mSelectedEventId = null;
             }
             notifyDataSetChanged();
         }
@@ -751,14 +752,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     public void setSearchedEventId(String eventId) {
         mSearchedEventId = eventId;
+        updateHighlightedEventId();
     }
 
     /**
      * Cancel the message selection mode
      */
     public void cancelSelectionMode() {
-        if (null != mHighlightedEventId) {
-            mHighlightedEventId = null;
+        if (null != mSelectedEventId) {
+            mSelectedEventId = null;
             notifyDataSetChanged();
         }
     }
@@ -767,7 +769,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @return true if there is a selected item.
      */
     public boolean isInSelectionMode() {
-        return null != mHighlightedEventId;
+        return null != mSelectedEventId;
     }
 
     /**
@@ -1329,6 +1331,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_HIDDEN), parent, false);
         }
 
+        // display the day separator
+        VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
+
         return convertView;
     }
 
@@ -1391,9 +1396,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             @Override
             public void onClick(View v) {
                 event.setIsExpanded(!event.isExpanded());
+                updateHighlightedEventId();
                 notifyDataSetChanged();
             }
         });
+
+        // set the message marker
+        convertView.findViewById(R.id.messagesAdapter_highlight_message_marker).setBackgroundColor(ContextCompat.getColor(mContext, TextUtils.equals(mHighlightedEventId, event.eventId) ? R.color.vector_green_color : android.R.color.transparent));
+
+        // display the day separator
+        VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
 
         return convertView;
     }
@@ -1576,20 +1588,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private void manageSelectionMode(final View contentView, final Event event) {
         final String eventId = event.eventId;
 
-        boolean isInSelectionMode = (null != mHighlightedEventId);
-        boolean isHighlighted = TextUtils.equals(eventId, mHighlightedEventId);
+        boolean isInSelectionMode = (null != mSelectedEventId);
+        boolean isSelected = TextUtils.equals(eventId, mSelectedEventId);
 
         // display the action icon when selected
-        contentView.findViewById(R.id.messagesAdapter_action_image).setVisibility(isHighlighted ? View.VISIBLE : View.GONE);
+        contentView.findViewById(R.id.messagesAdapter_action_image).setVisibility(isSelected ? View.VISIBLE : View.GONE);
 
-        float alpha = (!isInSelectionMode || isHighlighted) ? 1.0f : 0.2f;
+        float alpha = (!isInSelectionMode || isSelected) ? 1.0f : 0.2f;
 
         // the message body is dimmed when not selected
         contentView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
         contentView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
 
         TextView tsTextView = (TextView) contentView.findViewById(R.id.messagesAdapter_timestamp);
-        if (isInSelectionMode && isHighlighted) {
+        if (isInSelectionMode && isSelected) {
             tsTextView.setVisibility(View.VISIBLE);
         }
 
@@ -1597,7 +1609,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             contentView.findViewById(R.id.message_timestamp_layout).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (TextUtils.equals(eventId, mHighlightedEventId)) {
+                    if (TextUtils.equals(eventId, mSelectedEventId)) {
                         onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                     } else {
                         onEventTap(eventId);
@@ -1610,7 +1622,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 public boolean onLongClick(View v) {
                     if (!mIsSearchMode) {
                         onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
-                        mHighlightedEventId = eventId;
+                        mSelectedEventId = eventId;
                         notifyDataSetChanged();
                         return true;
                     }
@@ -1687,7 +1699,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     if (!mIsSearchMode) {
                         onMessageClick(event, getEventText(contentView), convertView.findViewById(R.id.messagesAdapter_action_anchor));
-                        mHighlightedEventId = event.eventId;
+                        mSelectedEventId = event.eventId;
                         notifyDataSetChanged();
                         return true;
                     }
@@ -1959,7 +1971,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
             highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
 
-            if (TextUtils.equals(mSearchedEventId, event.eventId)) {
+            if (TextUtils.equals(mHighlightedEventId, event.eventId)) {
                 if (mIsUnreadViewMode) {
                     highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
                     if (readMarkerView != null) {
@@ -2108,7 +2120,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
 
                 // disable the selection
-                mHighlightedEventId = null;
+                mSelectedEventId = null;
                 notifyDataSetChanged();
 
                 return true;
@@ -2125,9 +2137,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     /*
      * *********************************************************************************************
-     * Handle EventGroups events
+     *  EventGroups events
      * *********************************************************************************************
      */
+
+    private List<EventGroup> mEventGroups = new ArrayList<>();
 
     /**
      * Insert the MessageRow in an EventGroup to the front.
@@ -2144,11 +2158,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             if (null == eventGroupRow) {
                 eventGroupRow = new MessageRow(new EventGroup(mHiddenEventIds), null);
+                mEventGroups.add((EventGroup) eventGroupRow.getEvent());
                 super.insert(eventGroupRow, 0);
                 mEventRowMap.put(eventGroupRow.getEvent().eventId, row);
             }
 
             ((EventGroup) eventGroupRow.getEvent()).addToFront(row);
+            updateHighlightedEventId();
         }
 
         return (null != eventGroupRow);
@@ -2182,15 +2198,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
            if (null == eventGroupRow) {
                eventGroupRow = new MessageRow(new EventGroup(mHiddenEventIds), null);
                super.add(eventGroupRow);
-               mEventRowMap.put(eventGroupRow.getEvent().eventId, row);
+               mEventGroups.add((EventGroup)eventGroupRow.getEvent());
+               mEventRowMap.put(eventGroupRow.getEvent().eventId, eventGroupRow);
            }
 
            ((EventGroup) eventGroupRow.getEvent()).add(row);
+           updateHighlightedEventId();
        }
     }
-
-
-    private List<EventGroup> mEventGroups = new ArrayList<>();
 
     /**
      * Remove a message row from the known event groups
@@ -2208,6 +2223,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     if (eventGroup.isEmpty()) {
                         mEventGroups.remove(eventGroup);
                         super.remove(row);
+                        updateHighlightedEventId();
                         return true;
                     }
                 }
@@ -2215,6 +2231,24 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         return false;
+    }
+
+    /**
+     * Update the highlighted eventId
+     */
+    private void updateHighlightedEventId() {
+        if (null != mSearchedEventId) {
+            if (!mEventGroups.isEmpty() && mHiddenEventIds.contains(mSearchedEventId)) {
+                for (EventGroup eventGroup : mEventGroups) {
+                    if (eventGroup.contains(mSearchedEventId)) {
+                        mHighlightedEventId = eventGroup.eventId;
+                        return;
+                    }
+                }
+            }
+        }
+
+        mHighlightedEventId = mSearchedEventId;
     }
 
     /**
@@ -2251,7 +2285,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     }
 
                     MessageRow row = mEventRowMap.get(nextEventGroup.eventId);
+                    mEventGroups.remove(nextEventGroup);
                     super.remove(row);
+
+                    updateHighlightedEventId();
                 }
             }
         }
