@@ -19,6 +19,7 @@ package im.vector.util;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.adapters.MessageRow;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.rest.model.Event;
 
 import java.util.ArrayList;
@@ -68,7 +69,10 @@ public class EventGroup extends Event {
      * @return true it is supported
      */
     public static boolean isSupported(MessageRow row) {
-        return (null != row) && (null != row.getEvent()) && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER);
+        return (null != row) && (null != row.getEvent()) &&
+                TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER) &&
+                // do not merge the call invitation events
+                !TextUtils.equals(row.getEvent().stateKey, MXCallsManager.getConferenceUserId(row.getEvent().roomId));
     }
 
     /**
