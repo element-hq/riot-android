@@ -80,7 +80,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
     }
 
     @Override
-    protected boolean supportMels() {
+    protected boolean supportEventGroup() {
         return false;
     }
 

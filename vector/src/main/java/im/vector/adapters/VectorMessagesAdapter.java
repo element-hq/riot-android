@@ -76,13 +76,13 @@ import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
+import im.vector.util.EventGroup;
 
 /**
  * An adapter which can display room information.
@@ -127,7 +127,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_EMOTE = 3;
     static final int ROW_TYPE_FILE = 4;
     static final int ROW_TYPE_VIDEO = 5;
-    static final int ROW_TYPE_MELS = 6;
+    static final int ROW_TYPE_MERGE = 6;
     static final int ROW_TYPE_HIDDEN = 7;
     static final int NUM_ROW_TYPES = 8;
 
@@ -177,156 +177,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     private HashSet<String> mHiddenEventIds = new HashSet<>();
 
-    class MelsEvent extends Event {
-        Map<String, MessageRow> mRowsMap;
-        List<MessageRow> mRows;
-        boolean mIsExpanded;
-
-        public MelsEvent() {
-            // define an unique identifier
-            eventId = "mels-" + System.currentTimeMillis();
-            mRowsMap = new HashMap<>();
-            mRows = new ArrayList<>();
-        }
-
-        public boolean contains(String eventId) {
-            return (null != eventId) && mRowsMap.containsKey(eventId);
-        }
-
-        public boolean contains(MessageRow row) {
-            return (null != row) && (null != row.getEvent()) && mRowsMap.containsKey(row.getEvent().eventId);
-        }
-
-        private void refreshOriginServerTs() {
-            if (mRows.size() > 0) {
-                this.originServerTs = mRows.get(0).getEvent().originServerTs;
-            }
-        }
-
-        private void onRowAdded(MessageRow row) {
-            String addedEventId = row.getEvent().eventId;
-            mRowsMap.put(addedEventId, row);
-
-            if (mRowsMap.size() > 1) {
-                if (mHiddenEventIds.contains(eventId)) {
-                    mHiddenEventIds.remove(eventId);
-
-                    if (mIsExpanded) {
-                        mHiddenEventIds.removeAll(mRowsMap.keySet());
-                    } else {
-                        mHiddenEventIds.addAll(mRowsMap.keySet());
-                    }
-
-                } else {
-                    if (mIsExpanded) {
-                        mHiddenEventIds.remove(addedEventId);
-                    } else {
-                        mHiddenEventIds.add(addedEventId);
-                    }
-                }
-            } else {
-                mHiddenEventIds.removeAll(mRowsMap.keySet());
-                mHiddenEventIds.add(eventId);
-            }
-
-            refreshOriginServerTs();
-        }
-
-
-        public void add(MessageRow row) {
-            if (!contains(row)) {
-                mRows.add(row);
-                onRowAdded(row);
-            }
-        }
-
-        public void addToFront(MessageRow row) {
-            if (!contains(row)) {
-                if (mRows.size() > 0) {
-                    mRows.add(0, row);
-                } else {
-                    mRows.add(row);
-                }
-                onRowAdded(row);
-            }
-        }
-
-        public boolean isEmpty() {
-            return 0 == mRows.size();
-        }
-
-        public boolean isExpanded() {
-            return mIsExpanded;
-        }
-
-        public void setIsExpaned(boolean isExpanded) {
-            mIsExpanded = isExpanded;
-
-            if (mIsExpanded) {
-                mHiddenEventIds.removeAll(mRowsMap.keySet());
-            } else {
-                mHiddenEventIds.addAll(mRowsMap.keySet());
-            }
-        }
-
-        public boolean canAddEvent(Event event) {
-            return isEmpty() ||
-                    (AdapterUtils.zeroTimeDate(new Date(event.getOriginServerTs())).getTime() ==
-                            AdapterUtils.zeroTimeDate(new Date(getOriginServerTs())).getTime());
-        }
-
-        public void removeByEventId(String eventIdToRemove) {
-            if (null != eventIdToRemove) {
-                MessageRow row = mRowsMap.get(eventIdToRemove);
-
-                if (null != row) {
-                    mRowsMap.remove(eventIdToRemove);
-                    mRows.remove(row);
-
-                    mHiddenEventIds.remove(eventIdToRemove);
-                }
-
-                if (isEmpty()) {
-                    MessageRow selfRow = mEventRowMap.get(eventId);
-                    if (null != selfRow) {
-                        remove(selfRow);
-                    }
-                } else if (mRowsMap.size() == 1) {
-                    mHiddenEventIds.removeAll(mRowsMap.keySet());
-                    mHiddenEventIds.add(eventId);
-                }
-
-                refreshOriginServerTs();
-            }
-        }
-
-        public List<MessageRow> getRows() {
-            return mRows;
-        }
-
-        @Override
-        public java.lang.String toString() {
-            return mRowsMap.size() + " member updates";
-        }
-    }
-
-    List<MelsEvent> mMelsEvents = new ArrayList<>();
-
-    public void removeMemberShipEvent(String eventId) {
-        for(MelsEvent melsEvent : mMelsEvents) {
-            if (melsEvent.contains(eventId)) {
-                melsEvent.removeByEventId(eventId);
-
-                if (melsEvent.isEmpty()) {
-                    mMelsEvents.remove(melsEvent);
-
-                    MessageRow row =  mEventRowMap.get(melsEvent.eventId);
-                    super.remove(row);
-                }
-            }
-        }
-    }
-
     /**
      * Creates a messages adapter with the default layouts.
      */
@@ -338,7 +188,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_text_emote,
                 R.layout.adapter_item_vector_message_file,
                 R.layout.adapter_item_vector_message_image_video,
-                R.layout.adapter_item_vector_message_mels,
+                R.layout.adapter_item_vector_message_merge,
                 mediasCache);
     }
 
@@ -357,7 +207,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param mediasCache       the medias cache.
      */
     public VectorMessagesAdapter(MXSession session, Context context, int textResLayoutId, int imageResLayoutId,
-                                 int noticeResLayoutId, int emoteRestLayoutId, int fileResLayoutId, int videoResLayoutId, int melsResLayoutId, MXMediasCache mediasCache) {
+                                 int noticeResLayoutId, int emoteRestLayoutId, int fileResLayoutId, int videoResLayoutId, int mergeResLayoutId, MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
         mRowTypeToLayoutId.put(ROW_TYPE_TEXT, textResLayoutId);
@@ -366,7 +216,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_EMOTE, emoteRestLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_FILE, fileResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_VIDEO, videoResLayoutId);
-        mRowTypeToLayoutId.put(ROW_TYPE_MELS, melsResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_MERGE, mergeResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, R.layout.adapter_item_vector_hidden_message);
 
         mMediasCache = mediasCache;
@@ -473,7 +323,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * *********************************************************************************************
      */
 
-    protected boolean supportMels() {
+    /**
+     * @return true if the some events can be collapsed.
+     */
+    protected boolean supportEventGroup() {
         return true;
     }
 
@@ -487,23 +340,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (mIsSearchMode) {
                 mLiveMessagesRowList.add(0, row);
             } else {
-                MessageRow melsRow = null;
-
-                if (supportMels() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-                    if ((getCount() > 0) && (getItem(0).getEvent() instanceof MelsEvent) && ((MelsEvent)getItem(0).getEvent()).canAddEvent(row.getEvent())) {
-                        melsRow = getItem(0);
-                    }
-
-                    if (null == melsRow) {
-                        melsRow = new MessageRow(new MelsEvent(), null);
-                        super.insert(melsRow, 0);
-                        mEventRowMap.put(melsRow.getEvent().eventId, row);
-                    }
-
-                    ((MelsEvent)melsRow.getEvent()).addToFront(row);
-                }
-
-                insert(row, (null == melsRow) ? 0 : 1);
+                insert(row, (!addToEventGroupToFront(row)) ? 0 : 1);
             }
 
             if (row.getEvent().eventId != null) {
@@ -517,44 +354,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (mIsSearchMode) {
             mLiveMessagesRowList.remove(row);
         } else {
-            if (supportMels() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+            if (supportEventGroup() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
                 removeMemberShipEvent(row.getEvent().eventId);
             }
 
+            // get the position before removing the item
+            int position = getPosition(row);
+
+            // remove it
             super.remove(row);
 
-            int position = getPosition(row);
+            // check merge
             if (position >= 0) {
-                super.remove(row);
-
-                if (supportMels() && !TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-                    if ((position > 0) && (position < getCount()-1)) {
-                        Event eventBef = getItem(position-1).getEvent();
-                        Event eventAfter = getItem(position).getEvent();
-
-                        if (TextUtils.equals(eventBef.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER) &&
-                                eventAfter instanceof MelsEvent) {
-                            MelsEvent nextMelsEvent = (MelsEvent)eventAfter;
-                            MelsEvent melsEvent = null;
-
-                            for(int i = position-1; i >= 0; i--) {
-                                if (getItem(i).getEvent() instanceof MelsEvent) {
-                                    melsEvent = (MelsEvent)getItem(i).getEvent();
-                                    break;
-                                }
-                            }
-
-                            if (null != melsEvent) {
-                                List<MessageRow> nextRows =  new ArrayList<>(nextMelsEvent.getRows());
-                                if (melsEvent.canAddEvent(nextRows.get(0).getEvent())) {
-                                    for(MessageRow rowToAdd : nextRows) {
-                                        nextMelsEvent.removeByEventId(rowToAdd.getEvent().eventId);
-                                        melsEvent.add(rowToAdd);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                if (supportEventGroup() && !TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+                    checkEventGroupsMerge(position);
                 }
             }
         }
@@ -575,35 +388,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (mIsSearchMode) {
                 mLiveMessagesRowList.add(row);
             } else {
-                if (supportMels() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-                    MessageRow melsRow = null;
-
-                    // search backward the mels event
-                    for(int i = getCount()-1; i >= 0; i--) {
-                        MessageRow curRow = getItem(i);
-
-                        if (curRow.getEvent() instanceof MelsEvent) {
-                            // the event can be added (same day ?)
-                            if (((MelsEvent) curRow.getEvent()).canAddEvent(row.getEvent())) {
-                                melsRow = curRow;
-                            }
-                            break;
-                        } else
-                            // there is no more room member events
-                            if (!TextUtils.equals(curRow.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-                            break;
-                        }
-                    }
-
-                    if (null == melsRow) {
-                        melsRow = new MessageRow(new MelsEvent(), null);
-                        super.add(melsRow);
-                        mEventRowMap.put(melsRow.getEvent().eventId, row);
-                    }
-
-                    ((MelsEvent)melsRow.getEvent()).add(row);
-                }
-
+                addToEventGroup(row);
                 super.add(row);
             }
 
@@ -648,7 +433,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // loop because the list is not sorted
             for (MessageRow row : rows) {
-                if (!(row.getEvent() instanceof MelsEvent)) {
+                if (!(row.getEvent() instanceof EventGroup)) {
                     long rowTs = row.getEvent().getOriginServerTs();
 
                     // check if the row event has been received after eventTs (from)
@@ -679,7 +464,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // loop because the list is not sorted
             for (MessageRow row : rows) {
-                if (!(row.getEvent() instanceof MelsEvent)) {
+                if (!(row.getEvent() instanceof EventGroup)) {
                     long rowTs = row.getEvent().getOriginServerTs();
 
                     // check if the row event has been received before eventTs (from)
@@ -855,8 +640,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             case ROW_TYPE_HIDDEN:
                 inflatedView = getHiddenView(position, convertView, parent);
                 break;
-            case ROW_TYPE_MELS:
-                inflatedView = getMelsView(position, convertView, parent);
+            case ROW_TYPE_MERGE:
+                inflatedView = getMergeView(position, convertView, parent);
                 break;
             default:
                 throw new RuntimeException("Unknown item view type for position " + position);
@@ -1047,8 +832,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             return ROW_TYPE_TEXT;
         }
 
-        if (event instanceof MelsEvent) {
-            return ROW_TYPE_MELS;
+        if (event instanceof EventGroup) {
+            return ROW_TYPE_MERGE;
         }
 
         // never cache the view type of encrypted events
@@ -1535,7 +1320,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     /**
-     * Mels message management
+     * Hidden message management.
      *
      * @param position    the message position
      * @param convertView the message view
@@ -1558,19 +1343,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param parent      the parent view
      * @return the updated text view.
      */
-    private View getMelsView(final int position, View convertView, ViewGroup parent) {
+    private View getMergeView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_MELS), parent, false);
+            convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_MERGE), parent, false);
         }
 
         MessageRow row = getItem(position);
-        final MelsEvent event = (MelsEvent)row.getEvent();
+        final EventGroup event = (EventGroup) row.getEvent();
 
-        View headerLayout = convertView.findViewById(R.id.messagesAdapter_mels_header_layout);
-        TextView headerTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_mels_header_text_view);
-        TextView summaryTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_mels_summary);
-        View separatorLayout = convertView.findViewById(R.id.messagesAdapter_mels_separator);
-        View avatarsLayout =  convertView.findViewById(R.id.messagesAdapter_mels_avatar_list);
+        View headerLayout = convertView.findViewById(R.id.messagesAdapter_merge_header_layout);
+        TextView headerTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_merge_header_text_view);
+        TextView summaryTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_merge_summary);
+        View separatorLayout = convertView.findViewById(R.id.messagesAdapter_merge_separator);
+        View avatarsLayout = convertView.findViewById(R.id.messagesAdapter_merge_avatar_list);
 
         separatorLayout.setVisibility(event.isExpanded() ? View.VISIBLE : View.GONE);
         summaryTextView.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
@@ -1583,13 +1368,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             List<MessageRow> messageRows = event.getRows();
             List<ImageView> avatarView = new ArrayList<>();
 
-            avatarView.add((ImageView)convertView.findViewById(R.id.mels_list_avatar_1));
-            avatarView.add((ImageView)convertView.findViewById(R.id.mels_list_avatar_2));
-            avatarView.add((ImageView)convertView.findViewById(R.id.mels_list_avatar_3));
-            avatarView.add((ImageView)convertView.findViewById(R.id.mels_list_avatar_4));
-            avatarView.add((ImageView)convertView.findViewById(R.id.mels_list_avatar_5));
+            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_1));
+            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_2));
+            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_3));
+            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_4));
+            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_5));
 
-            for(int i = 0; i <  avatarView.size(); i++) {
+            for (int i = 0; i < avatarView.size(); i++) {
                 ImageView imageView = avatarView.get(i);
 
                 if (i < messageRows.size()) {
@@ -1810,7 +1595,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             tsTextView.setVisibility(View.VISIBLE);
         }
 
-        if (!(event instanceof MelsEvent)) {
+        if (!(event instanceof EventGroup)) {
             contentView.findViewById(R.id.message_timestamp_layout).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -2123,9 +1908,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     private boolean isReadMarkedEvent(Event event) {
         // if the read marked event is hidden and the event is a merged one
-        if ((null != mReadMarkerEventId) && (mHiddenEventIds.contains(mReadMarkerEventId) && (event instanceof MelsEvent))) {
+        if ((null != mReadMarkerEventId) && (mHiddenEventIds.contains(mReadMarkerEventId) && (event instanceof EventGroup))) {
             // check it is contains in it
-            return ((MelsEvent)event).contains(mReadMarkerEventId);
+            return ((EventGroup) event).contains(mReadMarkerEventId);
         }
 
         return event.eventId.equals(mReadMarkerEventId);
@@ -2337,6 +2122,134 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             popup.show();
         } catch (Exception e) {
             Log.e(LOG_TAG, " popup.show failed " + e.getMessage());
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Handle EventGroups events
+     * *********************************************************************************************
+     */
+
+    /**
+     * Insert the MessageRow in an EventGroup to the front.
+     * @param row the messageRow
+     * @return true if the MessageRow has been inserted
+     */
+    private boolean addToEventGroupToFront(MessageRow row) {
+        MessageRow eventGroupRow = null;
+
+        if (supportEventGroup() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+            if ((getCount() > 0) && (getItem(0).getEvent() instanceof EventGroup) && ((EventGroup) getItem(0).getEvent()).canAddRow(row)) {
+                eventGroupRow = getItem(0);
+            }
+
+            if (null == eventGroupRow) {
+                eventGroupRow = new MessageRow(new EventGroup(), null);
+                super.insert(eventGroupRow, 0);
+                mEventRowMap.put(eventGroupRow.getEvent().eventId, row);
+            }
+
+            ((EventGroup) eventGroupRow.getEvent()).addToFront(row);
+        }
+
+        return (null != eventGroupRow);
+    }
+
+    /**
+     * Add a MessageRow into an EventGroup (if it is possible)
+     * @param row
+     */
+    private void addToEventGroup(MessageRow row) {
+       if (supportEventGroup() && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+           MessageRow eventGroupRow = null;
+
+           // search backward the EventGroup event
+           for (int i = getCount() - 1; i >= 0; i--) {
+               MessageRow curRow = getItem(i);
+
+               if (curRow.getEvent() instanceof EventGroup) {
+                   // the event can be added (same day ?)
+                   if (((EventGroup) curRow.getEvent()).canAddRow(row)) {
+                       eventGroupRow = curRow;
+                   }
+                   break;
+               } else
+                   // there is no more room member events
+                   if (!TextUtils.equals(curRow.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+                       break;
+                   }
+           }
+
+           if (null == eventGroupRow) {
+               eventGroupRow = new MessageRow(new EventGroup(), null);
+               super.add(eventGroupRow);
+               mEventRowMap.put(eventGroupRow.getEvent().eventId, row);
+           }
+
+           ((EventGroup) eventGroupRow.getEvent()).add(row);
+       }
+    }
+
+
+    List<EventGroup> mEventGroups = new ArrayList<>();
+
+    /**
+     * Remove an event from the known event groups
+     *
+     * @param eventId the event id
+     */
+    private void removeMemberShipEvent(String eventId) {
+        for (EventGroup eventGroup : mEventGroups) {
+            if (eventGroup.contains(eventId)) {
+                eventGroup.removeByEventId(eventId);
+
+                if (eventGroup.isEmpty()) {
+                    mEventGroups.remove(eventGroup);
+
+                    MessageRow row = mEventRowMap.get(eventGroup.eventId);
+                    super.remove(row);
+                }
+            }
+        }
+    }
+
+    /**
+     * This method is called after a message deletion at position 'position'.
+     * It checks and merges if required two EventGroup around the deleted item.
+     *
+     * @param position the deleted item position
+     */
+    private void checkEventGroupsMerge(int position) {
+        if ((position > 0) && (position < getCount() - 1)) {
+            Event eventBef = getItem(position - 1).getEvent();
+            Event eventAfter = getItem(position).getEvent();
+
+            if (TextUtils.equals(eventBef.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER) && eventAfter instanceof EventGroup) {
+                EventGroup nextEventGroup = (EventGroup) eventAfter;
+                EventGroup eventGroupBefore = null;
+
+                for (int i = position - 1; i >= 0; i--) {
+                    if (getItem(i).getEvent() instanceof EventGroup) {
+                        eventGroupBefore = (EventGroup) getItem(i).getEvent();
+                        break;
+                    }
+                }
+
+                if (null != eventGroupBefore) {
+                    List<MessageRow> nextRows = new ArrayList<>(nextEventGroup.getRows());
+                    // check if the next EventGroup can be added in the previous Event group.
+                    // it might be impossible if the messages were not sent the same days
+                    if (eventGroupBefore.canAddRow(nextRows.get(0))) {
+                        for (MessageRow rowToAdd : nextRows) {
+                            eventGroupBefore.add(rowToAdd);
+                        }
+                    }
+
+                    MessageRow row = mEventRowMap.get(nextEventGroup.eventId);
+                    super.remove(row);
+                }
+            }
         }
     }
 }
