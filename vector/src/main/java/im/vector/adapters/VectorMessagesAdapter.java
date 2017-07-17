@@ -1887,9 +1887,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         readMarkerView.setVisibility(View.GONE);
-                        if (mReadMarkerListener != null) {
-                            mReadMarkerListener.onReadMarkerDisplayed(event, readMarkerView);
-                        }
                     }
 
                     @Override
@@ -1898,12 +1895,36 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 });
                 readMarkerView.setAnimation(animation);
             }
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+            final Handler uiHandler =  new Handler(Looper.getMainLooper());
+
+            uiHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     if (readMarkerView != null && readMarkerView.getAnimation() != null) {
                         readMarkerView.setVisibility(View.VISIBLE);
                         readMarkerView.getAnimation().start();
+
+                        // onAnimationEnd does not seem being called when
+                        // NotifyDataSetChanged is called during the animation.
+                        // This issue is easily reproducable on an Android 7.1 device.
+                        // So, we ensure that the listener is always called.
+                        uiHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mReadMarkerListener != null) {
+                                    mReadMarkerListener.onReadMarkerDisplayed(event, readMarkerView);
+                                }
+                            }
+                        }, readMarkerView.getAnimation().getDuration() + readMarkerView.getAnimation().getStartOffset());
+
+                    } else {
+                        // The animation has been cancelled by a notifyDataSetChanged
+                        // With the membership events merge, it will happen more often than before
+                        // because many new back paginate will be required to fill the screen.
+                        if (mReadMarkerListener != null) {
+                            mReadMarkerListener.onReadMarkerDisplayed(event, readMarkerView);
+                        }
                     }
                 }
             });
