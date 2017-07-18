@@ -56,6 +56,7 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
 import im.vector.util.RoomDirectoryData;
+import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SectionView;
 import im.vector.view.SimpleDividerItemDecoration;
@@ -112,7 +113,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setFragmentColors(R.color.tab_rooms, R.color.tab_rooms_secondary);
+        setFragmentColors(R.attr.tab_rooms, R.attr.tab_rooms_secondary);
 
         initViews();
 
@@ -275,7 +276,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 }
             }
         }
-        
+
         mAdapter.setRooms(mRooms);
     }
 

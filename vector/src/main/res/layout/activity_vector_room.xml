@@ -25,7 +25,7 @@
             android:layout_height="?attr/actionBarSize"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vector_green_color"
             style="@style/VectorToolbarStyle">
 
             <RelativeLayout
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        android:background="@color/vector_green_color"
+        android:background="?attr/vector_green_color"
         android:layout_below="@+id/room_action_bar"
         android:indeterminate="true"/>
 
@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/room_background"
+        android:background="?attr/room_background"
         android:layout_below="@+id/room_sync_in_progress">
 
         <View
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:text="A text here"
-            android:textColor="@color/vector_text_black_color"
+            android:textColor="?attr/vector_text_black_color"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
 
@@ -86,7 +86,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_width="94dp"
                 android:layout_height="36dp"
-                android:background="@color/vector_green_color"
+                android:background="?attr/vector_green_color"
                 android:textColor="@android:color/white"
                 android:text="@string/join_room"/>
 
@@ -96,7 +96,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_width="94dp"
                 android:layout_height="36dp"
-                android:textColor="@color/vector_fuchsia_color"
+                android:textColor="?attr/vector_fuchsia_color"
                 android:background="@android:color/white"
                 android:text="@string/cancel"/>
         </RelativeLayout>
@@ -109,7 +109,7 @@
             android:layout_marginRight="20dp"
             android:textSize="14sp"
             android:text=""
-            android:textColor="@color/vector_silver_color"/>
+            android:textColor="?attr/vector_silver_color"/>
 
     </LinearLayout>
 
@@ -131,20 +131,20 @@
         android:id="@+id/jump_to_first_unread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:layout_below="@+id/room_preview_info_layout"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/room_preview_info_layout"
+        android:background="?attr/room_background"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/jump_to_first_unread_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="16dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/jump_to_unread"/>
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/jump_to_unread" />
 
         <TextView
             android:id="@+id/jump_to_first_unread_label"
@@ -167,7 +167,8 @@
             android:layout_alignTop="@+id/jump_to_first_unread_label"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/vector_leave_room_black" />
+            android:src="@drawable/vector_leave_room_black"
+            android:tint="?attr/vector_message_text_color" />
 
         <ProgressBar
             android:id="@+id/jump_to_read_spinner"
@@ -185,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/jump_to_first_unread_label"
-            android:background="@color/vector_light_gray_color" />
+            android:background="?attr/vector_light_gray_color" />
 
     </RelativeLayout>
 
@@ -198,7 +199,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/room_background"
+            android:background="?attr/room_background"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
             android:layout_alignParentTop="true"
@@ -263,7 +264,8 @@
                             android:layout_width="12dp"
                             android:layout_height="12dp"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/e2e_verified"/>
+                            android:src="@drawable/e2e_verified"
+                            android:tint="?attr/vector_image_tint" />
 
                     </RelativeLayout>
 
@@ -277,10 +279,11 @@
                         android:dropDownAnchor="@+id/room_sending_message_layout"
                         android:hint="@string/room_message_placeholder_not_encrypted"
                         android:id="@+id/editText_messageBox"
+                        android:textColor="?attr/vector_message_text_color"
                         android:theme="@style/SearchesAppTheme"
                         android:background="@android:color/transparent"
                         android:textCursorDrawable="@drawable/searches_cursor_background"
-                        android:textColorHint="@color/vector_0_54_black_color"/>
+                        android:textColorHint="?attr/vector_0_54_black_color"/>
 
                     <View
                         android:id="@+id/room_button_margin_left"
@@ -347,7 +350,7 @@
                     android:layout_toRightOf="@id/room_self_avatar_container"
                     android:text="@string/room_do_not_have_permission_to_post"
                     android:textSize="14sp"
-                    android:textColor="@color/vector_text_black_color"
+                    android:textColor="?attr/vector_text_black_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone" />
@@ -359,7 +362,7 @@
                 android:layout_height="1dp"
                 android:layout_alignParentLeft="true"
                 android:layout_above="@id/room_bottom_layout"
-                android:background="@color/vector_light_gray_color" />
+                android:background="?attr/vector_light_gray_color" />
 
             <RelativeLayout
                 android:id="@+id/room_notifications_area"
@@ -387,7 +390,7 @@
                     android:layout_marginLeft="68dp"
                     android:layout_marginRight="13dp"
                     android:text="a text here "
-                    android:textColor="@color/vector_text_gray_color" />
+                    android:textColor="?attr/vector_text_gray_color" />
 
             </RelativeLayout>
 
@@ -397,7 +400,7 @@
                 android:layout_marginLeft="13dp"
                 android:layout_height="1dp"
                 android:layout_above="@id/room_notifications_area"
-                android:background="@color/vector_light_gray_color" />
+                android:background="?attr/vector_light_gray_color" />
 
             <RelativeLayout
                 android:id="@+id/anchor_fragment_messages"
@@ -431,7 +434,7 @@
         android:layout_alignParentLeft="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/chat_encoding_background"
+        android:background="?attr/chat_encoding_background"
         android:visibility="gone">
         <ProgressBar
             android:id="@+id/medias_processing_progress"

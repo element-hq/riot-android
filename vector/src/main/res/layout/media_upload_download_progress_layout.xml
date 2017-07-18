@@ -27,7 +27,7 @@
             android:layout_gravity="center_vertical"
             android:max="100"
             android:progress="0"
-            android:progressTint="@color/vector_green_color" />
+            android:progressTint="?attr/vector_green_color" />
     </LinearLayout>
 
     <RelativeLayout

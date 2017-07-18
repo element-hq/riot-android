@@ -25,7 +25,7 @@
         android:id="@+id/search_in_progress_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/chat_encoding_background"
+        android:background="?attr/chat_encoding_background"
         android:visibility="visible">
 
         <ProgressBar

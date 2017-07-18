@@ -19,7 +19,7 @@
         android:singleLine="true"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:textColor="@color/vector_0_54_black_color"
+        android:textColor="?attr/vector_0_54_black_color"
         android:textSize="14sp"
         android:textStyle="bold"
         tools:text="One very long sender name for testing purpose" />

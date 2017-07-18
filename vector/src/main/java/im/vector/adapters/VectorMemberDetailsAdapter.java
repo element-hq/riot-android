@@ -34,6 +34,7 @@ import java.util.List;
 
 import im.vector.R;
 import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
 
@@ -363,7 +364,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         // room selection
         if (null != currentItem.mRoom) {
             // room name
-            viewHolder.mActionDescTextView.setTextColor(ContextCompat.getColor(mContext, R.color.material_grey_900));
+            viewHolder.mActionDescTextView.setTextColor(ThemeUtils.getColor(mContext, R.attr.vector_message_text_color));
             viewHolder.mActionDescTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, currentItem.mRoom));
 
             // room avatar
@@ -390,10 +391,10 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             viewHolder.mActionImageView.setImageResource(currentItem.mIconResourceId);
 
             // update the text colour: specific colour is required for the remove action
-            int colourTxt = ContextCompat.getColor(mContext, R.color.material_grey_900);
+            int colourTxt = ThemeUtils.getColor(mContext, R.attr.vector_message_text_color);
 
             if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
-                colourTxt = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
+                colourTxt = ThemeUtils.getColor(mContext, R.attr.vector_fuchsia_color);
             }
 
             viewHolder.mActionDescTextView.setTextColor(colourTxt);

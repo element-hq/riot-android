@@ -42,7 +42,8 @@
         android:layout_marginRight="-4dp"
         android:src="@drawable/e2e_verified"
         android:visibility="invisible"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:tint="?attr/vector_image_tint"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -60,7 +61,7 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif-regular"
             android:maxLines="1"
-            android:textColor="@color/vector_text_black_color"
+            android:textColor="?attr/vector_text_black_color"
             android:textSize="16sp"
             tools:text="Room name a bit long to be displayed completely" />
 
@@ -72,7 +73,7 @@
             android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/vector_0_54_black_color"
+            android:textColor="?attr/vector_0_54_black_color"
             android:textSize="14sp"
             tools:text="First message of the room is a bit too long to be displayed" />
 
@@ -94,7 +95,7 @@
             android:layout_alignBaseline="@+id/room_name"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/room_more_action_ic"
-            android:textColor="@color/vector_0_54_black_color"
+            android:textColor="?attr/vector_0_54_black_color"
             android:textSize="12sp"
             tools:text="14 Mar" />
 

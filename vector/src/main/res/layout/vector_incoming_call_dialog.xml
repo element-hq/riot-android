@@ -44,7 +44,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:text="@string/incoming_call"
-        android:textColor="@color/vector_80_gray"
+        android:textColor="?attr/vector_80_gray"
         android:textSize="14sp" />
 
     <!-- this layout is used to compute the height of a single line -->
@@ -60,7 +60,7 @@
         android:layout_marginTop="43dp"
         android:background="@android:color/white"
         android:text="@string/action_accept"
-        android:textColor="@color/vector_74_gray"
+        android:textColor="?attr/vector_74_gray"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -75,7 +75,7 @@
         android:layout_toLeftOf="@+id/button_incoming_call_accept"
         android:background="@android:color/white"
         android:text="@string/action_ignore"
-        android:textColor="@color/vector_74_gray"
+        android:textColor="?attr/vector_74_gray"
         android:textSize="14sp"
         android:textStyle="bold" />
 

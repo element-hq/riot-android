@@ -63,6 +63,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
@@ -71,7 +72,7 @@ import im.vector.view.VectorPendingCallView;
 /**
  * VectorCallViewActivity is the call activity.
  */
-public class VectorCallViewActivity extends AppCompatActivity implements SensorEventListener {
+public class VectorCallViewActivity extends VectorAppCompatActivity implements SensorEventListener {
     private static final String LOG_TAG = "VCallViewActivity";
     private static final String HANGUP_MSG_HEADER_UI_CALL = "user hangup from header back arrow";
     private static final String HANGUP_MSG_BACK_KEY = "user hangup from back key";

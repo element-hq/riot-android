@@ -1,12 +1,12 @@
-/* 
+/*
  * Copyright 2017 Vector Creations Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,6 +30,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import im.vector.R;
 import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 
 public class UnreadCounterBadgeView extends RelativeLayout {
     // the background settings
@@ -91,11 +92,11 @@ public class UnreadCounterBadgeView extends RelativeLayout {
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(100);
             if (status == HIGHLIGHTED) {
-                shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_fuchsia_color));
+                shape.setColor(ThemeUtils.getColor(getContext(), R.attr.vector_fuchsia_color));
             } else if (status == NOTIFIED) {
-                shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_green_color));
+                shape.setColor(ThemeUtils.getColor(getContext(), R.attr.vector_green_color));
             } else { //if (status == DEFAULT)
-                shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_silver_color));
+                shape.setColor(ThemeUtils.getColor(getContext(), R.attr.vector_silver_color));
             }
             mParentView.setBackground(shape);
         } else {

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--TODO decide whether these themes are the right base-->
+    <style name="Theme.Vector.Light.Base" parent="@style/Theme.AppCompat.Light.NoActionBar" />
+    <style name="Theme.Vector.Dark.Base" parent="@style/Theme.AppCompat.NoActionBar"/>
+
+
+    <!-- LIGHT THEME COLORS -->
+    <style name="Theme.Vector.Light.Common" parent="Theme.Vector.Light.Base">
+        <item name="room_background">#FFFFFF</item>
+
+        <item name="presence_online">#38af00</item>
+        <item name="presence_unavailable">#fc0</item>
+        <item name="presence_offline">#E53333</item>
+
+        <item name="member_list_last_seen_text">#aaa</item>
+
+        <item name="chat_gray_text">#FFAAAAAA</item>
+        <item name="chat_encoding_background">#AAAAAAAA</item>
+        <item name="vector_deemed_background_view_gray_color">#339D9D9D</item>
+
+        <!-- action bar color -->
+        <item name="vector_statusbar_color">#5EA584</item>
+        <item name="vector_actionbar_background">#76CFA6</item>
+        <item name="vector_actionbar_text_color">#FFFFFF</item>
+        <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
+        <item name="vector_actionbar_icons_color">#FFFFFF</item>
+
+        <!-- activities background -->
+        <item name="vector_activity_background_color">#FFF</item>
+
+        <item name="vector_not_send_color">#FFFF4444</item>
+        <item name="vector_green_color">#FF76cfa6</item>
+        <item name="vector_light_gray_color">#FFF2F2F2</item>
+        <item name="vector_silver_color">#FFC7C7C7</item>
+
+        <item name="vector_text_black_color">#FF3C3C3C</item>
+
+        <item name="vector_message_text_color">#000000</item>
+
+        <!-- 0_54_black gives invalid rendering so use 9D gray -->
+        <item name="vector_0_54_black_color">#8E000000</item>
+        <item name="vector_0_87_black_color">#DC000000</item>
+        <item name="vector_line_separator_gray_color">#339D9D9D</item>
+        <item name="vector_recents_header_background_color">#77F2F2F2</item>
+
+        <!-- tabbar color-->
+        <item name="vector_tabbar_background_color">#FFF2F2F2</item>
+        <item name="vector_search_hint_color">#333C3C3C</item>
+
+        <item name="vector_image_tint">?attr/vector_actionbar_background</item>
+
+        <!-- colors to check their uses -->
+
+        <!-- NavigationView color-->
+        <item name="vector_4d_gray">#FF4D4D4D</item>
+
+        <!-- FloatingActionButton -->
+        <item name="vector_fuchsia_color">#ff0064</item>
+
+        <item name="vector_text_gray_color">#FF9D9D9D</item>
+
+        <!-- tabbar underline -->
+        <item name="vector_dc_gray">#FFDCDCDC</item>
+
+        <!-- room members list -->
+        <item name="vector_21_black">#FF212121</item>
+        <item name="vector_80_gray">#FF808080</item>
+        <item name="vector_05_gray">#FFF2F2F2</item>
+
+
+        <item name="vector_d8_gray">#FFD8D8D8</item>
+
+        <item name="vector_74_gray">#FF747474</item>
+        <item name="vector_33_black">#33000000</item>
+
+        <item name="vector_white_alpha_50">#80ffffff</item>
+
+        <item name="list_header_background">#f6f6f6</item>
+        <item name="list_header_spinner_text">#7f3c3c3c</item>
+        <item name="list_header_spinner">#2e3c3c3c</item>
+
+        <item name="tab_home">?attr/vector_green_color</item>
+        <item name="tab_home_secondary">?attr/vector_statusbar_color</item>
+        <item name="tab_favourites">#BD79CC</item>
+        <item name="tab_favourites_secondary">#744C7F</item>
+        <item name="tab_people">#F8A15F</item>
+        <item name="tab_people_secondary">#D97051</item>
+        <item name="tab_rooms">?attr/vector_green_color</item>
+        <item name="tab_rooms_secondary">?attr/vector_statusbar_color</item>
+
+        <item name="direct_chat_indicator">#8076cfa6</item>
+    </style>
+
+
+    <!-- DARK THEME COLORS -->
+    <style name="Theme.Vector.Dark.Common" parent="Theme.Vector.Dark.Base">
+        <!-- Background color of the room -->
+        <item name="room_background">#2d2d2d</item>
+
+        <item name="presence_online">#38af00</item>
+        <item name="presence_unavailable">#fc0</item>
+        <item name="presence_offline">#E53333</item>
+
+        <item name="member_list_last_seen_text">#aaa</item>
+
+        <item name="chat_gray_text">#FFAAAAAA</item>
+        <item name="chat_encoding_background">#AAAAAAAA</item>
+        <item name="vector_deemed_background_view_gray_color">#339D9D9D</item>
+
+        <!-- action bar color -->
+        <item name="vector_statusbar_color">#5EA584</item>
+        <item name="vector_actionbar_background">#76CFA6</item>
+        <item name="vector_actionbar_text_color">#FFFFFF</item>
+        <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
+        <item name="vector_actionbar_icons_color">#FFFFFF</item>
+
+        <!-- activities background -->
+        <item name="vector_activity_background_color">#fff</item>
+
+        <item name="vector_not_send_color">#FFFF4444</item>
+        <item name="vector_green_color">#46af7f</item>
+        <!-- Lines just above the input field in rooms -->
+        <item name="vector_light_gray_color">#565656</item>
+        <!-- Icons on the bottom of the overview activity -->
+        <item name="vector_silver_color">#FFC7C7C7</item>
+
+        <!-- Names of people, rooms and categories in the rooms overview -->
+        <!-- Also of headers (and filenames) in Room Details and People Details -->
+        <item name="vector_text_black_color">#d9d9d9</item>
+
+        <item name="vector_message_text_color">#d1d1d1</item>
+
+        <!-- 0_54_black gives invalid rendering so use 9D gray -->
+        <!-- Display name and text in input field in rooms and text in room overview -->
+        <item name="vector_0_54_black_color">#A4A4A4</item>
+        <item name="vector_0_87_black_color">#DC000000</item>
+        <!-- Line separator between rooms in overview -->
+        <item name="vector_line_separator_gray_color">#c5c1c1</item>
+        <!-- Room details, Search and Person details headers -->
+        <item name="vector_recents_header_background_color">#5A5A5A</item>
+
+        <!-- tabbar color-->
+        <item name="vector_tabbar_background_color">#FFF2F2F2</item>
+        <item name="vector_search_hint_color">#333C3C3C</item>
+
+        <item name="vector_image_tint">?attr/vector_actionbar_background</item>
+        <!-- colors to check their uses -->
+
+        <!-- NavigationView color-->
+        <!-- Items from the NavigationView -->
+        <item name="vector_4d_gray">#FF4D4D4D</item>
+
+        <!-- FloatingActionButton -->
+        <item name="vector_fuchsia_color">#ff0064</item>
+
+        <!-- The display name of senders in the room overview -->
+        <item name="vector_text_gray_color">#a0a29f</item>
+
+        <!-- tabbar underline -->
+        <!-- Separator between People and Files items in Room Details -->
+        <item name="vector_dc_gray">#565656</item>
+
+        <!-- room members list -->
+        <!-- Display names of the room members -->
+        <item name="vector_21_black">#A4A4A4</item>
+        <!-- Last time a room member was online -->
+        <item name="vector_80_gray">#A5A5A5A5</item>
+        <item name="vector_05_gray">#FFF2F2F2</item>
+
+
+        <item name="vector_d8_gray">#FFD8D8D8</item>
+
+        <item name="vector_74_gray">#FF747474</item>
+        <item name="vector_33_black">#33000000</item>
+
+        <!-- Hint in the search bar -->
+        <item name="vector_white_alpha_50">#80ffffff</item>
+
+        <!-- Background of the headers in the room overview -->
+        <item name="list_header_background">#5A5A5A</item>
+        <!-- Name of the Room Directory that is currently selected -->
+        <item name="list_header_spinner_text">#FFC7C7C7</item>
+        <!-- Carrot and underlining of the name of the Room Directory that is currently selected above -->
+        <item name="list_header_spinner">#A5A5A5A5</item>
+
+        <item name="tab_home">?attr/vector_green_color</item>
+        <item name="tab_home_secondary">?attr/vector_statusbar_color</item>
+        <item name="tab_favourites">#BD79CC</item>
+        <item name="tab_favourites_secondary">#744C7F</item>
+        <item name="tab_people">#F8A15F</item>
+        <item name="tab_people_secondary">#D97051</item>
+        <item name="tab_rooms">?attr/vector_green_color</item>
+        <item name="tab_rooms_secondary">?attr/vector_statusbar_color</item>
+
+        <item name="direct_chat_indicator">#8076cfa6</item>
+    </style>
+
+    <style name="Theme.Vector.Light" parent="Theme.Vector.Light.Common" />
+    <style name="Theme.Vector.Dark" parent="Theme.Vector.Dark.Common" />
+</resources>

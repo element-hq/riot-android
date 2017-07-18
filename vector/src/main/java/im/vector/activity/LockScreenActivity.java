@@ -51,7 +51,7 @@ import im.vector.R;
 /**
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
  */
-public class LockScreenActivity extends Activity { // do NOT extend from UC*Activity, we do not want to login on this screen!
+public class LockScreenActivity extends VectorActivity { // do NOT extend from UC*Activity, we do not want to login on this screen!
     public static final String LOG_TAG = "LockScreenActivity";
 
     public static final String EXTRA_SENDER_NAME = "extra_sender_name";

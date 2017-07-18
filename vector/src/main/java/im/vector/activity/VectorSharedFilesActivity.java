@@ -33,7 +33,7 @@ import im.vector.util.SharedDataItem;
 /**
  * Dummy activity used to manage the shared
  */
-public class VectorSharedFilesActivity extends Activity {
+public class VectorSharedFilesActivity extends VectorActivity {
     private static final String LOG_TAG = "VectorSharedFilesAct";
 
     final String SHARED_FOLDER = "VectorShared";

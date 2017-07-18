@@ -17,6 +17,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.adapters.RoomMembersAdapter;
@@ -24,6 +25,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 
 import java.util.HashMap;
 
@@ -36,19 +38,19 @@ public class VectorRoomMembersAdapter extends RoomMembersAdapter {
         super(context, hsConfig, layoutResourceId, roomState, mediasCache, membershipStrings);
     }
 
-    public int lastSeenTextColor() {
-        return mContext.getResources().getColor(R.color.member_list_last_seen_text);
+    public @ColorInt  int lastSeenTextColor() {
+        return ThemeUtils.getColor(mContext, R.attr.member_list_last_seen_text);
     }
 
-    public int presenceOnlineColor() {
-        return mContext.getResources().getColor(R.color.presence_online);
+    public @ColorInt  int presenceOnlineColor() {
+        return ThemeUtils.getColor(mContext, R.attr.presence_online);
     }
 
-    public int presenceOfflineColor() {
-        return mContext.getResources().getColor(R.color.presence_offline);
+    public @ColorInt  int presenceOfflineColor() {
+        return ThemeUtils.getColor(mContext, R.attr.presence_offline);
     }
 
-    public int presenceUnavailableColor() {
-        return mContext.getResources().getColor(R.color.presence_unavailable);
+    public @ColorInt int presenceUnavailableColor() {
+        return ThemeUtils.getColor(mContext, R.attr.presence_unavailable);
     }
 }

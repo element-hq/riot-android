@@ -24,6 +24,7 @@ import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.MXSession;
 import im.vector.R;
 import im.vector.fragments.VectorPublicRoomsListFragment;
+import im.vector.util.ThemeUtils;
 
 /**
  * Displays a list of public rooms

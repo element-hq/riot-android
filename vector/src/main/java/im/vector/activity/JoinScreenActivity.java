@@ -32,7 +32,7 @@ import im.vector.Matrix;
 /**
  * JoinScreenActivity is a dummy activity to join / reject a room invitation
  */
-public class JoinScreenActivity extends Activity {
+public class JoinScreenActivity extends VectorActivity {
     public static final String LOG_TAG = "JoinScreenActivity";
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";

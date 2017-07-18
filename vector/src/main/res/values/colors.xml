@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="room_background">#FFFFFFFF</color>
 
     <color name="presence_online">#38af00</color>
     <color name="presence_unavailable">#fc0</color>
@@ -68,14 +67,14 @@
     <color name="list_header_spinner_text">#7f3c3c3c</color>
     <color name="list_header_spinner">#2e3c3c3c</color>
 
-    <color name="tab_home">@color/vector_green_color</color>
-    <color name="tab_home_secondary">@color/vector_statusbar_color</color>
+    <color name="tab_home">?attr/vector_green_color</color>
+    <color name="tab_home_secondary">?attr/vector_statusbar_color</color>
     <color name="tab_favourites">#BD79CC</color>
     <color name="tab_favourites_secondary">#744C7F</color>
     <color name="tab_people">#F8A15F</color>
     <color name="tab_people_secondary">#D97051</color>
-    <color name="tab_rooms">@color/vector_green_color</color>
-    <color name="tab_rooms_secondary">@color/vector_statusbar_color</color>
+    <color name="tab_rooms">?attr/vector_green_color</color>
+    <color name="tab_rooms_secondary">?attr/vector_statusbar_color</color>
 
     <color name="direct_chat_indicator">#8076cfa6</color>
 

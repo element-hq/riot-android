@@ -50,6 +50,7 @@ import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**
@@ -660,11 +661,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             return convertView;
         }
 
-        int roomNameBlack = mContext.getResources().getColor(R.color.vector_text_black_color);
-        int fushiaColor = mContext.getResources().getColor(R.color.vector_fuchsia_color);
-        int vectorDefaultTimeStampColor = mContext.getResources().getColor(R.color.vector_0_54_black_color);
-        int vectorGreenColor = mContext.getResources().getColor(R.color.vector_green_color);
-        int vectorSilverColor = mContext.getResources().getColor(R.color.vector_silver_color);
+        int roomNameBlack = ThemeUtils.getColor(mContext, R.attr.vector_text_black_color);
+        int fushiaColor = ThemeUtils.getColor(mContext, R.attr.vector_fuchsia_color);
+        int vectorDefaultTimeStampColor = ThemeUtils.getColor(mContext, R.attr.vector_0_54_black_color);
+        int vectorGreenColor = ThemeUtils.getColor(mContext, R.attr.vector_green_color);
+        int vectorSilverColor = ThemeUtils.getColor(mContext, R.attr.vector_silver_color);
 
         // retrieve the UI items
         ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
@@ -814,7 +815,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             directChatIcon.setVisibility(View.GONE);
             encryptedIcon.setVisibility(View.GONE);
         }
-        
+
         bingUnreadMsgView.setVisibility(isInvited ? View.INVISIBLE : View.VISIBLE);
         invitationView.setVisibility(isInvited ? View.VISIBLE : View.GONE);
 
@@ -914,7 +915,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (aChildRoomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new EventDisplay(mContext, aChildRoomSummary.getLatestReceivedEvent(), aChildRoomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplayRetValue = eventDisplay.getTextualDisplay(mContext.getResources().getColor(R.color.vector_text_gray_color));
+                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.vector_text_gray_color));
             }
 
             // check if this is an invite

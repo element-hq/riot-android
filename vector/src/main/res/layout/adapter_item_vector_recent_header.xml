@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/vector_recents_header_background_color">
+    android:background="?attr/vector_recents_header_background_color">
 
     <RelativeLayout
         android:id="@+id/heading_layout"
@@ -18,7 +18,7 @@
             android:layout_marginLeft="18dp"
             android:fontFamily="sans-serif-medium"
             android:text="Header"
-            android:textColor="@color/vector_text_black_color"
+            android:textColor="?attr/vector_text_black_color"
             android:textSize="14sp" />
 
         <ImageView

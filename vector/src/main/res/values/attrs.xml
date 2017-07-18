@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<declare-styleable name="VectorStyles">
+    <attr name="room_background" format="color" />
+
+    <attr name="presence_online" format="color" />
+    <attr name="presence_unavailable" format="color" />
+    <attr name="presence_offline" format="color" />
+
+    <attr name="member_list_last_seen_text" format="color" />
+
+    <attr name="chat_gray_text" format="color" />
+    <attr name="chat_encoding_background" format="color" />
+    <attr name="vector_deemed_background_view_gray_color" format="color" />
+
+    <!-- action bar color -->
+    <attr name="vector_statusbar_color" format="color" />
+    <attr name="vector_actionbar_background" format="color" />
+    <attr name="vector_actionbar_hint_text_color" format="color" />
+    <attr name="vector_actionbar_text_color" format="color" />
+    <attr name="vector_actionbar_icons_color" format="color" />
+
+    <!-- activities background -->
+    <attr name="vector_activity_background_color" format="color" />
+
+    <attr name="vector_not_send_color" format="color" />
+    <attr name="vector_green_color" format="color" />
+    <attr name="vector_light_gray_color" format="color" />
+    <attr name="vector_silver_color" format="color" />
+
+    <attr name="vector_text_black_color" format="color" />
+
+    <!-- default message text color -->
+    <attr name="vector_message_text_color" format="color" />
+
+    <!-- 0_54_black gives invalid rendering so use 9D gray -->
+    <attr name="vector_0_54_black_color" format="color" />
+    <attr name="vector_0_87_black_color" format="color" />
+    <attr name="vector_line_separator_gray_color" format="color" />
+    <attr name="vector_recents_header_background_color" format="color" />
+
+    <!-- tabbar color-->
+    <attr name="vector_tabbar_background_color" format="color" />
+    <attr name="vector_search_hint_color" format="color" />
+
+    <attr name="vector_image_tint" format="color" />
+
+    <!-- colors to check their uses -->
+
+    <!-- NavigationView color-->
+    <attr name="vector_4d_gray" format="color" />
+
+    <!-- FloatingActionButton -->
+    <attr name="vector_fuchsia_color" format="color" />
+
+    <attr name="vector_text_gray_color" format="color" />
+
+    <!-- tabbar underline -->
+    <attr name="vector_dc_gray" format="color" />
+
+    <!-- room members list -->
+    <attr name="vector_21_black" format="color" />
+    <attr name="vector_80_gray" format="color" />
+    <attr name="vector_05_gray" format="color" />
+
+
+    <attr name="vector_d8_gray" format="color" />
+
+    <attr name="vector_74_gray" format="color" />
+    <attr name="vector_33_black" format="color" />
+
+    <attr name="vector_white_alpha_50" format="color" />
+
+    <attr name="list_header_background" format="color" />
+    <attr name="list_header_spinner_text" format="color" />
+    <attr name="list_header_spinner" format="color" />
+
+    <attr name="tab_home" format="color" />
+    <attr name="tab_home_secondary" format="color" />
+    <attr name="tab_favourites" format="color" />
+    <attr name="tab_favourites_secondary" format="color" />
+    <attr name="tab_people" format="color" />
+    <attr name="tab_people_secondary" format="color" />
+    <attr name="tab_rooms" format="color" />
+    <attr name="tab_rooms_secondary" format="color" />
+
+    <attr name="direct_chat_indicator" format="color" />
+
+</declare-styleable>
+
+</resources>

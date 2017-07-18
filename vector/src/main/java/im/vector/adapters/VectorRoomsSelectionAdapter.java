@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 import org.matrix.androidsdk.MXSession;
@@ -110,10 +111,10 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         if (roomSummary.getLatestReceivedEvent() != null) {
             EventDisplay eventDisplay = new EventDisplay(mContext, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
             eventDisplay.setPrependMessagesWithAuthor(true);
-            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(mContext.getResources().getColor(R.color.vector_text_gray_color)));
+            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.vector_text_gray_color)));
 
             timestampTxtView.setText(getFormattedTimestamp(roomSummary.getLatestReceivedEvent()));
-            timestampTxtView.setTextColor(mContext.getResources().getColor(R.color.vector_0_54_black_color));
+            timestampTxtView.setTextColor(ThemeUtils.getColor(mContext, R.attr.vector_0_54_black_color));
             timestampTxtView.setTypeface(null, Typeface.NORMAL);
             timestampTxtView.setVisibility(View.VISIBLE);
         } else {
@@ -123,7 +124,7 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
 
         // display the room name
         roomNameTxtView.setText(roomName);
-        
+
         // separator
         separatorView.setVisibility(View.VISIBLE);
 

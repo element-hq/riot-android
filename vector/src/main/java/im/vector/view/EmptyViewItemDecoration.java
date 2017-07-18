@@ -32,6 +32,7 @@ import android.view.View;
 import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.AdapterSection;
+import im.vector.util.ThemeUtils;
 
 public class EmptyViewItemDecoration extends DividerItemDecoration {
     private final int mOrientation;
@@ -50,7 +51,7 @@ public class EmptyViewItemDecoration extends DividerItemDecoration {
         mTextSize = textSize * density;
         mEmptyViewHeight = emptyViewHeight * density;
         mEmptyViewLeftMargin = emptyViewLeftMargin * density;
-        mTextColor = ContextCompat.getColor(context, R.color.vector_80_gray);
+        mTextColor = ThemeUtils.getColor(context, R.attr.vector_80_gray);
     }
 
     @Override

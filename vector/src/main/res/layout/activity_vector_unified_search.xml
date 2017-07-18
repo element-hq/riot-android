@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:background="@color/chat_encoding_background" />
+            android:background="?attr/chat_encoding_background" />
 
         <ProgressBar
             android:layout_height="40dp"

@@ -41,7 +41,7 @@ import java.util.HashMap;
 /**
  * AccountCreationCaptchaActivity displays a webview to check captchas.
  */
-public class AccountCreationCaptchaActivity extends Activity {
+public class AccountCreationCaptchaActivity extends VectorActivity {
     private static String LOG_TAG = "ACCCaptchaActivity";
 
     public static String EXTRA_HOME_SERVER_URL = "AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL";

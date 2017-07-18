@@ -47,6 +47,7 @@
             android:layout_alignLeft="@+id/room_avatar_image_view"
             android:layout_marginLeft="35dp"
             android:src="@drawable/e2e_verified"
+            android:tint="?attr/vector_image_tint"
             android:visibility="gone" />
 
         <RelativeLayout
@@ -91,7 +92,7 @@
                     android:fontFamily="sans-serif-regular"
                     android:singleLine="true"
                     android:text="Room Name"
-                    android:textColor="@color/vector_text_black_color"
+                    android:textColor="?attr/vector_text_black_color"
                     android:textSize="16sp" />
 
                 <!-- unread count badge -->
@@ -123,7 +124,7 @@
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_action_image"
                     android:fontFamily="sans-serif-light"
                     android:text="Jan 1 00:00"
-                    android:textColor="@color/vector_0_54_black_color"
+                    android:textColor="?attr/vector_0_54_black_color"
                     android:textSize="12sp" />
 
                 <ImageView
@@ -194,7 +195,7 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:text="last room message"
-                    android:textColor="@color/vector_0_54_black_color"
+                    android:textColor="?attr/vector_0_54_black_color"
                     android:textSize="14sp" />
 
             </RelativeLayout>
@@ -231,7 +232,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.26"
-                android:background="@color/vector_green_color"
+                android:background="?attr/vector_green_color"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/reject"
                 android:textColor="@android:color/white"
@@ -249,7 +250,7 @@
                 android:layout_width="0dp"
                 android:layout_height="36dp"
                 android:layout_weight="0.26"
-                android:background="@color/vector_green_color"
+                android:background="?attr/vector_green_color"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/preview"
                 android:textColor="@android:color/white"
@@ -270,12 +271,12 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="73dp"
-        android:background="@color/vector_line_separator_gray_color" />
+        android:background="?attr/vector_line_separator_gray_color" />
 
     <View
         android:id="@+id/recents_groups_separator_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/vector_line_separator_gray_color" />
+        android:background="?attr/vector_line_separator_gray_color" />
 
 </LinearLayout>

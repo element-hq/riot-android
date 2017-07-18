@@ -37,6 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
 import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class RoomViewHolder extends RecyclerView.ViewHolder {
@@ -82,12 +83,6 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
     @Nullable
     View vRoomMoreActionAnchor;
 
-    @BindColor(R.color.vector_fuchsia_color)
-    int mFuchsiaColor;
-    @BindColor(R.color.vector_green_color)
-    int mGreenColor;
-    @BindColor(R.color.vector_silver_color)
-    int mSilverColor;
 
     public RoomViewHolder(final View itemView) {
         super(itemView);
@@ -138,6 +133,11 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         int unreadMsgCount = roomSummary.getUnreadEventsCount();
         int highlightCount;
         int notificationCount;
+
+        // Setup colors
+        int mFuchsiaColor = ThemeUtils.getColor(context, R.attr.vector_fuchsia_color);
+        int mGreenColor = ThemeUtils.getColor(context, R.attr.vector_green_color);
+        int mSilverColor = ThemeUtils.getColor(context, R.attr.vector_silver_color);
 
         highlightCount = roomSummary.getHighlightCount();
         notificationCount = roomSummary.getNotificationCount();

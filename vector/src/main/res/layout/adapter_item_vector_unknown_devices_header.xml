@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/vector_recents_header_background_color">
+    android:background="?attr/vector_recents_header_background_color">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:fontFamily="sans-serif-medium"
             android:layout_marginLeft="18dp"
             android:textSize="14sp"
-            android:textColor="@color/vector_text_black_color"/>
+            android:textColor="?attr/vector_text_black_color"/>
 
         <ImageView
             android:id="@+id/heading_image"

@@ -65,6 +65,7 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.services.EventStreamService;
 import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.view.RecentsExpandableListView;
 
 public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener, RoomUtils.MoreActionListener {
@@ -894,12 +895,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 Log.e(LOG_TAG, "## startDragAndDrop() : getChildView failed " + e.getMessage());
                 return;
             }
-            
+
             // enable the drag and drop mode
             mAdapter.setIsDragAndDropMode(true);
             mSession.getDataHandler().removeListener(mEventsListener);
 
-            mDraggedView.setBackgroundColor(getResources().getColor(R.color.vector_silver_color));
+            mDraggedView.setBackgroundColor(ThemeUtils.getColor(getContext(), R.attr.vector_silver_color));
             mDraggedView.setAlpha(0.3f);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);

@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:text="Third party licences"
             android:textAppearance="@android:style/TextAppearance.DialogWindowTitle"
-            android:textColor="@color/vector_green_color"
+            android:textColor="?attr/vector_green_color"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp" />
@@ -25,5 +25,5 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_alignBottom="@+id/licenses_text_layout"
-        android:background="@color/vector_green_color" />
+        android:background="?attr/vector_green_color" />
 </RelativeLayout>

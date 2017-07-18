@@ -38,6 +38,7 @@
             android:layout_alignBottom="@+id/room_avatar"
             android:layout_alignRight="@+id/room_avatar_direct_chat_icon"
             android:src="@drawable/e2e_verified"
+            android:tint="?attr/vector_image_tint"
             android:visibility="invisible"
             tools:visibility="visible" />
 
@@ -57,7 +58,7 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-regular"
                 android:maxLines="1"
-                android:textColor="@color/vector_text_black_color"
+                android:textColor="?attr/vector_text_black_color"
                 android:textSize="16sp"
                 tools:text="Room name a bit long to be displayed completely" />
 
@@ -69,7 +70,7 @@
                 android:layout_below="@+id/room_name"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/vector_0_54_black_color"
+                android:textColor="?attr/vector_0_54_black_color"
                 android:textSize="14sp"
                 tools:text="First message of the room is a bit too long to be displayed" />
 
@@ -103,7 +104,7 @@
             android:id="@+id/recents_invite_reject_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vector_green_color"
             android:fontFamily="sans-serif-medium"
             android:minWidth="100dp"
             android:text="@string/reject"
@@ -115,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vector_green_color"
             android:fontFamily="sans-serif-medium"
             android:minWidth="100dp"
             android:text="@string/preview"

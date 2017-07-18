@@ -1,12 +1,12 @@
-/* 
+/*
  * Copyright 2014 OpenMarket Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Handler;
+import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -28,6 +29,8 @@ import org.matrix.androidsdk.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import im.vector.util.ThemeUtils;
 
 /**
  * View that displays a disc representing a percentage.
@@ -91,8 +94,11 @@ public class VideoRecordProgressView extends View {
         } else {
             int mod = (mRoundCount - 1) % 2;
 
-            mPowerColor = getResources().getColor((0 == mod) ? im.vector.R.color.vector_silver_color :  android.R.color.white);
-            mRestColor = getResources().getColor((0 != mod) ? im.vector.R.color.vector_silver_color :  android.R.color.white);
+
+            @ColorInt final int silver = ThemeUtils.getColor(getContext(), im.vector.R.attr.vector_silver_color);
+            @ColorInt final int white = getResources().getColor(android.R.color.white);
+            mPowerColor = ((0 == mod) ? silver : white);
+            mRestColor = ((0 != mod) ? silver : white);
         }
     }
 

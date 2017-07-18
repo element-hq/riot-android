@@ -115,7 +115,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             }
         };
 
-        setFragmentColors(R.color.tab_people, R.color.tab_people_secondary);
+        setFragmentColors(R.attr.tab_people, R.attr.tab_people_secondary);
 
         initViews();
 

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            android:background="@color/chat_encoding_background">
+            android:background="?attr/chat_encoding_background">
             <ProgressBar
                 android:id="@+id/loading_settings_progress_bar"
                 android:layout_width="40dp"

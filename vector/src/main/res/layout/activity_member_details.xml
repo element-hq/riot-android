@@ -6,14 +6,14 @@
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/room_background"
+    android:background="?attr/room_background"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/member_details_action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/vector_green_color">
+        android:background="?attr/vector_green_color">
 
         <RelativeLayout
             android:id="@+id/action_bar_header"
@@ -71,7 +71,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
-                android:textColor="@color/vector_0_54_black_color"
+                android:textColor="?attr/vector_0_54_black_color"
                 android:textSize="14sp" />
         </RelativeLayout>
 

@@ -103,7 +103,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setFragmentColors(R.color.tab_favourites, R.color.tab_favourites_secondary);
+        setFragmentColors(R.attr.tab_favourites, R.attr.tab_favourites_secondary);
 
         initViews();
 

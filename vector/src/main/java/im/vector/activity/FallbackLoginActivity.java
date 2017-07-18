@@ -43,7 +43,7 @@ import java.util.HashMap;
  * FallbackLoginActivity is the fallback login activity
  * i.e this activity is created when the client does not support the
  */
-public class FallbackLoginActivity extends Activity {
+public class FallbackLoginActivity extends VectorActivity {
 
     private static final String LOG_TAG = "FallbackLoginAct";
 

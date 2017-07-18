@@ -5,7 +5,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/room_background"
+        android:background="?attr/room_background"
         android:id="@+id/vector_settings_page" />
 
     <FrameLayout
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:background="@color/chat_encoding_background">
+        android:background="?attr/chat_encoding_background">
         <ProgressBar
             android:id="@+id/vector_settings_spinner"
             android:layout_width="40dp"

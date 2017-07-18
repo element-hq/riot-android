@@ -36,7 +36,7 @@
             android:singleLine="true"
             android:textSize="16sp"
             android:fontFamily="sans-serif-regular"
-            android:textColor="@color/vector_text_black_color"
+            android:textColor="?attr/vector_text_black_color"
             android:text="Some Person's Name" />
 
         <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
@@ -48,7 +48,7 @@
             android:textSize="14sp"
             android:layout_marginTop="3dp"
             android:layout_marginRight="26dp"
-            android:textColor="@color/vector_0_54_black_color"
+            android:textColor="?attr/vector_0_54_black_color"
             android:text="A date here" />
     </LinearLayout>
 
@@ -57,6 +57,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/vector_line_separator_gray_color"/>
+        android:background="?attr/vector_line_separator_gray_color"/>
 
 </RelativeLayout>

@@ -17,7 +17,7 @@
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:maxLines="1"
-        android:textColorHint="@color/vector_search_hint_color"
+        android:textColorHint="?attr/vector_search_hint_color"
         android:textCursorDrawable="@drawable/searches_cursor_background"
         android:textSize="20sp" />
 

@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/home_toolbar"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vector_green_color"
             android:indeterminate="true"
             android:visibility="gone" />
 
@@ -55,7 +55,8 @@
             <FrameLayout
                 android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="?attr/room_background" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/floating_action_button"
@@ -66,7 +67,7 @@
                 android:layout_marginBottom="@dimen/floating_action_button_margin"
                 android:layout_marginRight="@dimen/floating_action_button_margin"
                 android:src="@drawable/ic_add_white"
-                app:backgroundTint="@color/vector_fuchsia_color"
+                app:backgroundTint="?attr/vector_fuchsia_color"
                 app:borderWidth="0dp"
                 app:elevation="4dp" />
 
@@ -74,7 +75,7 @@
                 android:id="@+id/listView_spinner_views"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/chat_encoding_background"
+                android:background="?attr/chat_encoding_background"
                 android:visibility="gone">
 
                 <ProgressBar
@@ -91,8 +92,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@android:color/white"
-            app:itemBackground="@android:color/white"
+            android:background="?attr/room_background"
+            app:itemBackground="?attr/room_background"
             app:itemIconTint="@color/home_bottom_nav_view_tint"
             app:itemTextColor="@color/home_bottom_nav_view_tint"
             app:menu="@menu/bottom_navigation_main" />
@@ -103,10 +104,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#FFF"
+        android:background="?attr/room_background"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/vector_home_menu_header"
-        app:itemIconTint="@color/vector_4d_gray"
+        app:itemIconTint="?attr/vector_4d_gray"
         app:menu="@menu/vector_home_sliding_menu"
         app:theme="@style/NavigationViewStyle" />
 

@@ -38,7 +38,7 @@ import im.vector.Matrix;
  * currently displayed.
  */
 @SuppressLint("LongLogTag")
-public class VectorFakeRoomPreviewActivity extends Activity {
+public class VectorFakeRoomPreviewActivity extends VectorActivity {
     private static final String LOG_TAG = "VectorFakeRoomPreviewActivity";
 
     @Override

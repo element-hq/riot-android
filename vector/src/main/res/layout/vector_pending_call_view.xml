@@ -3,13 +3,13 @@
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/vector_green_color">
+    android:background="?attr/vector_green_color">
 
     <!-- separator line -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/vector_33_black"/>
+        android:background="?attr/vector_33_black"/>
 
     <!-- call view -->
     <LinearLayout

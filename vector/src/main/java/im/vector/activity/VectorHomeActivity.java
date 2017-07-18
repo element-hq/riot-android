@@ -26,6 +26,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,6 +53,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -116,6 +119,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
@@ -125,7 +129,7 @@ import im.vector.view.VectorPendingCallView;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class VectorHomeActivity extends VectorAppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
@@ -261,6 +265,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
@@ -596,7 +601,9 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
-        mToolbar.setBackgroundResource(R.color.vector_actionbar_background);
+        TypedValue vectorActionBarColor = new TypedValue();
+        this.getTheme().resolveAttribute(R.attr.room_background, vectorActionBarColor, true);
+        mToolbar.setBackgroundResource(vectorActionBarColor.resourceId);
 
         checkDeviceId();
 
@@ -889,6 +896,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(secondaryColor);
         }
+
+        // Set color of toolbar search view
+        EditText edit = (EditText) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        edit.setTextColor(ThemeUtils.getColor(this, R.attr.vector_actionbar_text_color));
+        edit.setHintTextColor(ThemeUtils.getColor(this, R.attr.vector_actionbar_hint_text_color));
     }
 
     /**

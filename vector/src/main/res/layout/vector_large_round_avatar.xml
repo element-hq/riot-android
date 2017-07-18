@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/avatar_mask_room_header"/>
     <!--
-            android:background="@color/vector_dc_gray"
+            android:background="?attr/vector_dc_gray"
         <ImageView
             android:id="@+id/imageView_presenceRing"
             android:layout_width="match_parent"

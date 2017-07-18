@@ -1,7 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,9 +21,11 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
@@ -767,7 +769,7 @@ public class NotificationUtils {
 
         boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
 
-        int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
+        @ColorInt int highlightColor = ThemeUtils.getColor(context, R.attr.vector_fuchsia_color);
         int defaultColor = Color.TRANSPARENT;
 
         if (isBackground) {

@@ -1,7 +1,7 @@
 /*
  * Copyright 2014 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -45,6 +45,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -58,6 +59,7 @@ import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.RageShake;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
 
@@ -136,6 +138,7 @@ public class VectorApp extends Application {
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
+        ThemeUtils.activitySetTheme(this);
 
         instance = this;
         mActivityTransitionTimer = null;
@@ -389,7 +392,7 @@ public class VectorApp extends Application {
             if (VectorCallSoundManager.isRinging() && !hasActiveCall && (null != EventStreamService.getInstance())) {
                 Log.e(LOG_TAG, "## suspendApp() : fix an infinite ringing");
                 EventStreamService.getInstance().hideCallNotifications();
-                
+
                 if (VectorCallSoundManager.isRinging()) {
                     VectorCallSoundManager.stopRinging();
                 }
@@ -400,6 +403,15 @@ public class VectorApp extends Application {
 
         mIsCallingInBackground = false;
         mIsInBackground = false;
+        setTheme();
+    }
+
+    private void setTheme() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String mode = sp.getString(getResources().getString(R.string.settings_theme), null);
+        if (mode != null) {
+            ThemeUtils.setTheme(mode);
+        }
     }
 
     /**
@@ -726,4 +738,3 @@ public class VectorApp extends Application {
     }
 
 }
-

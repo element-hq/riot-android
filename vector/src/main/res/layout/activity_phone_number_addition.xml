@@ -53,8 +53,8 @@
                 android:imeOptions="actionDone"
                 android:inputType="phone"
                 android:maxLines="1"
-                android:textColorHighlight="@color/vector_green_color"
-                android:textColorHint="@color/vector_green_color"
+                android:textColorHighlight="?attr/vector_green_color"
+                android:textColorHint="?attr/vector_green_color"
                 android:textSize="16sp"
                 tools:text="+33 6 00 00 00 00" />
 

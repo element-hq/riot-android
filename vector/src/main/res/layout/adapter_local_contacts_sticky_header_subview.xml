@@ -3,7 +3,7 @@
     android:id="@+id/matrix_only_filter"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/list_header_background"
+    android:background="?attr/list_header_background"
     android:paddingLeft="10dp">
 
     <CheckBox
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/matrix_only_filter"
-        android:textColor="@color/vector_text_black_color"
+        android:textColor="?attr/vector_text_black_color"
         android:theme="@style/CheckBoxTheme" />
 
 </LinearLayout>

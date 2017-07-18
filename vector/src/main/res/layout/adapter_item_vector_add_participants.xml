@@ -10,7 +10,7 @@
         android:layout_width="55dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@color/vector_fuchsia_color"
+        android:background="?attr/vector_fuchsia_color"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -104,7 +104,7 @@
             android:layout_toRightOf="@id/filtered_list_avatar"
             android:singleLine="true"
             android:text="A member name"
-            android:textColor="@color/vector_21_black"
+            android:textColor="?attr/vector_21_black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -119,7 +119,7 @@
             android:maxLines="1"
             android:ellipsize="end"
             android:text="A member status"
-            android:textColor="@color/vector_80_gray"
+            android:textColor="?attr/vector_80_gray"
             android:textSize="14sp" />
 
         <View
@@ -127,7 +127,7 @@
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:background="@color/vector_dc_gray" />
+            android:background="?attr/vector_dc_gray" />
 
     </RelativeLayout>
 </RelativeLayout>

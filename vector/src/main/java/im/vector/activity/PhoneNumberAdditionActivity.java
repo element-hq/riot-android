@@ -48,8 +48,9 @@ import org.matrix.androidsdk.util.Log;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.PhoneNumberUtils;
+import im.vector.util.ThemeUtils;
 
-public class PhoneNumberAdditionActivity extends AppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
+public class PhoneNumberAdditionActivity extends VectorAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
     private static final String LOG_TAG = PhoneNumberAdditionActivity.class.getSimpleName();
 

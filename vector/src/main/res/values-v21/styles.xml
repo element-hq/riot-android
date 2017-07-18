@@ -4,7 +4,7 @@
     <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.Light">
 
         <!-- overscroll color -->
-        <item name="android:colorEdgeEffect">@color/vector_green_color</item>
+        <item name="android:colorEdgeEffect">?attr/vector_green_color</item>
 
         <!-- hide the action bar -->
         <item name="android:windowActionBar">false</item>
@@ -13,13 +13,13 @@
         <item name="windowNoTitle">true</item>
 
         <!-- status bar color -->
-        <item name="android:colorPrimaryDark">@color/vector_statusbar_color</item>
+        <item name="android:colorPrimaryDark">?attr/vector_statusbar_color</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
 
         <!-- activities background -->
-        <item name="android:windowBackground">@color/vector_activity_background_color</item>
+        <item name="android:windowBackground">?attr/vector_activity_background_color</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Swipe" parent="@style/AppTheme.NoActionBar">
@@ -36,8 +36,8 @@
 
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">@color/vector_actionbar_background</item>
-        <item name="background">@color/vector_actionbar_background</item>
+        <item name="android:background">?attr/vector_actionbar_background</item>
+        <item name="background">?attr/vector_actionbar_background</item>
 
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
@@ -47,12 +47,12 @@
 
     <style name="VectorToolbarTheme">
         <!-- Used to tint the back arrow, menu and spinner arrow -->
-        <item name="colorControlNormal">@color/vector_actionbar_icons_color</item>
+        <item name="colorControlNormal">?attr/vector_actionbar_icons_color</item>
     </style>
 
     <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/vector_actionbar_text_color</item>
+        <item name="android:textColor">?attr/vector_actionbar_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
     </style>
 
@@ -60,22 +60,22 @@
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
 
         <!-- overscroll color -->
-        <item name="android:colorEdgeEffect">@color/vector_green_color</item>
+        <item name="android:colorEdgeEffect">?attr/vector_green_color</item>
 
         <!-- with action bar -->
         <item name="android:windowActionBar">true</item>
 
         <!-- status bar color -->
-        <item name="android:colorPrimaryDark">@color/vector_statusbar_color</item>
+        <item name="android:colorPrimaryDark">?attr/vector_statusbar_color</item>
 
         <!-- activities background -->
-        <item name="android:windowBackground">@color/vector_activity_background_color</item>
+        <item name="android:windowBackground">?attr/vector_activity_background_color</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
 
         <!-- android ui button -->
-        <item name="android:colorAccent">@color/vector_green_color</item>
+        <item name="android:colorAccent">?attr/vector_green_color</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
@@ -101,8 +101,8 @@
         <item name="android:actionBarDivider">@null</item>
 
         <!-- switch color -->
-        <item name="android:colorControlActivated">@color/vector_green_color</item>
-        <item name="colorControlActivated">@color/vector_green_color</item>
+        <item name="android:colorControlActivated">?attr/vector_green_color</item>
+        <item name="colorControlActivated">?attr/vector_green_color</item>
 
     </style>
 
@@ -129,7 +129,7 @@
     <!--  -->
     <style name="vector.PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@android:color/white</item>
-        <item name="android:textColor">@color/vector_0_87_black_color</item>
+        <item name="android:textColor">?attr/vector_0_87_black_color</item>
         <item name="android:textSize">16sp</item>
         <item name="android:dropDownHorizontalOffset">0dp</item>
         <item name="android:dropDownVerticalOffset">0dp</item>
@@ -139,13 +139,13 @@
 
     <!-- actionbar icons color -->
     <style name="Vector.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/vector_actionbar_icons_color</item>
+        <item name="colorControlNormal">?attr/vector_actionbar_icons_color</item>
     </style>
 
     <!-- custom action bar -->
     <style name="Vector.Styled.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
-        <item name="android:background">@color/vector_actionbar_background</item>
-        <item name="background">@color/vector_actionbar_background</item>
+        <item name="android:background">?attr/vector_actionbar_background</item>
+        <item name="background">?attr/vector_actionbar_background</item>
 
         <!-- remove shadow under the action bar -->
         <item name="android:elevation">0dp</item>
@@ -160,21 +160,21 @@
 
     <!-- main text -->
     <style name="ActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/vector_actionbar_text_color</item>
+        <item name="android:textColor">?attr/vector_actionbar_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <!-- subtext text -->
     <style name="ActionBarSubTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">@color/vector_actionbar_text_color</item>
+        <item name="android:textColor">?attr/vector_actionbar_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <!-- home scroller menu -->
     <style name="NavigationViewStyle">
-        <item name="android:textColor">@color/vector_4d_gray</item>
+        <item name="android:textColor">?attr/vector_4d_gray</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -242,11 +242,11 @@
 
     <!-- tabbar text color -->
     <style name="VectorSearches.TabText" parent="@style/Widget.AppCompat.ActionBar.TabText">
-        <item name="android:textColor">@color/vector_green_color</item>
+        <item name="android:textColor">?attr/vector_green_color</item>
     </style>
 
     <style name="VectorSearches.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/vector_green_color</item>
+        <item name="colorControlNormal">?attr/vector_green_color</item>
     </style>
 
 </resources>

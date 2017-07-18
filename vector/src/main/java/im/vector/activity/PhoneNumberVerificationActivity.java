@@ -42,8 +42,9 @@ import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 
-public class PhoneNumberVerificationActivity extends AppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
+public class PhoneNumberVerificationActivity extends VectorAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
 
     private static final String LOG_TAG = PhoneNumberVerificationActivity.class.getSimpleName();
 

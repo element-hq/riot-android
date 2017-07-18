@@ -37,6 +37,7 @@ import org.matrix.androidsdk.call.IMXCall;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 
@@ -44,7 +45,7 @@ import im.vector.util.VectorUtils;
  * InComingCallActivity is Dialog Activity, displayed when an incoming call (audio or a video) over IP
  * is received by the user. The user is asked to accept or ignore.
  */
-public class InComingCallActivity extends AppCompatActivity {
+public class InComingCallActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = "InComingCallActivity";
 
     // only one instance of this class should be displayed
@@ -212,7 +213,7 @@ public class InComingCallActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-                
+
                 // create the call view to enable mMxCallListener being used,
                 // otherwise call API is not enabled
                 mMxCall.createCallView();

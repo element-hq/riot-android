@@ -23,7 +23,7 @@
             android:layout_marginLeft="20dp"
             android:textSize="16sp"
             android:layout_centerVertical="true"
-            android:textColor="@color/vector_search_hint_color"
+            android:textColor="?attr/vector_search_hint_color"
             android:text = "A room name here" />
 
     </RelativeLayout>
@@ -51,7 +51,7 @@
             android:layout_marginLeft="16dp"
             android:layout_alignParentBottom="true"
             android:id="@+id/messagesAdapter_search_separator_line"
-            android:background="@color/vector_line_separator_gray_color"/>
+            android:background="?attr/vector_line_separator_gray_color"/>
     </RelativeLayout>
 
 </LinearLayout>
