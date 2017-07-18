@@ -266,15 +266,12 @@ public class VectorMessagesAdapterHelper {
      */
     View setSenderAvatar(View convertView, MessageRow row, boolean isMergedView) {
         Event event = row.getEvent();
-
-
         View avatarLayoutView = convertView.findViewById(R.id.messagesAdapter_roundAvatar);
 
         if (null != avatarLayoutView) {
             final String userId = event.getSender();
 
             avatarLayoutView.setClickable(true);
-
             avatarLayoutView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -326,9 +323,7 @@ public class VectorMessagesAdapterHelper {
 
         if (isMergedView) {
             bodyLayout.setMargins(avatarLayout.width, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-        } else
-
-        {
+        } else {
             bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
         }
         subView.setLayoutParams(bodyLayout);
