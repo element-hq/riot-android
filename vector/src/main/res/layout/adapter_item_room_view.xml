@@ -42,7 +42,8 @@
         android:layout_marginRight="-4dp"
         android:src="@drawable/e2e_verified"
         android:visibility="invisible"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:tint="?attr/vector_image_tint"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"

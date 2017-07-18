@@ -47,6 +47,7 @@
             android:layout_alignLeft="@+id/room_avatar_image_view"
             android:layout_marginLeft="35dp"
             android:src="@drawable/e2e_verified"
+            android:tint="?attr/vector_image_tint"
             android:visibility="gone" />
 
         <RelativeLayout

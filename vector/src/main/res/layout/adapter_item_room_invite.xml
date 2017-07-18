@@ -38,6 +38,7 @@
             android:layout_alignBottom="@+id/room_avatar"
             android:layout_alignRight="@+id/room_avatar_direct_chat_icon"
             android:src="@drawable/e2e_verified"
+            android:tint="?attr/vector_image_tint"
             android:visibility="invisible"
             tools:visibility="visible" />
 

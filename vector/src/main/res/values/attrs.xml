@@ -44,6 +44,8 @@
     <attr name="vector_tabbar_background_color" format="color" />
     <attr name="vector_search_hint_color" format="color" />
 
+    <attr name="vector_image_tint" format="color" />
+
     <!-- colors to check their uses -->
 
     <!-- NavigationView color-->
@@ -84,6 +86,7 @@
     <attr name="tab_rooms_secondary" format="color" />
 
     <attr name="direct_chat_indicator" format="color" />
+
 </declare-styleable>
 
 </resources>

@@ -263,7 +263,8 @@
                             android:layout_width="12dp"
                             android:layout_height="12dp"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/e2e_verified"/>
+                            android:src="@drawable/e2e_verified"
+                            android:tint="?attr/vector_image_tint" />
 
                     </RelativeLayout>
 

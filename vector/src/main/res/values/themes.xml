@@ -49,6 +49,8 @@
         <item name="vector_tabbar_background_color">#FFF2F2F2</item>
         <item name="vector_search_hint_color">#333C3C3C</item>
 
+        <item name="vector_image_tint">?attr/vector_actionbar_background</item>
+
         <!-- colors to check their uses -->
 
         <!-- NavigationView color-->
@@ -143,6 +145,7 @@
         <item name="vector_tabbar_background_color">#FFF2F2F2</item>
         <item name="vector_search_hint_color">#333C3C3C</item>
 
+        <item name="vector_image_tint">?attr/vector_actionbar_background</item>
         <!-- colors to check their uses -->
 
         <!-- NavigationView color-->
