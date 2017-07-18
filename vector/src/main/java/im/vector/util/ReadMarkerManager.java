@@ -612,6 +612,12 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
                 // In case it is triggered before any onScroll callback
                 mLastVisibleEvent = mVectorMessageListFragment.getEvent(mVectorMessageListFragment.getMessageListView().getLastVisiblePosition());
             }
+
+            if (mFirstVisibleEvent == null) {
+                // In case it is triggered before any onScroll callback
+                mFirstVisibleEvent = mVectorMessageListFragment.getEvent(mVectorMessageListFragment.getMessageListView().getFirstVisiblePosition());
+            }
+
             checkUnreadMessage();
         }
     }

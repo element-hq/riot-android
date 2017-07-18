@@ -74,13 +74,16 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
+import im.vector.util.EventGroup;
 
 /**
  * An adapter which can display room information.
@@ -89,8 +92,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     private static final String LOG_TAG = "VMessagesAdapter";
 
-    // an event is highlighted when the user taps on it
-    private String mHighlightedEventId;
+    // an event is selected when the user taps on it
+    private String mSelectedEventId;
 
     // events listeners
     protected IMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
@@ -105,6 +108,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     // when the adapter is used in search mode
     // the searched message should be highlighted
     private String mSearchedEventId = null;
+    private String mHighlightedEventId = null;
 
     // formatted time by event id
     // it avoids computing them several times
@@ -125,7 +129,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_EMOTE = 3;
     static final int ROW_TYPE_FILE = 4;
     static final int ROW_TYPE_VIDEO = 5;
-    static final int NUM_ROW_TYPES = 6;
+    static final int ROW_TYPE_MERGE = 6;
+    static final int ROW_TYPE_HIDDEN = 7;
+    static final int NUM_ROW_TYPES = 8;
 
     protected final Context mContext;
     private final HashMap<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
@@ -171,17 +177,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final VectorMessagesAdapterMediasHelper mMediasHelper;
     protected final VectorMessagesAdapterHelper mHelper;
 
+    private final Set<String> mHiddenEventIds = new HashSet<>();
+
     /**
      * Creates a messages adapter with the default layouts.
      */
     public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         this(session, context,
-                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_text_emote,
                 R.layout.adapter_item_vector_message_image_video,
-                R.layout.adapter_item_vector_message_text_emote_notice,
-                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_notice,
+                R.layout.adapter_item_vector_message_text_emote,
                 R.layout.adapter_item_vector_message_file,
                 R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_merge,
                 mediasCache);
     }
 
@@ -200,7 +209,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param mediasCache       the medias cache.
      */
     public VectorMessagesAdapter(MXSession session, Context context, int textResLayoutId, int imageResLayoutId,
-                                 int noticeResLayoutId, int emoteRestLayoutId, int fileResLayoutId, int videoResLayoutId, MXMediasCache mediasCache) {
+                                 int noticeResLayoutId, int emoteRestLayoutId, int fileResLayoutId, int videoResLayoutId, int mergeResLayoutId, MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
         mRowTypeToLayoutId.put(ROW_TYPE_TEXT, textResLayoutId);
@@ -209,6 +218,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_EMOTE, emoteRestLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_FILE, fileResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_VIDEO, videoResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_MERGE, mergeResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, R.layout.adapter_item_vector_hidden_message);
+
         mMediasCache = mediasCache;
         mLayoutInflater = LayoutInflater.from(mContext);
         // the refresh will be triggered only when it is required
@@ -313,6 +325,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * *********************************************************************************************
      */
 
+    /**
+     * Tests if the row can be inserted in a merge row.
+     *
+     * @param row the message row to test
+     * @return true if the row can be merged
+     */
+    protected boolean supportMessageRowMerge(MessageRow row) {
+        return EventGroup.isSupported(row);
+    }
+
     @Override
     public void addToFront(MessageRow row) {
         if (isSupportedRow(row)) {
@@ -323,7 +345,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (mIsSearchMode) {
                 mLiveMessagesRowList.add(0, row);
             } else {
-                insert(row, 0);
+                insert(row, (!addToEventGroupToFront(row)) ? 0 : 1);
             }
 
             if (row.getEvent().eventId != null) {
@@ -337,7 +359,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (mIsSearchMode) {
             mLiveMessagesRowList.remove(row);
         } else {
+            removeFromEventGroup(row);
+
+            // get the position before removing the item
+            int position = getPosition(row);
+
+            // remove it
             super.remove(row);
+
+            // check merge
+            checkEventGroupsMerge(row, position);
         }
     }
 
@@ -356,8 +387,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (mIsSearchMode) {
                 mLiveMessagesRowList.add(row);
             } else {
+                addToEventGroup(row);
                 super.add(row);
             }
+
             if (row.getEvent().eventId != null) {
                 mEventRowMap.put(row.getEvent().eventId, row);
             }
@@ -399,18 +432,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // loop because the list is not sorted
             for (MessageRow row : rows) {
-                long rowTs = row.getEvent().getOriginServerTs();
+                if (!(row.getEvent() instanceof EventGroup)) {
+                    long rowTs = row.getEvent().getOriginServerTs();
 
-                // check if the row event has been received after eventTs (from)
-                if (rowTs > eventTs) {
-                    // not yet initialised
-                    if (messageRow == null) {
-                        messageRow = row;
-                    }
-                    // keep the closest row
-                    else if (rowTs < messageRow.getEvent().getOriginServerTs()) {
-                        messageRow = row;
-                        Log.d(LOG_TAG, "## getClosestRowFromTs() " + row.getEvent().eventId);
+                    // check if the row event has been received after eventTs (from)
+                    if (rowTs > eventTs) {
+                        // not yet initialised
+                        if (messageRow == null) {
+                            messageRow = row;
+                        }
+                        // keep the closest row
+                        else if (rowTs < messageRow.getEvent().getOriginServerTs()) {
+                            messageRow = row;
+                            Log.d(LOG_TAG, "## getClosestRowFromTs() " + row.getEvent().eventId);
+                        }
                     }
                 }
             }
@@ -428,18 +463,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // loop because the list is not sorted
             for (MessageRow row : rows) {
-                long rowTs = row.getEvent().getOriginServerTs();
+                if (!(row.getEvent() instanceof EventGroup)) {
+                    long rowTs = row.getEvent().getOriginServerTs();
 
-                // check if the row event has been received before eventTs (from)
-                if (rowTs < eventTs) {
-                    // not yet initialised
-                    if (messageRow == null) {
-                        messageRow = row;
-                    }
-                    // keep the closest row
-                    else if (rowTs > messageRow.getEvent().getOriginServerTs()) {
-                        messageRow = row;
-                        Log.d(LOG_TAG, "## getClosestRowBeforeTs() " + row.getEvent().eventId);
+                    // check if the row event has been received before eventTs (from)
+                    if (rowTs < eventTs) {
+                        // not yet initialised
+                        if (messageRow == null) {
+                            messageRow = row;
+                        }
+                        // keep the closest row
+                        else if (rowTs > messageRow.getEvent().getOriginServerTs()) {
+                            messageRow = row;
+                            Log.d(LOG_TAG, "## getClosestRowBeforeTs() " + row.getEvent().eventId);
+                        }
                     }
                 }
             }
@@ -599,6 +636,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             case ROW_TYPE_FILE:
                 inflatedView = getFileView(position, convertView, parent);
                 break;
+            case ROW_TYPE_HIDDEN:
+                inflatedView = getHiddenView(position, convertView, parent);
+                break;
+            case ROW_TYPE_MERGE:
+                inflatedView = getMergeView(position, convertView, parent);
+                break;
             default:
                 throw new RuntimeException("Unknown item view type for position " + position);
         }
@@ -694,10 +737,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     public void onEventTap(String eventId) {
         // the tap to select is only enabled when the adapter is not in search mode.
         if (!mIsSearchMode) {
-            if (null == mHighlightedEventId) {
-                mHighlightedEventId = eventId;
+            if (null == mSelectedEventId) {
+                mSelectedEventId = eventId;
             } else {
-                mHighlightedEventId = null;
+                mSelectedEventId = null;
             }
             notifyDataSetChanged();
         }
@@ -710,14 +753,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     public void setSearchedEventId(String eventId) {
         mSearchedEventId = eventId;
+        updateHighlightedEventId();
     }
 
     /**
      * Cancel the message selection mode
      */
     public void cancelSelectionMode() {
-        if (null != mHighlightedEventId) {
-            mHighlightedEventId = null;
+        if (null != mSelectedEventId) {
+            mSelectedEventId = null;
             notifyDataSetChanged();
         }
     }
@@ -726,7 +770,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @return true if there is a selected item.
      */
     public boolean isInSelectionMode() {
-        return null != mHighlightedEventId;
+        return null != mSelectedEventId;
     }
 
     /**
@@ -779,9 +823,17 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         String eventId = event.eventId;
         String eventType = event.getType();
 
+        if ((null != eventId) && mHiddenEventIds.contains(eventId)) {
+            return ROW_TYPE_HIDDEN;
+        }
+
         // never cache the view type of the encrypted messages
         if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType)) {
             return ROW_TYPE_TEXT;
+        }
+
+        if (event instanceof EventGroup) {
+            return ROW_TYPE_MERGE;
         }
 
         // never cache the view type of encrypted events
@@ -874,21 +926,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         boolean isMergedView = false;
         boolean willBeMerged = false;
 
-        if (!mIsSearchMode) {
-            if ((position > 0) && VectorMessagesAdapterHelper.shouldMergeEvent(event)) {
+        // the notices are never merged
+        if (!mIsSearchMode && (ROW_TYPE_NOTICE != msgType)) {
+            if (position > 0) {
                 MessageRow prevRow = getItem(position - 1);
                 isMergedView = TextUtils.equals(prevRow.getEvent().getSender(), event.getSender());
             }
 
             // not the last message
             if ((position + 1) < this.getCount()) {
-                MessageRow nextRow = getItem(position + 1);
-
-                if (VectorMessagesAdapterHelper.shouldMergeEvent(event) || VectorMessagesAdapterHelper.shouldMergeEvent(nextRow.getEvent())) {
-                    // the message will be merged if the message senders are not the same
-                    // or the message is an avatar / displayname update.
-                    willBeMerged = TextUtils.equals(nextRow.getEvent().getSender(), event.getSender()) && VectorMessagesAdapterHelper.shouldMergeEvent(nextRow.getEvent());
-                }
+                Event nextEvent = getItem(position + 1).getEvent();
+                int nextRowType = getItemViewType(nextEvent);
+                willBeMerged = (ROW_TYPE_NOTICE != nextRowType) && TextUtils.equals(nextEvent.getSender(), event.getSender());
             }
         }
 
@@ -906,7 +955,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
-                tsTextView.setTextColor(mContext.getResources().getColor(R.color.chat_gray_text));
+                tsTextView.setTextColor(ContextCompat.getColor(mContext, R.color.chat_gray_text));
             }
 
             tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode) ? View.VISIBLE : View.GONE);
@@ -1271,6 +1320,103 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     /**
+     * Hidden message management.
+     *
+     * @param position    the message position
+     * @param convertView the message view
+     * @param parent      the parent view
+     * @return the updated text view.
+     */
+    private View getHiddenView(final int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_HIDDEN), parent, false);
+        }
+
+        // display the day separator
+        VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
+
+        return convertView;
+    }
+
+    /**
+     * Get a merge view for a position.
+     *
+     * @param position    the message position
+     * @param convertView the message view
+     * @param parent      the parent view
+     * @return the updated text view.
+     */
+    private View getMergeView(final int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_MERGE), parent, false);
+        }
+
+        MessageRow row = getItem(position);
+        final EventGroup event = (EventGroup) row.getEvent();
+
+        View headerLayout = convertView.findViewById(R.id.messagesAdapter_merge_header_layout);
+        TextView headerTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_merge_header_text_view);
+        TextView summaryTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_merge_summary);
+        View separatorLayout = convertView.findViewById(R.id.messagesAdapter_merge_separator);
+        View avatarsLayout = convertView.findViewById(R.id.messagesAdapter_merge_avatar_list);
+
+        separatorLayout.setVisibility(event.isExpanded() ? View.VISIBLE : View.GONE);
+        summaryTextView.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
+        avatarsLayout.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
+
+        headerTextView.setText(event.isExpanded() ? "collapse" : "expand");
+
+        if (!event.isExpanded()) {
+            avatarsLayout.setVisibility(View.VISIBLE);
+            List<ImageView> avatarView = new ArrayList<>();
+
+            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_1));
+            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_2));
+            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_3));
+            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_4));
+            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_5));
+
+            List<MessageRow> messageRows = event.getAvatarRows(avatarView.size());
+
+            for (int i = 0; i < avatarView.size(); i++) {
+                ImageView imageView = avatarView.get(i);
+
+                if (i < messageRows.size()) {
+                    mHelper.loadMemberAvatar(imageView, messageRows.get(i));
+                    imageView.setVisibility(View.VISIBLE);
+                } else {
+                    imageView.setVisibility(View.GONE);
+                }
+            }
+
+
+            summaryTextView.setText(event.toString(mContext));
+        }
+
+        headerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                event.setIsExpanded(!event.isExpanded());
+                updateHighlightedEventId();
+
+                if (event.contains(mSelectedEventId)) {
+                    cancelSelectionMode();
+                } else {
+                    notifyDataSetChanged();
+                }
+            }
+        });
+
+        // set the message marker
+        convertView.findViewById(R.id.messagesAdapter_highlight_message_marker).setBackgroundColor(ContextCompat.getColor(mContext, TextUtils.equals(mHighlightedEventId, event.eventId) ? R.color.vector_green_color : android.R.color.transparent));
+
+        // display the day separator
+        VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
+
+        return convertView;
+    }
+
+    /**
      * Highlight a pattern in a text view.
      *
      * @param textView the text view
@@ -1448,47 +1594,49 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private void manageSelectionMode(final View contentView, final Event event) {
         final String eventId = event.eventId;
 
-        boolean isInSelectionMode = (null != mHighlightedEventId);
-        boolean isHighlighted = TextUtils.equals(eventId, mHighlightedEventId);
+        boolean isInSelectionMode = (null != mSelectedEventId);
+        boolean isSelected = TextUtils.equals(eventId, mSelectedEventId);
 
         // display the action icon when selected
-        contentView.findViewById(R.id.messagesAdapter_action_image).setVisibility(isHighlighted ? View.VISIBLE : View.GONE);
+        contentView.findViewById(R.id.messagesAdapter_action_image).setVisibility(isSelected ? View.VISIBLE : View.GONE);
 
-        float alpha = (!isInSelectionMode || isHighlighted) ? 1.0f : 0.2f;
+        float alpha = (!isInSelectionMode || isSelected) ? 1.0f : 0.2f;
 
         // the message body is dimmed when not selected
         contentView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
         contentView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
 
         TextView tsTextView = (TextView) contentView.findViewById(R.id.messagesAdapter_timestamp);
-        if (isInSelectionMode && isHighlighted) {
+        if (isInSelectionMode && isSelected) {
             tsTextView.setVisibility(View.VISIBLE);
         }
 
-        contentView.findViewById(R.id.message_timestamp_layout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.equals(eventId, mHighlightedEventId)) {
-                    onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
-                } else {
-                    onEventTap(eventId);
+        if (!(event instanceof EventGroup)) {
+            contentView.findViewById(R.id.message_timestamp_layout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (TextUtils.equals(eventId, mSelectedEventId)) {
+                        onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+                    } else {
+                        onEventTap(eventId);
+                    }
                 }
-            }
-        });
+            });
 
-        contentView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (!mIsSearchMode) {
-                    onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
-                    mHighlightedEventId = eventId;
-                    notifyDataSetChanged();
-                    return true;
+            contentView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (!mIsSearchMode) {
+                        onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+                        mSelectedEventId = eventId;
+                        notifyDataSetChanged();
+                        return true;
+                    }
+
+                    return false;
                 }
-
-                return false;
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -1557,7 +1705,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     if (!mIsSearchMode) {
                         onMessageClick(event, getEventText(contentView), convertView.findViewById(R.id.messagesAdapter_action_anchor));
-                        mHighlightedEventId = event.eventId;
+                        mSelectedEventId = event.eventId;
                         notifyDataSetChanged();
                         return true;
                     }
@@ -1582,41 +1730,48 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     private void displayE2eIcon(View inflatedView, int position) {
         ImageView e2eIconView = (ImageView) inflatedView.findViewById(R.id.message_adapter_e2e_icon);
-        View senderMargin = inflatedView.findViewById(R.id.e2e_sender_margin);
-        View senderNameView = inflatedView.findViewById(R.id.messagesAdapter_sender);
 
-        MessageRow row = getItem(position);
-        final Event event = row.getEvent();
+        if (null != e2eIconView) {
+            View senderMargin = inflatedView.findViewById(R.id.e2e_sender_margin);
+            View senderNameView = inflatedView.findViewById(R.id.messagesAdapter_sender);
 
-        if (mE2eIconByEventId.containsKey(event.eventId)) {
-            senderMargin.setVisibility(senderNameView.getVisibility());
-            e2eIconView.setVisibility(View.VISIBLE);
-            e2eIconView.setImageResource(mE2eIconByEventId.get(event.eventId));
+            MessageRow row = getItem(position);
+            final Event event = row.getEvent();
 
-            int type = getItemViewType(position);
-
-            if ((type == ROW_TYPE_IMAGE) || (type == ROW_TYPE_VIDEO)) {
-                View bodyLayoutView = inflatedView.findViewById(R.id.messagesAdapter_body_layout);
-                ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
-                ViewGroup.MarginLayoutParams e2eIconViewLayout = (ViewGroup.MarginLayoutParams) e2eIconView.getLayoutParams();
-
-                e2eIconViewLayout.setMargins(bodyLayout.leftMargin, e2eIconViewLayout.topMargin, e2eIconViewLayout.rightMargin, e2eIconViewLayout.bottomMargin);
-                bodyLayout.setMargins(4, bodyLayout.topMargin, bodyLayout.rightMargin, bodyLayout.bottomMargin);
-                e2eIconView.setLayoutParams(e2eIconViewLayout);
-                bodyLayoutView.setLayoutParams(bodyLayout);
-            }
-
-            e2eIconView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mVectorMessagesAdapterEventsListener) {
-                        mVectorMessagesAdapterEventsListener.onE2eIconClick(event, mE2eDeviceByEventId.get(event.eventId));
-                    }
+            if (mE2eIconByEventId.containsKey(event.eventId)) {
+                if (null != senderMargin) {
+                    senderMargin.setVisibility(senderNameView.getVisibility());
                 }
-            });
-        } else {
-            e2eIconView.setVisibility(View.GONE);
-            senderMargin.setVisibility(View.GONE);
+                e2eIconView.setVisibility(View.VISIBLE);
+                e2eIconView.setImageResource(mE2eIconByEventId.get(event.eventId));
+
+                int type = getItemViewType(position);
+
+                if ((type == ROW_TYPE_IMAGE) || (type == ROW_TYPE_VIDEO)) {
+                    View bodyLayoutView = inflatedView.findViewById(R.id.messagesAdapter_body_layout);
+                    ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
+                    ViewGroup.MarginLayoutParams e2eIconViewLayout = (ViewGroup.MarginLayoutParams) e2eIconView.getLayoutParams();
+
+                    e2eIconViewLayout.setMargins(bodyLayout.leftMargin, e2eIconViewLayout.topMargin, e2eIconViewLayout.rightMargin, e2eIconViewLayout.bottomMargin);
+                    bodyLayout.setMargins(4, bodyLayout.topMargin, bodyLayout.rightMargin, bodyLayout.bottomMargin);
+                    e2eIconView.setLayoutParams(e2eIconViewLayout);
+                    bodyLayoutView.setLayoutParams(bodyLayout);
+                }
+
+                e2eIconView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (null != mVectorMessagesAdapterEventsListener) {
+                            mVectorMessagesAdapterEventsListener.onE2eIconClick(event, mE2eDeviceByEventId.get(event.eventId));
+                        }
+                    }
+                });
+            } else {
+                e2eIconView.setVisibility(View.GONE);
+                if (null != senderMargin) {
+                    senderMargin.setVisibility(View.GONE);
+                }
+            }
         }
     }
 
@@ -1738,9 +1893,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         readMarkerView.setVisibility(View.GONE);
-                        if (mReadMarkerListener != null) {
-                            mReadMarkerListener.onReadMarkerDisplayed(event, readMarkerView);
-                        }
                     }
 
                     @Override
@@ -1749,16 +1901,56 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 });
                 readMarkerView.setAnimation(animation);
             }
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+            final Handler uiHandler = new Handler(Looper.getMainLooper());
+
+            uiHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     if (readMarkerView != null && readMarkerView.getAnimation() != null) {
                         readMarkerView.setVisibility(View.VISIBLE);
                         readMarkerView.getAnimation().start();
+
+                        // onAnimationEnd does not seem being called when
+                        // NotifyDataSetChanged is called during the animation.
+                        // This issue is easily reproducable on an Android 7.1 device.
+                        // So, we ensure that the listener is always called.
+                        uiHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mReadMarkerListener != null) {
+                                    mReadMarkerListener.onReadMarkerDisplayed(event, readMarkerView);
+                                }
+                            }
+                        }, readMarkerView.getAnimation().getDuration() + readMarkerView.getAnimation().getStartOffset());
+
+                    } else {
+                        // The animation has been cancelled by a notifyDataSetChanged
+                        // With the membership events merge, it will happen more often than before
+                        // because many new back paginate will be required to fill the screen.
+                        if (mReadMarkerListener != null) {
+                            mReadMarkerListener.onReadMarkerDisplayed(event, readMarkerView);
+                        }
                     }
                 }
             });
         }
+    }
+
+    /**
+     * Tells if the event is the mReadMarkerEventId one.
+     *
+     * @param event the event to test
+     * @return true if the event is the mReadMarkerEventId one.
+     */
+    private boolean isReadMarkedEvent(Event event) {
+        // if the read marked event is hidden and the event is a merged one
+        if ((null != mReadMarkerEventId) && (mHiddenEventIds.contains(mReadMarkerEventId) && (event instanceof EventGroup))) {
+            // check it is contains in it
+            return ((EventGroup) event).contains(mReadMarkerEventId);
+        }
+
+        return event.eventId.equals(mReadMarkerEventId);
     }
 
     /**
@@ -1773,7 +1965,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         final View readMarkerView = inflatedView.findViewById(R.id.message_read_marker);
         if (readMarkerView != null) {
             if (event != null && !event.isDummyEvent() && mReadMarkerEventId != null && mCanShowReadMarker
-                    && event.eventId.equals(mReadMarkerEventId) && !mIsPreviewMode && !mIsSearchMode
+                    && isReadMarkedEvent(event) && !mIsPreviewMode && !mIsSearchMode
                     && (!mReadMarkerEventId.equals(mReadReceiptEventId) || position < getCount() - 1)) {
                 Log.d(LOG_TAG, " Display read marker " + event.eventId + " mReadMarkerEventId" + mReadMarkerEventId);
                 // Show the read marker
@@ -1806,7 +1998,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
             highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
 
-            if (TextUtils.equals(mSearchedEventId, event.eventId)) {
+            if (TextUtils.equals(mHighlightedEventId, event.eventId)) {
                 if (mIsUnreadViewMode) {
                     highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
                     if (readMarkerView != null) {
@@ -1955,7 +2147,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
 
                 // disable the selection
-                mHighlightedEventId = null;
+                mSelectedEventId = null;
                 notifyDataSetChanged();
 
                 return true;
@@ -1967,6 +2159,165 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             popup.show();
         } catch (Exception e) {
             Log.e(LOG_TAG, " popup.show failed " + e.getMessage());
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     *  EventGroups events
+     * *********************************************************************************************
+     */
+
+    private final List<EventGroup> mEventGroups = new ArrayList<>();
+
+    /**
+     * Insert the MessageRow in an EventGroup to the front.
+     *
+     * @param row the messageRow
+     * @return true if the MessageRow has been inserted
+     */
+    private boolean addToEventGroupToFront(MessageRow row) {
+        MessageRow eventGroupRow = null;
+
+        if (supportMessageRowMerge(row)) {
+            if ((getCount() > 0) && (getItem(0).getEvent() instanceof EventGroup) && ((EventGroup) getItem(0).getEvent()).canAddRow(row)) {
+                eventGroupRow = getItem(0);
+            }
+
+            if (null == eventGroupRow) {
+                eventGroupRow = new MessageRow(new EventGroup(mHiddenEventIds), null);
+                mEventGroups.add((EventGroup) eventGroupRow.getEvent());
+                super.insert(eventGroupRow, 0);
+                mEventRowMap.put(eventGroupRow.getEvent().eventId, row);
+            }
+
+            ((EventGroup) eventGroupRow.getEvent()).addToFront(row);
+            updateHighlightedEventId();
+        }
+
+        return (null != eventGroupRow);
+    }
+
+    /**
+     * Add a MessageRow into an EventGroup (if it is possible)
+     *
+     * @param row the row to added
+     */
+    private void addToEventGroup(MessageRow row) {
+        if (supportMessageRowMerge(row)) {
+            MessageRow eventGroupRow = null;
+
+            // search backward the EventGroup event
+            for (int i = getCount() - 1; i >= 0; i--) {
+                MessageRow curRow = getItem(i);
+
+                if (curRow.getEvent() instanceof EventGroup) {
+                    // the event can be added (same day ?)
+                    if (((EventGroup) curRow.getEvent()).canAddRow(row)) {
+                        eventGroupRow = curRow;
+                    }
+                    break;
+                } else
+                    // there is no more room member events
+                    if (!TextUtils.equals(curRow.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+                        break;
+                    }
+            }
+
+            if (null == eventGroupRow) {
+                eventGroupRow = new MessageRow(new EventGroup(mHiddenEventIds), null);
+                super.add(eventGroupRow);
+                mEventGroups.add((EventGroup) eventGroupRow.getEvent());
+                mEventRowMap.put(eventGroupRow.getEvent().eventId, eventGroupRow);
+            }
+
+            ((EventGroup) eventGroupRow.getEvent()).add(row);
+            updateHighlightedEventId();
+        }
+    }
+
+    /**
+     * Remove a message row from the known event groups
+     *
+     * @param row the message row
+     * @return true if the message has been removed
+     */
+    private void removeFromEventGroup(MessageRow row) {
+        if (supportMessageRowMerge(row)) {
+            String eventId = row.getEvent().eventId;
+            for (EventGroup eventGroup : mEventGroups) {
+                if (eventGroup.contains(eventId)) {
+                    eventGroup.removeByEventId(eventId);
+
+                    if (eventGroup.isEmpty()) {
+                        mEventGroups.remove(eventGroup);
+                        super.remove(row);
+                        updateHighlightedEventId();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Update the highlighted eventId
+     */
+    private void updateHighlightedEventId() {
+        if (null != mSearchedEventId) {
+            if (!mEventGroups.isEmpty() && mHiddenEventIds.contains(mSearchedEventId)) {
+                for (EventGroup eventGroup : mEventGroups) {
+                    if (eventGroup.contains(mSearchedEventId)) {
+                        mHighlightedEventId = eventGroup.eventId;
+                        return;
+                    }
+                }
+            }
+        }
+
+        mHighlightedEventId = mSearchedEventId;
+    }
+
+    /**
+     * This method is called after a message deletion at position 'position'.
+     * It checks and merges if required two EventGroup around the deleted item.
+     *
+     * @param deletedRow the deleted row
+     * @param position   the deleted item position
+     */
+    private void checkEventGroupsMerge(MessageRow deletedRow, int position) {
+        if ((position > 0) && (position < getCount() - 1) && !EventGroup.isSupported(deletedRow)) {
+            Event eventBef = getItem(position - 1).getEvent();
+            Event eventAfter = getItem(position).getEvent();
+
+            if (TextUtils.equals(eventBef.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER) && eventAfter instanceof EventGroup) {
+                EventGroup nextEventGroup = (EventGroup) eventAfter;
+                EventGroup eventGroupBefore = null;
+
+                for (int i = position - 1; i >= 0; i--) {
+                    if (getItem(i).getEvent() instanceof EventGroup) {
+                        eventGroupBefore = (EventGroup) getItem(i).getEvent();
+                        break;
+                    }
+                }
+
+                if (null != eventGroupBefore) {
+                    List<MessageRow> nextRows = new ArrayList<>(nextEventGroup.getRows());
+                    // check if the next EventGroup can be added in the previous Event group.
+                    // it might be impossible if the messages were not sent the same days
+                    if (eventGroupBefore.canAddRow(nextRows.get(0))) {
+                        for (MessageRow rowToAdd : nextRows) {
+                            eventGroupBefore.add(rowToAdd);
+                        }
+                    }
+
+                    MessageRow row = mEventRowMap.get(nextEventGroup.eventId);
+                    mEventGroups.remove(nextEventGroup);
+                    super.remove(row);
+
+                    updateHighlightedEventId();
+                }
+            }
         }
     }
 }

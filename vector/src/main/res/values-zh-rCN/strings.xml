@@ -580,6 +580,7 @@
 这只会关闭一次。
 请谅解由此造成的不便。</string>
     <string name="read_receipts_list">阅读收据清单</string>
+    <string name="membership_changes">%d membership changes</string>
     <string name="compression_options">发送为</string>
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>

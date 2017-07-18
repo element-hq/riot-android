@@ -52,12 +52,13 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
     public VectorSearchMessagesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediasCache mediasCache) {
         super(session, context,
-                R.layout.adapter_item_vector_search_message_text_emote_notice,
+                R.layout.adapter_item_vector_search_message_text_emote,
                 R.layout.adapter_item_vector_search_message_image_video,
-                R.layout.adapter_item_vector_search_message_text_emote_notice,
-                R.layout.adapter_item_vector_search_message_text_emote_notice,
+                R.layout.adapter_item_vector_search_message_notice,
+                R.layout.adapter_item_vector_search_message_text_emote,
                 R.layout.adapter_item_vector_search_message_file,
                 R.layout.adapter_item_vector_search_message_image_video,
+                -1,
                 mediasCache);
 
         setNotifyOnChange(true);
@@ -78,6 +79,10 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         return false;
     }
 
+    @Override
+    protected boolean supportMessageRowMerge(MessageRow row) {
+        return false;
+    }
 
     @Override
     public View getView(int position, View convertView2, ViewGroup parent) {
@@ -101,29 +106,10 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             roomState = room.getLiveState();
         }
 
-        RoomMember sender = null;
-
-        if (null != roomState) {
-            sender = roomState.getMember(event.getSender());
-        }
 
         // refresh the avatar
         ImageView avatarView = (ImageView) convertView.findViewById(R.id.messagesAdapter_roundAvatar).findViewById(R.id.avatar_img);
-        String url = null;
-        // Check whether this avatar url is updated by the current event (This happens in case of new joined member)
-        JsonObject msgContent = event.getContentAsJsonObject();
-
-        if (msgContent.has("avatar_url")) {
-            url = msgContent.get("avatar_url") == JsonNull.INSTANCE ? null : msgContent.get("avatar_url").getAsString();
-        }
-
-        String displayName = null;
-        //
-        if (msgContent.has("displayname")) {
-            displayName = msgContent.get("displayname") == JsonNull.INSTANCE ? null : msgContent.get("displayname").getAsString();
-        }
-
-        mHelper.loadMemberAvatar(avatarView, sender, event.getSender(), displayName, url);
+        mHelper.loadMemberAvatar(avatarView, row);
 
         // display the sender
         TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
