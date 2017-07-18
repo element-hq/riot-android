@@ -429,7 +429,7 @@ Biztos vagy benne?</string>
     <string name="directory_search_room">%1$d szoba</string>
     <string name="directory_search_rooms">%1$d szobák</string>
     <string name="directory_search_room_for">%1$d szoba megtalálva %2$s -nak/-nek</string>
-    <string name="directory_search_rooms_for">%1$d szobák megtalálva %2$s -nak/-nek</string>
+    <string name="directory_search_rooms_for">%1$s szobák megtalálva %2$s -nak/-nek</string>
     <string name="directory_searching_title">Könyvtárs keresése...</string>
 
     <string name="room_settings_notifications">Üzenetek</string>

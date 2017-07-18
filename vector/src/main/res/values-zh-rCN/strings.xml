@@ -603,7 +603,7 @@
     <string name="malformed_id">格式不正确的 ID。应该是一个电子邮件地址或 Matrix ID，如”@localpart:domain“</string>
     <string name="tab_title_search_people">人</string>
     <string name="directory_search_room_for">为 %2$s 找到 %1$d 个聊天室</string>
-    <string name="directory_search_rooms_for">为 %2$s 找到 %1$d 个聊天室</string>
+    <string name="directory_search_rooms_for">为 %2$s 找到 %1$s 个聊天室</string>
     <string name="room_sliding_menu_third_party_notices">第三方通知</string>
     <string name="settings_profile_picture">档案图片</string>
     <string name="settings_third_party_notices">第三方通知</string>
