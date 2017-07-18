@@ -2178,7 +2178,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             if (null == eventGroupRow) {
-                eventGroupRow = new MessageRow(new EventGroup(mHiddenEventIds), null);
+                eventGroupRow = new MessageRow(new EventGroup(mContext.getApplicationContext(), mHiddenEventIds), null);
                 mEventGroups.add((EventGroup) eventGroupRow.getEvent());
                 super.insert(eventGroupRow, 0);
                 mEventRowMap.put(eventGroupRow.getEvent().eventId, row);
@@ -2217,7 +2217,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
            }
 
            if (null == eventGroupRow) {
-               eventGroupRow = new MessageRow(new EventGroup(mHiddenEventIds), null);
+               eventGroupRow = new MessageRow(new EventGroup(mContext.getApplicationContext(), mHiddenEventIds), null);
                super.add(eventGroupRow);
                mEventGroups.add((EventGroup)eventGroupRow.getEvent());
                mEventRowMap.put(eventGroupRow.getEvent().eventId, eventGroupRow);

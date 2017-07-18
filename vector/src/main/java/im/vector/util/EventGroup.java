@@ -16,6 +16,7 @@
 
 package im.vector.util;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.adapters.MessageRow;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import im.vector.R;
 import im.vector.adapters.AdapterUtils;
 
 /**
@@ -49,10 +51,14 @@ public class EventGroup extends Event {
     // hidden event ids list
     private final Set<String> mHiddenEventIds;
 
+    private final Context mContext;
+
     /**
      * Constructors
      */
-    public EventGroup(Set<String> hiddenGroupIds) {
+    public EventGroup(Context context, Set<String> hiddenGroupIds) {
+        mContext = context;
+
         // defines an MessageRowGroup unique ID
         eventId = "EventGroup-" + System.currentTimeMillis();
 
@@ -269,7 +275,6 @@ public class EventGroup extends Event {
 
     @Override
     public java.lang.String toString() {
-        // TODO use the message algorithm
-        return mRowsMap.size() + " member updates";
+        return mContext.getString(R.string.membership_changes, mRowsMap.size());
     }
 }

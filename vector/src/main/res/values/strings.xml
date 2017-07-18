@@ -205,6 +205,9 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
 
+    <!-- Mels -->
+    <string name="membership_changes">%d membership changes</string>
+
     <!-- accounts list Screen -->
     <string name="choose_account">Choose account</string>
 

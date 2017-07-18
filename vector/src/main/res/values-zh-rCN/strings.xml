@@ -574,6 +574,7 @@
     <string name="send_files_in">发送到</string>
     <string name="e2e_need_log_in_again">您需要重新登录才能为此设备生成端到端加密密钥，并将公钥提交给您的家庭服务商。\n这是一次关闭。\n由于不便，请谅解</string>
     <string name="read_receipts_list">阅读收据清单</string>
+    <string name="membership_changes">%d membership changes</string>
     <string name="compression_options">发送为</string>
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
