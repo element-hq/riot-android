@@ -28,7 +28,6 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
-import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -45,12 +44,13 @@ import java.util.List;
 import im.vector.R;
 import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.fragments.VectorMessageListFragment;
 
 /**
  * Class handling the read marker for a given room
  */
-public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
+public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListener {
 
     private static final String LOG_TAG = ReadMarkerManager.class.getSimpleName();
 
@@ -170,7 +170,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
      * Called after the activity/fragment resumed
      */
     public void onResume() {
-        mVectorMessageListFragment.getMessageAdapter().setReadMarkerListener(this);
+        ((VectorMessagesAdapter)mVectorMessageListFragment.getMessageAdapter()).setReadMarkerListener(this);
         updateJumpToBanner();
     }
 
@@ -545,14 +545,18 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
             final Event currentReadMarkerEvent = getEvent(mReadMarkerEventId);
             if (currentReadMarkerEvent != null) {
                 final long currentReadMarkerTs = currentReadMarkerEvent.getOriginServerTs();
-                final Event closestEvent = mVectorMessageListFragment.getMessageAdapter().getClosestRow(newReadMarkerEvent).getEvent();
-                final long newReadMarkerTs = closestEvent.getOriginServerTs();
-                Log.v(LOG_TAG, "setReadMarkerToLastVisibleRow currentReadMarkerEvent:" + currentReadMarkerEvent.eventId
-                        + " TS:" + currentReadMarkerTs + " closestEvent:" + closestEvent.eventId + " TS:" + closestEvent.getOriginServerTs());
-                if (newReadMarkerTs > currentReadMarkerTs) {
-                    Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId + " isMessageId:" + MXSession.isMessageId(newReadMarkerEvent.eventId));
-                    mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
-                    onReadMarkerChanged(mRoom.getRoomId());
+                final MessageRow closestRow = mVectorMessageListFragment.getMessageAdapter().getClosestRow(newReadMarkerEvent);
+
+                if (null != closestRow) {
+                    final Event closestEvent = closestRow.getEvent();
+                    final long newReadMarkerTs = closestEvent.getOriginServerTs();
+                    Log.v(LOG_TAG, "setReadMarkerToLastVisibleRow currentReadMarkerEvent:" + currentReadMarkerEvent.eventId
+                            + " TS:" + currentReadMarkerTs + " closestEvent:" + closestEvent.eventId + " TS:" + closestEvent.getOriginServerTs());
+                    if (newReadMarkerTs > currentReadMarkerTs) {
+                        Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId + " isMessageId:" + MXSession.isMessageId(newReadMarkerEvent.eventId));
+                        mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
+                        onReadMarkerChanged(mRoom.getRoomId());
+                    }
                 }
             }
         }

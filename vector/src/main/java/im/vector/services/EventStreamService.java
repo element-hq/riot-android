@@ -1090,7 +1090,9 @@ public class EventStreamService extends Service {
             mActiveEventStreamService.getNotificationsHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    mActiveEventStreamService.refreshMessagesNotification();
+                    if (mActiveEventStreamService != null) {
+                        mActiveEventStreamService.refreshMessagesNotification();
+                    }
                 }
             });
         }

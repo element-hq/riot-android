@@ -132,8 +132,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         final ImageView mExpanderLogoImageView;
 
         GroupViewHolder(View aView){
-            mTitleTxtView = (TextView) aView.findViewById(org.matrix.androidsdk.R.id.heading);
-            mExpanderLogoImageView = (ImageView)aView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+            mTitleTxtView = (TextView) aView.findViewById(R.id.heading);
+            mExpanderLogoImageView = (ImageView)aView.findViewById(R.id.heading_image);
         }
     }
 

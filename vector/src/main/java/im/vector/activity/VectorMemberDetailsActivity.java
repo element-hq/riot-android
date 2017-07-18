@@ -1158,7 +1158,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mDevicesListView.setAdapter(mDevicesListViewAdapter);
             // devices header row
             mDevicesListHeaderView = findViewById(R.id.devices_header_view);
-            TextView devicesHeaderTitleTxtView = (TextView) mDevicesListHeaderView.findViewById(org.matrix.androidsdk.R.id.heading);
+            TextView devicesHeaderTitleTxtView = (TextView) mDevicesListHeaderView.findViewById(R.id.heading);
             if (null != devicesHeaderTitleTxtView) {
                 devicesHeaderTitleTxtView.setText(R.string.room_participants_header_devices);
             }

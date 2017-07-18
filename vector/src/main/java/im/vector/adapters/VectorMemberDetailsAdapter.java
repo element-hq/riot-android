@@ -309,8 +309,8 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
         }
 
-        ((TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading)).setText(getGroupTitle(groupPosition));
-        convertView.findViewById(org.matrix.androidsdk.R.id.heading_image).setVisibility(View.GONE);
+        ((TextView) convertView.findViewById(R.id.heading)).setText(getGroupTitle(groupPosition));
+        convertView.findViewById(R.id.heading_image).setVisibility(View.GONE);
 
         // mUncategorizedGroupPosition has no header
         convertView.findViewById(R.id.heading_layout).setVisibility((groupPosition == mUncategorizedGroupPosition) ? View.GONE : View.VISIBLE);

@@ -38,6 +38,7 @@ import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -758,6 +759,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
         addEmailPreference.setIcon(R.drawable.ic_add_black);
         addEmailPreference.setOrder(100);
+        addEmailPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
         addEmailPreference.setOnPreferenceChangeListener(
                 new Preference.OnPreferenceChangeListener() {
@@ -1619,7 +1621,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             @Override
             public void onMatrixError(MatrixError e) {
-                onCommonDone(e.getLocalizedMessage());
+                if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
+                    onCommonDone(getString(R.string.account_email_already_used_error));
+                } else {
+                    onCommonDone(e.getLocalizedMessage());
+                }
             }
 
             @Override

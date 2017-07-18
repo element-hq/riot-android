@@ -535,6 +535,10 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="account_email_validation_message">Bitte prüfe deinen E-Mail-Posteingang und klicke auf den in der E-Mail enthaltenen Link. Klicke anschließend auf Fortsetzen.</string>
     <string name="account_email_validation_error">Verifizieren der E-Mail-Adresse unmöglich. Bitte prüfe deine E-Mails und klicke auf den enthaltenen Link. Anschließend klicke auf "Fortsetzen"</string>
 
+    <string name="account_email_already_used_error">This email address is already in use</string>
+    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
+    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+
     <string name="settings_change_password">Passwort ändern</string>
     <string name="settings_old_password">Altes Passwort</string>
     <string name="settings_new_password">Neues Passwort</string>

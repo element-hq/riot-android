@@ -61,7 +61,6 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
         return false;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
