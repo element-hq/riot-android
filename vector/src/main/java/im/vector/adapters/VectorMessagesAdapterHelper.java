@@ -187,6 +187,11 @@ public class VectorMessagesAdapterHelper {
         return tsTextView;
     }
 
+    // JSON keys
+    private static final String AVATAR_URL_KEY = "avatar_url";
+    private static final String MEMBERSHIP_KEY = "membership";
+    private static final String DISPLAYNAME_KEY = "displayname";
+
     /**
      * Load the avatar image in the avatar view
      *
@@ -209,12 +214,12 @@ public class VectorMessagesAdapterHelper {
         // Check whether this avatar url is updated by the current event (This happens in case of new joined member)
         JsonObject msgContent = event.getContentAsJsonObject();
 
-        if (msgContent.has("avatar_url")) {
-            url = msgContent.get("avatar_url") == JsonNull.INSTANCE ? null : msgContent.get("avatar_url").getAsString();
+        if (msgContent.has(AVATAR_URL_KEY)) {
+            url = msgContent.get(AVATAR_URL_KEY) == JsonNull.INSTANCE ? null : msgContent.get(AVATAR_URL_KEY).getAsString();
         }
 
-        if (msgContent.has("membership")) {
-            String memberShip = msgContent.get("membership") == JsonNull.INSTANCE ? null : msgContent.get("membership").getAsString();
+        if (msgContent.has(MEMBERSHIP_KEY)) {
+            String memberShip = msgContent.get(MEMBERSHIP_KEY) == JsonNull.INSTANCE ? null : msgContent.get(MEMBERSHIP_KEY).getAsString();
 
             // the avatar url is the invited one not the inviter one.
             if (TextUtils.equals(memberShip, RoomMember.MEMBERSHIP_INVITE)) {
@@ -228,8 +233,8 @@ public class VectorMessagesAdapterHelper {
             if (TextUtils.equals(memberShip, RoomMember.MEMBERSHIP_JOIN)) {
                 // in some cases, the displayname cannot be retrieved because the user member joined the room with this event
                 // without being invited (a public room for example)
-                if (msgContent.has("displayname")) {
-                    displayName = msgContent.get("displayname") == JsonNull.INSTANCE ? null : msgContent.get("displayname").getAsString();
+                if (msgContent.has(DISPLAYNAME_KEY)) {
+                    displayName = msgContent.get(DISPLAYNAME_KEY) == JsonNull.INSTANCE ? null : msgContent.get(DISPLAYNAME_KEY).getAsString();
                 }
             }
         }

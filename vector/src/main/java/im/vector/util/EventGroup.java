@@ -45,20 +45,16 @@ public class EventGroup extends Event {
     // rows list (ordered)
     private final List<MessageRow> mRows;
 
-    // true the merged events are
+    // true the merged events are expanded
     private boolean mIsExpanded;
 
     // hidden event ids list
     private final Set<String> mHiddenEventIds;
 
-    private final Context mContext;
-
     /**
      * Constructors
      */
-    public EventGroup(Context context, Set<String> hiddenGroupIds) {
-        mContext = context;
-
+    public EventGroup(Set<String> hiddenGroupIds) {
         // defines an MessageRowGroup unique ID
         eventId = "EventGroup-" + System.currentTimeMillis();
 
@@ -178,7 +174,7 @@ public class EventGroup extends Event {
      * @return true if there is no more items
      */
     public boolean isEmpty() {
-        return 0 == mRows.size();
+        return mRows.isEmpty();
     }
 
     /**
@@ -272,9 +268,7 @@ public class EventGroup extends Event {
         return rows;
     }
 
-
-    @Override
-    public java.lang.String toString() {
-        return mContext.getString(R.string.membership_changes, mRowsMap.size());
+    public java.lang.String toString(Context context) {
+        return context.getString(R.string.membership_changes, mRowsMap.size());
     }
 }

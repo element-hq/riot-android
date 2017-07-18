@@ -76,6 +76,7 @@ import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -176,7 +177,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final VectorMessagesAdapterMediasHelper mMediasHelper;
     protected final VectorMessagesAdapterHelper mHelper;
 
-    private final HashSet<String> mHiddenEventIds = new HashSet<>();
+    private final Set<String> mHiddenEventIds = new HashSet<>();
 
     /**
      * Creates a messages adapter with the default layouts.
@@ -1389,7 +1390,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
 
-            summaryTextView.setText(event.toString());
+            summaryTextView.setText(event.toString(mContext));
         }
 
         headerLayout.setOnClickListener(new View.OnClickListener() {
@@ -2184,7 +2185,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             if (null == eventGroupRow) {
-                eventGroupRow = new MessageRow(new EventGroup(mContext.getApplicationContext(), mHiddenEventIds), null);
+                eventGroupRow = new MessageRow(new EventGroup(mHiddenEventIds), null);
                 mEventGroups.add((EventGroup) eventGroupRow.getEvent());
                 super.insert(eventGroupRow, 0);
                 mEventRowMap.put(eventGroupRow.getEvent().eventId, row);
@@ -2224,7 +2225,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             if (null == eventGroupRow) {
-                eventGroupRow = new MessageRow(new EventGroup(mContext.getApplicationContext(), mHiddenEventIds), null);
+                eventGroupRow = new MessageRow(new EventGroup(mHiddenEventIds), null);
                 super.add(eventGroupRow);
                 mEventGroups.add((EventGroup) eventGroupRow.getEvent());
                 mEventRowMap.put(eventGroupRow.getEvent().eventId, eventGroupRow);
