@@ -167,7 +167,8 @@
             android:layout_alignTop="@+id/jump_to_first_unread_label"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/vector_leave_room_black" />
+            android:src="@drawable/vector_leave_room_black"
+            android:tint="?attr/vector_message_text_color" />
 
         <ProgressBar
             android:id="@+id/jump_to_read_spinner"
