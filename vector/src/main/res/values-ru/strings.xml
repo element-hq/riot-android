@@ -5,10 +5,10 @@
     
     <!-- titles -->
     <string name="title_activity_home">Сообщения</string>
-    <string name="title_activity_room">Комнаты</string>
+    <string name="title_activity_room">Комната</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_member_details">Информация об участнике</string>
-    <string name="title_activity_historical">Historical</string>
+    <string name="title_activity_historical">История</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -18,14 +18,14 @@
     <string name="send">Отправить</string>
     <string name="copy">Копировать</string>
     <string name="resend">Повторить</string>
-    <string name="redact">Удалить</string>
+    <string name="redact">Редактировать</string>
     <string name="quote">Цитата</string>
     <string name="share">Поделиться</string>
     <string name="later">Позже</string>
     <string name="forward">Переслать</string>
-    <string name="permalink">Ссылка</string>
-    <string name="view_source">Просмотр исходного</string>
-    <string name="view_decrypted_source">View Decrypted Source</string>
+    <string name="permalink">Постоянная ссылка</string>
+    <string name="view_source">Просмотр исходного кода</string>
+    <string name="view_decrypted_source">Просмотр расшифрованного источника</string>
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
     <string name="report_content">Содержание отчета</string>
@@ -41,17 +41,17 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц звонки не поддерживаются в зашифрованных комнатах</string>
     <string name="send_anyway">Отправить всё равно</string>
     <string name="or">или</string>
-    <string name="and">and</string>
-    <string name="invite">Invite</string>
+    <string name="and">и</string>
+    <string name="invite">Приглашение</string>
 
     <!-- actions -->
     <string name="action_sign_out">Выйти</string>
     <string name="action_sign_out_confirmation">Для безопасности при выходе из системы удаляются все ключи шифрования, что делает невозможным чтение предыдущей зашифрованной истории чата.\n Выберите экспорт, чтобы сделать резервную копию истории чата, перед выходом из системы.</string>
     <string name="action_voice_call">Голосовой вызов</string>
     <string name="action_video_call">Видео вызов</string>
-    <string name="action_global_search">Global search</string>
+    <string name="action_global_search">Глобальный поиск</string>
     <string name="action_mark_all_as_read">Отметить всё как прочитанное</string>
-    <string name="action_historical">Historical</string>
+    <string name="action_historical">Исторический</string>
     <string name="action_quick_reply">Быстрый ответ</string>
     <string name="action_open">Открыть</string>
     <string name="action_close">Закрыть</string>
@@ -64,41 +64,41 @@
 
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
-    <string name="bottom_action_favourites">Favourites</string>
-    <string name="bottom_action_people">People</string>
-    <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_favourites">Избранные</string>
+    <string name="bottom_action_people">Люди</string>
+    <string name="bottom_action_rooms">Комнаты</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Search for rooms</string>
-    <string name="home_filter_placeholder_favorites">Search for favourites</string>
-    <string name="home_filter_placeholder_people">Search for people</string>
-    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+    <string name="home_filter_placeholder_home">Поиск комнат</string>
+    <string name="home_filter_placeholder_favorites">Поиск избранных</string>
+    <string name="home_filter_placeholder_people">Поиск людей</string>
+    <string name="home_filter_placeholder_rooms">Поиск комнат</string>
 
     <!-- Home fragment -->
-    <string name="invitations_header">Invites</string>
-    <string name="low_priority_header">Low priority</string>
+    <string name="invitations_header">Приглашения</string>
+    <string name="low_priority_header">Низкий приоритет</string>
 
     <!-- People fragment -->
-    <string name="direct_chats_header">Conversations</string>
-    <string name="local_address_book_header">Local address book</string>
-    <string name="known_contacts_header">Known contacts</string>
-    <string name="matrix_only_filter">Matrix contacts only</string>
-    <string name="no_conversation_placeholder">No conversations</string>
+    <string name="direct_chats_header">Диалоги</string>
+    <string name="local_address_book_header">Внутренние контакты</string>
+    <string name="known_contacts_header">Известные контакты</string>
+    <string name="matrix_only_filter">Только контакты Matrix</string>
+    <string name="no_conversation_placeholder">Нет диалогов</string>
     <string name="no_local_contact_placeholder">No local contacts</string>
-    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
-    <string name="no_result_placeholder">No results</string>
+    <string name="no_contact_access_placeholder">Вы не дали доступ Riot к внутренним контактам</string>
+    <string name="no_result_placeholder">Нет результатов</string>
 
     <!-- Rooms fragment -->
-    <string name="rooms_header">Rooms</string>
-    <string name="rooms_directory_header">Room directory</string>
-    <string name="no_room_placeholder">No rooms</string>
-    <string name="no_public_room_placeholder">No public rooms available</string>
+    <string name="rooms_header">Комнаты</string>
+    <string name="rooms_directory_header">Список комнат</string>
+    <string name="no_room_placeholder">Нет комнат</string>
+    <string name="no_public_room_placeholder">Публичные комнаты недоступны</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">%d users</item>
-        <item quantity="few">%d users</item>
-        <item quantity="many">%d users</item>
-        <item quantity="other">%d users</item>
-    </plurals>
+	<item quantity="one">%d пользователь</item>
+	<item quantity="few">%d пользователя</item>
+	<item quantity="many">%d пользователей</item>
+	<item quantity="other"/>
+</plurals>
     
     <string name="send_bug_report_include_logs">Отправить журналы</string>
     <string name="send_bug_report_include_crash_logs">Отправить журналы ошибок</string>
@@ -204,7 +204,7 @@
     <string name="e2e_need_log_in_again">Вам необходимо перелогиниться, для генерации E2E ключей шифрования для этого устройства и отправки их на сервер.\nЭто однократная операция.\nИзвините за неудобства.</string>
 
     <!-- read receipts list Screen -->
-    <string name="read_receipts_list">Read Receipts List</string>
+    <string name="read_receipts_list">Чтение списка вступивших</string>
     
     <!-- accounts list Screen -->
     <string name="choose_account">Выбор учётной записи</string>
@@ -242,14 +242,14 @@
     <string name="incoming_call">Входящий вызов</string>
     <string name="incoming_video_call">Входящий видио вызов</string>
     <string name="incoming_voice_call">Входящий аудио вызов</string>
-    <string name="call_in_progress">Call In Progress</string>
+    <string name="call_in_progress">Звонок выполняется</string>
     
-    <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
-    <string name="call_error_ice_failed">Media Connection Failed</string>
-    <string name="call_error_camera_init_failed">Cannot initialize the camera</string>
-    <string name="call_error_answered_elsewhere">call answered elsewhere</string>
-    <string name="call_error_peer_hangup_elsewhere">call hung up elsewhere</string>
-    <string name="call_error_peer_cancelled_call">call cancelled</string>
+    <string name="call_error_user_not_responding">На другом конце не отвечают.</string>
+    <string name="call_error_ice_failed">Медиавызов не удался</string>
+    <string name="call_error_camera_init_failed">Невозможно инициализировать камеру</string>
+    <string name="call_error_answered_elsewhere">Звонок принят на другом устройстве</string>
+    <string name="call_error_peer_hangup_elsewhere">Звонок сброшен на другом устройстве</string>
+    <string name="call_error_peer_cancelled_call">звонок отменен</string>
     
     <string name="action_accept">ПРИНЯТЬ</string>
     <string name="action_ignore">ОТМЕНИТЬ</string>
@@ -285,7 +285,7 @@
     <string name="reject">Отклонить</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+    <string name="room_jump_to_first_unread">Перейти к первому непрочитанному сообщению.</string>
     
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s пригласил вас присоединиться к этой комнате</string>
@@ -302,7 +302,13 @@
     <string name="room_title_members">%1$d пользователей</string>
     <string name="room_title_one_member">1 пользователь</string>
     <string name="room_e2e_alert_title">Предостережение!</string>
-    <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
+    <string name="room_e2e_alert_message">End-to-end шифрование в бета-тестировании и может быть ненадежным.
+
+Не стоит пока доверять этому для защиты данных.
+
+Устройства не смогут расшифровать историю, пока не войдут в комнату..
+
+Зашифрованные сообщения не будут видны на клиентах, в которых не включено шифрование.</string>
     
     <!--  Time -->
     <string name="format_time_s">с</string>
@@ -318,7 +324,7 @@
 
     <string name="room_participants_online">В сети</string>
     <string name="room_participants_offline">Недоступен</string>
-    <string name="room_participants_idle">Idle</string>
+    <string name="room_participants_idle">Простой</string>
     <string name="room_participants_now">сейчас</string>
     <string name="room_participants_ago">назад</string>
 
@@ -345,15 +351,15 @@
     <string name="room_participants_invite_prompt_msg">"Вы уверены что хотите пригласить %s в этот чат?"</string>
     
     <!-- invitation -->
-    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
+    <string name="people_search_invite_by_id"><u>Пригласить по ID</u></string>
     <string name="people_search_local_contacts">Локальные Контакты (%d)</string>
     <string name="people_search_known_contacts">Известные Контакты (%s)</string>
     <string name="people_search_filter_text">Только зарегистрированные</string>
     <string name="people_search_too_many_contacts">Слишком много контактов, используйте поле поиска</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Пригласить пользователя по ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Пожалуйста, введите один или несколько адресов email или Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email или Matrix ID</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Поиск</string>
@@ -399,7 +405,7 @@
     <string name="room_details_people_present_group_name">ПРИСОЕДИНИЛИСЬ</string>
     
     <!-- Room events -->
-    <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
+    <string name="room_event_action_report_prompt_reason">Причина отчета о контенте</string>
     <string name="room_event_action_report_prompt_ignore_user">Вы хотите скрыть все сообщения этого пользователя?</string>
     <string name="room_event_action_cancel_upload">Отменить загрузку</string>
     <string name="room_event_action_cancel_download">Отменить загрузку</string>
@@ -407,8 +413,8 @@
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Приглашение от %s</string>
     <string name="room_displayname_room_invite">Приглашение в комнату</string>
-    <string name="room_displayname_two_members">%1$s and %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s and %2$d others</string>
+    <string name="room_displayname_two_members">%1$s и %2$s</string>
+    <string name="room_displayname_more_than_two_members">%1$s и %2$d другие</string>
     <string name="room_displayname_no_title">Пустая комната</string>
     
     <!-- Search -->
@@ -429,9 +435,9 @@
     <string name="room_recents_invites">ПРИГЛАШЕНИЯ</string>
     <string name="room_recents_start_chat">Начать чат</string>
     <string name="room_recents_create_room">Создать чат</string>
-    <string name="room_recents_join_room">Join room</string>
-    <string name="room_recents_join_room_title">Join a room</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
+    <string name="room_recents_join_room">Войти в комнату</string>
+    <string name="room_recents_join_room_title">Войти в комнату</string>
+    <string name="room_recents_join_room_prompt">Введите ID комнаты или псевдоним</string>
     
     <!-- Directory -->
     <string name="directory_search_results_title">Просмотр каталога</string>
@@ -447,16 +453,16 @@
     <string name="room_settings_de_prioritize">Не срочно</string>
     <string name="room_settings_direct_chat">Прямой чат</string>
     <string name="room_settings_leave_conversation">Покинуть обсуждение</string>
-    <string name="room_settings_forget">Forget</string>
+    <string name="room_settings_forget">Забыть</string>
     
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Сообщения</string>
     <string name="room_sliding_menu_settings">Настройки</string>
     <string name="room_sliding_menu_version">Версия </string>
-    <string name="room_sliding_menu_term_and_conditions">Terms &amp; conditions</string>
-    <string name="room_sliding_menu_third_party_notices">Third party notices</string>
+    <string name="room_sliding_menu_term_and_conditions">Условия и положения</string>
+    <string name="room_sliding_menu_third_party_notices">Прочие уведомления</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
-    <string name="room_sliding_menu_privacy_policy">Privacy policy</string>
+    <string name="room_sliding_menu_privacy_policy">Политика конфиденциальности</string>
 
     <!-- Vector Settings -->
 
@@ -466,7 +472,7 @@
     <string name="settings_add_email_address">Добавить email</string>
     <string name="settings_phone_number">Телефон</string>
     <string name="settings_add_phone_number">Добавить телефон</string>
-    <string name="settings_summary_app_info_link">Application system info screen</string>
+    <string name="settings_summary_app_info_link">Эскран системной информации приложения</string>
     <string name="settings_title_app_info_link">Сведения о приложении</string>
     
     <string name="settings_enable_all_notif">Включить уведомления для этой учётной записи</string>
@@ -489,10 +495,10 @@
     
     <string name="settings_version">Версия</string>
     <string name="settings_olm_version">Версия olm</string>
-    <string name="settings_app_term_conditions">Terms &amp; conditions</string>
-    <string name="settings_third_party_notices">Third party notices</string>
+    <string name="settings_app_term_conditions">Условия и положения</string>
+    <string name="settings_third_party_notices">Прочие уведомления</string>
     <string name="settings_copyright">Copyright</string>
-    <string name="settings_privacy_policy">Privacy policy</string>
+    <string name="settings_privacy_policy">Политика конфиденциальности</string>
     <string name="settings_clear_cache">Очистить кэш</string>
     <!--string name="settings_room_privacy_label">Privacy</string-->
     
@@ -501,15 +507,15 @@
     <string name="settings_notifications">Уведомления</string>
     <string name="settings_ignored_users">Игнорируемые</string>
     <string name="settings_other">Другое</string>
-    <string name="settings_advanced">Продвинутые</string>
-    <string name="settings_cryptography">Cryptography</string>
+    <string name="settings_advanced">Дополнительно</string>
+    <string name="settings_cryptography">Криптография</string>
     <string name="settings_notifications_targets">Отправлять уведомления на</string>
     <string name="settings_contact">Локальные контакты</string>
     <string name="settings_contacts_app_permission">Доступ к контактам</string>
     <string name="settings_contacts_phonebook_country">Страна для контактов</string>
-    <string name="settings_home_display">Home display</string>
-    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
-    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
+    <string name="settings_home_display">Домашний экран</string>
+    <string name="settings_pin_missed_notifications">Прикрепить комнаты с отключенными уведомлениями</string>
+    <string name="settings_pin_unread_messages">Прикрепить комнаты с непрочитанными сообщениями</string>
     <string name="settings_devices_list">Устройства</string>
     <string name="devices_details_dialog_title">Подробности о устройстве</string>
     <string name="devices_details_id_title">ID</string>
@@ -529,12 +535,12 @@
     
     <string name="account_email_validation_title">Ожидается подтверждение</string>
     <string name="account_email_validation_message">Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
-    <string name="account_email_validation_error">Не удалась проверка email. Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
+   <string name="account_email_validation_error">Не удалась проверка email. Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
 
     <string name="account_email_already_used_error">This email address is already in use</string>
     <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
     <string name="account_phone_number_already_used_error">This phone number is already in use</string>
-
+  
     <string name="settings_change_password">Смена пароля</string>
     <string name="settings_old_password">старый пароль</string>
     <string name="settings_new_password">новый пароль</string>
@@ -605,7 +611,7 @@
     <string name="room_settings_category_advanced_title">Дополнительно</string>
     <string name="room_settings_room_internal_id">Внутренний ID комнаты</string>
     <string name="room_settings_addresses_pref_title">Адреса</string>
-    <string name="room_settings_labs_pref_title">Labs</string>
+    <string name="room_settings_labs_pref_title">Лаборатория</string>
     <string name="room_settings_labs_warning_message">Это экспериментальный функционал, он может вызвать неожиданный сбой. Используйте с осторожностью.</string>
     <string name="room_settings_labs_end_to_end">E2E шифрование</string>
     <string name="room_settings_labs_end_to_end_is_active">E2E шифрование активно</string>
@@ -703,17 +709,17 @@
     <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.\nЭто означает, что эти устройства могут не пренадлежать тем пользователям, на которых они претендуют. \nПеред продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.\n\nНеизвестные устройства:</string>
 
     <!-- directory activity  -->
-    <string name="select_room_directory">Select a room directory</string>
-    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
-    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
-    <string name="directory_server_placeholder">Homeserver URL</string>
-    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
-    <string name="directory_server_native_rooms">All native %s rooms</string>
+    <string name="select_room_directory">Выбор списка комнат</string>
+    <string name="directory_server_fail_to_retrieve_server">Сервер возможно недоступен или перегружен</string>
+    <string name="directory_server_type_homeserver">Введите домашний сервер для отображения списка публичных комнат</string>
+    <string name="directory_server_placeholder">URL домашнего сервера</string>
+    <string name="directory_server_all_rooms_on_server">Все комнаты на сервере %s</string>
+    <string name="directory_server_native_rooms">Все местные комнаты %s</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d unread notified messages</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
+    <string name="notification_unread_notified_messages">%d непрочитанных сообщений</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d непрочитанных сообщений в %2$d комнатах</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Search for historical</string>
+    <string name="historical_placeholder">Поиск в истории</string>
 </resources>
