@@ -41,7 +41,6 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.EventContent;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -191,8 +190,8 @@ public class VectorMessagesAdapterHelper {
     /**
      * Load the avatar image in the avatar view
      *
-     * @param avatarView  the avatar view
-     * @param row the message row
+     * @param avatarView the avatar view
+     * @param row        the message row
      */
     void loadMemberAvatar(ImageView avatarView, MessageRow row) {
         RoomState roomState = row.getRoomState();

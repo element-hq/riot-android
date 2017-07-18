@@ -176,7 +176,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final VectorMessagesAdapterMediasHelper mMediasHelper;
     protected final VectorMessagesAdapterHelper mHelper;
 
-    private HashSet<String> mHiddenEventIds = new HashSet<>();
+    private final HashSet<String> mHiddenEventIds = new HashSet<>();
 
     /**
      * Creates a messages adapter with the default layouts.
@@ -954,7 +954,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
-                tsTextView.setTextColor(mContext.getResources().getColor(R.color.chat_gray_text));
+                tsTextView.setTextColor(ContextCompat.getColor(mContext, R.color.chat_gray_text));
             }
 
             tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode) ? View.VISIBLE : View.GONE);
@@ -1338,7 +1338,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     /**
-     * Mels message management
+     * Get a merge view for a position.
      *
      * @param position    the message position
      * @param convertView the message view
@@ -1397,7 +1397,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             public void onClick(View v) {
                 event.setIsExpanded(!event.isExpanded());
                 updateHighlightedEventId();
-                notifyDataSetChanged();
+
+                if (event.contains(mSelectedEventId)) {
+                    cancelSelectionMode();
+                } else {
+                    notifyDataSetChanged();
+                }
             }
         });
 
@@ -1896,7 +1901,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 readMarkerView.setAnimation(animation);
             }
 
-            final Handler uiHandler =  new Handler(Looper.getMainLooper());
+            final Handler uiHandler = new Handler(Looper.getMainLooper());
 
             uiHandler.post(new Runnable() {
                 @Override
@@ -1932,10 +1937,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     /**
-     * Tells if the event is mReadMarkerEventId one.
+     * Tells if the event is the mReadMarkerEventId one.
      *
      * @param event the event to test
-     * @return
+     * @return true if the event is the mReadMarkerEventId one.
      */
     private boolean isReadMarkedEvent(Event event) {
         // if the read marked event is hidden and the event is a merged one
@@ -2162,10 +2167,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * *********************************************************************************************
      */
 
-    private List<EventGroup> mEventGroups = new ArrayList<>();
+    private final List<EventGroup> mEventGroups = new ArrayList<>();
 
     /**
      * Insert the MessageRow in an EventGroup to the front.
+     *
      * @param row the messageRow
      * @return true if the MessageRow has been inserted
      */
@@ -2193,39 +2199,40 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     /**
      * Add a MessageRow into an EventGroup (if it is possible)
-     * @param row
+     *
+     * @param row the row to added
      */
     private void addToEventGroup(MessageRow row) {
-       if (supportMessageRowMerge(row)) {
-           MessageRow eventGroupRow = null;
+        if (supportMessageRowMerge(row)) {
+            MessageRow eventGroupRow = null;
 
-           // search backward the EventGroup event
-           for (int i = getCount() - 1; i >= 0; i--) {
-               MessageRow curRow = getItem(i);
+            // search backward the EventGroup event
+            for (int i = getCount() - 1; i >= 0; i--) {
+                MessageRow curRow = getItem(i);
 
-               if (curRow.getEvent() instanceof EventGroup) {
-                   // the event can be added (same day ?)
-                   if (((EventGroup) curRow.getEvent()).canAddRow(row)) {
-                       eventGroupRow = curRow;
-                   }
-                   break;
-               } else
-                   // there is no more room member events
-                   if (!TextUtils.equals(curRow.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-                       break;
-                   }
-           }
+                if (curRow.getEvent() instanceof EventGroup) {
+                    // the event can be added (same day ?)
+                    if (((EventGroup) curRow.getEvent()).canAddRow(row)) {
+                        eventGroupRow = curRow;
+                    }
+                    break;
+                } else
+                    // there is no more room member events
+                    if (!TextUtils.equals(curRow.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+                        break;
+                    }
+            }
 
-           if (null == eventGroupRow) {
-               eventGroupRow = new MessageRow(new EventGroup(mContext.getApplicationContext(), mHiddenEventIds), null);
-               super.add(eventGroupRow);
-               mEventGroups.add((EventGroup)eventGroupRow.getEvent());
-               mEventRowMap.put(eventGroupRow.getEvent().eventId, eventGroupRow);
-           }
+            if (null == eventGroupRow) {
+                eventGroupRow = new MessageRow(new EventGroup(mContext.getApplicationContext(), mHiddenEventIds), null);
+                super.add(eventGroupRow);
+                mEventGroups.add((EventGroup) eventGroupRow.getEvent());
+                mEventRowMap.put(eventGroupRow.getEvent().eventId, eventGroupRow);
+            }
 
-           ((EventGroup) eventGroupRow.getEvent()).add(row);
-           updateHighlightedEventId();
-       }
+            ((EventGroup) eventGroupRow.getEvent()).add(row);
+            updateHighlightedEventId();
+        }
     }
 
     /**
@@ -2234,7 +2241,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param row the message row
      * @return true if the message has been removed
      */
-    private boolean removeFromEventGroup(MessageRow row) {
+    private void removeFromEventGroup(MessageRow row) {
         if (supportMessageRowMerge(row)) {
             String eventId = row.getEvent().eventId;
             for (EventGroup eventGroup : mEventGroups) {
@@ -2245,13 +2252,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                         mEventGroups.remove(eventGroup);
                         super.remove(row);
                         updateHighlightedEventId();
-                        return true;
+                        return;
                     }
                 }
             }
         }
-
-        return false;
     }
 
     /**
@@ -2277,7 +2282,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * It checks and merges if required two EventGroup around the deleted item.
      *
      * @param deletedRow the deleted row
-     * @param position the deleted item position
+     * @param position   the deleted item position
      */
     private void checkEventGroupsMerge(MessageRow deletedRow, int position) {
         if ((position > 0) && (position < getCount() - 1) && !EventGroup.isSupported(deletedRow)) {
