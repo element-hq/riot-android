@@ -929,15 +929,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         // the notices are never merged
         if (!mIsSearchMode && (ROW_TYPE_NOTICE != msgType)) {
             if (position > 0) {
-                MessageRow prevRow = getItem(position - 1);
-                isMergedView = TextUtils.equals(prevRow.getEvent().getSender(), event.getSender());
+                Event prevEvent = getItem(position - 1).getEvent();
+                isMergedView = (ROW_TYPE_NOTICE != getItemViewType(prevEvent)) && TextUtils.equals(prevEvent.getSender(), event.getSender());
             }
 
             // not the last message
             if ((position + 1) < this.getCount()) {
                 Event nextEvent = getItem(position + 1).getEvent();
-                int nextRowType = getItemViewType(nextEvent);
-                willBeMerged = (ROW_TYPE_NOTICE != nextRowType) && TextUtils.equals(nextEvent.getSender(), event.getSender());
+                willBeMerged = (ROW_TYPE_NOTICE != getItemViewType(nextEvent)) && TextUtils.equals(nextEvent.getSender(), event.getSender());
             }
         }
 
