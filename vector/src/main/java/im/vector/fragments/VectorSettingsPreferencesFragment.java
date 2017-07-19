@@ -2554,7 +2554,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new ApiCallback<String>() {
                     private void onDone(String message) {
                         hideLoadingView();
-                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VectorApp.getInstance().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
