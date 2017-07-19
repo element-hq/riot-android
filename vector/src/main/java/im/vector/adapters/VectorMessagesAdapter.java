@@ -131,7 +131,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_VIDEO = 5;
     static final int ROW_TYPE_MERGE = 6;
     static final int ROW_TYPE_HIDDEN = 7;
-    static final int NUM_ROW_TYPES = 8;
+    static final int ROW_TYPE_ROOM_MEMBER = 8;
+    static final int NUM_ROW_TYPES = 9;
 
     protected final Context mContext;
     private final HashMap<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
@@ -184,10 +185,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         this(session, context,
-                R.layout.adapter_item_vector_message_text_emote,
+                R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_image_video,
-                R.layout.adapter_item_vector_message_notice,
-                R.layout.adapter_item_vector_message_text_emote,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_room_member,
+                R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_file,
                 R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_message_merge,
@@ -208,13 +210,23 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param videoResLayoutId  the video message layout
      * @param mediasCache       the medias cache.
      */
-    public VectorMessagesAdapter(MXSession session, Context context, int textResLayoutId, int imageResLayoutId,
-                                 int noticeResLayoutId, int emoteRestLayoutId, int fileResLayoutId, int videoResLayoutId, int mergeResLayoutId, MXMediasCache mediasCache) {
+    public VectorMessagesAdapter(MXSession session,
+                                 Context context,
+                                 int textResLayoutId,
+                                 int imageResLayoutId,
+                                 int noticeResLayoutId,
+                                 int roomMemberResLayoutId,
+                                 int emoteRestLayoutId,
+                                 int fileResLayoutId,
+                                 int videoResLayoutId,
+                                 int mergeResLayoutId,
+                                 MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
         mRowTypeToLayoutId.put(ROW_TYPE_TEXT, textResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_IMAGE, imageResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_NOTICE, noticeResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_ROOM_MEMBER, roomMemberResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_EMOTE, emoteRestLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_FILE, fileResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_VIDEO, videoResLayoutId);
@@ -619,16 +631,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         final View inflatedView;
-        switch (getItemViewType(position)) {
+        int viewType = getItemViewType(position);
+
+        switch (viewType) {
             case ROW_TYPE_TEXT:
                 inflatedView = getTextView(position, convertView, parent);
                 break;
             case ROW_TYPE_IMAGE:
             case ROW_TYPE_VIDEO:
-                inflatedView = getImageVideoView(getItemViewType(position), position, convertView, parent);
+                inflatedView = getImageVideoView(viewType, position, convertView, parent);
                 break;
             case ROW_TYPE_NOTICE:
-                inflatedView = getNoticeView(position, convertView, parent);
+            case ROW_TYPE_ROOM_MEMBER:
+                inflatedView = getNoticeRoomMemberView(viewType, position, convertView, parent);
                 break;
             case ROW_TYPE_EMOTE:
                 inflatedView = getEmoteView(position, convertView, parent);
@@ -875,7 +890,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                         Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType) ||
                         Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType) ||
                         Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
-            viewType = ROW_TYPE_NOTICE;
+            viewType = ROW_TYPE_ROOM_MEMBER;
 
         } else {
             throw new RuntimeException("Unknown event type: " + eventType);
@@ -886,6 +901,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         return viewType;
+    }
+
+    /**
+     * Tells if the event of type 'eventType' can be merged.
+     *
+     * @param eventType the event type to test
+     * @return true if the event can be merged
+     */
+    private static boolean isMergeableEvent(int eventType) {
+        return (ROW_TYPE_NOTICE != eventType) && (ROW_TYPE_ROOM_MEMBER != eventType);
     }
 
     /**
@@ -927,16 +952,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         boolean willBeMerged = false;
 
         // the notices are never merged
-        if (!mIsSearchMode && (ROW_TYPE_NOTICE != msgType)) {
+        if (!mIsSearchMode && isMergeableEvent(msgType)) {
             if (position > 0) {
                 Event prevEvent = getItem(position - 1).getEvent();
-                isMergedView = (ROW_TYPE_NOTICE != getItemViewType(prevEvent)) && TextUtils.equals(prevEvent.getSender(), event.getSender());
+                isMergedView = isMergeableEvent(getItemViewType(prevEvent)) && TextUtils.equals(prevEvent.getSender(), event.getSender());
             }
 
             // not the last message
             if ((position + 1) < this.getCount()) {
                 Event nextEvent = getItem(position + 1).getEvent();
-                willBeMerged = (ROW_TYPE_NOTICE != getItemViewType(nextEvent)) && TextUtils.equals(nextEvent.getSender(), event.getSender());
+                willBeMerged = isMergeableEvent(getItemViewType(nextEvent)) && TextUtils.equals(nextEvent.getSender(), event.getSender());
             }
         }
 
@@ -1151,9 +1176,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param parent      the parent view
      * @return the updated text view.
      */
-    private View getNoticeView(final int position, View convertView, ViewGroup parent) {
+    private View getNoticeRoomMemberView(final int viewType, final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_NOTICE), parent, false);
+            convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(viewType), parent, false);
         }
 
         MessageRow row = getItem(position);
@@ -1168,7 +1193,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         TextView noticeTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
 
         if (null == noticeTextView) {
-            Log.e(LOG_TAG, "getNoticeView : invalid layout");
+            Log.e(LOG_TAG, "getNoticeRoomMemberView : invalid layout");
             return convertView;
         }
 
@@ -1181,7 +1206,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
-        this.manageSubView(position, convertView, textLayout, ROW_TYPE_NOTICE);
+        this.manageSubView(position, convertView, textLayout, viewType);
 
         addContentViewListeners(convertView, noticeTextView, position);
 

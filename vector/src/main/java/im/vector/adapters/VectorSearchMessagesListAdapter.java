@@ -52,10 +52,11 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
     public VectorSearchMessagesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediasCache mediasCache) {
         super(session, context,
-                R.layout.adapter_item_vector_search_message_text_emote,
+                R.layout.adapter_item_vector_search_message_text_emote_notice,
                 R.layout.adapter_item_vector_search_message_image_video,
-                R.layout.adapter_item_vector_search_message_notice,
-                R.layout.adapter_item_vector_search_message_text_emote,
+                R.layout.adapter_item_vector_search_message_text_emote_notice,
+                R.layout.adapter_item_vector_search_message_room_member,
+                R.layout.adapter_item_vector_search_message_text_emote_notice,
                 R.layout.adapter_item_vector_search_message_file,
                 R.layout.adapter_item_vector_search_message_image_video,
                 -1,
