@@ -611,7 +611,7 @@ public class EventStreamService extends Service {
         mActiveEventStreamService = this;
 
         for (final MXSession session : mSessions) {
-            if (null == session.getDataHandler()) {
+            if (null == session.getDataHandler() || (null == session.getDataHandler().getStore())) {
                 Log.e(LOG_TAG, "start : the session is not anymore valid.");
                 return;
             }
