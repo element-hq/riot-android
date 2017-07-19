@@ -910,7 +910,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @return true if the event can be merged
      */
     private static boolean isMergeableEvent(int eventType) {
-        return (ROW_TYPE_NOTICE != eventType) && (ROW_TYPE_ROOM_MEMBER != eventType);
+        return (ROW_TYPE_NOTICE != eventType) && (ROW_TYPE_ROOM_MEMBER != eventType) && (ROW_TYPE_HIDDEN != eventType);
     }
 
     /**
