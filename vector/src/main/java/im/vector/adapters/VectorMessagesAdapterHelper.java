@@ -18,6 +18,7 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -401,7 +402,7 @@ public class VectorMessagesAdapterHelper {
         IMXStore store = mSession.getDataHandler().getStore();
 
         // sanity check
-        if (null == roomState) {
+        if (null == roomState || !PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(mContext.getString(R.string.settings_show_read_receipts), true)) {
             avatarsListView.setVisibility(View.GONE);
             return;
         }

@@ -1754,7 +1754,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         int notificationTimeoutMS = -1;
-        if (isTyping) {
+        boolean typingNotificationsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(getString(R.string.settings_send_typing_notifications), true);
+        if (isTyping && typingNotificationsEnabled) {
             // Check whether a typing event has been already reported to server (We wait for the end of the local timeout before considering this new event)
             if (null != mTypingTimer) {
                 // Refresh date of the last observed typing
@@ -1828,6 +1829,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mLastTypingDate = 0;
         }
 
+        if (!typingNotificationsEnabled) {
+            return;
+        }
         final boolean typingStatus = isTyping;
 
         mRoom.sendTypingNotification(typingStatus, notificationTimeoutMS, new SimpleApiCallback<Void>(VectorRoomActivity.this) {
@@ -2325,6 +2329,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void onRoomTypings() {
         mLatestTypingMessage = null;
+
+        if (!PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(getString(R.string.settings_show_typing_notifications), true)) {
+            refreshNotificationsArea();
+            return;
+        }
 
         List<String> typingUsers = mRoom.getTypingUsers();
 

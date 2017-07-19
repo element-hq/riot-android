@@ -278,6 +278,21 @@
         android:key="SETTINGS_OTHERS_PREFERENCE_KEY" >
 
         <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_show_read_receipts"
+            android:key="@string/settings_show_read_receipts"
+            android:defaultValue="true"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_send_typing_notifications"
+            android:key="@string/settings_send_typing_notifications"
+            android:defaultValue="true"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_show_typing_notifications"
+            android:key="@string/settings_show_typing_notifications"
+            android:defaultValue="true"/>
+
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/ga_use_settings"
             android:key="SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY"/>
 
