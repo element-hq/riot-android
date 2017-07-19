@@ -34,10 +34,14 @@ import java.util.Set;
 import im.vector.R;
 import im.vector.adapters.AdapterUtils;
 
+import org.matrix.androidsdk.util.Log;
+
 /**
  * A EventGroup is a special event that can contain MessageRows
  */
 public class EventGroup extends Event {
+
+    private static final String LOG_TAG = "EventGroup";
 
     // events rows map
     private final Map<String, MessageRow> mRowsMap;
@@ -56,7 +60,7 @@ public class EventGroup extends Event {
      */
     public EventGroup(Set<String> hiddenGroupIds) {
         // defines an MessageRowGroup unique ID
-        eventId = "EventGroup-" + System.currentTimeMillis();
+        eventId =  getClass().getName() + '@' + Integer.toHexString(hashCode()) + "-" + System.currentTimeMillis();
 
         // init field
         mRowsMap = new HashMap<>();
@@ -190,7 +194,13 @@ public class EventGroup extends Event {
      * @param isExpanded the new expand status
      */
     public void setIsExpanded(boolean isExpanded) {
-        mIsExpanded = isExpanded;
+        if (mRows.size() < 2) {
+            Log.e(LOG_TAG, "## setIsExpanded() : cannot collapse a group when there is only one item");
+            mIsExpanded = true;
+            mHiddenEventIds.add(eventId);
+        } else {
+            mIsExpanded = isExpanded;
+        }
 
         if (mIsExpanded) {
             mHiddenEventIds.removeAll(mRowsMap.keySet());
