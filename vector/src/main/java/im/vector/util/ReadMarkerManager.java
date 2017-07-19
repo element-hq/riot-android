@@ -486,19 +486,24 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
             return true;
         } else {
             Log.d(LOG_TAG, "scrollToAdapterEvent: need to load more events in adapter or eventId is not displayed");
-            final MessageRow firstRow = mVectorMessageListFragment.getMessageAdapter().getItem(0);
-            final Event firstEvent = firstRow != null ? firstRow.getEvent() : null;
-            final MessageRow lastRow = mVectorMessageListFragment.getMessageAdapter().getItem(mVectorMessageListFragment.getMessageAdapter().getCount() - 1);
-            final Event lastEvent = lastRow != null ? lastRow.getEvent() : null;
-            if (firstEvent != null && lastEvent != null && event.getOriginServerTs() > firstEvent.getOriginServerTs()
-                    && event.getOriginServerTs() < lastEvent.getOriginServerTs()) {
-                // Event should be in adapter
-                final MessageRow closestRowFromEvent = mVectorMessageListFragment.getMessageAdapter().getClosestRow(event);
-                if (closestRowFromEvent != null) {
-                    scrollToRow(closestRowFromEvent, closestRowFromEvent.getEvent().eventId.equals(event.eventId));
-                    return true;
+
+            if (mVectorMessageListFragment.getMessageAdapter().getCount() > 0) {
+                final MessageRow firstRow = mVectorMessageListFragment.getMessageAdapter().getItem(0);
+                final Event firstEvent = firstRow != null ? firstRow.getEvent() : null;
+                final MessageRow lastRow = mVectorMessageListFragment.getMessageAdapter().getItem(mVectorMessageListFragment.getMessageAdapter().getCount() - 1);
+                final Event lastEvent = lastRow != null ? lastRow.getEvent() : null;
+                if (firstEvent != null && lastEvent != null && event.getOriginServerTs() > firstEvent.getOriginServerTs()
+                        && event.getOriginServerTs() < lastEvent.getOriginServerTs()) {
+                    // Event should be in adapter
+                    final MessageRow closestRowFromEvent = mVectorMessageListFragment.getMessageAdapter().getClosestRow(event);
+                    if (closestRowFromEvent != null) {
+                        scrollToRow(closestRowFromEvent, closestRowFromEvent.getEvent().eventId.equals(event.eventId));
+                        return true;
+                    }
+                    return false;
+                } else {
+                    return false;
                 }
-                return false;
             } else {
                 return false;
             }
