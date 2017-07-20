@@ -432,6 +432,15 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         if (item.mIsValid) {
             Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
             startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, item.mUserId);
+
+            if (!TextUtils.isEmpty(item.mAvatarUrl)) {
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_AVATAR_URL, item.mAvatarUrl);
+            }
+
+            if (!TextUtils.isEmpty(item.mDisplayName)) {
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_DISPLAY_NAME, item.mDisplayName);
+            }
+
             startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
             startActivity(startRoomInfoIntent);
         }
