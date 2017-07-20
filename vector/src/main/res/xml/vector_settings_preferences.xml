@@ -278,6 +278,11 @@
         android:key="SETTINGS_OTHERS_PREFERENCE_KEY" >
 
         <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_use_markdown"
+            android:key="MARKDOWN_PREFERENCE_KEY"
+            android:defaultValue="true"/>
+
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_show_read_receipts"
             android:key="@string/settings_show_read_receipts"
             android:defaultValue="true"/>
