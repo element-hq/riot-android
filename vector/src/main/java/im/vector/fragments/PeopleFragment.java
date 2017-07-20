@@ -39,7 +39,10 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.Search.SearchUsersResponse;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
@@ -66,6 +69,8 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
 
     private static final String MATRIX_USER_ONLY_PREF_KEY = "MATRIX_USER_ONLY_PREF_KEY";
+
+    private static final int MAX_KNOWN_CONTACTS_FILTER_COUNT = 50;
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecycler;
@@ -193,10 +198,14 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         mAdapter.getFilter().filter(pattern, new Filter.FilterListener() {
             @Override
             public void onFilterComplete(int count) {
+                boolean newSearch = TextUtils.isEmpty(mCurrentFilter) && !TextUtils.isEmpty(pattern);
+
                 Log.i(LOG_TAG, "onFilterComplete " + count);
                 if (listener != null) {
                     listener.onFilterDone(count);
                 }
+
+                startRemoteKnownContactsSearch(newSearch);
             }
         });
     }
@@ -330,6 +339,81 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                 mAdapter.setKnownContacts(mKnownContacts);
             }
         }.execute();
+    }
+
+    /**
+     * Display the public rooms loading view
+     */
+    private void showKnownContactLoadingView() {
+        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1).showLoadingView();
+    }
+
+    /**
+     * Hide the public rooms loading view
+     */
+    private void hideKnownContactLoadingView() {
+        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1).hideLoadingView();
+    }
+
+    /**
+     * Trigger a request to search known contacts.
+     *
+     * @param isNewSearch true if the search is a new one
+     */
+    private void startRemoteKnownContactsSearch(boolean isNewSearch) {
+        if (!TextUtils.isEmpty(mCurrentFilter)) {
+
+            // display the known contacts section
+            if (isNewSearch) {
+                mAdapter.setFilteredKnownContacts(new ArrayList<ParticipantAdapterItem>(), mCurrentFilter);
+                showKnownContactLoadingView();
+            }
+
+            final String fPattern = mCurrentFilter;
+
+            mSession.searchUsers(mCurrentFilter, MAX_KNOWN_CONTACTS_FILTER_COUNT, new ApiCallback<SearchUsersResponse>() {
+                @Override
+                public void onSuccess(SearchUsersResponse searchUsersResponse) {
+                    if (TextUtils.equals(fPattern, mCurrentFilter)) {
+                        hideKnownContactLoadingView();
+
+                        List<ParticipantAdapterItem> list = new ArrayList<>();
+
+                        if (null != searchUsersResponse.results) {
+                            for (User user : searchUsersResponse.results) {
+                                list.add(new ParticipantAdapterItem(user));
+                            }
+                        }
+
+                        mAdapter.setKnownContactsLimited((null != searchUsersResponse.limited) ? searchUsersResponse.limited : false);
+                        mAdapter.setFilteredKnownContacts(list, mCurrentFilter);
+                    }
+                }
+
+                private void onError() {
+                    //
+                    if (TextUtils.equals(fPattern, mCurrentFilter)) {
+                        hideKnownContactLoadingView();
+                        mAdapter.filterAccountKnownContacts(mCurrentFilter);
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError();
+                }
+            });
+        }
     }
 
     /*

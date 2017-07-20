@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
@@ -55,12 +54,12 @@ public class PeopleAdapter extends AbsAdapter {
 
     private AdapterSection<Room> mDirectChatsSection;
     private AdapterSection<ParticipantAdapterItem> mLocalContactsSection;
-    private AdapterSection<ParticipantAdapterItem> mKnownContactsSection;
+    private KnownContactsAdapterSection mKnownContactsSection;
 
     private final OnSelectItemListener mListener;
 
     private final String mNoContactAccessPlaceholder;
-    private final  String mNoResultPlaceholder;
+    private final String mNoResultPlaceholder;
 
     /*
      * *********************************************************************************************
@@ -84,7 +83,7 @@ public class PeopleAdapter extends AbsAdapter {
                 R.layout.adapter_local_contacts_sticky_header_subview, R.layout.adapter_item_contact_view, TYPE_HEADER_LOCAL_CONTACTS, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), ParticipantAdapterItem.alphaComparator);
         mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ? mNoContactAccessPlaceholder : mNoResultPlaceholder);
 
-        mKnownContactsSection = new AdapterSection<>(context.getString(R.string.known_contacts_header), -1,
+        mKnownContactsSection = new KnownContactsAdapterSection(context.getString(R.string.known_contacts_header), -1,
                 R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), null);
         mKnownContactsSection.setEmptyViewPlaceholder(null, context.getString(R.string.no_result_placeholder));
         mKnownContactsSection.setIsHiddenWhenNoFilter(true);
@@ -161,8 +160,11 @@ public class PeopleAdapter extends AbsAdapter {
         int nbResults = 0;
         nbResults += filterRoomSection(mDirectChatsSection, pattern);
         nbResults += filterLocalContacts(pattern);
-        nbResults += filterKnownContacts(pattern);
 
+        // if there is no pattern, use the default behaviour
+        if (TextUtils.isEmpty(pattern)) {
+            nbResults += filterKnownContacts(pattern);
+        }
         return nbResults;
     }
 
@@ -200,11 +202,14 @@ public class PeopleAdapter extends AbsAdapter {
         updateSections();
     }
 
-    /**
-     * Refresh direct chats data
-     */
-    public void refreshDirectChats() {
-        refreshSection(mDirectChatsSection);
+    public void setFilteredKnownContacts(List<ParticipantAdapterItem> filteredKnownContacts, String pattern) {
+        Collections.sort(filteredKnownContacts, ParticipantAdapterItem.getComparator(mSession));
+        mKnownContactsSection.setFilteredItems(filteredKnownContacts, pattern);
+        updateSections();
+    }
+
+    public void setKnownContactsLimited(boolean isLimited) {
+        mKnownContactsSection.setIsLimited(isLimited);
     }
 
     /**
@@ -255,6 +260,16 @@ public class PeopleAdapter extends AbsAdapter {
     }
 
     /**
+     * Filter the known contacts known by this account.
+     *
+     * @param pattern the pattern to search
+     */
+    public void filterAccountKnownContacts(final String pattern) {
+        filterKnownContacts(pattern);
+        updateSections();
+    }
+
+    /**
      * Filter the known contacts with the given pattern
      *
      * @param pattern
@@ -277,6 +292,8 @@ public class PeopleAdapter extends AbsAdapter {
         // see PeopleFragment.initKnownContacts
         Collections.sort(filteredKnownContacts, ParticipantAdapterItem.getComparator(mSession));
         mKnownContactsSection.setFilteredItems(filteredKnownContacts, pattern);
+
+        setKnownContactsLimited(false);
 
         return filteredKnownContacts.size();
     }
