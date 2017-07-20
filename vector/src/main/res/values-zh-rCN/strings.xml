@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="resouces_country">zh</string>
+    <string name="resouces_language">CN</string>
+
+
     <string name="resend">重新发送</string>
     <string name="quote">引用</string>
     <string name="share">分享</string>
@@ -570,8 +574,6 @@
 
 你可以现在或稍后从应用设置中做这件事。</string>
 
-    <string name="resouces_country">英式英语</string>
-    <string name="resouces_language">英语</string>
     <string name="ok">确认</string>
     <string name="redact">筹辑</string>
     <string name="send_bug_report_alert_message">你似乎在沮丧地摇晃手机。您要提交 bug 报告吗？</string>
