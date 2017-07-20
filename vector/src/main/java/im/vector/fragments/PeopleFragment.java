@@ -166,6 +166,9 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         ContactsManager.getInstance().removeListener(this);
 
         mRecycler.removeOnScrollListener(mScrollListener);
+
+        // cancel any search
+        mSession.cancelUsersSearch();
     }
 
     @Override
@@ -391,7 +394,8 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                     }
                 }
 
-                private void onError() {
+                private void onError(String errorMessage) {
+                    Log.e(LOG_TAG, "## startRemoteKnownContactsSearch() : failed " + errorMessage);
                     //
                     if (TextUtils.equals(fPattern, mCurrentFilter)) {
                         hideKnownContactLoadingView();
@@ -401,17 +405,17 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    onError();
+                    onError(e.getMessage());
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    onError();
+                    onError(e.getMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    onError();
+                    onError(e.getMessage());
                 }
             });
         }

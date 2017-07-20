@@ -430,7 +430,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                         }
 
                         mKnownContactsLimited = (null != searchUsersResponse.limited) ? searchUsersResponse.limited : false;
-
                         onKnownContactsSearchEnd(participantItemList, theFirstEntry, searchListener);
                     }
                 }
@@ -464,7 +463,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     /**
      * Search the known contacts from the account known users list.
      *
-     * @param theFirstEntry the adapter first entry
+     * @param theFirstEntry  the adapter first entry
      * @param searchListener the listener
      */
     private void searchAccountKnownContacts(final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
@@ -575,8 +574,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * Search the local contacts
      *
      * @param participantItemList the known contacts list
-     * @param theFirstEntry the adapter first entry
-     * @param searchListener the search listener
+     * @param theFirstEntry       the adapter first entry
+     * @param searchListener      the search listener
      */
     private void onKnownContactsSearchEnd(List<ParticipantAdapterItem> participantItemList, final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
         // ensure that the PIDs have been retrieved
@@ -703,6 +702,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tells if the session could contain some unused participants.
+     *
      * @return true if the session could contains some unused participants.
      */
     private boolean couldHaveUnusedParticipants() {
@@ -712,7 +712,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         } else { // else if there are rooms with more than one user
             Collection<Room> rooms = mSession.getDataHandler().getStore().getRooms();
 
-            for(Room room : rooms) {
+            for (Room room : rooms) {
                 if (room.getMembers().size() > 1) {
                     return true;
                 }

@@ -161,7 +161,7 @@ public class PeopleAdapter extends AbsAdapter {
         nbResults += filterRoomSection(mDirectChatsSection, pattern);
         nbResults += filterLocalContacts(pattern);
 
-        // if there is no pattern, use the default behaviour
+        // if there is no pattern, use the local search
         if (TextUtils.isEmpty(pattern)) {
             nbResults += filterKnownContacts(pattern);
         }

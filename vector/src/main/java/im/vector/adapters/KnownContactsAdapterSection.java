@@ -25,12 +25,13 @@ public class KnownContactsAdapterSection extends AdapterSection<ParticipantAdapt
     private boolean mIsLimited;
 
     public KnownContactsAdapterSection(String title, int headerSubViewResId, int contentResId, int headerViewType,
-                          int contentViewType, List<ParticipantAdapterItem> items, Comparator<ParticipantAdapterItem> comparator) {
+                                       int contentViewType, List<ParticipantAdapterItem> items, Comparator<ParticipantAdapterItem> comparator) {
         super(title, headerSubViewResId, contentResId, headerViewType, contentViewType, items, comparator);
     }
 
     /**
      * Tells that the search result is limited
+     *
      * @param isLimited true if limited
      */
     public void setIsLimited(boolean isLimited) {
