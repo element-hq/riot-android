@@ -484,6 +484,7 @@
 
     <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_enable_background_sync">Enable background sync</string>
+    <string name="settings_start_background_sync_on_boot">Start on boot</string>
     <string name="settings_set_sync_timeout">Sync request timeout</string>
     <string name="settings_set_sync_delay">Delay between two sync requests</string>
     <string name="settings_second">second</string>
