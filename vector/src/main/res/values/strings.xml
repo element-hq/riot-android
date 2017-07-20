@@ -572,6 +572,10 @@
     <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
     <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
     <string name="settings_phone_number_code">Code</string>
+    <string name="settings_font_size">Messages font size</string>
+    <string name="settings_font_size_small">Small</string>
+    <string name="settings_font_size_medium">Medium</string>
+    <string name="settings_font_size_large">Large</string>
     <string name="settings_use_markdown">Use markdown</string>
     <string name="settings_show_read_receipts">Show read receipts</string>
     <string name="settings_send_typing_notifications">Send typing notifications</string>

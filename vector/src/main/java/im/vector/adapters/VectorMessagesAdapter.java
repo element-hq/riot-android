@@ -25,6 +25,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -33,6 +34,7 @@ import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -1059,6 +1061,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
         final TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
+        bodyTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, getTextAppearance());
 
         // cannot refresh it
         if (null == bodyTextView) {
@@ -1113,6 +1116,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         addContentViewListeners(convertView, bodyTextView, position);
 
         return convertView;
+    }
+
+    private float getTextAppearance() {
+        String size = PreferenceManager.getDefaultSharedPreferences(mContext).getString(mContext.getString(R.string.settings_font_size), "small");
+        switch (size) {
+            case "medium":
+                return 18;
+            case "large":
+                return 22;
+            default:
+                return 14;
+        }
     }
 
     /**
