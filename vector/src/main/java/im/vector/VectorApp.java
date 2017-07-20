@@ -25,6 +25,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -144,8 +147,7 @@ public class VectorApp extends Application {
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             VERSION_BUILD = packageInfo.versionCode;
-        }
-        catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e) {
             Log.e(LOG_TAG, "fails to retrieve the package info " + e.getMessage());
         }
 
@@ -240,7 +242,8 @@ public class VectorApp extends Application {
 
     /**
      * Parse a markdown text
-     * @param text the text to parse
+     *
+     * @param text     the text to parse
      * @param listener the result listener
      */
     public static void markdownToHtml(final String text, final VectorMarkdownParser.IVectorMarkdownParserListener listener) {
@@ -274,7 +277,7 @@ public class VectorApp extends Application {
         // the sessions are not anymore seen as "online"
         ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
 
-        for(MXSession session : sessions) {
+        for (MXSession session : sessions) {
             if (session.isAlive()) {
                 session.setIsOnline(false);
                 session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
@@ -376,7 +379,7 @@ public class VectorApp extends Application {
             boolean hasActiveCall = false;
 
             ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
-            for(MXSession session : sessions) {
+            for (MXSession session : sessions) {
                 session.getMyUser().refreshUserInfos(null);
                 session.setIsOnline(true);
                 session.setSyncDelay(0);
@@ -389,7 +392,7 @@ public class VectorApp extends Application {
             if (VectorCallSoundManager.isRinging() && !hasActiveCall && (null != EventStreamService.getInstance())) {
                 Log.e(LOG_TAG, "## suspendApp() : fix an infinite ringing");
                 EventStreamService.getInstance().hideCallNotifications();
-                
+
                 if (VectorCallSoundManager.isRinging()) {
                     VectorCallSoundManager.stopRinging();
                 }
@@ -405,13 +408,14 @@ public class VectorApp extends Application {
     /**
      * Update the current active activity.
      * It manages the application background / foreground when it is required.
+     *
      * @param activity the current activity, null if there is no more one.
      */
     private void setCurrentActivity(Activity activity) {
         Log.d(LOG_TAG, "## setCurrentActivity() : from " + mCurrentActivity + " to " + activity);
 
         if (VectorApp.isAppInBackground() && (null != activity)) {
-            Matrix matrixInstance =  Matrix.getInstance(activity.getApplicationContext());
+            Matrix matrixInstance = Matrix.getInstance(activity.getApplicationContext());
 
             // sanity check
             if (null != matrixInstance) {
@@ -440,7 +444,9 @@ public class VectorApp extends Application {
     /**
      * @return the current active activity
      */
-    public static Activity getCurrentActivity() { return mCurrentActivity; }
+    public static Activity getCurrentActivity() {
+        return mCurrentActivity;
+    }
 
     /**
      * Return true if the application is in background.
@@ -487,17 +493,19 @@ public class VectorApp extends Application {
     /**
      * The image taken from the medias picker is stored in a static variable because
      * saving it would take too much time.
+     *
      * @return the saved image from medias picker
      */
-    public static Bitmap getSavedPickerImagePreview(){
+    public static Bitmap getSavedPickerImagePreview() {
         return mSavedPickerImagePreview;
     }
 
     /**
      * Save the image taken in the medias picker
+     *
      * @param aSavedCameraImagePreview the bitmap.
      */
-    public static void setSavedCameraImagePreview(Bitmap aSavedCameraImagePreview){
+    public static void setSavedCameraImagePreview(Bitmap aSavedCameraImagePreview) {
         if (aSavedCameraImagePreview != mSavedPickerImagePreview) {
             // force to release memory
             // reported by GA
@@ -528,6 +536,7 @@ public class VectorApp extends Application {
 
     /**
      * Add a session in the syncing sessions list
+     *
      * @param session the session
      */
     public static void addSyncingSession(MXSession session) {
@@ -538,6 +547,7 @@ public class VectorApp extends Application {
 
     /**
      * Remove a session in the syncing sessions list
+     *
      * @param session the session
      */
     public static void removeSyncingSession(MXSession session) {
@@ -559,6 +569,7 @@ public class VectorApp extends Application {
 
     /**
      * Tell if a session is syncing
+     *
      * @param session the session
      * @return true if the session is syncing
      */
@@ -595,16 +606,17 @@ public class VectorApp extends Application {
 
     /**
      * Send a GA stats
-     * @param context the context
+     *
+     * @param context  the context
      * @param category the category
-     * @param action the action
-     * @param label the label
-     * @param value the value
+     * @param action   the action
+     * @param label    the label
+     * @param value    the value
      */
     public static void sendGAStats(Context context, String category, String action, String label, long value) {
         try {
             String key = "[" + category + "] " + action;
-            String mapValue = "" ;
+            String mapValue = "";
 
             if (!TextUtils.isEmpty(label)) {
                 mapValue += label;
@@ -622,12 +634,13 @@ public class VectorApp extends Application {
 
     /**
      * Provide the GA stats.
+     *
      * @return the GA stats.
      */
     public static String getGAStats() {
         String stats = "";
 
-        for(String k : mGAStatsMap.keySet()) {
+        for (String k : mGAStatsMap.keySet()) {
             stats += k + " : " + mGAStatsMap.get(k) + "\n";
         }
 
@@ -636,8 +649,9 @@ public class VectorApp extends Application {
 
     /**
      * An uncaught exception has been triggered
+     *
      * @param threadName the thread name
-     * @param throwable the throwable
+     * @param throwable  the throwable
      * @return the exception description
      */
     public static String uncaughtException(String threadName, Throwable throwable) {
@@ -694,6 +708,7 @@ public class VectorApp extends Application {
 
     /**
      * Warn that the application crashed
+     *
      * @param description the crash description
      */
     private void setAppCrashed(String description) {
@@ -707,6 +722,7 @@ public class VectorApp extends Application {
 
     /**
      * Tells if the application crashed
+     *
      * @return true if the application crashed
      */
     public boolean didAppCrash() {
@@ -725,5 +741,85 @@ public class VectorApp extends Application {
         editor.commit();
     }
 
+    //==============================================================================================================
+    // Locale management
+    //==============================================================================================================
+
+    // the supported application languages
+    private static Set<Locale> mApplicationLocales = new HashSet<>();
+
+    /**
+     * Provides the current application locale
+     *
+     * @param context the context
+     * @return the application locale
+     */
+    public static Locale getApplicationLocale(Context context) {
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.N) {
+            return context.getResources().getConfiguration().getLocales().get(0);
+        } else {
+            return context.getResources().getConfiguration().locale;
+        }
+    }
+
+    /**
+     * Get String from a locale
+     *
+     * @param context the context
+     * @param locale the locale
+     * @param resourceId the string resource id
+     * @return the localized string
+     */
+    private static String getString(Context context, Locale locale, int resourceId) {
+        String result;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            Configuration config = new Configuration(context.getResources().getConfiguration());
+            config.setLocale(locale);
+            result = context.createConfigurationContext(config).getText(resourceId).toString();
+        } else {
+            Resources resources = context.getResources();
+            Configuration conf = resources.getConfiguration();
+            Locale savedLocale = conf.locale;
+            conf.locale = locale;
+            resources.updateConfiguration(conf, null);
+
+            // retrieve resources from desired locale
+            result = resources.getString(resourceId);
+
+            // restore original locale
+            conf.locale = savedLocale;
+            resources.updateConfiguration(conf, null);
+        }
+
+        return result;
+    }
+
+    /**
+     * Provides the supported application locales list
+     *
+     * @param context the context
+     * @return the supported application locales list
+     */
+    public static Set<Locale> getApplicationLocales(Context context) {
+        if (mApplicationLocales.isEmpty()) {
+            Locale currentLocal = getApplicationLocale(context);
+            String defaultStringValue = context.getString(R.string.resouces_country);
+
+            mApplicationLocales.add(currentLocal);
+
+            String[] locales = Resources.getSystem().getAssets().getLocales();
+
+            for(String locale: locales) {
+                String value = getString(context, new Locale(locale), R.string.resouces_country);
+
+                if (!TextUtils.equals(value, defaultStringValue)) {
+                    mApplicationLocales.add(new Locale(locale));
+                }
+            }
+        }
+
+        return mApplicationLocales;
+    }
 }
 
