@@ -48,6 +48,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -371,7 +372,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
             final String fPattern = mCurrentFilter;
 
-            mSession.searchUsers(mCurrentFilter, MAX_KNOWN_CONTACTS_FILTER_COUNT, new ApiCallback<SearchUsersResponse>() {
+            mSession.searchUsers(mCurrentFilter, MAX_KNOWN_CONTACTS_FILTER_COUNT, new HashSet<String>(), new ApiCallback<SearchUsersResponse>() {
                 @Override
                 public void onSuccess(SearchUsersResponse searchUsersResponse) {
                     if (TextUtils.equals(fPattern, mCurrentFilter)) {
