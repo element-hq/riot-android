@@ -43,9 +43,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.Timer;
@@ -60,6 +63,7 @@ import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
+import im.vector.util.CountryPhoneData;
 import im.vector.util.RageShake;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
@@ -238,6 +242,8 @@ public class VectorApp extends Application {
             // reported by GA
             Log.e(LOG_TAG, "cannot create the mMarkdownParser " + e.getMessage());
         }
+
+        initApplicationLocale(this);
     }
 
     /**
@@ -748,6 +754,26 @@ public class VectorApp extends Application {
     // the supported application languages
     private static Set<Locale> mApplicationLocales = new HashSet<>();
 
+    private static final String APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY";
+    private static final String APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY";
+    private static final String APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY";
+
+    private static Locale mApplicationDefaultLanguage = new Locale("en", "UK");
+
+    /**
+     * Init the application locale from the saved one
+     *
+     * @param context the contact
+     */
+    public static void initApplicationLocale(Context context) {
+        Locale locale = getApplicationLocale(context);
+
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+    }
+
     /**
      * Provides the current application locale
      *
@@ -755,11 +781,77 @@ public class VectorApp extends Application {
      * @return the application locale
      */
     public static Locale getApplicationLocale(Context context) {
-        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.N) {
-            return context.getResources().getConfiguration().getLocales().get(0);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Locale locale;
+
+        if (!preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
+            locale = Locale.getDefault();
+
+            // detect if the default language is used
+            String defaultStringValue = getString(context, mApplicationDefaultLanguage, R.string.resouces_country);
+            if (TextUtils.equals(defaultStringValue, getString(context, locale, R.string.resouces_country))) {
+                locale = mApplicationDefaultLanguage;
+            }
+
+            saveApplicationLocale(context, locale);
         } else {
-            return context.getResources().getConfiguration().locale;
+            locale = new Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
+                    preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, ""),
+                    preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")
+                    );
         }
+
+        return locale;
+    }
+
+    /**
+     * Saves the preferred locale.
+     *
+     * @param context the context
+     * @return the application locale
+     */
+    public static void saveApplicationLocale(Context context, Locale locale) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        SharedPreferences.Editor editor = preferences.edit();
+
+        String language = locale.getLanguage();
+        if (!TextUtils.isEmpty(language)) {
+            editor.putString(APPLICATION_LOCALE_LANGUAGE_KEY, language);
+        } else {
+            editor.remove(APPLICATION_LOCALE_LANGUAGE_KEY);
+        }
+
+        String country = locale.getCountry();
+        if (!TextUtils.isEmpty(country)) {
+            editor.putString(APPLICATION_LOCALE_COUNTRY_KEY, country);
+        } else {
+            editor.remove(APPLICATION_LOCALE_COUNTRY_KEY);
+        }
+
+        String variant = locale.getVariant();
+        if (!TextUtils.isEmpty(variant)) {
+            editor.putString(APPLICATION_LOCALE_VARIANT_KEY, variant);
+        } else {
+            editor.remove(APPLICATION_LOCALE_VARIANT_KEY);
+        }
+
+        editor.commit();
+    }
+
+    /**
+     * Update the application locale.
+     *
+     * @param context context
+     * @param locale locale
+     */
+    public static void updateApplicationLocale(Context context, Locale locale) {
+        saveApplicationLocale(context, locale);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.locale = locale;
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 
     /**
@@ -801,12 +893,11 @@ public class VectorApp extends Application {
      * @param context the context
      * @return the supported application locales list
      */
-    public static Set<Locale> getApplicationLocales(Context context) {
+    public static List<Locale> getApplicationLocales(Context context) {
         if (mApplicationLocales.isEmpty()) {
-            Locale currentLocal = getApplicationLocale(context);
-            String defaultStringValue = context.getString(R.string.resouces_country);
+            String defaultStringValue = getString(context, mApplicationDefaultLanguage, R.string.resouces_country);
 
-            mApplicationLocales.add(currentLocal);
+            mApplicationLocales.add(mApplicationDefaultLanguage);
 
             String[] locales = Resources.getSystem().getAssets().getLocales();
 
@@ -819,7 +910,17 @@ public class VectorApp extends Application {
             }
         }
 
-        return mApplicationLocales;
+        List<Locale> sortedLocalesList = new ArrayList<>(mApplicationLocales);
+
+        // sort by human display names
+        Collections.sort(sortedLocalesList, new Comparator<Locale>() {
+            @Override
+            public int compare(Locale lhs, Locale rhs) {
+                return lhs.getDisplayLanguage().compareTo(rhs.getDisplayLanguage());
+            }
+        });
+
+        return sortedLocalesList;
     }
 }
 

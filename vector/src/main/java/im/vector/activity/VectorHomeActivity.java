@@ -94,6 +94,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
@@ -238,6 +239,9 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
     // floating action bar dialog
     private AlertDialog mFabDialog;
+
+    // locale update manage
+    private Locale mCurrentLocale;
 
      /*
      * *********************************************************************************************
@@ -609,6 +613,12 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         displayCryptoCorruption();
 
         addBadgeEventsListener();
+
+        // restart the activity if the locale has been updated
+        if ((null != mCurrentLocale) && !TextUtils.equals(mCurrentLocale.getDisplayLanguage(), VectorApp.getApplicationLocale(this).getDisplayLanguage())) {
+            startActivity(getIntent());
+            finish();
+        }
     }
 
     @Override
@@ -709,6 +719,9 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         }
 
         removeBadgeEventsListener();
+
+        // save the current locale to track update
+        mCurrentLocale = VectorApp.getApplicationLocale(this);
     }
 
     @Override

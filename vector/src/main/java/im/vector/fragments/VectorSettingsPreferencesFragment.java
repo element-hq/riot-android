@@ -90,6 +90,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.CountryPickerActivity;
+import im.vector.activity.LanguagePickerActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
@@ -118,12 +119,66 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static final String ADD_PHONE_NUMBER_PREFERENCE_KEY = "ADD_PHONE_NUMBER_PREFERENCE_KEY";
     private static final String APP_INFO_LINK_PREFERENCE_KEY = "application_info_link";
 
+    private static final String SETTINGS_DISPLAY_NAME_PREFERENCE_KEY = "SETTINGS_DISPLAY_NAME_PREFERENCE_KEY";
+    private static final String SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY = "SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY";
+    private static final String SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY = "SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY";
+    private static final String SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY = "SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY";
+    private static final String SETTINGS_CONTAINING_MY_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_NAME_PREFERENCE_KEY";
+    private static final String SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY";
+    private static final String SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY";
+    public static final String SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY";
+    private static final String SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY";
+    private static final String SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY = "SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY";
+    private static final String SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY";
+    private static final String SETTINGS_VERSION_PREFERENCE_KEY = "SETTINGS_VERSION_PREFERENCE_KEY";
+    private static final String SETTINGS_OLM_VERSION_PREFERENCE_KEY = "SETTINGS_OLM_VERSION_PREFERENCE_KEY";
+    private static final String SETTINGS_LOGGED_IN_PREFERENCE_KEY = "SETTINGS_LOGGED_IN_PREFERENCE_KEY";
+    private static final String SETTINGS_HOME_SERVER_PREFERENCE_KEY = "SETTINGS_HOME_SERVER_PREFERENCE_KEY";
+    private static final String SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY = "SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY";
+    private static final String SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY = "SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY";
+    private static final String SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY = "SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY";
+    private static final String SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY = "SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY";
+    private static final String SETTINGS_COPYRIGHT_PREFERENCE_KEY = "SETTINGS_COPYRIGHT_PREFERENCE_KEY";
+    private static final String SETTINGS_CLEAR_CACHE_PREFERENCE_KEY = "SETTINGS_CLEAR_CACHE_PREFERENCE_KEY";
+    private static final String SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY";
+    public static final String SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY";
+    private static final String SETTINGS_OTHERS_PREFERENCE_KEY = "SETTINGS_OTHERS_PREFERENCE_KEY";
+    private static final String SETTINGS_USER_SETTINGS_PREFERENCE_KEY = "SETTINGS_USER_SETTINGS_PREFERENCE_KEY";
+    private static final String SETTINGS_CONTACT_PREFERENCE_KEYS = "SETTINGS_CONTACT_PREFERENCE_KEYS";
+    private static final String SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY";
+    private static final String SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY";
+    private static final String SETTINGS_IGNORED_USERS_PREFERENCE_KEY = "SETTINGS_IGNORED_USERS_PREFERENCE_KEY";
+    private static final String SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY = "SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY";
+    private static final String SETTINGS_DEVICES_LIST_PREFERENCE_KEY = "SETTINGS_DEVICES_LIST_PREFERENCE_KEY";
+    private static final String SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY = "SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY";
+    private static final String SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY";
+    private static final String SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY";
+    private static final String SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY";
+    private static final String SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY = "SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY";
+    private static final String SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY = "SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY";
+    private static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY";
+    private static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY";
+    private static final String SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY = "SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY";
+    private static final String SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY = "SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY";
+    private static final String SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY = "SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY";
+    public static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
+    private static final String SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY";
+    public static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
+    private static final String SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY";
+    private static final String SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY";
+    private static final String SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY";
+    private static final String SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY";
+    private static final String SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY";
+    private static final String SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY";
+
+
     private static final String DUMMY_RULE = "DUMMY_RULE";
     private static final String LABEL_UNAVAILABLE_DATA = "none";
 
     private static final int REQUEST_E2E_FILE_REQUEST_CODE = 123;
     private static final int REQUEST_NEW_PHONE_NUMBER = 456;
     private static final int REQUEST_PHONEBOOK_COUNTRY = 789;
+    private static final int REQUEST_LOCALE = 777;
 
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
@@ -149,7 +204,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             // refresh the settings value
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance().getApplicationContext());
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(getString(R.string.settings_display_name), myUser.displayname);
+            editor.putString(SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, myUser.displayname);
             editor.commit();
 
             refreshDisplay();
@@ -218,18 +273,18 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         if (null == mPushesRuleByResourceId) {
             mPushesRuleByResourceId = new HashMap<>();
 
-            mPushesRuleByResourceId.put(getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
-            mPushesRuleByResourceId.put(getString(R.string.settings_enable_this_device), DUMMY_RULE);
-            mPushesRuleByResourceId.put(getString(R.string.settings_turn_screen_on), DUMMY_RULE);
-            mPushesRuleByResourceId.put(getString(R.string.settings_containing_my_name), BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
-            mPushesRuleByResourceId.put(getString(R.string.settings_messages_in_one_to_one), BingRule.RULE_ID_ONE_TO_ONE_ROOM);
-            mPushesRuleByResourceId.put(getString(R.string.settings_messages_in_group_chat), BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS);
-            mPushesRuleByResourceId.put(getString(R.string.settings_invited_to_room), BingRule.RULE_ID_INVITE_ME);
-            mPushesRuleByResourceId.put(getString(R.string.settings_call_invitations), BingRule.RULE_ID_CALL);
-            mPushesRuleByResourceId.put(getString(R.string.settings_messages_sent_by_bot), BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS);
+            mPushesRuleByResourceId.put(SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY, BingRule.RULE_ID_DISABLE_ALL);
+            mPushesRuleByResourceId.put(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, DUMMY_RULE);
+            mPushesRuleByResourceId.put(SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY, DUMMY_RULE);
+            mPushesRuleByResourceId.put(SETTINGS_CONTAINING_MY_NAME_PREFERENCE_KEY, BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
+            mPushesRuleByResourceId.put(SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY, BingRule.RULE_ID_ONE_TO_ONE_ROOM);
+            mPushesRuleByResourceId.put(SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY, BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS);
+            mPushesRuleByResourceId.put(SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY, BingRule.RULE_ID_INVITE_ME);
+            mPushesRuleByResourceId.put(SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY, BingRule.RULE_ID_CALL);
+            mPushesRuleByResourceId.put(SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS);
         }
 
-        UserAvatarPreference avatarPreference = (UserAvatarPreference) findPreference("matrixId");
+        UserAvatarPreference avatarPreference = (UserAvatarPreference) findPreference(SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY);
         avatarPreference.setSession(mSession);
         avatarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -239,7 +294,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
-        EditTextPreference passwordPreference = (EditTextPreference) findPreference(getString(R.string.settings_change_password));
+        EditTextPreference passwordPreference = (EditTextPreference) findPreference(SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY);
         passwordPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -249,45 +304,45 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         });
 
         // application version
-        VectorCustomActionEditTextPreference versionTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.settings_version));
+        VectorCustomActionEditTextPreference versionTextPreference = (VectorCustomActionEditTextPreference) findPreference(SETTINGS_VERSION_PREFERENCE_KEY);
         if (null != versionTextPreference) {
             versionTextPreference.setSummary(VectorUtils.getApplicationVersion(appContext));
 
             versionTextPreference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
                 @Override
                 public boolean onPreferenceLongClick(Preference preference) {
-                    VectorUtils.copyToClipboard(appContext ,VectorUtils.getApplicationVersion(appContext));
+                    VectorUtils.copyToClipboard(appContext, VectorUtils.getApplicationVersion(appContext));
                     return true;
                 }
             });
         }
 
         // olm version
-        EditTextPreference olmTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_olm_version));
+        EditTextPreference olmTextPreference = (EditTextPreference) findPreference(SETTINGS_OLM_VERSION_PREFERENCE_KEY);
         if (null != olmTextPreference) {
             olmTextPreference.setSummary(Matrix.getInstance(appContext).getDefaultSession().getCryptoVersion(appContext, false));
         }
 
         // user account
-        EditTextPreference accountIdTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_logged_in));
+        EditTextPreference accountIdTextPreference = (EditTextPreference) findPreference(SETTINGS_LOGGED_IN_PREFERENCE_KEY);
         if (null != accountIdTextPreference) {
             accountIdTextPreference.setSummary(mSession.getMyUserId());
         }
 
         // home server
-        EditTextPreference homeServerTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_home_server));
+        EditTextPreference homeServerTextPreference = (EditTextPreference) findPreference(SETTINGS_HOME_SERVER_PREFERENCE_KEY);
         if (null != homeServerTextPreference) {
             homeServerTextPreference.setSummary(mSession.getHomeserverConfig().getHomeserverUri().toString());
         }
 
         // identity server
-        EditTextPreference identityServerTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_identity_server));
+        EditTextPreference identityServerTextPreference = (EditTextPreference) findPreference(SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY);
         if (null != identityServerTextPreference) {
             identityServerTextPreference.setSummary(mSession.getHomeserverConfig().getIdentityServerUri().toString());
         }
 
         // terms & conditions
-        EditTextPreference termConditionsPreference = (EditTextPreference) findPreference(getString(R.string.settings_app_term_conditions));
+        EditTextPreference termConditionsPreference = (EditTextPreference) findPreference(SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY);
 
         if (null != termConditionsPreference) {
             termConditionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -300,7 +355,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // privacy policy
-        EditTextPreference privacyPreference = (EditTextPreference) findPreference(getString(R.string.settings_privacy_policy));
+        EditTextPreference privacyPreference = (EditTextPreference) findPreference(SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY);
 
         if (null != termConditionsPreference) {
             privacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -313,7 +368,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // third party notice
-        EditTextPreference thirdPartyNotices = (EditTextPreference) findPreference(getString(R.string.settings_third_party_notices));
+        EditTextPreference thirdPartyNotices = (EditTextPreference) findPreference(SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY);
 
         if (null != termConditionsPreference) {
             thirdPartyNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -326,7 +381,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // copyright
-        EditTextPreference copyrightNotices = (EditTextPreference) findPreference(getString(R.string.settings_copyright));
+        EditTextPreference copyrightNotices = (EditTextPreference) findPreference(SETTINGS_COPYRIGHT_PREFERENCE_KEY);
 
         if (null != termConditionsPreference) {
             copyrightNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -339,7 +394,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // clear cache
-        EditTextPreference clearCachePreference = (EditTextPreference) findPreference(getString(R.string.settings_clear_cache));
+        EditTextPreference clearCachePreference = (EditTextPreference) findPreference(SETTINGS_CLEAR_CACHE_PREFERENCE_KEY);
 
         if (null != clearCachePreference) {
             clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -352,7 +407,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
-        final EditTextPreference displaynamePref = (EditTextPreference) findPreference(appContext.getString(R.string.settings_display_name));
+        final EditTextPreference displaynamePref = (EditTextPreference) findPreference(SETTINGS_DISPLAY_NAME_PREFERENCE_KEY);
         displaynamePref.setSummary(mSession.getMyUser().displayname);
         displaynamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -380,7 +435,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         }
 
-        final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) findPreference(appContext.getString(R.string.settings_enable_background_sync));
+        final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) findPreference(SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY);
 
         if (null != useBackgroundSyncPref) {
             final GcmRegistrationManager gcmMgr = Matrix.getInstance(appContext).getSharedGCMRegistrationManager();
@@ -401,10 +456,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
-        final CheckBoxPreference useGaPref = (CheckBoxPreference) findPreference(appContext.getString(R.string.ga_use_settings));
+        final CheckBoxPreference useGaPref = (CheckBoxPreference) findPreference(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY);
 
         if (!GAHelper.isGAUseUpdatable()) {
-            PreferenceCategory otherCategory = (PreferenceCategory) findPreference(getString(R.string.settings_other));
+            PreferenceCategory otherCategory = (PreferenceCategory) findPreference(SETTINGS_OTHERS_PREFERENCE_KEY);
             otherCategory.removePreference(useGaPref);
         } else {
             useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -434,17 +489,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
-        mUserSettingsCategory = (PreferenceCategory) findPreference(getString(R.string.settings_user_settings));
-        mContactSettingsCategory = (PreferenceCategory) findPreference(getString(R.string.settings_contact));
-        mPushersSettingsCategory = (PreferenceCategory) findPreference(getString(R.string.settings_notifications_targets));
-        mPushersSettingsDivider = (PreferenceCategory) findPreference("notifications_targets_divider");
-        mIgnoredUserSettingsCategory = (PreferenceCategory) findPreference(getString(R.string.settings_ignored_users));
-        mIgnoredUserSettingsCategoryDivider = (PreferenceCategory) findPreference("ignore_users_divider");
-        mDevicesListSettingsCategory = (PreferenceCategory) findPreference(getString(R.string.settings_devices_list));
-        mDevicesListSettingsCategoryDivider = (PreferenceCategory) findPreference(getString(R.string.devices_divider));
-        mCryptographyCategory = (PreferenceCategory) findPreference(getString(R.string.settings_cryptography));
-        mCryptographyCategoryDivider = (PreferenceCategory) findPreference(getString(R.string.cryptography_divider));
-        mLabsCategory = (PreferenceCategory) findPreference("labs");
+        mUserSettingsCategory = (PreferenceCategory) findPreference(SETTINGS_USER_SETTINGS_PREFERENCE_KEY);
+        mContactSettingsCategory = (PreferenceCategory) findPreference(SETTINGS_CONTACT_PREFERENCE_KEYS);
+        mPushersSettingsCategory = (PreferenceCategory) findPreference(SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY);
+        mPushersSettingsDivider = (PreferenceCategory) findPreference(SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY);
+        mIgnoredUserSettingsCategory = (PreferenceCategory) findPreference(SETTINGS_IGNORED_USERS_PREFERENCE_KEY);
+        mIgnoredUserSettingsCategoryDivider = (PreferenceCategory) findPreference(SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY);
+        mDevicesListSettingsCategory = (PreferenceCategory) findPreference(SETTINGS_DEVICES_LIST_PREFERENCE_KEY);
+        mDevicesListSettingsCategoryDivider = (PreferenceCategory) findPreference(SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY);
+        mCryptographyCategory = (PreferenceCategory) findPreference(SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY);
+        mCryptographyCategoryDivider = (PreferenceCategory) findPreference(SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY);
+        mLabsCategory = (PreferenceCategory) findPreference(SETTINGS_LABS_PREFERENCE_KEY);
 
         // preference to start the App info screen, to facilitate App permissions access
         Preference applicationInfoLInkPref = findPreference(APP_INFO_LINK_PREFERENCE_KEY);
@@ -467,16 +522,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // Contacts
         setContactsPreferences();
 
+        // user interface preferences
+        setUserInterfacePreferences();
+
         // Home display
         setHomeDisplayPreferences();
 
         // background sync management
-        mBackgroundSyncCategory = (PreferenceCategory) findPreference(getString(R.string.settings_background_sync));
-        mSyncRequestTimeoutPreference = (EditTextPreference) findPreference(getString(R.string.settings_set_sync_timeout));
-        mSyncRequestDelayPreference = (EditTextPreference) findPreference(getString(R.string.settings_set_sync_delay));
+        mBackgroundSyncCategory = (PreferenceCategory) findPreference(SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY);
+        mSyncRequestTimeoutPreference = (EditTextPreference) findPreference(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY);
+        mSyncRequestDelayPreference = (EditTextPreference) findPreference(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY);
 
-        final CheckBoxPreference useCryptoPref = (CheckBoxPreference) findPreference(appContext.getString(R.string.room_settings_labs_end_to_end));
-        final Preference cryptoIsEnabledPref = findPreference(appContext.getString(R.string.room_settings_labs_end_to_end_is_active));
+        final CheckBoxPreference useCryptoPref = (CheckBoxPreference) findPreference(SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY);
+        final Preference cryptoIsEnabledPref = findPreference(SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY);
 
         cryptoIsEnabledPref.setEnabled(false);
 
@@ -714,18 +772,18 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         PreferenceManager preferenceManager = getPreferenceManager();
 
         // refresh the avatar
-        UserAvatarPreference avatarPreference = (UserAvatarPreference) preferenceManager.findPreference("matrixId");
+        UserAvatarPreference avatarPreference = (UserAvatarPreference) preferenceManager.findPreference(SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY);
         avatarPreference.refreshAvatar();
         avatarPreference.setEnabled(isConnected);
 
         // refresh the display name
-        final EditTextPreference displaynamePref = (EditTextPreference) preferenceManager.findPreference(appContext.getString(R.string.settings_display_name));
+        final EditTextPreference displaynamePref = (EditTextPreference) preferenceManager.findPreference(SETTINGS_DISPLAY_NAME_PREFERENCE_KEY);
         displaynamePref.setSummary(mSession.getMyUser().displayname);
         displaynamePref.setText(mSession.getMyUser().displayname);
         displaynamePref.setEnabled(isConnected);
 
         // change password
-        final EditTextPreference changePasswordPref = (EditTextPreference) preferenceManager.findPreference(appContext.getString(R.string.settings_change_password));
+        final EditTextPreference changePasswordPref = (EditTextPreference) preferenceManager.findPreference(SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY);
         changePasswordPref.setEnabled(isConnected);
 
         // update the push rules
@@ -739,9 +797,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             CheckBoxPreference switchPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
-                if (resourceText.equals(getString(R.string.settings_enable_this_device))) {
+                if (resourceText.equals(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)) {
                     switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
-                } else if (resourceText.equals(getString(R.string.settings_turn_screen_on))) {
+                } else if (resourceText.equals(SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY)) {
                     switchPreference.setChecked(gcmMgr.isScreenTurnedOn());
                 } else {
                     switchPreference.setEnabled((null != rules) && isConnected);
@@ -928,14 +986,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         Log.d(LOG_TAG, "onPushRuleClick " + fResourceText + " : set to " + newValue);
 
-        if (fResourceText.equals(getString(R.string.settings_turn_screen_on))) {
+        if (fResourceText.equals(SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY)) {
             if (gcmMgr.isScreenTurnedOn() != newValue) {
                 gcmMgr.setScreenTurnedOn(newValue);
             }
             return;
         }
 
-        if (fResourceText.equals(getString(R.string.settings_enable_this_device))) {
+        if (fResourceText.equals(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)) {
             boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
             final boolean isAllowed = gcmMgr.areDeviceNotificationsAllowed();
 
@@ -1070,7 +1128,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     // refresh the settings value
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(getString(R.string.settings_display_name), value);
+                    editor.putString(SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, value);
                     editor.commit();
 
                     onCommonDone(null);
@@ -1126,6 +1184,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     break;
                 case REQUEST_PHONEBOOK_COUNTRY:
                     onPhonebookCountryUpdate(data);
+                    break;
+                case REQUEST_LOCALE:
+                    startActivity(getActivity().getIntent());
+                    getActivity().finish();
                     break;
                 case VectorUtils.TAKE_IMAGE:
                     Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), data, mSession.getMediasCache());
@@ -1192,8 +1254,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private void refreshPreferences() {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(getString(R.string.settings_display_name), mSession.getMyUser().displayname);
-        editor.putString(getString(R.string.settings_version), VectorUtils.getApplicationVersion(getActivity()));
+        editor.putString(SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, mSession.getMyUser().displayname);
+        editor.putString(SETTINGS_VERSION_PREFERENCE_KEY, VectorUtils.getApplicationVersion(getActivity()));
 
         BingRuleSet mBingRuleSet = mSession.getDataHandler().pushRules();
 
@@ -1233,7 +1295,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     /**
      * Display a dialog which asks confirmation for the deletion of a 3pid
      *
-     * @param pid the 3pid to delete
+     * @param pid               the 3pid to delete
      * @param preferenceSummary the displayed 3pid
      */
     private void displayDelete3PIDConfirmationDialog(final ThirdPartyIdentifier pid, final CharSequence preferenceSummary) {
@@ -1522,7 +1584,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             if (null == addEmailBtn) {
                 return;
             }
-            
+
             int order = addEmailBtn.getOrder();
 
             for (final ThirdPartyIdentifier email3PID : currentEmail3PID) {
@@ -1798,7 +1860,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             mContactSettingsCategory.removePreference(findPreference(ContactsManager.CONTACTS_BOOK_ACCESS_KEY));
         }
         // Phonebook country
-        mContactPhonebookCountryPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.settings_contacts_phonebook_country));
+        mContactPhonebookCountryPreference = (VectorCustomActionEditTextPreference) findPreference(SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY);
         mContactPhonebookCountryPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
 
         mContactPhonebookCountryPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -1823,6 +1885,23 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     }
 
     //==============================================================================================================
+    // user interface management
+    //==============================================================================================================
+
+    private void setUserInterfacePreferences() {
+        VectorCustomActionEditTextPreference selectedLangaguePreference = (VectorCustomActionEditTextPreference) findPreference(SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY);
+        selectedLangaguePreference.setSummary(VectorApp.getApplicationLocale(getActivity()).getDisplayLanguage());
+
+        selectedLangaguePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivityForResult(LanguagePickerActivity.getIntent(getActivity()), REQUEST_LOCALE);
+                return true;
+            }
+        });
+    }
+
+    //==============================================================================================================
     // Home display management
     //==============================================================================================================
 
@@ -1831,11 +1910,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      */
     private void setHomeDisplayPreferences() {
         // Missed notifications
-        final String pinMissedNotificationsKey = getString(R.string.settings_pin_missed_notifications);
-        final CheckBoxPreference pinMissedNotifications = (CheckBoxPreference) findPreference(pinMissedNotificationsKey);
+        final CheckBoxPreference pinMissedNotifications = (CheckBoxPreference) findPreference(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY);
         if (null != pinMissedNotifications) {
             pinMissedNotifications.setChecked(PreferenceManager.getDefaultSharedPreferences(getActivity())
-                    .getBoolean(pinMissedNotificationsKey, false));
+                    .getBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, false));
             pinMissedNotifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object aIsChecked) {
@@ -1843,7 +1921,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                     PreferenceManager.getDefaultSharedPreferences(getActivity())
                             .edit()
-                            .putBoolean(pinMissedNotificationsKey, isChecked)
+                            .putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, isChecked)
                             .apply();
                     return true;
                 }
@@ -1851,7 +1929,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // Unread messages
-        final String pinUnreadMessagesKey = getString(R.string.settings_pin_unread_messages);
+        final String pinUnreadMessagesKey = SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY;
         final CheckBoxPreference pinUnreadMessages = (CheckBoxPreference) findPreference(pinUnreadMessagesKey);
         if (null != pinUnreadMessages) {
             pinUnreadMessages.setChecked(PreferenceManager.getDefaultSharedPreferences(getActivity())
@@ -1863,7 +1941,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                     PreferenceManager.getDefaultSharedPreferences(getActivity())
                             .edit()
-                            .putBoolean(pinUnreadMessagesKey, isChecked)
+                            .putBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, isChecked)
                             .apply();
                     return true;
                 }
@@ -1906,8 +1984,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // update the settings
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(getString(R.string.settings_set_sync_timeout), timeout + "");
-        editor.putString(getString(R.string.settings_set_sync_delay), delay + "");
+        editor.putString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, timeout + "");
+        editor.putString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, delay + "");
         editor.commit();
 
         if (null != mSyncRequestTimeoutPreference) {
@@ -1944,7 +2022,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         if (null != mSyncRequestDelayPreference) {
             mSyncRequestDelayPreference.setSummary(secondsToText(delay));
-            mSyncRequestDelayPreference.setText(delay + "" );
+            mSyncRequestDelayPreference.setText(delay + "");
 
             mSyncRequestDelayPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -2005,7 +2083,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // device name
         if ((null != aMyDeviceInfo) && !TextUtils.isEmpty(aMyDeviceInfo.display_name)) {
-            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_information_device_name));
+            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY);
             if (null != cryptoInfoTextPreference) {
                 cryptoInfoTextPreference.setSummary(aMyDeviceInfo.display_name);
 
@@ -2029,7 +2107,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // crypto section: device ID
         if (!TextUtils.isEmpty(deviceId)) {
-            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_information_device_id));
+            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY);
             if (null != cryptoInfoTextPreference) {
                 cryptoInfoTextPreference.setSummary(deviceId);
 
@@ -2042,7 +2120,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 });
             }
 
-            VectorCustomActionEditTextPreference exportPref = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_export_e2e_room_keys));
+            VectorCustomActionEditTextPreference exportPref = (VectorCustomActionEditTextPreference) findPreference(SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY);
 
             exportPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -2052,7 +2130,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             });
 
-            VectorCustomActionEditTextPreference importPref = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_import_e2e_room_keys));
+            VectorCustomActionEditTextPreference importPref = (VectorCustomActionEditTextPreference) findPreference(SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY);
 
             importPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -2069,7 +2147,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 @Override
                 public void onSuccess(final MXDeviceInfo deviceInfo) {
                     if ((null != deviceInfo) && !TextUtils.isEmpty(deviceInfo.fingerprint()) && (null != getActivity())) {
-                        VectorCustomActionEditTextPreference cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_information_device_key));
+                        VectorCustomActionEditTextPreference cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY);
 
                         if (null != cryptoInfoTextPreference) {
                             cryptoInfoTextPreference.setSummary(deviceInfo.fingerprint());
@@ -2088,7 +2166,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // encrypt to unverified devices
-        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference)findPreference(getString(R.string.encryption_never_send_to_unverified_devices_title));
+        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference) findPreference(SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY);
 
         if (null != sendToUnverifiedDevicesPref) {
             sendToUnverifiedDevicesPref.setChecked(false);
@@ -2379,9 +2457,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         }
 
                         // detect if the updated device is the current account one
-                        Preference pref = findPreference(getString(R.string.encryption_information_device_id));
+                        Preference pref = findPreference(SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY);
                         if (TextUtils.equals(pref.getSummary(), aDeviceInfoToRename.device_id)) {
-                            (findPreference(getString(R.string.encryption_information_device_name))).setSummary(input.getText());
+                            findPreference(SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY).setSummary(input.getText());
                         }
 
                         hideLoadingView();
@@ -2416,6 +2494,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     /**
      * Try to delete a device.
+     *
      * @param deviceId the device id
      */
     private void deleteDevice(final String deviceId) {
@@ -2448,6 +2527,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
     }
+
     /**
      * Display a delete confirmation dialog to remove a device.<br>
      * The user is invited to enter his password to confirm the deletion.
