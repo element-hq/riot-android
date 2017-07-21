@@ -74,6 +74,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="im.vector.activity.AccountCreationActivity"
             android:label="@string/create_account" >

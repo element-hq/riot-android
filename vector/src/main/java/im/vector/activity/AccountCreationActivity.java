@@ -64,6 +64,7 @@ public class AccountCreationActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
 
+        setTitle(R.string.create_account);
         setContentView(R.layout.activity_account_creation);
 
         final WebView webView = (WebView) findViewById(R.id.account_creation_webview);

@@ -67,6 +67,8 @@ public class LanguagePickerActivity extends AppCompatActivity implements Languag
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(R.string.settings_select_language);
         setContentView(R.layout.activity_langagues_picker);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
