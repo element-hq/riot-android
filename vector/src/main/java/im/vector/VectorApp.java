@@ -59,6 +59,7 @@ import im.vector.activity.VectorCallViewActivity;
 import im.vector.adapters.AdapterUtils;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
+import im.vector.fragments.VectorSettingsPreferencesFragment;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.HeadsetConnectionReceiver;
@@ -246,6 +247,37 @@ public class VectorApp extends Application {
         }
 
         initApplicationLocale(this);
+
+        fixMigrationIssues();
+    }
+
+    /**
+     * Fix some migration issues
+     */
+    private void fixMigrationIssues() {
+        // some key names have been updated to supported language switch
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (preferences.contains(getString(R.string.ga_use_settings))) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(VectorSettingsPreferencesFragment.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, preferences.getBoolean(getString(R.string.ga_use_settings), false));
+            editor.remove(getString(R.string.ga_use_settings));
+            editor.commit();
+        }
+
+        if (preferences.contains(getString(R.string.settings_pin_missed_notifications))) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(VectorSettingsPreferencesFragment.SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, preferences.getBoolean(getString(R.string.settings_pin_missed_notifications), false));
+            editor.remove(getString(R.string.settings_pin_missed_notifications));
+            editor.commit();
+        }
+
+        if (preferences.contains(getString(R.string.settings_pin_unread_messages))) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(VectorSettingsPreferencesFragment.SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, preferences.getBoolean(getString(R.string.settings_pin_unread_messages), false));
+            editor.remove(getString(R.string.settings_pin_unread_messages));
+            editor.commit();
+        }
     }
 
     /**

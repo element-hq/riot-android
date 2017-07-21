@@ -290,13 +290,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         }
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final boolean pinMissedNotifications =
-                preferences.getBoolean(getString(R.string.settings_pin_missed_notifications), false) ||
-                        preferences.getBoolean(VectorSettingsPreferencesFragment.SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, false);
-
-
-        final boolean pinUnreadMessages = preferences.getBoolean(getString(R.string.settings_pin_unread_messages), false) ||
-                preferences.getBoolean(VectorSettingsPreferencesFragment.SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, false);
+        final boolean pinMissedNotifications = preferences.getBoolean(VectorSettingsPreferencesFragment.SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, false);
+        final boolean pinUnreadMessages = preferences.getBoolean(VectorSettingsPreferencesFragment.SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, false);
 
         Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages);
 

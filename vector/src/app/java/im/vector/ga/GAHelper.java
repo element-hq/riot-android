@@ -79,9 +79,7 @@ public class GAHelper {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (preferences.contains(context.getString(R.string.ga_use_settings))) {
-            return preferences.getBoolean(context.getString(R.string.ga_use_settings), false);
-        } else  if (preferences.contains(VectorSettingsPreferencesFragment.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY)) {
+        if (preferences.contains(VectorSettingsPreferencesFragment.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY)) {
             return preferences.getBoolean(VectorSettingsPreferencesFragment.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, false);
         } else {
             try {
