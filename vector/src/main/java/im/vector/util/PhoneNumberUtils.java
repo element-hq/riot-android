@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import im.vector.VectorApp;
+
 /**
  * This class contains the phone number toolbox
  */
@@ -60,6 +62,7 @@ public class PhoneNumberUtils {
      */
     public static void onLocaleUpdate() {
         mCountryCodes = null;
+        mCountryIndicatorList = null;
     }
 
     /**
@@ -67,6 +70,8 @@ public class PhoneNumberUtils {
      */
     private static void buildCountryCodesList() {
         if (null == mCountryCodes) {
+            Locale applicationLocale = VectorApp.getApplicationLocale(VectorApp.getInstance());
+
             // retrieve the ISO country code
             String[] isoCountryCodes = Locale.getISOCountries();
             List<Pair<String, String>> countryCodes = new ArrayList<>();
@@ -74,7 +79,7 @@ public class PhoneNumberUtils {
             // retrieve the human display name
             for (String countryCode : isoCountryCodes) {
                 Locale locale = new Locale("", countryCode);
-                countryCodes.add(new Pair<>(countryCode, locale.getDisplayCountry()));
+                countryCodes.add(new Pair<>(countryCode, locale.getDisplayCountry(applicationLocale)));
             }
 
             // sort by human display names
