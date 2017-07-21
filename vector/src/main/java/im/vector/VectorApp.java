@@ -56,6 +56,7 @@ import java.util.TimerTask;
 
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorCallViewActivity;
+import im.vector.adapters.AdapterUtils;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
@@ -64,6 +65,7 @@ import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.CountryPhoneData;
+import im.vector.util.PhoneNumberUtils;
 import im.vector.util.RageShake;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
@@ -852,6 +854,8 @@ public class VectorApp extends Application {
         Configuration config = new Configuration();
         config.locale = locale;
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+
+        PhoneNumberUtils.onLocaleUpdate();
     }
 
     /**

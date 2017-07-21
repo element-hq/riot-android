@@ -55,6 +55,14 @@ public class PhoneNumberUtils {
     private static List<CountryPhoneData> mCountryIndicatorList;
 
     /**
+     * The locale has been updated.
+     * The country code to string maps become invalid
+     */
+    public static void onLocaleUpdate() {
+        mCountryCodes = null;
+    }
+
+    /**
      * Build the country codes list
      */
     private static void buildCountryCodesList() {
