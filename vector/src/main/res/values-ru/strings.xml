@@ -30,10 +30,10 @@
     <string name="rename">Переименовать</string>
     <string name="report_content">Содержание отчета</string>
     <string name="active_call">Активный вызов</string>
-    <string name="ongoing_conference_call">Входящий конференц звонок. Присоединитесь с голосом или видео.</string>
+    <string name="ongoing_conference_call">" Входящий конференц звонок. Присоединитесь голосом или видео."</string>
     <string name="ongoing_conference_call_voice">голос</string>
     <string name="ongoing_conference_call_video">видео</string>
-    <string name="cannot_start_call">Не удалось осуществить вызов, попробуте позже</string>
+    <string name="cannot_start_call">Не удалось осуществить вызов, попробуйте позже</string>
     <string name="missing_permissions_warning">"Из-за отсутствия разрешений некоторые функции могут быть недоступны..</string>
     <string name="missing_permissions_to_start_conf_call">Вам нужно разрешение на приглашение для начала конференции в этой комнате</string>
     <string name="missing_permissions_title_to_start_conf_call">Не удалось осуществить вызов</string>
@@ -80,9 +80,9 @@
 
     <!-- People fragment -->
     <string name="direct_chats_header">Диалоги</string>
-    <string name="local_address_book_header">Внутренние контакты</string>
+    <string name="local_address_book_header">Локальные контакты</string>
     <string name="known_contacts_header">Известные контакты</string>
-    <string name="matrix_only_filter">Только контакты Matrix</string>
+    <string name="matrix_only_filter">Только Matrix контакты</string>
     <string name="no_conversation_placeholder">Нет диалогов</string>
     <string name="no_local_contact_placeholder">No local contacts</string>
     <string name="no_contact_access_placeholder">Вы не дали доступ Riot к внутренним контактам</string>
@@ -244,7 +244,7 @@
     <string name="incoming_voice_call">Входящий аудио вызов</string>
     <string name="call_in_progress">Звонок выполняется</string>
     
-    <string name="call_error_user_not_responding">На другом конце не отвечают.</string>
+    <string name="call_error_user_not_responding">Абонент не отвечает.</string>
     <string name="call_error_ice_failed">Медиавызов не удался</string>
     <string name="call_error_camera_init_failed">Невозможно инициализировать камеру</string>
     <string name="call_error_answered_elsewhere">Звонок принят на другом устройстве</string>
@@ -252,7 +252,7 @@
     <string name="call_error_peer_cancelled_call">звонок отменен</string>
     
     <string name="action_accept">ПРИНЯТЬ</string>
-    <string name="action_ignore">ОТМЕНИТЬ</string>
+    <string name="action_ignore">ОТКЛОНИТЬ</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Снять фото или видео"</string>
@@ -261,13 +261,19 @@
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">%s Информация</string>
     <string name="permissions_rationale_msg_storage">%s необходимы разрешения на доступ к вашим фото и видео для сохранения и отправки сложений.\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность отправлять файлы.</string>
-    <string name="permissions_rationale_msg_camera">%s необходимы разрешения на доступ к вашей камере, чтобы делать фото и совержать видеозвонки.</string>
+    <string name="permissions_rationale_msg_camera">%s необходимы разрешения на доступ к вашей камере, чтобы делать фото и совершать видеозвонки.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность совершать звонки.</string>
     <string name="permissions_rationale_msg_record_audio">%s необходимы разрешения на доступ к микрофону, чтобы выполнять звонки.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность совершать звонки.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">%s необходимы разрешения на доступ к камере и микрофону для видеовызовов.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
-    <string name="permissions_rationale_msg_contacts">%s необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.\n\nПожалуйста разрешите доступ в следующем окне, чтобы выши контакты были доступны в приложении.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">%s необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.\n\nРазрешить Riot доступ к контактам ?</string>
+    <string name="permissions_rationale_msg_camera_and_audio">%s необходимы разрешения на доступ к камере и микрофону для видеовызовов.
+
+Пожалуйста дайте разрешение в следующем окне для звонка.</string>
+    <string name="permissions_rationale_msg_contacts">%s необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
+
+Пожалуйста разрешите доступ в следующем окне, чтобы Ваши контакты были доступны в приложении.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">%s необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
+
+Разрешить Riot доступ к контактам?</string>
     
     <string name="permissions_action_not_performed_missing_permissions">Извините.. Действие не выполнено из-зо недостаточных разрешений</string>
     
@@ -292,7 +298,7 @@
     <string name="room_preview_unlinked_email_warning">Приглашение пришло на адрес %s, который не связан с этим аккаунтом.\nВы можете войти под другим аккаунтом или связать email с этим аккаунтом.</string>
     <string name="room_preview_try_join_an_unknown_room">Вы пытаетесь получить доступ к %s. Хотите присоединиться к обсуждению?</string>
     <string name="room_preview_try_join_an_unknown_room_default">комната</string>
-    <string name="room_preview_room_interactions_disabled">Это предпросмотр комнаты. Вы в режиме только чтения.</string>
+    <string name="room_preview_room_interactions_disabled">Это пред. просмотр комнаты. Вы в режиме только чтения.</string>
     
     <!-- Chat creation -->
     <string name="room_creation_title">Новый чат</string>
@@ -306,7 +312,7 @@
 
 Не стоит пока доверять этому для защиты данных.
 
-Устройства не смогут расшифровать историю, пока не войдут в комнату..
+Устройства не смогут расшифровать историю, пока не войдут в комнату.
 
 Зашифрованные сообщения не будут видны на клиентах, в которых не включено шифрование.</string>
     
@@ -317,14 +323,14 @@
     <string name="format_time_d">д</string>
     
     <!--  Chat participants -->
-    <string name="room_participants_leave_prompt_title">Покинуть Чат</string>
-    <string name="room_participants_leave_prompt_msg">Вы уверены, что хотите покинуть Чат?</string>
+    <string name="room_participants_leave_prompt_title">Покинуть чат</string>
+    <string name="room_participants_leave_prompt_msg">Вы уверены, что хотите покинуть чат?</string>
     <string name="room_participants_remove_prompt_msg">Вы уверены, что хотите исключить %s из чата?</string>
     <string name="room_participants_create">Создать</string>
 
     <string name="room_participants_online">В сети</string>
     <string name="room_participants_offline">Недоступен</string>
-    <string name="room_participants_idle">Простой</string>
+    <string name="room_participants_idle">Покой</string>
     <string name="room_participants_now">сейчас</string>
     <string name="room_participants_ago">назад</string>
 
@@ -370,7 +376,7 @@
     <string name="room_message_placeholder_not_encrypted">Отправить сообщение…</string>
     <string name="room_offline_notification">Соединение с сервером потеряно.</string>
     <string name="room_unsent_messages_notification">Сообщения не отправлены. %1$s или %2$s сейчас?</string>
-    <string name="room_unknown_devices_messages_notification">Сообщения, не отправленны из-за присутствия неизвестных устройств. %1$s или %2$s сейчас?</string>
+    <string name="room_unknown_devices_messages_notification">Сообщения, не отправлены из-за присутствия неизвестных устройств. %1$s или %2$s сейчас?</string>
     <string name="room_prompt_resend">Повторить отправку</string>
     <string name="room_prompt_cancel">удалить всё</string>
     <string name="room_resend_unsent_messages">Отправить неотправленные сообщения</string>
@@ -395,7 +401,7 @@
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
     
     <!-- Room Details -->
-    <string name="room_details_title">Подробности</string>
+    <string name="room_details_title">Подробности комнаты</string>
     <string name="room_details_people">Люди</string>
     <string name="room_details_files">Файлы</string>
     <string name="room_details_settings">Настройки</string>
@@ -421,7 +427,7 @@
     <string name="search_hint">Поиск</string>
     <string name="search_members_hint">Фильтр списка пользователей</string>
     <string name="search_no_results">Нет результатов</string>
-    <string name="tab_title_search_rooms">ЧАТЫ</string>
+    <string name="tab_title_search_rooms">КОМНАТЫ</string>
     <string name="tab_title_search_messages">СООБЩЕНИЯ</string>
     <string name="tab_title_search_people">ЛЮДИ</string>
     <string name="tab_title_search_files">ФАЙЛЫ</string>
@@ -430,21 +436,21 @@
     <string name="room_recents_join">ПРИСОЕДИНИЛИСЬ</string>
     <string name="room_recents_directory">КАТАЛОГ</string>
     <string name="room_recents_favourites">ИЗБРАННОЕ</string>
-    <string name="room_recents_conversations">ЧАТЫ</string>
+    <string name="room_recents_conversations">КОМНАТЫ</string>
     <string name="room_recents_low_priority">НЕ СРОЧНО</string>
     <string name="room_recents_invites">ПРИГЛАШЕНИЯ</string>
     <string name="room_recents_start_chat">Начать чат</string>
-    <string name="room_recents_create_room">Создать чат</string>
+    <string name="room_recents_create_room">Создать комнату</string>
     <string name="room_recents_join_room">Войти в комнату</string>
     <string name="room_recents_join_room_title">Войти в комнату</string>
     <string name="room_recents_join_room_prompt">Введите ID комнаты или псевдоним</string>
     
     <!-- Directory -->
     <string name="directory_search_results_title">Просмотр каталога</string>
-    <string name="directory_search_room">%1$d чат</string>
-    <string name="directory_search_rooms">%1$d чатов</string>
-    <string name="directory_search_room_for">%1$d чат найден для %2$s</string>
-    <string name="directory_search_rooms_for">%1$s чатов найдено для %2$s</string>
+    <string name="directory_search_room">%1$d комната</string>
+    <string name="directory_search_rooms">%1$d комнаты</string>
+    <string name="directory_search_room_for">%1$d комната найдена для %2$s</string>
+    <string name="directory_search_rooms_for">%1$s комнат найдено для %2$s</string>
     <string name="directory_searching_title">Поиск в каталоге..</string>
 
     <!-- home room settings -->
@@ -472,7 +478,7 @@
     <string name="settings_add_email_address">Добавить email</string>
     <string name="settings_phone_number">Телефон</string>
     <string name="settings_add_phone_number">Добавить телефон</string>
-    <string name="settings_summary_app_info_link">Эскран системной информации приложения</string>
+    <string name="settings_summary_app_info_link">Экран системной информации приложения</string>
     <string name="settings_title_app_info_link">Сведения о приложении</string>
     
     <string name="settings_enable_all_notif">Включить уведомления для этой учётной записи</string>
@@ -494,7 +500,7 @@
     <string name="settings_seconds">секунд</string>
     
     <string name="settings_version">Версия</string>
-    <string name="settings_olm_version">Версия olm</string>
+    <string name="settings_olm_version">Версия OLM</string>
     <string name="settings_app_term_conditions">Условия и положения</string>
     <string name="settings_third_party_notices">Прочие уведомления</string>
     <string name="settings_copyright">Copyright</string>
@@ -556,7 +562,7 @@
     <string name="settings_phone_number_label">Телефон</string>
     <string name="settings_phone_number_error">Некорректный телефонный номер для выбранной страны</string>
     <string name="settings_phone_number_verification">Проверка телефона</string>
-    <string name="settings_phone_number_verification_instruction">"Мы отправили СМС с кодом активации. Введите этот код в поле ниже."</string>
+    <string name="settings_phone_number_verification_instruction">Мы отправили SMS с кодом активации. Введите этот код в поле ниже.</string>
     <string name="settings_phone_number_verification_error_empty_code">Введите код активации</string>
     <string name="settings_phone_number_verification_error">Ошибка проверки телефона</string>
     <string name="settings_phone_number_code">Код</string>
@@ -595,7 +601,7 @@
     <string name="room_settings_read_history_entry_members_only_joined">Только члены (с момента присоединения)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
-    <string name="room_settings_room_access_warning">Для генерации ссылки комнада толжна иметь адрес.</string>
+    <string name="room_settings_room_access_warning">Для генерации ссылки команда должна иметь адрес.</string>
     <string name="room_settings_room_access_entry_only_invited">Только приглашённые</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Все у кого есть ссылка на комнату, кроме гостей</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Все у кого есть ссылка на комнату, включая гостей</string>
@@ -619,19 +625,20 @@
     <string name="room_settings_addresses_no_local_addresses">У этой комнаты ещё нет локального адреса</string>
     <string name="room_settings_addresses_add_new_address">Новый адрес (например #foo:matrix.org")</string>
     
-    <string name="room_settings_addresses_invalid_format_dialog_title">Неверный формат алиаса</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' неверный формат алиаса</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Неверный формат псевдонима</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' неверный формат псевдонима</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Необходимо указать основной адрес. По-умолчанию основной адрес для этой комнаты будет выбран случайно"</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Предостережение: основной адрес</string>
     
     <string name="room_settings_set_main_address">Установить как основной адрес</string>
     <string name="room_settings_unset_main_address">Сбросить основной адрес</string>
     <string name="room_settings_copy_room_id">Копировать ID комнаты</string>
-    <string name="room_settings_copy_room_address">Копировать адрес комныты</string>
+    <string name="room_settings_copy_room_address">Копировать адрес комнаты</string>
 
     <string name="room_settings_addresses_e2e_enabled">В этой комнате включено шифрование.</string>
     <string name="room_settings_addresses_e2e_disabled">В этой комнате выключено шифрование.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Включить шифрование \n(внимание: не может быть отключено!)</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Включить шифрование 
+(внимание: не может быть снова отключено!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Внимание!</string>
     <string name="room_settings_addresses_e2e_prompt_message">End-to-end шифрование пока нестабильно.\n\nВам не следует доверять этому шифрованию критичные данные.\n\nНет возможности расшифровать историю до момента присоединения к комнате.\n\nПосле включения шифрования для комнаты, оно не может быть отключено.\n\nЗашифрованные сообщения не будут отображаться на устройствах, не поддерживающих шифрование.</string>
     
@@ -652,8 +659,8 @@
     
     <string name="encryption_information_device_info">Информация о событии</string>
     <string name="encryption_information_user_id">ID пользователя</string>
-    <string name="encryption_information_curve25519_identity_key">Curve25519 identity key</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">Claimed Ed25519 fingerprint key</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519 идентификационный ключ</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Требовало Ed25519 fingerprint ключ</string>
     <string name="encryption_information_algorithm">Алгоритм</string>
     <string name="encryption_information_session_id">ID сесии</string>
     <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
@@ -669,7 +676,7 @@
     <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей комнаты</string>
     <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>
     <string name="encryption_export_room_keys_summary">Экспорт ключей в локальный файл</string>
-    <string name="encryption_export_export">Экпорт</string>
+    <string name="encryption_export_export">Экспорт</string>
     <string name="encryption_export_enter_passphrase">Введите пароль</string>
     <string name="encryption_export_confirm_passphrase">Подтвердите пароль</string>
     <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'</string>
@@ -681,28 +688,33 @@
     <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных устройств</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Никогда не посылать зашифрованные сообщения для непроверенных устройств с этого устройства</string>
     
-    <string name="encryption_information_not_verified">Непроверено</string>
+    <string name="encryption_information_not_verified">Не проверено</string>
     <string name="encryption_information_verified">Проверено</string>
     <string name="encryption_information_blocked">В чёрном списке</string>
     
-    <string name="encryption_information_unknown_device">неизветсное устройство</string>
-    <string name="encryption_information_none">none</string>
+    <string name="encryption_information_unknown_device">неизвестное устройство</string>
+    <string name="encryption_information_none">ничего</string>
     
     <string name="encryption_information_verify">Подтвердить</string>
     <string name="encryption_information_unverify">Отменить</string>
-    <string name="encryption_information_block">Игнорировать</string>
-    <string name="encryption_information_unblock">Разблокировать</string>
+    <string name="encryption_information_block">Блокировать</string>
+    <string name="encryption_information_unblock">Разрешить</string>
     
     <string name="encryption_information_verify_device">Проверить устройство</string>
-    <string name="encryption_information_verify_device_warning"> Для проверки устройства свяжитесь с его владельцем альтернативным способом (лично или по телефону) и запросите ключ, которный он видит у себя в настройках пользователя. Проверьте что этот ключ совпадает с данными ниже:</string>
-    <string name="encryption_information_verify_device_warning2">Если совпадает, то нажмите кнопку Подтвердить ниже. если не совпадает, возможно вы заходите добавитьу стройство в чёрный список.\nВ будующем данный процесс будет улучшен.</string>
+    <string name="encryption_information_verify_device_warning">" Для проверки устройства свяжитесь с его владельцем альтернативным способом (лично или по телефону) и запросите ключ, который он видит у себя в настройках пользователя. Проверьте что этот ключ совпадает с данными ниже:"</string>
+    <string name="encryption_information_verify_device_warning2">Если совпадает, то нажмите кнопку Подтвердить ниже. Если не совпадает, возможно вы захотите добавить устройство в чёрный список.
+В будущем данный процесс будет улучшен.</string>
     <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
     
     <string name="e2e_enabling_on_app_update">Riot теперь поддерживает E2E шифрование, но вам необходимо заново войти, чтобы включить его.\n\nШифрование можно включить в настройках приложения.</string>
     
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
-    <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.\nЭто означает, что эти устройства могут не пренадлежать тем пользователям, на которых они претендуют. \nПеред продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.\n\nНеизвестные устройства:</string>
+    <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.
+Это означает, что эти устройства могут не принадлежать тем пользователям, на которых они претендуют. 
+Перед продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.
+
+Неизвестные устройства:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Выбор списка комнат</string>
