@@ -458,7 +458,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="select_room_directory">Sélectionner un répertoire de salons</string>
     <string name="directory_server_placeholder">URL du homeserver</string>
     <string name="directory_server_all_rooms_on_server">Tous les salons sur le server %s</string>
-    <string name="directory_server_native_rooms">Toutes les salons natifs sur %s</string>
+    <string name="directory_server_native_rooms">Tous les salons natifs sur %s</string>
 
     <string name="historical_placeholder">Rechercher dans l\'historique</string>
 
