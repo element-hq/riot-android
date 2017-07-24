@@ -574,7 +574,20 @@
     <string name="settings_phone_number_verification_error_empty_code">Введите код активации</string>
     <string name="settings_phone_number_verification_error">Ошибка проверки телефона</string>
     <string name="settings_phone_number_code">Код</string>
-    
+    <string name="settings_font_size">Размер шрифта сообщений</string>
+    <string name="settings_font_size_small">Маленький</string>
+    <string name="settings_font_size_medium">Средний</string>
+    <string name="settings_font_size_large">Большой</string>
+    <string name="settings_use_markdown">Использовать markdown</string>
+    <string name="settings_show_read_receipts">Показывать уведомления о прочтении</string>
+    <string name="settings_send_typing_notifications">Отправлять уведомления о печатании</string>
+    <string name="settings_show_typing_notifications">Показывать уведомления о печатании</string>
+    <string name="settings_media">Медиа</string>
+    <string name="settings_default_compression">Сжатие по умолчанию</string>
+    <string name="compression_opt_list_choose">Выбирать</string>
+    <string name="settings_default_media_source">Источник медии по умолчанию</string>
+    <string name="media_source_choose">Выбирать</string>
+
     <!-- Room Settings -->
     
     <!-- room global settings-->
