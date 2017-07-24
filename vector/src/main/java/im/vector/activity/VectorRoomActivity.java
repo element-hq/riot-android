@@ -152,7 +152,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * expand the room header when the activity is launched (boolean)
      **/
     public static final String EXTRA_EXPAND_ROOM_HEADER = "EXTRA_EXPAND_ROOM_HEADER";
-    public static final String KEY_DEFAULT_MEDIA_SOURCE = "KEY_DEFAULT_MEDIA_SOURCE";
+    public static final String SETTINGS_DEFAULT_MEDIA_SOURCE_KEY = "SETTINGS_DEFAULT_MEDIA_SOURCE_KEY";
     public static final String MEDIA_SOURCE_CHOOSE = "MEDIA_SOURCE_CHOOSE";
     public static final String MEDIA_SOURCE_FILE = "MEDIA_SOURCE_FILE";
     public static final String MEDIA_SOURCE_PHOTO = "MEDIA_SOURCE_PHOTO";
@@ -677,7 +677,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 if (!TextUtils.isEmpty(mEditText.getText())) {
                     sendTextMessage();
                 } else {
-                    String mediaSource = PreferenceManager.getDefaultSharedPreferences(VectorRoomActivity.this).getString(KEY_DEFAULT_MEDIA_SOURCE, MEDIA_SOURCE_CHOOSE);
+                    String mediaSource = PreferenceManager.getDefaultSharedPreferences(VectorRoomActivity.this).getString(SETTINGS_DEFAULT_MEDIA_SOURCE_KEY, MEDIA_SOURCE_CHOOSE);
                     if (MEDIA_SOURCE_CHOOSE.equals(mediaSource)) {
                         chooseMediaSource();
                         return;
@@ -2060,7 +2060,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (hasText) {
             mSendImageView.setImageResource(R.drawable.ic_material_send_green);
         } else {
-            if (MEDIA_SOURCE_PHOTO.equals(PreferenceManager.getDefaultSharedPreferences(this).getString(KEY_DEFAULT_MEDIA_SOURCE, MEDIA_SOURCE_CHOOSE))) {
+            if (MEDIA_SOURCE_PHOTO.equals(PreferenceManager.getDefaultSharedPreferences(this).getString(SETTINGS_DEFAULT_MEDIA_SOURCE_KEY, MEDIA_SOURCE_CHOOSE))) {
                 mSendImageView.setImageResource(R.drawable.ic_material_camera);
             } else {
                 mSendImageView.setImageResource(R.drawable.ic_material_file);

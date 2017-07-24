@@ -56,7 +56,7 @@ public class VectorRoomMediasSender {
     private static final String LOG_TAG = "VectorRoomMedHelp";
 
     private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
-    private static final String KEY_DEFAULT_MEDIA_COMPRESSION = "KEY_DEFAULT_MEDIA_COMPRESSION";
+    private static final String SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY = "SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY";
     private static final int[] COMPRESSION_NAME_IDS = new int[]{R.string.compression_opt_list_original, R.string.compression_opt_list_large, R.string.compression_opt_list_medium, R.string.compression_opt_list_small};
 
     /**
@@ -850,7 +850,7 @@ public class VectorRoomMediasSender {
 
                     String[] stringsArray = getImagesCompressionTextsList(mVectorRoomActivity, imageSizes, fileSize);
 
-                    Integer prefResize = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(mVectorRoomActivity).getString(KEY_DEFAULT_MEDIA_COMPRESSION, "0"));
+                    Integer prefResize = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(mVectorRoomActivity).getString(SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY, "0"));
                     if (prefResize.equals(0) || prefResize > 4) {
                         final AlertDialog.Builder alert = new AlertDialog.Builder(mVectorRoomActivity);
                         alert.setTitle(mVectorRoomActivity.getString(im.vector.R.string.compression_options));
