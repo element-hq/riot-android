@@ -211,7 +211,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_participants_online">En ligne</string>
     <string name="room_participants_offline">Hors ligne</string>
     <string name="room_participants_now">maintenant</string>
-    <string name="room_participants_ago">d\'inactivité</string>
+    <string name="room_participants_ago">" "</string>
 
     <string name="room_participants_header_admin_tools">OUTILS D\'ADMINISTRATION</string>
     <string name="room_participants_header_call">APPEL</string>
@@ -288,7 +288,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="room_settings_notifications">Notifications</string>
     <string name="room_settings_favourite">Favori</string>
-    <string name="room_settings_de_prioritize">Déprioriser</string>
+    <string name="room_settings_de_prioritize">Priorité basse</string>
     <string name="room_settings_direct_chat">Discussion directe</string>
     <string name="room_settings_leave_conversation">Quitter la discussion</string>
     <string name="room_settings_forget">Oublier</string>
