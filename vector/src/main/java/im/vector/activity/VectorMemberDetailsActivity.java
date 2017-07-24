@@ -1333,7 +1333,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 store = Matrix.getInstance(this).getTmpStore(storeIndex);
             } else {
                 store = mSession.getDataHandler().getStore();
-                refreshUser();
+
+                if (refreshUser()) {
+                    intent.removeExtra(EXTRA_ROOM_ID);
+                }
             }
 
             mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
@@ -1375,8 +1378,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     /**
      * Refresh the user information
+     * @return true if the user is not a known one
      */
-    private void refreshUser() {
+    private boolean refreshUser() {
         mUser = mSession.getDataHandler().getStore().getUser(mMemberId);
 
         // build a tmp user from the data provided as parameters
@@ -1390,7 +1394,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             mUser.avatar_url  = getIntent().getStringExtra(EXTRA_MEMBER_AVATAR_URL);
+
+            return true;
         }
+
+        return false;
     }
 
     /**
