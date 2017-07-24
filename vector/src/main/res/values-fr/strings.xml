@@ -297,9 +297,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_sliding_menu_settings">Paramètres</string>
     <string name="room_sliding_menu_version">"Version "</string>
     <string name="room_sliding_menu_term_and_conditions">Termes et conditions</string>
-    <string name="room_sliding_menu_third_party_notices">- Avis aux tiers
-- Droit à un avis
-- le tiers a adhéré</string>
+    <string name="room_sliding_menu_third_party_notices">Licences tierces</string>
     <string name="room_sliding_menu_copyright">Droits d\'auteur</string>
     <string name="room_sliding_menu_privacy_policy">Politique de confidentialité</string>
 
@@ -314,7 +312,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="settings_enable_all_notif">Activer les notifications pour ce compte</string>
     <string name="settings_enable_this_device">Activer les notifications pour cet appareil</string>
-    <string name="settings_containing_my_name">Message contenant mon nom</string>
+    <string name="settings_containing_my_name">Msgs contenant mon nom</string>
     <string name="settings_messages_in_one_to_one">Msgs dans les discussions directes</string>
     <string name="settings_messages_in_group_chat">Msgs dans les discussions de groupe</string>
     <string name="settings_call_invitations">Demandes d\'appel</string>
@@ -330,10 +328,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">version de olm</string>
     <string name="settings_app_term_conditions">Termes et conditions</string>
-    <string name="settings_third_party_notices">- Avis aux tiers
-- droit à un avis
-- le tiers a adhéré
-- Tiers adhérant</string>
+    <string name="settings_third_party_notices">Licences tierces</string>
     <string name="settings_copyright">Droits d\'auteur</string>
     <string name="settings_privacy_policy">Politique de confidentialité</string>
     <string name="settings_clear_cache">Vider le cache</string>
@@ -513,7 +508,7 @@ Vous avez été déconnecté de tous les appareils et ne recevrez plus de notifi
     <string name="login_error_unknown_token">Le jeton d\'accès fourni n\'a pas été reconnu</string>
     <string name="login_error_limit_exceeded">Trop de demandes ont été envoyées</string>
     <string name="login_error_user_in_use">Ce nom d\'utilisateur est déjà utilisé</string>
-    <string name="login_error_login_email_not_yet">Le lien dans l\'e-mail qui n\'a pas encore été suivi</string>
+    <string name="login_error_login_email_not_yet">Vous n\'avez pas encore cliqué sur le lien dans l\'e-mail</string>
 
     <string name="e2e_need_log_in_again">Vous devez vous identifier à nouveau pour générer des clés de chiffrement de bout en bout pour cet appareil et envoyer la clé publique à votre homeserver.
 Il s\'agit d\'une erreur exceptionnelle.
