@@ -64,5 +64,15 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+    <string-array name="media_sources">
+        <item>@string/media_source_choose</item>
+        <item>@string/option_send_files</item>
+        <item>@string/option_take_photo_video</item>
+    </string-array>
+    <string-array name="media_source_values">
+        <item>MEDIA_SOURCE_CHOOSE</item>
+        <item>MEDIA_SOURCE_FILE</item>
+        <item>MEDIA_SOURCE_PHOTO</item>
+    </string-array>
 
 </resources>

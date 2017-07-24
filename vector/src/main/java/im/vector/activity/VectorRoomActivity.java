@@ -152,6 +152,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * expand the room header when the activity is launched (boolean)
      **/
     public static final String EXTRA_EXPAND_ROOM_HEADER = "EXTRA_EXPAND_ROOM_HEADER";
+    public static final String KEY_DEFAULT_MEDIA_SOURCE = "KEY_DEFAULT_MEDIA_SOURCE";
+    public static final String MEDIA_SOURCE_CHOOSE = "MEDIA_SOURCE_CHOOSE";
+    public static final String MEDIA_SOURCE_FILE = "MEDIA_SOURCE_FILE";
+    public static final String MEDIA_SOURCE_PHOTO = "MEDIA_SOURCE_PHOTO";
 
     // display the room information while joining a room.
     // until the join is done.
@@ -673,45 +677,28 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 if (!TextUtils.isEmpty(mEditText.getText())) {
                     sendTextMessage();
                 } else {
-                    // hide the header room
-                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-                    FragmentManager fm = getSupportFragmentManager();
-                    IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ATTACHMENTS_DIALOG);
-
-                    if (fragment != null) {
-                        fragment.dismissAllowingStateLoss();
+                    String mediaSource = PreferenceManager.getDefaultSharedPreferences(VectorRoomActivity.this).getString(KEY_DEFAULT_MEDIA_SOURCE, MEDIA_SOURCE_CHOOSE);
+                    if (MEDIA_SOURCE_CHOOSE.equals(mediaSource)) {
+                        chooseMediaSource();
+                        return;
                     }
-
-                    final Integer[] messages = new Integer[]{
-                            R.string.option_send_files,
-                            R.string.option_take_photo_video,
-                    };
-
-                    final Integer[] icons = new Integer[]{
-                            R.drawable.ic_material_file,  // R.string.option_send_files
-                            R.drawable.ic_material_camera, // R.string.option_take_photo
-                    };
-
-
-                    fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_text_black_color));
-                    fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                            Integer selectedVal = messages[position];
-
-                            if (selectedVal == R.string.option_send_files) {
-                                VectorRoomActivity.this.launchFileSelectionIntent();
-                            } else if (selectedVal == R.string.option_take_photo_video) {
-                                if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
-                                    launchCamera();
-                                }
-                            }
-                        }
-                    });
-
-                    fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+                    if (MEDIA_SOURCE_FILE.equals(mediaSource)) {
+                        launchFileSelectionIntent();
+                    }
+                    if (MEDIA_SOURCE_PHOTO.equals(mediaSource)) {
+                        tryLaunchCamera();
+                    }
                 }
+            }
+        });
+        mSendButtonLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (!TextUtils.isEmpty(mEditText.getText())) {
+                    return false;
+                }
+                chooseMediaSource();
+                return true;
             }
         });
 
@@ -957,6 +944,51 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         Log.d(LOG_TAG, "End of create");
+    }
+
+    private void chooseMediaSource() {
+        // hide the header room
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        FragmentManager fm = getSupportFragmentManager();
+        IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+
+        if (fragment != null) {
+            fragment.dismissAllowingStateLoss();
+        }
+
+        final Integer[] messages = new Integer[]{
+                R.string.option_send_files,
+                R.string.option_take_photo_video,
+        };
+
+        final Integer[] icons = new Integer[]{
+                R.drawable.ic_material_file,  // R.string.option_send_files
+                R.drawable.ic_material_camera, // R.string.option_take_photo
+        };
+
+
+        fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_text_black_color));
+        fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+            @Override
+            public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+                Integer selectedVal = messages[position];
+
+                if (selectedVal == R.string.option_send_files) {
+                    VectorRoomActivity.this.launchFileSelectionIntent();
+                } else if (selectedVal == R.string.option_take_photo_video) {
+                    tryLaunchCamera();
+                }
+            }
+        });
+
+        fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+    }
+
+    private void tryLaunchCamera() {
+        if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
+            launchCamera();
+        }
     }
 
     @Override
@@ -2025,7 +2057,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void manageSendMoreButtons() {
         boolean hasText = (mEditText.getText().length() > 0);
-        mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
+        if (hasText) {
+            mSendImageView.setImageResource(R.drawable.ic_material_send_green);
+        } else {
+            if (MEDIA_SOURCE_PHOTO.equals(PreferenceManager.getDefaultSharedPreferences(this).getString(KEY_DEFAULT_MEDIA_SOURCE, MEDIA_SOURCE_CHOOSE))) {
+                mSendImageView.setImageResource(R.drawable.ic_material_camera);
+            } else {
+                mSendImageView.setImageResource(R.drawable.ic_material_file);
+            }
+        }
     }
 
     /**

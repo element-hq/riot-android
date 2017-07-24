@@ -577,9 +577,12 @@
     <string name="settings_font_size_medium">Medium</string>
     <string name="settings_font_size_large">Large</string>
     <string name="settings_show_typing_notifications">Show typing notifications</string>
+    <string name="settings_media">Media</string>
     <string name="settings_default_compression">Default compression</string>
     <string name="compression_opt_list_choose">Choose</string>
     <string name="settings_media">Media</string>
+    <string name="settings_default_media_source">Default media source</string>
+    <string name="media_source_choose">Choose</string>
 
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>
