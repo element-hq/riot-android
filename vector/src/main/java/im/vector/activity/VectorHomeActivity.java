@@ -615,7 +615,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         addBadgeEventsListener();
 
         // restart the activity if the locale has been updated
-        if ((null != mCurrentLocale) && !TextUtils.equals(mCurrentLocale.getDisplayLanguage(), VectorApp.getApplicationLocale(this).getDisplayLanguage())) {
+        if ((null != mCurrentLocale) && !TextUtils.equals(mCurrentLocale.toString(), VectorApp.getApplicationLocale(this).toString())) {
             startActivity(getIntent());
             finish();
         }

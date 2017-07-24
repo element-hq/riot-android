@@ -199,7 +199,8 @@ public class BugReporter {
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())
-                            .addFormDataPart("app_language", context.getString(R.string.resouces_language) + "_" + context.getString(R.string.resouces_country));
+                            .addFormDataPart("app_language", VectorApp.getApplicationLocale(context).toString())
+                            .addFormDataPart("default_app_language", VectorApp.getDeviceLocale(context).toString());
 
                     // add the gzipped files
                     for (File file : gzippedFiles) {

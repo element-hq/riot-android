@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import im.vector.R;
+import im.vector.VectorApp;
 
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.LanguageViewHolder> implements Filterable {
 
@@ -89,7 +90,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
                     Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
 
                     for(Locale locale : mLocalesList) {
-                        if (pattern.matcher(locale.getDisplayLanguage()).matches()) {
+                        if (pattern.matcher(VectorApp.localeToString(locale)).matches()) {
                             mFilteredLocalesList.add(locale);
                         }
                     }
@@ -123,7 +124,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
         }
 
         private void populateViews(final Locale locale) {
-            vLocaleNameTextView.setText(locale.getDisplayLanguage());
+            vLocaleNameTextView.setText(VectorApp.localeToString(locale));
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

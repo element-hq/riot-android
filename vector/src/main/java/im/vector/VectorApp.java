@@ -28,12 +28,14 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Pair;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
@@ -56,7 +58,6 @@ import java.util.TimerTask;
 
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorCallViewActivity;
-import im.vector.adapters.AdapterUtils;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.VectorSettingsPreferencesFragment;
@@ -65,9 +66,9 @@ import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
-import im.vector.util.CountryPhoneData;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.RageShake;
+import im.vector.util.RoomUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
 
@@ -112,8 +113,8 @@ public class VectorApp extends Application {
      * Google analytics information.
      */
     public static int VERSION_BUILD = -1;
-    public static String VECTOR_VERSION_STRING = "";
-    public static String SDK_VERSION_STRING = "";
+    private static String VECTOR_VERSION_STRING = "";
+    private static String SDK_VERSION_STRING = "";
 
     /**
      * Tells if there a pending call whereas the application is backgrounded.
@@ -572,7 +573,7 @@ public class VectorApp extends Application {
     /**
      * syncing sessions
      */
-    private static HashSet<MXSession> mSyncingSessions = new HashSet<>();
+    private static final HashSet<MXSession> mSyncingSessions = new HashSet<>();
 
     /**
      * Add a session in the syncing sessions list
@@ -634,15 +635,13 @@ public class VectorApp extends Application {
     public static final String GOOGLE_ANALYTICS_STATS_CATEGORY = "stats";
 
     public static final String GOOGLE_ANALYTICS_STATS_ROOMS_ACTION = "rooms";
-    public static final String GOOGLE_ANALYTICS_STARTUP_INITIAL_SYNC_ACTION = "initialSync";
-    public static final String GOOGLE_ANALYTICS_STARTUP_INCREMENTAL_SYNC_ACTION = "incrementalSync";
     public static final String GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION = "storePreload";
     public static final String GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION = "mountData";
     public static final String GOOGLE_ANALYTICS_STARTUP_LAUNCH_SCREEN_ACTION = "launchScreen";
     public static final String GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION = "Contacts";
 
     // keep track of the GA events
-    private static HashMap<String, String> mGAStatsMap = new HashMap<>();
+    private static final HashMap<String, String> mGAStatsMap = new HashMap<>();
 
     /**
      * Send a GA stats
@@ -670,21 +669,6 @@ public class VectorApp extends Application {
         }
 
         GAHelper.sendGAStats(context, category, action, label, value);
-    }
-
-    /**
-     * Provide the GA stats.
-     *
-     * @return the GA stats.
-     */
-    public static String getGAStats() {
-        String stats = "";
-
-        for (String k : mGAStatsMap.keySet()) {
-            stats += k + " : " + mGAStatsMap.get(k) + "\n";
-        }
-
-        return stats;
     }
 
     /**
@@ -786,26 +770,36 @@ public class VectorApp extends Application {
     //==============================================================================================================
 
     // the supported application languages
-    private static Set<Locale> mApplicationLocales = new HashSet<>();
+    private static final Set<Locale> mApplicationLocales = new HashSet<>();
 
     private static final String APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY";
     private static final String APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY";
     private static final String APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY";
 
-    private static Locale mApplicationDefaultLanguage = new Locale("en", "UK");
+    private static final Locale mApplicationDefaultLanguage = new Locale("en", "UK");
 
     /**
      * Init the application locale from the saved one
      *
      * @param context the contact
      */
-    public static void initApplicationLocale(Context context) {
+    private static void initApplicationLocale(Context context) {
         Locale locale = getApplicationLocale(context);
 
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+
+        // init the known locales in background
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                getApplicationLocales(VectorApp.getInstance());
+                return null;
+            }
+        };
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     /**
@@ -832,19 +826,38 @@ public class VectorApp extends Application {
             locale = new Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
                     preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, ""),
                     preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")
-                    );
+            );
         }
 
         return locale;
     }
 
     /**
-     * Saves the preferred locale.
+     * Provides the device locale
      *
      * @param context the context
-     * @return the application locale
+     * @return the device locale
      */
-    public static void saveApplicationLocale(Context context, Locale locale) {
+    public static Locale getDeviceLocale(Context context) {
+        Locale locale = getApplicationLocale(context);
+
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            Resources resources = packageManager.getResourcesForApplication("android");
+            locale = resources.getConfiguration().locale;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getDeviceLocale() failed " + e.getMessage());
+        }
+
+        return locale;
+    }
+
+    /**
+     * Save the new application locale.
+     *
+     * @param context the context
+     */
+    private static void saveApplicationLocale(Context context, Locale locale) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         SharedPreferences.Editor editor = preferences.edit();
@@ -877,7 +890,7 @@ public class VectorApp extends Application {
      * Update the application locale.
      *
      * @param context context
-     * @param locale locale
+     * @param locale  locale
      */
     public static void updateApplicationLocale(Context context, Locale locale) {
         saveApplicationLocale(context, locale);
@@ -893,8 +906,8 @@ public class VectorApp extends Application {
     /**
      * Get String from a locale
      *
-     * @param context the context
-     * @param locale the locale
+     * @param context    the context
+     * @param locale     the locale
      * @param resourceId the string resource id
      * @return the localized string
      */
@@ -931,18 +944,17 @@ public class VectorApp extends Application {
      */
     public static List<Locale> getApplicationLocales(Context context) {
         if (mApplicationLocales.isEmpty()) {
-            String defaultStringValue = getString(context, mApplicationDefaultLanguage, R.string.resouces_country);
 
-            mApplicationLocales.add(mApplicationDefaultLanguage);
+            final Locale[] availableLocales = Locale.getAvailableLocales();
 
-            String[] locales = Resources.getSystem().getAssets().getLocales();
+            Set<Pair<String, String>> knownLocalesSet = new HashSet<>();
 
-            for(String locale: locales) {
-                String value = getString(context, new Locale(locale), R.string.resouces_country);
+            for (Locale locale : availableLocales) {
+                knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resouces_language), getString(context, locale, R.string.resouces_country)));
+            }
 
-                if (!TextUtils.equals(value, defaultStringValue)) {
-                    mApplicationLocales.add(new Locale(locale));
-                }
+            for(Pair<String, String> knownLocale : knownLocalesSet) {
+                mApplicationLocales.add(new Locale(knownLocale.first, knownLocale.second));
             }
         }
 
@@ -952,11 +964,27 @@ public class VectorApp extends Application {
         Collections.sort(sortedLocalesList, new Comparator<Locale>() {
             @Override
             public int compare(Locale lhs, Locale rhs) {
-                return lhs.getDisplayLanguage().compareTo(rhs.getDisplayLanguage());
+                return localeToString(lhs).compareTo(localeToString(rhs));
             }
         });
 
         return sortedLocalesList;
+    }
+
+    /**
+     * Convert a locale to a string
+     *
+     * @param locale the locale to convert
+     * @return the string
+     */
+    public static String localeToString(Locale locale) {
+        String res = locale.getDisplayLanguage();
+
+        if (!TextUtils.isEmpty(locale.getDisplayCountry())) {
+            res += " (" + locale.getDisplayCountry() + ")";
+        }
+
+        return res;
     }
 }
 

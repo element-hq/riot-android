@@ -1890,7 +1890,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     private void setUserInterfacePreferences() {
         VectorCustomActionEditTextPreference selectedLangaguePreference = (VectorCustomActionEditTextPreference) findPreference(SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY);
-        selectedLangaguePreference.setSummary(VectorApp.getApplicationLocale(getActivity()).getDisplayLanguage());
+        selectedLangaguePreference.setSummary(VectorApp.localeToString(VectorApp.getApplicationLocale(getActivity())));
 
         selectedLangaguePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
