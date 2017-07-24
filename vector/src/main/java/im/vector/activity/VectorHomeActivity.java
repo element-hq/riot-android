@@ -240,9 +240,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     // floating action bar dialog
     private AlertDialog mFabDialog;
 
-    // locale update manage
-    private Locale mCurrentLocale;
-
      /*
      * *********************************************************************************************
      * Static methods
@@ -613,12 +610,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         displayCryptoCorruption();
 
         addBadgeEventsListener();
-
-        // restart the activity if the locale has been updated
-        if ((null != mCurrentLocale) && !TextUtils.equals(mCurrentLocale.toString(), VectorApp.getApplicationLocale(this).toString())) {
-            startActivity(getIntent());
-            finish();
-        }
     }
 
     @Override
@@ -719,9 +710,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         }
 
         removeBadgeEventsListener();
-
-        // save the current locale to track update
-        mCurrentLocale = VectorApp.getApplicationLocale(this);
     }
 
     @Override

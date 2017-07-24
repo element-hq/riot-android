@@ -19,6 +19,7 @@ package im.vector;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -52,6 +53,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -142,6 +144,21 @@ public class VectorApp extends Application {
      */
     public static File mLogsDirectoryFile = null;
 
+    private BroadcastReceiver mLanguageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale(context).toString())) {
+                Log.d(LOG_TAG, "## onReceive() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale(context).toString());
+                updateApplicationLocale(context, getApplicationLocale(context));
+
+                if (null != getCurrentActivity()) {
+                    VectorApp.getInstance().startActivity(getCurrentActivity().getIntent());
+                    getCurrentActivity().finish();
+                }
+            }
+        }
+    };
+
     @Override
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
@@ -191,6 +208,8 @@ public class VectorApp extends Application {
         MXSession.initUserAgent(getApplicationContext());
 
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            Map<String, String> mLocalesByActivity = new HashMap<>();
+
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
@@ -206,11 +225,26 @@ public class VectorApp extends Application {
             public void onActivityResumed(Activity activity) {
                 Log.d(LOG_TAG, "onActivityResumed " + activity);
                 setCurrentActivity(activity);
+
+                String activityKey = activity.toString();
+
+                if (mLocalesByActivity.containsKey(activityKey)) {
+                    String prevActivityLocale = mLocalesByActivity.get(activityKey);
+                    String curLocale = getApplicationLocale(activity).toString();
+
+                    if (!TextUtils.equals(prevActivityLocale, curLocale)) {
+                        Log.d(LOG_TAG, "## onActivityResumed() : restart the activity " + activity + " because of the locale update from " + prevActivityLocale + " to " + curLocale);
+
+                        VectorApp.getInstance().startActivity(activity.getIntent());
+                        activity.finish();
+                    }
+                }
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
                 Log.d(LOG_TAG, "onActivityPaused " + activity);
+                mLocalesByActivity.put(activity.toString(), getApplicationLocale(activity).toString());
                 setCurrentActivity(null);
             }
 
@@ -228,6 +262,7 @@ public class VectorApp extends Application {
             public void onActivityDestroyed(Activity activity) {
                 Log.d(LOG_TAG, "onActivityDestroyed " + activity);
                 mCreatedActivities.remove(activity.toString());
+                mLocalesByActivity.remove(activity.toString());
 
                 if (mCreatedActivities.size() > 1) {
                     Log.d(LOG_TAG, "onActivityDestroyed : \n" + mCreatedActivities);
@@ -247,6 +282,9 @@ public class VectorApp extends Application {
         }
 
         initApplicationLocale(this);
+
+        // track external language updates
+        VectorApp.getInstance().registerReceiver(mLanguageReceiver, new IntentFilter(Intent.ACTION_LOCALE_CHANGED));
 
         fixMigrationIssues();
     }
