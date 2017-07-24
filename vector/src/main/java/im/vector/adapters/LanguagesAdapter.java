@@ -90,7 +90,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
                     Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
 
                     for(Locale locale : mLocalesList) {
-                        if (pattern.matcher(VectorApp.localeToString(locale)).matches()) {
+                        if (pattern.matcher(VectorApp.localeToString(locale)).find()) {
                             mFilteredLocalesList.add(locale);
                         }
                     }
