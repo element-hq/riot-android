@@ -19,7 +19,6 @@ package im.vector.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -36,14 +35,10 @@ import java.util.Locale;
 
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.adapters.CountryAdapter;
 import im.vector.adapters.LanguagesAdapter;
-import im.vector.util.CountryPhoneData;
-import im.vector.util.PhoneNumberUtils;
 
 public class LanguagePickerActivity extends AppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {
 
-    private RecyclerView mLanguagesRecyclerView;
     private View mLanguagesEmptyView;
     private LanguagesAdapter mAdapter;
     private SearchView mSearchView;
@@ -126,12 +121,12 @@ public class LanguagePickerActivity extends AppCompatActivity implements Languag
 
     private void initViews() {
         mLanguagesEmptyView = findViewById(R.id.languages_empty_view);
-        mLanguagesRecyclerView = (RecyclerView) findViewById(R.id.languages_recycler_view);
+        RecyclerView languagesRecyclerView = (RecyclerView) findViewById(R.id.languages_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mLanguagesRecyclerView.setLayoutManager(layoutManager);
+        languagesRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new LanguagesAdapter(VectorApp.getApplicationLocales(this), this);
-        mLanguagesRecyclerView.setAdapter(mAdapter);
+        languagesRecyclerView.setAdapter(mAdapter);
     }
 
     private void filterLocales(final String pattern) {

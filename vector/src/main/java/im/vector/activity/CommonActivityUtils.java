@@ -1821,16 +1821,8 @@ public class CommonActivityUtils {
             ArrayList<Room> roomCompleteList = new ArrayList<>(aDataHandler.getStore().getRooms());
             int unreadRoomsCount = 0;
 
-            // compute the number of rooms with unread notifications
-            // "invite to join a room" counts as a notification
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(aContext);
-            boolean isInvitedNotifEnabled =
-                    preferences.getBoolean(aContext.getResources().getString(R.string.settings_invited_to_room), false) ||
-                            preferences.getBoolean(VectorSettingsPreferencesFragment.SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY, false);
-
-
             for (Room room : roomCompleteList) {
-                if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
+                if (room.getNotificationCount() > 0) {
                     unreadRoomsCount++;
                 }
             }

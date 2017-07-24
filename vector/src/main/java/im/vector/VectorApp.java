@@ -68,7 +68,6 @@ import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.RageShake;
-import im.vector.util.RoomUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
 
@@ -640,9 +639,6 @@ public class VectorApp extends Application {
     public static final String GOOGLE_ANALYTICS_STARTUP_LAUNCH_SCREEN_ACTION = "launchScreen";
     public static final String GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION = "Contacts";
 
-    // keep track of the GA events
-    private static final HashMap<String, String> mGAStatsMap = new HashMap<>();
-
     /**
      * Send a GA stats
      *
@@ -653,21 +649,6 @@ public class VectorApp extends Application {
      * @param value    the value
      */
     public static void sendGAStats(Context context, String category, String action, String label, long value) {
-        try {
-            String key = "[" + category + "] " + action;
-            String mapValue = "";
-
-            if (!TextUtils.isEmpty(label)) {
-                mapValue += label;
-            } else {
-                mapValue += value + " ms";
-            }
-
-            mGAStatsMap.put(key, mapValue);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## sendGAStats() failed " + e.getMessage());
-        }
-
         GAHelper.sendGAStats(context, category, action, label, value);
     }
 
@@ -953,7 +934,7 @@ public class VectorApp extends Application {
                 knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resouces_language), getString(context, locale, R.string.resouces_country)));
             }
 
-            for(Pair<String, String> knownLocale : knownLocalesSet) {
+            for (Pair<String, String> knownLocale : knownLocalesSet) {
                 mApplicationLocales.add(new Locale(knownLocale.first, knownLocale.second));
             }
         }
