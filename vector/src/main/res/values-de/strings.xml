@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
     <string name="resouces_language">de</string>
-    <string name="resouces_country">DE</string>
+    <string name="resouces_country"></string>
 
     <!-- titles -->
     <string name="title_activity_home">Nachrichten</string>
@@ -565,7 +567,6 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="settings_phone_number_verification_error_empty_code">Hier Aktivierungsccode eintragen</string>
     <string name="settings_phone_number_verification_error">Fehler beim Verifizieren der Telefonnummer</string>
     <string name="settings_phone_number_code">Code</string>
-
     <!-- Room Settings -->
 
     <!-- room global settings-->

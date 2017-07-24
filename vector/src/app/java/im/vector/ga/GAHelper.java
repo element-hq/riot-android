@@ -28,6 +28,7 @@ import com.google.android.gms.analytics.HitBuilders;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.fragments.VectorSettingsPreferencesFragment;
 
 public class GAHelper {
 
@@ -58,7 +59,7 @@ public class GAHelper {
     public static void setUseGA(Context context, boolean value) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(context.getString(R.string.ga_use_settings), value);
+        editor.putBoolean(VectorSettingsPreferencesFragment.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, value);
         editor.commit();
 
         initGoogleAnalytics(context);
@@ -78,8 +79,8 @@ public class GAHelper {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (preferences.contains(context.getString(R.string.ga_use_settings))) {
-            return preferences.getBoolean(context.getString(R.string.ga_use_settings), false);
+        if (preferences.contains(VectorSettingsPreferencesFragment.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY)) {
+            return preferences.getBoolean(VectorSettingsPreferencesFragment.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, false);
         } else {
             try {
                 // test if the client should not use GA

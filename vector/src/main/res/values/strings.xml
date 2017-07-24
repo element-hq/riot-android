@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+
     <string name="resouces_language">en</string>
     <string name="resouces_country">UK</string>
 
@@ -528,6 +531,10 @@
     <string name="settings_logged_in">Logged in as</string>
     <string name="settings_home_server">Home Server</string>
     <string name="settings_identity_server">Identity Server</string>
+
+    <string name="settings_user_interface">User interface</string>
+    <string name="settings_interface_language">Interface Language</string>
+    <string name="settings_select_language">Choose a language</string>
 
     <string name="account_email_validation_title">Verification Pending</string>
     <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>

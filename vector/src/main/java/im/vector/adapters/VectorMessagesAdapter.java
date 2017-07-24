@@ -76,6 +76,7 @@ import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import im.vector.R;
@@ -180,6 +181,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     private final Set<String> mHiddenEventIds = new HashSet<>();
 
+    private Locale mLocale;
+
     /**
      * Creates a messages adapter with the default layouts.
      */
@@ -266,6 +269,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         // helpers
         mMediasHelper = new VectorMessagesAdapterMediasHelper(context, mSession, mMaxImageWidth, mMaxImageHeight, mNotSentMessageTextColor, mDefaultMessageTextColor);
         mHelper = new VectorMessagesAdapterHelper(context, mSession);
+
+        mLocale = VectorApp.getApplicationLocale(mContext);
     }
 
     /*
@@ -1564,14 +1569,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         } else if (nbrDays == 1) {
             return mContext.getResources().getString(R.string.yesterday);
         } else if (nbrDays < 7) {
-            return (new SimpleDateFormat("EEEE", AdapterUtils.getLocale(mContext))).format(date);
+            return (new SimpleDateFormat("EEEE", mLocale)).format(date);
         } else {
             int flags = DateUtils.FORMAT_SHOW_DATE |
                     DateUtils.FORMAT_SHOW_YEAR |
                     DateUtils.FORMAT_ABBREV_ALL |
                     DateUtils.FORMAT_SHOW_WEEKDAY;
 
-            Formatter f = new Formatter(new StringBuilder(50), AdapterUtils.getLocale(mContext));
+            Formatter f = new Formatter(new StringBuilder(50), mLocale);
             return DateUtils.formatDateRange(mContext, f, date.getTime(), date.getTime(), flags).toString();
         }
     }

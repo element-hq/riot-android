@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
     <string name="resouces_language">it</string>
-    <string name="resouces_country">IT</string>
+    <string name="resouces_country"></string>
 
     <!-- titles -->
     <string name="title_activity_home">Messaggi</string>

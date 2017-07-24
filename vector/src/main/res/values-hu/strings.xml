@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">hu</string>
-    <string name="resouces_country">HU</string>
+<resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resouces_language">hu</string>
+    <string name="resouces_country"></string>
 
     <string name="title_activity_home">Üzenetek</string>
     <string name="title_activity_room">Szoba</string>

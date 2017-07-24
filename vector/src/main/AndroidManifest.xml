@@ -74,6 +74,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="im.vector.activity.AccountCreationActivity"
             android:label="@string/create_account" >
@@ -311,6 +312,12 @@
             android:name="im.vector.activity.CountryPickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_select_country"
+            android:theme="@style/CountryPickerTheme" />
+
+        <activity
+            android:name="im.vector.activity.LanguagePickerActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_select_language"
             android:theme="@style/CountryPickerTheme" />
 
         <activity
