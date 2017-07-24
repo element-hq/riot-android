@@ -25,6 +25,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.HandlerThread;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.text.TextUtils;
@@ -55,6 +56,8 @@ public class VectorRoomMediasSender {
     private static final String LOG_TAG = "VectorRoomMedHelp";
 
     private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
+    private static final String KEY_DEFAULT_MEDIA_COMPRESSION = "KEY_DEFAULT_MEDIA_COMPRESSION";
+    private static final int[] COMPRESSION_NAME_IDS = new int[]{R.string.compression_opt_list_original, R.string.compression_opt_list_large, R.string.compression_opt_list_medium, R.string.compression_opt_list_small};
 
     /**
      * This listener is displayed when the image has been resized.
@@ -847,62 +850,43 @@ public class VectorRoomMediasSender {
 
                     String[] stringsArray = getImagesCompressionTextsList(mVectorRoomActivity, imageSizes, fileSize);
 
-                    final AlertDialog.Builder alert = new AlertDialog.Builder(mVectorRoomActivity);
-                    alert.setTitle(mVectorRoomActivity.getString(im.vector.R.string.compression_options));
-                    alert.setSingleChoiceItems(stringsArray, -1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            final int fPos = which;
+                    Integer prefResize = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(mVectorRoomActivity).getString(KEY_DEFAULT_MEDIA_COMPRESSION, "0"));
+                    if (prefResize.equals(0) || prefResize > 4) {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(mVectorRoomActivity);
+                        alert.setTitle(mVectorRoomActivity.getString(im.vector.R.string.compression_options));
+                        alert.setSingleChoiceItems(stringsArray, -1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                final int fPos = which;
 
-                            mImageSizesListDialog.dismiss();
+                                mImageSizesListDialog.dismiss();
+                                ImageSize expectedSize = null;
 
-                            mVectorRoomActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mVectorRoomActivity.setProgressVisibility(View.VISIBLE);
-
-                                    Thread thread = new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ImageSize expectedSize = null;
-
-                                            // full size
-                                            if (0 != fPos) {
-                                                expectedSize = imageSizes.getImageSizesList().get(fPos);
-                                            }
-
-                                            // stored the compression selected by the user
-                                            mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
-
-                                            final String fImageUrl = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
-
-                                            mVectorRoomActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    mVectorMessageListFragment.uploadImageContent(null, null, aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
-                                                    aListener.onDone();
-                                                }
-                                            });
-                                        }
-                                    });
-
-                                    thread.setPriority(Thread.MIN_PRIORITY);
-                                    thread.start();
+                                // full size
+                                if (0 != fPos) {
+                                    expectedSize = imageSizes.getImageSizesList().get(fPos);
                                 }
-                            });
-                        }
-                    });
 
-                    mImageSizesListDialog = alert.show();
-                    mImageSizesListDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            mImageSizesListDialog = null;
-                            if (null != aListener) {
-                                aListener.onCancel();
+                                // stored the compression selected by the user
+                                mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
+                                resizeAndUploadImage(expectedSize, imageSizes, anImageUrl, filename, rotationAngle, aThumbnailURL, anImageFilename, anImageMimeType, aListener);
                             }
-                        }
-                    });
+                        });
+
+                        mImageSizesListDialog = alert.show();
+                        mImageSizesListDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                mImageSizesListDialog = null;
+                                if (null != aListener) {
+                                    aListener.onCancel();
+                                }
+                            }
+                        });
+                    } else {
+                        ImageSize expectedSize = imageSizes.getImageSize(mVectorRoomActivity, mVectorRoomActivity.getString(COMPRESSION_NAME_IDS[Integer.valueOf(prefResize) - 1]));
+                        resizeAndUploadImage(expectedSize, imageSizes, anImageUrl, filename, rotationAngle, aThumbnailURL, anImageFilename, anImageMimeType, aListener);
+                    }
                 }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "sendImageMessage failed " + e.getMessage());
@@ -921,5 +905,33 @@ public class VectorRoomMediasSender {
                 }
             });
         }
+    }
+
+    private void resizeAndUploadImage(final ImageSize expectedSize, final ImageCompressionSizes imageSizes, final String anImageUrl, final String filename, final int rotationAngle, final String aThumbnailURL, final String anImageFilename, final String anImageMimeType, final OnImageUploadListener aListener) {
+        mVectorRoomActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mVectorRoomActivity.setProgressVisibility(View.VISIBLE);
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        final String fImageUrl = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
+
+                        mVectorRoomActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mVectorMessageListFragment.uploadImageContent(null, null, aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
+                                aListener.onDone();
+                            }
+                        });
+                    }
+                });
+
+                thread.setPriority(Thread.MIN_PRIORITY);
+                thread.start();
+            }
+        });
     }
 }

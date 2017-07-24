@@ -273,6 +273,18 @@
 
     <im.vector.preference.VectorDividerCategory/>
 
+    <PreferenceCategory android:title="@string/settings_media">
+        <ListPreference
+            android:defaultValue="@string/compression_opt_list_choose"
+            android:entries="@array/compression_levels"
+            android:entryValues="@array/compression_level_values"
+            android:summary="%s"
+            android:title="@string/settings_default_compression"
+            android:key="KEY_DEFAULT_MEDIA_COMPRESSION"/>
+    </PreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory/>
+
     <PreferenceCategory
         android:title="@string/settings_other"
         android:key="SETTINGS_OTHERS_PREFERENCE_KEY" >
