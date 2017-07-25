@@ -288,6 +288,10 @@
             android:summary="%s"
             android:title="@string/settings_default_media_source"
             android:key="SETTINGS_DEFAULT_MEDIA_SOURCE_KEY" />
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_play_shutter_sound"
+            android:key="SETTINGS_PLAY_SHUTTER_SOUND_KEY"
+            android:defaultValue="true"/>
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory/>

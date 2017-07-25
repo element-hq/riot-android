@@ -111,6 +111,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private static final String KEY_PREFERENCE_CAMERA_IMAGE_NAME = "KEY_PREFERENCE_CAMERA_IMAGE_NAME";
     private static final String KEY_IS_AVATAR_MODE = "KEY_IS_AVATAR_MODE";
     private static final String KEY_EXTRA_TAKEN_VIDEO_URI = "KEY_EXTRA_TAKEN_VIDEO_URI";
+    private static final String SETTINGS_PLAY_SHUTTER_SOUND_KEY = "SETTINGS_PLAY_SHUTTER_SOUND_KEY";
 
     // activity request
     private static final int REQUEST_MEDIAS = 54;
@@ -1325,6 +1326,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Play the camera shutter shound
      */
     private void playShutterSound() {
+        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SETTINGS_PLAY_SHUTTER_SOUND_KEY, true)) {
+            return;
+        }
         MediaActionSound sound = new MediaActionSound();
         sound.play(MediaActionSound.SHUTTER_CLICK);
     }

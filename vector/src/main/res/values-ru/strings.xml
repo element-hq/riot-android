@@ -587,6 +587,7 @@
     <string name="compression_opt_list_choose">Выбирать</string>
     <string name="settings_default_media_source">Источник медии по умолчанию</string>
     <string name="media_source_choose">Выбирать</string>
+    <string name="settings_play_shutter_sound">Звук затвора камеры при снимке</string>
 
     <!-- Room Settings -->
     
