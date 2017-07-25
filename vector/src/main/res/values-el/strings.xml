@@ -20,7 +20,7 @@
     <string name="settings_messages_sent_by_bot">Μηνύματα από bots</string>
 
     <string name="permalink">Μόνιμος σύνδεσμος</string>
-    <string name="send_bug_report_description">Παρακαλούμε περιγράψτε το σφάλμα. Τι κάνατε; Τι περιμένατε να συμβεί; Τι έγινε τελικά;</string>
+    <string name="send_bug_report_description">Παρακαλούμε περιγράψτε το σφάλμα. Τι κάνατε; Τι περιμένατε να συμβεί; Τι έγινε τελικά ?</string>
     <string name="quote">Παράθεση</string>
     <string name="reject">Απόρριψη</string>
 

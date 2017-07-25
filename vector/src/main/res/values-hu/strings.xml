@@ -129,22 +129,22 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
     <string name="auth_register">Regisztráció</string>
     <string name="auth_submit">Beküldés</string>
     <string name="auth_skip">Kihagyás</string>
-    <string name="auth_send_reset_email">Visszaállító Email küldése</string>
+    <string name="auth_send_reset_email">Visszaállító E-mail küldése</string>
     <string name="auth_return_to_login">Visszatérés a kezdőképernyőre</string>
-    <string name="auth_user_id_placeholder">Email vagy felhasználónév</string>
+    <string name="auth_user_id_placeholder">E-mail vagy felhasználónév</string>
     <string name="auth_password_placeholder">Jelszó</string>
     <string name="auth_new_password_placeholder">Új jelszó</string>
     <string name="auth_user_name_placeholder">Felhasználónév</string>
-    <string name="auth_add_email_message">Adj meg email címet a felhasználódhoz, hogy mások megtalálhassanak, és hogy visszaállíthasd a jelszavadat.</string>
+    <string name="auth_add_email_message">Adj meg e-mail címet a felhasználódhoz, hogy mások megtalálhassanak, és hogy visszaállíthasd a jelszavadat.</string>
     <string name="auth_add_phone_message">Adj meg telefonszámot a felhasználódhoz, hogy mások megtalálhassanak.</string>
-    <string name="auth_add_email_phone_message">Adj meg email címet vagy telefonszámot a felhasználódhoz, hogy mások megtalálhassanak.
+    <string name="auth_add_email_phone_message">Adj meg e-mail címet vagy telefonszámot a felhasználódhoz, hogy mások megtalálhassanak.
 
- Az Email cím megadása lehetővé teszi a jelszavad visszaállítását is.</string>
-    <string name="auth_add_email_and_phone_message">Adj meg email címet vagy telefonszámot a felhasználódhoz, hogy mások megtalálhassanak.
+ Az E-mail cím megadása lehetővé teszi a jelszavad visszaállítását is.</string>
+    <string name="auth_add_email_and_phone_message">Adj meg e-mail címet vagy telefonszámot a felhasználódhoz, hogy mások megtalálhassanak.
 
- Az Email cím megadása lehetővé teszi a jelszavad visszaállítását is.</string>
-    <string name="auth_email_placeholder">Email cím</string>
-    <string name="auth_opt_email_placeholder">Email cím (nem kötelező)</string>
+ Az E-mail cím megadása lehetővé teszi a jelszavad visszaállítását is.</string>
+    <string name="auth_email_placeholder">E-mail cím</string>
+    <string name="auth_opt_email_placeholder">E-mail cím (nem kötelező)</string>
     <string name="auth_phone_number_placeholder">Telefonszám</string>
     <string name="auth_opt_phone_number_placeholder">Telefonszám (nem kötelező)</string>
     <string name="auth_repeat_password_placeholder">Jelszó ismétlése</string>
@@ -153,30 +153,30 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
     <string name="auth_invalid_user_name">Felhasználónevek csak betűket, számokat, pontokat, kötőjeleket és aláhúzásokat tartalmazhatnak</string>
     <string name="auth_invalid_password">Jelszó túl rövid (min 6)</string>
     <string name="auth_missing_password">Hiányzó jelszó</string>
-    <string name="auth_invalid_email">Ez nem úgy néz ki mint egy érvényes email cím</string>
+    <string name="auth_invalid_email">Ez nem úgy néz ki mint egy érvényes e-mail cím</string>
     <string name="auth_invalid_phone">Ez nem úgy néz ki mint egy érvényes telefonszám</string>
-    <string name="auth_email_already_defined">Ez az email cím már használatban van.</string>
-    <string name="auth_missing_email">Hiányzó email cím</string>
+    <string name="auth_email_already_defined">Ez az e-mail cím már használatban van.</string>
+    <string name="auth_missing_email">Hiányzó e-mail cím</string>
     <string name="auth_missing_phone">Hiányzó telefonszám</string>
-    <string name="auth_missing_email_or_phone">Hiányzó email cím vagy telefonszám</string>
+    <string name="auth_missing_email_or_phone">Hiányzó e-mail cím vagy telefonszám</string>
     <string name="auth_invalid_token">Érvénytelen kód</string>
     <string name="auth_password_dont_match">A jelszók nem egyeznek</string>
     <string name="auth_forgot_password">Elfelejtetted a jelszavad?</string>
     <string name="auth_use_server_options">Személyre szabott szerver beállítások (haladó)</string>
-    <string name="auth_email_validation_message">Kérlek ellenőrizd az email címedet a regisztráció folytatásához</string>
-    <string name="auth_threepid_warning_message">Regisztráció email címmel és telefonszámmal egyszerre még nem támogatott (amíg az api kész nem lesz). Csak a telefonszám lesz számításba véve.
+    <string name="auth_email_validation_message">Kérlek ellenőrizd az e-mail címedet a regisztráció folytatásához</string>
+    <string name="auth_threepid_warning_message">Regisztráció e-mail címmel és telefonszámmal egyszerre még nem támogatott (amíg az api kész nem lesz). Csak a telefonszám lesz számításba véve.
 
-Később hozzáadhatsz email címet a profilodhoz a beállításokban.</string>
+Később hozzáadhatsz e-mail címet a profilodhoz a beállításokban.</string>
     <string name="auth_recaptcha_message">A Saját Szerver szeretne megbizonyosodni arról, hogy nem vagy robot</string>
     <string name="auth_username_in_use">Ez a felhasználónév már használatban van</string>
     <string name="auth_home_server">Saját Szerver:</string>
     <string name="auth_identity_server">Identitás Szerver:</string>
-    <string name="auth_reset_password_next_step_button">Ellenőriztem az email címemet</string>
-    <string name="auth_reset_password_message">A jelszavad vissza állításához, kérlek írd be a felhasználódhoz kapcsolódó email címet:</string>
-    <string name="auth_reset_password_missing_email">A felhasználódhoz kapcsolódó email cím megadása kötelező.</string>
+    <string name="auth_reset_password_next_step_button">Ellenőriztem az e-mail címemet</string>
+    <string name="auth_reset_password_message">A jelszavad vissza állításához, kérlek írd be a felhasználódhoz kapcsolódó e-mail címet:</string>
+    <string name="auth_reset_password_missing_email">A felhasználódhoz kapcsolódó e-mail cím megadása kötelező.</string>
     <string name="auth_reset_password_missing_password">Egy új jelszó megadása kötelező.</string>
-    <string name="auth_reset_password_email_validation_message">Egy Email el lett küldve a %s címre. Miután követted a linket amit tartalmazott, kattints alább.</string>
-    <string name="auth_reset_password_error_unauthorized">Email cím ellenőrzése sikertelen: győződj meg arról hogy rákattintottál az emailban található linkre</string>
+    <string name="auth_reset_password_email_validation_message">Egy E-mail el lett küldve a %s címre. Miután követted a linket amit tartalmazott, kattints alább.</string>
+    <string name="auth_reset_password_error_unauthorized">E-mail cím ellenőrzése sikertelen: győződj meg arról hogy rákattintottál az e-mailban található linkre</string>
     <string name="auth_reset_password_success_message">A jelszavad vissza lett állítva.
 
 Ki lettél jelentkeztetve az összes eszközödről és nem fogsz több értesítést kapni. Az értesítések újra engedélyezéséhez, lépj be újra az összes eszközödbe.</string>
@@ -186,7 +186,7 @@ Ki lettél jelentkeztetve az összes eszközödről és nem fogsz több értesí
     <string name="login_error_unable_login">Bejelentkezés sikertelen</string>
     <string name="login_error_registration_network_error">Regisztráció sikertelen: Hálózati hiba</string>
     <string name="login_error_unable_register">Regisztráció sikertelen</string>
-    <string name="login_error_unable_register_mail_ownership">Regisztráció sikertelen: email tulajdonjog hiba</string>
+    <string name="login_error_unable_register_mail_ownership">Regisztráció sikertelen: e-mail tulajdonjog hiba</string>
     <string name="login_error_invalid_home_server">Adj meg érvényes URL-címet</string>
 
     <string name="login_error_forbidden">Helytelen felhasználónév/jelszó</string>
@@ -195,7 +195,7 @@ Ki lettél jelentkeztetve az összes eszközödről és nem fogsz több értesí
     <string name="login_error_not_json">Nem tartalmazott érvényes JSON -t</string>
     <string name="login_error_limit_exceeded">Túl sok kérés érkezett</string>
     <string name="login_error_user_in_use">Ez a felhasználónév már használatban van</string>
-    <string name="login_error_login_email_not_yet">Az emailban található linkre még nem lett kattintva</string>
+    <string name="login_error_login_email_not_yet">Az e-mailban található linkre még nem lett kattintva</string>
 
     <string name="e2e_need_log_in_again">Újra be kell jelentkeznie, hogy egy új végtől végig titkosító kulcsot generáljon ehhez az eszközhöz és beküldeni a nyilvános kulcsot a Saját Szervernek.
 Ez egy egyszeri dolog.
@@ -241,8 +241,8 @@ Elnézést a kellemetlenségért.</string>
     <string name="call_error_peer_hangup_elsewhere">hívás letéve máshol</string>
     <string name="call_error_peer_cancelled_call">hívás törölve</string>
 
-    <string name="action_accept">ELFOGADÁS</string>
-    <string name="action_ignore">ELUTASÍTÁS</string>
+    <string name="action_accept">ELFOGAD</string>
+    <string name="action_ignore">ELUTASÍT</string>
 
     <string name="media_picker_both_capture_title">Készíts egy képet vagy egy videót</string>
     <string name="media_picker_cannot_record_video">Videó felvevése sikertelen</string>
@@ -262,10 +262,10 @@ Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj
     <string name="permissions_rationale_msg_camera_and_audio">"A Riot-nak engedély szükséges a mikrofonod  és kamerád eléréséhez, hogy tudj videóhívást kezdeményezni.
 
 Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni."</string>
-    <string name="permissions_rationale_msg_contacts">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj Matrix felhasználókat találni email és telefonszám alapján.
+    <string name="permissions_rationale_msg_contacts">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj Matrix felhasználókat találni e-mail és telefonszám alapján.
 
 Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj címjegyzék-kapcsolatok találni a Riot-tal.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj Matrix felhasználókat találni email és telefonszám alapján.
+    <string name="permissions_msg_contacts_warning_other_androids">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj Matrix felhasználókat találni e-mail és telefonszám alapján.
 
 Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
 
@@ -288,7 +288,7 @@ Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
     <string name="title_activity_member_details">Tag adatok</string>
     <string name="forward">Előre</string>
     <string name="room_preview_unlinked_email_warning">Ez a meghívó erre a címre lett küldve: %s, ami nincs összekötve a felhasználóddal.
-Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az email címet a felhasználódhoz.</string>
+Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az e-mail címet a felhasználódhoz.</string>
     <string name="room_preview_try_join_an_unknown_room">"%s szobához próbálsz hozzáférni.  Szeretnél csatlakozni, hogy részt tudj venni a beszélgetésben?"</string>
     <string name="room_preview_try_join_an_unknown_room_default">egy szoba</string>
     <string name="room_preview_room_interactions_disabled">Ez egy előnézete a szobának. A szobai interakciók letiltásra kerültek.</string>
@@ -339,7 +339,7 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
     <string name="room_participants_action_set_admin">Adminná tevés</string>
     <string name="room_participants_action_ignore">Az összes üzenet elrejtése ettől a felhasználótól</string>
     <string name="room_participants_action_unignore">Az összes üzenet megjelenítése ettől a felhasználótól</string>
-    <string name="room_participants_invite_search_another_user">Felhasználó azonosító, Név vagy Email</string>
+    <string name="room_participants_invite_search_another_user">Felhasználó azonosító, Név vagy E-mail</string>
     <string name="room_participants_action_mention">Említés</string>
     <string name="room_participants_action_devices_list">Eszköz lista mutatása</string>
     <string name="room_participants_power_level_prompt">Nem fogod tudni vissza vonni a változtatásokat mert az adott felhasználó ugyan azzal a jogosultság szinten fog állni mint te.
@@ -354,8 +354,8 @@ Biztos vagy benne?</string>
     <string name="people_search_too_many_contacts">Túl sok kapcsolat, kérlek használd a kereső mezőt</string>
 
     <string name="people_search_invite_by_id_dialog_title">Felhasználó meghívása azonosítóval</string>
-    <string name="people_search_invite_by_id_dialog_description">Kérlek adj meg egy vagy több email vagy Matrix azonosítót</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email vagy Matrix azonosító</string>
+    <string name="people_search_invite_by_id_dialog_description">Kérlek adj meg egy vagy több e-mail vagy Matrix azonosítót</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-mail vagy Matrix azonosító</string>
 
     <string name="room_menu_search">Keresés</string>
     <string name="room_one_user_is_typing">%s éppen pötyögi üzenetét…</string>
@@ -393,7 +393,7 @@ Biztos vagy benne?</string>
     <string name="room_details_files">Fájlok</string>
     <string name="room_details_settings">Beállítások</string>
     <string name="room_details_selected">kiválaszott</string>
-    <string name="malformed_id">Nem megfelelő Azonosító. Egy Matrix Azonosítónak vagy egy Email-nek kéne lennie, mint például \'@localpart:domain\'</string>
+    <string name="malformed_id">Nem megfelelő Azonosító. Egy Matrix Azonosítónak vagy egy E-mail-nek kéne lennie, mint például \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">MEGHÍVOTT</string>
     <string name="room_details_people_present_group_name">CSATLAKOZOTT</string>
 
@@ -452,8 +452,8 @@ Biztos vagy benne?</string>
 
     <string name="settings_profile_picture">Profil kép</string>
     <string name="settings_display_name">Megjelenítendő név</string>
-    <string name="settings_email_address">Email</string>
-    <string name="settings_add_email_address">Email cím hozzáadása</string>
+    <string name="settings_email_address">E-mail</string>
+    <string name="settings_add_email_address">E-mail cím hozzáadása</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Telefonszám hozzáadása</string>
     <string name="settings_summary_app_info_link">Alkalmazás rendszer információs képernyő</string>
@@ -516,8 +516,8 @@ A folytatáshoz, kérlek írd be a jelszavad.</string>
     <string name="settings_identity_server">Identitás Szerver</string>
 
     <string name="account_email_validation_title">Hitelesítés folyamatban</string>
-    <string name="account_email_validation_message">Kérlek ellenőrizd az email-ed és kattints a linkre amit tartalmaz. Amikor kész, kattints a folytatásra.</string>
-    <string name="account_email_validation_error">Email cím hitelesítése sikertelen. Kérlek kattints az email-ben található linkre. Amikor kész, kattints a folytatásra</string>
+    <string name="account_email_validation_message">Kérlek ellenőrizd az e-mail-ed és kattints a linkre amit tartalmaz. Amikor kész, kattints a folytatásra.</string>
+    <string name="account_email_validation_error">E-mail cím hitelesítése sikertelen. Kérlek kattints az e-mail-ben található linkre. Amikor kész, kattints a folytatásra</string>
 
     <string name="settings_change_password">Jelszó megváltoztatása</string>
     <string name="settings_old_password">Régi jelszó</string>
