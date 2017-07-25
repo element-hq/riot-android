@@ -95,6 +95,7 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
+import im.vector.util.PreferencesManager;
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -376,7 +377,7 @@ public class CommonActivityUtils {
 
         String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, context.getResources().getString(R.string.default_hs_server_url));
         String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, context.getResources().getString(R.string.default_identity_server_url));
-        Boolean useGa = GAHelper.useGA(context);
+        Boolean useGa = PreferencesManager.useGA(context);
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
@@ -385,7 +386,7 @@ public class CommonActivityUtils {
         editor.commit();
 
         if (null != useGa) {
-            GAHelper.setUseGA(context, useGa);
+            PreferencesManager.setUseGA(context, useGa);
         }
 
         // reset the GCM

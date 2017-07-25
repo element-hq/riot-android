@@ -45,7 +45,9 @@ import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.HomeRoomAdapter;
+import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.view.HomeSectionView;
 
@@ -289,9 +291,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
             }
         }
 
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final boolean pinMissedNotifications = preferences.getBoolean(VectorSettingsPreferencesFragment.SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, false);
-        final boolean pinUnreadMessages = preferences.getBoolean(VectorSettingsPreferencesFragment.SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, false);
+        final boolean pinMissedNotifications = PreferencesManager.pinMissedNotifications(getActivity());
+        final boolean pinUnreadMessages = PreferencesManager.pinUnreadMessages(getActivity());
 
         Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages);
 
