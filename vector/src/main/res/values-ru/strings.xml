@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">ru</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country">UK</string>
     
     <!-- titles -->
     <string name="title_activity_home">Сообщения</string>
@@ -248,7 +248,7 @@
     <string name="incoming_voice_call">Входящий аудио вызов</string>
     <string name="call_in_progress">Звонок выполняется</string>
     
-    <string name="call_error_user_not_responding">Абонент не отвечает.</string>
+    <string name="call_error_user_not_responding">Вызываемый абонент не отвечает.</string>
     <string name="call_error_ice_failed">Медиавызов не удался</string>
     <string name="call_error_camera_init_failed">Невозможно инициализировать камеру</string>
     <string name="call_error_answered_elsewhere">Звонок принят на другом устройстве</string>
@@ -545,11 +545,11 @@
     
     <string name="account_email_validation_title">Ожидается подтверждение</string>
     <string name="account_email_validation_message">Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
-   <string name="account_email_validation_error">Не удалась проверка email. Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
+   <string name="account_email_validation_error">Не удалось проверить адрес электронной почты. Проверьте свою электронную почту и нажмите на содержащуюся ссылку. Когда это будет сделано, нажмите Продолжить</string>
 
-    <string name="account_email_already_used_error">This email address is already in use</string>
-    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
-    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+    <string name="account_email_already_used_error">Этот адрес электронной почты уже занят</string>
+    <string name="account_email_not_found_error">Не удалось отправить сообщение электронной почты: этот адрес email не был найден</string>
+    <string name="account_phone_number_already_used_error">Этот номер телефона уже используется</string>
   
     <string name="settings_change_password">Смена пароля</string>
     <string name="settings_old_password">старый пароль</string>
@@ -738,4 +738,8 @@
 
     <!-- historical -->
     <string name="historical_placeholder">Поиск в истории</string>
-</resources>
+<string name="settings_user_interface">Пользовательский интерфейс</string>
+    <string name="settings_interface_language">Язык интерфейса</string>
+    <string name="settings_select_language">Выберите язык</string>
+
+    </resources>
