@@ -517,9 +517,9 @@
     <string name="account_email_validation_message">请检查你的电子邮箱并点击里面包含的链接。完成时请点击继续。</string>
     <string name="account_email_validation_error">无法验证电子邮箱地址。请检查你的电子邮件并点击里面包含的链接。完成时请点击继续</string>
 
-    <string name="account_email_already_used_error">This email address is already in use</string>
-    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
-    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+    <string name="account_email_already_used_error">此电子邮件地址已被占用</string>
+    <string name="account_email_not_found_error">发送电子邮件失败：未找到此电子邮件</string>
+    <string name="account_phone_number_already_used_error">此电话号码已被使用</string>
 
     <string name="settings_delete_notification_targets_confirmation">你确认你要移除这个通知目标吗？</string>
 
@@ -583,7 +583,7 @@
 这只会关闭一次。
 请谅解由此造成的不便。</string>
     <string name="read_receipts_list">阅读收据清单</string>
-    <string name="membership_changes">%d membership changes</string>
+    <string name="membership_changes">%d 个成员身份改变了</string>
     <string name="compression_options">发送为</string>
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
