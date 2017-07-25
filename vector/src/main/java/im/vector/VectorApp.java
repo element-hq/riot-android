@@ -237,7 +237,18 @@ public class VectorApp extends Application {
 
                         VectorApp.getInstance().startActivity(activity.getIntent());
                         activity.finish();
+                        return;
                     }
+                }
+
+                // it should never happen as there is a broadcast receiver (mLanguageReceiver)
+                // but it happens
+                if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale(activity).toString())) {
+                    Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale(activity).toString());
+                    updateApplicationLocale(activity, getApplicationLocale(activity));
+
+                    VectorApp.getInstance().startActivity(activity.getIntent());
+                    activity.finish();
                 }
             }
 
@@ -284,7 +295,10 @@ public class VectorApp extends Application {
         initApplicationLocale(this);
 
         // track external language updates
+        // local update from the settings
+        // or screen rotation !
         VectorApp.getInstance().registerReceiver(mLanguageReceiver, new IntentFilter(Intent.ACTION_LOCALE_CHANGED));
+        VectorApp.getInstance().registerReceiver(mLanguageReceiver, new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
 
         fixMigrationIssues();
     }
