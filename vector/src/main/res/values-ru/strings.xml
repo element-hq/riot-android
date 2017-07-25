@@ -668,7 +668,7 @@
     <string name="encryption_information_device_info">Информация о событии</string>
     <string name="encryption_information_user_id">ID пользователя</string>
     <string name="encryption_information_curve25519_identity_key">Curve25519 идентификационный ключ</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">Требовало Ed25519 fingerprint ключ</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Необходим отпечаток Ed25519-ключа</string>
     <string name="encryption_information_algorithm">Алгоритм</string>
     <string name="encryption_information_session_id">ID сесии</string>
     <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
