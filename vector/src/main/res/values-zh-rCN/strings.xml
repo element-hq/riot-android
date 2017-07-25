@@ -700,4 +700,8 @@
     <string name="settings_home_display">主页显示</string>
     <string name="settings_pin_missed_notifications">按错过的通知固定聊天室</string>
     <string name="settings_pin_unread_messages">按未读的通知固定聊天室</string>
-</resources>
+<string name="settings_user_interface">用户界面</string>
+    <string name="settings_interface_language">界面语言</string>
+    <string name="settings_select_language">选择一个语言</string>
+
+    </resources>
