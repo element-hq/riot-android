@@ -1,3 +1,12 @@
+Changes in Riot 0.6.14 (2017-07-25)
+===================================================
+
+Bugfixes:
+
+* Remove server catchup patch (i.e the sync requests were triggered until getting something).
+  It used to drain battery on small accounts.
+* Fix application resume edge cases (fdroid only)
+
 Changes in Riot 0.6.13 (2017-07-03)
 ===================================================
  
