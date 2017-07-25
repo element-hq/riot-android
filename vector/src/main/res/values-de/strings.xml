@@ -541,7 +541,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="account_email_validation_error">Verifizieren der E-Mail-Adresse unmöglich. Bitte prüfe deine E-Mails und klicke auf den enthaltenen Link. Anschließend klicke auf "Fortsetzen"</string>
 
     <string name="account_email_already_used_error">Diese E-Mail-Adresse wird bereits verwendet</string>
-    <string name="account_email_not_found_error">Fehler beim Sender der E-Mail: Diese E-Mail-Adresse wurde nicht gefunden</string>
+    <string name="account_email_not_found_error">Fehler beim Senden der E-Mail: Diese E-Mail-Adresse wurde nicht gefunden</string>
     <string name="account_phone_number_already_used_error">Diese Telefonnummer wird bereits verwendet</string>
 
     <string name="settings_change_password">Passwort ändern</string>
