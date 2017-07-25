@@ -79,6 +79,7 @@ public class AccountCreationCaptchaActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
 
+        setTitle(R.string.create_account);
         setContentView(R.layout.activity_vector_registration_captcha);
 
         final WebView webView = (WebView) findViewById(R.id.account_creation_webview);

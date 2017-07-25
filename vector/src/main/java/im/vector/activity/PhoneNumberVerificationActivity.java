@@ -84,6 +84,8 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(R.string.settings_phone_number_verification);
         setContentView(R.layout.activity_phone_number_verification);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

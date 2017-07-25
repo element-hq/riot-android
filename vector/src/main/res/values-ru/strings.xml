@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
     <string name="resouces_language">ru</string>
-    <string name="resouces_country">RU</string>
+    <string name="resouces_country"></string>
     
     <!-- titles -->
     <string name="title_activity_home">Сообщения</string>
@@ -205,6 +207,8 @@
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Чтение списка вступивших</string>
+    <!-- Mels -->
+    <string name="membership_changes">%d membership changes</string>
     
     <!-- accounts list Screen -->
     <string name="choose_account">Выбор учётной записи</string>
@@ -541,8 +545,12 @@
     
     <string name="account_email_validation_title">Ожидается подтверждение</string>
     <string name="account_email_validation_message">Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
-    <string name="account_email_validation_error">Не удалась проверка email. Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить</string>
-    
+   <string name="account_email_validation_error">Не удалась проверка email. Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
+
+    <string name="account_email_already_used_error">This email address is already in use</string>
+    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
+    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+  
     <string name="settings_change_password">Смена пароля</string>
     <string name="settings_old_password">старый пароль</string>
     <string name="settings_new_password">новый пароль</string>

@@ -72,6 +72,8 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(R.string.settings_select_country);
         setContentView(R.layout.activity_country_picker);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

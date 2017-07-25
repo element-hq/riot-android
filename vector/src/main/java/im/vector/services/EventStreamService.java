@@ -431,6 +431,12 @@ public class EventStreamService extends Service {
                     return START_NOT_STICKY;
                 }
 
+                GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+                if (!gcmManager.isBackgroundSyncAllowed()) {
+                    Log.e(LOG_TAG, "onStartCommand : no auto restart because the user disabled the background sync");
+                    return START_NOT_STICKY;
+                }
+
                 mSessions = new ArrayList<>();
                 mSessions.addAll(Matrix.getInstance(getApplicationContext()).getSessions());
 
@@ -605,7 +611,7 @@ public class EventStreamService extends Service {
         mActiveEventStreamService = this;
 
         for (final MXSession session : mSessions) {
-            if (null == session.getDataHandler()) {
+            if (null == session.getDataHandler() || (null == session.getDataHandler().getStore())) {
                 Log.e(LOG_TAG, "start : the session is not anymore valid.");
                 return;
             }
@@ -1090,7 +1096,9 @@ public class EventStreamService extends Service {
             mActiveEventStreamService.getNotificationsHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    mActiveEventStreamService.refreshMessagesNotification();
+                    if (mActiveEventStreamService != null) {
+                        mActiveEventStreamService.refreshMessagesNotification();
+                    }
                 }
             });
         }

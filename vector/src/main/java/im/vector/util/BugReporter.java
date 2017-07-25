@@ -156,7 +156,11 @@ public class BugReporter {
                     File gzippedLogcat = saveLogCat(context, false);
 
                     if (null != gzippedLogcat) {
-                        gzippedFiles.add(gzippedLogcat);
+                        if (gzippedFiles.size() == 0) {
+                            gzippedFiles.add(gzippedLogcat);
+                        } else {
+                            gzippedFiles.add(0, gzippedLogcat);
+                        }
                     }
 
                     File crashDescription = getCrashFile(context);
@@ -164,7 +168,11 @@ public class BugReporter {
                         File compressedCrashDescription = compressFile(crashDescription);
 
                         if (null != compressedCrashDescription) {
-                            gzippedFiles.add(compressedCrashDescription);
+                            if (gzippedFiles.size() == 0) {
+                                gzippedFiles.add(compressedCrashDescription);
+                            } else {
+                                gzippedFiles.add(0, compressedCrashDescription);
+                            }
                         }
                     }
                 }
@@ -199,7 +207,8 @@ public class BugReporter {
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())
-                            .addFormDataPart("app_language", context.getString(R.string.resouces_language) + "_" + context.getString(R.string.resouces_country));
+                            .addFormDataPart("app_language", VectorApp.getApplicationLocale(context).toString())
+                            .addFormDataPart("default_app_language", VectorApp.getDeviceLocale(context).toString());
 
                     // add the gzipped files
                     for (File file : gzippedFiles) {

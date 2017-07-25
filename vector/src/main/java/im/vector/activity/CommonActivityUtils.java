@@ -90,6 +90,7 @@ import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.AccountsSelectionDialogFragment;
+import im.vector.fragments.VectorSettingsPreferencesFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
@@ -563,25 +564,31 @@ public class CommonActivityUtils {
                 Log.e(LOG_TAG, "## startEventStreamService() : restart EventStreamService");
 
                 for (MXSession session : sessions) {
-                    boolean isSessionReady = session.getDataHandler().getStore().isReady();
+                    // reported by GA
+                    if ((null != session.getDataHandler()) && (null != session.getDataHandler().getStore())) {
+                        boolean isSessionReady = session.getDataHandler().getStore().isReady();
 
-                    if (!isSessionReady) {
-                        Log.e(LOG_TAG, "## startEventStreamService() : the session " + session.getMyUserId() + " is not opened");
-                        session.getDataHandler().getStore().open();
-                    } else {
-                        // it seems that the crypto is not always restarted properly after a crash
-                        Log.e(LOG_TAG, "## startEventStreamService() : check if the crypto of the session " + session.getMyUserId());
-                        session.checkCrypto();
+                        if (!isSessionReady) {
+                            Log.e(LOG_TAG, "## startEventStreamService() : the session " + session.getMyUserId() + " is not opened");
+                            session.getDataHandler().getStore().open();
+                        } else {
+                            // it seems that the crypto is not always restarted properly after a crash
+                            Log.e(LOG_TAG, "## startEventStreamService() : check if the crypto of the session " + session.getMyUserId());
+                            session.checkCrypto();
+                        }
+
+                        // session to activate
+                        matrixIds.add(session.getCredentials().userId);
                     }
-
-                    // session to activate
-                    matrixIds.add(session.getCredentials().userId);
                 }
 
-                Intent intent = new Intent(context, EventStreamService.class);
-                intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
-                intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
-                context.startService(intent);
+                // check size
+                if (matrixIds.size() > 0) {
+                    Intent intent = new Intent(context, EventStreamService.class);
+                    intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
+                    intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
+                    context.startService(intent);
+                }
             }
         }
     }
@@ -1814,13 +1821,8 @@ public class CommonActivityUtils {
             ArrayList<Room> roomCompleteList = new ArrayList<>(aDataHandler.getStore().getRooms());
             int unreadRoomsCount = 0;
 
-            // compute the number of rooms with unread notifications
-            // "invite to join a room" counts as a notification
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(aContext);
-            boolean isInvitedNotifEnabled = preferences.getBoolean(aContext.getResources().getString(R.string.settings_invited_to_room), false);
-
             for (Room room : roomCompleteList) {
-                if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
+                if (room.getNotificationCount() > 0) {
                     unreadRoomsCount++;
                 }
             }
@@ -2040,7 +2042,7 @@ public class CommonActivityUtils {
      */
     public static void displayUnknownDevicesDialog(MXSession session, FragmentActivity activity, MXUsersDevicesMap<MXDeviceInfo> unknownDevices, VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
         // sanity checks
-        if ((null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
+        if (activity.isFinishing() || (null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
             return;
         }
 

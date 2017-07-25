@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">hu</string>
-    <string name="resouces_country">HU</string>
+<resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resouces_language">hu</string>
+    <string name="resouces_country"></string>
 
     <string name="title_activity_home">Üzenetek</string>
     <string name="title_activity_room">Szoba</string>
@@ -429,7 +432,7 @@ Biztos vagy benne?</string>
     <string name="directory_search_room">%1$d szoba</string>
     <string name="directory_search_rooms">%1$d szobák</string>
     <string name="directory_search_room_for">%1$d szoba megtalálva %2$s -nak/-nek</string>
-    <string name="directory_search_rooms_for">%1$d szobák megtalálva %2$s -nak/-nek</string>
+    <string name="directory_search_rooms_for">%1$s szobák megtalálva %2$s -nak/-nek</string>
     <string name="directory_searching_title">Könyvtárs keresése...</string>
 
     <string name="room_settings_notifications">Üzenetek</string>

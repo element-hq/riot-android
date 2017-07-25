@@ -94,6 +94,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
@@ -564,21 +565,25 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         }
 
         if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
-            final AlertDialog.Builder appCrashedAlert = new AlertDialog.Builder(this);
+            // crash reported by a rage shake
+            try {
+                final AlertDialog.Builder appCrashedAlert = new AlertDialog.Builder(this);
+                appCrashedAlert.setMessage(getApplicationContext().getString(R.string.send_bug_report_app_crashed)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        BugReporter.sendBugReport();
+                    }
+                }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        BugReporter.deleteCrashFile(VectorHomeActivity.this);
+                    }
+                }).show();
 
-            appCrashedAlert.setMessage(getApplicationContext().getString(R.string.send_bug_report_app_crashed)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    BugReporter.sendBugReport();
-                }
-            }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    BugReporter.deleteCrashFile(VectorHomeActivity.this);
-                }
-            }).show();
-
-            VectorApp.getInstance().clearAppCrashStatus();
+                VectorApp.getInstance().clearAppCrashStatus();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage());
+            }
         }
 
         if (!mStorePermissionCheck) {

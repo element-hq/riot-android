@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resouces_language">zh</string>
+    <string name="resouces_country">CN</string>
+
     <string name="resend">重新发送</string>
     <string name="quote">引用</string>
     <string name="share">分享</string>
@@ -512,7 +517,11 @@
     <string name="account_email_validation_message">请检查你的电子邮箱并点击里面包含的链接。完成时请点击继续。</string>
     <string name="account_email_validation_error">无法验证电子邮箱地址。请检查你的电子邮件并点击里面包含的链接。完成时请点击继续</string>
 
-    <string name="settings_delete_notification_targets_confirmation">你确认要移除这个通知目标吗？</string>
+    <string name="account_email_already_used_error">This email address is already in use</string>
+    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
+    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+
+    <string name="settings_delete_notification_targets_confirmation">你确认你要移除这个通知目标吗？</string>
 
     <string name="settings_delete_threepid_confirmation">你确认要移除 %1$s %2$s 吗?</string>
 
@@ -566,8 +575,6 @@
 
 你可以现在或稍后从应用设置中做这件事。</string>
 
-    <string name="resouces_country">英式英语</string>
-    <string name="resouces_language">英语</string>
     <string name="ok">确认</string>
     <string name="redact">筹辑</string>
     <string name="send_bug_report_alert_message">你似乎在沮丧地摇晃手机。您要提交 bug 报告吗？</string>
@@ -576,6 +583,7 @@
 这只会关闭一次。
 请谅解由此造成的不便。</string>
     <string name="read_receipts_list">阅读收据清单</string>
+    <string name="membership_changes">%d membership changes</string>
     <string name="compression_options">发送为</string>
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
@@ -599,7 +607,7 @@
     <string name="malformed_id">格式不正确的 ID。应该是一个电子邮件地址或 Matrix ID，如”@localpart:domain“</string>
     <string name="tab_title_search_people">联系人</string>
     <string name="directory_search_room_for">为 %2$s 找到 %1$d 个聊天室</string>
-    <string name="directory_search_rooms_for">为 %2$s 找到 %1$d 个聊天室</string>
+    <string name="directory_search_rooms_for">为 %2$s 找到 %1$s 个聊天室</string>
     <string name="room_sliding_menu_third_party_notices">第三方通知</string>
     <string name="settings_profile_picture">档案图片</string>
     <string name="settings_third_party_notices">第三方通知</string>

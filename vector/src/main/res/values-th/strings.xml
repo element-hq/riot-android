@@ -1,5 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="or">หรือ</string>
+<resources>
+
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resouces_language">th</string>
+    <string name="resouces_country"></string>
+
+
+    <string name="or">หรือ</string>
     <string name="and">และ</string>
     <string name="action_open">เปิด</string>
     <string name="action_close">ปิด</string>

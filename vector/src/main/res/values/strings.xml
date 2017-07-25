@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+
     <string name="resouces_language">en</string>
     <string name="resouces_country">UK</string>
 
@@ -204,6 +207,9 @@
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
+
+    <!-- Mels -->
+    <string name="membership_changes">%d membership changes</string>
 
     <!-- accounts list Screen -->
     <string name="choose_account">Choose account</string>
@@ -526,9 +532,16 @@
     <string name="settings_home_server">Home Server</string>
     <string name="settings_identity_server">Identity Server</string>
 
+    <string name="settings_user_interface">User interface</string>
+    <string name="settings_interface_language">Interface Language</string>
+    <string name="settings_select_language">Choose a language</string>
+
     <string name="account_email_validation_title">Verification Pending</string>
     <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
     <string name="account_email_validation_error">Unable to verify email address. Please check your email and click on the link it contains. Once this is done, click continue</string>
+    <string name="account_email_already_used_error">This email address is already in use</string>
+    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
+    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
 
     <string name="settings_change_password">Change password</string>
     <string name="settings_old_password">old password</string>

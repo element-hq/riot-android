@@ -1,5 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="cancel">Ακύρωση</string>
+<resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resouces_language">el</string>
+    <string name="resouces_country"></string>
+
+
+    <string name="cancel">Ακύρωση</string>
     <string name="action_close">Κλείσιμο</string>
     <string name="room_settings_direct_chat">Απευθείας συνομιλία</string>
     <string name="directory_title">Ευρετήριο</string>

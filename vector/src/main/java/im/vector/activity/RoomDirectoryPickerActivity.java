@@ -86,6 +86,8 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(R.string.select_room_directory);
         setContentView(R.layout.activity_room_directory_picker);
         ButterKnife.bind(this);
 
