@@ -79,16 +79,81 @@ public class PreferencesManager {
     public static final String SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY";
     public static final String SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY";
 
-
     public static final String SETTINGS_HIDE_READ_RECEIPTS_KEY = "SETTINGS_HIDE_READ_RECEIPTS_KEY";
     public static final String SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY";
     public static final String SETTINGS_DISABLE_MARKDOWN_KEY = "SETTINGS_DISABLE_MARKDOWN_KEY";
     public static final String SETTINGS_DONT_SEND_TYPING_NOTIF_KEY = "SETTINGS_DONT_SEND_TYPING_NOTIF_KEY";
 
+    public static final String SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY";
+    public static final String SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY";
 
     public static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     public static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
     public static final String SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY";
+
+    private static final int MEDIA_SAVING_3_DAYS = 0;
+    private static final int MEDIA_SAVING_1_WEEK = 1;
+    private static final int MEDIA_SAVING_1_MONTH = 2;
+    private static final int MEDIA_SAVING_FOREVER = 3;
+
+    /**
+     * Provides the medias saving choice list.
+     *
+     * @param context the context
+     * @return the list
+     */
+    public static CharSequence[] getMediasSavingItemsChoicesList(Context context) {
+        return new CharSequence[]{
+                context.getString(R.string.media_saving_period_3_days),
+                context.getString(R.string.media_saving_period_1_week),
+                context.getString(R.string.media_saving_period_1_month),
+                context.getString(R.string.media_saving_period_forever)};
+    }
+
+    /**
+     * Provides the selected saving period.
+     *
+     * @param context the context
+     * @return the selected period
+     */
+    public static int getSelectedMediasSavingPeriod(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY, MEDIA_SAVING_1_WEEK);
+    }
+
+    /**
+     * Updates the selected saving period.
+     *
+     * @param context the context
+     * @param index the selected period index
+     */
+    public static void setSelectedMediasSavingPeriod(Context context, int index) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY, index);
+        editor.commit();
+    }
+
+    /**
+     * Provides the selected saving period.
+     *
+     * @param context the context
+     * @return the selected period
+     */
+    public static String getSelectedMediasSavingPeriodString(Context context) {
+        int selection = getSelectedMediasSavingPeriod(context);
+
+        switch (selection) {
+            case MEDIA_SAVING_3_DAYS:
+                return context.getString(R.string.media_saving_period_3_days);
+            case MEDIA_SAVING_1_WEEK:
+                return context.getString(R.string.media_saving_period_1_week);
+            case MEDIA_SAVING_1_MONTH:
+                return context.getString(R.string.media_saving_period_1_month);
+            case MEDIA_SAVING_FOREVER:
+                return context.getString(R.string.media_saving_period_forever);
+        }
+        return "?";
+    }
 
     /**
      * Fix some migration issues

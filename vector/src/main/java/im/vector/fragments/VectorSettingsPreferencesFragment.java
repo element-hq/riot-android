@@ -345,47 +345,71 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
+        // update keep medias period
+        final EditTextPreference keepMediaPeriodPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY);
+
+        if (null != keepMediaPeriodPreference) {
+            keepMediaPeriodPreference.setSummary(PreferencesManager.getSelectedMediasSavingPeriodString(getActivity()));
+
+            keepMediaPeriodPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                     new AlertDialog.Builder(getActivity()).
+                            setSingleChoiceItems(PreferencesManager.getMediasSavingItemsChoicesList(getActivity()),
+                                    PreferencesManager.getSelectedMediasSavingPeriod(getActivity()),
+                                    new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface d, int n) {
+                                    PreferencesManager.setSelectedMediasSavingPeriod(getActivity(), n);
+                                    d.cancel();
+
+                                    keepMediaPeriodPreference.setSummary(PreferencesManager.getSelectedMediasSavingPeriodString(getActivity()));
+                                }
+                            }).show();
+                    return false;
+                }
+            });
+        }
+
         // clear medias cache
-        {
-            final EditTextPreference clearMediaCachePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY);
+        final EditTextPreference clearMediaCachePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY);
 
-            if (null != clearMediaCachePreference) {
-                MXMediasCache.getCachesSize(getActivity(), new SimpleApiCallback<Long>() {
-                    @Override
-                    public void onSuccess(Long size) {
-                        clearMediaCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
-                    }
-                });
+        if (null != clearMediaCachePreference) {
+            MXMediasCache.getCachesSize(getActivity(), new SimpleApiCallback<Long>() {
+                @Override
+                public void onSuccess(Long size) {
+                    clearMediaCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
+                }
+            });
 
-                clearMediaCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        displayLoadingView();
+            clearMediaCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    displayLoadingView();
 
-                        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-                            @Override
-                            protected Void doInBackground(Void... params) {
-                                mSession.getMediasCache().clear();
-                                return null;
-                            }
+                    AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            mSession.getMediasCache().clear();
+                            return null;
+                        }
 
-                            @Override
-                            protected void onPostExecute(Void result) {
-                                hideLoadingView();
+                        @Override
+                        protected void onPostExecute(Void result) {
+                            hideLoadingView();
 
-                                MXMediasCache.getCachesSize(getActivity(), new SimpleApiCallback<Long>() {
-                                    @Override
-                                    public void onSuccess(Long size) {
-                                        clearMediaCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
-                                    }
-                                });
-                            }
-                        };
-                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        return false;
-                    }
-                });
-            }
+                            MXMediasCache.getCachesSize(getActivity(), new SimpleApiCallback<Long>() {
+                                @Override
+                                public void onSuccess(Long size) {
+                                    clearMediaCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
+                                }
+                            });
+                        }
+                    };
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    return false;
+                }
+            });
         }
 
         // clear cache
