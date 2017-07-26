@@ -712,8 +712,8 @@ Ismeretlen eszközök:</string>
     <string name="settings_clear_medias_cache">Média gyorsítótár törlése</string>
     <string name="settings_keep_media">Média megtartása</string>
 
-    <string name="settings_dont_send_typings_notifs">Ne küldj éppen írok értesítéseket</string>
-    <string name="settings_always_show_timestamps">Mindig mutassa az üzenetek időbélyegét</string>
+    <string name="settings_dont_send_typings_notifs">Ne küldjön írás értesítést</string>
+    <string name="settings_always_show_timestamps">Üzenet időbélyeg folyamatos megjelenítése</string>
     <string name="settings_disable_markdown">Markdown formázás kikapcsolása</string>
 
     <string name="media_saving_period_3_days">3 nap</string>
