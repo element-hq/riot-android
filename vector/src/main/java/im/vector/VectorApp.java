@@ -332,6 +332,7 @@ public class VectorApp extends Application {
                 session.setIsOnline(false);
                 session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
                 session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                session.removeMediasBefore(PreferencesManager.getMinMediasLastAccessTime(getApplicationContext()));
 
                 if (session.getDataHandler().areLeftRoomsSynced()) {
                     session.getDataHandler().releaseLeftRooms();

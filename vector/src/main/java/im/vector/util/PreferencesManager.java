@@ -134,6 +134,29 @@ public class PreferencesManager {
     }
 
     /**
+     * Provides the minimum last access time to keep a media file.
+     *
+     * @param context the context
+     * @return the min last access time (in seconds)
+     */
+    public static long getMinMediasLastAccessTime(Context context) {
+        int selection = getSelectedMediasSavingPeriod(context);
+
+        switch (selection) {
+            case MEDIA_SAVING_3_DAYS:
+                return (System.currentTimeMillis()/1000) - (3 * 24 * 60 * 60);
+            case MEDIA_SAVING_1_WEEK:
+                return (System.currentTimeMillis()/1000) - (7 * 24 * 60 * 60);
+            case MEDIA_SAVING_1_MONTH:
+                return (System.currentTimeMillis()/1000) - (30 * 24 * 60 * 60);
+            case MEDIA_SAVING_FOREVER:
+                return 0;
+        }
+
+        return 0;
+    }
+
+    /**
      * Provides the selected saving period.
      *
      * @param context the context
