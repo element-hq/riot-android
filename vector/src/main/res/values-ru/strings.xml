@@ -356,7 +356,7 @@
     <string name="room_participants_invite_search_another_user">ID пользователя, имя или email</string>
     <string name="room_participants_action_mention">Упомянуть</string>
     <string name="room_participants_action_devices_list">Отобразить список устройств</string>
-    <string name="room_participants_power_level_prompt">Вы не сможете отменить эту операцию.\nВы уверены, что хотите продолжить?</string>
+    <string name="room_participants_power_level_prompt">Вы не сможете отменить это действие, поскольку пользователь получит такой же уровень доступа, как и у вас. Вы уверены?</string>
     
     <string name="room_participants_invite_prompt_msg">"Вы уверены что хотите пригласить %s в этот чат?"</string>
     
@@ -741,5 +741,16 @@
 <string name="settings_user_interface">Пользовательский интерфейс</string>
     <string name="settings_interface_language">Язык интерфейса</string>
     <string name="settings_select_language">Выберите язык</string>
+
+    <string name="settings_start_on_boot">Запускать при загрузке</string>
+    <string name="settings_hide_read_receipts">Скрыть отчёты о прочтении</string>
+    <string name="settings_dont_send_typings_notifs">Не отправлять уведомления о вводе</string>
+    <string name="settings_always_show_timestamps">Всегда показывать время отправки сообщений</string>
+    <string name="settings_disable_markdown">Отключить markdown форматирование</string>
+
+    <string name="media_saving_period_3_days">3 дня</string>
+    <string name="media_saving_period_1_week">1 неделя</string>
+    <string name="media_saving_period_1_month">1 месяц</string>
+    <string name="media_saving_period_forever">Навсегда</string>
 
     </resources>
