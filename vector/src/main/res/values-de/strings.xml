@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">de</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country">UK</string>
 
     <!-- titles -->
     <string name="title_activity_home">Nachrichten</string>
@@ -738,5 +738,19 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
 <string name="settings_user_interface">Nutzer-Schnittstelle</string>
     <string name="settings_interface_language">Oberflächen-Sprache</string>
     <string name="settings_select_language">Wähle eine Sprache</string>
+
+    <string name="settings_start_on_boot">Starte beim Systemstart</string>
+    <string name="settings_clear_medias_cache">Leere Medien-Cache</string>
+    <string name="settings_keep_media">Behalten Medien</string>
+
+    <string name="settings_hide_read_receipts">Verberge Lesebestätigungen</string>
+    <string name="settings_dont_send_typings_notifs">Sende nicht, dass ich tippe</string>
+    <string name="settings_always_show_timestamps">Zeitstempel immer anzeigen</string>
+    <string name="settings_disable_markdown">Markdown-Formatierung deaktivern</string>
+
+    <string name="media_saving_period_3_days">3 Tage</string>
+    <string name="media_saving_period_1_week">1 Woche</string>
+    <string name="media_saving_period_1_month">1 Monat</string>
+    <string name="media_saving_period_forever">Für immer</string>
 
     </resources>
