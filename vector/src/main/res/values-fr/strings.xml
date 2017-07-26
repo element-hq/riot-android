@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">fr</string>
-    <string name="resouces_country">FR</string>
+<resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resouces_language">fr</string>
+    <string name="resouces_country"></string>
 
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_settings">Paramètres</string>
@@ -87,7 +90,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="send_bug_report_include_screenshot">Envoyer une capture d\'écran</string>
     <string name="send_bug_report">Rapport d\'erreur</string>
     <string name="send_bug_report_placeholder">Décrivez votre problème ici</string>
-    <string name="send_bug_report_progress">Avancement (% s %%)</string>
+    <string name="send_bug_report_progress">Avancement (%s %%)</string>
 
     <string name="send_files_in">Envoyer dans</string>
     <string name="read_receipt">Lire</string>
@@ -463,7 +466,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="historical_placeholder">Rechercher dans l\'historique</string>
 
 <plurals name="public_room_nb_users">
-	<item quantity="one">1 utilisateur</item>
+    <item quantity="zero">aucun utilisateur</item>
+	<item quantity="one">%d utilisateur</item>
 	<item quantity="other">%d utilisateurs</item>
 </plurals>
 
@@ -473,7 +477,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="send_bug_report_app_crashed">L\'application s\'est arrêtée anormalement la dernière fois. Souhaitez-vous soumettre un rapport d’erreur ?</string>
 
     <string name="send_bug_report_sent">Le rapport d\'erreur a été envoyé avec succès</string>
-    <string name="send_bug_report_failed">Le rapport d\'erreur n\'a pas été envoyé (% s)</string>
+    <string name="send_bug_report_failed">Le rapport d\'erreur n\'a pas été envoyé (%s)</string>
     <string name="auth_add_email_message">Ajoutez une adresse e-mail à votre compte pour permettre aux utilisateurs de vous retrouver et de réinitialiser votre mot de passe.</string>
     <string name="auth_add_phone_message">Ajoutez un numéro de téléphone à votre compte pour permettre aux utilisateurs de vous retrouver.</string>
     <string name="auth_add_email_phone_message">Ajoutez une adresse e-mail et / ou un numéro de téléphone à votre compte pour permettre aux utilisateurs de vous retrouver.

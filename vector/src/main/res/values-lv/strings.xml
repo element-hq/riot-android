@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">en</string>
-    <string name="resouces_country">UK</string>
+<resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resouces_language">lv</string>
+    <string name="resouces_country"></string>
 
     <string name="title_activity_home">Ziņas</string>
     <string name="title_activity_room">Istaba</string>
@@ -84,7 +87,7 @@
     <string name="no_room_placeholder">Nav istabu</string>
     <string name="no_public_room_placeholder">Nav pieejamu publisko istabu</string>
     <plurals name="public_room_nb_users">
-	<item quantity="zero">1 lietotājs</item>
+	<item quantity="zero">%d lietotājs</item>
 	<item quantity="one">%d lietotāji</item>
 	<item quantity="other">%d lietotāji</item>
 </plurals>
