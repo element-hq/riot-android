@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 import im.vector.R;
 import im.vector.ga.GAHelper;
+import im.vector.gcm.GcmRegistrationManager;
 
 public class PreferencesManager {
 
@@ -91,10 +92,35 @@ public class PreferencesManager {
     public static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
     public static final String SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY";
 
+    public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
+
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;
     private static final int MEDIA_SAVING_FOREVER = 3;
+
+    /**
+     * Tells if the application is started on boot
+     *
+     * @param context the context
+     * @return true if the application must be started on boot
+     */
+    public static boolean autoStartOnBoot(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, false);
+    }
+
+    /**
+     * Tells if the application is started on boot
+     *
+     * @param context the context
+     * @param value true to start the application on boot
+     */
+    public static void setAutoStartOnBoot(Context context, boolean value) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, value);
+        editor.commit();
+    }
 
     /**
      * Provides the medias saving choice list.

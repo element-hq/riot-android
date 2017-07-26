@@ -2028,8 +2028,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
-        // theses both settings are dedicated when a client does not support GCM
+        // theses settings are dedicated when a client does not support GCM
         if (gcmmgr.hasRegistrationToken()) {
+            final Preference autoStartSyncPref = findPreference(PreferencesManager.SETTINGS_START_ON_BOOT_PREFERENCE_KEY);
+            if (null != autoStartSyncPref) {
+                mBackgroundSyncCategory.removePreference(autoStartSyncPref);
+            }
             mBackgroundSyncCategory.removePreference(mSyncRequestTimeoutPreference);
             mBackgroundSyncCategory.removePreference(mSyncRequestDelayPreference);
         }
