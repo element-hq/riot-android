@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -60,6 +61,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Pusher;
+import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
@@ -73,6 +75,7 @@ import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
+import org.matrix.androidsdk.util.ContentUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.text.DateFormat;
@@ -81,6 +84,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -341,10 +345,60 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
+        // clear medias cache
+        {
+            final EditTextPreference clearMediaCachePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY);
+
+            if (null != clearMediaCachePreference) {
+                MXMediasCache.getCachesSize(getActivity(), new SimpleApiCallback<Long>() {
+                    @Override
+                    public void onSuccess(Long size) {
+                        clearMediaCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
+                    }
+                });
+
+                clearMediaCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        displayLoadingView();
+
+                        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                mSession.getMediasCache().clear();
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void result) {
+                                hideLoadingView();
+
+                                MXMediasCache.getCachesSize(getActivity(), new SimpleApiCallback<Long>() {
+                                    @Override
+                                    public void onSuccess(Long size) {
+                                        clearMediaCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
+                                    }
+                                });
+                            }
+                        };
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        return false;
+                    }
+                });
+            }
+        }
+
         // clear cache
-        EditTextPreference clearCachePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY);
+        final EditTextPreference clearCachePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY);
 
         if (null != clearCachePreference) {
+            MXSession.getApplicationSizeCaches(getActivity(), new SimpleApiCallback<Long>() {
+                @Override
+                public void onSuccess(Long size) {
+                    clearCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
+                }
+            });
+
             clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {

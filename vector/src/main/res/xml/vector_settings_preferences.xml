@@ -309,6 +309,10 @@
             android:key="SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"/>
 
         <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_clear_medias_cache"
+            android:key="SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_clear_cache"
             android:key="SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"/>
 
