@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">hu</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country">HU</string>
 
     <string name="title_activity_home">Üzenetek</string>
     <string name="title_activity_room">Szoba</string>
@@ -235,7 +235,7 @@ Elnézést a kellemetlenségért.</string>
     <string name="call_in_progress">Hívás folyamatban</string>
 
     <string name="call_error_user_not_responding">A hívott félnek nem sikerült felvennie.</string>
-    <string name="call_error_ice_failed">A Media csatlakozás nem sikerült</string>
+    <string name="call_error_ice_failed">A média csatlakozás nem sikerült</string>
     <string name="call_error_camera_init_failed">A kamerát nem lehet inicializálni</string>
     <string name="call_error_answered_elsewhere">hívás felvéve máshol</string>
     <string name="call_error_peer_hangup_elsewhere">hívás letéve máshol</string>
@@ -708,4 +708,18 @@ Ismeretlen eszközök:</string>
     <string name="account_email_not_found_error">E-mail küldése sikertelen: Ez az e-mail cím nem található</string>
     <string name="account_phone_number_already_used_error">Ez a telefonszám már használatban van</string>
 
+    <string name="settings_start_on_boot">Indítás rendszerinduláskor</string>
+    <string name="settings_clear_medias_cache">Média gyorsítótár törlése</string>
+    <string name="settings_keep_media">Média megtartása</string>
+
+    <string name="settings_dont_send_typings_notifs">Ne küldj éppen írok értesítéseket</string>
+    <string name="settings_always_show_timestamps">Mindig mutassa az üzenetek időbélyegét</string>
+    <string name="settings_disable_markdown">Markdown formázás kikapcsolása</string>
+
+    <string name="media_saving_period_3_days">3 nap</string>
+    <string name="media_saving_period_1_week">1 hét</string>
+    <string name="media_saving_period_1_month">1 hónap</string>
+    <string name="media_saving_period_forever">Örökké</string>
+
+    <string name="settings_hide_read_receipts">Olvasási visszajelzés elrejtése</string>
     </resources>
