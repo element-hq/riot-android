@@ -499,7 +499,7 @@
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_clear_cache">Clear cache</string>
-    <string name="settings_clear_medias_cache">Clear medias cache</string>
+    <string name="settings_clear_medias_cache">Clear media cache</string>
     <string name="settings_keep_media">Keep media</string>
 
     <string name="settings_user_settings">User settings</string>

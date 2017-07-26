@@ -378,7 +378,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             MXMediasCache.getCachesSize(getActivity(), new SimpleApiCallback<Long>() {
                 @Override
                 public void onSuccess(Long size) {
-                    clearMediaCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
+                    if (null != getActivity()) {
+                        clearMediaCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
+                    }
                 }
             });
 
@@ -419,7 +421,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             MXSession.getApplicationSizeCaches(getActivity(), new SimpleApiCallback<Long>() {
                 @Override
                 public void onSuccess(Long size) {
-                    clearCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
+                    if (null != getActivity()) {
+                        clearCachePreference.setSummary(android.text.format.Formatter.formatFileSize(getActivity(), size));
+                    }
                 }
             });
 
