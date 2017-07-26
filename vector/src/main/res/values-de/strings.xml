@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">de</string>
-    <string name="resouces_country">UK</string>
+    <string name="resouces_country">DE</string>
 
     <!-- titles -->
     <string name="title_activity_home">Nachrichten</string>
