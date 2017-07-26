@@ -54,6 +54,22 @@
             android:key="SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY"
             android:title="@string/settings_interface_language"
             android:dialogTitle="@string/settings_select_language"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_hide_read_receipts"
+            android:key="SETTINGS_HIDE_READ_RECEIPTS_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_dont_send_typings_notifs"
+            android:key="SETTINGS_DONT_SEND_TYPING_NOTIF_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_always_show_timestamps"
+            android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_disable_markdown"
+            android:key="SETTINGS_DISABLE_MARKDOWN_KEY"/>
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
@@ -234,6 +250,10 @@
         android:title="@string/settings_background_sync" >
 
         <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_start_on_boot"
+            android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_enable_background_sync"
             android:key="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"/>
 
@@ -291,6 +311,14 @@
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_third_party_notices"
             android:key="SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_keep_media"
+            android:key="SETTINGS_MEDIA_SAVING_PERIOD_KEY"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_clear_medias_cache"
+            android:key="SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY"/>
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_clear_cache"

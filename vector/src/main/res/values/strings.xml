@@ -485,6 +485,7 @@
     <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
 
+    <string name="settings_start_on_boot">Start on boot</string>
     <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_enable_background_sync">Enable background sync</string>
     <string name="settings_set_sync_timeout">Sync request timeout</string>
@@ -499,8 +500,8 @@
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_clear_cache">Clear cache</string>
-    <!--string name="settings_room_privacy_label">Privacy</string-->
-
+    <string name="settings_clear_medias_cache">Clear media cache</string>
+    <string name="settings_keep_media">Keep media</string>
 
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
@@ -516,6 +517,11 @@
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Devices</string>
+    <string name="settings_hide_read_receipts">Hide read receipts</string>
+    <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
+    <string name="settings_always_show_timestamps">Always show message timestamps</string>
+    <string name="settings_disable_markdown">Disable markdown formatting</string>
+
     <string name="devices_details_dialog_title">Device details</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Name</string>
@@ -566,6 +572,12 @@
     <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
     <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
     <string name="settings_phone_number_code">Code</string>
+
+    <!-- medias saving settings -->
+    <string name="media_saving_period_3_days">3 days</string>
+    <string name="media_saving_period_1_week">1 week</string>
+    <string name="media_saving_period_1_month">1 month</string>
+    <string name="media_saving_period_forever">Forever</string>
 
     <!-- Room Settings -->
 

@@ -102,6 +102,7 @@ import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
+import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
@@ -1747,6 +1748,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param isTyping typing param
      */
     private void handleTypingNotification(boolean isTyping) {
+        // the typing notifications are disabled ?
+        if (PreferencesManager.dontSendTypingNotifs(this)) {
+            return;
+        }
+
         int notificationTimeoutMS = -1;
         if (isTyping) {
             // Check whether a typing event has been already reported to server (We wait for the end of the local timeout before considering this new event)

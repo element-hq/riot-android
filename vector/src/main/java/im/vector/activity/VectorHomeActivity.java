@@ -116,6 +116,7 @@ import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
+import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
@@ -542,7 +543,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         // check if the GA accepts to send crash reports.
         // do not display this alert if there is an universal link management
-        if (null == GAHelper.useGA(this) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
+        if (null == PreferencesManager.useGA(this) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
             mUseGAAlert = new AlertDialog.Builder(this);
 
             mUseGAAlert.setMessage(getApplicationContext().getString(R.string.ga_use_alert_message)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
@@ -550,7 +551,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 public void onClick(DialogInterface dialog, int which) {
                     if (null != VectorApp.getInstance()) {
                         mUseGAAlert = null;
-                        GAHelper.setUseGA(VectorHomeActivity.this, true);
+                        PreferencesManager.setUseGA(VectorHomeActivity.this, true);
                     }
                 }
             }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -558,7 +559,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                 public void onClick(DialogInterface dialog, int which) {
                     if (null != VectorApp.getInstance()) {
                         mUseGAAlert = null;
-                        GAHelper.setUseGA(VectorHomeActivity.this, false);
+                        PreferencesManager.setUseGA(VectorHomeActivity.this, false);
                     }
                 }
             }).show();

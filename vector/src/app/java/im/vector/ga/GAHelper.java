@@ -29,6 +29,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.fragments.VectorSettingsPreferencesFragment;
+import im.vector.util.PreferencesManager;
 
 public class GAHelper {
 
@@ -51,63 +52,12 @@ public class GAHelper {
     }
 
     /**
-     * Update the GA use.
-     *
-     * @param context the context
-     * @param value   the new value
-     */
-    public static void setUseGA(Context context, boolean value) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(VectorSettingsPreferencesFragment.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, value);
-        editor.commit();
-
-        initGoogleAnalytics(context);
-    }
-
-    /**
-     * Tells if GA can be used
-     *
-     * @param context the context
-     * @return null if not defined, true / false when defined
-     */
-    public static Boolean useGA(Context context) {
-        // avoid getting the GA issues from the forked branches
-        if (!TextUtils.equals(VectorApp.getInstance().getPackageName(), "im.vector.alpha")) {
-            return false;
-        }
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (preferences.contains(VectorSettingsPreferencesFragment.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY)) {
-            return preferences.getBoolean(VectorSettingsPreferencesFragment.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, false);
-        } else {
-            try {
-                // test if the client should not use GA
-                boolean allowGA = TextUtils.equals(context.getResources().getString(R.string.allow_ga_use), "true");
-
-                if (!allowGA) {
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean(context.getString(R.string.ga_use_settings), false);
-                    editor.commit();
-
-                    return false;
-                }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "useGA " + e.getLocalizedMessage());
-            }
-
-            return null;
-        }
-    }
-
-    /**
      * Initialize the google analytics
      */
     public static void initGoogleAnalytics(final Context context) {
         int trackerResId = 0;
 
-        Boolean useGA = useGA(context);
+        Boolean useGA = PreferencesManager.useGA(context);
 
         if (null == useGA) {
             Log.e(LOG_TAG, "Google Analytics use is not yet initialized");
@@ -166,7 +116,7 @@ public class GAHelper {
      * @param value    the value
      */
     public static void sendGAStats(Context context, String category, String action, String label, long value) {
-        Boolean useGA = useGA(context);
+        Boolean useGA = PreferencesManager.useGA(context);
 
         if (null == useGA) {
             Log.e(LOG_TAG, "Google Analytics use is not yet initialized");
