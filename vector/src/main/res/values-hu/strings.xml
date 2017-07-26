@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">hu</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country">HU</string>
 
     <string name="title_activity_home">Üzenetek</string>
     <string name="title_activity_room">Szoba</string>
@@ -698,4 +698,14 @@ Ismeretlen eszközök:</string>
 
     <string name="historical_placeholder">Előzmények keresése</string>
 
-</resources>
+<string name="membership_changes">%d tagság változások</string>
+
+    <string name="settings_user_interface">Felhasználói felület</string>
+    <string name="settings_interface_language">Felület nyelve</string>
+    <string name="settings_select_language">Válassz egy nyelvet</string>
+
+    <string name="account_email_already_used_error">Ez az e-mail cím már használatban van</string>
+    <string name="account_email_not_found_error">E-mail küldése sikertelen: Ez az e-mail cím nem található</string>
+    <string name="account_phone_number_already_used_error">Ez a telefonszám már használatban van</string>
+
+    </resources>

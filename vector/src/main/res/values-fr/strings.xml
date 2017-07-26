@@ -699,4 +699,12 @@ Appareils connus :</string>
     <string name="notification_unread_notified_messages">%d messages notifiés non lus</string>
     <string name="notification_unread_notified_messages_in_room">%1$d messages non-lus dans %2$d salons</string>
 
+    <string name="settings_user_interface">Interface utilisateur</string>
+    <string name="settings_interface_language">Langue de l\'interface</string>
+    <string name="settings_select_language">Choisissez une langue</string>
+
+    <string name="account_email_already_used_error">Cette adresse e-mail est déjà utilisée</string>
+    <string name="account_email_not_found_error">Impossible d\'envoyer l\'e-mail : Cette adresse e-mail n\'a pas pu être trouvée</string>
+    <string name="account_phone_number_already_used_error">Ce numéro de téléphone est déjà utilisé</string>
+
     </resources>
