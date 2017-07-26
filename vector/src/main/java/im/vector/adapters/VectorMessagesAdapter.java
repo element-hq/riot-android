@@ -85,6 +85,7 @@ import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.EventGroup;
+import im.vector.util.PreferencesManager;
 
 /**
  * An adapter which can display room information.
@@ -183,6 +184,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     private Locale mLocale;
 
+
+    // custom settings
+    private boolean mAlwaysShowTimeStamps;
+    private boolean mHideReadReceipts;
+
     /**
      * Creates a messages adapter with the default layouts.
      */
@@ -271,6 +277,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mHelper = new VectorMessagesAdapterHelper(context, mSession);
 
         mLocale = VectorApp.getApplicationLocale(mContext);
+
+        mAlwaysShowTimeStamps = PreferencesManager.alwaysShowTimeStamps(VectorApp.getInstance());
+        mHideReadReceipts = PreferencesManager.hideReadReceipts(VectorApp.getInstance());
     }
 
     /*
@@ -980,14 +989,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         TextView tsTextView = VectorMessagesAdapterHelper.setTimestampValue(convertView, getFormattedTimestamp(event));
 
         if (null != tsTextView) {
-
             if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
                 tsTextView.setTextColor(ContextCompat.getColor(mContext, R.color.chat_gray_text));
             }
 
-            tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode) ? View.VISIBLE : View.GONE);
+            tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);
         }
 
         // Sender avatar
@@ -1010,7 +1018,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
 
         // read receipts
-        mHelper.displayReadReceipts(convertView, row, mIsPreviewMode);
+        if (mHideReadReceipts) {
+            mHelper.hideReadReceipts(convertView);
+        } else {
+            mHelper.displayReadReceipts(convertView, row, mIsPreviewMode);
+        }
 
         // selection mode
         manageSelectionMode(convertView, event);

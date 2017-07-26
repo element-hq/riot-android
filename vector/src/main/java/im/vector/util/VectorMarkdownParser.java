@@ -37,8 +37,6 @@ import android.webkit.WebView;
 public class VectorMarkdownParser extends WebView {
     private static final String LOG_TAG = "VMarkdownParser";
 
-    private static final String MARKDOWN_PREFERENCE_KEY = "MARKDOWN_PREFERENCE_KEY";
-
     public interface IVectorMarkdownParserListener {
         /**
          * A markdown text has been parsed.
@@ -80,25 +78,6 @@ public class VectorMarkdownParser extends WebView {
         getSettings().setAllowUniversalAccessFromFileURLs(true);
     }
 
-    /**
-     * @return true if the markdown parsing is enabled
-     */
-    public boolean isEnabled() {
-        return PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(MARKDOWN_PREFERENCE_KEY, true);
-    }
-
-    /**
-     * Enable / disable the markdown parser
-     *
-     * @param enable true to enable the parser
-     */
-    public void setEnable(boolean enable) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(MARKDOWN_PREFERENCE_KEY, enable);
-        editor.commit();
-    }
 
     /**
      * Parse the MarkDown text.
@@ -119,7 +98,7 @@ public class VectorMarkdownParser extends WebView {
         }
 
         // empty text or disabled
-        if (TextUtils.isEmpty(text) || !isEnabled()) {
+        if (TextUtils.isEmpty(text) || !PreferencesManager.isMarkdownEnabled(getContext())) {
             // nothing to do
             listener.onMarkdownParsed(markdownText, text);
             return;

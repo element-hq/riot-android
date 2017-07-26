@@ -78,6 +78,13 @@ public class PreferencesManager {
     public static final String SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY";
     public static final String SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY";
 
+
+    public static final String SETTINGS_HIDE_READ_RECEIPTS_KEY = "SETTINGS_HIDE_READ_RECEIPTS_KEY";
+    public static final String SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY";
+    public static final String SETTINGS_DISABLE_MARKDOWN_KEY = "SETTINGS_DISABLE_MARKDOWN_KEY";
+    public static final String SETTINGS_DONT_SEND_TYPING_NOTIF_KEY = "SETTINGS_DONT_SEND_TYPING_NOTIF_KEY";
+
+
     public static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     public static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
     public static final String SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY";
@@ -109,6 +116,66 @@ public class PreferencesManager {
             editor.remove(context.getString(R.string.settings_pin_unread_messages));
             editor.commit();
         }
+
+        if (preferences.contains("MARKDOWN_PREFERENCE_KEY")) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(SETTINGS_DISABLE_MARKDOWN_KEY, !preferences.getBoolean("MARKDOWN_PREFERENCE_KEY", false));
+            editor.remove("MARKDOWN_PREFERENCE_KEY");
+            editor.commit();
+        }
+    }
+
+    /**
+     * Tells if the markdown is enabled
+     *
+     * @param context the context
+     * @return true if the markdown is enabled
+     */
+    public static boolean isMarkdownEnabled(Context context) {
+        return !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISABLE_MARKDOWN_KEY, false);
+    }
+
+    /**
+     * Update the markdown enable status.
+     *
+     * @param context the context
+     * @param isEnabled true to enable the markdown
+     */
+    public static void setMarkdownEnabled(Context context, boolean isEnabled) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SETTINGS_DISABLE_MARKDOWN_KEY, !isEnabled);
+        editor.commit();
+    }
+
+    /**
+     * Tells if the read receipts must be hidden
+     *
+     * @param context the context
+     * @return true if the read receipts must be hidden
+     */
+    public static boolean hideReadReceipts(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_HIDE_READ_RECEIPTS_KEY, false);
+    }
+
+    /**
+     * Tells if the message timestamps must be always shown.
+     *
+     * @param context the context
+     * @return true if the message timestamps must be always shown.
+     */
+    public static boolean alwaysShowTimeStamps(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY, false);
+    }
+
+    /**
+     * Tells if the typing notifications must NOT be sent
+     *
+     * @param context the context
+     * @return true to do NOT send the typing notifs
+     */
+    public static boolean dontSendTypingNotifs(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DONT_SEND_TYPING_NOTIF_KEY, false);
     }
 
     /**

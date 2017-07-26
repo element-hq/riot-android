@@ -516,6 +516,11 @@
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Devices</string>
+    <string name="settings_hide_read_receipts">Hide read receipts</string>
+    <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
+    <string name="settings_always_show_timestamps">Always show message timestamps</string>
+    <string name="settings_disable_markdown">Disable markdown formatting</string>
+
     <string name="devices_details_dialog_title">Device details</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Name</string>

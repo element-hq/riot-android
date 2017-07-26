@@ -363,6 +363,19 @@ public class VectorMessagesAdapterHelper {
     }
 
     /**
+     * Hide the read receipts view
+     *
+     * @param convertView base view
+     */
+    void hideReadReceipts(View convertView) {
+        View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
+
+        if (null != avatarsListView) {
+            avatarsListView.setVisibility(View.GONE);
+        }
+    }
+
+    /**
      * Display the read receipts within the dedicated vector layout.
      * Console application displays them on the message side.
      * Vector application displays them in a dedicated line under the message
