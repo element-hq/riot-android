@@ -35,7 +35,7 @@
     <string name="ongoing_conference_call">Llamada de conferencia en proceso. Unir con voz o video.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
-    <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo de nuevo más tarde.</string>
+    <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo de nuevo más tarde</string>
     <string name="missing_permissions_warning">Debido a permisos faltantes, algunas características podrían estar ausentes..</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para realizar una llamada de conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Llamada no se puede empezar</string>
@@ -43,8 +43,8 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no pueden ser realizadas en salas cifradas</string>
     <string name="send_anyway">Enviar de todos modos</string>
     <string name="or">o</string>
-    <string name="and">and</string>
-    <string name="invite">Invite</string>
+    <string name="and">y</string>
+    <string name="invite">Invitar</string>
 
     <!-- actions -->
     <string name="action_sign_out">Cerrar la sesión</string>
@@ -54,7 +54,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="action_video_call">Llamada de Vídeo</string>
     <string name="action_global_search">Búsqueda global</string>
     <string name="action_mark_all_as_read">Marcar todos como visto</string>
-    <string name="action_historical">Historical</string>
+    <string name="action_historical">Histórico</string>
     <string name="action_quick_reply">Respuesta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Cerrar</string>
@@ -83,7 +83,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversaciones</string>
-    <string name="local_address_book_header">Local address book</string>
+    <string name="local_address_book_header">Agenda local de direcciones</string>
     <string name="known_contacts_header">Contactos conocidos</string>
     <string name="matrix_only_filter">Solo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
@@ -187,7 +187,7 @@ Podrá añadir su correo electrónico a su cuenta en las configuraciones.</strin
     <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requrido.</string>
     <string name="auth_reset_password_missing_password">Una contraseña nueva es requerida.</string>
     <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez que sigas el enlace, seleccione abajo.</string>
-    <string name="auth_reset_password_error_unauthorized">Verificación de correo electronico falló: asegúrese que siguió el enlace.</string>
+    <string name="auth_reset_password_error_unauthorized">Verificación de correo electrónico falló: asegúrese que siguió el enlace</string>
     <string name="auth_reset_password_success_message">Su contraseña fue actualizada.\n\nHaz sido desconectado de todos tus dispositivos y las notificaciones están apagadas. Para encender las notificaciones, entre su cuenta en cada dispositivo.</string>
 
     <!-- Login Screen -->
@@ -200,7 +200,7 @@ Podrá añadir su correo electrónico a su cuenta en las configuraciones.</strin
     <string name="login_error_invalid_home_server">Escribe enlace válido</string>
 
     <string name="login_error_forbidden">Nombre/Contraseña inválido</string>
-    <string name="login_error_unknown_token">El character de acesso escogido no fue reconocido.</string>
+    <string name="login_error_unknown_token">El testimonio de acceso escogido no fue reconocido</string>
     <string name="login_error_bad_json">JSON malformado</string>
     <string name="login_error_not_json">No contenía JSON válido</string>
     <string name="login_error_limit_exceeded">Demasiadas peticiones enviadas</string>
@@ -371,8 +371,8 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="people_search_too_many_contacts">Demasiados contactos, por favor use la busqueda</string>
 
     <string name="people_search_invite_by_id_dialog_title">Invitar usuario por ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Por favor, introducir una o más direcciones de correo electrónico o identificadores de Matrix</string>
+    <string name="people_search_invite_by_id_dialog_hint">Correo electrónico o identificador de Matrix</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Buscar</string>
@@ -448,9 +448,9 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_recents_invites">INVITACIONES</string>
     <string name="room_recents_start_chat">Comenzar chat</string>
     <string name="room_recents_create_room">Crear sala</string>
-    <string name="room_recents_join_room">Join room</string>
-    <string name="room_recents_join_room_title">Join a room</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
+    <string name="room_recents_join_room">Unirse a la sala</string>
+    <string name="room_recents_join_room_title">Unirse a una sala</string>
+    <string name="room_recents_join_room_prompt">Escribir el identificador de la sala o el alias</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar directorio</string>
@@ -526,8 +526,8 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="settings_contact">Contactos locales</string>
     <string name="settings_contacts_app_permission">Permiso de contactos</string>
     <string name="settings_contacts_phonebook_country">País de directorio telefónico</string>
-    <string name="settings_home_display">Home display</string>
-    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
+    <string name="settings_home_display">Pantalla de inicio</string>
+    <string name="settings_pin_missed_notifications">Fijar salas con notificaciones pendientes</string>
     <string name="settings_pin_unread_messages">Pegar salas con mensajes no leídos</string>
     <string name="settings_devices_list">Dispositivos</string>
     <string name="devices_details_dialog_title">Información del dispositivo</string>
@@ -548,7 +548,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
 
     <string name="account_email_validation_title">Verificación Pendiente</string>
     <string name="account_email_validation_message">Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
-    <string name="account_email_validation_error">Verificación de su correo electrónico falló. Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
+    <string name="account_email_validation_error">Verificación de su correo electrónico falló. Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoge Continuar</string>
 
     <string name="account_email_already_used_error">Esta dirección de correo electrónico ya está usada</string>
     <string name="account_email_not_found_error">Error al enviar correo electrónico: No se pudo encontrar esta dirección de correo electrónico</string>
@@ -730,17 +730,17 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <!-- directory activity  -->
     <string name="select_room_directory">Elegir un directorio de salas</string>
     <string name="directory_server_fail_to_retrieve_server">El servidor podría estar no disponible o sobrecargado</string>
-    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
-    <string name="directory_server_placeholder">Homeserver URL</string>
-    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
+    <string name="directory_server_type_homeserver">Escribir un homeserver para listar sus salas públicas</string>
+    <string name="directory_server_placeholder">URL del homeserver</string>
+    <string name="directory_server_all_rooms_on_server">Todas las salas en el servidor %s</string>
     <string name="directory_server_native_rooms">Todas las salas nativas de %s</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d unread notified messages</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
+    <string name="notification_unread_notified_messages">%d mensajes notificados sin leer</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d mensajes notificados sin leer en %2$d salas</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Search for historical</string>
+    <string name="historical_placeholder">Buscar en el historial</string>
 <string name="settings_user_interface">Interfaz de usuario</string>
     <string name="settings_interface_language">Idioma de la interfaz</string>
     <string name="settings_select_language">Elegir el idioma</string>
