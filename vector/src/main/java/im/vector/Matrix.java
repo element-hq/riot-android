@@ -55,6 +55,7 @@ import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
+import im.vector.util.PreferencesManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -687,6 +688,7 @@ public class Matrix {
 
         session.getDataHandler().addListener(mLiveEventListener);
         session.mCallsManager.addListener(mCallsManagerListener);
+        session.setUseDataSaveMode(PreferencesManager.useDataSaveMode(context));
         return session;
     }
 

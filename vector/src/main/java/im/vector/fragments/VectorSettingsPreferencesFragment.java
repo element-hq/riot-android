@@ -651,6 +651,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
+        final CheckBoxPreference dataSaveModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY);
+        dataSaveModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                List<MXSession> sessions = Matrix.getMXSessions(getActivity());
+                for(MXSession session : sessions) {
+                    session.setUseDataSaveMode((boolean)newValue);
+                }
+
+                return true;
+            }
+        });
+
         addButtons();
         refreshPushersList();
         refreshEmailsList();

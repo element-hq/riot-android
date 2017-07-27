@@ -521,6 +521,7 @@
     <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
     <string name="settings_always_show_timestamps">Always show message timestamps</string>
     <string name="settings_disable_markdown">Disable markdown formatting</string>
+    <string name="settings_data_save_mode">Data save mode</string>
 
     <string name="devices_details_dialog_title">Device details</string>
     <string name="devices_details_id_title">ID</string>
