@@ -46,6 +46,7 @@
     <string name="or">or</string>
     <string name="and">and</string>
     <string name="invite">Invite</string>
+    <string name="offline">Offline</string>
 
     <!-- actions -->
     <string name="action_sign_out">Sign out</string>
@@ -84,7 +85,7 @@
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
     <string name="local_address_book_header">Local address book</string>
-    <string name="known_contacts_header">Known contacts</string>
+    <string name="user_directory_header">User directory</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
     <string name="no_local_contact_placeholder">No local contacts</string>
@@ -352,7 +353,7 @@
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
     <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
-    <string name="people_search_known_contacts">KNOWN CONTACTS (%s)</string>
+    <string name="people_search_user_directory">USER DIRECTORY (%s)</string>
     <string name="people_search_filter_text">Matrix users only</string>
     <string name="people_search_too_many_contacts">Too many contacts, please use the search field</string>
 

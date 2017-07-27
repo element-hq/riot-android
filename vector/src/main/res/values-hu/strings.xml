@@ -74,7 +74,6 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
 
     <string name="direct_chats_header">Beszélgetések</string>
     <string name="local_address_book_header">Helyi címjegyzék</string>
-    <string name="known_contacts_header">Ismert kapcsolatok</string>
     <string name="matrix_only_filter">Csak Matrix kapcsolatok</string>
     <string name="no_conversation_placeholder">Nincsenek beszélgetések</string>
     <string name="no_local_contact_placeholder">Nincsenek helyi kapcsolatok</string>
@@ -349,7 +348,6 @@ Biztos vagy benne?</string>
 
     <string name="people_search_invite_by_id"><u>Meghívás azonosítóval</u></string>
     <string name="people_search_local_contacts">HELYI KAPCSOLATOK (%d)</string>
-    <string name="people_search_known_contacts">ISMERT KAPCSOLATOK (%s)</string>
     <string name="people_search_filter_text">Csak Matrix felhasználók</string>
     <string name="people_search_too_many_contacts">Túl sok kapcsolat, kérlek használd a kereső mezőt</string>
 

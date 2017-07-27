@@ -84,7 +84,6 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <!-- People fragment -->
     <string name="direct_chats_header">Conversaciones</string>
     <string name="local_address_book_header">Local address book</string>
-    <string name="known_contacts_header">Contactos conocidos</string>
     <string name="matrix_only_filter">Solo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
     <string name="no_local_contact_placeholder">No hay contactos locales</string>
@@ -366,7 +365,6 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invitar por ID</u></string>
     <string name="people_search_local_contacts">CONTACTOS LOCALES (%d)</string>
-    <string name="people_search_known_contacts">CONTACTOS CONOCIDOS (%s)</string>
     <string name="people_search_filter_text">Solmente usuarios de Matrix</string>
     <string name="people_search_too_many_contacts">Demasiados contactos, por favor use la busqueda</string>
 

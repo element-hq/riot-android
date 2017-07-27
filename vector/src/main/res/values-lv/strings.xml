@@ -75,7 +75,6 @@
 
     <string name="direct_chats_header">Sarunas</string>
     <string name="local_address_book_header">Vietējā adrešu grāmata</string>
-    <string name="known_contacts_header">Zināmie kontakti</string>
     <string name="matrix_only_filter">Vienīgi Matrix kontakti</string>
     <string name="no_conversation_placeholder">Nav sarunu</string>
     <string name="no_local_contact_placeholder">Nav vietējo kontaktu</string>

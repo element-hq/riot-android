@@ -130,6 +130,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     // tell if the known contacts list is limited
     private boolean mKnownContactsLimited;
 
+    // tell if the contacts search has been done offline
+    private boolean mIsOfflineContactsSearch;
+
     /**
      * Create a room member adapter.
      * If a room id is defined, the adapter is in edition mode : the user can add / remove dynamically members or leave the room.
@@ -429,6 +432,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                             }
                         }
 
+                        mIsOfflineContactsSearch = false;
                         mKnownContactsLimited = (null != searchUsersResponse.limited) ? searchUsersResponse.limited : false;
                         onKnownContactsSearchEnd(participantItemList, theFirstEntry, searchListener);
                     }
@@ -436,6 +440,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
                 private void onError() {
                     if (TextUtils.equals(fPattern, mPattern)) {
+                        mIsOfflineContactsSearch = true;
                         searchAccountKnownContacts(theFirstEntry, searchListener);
                     }
                 }
@@ -736,11 +741,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
             if (TextUtils.isEmpty(mPattern) && couldHaveUnusedParticipants()) {
                 titleExtra = "-";
+            } else if (mIsOfflineContactsSearch) {
+                titleExtra = mContext.getString(R.string.offline) + ", " + String.valueOf(groupSize);
             } else {
                 titleExtra = (mKnownContactsLimited ? ">" : "") + String.valueOf(groupSize);
             }
 
-            return mContext.getString(R.string.people_search_known_contacts, titleExtra);
+            return mContext.getString(R.string.people_search_user_directory, titleExtra);
         } else {
             return "??";
         }

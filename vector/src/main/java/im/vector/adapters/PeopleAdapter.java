@@ -83,7 +83,7 @@ public class PeopleAdapter extends AbsAdapter {
                 R.layout.adapter_local_contacts_sticky_header_subview, R.layout.adapter_item_contact_view, TYPE_HEADER_LOCAL_CONTACTS, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), ParticipantAdapterItem.alphaComparator);
         mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ? mNoContactAccessPlaceholder : mNoResultPlaceholder);
 
-        mKnownContactsSection = new KnownContactsAdapterSection(context.getString(R.string.known_contacts_header), -1,
+        mKnownContactsSection = new KnownContactsAdapterSection(context.getString(R.string.user_directory_header), -1,
                 R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), null);
         mKnownContactsSection.setEmptyViewPlaceholder(null, context.getString(R.string.no_result_placeholder));
         mKnownContactsSection.setIsHiddenWhenNoFilter(true);
@@ -212,6 +212,10 @@ public class PeopleAdapter extends AbsAdapter {
         mKnownContactsSection.setIsLimited(isLimited);
     }
 
+    public void setKnownContactsExtraTitle(String extraTitle) {
+        mKnownContactsSection.setCustomHeaderExtra(extraTitle);
+    }
+
     /**
      * Update the known contact corresponding to the given user id
      *
@@ -294,6 +298,7 @@ public class PeopleAdapter extends AbsAdapter {
         mKnownContactsSection.setFilteredItems(filteredKnownContacts, pattern);
 
         setKnownContactsLimited(false);
+        setKnownContactsExtraTitle(null);
 
         return filteredKnownContacts.size();
     }

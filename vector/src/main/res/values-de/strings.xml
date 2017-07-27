@@ -83,7 +83,6 @@
     <!-- People fragment -->
     <string name="direct_chats_header">Konversationen</string>
     <string name="local_address_book_header">Lokales Adressbuch</string>
-    <string name="known_contacts_header">Bekannte Kontakte</string>
     <string name="matrix_only_filter">Nur Matrix-Kontakte</string>
     <string name="no_conversation_placeholder">Keine Konversationen</string>
     <string name="no_local_contact_placeholder">No local contacts</string>
@@ -356,7 +355,6 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Mit ID einladen</u></string>
     <string name="people_search_local_contacts">LOKALE KONTAKTE (%d)</string>
-    <string name="people_search_known_contacts">BEKANNTE KONTAKTE (%s)</string>
     <string name="people_search_filter_text">Nur Matrix-Nutzer</string>
     <string name="people_search_too_many_contacts">"Zu viele Kontakte, bitte das Suchfeld  benutzen"</string>
 
