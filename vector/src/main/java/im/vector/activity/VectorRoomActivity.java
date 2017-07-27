@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.icu.text.LocaleDisplayNames;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -1750,8 +1751,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void handleTypingNotification(boolean isTyping) {
         // the typing notifications are disabled ?
         if (PreferencesManager.dontSendTypingNotifs(this)) {
+            Log.d(LOG_TAG, "##handleTypingNotification() : the typing notifs are disabled");
             return;
         }
+
+        Log.d(LOG_TAG, "##handleTypingNotification() : isTyping " + isTyping);
 
         int notificationTimeoutMS = -1;
         if (isTyping) {
@@ -1792,6 +1796,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                 mTypingTimer.cancel();
                                 mTypingTimer = null;
                             }
+
+                            Log.d(LOG_TAG, "##handleTypingNotification() : send end of typing");
+
                             // Post a new typing notification
                             VectorRoomActivity.this.handleTypingNotification(0 != mLastTypingDate);
                         }
