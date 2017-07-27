@@ -131,7 +131,7 @@
 
     <string name="start_new_chat">Начать новый чат</string>
     <string name="start_voice_call">Начать голосовой вызов</string>
-    <string name="start_video_call">Начать видео вызов</string>
+    <string name="start_video_call">Начать видеовызов</string>
 
     <string name="option_send_files">Отправка файлов</string>
     <string name="option_take_photo_video">Снять фото или видео</string>
@@ -194,9 +194,9 @@
     <string name="login_error_unable_register_mail_ownership">Сбой регистрации: ошибка проверки email</string>
     <string name="login_error_invalid_home_server">Введите корректный URL</string>
 
-    <string name="login_error_forbidden">Некорректный логин/пароль</string>
-    <string name="login_error_unknown_token">Указанный токен не распознан</string>
-    <string name="login_error_bad_json">Повреждённый JSON</string>
+    <string name="login_error_forbidden">Неверное имя пользователя или пароль</string>
+    <string name="login_error_unknown_token">Указанный токен доступа не распознан</string>
+    <string name="login_error_bad_json">Поврежденный JSON</string>
     <string name="login_error_not_json">Не JSON</string>
     <string name="login_error_limit_exceeded">Отправлено слишком много запросов</string>
     <string name="login_error_user_in_use">Логин уже используется</string>
@@ -743,14 +743,15 @@
     <string name="settings_select_language">Выберите язык</string>
 
     <string name="settings_start_on_boot">Запускать при загрузке</string>
-    <string name="settings_hide_read_receipts">Скрыть отчёты о прочтении</string>
-    <string name="settings_dont_send_typings_notifs">Не отправлять уведомления о вводе</string>
-    <string name="settings_always_show_timestamps">Всегда показывать время отправки сообщений</string>
-    <string name="settings_disable_markdown">Отключить markdown форматирование</string>
+    <string name="settings_hide_read_receipts">Скрыть отметки о прочтении</string>
+    <string name="settings_dont_send_typings_notifs">Не оповещать, когда я печатаю</string>
+    <string name="settings_always_show_timestamps">Всегда показывать временные метки сообщений</string>
+    <string name="settings_disable_markdown">Отключить Markdown-форматирование</string>
 
     <string name="media_saving_period_3_days">3 дня</string>
     <string name="media_saving_period_1_week">1 неделя</string>
     <string name="media_saving_period_1_month">1 месяц</string>
     <string name="media_saving_period_forever">Навсегда</string>
 
+    <string name="settings_clear_medias_cache">Очистить кэш</string>
     </resources>
