@@ -402,7 +402,7 @@ public class VectorMessagesAdapterHelper {
         IMXStore store = mSession.getDataHandler().getStore();
 
         // sanity check
-        if (null == roomState || !PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(mContext.getString(R.string.settings_show_read_receipts), true)) {
+        if (null == roomState) {
             avatarsListView.setVisibility(View.GONE);
             return;
         }

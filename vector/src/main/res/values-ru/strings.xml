@@ -578,9 +578,6 @@
     <string name="settings_font_size_small">Маленький</string>
     <string name="settings_font_size_medium">Средний</string>
     <string name="settings_font_size_large">Большой</string>
-    <string name="settings_use_markdown">Использовать markdown</string>
-    <string name="settings_show_read_receipts">Показывать уведомления о прочтении</string>
-    <string name="settings_send_typing_notifications">Отправлять уведомления о печатании</string>
     <string name="settings_show_typing_notifications">Показывать уведомления о печатании</string>
     <string name="settings_media">Медиа</string>
     <string name="settings_default_compression">Сжатие по умолчанию</string>

@@ -171,6 +171,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private static final String TAG_FRAGMENT_MATRIX_MESSAGE_LIST = "TAG_FRAGMENT_MATRIX_MESSAGE_LIST";
     private static final String TAG_FRAGMENT_ATTACHMENTS_DIALOG = "TAG_FRAGMENT_ATTACHMENTS_DIALOG";
     private static final String TAG_FRAGMENT_CALL_OPTIONS = "TAG_FRAGMENT_CALL_OPTIONS";
+    private static final String SETTINGS_SHOW_TYPING_NOTIFICATIONS_KEY = "SETTINGS_SHOW_TYPING_NOTIFICATIONS_KEY";
 
     private static final String LOG_TAG = "RoomActivity";
     private static final int TYPING_TIMEOUT_MS = 10000;
@@ -1786,8 +1787,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         int notificationTimeoutMS = -1;
-        boolean typingNotificationsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(getString(R.string.settings_send_typing_notifications), true);
-        if (isTyping && typingNotificationsEnabled) {
+        if (isTyping) {
             // Check whether a typing event has been already reported to server (We wait for the end of the local timeout before considering this new event)
             if (null != mTypingTimer) {
                 // Refresh date of the last observed typing
@@ -1861,9 +1861,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mLastTypingDate = 0;
         }
 
-        if (!typingNotificationsEnabled) {
-            return;
-        }
         final boolean typingStatus = isTyping;
 
         mRoom.sendTypingNotification(typingStatus, notificationTimeoutMS, new SimpleApiCallback<Void>(VectorRoomActivity.this) {
@@ -2370,7 +2367,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void onRoomTypings() {
         mLatestTypingMessage = null;
 
-        if (!PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(getString(R.string.settings_show_typing_notifications), true)) {
+        if (!PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(SETTINGS_SHOW_TYPING_NOTIFICATIONS_KEY, true)) {
             refreshNotificationsArea();
             return;
         }

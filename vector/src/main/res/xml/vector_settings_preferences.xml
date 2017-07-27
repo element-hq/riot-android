@@ -55,6 +55,14 @@
             android:title="@string/settings_interface_language"
             android:dialogTitle="@string/settings_select_language"/>
 
+        <ListPreference
+            android:defaultValue="small"
+            android:entries="@array/font_size_text"
+            android:entryValues="@array/font_size_values"
+            android:key="SETTINGS_FONT_SIZE_KEY"
+            android:summary="%s"
+            android:title="@string/settings_font_size"/>
+
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_hide_read_receipts"
             android:key="SETTINGS_HIDE_READ_RECEIPTS_KEY"/>
@@ -62,6 +70,11 @@
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_dont_send_typings_notifs"
             android:key="SETTINGS_DONT_SEND_TYPING_NOTIF_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_show_typing_notifications"
+            android:key="SETTINGS_SHOW_TYPING_NOTIFICATIONS_KEY"
+            android:defaultValue="true"/>
 
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_always_show_timestamps"
