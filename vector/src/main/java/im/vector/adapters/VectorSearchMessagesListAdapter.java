@@ -114,7 +114,9 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
         // display the sender
         TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
-        senderTextView.setText(VectorMessagesAdapterHelper.getUserDisplayName(event.getSender(), roomState));
+        if (senderTextView != null) {
+            senderTextView.setText(VectorMessagesAdapterHelper.getUserDisplayName(event.getSender(), roomState));
+        }
 
         // display the body
         TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
