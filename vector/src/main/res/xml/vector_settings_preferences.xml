@@ -313,34 +313,6 @@
         android:title="@string/settings_other"
         android:key="SETTINGS_OTHERS_PREFERENCE_KEY" >
 
-        <ListPreference
-            android:defaultValue="small"
-            android:entries="@array/font_size_text"
-            android:entryValues="@array/font_size_values"
-            android:key="SETTINGS_FONT_SIZE_KEY"
-            android:summary="%s"
-            android:title="@string/settings_font_size"/>
-
-        <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_use_markdown"
-            android:key="MARKDOWN_PREFERENCE_KEY"
-            android:defaultValue="true"/>
-
-        <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_show_read_receipts"
-            android:key="@string/settings_show_read_receipts"
-            android:defaultValue="true"/>
-
-        <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_send_typing_notifications"
-            android:key="@string/settings_send_typing_notifications"
-            android:defaultValue="true"/>
-
-        <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_show_typing_notifications"
-            android:key="@string/settings_show_typing_notifications"
-            android:defaultValue="true"/>
-
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/ga_use_settings"
             android:key="SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY"/>
