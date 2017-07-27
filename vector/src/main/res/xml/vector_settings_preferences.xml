@@ -317,7 +317,7 @@
             android:defaultValue="small"
             android:entries="@array/font_size_text"
             android:entryValues="@array/font_size_values"
-            android:key="@string/settings_font_size"
+            android:key="SETTINGS_FONT_SIZE_KEY"
             android:summary="%s"
             android:title="@string/settings_font_size"/>
 

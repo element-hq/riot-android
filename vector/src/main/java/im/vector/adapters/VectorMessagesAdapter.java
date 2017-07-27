@@ -95,6 +95,7 @@ import im.vector.util.PreferencesManager;
 public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     private static final String LOG_TAG = "VMessagesAdapter";
+    private static final String SETTINGS_FONT_SIZE_KEY = "SETTINGS_FONT_SIZE_KEY";
 
     // an event is selected when the user taps on it
     private String mSelectedEventId;
@@ -1119,7 +1120,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     private float getTextAppearance() {
-        String size = PreferenceManager.getDefaultSharedPreferences(mContext).getString(mContext.getString(R.string.settings_font_size), "small");
+        String size = PreferenceManager.getDefaultSharedPreferences(mContext).getString(SETTINGS_FONT_SIZE_KEY, "small");
         switch (size) {
             case "medium":
                 return 18;
