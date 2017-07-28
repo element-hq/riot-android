@@ -168,7 +168,7 @@
     <string name="auth_invalid_token">Ungültiges Token</string>
     <string name="auth_password_dont_match">Passwörter stimmen nicht überein</string>
     <string name="auth_forgot_password">Passwort vergessen?</string>
-    <string name="auth_use_server_options">Besondere Server-Optionen (erweitert)</string>
+    <string name="auth_use_server_options">Benutzerdefinierte Server-Optionen (erweitert)</string>
     <string name="auth_email_validation_message">Bitte überprüfe deinen E-Mail-Posteingang, um die Registrierung abzuschließen</string>
     <string name="auth_threepid_warning_message">Registrierung mit E-Mail und Telefonnummer zusammen wird zurzeit nicht unterstützt, da die zugrundeliegende Schnittstelle noch nicht existiert. Nur die Telefonnummer wird in den Account übernommen.\n\nDu kannst aber deine E-Mail-Adresse in den Einstellungen zu deinem Profil hinzufügen.</string>
     <string name="auth_recaptcha_message">Dieser Home-Server möchte sicherstellen, dass du kein Roboter bist</string>
@@ -199,7 +199,7 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="login_error_bad_json">Fehlerhaftes JSON</string>
     <string name="login_error_not_json">Enthielt kein gültiges JSON</string>
     <string name="login_error_limit_exceeded">Es wurden zu viele Anfragen gesendet</string>
-    <string name="login_error_user_in_use">Dieser Nutzername wird bereits verwendet</string>
+    <string name="login_error_user_in_use">Dieser Benutzername wird bereits verwendet</string>
     <string name="login_error_login_email_not_yet">Der Link in der E-Mail wurde noch nicht geöffnet</string>
 
     <!-- crypto warnings -->
@@ -440,7 +440,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_recents_create_room">Raum erstellen</string>
     <string name="room_recents_join_room">Raum beitreten</string>
     <string name="room_recents_join_room_title">Einem Raum beitreten</string>
-    <string name="room_recents_join_room_prompt">Gebe eine Raum-ID oder einen Raum-Alias ein</string>
+    <string name="room_recents_join_room_prompt">Raum-ID oder Raum-Alias eingeben</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Verzeichnis durchsuchen</string>
@@ -475,7 +475,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="settings_add_email_address">E-Mail-Adresse hinzufügen</string>
     <string name="settings_phone_number">Telefonnummer</string>
     <string name="settings_add_phone_number">Telefonnummer hinzufügen</string>
-    <string name="settings_summary_app_info_link">App-Info-Anzeige vom System</string>
+    <string name="settings_summary_app_info_link">App-Info-Anzeige von Android</string>
     <string name="settings_title_app_info_link">App-Info</string>
 
     <string name="settings_enable_all_notif">Benachrichtigungen für diesen Account aktivieren</string>
@@ -619,7 +619,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_settings_labs_end_to_end_is_active">Ende-zu-Ende-Verschlüsselung ist aktiv</string>
     <string name="room_settings_labs_end_to_end_warnings">Du musst dich abmelden, um die Verschlüsselung aktivieren zu können.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Nur für verifizierte Geräte verschlüsseln</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Von diesem Gerät keine verschlüsselten Nachrichten an unverifizierte Geräte in diesem Raum senden.</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Niemals verschlüsselte Nachrichten an unverifizierte Geräte in diesem Raum von diesem Gerät senden.</string>
 
     <!-- Raum settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Dieser Raum hat keine lokalen Adressen</string>
@@ -653,7 +653,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="directory_title">Verzeichnis</string>
 
     <!-- GA use -->
-    <string name="ga_use_alert_message">Stimmst du zu, uns zu helfen, um das Anwendungsverhalten zu verbessern und uns Absturzberichte zu senden?</string>
+    <string name="ga_use_alert_message">Stimmst du zu, uns dabei zu helfen, das Anwendungsverhalten der App zu verbessern und uns Absturzberichte zu übermitteln?</string>
     <string name="ga_use_settings">Absturzberichte automatisch übermitteln</string>
     <string name="ga_use_disable_alert_message">Du musst die Anwendung neustarten, um Absturzberichte auszuschalten.</string>
 
@@ -665,7 +665,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_information_title">Ende-zu-Ende-Verschlüsselungs-Informationen</string>
 
     <string name="encryption_information_device_info">Ereignisinformation</string>
-    <string name="encryption_information_user_id">Nutzer-ID</string>
+    <string name="encryption_information_user_id">Benutzer-ID</string>
     <string name="encryption_information_curve25519_identity_key">Curve25519-Identitätsschlüssel</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Beanspruchter Ed25519-Fingerabdruckschlüssel</string>
     <string name="encryption_information_algorithm">Algorithmus</string>
@@ -721,7 +721,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Geräte, die noch nicht verifiziert wurden.\nEs gibt also keine Garantie, dass diese Geräte wirklich zu dem angegebenen Nutzer gehören.\nWir empfehlen, den Verifizierungsprozess für jedes Gerät zu durchlaufen bevor du fortfährst. Du kannst die Nachricht aber auch ohne Verifizierung senden, wenn du das vorziehst.\n\nUnbekannte Geräte:</string>
 
     <!-- directory activity  -->
-    <string name="select_room_directory">Wähle Raum-Verzeichnis</string>
+    <string name="select_room_directory">Raum-Verzeichnis auswählen</string>
     <string name="directory_server_fail_to_retrieve_server">Der Server kann nicht verfügbar oder überlastet sein</string>
     <string name="directory_server_type_homeserver">Gebe einen Heimserver ein um seine öffentlichen Räume aufzulisten</string>
     <string name="directory_server_placeholder">Home-Server-URL</string>
@@ -735,18 +735,18 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <!-- historical -->
     <string name="historical_placeholder">Suche nach historischen</string>
 
-<string name="settings_user_interface">Nutzer-Schnittstelle</string>
+<string name="settings_user_interface">Benutzer-Oberfläche</string>
     <string name="settings_interface_language">Oberflächen-Sprache</string>
     <string name="settings_select_language">Wähle eine Sprache</string>
 
     <string name="settings_start_on_boot">Starte beim Systemstart</string>
-    <string name="settings_clear_medias_cache">Leere Medien-Cache</string>
+    <string name="settings_clear_medias_cache">Medien-Cache leeren</string>
     <string name="settings_keep_media">Behalten Medien</string>
 
-    <string name="settings_hide_read_receipts">Verberge Lesebestätigungen</string>
+    <string name="settings_hide_read_receipts">Lesebestätigungen verbergen</string>
     <string name="settings_dont_send_typings_notifs">Sende nicht, dass ich tippe</string>
-    <string name="settings_always_show_timestamps">Zeitstempel immer anzeigen</string>
-    <string name="settings_disable_markdown">Markdown-Formatierung deaktivern</string>
+    <string name="settings_always_show_timestamps">Nachrichten-Zeitstempel immer anzeigen</string>
+    <string name="settings_disable_markdown">Markdown-Formatierung deaktivieren</string>
 
     <string name="media_saving_period_3_days">3 Tage</string>
     <string name="media_saving_period_1_week">1 Woche</string>
