@@ -749,7 +749,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="settings_clear_medias_cache">Limpiar la cache de audiovisuales</string>
     <string name="settings_keep_media">Mantener los audiovisuales</string>
 
-    <string name="settings_hide_read_receipts">Ocultar la lectura de los receptores</string>
+    <string name="settings_hide_read_receipts">Ocultar los marcadores de lectura</string>
     <string name="settings_dont_send_typings_notifs">No enviar notificaciones de estar escribiendo</string>
     <string name="settings_always_show_timestamps">Siempre mostrar la marca de tiempo de los mensajes</string>
     <string name="settings_disable_markdown">Deshabilitar el formateo en markdown</string>
