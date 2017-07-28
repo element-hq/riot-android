@@ -60,6 +60,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
                 R.layout.adapter_item_vector_search_message_file,
                 R.layout.adapter_item_vector_search_message_image_video,
                 -1,
+                R.layout.adapter_item_vector_search_message_emoji,
                 mediasCache);
 
         setNotifyOnChange(true);

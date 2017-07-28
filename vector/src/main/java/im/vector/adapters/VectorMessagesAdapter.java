@@ -78,6 +78,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -134,7 +135,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_MERGE = 6;
     static final int ROW_TYPE_HIDDEN = 7;
     static final int ROW_TYPE_ROOM_MEMBER = 8;
-    static final int NUM_ROW_TYPES = 9;
+    static final int ROW_TYPE_EMOJI = 9;
+    static final int NUM_ROW_TYPES = 10;
 
     protected final Context mContext;
     private final HashMap<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
@@ -189,6 +191,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private boolean mAlwaysShowTimeStamps;
     private boolean mHideReadReceipts;
 
+    private static final Pattern mEmojiPattern = Pattern.compile("(?:[\uD83C\uDF00-\uD83D\uDDFF]|[\uD83E\uDD00-\uD83E\uDDFF]|[\uD83D\uDE00-\uD83D\uDE4F]|[\uD83D\uDE80-\uD83D\uDEFF]|[\u2600-\u26FF]\uFE0F?|[\u2700-\u27BF]\uFE0F?|\u24C2\uFE0F?|[\uD83C\uDDE6-\uD83C\uDDFF]{1,2}|[\uD83C\uDD70\uD83C\uDD71\uD83C\uDD7E\uD83C\uDD7F\uD83C\uDD8E\uD83C\uDD91-\uD83C\uDD9A]\uFE0F?|[\u0023\u002A\u0030-\u0039]\uFE0F?\u20E3|[\u2194-\u2199\u21A9-\u21AA]\uFE0F?|[\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55]\uFE0F?|[\u2934\u2935]\uFE0F?|[\u3030\u303D]\uFE0F?|[\u3297\u3299]\uFE0F?|[\uD83C\uDE01\uD83C\uDE02\uD83C\uDE1A\uD83C\uDE2F\uD83C\uDE32-\uD83C\uDE3A\uD83C\uDE50\uD83C\uDE51]\uFE0F?|[\u203C\u2049]\uFE0F?|[\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE]\uFE0F?|[\u00A9\u00AE]\uFE0F?|[\u2122\u2139]\uFE0F?|\uD83C\uDC04\uFE0F?|\uD83C\uDCCF\uFE0F?|[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?)");
+
     /**
      * Creates a messages adapter with the default layouts.
      */
@@ -202,6 +206,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_file,
                 R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_message_merge,
+                R.layout.adapter_item_vector_message_emoji,
                 mediasCache);
     }
 
@@ -229,6 +234,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                                  int fileResLayoutId,
                                  int videoResLayoutId,
                                  int mergeResLayoutId,
+                                 int emojiResLayoutId,
                                  MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
@@ -241,6 +247,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_VIDEO, videoResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_MERGE, mergeResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, R.layout.adapter_item_vector_hidden_message);
+        mRowTypeToLayoutId.put(ROW_TYPE_EMOJI, emojiResLayoutId);
 
         mMediasCache = mediasCache;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -648,8 +655,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         int viewType = getItemViewType(position);
 
         switch (viewType) {
+            case ROW_TYPE_EMOJI:
             case ROW_TYPE_TEXT:
-                inflatedView = getTextView(position, convertView, parent);
+                inflatedView = getTextView(viewType, position, convertView, parent);
                 break;
             case ROW_TYPE_IMAGE:
             case ROW_TYPE_VIDEO:
@@ -877,11 +885,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         int viewType;
 
         if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
-
-            String msgType = JsonUtils.getMessageMsgType(event.getContent());
+            Message message = JsonUtils.toMessage(event.getContent());
+            String msgType = message.msgtype;
 
             if (Message.MSGTYPE_TEXT.equals(msgType)) {
-                viewType = ROW_TYPE_TEXT;
+                if ((null != message.body) && (message.body.length() <= 4) && mEmojiPattern.matcher(message.body).matches()) {
+                    viewType = ROW_TYPE_EMOJI;
+                } else {
+                    viewType = ROW_TYPE_TEXT;
+                }
             } else if (Message.MSGTYPE_IMAGE.equals(msgType)) {
                 viewType = ROW_TYPE_IMAGE;
             } else if (Message.MSGTYPE_EMOTE.equals(msgType)) {
@@ -1039,14 +1051,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * Text message management
      *
+     * @param viewType    the view type
      * @param position    the message position
      * @param convertView the text message view
      * @param parent      the parent view
      * @return the updated text view.
      */
-    private View getTextView(final int position, View convertView, ViewGroup parent) {
+    private View getTextView(final int viewType, final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_TEXT), parent, false);
+            convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(viewType), parent, false);
         }
 
         MessageRow row = getItem(position);
