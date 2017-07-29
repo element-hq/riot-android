@@ -17,9 +17,9 @@
     <string name="cancel">Отмена</string>
     <string name="save">Сохранить</string>
     <string name="leave">Покинуть</string>
-    <string name="send">Отослать</string>
+    <string name="send">Отправить</string>
     <string name="copy">Копировать</string>
-    <string name="resend">Повторить</string>
+    <string name="resend">Повторить отправку</string>
     <string name="redact">Редактировать</string>
     <string name="quote">Цитата</string>
     <string name="share">Поделиться</string>
