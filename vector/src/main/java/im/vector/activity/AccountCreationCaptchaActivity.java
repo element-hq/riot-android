@@ -79,6 +79,7 @@ public class AccountCreationCaptchaActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
 
+        // required to have the right translated title
         setTitle(R.string.create_account);
         setContentView(R.layout.activity_vector_registration_captcha);
 
