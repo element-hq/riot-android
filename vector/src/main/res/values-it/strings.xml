@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <!-- use to retrieve the supported languages list -->
@@ -358,8 +358,8 @@
     <!--  Chat -->
     <string name="room_menu_search">Cerca</string>
     <string name="room_one_user_is_typing">%s sta scrivendo…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s stanno scrivendo…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; altri stanno scrivendo…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s stanno scrivendo…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; altri stanno scrivendo…</string>
     <string name="room_message_placeholder_encrypted">Invia un messaggio criptato…</string>
     <string name="room_message_placeholder_not_encrypted">Invia un messaggio (non criptato)…</string>
     <string name="room_offline_notification">La connessione al server è stata persa.</string>

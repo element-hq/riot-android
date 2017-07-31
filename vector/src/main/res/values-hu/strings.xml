@@ -74,6 +74,7 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
 
     <string name="direct_chats_header">Beszélgetések</string>
     <string name="local_address_book_header">Helyi címjegyzék</string>
+    <string name="known_contacts_header">Ismert kapcsolatok</string>
     <string name="matrix_only_filter">Csak Matrix kapcsolatok</string>
     <string name="no_conversation_placeholder">Nincsenek beszélgetések</string>
     <string name="no_local_contact_placeholder">Nincsenek helyi kapcsolatok</string>
@@ -234,7 +235,7 @@ Elnézést a kellemetlenségért.</string>
     <string name="call_in_progress">Hívás folyamatban</string>
 
     <string name="call_error_user_not_responding">A hívott félnek nem sikerült felvennie.</string>
-    <string name="call_error_ice_failed">A Media csatlakozás nem sikerült</string>
+    <string name="call_error_ice_failed">A média csatlakozás nem sikerült</string>
     <string name="call_error_camera_init_failed">A kamerát nem lehet inicializálni</string>
     <string name="call_error_answered_elsewhere">hívás felvéve máshol</string>
     <string name="call_error_peer_hangup_elsewhere">hívás letéve máshol</string>
@@ -706,4 +707,18 @@ Ismeretlen eszközök:</string>
     <string name="account_email_not_found_error">E-mail küldése sikertelen: Ez az e-mail cím nem található</string>
     <string name="account_phone_number_already_used_error">Ez a telefonszám már használatban van</string>
 
+    <string name="settings_start_on_boot">Indítás rendszerinduláskor</string>
+    <string name="settings_clear_medias_cache">Média gyorsítótár törlése</string>
+    <string name="settings_keep_media">Média megtartása</string>
+
+    <string name="settings_dont_send_typings_notifs">Ne küldjön írás értesítést</string>
+    <string name="settings_always_show_timestamps">Üzenet időbélyeg folyamatos megjelenítése</string>
+    <string name="settings_disable_markdown">Markdown formázás kikapcsolása</string>
+
+    <string name="media_saving_period_3_days">3 nap</string>
+    <string name="media_saving_period_1_week">1 hét</string>
+    <string name="media_saving_period_1_month">1 hónap</string>
+    <string name="media_saving_period_forever">Örökké</string>
+
+    <string name="settings_hide_read_receipts">Olvasási visszajelzés elrejtése</string>
     </resources>

@@ -19,7 +19,7 @@
     <string name="leave">Покинуть</string>
     <string name="send">Отправить</string>
     <string name="copy">Копировать</string>
-    <string name="resend">Повторить</string>
+    <string name="resend">Повторить отправку</string>
     <string name="redact">Редактировать</string>
     <string name="quote">Цитата</string>
     <string name="share">Поделиться</string>
@@ -83,6 +83,7 @@
     <!-- People fragment -->
     <string name="direct_chats_header">Диалоги</string>
     <string name="local_address_book_header">Локальные контакты</string>
+    <string name="known_contacts_header">Известные контакты</string>
     <string name="matrix_only_filter">Только Matrix контакты</string>
     <string name="no_conversation_placeholder">Нет диалогов</string>
     <string name="no_local_contact_placeholder">No local contacts</string>
@@ -130,7 +131,7 @@
 
     <string name="start_new_chat">Начать новый чат</string>
     <string name="start_voice_call">Начать голосовой вызов</string>
-    <string name="start_video_call">Начать видео вызов</string>
+    <string name="start_video_call">Начать видеовызов</string>
 
     <string name="option_send_files">Отправка файлов</string>
     <string name="option_take_photo_video">Снять фото или видео</string>
@@ -193,9 +194,9 @@
     <string name="login_error_unable_register_mail_ownership">Сбой регистрации: ошибка проверки email</string>
     <string name="login_error_invalid_home_server">Введите корректный URL</string>
 
-    <string name="login_error_forbidden">Некорректный логин/пароль</string>
-    <string name="login_error_unknown_token">Указанный токен не распознан</string>
-    <string name="login_error_bad_json">Повреждённый JSON</string>
+    <string name="login_error_forbidden">Неверное имя пользователя или пароль</string>
+    <string name="login_error_unknown_token">Указанный токен доступа не распознан</string>
+    <string name="login_error_bad_json">Поврежденный JSON</string>
     <string name="login_error_not_json">Не JSON</string>
     <string name="login_error_limit_exceeded">Отправлено слишком много запросов</string>
     <string name="login_error_user_in_use">Логин уже используется</string>
@@ -355,7 +356,7 @@
     <string name="room_participants_invite_search_another_user">ID пользователя, имя или email</string>
     <string name="room_participants_action_mention">Упомянуть</string>
     <string name="room_participants_action_devices_list">Отобразить список устройств</string>
-    <string name="room_participants_power_level_prompt">Вы не сможете отменить эту операцию.\nВы уверены, что хотите продолжить?</string>
+    <string name="room_participants_power_level_prompt">Вы не сможете отменить это действие, поскольку пользователь получит такой же уровень доступа, как и у вас. Вы уверены?</string>
     
     <string name="room_participants_invite_prompt_msg">"Вы уверены что хотите пригласить %s в этот чат?"</string>
     
@@ -740,4 +741,16 @@
     <string name="settings_interface_language">Язык интерфейса</string>
     <string name="settings_select_language">Выберите язык</string>
 
+    <string name="settings_start_on_boot">Запускать при загрузке</string>
+    <string name="settings_hide_read_receipts">Скрыть отметки о прочтении</string>
+    <string name="settings_dont_send_typings_notifs">Не оповещать, когда я печатаю</string>
+    <string name="settings_always_show_timestamps">Всегда показывать временные метки сообщений</string>
+    <string name="settings_disable_markdown">Отключить Markdown-форматирование</string>
+
+    <string name="media_saving_period_3_days">3 дня</string>
+    <string name="media_saving_period_1_week">1 неделя</string>
+    <string name="media_saving_period_1_month">1 месяц</string>
+    <string name="media_saving_period_forever">Навсегда</string>
+
+    <string name="settings_clear_medias_cache">Очистить кэш</string>
     </resources>
