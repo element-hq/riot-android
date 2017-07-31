@@ -223,6 +223,15 @@ public class VectorApp extends Application {
                 Log.d(LOG_TAG, "onActivityStarted " + activity);
             }
 
+            /**
+             * Compute the locale status value
+             * @param activity the activity
+             * @return the local status value
+             */
+            private String getActivityLocaleStatus(Activity activity) {
+                return getApplicationLocale(activity).toString() + "_" + getFontScale(activity);
+            }
+
             @Override
             public void onActivityResumed(final Activity activity) {
                 Log.d(LOG_TAG, "onActivityResumed " + activity);
@@ -232,10 +241,9 @@ public class VectorApp extends Application {
 
                 if (mLocalesByActivity.containsKey(activityKey)) {
                     String prevActivityLocale = mLocalesByActivity.get(activityKey);
-                    String curLocale = getApplicationLocale(activity).toString();
 
-                    if (!TextUtils.equals(prevActivityLocale, curLocale)) {
-                        Log.d(LOG_TAG, "## onActivityResumed() : restart the activity " + activity + " because of the locale update from " + prevActivityLocale + " to " + curLocale);
+                    if (!TextUtils.equals(prevActivityLocale, getActivityLocaleStatus(activity))) {
+                        Log.d(LOG_TAG, "## onActivityResumed() : restart the activity " + activity + " because of the locale update from " + prevActivityLocale + " to " + getActivityLocaleStatus(activity));
                         activity.startActivity(activity.getIntent());
                         activity.finish();
                         return;
@@ -243,7 +251,6 @@ public class VectorApp extends Application {
                 }
 
                 // it should never happen as there is a broadcast receiver (mLanguageReceiver)
-                // but it happens
                 if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale(activity).toString())) {
                     Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale(activity).toString());
                     updateApplicationLocale(activity, getApplicationLocale(activity), getFontScale(activity));
@@ -255,7 +262,7 @@ public class VectorApp extends Application {
             @Override
             public void onActivityPaused(Activity activity) {
                 Log.d(LOG_TAG, "onActivityPaused " + activity);
-                mLocalesByActivity.put(activity.toString(), getApplicationLocale(activity).toString());
+                mLocalesByActivity.put(activity.toString(), getActivityLocaleStatus(activity));
                 setCurrentActivity(null);
             }
 
