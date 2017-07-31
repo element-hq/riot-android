@@ -96,6 +96,8 @@ public class PreferencesManager {
 
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
 
+    public static final String SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY";
+
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;

@@ -48,6 +48,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -1934,6 +1935,94 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             public boolean onPreferenceClick(Preference preference) {
                 startActivityForResult(LanguagePickerActivity.getIntent(getActivity()), REQUEST_LOCALE);
                 return true;
+            }
+        });
+
+        VectorCustomActionEditTextPreference textSizePreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY);
+        textSizePreference.setSummary(VectorApp.getFontScaleDescription(getActivity()));
+
+        textSizePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                displayTextSizeSelection(getActivity());
+                return true;
+            }
+        });
+    }
+
+    private void displayTextSizeSelection(final Activity activity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        LayoutInflater inflater = activity.getLayoutInflater();
+
+        View layout = inflater.inflate(R.layout.text_size_selection, null);
+
+        String scaleText = VectorApp.getFontScale(activity);
+
+        CheckedTextView smallTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_small_text_view);
+        smallTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_SMALL, scaleText));
+
+        CheckedTextView normalTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_normal_text_view);
+        normalTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_NORMAL, scaleText));
+
+        CheckedTextView largeTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_large_text_view);
+        largeTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_LARGE, scaleText));
+
+        CheckedTextView largestTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_largest_text_view);
+        largestTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_LARGEST, scaleText));
+
+        builder.setTitle(R.string.font_size);
+        builder.setView(layout);
+
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        smallTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_SMALL);
+                activity.startActivity(activity.getIntent());
+                activity.finish();
+            }
+        });
+
+        normalTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_NORMAL);
+                activity.startActivity(activity.getIntent());
+                activity.finish();
+            }
+        });
+
+        largeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                VectorApp.updateApplicationLocale(getActivity(), VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_LARGE);
+                activity.startActivity(activity.getIntent());
+                activity.finish();
+            }
+        });
+
+        largestTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                VectorApp.updateApplicationLocale(getActivity(), VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_LARGEST);
+                activity.startActivity(activity.getIntent());
+                activity.finish();
             }
         });
     }

@@ -34,6 +34,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -150,7 +151,7 @@ public class VectorApp extends Application {
         public void onReceive(Context context, Intent intent) {
             if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale(context).toString())) {
                 Log.d(LOG_TAG, "## onReceive() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale(context).toString());
-                updateApplicationLocale(context, getApplicationLocale(context));
+                updateApplicationLocale(context, getApplicationLocale(context), getFontScale(context));
 
                 if (null != getCurrentActivity()) {
                     getCurrentActivity().startActivity(getCurrentActivity().getIntent());
@@ -245,7 +246,7 @@ public class VectorApp extends Application {
                 // but it happens
                 if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale(activity).toString())) {
                     Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale(activity).toString());
-                    updateApplicationLocale(activity, getApplicationLocale(activity));
+                    updateApplicationLocale(activity, getApplicationLocale(activity), getFontScale(activity));
                     activity.startActivity(activity.getIntent());
                     activity.finish();
                 }
@@ -779,6 +780,17 @@ public class VectorApp extends Application {
     private static final String APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY";
     private static final String APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY";
     private static final String APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY";
+    private static final String APPLICATION_FONT_SCALE_KEY = "APPLICATION_FONT_SCALE_KEY";
+
+    public static final String FONT_SCALE_SMALL = "FONT_SCALE_SMALL";
+    private static final float FONT_SCALE_SMALL_VALUE = 0.85f;
+    public static final String FONT_SCALE_NORMAL = "FONT_SCALE_NORMAL";
+    private static final float FONT_SCALE_NORMAL_VALUE = 1.00f;
+    public static final String FONT_SCALE_LARGE = "FONT_SCALE_LARGE";
+    private static final float FONT_SCALE_LARGE_VALUE = 1.15f;
+    public static final String FONT_SCALE_LARGEST = "FONT_SCALE_LARGEST";
+    private static final float FONT_SCALE_LARGEST_VALUE = 1.30f;
+
 
     private static final Locale mApplicationDefaultLanguage = new Locale("en", "UK");
 
@@ -789,10 +801,12 @@ public class VectorApp extends Application {
      */
     private static void initApplicationLocale(Context context) {
         Locale locale = getApplicationLocale(context);
+        float fontScale = getFontScaleValue(context);
 
         Locale.setDefault(locale);
-        Configuration config = new Configuration();
+        Configuration config = new Configuration(context.getResources().getConfiguration());
         config.locale = locale;
+        config.fontScale = fontScale;
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
 
         // init the known locales in background
@@ -804,6 +818,76 @@ public class VectorApp extends Application {
             }
         };
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    /**
+     * Get the font scale
+     * @param context the context
+     * @return the font scale
+     */
+    public static String getFontScale(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String scale;
+
+        if (!preferences.contains(APPLICATION_FONT_SCALE_KEY)) {
+            float fontScale = context.getResources().getConfiguration().fontScale;
+
+            if (fontScale == FONT_SCALE_SMALL_VALUE) {
+                scale = FONT_SCALE_SMALL;
+            } else if (fontScale == FONT_SCALE_LARGE_VALUE) {
+                scale = FONT_SCALE_LARGE;
+            } else if (fontScale == FONT_SCALE_LARGEST_VALUE) {
+                scale = FONT_SCALE_LARGEST;
+            } else {
+                scale = FONT_SCALE_NORMAL;
+            }
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(APPLICATION_FONT_SCALE_KEY, scale);
+            editor.commit();
+        } else {
+            scale = preferences.getString(APPLICATION_FONT_SCALE_KEY, FONT_SCALE_NORMAL);
+        }
+
+        return scale;
+    }
+
+    /**
+     * Provides the font scale value
+     * @param context the context
+     * @return the font scale
+     */
+    private static float getFontScaleValue(Context context) {
+        String fontScale = getFontScale(context);
+
+        if (TextUtils.equals(fontScale, FONT_SCALE_SMALL)) {
+            return FONT_SCALE_SMALL_VALUE;
+        } else if (TextUtils.equals(fontScale, FONT_SCALE_LARGE)) {
+            return FONT_SCALE_LARGE_VALUE;
+        } else if (TextUtils.equals(fontScale, FONT_SCALE_LARGEST)) {
+            return FONT_SCALE_LARGEST_VALUE;
+        }
+
+        return FONT_SCALE_NORMAL_VALUE;
+    }
+
+    /**
+     * Provides the font scale description
+     * @param context the context
+     * @return the font description
+     */
+    public static String getFontScaleDescription(Context context) {
+        String fontScale = getFontScale(context);
+
+        if (TextUtils.equals(fontScale, FONT_SCALE_SMALL)) {
+            return context.getString(R.string.small);
+        } else if (TextUtils.equals(fontScale, FONT_SCALE_LARGE)) {
+            return context.getString(R.string.large);
+        } else if (TextUtils.equals(fontScale, FONT_SCALE_LARGEST)) {
+            return context.getString(R.string.largest);
+        }
+
+        return context.getString(R.string.normal);
     }
 
     /**
@@ -890,18 +974,36 @@ public class VectorApp extends Application {
         editor.commit();
     }
 
+
+    /**
+     * Save the new text scale
+     *
+     * @param context the context
+     * @param textScale the text scale
+     */
+    private static void saveTextScale(Context context, String textScale) {
+        if (!TextUtils.isEmpty(textScale)) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(APPLICATION_FONT_SCALE_KEY, textScale);
+            editor.commit();
+        }
+    }
+
     /**
      * Update the application locale.
      *
      * @param context context
      * @param locale  locale
      */
-    public static void updateApplicationLocale(Context context, Locale locale) {
+    public static void updateApplicationLocale(Context context, Locale locale, String textSize) {
         saveApplicationLocale(context, locale);
+        saveTextScale(context, textSize);
         Locale.setDefault(locale);
 
-        Configuration config = new Configuration();
+        Configuration config = new Configuration(context.getResources().getConfiguration());
         config.locale = locale;
+        config.fontScale = getFontScaleValue(context);
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
 
         PhoneNumberUtils.onLocaleUpdate();

@@ -739,4 +739,10 @@
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
 
+    <!-- text size selection -->
+    <string name="font_size">Font size</string>
+    <string name="small">Small</string>
+    <string name="normal">Normal</string>
+    <string name="large">Large</string>
+    <string name="largest">Largest</string>
 </resources>

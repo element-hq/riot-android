@@ -55,6 +55,11 @@
             android:title="@string/settings_interface_language"
             android:dialogTitle="@string/settings_select_language"/>
 
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
+            android:title="@string/font_size"
+            android:dialogTitle="@string/font_size"/>
+
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_hide_read_receipts"
             android:key="SETTINGS_HIDE_READ_RECEIPTS_KEY"/>
