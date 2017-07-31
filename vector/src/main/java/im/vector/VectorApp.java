@@ -146,6 +146,11 @@ public class VectorApp extends Application {
      */
     public static File mLogsDirectoryFile = null;
 
+    /**
+     * The last time that removeMediasBefore has been called.
+     */
+    private long mLastMediasCheck = 0;
+
     private BroadcastReceiver mLanguageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -352,7 +357,12 @@ public class VectorApp extends Application {
                 session.setIsOnline(false);
                 session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
                 session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
-                session.removeMediasBefore(VectorApp.this, PreferencesManager.getMinMediasLastAccessTime(getApplicationContext()));
+
+                // remove older medias
+                if ((System.currentTimeMillis() - mLastMediasCheck) < (24 * 60 * 60 * 1000)) {
+                    mLastMediasCheck = System.currentTimeMillis();
+                    session.removeMediasBefore(VectorApp.this, PreferencesManager.getMinMediasLastAccessTime(getApplicationContext()));
+                }
 
                 if (session.getDataHandler().areLeftRoomsSynced()) {
                     session.getDataHandler().releaseLeftRooms();
