@@ -6,4 +6,10 @@
     <include
         layout="@layout/vector_message_header"
         android:visibility="gone" />
+
+    <!-- the adapter cannot render empty cell so create a really thin one -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.01dp"
+        android:background="@android:color/transparent" />
 </FrameLayout>
