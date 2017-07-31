@@ -1902,7 +1902,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param selectedTab the selected tab index.
      */
     private void launchRoomDetails(int selectedTab) {
-        if ((null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
+        if ((null != mSession) && (null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
             enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
             // pop to the home activity
@@ -1918,11 +1918,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Launch the invite people activity
      */
     private void launchInvitePeople() {
-        Intent intent = new Intent(this, VectorRoomInviteMembersActivity.class);
-        intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-        intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-        intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG, true);
-        startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
+        if ((null != mSession) && (null != mRoom)) {
+            Intent intent = new Intent(this, VectorRoomInviteMembersActivity.class);
+            intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG, true);
+            startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
+        }
     }
 
     /**
@@ -2622,7 +2624,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != mActionBarHeaderActiveMembersLayout) {
             // refresh only if the action bar is hidden
             if (mActionBarCustomTitle.getVisibility() == View.GONE) {
-
                 if ((null != mRoom) || (null != sRoomPreviewData)) {
                     // update the members status: "active members"/"members"
                     int joinedMembersCount = 0;
@@ -2676,8 +2677,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     } else {
                         mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
                     }
+                } else {
+                    mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
                 }
-
             } else {
                 mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
             }
