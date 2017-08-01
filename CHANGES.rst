@@ -1,3 +1,23 @@
+Changes in Riot 0.7.00 (2017-08-01)
+===================================================
+
+Features:
+
+ * Add member events merge
+ * Add new UI settings (hide/show some UI items, change the text size)
+ * Add a beta data save mode
+ * Add a medias timelife i.e the medias are kept in storage for a specfied period 
+ 
+Improvements:
+
+ * Add more languages
+ * Reduce the storage use
+  
+Bugfixes:
+
+ * Fix many crashes reported by rageshake or GA.
+ * #1455 : Click on a matrix id does not open the member details activity if it is not a known use
+
 Changes in Riot 0.6.14 (2017-07-25)
 ===================================================
 
