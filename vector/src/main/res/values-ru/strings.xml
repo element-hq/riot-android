@@ -83,7 +83,6 @@
     <!-- People fragment -->
     <string name="direct_chats_header">Диалоги</string>
     <string name="local_address_book_header">Локальные контакты</string>
-    <string name="known_contacts_header">Известные контакты</string>
     <string name="matrix_only_filter">Только Matrix контакты</string>
     <string name="no_conversation_placeholder">Нет диалогов</string>
     <string name="no_local_contact_placeholder">No local contacts</string>
