@@ -1,7 +1,7 @@
 <resources>
 
     <!-- no action bar window -->
-    <style name="AppTheme.NoActionBar" parent="@style/Theme.Vector.Light">
+    <style name="AppTheme.NoActionBarBase" parent="@style/Theme.Vector.Light">
 
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
@@ -22,7 +22,11 @@
         <item name="android:windowBackground">?attr/vector_activity_background_color</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Dark" parent="@style/Theme.Vector.Dark">
+    <style name="AppTheme.NoActionBar" parent="@style/AppTheme.NoActionBarBase">
+    </style>
+
+
+    <style name="AppTheme.NoActionBarBase.Dark" parent="@style/Theme.Vector.Dark">
 
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
@@ -42,6 +46,10 @@
         <!-- activities background -->
         <item name="android:windowBackground">?attr/vector_activity_background_color</item>
     </style>
+
+    <style name="AppTheme.NoActionBar.Dark" parent="@style/AppTheme.NoActionBarBase.Dark">
+    </style>
+
 
     <style name="AppTheme.NoActionBar.Swipe" parent="@style/AppTheme.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
@@ -230,7 +238,6 @@
         <!-- switch color -->
         <item name="colorControlActivated">?attr/vector_green_color</item>
     </style>
-
 
     <!-- tabbar background -->
     <style name="Vector.TabView" parent="@style/Widget.AppCompat.ActionBar.TabView">
