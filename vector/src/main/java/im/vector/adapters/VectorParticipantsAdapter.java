@@ -36,8 +36,11 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.Search.SearchUsersResponse;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
@@ -45,8 +48,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -67,6 +72,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private static final String KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP = "KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP";
     private static final String KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP = "KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP";
     private static final String KEY_FILTER_MATRIX_USERS_ONLY = "KEY_FILTER_MATRIX_USERS_ONLY";
+
+    private static final int MAX_USERS_SEARCH_COUNT = 100;
 
     // search events listener
     public interface OnParticipantsSearchListener {
@@ -93,7 +100,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     // participants list
     private List<ParticipantAdapterItem> mUnusedParticipants = null;
     private List<ParticipantAdapterItem> mContactsParticipants = null;
-    private List<String> mUsedMemberUserIds = null;
+    private Set<String> mUsedMemberUserIds = null;
     private List<String> mDisplayNamesList = null;
     private String mPattern = "";
 
@@ -112,13 +119,19 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private final List<List<ParticipantAdapterItem>> mParticipantsListsList = new ArrayList<>();
     private int mFirstEntryPosition = -1;
     private int mLocalContactsSectionPosition = -1;
-    private int mRoomContactsSectionPosition = -1;
+    private int mKnownContactsSectionPosition = -1;
 
     // flag specifying if we show all peoples or only ones having a matrix user id
     private boolean mShowMatrixUserOnly = false;
 
     // Set to true when we need to display the "+" icon
     private final boolean mWithAddIcon;
+
+    // tell if the known contacts list is limited
+    private boolean mKnownContactsLimited;
+
+    // tell if the contacts search has been done offline
+    private boolean mIsOfflineContactsSearch;
 
     /**
      * Create a room member adapter.
@@ -153,7 +166,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         mParticipantsListsList.clear();
         mFirstEntryPosition = -1;
         mLocalContactsSectionPosition = -1;
-        mRoomContactsSectionPosition = -1;
+        mKnownContactsSectionPosition = -1;
         mPattern = null;
 
         notifyDataSetChanged();
@@ -250,7 +263,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         IMXStore store = mSession.getDataHandler().getStore();
 
         // Used members (ids) which should be removed from the final list
-        mUsedMemberUserIds = new ArrayList<>();
+        mUsedMemberUserIds = new HashSet<>();
 
         // Add members of the given room to the used members list (when inviting to existing room)
         if ((null != mRoomId) && (null != store)) {
@@ -402,7 +415,67 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             mLocalContactsSnapshotSession = ContactsManager.getInstance().getLocalContactsSnapshotSession();
         }
 
+        if (!TextUtils.isEmpty(mPattern)) {
+            fillUsedMembersList();
+
+            final String fPattern = mPattern;
+
+            mSession.searchUsers(mPattern, MAX_USERS_SEARCH_COUNT, mUsedMemberUserIds, new ApiCallback<SearchUsersResponse>() {
+                @Override
+                public void onSuccess(SearchUsersResponse searchUsersResponse) {
+                    if (TextUtils.equals(fPattern, mPattern)) {
+                        List<ParticipantAdapterItem> participantItemList = new ArrayList<>();
+
+                        if (null != searchUsersResponse.results) {
+                            for (User user : searchUsersResponse.results) {
+                                participantItemList.add(new ParticipantAdapterItem(user));
+                            }
+                        }
+
+                        mIsOfflineContactsSearch = false;
+                        mKnownContactsLimited = (null != searchUsersResponse.limited) ? searchUsersResponse.limited : false;
+                        onKnownContactsSearchEnd(participantItemList, theFirstEntry, searchListener);
+                    }
+                }
+
+                private void onError() {
+                    if (TextUtils.equals(fPattern, mPattern)) {
+                        mIsOfflineContactsSearch = true;
+                        searchAccountKnownContacts(theFirstEntry, searchListener);
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError();
+                }
+            });
+        } else {
+            searchAccountKnownContacts(theFirstEntry, searchListener);
+        }
+    }
+
+    /**
+     * Search the known contacts from the account known users list.
+     *
+     * @param theFirstEntry  the adapter first entry
+     * @param searchListener the listener
+     */
+    private void searchAccountKnownContacts(final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
         List<ParticipantAdapterItem> participantItemList = new ArrayList<>();
+
+        // the list is not anymore limited
+        mKnownContactsLimited = false;
 
         // displays something only if there is a pattern
         if (!TextUtils.isEmpty(mPattern)) {
@@ -418,7 +491,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                refresh(theFirstEntry, searchListener);
+                                searchAccountKnownContacts(theFirstEntry, searchListener);
                             }
                         });
                     }
@@ -498,6 +571,18 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             }
         }
 
+        onKnownContactsSearchEnd(participantItemList, theFirstEntry, searchListener);
+    }
+
+    /**
+     * The known contacts search is ended.
+     * Search the local contacts
+     *
+     * @param participantItemList the known contacts list
+     * @param theFirstEntry       the adapter first entry
+     * @param searchListener      the search listener
+     */
+    private void onKnownContactsSearchEnd(List<ParticipantAdapterItem> participantItemList, final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
         // ensure that the PIDs have been retrieved
         // it might have failed
         ContactsManager.getInstance().retrievePids();
@@ -507,7 +592,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         // detect if the user ID is defined in the known members list
         if ((null != mUsedMemberUserIds) && (null != firstEntry)) {
-            if (mUsedMemberUserIds.indexOf(theFirstEntry.mUserId) >= 0) {
+            if (mUsedMemberUserIds.contains(theFirstEntry.mUserId)) {
                 firstEntry = null;
             }
         }
@@ -555,7 +640,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
         if (ContactsManager.getInstance().isContactBookAccessAllowed()) {
             mLocalContactsSectionPosition = mFirstEntryPosition + 1;
-            mRoomContactsSectionPosition = mLocalContactsSectionPosition + 1;
+            mKnownContactsSectionPosition = mLocalContactsSectionPosition + 1;
             // display the local contacts
             // -> if there are some
             // -> the PIDS retrieval is in progress
@@ -567,7 +652,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             }
             mParticipantsListsList.add(contactBookList);
         } else {
-            mRoomContactsSectionPosition = mFirstEntryPosition + 1;
+            mKnownContactsSectionPosition = mFirstEntryPosition + 1;
         }
 
         if (!TextUtils.isEmpty(mPattern)) {
@@ -622,6 +707,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tells if the session could contain some unused participants.
+     *
      * @return true if the session could contains some unused participants.
      */
     private boolean couldHaveUnusedParticipants() {
@@ -631,7 +717,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         } else { // else if there are rooms with more than one user
             Collection<Room> rooms = mSession.getDataHandler().getStore().getRooms();
 
-            for(Room room : rooms) {
+            for (Room room : rooms) {
                 if (room.getMembers().size() > 1) {
                     return true;
                 }
@@ -641,12 +727,27 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     }
 
     private String getGroupTitle(final int position) {
-        final int groupSize = mParticipantsListsList.get(position).size();
+        int groupSize;
+        if (position < mParticipantsListsList.size()) {
+            groupSize = mParticipantsListsList.get(position).size();
+        } else {
+            Log.e(LOG_TAG, "getGroupTitle position " + position + " is invalid, mParticipantsListsList.size()=" + mParticipantsListsList.size());
+            groupSize = 0;
+        }
         if (position == mLocalContactsSectionPosition) {
             return mContext.getString(R.string.people_search_local_contacts, groupSize);
-        } else if (position == mRoomContactsSectionPosition) {
-            final String titleExtra = (TextUtils.isEmpty(mPattern) && couldHaveUnusedParticipants()) ? "-" : String.valueOf(groupSize);
-            return mContext.getString(R.string.people_search_known_contacts, titleExtra);
+        } else if (position == mKnownContactsSectionPosition) {
+            final String titleExtra;
+
+            if (TextUtils.isEmpty(mPattern) && couldHaveUnusedParticipants()) {
+                titleExtra = "-";
+            } else if (mIsOfflineContactsSearch) {
+                titleExtra = mContext.getString(R.string.offline) + ", " + String.valueOf(groupSize);
+            } else {
+                titleExtra = (mKnownContactsLimited ? ">" : "") + String.valueOf(groupSize);
+            }
+
+            return mContext.getString(R.string.people_search_user_directory, titleExtra);
         } else {
             return "??";
         }
@@ -727,7 +828,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.getInstance().arePIDsRetrieved() ? View.VISIBLE : View.GONE);
 
-        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.heading_image);
         View matrixView = convertView.findViewById(R.id.people_header_matrix_contacts_layout);
 
         // reported by GA
@@ -736,7 +837,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             return convertView;
         }
 
-        if (groupPosition != mRoomContactsSectionPosition || mParticipantsListsList.get(groupPosition).size() > 0) {
+        if (groupPosition != mKnownContactsSectionPosition || mParticipantsListsList.get(groupPosition).size() > 0) {
             if (isExpanded) {
                 imageView.setImageResource(R.drawable.ic_material_expand_less_black);
             } else {
@@ -842,7 +943,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         // set the presence
         String status = "";
 
-        if (groupPosition == mRoomContactsSectionPosition) {
+        if (groupPosition == mKnownContactsSectionPosition) {
             User user = null;
             MXSession matchedSession = null;
             // retrieve the linked user
@@ -916,7 +1017,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         if (groupPosition == mLocalContactsSectionPosition) {
             return preferences.getBoolean(KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
-        } else if (groupPosition == mRoomContactsSectionPosition) {
+        } else if (groupPosition == mKnownContactsSectionPosition) {
             return preferences.getBoolean(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
         }
 
@@ -935,7 +1036,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         if (groupPosition == mLocalContactsSectionPosition) {
             editor.putBoolean(KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP, isExpanded);
-        } else if (groupPosition == mRoomContactsSectionPosition) {
+        } else if (groupPosition == mKnownContactsSectionPosition) {
             editor.putBoolean(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP, isExpanded);
         }
 

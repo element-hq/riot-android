@@ -111,24 +111,6 @@ public class AdapterUtils {
         return gregorianCalendar.getTime();
     }
 
-    //
-    private static String mLanguage = null;
-    private static String mCountryLanguage = null;
-    private static Locale mLocale = null;
-
-    public static Locale getLocale(Context context) {
-        String langague = context.getString(R.string.resouces_language);
-        String country = context.getString(R.string.resouces_country);
-
-        if (!TextUtils.equals(langague, mLanguage) || !TextUtils.equals(country, mCountryLanguage) || (null == mLocale)) {
-            mLanguage = langague;
-            mCountryLanguage = country;
-            mLocale = new Locale(mLanguage, country);
-        }
-
-        return mLocale;
-    }
-
     /**
      * Convert a time since epoch date to a string.
      * @param context the context.

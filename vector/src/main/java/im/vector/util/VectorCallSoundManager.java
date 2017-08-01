@@ -436,9 +436,9 @@ public class VectorCallSoundManager {
         stopRinging();
 
         mRingBackPlayer = MediaPlayer.create(VectorApp.getInstance(), R.raw.ringback);
-        mRingBackPlayer.setLooping(true);
 
         if (null != mRingBackPlayer) {
+            mRingBackPlayer.setLooping(true);
             setSpeakerphoneOn(true, isVideo && !HeadsetConnectionReceiver.isHeadsetPlugged());
             mRingBackPlayer.start();
         } else {
@@ -460,9 +460,10 @@ public class VectorCallSoundManager {
         stopRingTones();
 
         mCallEndPlayer = MediaPlayer.create(VectorApp.getInstance(), R.raw.callend);
-        mCallEndPlayer.setLooping(false);
 
         if (null != mCallEndPlayer) {
+            mCallEndPlayer.setLooping(false);
+
             // do not update the audio path
 
             mCallEndPlayer.start();

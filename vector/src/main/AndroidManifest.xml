@@ -26,6 +26,9 @@
     <!-- to be able to turn on display when a notification is received-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <!-- start the background sync on boot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <!-- videocall feature-->
     <!-- android.permission.CAMERA defines android.hardware.camera -->
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
@@ -47,6 +50,7 @@
 
     <!-- bluetooth headset -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
 
     <!-- libjingle is designed for API >= 15 but the app should work from API >= 11 -->
     <uses-sdk tools:overrideLibrary="io.pristine.libjingle"/>
@@ -73,6 +77,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="im.vector.activity.AccountCreationActivity"
             android:label="@string/create_account" >
@@ -313,6 +318,12 @@
             android:theme="@style/CountryPickerTheme" />
 
         <activity
+            android:name="im.vector.activity.LanguagePickerActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_select_language"
+            android:theme="@style/CountryPickerTheme" />
+
+        <activity
             android:name="im.vector.activity.RoomDirectoryPickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/select_room_directory"
@@ -372,6 +383,14 @@
                 <data android:host="vector.im" />
                 <!-- mail validation -->
                 <data android:pathPrefix="/_matrix/" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="im.vector.receiver.VectorBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_USER_UNLOCKED"/>
             </intent-filter>
         </receiver>
 
