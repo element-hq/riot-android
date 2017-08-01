@@ -74,7 +74,6 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
 
     <string name="direct_chats_header">Beszélgetések</string>
     <string name="local_address_book_header">Helyi címjegyzék</string>
-    <string name="known_contacts_header">Ismert kapcsolatok</string>
     <string name="matrix_only_filter">Csak Matrix kapcsolatok</string>
     <string name="no_conversation_placeholder">Nincsenek beszélgetések</string>
     <string name="no_local_contact_placeholder">Nincsenek helyi kapcsolatok</string>
