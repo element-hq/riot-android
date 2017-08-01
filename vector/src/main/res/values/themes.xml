@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--TODO decide whether these themes are the right base-->
-    <style name="Theme.Vector.Light.Base" parent="@style/Theme.AppCompat.Light.NoActionBar" />
-    <style name="Theme.Vector.Dark.Base" parent="@style/Theme.AppCompat.NoActionBar"/>
-
-
     <!-- LIGHT THEME COLORS -->
-    <style name="Theme.Vector.Light.Common" parent="Theme.Vector.Light.Base">
+    <style name="Theme.Vector.Light" parent="@style/Theme.AppCompat.Light">
         <item name="room_background">#FFFFFF</item>
 
         <item name="presence_online">#38af00</item>
@@ -95,7 +90,7 @@
 
 
     <!-- DARK THEME COLORS -->
-    <style name="Theme.Vector.Dark.Common" parent="Theme.Vector.Dark.Base">
+    <style name="Theme.Vector.Dark" parent="@style/Theme.AppCompat">
         <!-- Background color of the room -->
         <item name="room_background">#2d2d2d</item>
 
@@ -197,6 +192,4 @@
         <item name="direct_chat_indicator">#8076cfa6</item>
     </style>
 
-    <style name="Theme.Vector.Light" parent="Theme.Vector.Light.Common" />
-    <style name="Theme.Vector.Dark" parent="Theme.Vector.Dark.Common" />
 </resources>

@@ -29,6 +29,22 @@ import android.util.TypedValue;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.CountryPickerActivity;
+import im.vector.activity.HistoricalRoomsActivity;
+import im.vector.activity.InComingCallActivity;
+import im.vector.activity.JoinScreenActivity;
+import im.vector.activity.LanguagePickerActivity;
+import im.vector.activity.LockScreenActivity;
+import im.vector.activity.LoginActivity;
+import im.vector.activity.PhoneNumberAdditionActivity;
+import im.vector.activity.RoomDirectoryPickerActivity;
+import im.vector.activity.SplashActivity;
+import im.vector.activity.VectorCallViewActivity;
+import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.activity.VectorRoomActivity;
+import im.vector.activity.VectorRoomInviteMembersActivity;
 
 /**
  * Util class for managing themes.
@@ -37,16 +53,12 @@ public class ThemeUtils {
     // preference key
     public static final String APPLICATION_THEME_KEY = "APPLICATION_THEME_KEY";
 
-    //  the existing theme style
-    private static final int THEME_DARK_STYLE = R.style.Theme_Vector_Dark;
-    private static final int THEME_LIGHT_STYLE = R.style.Theme_Vector_Light;
-
     // the theme description
     public static final String THEME_DARK_VALUE = "dark";
     public static final String THEME_LIGHT_VALUE = "light";
 
     // selected theme
-    private static Integer mCurrentThemeStyle = THEME_LIGHT_STYLE;
+    private static boolean mIsDarkTheme = false;
 
     /**
      * Provides the selected application theme
@@ -81,9 +93,9 @@ public class ThemeUtils {
             editor.putString(APPLICATION_THEME_KEY, aTheme);
             editor.commit();
         }
+        mIsDarkTheme = TextUtils.equals(aTheme, THEME_DARK_VALUE);
 
-        mCurrentThemeStyle = TextUtils.equals(aTheme, THEME_DARK_VALUE) ? THEME_DARK_STYLE : THEME_LIGHT_STYLE;
-        VectorApp.getInstance().setTheme(mCurrentThemeStyle);
+        VectorApp.getInstance().setTheme(mIsDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme);
     }
 
     /**
@@ -91,10 +103,40 @@ public class ThemeUtils {
      * @param activity the activity
      */
     public static void setActivityTheme(Activity activity) {
-        if (null != activity) {
-            activity.setTheme(mCurrentThemeStyle);
-
-            // TODO manage action bar one
+        if ((null != activity) && mIsDarkTheme) {
+            if (activity instanceof LoginActivity) {
+                activity.setTheme(R.style.LoginAppTheme_Dark);
+            } else if (activity instanceof SplashActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof VectorHomeActivity) {
+                activity.setTheme(R.style.HomeActivityTheme_Dark);
+            } else if (activity instanceof HistoricalRoomsActivity) {
+                activity.setTheme(R.style.HomeActivityTheme_Dark);
+            } else if (activity instanceof VectorRoomActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof VectorMemberDetailsActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof LockScreenActivity) {
+                activity.setTheme(android.R.style.Theme_Holo_Dialog);
+            } else if (activity instanceof JoinScreenActivity) {
+                activity.setTheme(android.R.style.Theme_Holo_Dialog);
+            } else if (activity instanceof InComingCallActivity) {
+                // TODO Theme.AppCompat.Light.Dialog
+            } else if (activity instanceof VectorCallViewActivity) {
+                activity.setTheme(R.style.CallActivityTheme_Dark);
+            } else if (activity instanceof VectorMediasPickerActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_FullScreen_Dark);
+            } else if (activity instanceof PhoneNumberAdditionActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof CountryPickerActivity) {
+                activity.setTheme(R.style.CountryPickerTheme_Dark);
+            } else if (activity instanceof LanguagePickerActivity) {
+                activity.setTheme(R.style.CountryPickerTheme_Dark);
+            } else if (activity instanceof RoomDirectoryPickerActivity) {
+                activity.setTheme(R.style.DirectoryPickerTheme_Dark);
+            } else {
+                activity.setTheme(R.style.AppTheme_Dark);
+            }
         }
     }
     
