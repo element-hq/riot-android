@@ -73,7 +73,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-        Log.i(LOG_TAG, "onLayoutChange bottom " + bottom + " oldBottom " + oldBottom);
+        //Log.i(LOG_TAG, "onLayoutChange bottom " + bottom + " oldBottom " + oldBottom);
 
         if (bottom != oldBottom && bottom > mFooterBottom) {
             // Calculate the coordinates (header/footer) of section views
@@ -85,7 +85,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        Log.d(LOG_TAG, "onScrolled dy " + dy);
+        //Log.d(LOG_TAG, "onScrolled dy " + dy);
 
         if (dy != 0) {
             updateStickySection(dy);
@@ -232,7 +232,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
      * @param dy scroll value
      */
     private void updateStickySection(int dy) {
-        Log.d(LOG_TAG, "updateStickySection " + dy);
+        //Log.d(LOG_TAG, "updateStickySection " + dy);
 
         // header is out of screen, check if header or footer
         int firstVisiblePos = mLayoutManager.findFirstVisibleItemPosition();
@@ -244,7 +244,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
             SectionView current = mSectionViews.get(i).second;
 
             RecyclerView.ViewHolder holder = mRecyclerView.findViewHolderForLayoutPosition(currentPos);
-            Log.d(LOG_TAG, "updateStickySection holder for " + current.getSection().getTitle() + " is " + holder);
+            //Log.d(LOG_TAG, "updateStickySection holder for " + current.getSection().getTitle() + " is " + holder);
             if (holder != null) {
                 Log.d(LOG_TAG, "updateStickySection holder top " + holder.itemView.getTop() + " bottom " + holder.itemView.getBottom());
                 current.updatePosition(holder.itemView.getTop());

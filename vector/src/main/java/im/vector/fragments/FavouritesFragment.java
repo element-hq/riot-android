@@ -181,8 +181,12 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
 
     @Override
     public void onSummariesUpdate() {
-        if (!mActivity.isWaitingViewVisible()) {
-            refreshFavorites();
+        super.onSummariesUpdate();
+            
+        if (isResumed()) {
+            if (!mActivity.isWaitingViewVisible()) {
+                refreshFavorites();
+            }
         }
     }
 

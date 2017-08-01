@@ -1,11 +1,27 @@
+Changes in Riot 0.7.00 (2017-08-01)
+===================================================
+
+Features:
+ * Add member events merge.
+ * Add new UI settings (hide/show some UI items, change the text size).
+ * Add a beta data save mode.
+ * Add a medias timelife i.e the medias are kept in storage for a specfied period.
+ * Add new user search.
+ 
+Improvements:
+ * Add more languages.
+ * Reduce the storage use.
+  
+Bugfixes:
+ * Fix many crashes reported by rageshake or GA.
+ * #1455 : Click on a matrix id does not open the member details activity if it is not a known user.
+
 Changes in Riot 0.6.14 (2017-07-25)
 ===================================================
 
 Bugfixes:
-
-* Remove server catchup patch (i.e the sync requests were triggered until getting something).
-  It used to drain battery on small accounts.
-* Fix application resume edge cases (fdroid only)
+ * Remove server catchup patch (i.e the sync requests were triggered until getting something). It used to drain battery on small accounts.
+ * Fix application resume edge cases (fdroid only)
 
 Changes in Riot 0.6.13 (2017-07-03)
 ===================================================
@@ -15,7 +31,6 @@ Features:
  * Add the read markers management
    
 Bugfixes:
-
  * Fix many issues reported by GA.
  * #1308 : E2E new devices dialog disappears if screen is turned off by timeout : it does not reappear at next sent event.
  * #1330 : Using the name completion as the first item of the message should add a colon (:)

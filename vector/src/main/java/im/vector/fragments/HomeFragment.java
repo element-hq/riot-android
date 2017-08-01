@@ -45,7 +45,9 @@ import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.HomeRoomAdapter;
+import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.view.HomeSectionView;
 
@@ -237,8 +239,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     @Override
     public void onSummariesUpdate() {
-        if (!mActivity.isWaitingViewVisible()) {
-            initData();
+        super.onSummariesUpdate();
+
+        if (isResumed()) {
+            if (!mActivity.isWaitingViewVisible()) {
+                initData();
+            }
         }
     }
 
@@ -285,9 +291,9 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
             }
         }
 
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final boolean pinMissedNotifications = preferences.getBoolean(getString(R.string.settings_pin_missed_notifications), false);
-        final boolean pinUnreadMessages = preferences.getBoolean(getString(R.string.settings_pin_unread_messages), false);
+        final boolean pinMissedNotifications = PreferencesManager.pinMissedNotifications(getActivity());
+        final boolean pinUnreadMessages = PreferencesManager.pinUnreadMessages(getActivity());
+
         Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages);
 
         sortAndDisplay(favourites, notificationComparator, mFavouritesSection);

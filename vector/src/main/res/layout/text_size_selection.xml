@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- keep the sizes in dp -->
+    <CheckedTextView
+        android:id="@+id/text_selection_small_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
+        android:gravity="center_vertical"
+        android:text="@string/small"
+        android:textSize="12dp" />
+
+    <CheckedTextView
+        android:id="@+id/text_selection_normal_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
+        android:gravity="center_vertical"
+        android:text="@string/normal"
+        android:textSize="14dp" />
+
+    <CheckedTextView
+        android:id="@+id/text_selection_large_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
+        android:gravity="center_vertical"
+        android:text="@string/large"
+        android:textSize="16dp" />
+
+    <CheckedTextView
+        android:id="@+id/text_selection_largest_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
+        android:gravity="center_vertical"
+        android:text="@string/largest"
+        android:textSize="18dp" />
+</LinearLayout>
