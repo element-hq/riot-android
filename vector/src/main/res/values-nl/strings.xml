@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
     <string name="resouces_language">nl</string>
-    <string name="resouces_country">NL</string>
+    <string name="resouces_country"></string>
 
     <!-- titles -->
     <string name="title_activity_home">Berichten</string>
@@ -25,7 +27,7 @@
     <string name="forward">Doorsturen</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">Bekijk bron</string>
-    <string name="view_decrypted_source">View Decrypted Source</string>
+    <string name="view_decrypted_source">Bekijk onversleutelde bron</string>
     <string name="delete">Verwijderen</string>
     <string name="rename">Herbenoemen</string>
     <string name="report_content">Inhoud melden</string>
@@ -81,7 +83,6 @@
     <!-- People fragment -->
     <string name="direct_chats_header">Gesprekken</string>
     <string name="local_address_book_header">Lokale contactenlijst</string>
-    <string name="known_contacts_header">Bekende contacten</string>
     <string name="matrix_only_filter">Alleen Matrix contacten</string>
     <string name="no_conversation_placeholder">Geen gesprekken</string>
     <string name="no_local_contact_placeholder">Geen lokale contacten</string>
@@ -204,6 +205,9 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Gelezen berichten</string>
 
+    <!-- Mels -->
+    <string name="membership_changes">%d membership changes</string>
+
     <!-- accounts list Screen -->
     <string name="choose_account">Account kiezen</string>
 
@@ -283,7 +287,7 @@
     <string name="reject">Afwijzen</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+    <string name="room_jump_to_first_unread">Spring naar het eerste ongelezen bericht.</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Je bent uitgenodigd om deze ruimte toe te treden bij %s</string>
@@ -345,7 +349,6 @@
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Bij ID uitnodigen</u></string>
     <string name="people_search_local_contacts">LOKALE CONTACTEN (%d)</string>
-    <string name="people_search_known_contacts">BEKENDE CONTACTEN (%s)</string>
     <string name="people_search_filter_text">Alleen Matrix gebruikers</string>
     <string name="people_search_too_many_contacts">Te veel contacten, gebruik het zoekveld.</string>
 
@@ -505,14 +508,14 @@
     <string name="settings_contact">Lokale contacten</string>
     <string name="settings_contacts_app_permission">Contacten permissie</string>
     <string name="settings_contacts_phonebook_country">Telefoonboek land</string>
-    <string name="settings_home_display">Home display</string>
-    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
-    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
+    <string name="settings_home_display">Home scherm</string>
+    <string name="settings_pin_missed_notifications">Pin ruimtes met gemiste notificaties</string>
+    <string name="settings_pin_unread_messages">Pin ruimtes met ongelezen berichten</string>
     <string name="settings_devices_list">Apparaten</string>
     <string name="devices_details_dialog_title">Apparaat details</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Naam</string>
-    <string name="devices_details_device_name">Device Name</string>
+    <string name="devices_details_device_name">Apparaatnaam</string>
 
     <string name="devices_details_last_seen_title">Laatst gezien</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
@@ -529,6 +532,10 @@
     <string name="account_email_validation_title">Verificatie afwachtend</string>
     <string name="account_email_validation_message">Bekijk je e-mail en klik op de link dat de e-mail bevat. Zodra dit gedaan is, klik op verder gaan.</string>
     <string name="account_email_validation_error">Het verifïeren van het e-mailadres is mislukt. Bekijk je e-mail en klik op de link dat de e-mail bevat. Zodra dit gedaan is, klik op verder gaan</string>
+
+    <string name="account_email_already_used_error">This email address is already in use</string>
+    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
+    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
 
     <string name="settings_change_password">Wachtwoord veranderen</string>
     <string name="settings_old_password">oud wachtwoord</string>
@@ -712,3 +719,4 @@
     <!-- historical -->
     <string name="historical_placeholder">Zoek voor historisch</string>
 </resources>
+

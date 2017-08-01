@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -43,7 +44,7 @@ import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
-import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.EventTimeline;
@@ -62,6 +63,7 @@ import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.VideoMessage;
+import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
@@ -74,7 +76,6 @@ import java.util.HashMap;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.VectorHomeActivity;
@@ -83,11 +84,12 @@ import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
+import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.VectorUtils;
 
-public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
+public class VectorMessageListFragment extends MatrixMessageListFragment implements IMessagesAdapterActionsListener {
     private static final String LOG_TAG = "VectorMessageListFrg";
 
     public interface IListFragmentEventListener {
@@ -143,6 +145,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (null != mRoom) {
             ((VectorMessagesAdapter) mAdapter).mIsRoomEncrypted = mRoom.isEncrypted();
         }
+
+        mMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                onRowClick(position);
+            }
+        });
 
         return v;
     }
@@ -228,7 +237,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     @Override
-    public MessagesAdapter createMessagesAdapter() {
+    public AbstractMessagesAdapter createMessagesAdapter() {
         return new VectorMessagesAdapter(mSession, getActivity(), getMXMediasCache());
     }
 
@@ -276,7 +285,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      *
      * @return message adapter
      */
-    public MessagesAdapter getMessageAdapter() {
+    public AbstractMessagesAdapter getMessageAdapter() {
         return mAdapter;
     }
 
@@ -1144,5 +1153,64 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage());
         }
+    }
+
+    private int mInvalidIndexesCount = 0;
+
+    @Override
+    public void onInvalidIndexes() {
+        mInvalidIndexesCount++;
+
+        // it should happen once
+        // else we assume that the adapter is really corrupted
+        // It seems better to close the linked activity to avoid infinite refresh.
+        if (1 == mInvalidIndexesCount) {
+            mMessageListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+        } else {
+            mMessageListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != getActivity()) {
+                        getActivity().finish();
+                    }
+                }
+            });
+        }
+    }
+
+
+    private final HashMap<String, Object> mBingRulesByEventId = new HashMap<>();
+
+    @Override
+    public boolean shouldHighlightEvent(Event event) {
+        String eventId = event.eventId;
+
+        // cache the dedicated rule because it is slow to find them out
+        Object ruleAsVoid = mBingRulesByEventId.get(eventId);
+
+        if (null != ruleAsVoid) {
+            if (ruleAsVoid instanceof BingRule) {
+                return ((BingRule) ruleAsVoid).shouldHighlight();
+            }
+            return false;
+        }
+
+        boolean res = false;
+
+        BingRule rule = mSession.getDataHandler().getBingRulesManager().fulfilledBingRule(event);
+
+        if (null != rule) {
+            res = rule.shouldHighlight();
+            mBingRulesByEventId.put(eventId, rule);
+        } else {
+            mBingRulesByEventId.put(eventId, eventId);
+        }
+
+        return res;
     }
 }

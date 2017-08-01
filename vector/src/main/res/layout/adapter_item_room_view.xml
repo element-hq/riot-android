@@ -9,36 +9,36 @@
     <View
         android:id="@+id/indicator_unread_message"
         android:layout_width="8dp"
-        android:layout_marginRight="8dp"
         android:layout_height="match_parent"
+        android:layout_marginRight="8dp"
         android:background="@android:color/darker_gray" />
 
-    <im.vector.view.VectorCircularImageView
-        android:id="@+id/room_avatar"
-        android:layout_toRightOf="@+id/indicator_unread_message"
-        android:layout_width="@dimen/chat_avatar_size"
-        android:layout_height="@dimen/chat_avatar_size"
+    <include
+        android:id="@+id/room_avatar_layout"
+        layout="@layout/adapter_item_circular_avatar_room_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerInParent="true"
-        tools:src="@color/presence_unknown" />
+        android:layout_toRightOf="@+id/indicator_unread_message" />
 
     <ImageView
         android:id="@+id/direct_chat_indicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/room_avatar"
-        android:layout_alignLeft="@+id/room_avatar"
-        android:layout_alignRight="@+id/room_avatar"
-        android:layout_alignTop="@+id/room_avatar"
+        android:layout_alignBottom="@+id/room_avatar_layout"
+        android:layout_alignLeft="@+id/room_avatar_layout"
+        android:layout_alignRight="@+id/room_avatar_layout"
+        android:layout_alignTop="@+id/room_avatar_layout"
         android:background="@drawable/direct_chat_background"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/room_avatar_encrypted_icon"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_alignBottom="@+id/room_avatar"
-        android:layout_alignRight="@+id/room_avatar"
+        android:layout_alignBottom="@+id/room_avatar_layout"
+        android:layout_alignRight="@+id/room_avatar_layout"
         android:layout_marginRight="-4dp"
         android:src="@drawable/e2e_verified"
         android:visibility="invisible"
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
-        android:layout_toRightOf="@+id/room_avatar"
+        android:layout_toRightOf="@+id/room_avatar_layout"
         android:paddingRight="16dp">
 
         <TextView
@@ -110,18 +110,20 @@
             android:layout_toLeftOf="@+id/room_update_date"
             android:gravity="center"
             android:minWidth="25dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             tools:background="#AAff00ff"
-            tools:text="12" />
+            tools:text="3.6K" />
     </RelativeLayout>
 
     <View
         android:id="@+id/room_more_action_anchor"
         android:layout_width="1dp"
         android:layout_height="1dp"
-        android:layout_marginRight="20dp"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp" />
 
     <View
         android:id="@+id/room_more_action_click_area"

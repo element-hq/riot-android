@@ -76,6 +76,7 @@ android {
 
     lintOptions {
         disable 'InvalidPackage'
+        disable 'MissingTranslation'
     }
 
     repositories {

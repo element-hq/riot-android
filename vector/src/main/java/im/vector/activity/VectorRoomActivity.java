@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.icu.text.LocaleDisplayNames;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -103,6 +104,7 @@ import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
+import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
@@ -1061,7 +1063,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // listen for room name or topic changes
             mRoom.addEventListener(mRoomEventListener);
 
-            mEditText.setHint(mRoom.isEncrypted() ? R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
+            mEditText.setHint((mRoom.isEncrypted() && mSession.isCryptoEnabled()) ? R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
 
             mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
         } else {
@@ -1753,6 +1755,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param isTyping typing param
      */
     private void handleTypingNotification(boolean isTyping) {
+        // the typing notifications are disabled ?
+        if (PreferencesManager.dontSendTypingNotifs(this)) {
+            Log.d(LOG_TAG, "##handleTypingNotification() : the typing notifs are disabled");
+            return;
+        }
+
+        Log.d(LOG_TAG, "##handleTypingNotification() : isTyping " + isTyping);
+
         int notificationTimeoutMS = -1;
         if (isTyping) {
             // Check whether a typing event has been already reported to server (We wait for the end of the local timeout before considering this new event)
@@ -1792,6 +1802,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                 mTypingTimer.cancel();
                                 mTypingTimer = null;
                             }
+
+                            Log.d(LOG_TAG, "##handleTypingNotification() : send end of typing");
+
                             // Post a new typing notification
                             VectorRoomActivity.this.handleTypingNotification(0 != mLastTypingDate);
                         }
@@ -1895,7 +1908,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param selectedTab the selected tab index.
      */
     private void launchRoomDetails(int selectedTab) {
-        if ((null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
+        if ((null != mSession) && (null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
             enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
             // pop to the home activity
@@ -1911,11 +1924,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Launch the invite people activity
      */
     private void launchInvitePeople() {
-        Intent intent = new Intent(this, VectorRoomInviteMembersActivity.class);
-        intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-        intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-        intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG, true);
-        startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
+        if ((null != mSession) && (null != mRoom)) {
+            Intent intent = new Intent(this, VectorRoomInviteMembersActivity.class);
+            intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG, true);
+            startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
+        }
     }
 
     /**
@@ -2622,7 +2637,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != mActionBarHeaderActiveMembersLayout) {
             // refresh only if the action bar is hidden
             if (mActionBarCustomTitle.getVisibility() == View.GONE) {
-
                 if ((null != mRoom) || (null != sRoomPreviewData)) {
                     // update the members status: "active members"/"members"
                     int joinedMembersCount = 0;
@@ -2667,7 +2681,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                             // display the both action buttons only when it makes sense
                             // i.e not a room preview
-                            boolean hideMembersButtons = !TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData);
+                            boolean hideMembersButtons = (null == mRoom) || !TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData);
                             mActionBarHeaderActiveMembersListButton.setVisibility(hideMembersButtons ? View.INVISIBLE : View.VISIBLE);
                             mActionBarHeaderActiveMembersInviteButton.setVisibility(hideMembersButtons ? View.INVISIBLE : View.VISIBLE);
                         } else {
@@ -2676,8 +2690,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     } else {
                         mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
                     }
+                } else {
+                    mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
                 }
-
             } else {
                 mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
             }

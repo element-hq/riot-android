@@ -682,6 +682,11 @@ public class NotificationUtils {
         MXSession session = Matrix.getInstance(context).getDefaultSession();
         IMXStore store = session.getDataHandler().getStore();
 
+        if (null == store) {
+            Log.e(LOG_TAG, "## buildMessageNotification() : null store");
+            return null;
+        }
+
         Room room = store.getRoom(eventToNotify.mRoomId);
         Event event = store.getEvent(eventToNotify.mEventId, eventToNotify.mRoomId);
 

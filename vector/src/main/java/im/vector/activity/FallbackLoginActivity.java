@@ -57,6 +57,7 @@ public class FallbackLoginActivity extends VectorActivity {
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
 
+        setTitle(R.string.login);
         setContentView(R.layout.activity_login_fallback);
         mWebView = (WebView) findViewById(R.id.account_creation_webview);
         mWebView.getSettings().setJavaScriptEnabled(true);

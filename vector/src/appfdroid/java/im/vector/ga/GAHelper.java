@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package im.vector.ga;
-;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,29 +33,12 @@ public class GAHelper {
     // default exception handler
     private static Thread.UncaughtExceptionHandler mDefaultExceptionHandler = null;
 
-
     /**
      * Tells if the GA use can be updated
+     *
      * @return true if it can be updated
      */
     public static boolean isGAUseUpdatable() {
-        return false;
-    }
-
-    /**
-     * Update the GA use.
-     * @param context the context
-     * @param value the new value
-     */
-    public static void setUseGA(Context context, boolean value) {
-    }
-
-    /**
-     * Tells if GA can be used
-     * @param context the context
-     * @return null if not defined, true / false when defined
-     */
-    public static Boolean useGA(Context context) {
         return false;
     }
 
@@ -67,9 +50,9 @@ public class GAHelper {
             mDefaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         }
 
-        Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler() {
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
-            public void uncaughtException (Thread thread, Throwable e) {
+            public void uncaughtException(Thread thread, Throwable e) {
                 VectorApp.uncaughtException(thread.getName(), e);
 
                 if (null != mDefaultExceptionHandler) {
@@ -81,11 +64,12 @@ public class GAHelper {
 
     /**
      * Send a GA stats
-     * @param context the context
+     *
+     * @param context  the context
      * @param category the category
-     * @param action the action
-     * @param label the label
-     * @param value the value
+     * @param action   the action
+     * @param label    the label
+     * @param value    the value
      */
     public static void sendGAStats(Context context, String category, String action, String label, long value) {
     }

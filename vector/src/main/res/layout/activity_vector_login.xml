@@ -113,10 +113,10 @@
 
                 <ImageView
                     android:id="@+id/login_large_logo"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/logo_login"></ImageView>
+                    android:src="@drawable/logo_login" />
             </RelativeLayout>
 
             <LinearLayout
@@ -206,6 +206,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/auth_email_placeholder"
+                        android:inputType="textEmailAddress"
                         android:maxLines="1" />
 
                     <EditText
@@ -323,7 +324,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/display_server_url_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -337,11 +338,12 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:gravity="center_vertical"
+                            android:layout_toRightOf="@+id/display_server_url_expand_checkbox"
                             android:text="@string/auth_use_server_options" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/login_matrix_server_options_layout"
@@ -361,6 +363,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hs_url"
+                            android:inputType="text"
                             android:maxLines="1" />
 
                         <TextView
@@ -375,6 +378,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/identity_url"
+                            android:inputType="text"
                             android:maxLines="1" />
                     </LinearLayout>
                 </LinearLayout>

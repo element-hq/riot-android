@@ -63,6 +63,9 @@ public class AccountCreationActivity extends VectorActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
+
+        // required to have the right translated title
+        setTitle(R.string.create_account);
         setContentView(R.layout.activity_account_creation);
 
         final WebView webView = (WebView) findViewById(R.id.account_creation_webview);

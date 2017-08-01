@@ -79,6 +79,8 @@ public class AccountCreationCaptchaActivity extends VectorActivity {
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
 
+        // required to have the right translated title
+        setTitle(R.string.create_account);
         setContentView(R.layout.activity_vector_registration_captcha);
 
         final WebView webView = (WebView) findViewById(R.id.account_creation_webview);

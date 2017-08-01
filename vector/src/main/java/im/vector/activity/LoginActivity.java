@@ -34,6 +34,7 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -972,7 +973,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             @Override
             public void onMatrixError(MatrixError e) {
-                onError(e.getLocalizedMessage());
+                if (TextUtils.equals(MatrixError.THREEPID_NOT_FOUND, e.errcode)) {
+                    onError(getString(R.string.account_email_not_found_error));
+                } else {
+                    onError(e.getLocalizedMessage());
+                }
             }
         });
     }
@@ -2170,6 +2175,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                 onPhoneNumberSidReceived(pid);
                             }
                         }
+
+                        @Override
+                        public void onThreePidRequestFailed(@StringRes int errorMessageRes) {
+                            LoginActivity.this.onThreePidRequestFailed(getString(errorMessageRes));
+                        }
                     });
         } else {
             createAccount();
@@ -2330,6 +2340,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             Log.d(LOG_TAG, "## onWaitingCaptcha(): captcha flow cannot be done");
             Toast.makeText(this, getString(R.string.login_error_unable_register), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onThreePidRequestFailed(String message) {
+        Log.d(LOG_TAG, "## onThreePidRequestFailed():" + message);
+        enableLoadingScreen(false);
+        showMainLayout();
+        refreshDisplay();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

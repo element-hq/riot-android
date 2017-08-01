@@ -7,8 +7,9 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
 
-    <im.vector.view.VectorCircularImageView
-        android:id="@+id/contact_avatar"
+    <include
+        android:id="@+id/contact_avatar_layout"
+        layout="@layout/adapter_item_circular_avatar_contact_view"
         android:layout_width="@dimen/chat_avatar_size"
         android:layout_height="@dimen/chat_avatar_size"
         android:layout_centerVertical="true" />
@@ -17,8 +18,8 @@
         android:id="@+id/contact_badge"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_alignRight="@+id/contact_avatar"
-        android:layout_alignTop="@+id/contact_avatar"
+        android:layout_alignRight="@+id/contact_avatar_layout"
+        android:layout_alignTop="@+id/contact_avatar_layout"
         android:layout_marginRight="-7dp"
         android:layout_marginTop="-7dp"
         android:src="@drawable/logo"
@@ -30,7 +31,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_toRightOf="@+id/contact_avatar"
+        android:layout_toRightOf="@+id/contact_avatar_layout"
         android:orientation="vertical">
 
         <TextView

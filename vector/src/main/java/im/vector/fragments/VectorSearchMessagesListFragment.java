@@ -29,7 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.data.EventTimeline;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.model.Event;
@@ -85,7 +85,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     }
 
     @Override
-    public MessagesAdapter createMessagesAdapter() {
+    public AbstractMessagesAdapter createMessagesAdapter() {
         return new VectorSearchMessagesListAdapter(mSession, getActivity(), (null == mRoomId), getMXMediasCache());
     }
 

@@ -38,6 +38,7 @@ import org.matrix.androidsdk.rest.model.PushersResponse;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.util.PreferencesManager;
 import retrofit.RetrofitError;
 
 
@@ -1186,6 +1187,9 @@ public final class GcmRegistrationManager {
      * Dispatch the onThirdPartyRegistered to the listeners.
      */
     private void dispatchOnThirdPartyRegistered() {
+        // disable the application start on device boot
+        PreferencesManager.setAutoStartOnBoot(mContext, false);
+
         synchronized (this) {
             for(ThirdPartyRegistrationListener listener : mThirdPartyRegistrationListeners) {
                 try {

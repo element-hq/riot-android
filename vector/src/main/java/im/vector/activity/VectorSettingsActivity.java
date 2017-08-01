@@ -41,6 +41,10 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // required to have the right translated title
+        setTitle(R.string.title_activity_settings);
+
         Intent intent = getIntent();
         mSession = getSession(this, intent);
 

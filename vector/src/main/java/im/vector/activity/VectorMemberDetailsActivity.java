@@ -72,6 +72,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_MEMBER_ID = "EXTRA_MEMBER_ID";
+    public static final String EXTRA_MEMBER_DISPLAY_NAME = "EXTRA_MEMBER_DISPLAY_NAME";
+    public static final String EXTRA_MEMBER_AVATAR_URL = "EXTRA_MEMBER_AVATAR_URL";
+
     public static final String EXTRA_STORE_ID = "EXTRA_STORE_ID";
 
     public static final String RESULT_MENTION_ID = "RESULT_MENTION_ID";
@@ -1158,7 +1161,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mDevicesListView.setAdapter(mDevicesListViewAdapter);
             // devices header row
             mDevicesListHeaderView = findViewById(R.id.devices_header_view);
-            TextView devicesHeaderTitleTxtView = (TextView) mDevicesListHeaderView.findViewById(org.matrix.androidsdk.R.id.heading);
+            TextView devicesHeaderTitleTxtView = (TextView) mDevicesListHeaderView.findViewById(R.id.heading);
             if (null != devicesHeaderTitleTxtView) {
                 devicesHeaderTitleTxtView.setText(R.string.room_participants_header_devices);
             }
@@ -1330,7 +1333,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 store = Matrix.getInstance(this).getTmpStore(storeIndex);
             } else {
                 store = mSession.getDataHandler().getStore();
-                mUser = store.getUser(mMemberId);
+
+                if (refreshUser()) {
+                    intent.removeExtra(EXTRA_ROOM_ID);
+                }
             }
 
             mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
@@ -1371,6 +1377,31 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     }
 
     /**
+     * Refresh the user information
+     * @return true if the user is not a known one
+     */
+    private boolean refreshUser() {
+        mUser = mSession.getDataHandler().getStore().getUser(mMemberId);
+
+        // build a tmp user from the data provided as parameters
+        if (null == mUser) {
+            mUser = new User();
+            mUser.user_id = mMemberId;
+            mUser.displayname = getIntent().getStringExtra(EXTRA_MEMBER_DISPLAY_NAME);
+
+            if (TextUtils.isEmpty(mUser.displayname)) {
+                mUser.displayname = mMemberId;
+            }
+
+            mUser.avatar_url  = getIntent().getStringExtra(EXTRA_MEMBER_AVATAR_URL);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Update the UI
      */
     private void updateUi() {
@@ -1383,13 +1414,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             if ((null != mRoomMember) && !TextUtils.isEmpty(mRoomMember.displayname)) {
                 mMemberNameTextView.setText(mRoomMember.displayname);
             } else {
-                mUser = mSession.getDataHandler().getStore().getUser(mMemberId);
-
-                if ((null != mUser) && !TextUtils.isEmpty(mUser.displayname)) {
-                    mMemberNameTextView.setText(mUser.displayname);
-                } else {
-                    mMemberNameTextView.setText(mMemberId);
-                }
+                refreshUser();
+                mMemberNameTextView.setText(mUser.displayname);
             }
 
             // do not display the activity name in the action bar

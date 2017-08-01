@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+
+    <string name="resouces_language">en</string>
+    <string name="resouces_country">UK</string>
+
+    <!-- theme -->
     <string-array name="theme_readables">
         <item>Light Theme</item>
         <item>Dark Theme</item>
@@ -8,9 +15,6 @@
         <item>light</item>
         <item>dark</item>
     </string-array>
-
-    <string name="resouces_language">en</string>
-    <string name="resouces_country">UK</string>
 
     <!-- titles -->
     <string name="title_activity_home">Messages</string>
@@ -52,6 +56,7 @@
     <string name="or">or</string>
     <string name="and">and</string>
     <string name="invite">Invite</string>
+    <string name="offline">Offline</string>
 
     <!-- actions -->
     <string name="action_sign_out">Sign out</string>
@@ -90,7 +95,7 @@
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
     <string name="local_address_book_header">Local address book</string>
-    <string name="known_contacts_header">Known contacts</string>
+    <string name="user_directory_header">User directory</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
     <string name="no_local_contact_placeholder">No local contacts</string>
@@ -213,6 +218,9 @@
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
+
+    <!-- Mels -->
+    <string name="membership_changes">%d membership changes</string>
 
     <!-- accounts list Screen -->
     <string name="choose_account">Choose account</string>
@@ -355,7 +363,7 @@
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
     <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
-    <string name="people_search_known_contacts">KNOWN CONTACTS (%s)</string>
+    <string name="people_search_user_directory">USER DIRECTORY (%s)</string>
     <string name="people_search_filter_text">Matrix users only</string>
     <string name="people_search_too_many_contacts">Too many contacts, please use the search field</string>
 
@@ -488,6 +496,7 @@
     <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
 
+    <string name="settings_start_on_boot">Start on boot</string>
     <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_enable_background_sync">Enable background sync</string>
     <string name="settings_set_sync_timeout">Sync request timeout</string>
@@ -502,8 +511,8 @@
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_clear_cache">Clear cache</string>
-    <!--string name="settings_room_privacy_label">Privacy</string-->
-
+    <string name="settings_clear_medias_cache">Clear media cache</string>
+    <string name="settings_keep_media">Keep media</string>
 
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
@@ -519,6 +528,12 @@
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Devices</string>
+    <string name="settings_hide_read_receipts">Hide read receipts</string>
+    <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
+    <string name="settings_always_show_timestamps">Always show message timestamps</string>
+    <string name="settings_disable_markdown">Disable markdown formatting</string>
+    <string name="settings_data_save_mode">Data save mode</string>
+
     <string name="devices_details_dialog_title">Device details</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Name</string>
@@ -535,9 +550,16 @@
     <string name="settings_home_server">Home Server</string>
     <string name="settings_identity_server">Identity Server</string>
 
+    <string name="settings_user_interface">User interface</string>
+    <string name="settings_interface_language">Interface Language</string>
+    <string name="settings_select_language">Choose a language</string>
+
     <string name="account_email_validation_title">Verification Pending</string>
     <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
     <string name="account_email_validation_error">Unable to verify email address. Please check your email and click on the link it contains. Once this is done, click continue</string>
+    <string name="account_email_already_used_error">This email address is already in use</string>
+    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
+    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
 
     <string name="settings_change_password">Change password</string>
     <string name="settings_old_password">old password</string>
@@ -562,6 +584,12 @@
     <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
     <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
     <string name="settings_phone_number_code">Code</string>
+
+    <!-- medias saving settings -->
+    <string name="media_saving_period_3_days">3 days</string>
+    <string name="media_saving_period_1_week">1 week</string>
+    <string name="media_saving_period_1_month">1 month</string>
+    <string name="media_saving_period_forever">Forever</string>
 
     <!-- Room Settings -->
 
@@ -723,4 +751,10 @@
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
 
+    <!-- text size selection -->
+    <string name="font_size">Font size</string>
+    <string name="small">Small</string>
+    <string name="normal">Normal</string>
+    <string name="large">Large</string>
+    <string name="largest">Largest</string>
 </resources>

@@ -412,9 +412,20 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         mSession.markRoomsAsRead(getRooms(), new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                mActivity.stopWaitingView();
-                mActivity.refreshUnreadBadges();
-                onSummariesUpdate();
+                // check if the activity is still attached
+                if ((null != mActivity) && !mActivity.isFinishing()) {
+                    mActivity.stopWaitingView();
+                    mActivity.refreshUnreadBadges();
+
+                    // if the fragment is still the active one
+                    if (isResumed()) {
+                        // refresh it
+                        onSummariesUpdate();
+                    } else {
+                        // refresh the displayed one
+                        mActivity.dispatchOnSummariesUpdate();
+                    }
+                }
             }
 
             private void onError(String errorMessage) {

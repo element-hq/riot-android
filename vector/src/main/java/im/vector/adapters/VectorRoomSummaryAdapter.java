@@ -608,13 +608,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
         }
 
-        TextView sectionNameTxtView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.heading);
+        TextView sectionNameTxtView = (TextView)convertView.findViewById(R.id.heading);
 
         if (null != sectionNameTxtView) {
             sectionNameTxtView.setText(getGroupTitle(groupPosition));
         }
 
-        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.heading_image);
 
         if (mIsSearchMode) {
             imageView.setVisibility(View.GONE);

@@ -41,7 +41,6 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.RequestPhoneNumberValidationResponse;
 import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.util.Log;
 
@@ -97,6 +96,8 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(R.string.settings_add_phone_number);
         setContentView(R.layout.activity_phone_number_addition);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -264,9 +265,9 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
             final String countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
             final ThreePid pid = new ThreePid(e164phone, countryCode, ThreePid.MEDIUM_MSISDN);
 
-            mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<RequestPhoneNumberValidationResponse>() {
+            mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<Void>() {
                 @Override
-                public void onSuccess(RequestPhoneNumberValidationResponse response) {
+                public void onSuccess(Void info) {
                     mLoadingView.setVisibility(View.GONE);
                     Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
                             mSession.getCredentials().userId, pid);
@@ -280,7 +281,11 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    onSubmitPhoneError(e.getLocalizedMessage());
+                    if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
+                        onSubmitPhoneError(getString(R.string.account_phone_number_already_used_error));
+                    } else {
+                        onSubmitPhoneError(e.getLocalizedMessage());
+                    }
                 }
 
                 @Override

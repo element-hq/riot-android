@@ -97,6 +97,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
@@ -118,6 +119,7 @@ import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
+import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
@@ -546,7 +548,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         // check if the GA accepts to send crash reports.
         // do not display this alert if there is an universal link management
-        if (null == GAHelper.useGA(this) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
+        if (null == PreferencesManager.useGA(this) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
             mUseGAAlert = new AlertDialog.Builder(this);
 
             mUseGAAlert.setMessage(getApplicationContext().getString(R.string.ga_use_alert_message)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
@@ -554,7 +556,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 public void onClick(DialogInterface dialog, int which) {
                     if (null != VectorApp.getInstance()) {
                         mUseGAAlert = null;
-                        GAHelper.setUseGA(VectorHomeActivity.this, true);
+                        PreferencesManager.setUseGA(VectorHomeActivity.this, true);
                     }
                 }
             }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -562,28 +564,32 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 public void onClick(DialogInterface dialog, int which) {
                     if (null != VectorApp.getInstance()) {
                         mUseGAAlert = null;
-                        GAHelper.setUseGA(VectorHomeActivity.this, false);
+                        PreferencesManager.setUseGA(VectorHomeActivity.this, false);
                     }
                 }
             }).show();
         }
 
         if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
-            final AlertDialog.Builder appCrashedAlert = new AlertDialog.Builder(this);
+            // crash reported by a rage shake
+            try {
+                final AlertDialog.Builder appCrashedAlert = new AlertDialog.Builder(this);
+                appCrashedAlert.setMessage(getApplicationContext().getString(R.string.send_bug_report_app_crashed)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        BugReporter.sendBugReport();
+                    }
+                }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        BugReporter.deleteCrashFile(VectorHomeActivity.this);
+                    }
+                }).show();
 
-            appCrashedAlert.setMessage(getApplicationContext().getString(R.string.send_bug_report_app_crashed)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    BugReporter.sendBugReport();
-                }
-            }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    BugReporter.deleteCrashFile(VectorHomeActivity.this);
-                }
-            }).show();
-
-            VectorApp.getInstance().clearAppCrashStatus();
+                VectorApp.getInstance().clearAppCrashStatus();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage());
+            }
         }
 
         if (!mStorePermissionCheck) {
@@ -2223,7 +2229,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     /**
      * Warn the displayed fragment about summary updates.
      */
-    private void dispatchOnSummariesUpdate() {
+    public void dispatchOnSummariesUpdate() {
         Fragment fragment = getSelectedFragment();
 
         if ((null != fragment) && (fragment instanceof AbsHomeFragment)) {

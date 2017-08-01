@@ -28,7 +28,6 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
-import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -39,17 +38,19 @@ import org.matrix.androidsdk.util.Log;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import im.vector.R;
 import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.fragments.VectorMessageListFragment;
 
 /**
  * Class handling the read marker for a given room
  */
-public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
+public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListener {
 
     private static final String LOG_TAG = ReadMarkerManager.class.getSimpleName();
 
@@ -169,7 +170,7 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
      * Called after the activity/fragment resumed
      */
     public void onResume() {
-        mVectorMessageListFragment.getMessageAdapter().setReadMarkerListener(this);
+        ((VectorMessagesAdapter)mVectorMessageListFragment.getMessageAdapter()).setReadMarkerListener(this);
         updateJumpToBanner();
     }
 
@@ -328,7 +329,6 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                     // Read marker is invalid, ignore it as it should not occur
                     Log.e(LOG_TAG, "updateJumpToBanner: Read marker event id is invalid, ignore it as it should not occur");
                 } else {
-                    List<Event> roomMessages = new ArrayList<>(mRoom.getDataHandler().getStore().getRoomMessages(mRoom.getRoomId()));
                     final Event readMarkerEvent = getEvent(mReadMarkerEventId);
                     if (readMarkerEvent == null) {
                         // Event is not in store so we assume it is further in the past
@@ -337,25 +337,31 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
                         showJumpToView = true;
                     } else {
                         // Last read event is in the store
-                        final int lastReadEventIndex = roomMessages.indexOf(readMarkerEvent);
-                        final int firstUnreadEventIndex = lastReadEventIndex != -1 ? lastReadEventIndex + 1 : -1;
-                        if (firstUnreadEventIndex != -1 && firstUnreadEventIndex < roomMessages.size()) {
-                            final Event firstUnreadEvent = roomMessages.get(firstUnreadEventIndex);
-                            if (mFirstVisibleEvent != null && firstUnreadEvent != null) {
-                                if (firstUnreadEvent.getOriginServerTs() > mFirstVisibleEvent.getOriginServerTs()) {
-                                    // Beginning of first unread message is visible
-                                    showJumpToView = false;
-                                } else if (firstUnreadEvent.getOriginServerTs() == mFirstVisibleEvent.getOriginServerTs()) {
-                                    // Check if beginning of first unread message is visible
-                                    final ListView listView = mVectorMessageListFragment.getMessageListView();
-                                    final View firstUnreadView = listView != null ? listView.getChildAt(0) : null;
-                                    showJumpToView = firstUnreadView != null && firstUnreadView.getTop() < 0;
-                                    if (mHasJumpedToFirstUnread && !showJumpToView) {
-                                        forgetReadMarker();
+                        Collection<Event> roomMessagesCol = mRoom.getDataHandler().getStore().getRoomMessages(mRoom.getRoomId());
+                        if (roomMessagesCol == null) {
+                            Log.e(LOG_TAG, "updateJumpToBanner getRoomMessages returned null instead of collection with event " + readMarkerEvent.eventId);
+                        } else {
+                            List<Event> roomMessages = new ArrayList<>(roomMessagesCol);
+                            final int lastReadEventIndex = roomMessages.indexOf(readMarkerEvent);
+                            final int firstUnreadEventIndex = lastReadEventIndex != -1 ? lastReadEventIndex + 1 : -1;
+                            if (firstUnreadEventIndex != -1 && firstUnreadEventIndex < roomMessages.size()) {
+                                final Event firstUnreadEvent = roomMessages.get(firstUnreadEventIndex);
+                                if (mFirstVisibleEvent != null && firstUnreadEvent != null) {
+                                    if (firstUnreadEvent.getOriginServerTs() > mFirstVisibleEvent.getOriginServerTs()) {
+                                        // Beginning of first unread message is visible
+                                        showJumpToView = false;
+                                    } else if (firstUnreadEvent.getOriginServerTs() == mFirstVisibleEvent.getOriginServerTs()) {
+                                        // Check if beginning of first unread message is visible
+                                        final ListView listView = mVectorMessageListFragment.getMessageListView();
+                                        final View firstUnreadView = listView != null ? listView.getChildAt(0) : null;
+                                        showJumpToView = firstUnreadView != null && firstUnreadView.getTop() < 0;
+                                        if (mHasJumpedToFirstUnread && !showJumpToView) {
+                                            forgetReadMarker();
+                                        }
+                                    } else {
+                                        // Beginning of first unread message is hidden
+                                        showJumpToView = true;
                                     }
-                                } else {
-                                    // Beginning of first unread message is hidden
-                                    showJumpToView = true;
                                 }
                             }
                         }
@@ -480,19 +486,24 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
             return true;
         } else {
             Log.d(LOG_TAG, "scrollToAdapterEvent: need to load more events in adapter or eventId is not displayed");
-            final MessageRow firstRow = mVectorMessageListFragment.getMessageAdapter().getItem(0);
-            final Event firstEvent = firstRow != null ? firstRow.getEvent() : null;
-            final MessageRow lastRow = mVectorMessageListFragment.getMessageAdapter().getItem(mVectorMessageListFragment.getMessageAdapter().getCount() - 1);
-            final Event lastEvent = lastRow != null ? lastRow.getEvent() : null;
-            if (firstEvent != null && lastEvent != null && event.getOriginServerTs() > firstEvent.getOriginServerTs()
-                    && event.getOriginServerTs() < lastEvent.getOriginServerTs()) {
-                // Event should be in adapter
-                final MessageRow closestRowFromEvent = mVectorMessageListFragment.getMessageAdapter().getClosestRow(event);
-                if (closestRowFromEvent != null) {
-                    scrollToRow(closestRowFromEvent, closestRowFromEvent.getEvent().eventId.equals(event.eventId));
-                    return true;
+
+            if (mVectorMessageListFragment.getMessageAdapter().getCount() > 0) {
+                final MessageRow firstRow = mVectorMessageListFragment.getMessageAdapter().getItem(0);
+                final Event firstEvent = firstRow != null ? firstRow.getEvent() : null;
+                final MessageRow lastRow = mVectorMessageListFragment.getMessageAdapter().getItem(mVectorMessageListFragment.getMessageAdapter().getCount() - 1);
+                final Event lastEvent = lastRow != null ? lastRow.getEvent() : null;
+                if (firstEvent != null && lastEvent != null && event.getOriginServerTs() > firstEvent.getOriginServerTs()
+                        && event.getOriginServerTs() < lastEvent.getOriginServerTs()) {
+                    // Event should be in adapter
+                    final MessageRow closestRowFromEvent = mVectorMessageListFragment.getMessageAdapter().getClosestRow(event);
+                    if (closestRowFromEvent != null) {
+                        scrollToRow(closestRowFromEvent, closestRowFromEvent.getEvent().eventId.equals(event.eventId));
+                        return true;
+                    }
+                    return false;
+                } else {
+                    return false;
                 }
-                return false;
             } else {
                 return false;
             }
@@ -539,14 +550,18 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
             final Event currentReadMarkerEvent = getEvent(mReadMarkerEventId);
             if (currentReadMarkerEvent != null) {
                 final long currentReadMarkerTs = currentReadMarkerEvent.getOriginServerTs();
-                final Event closestEvent = mVectorMessageListFragment.getMessageAdapter().getClosestRow(newReadMarkerEvent).getEvent();
-                final long newReadMarkerTs = closestEvent.getOriginServerTs();
-                Log.v(LOG_TAG, "setReadMarkerToLastVisibleRow currentReadMarkerEvent:" + currentReadMarkerEvent.eventId
-                        + " TS:" + currentReadMarkerTs + " closestEvent:" + closestEvent.eventId + " TS:" + closestEvent.getOriginServerTs());
-                if (newReadMarkerTs > currentReadMarkerTs) {
-                    Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId + " isMessageId:" + MXSession.isMessageId(newReadMarkerEvent.eventId));
-                    mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
-                    onReadMarkerChanged(mRoom.getRoomId());
+                final MessageRow closestRow = mVectorMessageListFragment.getMessageAdapter().getClosestRow(newReadMarkerEvent);
+
+                if (null != closestRow) {
+                    final Event closestEvent = closestRow.getEvent();
+                    final long newReadMarkerTs = closestEvent.getOriginServerTs();
+                    Log.v(LOG_TAG, "setReadMarkerToLastVisibleRow currentReadMarkerEvent:" + currentReadMarkerEvent.eventId
+                            + " TS:" + currentReadMarkerTs + " closestEvent:" + closestEvent.eventId + " TS:" + closestEvent.getOriginServerTs());
+                    if (newReadMarkerTs > currentReadMarkerTs) {
+                        Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId + " isMessageId:" + MXSession.isMessageId(newReadMarkerEvent.eventId));
+                        mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
+                        onReadMarkerChanged(mRoom.getRoomId());
+                    }
                 }
             }
         }
@@ -600,8 +615,24 @@ public class ReadMarkerManager implements MessagesAdapter.ReadMarkerListener {
         if (!mActivity.isFinishing()) {
             if (mLastVisibleEvent == null) {
                 // In case it is triggered before any onScroll callback
-                mLastVisibleEvent = mVectorMessageListFragment.getEvent(mVectorMessageListFragment.getMessageListView().getLastVisiblePosition());
+                // crash reported by rage shake
+                try {
+                    mLastVisibleEvent = mVectorMessageListFragment.getEvent(mVectorMessageListFragment.getMessageListView().getLastVisiblePosition());
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## onReadMarkerDisplayed() : crash while retrieving mLastVisibleEvent " + e.getMessage());
+                }
             }
+
+            if (mFirstVisibleEvent == null) {
+                // In case it is triggered before any onScroll callback
+                // crash reported by rage shake
+                try {
+                    mFirstVisibleEvent = mVectorMessageListFragment.getEvent(mVectorMessageListFragment.getMessageListView().getFirstVisiblePosition());
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## onReadMarkerDisplayed() : crash while retrieving mFirstVisibleEvent " + e.getMessage());
+                }
+            }
+
             checkUnreadMessage();
         }
     }
