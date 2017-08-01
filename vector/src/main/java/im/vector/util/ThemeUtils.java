@@ -17,52 +17,87 @@
 package im.vector.util;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
+import android.text.TextUtils;
 import android.util.TypedValue;
 
 import im.vector.R;
+import im.vector.VectorApp;
 
 /**
  * Util class for managing themes.
  */
 public class ThemeUtils {
+    // preference key
+    public static final String APPLICATION_THEME_KEY = "APPLICATION_THEME_KEY";
 
-    private static Integer currentTheme = null;
+    //  the existing theme style
+    private static final int THEME_DARK_STYLE = R.style.Theme_Vector_Dark;
+    private static final int THEME_LIGHT_STYLE = R.style.Theme_Vector_Light;
 
-    @IntDef({THEME_DARK, THEME_LIGHT})
-    public @interface ThemeList {}
-    public static final int THEME_DARK = R.style.Theme_Vector_Dark;
-    public static final int THEME_LIGHT = R.style.Theme_Vector_Light;
+    // the theme description
+    public static final String THEME_DARK_VALUE = "dark";
+    public static final String THEME_LIGHT_VALUE = "light";
 
-    public static void setTheme(String theme) {
-        if (theme.equals("light")) {
-            currentTheme = THEME_LIGHT;
-        } else if (theme.equals("dark")) {
-            currentTheme = THEME_DARK;
-        }
-    }
+    // selected theme
+    private static Integer mCurrentThemeStyle = THEME_LIGHT_STYLE;
 
-    public static void activitySetTheme(Context a) {
-        if (currentTheme != null) {
-            a.setTheme(currentTheme);
+    /**
+     * Provides the selected application theme
+     * @param context the context
+     * @return the selected application theme
+     */
+    public static String getApplicationTheme(Context context) {
+        String appTheme = THEME_LIGHT_VALUE;
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // defines a default value if not defined
+        if (!sp.contains(APPLICATION_THEME_KEY)) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE);
+            editor.commit();
         } else {
-            // Just in case we had some problem anywhere reading, set the theme to default.
-            a.setTheme(R.style.Theme_Vector_Light);
+            appTheme = sp.getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE);
         }
+
+        return appTheme;
     }
 
     /**
-     * A setTheme for themes that MUST have an action bar.
-     * TODO theme this properly in the future
-     * @param a
+     * Update the application theme
+     * @param aTheme the new theme
      */
-    public static void activitySetThemeActionBar(Context a) {
-        a.setTheme(R.style.AppTheme);
+    public static void setApplicationTheme(Context context, String aTheme) {
+        if (null != aTheme) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(APPLICATION_THEME_KEY, aTheme);
+            editor.commit();
+        }
+
+        mCurrentThemeStyle = TextUtils.equals(aTheme, THEME_DARK_VALUE) ? THEME_DARK_STYLE : THEME_LIGHT_STYLE;
+        VectorApp.getInstance().setTheme(mCurrentThemeStyle);
     }
 
+    /**
+     * Update the theme of the provided activity
+     * @param activity the activity
+     */
+    public static void setActivityTheme(Activity activity) {
+        if (null != activity) {
+            activity.setTheme(mCurrentThemeStyle);
+
+            // TODO manage action bar one
+        }
+    }
+    
     /**
      * Translates color attributes to colors
      * @param c Context

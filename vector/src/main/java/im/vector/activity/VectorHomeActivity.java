@@ -131,7 +131,7 @@ import im.vector.view.VectorPendingCallView;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends VectorAppCompatActivity implements SearchView.OnQueryTextListener {
+public class VectorHomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
@@ -267,7 +267,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
+        //ThemeUtils.activitySetTheme(this);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 

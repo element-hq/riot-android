@@ -81,13 +81,6 @@ public class MXCActionBarActivity extends AppCompatActivity {
         CommonActivityUtils.onTrimMemory(this, level);
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetTheme(this);
-    }
-
     /**
      * Return the used MXSession from an intent.
      * @param context the application context

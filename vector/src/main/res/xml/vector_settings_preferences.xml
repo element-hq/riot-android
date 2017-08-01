@@ -75,6 +75,14 @@
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_disable_markdown"
             android:key="SETTINGS_DISABLE_MARKDOWN_KEY"/>
+
+        <ListPreference
+            android:entries="@array/theme_readables"
+            android:entryValues="@array/theme_codes"
+            android:key="APPLICATION_THEME_KEY"
+            android:summary="%s"
+            android:title="@string/settings_theme"/>
+
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
@@ -285,14 +293,6 @@
     <PreferenceCategory
         android:title="@string/settings_other"
         android:key="SETTINGS_OTHERS_PREFERENCE_KEY" >
-
-        <ListPreference
-            android:defaultValue="light"
-            android:entries="@array/theme_readables"
-            android:entryValues="@array/theme_codes"
-            android:key="@string/settings_theme"
-            android:summary="%s"
-            android:title="@string/settings_theme"></ListPreference>
 
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/ga_use_settings"

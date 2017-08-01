@@ -45,7 +45,7 @@ import im.vector.util.VectorUtils;
  * InComingCallActivity is Dialog Activity, displayed when an incoming call (audio or a video) over IP
  * is received by the user. The user is asked to accept or ignore.
  */
-public class InComingCallActivity extends VectorAppCompatActivity {
+public class InComingCallActivity extends AppCompatActivity {
     private static final String LOG_TAG = "InComingCallActivity";
 
     // only one instance of this class should be displayed

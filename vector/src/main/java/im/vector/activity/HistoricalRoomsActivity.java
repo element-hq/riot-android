@@ -63,7 +63,7 @@ import im.vector.view.SimpleDividerItemDecoration;
 /**
  * Displays the historical rooms list
  */
-public class HistoricalRoomsActivity extends VectorAppCompatActivity implements SearchView.OnQueryTextListener, HomeRoomAdapter.OnSelectRoomListener, AbsAdapter.MoreRoomActionListener, RoomUtils.HistoricalRoomActionListener {
+public class HistoricalRoomsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, HomeRoomAdapter.OnSelectRoomListener, AbsAdapter.MoreRoomActionListener, RoomUtils.HistoricalRoomActionListener {
 
     private static final String LOG_TAG = HistoricalRoomsActivity.class.getSimpleName();
 

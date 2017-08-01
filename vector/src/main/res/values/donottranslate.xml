@@ -22,4 +22,10 @@
         name="room_directory_servers" translatable="false" >
         <item>matrix.org</item>
     </string-array>
+
+    <string-array name="theme_codes">
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
 </resources>

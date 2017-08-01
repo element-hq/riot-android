@@ -157,7 +157,7 @@ public class VectorApp extends Application {
         public void onReceive(Context context, Intent intent) {
             if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale(context).toString())) {
                 Log.d(LOG_TAG, "## onReceive() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale(context).toString());
-                updateApplicationLocale(context, getApplicationLocale(context), getFontScale(context));
+                updateApplicationLocale(context, getApplicationLocale(context), getFontScale(context), ThemeUtils.getApplicationTheme(context));
 
                 if (null != getCurrentActivity()) {
                     getCurrentActivity().startActivity(getCurrentActivity().getIntent());
@@ -171,7 +171,7 @@ public class VectorApp extends Application {
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
-        ThemeUtils.activitySetTheme(this);
+        //ThemeUtils.activitySetTheme(this);
 
         instance = this;
         mActivityTransitionTimer = null;
@@ -223,6 +223,7 @@ public class VectorApp extends Application {
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
+                ThemeUtils.setActivityTheme(activity);
             }
 
             @Override
@@ -236,7 +237,7 @@ public class VectorApp extends Application {
              * @return the local status value
              */
             private String getActivityLocaleStatus(Activity activity) {
-                return getApplicationLocale(activity).toString() + "_" + getFontScale(activity);
+                return getApplicationLocale(activity).toString() + "_" + getFontScale(activity) + "_" + ThemeUtils.getApplicationTheme(activity);
             }
 
             @Override
@@ -260,7 +261,7 @@ public class VectorApp extends Application {
                 // it should never happen as there is a broadcast receiver (mLanguageReceiver)
                 if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale(activity).toString())) {
                     Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale(activity).toString());
-                    updateApplicationLocale(activity, getApplicationLocale(activity), getFontScale(activity));
+                    updateApplicationLocale(activity, getApplicationLocale(activity), getFontScale(activity), ThemeUtils.getApplicationTheme(activity));
                     activity.startActivity(activity.getIntent());
                     activity.finish();
                 }
@@ -486,15 +487,6 @@ public class VectorApp extends Application {
 
         mIsCallingInBackground = false;
         mIsInBackground = false;
-        setTheme();
-    }
-
-    private void setTheme() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        String mode = sp.getString(getResources().getString(R.string.settings_theme), null);
-        if (mode != null) {
-            ThemeUtils.setTheme(mode);
-        }
     }
 
     /**
@@ -819,7 +811,6 @@ public class VectorApp extends Application {
     public static final String FONT_SCALE_LARGEST = "FONT_SCALE_LARGEST";
     private static final float FONT_SCALE_LARGEST_VALUE = 1.30f;
 
-
     private static final Locale mApplicationDefaultLanguage = new Locale("en", "UK");
 
     /**
@@ -830,12 +821,16 @@ public class VectorApp extends Application {
     private static void initApplicationLocale(Context context) {
         Locale locale = getApplicationLocale(context);
         float fontScale = getFontScaleValue(context);
+        String theme = ThemeUtils.getApplicationTheme(context);
 
         Locale.setDefault(locale);
         Configuration config = new Configuration(context.getResources().getConfiguration());
         config.locale = locale;
         config.fontScale = fontScale;
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+
+        // init the theme
+        ThemeUtils.setApplicationTheme(context, theme);
 
         // init the known locales in background
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
@@ -1021,10 +1016,11 @@ public class VectorApp extends Application {
     /**
      * Update the application locale.
      *
-     * @param context context
-     * @param locale  locale
+     * @param context the context
+     * @param locale  the locale
+     * @param theme  the new theme
      */
-    public static void updateApplicationLocale(Context context, Locale locale, String textSize) {
+    public static void updateApplicationLocale(Context context, Locale locale, String textSize, String theme) {
         saveApplicationLocale(context, locale);
         saveTextScale(context, textSize);
         Locale.setDefault(locale);
@@ -1034,6 +1030,7 @@ public class VectorApp extends Application {
         config.fontScale = getFontScaleValue(context);
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
 
+        ThemeUtils.setApplicationTheme(context, theme);
         PhoneNumberUtils.onLocaleUpdate();
     }
 

@@ -66,7 +66,6 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.activitySetThemeActionBar(this);
 
         mActionBar = getSupportActionBar();
         View actionBarView = customizeActionBar();

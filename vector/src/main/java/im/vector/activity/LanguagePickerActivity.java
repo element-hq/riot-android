@@ -36,6 +36,7 @@ import java.util.Locale;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.LanguagesAdapter;
+import im.vector.util.ThemeUtils;
 
 public class LanguagePickerActivity extends AppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {
 
@@ -146,7 +147,7 @@ public class LanguagePickerActivity extends AppCompatActivity implements Languag
 
     @Override
     public void onSelectLocale(Locale locale) {
-        VectorApp.updateApplicationLocale(this, locale, VectorApp.getFontScale(this));
+        VectorApp.updateApplicationLocale(this, locale, VectorApp.getFontScale(this), ThemeUtils.getApplicationTheme(this));
         setResult(RESULT_OK);
         finish();
     }

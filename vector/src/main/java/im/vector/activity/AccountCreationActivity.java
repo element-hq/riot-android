@@ -39,7 +39,7 @@ import java.util.HashMap;
 /**
  * AccountCreationActivity is the fallback account creation activity
  */
-public class AccountCreationActivity extends VectorActivity {
+public class AccountCreationActivity extends Activity {
     private static final String LOG_TAG = "ACCreationActivity";
 
     public static String EXTRA_HOME_SERVER_ID = "AccountCreationActivity.EXTRA_HOME_SERVER_ID";
