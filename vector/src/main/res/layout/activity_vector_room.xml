@@ -25,7 +25,7 @@
             android:layout_height="?attr/actionBarSize"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp"
-            android:background="?attr/vector_green_color"
+            android:background="?attr/header_color"
             style="@style/VectorToolbarStyle">
 
             <RelativeLayout
@@ -280,7 +280,6 @@
                         android:hint="@string/room_message_placeholder_not_encrypted"
                         android:id="@+id/editText_messageBox"
                         android:textColor="?attr/vector_message_text_color"
-                        android:theme="@style/SearchesAppTheme"
                         android:background="@android:color/transparent"
                         android:textCursorDrawable="@drawable/searches_cursor_background"
                         android:textColorHint="?attr/vector_0_54_black_color"/>

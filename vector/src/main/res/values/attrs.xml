@@ -39,6 +39,7 @@
     <attr name="vector_0_87_black_color" format="color" />
     <attr name="vector_line_separator_gray_color" format="color" />
     <attr name="vector_recents_header_background_color" format="color" />
+    <attr name="vector_members_count_color" format="color" />
 
     <!-- tabbar color-->
     <attr name="vector_tabbar_background_color" format="color" />
@@ -86,6 +87,8 @@
     <attr name="tab_rooms_secondary" format="color" />
 
     <attr name="direct_chat_indicator" format="color" />
+
+    <attr name="header_color" format="color" />
 
 </declare-styleable>
 
