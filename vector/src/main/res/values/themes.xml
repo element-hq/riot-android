@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--TODO decide whether these themes are the right base-->
-    <style name="Theme.Vector.Light.Base" parent="@style/Theme.AppCompat.Light.NoActionBar" />
-    <style name="Theme.Vector.Dark.Base" parent="@style/Theme.AppCompat.NoActionBar"/>
-
-
     <!-- LIGHT THEME COLORS -->
-    <style name="Theme.Vector.Light.Common" parent="Theme.Vector.Light.Base">
+    <style name="Theme.Vector.Light" parent="@style/Theme.AppCompat.Light">
         <item name="room_background">#FFFFFF</item>
 
         <item name="presence_online">#38af00</item>
@@ -44,6 +39,7 @@
         <item name="vector_0_87_black_color">#DC000000</item>
         <item name="vector_line_separator_gray_color">#339D9D9D</item>
         <item name="vector_recents_header_background_color">#77F2F2F2</item>
+        <item name="vector_members_count_color">#8E000000</item>
 
         <!-- tabbar color-->
         <item name="vector_tabbar_background_color">#FFF2F2F2</item>
@@ -91,11 +87,12 @@
         <item name="tab_rooms_secondary">?attr/vector_statusbar_color</item>
 
         <item name="direct_chat_indicator">#8076cfa6</item>
+
+        <item name="header_color">#FF76cfa6</item>
     </style>
 
-
     <!-- DARK THEME COLORS -->
-    <style name="Theme.Vector.Dark.Common" parent="Theme.Vector.Dark.Base">
+    <style name="Theme.Vector.Dark" parent="@style/Theme.AppCompat">
         <!-- Background color of the room -->
         <item name="room_background">#2d2d2d</item>
 
@@ -130,7 +127,7 @@
         <!-- Also of headers (and filenames) in Room Details and People Details -->
         <item name="vector_text_black_color">#d9d9d9</item>
 
-        <item name="vector_message_text_color">#d1d1d1</item>
+        <item name="vector_message_text_color">#FFF</item>
 
         <!-- 0_54_black gives invalid rendering so use 9D gray -->
         <!-- Display name and text in input field in rooms and text in room overview -->
@@ -140,6 +137,7 @@
         <item name="vector_line_separator_gray_color">#c5c1c1</item>
         <!-- Room details, Search and Person details headers -->
         <item name="vector_recents_header_background_color">#5A5A5A</item>
+        <item name="vector_members_count_color">#FFF</item>
 
         <!-- tabbar color-->
         <item name="vector_tabbar_background_color">#FFF2F2F2</item>
@@ -195,8 +193,8 @@
         <item name="tab_rooms_secondary">?attr/vector_statusbar_color</item>
 
         <item name="direct_chat_indicator">#8076cfa6</item>
+
+        <item name="header_color">#2d2d2d</item>
     </style>
 
-    <style name="Theme.Vector.Light" parent="Theme.Vector.Light.Common" />
-    <style name="Theme.Vector.Dark" parent="Theme.Vector.Dark.Common" />
 </resources>

@@ -1,7 +1,7 @@
 <resources>
 
     <!-- no action bar window -->
-    <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.Light">
+    <style name="AppTheme.NoActionBarBase" parent="@style/Theme.Vector.Light">
 
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
@@ -22,13 +22,54 @@
         <item name="android:windowBackground">?attr/vector_activity_background_color</item>
     </style>
 
+    <style name="AppTheme.NoActionBar" parent="@style/AppTheme.NoActionBarBase">
+    </style>
+
+
+    <style name="AppTheme.NoActionBarBase.Dark" parent="@style/Theme.Vector.Dark">
+
+        <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
+        <item name="android:overScrollMode">never</item>
+
+        <!-- hide the action bar -->
+        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+
+        <!-- status bar color -->
+        <item name="colorPrimaryDark">?attr/vector_statusbar_color</item>
+
+        <!-- fonts -->
+        <item name="android:typeface">sans</item>
+
+        <!-- activities background -->
+        <item name="android:windowBackground">?attr/vector_activity_background_color</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Dark" parent="@style/AppTheme.NoActionBarBase.Dark">
+    </style>
+
+
     <style name="AppTheme.NoActionBar.Swipe" parent="@style/AppTheme.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.Swipe.Dark" parent="@style/AppTheme.NoActionBar.Dark">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+
     <!-- home activity -->
     <style name="HomeActivityTheme" parent="AppTheme.NoActionBar">
+        <item name="editTextColor">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">?attr/vector_white_alpha_50</item>
+    </style>
+
+    <style name="HomeActivityTheme.Dark" parent="AppTheme.NoActionBar.Dark">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
         <item name="android:textColorHint">?attr/vector_white_alpha_50</item>
@@ -42,6 +83,14 @@
         <item name="colorPrimaryDark">@android:color/black</item>
     </style>
 
+    <style name="CallActivityTheme.Dark" parent="AppTheme.Dark">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <!-- status bar color -->
+        <item name="colorPrimaryDark">@android:color/black</item>
+    </style>
+
+
     <!-- NoActionBar + FullScreen -->
     <style name="AppTheme.NoActionBar.FullScreen" parent="@style/AppTheme.NoActionBar">
         <item name="android:windowFullscreen">true</item>
@@ -49,8 +98,22 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.FullScreen.Dark" parent="@style/AppTheme.NoActionBar.Dark">
+        <item name="android:windowFullscreen">true</item>
+        <!-- activities background -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
     <!-- ActionBar + FullScreen -->
     <style name="AppTheme.ActionBar.FullScreen" parent="@style/AppTheme.NoActionBar.FullScreen">
+        <!-- show the action bar -->
+        <item name="android:windowActionBar">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.FullScreen.Dark" parent="@style/AppTheme.NoActionBar.FullScreen.Dark">
         <!-- show the action bar -->
         <item name="android:windowActionBar">true</item>
         <item name="windowActionBar">true</item>
@@ -81,7 +144,7 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
+    <style name="AppTheme" parent="@style/Theme.Vector.Light">
 
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
@@ -126,7 +189,54 @@
 
         <!-- switch color -->
         <item name="colorControlActivated">?attr/vector_green_color</item>
+    </style>
 
+
+    <style name="AppTheme.Dark" parent="@style/Theme.Vector.Dark">
+
+        <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
+        <item name="android:overScrollMode">never</item>
+
+        <!-- with action bar -->
+        <item name="android:windowActionBar">true</item>
+
+        <!-- status bar color -->
+        <item name="colorPrimaryDark">?attr/vector_statusbar_color</item>
+
+        <!-- activities background -->
+        <item name="android:windowBackground">?attr/vector_activity_background_color</item>
+
+        <!-- fonts -->
+        <item name="android:typeface">sans</item>
+
+        <!-- android ui button -->
+        <item name="colorAccent">?attr/vector_green_color</item>
+
+        <!-- custom action bar -->
+        <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
+        <item name="actionBarStyle">@style/Vector.Styled.ActionBar</item>
+
+        <!-- actionbar icons color -->
+        <item name="actionBarTheme">@style/Vector.ActionBarTheme</item>
+
+        <!-- remove the shadow under the actionbar -->
+        <item name="android:windowContentOverlay">@null</item>
+
+        <item name="android:popupMenuStyle">@style/vector.PopupMenu</item>
+
+        <!-- tabbar background -->
+        <item name="android:actionBarTabStyle">@style/Vector.TabView</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView</item>
+
+        <!-- tabbar text color -->
+        <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
+        <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
+
+        <!-- no divider -->
+        <item name="android:actionBarDivider">@null</item>
+
+        <!-- switch color -->
+        <item name="colorControlActivated">?attr/vector_green_color</item>
     </style>
 
     <!-- tabbar background -->
@@ -197,13 +307,30 @@
         <item name="colorAccent">?attr/editTextColor</item>
     </style>
 
+    <style name="LoginAppTheme.Dark" parent="AppTheme.NoActionBar">
+        <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
+        <item name="android:buttonStyle">@style/LoginButtonStyle</item>
+
+        <item name="colorAccent">?attr/editTextColor</item>
+    </style>
+
+
     <style name="CountryPickerTheme" parent="AppTheme.NoActionBar">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
         <item name="android:textColorHint">?attr/vector_white_alpha_50</item>
     </style>
 
+    <style name="CountryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark">
+        <item name="editTextColor">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">?attr/vector_white_alpha_50</item>
+    </style>
+
     <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar">
+    </style>
+
+    <style name="DirectoryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark">
     </style>
 
     <style name="LoginEditTextStyle" parent="@android:style/Widget.EditText">
@@ -218,6 +345,29 @@
 
     <!-- searches activity -->
     <style name="SearchesAppTheme" parent="AppTheme">
+        <!-- custom action bar -->
+        <item name="android:actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
+        <item name="actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
+
+        <!-- tabbar background -->
+        <item name="android:actionBarTabStyle">@style/VectorSearches.TabView</item>
+        <item name="actionBarTabStyle">@style/VectorSearches.TabView</item>
+
+        <!-- tabbar text color -->
+        <item name="android:actionBarTabTextStyle">@style/VectorSearches.TabText</item>
+        <item name="actionBarTabTextStyle">@style/VectorSearches.TabText</item>
+
+        <!-- no divider -->
+        <item name="android:actionBarDivider">@null</item>
+
+        <!-- edittext -->
+        <item name="android:editTextStyle">@style/VectorSearches.EditText</item>
+
+        <!-- actionbar icons color -->
+        <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
+    </style>
+
+    <style name="SearchesAppTheme.Dark" parent="AppTheme.Dark">
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
         <item name="actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>

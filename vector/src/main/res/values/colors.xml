@@ -32,6 +32,7 @@
     <color name="vector_0_87_black_color">#DC000000</color>
     <color name="vector_line_separator_gray_color">#339D9D9D</color>
     <color name="vector_recents_header_background_color">#77F2F2F2</color>
+    <color name="vector_members_count_color">#8E000000</color>
 
     <!-- tabbar color-->
     <color name="vector_tabbar_background_color">#FFF2F2F2</color>
