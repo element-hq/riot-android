@@ -183,7 +183,7 @@
 
         <activity
             android:name="im.vector.activity.InComingCallActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:theme="@style/CallAppTheme"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
             android:taskAffinity=""

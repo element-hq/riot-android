@@ -65,6 +65,10 @@ public class AccountCreationActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
 
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.AppTheme_Dark);
+        }
+
         // required to have the right translated title
         setTitle(R.string.create_account);
         setContentView(R.layout.activity_account_creation);

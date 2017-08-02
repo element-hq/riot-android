@@ -12,7 +12,7 @@
 
             <stroke
                 android:width="50dp"
-                android:color="@android:color/white" />
+                android:color="?attr/vector_activity_background_color" />
         </shape>
     </item>
 

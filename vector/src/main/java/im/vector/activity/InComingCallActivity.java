@@ -137,7 +137,7 @@ public class InComingCallActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.AppTheme_Dark);
+            setTheme(R.style.CallAppTheme_Dark);
         }
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);

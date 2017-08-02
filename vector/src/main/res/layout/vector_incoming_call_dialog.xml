@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:background="?attr/vector_activity_background_color">
 
     <RelativeLayout
         android:id="@+id/incoming_call_avatar_container"
@@ -33,7 +33,7 @@
         android:gravity="center_horizontal"
         android:singleLine="true"
         android:text="Room name"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/vector_0_54_black_color"
         android:textSize="20sp" />
 
     <TextView
@@ -58,7 +58,7 @@
         android:layout_marginBottom="17dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="43dp"
-        android:background="@android:color/white"
+        android:background="?attr/vector_activity_background_color"
         android:text="@string/action_accept"
         android:textColor="?attr/vector_74_gray"
         android:textSize="14sp"
@@ -73,7 +73,7 @@
         android:layout_marginBottom="17dp"
         android:layout_marginRight="24dp"
         android:layout_toLeftOf="@+id/button_incoming_call_accept"
-        android:background="@android:color/white"
+        android:background="?attr/vector_activity_background_color"
         android:text="@string/action_ignore"
         android:textColor="?attr/vector_74_gray"
         android:textSize="14sp"
