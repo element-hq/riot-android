@@ -123,7 +123,7 @@
         <item name="vector_members_count_color">#FFF</item>
 
         <!-- tabbar color-->
-        <item name="vector_tabbar_background_color">#FFF2F2F2</item>
+        <item name="vector_tabbar_background_color">?attr/vector_activity_background_color</item>
         <item name="vector_search_hint_color">#CCC3C3C3</item>
 
         <item name="vector_image_tint">?attr/vector_actionbar_background</item>

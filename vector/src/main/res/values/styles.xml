@@ -105,12 +105,6 @@
         <item name="background">?attr/vector_activity_background_color</item>
     </style>
 
-    <!-- tabbar background -->
-    <style name="VectorSearches.TabView" parent="@style/Widget.AppCompat.ActionBar.TabView">
-        <item name="android:background">@drawable/vector_search_tabbar_background</item>
-        <item name="background">@drawable/vector_search_tabbar_background</item>
-    </style>
-
     <!-- tabbar text color -->
     <style name="VectorSearches.TabText" parent="@style/Widget.AppCompat.ActionBar.TabText">
         <item name="android:textColor">?attr/vector_green_color</item>
@@ -267,14 +261,6 @@
 
         <item name="android:popupMenuStyle">@style/vector.PopupMenu</item>
 
-        <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/Vector.TabView</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView</item>
-
-        <!-- tabbar text color -->
-        <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
-        <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
-
         <!-- no divider -->
         <item name="android:actionBarDivider">@null</item>
 
@@ -303,14 +289,6 @@
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
         <item name="actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
-
-        <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/VectorSearches.TabView</item>
-        <item name="actionBarTabStyle">@style/VectorSearches.TabView</item>
-
-        <!-- tabbar text color -->
-        <item name="android:actionBarTabTextStyle">@style/VectorSearches.TabText</item>
-        <item name="actionBarTabTextStyle">@style/VectorSearches.TabText</item>
 
         <!-- no divider -->
         <item name="android:actionBarDivider">@null</item>
@@ -444,14 +422,6 @@
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
         <item name="actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
-
-        <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/VectorSearches.TabView</item>
-        <item name="actionBarTabStyle">@style/VectorSearches.TabView</item>
-
-        <!-- tabbar text color -->
-        <item name="android:actionBarTabTextStyle">@style/VectorSearches.TabText</item>
-        <item name="actionBarTabTextStyle">@style/VectorSearches.TabText</item>
 
         <!-- no divider -->
         <item name="android:actionBarDivider">@null</item>
