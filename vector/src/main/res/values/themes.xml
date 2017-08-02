@@ -87,8 +87,6 @@
         <item name="tab_rooms_secondary">?attr/vector_statusbar_color</item>
 
         <item name="direct_chat_indicator">#8076cfa6</item>
-
-        <item name="header_color">#FF76cfa6</item>
     </style>
 
     <!-- DARK THEME COLORS -->
@@ -107,8 +105,8 @@
         <item name="vector_deemed_background_view_gray_color">#339D9D9D</item>
 
         <!-- action bar color -->
-        <item name="vector_statusbar_color">#5EA584</item>
-        <item name="vector_actionbar_background">#76CFA6</item>
+        <item name="vector_statusbar_color">#2d2d2d</item>
+        <item name="vector_actionbar_background">#2d2d2d</item>
         <item name="vector_actionbar_text_color">#FFFFFF</item>
         <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
         <item name="vector_actionbar_icons_color">#FFFFFF</item>
@@ -193,8 +191,6 @@
         <item name="tab_rooms_secondary">?attr/vector_statusbar_color</item>
 
         <item name="direct_chat_indicator">#8076cfa6</item>
-
-        <item name="header_color">#2d2d2d</item>
     </style>
 
 </resources>

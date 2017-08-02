@@ -2746,7 +2746,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                mToolbar.setBackgroundColor(ThemeUtils.getColor(this, R.attr.header_color));
+                mToolbar.setBackgroundColor(ThemeUtils.getColor(this, R.attr.vector_actionbar_background));
             }
         }
     }

@@ -25,7 +25,7 @@
             android:layout_height="?attr/actionBarSize"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp"
-            android:background="?attr/header_color"
+            android:background="?attr/vector_actionbar_background"
             style="@style/VectorToolbarStyle">
 
             <RelativeLayout
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        android:background="?attr/vector_green_color"
+        android:background="?attr/vector_actionbar_background"
         android:layout_below="@+id/room_action_bar"
         android:indeterminate="true"/>
 

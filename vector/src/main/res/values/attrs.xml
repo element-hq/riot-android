@@ -87,9 +87,6 @@
     <attr name="tab_rooms_secondary" format="color" />
 
     <attr name="direct_chat_indicator" format="color" />
-
-    <attr name="header_color" format="color" />
-
 </declare-styleable>
 
 </resources>
