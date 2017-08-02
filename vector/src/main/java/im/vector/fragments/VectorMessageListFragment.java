@@ -87,6 +87,7 @@ import im.vector.db.VectorContentProvider;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements IMessagesAdapterActionsListener {
@@ -152,6 +153,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 onRowClick(position);
             }
         });
+
+        v.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.vector_activity_background_color));
 
         return v;
     }

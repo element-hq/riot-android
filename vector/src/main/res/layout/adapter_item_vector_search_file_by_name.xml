@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?attr/vector_activity_background_color"
     android:layout_width="match_parent"
     android:layout_height="72dp">
 
@@ -59,5 +60,5 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="?attr/vector_dc_gray" />
+        android:background="?attr/vector_line_separator_gray_color" />
 </RelativeLayout>

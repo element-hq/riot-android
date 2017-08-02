@@ -39,6 +39,9 @@
     <attr name="vector_tabbar_background_color" format="color" />
     <attr name="vector_search_hint_color" format="color" />
 
+    <attr name="vector_tabbar_selected_background_color" format="color" />
+    <attr name="vector_tabbar_unselected_background_color" format="color" />
+
     <attr name="vector_image_tint" format="color" />
 
     <!-- colors to check their uses -->
@@ -58,7 +61,6 @@
     <attr name="vector_21_black" format="color" />
     <attr name="vector_80_gray" format="color" />
     <attr name="vector_05_gray" format="color" />
-
 
     <attr name="vector_d8_gray" format="color" />
 

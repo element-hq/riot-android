@@ -2,9 +2,9 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/vector_activity_background_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
 
     <RelativeLayout
         android:id="@+id/search_layout"
@@ -41,8 +41,7 @@
             android:textColor="?attr/vector_21_black"
             android:textColorHint="?attr/vector_search_hint_color"
             android:textCursorDrawable="@drawable/searches_cursor_background"
-            android:textSize="16sp"
-            android:theme="@style/SearchesAppTheme" />
+            android:textSize="16sp"/>
     </RelativeLayout>
 
     <ExpandableListView
@@ -50,7 +49,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/search_layout"
-        android:divider="@color/bright_foreground_material_light"
+        android:background="?attr/vector_activity_background_color"
+        android:divider="?attr/vector_line_separator_gray_color"
         android:dividerHeight="1px" />
 
     <TextView

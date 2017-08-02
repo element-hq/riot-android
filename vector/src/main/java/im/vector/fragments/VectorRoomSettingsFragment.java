@@ -84,6 +84,7 @@ import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.ResourceUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
@@ -457,6 +458,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             listView.setPadding(0, 0, 0, 0);
         }
 
+        // seems known issue that the preferences screen does not use the activity theme
+        view.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.vector_activity_background_color));
         return view;
     }
 

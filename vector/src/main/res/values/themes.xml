@@ -77,6 +77,9 @@
         <item name="tab_rooms_secondary">?attr/vector_statusbar_color</item>
 
         <item name="direct_chat_indicator">#8076cfa6</item>
+
+        <item name="vector_tabbar_selected_background_color">?attr/vector_green_color</item>
+        <item name="vector_tabbar_unselected_background_color">?attr/vector_green_color</item>
     </style>
 
     <!-- DARK THEME COLORS -->
@@ -121,7 +124,7 @@
 
         <!-- tabbar color-->
         <item name="vector_tabbar_background_color">#FFF2F2F2</item>
-        <item name="vector_search_hint_color">#333C3C3C</item>
+        <item name="vector_search_hint_color">#CCC3C3C3</item>
 
         <item name="vector_image_tint">?attr/vector_actionbar_background</item>
         <!-- colors to check their uses -->
@@ -142,10 +145,10 @@
 
         <!-- room members list -->
         <!-- Display names of the room members -->
-        <item name="vector_21_black">#A4A4A4</item>
+        <item name="vector_21_black">#DEDEDE</item>
         <!-- Last time a room member was online -->
         <item name="vector_80_gray">#A5A5A5A5</item>
-        <item name="vector_05_gray">#FFF2F2F2</item>
+        <item name="vector_05_gray">#CCF2F2F2</item>
 
 
         <item name="vector_d8_gray">#FFD8D8D8</item>
@@ -173,6 +176,9 @@
         <item name="tab_rooms_secondary">?attr/vector_statusbar_color</item>
 
         <item name="direct_chat_indicator">#8076cfa6</item>
+
+        <item name="vector_tabbar_selected_background_color">#2d2d2d</item>
+        <item name="vector_tabbar_unselected_background_color">#2d2d2d</item>
     </style>
 
 </resources>
