@@ -101,8 +101,8 @@
     </style>
 
     <style name="VectorSearches.Styled.ActionBar" parent="@style/Vector.Styled.ActionBar">
-        <item name="android:background">@android:color/white</item>
-        <item name="background">@android:color/white</item>
+        <item name="android:background">?attr/vector_activity_background_color</item>
+        <item name="background">?attr/vector_activity_background_color</item>
     </style>
 
     <!-- tabbar background -->
@@ -461,6 +461,7 @@
 
         <!-- actionbar icons color -->
         <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
+
     </style>
 
 </resources>

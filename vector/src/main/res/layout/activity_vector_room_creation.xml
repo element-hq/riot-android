@@ -25,5 +25,4 @@
             android:layout_gravity="center"
             android:visibility="visible"/>
     </FrameLayout>
-
 </FrameLayout>

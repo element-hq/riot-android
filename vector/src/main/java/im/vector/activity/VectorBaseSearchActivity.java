@@ -67,6 +67,10 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.SearchesAppTheme_Dark);
+        }
+
         mActionBar = getSupportActionBar();
         View actionBarView = customizeActionBar();
 

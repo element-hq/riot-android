@@ -2,7 +2,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/vector_activity_background_color">
 
     <EditText
         android:id="@+id/room_action_bar_edit_text"
@@ -17,6 +18,7 @@
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:maxLines="1"
+        android:textColor="?attr/vector_21_black"
         android:textColorHint="?attr/vector_search_hint_color"
         android:textCursorDrawable="@drawable/searches_cursor_background"
         android:textSize="20sp" />

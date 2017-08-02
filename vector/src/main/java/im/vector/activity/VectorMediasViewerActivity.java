@@ -108,7 +108,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
 
         if (ThemeUtils.useDarkTheme()) {
-            setTitle(R.style.AppTheme_Dark);
+            setTheme(R.style.AppTheme_Dark);
         }
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
