@@ -58,7 +58,7 @@ public class ThemeUtils {
     public static final String THEME_LIGHT_VALUE = "light";
 
     // selected theme
-    private static boolean mIsDarkTheme = false;
+    private static boolean mUseDarkTheme = false;
 
     /**
      * Provides the selected application theme
@@ -93,51 +93,16 @@ public class ThemeUtils {
             editor.putString(APPLICATION_THEME_KEY, aTheme);
             editor.commit();
         }
-        mIsDarkTheme = TextUtils.equals(aTheme, THEME_DARK_VALUE);
-
-        VectorApp.getInstance().setTheme(mIsDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme);
+        mUseDarkTheme = TextUtils.equals(aTheme, THEME_DARK_VALUE);
+        VectorApp.getInstance().setTheme(mUseDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme);
     }
 
     /**
-     * Update the theme of the provided activity
-     * @param activity the activity
+     * Tells if the dark theme is used
+     * @return true if the dark theme is used
      */
-    public static void setActivityTheme(Activity activity) {
-        if ((null != activity) && mIsDarkTheme) {
-            if (activity instanceof LoginActivity) {
-                activity.setTheme(R.style.LoginAppTheme_Dark);
-            } else if (activity instanceof SplashActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
-            } else if (activity instanceof VectorHomeActivity) {
-                activity.setTheme(R.style.HomeActivityTheme_Dark);
-            } else if (activity instanceof HistoricalRoomsActivity) {
-                activity.setTheme(R.style.HomeActivityTheme_Dark);
-            } else if (activity instanceof VectorRoomActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
-            } else if (activity instanceof VectorMemberDetailsActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
-            } else if (activity instanceof LockScreenActivity) {
-                activity.setTheme(android.R.style.Theme_Holo_Dialog);
-            } else if (activity instanceof JoinScreenActivity) {
-                activity.setTheme(android.R.style.Theme_Holo_Dialog);
-            } else if (activity instanceof InComingCallActivity) {
-                // TODO Theme.AppCompat.Light.Dialog
-            } else if (activity instanceof VectorCallViewActivity) {
-                activity.setTheme(R.style.CallActivityTheme_Dark);
-            } else if (activity instanceof VectorMediasPickerActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_FullScreen_Dark);
-            } else if (activity instanceof PhoneNumberAdditionActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
-            } else if (activity instanceof CountryPickerActivity) {
-                activity.setTheme(R.style.CountryPickerTheme_Dark);
-            } else if (activity instanceof LanguagePickerActivity) {
-                activity.setTheme(R.style.CountryPickerTheme_Dark);
-            } else if (activity instanceof RoomDirectoryPickerActivity) {
-                activity.setTheme(R.style.DirectoryPickerTheme_Dark);
-            } else {
-                activity.setTheme(R.style.AppTheme_Dark);
-            }
-        }
+    public static boolean useDarkTheme() {
+        return mUseDarkTheme;
     }
     
     /**

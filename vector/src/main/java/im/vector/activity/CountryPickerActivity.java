@@ -74,6 +74,10 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.CountryPickerTheme_Dark);
+        }
+
         // required to have the right translated title
         setTitle(R.string.settings_select_country);
         setContentView(R.layout.activity_country_picker);

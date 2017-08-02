@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources>
 
     <!-- LIGHT THEME COLORS -->
     <style name="Theme.Vector.Light" parent="@style/Theme.AppCompat.Light">
         <item name="room_background">#FFFFFF</item>
+        <item name="vector_activity_background_color">#FFF</item>
 
-        <item name="presence_online">#38af00</item>
-        <item name="presence_unavailable">#fc0</item>
-        <item name="presence_offline">#E53333</item>
-
-        <item name="member_list_last_seen_text">#aaa</item>
-
-        <item name="chat_gray_text">#FFAAAAAA</item>
         <item name="chat_encoding_background">#AAAAAAAA</item>
         <item name="vector_deemed_background_view_gray_color">#339D9D9D</item>
 
@@ -21,9 +15,6 @@
         <item name="vector_actionbar_text_color">#FFFFFF</item>
         <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
         <item name="vector_actionbar_icons_color">#FFFFFF</item>
-
-        <!-- activities background -->
-        <item name="vector_activity_background_color">#FFF</item>
 
         <item name="vector_not_send_color">#FFFF4444</item>
         <item name="vector_green_color">#FF76cfa6</item>
@@ -65,7 +56,6 @@
         <item name="vector_80_gray">#FF808080</item>
         <item name="vector_05_gray">#FFF2F2F2</item>
 
-
         <item name="vector_d8_gray">#FFD8D8D8</item>
 
         <item name="vector_74_gray">#FF747474</item>
@@ -93,14 +83,8 @@
     <style name="Theme.Vector.Dark" parent="@style/Theme.AppCompat">
         <!-- Background color of the room -->
         <item name="room_background">#2d2d2d</item>
+        <item name="vector_activity_background_color">#2d2d2d</item>
 
-        <item name="presence_online">#38af00</item>
-        <item name="presence_unavailable">#fc0</item>
-        <item name="presence_offline">#E53333</item>
-
-        <item name="member_list_last_seen_text">#aaa</item>
-
-        <item name="chat_gray_text">#FFAAAAAA</item>
         <item name="chat_encoding_background">#AAAAAAAA</item>
         <item name="vector_deemed_background_view_gray_color">#339D9D9D</item>
 
@@ -111,8 +95,6 @@
         <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
         <item name="vector_actionbar_icons_color">#FFFFFF</item>
 
-        <!-- activities background -->
-        <item name="vector_activity_background_color">#fff</item>
 
         <item name="vector_not_send_color">#FFFF4444</item>
         <item name="vector_green_color">#46af7f</item>

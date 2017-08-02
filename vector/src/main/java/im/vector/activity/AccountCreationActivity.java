@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 
 import java.net.URLDecoder;
 import java.util.HashMap;

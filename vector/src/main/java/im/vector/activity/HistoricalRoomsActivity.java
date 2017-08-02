@@ -101,6 +101,10 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.HomeActivityTheme_Dark);
+        }
+
         // required to have the right translated title
         setTitle(R.string.title_activity_historical);
         setContentView(R.layout.activity_historical);

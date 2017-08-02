@@ -136,6 +136,10 @@ public class InComingCallActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.AppTheme_Dark);
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setFinishOnTouchOutside(false);
 

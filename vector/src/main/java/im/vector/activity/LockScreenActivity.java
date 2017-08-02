@@ -71,6 +71,8 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // keep theme ?
+
         // kill any running alert
         if (null != mLockScreenActivity) {
             mLockScreenActivity.finish();

@@ -97,6 +97,10 @@ public class PhoneNumberAdditionActivity extends AppCompatActivity implements Te
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.AppTheme_NoActionBar_Dark);
+        }
+
         setTitle(R.string.settings_add_phone_number);
         setContentView(R.layout.activity_phone_number_addition);
 

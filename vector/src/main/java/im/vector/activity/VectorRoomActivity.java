@@ -546,6 +546,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.AppTheme_NoActionBar_Dark);
+        }
+
         setContentView(R.layout.activity_vector_room);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {

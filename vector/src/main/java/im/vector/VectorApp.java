@@ -171,7 +171,6 @@ public class VectorApp extends Application {
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
-        //ThemeUtils.activitySetTheme(this);
 
         instance = this;
         mActivityTransitionTimer = null;
@@ -223,7 +222,6 @@ public class VectorApp extends Application {
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
-                ThemeUtils.setActivityTheme(activity);
             }
 
             @Override
@@ -307,8 +305,6 @@ public class VectorApp extends Application {
             Log.e(LOG_TAG, "cannot create the mMarkdownParser " + e.getMessage());
         }
 
-        initApplicationLocale(this);
-
         // track external language updates
         // local update from the settings
         // or screen rotation !
@@ -316,6 +312,7 @@ public class VectorApp extends Application {
         VectorApp.getInstance().registerReceiver(mLanguageReceiver, new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
 
         PreferencesManager.fixMigrationIssues(this);
+        initApplicationLocale(this);
     }
 
     /**

@@ -86,6 +86,10 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.AppTheme_NoActionBar_Dark);
+        }
+
         setTitle(R.string.settings_phone_number_verification);
         setContentView(R.layout.activity_phone_number_verification);
 

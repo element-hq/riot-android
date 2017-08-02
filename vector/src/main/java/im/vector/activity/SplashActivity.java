@@ -30,6 +30,7 @@ import im.vector.VectorApp;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.util.ThemeUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -123,7 +124,11 @@ public class SplashActivity extends MXCActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.e(LOG_TAG, "onCreate");
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.AppTheme_NoActionBar_Dark);
+        }
+
+        Log.d(LOG_TAG, "onCreate");
 
         setContentView(R.layout.vector_activity_splash);
 

@@ -4,13 +4,7 @@
 <declare-styleable name="VectorStyles">
     <attr name="room_background" format="color" />
 
-    <attr name="presence_online" format="color" />
-    <attr name="presence_unavailable" format="color" />
-    <attr name="presence_offline" format="color" />
-
     <attr name="member_list_last_seen_text" format="color" />
-
-    <attr name="chat_gray_text" format="color" />
     <attr name="chat_encoding_background" format="color" />
     <attr name="vector_deemed_background_view_gray_color" format="color" />
 

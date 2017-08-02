@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="presence_online">#38af00</color>
-    <color name="presence_unavailable">#fc0</color>
-    <color name="presence_offline">#E53333</color>
-
-    <color name="member_list_last_seen_text">#aaa</color>
-
-    <color name="chat_gray_text">#FFAAAAAA</color>
-    <color name="chat_encoding_background">#AAAAAAAA</color>
-    <color name="vector_deemed_background_view_gray_color">#339D9D9D</color>
-
-    <!-- action bar color -->
-    <color name="vector_statusbar_color">#5EA584</color>
-    <color name="vector_actionbar_background">#76CFA6</color>
-    <color name="vector_actionbar_text_color">#FFFFFF</color>
-    <color name="vector_actionbar_icons_color">#FFFFFF</color>
-
-    <!-- activities background -->
-    <color name="vector_activity_background_color">#FFF</color>
-
-    <color name="vector_not_send_color">#FFFF4444</color>
     <color name="vector_green_color">#FF76cfa6</color>
     <color name="vector_light_gray_color">#FFF2F2F2</color>
     <color name="vector_silver_color">#FFC7C7C7</color>

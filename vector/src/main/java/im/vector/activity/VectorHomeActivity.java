@@ -267,7 +267,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //ThemeUtils.activitySetTheme(this);
+
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.HomeActivityTheme_Dark);
+        }
+
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 

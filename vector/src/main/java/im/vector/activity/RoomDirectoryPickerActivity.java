@@ -88,6 +88,10 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (ThemeUtils.useDarkTheme()) {
+            setTheme(R.style.DirectoryPickerTheme_Dark);
+        }
+
         setTitle(R.string.select_room_directory);
         setContentView(R.layout.activity_room_directory_picker);
         ButterKnife.bind(this);
