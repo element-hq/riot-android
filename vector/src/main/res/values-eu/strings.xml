@@ -92,15 +92,15 @@ Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
     <string name="send_bug_report_include_logs">Bidali egunkariak</string>
     <string name="send_bug_report_include_crash_logs">Bidali kraskatze egunkariak</string>
     <string name="send_bug_report_include_screenshot">Bidali pantaila-argazkia</string>
-    <string name="send_bug_report">Arazte txostena</string>
+    <string name="send_bug_report">Arazte-txostena</string>
     <string name="send_bug_report_description">Azaldu akatsa. Zer egin duzu? Zer espero zenuen? Zer gertatu da benetan?</string>
     <string name="send_bug_report_placeholder">Azaldu zure arazoa hemen</string>
-    <string name="send_bug_report_logs_description">Arazoak aztertzeari begira, bezero honen egunkariak txosten honekin batera bidaliko dira. Goiko testua besterik ez baduzu bidali nahi, desmarkatu:</string>
-    <string name="send_bug_report_alert_message">Telefonoa frustrazioz astintzen zabiltzala dirudi. Arazo baten berri eman nahi duzu?</string>
+    <string name="send_bug_report_logs_description">Akatsak aztertzeari begira, bezero honen egunkariak arazte-txosten honekin batera bidaliko dira. Goiko testua besterik ez baduzu bidali nahi, desmarkatu:</string>
+    <string name="send_bug_report_alert_message">Telefonoa amorruz astintzen zabiltzala dirudi. Akats baten berri eman nahi duzu?</string>
     <string name="send_bug_report_app_crashed">Azken aldian aplikazioa kraskatu da. Kraskatze txostena bidali nahi duzu?</string>
 
-    <string name="send_bug_report_sent">Arazte txostena ongi bidali da</string>
-    <string name="send_bug_report_failed">Huts egin du arazte txostenaren bidalketak (%s)</string>
+    <string name="send_bug_report_sent">Arazte-txostena ongi bidali da</string>
+    <string name="send_bug_report_failed">Huts egin du arazte-txostenaren bidalketak (%s)</string>
     <string name="send_bug_report_progress">Aurrerapena (%s%%)</string>
 
     <string name="send_files_in">Bidali hona</string>
@@ -264,7 +264,7 @@ Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
     <string name="remove">Kendu</string>
     <string name="join">Elkartu</string>
     <string name="preview">Aurreikusi</string>
-    <string name="reject">Ukatu</string>
+    <string name="reject">Baztertu</string>
 
     <string name="room_jump_to_first_unread">Jauzi irakurri gabeko lehen mezura.</string>
 
@@ -402,7 +402,7 @@ Ziur zaude?</string>
     <string name="room_event_action_cancel_upload">Utzi igoera</string>
     <string name="room_event_action_cancel_download">Utzi deskarga</string>
 
-    <string name="room_displayname_invite_from">Gonbidatu %s gelatik</string>
+    <string name="room_displayname_invite_from">%s gelarako gonbidapena</string>
     <string name="room_displayname_room_invite">Gela gonbidapena</string>
     <string name="room_displayname_two_members">%1$s eta %2$s</string>
     <string name="room_displayname_more_than_two_members">%1$s eta beste %2$d</string>
@@ -515,7 +515,7 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="devices_delete_pswd">Pasahitza:</string>
     <string name="devices_delete_submit_button_label">Bidali</string>
 
-    <string name="settings_logged_in">Saioa honen erabiltzailea</string>
+    <string name="settings_logged_in">Saioa hasteko erabiltzailea</string>
     <string name="settings_home_server">Hasiera zerbitzaria</string>
     <string name="settings_identity_server">Identitate zerbitzaria</string>
 
