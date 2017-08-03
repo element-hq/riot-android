@@ -330,27 +330,27 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // customization methods
     private int getDefaultMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.vector_message_text_color);
+        return ThemeUtils.getColor(mContext, R.attr.message_text_color);
     }
 
     private int getEncryptingMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.vector_green_color);
+        return ThemeUtils.getColor(mContext, R.attr.encrypting_message_text_color);
     }
 
     private int getSendingMessageTextColor() {
-        return ContextCompat.getColor(mContext, R.color.message_sending);
+        return ThemeUtils.getColor(mContext, R.attr.sending_message_text_color);
     }
 
     private int getHighlightMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.vector_fuchsia_color);
+        return ThemeUtils.getColor(mContext, R.attr.highlighted_message_text_color);
     }
 
     private int getSearchHighlightMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.vector_green_color);
+        return ThemeUtils.getColor(mContext, R.attr.highlighted_searched_message_text_color);
     }
 
     private int getNotSentMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.vector_not_send_color);
+        return ThemeUtils.getColor(mContext, R.attr.unsent_message_text_color);
     }
 
     /*

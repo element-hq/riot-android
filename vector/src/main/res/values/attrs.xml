@@ -24,18 +24,24 @@
     <!-- application bar text hint color -->
     <attr name="primary_hint_text_color" format="color" />
 
+    <!-- default text colors -->
+    <attr name="default_text_color" format="color" />
 
+    <!-- room message colors -->
+    <attr name="unsent_message_text_color" format="color" />
+    <attr name="message_text_color" format="color" />
+    <attr name="encrypting_message_text_color" format="color" />
+    <attr name="sending_message_text_color" format="color" />
+    <attr name="highlighted_message_text_color" format="color" />
+    <attr name="highlighted_searched_message_text_color" format="color" />
 
     <!-- activities background -->
-    <attr name="vector_not_send_color" format="color" />
     <attr name="vector_green_color" format="color" />
     <attr name="vector_light_gray_color" format="color" />
     <attr name="vector_silver_color" format="color" />
 
     <attr name="vector_text_black_color" format="color" />
 
-    <!-- default message text color -->
-    <attr name="vector_message_text_color" format="color" />
 
     <!-- 0_54_black gives invalid rendering so use 9D gray -->
     <attr name="vector_0_54_black_color" format="color" />
@@ -82,17 +88,6 @@
     <attr name="list_header_background" format="color" />
     <attr name="list_header_spinner_text" format="color" />
     <attr name="list_header_spinner" format="color" />
-
-    <attr name="tab_home" format="color" />
-    <attr name="tab_home_secondary" format="color" />
-    <attr name="tab_favourites" format="color" />
-    <attr name="tab_favourites_secondary" format="color" />
-    <attr name="tab_people" format="color" />
-    <attr name="tab_people_secondary" format="color" />
-    <attr name="tab_rooms" format="color" />
-    <attr name="tab_rooms_secondary" format="color" />
-
-    <attr name="direct_chat_indicator" format="color" />
 
     <attr name="vector_deemed_background_view_gray_color" format="color" />
 </declare-styleable>

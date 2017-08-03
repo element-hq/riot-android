@@ -168,7 +168,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:src="@drawable/vector_leave_room_black"
-            android:tint="?attr/vector_message_text_color" />
+            android:tint="?attr/message_text_color" />
 
         <ProgressBar
             android:id="@+id/jump_to_read_spinner"
@@ -279,7 +279,7 @@
                         android:dropDownAnchor="@+id/room_sending_message_layout"
                         android:hint="@string/room_message_placeholder_not_encrypted"
                         android:id="@+id/editText_messageBox"
-                        android:textColor="?attr/vector_message_text_color"
+                        android:textColor="?attr/default_text_color"
                         android:background="@android:color/transparent"
                         android:textCursorDrawable="@drawable/searches_cursor_background"
                         android:textColorHint="?attr/vector_0_54_black_color"/>

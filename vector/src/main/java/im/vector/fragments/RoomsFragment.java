@@ -19,6 +19,7 @@ package im.vector.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -114,7 +115,8 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setFragmentColors(R.attr.tab_rooms, R.attr.tab_rooms_secondary);
+        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_rooms);
+        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_rooms_secondary);
 
         initViews();
 

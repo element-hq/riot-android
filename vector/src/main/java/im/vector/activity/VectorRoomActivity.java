@@ -700,7 +700,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                     fragment = IconAndTextDialogFragment.newInstance(icons, messages,
                         ThemeUtils.getColor(VectorRoomActivity.this, R.attr.default_background_color),
-                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.vector_message_text_color));
+                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.default_text_color));
                     fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                         @Override
                         public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -1516,7 +1516,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts,
             ThemeUtils.getColor(this, R.attr.default_background_color),
-            ThemeUtils.getColor(this, R.attr.vector_message_text_color));
+            ThemeUtils.getColor(this, R.attr.default_text_color));
         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
             @Override
             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {

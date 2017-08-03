@@ -19,6 +19,7 @@ package im.vector.fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -103,7 +104,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setFragmentColors(R.attr.tab_home, R.attr.tab_home_secondary);
+        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_home);
+        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_home_secondary);
 
         initViews();
 

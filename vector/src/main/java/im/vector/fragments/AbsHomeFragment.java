@@ -335,17 +335,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         }
     }
 
-    /**
-     * Define colors of the fragment
-     *
-     * @param primaryColorAttr   color for header, floating button
-     * @param secondaryColorAttr color for status bar
-     */
-    public void setFragmentColors(@AttrRes final int primaryColorAttr, @AttrRes final int secondaryColorAttr) {
-        mPrimaryColor = ThemeUtils.getColor(mActivity, primaryColorAttr);
-        mSecondaryColor = ThemeUtils.getColor(mActivity, secondaryColorAttr);
-    }
-
     /*
      * *********************************************************************************************
      * Private methods
