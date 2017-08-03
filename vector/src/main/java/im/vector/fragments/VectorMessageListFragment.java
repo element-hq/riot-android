@@ -154,7 +154,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
         });
 
-        v.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.vector_activity_background_color));
+        v.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.default_background_color));
 
         return v;
     }

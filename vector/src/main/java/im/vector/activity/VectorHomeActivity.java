@@ -607,7 +607,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
         TypedValue vectorActionBarColor = new TypedValue();
-        this.getTheme().resolveAttribute(R.attr.room_background, vectorActionBarColor, true);
+        this.getTheme().resolveAttribute(R.attr.default_background_color, vectorActionBarColor, true);
         mToolbar.setBackgroundResource(vectorActionBarColor.resourceId);
 
         checkDeviceId();

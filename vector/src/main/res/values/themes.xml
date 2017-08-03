@@ -3,15 +3,20 @@
 
     <!-- LIGHT THEME COLORS -->
     <style name="Theme.Vector.Light" parent="@style/Theme.AppCompat.Light">
-        <item name="room_background">#FFFFFF</item>
-        <item name="vector_activity_background_color">#FFF</item>
+        <!-- default background color -->
+        <item name="default_background_color">@android:color/white</item>
 
-        <item name="chat_encoding_background">#AAAAAAAA</item>
-        <item name="vector_deemed_background_view_gray_color">#339D9D9D</item>
+        <!-- waiting view background -->
+        <item name="waiting_background_color">#AAAAAAAA</item>
+
+        <!-- primary dark color (status bar) -->
+        <item name="primary_dark_color">#5EA584</item>
+
+        <!-- navigation bar background color -->
+        <item name="primary_color">#76CFA6</item>
 
         <!-- action bar color -->
-        <item name="vector_statusbar_color">#5EA584</item>
-        <item name="vector_actionbar_background">#76CFA6</item>
+
         <item name="vector_actionbar_text_color">#FFFFFF</item>
         <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
         <item name="vector_actionbar_icons_color">#FFFFFF</item>
@@ -36,7 +41,7 @@
         <item name="vector_tabbar_background_color">#FFF2F2F2</item>
         <item name="vector_search_hint_color">#333C3C3C</item>
 
-        <item name="vector_image_tint">?attr/vector_actionbar_background</item>
+        <item name="vector_image_tint">?attr/primary_color</item>
 
         <!-- colors to check their uses -->
 
@@ -68,32 +73,37 @@
         <item name="list_header_spinner">#2e3c3c3c</item>
 
         <item name="tab_home">?attr/vector_green_color</item>
-        <item name="tab_home_secondary">?attr/vector_statusbar_color</item>
+        <item name="tab_home_secondary">?attr/primary_dark_color</item>
         <item name="tab_favourites">#BD79CC</item>
         <item name="tab_favourites_secondary">#744C7F</item>
         <item name="tab_people">#F8A15F</item>
         <item name="tab_people_secondary">#D97051</item>
         <item name="tab_rooms">?attr/vector_green_color</item>
-        <item name="tab_rooms_secondary">?attr/vector_statusbar_color</item>
+        <item name="tab_rooms_secondary">?attr/primary_dark_color</item>
 
         <item name="direct_chat_indicator">#8076cfa6</item>
 
         <item name="vector_tabbar_selected_background_color">?attr/vector_green_color</item>
         <item name="vector_tabbar_unselected_background_color">?attr/vector_green_color</item>
+
+        <item name="vector_deemed_background_view_gray_color">#339D9D9D</item>
     </style>
 
     <!-- DARK THEME COLORS -->
     <style name="Theme.Vector.Dark" parent="@style/Theme.AppCompat">
-        <!-- Background color of the room -->
-        <item name="room_background">#2d2d2d</item>
-        <item name="vector_activity_background_color">#2d2d2d</item>
+        <!-- default background color -->
+        <item name="default_background_color">#2d2d2d</item>
 
-        <item name="chat_encoding_background">#AAAAAAAA</item>
-        <item name="vector_deemed_background_view_gray_color">#339D9D9D</item>
+        <!-- waiting view background -->
+        <item name="waiting_background_color">#55555555</item>
+
+        <!-- status bar color -->
+        <item name="primary_dark_color">#191919</item>
+
+        <!-- navigation bar background color -->
+        <item name="primary_color">#383838</item>
 
         <!-- action bar color -->
-        <item name="vector_statusbar_color">#2d2d2d</item>
-        <item name="vector_actionbar_background">#2d2d2d</item>
         <item name="vector_actionbar_text_color">#FFFFFF</item>
         <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
         <item name="vector_actionbar_icons_color">#FFFFFF</item>
@@ -123,10 +133,10 @@
         <item name="vector_members_count_color">#FFF</item>
 
         <!-- tabbar color-->
-        <item name="vector_tabbar_background_color">?attr/vector_activity_background_color</item>
+        <item name="vector_tabbar_background_color">?attr/default_background_color</item>
         <item name="vector_search_hint_color">#CCC3C3C3</item>
 
-        <item name="vector_image_tint">?attr/vector_actionbar_background</item>
+        <item name="vector_image_tint">?attr/primary_color</item>
         <!-- colors to check their uses -->
 
         <!-- NavigationView color-->
@@ -167,18 +177,22 @@
         <item name="list_header_spinner">#A5A5A5A5</item>
 
         <item name="tab_home">?attr/vector_green_color</item>
-        <item name="tab_home_secondary">?attr/vector_statusbar_color</item>
+        <item name="tab_home_secondary">?attr/primary_dark_color</item>
         <item name="tab_favourites">#BD79CC</item>
         <item name="tab_favourites_secondary">#744C7F</item>
         <item name="tab_people">#F8A15F</item>
         <item name="tab_people_secondary">#D97051</item>
         <item name="tab_rooms">?attr/vector_green_color</item>
-        <item name="tab_rooms_secondary">?attr/vector_statusbar_color</item>
+        <item name="tab_rooms_secondary">?attr/primary_dark_color</item>
 
         <item name="direct_chat_indicator">#8076cfa6</item>
 
         <item name="vector_tabbar_selected_background_color">#2d2d2d</item>
         <item name="vector_tabbar_unselected_background_color">#2d2d2d</item>
+
+
+
+        <item name="vector_deemed_background_view_gray_color">#339D9D9D</item>
     </style>
 
 </resources>

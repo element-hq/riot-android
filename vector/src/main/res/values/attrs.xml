@@ -2,21 +2,28 @@
 <resources>
 
 <declare-styleable name="VectorStyles">
-    <attr name="room_background" format="color" />
 
-    <attr name="member_list_last_seen_text" format="color" />
-    <attr name="chat_encoding_background" format="color" />
-    <attr name="vector_deemed_background_view_gray_color" format="color" />
+    <!-- default background color -->
+    <attr name="default_background_color" format="color" />
+
+    <!-- waiting view background -->
+    <attr name="waiting_background_color" format="color" />
+
+    <!-- primary dark color (status bar) -->
+    <attr name="primary_dark_color" format="color" />
+
+    <!-- navigation bar background color -->
+    <attr name="primary_color" format="color" />
+
 
     <!-- action bar color -->
-    <attr name="vector_statusbar_color" format="color" />
-    <attr name="vector_actionbar_background" format="color" />
+
     <attr name="vector_actionbar_hint_text_color" format="color" />
     <attr name="vector_actionbar_text_color" format="color" />
     <attr name="vector_actionbar_icons_color" format="color" />
 
     <!-- activities background -->
-    <attr name="vector_activity_background_color" format="color" />
+
 
     <attr name="vector_not_send_color" format="color" />
     <attr name="vector_green_color" format="color" />
@@ -84,6 +91,8 @@
     <attr name="tab_rooms_secondary" format="color" />
 
     <attr name="direct_chat_indicator" format="color" />
+
+    <attr name="vector_deemed_background_view_gray_color" format="color" />
 </declare-styleable>
 
 </resources>

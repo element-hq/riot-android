@@ -4,8 +4,8 @@
 
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">?attr/vector_actionbar_background</item>
-        <item name="background">?attr/vector_actionbar_background</item>
+        <item name="android:background">?attr/primary_color</item>
+        <item name="background">?attr/primary_color</item>
 
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
@@ -51,8 +51,8 @@
 
     <!-- custom action bar -->
     <style name="Vector.Styled.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
-        <item name="android:background">?attr/vector_actionbar_background</item>
-        <item name="background">?attr/vector_actionbar_background</item>
+        <item name="android:background">?attr/primary_color</item>
+        <item name="background">?attr/primary_color</item>
 
         <!-- remove shadow under the action bar -->
         <item name="elevation">0dp</item>
@@ -101,8 +101,8 @@
     </style>
 
     <style name="VectorSearches.Styled.ActionBar" parent="@style/Vector.Styled.ActionBar">
-        <item name="android:background">?attr/vector_activity_background_color</item>
-        <item name="background">?attr/vector_activity_background_color</item>
+        <item name="android:background">?attr/default_background_color</item>
+        <item name="background">?attr/default_background_color</item>
     </style>
 
     <!-- tabbar text color -->
@@ -183,7 +183,7 @@
         <item name="windowNoTitle">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">?attr/vector_statusbar_color</item>
+        <item name="colorPrimaryDark">?attr/primary_dark_color</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
@@ -238,7 +238,7 @@
         <item name="android:windowActionBar">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">?attr/vector_statusbar_color</item>
+        <item name="colorPrimaryDark">?attr/primary_dark_color</item>
 
         <!-- activities background -->
         <item name="android:windowBackground">@drawable/window_background</item>
@@ -336,7 +336,7 @@
         <item name="windowNoTitle">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">?attr/vector_statusbar_color</item>
+        <item name="colorPrimaryDark">?attr/primary_dark_color</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
@@ -387,7 +387,7 @@
         <item name="android:windowActionBar">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">?attr/vector_statusbar_color</item>
+        <item name="colorPrimaryDark">?attr/primary_dark_color</item>
 
         <!-- activities background -->
         <item name="android:windowBackground">@drawable/window_background</item>

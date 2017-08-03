@@ -699,7 +699,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
 
                     fragment = IconAndTextDialogFragment.newInstance(icons, messages,
-                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.room_background),
+                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.default_background_color),
                         ThemeUtils.getColor(VectorRoomActivity.this, R.attr.vector_message_text_color));
                     fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                         @Override
@@ -1515,7 +1515,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         final Integer[] lTexts = new Integer[]{R.string.action_voice_call, R.string.action_video_call};
 
         IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts,
-            ThemeUtils.getColor(this, R.attr.room_background),
+            ThemeUtils.getColor(this, R.attr.default_background_color),
             ThemeUtils.getColor(this, R.attr.vector_message_text_color));
         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
             @Override
@@ -2747,7 +2747,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                mToolbar.setBackgroundColor(ThemeUtils.getColor(this, R.attr.vector_actionbar_background));
+                mToolbar.setBackgroundColor(ThemeUtils.getColor(this, R.attr.primary_color));
             }
         }
     }

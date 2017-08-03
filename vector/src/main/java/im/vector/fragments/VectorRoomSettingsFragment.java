@@ -459,7 +459,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // seems known issue that the preferences screen does not use the activity theme
-        view.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.vector_activity_background_color));
+        view.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.default_background_color));
         return view;
     }
 
