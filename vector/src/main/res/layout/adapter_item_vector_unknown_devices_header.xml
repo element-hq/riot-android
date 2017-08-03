@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/vector_recents_header_background_color">
+    android:background="?attr/vector_activity_background_color">
 
     <RelativeLayout
         android:layout_width="match_parent"
