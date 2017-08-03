@@ -35,7 +35,6 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
 import im.vector.R;
-import im.vector.util.ThemeUtils;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -57,10 +56,6 @@ public class FallbackLoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-
-        if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.AppTheme_Dark);
-        }
 
         setTitle(R.string.login);
         setContentView(R.layout.activity_login_fallback);

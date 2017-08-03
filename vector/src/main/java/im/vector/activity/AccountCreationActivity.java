@@ -32,7 +32,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import im.vector.R;
-import im.vector.util.ThemeUtils;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -64,10 +63,6 @@ public class AccountCreationActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-
-        if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.AppTheme_Dark);
-        }
 
         // required to have the right translated title
         setTitle(R.string.create_account);

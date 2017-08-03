@@ -29,7 +29,9 @@ import android.util.TypedValue;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.AccountCreationActivity;
 import im.vector.activity.CountryPickerActivity;
+import im.vector.activity.FallbackLoginActivity;
 import im.vector.activity.HistoricalRoomsActivity;
 import im.vector.activity.InComingCallActivity;
 import im.vector.activity.JoinScreenActivity;
@@ -37,14 +39,22 @@ import im.vector.activity.LanguagePickerActivity;
 import im.vector.activity.LockScreenActivity;
 import im.vector.activity.LoginActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
+import im.vector.activity.PhoneNumberVerificationActivity;
 import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.SplashActivity;
+import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.activity.VectorRoomCreationActivity;
+import im.vector.activity.VectorRoomDetailsActivity;
 import im.vector.activity.VectorRoomInviteMembersActivity;
+import im.vector.activity.VectorSettingsActivity;
+import im.vector.activity.VectorUniversalLinkActivity;
 
 /**
  * Util class for managing themes.
@@ -57,8 +67,6 @@ public class ThemeUtils {
     public static final String THEME_DARK_VALUE = "dark";
     public static final String THEME_LIGHT_VALUE = "light";
 
-    // selected theme
-    private static boolean mUseDarkTheme = false;
 
     /**
      * Provides the selected application theme
@@ -93,17 +101,74 @@ public class ThemeUtils {
             editor.putString(APPLICATION_THEME_KEY, aTheme);
             editor.commit();
         }
-        mUseDarkTheme = TextUtils.equals(aTheme, THEME_DARK_VALUE);
-        VectorApp.getInstance().setTheme(mUseDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme);
+
+        if (TextUtils.equals(aTheme, THEME_DARK_VALUE)) {
+            VectorApp.getInstance().setTheme(R.style.AppTheme_Dark);
+        } else {
+            VectorApp.getInstance().setTheme(R.style.AppTheme);
+        }
     }
 
     /**
-     * Tells if the dark theme is used
-     * @return true if the dark theme is used
+     * Set the activity theme according to the selected one.
+     *
+     * @param activity the activity
      */
-    public static boolean useDarkTheme() {
-        return mUseDarkTheme;
+    public static void setActivityTheme(Activity activity) {
+        if (TextUtils.equals(getApplicationTheme(activity), THEME_DARK_VALUE)) {
+            if (activity instanceof AccountCreationActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof AccountCreationActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof CountryPickerActivity) {
+                activity.setTheme(R.style.CountryPickerTheme_Dark);
+            } else if (activity instanceof FallbackLoginActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof HistoricalRoomsActivity) {
+                activity.setTheme(R.style.HomeActivityTheme_Dark);
+            } else if (activity instanceof InComingCallActivity) {
+                activity.setTheme(R.style.CallAppTheme_Dark);
+            } else if (activity instanceof LanguagePickerActivity) {
+                activity.setTheme(R.style.CountryPickerTheme_Dark);
+            } else if (activity instanceof LoginActivity) {
+                activity.setTheme(R.style.LoginAppTheme_Dark);
+            } else if (activity instanceof PhoneNumberAdditionActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof PhoneNumberVerificationActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof RoomDirectoryPickerActivity) {
+                activity.setTheme(R.style.DirectoryPickerTheme_Dark);
+            } else if (activity instanceof SplashActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof VectorBaseSearchActivity) {
+                activity.setTheme(R.style.SearchesAppTheme_Dark);
+            } else if (activity instanceof VectorCallViewActivity) {
+                activity.setTheme(R.style.CallActivityTheme_Dark);
+            } else if (activity instanceof VectorHomeActivity) {
+                activity.setTheme(R.style.HomeActivityTheme_Dark);
+            } else if (activity instanceof VectorMediasPickerActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_FullScreen_Dark);
+            } else if (activity instanceof VectorMediasViewerActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof VectorMemberDetailsActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof VectorPublicRoomsActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof VectorRoomActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof VectorRoomCreationActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof VectorRoomDetailsActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof VectorSettingsActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof VectorUniversalLinkActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
+            }
+        }
     }
+
+
     
     /**
      * Translates color attributes to colors

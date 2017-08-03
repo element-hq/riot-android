@@ -42,7 +42,6 @@ import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.util.ThemeUtils;
 
 public class PhoneNumberVerificationActivity extends AppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
 
@@ -85,10 +84,6 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.AppTheme_NoActionBar_Dark);
-        }
 
         setTitle(R.string.settings_phone_number_verification);
         setContentView(R.layout.activity_phone_number_verification);

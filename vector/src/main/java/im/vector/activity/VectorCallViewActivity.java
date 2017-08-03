@@ -63,7 +63,6 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
@@ -506,10 +505,6 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG,"## onCreate(): IN");
         super.onCreate(savedInstanceState);
-
-        if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.CallActivityTheme_Dark);
-        }
 
         setContentView(R.layout.activity_callview);
         instance = this;

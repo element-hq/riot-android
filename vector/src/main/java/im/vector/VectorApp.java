@@ -222,6 +222,7 @@ public class VectorApp extends Application {
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
+                ThemeUtils.setActivityTheme(activity);
             }
 
             @Override

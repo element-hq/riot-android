@@ -40,7 +40,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
-import im.vector.util.ThemeUtils;
 
 /**
  * Dummy activity used to dispatch the vector URL links.
@@ -52,10 +51,6 @@ public class VectorUniversalLinkActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.AppTheme_Dark);
-        }
 
         String intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
 

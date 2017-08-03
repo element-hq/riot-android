@@ -109,10 +109,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.AppTheme_Dark);
-        }
-
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);

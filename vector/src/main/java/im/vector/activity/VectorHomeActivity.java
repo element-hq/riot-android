@@ -115,7 +115,6 @@ import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
-import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
@@ -267,10 +266,6 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.HomeActivityTheme_Dark);
-        }
 
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);

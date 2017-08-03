@@ -41,7 +41,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.VectorUnifiedSearchFragmentPagerAdapter;
 import im.vector.contacts.ContactsManager;
-import im.vector.util.ThemeUtils;
 
 /**
  * Displays a generic activity search method

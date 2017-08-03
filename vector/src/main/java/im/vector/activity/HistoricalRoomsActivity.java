@@ -56,7 +56,6 @@ import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.util.RoomUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
@@ -100,10 +99,6 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.HomeActivityTheme_Dark);
-        }
 
         // required to have the right translated title
         setTitle(R.string.title_activity_historical);

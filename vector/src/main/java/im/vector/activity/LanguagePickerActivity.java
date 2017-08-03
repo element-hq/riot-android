@@ -64,10 +64,6 @@ public class LanguagePickerActivity extends AppCompatActivity implements Languag
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.CountryPickerTheme_Dark);
-        }
-
         setTitle(R.string.settings_select_language);
         setContentView(R.layout.activity_langagues_picker);
 

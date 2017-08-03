@@ -86,7 +86,6 @@ import javax.microedition.khronos.egl.EGLSurface;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.ResourceUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
 
@@ -221,10 +220,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (ThemeUtils.useDarkTheme()) {
-            setTheme(R.style.AppTheme_NoActionBar_FullScreen_Dark);
-        }
 
         setContentView(R.layout.activity_vector_medias_picker);
 
