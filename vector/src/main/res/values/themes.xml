@@ -12,14 +12,18 @@
         <!-- primary dark color (status bar) -->
         <item name="primary_dark_color">#5EA584</item>
 
-        <!-- navigation bar background color -->
+        <!-- application bar background color -->
         <item name="primary_color">#76CFA6</item>
 
-        <!-- action bar color -->
+        <!-- application bar text color -->
+        <item name="primary_text_color">@android:color/white</item>
 
-        <item name="vector_actionbar_text_color">#FFFFFF</item>
-        <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
-        <item name="vector_actionbar_icons_color">#FFFFFF</item>
+        <!-- application bar icons color -->
+        <item name="primary_control_color">@android:color/white</item>
+
+        <!-- application bar text hint color -->
+        <item name="primary_hint_text_color">#BBE7D3</item>
+
 
         <item name="vector_not_send_color">#FFFF4444</item>
         <item name="vector_green_color">#FF76cfa6</item>
@@ -100,13 +104,19 @@
         <!-- status bar color -->
         <item name="primary_dark_color">#191919</item>
 
-        <!-- navigation bar background color -->
+        <!-- application bar color -->
         <item name="primary_color">#383838</item>
 
-        <!-- action bar color -->
-        <item name="vector_actionbar_text_color">#FFFFFF</item>
-        <item name="vector_actionbar_hint_text_color">#BBE7D3</item>
-        <item name="vector_actionbar_icons_color">#FFFFFF</item>
+        <!-- application bar text color -->
+        <item name="primary_text_color">@android:color/white</item>
+
+        <!-- application bar icons color -->
+        <item name="primary_control_color">#74CAA2</item>
+
+        <!-- application bar text hint color -->
+        <item name="primary_hint_text_color">#BBE7D3</item>
+
+
 
 
         <item name="vector_not_send_color">#FFFF4444</item>

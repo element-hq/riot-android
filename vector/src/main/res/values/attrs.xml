@@ -12,19 +12,21 @@
     <!-- primary dark color (status bar) -->
     <attr name="primary_dark_color" format="color" />
 
-    <!-- navigation bar background color -->
+    <!-- application bar background color -->
     <attr name="primary_color" format="color" />
 
+    <!-- application bar text color -->
+    <attr name="primary_text_color" format="color" />
 
-    <!-- action bar color -->
+    <!-- application bar icons color -->
+    <attr name="primary_control_color" format="color" />
 
-    <attr name="vector_actionbar_hint_text_color" format="color" />
-    <attr name="vector_actionbar_text_color" format="color" />
-    <attr name="vector_actionbar_icons_color" format="color" />
+    <!-- application bar text hint color -->
+    <attr name="primary_hint_text_color" format="color" />
+
+
 
     <!-- activities background -->
-
-
     <attr name="vector_not_send_color" format="color" />
     <attr name="vector_green_color" format="color" />
     <attr name="vector_light_gray_color" format="color" />

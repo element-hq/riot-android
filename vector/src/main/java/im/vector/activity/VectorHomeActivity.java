@@ -904,8 +904,8 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         // Set color of toolbar search view
         EditText edit = (EditText) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        edit.setTextColor(ThemeUtils.getColor(this, R.attr.vector_actionbar_text_color));
-        edit.setHintTextColor(ThemeUtils.getColor(this, R.attr.vector_actionbar_hint_text_color));
+        edit.setTextColor(ThemeUtils.getColor(this, R.attr.primary_text_color));
+        edit.setHintTextColor(ThemeUtils.getColor(this, R.attr.primary_hint_text_color));
     }
 
     /**

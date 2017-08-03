@@ -15,12 +15,12 @@
 
     <style name="VectorToolbarTheme">
         <!-- Used to tint the back arrow, menu and spinner arrow -->
-        <item name="colorControlNormal">?attr/vector_actionbar_icons_color</item>
+        <item name="colorControlNormal">?attr/primary_control_color</item>
     </style>
 
     <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">?attr/vector_actionbar_text_color</item>
+        <item name="android:textColor">?attr/primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
     </style>
 
@@ -46,7 +46,7 @@
 
     <!-- actionbar icons color -->
     <style name="Vector.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">?attr/vector_actionbar_icons_color</item>
+        <item name="colorControlNormal">?attr/primary_control_color</item>
     </style>
 
     <!-- custom action bar -->
@@ -66,14 +66,14 @@
 
     <!-- main text -->
     <style name="ActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">?attr/vector_actionbar_text_color</item>
+        <item name="android:textColor">?attr/primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <!-- subtext text -->
     <style name="ActionBarSubTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">?attr/vector_actionbar_text_color</item>
+        <item name="android:textColor">?attr/primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">12sp</item>
     </style>
