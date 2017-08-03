@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- main app color -->
+    <!-- main app colors -->
     <color name="vector_green_color">#FF76cfa6</color>
+    <color name="vector_fuchsia_color">#ff0064</color>
+
+
+    <!-- home activity tab bar color -->
+    <color name="tab_home">@color/vector_green_color</color>
+    <color name="tab_home_secondary">#5EA584</color>
+    <color name="tab_favourites">#BD79CC</color>
+    <color name="tab_favourites_secondary">#744C7F</color>
+    <color name="tab_people">#F8A15F</color>
+    <color name="tab_people_secondary">#D97051</color>
+    <color name="tab_rooms">@color/vector_green_color</color>
+    <color name="tab_rooms_secondary">#5EA584</color>
+
 
     <color name="vector_light_gray_color">#FFF2F2F2</color>
     <color name="vector_silver_color">#FFC7C7C7</color>
-
-    <color name="vector_text_black_color">#FF3C3C3C</color>
 
     <!-- 0_54_black gives invalid rendering so use 9D gray -->
     <color name="vector_0_54_black_color">#8E000000</color>
@@ -16,9 +27,6 @@
     <color name="vector_recents_header_background_color">#77F2F2F2</color>
     <color name="vector_members_count_color">#8E000000</color>
 
-    <!-- tabbar color-->
-    <color name="vector_tabbar_background_color">#FFF2F2F2</color>
-    <color name="vector_search_hint_color">#333C3C3C</color>
 
     <!-- colors to check their uses -->
 
@@ -26,7 +34,7 @@
     <color name="vector_4d_gray">#FF4D4D4D</color>
 
     <!-- FloatingActionButton -->
-    <color name="vector_fuchsia_color">#ff0064</color>
+
 
     <color name="vector_text_gray_color">#FF9D9D9D</color>
 
@@ -49,16 +57,6 @@
     <color name="list_header_background">#f6f6f6</color>
     <color name="list_header_spinner_text">#7f3c3c3c</color>
     <color name="list_header_spinner">#2e3c3c3c</color>
-
-    <!-- home activity tab bar color -->
-    <color name="tab_home">@color/vector_green_color</color>
-    <color name="tab_home_secondary">#5EA584</color>
-    <color name="tab_favourites">#BD79CC</color>
-    <color name="tab_favourites_secondary">#744C7F</color>
-    <color name="tab_people">#F8A15F</color>
-    <color name="tab_people_secondary">#D97051</color>
-    <color name="tab_rooms">@color/vector_green_color</color>
-    <color name="tab_rooms_secondary">#5EA584</color>
 
     <!-- color of the direct chat avatar ring -->
     <color name="direct_chat_ring_color">#8076cfa6</color>

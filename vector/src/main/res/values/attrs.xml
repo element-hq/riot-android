@@ -26,6 +26,7 @@
 
     <!-- default text colors -->
     <attr name="default_text_color" format="color" />
+    <attr name="default_text_hint_color" format="color" />
 
     <!-- room message colors -->
     <attr name="unsent_message_text_color" format="color" />
@@ -34,13 +35,18 @@
     <attr name="sending_message_text_color" format="color" />
     <attr name="highlighted_message_text_color" format="color" />
     <attr name="highlighted_searched_message_text_color" format="color" />
+    <attr name="search_mode_room_name_text_color" format="color" />
+
+    <!-- activities background -->
+    <attr name="tab_bar_background_color" format="color" />
+    <attr name="tab_bar_selected_background_color" format="color" />
+    <attr name="tab_bar_unselected_background_color" format="color" />
+
 
     <!-- activities background -->
     <attr name="vector_green_color" format="color" />
     <attr name="vector_light_gray_color" format="color" />
     <attr name="vector_silver_color" format="color" />
-
-    <attr name="vector_text_black_color" format="color" />
 
 
     <!-- 0_54_black gives invalid rendering so use 9D gray -->
@@ -50,12 +56,7 @@
     <attr name="vector_recents_header_background_color" format="color" />
     <attr name="vector_members_count_color" format="color" />
 
-    <!-- tabbar color-->
-    <attr name="vector_tabbar_background_color" format="color" />
-    <attr name="vector_search_hint_color" format="color" />
 
-    <attr name="vector_tabbar_selected_background_color" format="color" />
-    <attr name="vector_tabbar_unselected_background_color" format="color" />
 
     <attr name="vector_image_tint" format="color" />
 
@@ -63,9 +64,6 @@
 
     <!-- NavigationView color-->
     <attr name="vector_4d_gray" format="color" />
-
-    <!-- FloatingActionButton -->
-    <attr name="vector_fuchsia_color" format="color" />
 
     <attr name="vector_text_gray_color" format="color" />
 

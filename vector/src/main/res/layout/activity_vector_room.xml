@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:text="A text here"
-            android:textColor="?attr/vector_text_black_color"
+            android:textColor="?attr/default_text_color"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
 
@@ -96,7 +96,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_width="94dp"
                 android:layout_height="36dp"
-                android:textColor="?attr/vector_fuchsia_color"
+                android:textColor="@color/vector_fuchsia_color"
                 android:background="@android:color/white"
                 android:text="@string/cancel"/>
         </RelativeLayout>
@@ -349,7 +349,7 @@
                     android:layout_toRightOf="@id/room_self_avatar_container"
                     android:text="@string/room_do_not_have_permission_to_post"
                     android:textSize="14sp"
-                    android:textColor="?attr/vector_text_black_color"
+                    android:textColor="?attr/default_text_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone" />

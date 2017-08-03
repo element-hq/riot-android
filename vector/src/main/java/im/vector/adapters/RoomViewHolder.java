@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -135,7 +136,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         int notificationCount;
 
         // Setup colors
-        int mFuchsiaColor = ThemeUtils.getColor(context, R.attr.vector_fuchsia_color);
+        int mFuchsiaColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
         int mGreenColor = ThemeUtils.getColor(context, R.attr.vector_green_color);
         int mSilverColor = ThemeUtils.getColor(context, R.attr.vector_silver_color);
 

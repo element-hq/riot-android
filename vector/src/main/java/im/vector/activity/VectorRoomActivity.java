@@ -2126,7 +2126,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         @Override
         public void updateDrawState(TextPaint ds) {
             super.updateDrawState(ds);
-            ds.setColor(ThemeUtils.getColor(VectorRoomActivity.this, R.attr.vector_fuchsia_color));
+            ds.setColor(ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color));
             ds.bgColor = 0;
             ds.setUnderlineText(true);
         }
@@ -2145,7 +2145,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         @Override
         public void updateDrawState(TextPaint ds) {
             super.updateDrawState(ds);
-            ds.setColor(ThemeUtils.getColor(VectorRoomActivity.this, R.attr.vector_fuchsia_color));
+            ds.setColor(ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color));
             ds.bgColor = 0;
             ds.setUnderlineText(true);
         }
@@ -2176,7 +2176,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (!Matrix.getInstance(this).isConnected()) {
             isAreaVisible = true;
             iconId = R.drawable.error;
-            textColor = ThemeUtils.getColor(this, R.attr.vector_fuchsia_color);
+            textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
             changedTextColor = true;
             text = new SpannableString(getResources().getString(R.string.room_offline_notification));
         } else if(mIsUnreadPreviewMode){
@@ -2224,7 +2224,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 }
 
                 mNotificationTextView.setMovementMethod(LinkMovementMethod.getInstance());
-                textColor = ThemeUtils.getColor(this, R.attr.vector_fuchsia_color);
+                textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
                 changedTextColor = true;
 
             } else if ((null != mIsScrolledToTheBottom) && (!mIsScrolledToTheBottom)) {
@@ -2240,7 +2240,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                 if (unreadCount > 0) {
                     iconId = R.drawable.newmessages;
-                    textColor = ThemeUtils.getColor(this, R.attr.vector_fuchsia_color);
+                    textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
                     changedTextColor = true;
 
                     if (unreadCount == 1) {

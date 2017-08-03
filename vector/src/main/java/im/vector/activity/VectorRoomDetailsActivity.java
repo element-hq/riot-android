@@ -23,6 +23,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
 import android.view.MenuItem;
@@ -330,7 +331,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             tabIndexToRestore = PEOPLE_TAB_INDEX;
         }
 
-        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(ThemeUtils.getColor(this, R.attr.vector_tabbar_background_color)));
+        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(ThemeUtils.getColor(this, R.attr.tab_bar_background_color)));
 
         // set the tab to display & set current tab index
         mActionBar.setSelectedNavigationItem(tabIndexToRestore);

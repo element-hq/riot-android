@@ -23,7 +23,7 @@
             android:layout_marginLeft="18dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold"
-            android:textColor="?attr/vector_text_black_color"
+            android:textColor="?attr/default_text_color"
             android:text = "A message here" />
     </RelativeLayout>
 

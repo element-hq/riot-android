@@ -131,10 +131,10 @@
         <item name="tabMode">fixed</item>
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">?attr/vector_tabbar_background_color</item>
-        <item name="tabTextColor">?attr/vector_green_color</item>
-        <item name="tabSelectedTextColor">?attr/vector_green_color</item>
-        <item name="tabIndicatorColor">?attr/vector_green_color</item>
+        <item name="tabBackground">?attr/tab_bar_background_color</item>
+        <item name="tabTextColor">@color/vector_green_color</item>
+        <item name="tabSelectedTextColor">@color/vector_green_color</item>
+        <item name="tabIndicatorColor">@color/vector_green_color</item>
         <item name="tabMaxWidth">0dp</item>
     </style>
 
@@ -150,7 +150,7 @@
 
     <style name="ListHeader">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?attr/vector_text_black_color</item>
+        <item name="android:textColor">?attr/default_text_color</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:background">?attr/list_header_background</item>
@@ -263,6 +263,14 @@
 
         <!-- no divider -->
         <item name="android:actionBarDivider">@null</item>
+
+        <!-- tabbar background -->
+        <item name="android:actionBarTabStyle">@style/Vector.TabView</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView</item>
+
+        <!-- tabbar text color -->
+        <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
+        <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
 
         <!-- switch color -->
         <item name="colorControlActivated">?attr/vector_green_color</item>

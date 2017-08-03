@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -661,8 +663,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             return convertView;
         }
 
-        int roomNameBlack = ThemeUtils.getColor(mContext, R.attr.vector_text_black_color);
-        int fushiaColor = ThemeUtils.getColor(mContext, R.attr.vector_fuchsia_color);
+        int roomNameBlack = ThemeUtils.getColor(mContext, R.attr.default_text_color);
+        int fushiaColor = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
         int vectorDefaultTimeStampColor = ThemeUtils.getColor(mContext, R.attr.vector_0_54_black_color);
         int vectorGreenColor = ThemeUtils.getColor(mContext, R.attr.vector_green_color);
         int vectorSilverColor = ThemeUtils.getColor(mContext, R.attr.vector_silver_color);

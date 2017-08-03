@@ -25,25 +25,27 @@
         <item name="primary_hint_text_color">#BBE7D3</item>
 
         <!-- default text colors -->
-        <item name="default_text_color">@android:color/black</item>
+        <item name="default_text_color">#FF3C3C3C</item>
+        <item name="default_text_hint_color">#333C3C3C</item>
 
         <!-- room message colors -->
         <item name="unsent_message_text_color">#FFFF4444</item>
-        <item name="message_text_color">@android:color/black</item>
+        <item name="message_text_color">?attr/default_text_color</item>
         <item name="encrypting_message_text_color">@color/vector_green_color</item>
         <item name="sending_message_text_color">#AAA</item>
         <item name="highlighted_message_text_color">@color/vector_fuchsia_color</item>
         <item name="highlighted_searched_message_text_color">@color/vector_green_color</item>
+        <item name="search_mode_room_name_text_color">#333C3C3C</item>
 
-
-
+        <!-- tab bar colors -->
+        <item name="tab_bar_background_color">?attr/primary_color</item>
+        <item name="tab_bar_selected_background_color">?attr/primary_color</item>
+        <item name="tab_bar_unselected_background_color">?attr/primary_color</item>
 
 
         <item name="vector_green_color">#FF76cfa6</item>
         <item name="vector_light_gray_color">#FFF2F2F2</item>
         <item name="vector_silver_color">#FFC7C7C7</item>
-
-        <item name="vector_text_black_color">#FF3C3C3C</item>
 
 
 
@@ -54,9 +56,8 @@
         <item name="vector_recents_header_background_color">#77F2F2F2</item>
         <item name="vector_members_count_color">#8E000000</item>
 
-        <!-- tabbar color-->
-        <item name="vector_tabbar_background_color">#FFF2F2F2</item>
-        <item name="vector_search_hint_color">#333C3C3C</item>
+
+
 
         <item name="vector_image_tint">?attr/primary_color</item>
 
@@ -65,8 +66,6 @@
         <!-- NavigationView color-->
         <item name="vector_4d_gray">#FF4D4D4D</item>
 
-        <!-- FloatingActionButton -->
-        <item name="vector_fuchsia_color">#ff0064</item>
 
         <item name="vector_text_gray_color">#FF9D9D9D</item>
 
@@ -89,8 +88,6 @@
         <item name="list_header_spinner_text">#7f3c3c3c</item>
         <item name="list_header_spinner">#2e3c3c3c</item>
 
-        <item name="vector_tabbar_selected_background_color">?attr/vector_green_color</item>
-        <item name="vector_tabbar_unselected_background_color">?attr/vector_green_color</item>
 
         <item name="vector_deemed_background_view_gray_color">#339D9D9D</item>
     </style>
@@ -113,21 +110,31 @@
         <item name="primary_text_color">@android:color/white</item>
 
         <!-- application bar icons color -->
-        <item name="primary_control_color">#74CAA2</item>
+        <item name="primary_control_color">#5EA584</item>
 
         <!-- application bar text hint color -->
         <item name="primary_hint_text_color">#BBE7D3</item>
 
         <!-- default text colors -->
-        <item name="default_text_color">@android:color/white</item>
+        <item name="default_text_color">#d9d9d9</item>
+        <item name="default_text_hint_color">#CCC3C3C3</item>
 
         <!-- room message colors -->
         <item name="unsent_message_text_color">#FFFF4444</item>
-        <item name="message_text_color">@android:color/white</item>
+        <item name="message_text_color">?attr/default_text_color</item>
         <item name="encrypting_message_text_color">@color/vector_green_color</item>
         <item name="sending_message_text_color">#AAA</item>
         <item name="highlighted_message_text_color">@color/vector_fuchsia_color</item>
         <item name="highlighted_searched_message_text_color">@color/vector_green_color</item>
+        <item name="search_mode_room_name_text_color">#CCC3C3C3</item>
+
+        <!-- tab bar colors -->
+        <item name="tab_bar_background_color">?attr/primary_color</item>
+        <item name="tab_bar_selected_background_color">?attr/primary_color</item>
+        <item name="tab_bar_unselected_background_color">?attr/primary_color</item>
+
+
+
 
 
         <item name="vector_green_color">#46af7f</item>
@@ -136,9 +143,6 @@
         <!-- Icons on the bottom of the overview activity -->
         <item name="vector_silver_color">#FFC7C7C7</item>
 
-        <!-- Names of people, rooms and categories in the rooms overview -->
-        <!-- Also of headers (and filenames) in Room Details and People Details -->
-        <item name="vector_text_black_color">#d9d9d9</item>
 
 
         <!-- 0_54_black gives invalid rendering so use 9D gray -->
@@ -151,19 +155,12 @@
         <item name="vector_recents_header_background_color">#5A5A5A</item>
         <item name="vector_members_count_color">#FFF</item>
 
-        <!-- tabbar color-->
-        <item name="vector_tabbar_background_color">?attr/default_background_color</item>
-        <item name="vector_search_hint_color">#CCC3C3C3</item>
-
         <item name="vector_image_tint">?attr/primary_color</item>
         <!-- colors to check their uses -->
 
         <!-- NavigationView color-->
         <!-- Items from the NavigationView -->
         <item name="vector_4d_gray">#FF4D4D4D</item>
-
-        <!-- FloatingActionButton -->
-        <item name="vector_fuchsia_color">#ff0064</item>
 
         <!-- The display name of senders in the room overview -->
         <item name="vector_text_gray_color">#a0a29f</item>
@@ -194,11 +191,6 @@
         <item name="list_header_spinner_text">#FFC7C7C7</item>
         <!-- Carrot and underlining of the name of the Room Directory that is currently selected above -->
         <item name="list_header_spinner">#A5A5A5A5</item>
-
-
-
-        <item name="vector_tabbar_selected_background_color">#2d2d2d</item>
-        <item name="vector_tabbar_unselected_background_color">#2d2d2d</item>
 
 
 

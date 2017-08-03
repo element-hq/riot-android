@@ -15,7 +15,7 @@
             android:fontFamily="sans-serif-medium"
             android:layout_marginLeft="18dp"
             android:textSize="14sp"
-            android:textColor="?attr/vector_text_black_color"/>
+            android:textColor="?attr/default_text_color"/>
 
         <ImageView
             android:id="@+id/heading_image"

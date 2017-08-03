@@ -394,7 +394,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             int colourTxt = ThemeUtils.getColor(mContext, R.attr.default_text_color);
 
             if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
-                colourTxt = ThemeUtils.getColor(mContext, R.attr.vector_fuchsia_color);
+                colourTxt = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
             }
 
             viewHolder.mActionDescTextView.setTextColor(colourTxt);

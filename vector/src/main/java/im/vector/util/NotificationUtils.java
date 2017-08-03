@@ -774,7 +774,7 @@ public class NotificationUtils {
 
         boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
 
-        @ColorInt int highlightColor = ThemeUtils.getColor(context, R.attr.vector_fuchsia_color);
+        @ColorInt int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
         int defaultColor = Color.TRANSPARENT;
 
         if (isBackground) {

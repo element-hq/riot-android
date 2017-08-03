@@ -92,7 +92,7 @@
                     android:fontFamily="sans-serif-regular"
                     android:singleLine="true"
                     android:text="Room Name"
-                    android:textColor="?attr/vector_text_black_color"
+                    android:textColor="?attr/default_text_color"
                     android:textSize="16sp" />
 
                 <!-- unread count badge -->

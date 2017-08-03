@@ -58,7 +58,7 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-regular"
                 android:maxLines="1"
-                android:textColor="?attr/vector_text_black_color"
+                android:textColor="?attr/default_text_color"
                 android:textSize="16sp"
                 tools:text="Room name a bit long to be displayed completely" />
 

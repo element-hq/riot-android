@@ -23,7 +23,7 @@
             android:layout_marginLeft="20dp"
             android:textSize="16sp"
             android:layout_centerVertical="true"
-            android:textColor="@color/vector_search_hint_color"
+            android:textColor="?attr/search_mode_room_name_text_color"
             android:text = "A room name here" />
 
     </RelativeLayout>

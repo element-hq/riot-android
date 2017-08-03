@@ -10,7 +10,7 @@
         android:layout_width="55dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="?attr/vector_fuchsia_color"
+        android:background="@color/vector_fuchsia_color"
         android:orientation="vertical">
 
         <RelativeLayout

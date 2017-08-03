@@ -38,7 +38,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:text="File name"
-        android:textColor="?attr/vector_text_black_color"
+        android:textColor="?attr/default_text_color"
         android:textSize="16sp" />
 
     <!-- Last message of the room -->
