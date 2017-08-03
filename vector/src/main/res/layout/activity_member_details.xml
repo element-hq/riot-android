@@ -71,7 +71,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
-                android:textColor="?attr/vector_0_54_black_color"
+                android:textColor="?attr/default_text_light_color"
                 android:textSize="14sp" />
         </RelativeLayout>
 

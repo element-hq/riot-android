@@ -51,7 +51,7 @@
             android:layout_marginLeft="16dp"
             android:layout_alignParentBottom="true"
             android:id="@+id/messagesAdapter_search_separator_line"
-            android:background="@color/vector_line_separator_gray_color"/>
+            android:background="?attr/list_divider_color"/>
     </RelativeLayout>
 
 </LinearLayout>

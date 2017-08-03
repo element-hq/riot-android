@@ -265,7 +265,7 @@
                             android:layout_height="12dp"
                             android:layout_centerInParent="true"
                             android:src="@drawable/e2e_verified"
-                            android:tint="?attr/vector_image_tint" />
+                            android:tint="?attr/icon_tint_color" />
 
                     </RelativeLayout>
 
@@ -282,7 +282,7 @@
                         android:textColor="?attr/default_text_color"
                         android:background="@android:color/transparent"
                         android:textCursorDrawable="@drawable/searches_cursor_background"
-                        android:textColorHint="?attr/vector_0_54_black_color"/>
+                        android:textColorHint="?attr/default_text_hint_color"/>
 
                     <View
                         android:id="@+id/room_button_margin_left"
@@ -389,7 +389,7 @@
                     android:layout_marginLeft="68dp"
                     android:layout_marginRight="13dp"
                     android:text="a text here "
-                    android:textColor="?attr/vector_text_gray_color" />
+                    android:textColor="?attr/room_notification_text_message_color" />
 
             </RelativeLayout>
 

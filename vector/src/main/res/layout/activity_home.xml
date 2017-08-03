@@ -107,7 +107,7 @@
         android:background="?attr/default_background_color"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/vector_home_menu_header"
-        app:itemIconTint="?attr/vector_4d_gray"
+        app:itemIconTint="?attr/home_navigation_icon_color"
         app:menu="@menu/vector_home_sliding_menu"
         app:theme="@style/NavigationViewStyle" />
 

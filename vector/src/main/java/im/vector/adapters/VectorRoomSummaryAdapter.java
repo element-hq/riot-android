@@ -665,7 +665,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         int roomNameBlack = ThemeUtils.getColor(mContext, R.attr.default_text_color);
         int fushiaColor = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
-        int vectorDefaultTimeStampColor = ThemeUtils.getColor(mContext, R.attr.vector_0_54_black_color);
+        int vectorDefaultTimeStampColor = ThemeUtils.getColor(mContext, R.attr.default_text_light_color);
         int vectorGreenColor = ThemeUtils.getColor(mContext, R.attr.vector_green_color);
         int vectorSilverColor = ThemeUtils.getColor(mContext, R.attr.vector_silver_color);
 
@@ -917,7 +917,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (aChildRoomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new EventDisplay(mContext, aChildRoomSummary.getLatestReceivedEvent(), aChildRoomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.vector_text_gray_color));
+                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.default_text_color));
             }
 
             // check if this is an invite

@@ -38,7 +38,7 @@
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"
-            android:textColor="?attr/vector_21_black"
+            android:textColor="?attr/default_text_dark_color"
             android:textColorHint="?attr/default_text_hint_color"
             android:textCursorDrawable="@drawable/searches_cursor_background"
             android:textSize="16sp"/>
@@ -50,7 +50,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/search_layout"
         android:background="?attr/default_background_color"
-        android:divider="?attr/vector_line_separator_gray_color"
+        android:divider="?attr/list_divider_color"
         android:dividerHeight="1px" />
 
     <TextView
@@ -68,7 +68,7 @@
         android:id="@+id/add_participants_progress_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/vector_deemed_background_view_gray_color"
+        android:background="?attr/waiting_background_color"
         android:visibility="gone">
 
         <ProgressBar

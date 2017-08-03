@@ -70,7 +70,7 @@
             android:layout_marginRight="15dp"
             android:ellipsize="end"
             android:text="a text"
-            android:textColor="?attr/vector_members_count_color"
+            android:textColor="?attr/default_text_light_color"
             android:textSize="14sp" />
 
         <RelativeLayout

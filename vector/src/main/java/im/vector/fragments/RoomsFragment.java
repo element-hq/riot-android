@@ -423,7 +423,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         }
 
         if (mPublicRoomsSelector != null) {
-
             // reported by GA
             // https://stackoverflow.com/questions/26752974/adapterdatasetobserver-was-not-registered
             if (mRoomDirectoryAdapter != mPublicRoomsSelector.getAdapter()) {

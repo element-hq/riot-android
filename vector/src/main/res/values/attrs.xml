@@ -26,7 +26,10 @@
 
     <!-- default text colors -->
     <attr name="default_text_color" format="color" />
+    <attr name="default_text_light_color" format="color"/>
+    <attr name="default_text_dark_color" format="color"/>
     <attr name="default_text_hint_color" format="color" />
+    <attr name="default_button_light_text_color" format="color"/>
 
     <!-- room message colors -->
     <attr name="unsent_message_text_color" format="color" />
@@ -37,10 +40,32 @@
     <attr name="highlighted_searched_message_text_color" format="color" />
     <attr name="search_mode_room_name_text_color" format="color" />
 
-    <!-- activities background -->
+    <!-- tab bar colors -->
     <attr name="tab_bar_background_color" format="color" />
     <attr name="tab_bar_selected_background_color" format="color" />
     <attr name="tab_bar_unselected_background_color" format="color" />
+
+    <!-- list colors -->
+    <attr name="list_header_background_color" format="color" />
+    <attr name="list_divider_color" format="color" />
+
+    <!-- directory selection header -->
+    <attr name="list_header_public_room_spinner_text_color" format="color" />
+    <attr name="list_header_public_room_spinner_color" format="color" />
+
+
+    <!-- gradient on the bottom of some activities -->
+    <attr name="activity_bottom_gradient_color" format="color" />
+
+    <attr name="pending_outgoing_view_background_color" format="color"/>
+
+    <attr name="multi_selection_background_color" format="color" />
+
+    <attr name="home_navigation_icon_color" format="color" />
+
+    <attr name="room_notification_text_message_color" format="color" />
+
+    <attr name="icon_tint_color" format="color" />
 
 
     <!-- activities background -->
@@ -48,46 +73,6 @@
     <attr name="vector_light_gray_color" format="color" />
     <attr name="vector_silver_color" format="color" />
 
-
-    <!-- 0_54_black gives invalid rendering so use 9D gray -->
-    <attr name="vector_0_54_black_color" format="color" />
-    <attr name="vector_0_87_black_color" format="color" />
-    <attr name="vector_line_separator_gray_color" format="color" />
-    <attr name="vector_recents_header_background_color" format="color" />
-    <attr name="vector_members_count_color" format="color" />
-
-
-
-    <attr name="vector_image_tint" format="color" />
-
-    <!-- colors to check their uses -->
-
-    <!-- NavigationView color-->
-    <attr name="vector_4d_gray" format="color" />
-
-    <attr name="vector_text_gray_color" format="color" />
-
-    <!-- tabbar underline -->
-    <attr name="vector_dc_gray" format="color" />
-
-    <!-- room members list -->
-    <attr name="vector_21_black" format="color" />
-    <attr name="vector_80_gray" format="color" />
-    <attr name="vector_05_gray" format="color" />
-
-
-    <attr name="vector_d8_gray" format="color" />
-
-    <attr name="vector_74_gray" format="color" />
-    <attr name="vector_33_black" format="color" />
-
-    <attr name="vector_white_alpha_50" format="color" />
-
-    <attr name="list_header_background" format="color" />
-    <attr name="list_header_spinner_text" format="color" />
-    <attr name="list_header_spinner" format="color" />
-
-    <attr name="vector_deemed_background_view_gray_color" format="color" />
 </declare-styleable>
 
 </resources>

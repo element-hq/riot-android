@@ -9,7 +9,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/vector_33_black"/>
+        android:background="?attr/pending_outgoing_view_background_color"/>
 
     <!-- call view -->
     <LinearLayout

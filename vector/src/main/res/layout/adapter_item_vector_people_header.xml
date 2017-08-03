@@ -5,7 +5,7 @@
     android:id="@+id/people_header_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/vector_recents_header_background_color"
+    android:background="?attr/list_header_background_color"
     android:orientation="vertical">
 
     <RelativeLayout

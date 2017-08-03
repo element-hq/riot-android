@@ -108,7 +108,7 @@ public class HomeSectionView extends RelativeLayout {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.RECTANGLE);
         shape.setCornerRadius(100);
-        shape.setColor(ThemeUtils.getColor(getContext(), R.attr.vector_white_alpha_50));
+        shape.setColor(ThemeUtils.getColor(getContext(), R.attr.activity_bottom_gradient_color));
         mBadge.setBackground(shape);
 
         mHeader.setOnClickListener(new OnClickListener() {

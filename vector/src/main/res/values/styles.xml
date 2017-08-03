@@ -38,7 +38,7 @@
     <!--  -->
     <style name="vector.PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@android:color/white</item>
-        <item name="android:textColor">?attr/vector_0_87_black_color</item>
+        <item name="android:textColor">?attr/default_text_color</item>
         <item name="android:textSize">16sp</item>
         <item name="android:dropDownHorizontalOffset">0dp</item>
         <item name="android:dropDownVerticalOffset">0dp</item>
@@ -80,7 +80,6 @@
 
     <!-- home scroller menu -->
     <style name="NavigationViewStyle">
-        <item name="android:textColor">?attr/vector_4d_gray</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -139,13 +138,13 @@
     </style>
 
     <style name="TextAppearance.TextInputLayout" parent="@android:style/TextAppearance">
-        <item name="android:textColor">?attr/vector_74_gray</item>
+        <item name="android:textColor">?attr/default_button_light_text_color</item>
     </style>
 
     <style name="TextInputLayoutTheme" parent="AppTheme.NoActionBar">
-        <item name="colorControlNormal">?attr/vector_74_gray</item>
-        <item name="colorControlActivated">?attr/vector_74_gray</item>
-        <item name="android:textColorHint">?attr/vector_74_gray</item>
+        <item name="colorControlNormal">?attr/default_button_light_text_color</item>
+        <item name="colorControlActivated">?attr/default_button_light_text_color</item>
+        <item name="android:textColorHint">?attr/default_button_light_text_color</item>
     </style>
 
     <style name="ListHeader">
@@ -153,7 +152,7 @@
         <item name="android:textColor">?attr/default_text_color</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:background">?attr/list_header_background</item>
+        <item name="android:background">?attr/list_header_background_color</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">10dp</item>
@@ -165,7 +164,7 @@
     </style>
 
     <style name="SpinnerTheme">
-        <item name="colorControlNormal">?attr/list_header_spinner</item>
+        <item name="colorControlNormal">?attr/list_header_public_room_spinner_color</item>
     </style>
 
     <!--  ************************  Light theme  **************************** -->
@@ -201,7 +200,7 @@
     <style name="HomeActivityTheme" parent="AppTheme.NoActionBar">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:textColorHint">?attr/vector_white_alpha_50</item>
+        <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
     <!-- call activity -->
@@ -287,7 +286,7 @@
     <style name="CountryPickerTheme" parent="AppTheme.NoActionBar">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:textColorHint">?attr/vector_white_alpha_50</item>
+        <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
     <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar"></style>
@@ -361,7 +360,7 @@
     <style name="HomeActivityTheme.Dark" parent="AppTheme.NoActionBar.Dark">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:textColorHint">?attr/vector_white_alpha_50</item>
+        <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
     <style name="CallActivityTheme.Dark" parent="AppTheme.Dark">
@@ -443,7 +442,7 @@
     <style name="CountryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:textColorHint">?attr/vector_white_alpha_50</item>
+        <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
     <style name="DirectoryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark"></style>

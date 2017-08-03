@@ -3,7 +3,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle" >
-            <solid android:color="?attr/vector_dc_gray" />
+            <solid android:color="?attr/list_divider_color" />
             <padding android:bottom="1dp" />
         </shape>
     </item>
