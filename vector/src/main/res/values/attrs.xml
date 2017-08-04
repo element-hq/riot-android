@@ -40,6 +40,8 @@
     <attr name="highlighted_message_text_color" format="color" />
     <attr name="highlighted_searched_message_text_color" format="color" />
     <attr name="search_mode_room_name_text_color" format="color" />
+    <attr name="unread_marker_line_color" format="color" />
+    <attr name="markdown_block_background_color" format="color" />
 
     <!-- tab bar colors -->
     <attr name="tab_bar_background_color" format="color" />

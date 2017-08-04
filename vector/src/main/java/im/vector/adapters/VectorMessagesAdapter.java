@@ -1009,7 +1009,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
-                tsTextView.setTextColor(ContextCompat.getColor(mContext, R.color.chat_gray_text));
+                tsTextView.setTextColor(ThemeUtils.getColor(mContext, R.attr.default_text_light_color));
             }
 
             tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);

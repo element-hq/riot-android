@@ -47,7 +47,8 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
-import org.matrix.androidsdk.view.ConsoleHtmlTagHandler;
+import org.matrix.androidsdk.view.HtmlTagHandler;
+import org.matrix.androidsdk.view.HtmlTagHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +61,7 @@ import im.vector.R;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**
@@ -426,11 +428,11 @@ public class VectorMessagesAdapterHelper {
 
         ArrayList<View> imageViews = new ArrayList<>();
 
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_1).findViewById(org.matrix.androidsdk.R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_2).findViewById(org.matrix.androidsdk.R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_3).findViewById(org.matrix.androidsdk.R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_4).findViewById(org.matrix.androidsdk.R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_5).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_1).findViewById(R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_2).findViewById(R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_3).findViewById(R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_4).findViewById(R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_5).findViewById(R.id.avatar_img));
 
         TextView moreText = (TextView) avatarsListView.findViewById(R.id.message_more_than_expected);
 
@@ -556,8 +558,9 @@ public class VectorMessagesAdapterHelper {
             }
         }
 
-        final ConsoleHtmlTagHandler htmlTagHandler = new ConsoleHtmlTagHandler();
+        final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.mContext = mContext;
+        htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
 
         CharSequence sequence;
 

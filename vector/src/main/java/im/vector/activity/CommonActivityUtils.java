@@ -89,7 +89,6 @@ import im.vector.VectorApp;
 import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
-import im.vector.fragments.AccountsSelectionDialogFragment;
 import im.vector.fragments.VectorSettingsPreferencesFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.ga.GAHelper;
@@ -1369,28 +1368,7 @@ public class CommonActivityUtils {
         if (Matrix.getMXSessions(fromActivity).size() == 1) {
             sendFilesTo(fromActivity, intent, Matrix.getMXSession(fromActivity, null));
         } else if (fromActivity instanceof FragmentActivity) {
-            FragmentManager fm = ((FragmentActivity) fromActivity).getSupportFragmentManager();
-
-            AccountsSelectionDialogFragment fragment = (AccountsSelectionDialogFragment) fm.findFragmentByTag(MXCActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-            }
-
-            fragment = AccountsSelectionDialogFragment.newInstance(Matrix.getMXSessions(fromActivity));
-
-            fragment.setListener(new AccountsSelectionDialogFragment.AccountsListener() {
-                @Override
-                public void onSelected(final MXSession session) {
-                    fromActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            sendFilesTo(fromActivity, intent, session);
-                        }
-                    });
-                }
-            });
-
-            fragment.show(fm, MXCActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
+            // TBD
         }
     }
 

@@ -41,6 +41,8 @@
         <item name="highlighted_message_text_color">@color/vector_fuchsia_color</item>
         <item name="highlighted_searched_message_text_color">@color/vector_green_color</item>
         <item name="search_mode_room_name_text_color">#333C3C3C</item>
+        <item name="unread_marker_line_color">@color/vector_green_color</item>
+        <item name="markdown_block_background_color">#FFEEEEEE</item>
 
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
@@ -68,16 +70,7 @@
 
         <item name="icon_tint_color">#76CFA6</item>
 
-
         <item name="vector_light_gray_color">#FFF2F2F2</item>
-
-
-
-
-
-
-
-
 
     </style>
 
@@ -120,6 +113,8 @@
         <item name="highlighted_message_text_color">@color/vector_fuchsia_color</item>
         <item name="highlighted_searched_message_text_color">@color/vector_green_color</item>
         <item name="search_mode_room_name_text_color">#CCC3C3C3</item>
+        <item name="unread_marker_line_color">@color/vector_green_color</item>
+        <item name="markdown_block_background_color">@android:color/black</item>
 
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
