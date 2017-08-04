@@ -86,7 +86,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_width="94dp"
                 android:layout_height="36dp"
-                android:background="?attr/vector_green_color"
+                android:background="@color/vector_green_color"
                 android:textColor="@android:color/white"
                 android:text="@string/join_room"/>
 
@@ -109,7 +109,7 @@
             android:layout_marginRight="20dp"
             android:textSize="14sp"
             android:text=""
-            android:textColor="?attr/vector_silver_color"/>
+            android:textColor="@color/vector_silver_color"/>
 
     </LinearLayout>
 

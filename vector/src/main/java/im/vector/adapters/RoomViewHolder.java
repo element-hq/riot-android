@@ -137,8 +137,8 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
 
         // Setup colors
         int mFuchsiaColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
-        int mGreenColor = ThemeUtils.getColor(context, R.attr.vector_green_color);
-        int mSilverColor = ThemeUtils.getColor(context, R.attr.vector_silver_color);
+        int mGreenColor = ContextCompat.getColor(context, R.color.vector_green_color);
+        int mSilverColor = ContextCompat.getColor(context, R.color.vector_silver_color);
 
         highlightCount = roomSummary.getHighlightCount();
         notificationCount = roomSummary.getNotificationCount();

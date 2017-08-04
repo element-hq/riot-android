@@ -106,11 +106,11 @@
 
     <!-- tabbar text color -->
     <style name="VectorSearches.TabText" parent="@style/Widget.AppCompat.ActionBar.TabText">
-        <item name="android:textColor">?attr/vector_green_color</item>
+        <item name="android:textColor">@color/vector_green_color</item>
     </style>
 
     <style name="VectorSearches.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">?attr/vector_green_color</item>
+        <item name="colorControlNormal">@color/vector_green_color</item>
     </style>
 
     <style name="VectorPeopleSearches.TabLayout" parent="Widget.Design.TabLayout">
@@ -118,7 +118,7 @@
         <item name="tabMode">fixed</item>
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">?attr/vector_green_color</item>
+        <item name="tabBackground">@color/vector_green_color</item>
         <item name="tabTextColor">@android:color/white</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabIndicatorColor">@android:color/white</item>
@@ -160,7 +160,7 @@
     </style>
 
     <style name="CheckBoxTheme">
-        <item name="colorAccent">?attr/vector_green_color</item>
+        <item name="colorAccent">@color/vector_green_color</item>
     </style>
 
     <style name="SpinnerTheme">
@@ -246,7 +246,7 @@
         <item name="android:typeface">sans</item>
 
         <!-- android ui button -->
-        <item name="colorAccent">?attr/vector_green_color</item>
+        <item name="colorAccent">@color/vector_green_color</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
@@ -272,7 +272,7 @@
         <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
 
         <!-- switch color -->
-        <item name="colorControlActivated">?attr/vector_green_color</item>
+        <item name="colorControlActivated">@color/vector_green_color</item>
     </style>
 
     <!-- login & registration activities -->
@@ -403,7 +403,7 @@
         <item name="android:typeface">sans</item>
 
         <!-- android ui button -->
-        <item name="colorAccent">?attr/vector_green_color</item>
+        <item name="colorAccent">@color/vector_green_color</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
@@ -429,7 +429,7 @@
         <item name="android:actionBarDivider">@null</item>
 
         <!-- switch color -->
-        <item name="colorControlActivated">?attr/vector_green_color</item>
+        <item name="colorControlActivated">@color/vector_green_color</item>
     </style>
 
     <style name="LoginAppTheme.Dark" parent="AppTheme.NoActionBar.Dark">

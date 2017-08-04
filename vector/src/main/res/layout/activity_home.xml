@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/home_toolbar"
-            android:background="?attr/vector_green_color"
+            android:background="@color/vector_green_color"
             android:indeterminate="true"
             android:visibility="gone" />
 

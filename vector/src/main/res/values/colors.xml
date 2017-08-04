@@ -4,7 +4,7 @@
     <!-- main app colors -->
     <color name="vector_green_color">#FF76cfa6</color>
     <color name="vector_fuchsia_color">#ff0064</color>
-
+    <color name="vector_silver_color">#FFC7C7C7</color>
 
     <!-- home activity tab bar color -->
     <color name="tab_home">@color/vector_green_color</color>
@@ -20,11 +20,6 @@
     <color name="direct_chat_ring_color">#8076cfa6</color>
 
 
-
-
-
-
-    <color name="vector_silver_color">#FFC7C7C7</color>
 
     <!-- 0_54_black gives invalid rendering so use 9D gray -->
     <color name="vector_0_54_black_color">#8E000000</color>

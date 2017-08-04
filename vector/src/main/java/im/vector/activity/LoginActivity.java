@@ -1882,8 +1882,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // 2 - the password has been resetted and the user is invited to switch to the login screen
         mForgotValidateEmailButton.setText(mIsPasswordResetted ? R.string.auth_return_to_login : R.string.auth_reset_password_next_step_button);
 
-        @ColorInt final int green = ThemeUtils.getColor(this, R.attr.vector_green_color);
-        @ColorInt final int white = getResources().getColor(android.R.color.white);
+        @ColorInt final int green = ContextCompat.getColor(this, R.color.vector_green_color);
+        @ColorInt final int white = ContextCompat.getColor(this, android.R.color.white);
 
         mLoginButton.setBackgroundColor(isLoginMode ? green : white);
         mLoginButton.setTextColor(!isLoginMode ? green : white);

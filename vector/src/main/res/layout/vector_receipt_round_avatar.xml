@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:background="?attr/vector_green_color"
+        android:background="@color/vector_green_color"
         android:adjustViewBounds="true"/>
 
     <ImageView

@@ -17,6 +17,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
@@ -66,7 +67,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
         setNotifyOnChange(true);
         mDisplayRoomName = displayRoomName;
-        mSearchHighlightMessageTextColor = ThemeUtils.getColor(context, R.attr.vector_green_color);
+        mSearchHighlightMessageTextColor = ContextCompat.getColor(context, R.color.vector_green_color);
     }
 
     /**

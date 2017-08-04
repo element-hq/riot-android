@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -900,7 +901,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             mAdapter.setIsDragAndDropMode(true);
             mSession.getDataHandler().removeListener(mEventsListener);
 
-            mDraggedView.setBackgroundColor(ThemeUtils.getColor(getContext(), R.attr.vector_silver_color));
+            mDraggedView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.vector_silver_color));
             mDraggedView.setAlpha(0.3f);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);

@@ -34,6 +34,7 @@
     <!-- room message colors -->
     <attr name="unsent_message_text_color" format="color" />
     <attr name="message_text_color" format="color" />
+    <attr name="notice_text_color" format="color" />
     <attr name="encrypting_message_text_color" format="color" />
     <attr name="sending_message_text_color" format="color" />
     <attr name="highlighted_message_text_color" format="color" />
@@ -69,9 +70,7 @@
 
 
     <!-- activities background -->
-    <attr name="vector_green_color" format="color" />
     <attr name="vector_light_gray_color" format="color" />
-    <attr name="vector_silver_color" format="color" />
 
 </declare-styleable>
 

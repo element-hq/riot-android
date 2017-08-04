@@ -95,7 +95,7 @@ public class VideoRecordProgressView extends View {
             int mod = (mRoundCount - 1) % 2;
 
 
-            @ColorInt final int silver = ThemeUtils.getColor(getContext(), im.vector.R.attr.vector_silver_color);
+            @ColorInt final int silver = getResources().getColor(im.vector.R.color.vector_silver_color);
             @ColorInt final int white = getResources().getColor(android.R.color.white);
             mPowerColor = ((0 == mod) ? silver : white);
             mRestColor = ((0 != mod) ? silver : white);

@@ -13,13 +13,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?attr/vector_silver_color" />
+            android:background="@color/vector_silver_color" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="?attr/vector_silver_color" />
+            android:background="@color/vector_silver_color" />
 
         <Button
             android:id="@+id/button_login"
@@ -28,7 +28,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:background="?attr/vector_green_color"
+            android:background="@color/vector_green_color"
             android:text="@string/auth_login"
             android:textColor="@android:color/white" />
 
@@ -40,7 +40,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/white"
             android:text="@string/auth_register"
-            android:textColor="?attr/vector_green_color" />
+            android:textColor="@color/vector_green_color" />
 
         <Button
             android:id="@+id/button_reset_password"
@@ -49,7 +49,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:background="?attr/vector_green_color"
+            android:background="@color/vector_green_color"
             android:text="@string/auth_send_reset_email"
             android:textColor="@android:color/white"
             android:visibility="gone" />
@@ -62,7 +62,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="?attr/vector_green_color"
+            android:background="@color/vector_green_color"
             android:text="@string/auth_send_reset_email"
             android:textColor="@android:color/white"
             android:visibility="gone" />
@@ -74,7 +74,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:background="?attr/vector_green_color"
+            android:background="@color/vector_green_color"
             android:minWidth="94dp"
             android:text="@string/auth_submit"
             android:textColor="@android:color/white"
@@ -87,7 +87,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
             android:layout_toLeftOf="@id/button_submit"
-            android:background="?attr/vector_green_color"
+            android:background="@color/vector_green_color"
             android:minWidth="94dp"
             android:text="@string/auth_skip"
             android:textColor="@android:color/white"
@@ -391,7 +391,7 @@
                     android:paddingBottom="10dp"
                     android:paddingTop="5dp"
                     android:text="@string/auth_forgot_password"
-                    android:textColor="?attr/vector_green_color"
+                    android:textColor="@color/vector_green_color"
                     android:textSize="14sp" />
             </LinearLayout>
 

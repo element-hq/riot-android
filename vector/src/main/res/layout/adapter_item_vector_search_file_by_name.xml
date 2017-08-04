@@ -22,7 +22,7 @@
         android:layout_marginTop="18dp"
         android:fontFamily="sans-serif-light"
         android:text="370Kb"
-        android:textColor="?attr/vector_silver_color"
+        android:textColor="@color/vector_silver_color"
         android:textSize="12sp" />
 
     <TextView

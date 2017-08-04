@@ -333,6 +333,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return ThemeUtils.getColor(mContext, R.attr.message_text_color);
     }
 
+    private int getNoticeTextColor() {
+        return ThemeUtils.getColor(mContext, R.attr.notice_text_color);
+    }
+
     private int getEncryptingMessageTextColor() {
         return ThemeUtils.getColor(mContext, R.attr.encrypting_message_text_color);
     }
@@ -1197,8 +1201,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return convertView;
     }
 
-    static private Integer mDimmedNoticeTextColor = null;
-
     /**
      * Notice message management
      *
@@ -1241,16 +1243,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         addContentViewListeners(convertView, noticeTextView, position);
 
-        // compute the notice mDimmedNoticeTextColor colors
-        if (null == mDimmedNoticeTextColor) {
-            int defaultNoticeColor = noticeTextView.getCurrentTextColor();
-            mDimmedNoticeTextColor = Color.argb(
-                    Color.alpha(defaultNoticeColor) * 6 / 10,
-                    Color.red(defaultNoticeColor),
-                    Color.green(defaultNoticeColor),
-                    Color.blue(defaultNoticeColor));
-        }
-
         // android seems having a big issue when the text is too long and an alpha !=1 is applied:
         // ---> the text is not displayed.
         // It is sometimes partially displayed and/or flickers while scrolling.
@@ -1259,7 +1251,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         // I don't understand why the render graph fails to do it.
         // the patch apply the alpha to the text color but it does not work for the hyperlinks.
         noticeTextView.setAlpha(1.0f);
-        noticeTextView.setTextColor(mDimmedNoticeTextColor);
+        noticeTextView.setTextColor(getNoticeTextColor());
 
         return convertView;
     }
@@ -2072,7 +2064,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     // move left the body
                     bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-                    highlightMakerView.setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.vector_green_color));
+                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
                 }
             } else {
                 highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
