@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -44,8 +45,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,6 +99,7 @@ import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.PreferencesManager;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -2034,5 +2039,40 @@ public class CommonActivityUtils {
 
         fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, listener);
         fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+    }
+
+    /**
+     * Update the menu icons colors
+     * @param context the context
+     * @param menu the menu
+     */
+    public static void tintMenuIcons(Context context, Menu menu) {
+        int color = ThemeUtils.getColor(context, R.attr.menu_icon_tint_color);
+
+        for (int i = 0; i < menu.size(); ++i) {
+            MenuItem item = menu.getItem(i);
+            Drawable drawable = item.getIcon();
+            if (drawable != null) {
+                Drawable wrapped = DrawableCompat.wrap(drawable);
+                drawable.mutate();
+                DrawableCompat.setTint(wrapped, color);
+                item.setIcon(drawable);
+            }
+        }
+    }
+
+    /**
+     * Tint the drawable with the menu icon color
+     * @param context the context
+     * @param drawable the drawable to tint
+     * @return the tinted drawable
+     */
+    public static Drawable tintDrawable(Context context, Drawable drawable) {
+        int color = ThemeUtils.getColor(context, R.attr.menu_icon_tint_color);
+        Drawable tinted = DrawableCompat.wrap(drawable);
+        drawable.mutate();
+        DrawableCompat.setTint(tinted, color);
+
+        return tinted;
     }
 }

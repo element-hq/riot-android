@@ -119,6 +119,7 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_directory_server_picker, menu);
+        CommonActivityUtils.tintMenuIcons(this, menu);
         return true;
     }
 

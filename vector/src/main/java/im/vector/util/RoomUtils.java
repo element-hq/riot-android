@@ -53,6 +53,7 @@ import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.adapters.AdapterUtils;
 
 public class RoomUtils {
@@ -472,6 +473,7 @@ public class RoomUtils {
             popup = new PopupMenu(context, actionView);
         }
         popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
+        CommonActivityUtils.tintMenuIcons(context,  popup.getMenu());
 
         if (room.isLeft()) {
             popup.getMenu().setGroupVisible(R.id.active_room_actions, false);

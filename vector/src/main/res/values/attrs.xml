@@ -69,7 +69,7 @@
     <attr name="room_notification_text_message_color" format="color" />
 
     <attr name="icon_tint_color" format="color" />
-
+    <attr name="menu_icon_tint_color" format="color" />
 
     <!-- activities background -->
     <attr name="vector_light_gray_color" format="color" />

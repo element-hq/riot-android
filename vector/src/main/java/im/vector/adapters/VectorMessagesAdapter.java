@@ -82,6 +82,7 @@ import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
@@ -2111,6 +2112,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         Menu menu = popup.getMenu();
+
+        CommonActivityUtils.tintMenuIcons(mContext, menu);
 
         // hide entries
         for (int i = 0; i < menu.size(); i++) {

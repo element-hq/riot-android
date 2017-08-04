@@ -36,6 +36,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -1410,6 +1411,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         Menu menu = popup.getMenu();
+        CommonActivityUtils.tintMenuIcons(getActivity(), menu);
 
         String canonicalAlias = mRoom.getLiveState().alias;
         boolean canUpdateAliases = canUpdateAliases();
@@ -1568,7 +1570,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             addAddressPreference.setTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setDialogTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setKey(ADD_ADDRESSES_PREFERENCE_KEY);
-            addAddressPreference.setIcon(R.drawable.ic_add_black);
+            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black)));
 
             addAddressPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {

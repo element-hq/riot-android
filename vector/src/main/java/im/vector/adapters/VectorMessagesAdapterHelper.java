@@ -48,7 +48,6 @@ import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.view.HtmlTagHandler;
-import org.matrix.androidsdk.view.HtmlTagHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;

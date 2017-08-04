@@ -127,6 +127,7 @@ public class PhoneNumberAdditionActivity extends AppCompatActivity implements Te
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_phone_number_addition, menu);
+        CommonActivityUtils.tintMenuIcons(this, menu);
         return true;
     }
 
