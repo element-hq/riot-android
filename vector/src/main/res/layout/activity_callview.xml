@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:background="@android:color/white"
+            android:background="?attr/default_background_color"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <im.vector.view.VectorCircularImageView

@@ -89,6 +89,7 @@
             android:layout_alignParentLeft="true"
             android:src="@drawable/ic_material_arrow_back_white"
             android:layout_centerInParent="true"
+            android:tint="?attr/primary_control_color"
             android:visibility="gone"/>
     </RelativeLayout>
     </LinearLayout>
