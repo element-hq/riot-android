@@ -1358,6 +1358,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.vector_room, menu);
 
+            CommonActivityUtils.tintMenuIcons(this, menu);
+
             mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
             mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
             mSearchInRoomMenuItem = menu.findItem(R.id.ic_action_search_in_room);

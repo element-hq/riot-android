@@ -51,6 +51,7 @@
     <!-- list colors -->
     <attr name="list_header_background_color" format="color" />
     <attr name="list_divider_color" format="color" />
+    <attr name="list_header_subtext_color" format="color" />
 
     <!-- directory selection header -->
     <attr name="list_header_public_room_spinner_text_color" format="color" />

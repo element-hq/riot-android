@@ -39,6 +39,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.AttrRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -2067,8 +2068,8 @@ public class CommonActivityUtils {
      * @param drawable the drawable to tint
      * @return the tinted drawable
      */
-    public static Drawable tintDrawable(Context context, Drawable drawable) {
-        int color = ThemeUtils.getColor(context, R.attr.menu_icon_tint_color);
+    public static Drawable tintDrawable(Context context, Drawable drawable, @AttrRes int attribute) {
+        int color = ThemeUtils.getColor(context, attribute);
         Drawable tinted = DrawableCompat.wrap(drawable);
         drawable.mutate();
         DrawableCompat.setTint(tinted, color);

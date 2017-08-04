@@ -1810,7 +1810,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white));
+            getSupportActionBar().setHomeAsUpIndicator(CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white), R.attr.primary_control_color));
         }
 
         Menu menuNav = navigationView.getMenu();

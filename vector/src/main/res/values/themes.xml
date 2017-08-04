@@ -52,6 +52,7 @@
         <!-- list colors -->
         <item name="list_header_background_color">#f6f6f6</item>
         <item name="list_divider_color">#FF808080</item>
+        <item name="list_header_subtext_color">#4D3C3C3C</item>
 
         <!-- directory selection header -->
         <item name="list_header_public_room_spinner_text_color">#7f3c3c3c</item>
@@ -125,6 +126,7 @@
         <!-- list colors -->
         <item name="list_header_background_color">#5A5A5A</item>
         <item name="list_divider_color">#A5A5A5A5</item>
+        <item name="list_header_subtext_color">?attr/primary_control_color</item>
 
         <!-- directory selection header -->
         <item name="list_header_public_room_spinner_text_color">#FFC7C7C7</item>

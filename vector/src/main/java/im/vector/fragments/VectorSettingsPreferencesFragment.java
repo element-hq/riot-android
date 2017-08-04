@@ -880,7 +880,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         addEmailPreference.setTitle(R.string.settings_add_email_address);
         addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
         addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-        addEmailPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black)));
+        addEmailPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.menu_icon_tint_color));
         addEmailPreference.setOrder(100);
         addEmailPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
@@ -906,7 +906,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // display the "add phone number" entry
         Preference addPhoneNumberPreference = new Preference(getActivity());
         addPhoneNumberPreference.setKey(ADD_PHONE_NUMBER_PREFERENCE_KEY);
-        addPhoneNumberPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black)));
+        addPhoneNumberPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.menu_icon_tint_color));
         addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number);
         addPhoneNumberPreference.setOrder(200);
 
