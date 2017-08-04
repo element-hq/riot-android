@@ -358,9 +358,9 @@
     </style>
 
     <style name="HomeActivityTheme.Dark" parent="AppTheme.NoActionBar.Dark">
-        <item name="editTextColor">@android:color/white</item>
-        <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
+        <item name="editTextColor">?attr/default_text_color</item>
+        <item name="android:editTextColor">?attr/default_text_color</item>
+        <item name="android:textColorHint">?attr/default_text_hint_color</item>
     </style>
 
     <style name="CallActivityTheme.Dark" parent="AppTheme.Dark">

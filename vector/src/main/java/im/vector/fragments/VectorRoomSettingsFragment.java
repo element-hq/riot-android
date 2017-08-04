@@ -1739,13 +1739,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 VectorCustomActionEditTextPreference isEncryptedPreference = new VectorCustomActionEditTextPreference(getActivity());
                 isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_disabled);
                 isEncryptedPreference.setKey(key);
-                isEncryptedPreference.setIcon(getResources().getDrawable(R.drawable.e2e_unencrypted));
+                isEncryptedPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.menu_icon_tint_color));
                 mAdvandceSettingsCategory.addPreference(isEncryptedPreference);
             } else if (mSession.isCryptoEnabled()) {
                 final VectorSwitchPreference encryptSwitchPreference = new VectorSwitchPreference(getActivity());
                 encryptSwitchPreference.setTitle(R.string.room_settings_addresses_e2e_encryption_warning);
                 encryptSwitchPreference.setKey(key);
-                encryptSwitchPreference.setIcon(getResources().getDrawable(R.drawable.e2e_unencrypted));
+                encryptSwitchPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.menu_icon_tint_color));
                 encryptSwitchPreference.setChecked(false);
                 mAdvandceSettingsCategory.addPreference(encryptSwitchPreference);
 

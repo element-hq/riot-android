@@ -24,8 +24,12 @@ import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.TypedValue;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -68,6 +72,8 @@ public class ThemeUtils {
     public static final String THEME_LIGHT_VALUE = "light";
 
 
+    public static Map<Integer, Integer> mColorByAttr = new HashMap<>();
+
     /**
      * Provides the selected application theme
      * @param context the context
@@ -107,6 +113,8 @@ public class ThemeUtils {
         } else {
             VectorApp.getInstance().setTheme(R.style.AppTheme);
         }
+
+        mColorByAttr.clear();
     }
 
     /**
@@ -177,8 +185,22 @@ public class ThemeUtils {
      * @return Requested Color
      */
     public static @ColorInt int getColor(Context c, @AttrRes final int colorAttribute) {
-        TypedValue color = new TypedValue();
-        c.getTheme().resolveAttribute(colorAttribute, color, true);
-        return color.data;
+        if (mColorByAttr.containsKey(colorAttribute)) {
+            return mColorByAttr.get(colorAttribute);
+        }
+
+        int matchedColor;
+
+        try {
+            TypedValue color = new TypedValue();
+            c.getTheme().resolveAttribute(colorAttribute, color, true);
+            matchedColor = color.data;
+        } catch (Exception e) {
+            matchedColor = ContextCompat.getColor(c, android.R.color.holo_red_dark);
+        }
+
+        mColorByAttr.put(colorAttribute, matchedColor);
+
+        return matchedColor;
     }
 }
