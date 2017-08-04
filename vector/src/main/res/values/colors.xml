@@ -18,24 +18,5 @@
 
     <!-- color of the direct chat avatar ring -->
     <color name="direct_chat_ring_color">#8076cfa6</color>
-
-
-
-    <!-- 0_54_black gives invalid rendering so use 9D gray -->
-    <color name="vector_0_54_black_color">#8E000000</color>
-    <color name="vector_0_87_black_color">#DC000000</color>
-    <color name="vector_recents_header_background_color">#77F2F2F2</color>
-    <color name="vector_members_count_color">#8E000000</color>
-
-
-
-    <color name="vector_dc_gray">#FFDCDCDC</color>
-
-    <!-- room members list -->
-    <color name="vector_21_black">#FF212121</color>
-    <color name="vector_80_gray">#FF808080</color>
-
-
-
-
+    
 </resources>

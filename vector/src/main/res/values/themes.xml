@@ -73,7 +73,6 @@
         <item name="menu_icon_tint_color">@android:color/black</item>
 
         <item name="vector_light_gray_color">#FFF2F2F2</item>
-
     </style>
 
     <!-- DARK THEME COLORS -->
@@ -149,8 +148,5 @@
 
         <!-- Lines just above the input field in rooms -->
         <item name="vector_light_gray_color">#565656</item>
-
-
     </style>
-
 </resources>
