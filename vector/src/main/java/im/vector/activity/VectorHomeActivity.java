@@ -1382,6 +1382,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         alertDialogBuilder.setView(dialogView);
 
         final EditText textInput = (EditText) dialogView.findViewById(R.id.join_room_edit_text);
+        textInput.setTextColor(ThemeUtils.getColor(this, R.attr.default_text_color));
 
         // set dialog message
         alertDialogBuilder
