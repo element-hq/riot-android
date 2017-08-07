@@ -607,7 +607,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
         TypedValue vectorActionBarColor = new TypedValue();
-        this.getTheme().resolveAttribute(R.attr.default_background_color, vectorActionBarColor, true);
+        this.getTheme().resolveAttribute(R.attr.riot_primary_background_color, vectorActionBarColor, true);
         mToolbar.setBackgroundResource(vectorActionBarColor.resourceId);
 
         checkDeviceId();
@@ -1382,7 +1382,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         alertDialogBuilder.setView(dialogView);
 
         final EditText textInput = (EditText) dialogView.findViewById(R.id.join_room_edit_text);
-        textInput.setTextColor(ThemeUtils.getColor(this, R.attr.default_text_color));
+        textInput.setTextColor(ThemeUtils.getColor(this, R.attr.riot_primary_text_color));
 
         // set dialog message
         alertDialogBuilder

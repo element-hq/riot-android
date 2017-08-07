@@ -31,7 +31,7 @@
         android:id="@+id/filtered_list_cell"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/default_background_color">
+        android:background="?attr/riot_primary_background_color">
 
         <RelativeLayout
             android:id="@+id/filtered_list_actions_list"

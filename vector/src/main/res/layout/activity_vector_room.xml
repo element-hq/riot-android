@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="?attr/default_background_color"
+        android:background="?attr/riot_primary_background_color"
         android:layout_below="@+id/room_sync_in_progress">
 
         <View
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:text="A text here"
-            android:textColor="?attr/default_text_color"
+            android:textColor="?attr/riot_primary_text_color"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
 
@@ -134,7 +134,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/room_preview_info_layout"
-        android:background="?attr/default_background_color"
+        android:background="?attr/riot_primary_background_color"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -186,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/jump_to_first_unread_label"
-            android:background="?attr/vector_light_gray_color" />
+            android:background="?attr/room_activity_divider_color" />
 
     </RelativeLayout>
 
@@ -199,7 +199,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/default_background_color"
+            android:background="?attr/riot_primary_background_color"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
             android:layout_alignParentTop="true"
@@ -265,7 +265,7 @@
                             android:layout_height="12dp"
                             android:layout_centerInParent="true"
                             android:src="@drawable/e2e_verified"
-                            android:tint="?attr/icon_tint_color" />
+                            android:tint="?attr/default_icon_tint_color" />
 
                     </RelativeLayout>
 
@@ -279,7 +279,7 @@
                         android:dropDownAnchor="@+id/room_sending_message_layout"
                         android:hint="@string/room_message_placeholder_not_encrypted"
                         android:id="@+id/editText_messageBox"
-                        android:textColor="?attr/default_text_color"
+                        android:textColor="?attr/riot_primary_text_color"
                         android:background="@android:color/transparent"
                         android:textCursorDrawable="@drawable/searches_cursor_background"
                         android:textColorHint="?attr/default_text_hint_color"/>
@@ -349,7 +349,7 @@
                     android:layout_toRightOf="@id/room_self_avatar_container"
                     android:text="@string/room_do_not_have_permission_to_post"
                     android:textSize="14sp"
-                    android:textColor="?attr/default_text_color"
+                    android:textColor="?attr/riot_primary_text_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone" />
@@ -361,7 +361,7 @@
                 android:layout_height="1dp"
                 android:layout_alignParentLeft="true"
                 android:layout_above="@id/room_bottom_layout"
-                android:background="?attr/vector_light_gray_color" />
+                android:background="?attr/room_activity_divider_color" />
 
             <RelativeLayout
                 android:id="@+id/room_notifications_area"
@@ -389,7 +389,7 @@
                     android:layout_marginLeft="68dp"
                     android:layout_marginRight="13dp"
                     android:text="a text here "
-                    android:textColor="?attr/room_notification_text_message_color" />
+                    android:textColor="?attr/room_notification_text_color" />
 
             </RelativeLayout>
 
@@ -399,7 +399,7 @@
                 android:layout_marginLeft="13dp"
                 android:layout_height="1dp"
                 android:layout_above="@id/room_notifications_area"
-                android:background="?attr/vector_light_gray_color" />
+                android:background="?attr/room_activity_divider_color" />
 
             <RelativeLayout
                 android:id="@+id/anchor_fragment_messages"

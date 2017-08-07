@@ -3,7 +3,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/internal_container"
-    android:background="?attr/default_background_color"
+    android:background="?attr/riot_primary_background_color"
     android:layout_width="match_parent"
     android:layout_height="72dp">
 
@@ -36,7 +36,7 @@
             android:singleLine="true"
             android:textSize="16sp"
             android:fontFamily="sans-serif-regular"
-            android:textColor="?attr/default_text_color"
+            android:textColor="?attr/riot_primary_text_color"
             android:text="Some Person's Name" />
 
         <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->

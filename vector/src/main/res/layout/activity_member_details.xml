@@ -6,7 +6,7 @@
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/default_background_color"
+    android:background="?attr/riot_primary_background_color"
     android:orientation="vertical">
 
     <RelativeLayout

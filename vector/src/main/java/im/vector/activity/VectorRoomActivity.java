@@ -699,8 +699,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
 
                     fragment = IconAndTextDialogFragment.newInstance(icons, messages,
-                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.default_background_color),
-                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.default_text_color));
+                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
+                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
                     fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                         @Override
                         public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -1517,8 +1517,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         final Integer[] lTexts = new Integer[]{R.string.action_voice_call, R.string.action_video_call};
 
         IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts,
-            ThemeUtils.getColor(this, R.attr.default_background_color),
-            ThemeUtils.getColor(this, R.attr.default_text_color));
+            ThemeUtils.getColor(this, R.attr.riot_primary_background_color),
+            ThemeUtils.getColor(this, R.attr.riot_primary_text_color));
         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
             @Override
             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -2184,7 +2184,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         } else if(mIsUnreadPreviewMode){
             isAreaVisible = true;
             iconId = R.drawable.scrolldown;
-            textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_message_color);
+            textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
             changedTextColor = true;
 
             mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
@@ -2252,7 +2252,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     }
                 } else {
                     iconId = R.drawable.scrolldown;
-                    textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_message_color);
+                    textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
                     changedTextColor = true;
 
                     if (!TextUtils.isEmpty(mLatestTypingMessage)) {
@@ -2287,7 +2287,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                 iconId = R.drawable.vector_typing;
                 text = new SpannableString(mLatestTypingMessage);
-                textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_message_color);
+                textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
                 changedTextColor = true;
             }
         }

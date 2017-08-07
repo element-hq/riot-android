@@ -51,7 +51,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="15dp"
         android:src="@drawable/e2e_verified"
-        android:tint="?attr/icon_tint_color"
+        android:tint="?attr/default_icon_tint_color"
         android:visibility="invisible"
         tools:visibility="visible" />
 
@@ -67,7 +67,7 @@
         android:lines="2"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:textColor="?attr/default_text_color"
+        android:textColor="?attr/riot_primary_text_color"
         android:textSize="12sp"
         tools:background="#220000ff"
         tools:text="#a very long room name" />
@@ -84,7 +84,7 @@
         android:lines="1"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:textColor="?attr/default_text_color"
+        android:textColor="?attr/riot_primary_text_color"
         android:textSize="12sp"
         android:visibility="gone"
         tools:background="#220000ff"

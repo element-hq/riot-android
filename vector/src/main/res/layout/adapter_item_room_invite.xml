@@ -38,7 +38,7 @@
             android:layout_alignBottom="@+id/room_avatar"
             android:layout_alignRight="@+id/room_avatar_direct_chat_icon"
             android:src="@drawable/e2e_verified"
-            android:tint="?attr/icon_tint_color"
+            android:tint="?attr/default_icon_tint_color"
             android:visibility="invisible"
             tools:visibility="visible" />
 
@@ -58,7 +58,7 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-regular"
                 android:maxLines="1"
-                android:textColor="?attr/default_text_color"
+                android:textColor="?attr/riot_primary_text_color"
                 android:textSize="16sp"
                 tools:text="Room name a bit long to be displayed completely" />
 

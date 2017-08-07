@@ -111,7 +111,7 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         if (roomSummary.getLatestReceivedEvent() != null) {
             EventDisplay eventDisplay = new EventDisplay(mContext, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
             eventDisplay.setPrependMessagesWithAuthor(true);
-            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.room_notification_text_message_color)));
+            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color)));
 
             timestampTxtView.setText(getFormattedTimestamp(roomSummary.getLatestReceivedEvent()));
             timestampTxtView.setTextColor(ThemeUtils.getColor(mContext, R.attr.default_text_light_color));

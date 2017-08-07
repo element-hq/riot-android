@@ -47,7 +47,7 @@
             android:layout_alignLeft="@+id/room_avatar_image_view"
             android:layout_marginLeft="35dp"
             android:src="@drawable/e2e_verified"
-            android:tint="?attr/icon_tint_color"
+            android:tint="?attr/default_icon_tint_color"
             android:visibility="gone" />
 
         <RelativeLayout
@@ -92,7 +92,7 @@
                     android:fontFamily="sans-serif-regular"
                     android:singleLine="true"
                     android:text="Room Name"
-                    android:textColor="?attr/default_text_color"
+                    android:textColor="?attr/riot_primary_text_color"
                     android:textSize="16sp" />
 
                 <!-- unread count badge -->

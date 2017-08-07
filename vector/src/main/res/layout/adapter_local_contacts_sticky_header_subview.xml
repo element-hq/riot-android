@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/matrix_only_filter"
-        android:textColor="?attr/default_text_color"
+        android:textColor="?attr/riot_primary_text_color"
         android:theme="@style/CheckBoxTheme" />
 
 </LinearLayout>

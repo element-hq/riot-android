@@ -4,7 +4,7 @@
 <declare-styleable name="VectorStyles">
 
     <!-- default background color -->
-    <attr name="default_background_color" format="color" />
+    <attr name="riot_primary_background_color" format="color" />
 
     <!-- waiting view background -->
     <attr name="waiting_background_color" format="color" />
@@ -25,7 +25,7 @@
     <attr name="primary_hint_text_color" format="color" />
 
     <!-- default text colors -->
-    <attr name="default_text_color" format="color" />
+    <attr name="riot_primary_text_color" format="color" />
     <attr name="default_text_light_color" format="color"/>
     <attr name="default_text_dark_color" format="color"/>
     <attr name="default_text_hint_color" format="color" />
@@ -42,6 +42,7 @@
     <attr name="search_mode_room_name_text_color" format="color" />
     <attr name="unread_marker_line_color" format="color" />
     <attr name="markdown_block_background_color" format="color" />
+    <attr name="room_activity_divider_color" format="color" />
 
     <!-- tab bar colors -->
     <attr name="tab_bar_background_color" format="color" />
@@ -57,24 +58,24 @@
     <attr name="list_header_public_room_spinner_text_color" format="color" />
     <attr name="list_header_public_room_spinner_color" format="color" />
 
-
     <!-- gradient on the bottom of some activities -->
     <attr name="activity_bottom_gradient_color" format="color" />
 
+    <!-- outgoing call background color -->
     <attr name="pending_outgoing_view_background_color" format="color"/>
 
+    <!-- multi selection member background color -->
     <attr name="multi_selection_background_color" format="color" />
 
+    <!-- sliding menu icon colors -->
     <attr name="home_navigation_icon_color" format="color" />
 
-    <attr name="room_notification_text_message_color" format="color" />
+    <!-- room notification text color (typing, unsent...) -->
+    <attr name="room_notification_text_color" format="color" />
 
-    <attr name="icon_tint_color" format="color" />
+    <!-- icon colors -->
+    <attr name="default_icon_tint_color" format="color" />
     <attr name="menu_icon_tint_color" format="color" />
-
-    <!-- activities background -->
-    <attr name="vector_light_gray_color" format="color" />
-
 </declare-styleable>
 
 </resources>

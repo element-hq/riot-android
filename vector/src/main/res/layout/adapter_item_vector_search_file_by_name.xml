@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="?attr/default_background_color"
+    android:background="?attr/riot_primary_background_color"
     android:layout_width="match_parent"
     android:layout_height="72dp">
 
@@ -38,7 +38,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:text="File name"
-        android:textColor="?attr/default_text_color"
+        android:textColor="?attr/riot_primary_text_color"
         android:textSize="16sp" />
 
     <!-- Last message of the room -->
