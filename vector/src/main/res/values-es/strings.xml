@@ -32,13 +32,13 @@
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">Llamada de conferencia en proceso. Unir con voz o video.</string>
+    <string name="ongoing_conference_call">" Llamada de conferencia en proceso. Participar con voz o vídeo."</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo de nuevo más tarde</string>
     <string name="missing_permissions_warning">Debido a permisos faltantes, algunas características podrían estar ausentes..</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para realizar una llamada de conferencia en esta sala</string>
-    <string name="missing_permissions_title_to_start_conf_call">Llamada no se puede empezar</string>
+    <string name="missing_permissions_title_to_start_conf_call">No se puede iniciar la llamada</string>
     <string name="device_information">Información del dispositivo</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no pueden ser realizadas en salas cifradas</string>
     <string name="send_anyway">Enviar de todos modos</string>
@@ -58,7 +58,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="action_quick_reply">Respuesta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Cerrar</string>
-    <string name="copied_to_clipboard">Copiado</string>
+    <string name="copied_to_clipboard">Copiado al portapapeles</string>
     <string name="disable">Desactivar</string>
 
     <!-- dialog titles -->
@@ -107,7 +107,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="send_bug_report">Informe de Error</string>
     <string name="send_bug_report_description">Por favor describe el error. ¿Qué hiciste? ¿Qué esperabas que sucediera? ¿Qué sucedió realmente?</string>
     <string name="send_bug_report_placeholder">Describe tu problema aquí</string>
-    <string name="send_bug_report_logs_description">Para la diagnostica de problemas, informes de este cliente se enviarán junto a este reporte de error. Si prefiere solamente enviar el texto de arriba, desmarque:</string>
+    <string name="send_bug_report_logs_description">Para diagnosticar los problemas, informes de este cliente se enviarán junto a este reporte de error. Si prefiere solamente enviar el texto de arriba, desmarque:</string>
     <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaria enviar un reporte de error?</string>
     <string name="send_bug_report_sent">El reporte de error ha sido enviado</string>
     <string name="send_bug_report_failed">El reporte de error no se pudo enviar (%s)</string>
@@ -122,7 +122,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="create_account">Registrar</string>
     <string name="login">Iniciar sesión</string>
     <string name="logout">Salir</string>
-    <string name="hs_url">Enlace de el Servidor</string>
+    <string name="hs_url">URL del Servidor</string>
     <string name="identity_url">URL del Servidor de Identidad</string>
     <string name="user">usuario</string>
     <string name="users">usuarios</string>
@@ -141,7 +141,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="auth_submit">Entregar</string>
     <string name="auth_skip">Omitir</string>
     <string name="auth_send_reset_email">Enviar Correo Electrónico de Reinicio</string>
-    <string name="auth_return_to_login">Volver a la página de entrar</string>
+    <string name="auth_return_to_login">Volver a la página de entrada</string>
     <string name="auth_user_id_placeholder">Correo electrónico o nombre de usuario</string>
     <string name="auth_password_placeholder">Contraseña</string>
     <string name="auth_new_password_placeholder">Contraseña nueva</string>
@@ -183,7 +183,7 @@ Podrá añadir su correo electrónico a su cuenta en las configuraciones.</strin
     <string name="auth_home_server">Servidor:</string>
     <string name="auth_identity_server">Servidor de Identidad:</string>
     <string name="auth_reset_password_next_step_button">Verifiqué mi correo electrónico</string>
-    <string name="auth_reset_password_message">Para reiniciar su contraseña, presente el correo electrónico de esta cuenta:</string>
+    <string name="auth_reset_password_message">Para restablecer su contraseña, introduzca el correo electrónico de esta cuenta:</string>
     <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requrido.</string>
     <string name="auth_reset_password_missing_password">Una contraseña nueva es requerida.</string>
     <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez que sigas el enlace, seleccione abajo.</string>
@@ -298,7 +298,7 @@ Disculpe por la inconveniencia.</string>
     <string name="reject">Rechazar</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Saltar al primer mensaje no leído.</string>
+    <string name="room_jump_to_first_unread">Saltar al primer mensaje sin leer.</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Has sido invitado por %s a entrar a esta sala</string>
@@ -401,8 +401,8 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="ssl_could_not_verify">La identidad de el servidor remoto no se pudo verificar.</string>
     <string name="ssl_cert_not_trust">Esto podría significar que alquien esta maliciosamente interceptando tus mensajes, o que tu dispositivo no confía en el certificado proporcionado por el servidor remoto.</string>
     <string name="ssl_cert_new_account_expl">Si el administrador publicó que esto es normal, verifica que la huella abajo coincide con el que fue proporcionado por el administrador.</string>
-    <string name="ssl_unexpected_existing_expl">El certificado cambio de el que confiaba tu dispositivo. Esto es MUY RARO. Se recomienda que no aceptes el certificado nuevo.</string>
-    <string name="ssl_expected_existing_expl">El certificado cambio de uno que confiaba tu dispositivo a un certificado desconfiado. El servidor posiblemente actualizo su certificado. Pongase en contacto con el administrador de el servidor para la huella esperada.</string>
+    <string name="ssl_unexpected_existing_expl">El certificado cambió de el que confiaba tu dispositivo. Esto es MUY RARO. Se recomienda que no aceptes el certificado nuevo.</string>
+    <string name="ssl_expected_existing_expl">El certificado cambió de uno que confiaba tu dispositivo a un certificado desconfiado. El servidor posiblemente actualizo su certificado. Póngase en contacto con el administrador del servidor para la huella esperada.</string>
     <string name="ssl_only_accept">SOLAMENTE acepta el certificado de arriba si coincide con el certificado que publicó el administrador de el servidor.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
@@ -471,7 +471,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_sliding_menu_messages">Mensajes</string>
     <string name="room_sliding_menu_settings">Configuraciones</string>
     <string name="room_sliding_menu_version">Versión </string>
-    <string name="room_sliding_menu_term_and_conditions">Terminos &amp; condiciones</string>
+    <string name="room_sliding_menu_term_and_conditions">Términos &amp; condiciones</string>
     <string name="room_sliding_menu_third_party_notices">Avisos de partidos terceros</string>
     <string name="room_sliding_menu_copyright">Derechos de autor</string>
     <string name="room_sliding_menu_privacy_policy">Políticas de privacidad</string>
@@ -506,8 +506,8 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="settings_seconds">segundos</string>
 
     <string name="settings_version">Versión</string>
-    <string name="settings_olm_version">versión olm</string>
-    <string name="settings_app_term_conditions">Terminos &amp; condiciones</string>
+    <string name="settings_olm_version">Versión olm</string>
+    <string name="settings_app_term_conditions">Términos &amp; condiciones</string>
     <string name="settings_third_party_notices">Avisos de partidos terceros</string>
     <string name="settings_copyright">Derechos de autor</string>
     <string name="settings_privacy_policy">Políticas de privacidad</string>
@@ -624,7 +624,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_settings_room_internal_id">La identificación interna de esta sala</string>
     <string name="room_settings_addresses_pref_title">Direcciones</string>
     <string name="room_settings_labs_pref_title">Laboratorios</string>
-    <string name="room_settings_labs_warning_message">Estas son caracteristicas que se pueden descomponer en maneras no esperadas. Usar con precaución.</string>
+    <string name="room_settings_labs_warning_message">Estas son características que se pueden descomponer en maneras no esperadas. Usar con precaución.</string>
     <string name="room_settings_labs_end_to_end">Cifrado de extremo-a-extremo</string>
     <string name="room_settings_labs_end_to_end_is_active">El cifrado de extremo-a-extremo está encendido</string>
     <string name="room_settings_labs_end_to_end_warnings">Necesitas reingresar a tu cuenta para encender el cifrado.</string>
@@ -758,4 +758,13 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="media_saving_period_1_month">1 mes</string>
     <string name="media_saving_period_forever">Para siempre</string>
 
-    </resources>
+    <string name="offline">Desconectado</string>
+
+    <string name="settings_data_save_mode">Modo de ahorro de datos</string>
+
+    <string name="font_size">Tamaño de la letra</string>
+    <string name="small">Pequeño</string>
+    <string name="normal">Normal</string>
+    <string name="large">Grande</string>
+    <string name="largest">Muy grande</string>
+</resources>
