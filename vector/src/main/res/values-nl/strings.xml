@@ -83,7 +83,6 @@
     <!-- People fragment -->
     <string name="direct_chats_header">Gesprekken</string>
     <string name="local_address_book_header">Lokale contactenlijst</string>
-    <string name="known_contacts_header">Bekende contacten</string>
     <string name="matrix_only_filter">Alleen Matrix contacten</string>
     <string name="no_conversation_placeholder">Geen gesprekken</string>
     <string name="no_local_contact_placeholder">Geen lokale contacten</string>
@@ -350,7 +349,6 @@
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Bij ID uitnodigen</u></string>
     <string name="people_search_local_contacts">LOKALE CONTACTEN (%d)</string>
-    <string name="people_search_known_contacts">BEKENDE CONTACTEN (%s)</string>
     <string name="people_search_filter_text">Alleen Matrix gebruikers</string>
     <string name="people_search_too_many_contacts">Te veel contacten, gebruik het zoekveld.</string>
 

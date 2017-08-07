@@ -389,6 +389,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                             }
                         }
 
+                        mAdapter.setKnownContactsExtraTitle(null);
                         mAdapter.setKnownContactsLimited((null != searchUsersResponse.limited) ? searchUsersResponse.limited : false);
                         mAdapter.setFilteredKnownContacts(list, mCurrentFilter);
                     }
@@ -399,6 +400,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                     //
                     if (TextUtils.equals(fPattern, mCurrentFilter)) {
                         hideKnownContactLoadingView();
+                        mAdapter.setKnownContactsExtraTitle(PeopleFragment.this.getContext().getString(R.string.offline));
                         mAdapter.filterAccountKnownContacts(mCurrentFilter);
                     }
                 }

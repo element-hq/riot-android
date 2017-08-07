@@ -55,6 +55,11 @@
             android:title="@string/settings_interface_language"
             android:dialogTitle="@string/settings_select_language"/>
 
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
+            android:title="@string/font_size"
+            android:dialogTitle="@string/font_size"/>
+
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_hide_read_receipts"
             android:key="SETTINGS_HIDE_READ_RECEIPTS_KEY"/>
@@ -175,6 +180,10 @@
             android:key="SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY"
             android:focusable="false"
             android:title="@string/room_settings_labs_end_to_end_is_active" />
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_data_save_mode"
+            android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"/>
 
     </im.vector.preference.VectorPreferenceCategory>
     

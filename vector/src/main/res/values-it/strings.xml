@@ -84,7 +84,6 @@
     <!-- People fragment -->
     <string name="direct_chats_header">Conversazioni</string>
     <string name="local_address_book_header">Libro degli indirizzi locale</string>
-    <string name="known_contacts_header">Contatti conosciuti</string>
     <string name="matrix_only_filter">Solo contatti Matrix</string>
     <string name="no_conversation_placeholder">Nessuna conversazione</string>
     <string name="no_local_contact_placeholder">Nessun contatto locale</string>
@@ -349,7 +348,6 @@
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invita tramite ID</u></string>
     <string name="people_search_local_contacts">CONTATTI LOCALI (%d)</string>
-    <string name="people_search_known_contacts">CONTATTI CONOSCIUTI (%s)</string>
     <string name="people_search_filter_text">Solo utenti Matrix</string>
     <string name="people_search_too_many_contacts">Troppi contatti, per favore usa il campo di ricerca</string>
 

@@ -60,6 +60,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
                 R.layout.adapter_item_vector_search_message_file,
                 R.layout.adapter_item_vector_search_message_image_video,
                 -1,
+                R.layout.adapter_item_vector_search_message_emoji,
                 mediasCache);
 
         setNotifyOnChange(true);
@@ -114,7 +115,9 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
         // display the sender
         TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
-        senderTextView.setText(VectorMessagesAdapterHelper.getUserDisplayName(event.getSender(), roomState));
+        if (senderTextView != null) {
+            senderTextView.setText(VectorMessagesAdapterHelper.getUserDisplayName(event.getSender(), roomState));
+        }
 
         // display the body
         TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);

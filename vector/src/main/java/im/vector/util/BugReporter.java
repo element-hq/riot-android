@@ -132,6 +132,10 @@ public class BugReporter {
      */
     private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final boolean withScreenshot, final String bugDescription, final IMXBugReportListener listener) {
         new AsyncTask<Void, Integer, String>() {
+
+            // enumerate files to delete
+            List<File> mBugReportFiles = new ArrayList<>();
+
             @Override
             protected String doInBackground(Void... voids) {
                 String serverError = null;
@@ -214,6 +218,8 @@ public class BugReporter {
                     for (File file : gzippedFiles) {
                         builder.addFormDataPart("compressed-log", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
                     }
+
+                    mBugReportFiles.addAll(gzippedFiles);
 
                     if (withScreenshot) {
                         Bitmap bitmap = takeScreenshot();
@@ -361,6 +367,11 @@ public class BugReporter {
             @Override
             protected void onPostExecute(String reason) {
                 mBugReportCall = null;
+
+                // delete when the bug report has been successfully sent
+                for(File file : mBugReportFiles) {
+                    file.delete();
+                }
 
                 if (null != listener) {
                     try {

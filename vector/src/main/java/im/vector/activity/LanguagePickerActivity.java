@@ -146,7 +146,7 @@ public class LanguagePickerActivity extends AppCompatActivity implements Languag
 
     @Override
     public void onSelectLocale(Locale locale) {
-        VectorApp.updateApplicationLocale(this, locale);
+        VectorApp.updateApplicationLocale(this, locale, VectorApp.getFontScale(this));
         setResult(RESULT_OK);
         finish();
     }

@@ -71,7 +71,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="direct_chats_header">Discussions</string>
     <string name="local_address_book_header">Carnet d\'adresses local</string>
-    <string name="known_contacts_header">Contacts connus</string>
     <string name="matrix_only_filter">Contacts Matrix uniquement</string>
     <string name="no_conversation_placeholder">Pas de discussion</string>
     <string name="no_local_contact_placeholder">Pas de contacts locaux</string>
@@ -232,7 +231,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_participants_action_mention">Citer</string>
     <string name="room_participants_action_devices_list">Afficher la liste des appareils</string>
     <string name="people_search_local_contacts">CONTACTS LOCAUX (%d)</string>
-    <string name="people_search_known_contacts">CONTACTS CONNUS (%s)</string>
     <string name="people_search_filter_text">Utilisateurs Matrix uniquement</string>
     <string name="people_search_invite_by_id_dialog_title">Inviter un utilisateur par identifiant</string>
     <string name="people_search_invite_by_id_dialog_hint">E-mail ou Matrix ID</string>

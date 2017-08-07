@@ -266,7 +266,6 @@
     <string name="room_participants_invite_prompt_msg">你确定要把 %s 邀请到这个聊天吗？</string>
 
     <string name="people_search_local_contacts">本地联系人（%d 个）</string>
-    <string name="people_search_known_contacts">已知联系人（%s）</string>
     <string name="people_search_too_many_contacts">太多联系人，请用搜索字段</string>
 
     <string name="room_two_users_are_typing">%1$s 和 %2$s 正在打字…</string>
@@ -656,7 +655,6 @@
     <!-- People fragment -->
     <string name="direct_chats_header">对话</string>
     <string name="local_address_book_header">本地通讯录</string>
-    <string name="known_contacts_header">已知联系人</string>
     <string name="matrix_only_filter">只有 Matrix 联系人</string>
     <string name="no_conversation_placeholder">没有对话</string>
     <string name="no_local_contact_placeholder">没有本地联系人</string>
