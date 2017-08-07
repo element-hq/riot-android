@@ -2048,7 +2048,7 @@ public class CommonActivityUtils {
      * @param menu the menu
      */
     public static void tintMenuIcons(Context context, Menu menu) {
-        int color = ThemeUtils.getColor(context, R.attr.menu_icon_tint_color);
+        int color = ThemeUtils.getColor(context, R.attr.action_bar_icon_tint_color);
 
         for (int i = 0; i < menu.size(); ++i) {
             MenuItem item = menu.getItem(i);

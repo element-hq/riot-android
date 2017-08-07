@@ -18,6 +18,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -389,6 +391,10 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             viewHolder.mRoomAvatarLayout.setVisibility(View.GONE);
 
             viewHolder.mActionImageView.setImageResource(currentItem.mIconResourceId);
+
+            if (currentItem.mIconResourceId != R.drawable.ic_remove_circle_outline_red) {
+                viewHolder.mActionImageView.setImageDrawable(CommonActivityUtils.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
+            }
 
             // update the text colour: specific colour is required for the remove action
             int colourTxt = ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color);

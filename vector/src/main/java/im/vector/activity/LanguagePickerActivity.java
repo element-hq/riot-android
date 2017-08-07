@@ -81,6 +81,7 @@ public class LanguagePickerActivity extends AppCompatActivity implements Languag
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_languages_picker, menu);
+        CommonActivityUtils.tintMenuIcons(this, menu);
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         if (searchItem != null) {

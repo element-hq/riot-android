@@ -1084,7 +1084,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             }
 
-            imageResource = R.drawable.vector_create_direct_room;
+            imageResource = R.drawable.ic_add_black;
             actionText = getResources().getString(R.string.start_new_chat);
             directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
 

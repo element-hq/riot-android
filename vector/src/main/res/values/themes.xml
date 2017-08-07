@@ -51,7 +51,7 @@
 
         <!-- list colors -->
         <item name="list_header_background_color">#f6f6f6</item>
-        <item name="list_divider_color">#FF808080</item>
+        <item name="list_divider_color">#339D9D9D</item>
         <item name="list_header_subtext_color">#4D3C3C3C</item>
 
         <!-- directory selection header -->
@@ -74,8 +74,9 @@
         <item name="room_notification_text_color">#a0a29f</item>
 
         <!-- icon colors -->
-        <item name="default_icon_tint_color">@color/vector_green_color</item>
-        <item name="menu_icon_tint_color">@android:color/black</item>
+        <item name="default_icon_tint_color">@android:color/white</item>
+        <item name="settings_icon_tint_color">@android:color/black</item>
+        <item name="action_bar_icon_tint_color">@android:color/white</item>
     </style>
 
     <!-- DARK THEME COLORS -->
@@ -142,7 +143,7 @@
         <item name="pending_outgoing_view_background_color">#33FFFFFF</item>
 
         <!-- multi selection memeber background color -->
-        <item name="multi_selection_background_color">#CCF2F2F2</item>
+        <item name="multi_selection_background_color">#4d4d4d</item>
 
         <!-- sliding menu icon colors -->
         <item name="home_navigation_icon_color">?attr/primary_control_color</item>
@@ -152,7 +153,7 @@
 
         <!-- icon colors -->
         <item name="default_icon_tint_color">@color/vector_green_color</item>
-        <item name="menu_icon_tint_color">?attr/primary_control_color</item>
-
+        <item name="settings_icon_tint_color">@android:color/white</item>
+        <item name="action_bar_icon_tint_color">?attr/primary_control_color</item>
     </style>
 </resources>

@@ -116,6 +116,7 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_phone_number_verification, menu);
+        CommonActivityUtils.tintMenuIcons(this, menu);
         return true;
     }
 

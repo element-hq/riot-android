@@ -628,6 +628,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_home, menu);
+        CommonActivityUtils.tintMenuIcons(this, menu);
         return true;
     }
 

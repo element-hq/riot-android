@@ -75,7 +75,8 @@
 
     <!-- icon colors -->
     <attr name="default_icon_tint_color" format="color" />
-    <attr name="menu_icon_tint_color" format="color" />
+    <attr name="action_bar_icon_tint_color" format="color" />
+    <attr name="settings_icon_tint_color" format="color" />
 </declare-styleable>
 
 </resources>

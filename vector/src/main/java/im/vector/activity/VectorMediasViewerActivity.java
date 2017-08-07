@@ -187,6 +187,8 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_medias_viewer, menu);
+        CommonActivityUtils.tintMenuIcons(this, menu);
+
         return true;
     }
 
