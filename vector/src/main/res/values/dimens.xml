@@ -7,6 +7,5 @@
     <dimen name="item_decoration_left_margin">72dp</dimen>
 
     <dimen name="chat_avatar_size">40dp</dimen>
-    <dimen name="chat_small_avatar_size">15dp</dimen>
     <dimen name="member_list_avatar_size">60dp</dimen>
 </resources>
