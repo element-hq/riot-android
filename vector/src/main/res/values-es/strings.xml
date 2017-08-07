@@ -84,10 +84,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <!-- People fragment -->
     <string name="direct_chats_header">Conversaciones</string>
     <string name="local_address_book_header">Agenda local de direcciones</string>
-<<<<<<< HEAD
     <string name="known_contacts_header">Contactos conocidos</string>
-=======
->>>>>>> 9fb114be0a2ad530fd7cb95d33d685b141ae58fd
     <string name="matrix_only_filter">Solo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
     <string name="no_local_contact_placeholder">No hay contactos locales</string>
