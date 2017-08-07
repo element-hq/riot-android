@@ -1264,24 +1264,24 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mRoom.sendReadReceipt(mLatestDisplayedEvent, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    if (!isFinishing() && mVectorMessageListFragment.getMessageAdapter() != null) {
+                    if (!isFinishing() && (null != mLatestDisplayedEvent) && mVectorMessageListFragment.getMessageAdapter() != null) {
                         mVectorMessageListFragment.getMessageAdapter().updateReadMarker(mRoom.getReadMarkerEventId(), mLatestDisplayedEvent.eventId);
                     }
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-
+                    Log.e(LOG_TAG, "## sendReadReceipt() : failed " + e.getMessage());
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-
+                    Log.e(LOG_TAG, "## sendReadReceipt() : failed " + e.getMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-
+                    Log.e(LOG_TAG, "## sendReadReceipt() : failed " + e.getMessage());
                 }
             });
             refreshNotificationsArea();
