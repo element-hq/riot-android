@@ -418,8 +418,6 @@ public class BugReporter {
         final ProgressBar progressBar = (ProgressBar) dialogLayout.findViewById(R.id.bug_report_progress_view);
         final TextView progressTextView = (TextView) dialogLayout.findViewById(R.id.bug_report_progress_text_view);
 
-        bugReportText.setTextColor(ThemeUtils.getColor(appContext, R.attr.riot_primary_text_color));
-
         dialog.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

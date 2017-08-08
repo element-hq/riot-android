@@ -142,17 +142,6 @@
         <item name="tabMaxWidth">0dp</item>
     </style>
 
-    <style name="TextAppearance.TextInputLayout" parent="@android:style/TextAppearance">
-        <item name="android:textColor">?attr/default_button_light_text_color</item>
-    </style>
-
-    <style name="TextInputLayoutTheme" parent="AppTheme.NoActionBar">
-        <item name="colorControlNormal">?attr/default_button_light_text_color</item>
-        <item name="colorControlActivated">?attr/default_button_light_text_color</item>
-        <item name="android:textColorHint">?attr/default_text_hint_color</item>
-        <item name="android:editTextColor">?attr/riot_primary_text_color</item>
-    </style>
-
     <style name="ListHeader">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">?attr/riot_primary_text_color</item>
