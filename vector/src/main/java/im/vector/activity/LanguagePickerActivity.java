@@ -92,6 +92,8 @@ public class LanguagePickerActivity extends AppCompatActivity implements Languag
             mSearchView.setQueryHint(getString(R.string.search_hint));
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             mSearchView.setOnQueryTextListener(this);
+            SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
         }
         return true;
     }

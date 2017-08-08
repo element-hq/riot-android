@@ -35,6 +35,7 @@ import im.vector.R;
 import im.vector.adapters.CountryAdapter;
 import im.vector.util.CountryPhoneData;
 import im.vector.util.PhoneNumberUtils;
+import im.vector.util.ThemeUtils;
 
 public class CountryPickerActivity extends AppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
 
@@ -106,6 +107,9 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
             mSearchView.setQueryHint(getString(R.string.search_hint));
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             mSearchView.setOnQueryTextListener(this);
+
+            SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
         }
         return true;
     }
