@@ -515,7 +515,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
             if (null != (powerLevels = mRoom.getLiveState().getPowerLevels())) {
                 String userId = mSession.getMyUserId();
-                isAdmin = (null != userId) ? (powerLevels.getUserPowerLevel(userId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) : false;
+                isAdmin = (null != userId) && (powerLevels.getUserPowerLevel(userId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN);
             }
         }
         return isAdmin;
@@ -535,11 +535,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         if (null != mSwitchDeletionMenuItem) {
             if (!isUserAdmin()) {
                 isEnabled = false;
-            } else if (1 == mAdapter.getItemsCount()) {
-                isEnabled = false;
-            } else {
-                isEnabled = true;
-            }
+            } else isEnabled = 1 != mAdapter.getItemsCount();
 
             mSwitchDeletionMenuItem.setVisible(isEnabled);
             mSwitchDeletionMenuItem.setEnabled(isEnabled);

@@ -21,7 +21,6 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.MXSession;
 
 import java.io.Serializable;
-import java.util.regex.Pattern;
 
 /**
  * This class describes a directory server.

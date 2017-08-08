@@ -16,21 +16,9 @@
 package im.vector.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import org.matrix.androidsdk.R;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * View that displays a disc representing a percentage.

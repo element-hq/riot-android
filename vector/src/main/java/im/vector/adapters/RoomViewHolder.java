@@ -33,12 +33,10 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.util.Log;
 
-import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
 import im.vector.util.RoomUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class RoomViewHolder extends RecyclerView.ViewHolder {

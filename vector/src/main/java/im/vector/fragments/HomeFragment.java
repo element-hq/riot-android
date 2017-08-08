@@ -16,9 +16,7 @@
 
 package im.vector.fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -46,7 +44,6 @@ import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;

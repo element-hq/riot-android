@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
-import android.support.annotation.IntDef;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -38,9 +37,7 @@ import im.vector.activity.CountryPickerActivity;
 import im.vector.activity.FallbackLoginActivity;
 import im.vector.activity.HistoricalRoomsActivity;
 import im.vector.activity.InComingCallActivity;
-import im.vector.activity.JoinScreenActivity;
 import im.vector.activity.LanguagePickerActivity;
-import im.vector.activity.LockScreenActivity;
 import im.vector.activity.LoginActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.PhoneNumberVerificationActivity;
@@ -56,7 +53,6 @@ import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorRoomCreationActivity;
 import im.vector.activity.VectorRoomDetailsActivity;
-import im.vector.activity.VectorRoomInviteMembersActivity;
 import im.vector.activity.VectorSettingsActivity;
 import im.vector.activity.VectorUniversalLinkActivity;
 
@@ -202,9 +198,19 @@ public class ThemeUtils {
         return matchedColor;
     }
 
+    /**
+     * Get the resource Id applied to the current theme
+     * @param c the context
+     * @param resourceId the resource id
+     * @return the resource Id for the current theme
+     */
+    public static int getResourceId(Context c, int resourceId) {
+        if (TextUtils.equals(getApplicationTheme(c), THEME_DARK_VALUE)) {
 
-    public static int getLineDividerResourceId(Context c) {
-        return TextUtils.equals(getApplicationTheme(c), THEME_DARK_VALUE) ? R.drawable.line_divider_dark : R.drawable.line_divider_light;
+            if (resourceId == R.drawable.line_divider_light) {
+                return R.drawable.line_divider_dark;
+            }
+        }
+        return resourceId;
     }
-
 }

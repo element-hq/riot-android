@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;

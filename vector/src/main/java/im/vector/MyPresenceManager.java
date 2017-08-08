@@ -18,7 +18,6 @@ package im.vector;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.MyUser;

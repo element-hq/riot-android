@@ -25,13 +25,6 @@ import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.view.View;
 
-import org.matrix.androidsdk.R;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import im.vector.util.ThemeUtils;
-
 /**
  * View that displays a disc representing a percentage.
  */

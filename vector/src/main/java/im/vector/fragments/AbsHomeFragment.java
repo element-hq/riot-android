@@ -18,15 +18,11 @@ package im.vector.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.AttrRes;
 import android.support.annotation.CallSuper;
-import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -53,7 +49,6 @@ import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AbsAdapter;
 import im.vector.util.RoomUtils;
-import im.vector.util.ThemeUtils;
 
 /**
  * Abstract fragment providing the universal search

@@ -36,8 +36,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.rest.model.Event;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;

@@ -30,7 +30,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import im.vector.R;
 import im.vector.util.RoomUtils;
-import im.vector.util.ThemeUtils;
 
 public class UnreadCounterBadgeView extends RelativeLayout {
     // the background settings

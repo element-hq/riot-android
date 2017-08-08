@@ -48,7 +48,6 @@ import butterknife.BindView;
 import im.vector.R;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.util.RoomUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 

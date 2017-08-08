@@ -17,7 +17,6 @@
 
 package im.vector.fragments;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,9 +46,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.HashMap;
@@ -58,15 +55,12 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
-import im.vector.ViewedRoomTracker;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.services.EventStreamService;
 import im.vector.util.RoomUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.view.RecentsExpandableListView;
 
 public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener, RoomUtils.MoreActionListener {
