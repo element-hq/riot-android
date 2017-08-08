@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        tools:background="#2200ff00"
+        android:background="@color/riot_primary_background_color_light"
         tools:src="@drawable/ic_material_camera" />
 
     <ImageView
