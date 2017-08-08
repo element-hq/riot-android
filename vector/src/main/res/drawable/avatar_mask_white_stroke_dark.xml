@@ -12,7 +12,7 @@
 
             <stroke
                 android:width="50dp"
-                android:color="?attr/riot_primary_background_color" />
+                android:color="@color/riot_primary_background_color_dark" />
         </shape>
     </item>
 

@@ -4,7 +4,17 @@
     <!-- LIGHT THEME COLORS -->
     <style name="Theme.Vector.Light" parent="@style/Theme.AppCompat.Light">
         <!-- default background color -->
-        <item name="riot_primary_background_color">@android:color/white</item>
+        <item name="avatar_mask">@drawable/avatar_mask_light</item>
+        <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_light</item>
+        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_light</item>
+        <item name="line_divider">@drawable/line_divider_light</item>
+        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_light</item>
+        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_light</item>
+        <item name="vector_tabbar_background">@drawable/vector_tabbar_background_light</item>
+
+
+
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_light</item>
 
         <!-- waiting view background -->
         <item name="waiting_background_color">#AAAAAAAA</item>
@@ -13,7 +23,7 @@
         <item name="primary_dark_color">#5EA584</item>
 
         <!-- application bar background color -->
-        <item name="primary_color">#76CFA6</item>
+        <item name="primary_color">@color/primary_color_light</item>
 
         <!-- application bar text color -->
         <item name="primary_text_color">@android:color/white</item>
@@ -46,12 +56,12 @@
 
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
-        <item name="tab_bar_selected_background_color">?attr/primary_color</item>
-        <item name="tab_bar_unselected_background_color">?attr/primary_color</item>
+        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_light</item>
+        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_light</item>
 
         <!-- list colors -->
         <item name="list_header_background_color">#f6f6f6</item>
-        <item name="list_divider_color">#339D9D9D</item>
+        <item name="list_divider_color">@color/list_divider_color_light</item>
         <item name="list_header_subtext_color">#4D3C3C3C</item>
 
         <!-- directory selection header -->
@@ -81,8 +91,16 @@
 
     <!-- DARK THEME COLORS -->
     <style name="Theme.Vector.Dark" parent="@style/Theme.AppCompat">
+        <item name="avatar_mask">@drawable/avatar_mask_dark</item>
+        <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_dark</item>
+        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_dark</item>
+        <item name="line_divider">@drawable/line_divider_dark</item>
+        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_dark</item>
+        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_dark</item>
+        <item name="vector_tabbar_background">@drawable/vector_tabbar_background_dark</item>
+
         <!-- default background color -->
-        <item name="riot_primary_background_color">#2d2d2d</item>
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_dark</item>
 
         <!-- waiting view background -->
         <item name="waiting_background_color">#55555555</item>
@@ -91,7 +109,7 @@
         <item name="primary_dark_color">#191919</item>
 
         <!-- application bar color -->
-        <item name="primary_color">#353535</item>
+        <item name="primary_color">@color/primary_color_dark</item>
 
         <!-- application bar text color -->
         <item name="primary_text_color">@android:color/white</item>
@@ -124,12 +142,12 @@
 
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
-        <item name="tab_bar_selected_background_color">?attr/primary_color</item>
-        <item name="tab_bar_unselected_background_color">?attr/primary_color</item>
+        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_dark</item>
+        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_dark</item>
 
         <!-- list colors -->
         <item name="list_header_background_color">#5A5A5A</item>
-        <item name="list_divider_color">#A5A5A5A5</item>
+        <item name="list_divider_color">@color/list_divider_color_dark</item>
         <item name="list_header_subtext_color">?attr/primary_control_color</item>
 
         <!-- directory selection header -->

@@ -25,9 +25,14 @@
     </style>
 
     <!-- tabbar background -->
-    <style name="Vector.TabView" parent="@style/Widget.AppCompat.ActionBar.TabView">
-        <item name="android:background">@drawable/vector_tabbar_background</item>
-        <item name="background">@drawable/vector_tabbar_background</item>
+    <style name="Vector.TabView.Light" parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/vector_tabbar_background_light</item>
+        <item name="background">@drawable/vector_tabbar_background_light</item>
+    </style>
+
+    <style name="Vector.TabView.Dark" parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/vector_tabbar_background_dark</item>
+        <item name="background">@drawable/vector_tabbar_background_dark</item>
     </style>
 
     <!-- tabbar text color -->
@@ -189,7 +194,7 @@
         <item name="android:typeface">sans</item>
 
         <!-- activities background -->
-        <item name="android:windowBackground">@drawable/window_background</item>
+        <item name="android:windowBackground">@color/riot_primary_background_color_light</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Swipe" parent="@style/AppTheme.NoActionBar">
@@ -241,7 +246,7 @@
         <item name="colorPrimaryDark">?attr/primary_dark_color</item>
 
         <!-- activities background -->
-        <item name="android:windowBackground">@drawable/window_background</item>
+        <item name="android:windowBackground">@color/riot_primary_background_color_light</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
@@ -265,8 +270,8 @@
         <item name="android:actionBarDivider">@null</item>
 
         <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/Vector.TabView</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView</item>
+        <item name="android:actionBarTabStyle">@style/Vector.TabView.Light</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView.Light</item>
 
         <!-- tabbar text color -->
         <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
@@ -350,7 +355,7 @@
         <item name="android:typeface">sans</item>
 
         <!-- activities background -->
-        <item name="android:windowBackground">@drawable/window_background</item>
+        <item name="android:windowBackground">@color/riot_primary_background_color_dark</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Swipe.Dark" parent="@style/AppTheme.NoActionBar.Dark">
@@ -398,7 +403,7 @@
         <item name="colorPrimaryDark">?attr/primary_dark_color</item>
 
         <!-- activities background -->
-        <item name="android:windowBackground">@drawable/window_background</item>
+        <item name="android:windowBackground">@color/riot_primary_background_color_dark</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
@@ -419,8 +424,8 @@
         <item name="android:popupMenuStyle">@style/vector.PopupMenu</item>
 
         <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/Vector.TabView</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView</item>
+        <item name="android:actionBarTabStyle">@style/Vector.TabView.Dark</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView.Dark</item>
 
         <!-- tabbar text color -->
         <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>

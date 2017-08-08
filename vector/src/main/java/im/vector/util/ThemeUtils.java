@@ -84,16 +84,18 @@ public class ThemeUtils {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
         // defines a default value if not defined
-        if (!sp.contains(APPLICATION_THEME_KEY)) {
+       /* if (!sp.contains(APPLICATION_THEME_KEY)) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE);
             editor.commit();
         } else {
             appTheme = sp.getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE);
-        }
+        }*/
 
-        return appTheme;
+
+
+        return THEME_DARK_VALUE;
     }
 
     /**
@@ -108,11 +110,13 @@ public class ThemeUtils {
             editor.commit();
         }
 
-        if (TextUtils.equals(aTheme, THEME_DARK_VALUE)) {
+        /*if (TextUtils.equals(aTheme, THEME_DARK_VALUE)) {
             VectorApp.getInstance().setTheme(R.style.AppTheme_Dark);
         } else {
             VectorApp.getInstance().setTheme(R.style.AppTheme);
-        }
+        }*/
+
+        VectorApp.getInstance().setTheme(R.style.AppTheme_Dark);
 
         mColorByAttr.clear();
     }
@@ -203,4 +207,10 @@ public class ThemeUtils {
 
         return matchedColor;
     }
+
+
+    public static int getLineDividerResourceId(Context c) {
+        return TextUtils.equals(getApplicationTheme(c), THEME_DARK_VALUE) ? R.drawable.line_divider_dark : R.drawable.line_divider_light;
+    }
+
 }
