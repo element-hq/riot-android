@@ -18,5 +18,25 @@
 
     <!-- color of the direct chat avatar ring -->
     <color name="direct_chat_ring_color">#8076cfa6</color>
-    
+
+
+    <color name="riot_primary_background_color_light">@android:color/white</color>
+    <color name="riot_primary_background_color_dark">#2d2d2d</color>
+
+    <color name="primary_color_light">#76CFA6</color>
+    <color name="primary_color_dark">#353535</color>
+
+    <color name="list_divider_color_light">#339D9D9D</color>
+    <color name="list_divider_color_dark">#A5A5A5A5</color>
+
+    <color name="tab_bar_selected_background_color_light">@color/primary_color_light</color>
+    <color name="tab_bar_selected_background_color_dark">@color/primary_color_dark</color>
+
+    <color name="tab_bar_unselected_background_color_light">@color/primary_color_light</color>
+    <color name="tab_bar_unselected_background_color_dark">@color/primary_color_dark</color>
+
+
+
+
+
 </resources>

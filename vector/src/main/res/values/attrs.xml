@@ -3,6 +3,16 @@
 
 <declare-styleable name="VectorStyles">
 
+    <attr name="avatar_mask" format="reference"/>
+    <attr name="avatar_mask_room_header" format="reference"/>
+    <attr name="avatar_mask_white_stroke" format="reference"/>
+    <attr name="line_divider" format="reference"/>
+    <attr name="vector_tabbar_selected_background" format="reference"/>
+    <attr name="vector_tabbar_unselected_background" format="reference"/>
+    <attr name="vector_tabbar_background" format="reference"/>
+
+
+
     <!-- default background color -->
     <attr name="riot_primary_background_color" format="color" />
 

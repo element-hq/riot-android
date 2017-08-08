@@ -402,6 +402,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mLoginEmailTextView = (EditText) findViewById(R.id.login_user_name);
         mLoginPhoneNumber = (EditText) findViewById(R.id.login_phone_number_value);
         mLoginPhoneNumberCountryCode = (EditText) findViewById(R.id.login_phone_number_country);
+        mLoginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
         mLoginPasswordTextView = (EditText) findViewById(R.id.login_password);
 
         // account creation
@@ -415,6 +416,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mPhoneNumberLayout = findViewById(R.id.registration_phone_number);
         mPhoneNumber = (EditText) findViewById(R.id.registration_phone_number_value);
         mPhoneNumberCountryCode = (EditText) findViewById(R.id.registration_phone_number_country);
+        mPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
         mSubmitThreePidButton = (Button) findViewById(R.id.button_submit);
         mSkipThreePidButton = (Button) findViewById(R.id.button_skip);
 

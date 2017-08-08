@@ -380,6 +380,7 @@ public class CommonActivityUtils {
         // clear the preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
+        String theme = ThemeUtils.getApplicationTheme(context);
         String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, context.getResources().getString(R.string.default_hs_server_url));
         String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, context.getResources().getString(R.string.default_identity_server_url));
         Boolean useGa = PreferencesManager.useGA(context);
@@ -393,6 +394,8 @@ public class CommonActivityUtils {
         if (null != useGa) {
             PreferencesManager.setUseGA(context, useGa);
         }
+
+        ThemeUtils.setApplicationTheme(context, theme);
 
         // reset the GCM
         Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();

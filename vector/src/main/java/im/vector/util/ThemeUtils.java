@@ -175,8 +175,6 @@ public class ThemeUtils {
             }
         }
     }
-
-
     
     /**
      * Translates color attributes to colors
@@ -203,4 +201,10 @@ public class ThemeUtils {
 
         return matchedColor;
     }
+
+
+    public static int getLineDividerResourceId(Context c) {
+        return TextUtils.equals(getApplicationTheme(c), THEME_DARK_VALUE) ? R.drawable.line_divider_dark : R.drawable.line_divider_light;
+    }
+
 }
