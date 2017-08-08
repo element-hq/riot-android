@@ -93,7 +93,7 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         String roomName = roomSummary.getRoomName();
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
+        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMessageTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
 
@@ -101,7 +101,6 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         View separatorView = convertView.findViewById(R.id.recents_separator);
 
         // display the room avatar
-        avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
         Room childRoom = mSession.getDataHandler().getRoom(roomSummary.getRoomId());
 
         if (null != childRoom) {

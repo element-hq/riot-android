@@ -669,7 +669,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         int vectorSilverColor = ContextCompat.getColor(mContext, R.color.vector_silver_color);
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
+        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMsgTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
         View bingUnreadMsgView = convertView.findViewById(R.id.bing_indicator_unread_message);
@@ -737,7 +737,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 roomMsgTxtView.setText("");
                 avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarColor(null), "@", true));
             }
-
             return convertView;
         }
 
@@ -762,7 +761,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         CharSequence lastMsgToDisplay = getChildMessageToDisplay(childRoomSummary);
 
         // display the room avatar
-        avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
         final String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, childRoom);
         VectorUtils.loadRoomAvatar(mContext, mMxSession, avatarImageView, childRoom);
 
