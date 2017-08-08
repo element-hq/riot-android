@@ -3,17 +3,6 @@
 
     <!-- LIGHT THEME COLORS -->
     <style name="Theme.Vector.Light" parent="@style/Theme.AppCompat.Light">
-        <!-- default background color -->
-        <item name="avatar_mask">@drawable/avatar_mask_light</item>
-        <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_light</item>
-        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_light</item>
-        <item name="line_divider">@drawable/line_divider_light</item>
-        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_light</item>
-        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_light</item>
-        <item name="vector_tabbar_background">@drawable/vector_tabbar_background_light</item>
-
-
-
         <item name="riot_primary_background_color">@color/riot_primary_background_color_light</item>
 
         <!-- waiting view background -->
@@ -87,18 +76,21 @@
         <item name="default_icon_tint_color">@android:color/white</item>
         <item name="settings_icon_tint_color">@android:color/black</item>
         <item name="action_bar_icon_tint_color">@android:color/white</item>
+
+        <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
+        <!-- dedicated drawables are created for each theme -->
+        <item name="avatar_mask">@drawable/avatar_mask_light</item>
+        <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_light</item>
+        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_light</item>
+        <item name="line_divider">@drawable/line_divider_light</item>
+        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_light</item>
+        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_light</item>
+        <item name="vector_tabbar_background">@drawable/vector_tabbar_background_light</item>
+
     </style>
 
     <!-- DARK THEME COLORS -->
     <style name="Theme.Vector.Dark" parent="@style/Theme.AppCompat">
-        <item name="avatar_mask">@drawable/avatar_mask_dark</item>
-        <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_dark</item>
-        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_dark</item>
-        <item name="line_divider">@drawable/line_divider_dark</item>
-        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_dark</item>
-        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_dark</item>
-        <item name="vector_tabbar_background">@drawable/vector_tabbar_background_dark</item>
-
         <!-- default background color -->
         <item name="riot_primary_background_color">@color/riot_primary_background_color_dark</item>
 
@@ -173,5 +165,15 @@
         <item name="default_icon_tint_color">@color/vector_green_color</item>
         <item name="settings_icon_tint_color">@android:color/white</item>
         <item name="action_bar_icon_tint_color">?attr/primary_control_color</item>
+
+        <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
+        <!-- dedicated drawables are created for each theme -->
+        <item name="avatar_mask">@drawable/avatar_mask_dark</item>
+        <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_dark</item>
+        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_dark</item>
+        <item name="line_divider">@drawable/line_divider_dark</item>
+        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_dark</item>
+        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_dark</item>
+        <item name="vector_tabbar_background">@drawable/vector_tabbar_background_dark</item>
     </style>
 </resources>

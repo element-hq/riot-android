@@ -19,7 +19,8 @@
     <!-- color of the direct chat avatar ring -->
     <color name="direct_chat_ring_color">#8076cfa6</color>
 
-
+    <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
+    <!-- dedicated drawables are created for each theme -->
     <color name="riot_primary_background_color_light">@android:color/white</color>
     <color name="riot_primary_background_color_dark">#2d2d2d</color>
 
@@ -34,9 +35,4 @@
 
     <color name="tab_bar_unselected_background_color_light">@color/primary_color_light</color>
     <color name="tab_bar_unselected_background_color_dark">@color/primary_color_dark</color>
-
-
-
-
-
 </resources>
