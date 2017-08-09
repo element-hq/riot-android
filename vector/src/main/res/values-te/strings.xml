@@ -25,11 +25,11 @@
     <string name="rename">పునర్నామకరణ”</string>
     <string name="report_content">నివేదానుసారం</string>
     <string name="active_call">క్రియాశీల పిలుపు</string>
-    <string name="ongoing_conference_call">"సమావేశ పిలుపు కొనసాగుతున్నది.  వీడియో లొ నైన లేదా మాట్లాడటానికైనా చేరండీ"</string>
+    <string name="ongoing_conference_call">" సమావేశ పిలుపు కొనసాగుతున్నది.  వీడియో లొ నైన లేదా మాట్లాడటానికైనా చేరండీ."</string>
     <string name="ongoing_conference_call_voice">మాట్లాడు</string>
     <string name="ongoing_conference_call_video">వీడియో</string>
     <string name="cannot_start_call">పిలుపుని ప్రారంభించలక పొతున్నాము, ధాయచసి కసేపటి తరువత ప్రయత్నీచండి</string>
-    <string name="missing_permissions_warning">సరైన అనుమతులు లేని కరనంగా, కుని లక్షణాలు పనిచేయవు</string>
+    <string name="missing_permissions_warning">సరైన అనుమతులు లేని కరనంగా, కుని లక్షణాలు పనిచేయవు.</string>
     <string name="missing_permissions_to_start_conf_call">ఈ గది లొ మీరు పిలుపుని మోధలుపటాడనికి సరైన అనుమతులు లవు</string>
     <string name="missing_permissions_title_to_start_conf_call">పిలుపును మొధలుపాటలేము</string>
     <string name="device_information">పరికరం యొక సమాచారం</string>
@@ -128,10 +128,10 @@
     <string name="auth_invalid_password">రహస్యపదము మరీ చిన్నది</string>
     <string name="auth_missing_password">రహస్యపదము లేధు</string>
     <string name="auth_invalid_email">ఇది చెల్లుబాటు అయ్యే ఇ-తపాలా చిరునామా లాగా లేదు</string>
-    <string name="auth_email_already_defined">ఈ ఇ-తపాలా చిరునామా ఇప్పటికే నిర్వచించబడింది</string>
+    <string name="auth_email_already_defined">ఈ ఇ-తపాలా చిరునామా ఇప్పటికే నిర్వచించబడింది.</string>
     <string name="auth_missing_email">ఇ-తపాలా చిరునామా</string>
     <string name="auth_password_dont_match">రహస్యపదము సరితూగలేదు</string>
-    <string name="auth_forgot_password">రహస్యపదం మర్చిపోయారు</string>
+    <string name="auth_forgot_password">రహస్యపదం మర్చిపోయారు?</string>
     <string name="auth_use_server_options">కస్టమ్ సర్వర్ ఎంపికలు (ఆధునిక) ఉపయోగించండి</string>
     <string name="auth_email_validation_message">దయచేసి నమోదును కొనసాగించడానికి మీ ఇమెయిల్ను తనిఖీ చేయండి</string>
     <string name="auth_recaptcha_message">ఈ నివాస సేవిక మీరు రోబోట్ కాదని నిర్ధారించుకొవలనుకుంటునధి</string>
@@ -140,10 +140,12 @@
     <string name="auth_identity_server">గుర్తింపు సేవిక:</string>
     <string name="auth_reset_password_next_step_button">నేను నా ఇ-తపాలా చిరునామాను ధృవీకరించాను</string>
     <string name="auth_reset_password_message">మీ పాస్వర్డ్ను పునః ప్రారంభం చేయడానికి, మీ ఖాతాకు లింక్ చేయబడిన ఇ-తపాలా చిరునామాను నమోదు చేయండి:</string>
-    <string name="auth_reset_password_missing_email">"మీ ఖాతాకు లింగికను చేయబడిన ఇ-తపాలా చిరునామా తప్పక నమోదు చేయబడాలి. "</string>
+    <string name="auth_reset_password_missing_email">మీ ఖాతాకు లింగికను చేయబడిన ఇ-తపాలా చిరునామా తప్పక నమోదు చేయబడాలి.</string>
     <string name="auth_reset_password_missing_password">ఒక కొత్త సాంకేతిక పదము తప్పక నమోదు చేయబడాలి.</string>
     <string name="auth_reset_password_email_validation_message">% S కు ఒక ఇ-తపాలా పంపబడింది. మీరు కలిగి ఉన్న లింగికను మీరు అనుసరించిన తర్వాత, క్రింద నొక్కండి .</string>
     <string name="auth_reset_password_error_unauthorized">ఇ-తపాలా చిరునామాను ధృవీకరించడంలో విఫలమైంది: మీరు ఇ-తపాలా లో లింగికను నొక్కారనీ నిర్ధారించుకోండి</string>
-    <string name="auth_reset_password_success_message">"మీ సాంకేతిక పదము  పునః ప్రారంభం చెయ్యబడింది. \\ n \\ nమీరు అన్ని పరికరాలనుండి నిష్క్రమణ అయ్యారు మరియు ఇకపై "</string>
+    <string name="auth_reset_password_success_message">"మీ సాంకేతిక పదము  పునః ప్రారంభం చెయ్యబడింది.
+
+మీరు అన్ని పరికరాలనుండి నిష్క్రమణ అయ్యారు మరియు ఇకపై."</string>
 
     </resources>
