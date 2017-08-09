@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">eu</string>
-    <string name="resouces_country">" "</string>
+<resources>
+    <string name="resouces_language">eu</string>
+    <string name="resouces_country"></string>
 
     <string name="title_activity_home">Mezuak</string>
     <string name="title_activity_room">Gela</string>
@@ -73,10 +74,8 @@ Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
 
     <string name="direct_chats_header">Elkarrizketak</string>
     <string name="local_address_book_header">Gailuko helbide liburua</string>
-    <string name="known_contacts_header">Kontaktu ezagunak</string>
     <string name="matrix_only_filter">Matrixeko kontaktuak besterik ez</string>
     <string name="no_conversation_placeholder">Elkarrizketarik ez</string>
-    <string name="no_local_contact_placeholder">Gailuko kontakturik ez</string>
     <string name="no_contact_access_placeholder">Ez diozu baimena eman Riot aplikazioari zure gailuko kontaktuak atzitzeko</string>
     <string name="no_result_placeholder">Emaitzarik ez</string>
 
@@ -198,9 +197,7 @@ Saiotik atera zaizu gailu guztietan eta ez dituzu jakinarazpenak jasoko. Jakinar
 
     <string name="read_receipts_list">Irakurri jasotzaileen zerrenda</string>
 
-    <string name="membership_changes">%s kidetza aldaketak</string>
-
-    <string name="choose_account">Hautatu kontua</string>
+    <string name="membership_changes">%d kidetza aldaketak</string>
 
     <string name="compression_options">"Bidali honela "</string>
     <string name="compression_opt_list_original">Jatorrizkoa</string>
@@ -292,7 +289,6 @@ Beste kontu batekin hasi dezakezu saioa, edo e-mail hau kontu honetara gehitu.</
     <string name="room_creation_title">Txat berria</string>
     <string name="room_creation_add_member">Gehitu kidea</string>
     <string name="room_header_active_members">%1$d/%2$d kide aktibo</string>
-    <string name="room_header_invite_members">Gonbidatu kideak</string>
     <string name="room_title_members">%1$d kide</string>
     <string name="room_title_one_member">kide 1</string>
     <string name="room_e2e_alert_title">Abisua!</string>
@@ -350,9 +346,7 @@ Ziur zaude?</string>
     <string name="room_settings_addresses_no_local_addresses">Gela honek ez du tokiko helbiderik</string>
     <string name="encryption_export_room_keys_summary">Esportatu gakoak gailuko fitxategi batetara</string>
     <string name="encryption_import_room_keys_summary">Inportatu gakoak gailuko fitxategi batetik</string>
-    <string name="people_search_known_contacts">KONTAKTU EZAGUNAK (%s)</string>
     <string name="people_search_filter_text">Matrix erabiltzaileak besterik ez</string>
-    <string name="people_search_too_many_contacts">Kontaktu gehiegi, erabili bilaketa eremua</string>
 
     <string name="people_search_invite_by_id_dialog_title">Gonbidatu erabiltzailea ID bidez</string>
     <string name="people_search_invite_by_id_dialog_description">Sartu e-mail helbide edo Matrix ID bat edo gehiago</string>

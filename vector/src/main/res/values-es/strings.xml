@@ -84,7 +84,6 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <!-- People fragment -->
     <string name="direct_chats_header">Conversaciones</string>
     <string name="local_address_book_header">Agenda local de direcciones</string>
-    <string name="known_contacts_header">Contactos conocidos</string>
     <string name="matrix_only_filter">Solo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
     <string name="no_contact_access_placeholder">No has cedido permiso a Riot a acceder a tus contactos locales</string>
