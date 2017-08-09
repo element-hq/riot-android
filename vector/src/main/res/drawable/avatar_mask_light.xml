@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:bottom="-50dp"
         android:left="-50dp"
@@ -12,8 +11,7 @@
 
             <stroke
                 android:width="50dp"
-                android:color="@color/vector_green_color" />
+                android:color="@color/riot_primary_background_color_light" />
         </shape>
     </item>
-
 </layer-list>

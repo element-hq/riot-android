@@ -19,9 +19,7 @@ package im.vector.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 

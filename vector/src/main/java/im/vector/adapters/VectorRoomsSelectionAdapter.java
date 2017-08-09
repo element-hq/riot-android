@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 import org.matrix.androidsdk.MXSession;
@@ -92,7 +93,7 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         String roomName = roomSummary.getRoomName();
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
+        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMessageTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
 
@@ -100,7 +101,6 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         View separatorView = convertView.findViewById(R.id.recents_separator);
 
         // display the room avatar
-        avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
         Room childRoom = mSession.getDataHandler().getRoom(roomSummary.getRoomId());
 
         if (null != childRoom) {
@@ -110,10 +110,10 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         if (roomSummary.getLatestReceivedEvent() != null) {
             EventDisplay eventDisplay = new EventDisplay(mContext, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
             eventDisplay.setPrependMessagesWithAuthor(true);
-            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(mContext.getResources().getColor(R.color.vector_text_gray_color)));
+            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color)));
 
             timestampTxtView.setText(getFormattedTimestamp(roomSummary.getLatestReceivedEvent()));
-            timestampTxtView.setTextColor(mContext.getResources().getColor(R.color.vector_0_54_black_color));
+            timestampTxtView.setTextColor(ThemeUtils.getColor(mContext, R.attr.default_text_light_color));
             timestampTxtView.setTypeface(null, Typeface.NORMAL);
             timestampTxtView.setVisibility(View.VISIBLE);
         } else {
@@ -123,7 +123,7 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
 
         // display the room name
         roomNameTxtView.setText(roomName);
-        
+
         // separator
         separatorView.setVisibility(View.VISIBLE);
 

@@ -51,6 +51,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
+import im.vector.util.ThemeUtils;
 
 public class RoomDirectoryPickerActivity extends AppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
     // LOG TAG
@@ -119,6 +120,7 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_directory_server_picker, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
         return true;
     }
 

@@ -1,11 +1,11 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="profile_avatar_size">50dp</dimen>
-
     <dimen name="floating_action_button_margin">0dp</dimen>
-
     <dimen name="navigation_view_height">172dp</dimen>
     <dimen name="navigation_avatar_top_margin">20dp</dimen>
-
     <dimen name="item_decoration_left_margin">72dp</dimen>
+
+    <dimen name="chat_avatar_size">40dp</dimen>
+    <dimen name="member_list_avatar_size">60dp</dimen>
 </resources>

@@ -82,11 +82,13 @@ import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.EventGroup;
 import im.vector.util.PreferencesManager;
+import im.vector.util.ThemeUtils;
 
 /**
  * An adapter which can display room information.
@@ -329,27 +331,31 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // customization methods
     private int getDefaultMessageTextColor() {
-        return ContextCompat.getColor(mContext, R.color.message_normal);
+        return ThemeUtils.getColor(mContext, R.attr.message_text_color);
+    }
+
+    private int getNoticeTextColor() {
+        return ThemeUtils.getColor(mContext, R.attr.notice_text_color);
     }
 
     private int getEncryptingMessageTextColor() {
-        return ContextCompat.getColor(mContext, R.color.vector_green_color);
+        return ThemeUtils.getColor(mContext, R.attr.encrypting_message_text_color);
     }
 
     private int getSendingMessageTextColor() {
-        return ContextCompat.getColor(mContext, R.color.message_sending);
+        return ThemeUtils.getColor(mContext, R.attr.sending_message_text_color);
     }
 
     private int getHighlightMessageTextColor() {
-        return ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
+        return ThemeUtils.getColor(mContext, R.attr.highlighted_message_text_color);
     }
 
     private int getSearchHighlightMessageTextColor() {
-        return ContextCompat.getColor(mContext, R.color.vector_green_color);
+        return ThemeUtils.getColor(mContext, R.attr.highlighted_searched_message_text_color);
     }
 
     private int getNotSentMessageTextColor() {
-        return ContextCompat.getColor(mContext, R.color.vector_not_send_color);
+        return ThemeUtils.getColor(mContext, R.attr.unsent_message_text_color);
     }
 
     /*
@@ -1004,7 +1010,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
-                tsTextView.setTextColor(ContextCompat.getColor(mContext, R.color.chat_gray_text));
+                tsTextView.setTextColor(ThemeUtils.getColor(mContext, R.attr.default_text_light_color));
             }
 
             tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);
@@ -1196,8 +1202,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return convertView;
     }
 
-    static private Integer mDimmedNoticeTextColor = null;
-
     /**
      * Notice message management
      *
@@ -1240,16 +1244,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         addContentViewListeners(convertView, noticeTextView, position);
 
-        // compute the notice mDimmedNoticeTextColor colors
-        if (null == mDimmedNoticeTextColor) {
-            int defaultNoticeColor = noticeTextView.getCurrentTextColor();
-            mDimmedNoticeTextColor = Color.argb(
-                    Color.alpha(defaultNoticeColor) * 6 / 10,
-                    Color.red(defaultNoticeColor),
-                    Color.green(defaultNoticeColor),
-                    Color.blue(defaultNoticeColor));
-        }
-
         // android seems having a big issue when the text is too long and an alpha !=1 is applied:
         // ---> the text is not displayed.
         // It is sometimes partially displayed and/or flickers while scrolling.
@@ -1258,7 +1252,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         // I don't understand why the render graph fails to do it.
         // the patch apply the alpha to the text color but it does not work for the hyperlinks.
         noticeTextView.setAlpha(1.0f);
-        noticeTextView.setTextColor(mDimmedNoticeTextColor);
+        noticeTextView.setTextColor(getNoticeTextColor());
 
         return convertView;
     }
@@ -2071,7 +2065,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     // move left the body
                     bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-
                     highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
                 }
             } else {
@@ -2119,6 +2112,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         Menu menu = popup.getMenu();
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(mContext, R.attr.settings_icon_tint_color));
 
         // hide entries
         for (int i = 0; i < menu.size(); i++) {

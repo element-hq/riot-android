@@ -56,6 +56,7 @@ import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
@@ -193,6 +194,9 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setQueryHint(getString(R.string.historical_placeholder));
+
+        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
     }
 
     /*

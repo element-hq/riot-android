@@ -47,6 +47,8 @@ public class JoinScreenActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // keep the theme ?
+
         Intent intent = getIntent();
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);

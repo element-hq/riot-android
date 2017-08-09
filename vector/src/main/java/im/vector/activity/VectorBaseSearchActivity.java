@@ -36,14 +36,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.rest.model.Event;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 
 /**
  * This class defines a base class to manage search in action bar
@@ -189,6 +188,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_searches, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_light_action_bar_color));
 
         mMicroMenuItem = menu.findItem(R.id.ic_action_speak_to_search);
         mClearEditTextMenuItem = menu.findItem(R.id.ic_action_clear_search);

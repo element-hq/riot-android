@@ -6,6 +6,12 @@
     <string name="resouces_language">en</string>
     <string name="resouces_country">UK</string>
 
+    <!-- theme -->
+    <string-array name="theme_readables">
+        <item>Light Theme</item>
+        <item>Dark Theme</item>
+    </string-array>
+
     <!-- titles -->
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_room">Room</string>
@@ -88,7 +94,6 @@
     <string name="user_directory_header">User directory</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_local_contact_placeholder">No local contacts</string>
     <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
 
@@ -213,7 +218,6 @@
     <string name="membership_changes">%d membership changes</string>
 
     <!-- accounts list Screen -->
-    <string name="choose_account">Choose account</string>
 
     <!-- image size selection -->
     <string name="compression_options">Send as </string>
@@ -304,7 +308,6 @@
     <string name="room_creation_title">New Chat</string>
     <string name="room_creation_add_member">Add member</string>
     <string name="room_header_active_members">%1$d/%2$d active members</string>
-    <string name="room_header_invite_members">Invite members</string>
     <string name="room_title_members">%1$d members</string>
     <string name="room_title_one_member">1 member</string>
     <string name="room_e2e_alert_title">Warning!</string>
@@ -355,7 +358,6 @@
     <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
     <string name="people_search_user_directory">USER DIRECTORY (%s)</string>
     <string name="people_search_filter_text">Matrix users only</string>
-    <string name="people_search_too_many_contacts">Too many contacts, please use the search field</string>
 
     <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
     <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
@@ -657,6 +659,7 @@
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
+    <string name="settings_theme">Theme</string>
 
     <!-- GA use -->
     <string name="ga_use_alert_message">Do you accept to help us to improve the application behaviour and to send crash reports ?</string>

@@ -34,7 +34,6 @@ import java.util.ArrayList;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.adapters.VectorReadReceiptsAdapter;
 
 /**

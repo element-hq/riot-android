@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorInt;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -353,6 +354,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_vector_login);
 
         // warn that the application has started.
@@ -398,6 +400,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mLoginEmailTextView = (EditText) findViewById(R.id.login_user_name);
         mLoginPhoneNumber = (EditText) findViewById(R.id.login_phone_number_value);
         mLoginPhoneNumberCountryCode = (EditText) findViewById(R.id.login_phone_number_country);
+        mLoginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
         mLoginPasswordTextView = (EditText) findViewById(R.id.login_password);
 
         // account creation
@@ -411,6 +414,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mPhoneNumberLayout = findViewById(R.id.registration_phone_number);
         mPhoneNumber = (EditText) findViewById(R.id.registration_phone_number_value);
         mPhoneNumberCountryCode = (EditText) findViewById(R.id.registration_phone_number_country);
+        mPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
         mSubmitThreePidButton = (Button) findViewById(R.id.button_submit);
         mSkipThreePidButton = (Button) findViewById(R.id.button_skip);
 
@@ -1233,7 +1237,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             mForgotPid.put("client_secret", aClientSecret);
                             mForgotPid.put("id_server", homeServerConfig.getIdentityServerUri().getHost());
                             mForgotPid.put("sid", aSid);
-                            
+
                             mIsPasswordResetted = false;
                             onForgotOnEmailValidated(homeServerConfig);
                         } else {
@@ -1878,10 +1882,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // 2 - the password has been resetted and the user is invited to switch to the login screen
         mForgotValidateEmailButton.setText(mIsPasswordResetted ? R.string.auth_return_to_login : R.string.auth_reset_password_next_step_button);
 
-        mLoginButton.setBackgroundColor(ContextCompat.getColor(this, isLoginMode ? R.color.vector_green_color : android.R.color.white));
-        mLoginButton.setTextColor(ContextCompat.getColor(this, !isLoginMode ? R.color.vector_green_color : android.R.color.white));
-        mRegisterButton.setBackgroundColor(ContextCompat.getColor(this, !isLoginMode ? R.color.vector_green_color : android.R.color.white));
-        mRegisterButton.setTextColor(ContextCompat.getColor(this, isLoginMode ? R.color.vector_green_color : android.R.color.white));
+        @ColorInt final int green = ContextCompat.getColor(this, R.color.vector_green_color);
+        @ColorInt final int white = ContextCompat.getColor(this, android.R.color.white);
+
+        mLoginButton.setBackgroundColor(isLoginMode ? green : white);
+        mLoginButton.setTextColor(!isLoginMode ? green : white);
+        mRegisterButton.setBackgroundColor(!isLoginMode ? green : white);
+        mRegisterButton.setTextColor(isLoginMode ? green : white);
     }
 
     /**

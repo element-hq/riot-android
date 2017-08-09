@@ -85,7 +85,6 @@
     <string name="local_address_book_header">Local address book</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_local_contact_placeholder">No local contacts</string>
     <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
 
@@ -209,7 +208,6 @@
     <string name="membership_changes">%d membership changes</string>
 
     <!-- accounts list Screen -->
-    <string name="choose_account">Escolher conta</string>
 
     <!-- image size selection -->
     <string name="compression_options">Enviar como </string>
@@ -300,7 +298,6 @@
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Adicionar uma pessoa</string>
     <string name="room_header_active_members">%1$d/%2$d integrantes ativos</string>
-    <string name="room_header_invite_members">Convidar novos integrantes</string>
     <string name="room_title_members">%1$d integrantes</string>
     <string name="room_title_one_member">1 integrante</string>
     <string name="room_e2e_alert_title">Atenção!</string>
@@ -350,7 +347,6 @@
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
     <string name="people_search_local_contacts">CONTATOS LOCAIS (%d)</string>
     <string name="people_search_filter_text">Apenas usuários Matrix</string>
-    <string name="people_search_too_many_contacts">Há contatos demais. Por favor, use o campo de busca</string>
 
     <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
     <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>

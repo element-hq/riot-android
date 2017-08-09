@@ -76,6 +76,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_vector_unified_search);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {

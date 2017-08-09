@@ -45,6 +45,8 @@ public class VectorFakeRoomPreviewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // keep theme ?
+
         Intent receivedIntent = getIntent();
         String matrixId;
         MXSession session;

@@ -19,7 +19,6 @@ package im.vector.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -505,6 +504,7 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG,"## onCreate(): IN");
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_callview);
         instance = this;
 

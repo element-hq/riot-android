@@ -4,7 +4,7 @@
     android:layout_width="40dp"
     android:layout_height="40dp">
 
-    <!-- android:background="@color/vector_green_color" -->
+    <!-- android:background="?attr/vector_green_color" -->
     <ImageView
         android:id="@+id/avatar_img"
         android:background="@color/vector_green_color"
@@ -16,6 +16,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/avatar_mask_white_stroke"/>
+        android:src="?avatar_mask_white_stroke"/>
 
 </FrameLayout>

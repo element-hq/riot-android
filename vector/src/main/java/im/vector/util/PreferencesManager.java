@@ -23,7 +23,6 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 import im.vector.R;
 import im.vector.ga.GAHelper;
-import im.vector.gcm.GcmRegistrationManager;
 
 public class PreferencesManager {
 

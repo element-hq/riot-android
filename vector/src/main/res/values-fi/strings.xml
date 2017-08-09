@@ -88,7 +88,6 @@
     <string name="local_address_book_header">Local address book</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_local_contact_placeholder">No local contacts</string>
     <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
 
@@ -218,7 +217,6 @@
     <string name="membership_changes">%d membership changes</string>
 
     <!-- accounts list Screen -->
-    <string name="choose_account">Valitse tili</string>
 
     <!-- image size selection -->
     <string name="compression_options">Valitse koko</string>
@@ -311,7 +309,6 @@
     <string name="room_creation_title">Uusi keskustelu</string>
     <string name="room_creation_add_member">Lisää jäsen</string>
     <string name="room_header_active_members">%1$d/%2$d aktiivista jäsentä</string>
-    <string name="room_header_invite_members">Kutsu jäseniä</string>
     <string name="room_title_members">%1$d jäsentä</string>
     <string name="room_title_one_member">1 jäsen</string>
     <string name="room_e2e_alert_title">Varoitus!</string>
@@ -361,7 +358,6 @@
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
     <string name="people_search_local_contacts">PAIKALLISET YHTEYSTIEDOT (%d)</string>
     <string name="people_search_filter_text">Vain Matrix-käyttäjät</string>
-    <string name="people_search_too_many_contacts">Liian monta käyttäjää, käytä hakukenttää</string>
 
     <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
     <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>

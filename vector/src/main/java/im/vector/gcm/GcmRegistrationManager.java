@@ -24,7 +24,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.util.Log;
 

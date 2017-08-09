@@ -40,9 +40,6 @@
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
 
-    <color name="hint_foreground_material_dark">#80ffffff</color>
-    <color name="hint_foreground_material_light">#80000000</color>
-
     <color name="highlighted_text_material_dark">#6640c4ff</color> <!-- TODO: This is 40% alpha on the default accent color. -->
     <color name="highlighted_text_material_light">#6640c4ff</color> <!-- TODO: This is 40% alpha on the default accent color. -->
 

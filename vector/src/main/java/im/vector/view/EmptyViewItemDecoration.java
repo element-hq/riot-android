@@ -20,7 +20,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -32,6 +31,7 @@ import android.view.View;
 import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.AdapterSection;
+import im.vector.util.ThemeUtils;
 
 public class EmptyViewItemDecoration extends DividerItemDecoration {
     private final int mOrientation;
@@ -50,7 +50,7 @@ public class EmptyViewItemDecoration extends DividerItemDecoration {
         mTextSize = textSize * density;
         mEmptyViewHeight = emptyViewHeight * density;
         mEmptyViewLeftMargin = emptyViewLeftMargin * density;
-        mTextColor = ContextCompat.getColor(context, R.color.vector_80_gray);
+        mTextColor = ThemeUtils.getColor(context, R.attr.list_divider_color);
     }
 
     @Override
