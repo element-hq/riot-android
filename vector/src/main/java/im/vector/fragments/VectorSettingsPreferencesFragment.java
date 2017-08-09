@@ -52,6 +52,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -316,11 +317,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if (newValue instanceof String) {
-                        Activity activity = getActivity();
-
-                        ThemeUtils.setApplicationTheme(activity, (String)newValue);
-
-                        VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(activity), VectorApp.getFontScale(activity), ThemeUtils.getApplicationTheme(activity));
+                        VectorApp.updateApplicationTheme((String)newValue);
                         getActivity().startActivity(getActivity().getIntent());
                         getActivity().finish();
                         return true;
@@ -1952,7 +1949,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     private void setUserInterfacePreferences() {
         VectorCustomActionEditTextPreference selectedLangaguePreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY);
-        selectedLangaguePreference.setSummary(VectorApp.localeToString(VectorApp.getApplicationLocale(getActivity())));
+        selectedLangaguePreference.setSummary(VectorApp.localeToString(VectorApp.getApplicationLocale()));
 
         selectedLangaguePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -1963,7 +1960,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         });
 
         VectorCustomActionEditTextPreference textSizePreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY);
-        textSizePreference.setSummary(VectorApp.getFontScaleDescription(getActivity()));
+        textSizePreference.setSummary(VectorApp.getFontScaleDescription());
 
         textSizePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -1979,21 +1976,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         LayoutInflater inflater = activity.getLayoutInflater();
 
         View layout = inflater.inflate(R.layout.text_size_selection, null);
-
-        String scaleText = VectorApp.getFontScale(activity);
-
-        CheckedTextView smallTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_small_text_view);
-        smallTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_SMALL, scaleText));
-
-        CheckedTextView normalTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_normal_text_view);
-        normalTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_NORMAL, scaleText));
-
-        CheckedTextView largeTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_large_text_view);
-        largeTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_LARGE, scaleText));
-
-        CheckedTextView largestTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_largest_text_view);
-        largestTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_LARGEST, scaleText));
-
         builder.setTitle(R.string.font_size);
         builder.setView(layout);
 
@@ -2010,45 +1992,30 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        smallTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_SMALL, ThemeUtils.getApplicationTheme(getActivity()));
-                activity.startActivity(activity.getIntent());
-                activity.finish();
-            }
-        });
+        LinearLayout linearLayout = (LinearLayout)layout.findViewById(R.id.text_selection_group_view);
 
-        normalTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_NORMAL, ThemeUtils.getApplicationTheme(getActivity()));
-                activity.startActivity(activity.getIntent());
-                activity.finish();
-            }
-        });
+        int childCount = linearLayout.getChildCount();
 
-        largeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                VectorApp.updateApplicationLocale(getActivity(), VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_LARGE, ThemeUtils.getApplicationTheme(getActivity()));
-                activity.startActivity(activity.getIntent());
-                activity.finish();
-            }
-        });
+        String scaleText = VectorApp.getFontScale();
 
-        largestTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                VectorApp.updateApplicationLocale(getActivity(), VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_LARGEST, ThemeUtils.getApplicationTheme(getActivity()));
-                activity.startActivity(activity.getIntent());
-                activity.finish();
+        for (int i = 0; i < childCount; i++) {
+            View v = linearLayout.getChildAt(i);
+
+            if (v instanceof CheckedTextView) {
+                final CheckedTextView checkedTextView = (CheckedTextView)v;
+                checkedTextView.setChecked(TextUtils.equals(checkedTextView.getText(), scaleText));
+
+                checkedTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        VectorApp.updateFontScale(checkedTextView.getText().toString());
+                        activity.startActivity(activity.getIntent());
+                        activity.finish();
+                    }
+                });
             }
-        });
+        }
     }
 
     //==============================================================================================================
