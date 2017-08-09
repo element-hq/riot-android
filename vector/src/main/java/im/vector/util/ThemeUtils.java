@@ -170,6 +170,8 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Dark);
             }
         }
+
+        mColorByAttr.clear();
     }
     
     /**
