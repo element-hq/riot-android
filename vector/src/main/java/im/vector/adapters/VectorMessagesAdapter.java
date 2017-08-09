@@ -285,7 +285,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mMediasHelper = new VectorMessagesAdapterMediasHelper(context, mSession, mMaxImageWidth, mMaxImageHeight, mNotSentMessageTextColor, mDefaultMessageTextColor);
         mHelper = new VectorMessagesAdapterHelper(context, mSession);
 
-        mLocale = VectorApp.getApplicationLocale(mContext);
+        mLocale = VectorApp.getApplicationLocale();
 
         mAlwaysShowTimeStamps = PreferencesManager.alwaysShowTimeStamps(VectorApp.getInstance());
         mHideReadReceipts = PreferencesManager.hideReadReceipts(VectorApp.getInstance());

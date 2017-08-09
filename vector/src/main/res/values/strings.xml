@@ -744,8 +744,11 @@
 
     <!-- text size selection -->
     <string name="font_size">Font size</string>
+    <string name="tiny">Tiny</string>
     <string name="small">Small</string>
     <string name="normal">Normal</string>
     <string name="large">Large</string>
+    <string name="larger">Larger</string>
     <string name="largest">Largest</string>
+    <string name="huge">Huge</string>
 </resources>

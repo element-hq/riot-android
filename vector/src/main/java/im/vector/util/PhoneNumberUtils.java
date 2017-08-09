@@ -70,7 +70,7 @@ public class PhoneNumberUtils {
      */
     private static void buildCountryCodesList() {
         if (null == mCountryCodes) {
-            Locale applicationLocale = VectorApp.getApplicationLocale(VectorApp.getInstance());
+            Locale applicationLocale = VectorApp.getApplicationLocale();
 
             // retrieve the ISO country code
             String[] isoCountryCodes = Locale.getISOCountries();
