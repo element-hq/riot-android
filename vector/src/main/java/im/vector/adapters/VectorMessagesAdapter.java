@@ -1408,6 +1408,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         View separatorLayout = convertView.findViewById(R.id.messagesAdapter_merge_separator);
         View avatarsLayout = convertView.findViewById(R.id.messagesAdapter_merge_avatar_list);
 
+        // test if the layout is still valid
+        // reported by a rageshake
+        if ((null == headerLayout) || (null == headerTextView) || (null == summaryTextView)
+                || (null == separatorLayout) || (null == avatarsLayout)) {
+            Log.e(LOG_TAG, "getMergeView : invalid layout");
+            return convertView;
+        }
+
         separatorLayout.setVisibility(event.isExpanded() ? View.VISIBLE : View.GONE);
         summaryTextView.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
         avatarsLayout.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
