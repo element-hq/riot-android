@@ -658,10 +658,10 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <!-- GA use -->
     <string name="ga_use_alert_message">¿Aceptas el ayudarnos en mejorar el funcionamiento de la applicación y enviar reportes de error?</string>
     <string name="ga_use_settings">Automaticamente enviar reportes de error</string>
-    <string name="ga_use_disable_alert_message">Necesitas reiniciar la applicación para apagar los reportes de error.</string>
+    <string name="ga_use_disable_alert_message">Necesitas reiniciar la aplicación para apagar los reportes de error.</string>
 
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s estuvo intentando cargar un punto especifico en el historial de esta sala pero no lo pudo encontrar.</string>
+    <string name="failed_to_load_timeline_position">%s estuvo intentando cargar un punto específico en el historial de esta sala pero no lo pudo encontrar.</string>
 
 
     <!-- encryption dialog -->
@@ -762,4 +762,6 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="normal">Normal</string>
     <string name="large">Grande</string>
     <string name="largest">Muy grande</string>
-</resources>
+<string name="settings_theme">Tema</string>
+
+    </resources>
