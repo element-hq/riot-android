@@ -48,7 +48,8 @@
 
     <!-- actions -->
     <string name="action_sign_out">Uitloggen</string>
-    <string name="action_sign_out_confirmation">Uitloggen?</string>
+    <string name="action_sign_out_confirmation">Voor veiligheidsredenen zal het uitloggen alle eind-tot-eind versleutelingssleutels verwijderen. Dit zal ervoor zorgen dat gespreksgeschiedenis onleesbaar is als je weer terug in logt. 
+Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt.</string>
     <string name="action_voice_call">Spraakoproep</string>
     <string name="action_video_call">Videogesprek</string>
     <string name="action_global_search">Globaal zoeken</string>
@@ -178,7 +179,7 @@
     <string name="auth_reset_password_missing_email">Het e-mailadres dat aan uw account gekoppeld is moet worden ingevoerd.</string>
     <string name="auth_reset_password_missing_password">Een nieuw wachtwoord moet worden ingevoerd.</string>
     <string name="auth_reset_password_email_validation_message">Een e-mail is naar  %s verstuurd. Zodra je op de link in de e-mail hebt geklikt, klik hieronder.</string>
-    <string name="auth_reset_password_error_unauthorized">Het verifiëren is mislukt: Wees er zeker van dat je op de link in de e-mail hebt geklikt.</string>
+    <string name="auth_reset_password_error_unauthorized">Het verifiëren is mislukt: wees er zeker van dat je op de link in de e-mail hebt geklikt</string>
     <string name="auth_reset_password_success_message">Je wachtwoord is gereset.\n\nJe bent op alle apparaten uitgelogd en zal niet langer push notificaties ontvangen. Om notificaties op nieuw aan te zetten, log op elk apparaat opnieuw in.</string>
 
     <!-- Login Screen -->
@@ -260,10 +261,12 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">%s permissies</string>
-    <string name="permissions_rationale_msg_storage">%s heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.\n\n</string>
+    <string name="permissions_rationale_msg_storage">%s heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.
+
+Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.</string>
     <string name="permissions_rationale_msg_camera">%s heeft toegang nodig tot je camera om afbeeldingen en video oproepen te maken..</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de camera om een oproep te maken.</string>
-    <string name="permissions_rationale_msg_record_audio">%s heeft toegang nodig tot je microfoon om spraakoproepen te maken</string>
+    <string name="permissions_rationale_msg_record_audio">%s heeft toegang nodig tot je microfoon om spraakoproepen te maken.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de microfoon om een oproep te maken.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot heeft permissie nodig om je camera en microfoon te gebruiken voor videogesprekken.\n\nGeef toegang op de volgende pop-ups om een oproep te maken.</string>
     <string name="permissions_rationale_msg_contacts">Je adresboek e-mails worden geupload om matrix IDs te zoeken.</string>
@@ -694,7 +697,9 @@
     <string name="encryption_information_verify_device_warning2">Als het overeenkomt, druk op de verifïeren knop hieronder. Als het niet overeenkomt, dan onderschept iemand anders het apparaat en wil je waarschijnlijk in plaats daar van op de blokkeren knop drukken.\nIn de toekomst zal dit verificatie proces wat meer worden vermakkelijkt.</string>
     <string name="encryption_information_verify_key_match">Ik verifïeer dat de sleutels overeenkomen</string>
 
-    <string name="e2e_enabling_on_app_update">Riot ondersteund nu eind-tot-eind sleuteling maar je moet opnieuw inloggen om het aan te zetten.\n\nJe kan het nu of later doen vanaf de applicatie instellingen</string>
+    <string name="e2e_enabling_on_app_update">Riot ondersteund nu eind-tot-eind versleuteling maar je moet opnieuw inloggen om het aan te zetten.
+
+Je kan het nu of later doen vanaf de applicatie instellingen.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Deze ruimte bevat onbekende apparaten</string>
@@ -725,4 +730,22 @@
     <string name="settings_hide_read_receipts">Leesbewijzen verbergen</string>
     <string name="settings_dont_send_typings_notifs">Geen typ notificaties versturen</string>
     <string name="settings_always_show_timestamps">Altijd tijden van berichten weergeven</string>
+    <string name="settings_disable_markdown">Tekst formattering uitzetten</string>
+    <string name="settings_data_save_mode">Data bespaarmodus</string>
+
+    <string name="settings_user_interface">Gebruikersinterface</string>
+    <string name="settings_interface_language">Interface Taal</string>
+    <string name="settings_select_language">Kies een taal</string>
+
+    <string name="media_saving_period_1_week">1 week</string>
+    <string name="media_saving_period_1_month">1 maand</string>
+    <string name="media_saving_period_forever">Altijd</string>
+
+    <string name="settings_theme">Thema</string>
+
+    <string name="font_size">Tekstgrootte</string>
+    <string name="small">Klein</string>
+    <string name="normal">Normaal</string>
+    <string name="large">Groot</string>
+    <string name="largest">Grootst</string>
     </resources>
