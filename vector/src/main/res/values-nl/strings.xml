@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">nl</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country">VK</string>
 
     <!-- titles -->
     <string name="title_activity_home">Berichten</string>
@@ -355,8 +355,8 @@
     <!--  Chat -->
     <string name="room_menu_search">Zoeken</string>
     <string name="room_one_user_is_typing">%s is aan het typen…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s zijn aan het typen…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; anderen zijn aan het typen…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s zijn aan het typen…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; anderen zijn aan het typen…</string>
     <string name="room_offline_notification">De verbinding met de server is verbroken.</string>
     <string name="room_message_placeholder_encrypted">Verstuur een versleuteld bericht…</string>
     <string name="room_message_placeholder_not_encrypted">Verstuur een bericht (niet versleuteld)…</string>
@@ -714,5 +714,15 @@
 
     <!-- historical -->
     <string name="historical_placeholder">Zoek voor historisch</string>
-</resources>
+<string name="offline">Offline</string>
 
+    <string name="user_directory_header">Gebruikersadresboek</string>
+    <string name="people_search_user_directory">GEBRUIKERSADRESBOEK (%s)</string>
+    <string name="settings_start_on_boot">Start bij het inschakelen van je telefoon</string>
+    <string name="settings_clear_medias_cache">Media cache vrijmaken</string>
+    <string name="settings_keep_media">Media behouden</string>
+
+    <string name="settings_hide_read_receipts">Leesbewijzen verbergen</string>
+    <string name="settings_dont_send_typings_notifs">Geen typ notificaties versturen</string>
+    <string name="settings_always_show_timestamps">Altijd tijden van berichten weergeven</string>
+    </resources>
