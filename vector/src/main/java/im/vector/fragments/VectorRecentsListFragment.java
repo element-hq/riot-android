@@ -17,7 +17,6 @@
 
 package im.vector.fragments;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,9 +46,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.HashMap;
@@ -57,9 +55,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
-import im.vector.ViewedRoomTracker;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
@@ -894,12 +890,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 Log.e(LOG_TAG, "## startDragAndDrop() : getChildView failed " + e.getMessage());
                 return;
             }
-            
+
             // enable the drag and drop mode
             mAdapter.setIsDragAndDropMode(true);
             mSession.getDataHandler().removeListener(mEventsListener);
 
-            mDraggedView.setBackgroundColor(getResources().getColor(R.color.vector_silver_color));
+            mDraggedView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.vector_silver_color));
             mDraggedView.setAlpha(0.3f);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);

@@ -33,7 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
 
@@ -363,7 +365,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         // room selection
         if (null != currentItem.mRoom) {
             // room name
-            viewHolder.mActionDescTextView.setTextColor(ContextCompat.getColor(mContext, R.color.material_grey_900));
+            viewHolder.mActionDescTextView.setTextColor(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color));
             viewHolder.mActionDescTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, currentItem.mRoom));
 
             // room avatar
@@ -389,8 +391,12 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
 
             viewHolder.mActionImageView.setImageResource(currentItem.mIconResourceId);
 
+            if (currentItem.mIconResourceId != R.drawable.ic_remove_circle_outline_red) {
+                viewHolder.mActionImageView.setImageDrawable(CommonActivityUtils.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
+            }
+
             // update the text colour: specific colour is required for the remove action
-            int colourTxt = ContextCompat.getColor(mContext, R.color.material_grey_900);
+            int colourTxt = ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color);
 
             if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
                 colourTxt = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);

@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:background="?attr/riot_primary_background_color">
 
     <RelativeLayout
         android:id="@+id/incoming_call_avatar_container"
@@ -33,7 +33,7 @@
         android:gravity="center_horizontal"
         android:singleLine="true"
         android:text="Room name"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/default_text_light_color"
         android:textSize="20sp" />
 
     <TextView
@@ -44,7 +44,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:text="@string/incoming_call"
-        android:textColor="@color/vector_80_gray"
+        android:textColor="?attr/default_text_light_color"
         android:textSize="14sp" />
 
     <!-- this layout is used to compute the height of a single line -->
@@ -58,9 +58,9 @@
         android:layout_marginBottom="17dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="43dp"
-        android:background="@android:color/white"
+        android:background="?attr/riot_primary_background_color"
         android:text="@string/action_accept"
-        android:textColor="@color/vector_74_gray"
+        android:textColor="?attr/default_button_light_text_color"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -73,9 +73,9 @@
         android:layout_marginBottom="17dp"
         android:layout_marginRight="24dp"
         android:layout_toLeftOf="@+id/button_incoming_call_accept"
-        android:background="@android:color/white"
+        android:background="?attr/riot_primary_background_color"
         android:text="@string/action_ignore"
-        android:textColor="@color/vector_74_gray"
+        android:textColor="?attr/default_button_light_text_color"
         android:textSize="14sp"
         android:textStyle="bold" />
 

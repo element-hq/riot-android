@@ -25,6 +25,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.util.ThemeUtils;
+
 public class AdapterSection<T> {
 
     protected final String mTitle;
@@ -116,7 +120,7 @@ public class AdapterSection<T> {
      */
     protected void formatTitle(final String titleToFormat) {
         SpannableString spannableString = new SpannableString(titleToFormat.toUpperCase());
-        spannableString.setSpan(new ForegroundColorSpan(0x4D3C3C3C),
+        spannableString.setSpan(new ForegroundColorSpan(ThemeUtils.getColor(VectorApp.getInstance(), R.attr.list_header_subtext_color)),
                 mTitle.length(), titleToFormat.length(), 0);
         mTitleFormatted = spannableString;
     }

@@ -17,13 +17,11 @@
 package im.vector.preference;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.preference.PreferenceCategory;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import im.vector.R;
 

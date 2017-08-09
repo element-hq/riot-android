@@ -86,7 +86,6 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="local_address_book_header">Libreta local de direcciones</string>
     <string name="matrix_only_filter">Solamente contactos Matrix</string>
     <string name="no_conversation_placeholder">Sin conversaciones</string>
-    <string name="no_local_contact_placeholder">No local contacts</string>
     <string name="no_contact_access_placeholder">No ha permitido a Riot acceder a sus contactos locales</string>
     <string name="no_result_placeholder">Sin resultados</string>
 
@@ -212,7 +211,6 @@ Disculpe por la inconveniencia.</string>
     <string name="membership_changes">%d membership changes</string>
 
     <!-- accounts list Screen -->
-    <string name="choose_account">Elige Cuenta</string>
 
     <!-- image size selection -->
     <string name="compression_options">Enviar como </string>
@@ -304,7 +302,6 @@ Disculpe por la inconveniencia.</string>
     <string name="room_creation_title">Chat Nuevo</string>
     <string name="room_creation_add_member">Añadir miembro</string>
     <string name="room_header_active_members">%1$d/%2$d miembros activos</string>
-    <string name="room_header_invite_members">Invitar miembros</string>
     <string name="room_title_members">%1$d miembros</string>
     <string name="room_title_one_member">1 miembro</string>
     <string name="room_e2e_alert_title">¡Aviso!</string>
@@ -360,7 +357,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="people_search_invite_by_id"><u>Invitado por ID</u></string>
     <string name="people_search_local_contacts">CONTACTOS LOCALES (%d)</string>
     <string name="people_search_filter_text">Solmente usuarios de Matrix</string>
-    <string name="people_search_too_many_contacts">Demasiados contactos, por favor use la busqueda</string>
 
     <string name="people_search_invite_by_id_dialog_title">Invitar usuario por ID</string>
     <string name="people_search_invite_by_id_dialog_description">Ingrese una o varias direcciones de correo o ID Matrix</string>

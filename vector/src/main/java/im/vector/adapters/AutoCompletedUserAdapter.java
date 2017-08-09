@@ -31,7 +31,6 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
 
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;

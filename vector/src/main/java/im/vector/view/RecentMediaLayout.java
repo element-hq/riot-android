@@ -120,6 +120,6 @@ public class RecentMediaLayout extends RelativeLayout {
      * @return true if the logo gif is displayed, false otherwise
      */
     public boolean isGifImage() {
-        return (mGifLogoImageView.getVisibility()==View.VISIBLE)?true:false;
+        return (mGifLogoImageView.getVisibility() == View.VISIBLE);
     }
 }

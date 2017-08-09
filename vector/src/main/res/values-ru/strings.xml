@@ -85,7 +85,6 @@
     <string name="local_address_book_header">Локальные контакты</string>
     <string name="matrix_only_filter">Только Matrix контакты</string>
     <string name="no_conversation_placeholder">Нет диалогов</string>
-    <string name="no_local_contact_placeholder">No local contacts</string>
     <string name="no_contact_access_placeholder">Вы не дали доступ Riot к внутренним контактам</string>
     <string name="no_result_placeholder">Нет результатов</string>
 
@@ -210,8 +209,7 @@
     <string name="membership_changes">%d membership changes</string>
     
     <!-- accounts list Screen -->
-    <string name="choose_account">Выбор учётной записи</string>
-    
+
     <!-- image size selection -->
     <string name="compression_options">Откравить как </string>
     <string name="compression_opt_list_original">Оригинал</string>
@@ -307,7 +305,6 @@
     <string name="room_creation_title">Новый чат</string>
     <string name="room_creation_add_member">Добавить участника</string>
     <string name="room_header_active_members">%1$d/%2$d активных пользователей</string>
-    <string name="room_header_invite_members">Пригласить участников</string>
     <string name="room_title_members">%1$d пользователей</string>
     <string name="room_title_one_member">1 пользователь</string>
     <string name="room_e2e_alert_title">Предостережение!</string>
@@ -363,7 +360,6 @@
     <string name="people_search_invite_by_id"><u>Пригласить по ID</u></string>
     <string name="people_search_local_contacts">Локальные Контакты (%d)</string>
     <string name="people_search_filter_text">Только зарегистрированные</string>
-    <string name="people_search_too_many_contacts">Слишком много контактов, используйте поле поиска</string>
 
     <string name="people_search_invite_by_id_dialog_title">Пригласить пользователя по ID</string>
     <string name="people_search_invite_by_id_dialog_description">Пожалуйста, введите один или несколько адресов email или Matrix ID</string>

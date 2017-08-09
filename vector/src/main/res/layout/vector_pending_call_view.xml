@@ -9,7 +9,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/vector_33_black"/>
+        android:background="?attr/pending_outgoing_view_background_color"/>
 
     <!-- call view -->
     <LinearLayout
@@ -89,6 +89,7 @@
             android:layout_alignParentLeft="true"
             android:src="@drawable/ic_material_arrow_back_white"
             android:layout_centerInParent="true"
+            android:tint="?attr/primary_control_color"
             android:visibility="gone"/>
     </RelativeLayout>
     </LinearLayout>

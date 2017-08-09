@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,7 +33,6 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.util.Log;
 
-import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
@@ -82,12 +82,6 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
     @Nullable
     View vRoomMoreActionAnchor;
 
-    @BindColor(R.color.vector_fuchsia_color)
-    int mFuchsiaColor;
-    @BindColor(R.color.vector_green_color)
-    int mGreenColor;
-    @BindColor(R.color.vector_silver_color)
-    int mSilverColor;
 
     public RoomViewHolder(final View itemView) {
         super(itemView);
@@ -138,6 +132,11 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         int unreadMsgCount = roomSummary.getUnreadEventsCount();
         int highlightCount;
         int notificationCount;
+
+        // Setup colors
+        int mFuchsiaColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
+        int mGreenColor = ContextCompat.getColor(context, R.color.vector_green_color);
+        int mSilverColor = ContextCompat.getColor(context, R.color.vector_silver_color);
 
         highlightCount = roomSummary.getHighlightCount();
         notificationCount = roomSummary.getNotificationCount();

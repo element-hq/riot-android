@@ -17,6 +17,7 @@
 package im.vector.fragments;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -103,7 +104,8 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setFragmentColors(R.color.tab_favourites, R.color.tab_favourites_secondary);
+        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_favourites);
+        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_favourites_secondary);
 
         initViews();
 

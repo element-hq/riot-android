@@ -220,6 +220,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_vector_medias_picker);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {

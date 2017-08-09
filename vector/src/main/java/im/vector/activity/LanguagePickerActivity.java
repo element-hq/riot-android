@@ -36,6 +36,7 @@ import java.util.Locale;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.LanguagesAdapter;
+import im.vector.util.ThemeUtils;
 
 public class LanguagePickerActivity extends AppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {
 
@@ -80,6 +81,7 @@ public class LanguagePickerActivity extends AppCompatActivity implements Languag
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_languages_picker, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         if (searchItem != null) {
@@ -90,6 +92,8 @@ public class LanguagePickerActivity extends AppCompatActivity implements Languag
             mSearchView.setQueryHint(getString(R.string.search_hint));
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             mSearchView.setOnQueryTextListener(this);
+            SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
         }
         return true;
     }
@@ -146,7 +150,7 @@ public class LanguagePickerActivity extends AppCompatActivity implements Languag
 
     @Override
     public void onSelectLocale(Locale locale) {
-        VectorApp.updateApplicationLocale(this, locale, VectorApp.getFontScale(this));
+        VectorApp.updateApplicationLocale(this, locale, VectorApp.getFontScale(this), ThemeUtils.getApplicationTheme(this));
         setResult(RESULT_OK);
         finish();
     }

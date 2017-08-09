@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
@@ -79,7 +78,7 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
         // common info
         String thumbUrl = null;
         Long mediaSize = null;
-        int avatarId = org.matrix.androidsdk.R.drawable.filetype_attachment;
+        int avatarId = R.drawable.filetype_attachment;
         EncryptedFileInfo encryptedFileInfo = null;
 
         if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
@@ -95,9 +94,9 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
             }
 
             if ("image/gif".equals(imageMessage.getMimeType())) {
-                avatarId = org.matrix.androidsdk.R.drawable.filetype_gif;
+                avatarId = R.drawable.filetype_gif;
             } else {
-                avatarId = org.matrix.androidsdk.R.drawable.filetype_image;
+                avatarId = R.drawable.filetype_image;
             }
 
             if (null != imageMessage.info) {
@@ -112,7 +111,7 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
                 mediaSize = videoMessage.info.size;
             }
 
-            avatarId = org.matrix.androidsdk.R.drawable.filetype_video;
+            avatarId = R.drawable.filetype_video;
 
             if (null != videoMessage.info) {
                 encryptedFileInfo = videoMessage.info.thumbnail_file;
@@ -125,7 +124,7 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
                 mediaSize = fileMessage.info.size;
             }
 
-            avatarId = Message.MSGTYPE_AUDIO.equals(message.msgtype) ? org.matrix.androidsdk.R.drawable.filetype_audio : org.matrix.androidsdk.R.drawable.filetype_attachment;
+            avatarId = Message.MSGTYPE_AUDIO.equals(message.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment;
         }
 
         // thumbnail

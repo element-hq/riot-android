@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -38,6 +39,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -76,7 +78,6 @@ import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.ContentUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.text.DateFormat;
@@ -85,7 +86,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -108,6 +108,7 @@ import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -303,6 +304,29 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 public boolean onPreferenceClick(Preference preference) {
                     VectorUtils.displayAppTac();
                     return false;
+                }
+            });
+        }
+
+        // Themes
+        ListPreference themePreference = (ListPreference) findPreference(ThemeUtils.APPLICATION_THEME_KEY);
+
+        if (null != themePreference) {
+            themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (newValue instanceof String) {
+                        Activity activity = getActivity();
+
+                        ThemeUtils.setApplicationTheme(activity, (String)newValue);
+
+                        VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(activity), VectorApp.getFontScale(activity), ThemeUtils.getApplicationTheme(activity));
+                        getActivity().startActivity(getActivity().getIntent());
+                        getActivity().finish();
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             });
         }
@@ -853,7 +877,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         addEmailPreference.setTitle(R.string.settings_add_email_address);
         addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
         addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-        addEmailPreference.setIcon(R.drawable.ic_add_black);
+        addEmailPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.settings_icon_tint_color));
         addEmailPreference.setOrder(100);
         addEmailPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
@@ -879,7 +903,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // display the "add phone number" entry
         Preference addPhoneNumberPreference = new Preference(getActivity());
         addPhoneNumberPreference.setKey(ADD_PHONE_NUMBER_PREFERENCE_KEY);
-        addPhoneNumberPreference.setIcon(R.drawable.ic_add_black);
+        addPhoneNumberPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.settings_icon_tint_color));
         addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number);
         addPhoneNumberPreference.setOrder(200);
 
@@ -1990,7 +2014,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_SMALL);
+                VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_SMALL, ThemeUtils.getApplicationTheme(getActivity()));
                 activity.startActivity(activity.getIntent());
                 activity.finish();
             }
@@ -2000,7 +2024,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_NORMAL);
+                VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_NORMAL, ThemeUtils.getApplicationTheme(getActivity()));
                 activity.startActivity(activity.getIntent());
                 activity.finish();
             }
@@ -2010,7 +2034,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                VectorApp.updateApplicationLocale(getActivity(), VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_LARGE);
+                VectorApp.updateApplicationLocale(getActivity(), VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_LARGE, ThemeUtils.getApplicationTheme(getActivity()));
                 activity.startActivity(activity.getIntent());
                 activity.finish();
             }
@@ -2020,7 +2044,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                VectorApp.updateApplicationLocale(getActivity(), VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_LARGEST);
+                VectorApp.updateApplicationLocale(getActivity(), VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_LARGEST, ThemeUtils.getApplicationTheme(getActivity()));
                 activity.startActivity(activity.getIntent());
                 activity.finish();
             }

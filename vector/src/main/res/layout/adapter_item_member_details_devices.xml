@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:background="?attr/riot_primary_background_color">
 
     <TextView
         android:id="@+id/device_name"
@@ -28,7 +28,8 @@
         android:layout_alignBottom="@id/device_id"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
-        android:src="@drawable/e2e_verified" />
+        android:src="@drawable/e2e_verified"
+        android:tint="?attr/default_icon_tint_color" />
 
     <LinearLayout
         android:id="@+id/container_buttons"
@@ -75,5 +76,5 @@
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:background="@color/vector_dc_gray" />
+        android:background="?attr/list_divider_color" />
 </RelativeLayout>

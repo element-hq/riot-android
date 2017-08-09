@@ -25,7 +25,6 @@
 
     <string name="start_new_chat">开始新的聊天</string>
     <string name="option_send_files">发送文件</string>
-    <string name="choose_account">选择账户</string>
 
     <string name="yesterday">昨天</string>
     <string name="today">今天</string>
@@ -47,7 +46,6 @@
     <string name="room_preview_invitation_format">你已经被 %s 邀请加入这个聊天室</string>
     <string name="room_creation_title">新的聊天</string>
     <string name="room_creation_add_member">添加成员</string>
-    <string name="room_header_invite_members">邀请成员</string>
     <string name="room_e2e_alert_title">警告！</string>
     <string name="format_time_s">秒</string>
     <string name="format_time_m">分</string>
@@ -266,7 +264,6 @@
     <string name="room_participants_invite_prompt_msg">你确定要把 %s 邀请到这个聊天吗？</string>
 
     <string name="people_search_local_contacts">本地联系人（%d 个）</string>
-    <string name="people_search_too_many_contacts">太多联系人，请用搜索字段</string>
 
     <string name="room_two_users_are_typing">%1$s 和 %2$s 正在打字…</string>
     <string name="room_many_users_are_typing">%1$s 和 %2$s 及其他人正在打字…</string>
@@ -657,7 +654,6 @@
     <string name="local_address_book_header">本地通讯录</string>
     <string name="matrix_only_filter">只有 Matrix 联系人</string>
     <string name="no_conversation_placeholder">没有对话</string>
-    <string name="no_local_contact_placeholder">没有本地联系人</string>
     <string name="no_result_placeholder">没有结果</string>
     <string name="no_contact_access_placeholder">您没有允许 Riot 访问本地联系人的权限</string>
 

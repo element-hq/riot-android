@@ -42,6 +42,7 @@ import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 
 public class PhoneNumberVerificationActivity extends AppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
 
@@ -116,6 +117,7 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_phone_number_verification, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
         return true;
     }
 

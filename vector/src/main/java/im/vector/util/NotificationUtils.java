@@ -1,7 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -24,13 +24,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.widget.ImageView;
 
@@ -52,10 +52,8 @@ import im.vector.activity.LockScreenActivity;
 import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
-import im.vector.services.EventStreamService;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -772,7 +770,7 @@ public class NotificationUtils {
 
         boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
 
-        int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
+        @ColorInt int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
         int defaultColor = Color.TRANSPARENT;
 
         if (isBackground) {

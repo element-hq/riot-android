@@ -212,7 +212,7 @@ public class InComingCallActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-                
+
                 // create the call view to enable mMxCallListener being used,
                 // otherwise call API is not enabled
                 mMxCall.createCallView();

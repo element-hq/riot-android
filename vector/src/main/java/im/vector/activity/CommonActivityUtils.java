@@ -33,19 +33,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.AttrRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,13 +94,11 @@ import im.vector.VectorApp;
 import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
-import im.vector.fragments.AccountsSelectionDialogFragment;
-import im.vector.fragments.VectorSettingsPreferencesFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
-import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.PreferencesManager;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -375,6 +378,7 @@ public class CommonActivityUtils {
         // clear the preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
+        String theme = ThemeUtils.getApplicationTheme(context);
         String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, context.getResources().getString(R.string.default_hs_server_url));
         String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, context.getResources().getString(R.string.default_identity_server_url));
         Boolean useGa = PreferencesManager.useGA(context);
@@ -388,6 +392,8 @@ public class CommonActivityUtils {
         if (null != useGa) {
             PreferencesManager.setUseGA(context, useGa);
         }
+
+        ThemeUtils.setApplicationTheme(context, theme);
 
         // reset the GCM
         Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
@@ -1369,28 +1375,7 @@ public class CommonActivityUtils {
         if (Matrix.getMXSessions(fromActivity).size() == 1) {
             sendFilesTo(fromActivity, intent, Matrix.getMXSession(fromActivity, null));
         } else if (fromActivity instanceof FragmentActivity) {
-            FragmentManager fm = ((FragmentActivity) fromActivity).getSupportFragmentManager();
-
-            AccountsSelectionDialogFragment fragment = (AccountsSelectionDialogFragment) fm.findFragmentByTag(MXCActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-            }
-
-            fragment = AccountsSelectionDialogFragment.newInstance(Matrix.getMXSessions(fromActivity));
-
-            fragment.setListener(new AccountsSelectionDialogFragment.AccountsListener() {
-                @Override
-                public void onSelected(final MXSession session) {
-                    fromActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            sendFilesTo(fromActivity, intent, session);
-                        }
-                    });
-                }
-            });
-
-            fragment.show(fm, MXCActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
+            // TBD
         }
     }
 
@@ -2056,5 +2041,38 @@ public class CommonActivityUtils {
 
         fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, listener);
         fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+    }
+
+    /**
+     * Update the menu icons colors
+     * @param menu the menu
+     * @param color the color
+     */
+    public static void tintMenuIcons(Menu menu, int color) {
+        for (int i = 0; i < menu.size(); ++i) {
+            MenuItem item = menu.getItem(i);
+            Drawable drawable = item.getIcon();
+            if (drawable != null) {
+                Drawable wrapped = DrawableCompat.wrap(drawable);
+                drawable.mutate();
+                DrawableCompat.setTint(wrapped, color);
+                item.setIcon(drawable);
+            }
+        }
+    }
+
+    /**
+     * Tint the drawable with the menu icon color
+     * @param context the context
+     * @param drawable the drawable to tint
+     * @return the tinted drawable
+     */
+    public static Drawable tintDrawable(Context context, Drawable drawable, @AttrRes int attribute) {
+        int color = ThemeUtils.getColor(context, attribute);
+        Drawable tinted = DrawableCompat.wrap(drawable);
+        drawable.mutate();
+        DrawableCompat.setTint(tinted, color);
+
+        return tinted;
     }
 }

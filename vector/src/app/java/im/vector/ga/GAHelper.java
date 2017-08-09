@@ -17,8 +17,6 @@
 package im.vector.ga;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.util.Log;
@@ -26,9 +24,7 @@ import org.matrix.androidsdk.util.Log;
 import com.google.android.gms.analytics.ExceptionParser;
 import com.google.android.gms.analytics.HitBuilders;
 
-import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.fragments.VectorSettingsPreferencesFragment;
 import im.vector.util.PreferencesManager;
 
 public class GAHelper {

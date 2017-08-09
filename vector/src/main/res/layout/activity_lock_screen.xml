@@ -18,6 +18,7 @@
         android:textStyle="bold" />
 
     <View
+        android:id="@+id/lock_screen_separator"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/vector_green_color" />
@@ -66,8 +67,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ic_material_send_green"
             android:textColor="@android:color/black" />
-
     </LinearLayout>
-
 
 </LinearLayout>

@@ -37,7 +37,6 @@ import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.fragments.VectorUnknownDevicesFragment;
 
 /**
  * extends ActionBarActivity to manage the rageshake

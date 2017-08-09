@@ -64,7 +64,7 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         String roomName = !TextUtils.isEmpty(publicRoom.name) ? publicRoom.name : VectorUtils.getPublicRoomDisplayName(publicRoom);
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
+        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMessageTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
 
@@ -72,7 +72,6 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         View separatorView = convertView.findViewById(R.id.recents_separator);
 
         // display the room avatar
-        avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
         VectorUtils.loadUserAvatar(mContext, mSession, avatarImageView, publicRoom.getAvatarUrl(),  publicRoom.roomId, roomName);
 
         // set the topic

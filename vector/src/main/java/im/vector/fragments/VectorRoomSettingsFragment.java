@@ -36,6 +36,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -84,6 +85,7 @@ import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.ResourceUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
@@ -457,6 +459,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             listView.setPadding(0, 0, 0, 0);
         }
 
+        // seems known issue that the preferences screen does not use the activity theme
+        view.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.riot_primary_background_color));
         return view;
     }
 
@@ -1407,6 +1411,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         Menu menu = popup.getMenu();
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(context, R.attr.icon_tint_on_light_action_bar_color));
 
         String canonicalAlias = mRoom.getLiveState().alias;
         boolean canUpdateAliases = canUpdateAliases();
@@ -1565,7 +1570,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             addAddressPreference.setTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setDialogTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setKey(ADD_ADDRESSES_PREFERENCE_KEY);
-            addAddressPreference.setIcon(R.drawable.ic_add_black);
+            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.settings_icon_tint_color));
 
             addAddressPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
@@ -1734,13 +1739,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 VectorCustomActionEditTextPreference isEncryptedPreference = new VectorCustomActionEditTextPreference(getActivity());
                 isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_disabled);
                 isEncryptedPreference.setKey(key);
-                isEncryptedPreference.setIcon(getResources().getDrawable(R.drawable.e2e_unencrypted));
+                isEncryptedPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color));
                 mAdvandceSettingsCategory.addPreference(isEncryptedPreference);
             } else if (mSession.isCryptoEnabled()) {
                 final VectorSwitchPreference encryptSwitchPreference = new VectorSwitchPreference(getActivity());
                 encryptSwitchPreference.setTitle(R.string.room_settings_addresses_e2e_encryption_warning);
                 encryptSwitchPreference.setKey(key);
-                encryptSwitchPreference.setIcon(getResources().getDrawable(R.drawable.e2e_unencrypted));
+                encryptSwitchPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color));
                 encryptSwitchPreference.setChecked(false);
                 mAdvandceSettingsCategory.addPreference(encryptSwitchPreference);
 
