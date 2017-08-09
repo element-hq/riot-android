@@ -2045,12 +2045,10 @@ public class CommonActivityUtils {
 
     /**
      * Update the menu icons colors
-     * @param context the context
      * @param menu the menu
+     * @param color the color
      */
-    public static void tintMenuIcons(Context context, Menu menu) {
-        int color = ThemeUtils.getColor(context, R.attr.action_bar_icon_tint_color);
-
+    public static void tintMenuIcons(Menu menu, int color) {
         for (int i = 0; i < menu.size(); ++i) {
             MenuItem item = menu.getItem(i);
             Drawable drawable = item.getIcon();

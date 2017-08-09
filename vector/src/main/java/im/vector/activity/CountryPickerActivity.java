@@ -96,7 +96,7 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_country_picker, menu);
-        CommonActivityUtils.tintMenuIcons(this, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         if (searchItem != null) {

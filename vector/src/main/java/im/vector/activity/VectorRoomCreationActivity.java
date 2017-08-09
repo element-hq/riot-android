@@ -47,6 +47,7 @@ import java.util.List;
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomCreationAdapter;
+import im.vector.util.ThemeUtils;
 
 public class VectorRoomCreationActivity extends MXCActionBarActivity {
     // tags
@@ -268,7 +269,8 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         }
 
         getMenuInflater().inflate(R.menu.vector_room_creation, menu);
-        CommonActivityUtils.tintMenuIcons(this, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+
 
         return true;
     }

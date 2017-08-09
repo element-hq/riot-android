@@ -45,6 +45,7 @@ import im.vector.R;
 import im.vector.adapters.VectorMediasViewerAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.util.SlidableMediaInfo;
+import im.vector.util.ThemeUtils;
 
 public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
@@ -187,7 +188,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_medias_viewer, menu);
-        CommonActivityUtils.tintMenuIcons(this, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
 
         return true;
     }

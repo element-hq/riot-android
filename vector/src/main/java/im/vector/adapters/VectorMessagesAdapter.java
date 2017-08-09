@@ -2112,7 +2112,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         Menu menu = popup.getMenu();
-        CommonActivityUtils.tintMenuIcons(mContext, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(mContext, R.attr.settings_icon_tint_color));
 
         // hide entries
         for (int i = 0; i < menu.size(); i++) {

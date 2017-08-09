@@ -73,9 +73,10 @@
         <item name="room_notification_text_color">#a0a29f</item>
 
         <!-- icon colors -->
-        <item name="default_icon_tint_color">@android:color/white</item>
+        <item name="default_icon_tint_color">@color/vector_green_color</item>
         <item name="settings_icon_tint_color">@android:color/black</item>
-        <item name="action_bar_icon_tint_color">@android:color/white</item>
+        <item name="icon_tint_on_light_action_bar_color">@color/vector_green_color</item>
+        <item name="icon_tint_on_dark_action_bar_color">@android:color/white</item>
 
         <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
         <!-- dedicated drawables are created for each theme -->
@@ -164,7 +165,8 @@
         <!-- icon colors -->
         <item name="default_icon_tint_color">@color/vector_green_color</item>
         <item name="settings_icon_tint_color">@android:color/white</item>
-        <item name="action_bar_icon_tint_color">?attr/primary_control_color</item>
+        <item name="icon_tint_on_light_action_bar_color">?attr/primary_control_color</item>>
+        <item name="icon_tint_on_dark_action_bar_color">?attr/primary_control_color</item>
 
         <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
         <!-- dedicated drawables are created for each theme -->
