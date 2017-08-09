@@ -747,4 +747,15 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="media_saving_period_1_month">1 Monat</string>
     <string name="media_saving_period_forever">Für immer</string>
 
-    </resources>
+    <string name="offline">Offline</string>
+
+    <string name="user_directory_header">Benutzer-Verzeichnis</string>
+    <string name="people_search_user_directory">NUTZER-VERZEICHNIS (%s)</string>
+    <string name="settings_data_save_mode">Datensparsamer Modus</string>
+
+    <string name="font_size">Schriftgröße</string>
+    <string name="small">Klein</string>
+    <string name="normal">Normal</string>
+    <string name="large">Groß</string>
+    <string name="largest">Extra groß</string>
+</resources>
