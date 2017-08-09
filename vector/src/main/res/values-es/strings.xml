@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">es</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country">ES</string>
 
     <!-- titles -->
     <string name="title_activity_home">Mensajes</string>
@@ -84,6 +84,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <!-- People fragment -->
     <string name="direct_chats_header">Conversaciones</string>
     <string name="local_address_book_header">Agenda local de direcciones</string>
+    <string name="known_contacts_header">Contactos conocidos</string>
     <string name="matrix_only_filter">Solo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
     <string name="no_contact_access_placeholder">No has cedido permiso a Riot a acceder a tus contactos locales</string>
