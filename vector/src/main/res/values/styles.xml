@@ -135,7 +135,7 @@
         <item name="tabMode">fixed</item>
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">?attr/tab_bar_background_color</item>
+        <item name="tabBackground">?attr/tab_bar_inverted_background_color</item>
         <item name="tabTextColor">@color/vector_green_color</item>
         <item name="tabSelectedTextColor">@color/vector_green_color</item>
         <item name="tabIndicatorColor">@color/vector_green_color</item>

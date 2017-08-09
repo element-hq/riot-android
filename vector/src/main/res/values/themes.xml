@@ -45,6 +45,7 @@
 
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
+        <item name="tab_bar_inverted_background_color">#FFF2F2F2</item>
         <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_light</item>
         <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_light</item>
 
@@ -135,6 +136,7 @@
 
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
+        <item name="tab_bar_inverted_background_color">?attr/primary_color</item>
         <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_dark</item>
         <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_dark</item>
 

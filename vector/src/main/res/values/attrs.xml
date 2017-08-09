@@ -44,6 +44,7 @@
         <attr name="room_activity_divider_color" format="color" />
 
         <!-- tab bar colors -->
+        <attr name="tab_bar_inverted_background_color" format="color" />
         <attr name="tab_bar_background_color" format="color" />
         <attr name="tab_bar_selected_background_color" format="color" />
         <attr name="tab_bar_unselected_background_color" format="color" />
