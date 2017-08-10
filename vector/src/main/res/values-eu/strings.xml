@@ -624,7 +624,7 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="room_settings_addresses_e2e_prompt_title">Abisua!</string>
     <string name="directory_title">Direktorioa</string>
 
-    <string name="ga_use_alert_message">Aplikazioa hobetzen laguntzeko kraskatze txostenak guri bidaltzea onartzen duzu?</string>
+    <string name="ga_use_alert_message">Aplikazioa hobetzen lagundu nahi duzu kraskatze txostenak automatikoki bidaliz?</string>
     <string name="ga_use_settings">Bidali automatikoki kraskatze txostenak</string>
     <string name="ga_use_disable_alert_message">Aplikazioa berrabiarazi behar duzu kraskatze txostenak desgaitzeko.</string>
 
