@@ -25,7 +25,7 @@
 
         <!-- default text colors -->
         <item name="riot_primary_text_color">#FF3C3C3C</item>
-        <item name="default_text_hint_color">#333C3C3C</item>
+        <item name="default_text_hint_color">#903C3C3C</item>
         <item name="default_text_light_color">#8E000000</item>
         <item name="default_button_light_text_color">#FF747474</item>
         <item name="default_text_dark_color">#FF212121</item>
