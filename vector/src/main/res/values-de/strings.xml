@@ -761,4 +761,6 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
 <string name="larger">Größer</string>
     <string name="tiny">Sehr klein</string>
     <string name="huge">Riesig</string>
-</resources>
+<string name="settings_theme">Thema</string>
+
+    </resources>
