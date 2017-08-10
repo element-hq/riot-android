@@ -748,4 +748,22 @@
     <string name="media_saving_period_forever">Навсегда</string>
 
     <string name="settings_clear_medias_cache">Очистить кэш</string>
+    <string name="offline">Недоступен</string>
+
+    <string name="user_directory_header">Каталог пользователей</string>
+    <string name="people_search_user_directory">КАТАЛОГ ПОЛЬЗОВАТЕЛЕЙ (%s)</string>
+    <string name="settings_data_save_mode">Режим сохранения данных</string>
+
+    <string name="settings_theme">Тема</string>
+
+    <string name="font_size">Размер шрифта</string>
+    <string name="tiny">Очень мелкий</string>
+    <string name="small">Малый</string>
+    <string name="normal">Нормальный</string>
+    <string name="large">Крупный</string>
+    <string name="larger">Большой</string>
+    <string name="largest">Самый большой</string>
+    <string name="huge">Огромный</string>
+<string name="settings_keep_media">Сохранить медиа</string>
+
     </resources>
