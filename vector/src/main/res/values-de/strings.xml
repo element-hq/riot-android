@@ -735,7 +735,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
 
     <string name="settings_start_on_boot">Starte beim Systemstart</string>
     <string name="settings_clear_medias_cache">Medien-Cache leeren</string>
-    <string name="settings_keep_media">Behalten Medien</string>
+    <string name="settings_keep_media">Medien behalten</string>
 
     <string name="settings_hide_read_receipts">Lesebestätigungen verbergen</string>
     <string name="settings_dont_send_typings_notifs">Sende nicht, dass ich tippe</string>
@@ -758,4 +758,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="normal">Normal</string>
     <string name="large">Groß</string>
     <string name="largest">Extra groß</string>
+<string name="larger">Größer</string>
+    <string name="tiny">Sehr klein</string>
+    <string name="huge">Riesig</string>
 </resources>
