@@ -715,4 +715,20 @@ Ismeretlen eszközök:</string>
     <string name="media_saving_period_forever">Örökké</string>
 
     <string name="settings_hide_read_receipts">Olvasási visszajelzés elrejtése</string>
+    <string name="people_search_user_directory">FELHASZNÁLÓ JEGYZÉK (%S)</string>
+    <string name="settings_data_save_mode">Adattakarékos mód</string>
+
+    <string name="settings_theme">Téma</string>
+
+    <string name="font_size">Betűméret</string>
+    <string name="tiny">Apró</string>
+    <string name="small">Kicsi</string>
+    <string name="normal">Normál</string>
+    <string name="large">Nagy</string>
+    <string name="larger">Nagyobb</string>
+    <string name="largest">Legnagyobb</string>
+    <string name="huge">Óriási</string>
+<string name="offline">Nem elérhető</string>
+
+    <string name="user_directory_header">Felhasználó jegyzék</string>
     </resources>
