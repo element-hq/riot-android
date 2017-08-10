@@ -479,7 +479,7 @@
     <string name="settings_summary_app_info_link">Экран системной информации приложения</string>
     <string name="settings_title_app_info_link">Сведения о приложении</string>
     
-    <string name="settings_enable_all_notif">Включить уведомления для этой учётной записи</string>
+    <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
     <string name="settings_enable_this_device">Включить уведомления для этого устройства</string>
     <string name="settings_turn_screen_on">Включить экран на 3 секунды</string>
     
@@ -604,7 +604,7 @@
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Для генерации ссылки команда должна иметь адрес.</string>
-    <string name="room_settings_room_access_entry_only_invited">Только приглашённые</string>
+    <string name="room_settings_room_access_entry_only_invited">Только приглашенные</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Все у кого есть ссылка на комнату, кроме гостей</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Все у кого есть ссылка на комнату, включая гостей</string>
     
@@ -624,7 +624,7 @@
     <string name="room_settings_never_send_to_unverified_devices_summary">Никогда не отправлять шифрованное сообщение на непроверенные устройства в этой комнате с этого устройства.</string>
     
     <!-- Room settings: advanced addresses -->
-    <string name="room_settings_addresses_no_local_addresses">У этой комнаты ещё нет локального адреса</string>
+    <string name="room_settings_addresses_no_local_addresses">У этой комнаты еще нет локального адреса</string>
     <string name="room_settings_addresses_add_new_address">Новый адрес (например #foo:matrix.org")</string>
     
     <string name="room_settings_addresses_invalid_format_dialog_title">Неверный формат псевдонима</string>
