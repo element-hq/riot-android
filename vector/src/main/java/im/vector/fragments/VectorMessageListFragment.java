@@ -592,7 +592,19 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             Activity attachedActivity = getActivity();
 
             if ((null != attachedActivity) && (attachedActivity instanceof VectorRoomActivity)) {
-                ((VectorRoomActivity) attachedActivity).insertQuoteInTextEditor("> " + textMsg + "\n\n");
+                // Quote all paragraphs instead
+                String[] messageParagraphs = textMsg.split("\n\n");
+                String quotedTextMsg = "";
+                for(int i = 0; i < messageParagraphs.length; i++) {
+                    if(!messageParagraphs[i].trim().equals("")) {
+                        quotedTextMsg += "> " + messageParagraphs[i];
+                    }
+
+                    if (!((i + 1) == messageParagraphs.length)) {
+                        quotedTextMsg += "\n\n";
+                    }
+                }
+                ((VectorRoomActivity) attachedActivity).insertQuoteInTextEditor(quotedTextMsg + "\n\n");
             }
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
