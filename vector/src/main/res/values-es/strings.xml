@@ -186,7 +186,9 @@ Podrá añadir su correo electrónico a su cuenta en las configuraciones.</strin
     <string name="auth_reset_password_missing_password">Una contraseña nueva es requerida.</string>
     <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez que sigas el enlace, seleccione abajo.</string>
     <string name="auth_reset_password_error_unauthorized">Verificación de correo electrónico falló: asegúrese que siguió el enlace</string>
-    <string name="auth_reset_password_success_message">Su contraseña fue actualizada.\n\nHaz sido desconectado de todos tus dispositivos y las notificaciones están apagadas. Para encender las notificaciones, entre su cuenta en cada dispositivo.</string>
+    <string name="auth_reset_password_success_message">Su contraseña fue actualizada.
+
+Has sido desconectado de todos tus dispositivos y las notificaciones están apagadas. Para encender las notificaciones, entre su cuenta en cada dispositivo.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">El enlace sólo puede comenzar con http[s]://</string>
@@ -206,7 +208,7 @@ Podrá añadir su correo electrónico a su cuenta en las configuraciones.</strin
     <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifrado de extremo-a-extremo nuevas de este dispositivo y enviar la clave pública a el servidor.
+    <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifrado de extremo-a-extremo nuevas de este dispositivo y enviar la clave pública al servidor.
 Esto sólo ocurre una vez.
 Disculpe por la inconveniencia.</string>
 
@@ -256,7 +258,7 @@ Disculpe por la inconveniencia.</string>
 
     <string name="call_error_user_not_responding">El lado remoto no pudo contestar.</string>
     <string name="call_error_ice_failed">Conexión de media falló</string>
-    <string name="call_error_camera_init_failed">La camara no se pudo encender</string>
+    <string name="call_error_camera_init_failed">La cámara no se pudo encender</string>
     <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
     <string name="call_error_peer_hangup_elsewhere">la llamada fue colgado en otra parte</string>
     <string name="call_error_peer_cancelled_call">la llamada fue cancelada</string>
@@ -640,9 +642,10 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_settings_copy_room_id">Copiar Identificación de la Sala</string>
     <string name="room_settings_copy_room_address">Copiar Dirección de la Sala</string>
 
-    <string name="room_settings_addresses_e2e_enabled">La cifración está encendida en esta sala.</string>
-    <string name="room_settings_addresses_e2e_disabled">La cifración está apagada en esta sala.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Encender cifración \n(¡Aviso: no se puede apagar!)</string>
+    <string name="room_settings_addresses_e2e_enabled">El cifrado está encendido en esta sala.</string>
+    <string name="room_settings_addresses_e2e_disabled">El cifrado está apagado en esta sala.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Encender cifrado
+(¡Aviso: no se puede apagar!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">¡Aviso!</string>
     <string name="room_settings_addresses_e2e_prompt_message">El cifrado de extremo-a-extremo está en beta y puede ser poco fiable.
 
@@ -715,7 +718,9 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione Verificar. Si no, otro esta interceptando este dispositivo y vas a querer bloquearlo.\nEn el futuro, este procceso sera mas sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
-    <string name="e2e_enabling_on_app_update">Riot ahora cuenta con cifración de Persona-a-Persona pero necesitas reentrar tu cuenta para prenderla.\n\nLo puedes hacer ahora o luego desde las configuraciones de la applicación.</string>
+    <string name="e2e_enabling_on_app_update">Riot ahora cuenta con cifrado de extremo-a-extremo pero necesitas reentrar tu cuenta para prenderlo.
+
+Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contiene dispositivos desconocidos</string>
@@ -764,4 +769,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="largest">Muy grande</string>
 <string name="settings_theme">Tema</string>
 
-    </resources>
+    <string name="tiny">Muy pequeño</string>
+    <string name="larger">Más grande</string>
+    <string name="huge">Grandísimo</string>
+</resources>
