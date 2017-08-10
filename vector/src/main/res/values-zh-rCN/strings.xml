@@ -698,4 +698,33 @@
     <string name="settings_interface_language">界面语言</string>
     <string name="settings_select_language">选择一个语言</string>
 
-    </resources>
+    <string name="offline">离线</string>
+
+    <string name="user_directory_header">用户目录</string>
+    <string name="people_search_user_directory">用户目录 (%s)</string>
+    <string name="settings_start_on_boot">系统启动时启动</string>
+    <string name="settings_clear_medias_cache">清空媒体缓存</string>
+    <string name="settings_keep_media">保存媒体</string>
+
+    <string name="settings_hide_read_receipts">隐藏已读回执</string>
+    <string name="settings_dont_send_typings_notifs">不发送打字通知</string>
+    <string name="settings_always_show_timestamps">总是显示消息时间戳</string>
+    <string name="settings_disable_markdown">禁用markdown格式化</string>
+    <string name="settings_data_save_mode">消息保存模式</string>
+
+    <string name="media_saving_period_3_days">3天</string>
+    <string name="media_saving_period_1_week">1周</string>
+    <string name="media_saving_period_1_month">1个月</string>
+    <string name="media_saving_period_forever">永远</string>
+
+    <string name="settings_theme">主题</string>
+
+    <string name="font_size">文字大小选择</string>
+    <string name="tiny">微小</string>
+    <string name="small">小</string>
+    <string name="normal">标准</string>
+    <string name="large">大</string>
+    <string name="larger">更大</string>
+    <string name="largest">最大</string>
+    <string name="huge">巨大</string>
+</resources>
