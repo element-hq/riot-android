@@ -647,7 +647,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="directory_title">Verzeichnis</string>
 
     <!-- GA use -->
-    <string name="ga_use_alert_message">Stimmst du zu, uns dabei zu helfen, das Anwendungsverhalten der App zu verbessern und uns Absturzberichte zu übermitteln?</string>
+    <string name="ga_use_alert_message">Möchtest du uns dabei helfen die App zu verbessern indem automatisch Absturzberichte gesendet werden?</string>
     <string name="ga_use_settings">Absturzberichte automatisch übermitteln</string>
     <string name="ga_use_disable_alert_message">Du musst die Anwendung neustarten, um Absturzberichte auszuschalten.</string>
 
