@@ -29,6 +29,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -562,9 +564,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         File file = mMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
 
         if (null != file) {
-            if (null != CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType)) {
-                Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-            }
+            CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                @Override
+                public void onSuccess(String path) {
+                    Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                }
+            });
+
         } else {
             downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
             final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
@@ -585,9 +591,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         if (aDownloadId.equals(downloadId)) {
                             File file = mMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
                             if (null != file) {
-                                if (null != CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType)) {
-                                    Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-                                }
+
+                                CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String path) {
+                                        Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                    }
+                                });
                             }
                         }
                     }

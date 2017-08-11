@@ -762,15 +762,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (null != file) {
             // download
             if ((menuAction == ACTION_VECTOR_SAVE) || (menuAction == ACTION_VECTOR_OPEN)) {
-                String savedMediaPath = CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, filename, mediaMimeType);
-
-                if (null != savedMediaPath) {
-                    if (menuAction == ACTION_VECTOR_SAVE) {
-                        Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-                    } else {
-                        CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, filename, mediaMimeType, new SimpleApiCallback<String>() {
+                    @Override
+                    public void onSuccess(String savedMediaPath) {
+                        if (null != savedMediaPath) {
+                            if (menuAction == ACTION_VECTOR_SAVE) {
+                                Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                            } else {
+                                CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                            }
+                        }
                     }
-                }
+                });
             } else {
                 // shared / forward
                 Uri mediaUri = null;

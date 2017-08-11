@@ -2705,29 +2705,25 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 displayLoadingView();
 
                 CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new ApiCallback<String>() {
-                    private void onDone(String message) {
-                        hideLoadingView();
-                        Toast.makeText(VectorApp.getInstance().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                    }
-
                     @Override
                     public void onSuccess(String filename) {
-                        onDone(filename);
+                        Toast.makeText(VectorApp.getInstance().getApplicationContext(), filename, Toast.LENGTH_SHORT).show();
+                        hideLoadingView();
                     }
 
                     @Override
                     public void onNetworkError(Exception e) {
-                        onDone(e.getLocalizedMessage());
+                        hideLoadingView();
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
-                        onDone(e.getLocalizedMessage());
+                        hideLoadingView();
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        onDone(e.getLocalizedMessage());
+                        hideLoadingView();
                     }
                 });
 
