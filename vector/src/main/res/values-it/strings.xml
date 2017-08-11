@@ -89,7 +89,7 @@
     <string name="matrix_only_filter">Solo contatti Matrix</string>
     <string name="no_conversation_placeholder">Nessuna conversazione</string>
     <string name="no_local_contact_placeholder">Nessun contatto locale</string>
-    <string name="no_contact_access_placeholder">Non hai dato a Riot l'autorizzazione di accedere ai tuoi contatti locali</string>
+    <string name="no_contact_access_placeholder">Non hai dato a Riot l\'autorizzazione di accedere ai tuoi contatti locali</string>
     <string name="no_result_placeholder">Nessun risultato</string>
 
     <!-- Rooms fragment -->
