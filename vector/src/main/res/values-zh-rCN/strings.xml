@@ -572,7 +572,7 @@
 你可以现在或稍后从应用设置中做这件事。</string>
 
     <string name="ok">确认</string>
-    <string name="redact">筹辑</string>
+    <string name="redact">删改</string>
     <string name="send_bug_report_alert_message">你似乎在沮丧地摇晃手机。您要提交 bug 报告吗？</string>
     <string name="send_files_in">发送到</string>
     <string name="e2e_need_log_in_again">您需要重新登录才能为此设备生成端对端加密密钥，并将公钥提交给您的主服务器。
