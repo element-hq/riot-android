@@ -133,7 +133,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/room_preview_info_layout"
+        android:layout_below="@+id/room_ongoing_conference_call_view"
         android:background="?attr/riot_primary_background_color"
         android:visibility="gone"
         tools:visibility="visible">

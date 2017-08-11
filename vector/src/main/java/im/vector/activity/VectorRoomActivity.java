@@ -1264,12 +1264,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void sendReadReceipt() {
         if ((null != mRoom) && (null == sRoomPreviewData)) {
+            final Event latestDisplayedEvent = mLatestDisplayedEvent;
+            
             // send the read receipt
-            mRoom.sendReadReceipt(mLatestDisplayedEvent, new ApiCallback<Void>() {
+            mRoom.sendReadReceipt(latestDisplayedEvent, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    if (!isFinishing() && (null != mLatestDisplayedEvent) && mVectorMessageListFragment.getMessageAdapter() != null) {
-                        mVectorMessageListFragment.getMessageAdapter().updateReadMarker(mRoom.getReadMarkerEventId(), mLatestDisplayedEvent.eventId);
+                    // reported by a rageshake that mLatestDisplayedEvent.evenId was null whereas it was tested before being used
+                    // use a final copy of the event
+                    try {
+                        if (!isFinishing() && (null != latestDisplayedEvent) && mVectorMessageListFragment.getMessageAdapter() != null) {
+                            mVectorMessageListFragment.getMessageAdapter().updateReadMarker(mRoom.getReadMarkerEventId(), latestDisplayedEvent.eventId);
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## sendReadReceipt() : failed " + e.getMessage());
                     }
                 }
 
@@ -1308,7 +1316,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             } else {
                 Log.d(LOG_TAG, "## onScroll : the app is in background");
             }
-
         }
 
         if (mReadMarkerManager != null) {
