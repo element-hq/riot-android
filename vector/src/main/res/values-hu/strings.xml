@@ -17,8 +17,8 @@
     <string name="send">Küldés</string>
     <string name="copy">Másolás</string>
     <string name="resend">Újraküldés</string>
-    <string name="redact">Szerkeszt</string>
-    <string name="quote">Idézet</string>
+    <string name="redact">Törlés</string>
+    <string name="quote">Idézés</string>
     <string name="share">Megosztás</string>
     <string name="later">Később</string>
     <string name="permalink">Állandó hivatkozás</string>
@@ -102,8 +102,8 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
     <string name="send_bug_report_failed">A hibajelentést nem sikerült elküldeni (%s)</string>
     <string name="send_bug_report_progress">Folyamat (%s%%)</string>
 
-    <string name="send_files_in">Küldd be</string>
-    <string name="read_receipt">Olvasás</string>
+    <string name="send_files_in">Küldés ide:</string>
+    <string name="read_receipt">Elolvasta</string>
 
     <string name="join_room">Szobához csatlakozás</string>
     <string name="username">Felhasználónév</string>
@@ -282,7 +282,7 @@ Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
 
     <string name="room_preview_invitation_format">Meg lettél hívva, hogy csatlakozz ehhez a szobához %s által</string>
     <string name="title_activity_member_details">Tag adatok</string>
-    <string name="forward">Előre</string>
+    <string name="forward">Továbbítás</string>
     <string name="room_preview_unlinked_email_warning">Ez a meghívó erre a címre lett küldve: %s, ami nincs összekötve a felhasználóddal.
 Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az e-mail címet a felhasználódhoz.</string>
     <string name="room_preview_try_join_an_unknown_room">"%s szobához próbálsz hozzáférni.  Szeretnél csatlakozni, hogy részt tudj venni a beszélgetésben?"</string>
@@ -291,7 +291,7 @@ Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az e-
 
     <string name="room_creation_title">Új csevegés</string>
     <string name="room_creation_add_member">Új tag hozzáadása</string>
-    <string name="room_header_active_members">%1$d/%2$d aktív tagok</string>
+    <string name="room_header_active_members">%1$d/%2$d aktív tag</string>
     <string name="room_title_members">%1$d tagok</string>
     <string name="room_title_one_member">1 tag</string>
     <string name="room_e2e_alert_title">Vigyázat!</string>
@@ -382,7 +382,7 @@ Biztos vagy benne?</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Szoba adatai</string>
-    <string name="room_details_people">Emberek</string>
+    <string name="room_details_people">Résztvevők</string>
     <string name="room_details_files">Fájlok</string>
     <string name="room_details_settings">Beállítások</string>
     <string name="room_details_selected">kiválaszott</string>
@@ -554,14 +554,14 @@ A folytatáshoz, kérlek írd be a jelszavad.</string>
     <string name="room_settings_category_access_visibility_title">Hozzáférés és láthatóság</string>
     <string name="room_settings_directory_visibility">Listázza ezt a szobát a szobák könyvtárba</string>
     <string name="room_settings_room_access_rules_pref_title">Szoba hozzáfárés</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Szoba Előzmény Olvashatóság</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Szoba előzmény olvashatóság</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Ki tud előzményt olvasni?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Ki tud hozzáférni a szobához?</string>
 
     <string name="room_settings_read_history_entry_anyone">Bárki</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Csak tagok (amikortól ezt az opciót kiválasztottad)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Csak tagok (amikortól meg lettek hívva)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Csak tagok (amikortól csatlakoztak)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Csak tagok (ez az opció kiválasztása óta)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Csak tagok (meghívásuk óta)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Csak tagok (csatlakozásuk óta)</string>
 
     <string name="room_settings_room_access_warning">Hogy linkelhess egy szobához, mindenféleképp névvel kell rendelkeznie.</string>
     <string name="room_settings_room_access_entry_only_invited">Csak meghívott emberek</string>
