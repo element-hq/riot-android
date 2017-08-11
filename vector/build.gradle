@@ -60,6 +60,7 @@ android {
             versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "true"
             resValue "string", "allow_ga_use", "true"
+            resValue "string", "short_flavor_description", "G"
             resValue "string", "flavor_description", "GooglePlay"
         }
 
@@ -70,6 +71,7 @@ android {
             versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "false"
             resValue "string", "allow_ga_use", "false"
+            resValue "string", "short_flavor_description", "F"
             resValue "string", "flavor_description", "FDroid"
         }
     }

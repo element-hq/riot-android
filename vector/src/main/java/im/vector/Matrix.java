@@ -302,7 +302,7 @@ public class Matrix {
             PackageInfo pInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), 0);
             versionName = pInfo.versionName;
 
-            flavor = mAppContext.getResources().getString(R.string.flavor_description);
+            flavor = mAppContext.getResources().getString(R.string.short_flavor_description);
 
             if (!TextUtils.isEmpty(flavor)) {
                 flavor += "-";
