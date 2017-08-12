@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">lv</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country">UK</string>
 
     <string name="title_activity_home">Ziņas</string>
     <string name="title_activity_room">Istaba</string>
@@ -119,4 +119,28 @@
     <string name="search">Meklēt</string>
 
     <string name="start_new_chat">Uzsākt jaunu čatu</string>
+    <string name="offline">Nav tiešsaistē</string>
+
+    <string name="user_directory_header">Lietotāju katalogs</string>
+    <string name="start_voice_call">Sākt balss zvanu</string>
+    <string name="start_video_call">Sākt video zvanu</string>
+
+    <string name="option_send_files">Sūtīt failus</string>
+    <string name="option_take_photo_video">Uzņemt foto vai video</string>
+
+    <string name="auth_login">Pierakstīties</string>
+    <string name="auth_register">Reģistrēties</string>
+    <string name="auth_submit">Iesniegt</string>
+    <string name="auth_skip">Izlaist</string>
+    <string name="auth_send_reset_email">Nosūtīt atiestatīšanas epastu</string>
+    <string name="auth_return_to_login">Atgriezties uz pierakstīšanās logu</string>
+    <string name="auth_user_id_placeholder">Epasts vai lietotājvārds</string>
+    <string name="auth_password_placeholder">Parole</string>
+    <string name="auth_new_password_placeholder">Jauna parole</string>
+    <string name="auth_user_name_placeholder">Lietotājvārds</string>
+    <string name="auth_add_email_message">Pievieno epasta adresi savam kontam, lai pārējiem dalībniekiem būtu iespējams Tevi atrast, kā arī lai Tev būtu iespēja mainīt paroli.</string>
+    <string name="auth_add_phone_message">Pievieno telefona numuru savam kontam, lai ļautu pārējiem dalībniekiem Tevi atrast.</string>
+    <string name="auth_add_email_phone_message">Pievieno savam kontam epasta adresi un/vai telefona numuru, lai ļautu pārējiem dalībniekiem Tevi atrast.
+
+Kā arī epasta adrese ļaus Tev atiestatīt paroli.</string>
     </resources>
