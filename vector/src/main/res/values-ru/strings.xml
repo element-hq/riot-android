@@ -174,7 +174,7 @@
     <string name="auth_recaptcha_message">Проверка не являетесь ли вы роботом</string>
     <string name="auth_username_in_use">Логин уже используется</string>
     <string name="auth_home_server">Сервер:</string>
-    <string name="auth_identity_server">Сервер авторизации:</string>
+    <string name="auth_identity_server">Сервер идентификации:</string>
     <string name="auth_reset_password_next_step_button">Я проверил мой email адрес</string>
     <string name="auth_reset_password_message">Для сброса пароля введите привязанный к учётной записи email:</string>
     <string name="auth_reset_password_missing_email">Должен быть введён привязанный к учётной записи email.</string>
@@ -535,7 +535,7 @@
     
     <string name="settings_logged_in">Авторизован как</string>
     <string name="settings_home_server">Сервер</string>
-    <string name="settings_identity_server">Сервер авторизации</string>
+    <string name="settings_identity_server">Сервер идентификации</string>
     
     <string name="account_email_validation_title">Ожидается подтверждение</string>
     <string name="account_email_validation_message">Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
