@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">fr</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country"/>
 
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_settings">Paramètres</string>
@@ -281,7 +281,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_recents_join_room">Rejoindre le salon</string>
     <string name="room_recents_join_room_title">Rejoindre un salon</string>
     <string name="directory_search_results_title">Parcourir le répertoire</string>
-    <string name="directory_searching_title">Recherche dans le répertoire...</string>
+    <string name="directory_searching_title">Recherche dans le répertoire…</string>
 
     <string name="room_settings_notifications">Notifications</string>
     <string name="room_settings_favourite">Favori</string>
