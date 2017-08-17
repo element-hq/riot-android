@@ -2,7 +2,7 @@
 <resources><string name="title_activity_home">Pesan</string>
     <string name="title_activity_room">Ruang</string>
     <string name="title_activity_settings">Pengaturan</string>
-    <string name="title_activity_member_details">Detil Peserta</string>
+    <string name="title_activity_member_details">Detil Anggota</string>
     <string name="ok">OK</string>
     <string name="cancel">Batal</string>
     <string name="save">Simpan</string>
@@ -20,7 +20,7 @@
     <string name="invite">Undang</string>
     <string name="action_voice_call">Panggilan Suara</string>
     <string name="action_video_call">Panggilan Video</string>
-    <string name="action_quick_reply">Balas Cepat</string>
+    <string name="action_quick_reply">Balasan Cepat</string>
     <string name="dialog_title_warning">Peringatan</string>
 
     <string name="dialog_title_confirmation">Konfirmasi</string>
@@ -37,17 +37,17 @@
     <string name="user_directory_header">Direktori Pengguna</string>
     <string name="no_result_placeholder">Tidak ada hasil</string>
 
-    <string name="no_public_room_placeholder">Tidak ada ruang publik tersedia</string>
+    <string name="no_public_room_placeholder">Ruang umum belum tersedia</string>
     <string name="rooms_directory_header">Direktori ruang</string>
-    <string name="send_bug_report_include_logs">Kirim catatan</string>
+    <string name="send_bug_report_include_logs">Kirim log</string>
     <string name="send_bug_report_placeholder">Deskripsikan kendala Anda di sini</string>
     <string name="send_bug_report_sent">Laporan bug telah berhasil dikirimkan</string>
     <string name="read_receipt">Baca</string>
 
-    <string name="create_account">Registrasi</string>
+    <string name="create_account">Daftar</string>
     <string name="login">Masuk</string>
     <string name="logout">Keluar</string>
-    <string name="hs_url">URL server Home</string>
+    <string name="hs_url">URL Server Mula</string>
     <string name="search">Cari</string>
 
     <string name="start_new_chat">Mulai Obrolan Baru</string>
@@ -71,7 +71,7 @@
     <string name="resend">Kirim Ulang</string>
     <string name="forward">Teruskan</string>
     <string name="view_source">Tampilkan Sumber</string>
-    <string name="permalink">Permalink</string>
+    <string name="permalink">Buat Tautan</string>
     <string name="view_decrypted_source">Tampilkan Sumber Terdekripsi</string>
     <string name="active_call">Panggilan aktif</string>
     <string name="ongoing_conference_call_video">video</string>
@@ -85,15 +85,15 @@
     <string name="bottom_action_people">Orang</string>
     <string name="bottom_action_rooms">Ruang</string>
 
-    <string name="invitations_header">Undang</string>
-    <string name="direct_chats_header">Obrolan</string>
+    <string name="invitations_header">Undangan</string>
+    <string name="direct_chats_header">Percakapan</string>
     <string name="local_address_book_header">Buku alamat lokal</string>
     <string name="low_priority_header">Prioritas rendah</string>
 
     <string name="matrix_only_filter">Hanya kontak Matrix</string>
     <string name="rooms_header">Ruang</string>
     <string name="send_bug_report">Laporan Bug</string>
-    <string name="send_bug_report_app_crashed">Aplikasi gagal saat terakhir digunakan. Anda ingin mengirimkan laporan kegagalan?</string>
+    <string name="send_bug_report_app_crashed">Aplikasi gagal saat terakhir digunakan. Maukah Anda mengirim laporan kegagalan?</string>
 
     <string name="join_room">Gabung di Ruang</string>
     <string name="identity_url">URL Server Identity</string>
@@ -115,7 +115,7 @@
     <string name="auth_recaptcha_message">Serve Home ingin memastikan bahwa Anda bukan robot</string>
     <string name="auth_home_server">Server Home:</string>
     <string name="auth_reset_password_next_step_button">Saya sudah verifikasi alamat email</string>
-    <string name="auth_reset_password_missing_password">Password baru harap diisi</string>
+    <string name="auth_reset_password_missing_password">Kata sandi baru perlu dimasukkan.</string>
     <string name="login_error_must_start_http">URL diawali dengan http[s]://</string>
     <string name="login_error_unable_login">Tidak bisa masuk</string>
     <string name="login_error_unable_register">Tidak bisa registrasi</string>
@@ -158,8 +158,8 @@
 
     <string name="later">Nanti</string>
     <string name="send_anyway">Kirim Saja</string>
-    <string name="no_contact_access_placeholder">Anda tidak mengizinkan Riot untuk akses kontak lokal</string>
-    <string name="send_bug_report_include_crash_logs">Kirim catatan kegagalan</string>
+    <string name="no_contact_access_placeholder">Anda tidak mengizinkan Riot untuk mengakses kontak lokal</string>
+    <string name="send_bug_report_include_crash_logs">Kirim log gangguan</string>
     <string name="huge">Raksasa</string>
 <string name="small">Kecil</string>
     <string name="normal">Normal</string>
@@ -176,4 +176,90 @@
 
     <string name="encryption_information_unknown_device">perangkat tidak diketahui</string>
     <string name="encryption_information_verified">Terverifikasi</string>
+    <string name="title_activity_historical">Jejak Percakapan</string>
+
+    <string name="redact">Sunting</string>
+    <string name="ongoing_conference_call">" Panggilan massal sedang berlangsung. Bergabunglah lewat suara atau video."</string>
+    <string name="missing_permissions_warning">Beberapa fitur tidak dapat digunakan karena aplikasi belum mendapat ijin..</string>
+    <string name="missing_permissions_to_start_conf_call">Anda membutuhkan ijin mengundang untuk memulai panggilan massal di ruang ini</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Panggilan massal tidak dapat diselenggarakan di ruang terenkripsi</string>
+    <string name="action_sign_out_confirmation">Demi keamanan, semua kunci enkripsi ujung-ke-ujung akan dihapus ketika Anda keluar yang berakibat pada sejarah percakapan terenkripsi tidak lagi dapat dibaca ketika Anda masuk kembali.
+Lakukan export agar tercadangkan sebelum Anda keluar.</string>
+    <string name="action_historical">Jejak Percakapan</string>
+    <string name="copied_to_clipboard">Gandakan ke clipboard</string>
+    <string name="bottom_action_home">Tampilan Awal</string>
+    <string name="no_conversation_placeholder">Belum ada percakapan</string>
+    <string name="no_room_placeholder">Belum ada ruang</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="other">%d pengguna</item>
+</plurals>
+
+    <string name="send_bug_report_include_screenshot">Kirim tampilan layar</string>
+    <string name="send_bug_report_description">Mohon uraikan bug tersebut. Apa yang Anda lakukan? Apa yang Anda harapkan terjadi? Apa yang sebenarnya terjadi?</string>
+    <string name="send_bug_report_logs_description">Log dari klien akan dikirim bersama laporan bug ini untuk mendalami kendala yang Anda temukan. Jika Anda hanya ingin mengirimkan tulisan di atas, silahkan hapus centang:</string>
+    <string name="send_bug_report_alert_message">Sepertinya Anda mengguncang telepon Anda akibat frustrasi. Maukah Anda mengirim laporan bug?</string>
+    <string name="send_bug_report_failed">Pengiriman laporan bug gagal (%s)</string>
+    <string name="send_bug_report_progress">Kemajuan (%s%%)</string>
+
+    <string name="send_files_in">Kirim ke</string>
+    <string name="username">Nama Pengguna</string>
+    <string name="auth_add_email_message">Tambahkan alamat email ke akun agar pengguna lain dapat menemukan Anda, dan kata sandi dapat disetel ulang.</string>
+    <string name="auth_add_phone_message">Tambahkan nomor telpon ke akun agar pengguna lain dapat menemukan Anda.</string>
+    <string name="auth_add_email_phone_message">Tambahkan alamat email dan/atau nomor telpon ke akun agar pengguna lain dapat menemukan Anda.
+
+Alamat email juga memungkinkan Anda menyetel ulang kata sandi.</string>
+    <string name="auth_add_email_and_phone_message">Tambahkan alamat email dan nomor telpon ke akun agar pengguna lain dapat menemukan Anda.
+
+Alamat email juga memungkinkan Anda menyetel ulang kata sandi Anda.</string>
+    <string name="auth_invalid_login_param">Nama pengguna dan/atau kata sandi salah</string>
+    <string name="auth_invalid_user_name">Nama pengguna hanya boleh memuat huruf, angka, titik, tanda hubung ( - ), dan garis bawah ( _ )</string>
+    <string name="auth_missing_password">Password belum dimasukkan</string>
+    <string name="auth_missing_email">Alamat email belum dimasukkan</string>
+    <string name="auth_missing_phone">Nomor telpon belum dimasukkan</string>
+    <string name="auth_missing_email_or_phone">Alamat email atau nomor telpon belum dimasukkan</string>
+    <string name="auth_use_server_options">Gunakan server lain (lanjutan)</string>
+    <string name="auth_email_validation_message">Silahkan periksa email Anda untuk melanjutkan pendaftaran</string>
+    <string name="auth_threepid_warning_message">Pendaftaran dengan email sekaligus nomor telpon belum didukung sampai API dihadirkan. Hanya nomor telpon yang akan digunakan.
+
+Anda dapat menambah email di profile Anda dalam pengaturan nantinya.</string>
+    <string name="auth_username_in_use">Nama pengguna yang terpakai</string>
+    <string name="auth_reset_password_message">Untuk menyetel ulang kata sandi Anda, silahkan masukkan alamat email yang tertaut ke akun Anda:</string>
+    <string name="auth_reset_password_missing_email">Anda perlu memasukkan alamat email yang tertaut pada akun.</string>
+    <string name="auth_reset_password_email_validation_message">Sebuah email telah dikirim ke %s. Setelah Anda mengikuti tautan yang termuat di dalamnya, silahkan klik di bawah.</string>
+    <string name="auth_reset_password_error_unauthorized">Verifikasi alamat email gagal: pastikan tautan yang termuat di email telah diklik</string>
+    <string name="auth_reset_password_success_message">Kata sandi Anda telah disetel ulang.
+
+Anda telah dikeluarkan dari semua perangkat dan tidak lagi menerima pemberitahuan dorongan. Untuk menerima kembali pemberitahuan, masuk kembali dengan tiap perangkat.</string>
+
+    <string name="login_error_network_error">Tidak dapat masuk: Gangguan jaringan</string>
+    <string name="login_error_registration_network_error">Tidak dapat mendaftar: Gangguan jaringan</string>
+    <string name="login_error_unable_register_mail_ownership">Tidak dapat mendaftar : gagal memastikan kepemilikan alamat email</string>
+    <string name="login_error_forbidden">Nama pengguna/kata sandi tidak tepat</string>
+    <string name="login_error_unknown_token">Rincian token akses tidak dikenal</string>
+    <string name="login_error_bad_json">JSON amburadul</string>
+    <string name="login_error_not_json">Tidak berisi JSON yang sah</string>
+    <string name="login_error_limit_exceeded">Pengajuan yang dikirimkan terlalu banyak</string>
+    <string name="login_error_login_email_not_yet">Tautan email masih belum diklik</string>
+
+    <string name="e2e_need_log_in_again">Anda perlu masuk kembali untuk menghasilkan kunci enkripsi ujung-ke-ujung untuk perangkat ini dan menyerahkan kunci umum ke server awal Anda.
+Proses ini hanya dilakukan sekali saja.
+Mohon maaf untuk ketidaknyamannya.</string>
+
+    <string name="read_receipts_list">Baca Daftar Penerimaan</string>
+
+    <string name="membership_changes">%d perubahan keanggotaan</string>
+
+    <string name="compression_options">"Kirim sebagai "</string>
+    <string name="attachment_remaining_time_seconds">%d d</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %s$dd</string>
+
+    <string name="room_info_room_topic">Topik ruang</string>
+
+    <string name="call_ring">Memanggil…</string>
+    <string name="incoming_call">Panggilan Masuk</string>
+    <string name="incoming_video_call">Panggilan Video Masuk</string>
+    <string name="incoming_voice_call">Panggilan Suara Masuk</string>
+    <string name="call_in_progress">Panggilan Sedang Berlangsung</string>
+
+    <string name="call_error_ice_failed">Hubungan Media Gagal</string>
     </resources>
