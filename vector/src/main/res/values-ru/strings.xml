@@ -237,11 +237,11 @@
 
     <!-- call string -->
     <string name="call_connected">Вызов соеденен</string>
-    <string name="call_connecting">Вызов соеденяеться…</string>
+    <string name="call_connecting">Вызов соеденяется…</string>
     <string name="call_ended">Вызов закончен</string>
     <string name="call_ring">Звонок…</string>
     <string name="incoming_call">Входящий вызов</string>
-    <string name="incoming_video_call">Входящий видио вызов</string>
+    <string name="incoming_video_call">Входящий видео вызов</string>
     <string name="incoming_voice_call">Входящий аудио вызов</string>
     <string name="call_in_progress">Звонок выполняется</string>
     
@@ -648,7 +648,7 @@
     <string name="directory_title">Каталог</string>
     
     <!-- GA use -->
-    <string name="ga_use_alert_message">Вы согласны помочь нам улучшить приложение и отправлять отчёты о сбоях ?</string>
+    <string name="ga_use_alert_message">Вы согласны помочь нам улучшить приложение и автоматически отправлять отчёты о сбоях?</string>
     <string name="ga_use_settings">Автоматически отправлять отчёты о сбоях</string>
     <string name="ga_use_disable_alert_message">Для отключения отчётов о сбоях необходимо перезапустить приложение.</string>
     
