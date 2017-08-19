@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">fr</string>
-    <string name="resouces_country"/>
+    <string name="resouces_country">FR</string>
 
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_settings">Paramètres</string>
@@ -660,7 +660,7 @@ Une fois le chiffrement activé pour un salon, il ne peut plus être désactivé
 
 Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas encore implémenté le chiffrement.</string>
 
-    <string name="ga_use_alert_message">Acceptez-vous de nous aider à améliorer le comportement de l\'application et à envoyer des rapports d\'erreur ?</string>
+    <string name="ga_use_alert_message">Souhaitez-vous nous aider à améliorer le comportement de l\'application et envoyer des rapports d\'erreur automatiques ?</string>
     <string name="ga_use_disable_alert_message">Vous devez redémarrer l\'application pour désactiver les rapports d\'erreur .</string>
 
     <string name="failed_to_load_timeline_position">%s essayait de charger un point spécifique dans l\'historique du salon mais ne l\'a pas trouvé.</string>
@@ -700,4 +700,35 @@ Appareils connus :</string>
     <string name="account_email_not_found_error">Impossible d\'envoyer l\'e-mail : Cette adresse e-mail n\'a pas pu être trouvée</string>
     <string name="account_phone_number_already_used_error">Ce numéro de téléphone est déjà utilisé</string>
 
-    </resources>
+    <string name="offline">Hors ligne</string>
+
+    <string name="user_directory_header">Répertoire utilisateur</string>
+    <string name="membership_changes">%d changements de statut</string>
+
+    <string name="people_search_user_directory">REPERTOIRE UTILISATEUR (%s)</string>
+    <string name="settings_start_on_boot">Lancer au démarrage</string>
+    <string name="settings_clear_medias_cache">Vider les médias temporaires</string>
+    <string name="settings_keep_media">Conserver les médias</string>
+
+    <string name="settings_hide_read_receipts">Masquer les accusés de lecture</string>
+    <string name="settings_dont_send_typings_notifs">Ne pas envoyer de notification d\'écriture</string>
+    <string name="settings_always_show_timestamps">Toujours afficher l\'heure des messages</string>
+    <string name="settings_disable_markdown">Désactiver le formattage Markdown</string>
+    <string name="settings_data_save_mode">Mode économie de données</string>
+
+    <string name="media_saving_period_3_days">3 jours</string>
+    <string name="media_saving_period_1_week">1 semaine</string>
+    <string name="media_saving_period_1_month">1 mois</string>
+    <string name="media_saving_period_forever">Pas de limite</string>
+
+    <string name="settings_theme">Thème</string>
+
+    <string name="font_size">Taille de la police</string>
+    <string name="tiny">Minuscule</string>
+    <string name="small">Petite</string>
+    <string name="normal">Normale</string>
+    <string name="large">Grande</string>
+    <string name="larger">Très grande</string>
+    <string name="largest">La plus grande</string>
+    <string name="huge">Énorme</string>
+</resources>
