@@ -30,7 +30,7 @@
     <string name="ongoing_conference_call_voice">voix</string>
     <string name="ongoing_conference_call_video">vidéo</string>
     <string name="cannot_start_call">Impossible de démarrer l\'appel, essayez plus tard</string>
-    <string name="missing_permissions_warning">En raison de permissions manquantes, certaines fonctionnalités peuvent manquer ...</string>
+    <string name="missing_permissions_warning">En raison de permissions manquantes, certaines fonctionnalités peuvent manquer...</string>
     <string name="missing_permissions_to_start_conf_call">"Vous avez besoin des permissions pour inviter ou créer  une conférence dans ce salon"</string>
     <string name="missing_permissions_title_to_start_conf_call">Impossible de démarrer l\'appel</string>
     <string name="device_information">Informations sur l\'appareil</string>
@@ -111,12 +111,12 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="option_send_files">Envoyer des fichiers</string>
     <string name="option_take_photo_video">Prendre une photo ou une vidéo</string>
 
-    <string name="auth_login">S\'identifier</string>
+    <string name="auth_login">S\'authentifier</string>
     <string name="auth_register">S\'inscrire</string>
     <string name="auth_submit">Valider</string>
     <string name="auth_skip">Ignorer</string>
     <string name="auth_send_reset_email">Envoyer l\'e-mail de réinitialisation</string>
-    <string name="auth_return_to_login">Retourner à l\'écran d\'identification</string>
+    <string name="auth_return_to_login">Retourner à l\'écran d\'authentification</string>
     <string name="auth_user_id_placeholder">E-mail ou nom d\'utilisateur</string>
     <string name="auth_password_placeholder">Mot de passe</string>
     <string name="auth_new_password_placeholder">Nouveau mot de passe</string>
@@ -163,7 +163,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_info_room_topic">Sujet du salon</string>
 
     <string name="call_connected">Appel établi</string>
-    <string name="call_connecting">Appel en cours d\'établissement …</string>
+    <string name="call_connecting">Appel en cours d\'établissement…</string>
     <string name="call_ended">Appel terminé</string>
     <string name="call_ring">Appel…</string>
     <string name="incoming_call">Appel entrant</string>
@@ -209,7 +209,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_participants_online">En ligne</string>
     <string name="room_participants_offline">Hors ligne</string>
     <string name="room_participants_now">maintenant</string>
-    <string name="room_participants_ago">" "</string>
+    <string name="room_participants_ago">de là</string>
 
     <string name="room_participants_header_admin_tools">OUTILS D\'ADMINISTRATION</string>
     <string name="room_participants_header_call">APPEL</string>
@@ -232,10 +232,10 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="people_search_invite_by_id_dialog_hint">E-mail ou Matrix ID</string>
 
     <string name="room_menu_search">Rechercher</string>
-    <string name="room_message_placeholder_encrypted">Envoyer un message chiffré …</string>
-    <string name="room_message_placeholder_not_encrypted">Envoyer un message (non chiffré) …</string>
+    <string name="room_message_placeholder_encrypted">Envoyer un message chiffré…</string>
+    <string name="room_message_placeholder_not_encrypted">Envoyer un message (non chiffré)…</string>
     <string name="room_prompt_resend">Tout renvoyer</string>
-    <string name="room_prompt_cancel">Tout annuler</string>
+    <string name="room_prompt_cancel">tout annuler</string>
     <string name="room_resend_unsent_messages">Renvoyer les messages non envoyés</string>
     <string name="room_delete_unsent_messages">Supprimer les messages non envoyés</string>
     <string name="room_message_file_not_found">Fichier non trouvé</string>
@@ -351,7 +351,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="devices_delete_pswd">Mot de passe :</string>
     <string name="devices_delete_submit_button_label">Valider</string>
 
-    <string name="settings_logged_in">Identifié en tant que</string>
+    <string name="settings_logged_in">Authentifié en tant que</string>
     <string name="settings_home_server">Homeserver</string>
     <string name="settings_identity_server">Serveur d\'identité</string>
 
@@ -472,7 +472,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="send_bug_report_sent">Le rapport d\'erreur a été envoyé avec succès</string>
     <string name="send_bug_report_failed">Le rapport d\'erreur n\'a pas été envoyé (%s)</string>
-    <string name="auth_add_email_message">Ajoutez une adresse e-mail à votre compte pour permettre aux utilisateurs de vous retrouver et de réinitialiser votre mot de passe.</string>
+    <string name="auth_add_email_message">Ajoutez une adresse e-mail à votre compte pour permettre aux utilisateurs de vous retrouver et pouvoir réinitialiser votre mot de passe.</string>
     <string name="auth_add_phone_message">Ajoutez un numéro de téléphone à votre compte pour permettre aux utilisateurs de vous retrouver.</string>
     <string name="auth_add_email_phone_message">Ajoutez une adresse e-mail et / ou un numéro de téléphone à votre compte pour permettre aux utilisateurs de vous retrouver.
 
@@ -484,7 +484,7 @@ L\'adresse e-mail vous permettra également de réinitialiser votre mot de passe
     <string name="auth_invalid_email">Cela ne ressemble pas à une adresse e-mail valide</string>
     <string name="auth_invalid_phone">Cela ne ressemble pas à un numéro de téléphone valide</string>
     <string name="auth_email_already_defined">Cette adresse e-mail est déjà utilisée.</string>
-    <string name="auth_email_validation_message">Veuillez vérifier votre courrier électronique pour continuer votre inscription</string>
+    <string name="auth_email_validation_message">Veuillez vérifier votre e-mail pour continuer votre inscription</string>
     <string name="auth_threepid_warning_message">L\'inscription avec e-mail et numéro de téléphone à la fois n\'est pas prise en charge jusqu\'à ce que l\'api existe. Seul le numéro de téléphone sera pris en compte.
 
 Vous pouvez ajouter votre adress e-mail à votre profil dans les paramètres.</string>
@@ -494,14 +494,14 @@ Vous pouvez ajouter votre adress e-mail à votre profil dans les paramètres.</s
     <string name="auth_reset_password_missing_email">L\'adresse e-mail liée à votre compte doit être saisie.</string>
     <string name="auth_reset_password_missing_password">Un nouveau mot de passe doit être saisi.</string>
     <string name="auth_reset_password_email_validation_message">Un e-mail a été envoyé à %s. Une fois que vous aurez suivi le lien qu\'il contient, cliquez ci-dessous.</string>
-    <string name="auth_reset_password_error_unauthorized">Impossible de vérifier l\'adresse e-mail : assurez-vous d\'avoir cliqué sur le lien dans le courrier électronique</string>
+    <string name="auth_reset_password_error_unauthorized">Impossible de vérifier l\'adresse e-mail : assurez-vous d\'avoir cliqué sur le lien dans l\'e-mail</string>
     <string name="auth_reset_password_success_message">Votre mot de passe a été réinitialisé.
 
 Vous avez été déconnecté de tous les appareils et ne recevrez plus de notifications. Pour réactiver les notifications, re-connectez-vous sur chaque appareil.</string>
 
     <string name="login_error_must_start_http">L\'URL doit commencer par http[s]://</string>
-    <string name="login_error_network_error">Impossible de s\'identifier : erreur réseau</string>
-    <string name="login_error_unable_login">Impossible de s\'identifier</string>
+    <string name="login_error_network_error">Impossible de s\'authentifier : erreur réseau</string>
+    <string name="login_error_unable_login">Impossible de s\'authentifier</string>
     <string name="login_error_registration_network_error">Impossible de vous inscrire : erreur réseau</string>
     <string name="login_error_unknown_token">Le jeton d\'accès fourni n\'a pas été reconnu</string>
     <string name="login_error_limit_exceeded">Trop de demandes ont été envoyées</string>
@@ -519,7 +519,7 @@ Nous nous excusons pour le désagrément.</string>
     <string name="settings_key_display_all_events">settings_key_display_all_events</string>
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
 
-    <string name="leave">"Quitter "</string>
+    <string name="leave">Quitter</string>
     <string name="quote">Citer</string>
     <string name="call_error_user_not_responding">Le correspondant n\'a pas décroché.</string>
     <string name="media_picker_both_capture_title">Prendre une photo ou une vidéo</string>
@@ -530,22 +530,22 @@ Veuillez autoriser l\'accès dans la prochaine fenêtre contextuelle pour pouvoi
     <string name="permissions_rationale_msg_camera">Riot a besoin de permissions pour accéder à votre caméra et prendre des photos et des appels vidéo.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
-Veuillez autoriser l\'accès à la prochaine fenêtre contextuelle pour pouvoir effectuer l\'appel.</string>
+Veuillez autoriser l\'accès dans la prochaine fenêtre contextuelle pour pouvoir effectuer l\'appel.</string>
     <string name="permissions_rationale_msg_record_audio">Riot a besoin de permissions pour accéder à votre microphone et effectuer des appels audio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
-Veuillez autoriser l\'accès à la prochaine fenêtre contextuelle pour pouvoir effectuer l\'appel.</string>
+Veuillez autoriser l\'accès dans la prochaine fenêtre contextuelle pour pouvoir effectuer l\'appel.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot a besoin de permissions pour accéder à votre caméra et à votre microphone et effectuer des appels vidéo.
 
-Veuillez autoriser l\'accès sur les prochaines fenêtres pop-up pour pouvoir effectuer l\'appel.</string>
+Veuillez autoriser l\'accès dans les prochaines fenêtres contextuelles pour pouvoir effectuer l\'appel.</string>
     <string name="permissions_rationale_msg_contacts">Riot a besoin d\'une autorisation pour accéder aux contacts de votre carnet d\'adresses et trouver d\'autres utilisateurs Matrix en fonction de leurs numéros de téléphone et de leur adresse e-mail.
 
-Veuillez autoriser l\'accès à la prochaine fenêtre contextuelle pour découvrir les utilisateurs du carnet d\'adresses accessibles par Riot.</string>
+Veuillez autoriser l\'accès dans la prochaine fenêtre contextuelle pour découvrir les utilisateurs du carnet d\'adresses accessibles par Riot.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot a besoin de permissions pour accéder aux contacts de votre carnet d\'adresses et trouver d\'autres utilisateurs de Matrix en fonction de leurs numéros de téléphone et de leur adresse e-mail.
 
 Autorisez-vous Riot à accéder à vos contacts ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Désolé ... Action n\'a pas été réalisée, faute de permissions</string>
+    <string name="permissions_action_not_performed_missing_permissions">Désolé... L\'action n\'a pas été réalisée, faute de permissions</string>
 
     <string name="room_jump_to_first_unread">Aller directement au premier message non lu.</string>
 
@@ -583,8 +583,8 @@ Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas enc
     <string name="room_two_users_are_typing">%1$s et %2$s sont en train d\'écrire…</string>
     <string name="room_many_users_are_typing">%1$s, %2$s et d\'autres sont en train d\'écrire…</string>
     <string name="room_offline_notification">La connexion au serveur a été perdue.</string>
-    <string name="room_unsent_messages_notification">Messages non envoyés. %1$s or %2$s maintenant ?</string>
-    <string name="room_unknown_devices_messages_notification">Messages non envoyés car des appareils inconnus sont présents. %1$s or %2$s maintenant ?</string>
+    <string name="room_unsent_messages_notification">Messages non envoyés. %1$s ou %2$s maintenant ?</string>
+    <string name="room_unknown_devices_messages_notification">Messages non envoyés car des appareils inconnus sont présents. %1$s ou %2$s maintenant ?</string>
     <string name="room_do_not_have_permission_to_post">Vous n\'avez pas la permission de poster dans ce salon</string>
     <string name="room_new_messages_notification">%1$d nouveaux messages</string>
 
@@ -592,9 +592,9 @@ Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas enc
     <string name="ssl_could_not_verify">Impossible de vérifier l\'identité du serveur distant.</string>
     <string name="ssl_cert_not_trust">Cela pourrait signifier que quelqu\'un intercepte malicieusement votre trafic ou que votre téléphone ne fait pas confiance au certificat fourni par le serveur distant.</string>
     <string name="ssl_cert_new_account_expl">Si l\'administrateur du serveur a confirmé que cela était normal, assurez-vous que l\'empreinte numérique ci-dessous correspond à l\'empreinte fournie par l\'administrateur.</string>
-    <string name="ssl_unexpected_existing_expl">Le certificat a changé de celui qui a été approuvé par votre téléphone. Ce comportement est INATTENDU. Il est recommandé de ne PAS ACCEPTER ce nouveau certificat.</string>
-    <string name="ssl_expected_existing_expl">Le certificat était de confiance et a été remplacé par un certificat qui ne l\'est pas. Le serveur a peut-être renouvelé son certificat. Contactez l\'administrateur du serveur pour lui demander l\'empreinte numérique de son certificat.</string>
-    <string name="ssl_only_accept">Accepter le certificat UNIQUEMENT si l\'administrateur du serveur a publié une empreinte numérique correspondant à celle ci-dessus.</string>
+    <string name="ssl_unexpected_existing_expl">Le certificat n\'est plus celui qui a été approuvé par votre téléphone. Ce comportement est INATTENDU. Il est recommandé de ne PAS ACCEPTER ce nouveau certificat.</string>
+    <string name="ssl_expected_existing_expl">Le certificat n\'est plus celui qui a été approuvé par votre téléphone. Le serveur a peut-être renouvelé son certificat. Contactez l\'administrateur du serveur pour lui demander l\'empreinte numérique de son certificat.</string>
+    <string name="ssl_only_accept">Acceptez le certificat UNIQUEMENT si l\'administrateur du serveur a publié une empreinte numérique correspondant à celle ci-dessus.</string>
     <string name="malformed_id">Identifiant au mauvais format. Une adresse e-mail ou un identifiant au format \'@utilisateur:domaine\' est attendu</string>
     <string name="room_event_action_report_prompt_ignore_user">Voulez-vous cacher tous les messages de cet utilisateur ?</string>
     <string name="room_displayname_two_members">%1$s et %2$s</string>
@@ -605,7 +605,7 @@ Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas enc
     <string name="directory_search_rooms">%1$d salons</string>
     <string name="directory_search_room_for">%1$d salon trouvé pour %2$s</string>
     <string name="directory_search_rooms_for">%1$s salons trouvés pour %2$s</string>
-    <string name="settings_turn_screen_on">Allumez l\'écran pendant 3 secondes</string>
+    <string name="settings_turn_screen_on">Allumer l\'écran pendant 3 secondes</string>
 
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
     <string name="settings_user_settings">Paramètres utilisateur</string>
@@ -613,8 +613,8 @@ Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas enc
     <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Cette opération nécessite de s\'authentifier à nouveau.
 Pour continuer, saisissez votre mot de passe.</string>
-    <string name="account_email_validation_message">Vérifiez votre courrier électronique et cliquez sur le lien qu\'il contient. Une fois cela fait, cliquez sur continuer.</string>
-    <string name="account_email_validation_error">Impossible de vérifier l\'adresse e-mail. Vérifiez votre courrier électronique et cliquez sur le lien qu\'il contient. Une fois cela fait, cliquez sur continuer</string>
+    <string name="account_email_validation_message">Vérifiez votre e-mail et cliquez sur le lien qu\'il contient. Une fois cela fait, cliquez sur continuer.</string>
+    <string name="account_email_validation_error">Impossible de vérifier l\'adresse e-mail. Vérifiez votre e-mail et cliquez sur le lien qu\'il contient. Une fois cela fait, cliquez sur continuer</string>
 
     <string name="settings_unignore_user">Afficher tous les messages de %s ?</string>
 
@@ -644,7 +644,7 @@ Pour continuer, saisissez votre mot de passe.</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Ne jamais envoyer de message chiffré aux appareils non vérifiés sur ce salon, depuis cet appareil.</string>
 
     <string name="room_settings_addresses_no_local_addresses">Ce salon n\'a pas d\'adresse locale</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">"\'%s\'  N\'est pas un format valide pour une adresse"</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">"\'%s\'  n\'est pas un format valide pour une adresse"</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Vous n\'aurez aucune adresse principale spécifiée. L\'adresse principale par défaut de ce salon sera choisie au hasard</string>
     <string name="room_settings_addresses_e2e_enabled">Le chiffrement est activé sur ce salon.</string>
     <string name="room_settings_addresses_e2e_disabled">Le chiffrement est désactivé sur ce salon.</string>
@@ -652,7 +652,7 @@ Pour continuer, saisissez votre mot de passe.</string>
 (attention : ne peut pas être désactivé ensuite !)</string>
     <string name="room_settings_addresses_e2e_prompt_message">Le chiffrement de bout en bout est en version bêta et peut ne pas être fiable.
 
-Il ne doit pas être considéré comme de confiance pour sécuriser des données.
+Il ne doit pas être considéré comme fiable pour sécuriser des données.
 
 Les appareils ne pourront pas encore déchiffrer l\'historique de messages avant leur arrivée sur le salon.
 
@@ -661,7 +661,7 @@ Une fois le chiffrement activé pour un salon, il ne peut plus être désactivé
 Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas encore implémenté le chiffrement.</string>
 
     <string name="ga_use_alert_message">Souhaitez-vous nous aider à améliorer le comportement de l\'application et envoyer des rapports d\'erreur automatiques ?</string>
-    <string name="ga_use_disable_alert_message">Vous devez redémarrer l\'application pour désactiver les rapports d\'erreur .</string>
+    <string name="ga_use_disable_alert_message">Vous devez redémarrer l\'application pour désactiver les rapports d\'erreur.</string>
 
     <string name="failed_to_load_timeline_position">%s essayait de charger un point spécifique dans l\'historique du salon mais ne l\'a pas trouvé.</string>
 
@@ -670,10 +670,10 @@ Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas enc
     <string name="encryption_export_saved_as">Les clés E2E du salons sont sauvegardées dans \'%s\'</string>
 
     <string name="encryption_import_room_keys_summary">Importer les clés à partir d\'un fichier local</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de message chiffré aux appareils non vérifiés, depuis cette appareil</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux appareils non vérifiés depuis cet appareil</string>
 
     <string name="encryption_information_verify_device_warning">" Pour vérifier que cet appareil est de confiance, contactez son propriétaire en utilisant un autre moyen (par exemple en personne ou par téléphone) et demandez-lui si la clé qu\'il voir dans ses paramètres utilisateur pour cet appareil correspond à la clé ci-dessous :"</string>
-    <string name="encryption_information_verify_device_warning2">Si elle correspond, appuyez sur le bouton de vérification ci-dessous. Si ce n\'est pas le cas, quelqu\'un d\'autre intercepte cet appareil et vous devriez probablement le bloquer. À l\'avenir, ce processus de vérification sera plus évolué .</string>
+    <string name="encryption_information_verify_device_warning2">Si elle correspond, appuyez sur le bouton de vérification ci-dessous. Si ce n\'est pas le cas, quelqu\'un d\'autre intercepte cet appareil et vous devriez probablement le bloquer. À l\'avenir, ce processus de vérification sera plus évolué.</string>
     <string name="encryption_information_verify_key_match">Je confirme que les clés correspondent</string>
 
     <string name="e2e_enabling_on_app_update">Riot prend désormais en charge le chiffrement de bout en bout, mais vous devez vous identifier à nouveau pour l\'activer.
@@ -685,19 +685,19 @@ Vous pouvez le faire maintenant ou plus tard à partir des paramètres de l\'app
 Cela signifie qu\'il n\'y a aucune garantie que les appareils appartiennent aux utilisateurs qu\'ils prétendent.
 Nous vous recommandons d\'effectuer le processus de vérification pour chaque appareil avant de continuer, mais vous pouvez renvoyer le message sans vérifier si vous préférez. 
 
-Appareils connus :</string>
+Appareils inconnus :</string>
 
     <string name="directory_server_fail_to_retrieve_server">Le serveur est peut-être indisponible ou surchargé</string>
     <string name="directory_server_type_homeserver">Saisir un homeserver pour lister ses salons publics</string>
     <string name="notification_unread_notified_messages">%d messages notifiés non lus</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d messages non-lus dans %2$d salons</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d messages non lus dans %2$d salons</string>
 
     <string name="settings_user_interface">Interface utilisateur</string>
     <string name="settings_interface_language">Langue de l\'interface</string>
     <string name="settings_select_language">Choisissez une langue</string>
 
     <string name="account_email_already_used_error">Cette adresse e-mail est déjà utilisée</string>
-    <string name="account_email_not_found_error">Impossible d\'envoyer l\'e-mail : Cette adresse e-mail n\'a pas pu être trouvée</string>
+    <string name="account_email_not_found_error">Impossible d\'envoyer l\'e-mail : cette adresse e-mail n\'a pas pu être trouvée</string>
     <string name="account_phone_number_already_used_error">Ce numéro de téléphone est déjà utilisé</string>
 
     <string name="offline">Hors ligne</string>
@@ -705,7 +705,7 @@ Appareils connus :</string>
     <string name="user_directory_header">Répertoire utilisateur</string>
     <string name="membership_changes">%d changements de statut</string>
 
-    <string name="people_search_user_directory">REPERTOIRE UTILISATEUR (%s)</string>
+    <string name="people_search_user_directory">RÉPERTOIRE UTILISATEUR (%s)</string>
     <string name="settings_start_on_boot">Lancer au démarrage</string>
     <string name="settings_clear_medias_cache">Vider les médias temporaires</string>
     <string name="settings_keep_media">Conserver les médias</string>
