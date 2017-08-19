@@ -309,9 +309,9 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="settings_enable_all_notif">Activer les notifications pour ce compte</string>
     <string name="settings_enable_this_device">Activer les notifications pour cet appareil</string>
-    <string name="settings_containing_my_name">Msgs contenant mon nom</string>
-    <string name="settings_messages_in_one_to_one">Msgs dans les discussions directes</string>
-    <string name="settings_messages_in_group_chat">Msgs dans les discussions de groupe</string>
+    <string name="settings_containing_my_name">Messages contenant mon nom</string>
+    <string name="settings_messages_in_one_to_one">Messages dans les discussions directes</string>
+    <string name="settings_messages_in_group_chat">Messages dans les discussions de groupe</string>
     <string name="settings_call_invitations">Demandes d\'appel</string>
     <string name="settings_messages_sent_by_bot">Messages envoyés par un robot</string>
 
@@ -430,13 +430,13 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="encryption_information_verification">Vérification</string>
     <string name="encryption_information_ed25519_fingerprint">Empreinte numérique Ed25519</string>
 
-    <string name="encryption_export_e2e_room_keys">Exporter les clés E2E du salon</string>
-    <string name="encryption_export_room_keys">Exporter les clés du salon</string>
+    <string name="encryption_export_e2e_room_keys">Exporter les clés E2E des salons</string>
+    <string name="encryption_export_room_keys">Exporter les clés des salons</string>
     <string name="encryption_export_export">Exporter</string>
     <string name="encryption_export_enter_passphrase">Saisir la phrase de passe</string>
     <string name="encryption_export_confirm_passphrase">Confirmer la phrase de passe</string>
-    <string name="encryption_import_e2e_room_keys">Importer les clés E2E du salon</string>
-    <string name="encryption_import_room_keys">Importer les clés du salon</string>
+    <string name="encryption_import_e2e_room_keys">Importer les clés E2E des salons</string>
+    <string name="encryption_import_room_keys">Importer les clés des salons</string>
     <string name="encryption_import_import">Importer</string>
     <string name="encryption_never_send_to_unverified_devices_title">Chiffrer uniquement vers les appareils vérifiés</string>
     <string name="encryption_information_not_verified">NON vérifié</string>
@@ -670,7 +670,7 @@ Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas enc
     <string name="encryption_export_saved_as">Les clés E2E du salons sont sauvegardées dans \'%s\'</string>
 
     <string name="encryption_import_room_keys_summary">Importer les clés à partir d\'un fichier local</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de message chiffré aux appareils non vérifié, depuis cette appareil</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de message chiffré aux appareils non vérifiés, depuis cette appareil</string>
 
     <string name="encryption_information_verify_device_warning">" Pour vérifier que cet appareil est de confiance, contactez son propriétaire en utilisant un autre moyen (par exemple en personne ou par téléphone) et demandez-lui si la clé qu\'il voir dans ses paramètres utilisateur pour cet appareil correspond à la clé ci-dessous :"</string>
     <string name="encryption_information_verify_device_warning2">Si elle correspond, appuyez sur le bouton de vérification ci-dessous. Si ce n\'est pas le cas, quelqu\'un d\'autre intercepte cet appareil et vous devriez probablement le bloquer. À l\'avenir, ce processus de vérification sera plus évolué .</string>
