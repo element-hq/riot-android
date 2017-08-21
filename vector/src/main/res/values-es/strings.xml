@@ -566,7 +566,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
 
     <string name="settings_phone_number_country_label">País</string>
     <string name="settings_phone_number_country_error">Por favor escoje un país</string>
-    <string name="settings_phone_number_label">Número electrónico</string>
+    <string name="settings_phone_number_label">Número de teléfono</string>
     <string name="settings_phone_number_error">Número telefónico inválido por el país escojido</string>
     <string name="settings_phone_number_verification">Verficación de número telefónico</string>
     <string name="settings_phone_number_verification_instruction">"Enviamos un SMS con un código de activación. Por favor escribe ese código abajo."</string>
@@ -659,7 +659,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="directory_title">Directorio</string>
 
     <!-- GA use -->
-    <string name="ga_use_alert_message">¿Aceptas el ayudarnos en mejorar el funcionamiento de la applicación y enviar reportes de error?</string>
+    <string name="ga_use_alert_message">¿Quieres ayudarnos a mejorar la aplicación mediante el envío automático de informes de errores?</string>
     <string name="ga_use_settings">Automaticamente enviar reportes de error</string>
     <string name="ga_use_disable_alert_message">Necesitas reiniciar la aplicación para apagar los reportes de error.</string>
 
