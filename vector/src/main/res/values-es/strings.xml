@@ -567,7 +567,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="settings_phone_number_country_label">País</string>
     <string name="settings_phone_number_country_error">Por favor escoje un país</string>
     <string name="settings_phone_number_label">Número de teléfono</string>
-    <string name="settings_phone_number_error">Número telefónico inválido por el país escojido</string>
+    <string name="settings_phone_number_error">Número de teléfono inválido por el país escojido</string>
     <string name="settings_phone_number_verification">Verficación de número telefónico</string>
     <string name="settings_phone_number_verification_instruction">"Enviamos un SMS con un código de activación. Por favor escribe ese código abajo."</string>
     <string name="settings_phone_number_verification_error_empty_code">Escribe un código de activación</string>
