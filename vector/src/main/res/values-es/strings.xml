@@ -204,7 +204,7 @@ Has sido desconectado de todos tus dispositivos y las notificaciones están apag
     <string name="login_error_bad_json">JSON malformado</string>
     <string name="login_error_not_json">No contenía JSON válido</string>
     <string name="login_error_limit_exceeded">Demasiadas peticiones enviadas</string>
-    <string name="login_error_user_in_use">Este nombre de usuario ya está reservado para otra persona</string>
+    <string name="login_error_user_in_use">Este nombre de usuario ya está reservado</string>
     <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
 
     <!-- crypto warnings -->
