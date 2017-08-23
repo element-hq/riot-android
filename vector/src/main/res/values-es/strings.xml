@@ -772,4 +772,6 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="tiny">Muy pequeño</string>
     <string name="larger">Más grande</string>
     <string name="huge">Grandísimo</string>
-</resources>
+<string name="user_directory_header">directorio del usuario</string>
+    <string name="people_search_user_directory">DIRECTORIO DEL USUARIO (%s)</string>
+    </resources>
