@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">fi</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country"/>
 
     <!-- titles -->
     <string name="title_activity_home">Keskustelut</string>
     <string name="title_activity_room">Huone</string>
     <string name="title_activity_settings">Asetukset</string>
     <string name="title_activity_member_details">Jäsenen tiedot</string>
-    <string name="title_activity_historical">Historical</string>
+    <string name="title_activity_historical">Historiallinen</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -25,9 +25,9 @@
     <string name="share">Jaa</string>
     <string name="later">Myöhemmin</string>
     <string name="forward">Lähetä edelleen</string>
-    <string name="permalink">Permalink</string>
+    <string name="permalink">Pysyvä linkki</string>
     <string name="view_source">Lähdekoodi</string>
-    <string name="view_decrypted_source">View Decrypted Source</string>
+    <string name="view_decrypted_source">Näytä salaamaton lähde</string>
 
     <!-- verb or noun? -->
     <!-- uh oh -->
@@ -35,28 +35,28 @@
     <string name="rename">Nimeä uudelleen</string>
     <string name="report_content">Ilmoita viesti</string>
     <string name="active_call">Puhelu meneillään</string>
-    <string name="ongoing_conference_call"> Ryhmäpuhelu meneillään. Liity äänellä tai videolla</string>
+    <string name="ongoing_conference_call">" Ryhmäpuhelu meneillään. Liity äänellä tai videolla."</string>
     <string name="ongoing_conference_call_voice">äänellä</string>
     <string name="ongoing_conference_call_video">videolla</string>
     <string name="cannot_start_call">Ei voitu aloittaa puhelua, yritä uudelleen</string>
-    <string name="missing_permissions_warning">Puuttuvien käyttölupien takia jotkut ominaisuudet eivät ole käytettävissä</string>
+    <string name="missing_permissions_warning">Puuttuvien käyttölupien takia jotkut ominaisuudet eivät ole käytettävissä..</string>
     <string name="missing_permissions_to_start_conf_call">Sinulta puuttuu oikeus käynnistää ryhmäpuhelu tässä huoneessa</string>
     <string name="missing_permissions_title_to_start_conf_call">Puhelua ei voitu käynnistää</string>
     <string name="device_information">Laitteen tiedot</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Ryhmäpuhelut eivät ole tuettuja salatuissa huoneissa</string>
     <string name="send_anyway">Lähetä silti</string>
     <string name="or">tai</string>
-    <string name="and">and</string>
-    <string name="invite">Invite</string>
+    <string name="and">ja</string>
+    <string name="invite">Kutsu</string>
 
     <!-- actions -->
     <string name="action_sign_out">Kirjaudu ulos</string>
     <string name="action_sign_out_confirmation">Turvallisuussyistä uloskirjautuminen poistaa salausavaimet. Ilman salausavaimia et voi lukea viestihistoriaa salatuissa huoneissa.\nValitse \"vie\" tehdäksesi varmuuskopio avaimista.</string>
     <string name="action_voice_call">Äänipuhelu</string>
     <string name="action_video_call">Videopuhelu</string>
-    <string name="action_global_search">Global search</string>
+    <string name="action_global_search">Haku kaikkialta</string>
     <string name="action_mark_all_as_read">Merkitse kaikki luetuiksi</string>
-    <string name="action_historical">Historical</string>
+    <string name="action_historical">Historiallinen</string>
     <string name="action_quick_reply">Pikavastaus</string>
     <string name="action_open">Avaa</string>
     <string name="action_close">Sulje</string>
@@ -69,37 +69,37 @@
 
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
-    <string name="bottom_action_favourites">Favourites</string>
-    <string name="bottom_action_people">People</string>
-    <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_favourites">Suosikit</string>
+    <string name="bottom_action_people">Ihmiset</string>
+    <string name="bottom_action_rooms">Huoneet</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Search for rooms</string>
-    <string name="home_filter_placeholder_favorites">Search for favourites</string>
-    <string name="home_filter_placeholder_people">Search for people</string>
-    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+    <string name="home_filter_placeholder_home">Hae huoneita</string>
+    <string name="home_filter_placeholder_favorites">Hae suosikkeja</string>
+    <string name="home_filter_placeholder_people">Hae henkilöitä</string>
+    <string name="home_filter_placeholder_rooms">Hae huoneita</string>
 
     <!-- Home fragment -->
-    <string name="invitations_header">Invites</string>
-    <string name="low_priority_header">Low priority</string>
+    <string name="invitations_header">Kutsut</string>
+    <string name="low_priority_header">Matala prioriteetti</string>
 
     <!-- People fragment -->
-    <string name="direct_chats_header">Conversations</string>
-    <string name="local_address_book_header">Local address book</string>
-    <string name="matrix_only_filter">Matrix contacts only</string>
-    <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
-    <string name="no_result_placeholder">No results</string>
+    <string name="direct_chats_header">Keskustelut</string>
+    <string name="local_address_book_header">Paikallinen osoitekirja</string>
+    <string name="matrix_only_filter">Ainoastaan Matrix-yhteyshenkilöt</string>
+    <string name="no_conversation_placeholder">Ei keskusteluja</string>
+    <string name="no_contact_access_placeholder">Et sallinut Riotille pääsyä paikallisiin yhteystietoihisi</string>
+    <string name="no_result_placeholder">Ei tuloksia</string>
 
     <!-- Rooms fragment -->
-    <string name="rooms_header">Rooms</string>
-    <string name="rooms_directory_header">Room directory</string>
-    <string name="no_room_placeholder">No rooms</string>
-    <string name="no_public_room_placeholder">No public rooms available</string>
+    <string name="rooms_header">Huoneet</string>
+    <string name="rooms_directory_header">Huonehakemisto</string>
+    <string name="no_room_placeholder">Ei huoneita</string>
+    <string name="no_public_room_placeholder">Ei julkisia huoneita saatavilla</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 user</item>
-        <item quantity="other">%d users</item>
-    </plurals>
+	<item quantity="one">1 käyttäjä</item>
+	<item quantity="other">%d käyttäjää</item>
+</plurals>
 
     <string name="send_bug_report_include_logs">Lähetä lokit</string>
     <string name="send_bug_report_include_crash_logs">Lähetä kaatumislokit</string>
@@ -112,9 +112,9 @@
     <string name="send_bug_report_sent">Bugiraportti lähetettiin</string>
     <string name="send_bug_report_failed">Bugiraporttia ei voitu lähettää (%s)</string>
     <string name="send_bug_report_progress">Lähetetään (%s%%)</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_app_crashed">Sovellus kaatui viimeksi. Haluatko tehdä kaatumisesta ilmoituksen?</string>
 
-    <string name="send_files_in">Send into</string>
+    <string name="send_files_in">Lähetä [johonkin]</string>
     <string name="read_receipt">Luettu</string>
 
     <string name="join_room">Liity huoneeseen</string>
@@ -163,7 +163,7 @@
     <string name="auth_repeat_new_password_placeholder">Vahvista uusi salasanasi</string>
     <string name="auth_invalid_login_param">Väärä käyttäjätunnus ja/tai salasana</string>
     <string name="auth_invalid_user_name">Käyttäjätunnus saa koostua vain kirjaimista a-z, numeroista, pisteistä, väliviivoista ja alaviivoista</string>
-    <string name="auth_invalid_password">Liian lyhyt salasana (minimi 6)</string>
+    <string name="auth_invalid_password">Liian lyhyt salasana (vähintään 6 merkkiä)</string>
     <string name="auth_missing_password">Salasana puuttuu</string>
     <string name="auth_invalid_email">Tämä ei näytä sähköpostiosoitteelta</string>
     <string name="auth_invalid_phone">Tämä ei näytä puhelinnumerolta</string>
@@ -186,11 +186,11 @@
     <string name="auth_reset_password_missing_email">Anna tilisi sähköpostiosoite.</string>
     <string name="auth_reset_password_missing_password">Anna uusi salasana.</string>
     <string name="auth_reset_password_email_validation_message">Sähköposti lähetetty osoitteeseen %s. Kun olet seurannut siinä olevaa linkkiä, paina alla olevaa nappia.</string> <!-- ???? -->
-    <string name="auth_reset_password_error_unauthorized">Ei voitu vahvistaa sähköpostiosoitetta, seuraa linkkiä sähköpostissa jonka sait.</string>
+    <string name="auth_reset_password_error_unauthorized">Ei voitu vahvistaa sähköpostiosoitetta, seuraa linkkiä sähköpostissa jonka sait</string>
     <string name="auth_reset_password_success_message">Salasanasi on vaihdettu.\n\nSinut on kirjauduttu ulos kaikista laitteistasi, etkä enää saa viesti-ilmoituksia. Ottaaksesi käyttöön ilmoitukset uudelleen, kirjaudu sisään uudelleen kaikilla laitteillasi.</string>
 
     <!-- Login Screen -->
-    <string name="login_error_must_start_http">URL must start with http[s]://</string>
+    <string name="login_error_must_start_http">URL:n on alettava seuraavasti: http[s]://</string>
     <string name="login_error_network_error">Kirjautuminen epäonnistui: Verkkovirhe</string>
     <string name="login_error_unable_login">Kirjautuminen epäonnistui</string>
     <string name="login_error_registration_network_error">Rekisteröityminen epäonnistui: Verkkovirhe</string>
@@ -214,7 +214,7 @@
     <string name="read_receipts_list">Lukukuittaukset</string>
 
     <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
+    <string name="membership_changes">%d jäsenyysmuutosta</string>
 
     <!-- accounts list Screen -->
 
@@ -293,16 +293,16 @@
     <string name="remove">Poista</string>
     <string name="join">Liity</string>
     <string name="preview">Esikatsele</string>
-    <string name="reject">Kieltäydy</string>
+    <string name="reject">Hylkää</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+    <string name="room_jump_to_first_unread">Hyppää ensimmäiseen lukemattomaan viestiin.</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s on kutsunut sinut huoneeseen</string>
     <string name="room_preview_unlinked_email_warning">Kutsu lähetettiin osoitteeseen %s, joka ei kuulu tälle tilille.\nVoit kirjautua sisään toisella tilillä tai lisätä sähköpostiosoitteesi tälle tilille.</string>
     <string name="room_preview_try_join_an_unknown_room">Olet avaamassa huonetta %s. Haluatko liittyä huoneeseen osallistuaksesi keskusteluun?</string>
-    <string name="room_preview_try_join_an_unknown_room_default"></string> <!-- ??? what is this meant to be, I suspect grammar shenanigans -->
+    <string name="room_preview_try_join_an_unknown_room_default"/> <!-- ??? what is this meant to be, I suspect grammar shenanigans -->
     <string name="room_preview_room_interactions_disabled">Tämä on esikatsely huoneesta. Liity huoneeseen osallistuaksesi keskusteluun.</string>
 
     <!-- Chat creation -->
@@ -317,7 +317,7 @@
     <!--  Time -->
     <string name="format_time_s">" sek"</string>
     <string name="format_time_m">" min"</string>
-    <string name="format_time_h">" t"</string>
+    <string name="format_time_h">t</string>
     <string name="format_time_d">" pv"</string>
 
     <!--  Chat participants -->
@@ -355,13 +355,13 @@
     <string name="room_participants_invite_prompt_msg">"Haluatko kutsua käyttäjän %s tähän huoneeseen?"</string>
 
     <!-- invitation -->
-    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
+    <string name="people_search_invite_by_id"><u>Kutsu tunnisteella</u></string>
     <string name="people_search_local_contacts">PAIKALLISET YHTEYSTIEDOT (%d)</string>
     <string name="people_search_filter_text">Vain Matrix-käyttäjät</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Kutsu käyttäjä tunnisteella</string>
+    <string name="people_search_invite_by_id_dialog_description">Syötä yksi tai useampi sähköpostiosoite tai Matrix-tunniste</string>
+    <string name="people_search_invite_by_id_dialog_hint">Sähköposti tai Matrix-tunniste</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Etsi</string>
@@ -378,7 +378,7 @@
     <string name="room_resend_unsent_messages">Lähetä lähettämättömät viestit</string>
     <string name="room_delete_unsent_messages">Poista lähettämättömät viestit</string>
     <string name="room_message_file_not_found">Tiedostoa ei löydy</string>
-    <string name="room_do_not_have_permission_to_post">Et saa lähettää viestejä tähän huoneeseen.</string>
+    <string name="room_do_not_have_permission_to_post">Et saa lähettää viestejä tähän huoneeseen</string>
     <string name="room_new_message_notification">1 uusi viesti</string>
     <string name="room_new_messages_notification">%1$d uutta viestiä</string>
 
@@ -389,7 +389,7 @@
     <string name="ssl_remain_offline">Jätä huomiotta</string> <!-- ??? -->
     <string name="ssl_fingerprint_hash">Sormenjälki (%s):</string>
     <string name="ssl_could_not_verify">Palvelimen identiteettiä ei voitu varmistaa.</string> <!-- ??? -->
-    <string name="ssl_cert_not_trust">Tämä voi tarkoittaa että joku yrittää kaapata sinun viestintää, tai että laitteesi ei luota palvelimen sertifikaattiin.</string>
+    <string name="ssl_cert_not_trust">Tämä voi tarkoittaa että joku yrittää kaapata sinun viestintääsi, tai että laitteesi ei luota palvelimen varmenteeseen.</string>
     <string name="ssl_cert_new_account_expl">Jos palvelimen ylläpitäjä sanoo että tämä on odotettua, varmista että alla oleva sormenjälki on sama kuin hänen antama.</string>
     <string name="ssl_unexpected_existing_expl">Sertifikaatti johon laitteesi luotti aikaisemmin on vaihtunut. Tämä on HYVIN EPÄTAVALLISTA. Suositellaan että ET hyväksy tätä uutta sertifikaattia.</string>
     <string name="ssl_expected_existing_expl">Sertifikaatti on vaihtunut luotetusta sertifikaatista uuteen. Palvelin on voinut uudistaa sertifikaattinsa. Ota yhteyttä palvelimen ylläpitäjään ja selvitä oikean sertifikaatin sormenjälki.</string>
@@ -415,7 +415,7 @@
     <string name="room_event_action_cancel_download">Peru lataus</string>
 
     <!-- Room display name -->
-    <string name="room_displayname_invite_from">Invite from %s</string> <!-- Grammar problem -->
+    <string name="room_displayname_invite_from">Kutsu %s[:lta]</string> <!-- Grammar problem -->
     <string name="room_displayname_room_invite">Huonekutsu</string>
     <string name="room_displayname_two_members">%1$s ja %2$s</string>
     <string name="room_displayname_more_than_two_members">%1$s ja %2$d muuta</string>
@@ -439,12 +439,12 @@
     <string name="room_recents_invites">KUTSUT</string>
     <string name="room_recents_start_chat">Aloita keskustelu</string>
     <string name="room_recents_create_room">Luo huone</string>
-    <string name="room_recents_join_room">Join room</string>
-    <string name="room_recents_join_room_title">Join a room</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
+    <string name="room_recents_join_room">Liity huoneeseen</string>
+    <string name="room_recents_join_room_title">Liity huoneeseen</string>
+    <string name="room_recents_join_room_prompt">Syötä huonetunniste tai -alias</string>
 
     <!-- Directory -->
-    <string name="directory_search_results_title">Selaa luetteloa</string>
+    <string name="directory_search_results_title">Selaa hakemistoa</string>
     <string name="directory_search_room">%1$d huone</string>
     <string name="directory_search_rooms">%1$d huonetta</string>
     <string name="directory_search_room_for">%1$d huone löydetty hakusanalla "%2$s"</string>
@@ -457,7 +457,7 @@
     <string name="room_settings_de_prioritize">Matala tärkeys</string>
     <string name="room_settings_direct_chat">Yksityiskeskustelu</string>
     <string name="room_settings_leave_conversation">Poistu keskustelusta</string>
-    <string name="room_settings_forget">Forget</string>
+    <string name="room_settings_forget">Unohda</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Keskustelut</string>
@@ -517,7 +517,7 @@
     <string name="settings_contact">Paikalliset yhteystiedot</string>
     <string name="settings_contacts_app_permission">Osoitekirjakäyttölupa</string>
     <string name="settings_contacts_phonebook_country">Osoitekirjan maa</string>
-    <string name="settings_home_display">Home display</string>
+    <string name="settings_home_display">Kotinäyttö</string>
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Laitteet</string>
@@ -539,18 +539,18 @@
 
     <string name="account_email_validation_title">Odotetaan vahvistusta</string>
     <string name="account_email_validation_message">Tarkista sähköpostisi ja seuraa sinne saamaasi linkkiä. Kun olet tehnyt tämän, paina "jatka".</string>
-    <string name="account_email_validation_error">Sähköpostin vahvistaminen epäonnistui. Tarkista sähköpostisi ja seuraa sinne saamaasi linkkiä. Kun olet tehnyt tämän, paina "jatka".</string>
+    <string name="account_email_validation_error">Sähköpostin vahvistaminen epäonnistui. Tarkista sähköpostisi ja seuraa sinne saamaasi linkkiä. Paina jatka tehtyäsi tämän</string>
 
-    <string name="account_email_already_used_error">This email address is already in use</string>
-    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
-    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+    <string name="account_email_already_used_error">Kyseinen sähköpostiosoite on jo käytössä</string>
+    <string name="account_email_not_found_error">Sähköpostin lähettäminen epäonnistui: kyseistä sähköpostiosoitetta ei löytynyt</string>
+    <string name="account_phone_number_already_used_error">Kyseinen puhelinnumero on jo käytössä</string>
 
     <string name="settings_change_password">Vaihda salasana</string>
     <string name="settings_old_password">vanha salasana</string>
     <string name="settings_new_password">uusi salasana</string>
     <string name="settings_confirm_password">toista uusi salasana</string>
     <string name="settings_fail_to_update_password">Salasanan vaihtaminen epäonnistui</string>
-    <string name="settings_password_updated">Salasanasi on vaihdettu.</string>
+    <string name="settings_password_updated">Salasanasi on vaihdettu</string>
     <string name="settings_unignore_user">Näytä kaikki viestit käyttäjältä %s?</string>
 
     <string name="settings_delete_notification_targets_confirmation">Haluatko poistaa tämän ilmoituskohteen?</string>
@@ -564,7 +564,7 @@
     <string name="settings_phone_number_label">Puhelinnumero</string>
     <string name="settings_phone_number_error">Väärän muotoinen puhelinnumero valitulle maalle</string>
     <string name="settings_phone_number_verification">Puhelinvarmennus</string>
-    <string name="settings_phone_number_verification_instruction">"Lähetimme aktivointikoodin tekstiviestinä. Anna aktivointikoodi:"</string>
+    <string name="settings_phone_number_verification_instruction">Lähetimme aktivointikoodin tekstiviestinä. Syötä aktivointikoodi alle.</string>
     <string name="settings_phone_number_verification_error_empty_code">Anna aktivointikoodi</string>
     <string name="settings_phone_number_verification_error">Puhelinnumeron aktivointi epäonnistui</string>
     <string name="settings_phone_number_code">Aktivointikoodi</string>
@@ -584,8 +584,8 @@
     <string name="room_settings_tag_pref_entry_low_priority">Matala tärkeys</string>
     <string name="room_settings_tag_pref_entry_none">Ei mikään</string>
     <string name="room_settings_tag_pref_no_tag">ei luokiteltu</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favourite</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">low</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">suosikki</string>
+    <string name="room_settings_tag_pref_entry_value_low_priority">matala</string>
     <string name="room_settings_tag_pref_entry_value_none">none</string>
 
     <!-- room settings : access and visibility -->
@@ -629,12 +629,12 @@
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Väärä osoitteen muoto</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' ei ole oikea muoto osoitteelle</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Et ole valinnut pääosoitetta. Huoneen oletuspääosoite valitaan satunnaisesti."</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Et ole valinnut pääosoitetta. Huoneen oletuspääosoite valitaan satunnaisesti</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Pääosoitevaroitus</string>
 
     <string name="room_settings_set_main_address">Aseta pääosoitteeksi</string>
     <string name="room_settings_unset_main_address">Poista pääosoite</string>
-    <string name="room_settings_copy_room_id">Kopioi huoneen ID</string>
+    <string name="room_settings_copy_room_id">Kopioi huoneen tunniste</string>
     <string name="room_settings_copy_room_address">Kopioi huoneen osoite</string>
 
     <string name="room_settings_addresses_e2e_enabled">Tämä huone on salattu.</string>
@@ -693,7 +693,7 @@
     <string name="encryption_information_verified">Vahvistettu</string>
     <string name="encryption_information_blocked">Kielletty</string>
 
-    <string name="encryption_information_unknown_device">unknown device</string>
+    <string name="encryption_information_unknown_device">tuntematon laite</string>
     <string name="encryption_information_none">none</string>
 
     <string name="encryption_information_verify">Vahvista</string>
@@ -713,17 +713,17 @@
     <string name="unknown_devices_alert_message">Huoneessa on tuntemattomia laitteita joita ei ole vahvistettu.\nLaitteet eivät välttämättä kuulu väitetyille omistajilleen.\nJokainen uusi laite kannattaa vahvistaa ennen kuin jatkat, mutta voit myös lähettää viestit vahvistamattomille laitteille.\n\nTuntemattomat laitteet:</string>
 
     <!-- directory activity  -->
-    <string name="select_room_directory">Select a room directory</string>
-    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
-    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
-    <string name="directory_server_placeholder">Homeserver URL</string>
-    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
-    <string name="directory_server_native_rooms">All native %s rooms</string>
+    <string name="select_room_directory">Valitse huonehakemisto</string>
+    <string name="directory_server_fail_to_retrieve_server">Palvelin saattaa olla tavoittamattomissa tai ylikuormitettu</string>
+    <string name="directory_server_type_homeserver">Syötä kotipalvelin jolta listataan julkiset huoneet</string>
+    <string name="directory_server_placeholder">Kotipalvelimen URL</string>
+    <string name="directory_server_all_rooms_on_server">Kaikki huoneet palvelimella %s</string>
+    <string name="directory_server_native_rooms">Kaikki kotoperäiset %s huoneet</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d unread notified messages</string>
+    <string name="notification_unread_notified_messages">%d lukematonta ilmoitettua viestiä</string>
     <string name="notification_unread_notified_messages_in_room">%1$d unread messages in %2$d rooms"</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Search for historical</string>
+    <string name="historical_placeholder">Hae historiallista</string>
 </resources>
