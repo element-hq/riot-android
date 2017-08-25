@@ -114,7 +114,7 @@
     <string name="auth_password_dont_match">Password tidak cocok</string>
     <string name="auth_recaptcha_message">Serve Home ingin memastikan bahwa Anda bukan robot</string>
     <string name="auth_home_server">Server Home:</string>
-    <string name="auth_reset_password_next_step_button">Saya sudah verifikasi alamat email</string>
+    <string name="auth_reset_password_next_step_button">Saya sudah verifikasi alamat email saya</string>
     <string name="auth_reset_password_missing_password">Kata sandi baru perlu dimasukkan.</string>
     <string name="login_error_must_start_http">URL diawali dengan http[s]://</string>
     <string name="login_error_unable_login">Tidak bisa masuk</string>
@@ -262,4 +262,26 @@ Mohon maaf untuk ketidaknyamannya.</string>
     <string name="call_in_progress">Panggilan Sedang Berlangsung</string>
 
     <string name="call_error_ice_failed">Hubungan Media Gagal</string>
+    <string name="auth_identity_server">Server Identitas</string>
+    <string name="settings_key_display_all_events">pengaturan_tombol_pertunjukan_semua_acara</string>
+    <string name="call_error_camera_init_failed">Kamera tidak bisa dibuka</string>
+    <string name="call_error_answered_elsewhere">panggilan gagal dijawab di tempat lain</string>
+    <string name="call_error_peer_hangup_elsewhere">panggilan telepon ditutup di suatu tempat</string>
+    <string name="media_picker_both_capture_title">Ambil sebuah gambar atau video</string>
+    <string name="media_picker_cannot_record_video">Tidak bisa merekam video</string>
+
+    <string name="permissions_rationale_msg_storage">Riot membutuhkan izin Anda untuk mengakses galeri foto dan video Anda untuk mengirim dan menyimpan lampiran.
+
+Harap berikan akses pada layar yang muncul berikutnya agar dapat mengirimkan data - data dari ponsel Anda.</string>
+    <string name="permissions_rationale_msg_camera">Riot membutuhkan izin Anda untuk mengakses kamera untuk mengambil gambar dan melakukan panggilan video.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+Harap berikan akses pada layar yang akan muncul agar dapat melakukan panggilan.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot membutuhkan izin Anda untuk mengakses microphone untuk melakukan panggilan audio.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Harap berikan akses pada layar yang akan muncul agar dapat melakukan panggilan.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot membutuhkan izin untuk mengakses kamera dan mikrofon Anda untuk melakukan panggilan video.
+
+Harap berikan akses pada layar yang akan muncul berikutnya untuk melakukan panggilan.</string>
     </resources>
