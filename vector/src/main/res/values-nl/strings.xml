@@ -638,7 +638,7 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="directory_title">Adresboek</string>
 
     <!-- GA use -->
-    <string name="ga_use_alert_message">Wil je om ons te helpen met het verbeteren van de applicatie doormiddel van het doorsturen van crashes ?</string>
+    <string name="ga_use_alert_message">Wil je om ons te helpen met het verbeteren van de applicatie door middel van het doorsturen van crashes ?</string>
     <string name="ga_use_settings">Automatisch crash rapporten versturen</string>
     <string name="ga_use_disable_alert_message">Je moet de applicatie herstarten om de crash vermeldingen uit te schakelen.</string>
 
@@ -748,4 +748,8 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="normal">Normaal</string>
     <string name="large">Groot</string>
     <string name="largest">Grootst</string>
-    </resources>
+    <string name="media_saving_period_3_days">3 dagen</string>
+    <string name="tiny">Klein</string>
+    <string name="larger">Groter</string>
+    <string name="huge">Gigantisch</string>
+</resources>
