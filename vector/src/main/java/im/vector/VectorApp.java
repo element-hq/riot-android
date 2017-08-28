@@ -1095,7 +1095,13 @@ public class VectorApp extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             Configuration config = new Configuration(context.getResources().getConfiguration());
             config.setLocale(locale);
-            result = context.createConfigurationContext(config).getText(resourceId).toString();
+            try {
+                result = context.createConfigurationContext(config).getText(resourceId).toString();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getString() failed : " + e.getMessage());
+                // use the default one
+                result = context.getString(resourceId);
+            }
         } else {
             Resources resources = context.getResources();
             Configuration conf = resources.getConfiguration();
