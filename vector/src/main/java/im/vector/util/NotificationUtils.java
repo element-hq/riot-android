@@ -674,128 +674,134 @@ public class NotificationUtils {
                                                          Map<String, List<NotifiedEvent>> notifiedEventsByRoomId,
                                                          NotifiedEvent eventToNotify,
                                                          boolean isBackground) {
-        // TODO manage multi accounts
-        MXSession session = Matrix.getInstance(context).getDefaultSession();
-        IMXStore store = session.getDataHandler().getStore();
+        try {
+            // TODO manage multi accounts
+            MXSession session = Matrix.getInstance(context).getDefaultSession();
+            IMXStore store = session.getDataHandler().getStore();
 
-        if (null == store) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : null store");
-            return null;
-        }
-
-        Room room = store.getRoom(eventToNotify.mRoomId);
-        Event event = store.getEvent(eventToNotify.mEventId, eventToNotify.mRoomId);
-
-        // sanity check
-        if ((null == room) || (null == event)) {
-            if (null == room) {
-                Log.e(LOG_TAG, "## buildMessageNotification() : null room " + eventToNotify.mRoomId);
-            } else {
-                Log.e(LOG_TAG, "## buildMessageNotification() : null event " + eventToNotify.mEventId + " " + eventToNotify.mRoomId);
+            if (null == store) {
+                Log.e(LOG_TAG, "## buildMessageNotification() : null store");
+                return null;
             }
-            return null;
-        }
 
-        BingRule bingRule = eventToNotify.mBingRule;
+            Room room = store.getRoom(eventToNotify.mRoomId);
+            Event event = store.getEvent(eventToNotify.mEventId, eventToNotify.mRoomId);
 
-        boolean isInvitationEvent = false;
-
-        EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
-        eventDisplay.setPrependMessagesWithAuthor(true);
-        CharSequence textualDisplay = eventDisplay.getTextualDisplay();
-        String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
-
-        if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
-            try {
-                isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "prepareNotification : invitation parsing failed");
-            }
-        }
-
-        Bitmap largeBitmap = null;
-
-        // when the event is an invitation one
-        // don't check if the sender ID is known because the members list are not yet downloaded
-        if (!isInvitationEvent) {
-            // is there any avatar url
-            if (!TextUtils.isEmpty(room.getAvatarUrl())) {
-                int size = context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
-
-                // check if the thumbnail is already downloaded
-                File f = session.getMediasCache().thumbnailCacheFile(room.getAvatarUrl(), size);
-
-                if (null != f) {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    try {
-                        largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
-                    } catch (OutOfMemoryError oom) {
-                        Log.e(LOG_TAG, "decodeFile failed with an oom");
-                    }
+            // sanity check
+            if ((null == room) || (null == event)) {
+                if (null == room) {
+                    Log.e(LOG_TAG, "## buildMessageNotification() : null room " + eventToNotify.mRoomId);
                 } else {
-                    session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(context), room.getAvatarUrl(), size);
+                    Log.e(LOG_TAG, "## buildMessageNotification() : null event " + eventToNotify.mEventId + " " + eventToNotify.mRoomId);
+                }
+                return null;
+            }
+
+            BingRule bingRule = eventToNotify.mBingRule;
+
+            boolean isInvitationEvent = false;
+
+            EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
+            eventDisplay.setPrependMessagesWithAuthor(true);
+            CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+            String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
+
+            if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
+                try {
+                    isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "prepareNotification : invitation parsing failed");
                 }
             }
-        }
 
-        Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
+            Bitmap largeBitmap = null;
 
-        String roomName = getRoomName(context, session, room, event);
+            // when the event is an invitation one
+            // don't check if the sender ID is known because the members list are not yet downloaded
+            if (!isInvitationEvent) {
+                // is there any avatar url
+                if (!TextUtils.isEmpty(room.getAvatarUrl())) {
+                    int size = context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
 
-        android.support.v7.app.NotificationCompat.Builder builder = new android.support.v7.app.NotificationCompat.Builder(context);
-        builder.setWhen(event.getOriginServerTs());
-        builder.setContentTitle(roomName);
-        builder.setContentText(body);
+                    // check if the thumbnail is already downloaded
+                    File f = session.getMediasCache().thumbnailCacheFile(room.getAvatarUrl(), size);
 
-        builder.setGroup(context.getString(R.string.riot_app_name));
-        builder.setGroupSummary(true);
+                    if (null != f) {
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                        try {
+                            largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
+                        } catch (OutOfMemoryError oom) {
+                            Log.e(LOG_TAG, "decodeFile failed with an oom");
+                        }
+                    } else {
+                        session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(context), room.getAvatarUrl(), size);
+                    }
+                }
+            }
 
-        try {
-            addTextStyle(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId);
+            Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
+
+            String roomName = getRoomName(context, session, room, event);
+
+            android.support.v7.app.NotificationCompat.Builder builder = new android.support.v7.app.NotificationCompat.Builder(context);
+            builder.setWhen(event.getOriginServerTs());
+            builder.setContentTitle(roomName);
+            builder.setContentText(body);
+
+            builder.setGroup(context.getString(R.string.riot_app_name));
+            builder.setGroupSummary(true);
+
+            try {
+                addTextStyle(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.getMessage());
+            }
+
+            // only one room : display the large bitmap (it should be the room avatar
+            // several rooms : display the Riot avatar
+            if (notifiedEventsByRoomId.keySet().size() == 1) {
+                if (null != largeBitmap) {
+                    largeBitmap = NotificationUtils.createSquareBitmap(largeBitmap);
+                    builder.setLargeIcon(largeBitmap);
+                }
+            }
+
+            builder.setSmallIcon(R.drawable.message_notification_transparent);
+
+            boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
+
+            @ColorInt int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
+            int defaultColor = Color.TRANSPARENT;
+
+            if (isBackground) {
+                builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
+                builder.setColor(defaultColor);
+            } else if (is_bing) {
+                builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_HIGH);
+                builder.setColor(highlightColor);
+            } else {
+                builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
+                builder.setColor(Color.TRANSPARENT);
+            }
+
+
+            Notification n = builder.build();
+
+            if (!isBackground) {
+                n.flags |= Notification.FLAG_SHOW_LIGHTS;
+                n.defaults |= Notification.DEFAULT_LIGHTS;
+
+                if (is_bing) {
+                    n.defaults |= Notification.DEFAULT_SOUND;
+                }
+            }
+
+            return n;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.getMessage());
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed" + e.getMessage());
         }
 
-        // only one room : display the large bitmap (it should be the room avatar
-        // several rooms : display the Riot avatar
-        if (notifiedEventsByRoomId.keySet().size() == 1) {
-            if (null != largeBitmap) {
-                largeBitmap = NotificationUtils.createSquareBitmap(largeBitmap);
-                builder.setLargeIcon(largeBitmap);
-            }
-        }
-
-        builder.setSmallIcon(R.drawable.message_notification_transparent);
-
-        boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
-
-        @ColorInt int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
-        int defaultColor = Color.TRANSPARENT;
-
-        if (isBackground) {
-            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
-            builder.setColor(defaultColor);
-        } else if (is_bing) {
-            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_HIGH);
-            builder.setColor(highlightColor);
-        } else {
-            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
-            builder.setColor(Color.TRANSPARENT);
-        }
-
-
-        Notification n = builder.build();
-
-        if (!isBackground) {
-            n.flags |= Notification.FLAG_SHOW_LIGHTS;
-            n.defaults |= Notification.DEFAULT_LIGHTS;
-
-            if (is_bing) {
-                n.defaults |= Notification.DEFAULT_SOUND;
-            }
-        }
-
-        return n;
+        return null;
     }
 }
