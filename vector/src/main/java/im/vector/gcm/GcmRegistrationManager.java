@@ -286,45 +286,57 @@ public final class GcmRegistrationManager {
         if (mRegistrationState == RegistrationState.UNREGISTRATED) {
             mRegistrationState = RegistrationState.GCM_REGISTRATING;
 
-            new AsyncTask<Void, Void, String>() {
-                @Override
-                protected String doInBackground(Void... voids) {
-                    String registrationToken = getGCMRegistrationToken();
+            try {
+                new AsyncTask<Void, Void, String>() {
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        String registrationToken = getGCMRegistrationToken();
 
-                    if (registrationToken != null) {
-                        mRegistrationToken = registrationToken;
+                        if (registrationToken != null) {
+                            mRegistrationToken = registrationToken;
+                        }
+
+                        return registrationToken;
                     }
 
-                    return registrationToken;
-                }
+                    @Override
+                    protected void onPostExecute(String pushKey) {
+                        mRegistrationState = (pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED;
+                        setStoredRegistrationToken(pushKey);
 
-                @Override
-                protected void onPostExecute(String pushKey) {
-                    mRegistrationState = (pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED;
-                    setStoredRegistrationToken(pushKey);
-
-                    // warn the listener
-                    if (null != gcmRegistrationListener) {
-                        try {
-                            if (pushKey != null) {
-                                gcmRegistrationListener.onGCMRegistered();
-                            } else {
-                                gcmRegistrationListener.onGCMRegistrationFailed();
+                        // warn the listener
+                        if (null != gcmRegistrationListener) {
+                            try {
+                                if (pushKey != null) {
+                                    gcmRegistrationListener.onGCMRegistered();
+                                } else {
+                                    gcmRegistrationListener.onGCMRegistrationFailed();
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e.getMessage());
                             }
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e.getLocalizedMessage());
+                        }
+
+                        if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
+                            // register the sessions to the 3rd party server
+                            // this setting should be updated from the listener
+                            if (useGCM()) {
+                                register(null);
+                            }
                         }
                     }
-
-                    if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
-                        // register the sessions to the 3rd party server
-                        // this setting should be updated from the listener
-                        if (useGCM()) {
-                            register(null);
-                        }
+                }.execute();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## registerToGCM() failed " + e.getMessage());
+                // warn the listener
+                if (null != gcmRegistrationListener) {
+                    try {
+                        gcmRegistrationListener.onGCMRegistrationFailed();
+                    } catch (Exception e2) {
+                        Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e2.getMessage());
                     }
                 }
-            }.execute();
+            }
         } else if (mRegistrationState == RegistrationState.GCM_REGISTRATING) {
             gcmRegistrationListener.onGCMRegistrationFailed();
         } else {
@@ -1143,27 +1155,35 @@ public final class GcmRegistrationManager {
      * @param callback the asynchronous callback
      */
     public void clearGCMData(final boolean clearRegistrationToken, final ApiCallback callback) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                setStoredRegistrationToken(null);
-                mRegistrationToken = null;
-                mRegistrationState = RegistrationState.UNREGISTRATED;
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    setStoredRegistrationToken(null);
+                    mRegistrationToken = null;
+                    mRegistrationState = RegistrationState.UNREGISTRATED;
 
-                if (clearRegistrationToken) {
-                    GCMHelper.clearRegistrationToken();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void nothing) {
-                if (null != callback) {
-                    callback.onSuccess(null);
+                    if (clearRegistrationToken) {
+                        GCMHelper.clearRegistrationToken();
+                    }
+                    return null;
                 }
 
+                @Override
+                protected void onPostExecute(Void nothing) {
+                    if (null != callback) {
+                        callback.onSuccess(null);
+                    }
+
+                }
+            }.execute();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## clearGCMData failed " + e.getMessage());
+
+            if (null != callback) {
+                callback.onUnexpectedError(e);
             }
-        }.execute();
+        }
     }
 
     //================================================================================
