@@ -388,14 +388,19 @@ public class VectorApp extends Application {
         mActivityTransitionTimerTask = new TimerTask() {
             @Override
             public void run() {
-                if (mActivityTransitionTimerTask != null) {
-                    mActivityTransitionTimerTask.cancel();
-                    mActivityTransitionTimerTask = null;
-                }
+                // reported by GA
+                try {
+                    if (mActivityTransitionTimerTask != null) {
+                        mActivityTransitionTimerTask.cancel();
+                        mActivityTransitionTimerTask = null;
+                    }
 
-                if (mActivityTransitionTimer != null) {
-                    mActivityTransitionTimer.cancel();
-                    mActivityTransitionTimer = null;
+                    if (mActivityTransitionTimer != null) {
+                        mActivityTransitionTimer.cancel();
+                        mActivityTransitionTimer = null;
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## startActivityTransitionTimer() failed " + e.getMessage());
                 }
 
                 if (null != mCurrentActivity) {
