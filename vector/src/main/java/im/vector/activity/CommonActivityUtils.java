@@ -1623,7 +1623,22 @@ public class CommonActivityUtils {
                 }
             }
         };
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        try {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (final Exception e) {
+            Log.e(LOG_TAG, "## saveFileInto() failed " + e.getMessage());
+            task.cancel(true);
+
+            (new android.os.Handler(Looper.getMainLooper())).post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != callback) {
+                        callback.onUnexpectedError(e);
+                    }
+                }
+            });
+        }
     }
 
     /**

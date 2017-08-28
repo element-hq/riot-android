@@ -273,8 +273,14 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
                 mHistoricalAdapter.setRooms(historicalRooms);
             }
         };
-        mSortingAsyncTasks.add(task);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        try {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            mSortingAsyncTasks.add(task);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## initHistoricalRoomsData() failed " + e.getMessage());
+            task.cancel(true);
+        }
     }
 
     /*

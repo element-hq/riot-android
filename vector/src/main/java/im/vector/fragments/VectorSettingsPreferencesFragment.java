@@ -430,7 +430,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             });
                         }
                     };
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+                    try {
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.getMessage());
+                        task.cancel(true);
+                        hideLoadingView();
+                    }
                     return false;
                 }
             });

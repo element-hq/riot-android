@@ -860,6 +860,8 @@ public class VectorApp extends Application {
                 return null;
             }
         };
+
+        // should never crash
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
