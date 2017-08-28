@@ -136,13 +136,13 @@ public class SectionView extends RelativeLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.d(LOG_TAG, "onMeasure parent height" + MeasureSpec.getSize(heightMeasureSpec));
+        //Log.d(LOG_TAG, "onMeasure parent height" + MeasureSpec.getSize(heightMeasureSpec));
     }
 
     @Override
     protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld) {
         super.onSizeChanged(xNew, yNew, xOld, yOld);
-        Log.d(LOG_TAG, "onSizeChanged yOld " + yOld + " yNew" + yNew);
+        //Log.d(LOG_TAG, "onSizeChanged yOld " + yOld + " yNew" + yNew);
     }
 
     public boolean isStickyHeader() {
