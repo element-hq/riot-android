@@ -31,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.List;
 
@@ -44,6 +45,7 @@ import im.vector.util.ThemeUtils;
 import im.vector.util.RoomUtils;
 
 public class HomeSectionView extends RelativeLayout {
+    private static final String LOG_TAG = HomeSectionView.class.getSimpleName();
 
     @BindView(R.id.section_header)
     TextView mHeader;
@@ -125,12 +127,20 @@ public class HomeSectionView extends RelativeLayout {
      * Update the views to reflect the new number of items
      */
     private void onDataUpdated() {
-        setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
-        final int badgeCount = mAdapter.getBadgeCount();
-        mBadge.setText(RoomUtils.formatUnreadMessagesCounter(badgeCount));
-        mBadge.setVisibility(badgeCount == 0 ? GONE : VISIBLE);
-        mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
-        mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);
+        if (null != mAdapter) {
+            // reported by GA
+            // the adapter value is tested by it seems crashed when calling getBadgeCount
+            try {
+                setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
+                final int badgeCount = mAdapter.getBadgeCount();
+                mBadge.setText(RoomUtils.formatUnreadMessagesCounter(badgeCount));
+                mBadge.setVisibility(badgeCount == 0 ? GONE : VISIBLE);
+                mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
+                mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onDataUpdated() failed " + e.getMessage());
+            }
+        }
     }
 
     /*
@@ -225,9 +235,12 @@ public class HomeSectionView extends RelativeLayout {
      * @param filter
      */
     public void setCurrentFilter(final String filter) {
-        mCurrentFilter = filter;
-        mAdapter.onFilterDone(mCurrentFilter);
-        mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
+        // reported by GA
+        if (null != mAdapter) {
+            mCurrentFilter = filter;
+            mAdapter.onFilterDone(mCurrentFilter);
+            mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
+        }
     }
 
     /**
