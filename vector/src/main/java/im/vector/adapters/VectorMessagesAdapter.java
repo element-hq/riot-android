@@ -1069,68 +1069,72 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(viewType), parent, false);
         }
 
-        MessageRow row = getItem(position);
-        Event event = row.getEvent();
-        Message message = JsonUtils.toMessage(event.getContent());
-        RoomState roomState = row.getRoomState();
+        try {
+            MessageRow row = getItem(position);
+            Event event = row.getEvent();
+            Message message = JsonUtils.toMessage(event.getContent());
+            RoomState roomState = row.getRoomState();
 
-        EventDisplay display = new EventDisplay(mContext, event, roomState);
-        CharSequence textualDisplay = display.getTextualDisplay();
+            EventDisplay display = new EventDisplay(mContext, event, roomState);
+            CharSequence textualDisplay = display.getTextualDisplay();
 
-        SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
-        final TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
+            SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
+            final TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
 
-        // cannot refresh it
-        if (null == bodyTextView) {
-            Log.e(LOG_TAG, "getTextView : invalid layout");
-            return convertView;
-        }
+            // cannot refresh it
+            if (null == bodyTextView) {
+                Log.e(LOG_TAG, "getTextView : invalid layout");
+                return convertView;
+            }
 
-        if ((null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event)) {
-            body.setSpan(new ForegroundColorSpan(mHighlightMessageTextColor), 0, body.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
+            if ((null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event)) {
+                body.setSpan(new ForegroundColorSpan(mHighlightMessageTextColor), 0, body.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
 
-        highlightPattern(bodyTextView, body, TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null, mPattern);
+            highlightPattern(bodyTextView, body, TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null, mPattern);
 
-        int textColor;
+            int textColor;
 
-        if (row.getEvent().isEncrypting()) {
-            textColor = mEncryptingMessageTextColor;
-        } else if (row.getEvent().isSending()) {
-            textColor = mSendingMessageTextColor;
-        } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
-            textColor = mNotSentMessageTextColor;
-        } else {
-            textColor = mDefaultMessageTextColor;
+            if (row.getEvent().isEncrypting()) {
+                textColor = mEncryptingMessageTextColor;
+            } else if (row.getEvent().isSending()) {
+                textColor = mSendingMessageTextColor;
+            } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+                textColor = mNotSentMessageTextColor;
+            } else {
+                textColor = mDefaultMessageTextColor;
 
-            // sanity check
-            if (null != event.eventId) {
-                synchronized (this) {
-                    if (!mTextColorByEventId.containsKey(event.eventId)) {
-                        String sBody = body.toString();
-                        String displayName = mSession.getMyUser().displayname;
-                        String userID = mSession.getMyUserId();
+                // sanity check
+                if (null != event.eventId) {
+                    synchronized (this) {
+                        if (!mTextColorByEventId.containsKey(event.eventId)) {
+                            String sBody = body.toString();
+                            String displayName = mSession.getMyUser().displayname;
+                            String userID = mSession.getMyUserId();
 
-                        if (EventUtils.caseInsensitiveFind(displayName, sBody) || EventUtils.caseInsensitiveFind(userID, sBody)) {
-                            textColor = mHighlightMessageTextColor;
+                            if (EventUtils.caseInsensitiveFind(displayName, sBody) || EventUtils.caseInsensitiveFind(userID, sBody)) {
+                                textColor = mHighlightMessageTextColor;
+                            } else {
+                                textColor = mDefaultMessageTextColor;
+                            }
+
+                            mTextColorByEventId.put(event.eventId, textColor);
                         } else {
-                            textColor = mDefaultMessageTextColor;
+                            textColor = mTextColorByEventId.get(event.eventId);
                         }
-
-                        mTextColorByEventId.put(event.eventId, textColor);
-                    } else {
-                        textColor = mTextColorByEventId.get(event.eventId);
                     }
                 }
             }
+
+            bodyTextView.setTextColor(textColor);
+
+            View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
+            this.manageSubView(position, convertView, textLayout, ROW_TYPE_TEXT);
+
+            addContentViewListeners(convertView, bodyTextView, position);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage());
         }
-
-        bodyTextView.setTextColor(textColor);
-
-        View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
-        this.manageSubView(position, convertView, textLayout, ROW_TYPE_TEXT);
-
-        addContentViewListeners(convertView, bodyTextView, position);
 
         return convertView;
     }
@@ -1149,56 +1153,60 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(type), parent, false);
         }
 
-        MessageRow row = getItem(position);
-        Event event = row.getEvent();
+        try {
+            MessageRow row = getItem(position);
+            Event event = row.getEvent();
 
-        Message message;
-        int waterMarkResourceId = -1;
+            Message message;
+            int waterMarkResourceId = -1;
 
-        if (type == ROW_TYPE_IMAGE) {
-            ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
+            if (type == ROW_TYPE_IMAGE) {
+                ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
 
-            if ("image/gif".equals(imageMessage.getMimeType())) {
-                waterMarkResourceId = R.drawable.filetype_gif;
+                if ("image/gif".equals(imageMessage.getMimeType())) {
+                    waterMarkResourceId = R.drawable.filetype_gif;
+                }
+                message = imageMessage;
+
+            } else {
+                message = JsonUtils.toVideoMessage(event.getContent());
+                waterMarkResourceId = R.drawable.filetype_video;
             }
-            message = imageMessage;
 
-        } else {
-            message = JsonUtils.toVideoMessage(event.getContent());
-            waterMarkResourceId = R.drawable.filetype_video;
+            // display a type watermark
+            final ImageView imageTypeView = (ImageView) convertView.findViewById(R.id.messagesAdapter_image_type);
+
+            if (null == imageTypeView) {
+                Log.e(LOG_TAG, "getImageVideoView : invalid layout");
+                return convertView;
+            }
+
+            imageTypeView.setBackgroundColor(Color.TRANSPARENT);
+
+            if (waterMarkResourceId > 0) {
+                imageTypeView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), waterMarkResourceId));
+                imageTypeView.setVisibility(View.VISIBLE);
+            } else {
+                imageTypeView.setVisibility(View.GONE);
+            }
+
+            // download management
+            mMediasHelper.managePendingImageVideoDownload(convertView, event, message, position);
+
+            // upload management
+            mMediasHelper.managePendingImageVideoUpload(convertView, event, message);
+
+            // dimmed when the message is not sent
+            View imageLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
+            imageLayout.setAlpha(event.isSent() ? 1.0f : 0.5f);
+
+            this.manageSubView(position, convertView, imageLayout, type);
+
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.messagesAdapter_image);
+            addContentViewListeners(convertView, imageView, position);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage());
         }
-
-        // display a type watermark
-        final ImageView imageTypeView = (ImageView) convertView.findViewById(R.id.messagesAdapter_image_type);
-
-        if (null == imageTypeView) {
-            Log.e(LOG_TAG, "getImageVideoView : invalid layout");
-            return convertView;
-        }
-
-        imageTypeView.setBackgroundColor(Color.TRANSPARENT);
-
-        if (waterMarkResourceId > 0) {
-            imageTypeView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), waterMarkResourceId));
-            imageTypeView.setVisibility(View.VISIBLE);
-        } else {
-            imageTypeView.setVisibility(View.GONE);
-        }
-
-        // download management
-        mMediasHelper.managePendingImageVideoDownload(convertView, event, message, position);
-
-        // upload management
-        mMediasHelper.managePendingImageVideoUpload(convertView, event, message);
-
-        // dimmed when the message is not sent
-        View imageLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
-        imageLayout.setAlpha(event.isSent() ? 1.0f : 0.5f);
-
-        this.manageSubView(position, convertView, imageLayout, type);
-
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.messagesAdapter_image);
-        addContentViewListeners(convertView, imageView, position);
 
         return convertView;
     }
@@ -1216,44 +1224,48 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(viewType), parent, false);
         }
 
-        MessageRow row = getItem(position);
-        Event msg = row.getEvent();
-        RoomState roomState = row.getRoomState();
+        try {
+            MessageRow row = getItem(position);
+            Event msg = row.getEvent();
+            RoomState roomState = row.getRoomState();
 
-        CharSequence notice;
+            CharSequence notice;
 
-        EventDisplay display = new EventDisplay(mContext, msg, roomState);
-        notice = display.getTextualDisplay();
+            EventDisplay display = new EventDisplay(mContext, msg, roomState);
+            notice = display.getTextualDisplay();
 
-        TextView noticeTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
+            TextView noticeTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
 
-        if (null == noticeTextView) {
-            Log.e(LOG_TAG, "getNoticeRoomMemberView : invalid layout");
-            return convertView;
+            if (null == noticeTextView) {
+                Log.e(LOG_TAG, "getNoticeRoomMemberView : invalid layout");
+                return convertView;
+            }
+
+            if (TextUtils.isEmpty(notice)) {
+                noticeTextView.setText("");
+            } else {
+                SpannableStringBuilder strBuilder = new SpannableStringBuilder(notice);
+                MatrixURLSpan.refreshMatrixSpans(strBuilder, mVectorMessagesAdapterEventsListener);
+                noticeTextView.setText(strBuilder);
+            }
+
+            View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
+            this.manageSubView(position, convertView, textLayout, viewType);
+
+            addContentViewListeners(convertView, noticeTextView, position);
+
+            // android seems having a big issue when the text is too long and an alpha !=1 is applied:
+            // ---> the text is not displayed.
+            // It is sometimes partially displayed and/or flickers while scrolling.
+            // Apply an alpha != 1, trigger the same issue.
+            // It is related to the number of characters not to the number of lines.
+            // I don't understand why the render graph fails to do it.
+            // the patch apply the alpha to the text color but it does not work for the hyperlinks.
+            noticeTextView.setAlpha(1.0f);
+            noticeTextView.setTextColor(getNoticeTextColor());
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getNoticeRoomMemberView() failed : " + e.getMessage());
         }
-
-        if (TextUtils.isEmpty(notice)) {
-            noticeTextView.setText("");
-        } else {
-            SpannableStringBuilder strBuilder = new SpannableStringBuilder(notice);
-            MatrixURLSpan.refreshMatrixSpans(strBuilder, mVectorMessagesAdapterEventsListener);
-            noticeTextView.setText(strBuilder);
-        }
-
-        View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
-        this.manageSubView(position, convertView, textLayout, viewType);
-
-        addContentViewListeners(convertView, noticeTextView, position);
-
-        // android seems having a big issue when the text is too long and an alpha !=1 is applied:
-        // ---> the text is not displayed.
-        // It is sometimes partially displayed and/or flickers while scrolling.
-        // Apply an alpha != 1, trigger the same issue.
-        // It is related to the number of characters not to the number of lines.
-        // I don't understand why the render graph fails to do it.
-        // the patch apply the alpha to the text color but it does not work for the hyperlinks.
-        noticeTextView.setAlpha(1.0f);
-        noticeTextView.setTextColor(getNoticeTextColor());
 
         return convertView;
     }
@@ -1271,52 +1283,56 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_EMOTE), parent, false);
         }
 
-        MessageRow row = getItem(position);
-        Event event = row.getEvent();
-        RoomState roomState = row.getRoomState();
+        try {
+            MessageRow row = getItem(position);
+            Event event = row.getEvent();
+            RoomState roomState = row.getRoomState();
 
-        TextView emoteTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
+            TextView emoteTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
 
-        if (null == emoteTextView) {
-            Log.e(LOG_TAG, "getEmoteView : invalid layout");
-            return convertView;
-        }
-
-        Message message = JsonUtils.toMessage(event.getContent());
-        String userDisplayName = (null == roomState) ? event.getSender() : roomState.getMemberName(event.getSender());
-
-        String body = "* " + userDisplayName + " " + message.body;
-
-        String htmlString = null;
-
-        if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
-            htmlString = mHelper.getSanitisedHtml(message.formatted_body);
-
-            if (null != htmlString) {
-                htmlString = "* " + userDisplayName + " " + message.formatted_body;
+            if (null == emoteTextView) {
+                Log.e(LOG_TAG, "getEmoteView : invalid layout");
+                return convertView;
             }
+
+            Message message = JsonUtils.toMessage(event.getContent());
+            String userDisplayName = (null == roomState) ? event.getSender() : roomState.getMemberName(event.getSender());
+
+            String body = "* " + userDisplayName + " " + message.body;
+
+            String htmlString = null;
+
+            if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
+                htmlString = mHelper.getSanitisedHtml(message.formatted_body);
+
+                if (null != htmlString) {
+                    htmlString = "* " + userDisplayName + " " + message.formatted_body;
+                }
+            }
+
+            highlightPattern(emoteTextView, new SpannableString(body), htmlString, null);
+
+            int textColor;
+
+            if (row.getEvent().isEncrypting()) {
+                textColor = mEncryptingMessageTextColor;
+            } else if (row.getEvent().isSending()) {
+                textColor = mSendingMessageTextColor;
+            } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+                textColor = mNotSentMessageTextColor;
+            } else {
+                textColor = mDefaultMessageTextColor;
+            }
+
+            emoteTextView.setTextColor(textColor);
+
+            View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
+            this.manageSubView(position, convertView, textLayout, ROW_TYPE_EMOTE);
+
+            addContentViewListeners(convertView, emoteTextView, position);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage());
         }
-
-        highlightPattern(emoteTextView, new SpannableString(body), htmlString, null);
-
-        int textColor;
-
-        if (row.getEvent().isEncrypting()) {
-            textColor = mEncryptingMessageTextColor;
-        } else if (row.getEvent().isSending()) {
-            textColor = mSendingMessageTextColor;
-        } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
-            textColor = mNotSentMessageTextColor;
-        } else {
-            textColor = mDefaultMessageTextColor;
-        }
-
-        emoteTextView.setTextColor(textColor);
-
-        View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
-        this.manageSubView(position, convertView, textLayout, ROW_TYPE_EMOTE);
-
-        addContentViewListeners(convertView, emoteTextView, position);
 
         return convertView;
     }
@@ -1334,36 +1350,40 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_FILE), parent, false);
         }
 
-        MessageRow row = getItem(position);
-        Event event = row.getEvent();
+        try {
+            MessageRow row = getItem(position);
+            Event event = row.getEvent();
 
-        final FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
-        final TextView fileTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_filename);
+            final FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
+            final TextView fileTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_filename);
 
-        if (null == fileTextView) {
-            Log.e(LOG_TAG, "getFileView : invalid layout");
-            return convertView;
+            if (null == fileTextView) {
+                Log.e(LOG_TAG, "getFileView : invalid layout");
+                return convertView;
+            }
+
+            fileTextView.setPaintFlags(fileTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            fileTextView.setText("\n" + fileMessage.body + "\n");
+
+            // display the right message type icon.
+            // Audio and File messages are managed by the same method
+            final ImageView imageTypeView = (ImageView) convertView.findViewById(R.id.messagesAdapter_image_type);
+
+            if (null != imageTypeView) {
+                imageTypeView.setImageResource(Message.MSGTYPE_AUDIO.equals(fileMessage.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
+            }
+            imageTypeView.setBackgroundColor(Color.TRANSPARENT);
+
+            mMediasHelper.managePendingFileDownload(convertView, event, fileMessage, position);
+            mMediasHelper.managePendingUpload(convertView, event, ROW_TYPE_FILE, fileMessage.url);
+
+            View fileLayout = convertView.findViewById(R.id.messagesAdapter_file_layout);
+            this.manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);
+
+            addContentViewListeners(convertView, fileTextView, position);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage());
         }
-
-        fileTextView.setPaintFlags(fileTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        fileTextView.setText("\n" + fileMessage.body + "\n");
-
-        // display the right message type icon.
-        // Audio and File messages are managed by the same method
-        final ImageView imageTypeView = (ImageView) convertView.findViewById(R.id.messagesAdapter_image_type);
-
-        if (null != imageTypeView) {
-            imageTypeView.setImageResource(Message.MSGTYPE_AUDIO.equals(fileMessage.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
-        }
-        imageTypeView.setBackgroundColor(Color.TRANSPARENT);
-
-        mMediasHelper.managePendingFileDownload(convertView, event, fileMessage, position);
-        mMediasHelper.managePendingUpload(convertView, event, ROW_TYPE_FILE, fileMessage.url);
-
-        View fileLayout = convertView.findViewById(R.id.messagesAdapter_file_layout);
-        this.manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);
-
-        addContentViewListeners(convertView, fileTextView, position);
 
         return convertView;
     }
@@ -1400,75 +1420,79 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_MERGE), parent, false);
         }
 
-        MessageRow row = getItem(position);
-        final EventGroup event = (EventGroup) row.getEvent();
+        try {
+            MessageRow row = getItem(position);
+            final EventGroup event = (EventGroup) row.getEvent();
 
-        View headerLayout = convertView.findViewById(R.id.messagesAdapter_merge_header_layout);
-        TextView headerTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_merge_header_text_view);
-        TextView summaryTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_merge_summary);
-        View separatorLayout = convertView.findViewById(R.id.messagesAdapter_merge_separator);
-        View avatarsLayout = convertView.findViewById(R.id.messagesAdapter_merge_avatar_list);
+            View headerLayout = convertView.findViewById(R.id.messagesAdapter_merge_header_layout);
+            TextView headerTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_merge_header_text_view);
+            TextView summaryTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_merge_summary);
+            View separatorLayout = convertView.findViewById(R.id.messagesAdapter_merge_separator);
+            View avatarsLayout = convertView.findViewById(R.id.messagesAdapter_merge_avatar_list);
 
-        // test if the layout is still valid
-        // reported by a rageshake
-        if ((null == headerLayout) || (null == headerTextView) || (null == summaryTextView)
-                || (null == separatorLayout) || (null == avatarsLayout)) {
-            Log.e(LOG_TAG, "getMergeView : invalid layout");
-            return convertView;
-        }
-
-        separatorLayout.setVisibility(event.isExpanded() ? View.VISIBLE : View.GONE);
-        summaryTextView.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
-        avatarsLayout.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
-
-        headerTextView.setText(event.isExpanded() ? "collapse" : "expand");
-
-        if (!event.isExpanded()) {
-            avatarsLayout.setVisibility(View.VISIBLE);
-            List<ImageView> avatarView = new ArrayList<>();
-
-            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_1));
-            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_2));
-            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_3));
-            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_4));
-            avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_5));
-
-            List<MessageRow> messageRows = event.getAvatarRows(avatarView.size());
-
-            for (int i = 0; i < avatarView.size(); i++) {
-                ImageView imageView = avatarView.get(i);
-
-                if (i < messageRows.size()) {
-                    mHelper.loadMemberAvatar(imageView, messageRows.get(i));
-                    imageView.setVisibility(View.VISIBLE);
-                } else {
-                    imageView.setVisibility(View.GONE);
-                }
+            // test if the layout is still valid
+            // reported by a rageshake
+            if ((null == headerLayout) || (null == headerTextView) || (null == summaryTextView)
+                    || (null == separatorLayout) || (null == avatarsLayout)) {
+                Log.e(LOG_TAG, "getMergeView : invalid layout");
+                return convertView;
             }
 
+            separatorLayout.setVisibility(event.isExpanded() ? View.VISIBLE : View.GONE);
+            summaryTextView.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
+            avatarsLayout.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
 
-            summaryTextView.setText(event.toString(mContext));
-        }
+            headerTextView.setText(event.isExpanded() ? "collapse" : "expand");
 
-        headerLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                event.setIsExpanded(!event.isExpanded());
-                updateHighlightedEventId();
+            if (!event.isExpanded()) {
+                avatarsLayout.setVisibility(View.VISIBLE);
+                List<ImageView> avatarView = new ArrayList<>();
 
-                if (event.contains(mSelectedEventId)) {
-                    cancelSelectionMode();
-                } else {
-                    notifyDataSetChanged();
+                avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_1));
+                avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_2));
+                avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_3));
+                avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_4));
+                avatarView.add((ImageView) convertView.findViewById(R.id.mels_list_avatar_5));
+
+                List<MessageRow> messageRows = event.getAvatarRows(avatarView.size());
+
+                for (int i = 0; i < avatarView.size(); i++) {
+                    ImageView imageView = avatarView.get(i);
+
+                    if (i < messageRows.size()) {
+                        mHelper.loadMemberAvatar(imageView, messageRows.get(i));
+                        imageView.setVisibility(View.VISIBLE);
+                    } else {
+                        imageView.setVisibility(View.GONE);
+                    }
                 }
+
+
+                summaryTextView.setText(event.toString(mContext));
             }
-        });
 
-        // set the message marker
-        convertView.findViewById(R.id.messagesAdapter_highlight_message_marker).setBackgroundColor(ContextCompat.getColor(mContext, TextUtils.equals(mHighlightedEventId, event.eventId) ? R.color.vector_green_color : android.R.color.transparent));
+            headerLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    event.setIsExpanded(!event.isExpanded());
+                    updateHighlightedEventId();
 
-        // display the day separator
-        VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
+                    if (event.contains(mSelectedEventId)) {
+                        cancelSelectionMode();
+                    } else {
+                        notifyDataSetChanged();
+                    }
+                }
+            });
+
+            // set the message marker
+            convertView.findViewById(R.id.messagesAdapter_highlight_message_marker).setBackgroundColor(ContextCompat.getColor(mContext, TextUtils.equals(mHighlightedEventId, event.eventId) ? R.color.vector_green_color : android.R.color.transparent));
+
+            // display the day separator
+            VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getMergeView() failed " + e.getMessage());
+        }
 
         return convertView;
     }
