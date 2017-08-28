@@ -426,7 +426,9 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
             // or it's still valid
             if (!canCallBeResumed() || (null == mCall.getSession().mCallsManager.getCallWithCallId(mCall.getCallId()))) {
                 Log.d(LOG_TAG, "Hide the call notifications because the current one cannot be resumed");
-                EventStreamService.getInstance().hideCallNotifications();
+                if (null != EventStreamService.getInstance()) {
+                    EventStreamService.getInstance().hideCallNotifications();
+                }
                 mCall = null;
                 mSavedCallView = null;
             }
@@ -676,7 +678,9 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
             }
         } else {
             Log.d(LOG_TAG, "## onCreate(): Hide the call notifications");
-            EventStreamService.getInstance().hideCallNotifications();
+            if (null != EventStreamService.getInstance()) {
+                EventStreamService.getInstance().hideCallNotifications();
+            }
             mSavedCallView = null;
             mSavedLocalVideoLayoutConfig = null;
 
@@ -1396,7 +1400,9 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
 
         if (mIsCallEnded || mIsCalleeBusy) {
             Log.d(LOG_TAG, "onDestroy: Hide the call notifications");
-            EventStreamService.getInstance().hideCallNotifications();
+            if (null != EventStreamService.getInstance()) {
+                EventStreamService.getInstance().hideCallNotifications();
+            }
 
             if (mIsCalleeBusy) {
                 VectorCallSoundManager.startBusyCallSound();
