@@ -35,6 +35,9 @@ import android.webkit.WebView;
 public class VectorMarkdownParser extends WebView {
     private static final String LOG_TAG = "VMarkdownParser";
 
+    // tell if the parser is properly initialised
+    private boolean mIsInitialised = false;
+
     public interface IVectorMarkdownParserListener {
         /**
          * A markdown text has been parsed.
@@ -65,17 +68,22 @@ public class VectorMarkdownParser extends WebView {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initialize() {
-        loadUrl("file:///android_asset/html/markdown.html");
+        try {
+            loadUrl("file:///android_asset/html/markdown.html");
 
-        // allow java script
-        getSettings().setJavaScriptEnabled(true);
+            // allow java script
+            getSettings().setJavaScriptEnabled(true);
 
-        // java <-> web interface
-        addJavascriptInterface(mMarkDownWebAppInterface, "Android");
+            // java <-> web interface
+            addJavascriptInterface(mMarkDownWebAppInterface, "Android");
 
-        getSettings().setAllowUniversalAccessFromFileURLs(true);
+            getSettings().setAllowUniversalAccessFromFileURLs(true);
+
+            mIsInitialised = true;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## initialize() failed " + e.getMessage());
+        }
     }
-
 
     /**
      * Parse the MarkDown text.
@@ -96,7 +104,7 @@ public class VectorMarkdownParser extends WebView {
         }
 
         // empty text or disabled
-        if (TextUtils.isEmpty(text) || !PreferencesManager.isMarkdownEnabled(getContext())) {
+        if (!mIsInitialised || TextUtils.isEmpty(text) || !PreferencesManager.isMarkdownEnabled(getContext())) {
             // nothing to do
             listener.onMarkdownParsed(markdownText, text);
             return;
