@@ -74,9 +74,6 @@ public class NotificationUtils {
     public static final String ACTION_MESSAGE_REPLY = "ACTION_MESSAGE_REPLY";
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
 
-    // the bubble radius is computed for 99
-    static private int mUnreadBubbleWidth = -1;
-
     /**
      * Retrieve the room name.
      *
@@ -289,12 +286,13 @@ public class NotificationUtils {
     }
 
     // max number of lines to display the notification text styles
-    static final int MAX_NUMBER_NOTIFICATION_LINES = 10;
+    private static final int MAX_NUMBER_NOTIFICATION_LINES = 10;
 
     /**
      * Add a text style to a notification when there are several notified rooms.
-     * @param context the context
-     * @param builder the notification builder
+     *
+     * @param context                the context
+     * @param builder                the notification builder
      * @param notifiedEventsByRoomId the notified events by room ids
      */
     private static void addTextStyleWithSeveralRooms(Context context,
@@ -318,7 +316,7 @@ public class NotificationUtils {
             String roomName = getRoomName(context, session, room, null);
 
             List<NotifiedEvent> notifiedEvents = notifiedEventsByRoomId.get(roomId);
-            Event latestEvent = store.getEvent(notifiedEvents.get(notifiedEvents.size()-1).mEventId, roomId);
+            Event latestEvent = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
 
             String text;
             String header;
@@ -462,30 +460,30 @@ public class NotificationUtils {
 
     /**
      * Add a text style for a bunch of notified events.
-     *
+     * <p>
      * The notification contains the notified messages from any rooms.
      * It does not contain anymore the latest notified message.
-     *
+     * <p>
      * When there is only one room, it displays the MAX_NUMBER_NOTIFICATION_LINES latest messages.
      * The busy ones are displayed in RED.
      * The QUICK REPLY and other buttons are displayed.
-     *
+     * <p>
      * When there are several rooms, it displays the busy notified rooms first (sorted by latest message timestamp).
      * Each line is
      * - "Room Name : XX unread messages" if there are many unread messages
      * - 'Room Name : Sender   - Message body" if there is only one unread message.
      *
-     * @param context the context
-     * @param builder the notification builder
-     * @param eventToNotify the latest notified event
-     * @param isInvitationEvent true if the notified event is an invitation
+     * @param context                the context
+     * @param builder                the notification builder
+     * @param eventToNotify          the latest notified event
+     * @param isInvitationEvent      true if the notified event is an invitation
      * @param notifiedEventsByRoomId the notified events by room ids
      */
     private static void addTextStyle(Context context,
-                                                  android.support.v7.app.NotificationCompat.Builder builder,
-                                                  NotifiedEvent eventToNotify,
-                                                  boolean isInvitationEvent,
-                                                  Map<String, List<NotifiedEvent>> notifiedEventsByRoomId) {
+                                     android.support.v7.app.NotificationCompat.Builder builder,
+                                     NotifiedEvent eventToNotify,
+                                     boolean isInvitationEvent,
+                                     Map<String, List<NotifiedEvent>> notifiedEventsByRoomId) {
 
         // nothing to do
         if (0 == notifiedEventsByRoomId.size()) {
@@ -664,16 +662,17 @@ public class NotificationUtils {
 
     /**
      * Build a notification
-     * @param context the context
+     *
+     * @param context                the context
      * @param notifiedEventsByRoomId the notified events
-     * @param eventToNotify the latest event to notify
-     * @param isBackground true if it is background notification
+     * @param eventToNotify          the latest event to notify
+     * @param isBackground           true if it is background notification
      * @return the notification
      */
     public static Notification buildMessageNotification(Context context,
-                                                         Map<String, List<NotifiedEvent>> notifiedEventsByRoomId,
-                                                         NotifiedEvent eventToNotify,
-                                                         boolean isBackground) {
+                                                        Map<String, List<NotifiedEvent>> notifiedEventsByRoomId,
+                                                        NotifiedEvent eventToNotify,
+                                                        boolean isBackground) {
         try {
             // TODO manage multi accounts
             MXSession session = Matrix.getInstance(context).getDefaultSession();
@@ -800,6 +799,72 @@ public class NotificationUtils {
             return n;
         } catch (Exception e) {
             Log.e(LOG_TAG, "## buildMessageNotification() : failed" + e.getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Build a notification
+     *
+     * @param context         the context
+     * @param messagesStrings the message texts
+     * @param bingRule        the bing rule
+     * @return the notification
+     */
+    public static Notification buildMessagesListNotification(Context context, List<CharSequence> messagesStrings, BingRule bingRule) {
+        try {
+            android.support.v7.app.NotificationCompat.Builder builder = new android.support.v7.app.NotificationCompat.Builder(context);
+            builder.setWhen(System.currentTimeMillis());
+            builder.setContentTitle("");
+            builder.setContentText(messagesStrings.get(0));
+
+            builder.setGroup(context.getString(R.string.riot_app_name));
+            builder.setGroupSummary(true);
+
+            android.support.v7.app.NotificationCompat.InboxStyle inboxStyle = new android.support.v7.app.NotificationCompat.InboxStyle();
+
+            for (int i = 0; i < Math.min(MAX_NUMBER_NOTIFICATION_LINES, messagesStrings.size()); i++) {
+                inboxStyle.addLine(messagesStrings.get(i));
+            }
+
+            inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name));
+            inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages, messagesStrings.size()));
+            builder.setStyle(inboxStyle);
+
+            // open the home activity
+            TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context);
+            Intent roomIntentTap = new Intent(context, VectorHomeActivity.class);
+            roomIntentTap.setAction(TAP_TO_VIEW_ACTION + ((int) (System.currentTimeMillis())));
+            stackBuilderTap.addNextIntent(roomIntentTap);
+            builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            builder.setSmallIcon(R.drawable.message_notification_transparent);
+
+            boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
+
+            @ColorInt int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
+
+            if (is_bing) {
+                builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_HIGH);
+                builder.setColor(highlightColor);
+            } else {
+                builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
+                builder.setColor(Color.TRANSPARENT);
+            }
+
+            Notification n = builder.build();
+
+            n.flags |= Notification.FLAG_SHOW_LIGHTS;
+            n.defaults |= Notification.DEFAULT_LIGHTS;
+
+            if (is_bing) {
+                n.defaults |= Notification.DEFAULT_SOUND;
+            }
+
+            return n;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## buildMessagesListNotification() : failed" + e.getMessage());
         }
 
         return null;
