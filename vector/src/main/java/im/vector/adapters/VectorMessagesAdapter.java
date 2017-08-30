@@ -78,6 +78,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
@@ -193,8 +194,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private boolean mAlwaysShowTimeStamps;
     private boolean mHideReadReceipts;
 
-    private static final Pattern mEmojisPattern = Pattern.compile("[(?:[\uD83C\uDF00-\uD83D\uDDFF]|[\uD83E\uDD00-\uD83E\uDDFF]|[\uD83D\uDE00-\uD83D\uDE4F]|[\uD83D\uDE80-\uD83D\uDEFF]|[\u2600-\u26FF]\uFE0F?|[\u2700-\u27BF]\uFE0F?|\u24C2\uFE0F?|[\uD83C\uDDE6-\uD83C\uDDFF]{1,2}|[\uD83C\uDD70\uD83C\uDD71\uD83C\uDD7E\uD83C\uDD7F\uD83C\uDD8E\uD83C\uDD91-\uD83C\uDD9A]\uFE0F?|[\u0023\u002A\u0030-\u0039]\uFE0F?\u20E3|[\u2194-\u2199\u21A9-\u21AA]\uFE0F?|[\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55]\uFE0F?|[\u2934\u2935]\uFE0F?|[\u3030\u303D]\uFE0F?|[\u3297\u3299]\uFE0F?|[\uD83C\uDE01\uD83C\uDE02\uD83C\uDE1A\uD83C\uDE2F\uD83C\uDE32-\uD83C\uDE3A\uD83C\uDE50\uD83C\uDE51]\uFE0F?|[\u203C\u2049]\uFE0F?|[\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE]\uFE0F?|[\u00A9\u00AE]\uFE0F?|[\u2122\u2139]\uFE0F?|\uD83C\uDC04\uFE0F?|\uD83C\uDCCF\uFE0F?|[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?)]+");
-    private static final Pattern mOnlyDigitsPattern = Pattern.compile("[0-9]+");
+    private static final Pattern mEmojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]|[\uD83E\uDD00-\uD83E\uDDFF]|[\uD83D\uDE00-\uD83D\uDE4F]|[\uD83D\uDE80-\uD83D\uDEFF]|[\u2600-\u26FF]\uFE0F?|[\u2700-\u27BF]\uFE0F?|\u24C2\uFE0F?|[\uD83C\uDDE6-\uD83C\uDDFF]{1,2}|[\uD83C\uDD70\uD83C\uDD71\uD83C\uDD7E\uD83C\uDD7F\uD83C\uDD8E\uD83C\uDD91-\uD83C\uDD9A]\uFE0F?|[\u0023\u002A\u0030-\u0039]\uFE0F?\u20E3|[\u2194-\u2199\u21A9-\u21AA]\uFE0F?|[\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55]\uFE0F?|[\u2934\u2935]\uFE0F?|[\u3030\u303D]\uFE0F?|[\u3297\u3299]\uFE0F?|[\uD83C\uDE01\uD83C\uDE02\uD83C\uDE1A\uD83C\uDE2F\uD83C\uDE32-\uD83C\uDE3A\uD83C\uDE50\uD83C\uDE51]\uFE0F?|[\u203C\u2049]\uFE0F?|[\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE]\uFE0F?|[\u00A9\u00AE]\uFE0F?|[\u2122\u2139]\uFE0F?|\uD83C\uDC04\uFE0F?|\uD83C\uDCCF\uFE0F?|[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?))");
 
     /**
      * Creates a messages adapter with the default layouts.
@@ -858,6 +858,46 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
 
     /**
+     * Test if a string contains emojis.
+     * It seems that the regex [emoji_regex]+ does not work.
+     * Some characters like ?, # or digit are accepted.
+     * @param body the body to test
+     * @return true if the body contains only emojis
+     */
+    private static boolean containsOnlyEmojis(String body) {
+        boolean res = false;
+
+        if (!TextUtils.isEmpty(body)) {
+            Matcher matcher = mEmojisPattern.matcher(body);
+
+            int start = -1;
+            int end = -1;
+
+            while(matcher.find()) {
+                int nextStart = matcher.start();
+
+                // first emoji position
+                if (start < 0) {
+                    if (nextStart > 0) {
+                        return false;
+                    }
+                } else {
+                    // must not have a character between
+                    if (nextStart != end) {
+                        return false;
+                    }
+                }
+                start = nextStart;
+                end = matcher.end();
+            }
+
+            res = (-1 != start) && (end == body.length());
+        }
+
+        return res;
+    }
+
+    /**
      * Convert Event to view type.
      *
      * @param event the event to convert
@@ -896,7 +936,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             String msgType = message.msgtype;
 
             if (Message.MSGTYPE_TEXT.equals(msgType)) {
-                if ((null != message.body) && !mOnlyDigitsPattern.matcher(message.body).matches() && mEmojisPattern.matcher(message.body).matches()) {
+                if (containsOnlyEmojis(message.body)) {
                     viewType = ROW_TYPE_EMOJI;
                 } else {
                     viewType = ROW_TYPE_TEXT;
