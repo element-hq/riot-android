@@ -61,6 +61,7 @@ import java.util.TimerTask;
 
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorCallViewActivity;
+import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
@@ -238,6 +239,20 @@ public class VectorApp extends Application {
                 return getApplicationLocale().toString() + "_" + getFontScale() + "_" + ThemeUtils.getApplicationTheme(activity);
             }
 
+            /**
+             * Restart an activity to manage language update
+             * @param activity the activity to restart
+             */
+            private void restartActivity(Activity activity) {
+                // avoid restarting activities when it is not required
+                // some of them has no text
+                if (!(activity instanceof VectorMediasPickerActivity) &&
+                        !(activity instanceof VectorCallViewActivity)) {
+                    activity.startActivity(activity.getIntent());
+                    activity.finish();
+                }
+            }
+
             @Override
             public void onActivityResumed(final Activity activity) {
                 Log.d(LOG_TAG, "onActivityResumed " + activity);
@@ -250,8 +265,7 @@ public class VectorApp extends Application {
 
                     if (!TextUtils.equals(prevActivityLocale, getActivityLocaleStatus(activity))) {
                         Log.d(LOG_TAG, "## onActivityResumed() : restart the activity " + activity + " because of the locale update from " + prevActivityLocale + " to " + getActivityLocaleStatus(activity));
-                        activity.startActivity(activity.getIntent());
-                        activity.finish();
+                        restartActivity(activity);
                         return;
                     }
                 }
@@ -260,8 +274,7 @@ public class VectorApp extends Application {
                 if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
                     Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale().toString());
                     updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(activity));
-                    activity.startActivity(activity.getIntent());
-                    activity.finish();
+                    restartActivity(activity);
                 }
             }
 
