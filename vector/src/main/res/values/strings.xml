@@ -523,6 +523,7 @@
     <string name="settings_hide_read_receipts">Hide read receipts</string>
     <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
     <string name="settings_always_show_timestamps">Always show message timestamps</string>
+    <string name="settings_12_24_timestamps">Show timestamps in 12 hour format (e.g. 2:30pm)</string>
     <string name="settings_disable_markdown">Disable markdown formatting</string>
     <string name="settings_data_save_mode">Data save mode</string>
 

@@ -31,6 +31,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.util.PreferencesManager;
 
 /**
  * Contains useful functions for adapters.
@@ -110,6 +111,15 @@ public class AdapterUtils {
     }
 
     /**
+     * Returns the 12/24 h preference display
+     * @param context the context
+     * @return the preferred display format
+     */
+    private static int getTimeDisplay(Context context) {
+        return PreferencesManager.displayTimeIn12hFormat(context) ? DateUtils.FORMAT_12HOUR : DateUtils.FORMAT_24HOUR;
+    }
+
+    /**
      * Convert a time since epoch date to a string.
      * @param context the context.
      * @param ts the time since epoch.
@@ -122,13 +132,13 @@ public class AdapterUtils {
         String res;
 
         if (timeOnly) {
-            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME);
+            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME | getTimeDisplay(context));
         } else if (0 == daysDiff) {
-            res = context.getString(R.string.today) + " " + DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME);
+            res = context.getString(R.string.today) + " " + DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME | getTimeDisplay(context));
         } else if (1 == daysDiff) {
-            res = context.getString(R.string.yesterday) + " " + DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME);
+            res = context.getString(R.string.yesterday) + " " + DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME | getTimeDisplay(context));
         } else if (7 > daysDiff) {
-            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_ALL);
+            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_ALL| getTimeDisplay(context));
         } else if (365 > daysDiff) {
             res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_SHOW_DATE);
         } else {
