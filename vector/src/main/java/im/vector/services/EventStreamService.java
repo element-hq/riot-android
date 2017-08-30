@@ -440,6 +440,12 @@ public class EventStreamService extends Service {
                     return START_NOT_STICKY;
                 }
 
+                GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+                if (!gcmManager.canStartAppInBackground()) {
+                    Log.e(LOG_TAG, "onStartCommand : no auto restart because the user disabled the background sync");
+                    return START_NOT_STICKY;
+                }
+
                 mSessions = new ArrayList<>();
                 mSessions.addAll(Matrix.getInstance(getApplicationContext()).getSessions());
 

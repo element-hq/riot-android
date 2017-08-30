@@ -355,7 +355,7 @@ public class VectorApp extends Application {
         for (MXSession session : sessions) {
             if (session.isAlive()) {
                 session.setIsOnline(false);
-                session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
+                session.setSyncDelay(gcmRegistrationManager.isBackgroundSyncAllowed() ? gcmRegistrationManager.getBackgroundSyncDelay() : 0);
                 session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
 
                 // remove older medias

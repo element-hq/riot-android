@@ -1028,6 +1028,14 @@ public final class GcmRegistrationManager {
     }
 
     /**
+     * Tell if the application can be restarted in background
+     * @return true if the application can be restarted in background
+     */
+    public boolean canStartAppInBackground() {
+        return isBackgroundSyncAllowed() || (null != getStoredRegistrationToken());
+    }
+
+    /**
      * Allow the background sync
      * @param isAllowed true to allow the background sync.
      */
