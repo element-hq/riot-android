@@ -1416,44 +1416,48 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         Log.d(LOG_TAG, "## onSurfaceTextureSizeChanged(): width="+width+" height="+height);
 
         if (null != surface) {
-            // clear the texture to avoid staled area
-            // when switching the camera, some texture areas are not refreshed/cleared
-            // so, paint it in black
-            EGL10 egl = (EGL10) EGLContext.getEGL();
-            EGLDisplay display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-            egl.eglInitialize(display, null);
+            try {
+                // clear the texture to avoid staled area
+                // when switching the camera, some texture areas are not refreshed/cleared
+                // so, paint it in black
+                EGL10 egl = (EGL10) EGLContext.getEGL();
+                EGLDisplay display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+                egl.eglInitialize(display, null);
 
-            int[] attribList = {
-                    EGL10.EGL_RED_SIZE, 8,
-                    EGL10.EGL_GREEN_SIZE, 8,
-                    EGL10.EGL_BLUE_SIZE, 8,
-                    EGL10.EGL_ALPHA_SIZE, 8,
-                    EGL10.EGL_RENDERABLE_TYPE, EGL10.EGL_WINDOW_BIT,
-                    EGL10.EGL_NONE, 0,
-                    EGL10.EGL_NONE
-            };
-            EGLConfig[] configs = new EGLConfig[1];
-            int[] numConfigs = new int[1];
-            egl.eglChooseConfig(display, attribList, configs, configs.length, numConfigs);
-            EGLConfig config = configs[0];
-            EGLContext context = egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, new int[]{
-                    12440, 2,
-                    EGL10.EGL_NONE
-            });
-            EGLSurface eglSurface = egl.eglCreateWindowSurface(display, config, surface,
-                    new int[]{
-                            EGL10.EGL_NONE
-                    });
+                int[] attribList = {
+                        EGL10.EGL_RED_SIZE, 8,
+                        EGL10.EGL_GREEN_SIZE, 8,
+                        EGL10.EGL_BLUE_SIZE, 8,
+                        EGL10.EGL_ALPHA_SIZE, 8,
+                        EGL10.EGL_RENDERABLE_TYPE, EGL10.EGL_WINDOW_BIT,
+                        EGL10.EGL_NONE, 0,
+                        EGL10.EGL_NONE
+                };
+                EGLConfig[] configs = new EGLConfig[1];
+                int[] numConfigs = new int[1];
+                egl.eglChooseConfig(display, attribList, configs, configs.length, numConfigs);
+                EGLConfig config = configs[0];
+                EGLContext context = egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, new int[]{
+                        12440, 2,
+                        EGL10.EGL_NONE
+                });
+                EGLSurface eglSurface = egl.eglCreateWindowSurface(display, config, surface,
+                        new int[]{
+                                EGL10.EGL_NONE
+                        });
 
-            egl.eglMakeCurrent(display, eglSurface, eglSurface, context);
-            GLES20.glClearColor(0, 0, 0, 1);
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-            egl.eglSwapBuffers(display, eglSurface);
-            egl.eglDestroySurface(display, eglSurface);
-            egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE,
-                    EGL10.EGL_NO_CONTEXT);
-            egl.eglDestroyContext(display, context);
-            egl.eglTerminate(display);
+                egl.eglMakeCurrent(display, eglSurface, eglSurface, context);
+                GLES20.glClearColor(0, 0, 0, 1);
+                GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+                egl.eglSwapBuffers(display, eglSurface);
+                egl.eglDestroySurface(display, eglSurface);
+                egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE,
+                        EGL10.EGL_NO_CONTEXT);
+                egl.eglDestroyContext(display, context);
+                egl.eglTerminate(display);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onSurfaceTextureSizeChanged() failed " + e.getMessage());
+            }
         }
     }
 
