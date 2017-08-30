@@ -1267,11 +1267,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
                                 @Override
-                                public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
+                                public void onUploadError(final String uploadId, final int serverResponseCode, final String serverErrorMessage) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            hideLoadingView(false);
+                                            onCommonDone(serverResponseCode + " : " + serverErrorMessage);
                                         }
                                     });
                                 }
