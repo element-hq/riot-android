@@ -1142,12 +1142,17 @@ public class VectorApp extends Application {
     public static List<Locale> getApplicationLocales(Context context) {
         if (mApplicationLocales.isEmpty()) {
 
-            final Locale[] availableLocales = Locale.getAvailableLocales();
-
             Set<Pair<String, String>> knownLocalesSet = new HashSet<>();
 
-            for (Locale locale : availableLocales) {
-                knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resouces_language), getString(context, locale, R.string.resouces_country)));
+            try {
+                final Locale[] availableLocales = Locale.getAvailableLocales();
+
+                for (Locale locale : availableLocales) {
+                    knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resouces_language), getString(context, locale, R.string.resouces_country)));
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.getMessage());
+                knownLocalesSet.add(new Pair<>(context.getString(R.string.resouces_language), context.getString(R.string.resouces_country)));
             }
 
             for (Pair<String, String> knownLocale : knownLocalesSet) {
