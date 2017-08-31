@@ -10,7 +10,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "im.vector"
+        applicationId "im.vector.alpha"
         minSdkVersion 16
         targetSdkVersion 25
         // use the version code
@@ -32,6 +32,7 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix ".dev"
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
             resValue "string", "git_branch_name", "\"${gitBranchName()}\""
@@ -54,7 +55,6 @@ android {
 
     productFlavors {
         app {
-            applicationId "im.vector.alpha"
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
@@ -65,7 +65,7 @@ android {
         }
 
         appfdroid {
-            applicationId "im.vector.alpha"
+            applicationIdSuffix ".fdroid"
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
