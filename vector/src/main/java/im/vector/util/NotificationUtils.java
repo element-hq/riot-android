@@ -18,12 +18,15 @@
 package im.vector.util;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -73,6 +76,9 @@ public class NotificationUtils {
     public static final String ACTION_MESSAGE_HEARD = "ACTION_MESSAGE_HEARD";
     public static final String ACTION_MESSAGE_REPLY = "ACTION_MESSAGE_REPLY";
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
+
+    // notification sound
+    private static final String RING_TONE_MESSAGE_NOTIFICATION = "message.ogg";
 
     /**
      * Retrieve the room name.
@@ -661,6 +667,44 @@ public class NotificationUtils {
     }
 
     /**
+     * Add the notification sound.
+     *
+     * @param context the context
+     * @param builder the notification builder
+     * @param isBackground true if the notification is a background one
+     * @param isBing true if the notification should play sound
+     */
+    private static void manageNotificationSound(Context context, android.support.v7.app.NotificationCompat.Builder builder, boolean isBackground, boolean isBing) {
+        @ColorInt int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
+        int defaultColor = Color.TRANSPARENT;
+
+        if (isBackground) {
+            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
+            builder.setColor(defaultColor);
+        } else if (isBing) {
+            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_HIGH);
+            builder.setColor(highlightColor);
+        } else {
+            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
+            builder.setColor(Color.TRANSPARENT);
+        }
+
+        if (!isBackground) {
+            builder.setLights(Color.GREEN, 500, 500);
+
+            if (isBing) {
+                Uri ringTone = VectorCallSoundManager.getRingToneUri(R.raw.message, RING_TONE_MESSAGE_NOTIFICATION);
+
+                if (null == ringTone) {
+                    ringTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                }
+
+                builder.setSound(ringTone);
+            }
+        }
+    }
+
+    /**
      * Build a notification
      *
      * @param context                the context
@@ -768,39 +812,12 @@ public class NotificationUtils {
 
             builder.setSmallIcon(R.drawable.message_notification_transparent);
 
-            boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
+            manageNotificationSound(context, builder, isBackground, bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
 
-            @ColorInt int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
-            int defaultColor = Color.TRANSPARENT;
-
-            if (isBackground) {
-                builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
-                builder.setColor(defaultColor);
-            } else if (is_bing) {
-                builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_HIGH);
-                builder.setColor(highlightColor);
-            } else {
-                builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
-                builder.setColor(Color.TRANSPARENT);
-            }
-
-
-            Notification n = builder.build();
-
-            if (!isBackground) {
-                n.flags |= Notification.FLAG_SHOW_LIGHTS;
-                n.defaults |= Notification.DEFAULT_LIGHTS;
-
-                if (is_bing) {
-                    n.defaults |= Notification.DEFAULT_SOUND;
-                }
-            }
-
-            return n;
+            return builder.build();
         } catch (Exception e) {
             Log.e(LOG_TAG, "## buildMessageNotification() : failed" + e.getMessage());
         }
-
         return null;
     }
 
@@ -841,28 +858,9 @@ public class NotificationUtils {
 
             builder.setSmallIcon(R.drawable.message_notification_transparent);
 
-            boolean is_bing = bingRule.isDefaultNotificationSound(bingRule.notificationSound());
+            manageNotificationSound(context, builder, false, bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
 
-            @ColorInt int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
-
-            if (is_bing) {
-                builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_HIGH);
-                builder.setColor(highlightColor);
-            } else {
-                builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
-                builder.setColor(Color.TRANSPARENT);
-            }
-
-            Notification n = builder.build();
-
-            n.flags |= Notification.FLAG_SHOW_LIGHTS;
-            n.defaults |= Notification.DEFAULT_LIGHTS;
-
-            if (is_bing) {
-                n.defaults |= Notification.DEFAULT_SOUND;
-            }
-
-            return n;
+            return builder.build();
         } catch (Exception e) {
             Log.e(LOG_TAG, "## buildMessagesListNotification() : failed" + e.getMessage());
         }
