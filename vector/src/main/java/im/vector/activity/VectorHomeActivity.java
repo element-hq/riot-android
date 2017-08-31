@@ -878,7 +878,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
                         .addToBackStack(mCurrentFragmentTag)
                         .commit();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## updateSelectedFragment() failed : " e.getMessage());
+                Log.e(LOG_TAG, "## updateSelectedFragment() failed : " + e.getMessage());
             }
         }
     }
