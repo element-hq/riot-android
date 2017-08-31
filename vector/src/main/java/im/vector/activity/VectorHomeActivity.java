@@ -872,10 +872,14 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         if (fragment != null) {
             resetFilter();
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment, mCurrentFragmentTag)
-                    .addToBackStack(mCurrentFragmentTag)
-                    .commit();
+            try {
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment, mCurrentFragmentTag)
+                        .addToBackStack(mCurrentFragmentTag)
+                        .commit();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## updateSelectedFragment() failed : " e.getMessage());
+            }
         }
     }
     /**
