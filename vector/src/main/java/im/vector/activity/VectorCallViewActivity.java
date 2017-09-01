@@ -690,7 +690,7 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
                 @Override
                 public void run() {
                     // call once
-                    if (!mCall.isIncoming() && TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState())) {
+                    if (mCall.isVideo() || (!mCall.isIncoming() && (TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState())))) {
                         mCall.createCallView();
                     }
                 }
