@@ -246,8 +246,7 @@ public class VectorApp extends Application {
             private void restartActivity(Activity activity) {
                 // avoid restarting activities when it is not required
                 // some of them has no text
-                if (!(activity instanceof VectorMediasPickerActivity) &&
-                        !(activity instanceof VectorCallViewActivity)) {
+                if (!(activity instanceof VectorMediasPickerActivity)) {
                     activity.startActivity(activity.getIntent());
                     activity.finish();
                 }
