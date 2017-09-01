@@ -492,6 +492,7 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             layout.removeView(mCallView);
+            layout.setVisibility(View.VISIBLE);
 
             // add the call view only is the call is a video one
             if (mCall.isVideo()) {
