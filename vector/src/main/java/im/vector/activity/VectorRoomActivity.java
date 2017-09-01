@@ -462,7 +462,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         @Override
-        public void onSentEvent(Event event) {
+        public void onEventSent(Event event, String prevEventId) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
