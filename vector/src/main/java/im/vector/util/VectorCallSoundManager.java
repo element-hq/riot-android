@@ -239,11 +239,16 @@ public class VectorCallSoundManager {
      * The audio file must have a ANDROID_LOOP metatada set to true to loop the sound.
      * @param resId The audio resource.
      * @param filename the audio filename
+     * @param defaultRingToneUri
      * @return a RingTone, null if the operation fails.
      */
-    private static Ringtone getRingTone(int resId, String filename) {
+    private static Ringtone getRingTone(int resId, String filename, Uri defaultRingToneUri) {
         Uri ringToneUri = getRingToneUri(resId, filename);
         Ringtone ringtone = null;
+
+        if (null == ringToneUri) {
+            ringToneUri = defaultRingToneUri;
+        }
 
         if (null != ringToneUri) {
             try {
@@ -387,7 +392,7 @@ public class VectorCallSoundManager {
         stopRinging();
 
         // use the ringTone to manage sound volume properly
-        mRingTone = getRingTone(R.raw.ring, RING_TONE_START_RINGING);
+        mRingTone = getRingTone(R.raw.ring, RING_TONE_START_RINGING, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 
         if (null != mRingTone) {
             setSpeakerphoneOn(false, true);
