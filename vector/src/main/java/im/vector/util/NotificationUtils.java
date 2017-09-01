@@ -29,6 +29,7 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.support.annotation.ColorInt;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -51,6 +52,7 @@ import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.JoinScreenActivity;
 import im.vector.activity.LockScreenActivity;
@@ -708,6 +710,14 @@ public class NotificationUtils {
 
                 builder.setSound(ringTone);
             }
+
+            // turn the screen on for 3 seconds
+            if (Matrix.getInstance(VectorApp.getInstance()).getSharedGCMRegistrationManager().isScreenTurnedOn()) {
+                PowerManager pm = (PowerManager)VectorApp.getInstance().getSystemService(Context.POWER_SERVICE);
+                PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "manageNotificationSound");
+                wl.acquire(3000);
+                wl.release();
+            }
         }
     }
 
@@ -818,7 +828,6 @@ public class NotificationUtils {
             }
 
             builder.setSmallIcon(R.drawable.message_notification_transparent);
-
             manageNotificationSound(context, builder, isBackground, bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
 
             return builder.build();
