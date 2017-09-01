@@ -17,6 +17,7 @@
 
 package im.vector.util;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -27,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -121,6 +123,7 @@ public class NotificationUtils {
      * @param callId   the call id.
      * @return the call notification.
      */
+    @SuppressLint("NewApi")
     public static Notification buildIncomingCallNotification(Context context, String roomName, String matrixId, String callId) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
@@ -128,6 +131,11 @@ public class NotificationUtils {
         builder.setContentTitle(roomName);
         builder.setContentText(context.getString(R.string.incoming_call));
         builder.setSmallIcon(R.drawable.incoming_call_notification_transparent);
+
+        // Display the incoming call notification on the lock screen
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_MAX);
+        }
 
         // clear the activity stack to home activity
         Intent intent = new Intent(context, VectorHomeActivity.class);
@@ -148,11 +156,9 @@ public class NotificationUtils {
         PendingIntent pendingIntent = stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
-        Notification n = builder.build();
-        n.flags |= Notification.FLAG_SHOW_LIGHTS;
-        n.defaults |= Notification.DEFAULT_LIGHTS;
+        builder.setLights(Color.GREEN, 500, 500);
 
-        return n;
+        return builder.build();
     }
 
     /**
@@ -165,6 +171,7 @@ public class NotificationUtils {
      * @param callId   the call id.
      * @return the call notification.
      */
+    @SuppressLint("NewApi")
     public static Notification buildPendingCallNotification(Context context, String roomName, String roomId, String matrixId, String callId) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
@@ -172,6 +179,11 @@ public class NotificationUtils {
         builder.setContentTitle(roomName);
         builder.setContentText(context.getString(R.string.call_in_progress));
         builder.setSmallIcon(R.drawable.incoming_call_notification_transparent);
+
+        // Display the incoming call notification on the lock screen
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_MAX);
+        }
 
         // Build the pending intent for when the notification is clicked
         Intent roomIntent = new Intent(context, VectorRoomActivity.class);
@@ -184,7 +196,6 @@ public class NotificationUtils {
                 .addParentStack(VectorRoomActivity.class)
                 .addNextIntent(roomIntent);
 
-
         // android 4.3 issue
         // use a generator for the private requestCode.
         // When using 0, the intent is not created/launched when the user taps on the notification.
@@ -192,11 +203,7 @@ public class NotificationUtils {
         PendingIntent pendingIntent = stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
-        Notification n = builder.build();
-        n.flags |= Notification.FLAG_SHOW_LIGHTS;
-        n.defaults |= Notification.DEFAULT_LIGHTS;
-
-        return n;
+        return builder.build();
     }
 
     /**

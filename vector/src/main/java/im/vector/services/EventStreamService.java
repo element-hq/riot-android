@@ -1543,10 +1543,6 @@ public class EventStreamService extends Service {
                     session.getMyUserId(),
                     callId);
 
-            if ((null != bingRule) && bingRule.isDefaultNotificationSound(bingRule.notificationSound())) {
-                notification.defaults |= Notification.DEFAULT_SOUND;
-            }
-
             startForeground(NOTIF_ID_FOREGROUND_SERVICE, notification);
             mForegroundServiceIdentifier = FOREGROUND_ID_INCOMING_CALL;
 
