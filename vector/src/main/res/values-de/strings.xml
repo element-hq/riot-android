@@ -329,14 +329,14 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
     <string name="room_participants_header_admin_tools">ADMIN-WERKZEUGE</string>
     <string name="room_participants_header_call">ANRUFE</string>
-    <string name="room_participants_header_direct_chats">DIREKTE CHATS</string>
+    <string name="room_participants_header_direct_chats">DIREKT-CHATS</string>
     <string name="room_participants_header_devices">GERÄTE</string>
 
     <string name="room_participants_action_invite">Einladen</string>
     <string name="room_participants_action_leave">Diesen Raum verlassen</string>
     <string name="room_participants_action_remove">Aus diesem Raum entfernen</string>
-    <string name="room_participants_action_ban">Dauerhaft aus dem Raum ausschließen</string>
-    <string name="room_participants_action_unban">Dauerhaftes Ausschließen aus dem Raum aufheben</string>
+    <string name="room_participants_action_ban">Verbannen</string>
+    <string name="room_participants_action_unban">Verbannung aufheben</string>
     <string name="room_participants_action_set_default_power_level">Zum normalen Nutzer machen</string>
     <string name="room_participants_action_set_moderator">Zum Moderator machen</string>
     <string name="room_participants_action_set_admin">Zum Admin machen</string>
@@ -601,7 +601,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Alle, die den Raum-Link kennen (auch Gäste)</string>
 
     <!-- Room settings: banned users -->
-    <string name="room_settings_banned_users_title">Gebannte Nutzer</string>
+    <string name="room_settings_banned_users_title">Verbannte Benutzer</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Erweitert</string>
