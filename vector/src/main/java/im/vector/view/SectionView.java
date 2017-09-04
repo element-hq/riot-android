@@ -19,7 +19,6 @@ package im.vector.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import org.matrix.androidsdk.util.Log;
 import android.view.View;
@@ -29,6 +28,7 @@ import android.widget.TextView;
 
 import im.vector.R;
 import im.vector.adapters.AdapterSection;
+import im.vector.util.ThemeUtils;
 
 public class SectionView extends RelativeLayout {
 
@@ -77,7 +77,7 @@ public class SectionView extends RelativeLayout {
     private void setup(final AdapterSection section) {
         mSection = section;
 
-        setBackgroundColor(ContextCompat.getColor(getContext(), R.color.list_header_background));
+        setBackgroundColor(ThemeUtils.getColor(getContext(), R.attr.list_header_background_color));
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         // inflate the layout
@@ -136,13 +136,13 @@ public class SectionView extends RelativeLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.d(LOG_TAG, "onMeasure parent height" + MeasureSpec.getSize(heightMeasureSpec));
+        //Log.d(LOG_TAG, "onMeasure parent height" + MeasureSpec.getSize(heightMeasureSpec));
     }
 
     @Override
     protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld) {
         super.onSizeChanged(xNew, yNew, xOld, yOld);
-        Log.d(LOG_TAG, "onSizeChanged yOld " + yOld + " yNew" + yNew);
+        //Log.d(LOG_TAG, "onSizeChanged yOld " + yOld + " yNew" + yNew);
     }
 
     public boolean isStickyHeader() {

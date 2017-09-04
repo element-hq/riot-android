@@ -127,10 +127,10 @@ public class BugReporter {
      * @param withDevicesLogs true to include the device log
      * @param withCrashLogs true to include the crash logs
      * @param withScreenshot true to include the screenshot
-     * @param bugDescription the bug description
+     * @param theBugDescription the bug description
      * @param listener the listener
      */
-    private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final boolean withScreenshot, final String bugDescription, final IMXBugReportListener listener) {
+    private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final boolean withScreenshot, final String theBugDescription, final IMXBugReportListener listener) {
         new AsyncTask<Void, Integer, String>() {
 
             // enumerate files to delete
@@ -138,7 +138,14 @@ public class BugReporter {
 
             @Override
             protected String doInBackground(Void... voids) {
+                String bugDescription = theBugDescription;
                 String serverError = null;
+                String crashCallStack = getCrashDescription(context);
+
+                if (null != crashCallStack) {
+                    bugDescription += "\n\n\n\n--------------------------------- crash call stack ---------------------------------\n";
+                    bugDescription += crashCallStack;
+                }
 
                 List<File> gzippedFiles = new ArrayList<>();
 
@@ -211,8 +218,8 @@ public class BugReporter {
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())
-                            .addFormDataPart("app_language", VectorApp.getApplicationLocale(context).toString())
-                            .addFormDataPart("default_app_language", VectorApp.getDeviceLocale(context).toString());
+                            .addFormDataPart("app_language", VectorApp.getApplicationLocale().toString())
+                            .addFormDataPart("default_app_language", VectorApp.getDeviceLocale().toString());
 
                     // add the gzipped files
                     for (File file : gzippedFiles) {
@@ -616,6 +623,33 @@ public class BugReporter {
                 Log.e(LOG_TAG, "## saveCrashReport() : fail to write " + e.toString());
             }
         }
+    }
+
+    /**
+     * Read the crash description file and return its content.
+     * @param context teh context
+     * @return the crash description
+     */
+    public static String getCrashDescription(Context context) {
+        String crashDescription = null;
+        File crashFile = getCrashFile(context);
+
+        if (crashFile.exists()) {
+            try {
+                FileInputStream fis = new FileInputStream(crashFile);
+                InputStreamReader isr = new InputStreamReader(fis);
+
+                char[] buffer = new char[fis.available()];
+                int len = isr.read(buffer, 0, fis.available());
+                crashDescription = String.valueOf(buffer, 0, len);
+                isr.close();
+                fis.close();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getCrashDescription() : fail to read " + e.toString());
+            }
+        }
+
+        return crashDescription;
     }
 
     //==============================================================================================================

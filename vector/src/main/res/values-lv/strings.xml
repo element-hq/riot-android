@@ -77,7 +77,6 @@
     <string name="local_address_book_header">Vietējā adrešu grāmata</string>
     <string name="matrix_only_filter">Vienīgi Matrix kontakti</string>
     <string name="no_conversation_placeholder">Nav sarunu</string>
-    <string name="no_local_contact_placeholder">Nav vietējo kontaktu</string>
     <string name="no_contact_access_placeholder">Tu neesi atļāvis/usi Riot piekļūt taviem vietējiem kontaktiem</string>
     <string name="no_result_placeholder">Nav rezultātu</string>
 

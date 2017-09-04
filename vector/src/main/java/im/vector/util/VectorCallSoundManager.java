@@ -144,23 +144,19 @@ public class VectorCallSoundManager {
     }
 
     /**
-     * Provide a ringtone from a resource and a filename.
-     * The audio file must have a ANDROID_LOOP metatada set to true to loop the sound.
+     * Provide a ringtone uri from a resource and a filename.
      * @param resId The audio resource.
      * @param filename the audio filename
-     * @return a RingTone, null if the operation fails.
+     * @return the ringtone uri
      */
-    static private Ringtone getRingTone(int resId, String filename) {
+    public static Uri getRingToneUri(int resId, String filename) {
         Context context = VectorApp.getInstance();
         Uri ringToneUri = mRingtoneUrlByFileName.get(filename);
-        Ringtone ringtone = null;
-
         // test if the ring tone has been cached
-        if (null != ringToneUri) {
-            ringtone = RingtoneManager.getRingtone(context, ringToneUri);
 
+        if (null != ringToneUri) {
             // provide it
-            return ringtone;
+            return ringToneUri;
         }
 
         try {
@@ -208,7 +204,7 @@ public class VectorCallSoundManager {
 
                         fos.close();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## getRingTone():  Exception1 Msg=" + e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "## getRingToneUri():  Exception1 Msg=" + e.getMessage());
                     }
                 }
 
@@ -229,10 +225,37 @@ public class VectorCallSoundManager {
 
             if (null != ringToneUri) {
                 mRingtoneUrlByFileName.put(filename, ringToneUri);
-                ringtone = RingtoneManager.getRingtone(context, ringToneUri);
+                return ringToneUri;
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getRingTone():  Exception2 Msg=" + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "## getRingToneUri():  Exception2 Msg=" + e.getLocalizedMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Provide a ringtone from a resource and a filename.
+     * The audio file must have a ANDROID_LOOP metatada set to true to loop the sound.
+     * @param resId The audio resource.
+     * @param filename the audio filename
+     * @param defaultRingToneUri
+     * @return a RingTone, null if the operation fails.
+     */
+    private static Ringtone getRingTone(int resId, String filename, Uri defaultRingToneUri) {
+        Uri ringToneUri = getRingToneUri(resId, filename);
+        Ringtone ringtone = null;
+
+        if (null == ringToneUri) {
+            ringToneUri = defaultRingToneUri;
+        }
+
+        if (null != ringToneUri) {
+            try {
+                ringtone = RingtoneManager.getRingtone(VectorApp.getInstance(), ringToneUri);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getRingTone() failed " + e.getMessage());
+            }
         }
 
         return ringtone;
@@ -369,7 +392,7 @@ public class VectorCallSoundManager {
         stopRinging();
 
         // use the ringTone to manage sound volume properly
-        mRingTone = getRingTone(R.raw.ring, RING_TONE_START_RINGING);
+        mRingTone = getRingTone(R.raw.ring, RING_TONE_START_RINGING, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 
         if (null != mRingTone) {
             setSpeakerphoneOn(false, true);

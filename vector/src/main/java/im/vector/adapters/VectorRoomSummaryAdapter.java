@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,7 @@ import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**
@@ -660,14 +662,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             return convertView;
         }
 
-        int roomNameBlack = mContext.getResources().getColor(R.color.vector_text_black_color);
-        int fushiaColor = mContext.getResources().getColor(R.color.vector_fuchsia_color);
-        int vectorDefaultTimeStampColor = mContext.getResources().getColor(R.color.vector_0_54_black_color);
-        int vectorGreenColor = mContext.getResources().getColor(R.color.vector_green_color);
-        int vectorSilverColor = mContext.getResources().getColor(R.color.vector_silver_color);
+        int roomNameBlack = ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color);
+        int fushiaColor = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
+        int vectorDefaultTimeStampColor = ThemeUtils.getColor(mContext, R.attr.default_text_light_color);
+        int vectorGreenColor = ContextCompat.getColor(mContext, R.color.vector_green_color);
+        int vectorSilverColor = ContextCompat.getColor(mContext, R.color.vector_silver_color);
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
+        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMsgTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
         View bingUnreadMsgView = convertView.findViewById(R.id.bing_indicator_unread_message);
@@ -735,7 +737,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 roomMsgTxtView.setText("");
                 avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarColor(null), "@", true));
             }
-
             return convertView;
         }
 
@@ -760,7 +761,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         CharSequence lastMsgToDisplay = getChildMessageToDisplay(childRoomSummary);
 
         // display the room avatar
-        avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
         final String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, childRoom);
         VectorUtils.loadRoomAvatar(mContext, mMxSession, avatarImageView, childRoom);
 
@@ -814,7 +814,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             directChatIcon.setVisibility(View.GONE);
             encryptedIcon.setVisibility(View.GONE);
         }
-        
+
         bingUnreadMsgView.setVisibility(isInvited ? View.INVISIBLE : View.VISIBLE);
         invitationView.setVisibility(isInvited ? View.VISIBLE : View.GONE);
 
@@ -914,7 +914,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (aChildRoomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new EventDisplay(mContext, aChildRoomSummary.getLatestReceivedEvent(), aChildRoomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplayRetValue = eventDisplay.getTextualDisplay(mContext.getResources().getColor(R.color.vector_text_gray_color));
+                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color));
             }
 
             // check if this is an invite

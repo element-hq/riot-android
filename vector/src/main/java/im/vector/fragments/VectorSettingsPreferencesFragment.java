@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -38,6 +39,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -50,6 +52,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,7 +79,6 @@ import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.ContentUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.text.DateFormat;
@@ -85,7 +87,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -108,6 +109,7 @@ import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -307,6 +309,25 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
+        // Themes
+        ListPreference themePreference = (ListPreference) findPreference(ThemeUtils.APPLICATION_THEME_KEY);
+
+        if (null != themePreference) {
+            themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (newValue instanceof String) {
+                        VectorApp.updateApplicationTheme((String)newValue);
+                        getActivity().startActivity(getActivity().getIntent());
+                        getActivity().finish();
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
+        }
+
         // privacy policy
         EditTextPreference privacyPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY);
 
@@ -409,7 +430,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             });
                         }
                     };
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+                    try {
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.getMessage());
+                        task.cancel(true);
+                        hideLoadingView();
+                    }
                     return false;
                 }
             });
@@ -853,7 +881,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         addEmailPreference.setTitle(R.string.settings_add_email_address);
         addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
         addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-        addEmailPreference.setIcon(R.drawable.ic_add_black);
+        addEmailPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.settings_icon_tint_color));
         addEmailPreference.setOrder(100);
         addEmailPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
@@ -879,7 +907,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // display the "add phone number" entry
         Preference addPhoneNumberPreference = new Preference(getActivity());
         addPhoneNumberPreference.setKey(ADD_PHONE_NUMBER_PREFERENCE_KEY);
-        addPhoneNumberPreference.setIcon(R.drawable.ic_add_black);
+        addPhoneNumberPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.settings_icon_tint_color));
         addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number);
         addPhoneNumberPreference.setOrder(200);
 
@@ -1239,11 +1267,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
                                 @Override
-                                public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
+                                public void onUploadError(final String uploadId, final int serverResponseCode, final String serverErrorMessage) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            hideLoadingView(false);
+                                            onCommonDone(serverResponseCode + " : " + serverErrorMessage);
                                         }
                                     });
                                 }
@@ -1928,7 +1956,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     private void setUserInterfacePreferences() {
         VectorCustomActionEditTextPreference selectedLangaguePreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY);
-        selectedLangaguePreference.setSummary(VectorApp.localeToString(VectorApp.getApplicationLocale(getActivity())));
+        selectedLangaguePreference.setSummary(VectorApp.localeToString(VectorApp.getApplicationLocale()));
 
         selectedLangaguePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -1939,7 +1967,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         });
 
         VectorCustomActionEditTextPreference textSizePreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY);
-        textSizePreference.setSummary(VectorApp.getFontScaleDescription(getActivity()));
+        textSizePreference.setSummary(VectorApp.getFontScaleDescription());
 
         textSizePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -1955,21 +1983,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         LayoutInflater inflater = activity.getLayoutInflater();
 
         View layout = inflater.inflate(R.layout.text_size_selection, null);
-
-        String scaleText = VectorApp.getFontScale(activity);
-
-        CheckedTextView smallTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_small_text_view);
-        smallTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_SMALL, scaleText));
-
-        CheckedTextView normalTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_normal_text_view);
-        normalTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_NORMAL, scaleText));
-
-        CheckedTextView largeTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_large_text_view);
-        largeTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_LARGE, scaleText));
-
-        CheckedTextView largestTextView = (CheckedTextView)layout.findViewById(R.id.text_selection_largest_text_view);
-        largestTextView.setChecked(TextUtils.equals(VectorApp.FONT_SCALE_LARGEST, scaleText));
-
         builder.setTitle(R.string.font_size);
         builder.setView(layout);
 
@@ -1986,45 +1999,30 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        smallTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_SMALL);
-                activity.startActivity(activity.getIntent());
-                activity.finish();
-            }
-        });
+        LinearLayout linearLayout = (LinearLayout)layout.findViewById(R.id.text_selection_group_view);
 
-        normalTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                VectorApp.updateApplicationLocale(activity, VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_NORMAL);
-                activity.startActivity(activity.getIntent());
-                activity.finish();
-            }
-        });
+        int childCount = linearLayout.getChildCount();
 
-        largeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                VectorApp.updateApplicationLocale(getActivity(), VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_LARGE);
-                activity.startActivity(activity.getIntent());
-                activity.finish();
-            }
-        });
+        String scaleText = VectorApp.getFontScale();
 
-        largestTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                VectorApp.updateApplicationLocale(getActivity(), VectorApp.getApplicationLocale(getActivity()), VectorApp.FONT_SCALE_LARGEST);
-                activity.startActivity(activity.getIntent());
-                activity.finish();
+        for (int i = 0; i < childCount; i++) {
+            View v = linearLayout.getChildAt(i);
+
+            if (v instanceof CheckedTextView) {
+                final CheckedTextView checkedTextView = (CheckedTextView)v;
+                checkedTextView.setChecked(TextUtils.equals(checkedTextView.getText(), scaleText));
+
+                checkedTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        VectorApp.updateFontScale(checkedTextView.getText().toString());
+                        activity.startActivity(activity.getIntent());
+                        activity.finish();
+                    }
+                });
             }
-        });
+        }
     }
 
     //==============================================================================================================
@@ -2714,29 +2712,25 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 displayLoadingView();
 
                 CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new ApiCallback<String>() {
-                    private void onDone(String message) {
-                        hideLoadingView();
-                        Toast.makeText(VectorApp.getInstance().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                    }
-
                     @Override
                     public void onSuccess(String filename) {
-                        onDone(filename);
+                        Toast.makeText(VectorApp.getInstance().getApplicationContext(), filename, Toast.LENGTH_SHORT).show();
+                        hideLoadingView();
                     }
 
                     @Override
                     public void onNetworkError(Exception e) {
-                        onDone(e.getLocalizedMessage());
+                        hideLoadingView();
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
-                        onDone(e.getLocalizedMessage());
+                        hideLoadingView();
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        onDone(e.getLocalizedMessage());
+                        hideLoadingView();
                     }
                 });
 

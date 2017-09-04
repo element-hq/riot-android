@@ -21,8 +21,9 @@
             android:background="@android:color/darker_gray" />
 
         <!-- Avatar -->
-        <im.vector.view.VectorCircularImageView
-            android:id="@+id/room_avatar_image_view"
+        <include
+            android:id="@+id/room_avatar_layout"
+            layout="@layout/adapter_item_circular_avatar_room_view"
             android:layout_width="@dimen/chat_avatar_size"
             android:layout_height="@dimen/chat_avatar_size"
             android:layout_centerVertical="true"
@@ -32,8 +33,8 @@
             android:id="@+id/room_avatar_direct_chat_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignLeft="@+id/room_avatar_image_view"
-            android:layout_alignTop="@+id/room_avatar_image_view"
+            android:layout_alignLeft="@+id/room_avatar_layout"
+            android:layout_alignTop="@+id/room_avatar_layout"
             android:layout_marginLeft="30dp"
             android:src="@drawable/icon_person"
             android:visibility="gone" />
@@ -43,10 +44,11 @@
             android:id="@+id/room_avatar_encrypted_icon"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_alignBottom="@+id/room_avatar_image_view"
-            android:layout_alignLeft="@+id/room_avatar_image_view"
+            android:layout_alignBottom="@+id/room_avatar_layout"
+            android:layout_alignLeft="@+id/room_avatar_layout"
             android:layout_marginLeft="35dp"
             android:src="@drawable/e2e_verified"
+            android:tint="?attr/default_icon_tint_color"
             android:visibility="gone" />
 
         <RelativeLayout
@@ -71,7 +73,7 @@
             android:layout_marginLeft="17dp"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@id/roomSummaryAdapter_show_more_layout"
-            android:layout_toRightOf="@id/room_avatar_image_view"
+            android:layout_toRightOf="@id/room_avatar_layout"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -91,7 +93,7 @@
                     android:fontFamily="sans-serif-regular"
                     android:singleLine="true"
                     android:text="Room Name"
-                    android:textColor="@color/vector_text_black_color"
+                    android:textColor="?attr/riot_primary_text_color"
                     android:textSize="16sp" />
 
                 <!-- unread count badge -->
@@ -123,7 +125,7 @@
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_action_image"
                     android:fontFamily="sans-serif-light"
                     android:text="Jan 1 00:00"
-                    android:textColor="@color/vector_0_54_black_color"
+                    android:textColor="?attr/default_text_light_color"
                     android:textSize="12sp" />
 
                 <ImageView
@@ -194,7 +196,7 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:text="last room message"
-                    android:textColor="@color/vector_0_54_black_color"
+                    android:textColor="?attr/default_text_light_color"
                     android:textSize="14sp" />
 
             </RelativeLayout>
@@ -270,12 +272,12 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="73dp"
-        android:background="@color/vector_line_separator_gray_color" />
+        android:background="?attr/list_divider_color" />
 
     <View
         android:id="@+id/recents_groups_separator_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/vector_line_separator_gray_color" />
+        android:background="?attr/list_divider_color" />
 
 </LinearLayout>

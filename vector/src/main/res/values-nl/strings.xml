@@ -85,7 +85,6 @@
     <string name="local_address_book_header">Lokale contactenlijst</string>
     <string name="matrix_only_filter">Alleen Matrix contacten</string>
     <string name="no_conversation_placeholder">Geen gesprekken</string>
-    <string name="no_local_contact_placeholder">Geen lokale contacten</string>
     <string name="no_contact_access_placeholder">Je hebt Riot geen toegang tot je lokale contacten gegeven</string>
     <string name="no_result_placeholder">Geen resultaten</string>
 
@@ -209,7 +208,6 @@
     <string name="membership_changes">%d membership changes</string>
 
     <!-- accounts list Screen -->
-    <string name="choose_account">Account kiezen</string>
 
     <!-- image size selection -->
     <string name="compression_options">Versturen als </string>
@@ -300,7 +298,6 @@
     <string name="room_creation_title">Nieuwe Chat</string>
     <string name="room_creation_add_member">Deelnemer toevoegen</string>
     <string name="room_header_active_members">%1$d/%2$d actieve deelnemers</string>
-    <string name="room_header_invite_members">Deelnemers uitnodigen</string>
     <string name="room_title_members">%1$d deelnemers</string>
     <string name="room_title_one_member">1 deelnemer</string>
     <string name="room_e2e_alert_title">Waarschuwing!</string>
@@ -350,7 +347,6 @@
     <string name="people_search_invite_by_id"><u>Bij ID uitnodigen</u></string>
     <string name="people_search_local_contacts">LOKALE CONTACTEN (%d)</string>
     <string name="people_search_filter_text">Alleen Matrix gebruikers</string>
-    <string name="people_search_too_many_contacts">Te veel contacten, gebruik het zoekveld.</string>
 
     <string name="people_search_invite_by_id_dialog_title">Gebruiker bij ID uitnodigen</string>
     <string name="people_search_invite_by_id_dialog_description">Vul één of meer e-mailaddressen of Matrix ID\'s in</string>

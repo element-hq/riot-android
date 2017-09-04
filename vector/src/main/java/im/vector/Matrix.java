@@ -62,7 +62,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
@@ -303,7 +302,7 @@ public class Matrix {
             PackageInfo pInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), 0);
             versionName = pInfo.versionName;
 
-            flavor = mAppContext.getResources().getString(R.string.flavor_description);
+            flavor = mAppContext.getResources().getString(R.string.short_flavor_description);
 
             if (!TextUtils.isEmpty(flavor)) {
                 flavor += "-";

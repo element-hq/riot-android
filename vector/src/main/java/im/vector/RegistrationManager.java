@@ -887,12 +887,16 @@ public class RegistrationManager {
                             isDuplicated |= TextUtils.equals(credentials.userId, cred.userId) && TextUtils.equals(credentials.homeServer, cred.homeServer);
                         }
 
-                        if (!isDuplicated) {
-                            mHsConfig.setCredentials(credentials);
-                            MXSession session = Matrix.getInstance(context).createSession(mHsConfig);
-                            Matrix.getInstance(context).addSession(session);
+                        if (null == mHsConfig) {
+                            listener.onRegistrationFailed("null mHsConfig");
+                        } else {
+                            if (!isDuplicated) {
+                                mHsConfig.setCredentials(credentials);
+                                MXSession session = Matrix.getInstance(context).createSession(mHsConfig);
+                                Matrix.getInstance(context).addSession(session);
+                            }
+                            listener.onRegistrationSuccess();
                         }
-                        listener.onRegistrationSuccess();
                     }
                 }
 

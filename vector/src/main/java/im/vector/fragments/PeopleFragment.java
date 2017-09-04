@@ -21,8 +21,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -121,7 +123,8 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             }
         };
 
-        setFragmentColors(R.color.tab_people, R.color.tab_people_secondary);
+        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_people);
+        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_people_secondary);
 
         initViews();
 
@@ -323,8 +326,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * Get the known contacts list, sort it by presence and give it to adapter
      */
     private void initKnownContacts() {
-        new AsyncTask<Void, Void, Void>() {
-
+        final AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 // do not sort anymore the full known participants list
@@ -342,7 +344,21 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             protected void onPostExecute(Void args) {
                 mAdapter.setKnownContacts(mKnownContacts);
             }
-        }.execute();
+        };
+
+        try {
+            asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (final Exception e) {
+            Log.e(LOG_TAG, "## initKnownContacts() failed " + e.getMessage());
+            asyncTask.cancel(true);
+
+            (new android.os.Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    initKnownContacts();
+                }
+            }, 1000);
+        }
     }
 
     /**

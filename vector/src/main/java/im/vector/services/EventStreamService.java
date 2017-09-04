@@ -33,7 +33,10 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Toast;
 
@@ -59,9 +62,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -153,6 +158,10 @@ public class EventStreamService extends Service {
     private Map<String, List<NotificationUtils.NotifiedEvent>> mNotifiedEventsByRoomId = null;
     private static HandlerThread mNotificationHandlerThread = null;
     private static android.os.Handler mNotificationsHandler = null;
+
+    // get the text to display when the background sync is disabled
+    private final List<CharSequence> mBackgroundNotificationStrings = new ArrayList<>();
+    private final Set<String> mBackgroundNotificationEventIds = new HashSet<>();
 
     /**
      * call in progress (foreground notification)
@@ -432,7 +441,7 @@ public class EventStreamService extends Service {
                 }
 
                 GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
-                if (!gcmManager.isBackgroundSyncAllowed()) {
+                if (!gcmManager.canStartAppInBackground()) {
                     Log.e(LOG_TAG, "onStartCommand : no auto restart because the user disabled the background sync");
                     return START_NOT_STICKY;
                 }
@@ -1123,10 +1132,111 @@ public class EventStreamService extends Service {
     }
 
     /**
+     * Notify that a notification for even has been received.
+     *
+     * @param event the notified event
+     * @param roomName the room name
+     * @param senderDisplayName the sender displayname
+     * @param unreadMessagesCount the unread messages count
+     */
+    public void onNotifiedEventWithBackgroundSyncDisabled(Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
+        if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
+            mBackgroundNotificationEventIds.add(event.eventId);
+
+            // TODO the session id should be provided by the server
+            MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
+
+            if (null != session) {
+                RoomState roomState = null;
+
+                try {
+                    roomState = session.getDataHandler().getRoom(event.roomId).getLiveState();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "Fail to retrieve the roomState of " + event.roomId);
+                }
+
+                if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTED) && session.isCryptoEnabled()) {
+                    session.getCrypto().decryptEvent(event, null);
+                }
+
+                // test if the message is displayable
+                EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, roomState);
+                eventDisplay.setPrependMessagesWithAuthor(false);
+                String text = eventDisplay.getTextualDisplay().toString();
+
+                // sanity check
+                if (!TextUtils.isEmpty(text) && (null != roomState)) {
+
+                    if (TextUtils.isEmpty(roomName)) {
+                        roomName = roomState.getDisplayName(session.getMyUserId());
+                    }
+
+                    if (TextUtils.isEmpty(senderDisplayName)) {
+                        senderDisplayName = roomState.getMemberName(event.sender);
+                    }
+
+                    String header = roomName + ": " + senderDisplayName + " ";
+
+                    SpannableString notifiedLine = new SpannableString(header + text);
+                    notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    Log.d(LOG_TAG, "## onMessageReceivedInternal() : trigger a notification " + notifiedLine);
+
+                    mBackgroundNotificationStrings.add(0, notifiedLine);
+                    BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+                    BingRule rule = bingRulesManager.isReady() ? bingRulesManager.fulfilledBingRule(event) : new BingRule(false);
+
+                    displayMessagesNotification(mBackgroundNotificationStrings, rule);
+                }
+            }
+        } else if (0 == unreadMessagesCount) {
+            mBackgroundNotificationStrings.clear();
+            displayMessagesNotification(mBackgroundNotificationStrings, null);
+        }
+    }
+
+    /**
+     * Display a list of events as string.
+     *
+     * @param messages the messages list
+     * @param rule the bing rule to use
+     */
+    public void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
+        final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
+
+        if (!mGcmRegistrationManager.areDeviceNotificationsAllowed() || (null == messages) || (0 == messages.size())) {
+            new Handler(getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    nm.cancel(NOTIF_ID_MESSAGE);
+                }
+            });
+        } else {
+            new Handler(getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Notification notif = NotificationUtils.buildMessagesListNotification(getApplicationContext(), messages, rule);
+
+                    if (null != notif) {
+                        nm.notify(NOTIF_ID_MESSAGE, notif);
+
+                    } else {
+                        nm.cancel(NOTIF_ID_MESSAGE);
+                    }
+                }
+            });
+        }
+    }
+
+    /**
      * Refresh the messages notification.
      * Must always be called in getNotificationsHandler() thread.
      */
     public void refreshMessagesNotification() {
+        // disabled background sync management
+        mBackgroundNotificationStrings.clear();
+        mBackgroundNotificationEventIds.clear();
+
         final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
         NotificationUtils.NotifiedEvent eventToNotify = getEventToNotify();
@@ -1433,21 +1543,18 @@ public class EventStreamService extends Service {
                     session.getMyUserId(),
                     callId);
 
-            if ((null != bingRule) && bingRule.isDefaultNotificationSound(bingRule.notificationSound())) {
-                notification.defaults |= Notification.DEFAULT_SOUND;
-            }
-
             startForeground(NOTIF_ID_FOREGROUND_SERVICE, notification);
             mForegroundServiceIdentifier = FOREGROUND_ID_INCOMING_CALL;
 
             mIncomingCallId = callId;
 
             // turn the screen on for 3 seconds
-            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "MXEventListener");
-            wl.acquire(3000);
-            wl.release();
-
+            if (Matrix.getInstance(VectorApp.getInstance()).getSharedGCMRegistrationManager().isScreenTurnedOn()) {
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "MXEventListener");
+                wl.acquire(3000);
+                wl.release();
+            }
         } else {
             Log.d(LOG_TAG, "displayIncomingCallNotification : do not display the incoming call notification because there is a pending call");
         }

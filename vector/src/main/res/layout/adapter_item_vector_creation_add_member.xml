@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="74dp"
-    android:background="@android:color/white">
+    android:background="?attr/riot_primary_background_color">
 
     <ImageView
         android:id="@+id/filtered_list_avatar"
@@ -25,7 +25,7 @@
         android:layout_toRightOf="@id/filtered_list_avatar"
         android:singleLine="true"
         android:text="@string/room_creation_add_member"
-        android:textColor="@color/vector_21_black"
+        android:textColor="?attr/default_text_dark_color"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -34,6 +34,6 @@
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:background="@color/vector_dc_gray" />
+        android:background="?attr/list_divider_color" />
 
 </RelativeLayout>

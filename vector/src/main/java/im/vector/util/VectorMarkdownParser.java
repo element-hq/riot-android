@@ -19,9 +19,7 @@ package im.vector.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
@@ -36,6 +34,9 @@ import android.webkit.WebView;
  */
 public class VectorMarkdownParser extends WebView {
     private static final String LOG_TAG = "VMarkdownParser";
+
+    // tell if the parser is properly initialised
+    private boolean mIsInitialised = false;
 
     public interface IVectorMarkdownParserListener {
         /**
@@ -67,17 +68,22 @@ public class VectorMarkdownParser extends WebView {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initialize() {
-        loadUrl("file:///android_asset/html/markdown.html");
+        try {
+            loadUrl("file:///android_asset/html/markdown.html");
 
-        // allow java script
-        getSettings().setJavaScriptEnabled(true);
+            // allow java script
+            getSettings().setJavaScriptEnabled(true);
 
-        // java <-> web interface
-        addJavascriptInterface(mMarkDownWebAppInterface, "Android");
+            // java <-> web interface
+            addJavascriptInterface(mMarkDownWebAppInterface, "Android");
 
-        getSettings().setAllowUniversalAccessFromFileURLs(true);
+            getSettings().setAllowUniversalAccessFromFileURLs(true);
+
+            mIsInitialised = true;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## initialize() failed " + e.getMessage());
+        }
     }
-
 
     /**
      * Parse the MarkDown text.
@@ -98,7 +104,7 @@ public class VectorMarkdownParser extends WebView {
         }
 
         // empty text or disabled
-        if (TextUtils.isEmpty(text) || !PreferencesManager.isMarkdownEnabled(getContext())) {
+        if (!mIsInitialised || TextUtils.isEmpty(text) || !PreferencesManager.isMarkdownEnabled(getContext())) {
             // nothing to do
             listener.onMarkdownParsed(markdownText, text);
             return;

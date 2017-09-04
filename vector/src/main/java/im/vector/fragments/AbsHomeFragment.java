@@ -19,10 +19,8 @@ package im.vector.fragments;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -330,17 +328,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
 
             CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
         }
-    }
-
-    /**
-     * Define colors of the fragment
-     *
-     * @param primaryColorId   color for header, floating button
-     * @param secondaryColorId color for status bar
-     */
-    public void setFragmentColors(@ColorRes final int primaryColorId, @ColorRes final int secondaryColorId) {
-        mPrimaryColor = ContextCompat.getColor(mActivity, primaryColorId);
-        mSecondaryColor = ContextCompat.getColor(mActivity, secondaryColorId);
     }
 
     /*

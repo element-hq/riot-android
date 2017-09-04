@@ -73,6 +73,7 @@ import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomInviteMembersActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomDetailsMembersAdapter;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorRoomDetailsMembersFragment extends Fragment {
@@ -477,6 +478,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getActivity().getMenuInflater().inflate(R.menu.vector_room_details_add_people, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(getContext(), R.attr.icon_tint_on_dark_action_bar_color));
 
         mRemoveMembersMenuItem = menu.findItem(R.id.ic_action_room_details_delete);
         mSwitchDeletionMenuItem = menu.findItem(R.id.ic_action_room_details_edition_mode);
@@ -514,7 +516,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
             if (null != (powerLevels = mRoom.getLiveState().getPowerLevels())) {
                 String userId = mSession.getMyUserId();
-                isAdmin = (null != userId) ? (powerLevels.getUserPowerLevel(userId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) : false;
+                isAdmin = (null != userId) && (powerLevels.getUserPowerLevel(userId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN);
             }
         }
         return isAdmin;
@@ -534,11 +536,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         if (null != mSwitchDeletionMenuItem) {
             if (!isUserAdmin()) {
                 isEnabled = false;
-            } else if (1 == mAdapter.getItemsCount()) {
-                isEnabled = false;
-            } else {
-                isEnabled = true;
-            }
+            } else isEnabled = 1 != mAdapter.getItemsCount();
 
             mSwitchDeletionMenuItem.setVisible(isEnabled);
             mSwitchDeletionMenuItem.setEnabled(isEnabled);

@@ -23,7 +23,6 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 import im.vector.R;
 import im.vector.ga.GAHelper;
-import im.vector.gcm.GcmRegistrationManager;
 
 public class PreferencesManager {
 
@@ -82,6 +81,7 @@ public class PreferencesManager {
 
     public static final String SETTINGS_HIDE_READ_RECEIPTS_KEY = "SETTINGS_HIDE_READ_RECEIPTS_KEY";
     public static final String SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY";
+    public static final String SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY";
     public static final String SETTINGS_DISABLE_MARKDOWN_KEY = "SETTINGS_DISABLE_MARKDOWN_KEY";
     public static final String SETTINGS_DONT_SEND_TYPING_NOTIF_KEY = "SETTINGS_DONT_SEND_TYPING_NOTIF_KEY";
 
@@ -102,6 +102,17 @@ public class PreferencesManager {
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;
     private static final int MEDIA_SAVING_FOREVER = 3;
+
+
+    /**
+     * Tells if the timestamp must be displayed in 12h format
+     *
+     * @param context the context
+     * @return true if the time must be displayed in 12h format
+     */
+    public static boolean displayTimeIn12hFormat(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_12_24_TIMESTAMPS_KEY, false);
+    }
 
     /**
      * Tells if the data save mode is enabled

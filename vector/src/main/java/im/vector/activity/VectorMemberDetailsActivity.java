@@ -1084,7 +1084,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             }
 
-            imageResource = R.drawable.vector_create_direct_room;
+            imageResource = R.drawable.ic_add_black;
             actionText = getResources().getString(R.string.start_new_chat);
             directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
 
@@ -1125,13 +1125,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // init failed, just return
             Log.e(LOG_TAG, "## onCreate(): Parameters init failure");
             finish();
-        }
-        // find out the room member to set mRoomMember field.
-        // if mRoomMember is not found among the members of the room, just finish the activity
-        else if (!checkRoomMemberStatus()) {
-            Log.e(LOG_TAG, "## onCreate(): The user " + mMemberId + " is not in the room " + mRoomId);
-            finish();
         } else {
+            // check if the user is a member of the room
+            checkRoomMemberStatus();
+
             // setup UI view and bind the widgets
             setContentView(R.layout.activity_member_details);
 

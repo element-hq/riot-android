@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="VectorStyles">
+        <!-- default background color -->
+        <attr name="riot_primary_background_color" format="color" />
+
+        <!-- waiting view background -->
+        <attr name="waiting_background_color" format="color" />
+
+        <!-- primary dark color (status bar) -->
+        <attr name="primary_dark_color" format="color" />
+
+        <!-- application bar background color -->
+        <attr name="primary_color" format="color" />
+
+        <!-- application bar text color -->
+        <attr name="primary_text_color" format="color" />
+
+        <!-- application bar icons color -->
+        <attr name="primary_control_color" format="color" />
+
+        <!-- application bar text hint color -->
+        <attr name="primary_hint_text_color" format="color" />
+
+        <!-- default text colors -->
+        <attr name="riot_primary_text_color" format="color" />
+        <attr name="default_text_light_color" format="color" />
+        <attr name="default_text_dark_color" format="color" />
+        <attr name="default_text_hint_color" format="color" />
+        <attr name="default_button_light_text_color" format="color" />
+
+        <!-- room message colors -->
+        <attr name="unsent_message_text_color" format="color" />
+        <attr name="message_text_color" format="color" />
+        <attr name="notice_text_color" format="color" />
+        <attr name="encrypting_message_text_color" format="color" />
+        <attr name="sending_message_text_color" format="color" />
+        <attr name="highlighted_message_text_color" format="color" />
+        <attr name="highlighted_searched_message_text_color" format="color" />
+        <attr name="search_mode_room_name_text_color" format="color" />
+        <attr name="unread_marker_line_color" format="color" />
+        <attr name="markdown_block_background_color" format="color" />
+        <attr name="room_activity_divider_color" format="color" />
+
+        <!-- tab bar colors -->
+        <attr name="tab_bar_inverted_background_color" format="color" />
+        <attr name="tab_bar_background_color" format="color" />
+        <attr name="tab_bar_selected_background_color" format="color" />
+        <attr name="tab_bar_unselected_background_color" format="color" />
+
+        <!-- list colors -->
+        <attr name="list_header_background_color" format="color" />
+        <attr name="list_divider_color" format="color" />
+        <attr name="list_header_subtext_color" format="color" />
+
+        <!-- directory selection header -->
+        <attr name="list_header_public_room_spinner_text_color" format="color" />
+        <attr name="list_header_public_room_spinner_color" format="color" />
+
+        <!-- gradient on the bottom of some activities -->
+        <attr name="activity_bottom_gradient_color" format="color" />
+
+        <!-- outgoing call background color -->
+        <attr name="pending_outgoing_view_background_color" format="color" />
+
+        <!-- multi selection member background color -->
+        <attr name="multi_selection_background_color" format="color" />
+
+        <!-- sliding menu icon colors -->
+        <attr name="home_navigation_icon_color" format="color" />
+
+        <!-- room notification text color (typing, unsent...) -->
+        <attr name="room_notification_text_color" format="color" />
+
+        <!-- icon colors -->
+        <attr name="default_icon_tint_color" format="color" />
+        <attr name="icon_tint_on_light_action_bar_color" format="color" />
+        <attr name="icon_tint_on_dark_action_bar_color" format="color" />
+        <attr name="settings_icon_tint_color" format="color" />
+
+        <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
+        <!-- dedicated drawables are created for each theme -->
+
+        <attr name="avatar_mask" format="reference" />
+        <attr name="avatar_mask_room_header" format="reference" />
+        <attr name="avatar_mask_white_stroke" format="reference" />
+        <attr name="line_divider" format="reference" />
+        <attr name="vector_tabbar_selected_background" format="reference" />
+        <attr name="vector_tabbar_unselected_background" format="reference" />
+        <attr name="vector_tabbar_background" format="reference" />
+    </declare-styleable>
+</resources>

@@ -87,6 +87,7 @@ import im.vector.db.VectorContentProvider;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements IMessagesAdapterActionsListener {
@@ -152,6 +153,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 onRowClick(position);
             }
         });
+
+        v.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.riot_primary_background_color));
 
         return v;
     }
@@ -589,7 +592,19 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             Activity attachedActivity = getActivity();
 
             if ((null != attachedActivity) && (attachedActivity instanceof VectorRoomActivity)) {
-                ((VectorRoomActivity) attachedActivity).insertQuoteInTextEditor("> " + textMsg + "\n\n");
+                // Quote all paragraphs instead
+                String[] messageParagraphs = textMsg.split("\n\n");
+                String quotedTextMsg = "";
+                for(int i = 0; i < messageParagraphs.length; i++) {
+                    if(!messageParagraphs[i].trim().equals("")) {
+                        quotedTextMsg += "> " + messageParagraphs[i];
+                    }
+
+                    if (!((i + 1) == messageParagraphs.length)) {
+                        quotedTextMsg += "\n\n";
+                    }
+                }
+                ((VectorRoomActivity) attachedActivity).insertQuoteInTextEditor(quotedTextMsg + "\n\n");
             }
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
@@ -747,15 +762,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (null != file) {
             // download
             if ((menuAction == ACTION_VECTOR_SAVE) || (menuAction == ACTION_VECTOR_OPEN)) {
-                String savedMediaPath = CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, filename, mediaMimeType);
-
-                if (null != savedMediaPath) {
-                    if (menuAction == ACTION_VECTOR_SAVE) {
-                        Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-                    } else {
-                        CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, filename, mediaMimeType, new SimpleApiCallback<String>() {
+                    @Override
+                    public void onSuccess(String savedMediaPath) {
+                        if (null != savedMediaPath) {
+                            if (menuAction == ACTION_VECTOR_SAVE) {
+                                Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                            } else {
+                                CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                            }
+                        }
                     }
-                }
+                });
             } else {
                 // shared / forward
                 Uri mediaUri = null;

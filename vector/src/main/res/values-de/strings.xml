@@ -85,7 +85,6 @@
     <string name="local_address_book_header">Lokales Adressbuch</string>
     <string name="matrix_only_filter">Nur Matrix-Kontakte</string>
     <string name="no_conversation_placeholder">Keine Konversationen</string>
-    <string name="no_local_contact_placeholder">No local contacts</string>
     <string name="no_contact_access_placeholder">Du hast Riot nicht erlaubt auf deine lokalen Kontakte zuzugreifen</string>
     <string name="no_result_placeholder">Keine Ergebnisse</string>
 
@@ -211,7 +210,6 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="membership_changes">%d Änderungen der Mitgliedschaft</string>
 
     <!-- accounts list Screen -->
-    <string name="choose_account">Account wählen</string>
 
     <!-- image size selection -->
     <string name="compression_options">Sende als </string>
@@ -306,7 +304,6 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_creation_title">Neuer Chat</string>
     <string name="room_creation_add_member">Mitglied hinzufügen</string>
     <string name="room_header_active_members">%1$d/%2$d aktive Mitglieder</string>
-    <string name="room_header_invite_members">Mitglieder einladen</string>
     <string name="room_title_members">%1$d Mitglieder</string>
     <string name="room_title_one_member">1 Mitglied</string>
     <string name="room_e2e_alert_title">Achtung!</string>
@@ -356,7 +353,6 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="people_search_invite_by_id"><u>Mit ID einladen</u></string>
     <string name="people_search_local_contacts">LOKALE KONTAKTE (%d)</string>
     <string name="people_search_filter_text">Nur Matrix-Nutzer</string>
-    <string name="people_search_too_many_contacts">"Zu viele Kontakte, bitte das Suchfeld  benutzen"</string>
 
     <string name="people_search_invite_by_id_dialog_title">Nutzer mit ID einladen</string>
     <string name="people_search_invite_by_id_dialog_description">Bitte gebe eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
@@ -751,4 +747,15 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="media_saving_period_1_month">1 Monat</string>
     <string name="media_saving_period_forever">Für immer</string>
 
-    </resources>
+    <string name="offline">Offline</string>
+
+    <string name="user_directory_header">Benutzer-Verzeichnis</string>
+    <string name="people_search_user_directory">NUTZER-VERZEICHNIS (%s)</string>
+    <string name="settings_data_save_mode">Datensparsamer Modus</string>
+
+    <string name="font_size">Schriftgröße</string>
+    <string name="small">Klein</string>
+    <string name="normal">Normal</string>
+    <string name="large">Groß</string>
+    <string name="largest">Extra groß</string>
+</resources>

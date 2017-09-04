@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- LIGHT THEME COLORS -->
+    <style name="Theme.Vector.Light" parent="@style/Theme.AppCompat.Light">
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_light</item>
+
+        <!-- waiting view background -->
+        <item name="waiting_background_color">#AAAAAAAA</item>
+
+        <!-- primary dark color (status bar) -->
+        <item name="primary_dark_color">#5EA584</item>
+
+        <!-- application bar background color -->
+        <item name="primary_color">@color/primary_color_light</item>
+
+        <!-- application bar text color -->
+        <item name="primary_text_color">@android:color/white</item>
+
+        <!-- application bar icons color -->
+        <item name="primary_control_color">@android:color/white</item>
+
+        <!-- application bar text hint color -->
+        <item name="primary_hint_text_color">#BBE7D3</item>
+
+        <!-- default text colors -->
+        <item name="riot_primary_text_color">#FF3C3C3C</item>
+        <item name="default_text_hint_color">#903C3C3C</item>
+        <item name="default_text_light_color">#8E000000</item>
+        <item name="default_button_light_text_color">#FF747474</item>
+        <item name="default_text_dark_color">#FF212121</item>
+
+        <!-- room message colors -->
+        <item name="unsent_message_text_color">#FFFF4444</item>
+        <item name="message_text_color">?attr/riot_primary_text_color</item>
+        <item name="notice_text_color">#903C3C3C</item>
+        <item name="encrypting_message_text_color">@color/vector_green_color</item>
+        <item name="sending_message_text_color">#AAA</item>
+        <item name="highlighted_message_text_color">@color/vector_fuchsia_color</item>
+        <item name="highlighted_searched_message_text_color">@color/vector_green_color</item>
+        <item name="search_mode_room_name_text_color">#333C3C3C</item>
+        <item name="unread_marker_line_color">@color/vector_green_color</item>
+        <item name="markdown_block_background_color">#FFEEEEEE</item>
+        <item name="room_activity_divider_color">#FFF2F2F2</item>
+
+        <!-- tab bar colors -->
+        <item name="tab_bar_background_color">?attr/primary_color</item>
+        <item name="tab_bar_inverted_background_color">#FFF2F2F2</item>
+        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_light</item>
+        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_light</item>
+
+        <!-- list colors -->
+        <item name="list_header_background_color">#f6f6f6</item>
+        <item name="list_divider_color">@color/list_divider_color_light</item>
+        <item name="list_header_subtext_color">#4D3C3C3C</item>
+
+        <!-- directory selection header -->
+        <item name="list_header_public_room_spinner_text_color">#7f3c3c3c</item>
+        <item name="list_header_public_room_spinner_color">#2e3c3c3c</item>
+
+        <!-- gradient on the home bottom -->
+        <item name="activity_bottom_gradient_color">#80ffffff</item>
+
+        <!-- outgoing call background color -->
+        <item name="pending_outgoing_view_background_color">#33000000</item>
+
+        <!-- multi selection memeber background color -->
+        <item name="multi_selection_background_color">#FFF2F2F2</item>
+
+        <!-- sliding menu icon colors -->
+        <item name="home_navigation_icon_color">#FF4D4D4D</item>
+
+        <!-- room notification text color (typing, unsent...) -->
+        <item name="room_notification_text_color">#a0a29f</item>
+
+        <!-- icon colors -->
+        <item name="default_icon_tint_color">@color/vector_green_color</item>
+        <item name="settings_icon_tint_color">@android:color/black</item>
+        <item name="icon_tint_on_light_action_bar_color">@color/vector_green_color</item>
+        <item name="icon_tint_on_dark_action_bar_color">@android:color/white</item>
+
+        <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
+        <!-- dedicated drawables are created for each theme -->
+        <item name="avatar_mask">@drawable/avatar_mask_light</item>
+        <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_light</item>
+        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_light</item>
+        <item name="line_divider">@drawable/line_divider_light</item>
+        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_light</item>
+        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_light</item>
+        <item name="vector_tabbar_background">@drawable/vector_tabbar_background_light</item>
+
+    </style>
+
+    <!-- DARK THEME COLORS -->
+    <style name="Theme.Vector.Dark" parent="@style/Theme.AppCompat">
+        <!-- default background color -->
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_dark</item>
+
+        <!-- waiting view background -->
+        <item name="waiting_background_color">#55555555</item>
+
+        <!-- status bar color -->
+        <item name="primary_dark_color">#191919</item>
+
+        <!-- application bar color -->
+        <item name="primary_color">@color/primary_color_dark</item>
+
+        <!-- application bar text color -->
+        <item name="primary_text_color">@android:color/white</item>
+
+        <!-- application bar icons color -->
+        <item name="primary_control_color">#5EA584</item>
+
+        <!-- application bar text hint color -->
+        <item name="primary_hint_text_color">#BBE7D3</item>
+
+        <!-- default text colors -->
+        <item name="riot_primary_text_color">#dddddd</item>
+        <item name="default_text_hint_color">#CCDDDDDD</item>
+        <item name="default_text_light_color">#A4A4A4</item>
+        <item name="default_button_light_text_color">#FF747474</item>
+        <item name="default_text_dark_color">#DEDEDE</item>
+
+        <!-- room message colors -->
+        <item name="unsent_message_text_color">#FFFF4444</item>
+        <item name="message_text_color">@android:color/white</item>
+        <item name="notice_text_color">?attr/riot_primary_text_color</item>
+        <item name="encrypting_message_text_color">@color/vector_green_color</item>
+        <item name="sending_message_text_color">#AAA</item>
+        <item name="highlighted_message_text_color">@color/vector_fuchsia_color</item>
+        <item name="highlighted_searched_message_text_color">@color/vector_green_color</item>
+        <item name="search_mode_room_name_text_color">#CCC3C3C3</item>
+        <item name="unread_marker_line_color">@color/vector_green_color</item>
+        <item name="markdown_block_background_color">@android:color/black</item>
+        <item name="room_activity_divider_color">#565656</item>
+
+        <!-- tab bar colors -->
+        <item name="tab_bar_background_color">?attr/primary_color</item>
+        <item name="tab_bar_inverted_background_color">?attr/primary_color</item>
+        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_dark</item>
+        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_dark</item>
+
+        <!-- list colors -->
+        <item name="list_header_background_color">#5A5A5A</item>
+        <item name="list_divider_color">@color/list_divider_color_dark</item>
+        <item name="list_header_subtext_color">?attr/primary_control_color</item>
+
+        <!-- directory selection header -->
+        <item name="list_header_public_room_spinner_text_color">#FFC7C7C7</item>
+        <item name="list_header_public_room_spinner_color">#A5A5A5A5</item>
+
+        <!-- gradient on the home bottom -->
+        <item name="activity_bottom_gradient_color">#80000000</item>
+
+        <!-- outgoing call background color -->
+        <item name="pending_outgoing_view_background_color">#33FFFFFF</item>
+
+        <!-- multi selection memeber background color -->
+        <item name="multi_selection_background_color">#4d4d4d</item>
+
+        <!-- sliding menu icon colors -->
+        <item name="home_navigation_icon_color">?attr/primary_control_color</item>
+
+        <!-- room notification text color (typing, unsent...) -->
+        <item name="room_notification_text_color">#FF9D9D9D</item>
+
+        <!-- icon colors -->
+        <item name="default_icon_tint_color">@color/vector_green_color</item>
+        <item name="settings_icon_tint_color">@android:color/white</item>
+        <item name="icon_tint_on_light_action_bar_color">?attr/primary_control_color</item>>
+        <item name="icon_tint_on_dark_action_bar_color">?attr/primary_control_color</item>
+
+        <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
+        <!-- dedicated drawables are created for each theme -->
+        <item name="avatar_mask">@drawable/avatar_mask_dark</item>
+        <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_dark</item>
+        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_dark</item>
+        <item name="line_divider">@drawable/line_divider_dark</item>
+        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_dark</item>
+        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_dark</item>
+        <item name="vector_tabbar_background">@drawable/vector_tabbar_background_dark</item>
+    </style>
+</resources>

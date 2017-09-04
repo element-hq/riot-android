@@ -1,10 +1,16 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    
+
     <string name="resouces_language">it</string>
     <string name="resouces_country">IT</string>
+
+    <!-- theme -->
+    <string-array name="theme_readables">
+        <item>Tema chiaro</item>
+        <item>Tema scuro</item>
+    </string-array>
 
     <!-- titles -->
     <string name="title_activity_home">Messaggi</string>
@@ -47,10 +53,10 @@
     <string name="and">e</string>
     <string name="invite">Invita</string>
     <string name="offline">Offline</string>
-    
+
     <!-- actions -->
     <string name="action_sign_out">Disconnettiti</string>
-    <string name="action_sign_out_confirmation">Per ragioni di sicurezza, la disconnessione eliminerà qualsiasi chiave crittografica da-utente-a-utente rendendo illeggibile la cronologia delle chat precedentemente criptate, qualora volessi riconnetterti.\nSeleziona esporta per fare un backup delle chat prima di disconnetterti.</string>
+    <string name="action_sign_out_confirmation">Per ragioni di sicurezza, la disconnessione causerà l\'eliminazione di qualsiasi chiave di crittografia da-utente-a-utente rendendo illeggibile la storia delle chat precedentemente criptate qualora volessi riconnetterti.\nSeleziona esporta per fare un backup delle chat prima di disconnetterti.</string>
     <string name="action_voice_call">Chiamata voce</string>
     <string name="action_video_call">Chiamata video</string>
     <string name="action_global_search">Ricerca globale</string>
@@ -84,12 +90,11 @@
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversazioni</string>
-    <string name="local_address_book_header">Rubrica locale</string>
+    <string name="local_address_book_header">Libro degli indirizzi locale</string>
     <string name="user_directory_header">Elenco utenti</string>
     <string name="matrix_only_filter">Solo contatti Matrix</string>
     <string name="no_conversation_placeholder">Nessuna conversazione</string>
-    <string name="no_local_contact_placeholder">Nessun contatto locale</string>
-    <string name="no_contact_access_placeholder">Non hai dato a Riot l\'autorizzazione di accedere ai tuoi contatti locali</string>
+    <string name="no_contact_access_placeholder">Riot non ha il permesso di accedere ai tuoi contatti locali</string>
     <string name="no_result_placeholder">Nessun risultato</string>
 
     <!-- Rooms fragment -->
@@ -119,7 +124,7 @@
     <string name="send_files_in">Invia file in</string>
     <string name="read_receipt">Leggi</string>
 
-    <string name="join_room">Entra nella stanza</string>
+    <string name="join_room">Entra</string>
     <string name="username">Nome utente</string>
     <string name="create_account">Registrati</string>
     <string name="login">Accedi</string>
@@ -134,7 +139,7 @@
     <string name="start_voice_call">Avvia chiamata voce</string>
     <string name="start_video_call">Avvia chiamata video</string>
 
-    <string name="option_send_files">Invia i file</string>
+    <string name="option_send_files">Invia dei file</string>
     <string name="option_take_photo_video">Cattura foto o video</string>
 
     <!-- Authentication -->
@@ -210,10 +215,9 @@
     <string name="read_receipts_list">Elenco ricevute lette</string>
 
     <!-- Mels -->
-    <string name="membership_changes">%d cambiamenti iscrizione</string>
-    
+    <string name="membership_changes">%d cambiamenti di appartenenza</string>
+
     <!-- accounts list Screen -->
-    <string name="choose_account">Scegli un account</string>
 
     <!-- image size selection -->
     <string name="compression_options">Invia come </string>
@@ -291,7 +295,7 @@
     <string name="reject">Rifiuta</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Vai al primo messaggio non letto.</string>
+    <string name="room_jump_to_first_unread">Vai al primo messaggio non letto</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Sei stato invitato ad unirti in questa stanza da %s</string>
@@ -304,11 +308,10 @@
     <string name="room_creation_title">Nuova chat</string>
     <string name="room_creation_add_member">Aggiungi membro</string>
     <string name="room_header_active_members">%1$d/%2$d membri attivi</string>
-    <string name="room_header_invite_members">Invita membri</string>
     <string name="room_title_members">%1$d membri</string>
     <string name="room_title_one_member">1 membro</string>
     <string name="room_e2e_alert_title">Attenzione!</string>
-    <string name="room_e2e_alert_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.\n\nNon dovresti ancora fidarti di essa per proteggere i tuoi dati.\n\nI dispositivi non saranno in grado di decriptare la cronologia prima di entrare in una stanza.\n\nI messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
+    <string name="room_e2e_alert_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.\n\nNon dovresti ancora fidarti di essa per proteggere i tuoi dati.\n\nI dispositivi non saranno in grado di decriptare la cronologia prima che entrino nella stanza.\n\nI messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
@@ -355,7 +358,6 @@
     <string name="people_search_local_contacts">CONTATTI LOCALI (%d)</string>
     <string name="people_search_user_directory">ELENCO UTENTI (%s)</string>
     <string name="people_search_filter_text">Solo utenti Matrix</string>
-    <string name="people_search_too_many_contacts">Troppi contatti, per favore usa il campo di ricerca</string>
 
     <string name="people_search_invite_by_id_dialog_title">Invita utente tramite ID</string>
     <string name="people_search_invite_by_id_dialog_description">Per favore inserisci uno o più indirizzi email o ID Matrix</string>
@@ -364,10 +366,10 @@
     <!--  Chat -->
     <string name="room_menu_search">Cerca</string>
     <string name="room_one_user_is_typing">%s sta scrivendo…</string>
-    <string name="room_two_users_are_typing">%1$s &amp; %2$s stanno scrivendo…</string>
-    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; altri stanno scrivendo…</string>
-    <string name="room_message_placeholder_encrypted">Invia un messaggio criptato…</string>
-    <string name="room_message_placeholder_not_encrypted">Invia un messaggio (non criptato)…</string>
+    <string name="room_two_users_are_typing">%1$s &#038; %2$s stanno scrivendo…</string>
+    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; altri stanno scrivendo…</string>
+    <string name="room_message_placeholder_encrypted">Messaggio criptato…</string>
+    <string name="room_message_placeholder_not_encrypted">Messaggio non criptato…</string>
     <string name="room_offline_notification">La connessione al server è stata persa.</string>
     <string name="room_unsent_messages_notification">Messaggi non inviati. %1$s o %2$s ora?</string>
     <string name="room_unknown_devices_messages_notification">Messaggi non inviati a causa di dispositivi sconosciuti qui presenti. %1$s o %2$s ora?</string>
@@ -419,7 +421,7 @@
 
     <!-- Search -->
     <string name="search_hint">Cerca</string>
-    <string name="search_members_hint">Filtra membri stanza</string>
+    <string name="search_members_hint">Filtra i membri della stanza</string>
     <string name="search_no_results">Nessun risultato</string>
     <string name="tab_title_search_rooms">STANZE</string>
     <string name="tab_title_search_messages">MESSAGGI</string>
@@ -437,7 +439,7 @@
     <string name="room_recents_create_room">Crea stanza</string>
     <string name="room_recents_join_room">Entra nella stanza</string>
     <string name="room_recents_join_room_title">Entra in una stanza</string>
-    <string name="room_recents_join_room_prompt">Digita un ID o un soprannome (alias) della stanza</string>
+    <string name="room_recents_join_room_prompt">Digita ID o soprannome (alias)</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Esplora elenco</string>
@@ -445,12 +447,12 @@
     <string name="directory_search_rooms">%1$d stanze</string>
     <string name="directory_search_room_for">%1$d stanza trovata per %2$s</string>
     <string name="directory_search_rooms_for">%1$s stanze trovate per %2$s</string>
-    <string name="directory_searching_title">Elenco della ricerca…</string>
+    <string name="directory_searching_title">Ricerca in corso…</string>
 
     <!-- home room settings -->
     <string name="room_settings_notifications">Notifiche</string>
     <string name="room_settings_favourite">Preferito</string>
-    <string name="room_settings_de_prioritize">Togli priorità</string>
+    <string name="room_settings_de_prioritize">Bassa priorità</string>
     <string name="room_settings_direct_chat">Chat diretta</string>
     <string name="room_settings_leave_conversation">Lascia conversazione</string>
     <string name="room_settings_forget">Dimentica</string>
@@ -472,12 +474,12 @@
     <string name="settings_add_email_address">Aggiungi indirizzo email</string>
     <string name="settings_phone_number">Telefono</string>
     <string name="settings_add_phone_number">Aggiungi numero di telefono</string>
-    <string name="settings_summary_app_info_link">Schermata informazioni di sistema per l\'applicazione</string>
-    <string name="settings_title_app_info_link">Informazioni sull\'app</string>
+    <string name="settings_summary_app_info_link">Vai alla schermata delle informazioni di sistema per quest\'app</string>
+    <string name="settings_title_app_info_link">Informazioni applicazione</string>
 
     <string name="settings_enable_all_notif">Abilita notifiche per questo account</string>
     <string name="settings_enable_this_device">Abilita notifiche per questo dispositivo</string>
-    <string name="settings_turn_screen_on">Accendi lo schermo per 3 secondi</string>
+    <string name="settings_turn_screen_on">Accendi lo schermo per 3 secondi alla notifica</string>
 
     <string name="settings_containing_my_name">Messaggi contenenti il mio nome</string>
     <string name="settings_messages_in_one_to_one">Messaggi nelle chat a due</string>
@@ -486,11 +488,11 @@
     <string name="settings_call_invitations">Invito ad una chiamata</string>
     <string name="settings_messages_sent_by_bot">Messaggi inviati da bot</string>
 
-    <string name="settings_start_on_boot">Apri all\'avvio</string>
-    <string name="settings_background_sync">Sincronizzazione in secondo piano</string>
-    <string name="settings_enable_background_sync">Abilita sync in secondo piano</string>
-    <string name="settings_set_sync_timeout">Tempo scaduto per una richiesta di sync</string>
-    <string name="settings_set_sync_delay">Attesa tra due richieste di sync</string>
+    <string name="settings_start_on_boot">Esegui all\'avvio</string>
+    <string name="settings_background_sync">Sincronizzazione in sottofondo</string>
+    <string name="settings_enable_background_sync">Abilita sync in sottofondo</string>
+    <string name="settings_set_sync_timeout">Attesa per una richiesta di sync</string>
+    <string name="settings_set_sync_delay">Pausa tra due richieste di sync</string>
     <string name="settings_second">secondo</string>
     <string name="settings_seconds">secondi</string>
 
@@ -500,9 +502,9 @@
     <string name="settings_third_party_notices">Avvisi di terze parti</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Politica sulla privacy</string>
-    <string name="settings_clear_cache">Svuota cache</string>
-    <string name="settings_clear_medias_cache">Svuota cache dei media</string>
-    <string name="settings_keep_media">Mantieni i media</string>
+    <string name="settings_clear_cache">Elimina cache</string>
+    <string name="settings_clear_medias_cache">Elimina cache file media</string>
+    <string name="settings_keep_media">Conserva file media</string>
 
     <string name="settings_user_settings">Impostazioni utente</string>
     <string name="settings_notifications">Notifiche</string>
@@ -514,16 +516,16 @@
     <string name="settings_contact">Contatti locali</string>
     <string name="settings_contacts_app_permission">Consenti accesso alla rubrica</string>
     <string name="settings_contacts_phonebook_country">Nazione rubrica telefonica</string>
-    <string name="settings_home_display">Visualizzazione home</string>
+    <string name="settings_home_display">Pagina home</string>
     <string name="settings_pin_missed_notifications">Segna le stanze con notifiche perse</string>
     <string name="settings_pin_unread_messages">Segna le stanze con messaggi non letti</string>
     <string name="settings_devices_list">Dispositivi</string>
-    <string name="settings_hide_read_receipts">Nascondi ricevute lette</string>
-    <string name="settings_dont_send_typings_notifs">Non inviare notifiche di digitazione</string>
-    <string name="settings_always_show_timestamps">Mostra sempre orario messaggi</string>
-    <string name="settings_disable_markdown">Disabilita formattazione markdown</string>
+    <string name="settings_hide_read_receipts">Nascondi conferme di lettura</string>
+    <string name="settings_dont_send_typings_notifs">Non inviare notifica di scrittura in corso</string>
+    <string name="settings_always_show_timestamps">Mostra sempre data e orario dei messaggi</string>
+    <string name="settings_disable_markdown">Disabilita la formattazione markdown</string>
     <string name="settings_data_save_mode">Modalità salvataggio dati</string>
-    
+
     <string name="devices_details_dialog_title">Dettagli dispositivo</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Nome</string>
@@ -548,9 +550,9 @@
     <string name="account_email_validation_message">Controlla la tua email e clicca sul link lì contenuto. Fatto questo, clicca su Continua.</string>
     <string name="account_email_validation_error">Impossibile verificare l\'indirizzo email. Controlla la tua email e clicca sul link lì contenuto. Fatto questo, clicca su Continua</string>
     <string name="account_email_already_used_error">Questo indirizzo email è già in uso</string>
-    <string name="account_email_not_found_error">Invio email fallito: questo indirizzo email non è stato trovato</string>
+    <string name="account_email_not_found_error">Invio email fallito: l\'indirizzo email non è stato trovato</string>
     <string name="account_phone_number_already_used_error">Questo numero di telefono è già in uso</string>
-        
+
     <string name="settings_change_password">Cambia password</string>
     <string name="settings_old_password">vecchia password</string>
     <string name="settings_new_password">nuova password</string>
@@ -580,7 +582,7 @@
     <string name="media_saving_period_1_week">1 settimana</string>
     <string name="media_saving_period_1_month">1 mese</string>
     <string name="media_saving_period_forever">Per sempre</string>
-    
+
     <!-- Room Settings -->
 
     <!-- room global settings-->
@@ -604,7 +606,7 @@
     <string name="room_settings_category_access_visibility_title">Accesso e visibilità</string>
     <string name="room_settings_directory_visibility">Mostra questa stanza nell\'elenco delle stanze</string>
     <string name="room_settings_room_access_rules_pref_title">Accesso alla stanza</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Leggibilità della cronologia della stanza</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Leggibilità cronologia della stanza</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Chi può leggere la cronologia?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Chi può entrare in questa stanza?</string>
 
@@ -641,7 +643,7 @@
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Formato soprannome (alias) invalido</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' non è un formato valido per un soprannome (alias)</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Non avrai un indirizzo principale personalmente specificato. L\'indirizzo principale predefinito per questa stanza sarà generato casualmente</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Non avrai un indirizzo personalmente specificato. L\'indirizzo principale predefinito per questa stanza sarà generato casualmente.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Avvisi per l\'indirizzo principale</string>
 
     <string name="room_settings_set_main_address">Imposta come indirizzo principale</string>
@@ -653,10 +655,11 @@
     <string name="room_settings_addresses_e2e_disabled">Crittografia disabilitata in questa stanza.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Abilita crittografia\n(attenzione: non può più essere disabilitata!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Attenzione!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.\n\nNon dovresti ancora fidarti di essa per proteggere i tuoi dati.\n\nI dispositivi non saranno in grado di decriptare la cronologia prima di entrare in una stanza.\n\nI messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
+    <string name="room_settings_addresses_e2e_prompt_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.\n\nNon dovresti ancora fidarti di essa per proteggere i tuoi dati.\n\nI dispositivi non saranno in grado di decriptare la cronologia prima che entrino nella stanza.\n\nI messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
 
     <!-- Directory -->
     <string name="directory_title">Elenco</string>
+    <string name="settings_theme">Tema</string>
 
     <!-- GA use -->
     <string name="ga_use_alert_message">Accetti di aiutarci per migliorare il comportamento dell\'applicazione inviando rapporti sui crash?</string>
@@ -715,7 +718,7 @@
 
     <string name="encryption_information_verify_device">Verifica dispositivo</string>
     <string name="encryption_information_verify_device_warning">Per verificare che quel dispositivo è affidabile, contatta il suo proprietario utilizzando altri canali di comunicazione (ad esempio, per persona o per telefono) e chiedigli se nelle Impostazioni, sezione Crittografia, la voce Chiave dispositivo corrisponde al codice riportato qui sotto:</string>
-    <string name="encryption_information_verify_device_warning2">Se esso corrisponde, premi il pulsante Conferma qui sotto. Se non corrisponde, allora qualcun altro ha intercettato la comunicazione e probabilmente vorrai metterlo nella lista nera piuttosto.\nIn futuro il processo di verifica sarà più sofisticato.</string>
+    <string name="encryption_information_verify_device_warning2">Se esso corrisponde, premi il pulsante qui sotto per confermare la verifica. Se non corrisponde, allora qualcun altro ha intercettato la comunicazione e probabilmente vorrai metterlo nella lista nera piuttosto.\nIn futuro il processo di verifica sarà più sofisticato.</string>
     <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondano</string>
 
     <string name="e2e_enabling_on_app_update">Riot supporta ora la crittografia da-utente-a-utente, ma devi riconnetterti per abilitarla.\n\nPuoi farlo ora o più tardi dalle impostazioni dell\'applicazione.</string>
@@ -737,12 +740,15 @@
     <string name="notification_unread_notified_messages_in_room">%1$d messaggi notificati non letti in %2$d stanze"</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Cerca nella cronologia</string>
+    <string name="historical_placeholder">Cerca nello storico</string>
 
     <!-- text size selection -->
-    <string name="font_size">Dimensione carattere</string>
+    <string name="font_size">Grandezza font</string>
+    <string name="tiny">Minuscolo</string>
     <string name="small">Piccolo</string>
     <string name="normal">Normale</string>
     <string name="large">Grande</string>
-<string name="largest">Molto grande</string>
+    <string name="larger">Più grande</string>
+    <string name="largest">Grandissimo</string>
+    <string name="huge">Enorme</string>
 </resources>

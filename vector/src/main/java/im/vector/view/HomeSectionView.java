@@ -22,7 +22,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -32,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.List;
 
@@ -41,9 +41,11 @@ import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.fragments.AbsHomeFragment;
+import im.vector.util.ThemeUtils;
 import im.vector.util.RoomUtils;
 
 public class HomeSectionView extends RelativeLayout {
+    private static final String LOG_TAG = HomeSectionView.class.getSimpleName();
 
     @BindView(R.id.section_header)
     TextView mHeader;
@@ -107,7 +109,7 @@ public class HomeSectionView extends RelativeLayout {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.RECTANGLE);
         shape.setCornerRadius(100);
-        shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_white_alpha_50));
+        shape.setColor(ThemeUtils.getColor(getContext(), R.attr.activity_bottom_gradient_color));
         mBadge.setBackground(shape);
 
         mHeader.setOnClickListener(new OnClickListener() {
@@ -125,12 +127,20 @@ public class HomeSectionView extends RelativeLayout {
      * Update the views to reflect the new number of items
      */
     private void onDataUpdated() {
-        setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
-        final int badgeCount = mAdapter.getBadgeCount();
-        mBadge.setText(RoomUtils.formatUnreadMessagesCounter(badgeCount));
-        mBadge.setVisibility(badgeCount == 0 ? GONE : VISIBLE);
-        mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
-        mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);
+        if (null != mAdapter) {
+            // reported by GA
+            // the adapter value is tested by it seems crashed when calling getBadgeCount
+            try {
+                setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
+                final int badgeCount = mAdapter.getBadgeCount();
+                mBadge.setText(RoomUtils.formatUnreadMessagesCounter(badgeCount));
+                mBadge.setVisibility(badgeCount == 0 ? GONE : VISIBLE);
+                mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
+                mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onDataUpdated() failed " + e.getMessage());
+            }
+        }
     }
 
     /*
@@ -225,9 +235,12 @@ public class HomeSectionView extends RelativeLayout {
      * @param filter
      */
     public void setCurrentFilter(final String filter) {
-        mCurrentFilter = filter;
-        mAdapter.onFilterDone(mCurrentFilter);
-        mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
+        // reported by GA
+        if (null != mAdapter) {
+            mCurrentFilter = filter;
+            mAdapter.onFilterDone(mCurrentFilter);
+            mPlaceHolder.setText(TextUtils.isEmpty(mCurrentFilter) ? mNoItemPlaceholder : mNoResultPlaceholder);
+        }
     }
 
     /**

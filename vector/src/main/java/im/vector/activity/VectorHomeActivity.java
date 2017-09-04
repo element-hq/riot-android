@@ -51,6 +51,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -94,7 +95,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
@@ -112,12 +112,12 @@ import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
-import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
@@ -263,6 +263,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
@@ -602,7 +603,9 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
-        mToolbar.setBackgroundResource(R.color.vector_actionbar_background);
+        TypedValue vectorActionBarColor = new TypedValue();
+        this.getTheme().resolveAttribute(R.attr.riot_primary_background_color, vectorActionBarColor, true);
+        mToolbar.setBackgroundResource(vectorActionBarColor.resourceId);
 
         checkDeviceId();
 
@@ -622,6 +625,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_home, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
         return true;
     }
 
@@ -868,10 +872,14 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         if (fragment != null) {
             resetFilter();
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment, mCurrentFragmentTag)
-                    .addToBackStack(mCurrentFragmentTag)
-                    .commit();
+            try {
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment, mCurrentFragmentTag)
+                        .addToBackStack(mCurrentFragmentTag)
+                        .commit();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## updateSelectedFragment() failed : " + e.getMessage());
+            }
         }
     }
     /**
@@ -895,6 +903,11 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(secondaryColor);
         }
+
+        // Set color of toolbar search view
+        EditText edit = (EditText) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        edit.setTextColor(ThemeUtils.getColor(this, R.attr.primary_text_color));
+        edit.setHintTextColor(ThemeUtils.getColor(this, R.attr.primary_hint_text_color));
     }
 
     /**
@@ -1371,6 +1384,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         alertDialogBuilder.setView(dialogView);
 
         final EditText textInput = (EditText) dialogView.findViewById(R.id.join_room_edit_text);
+        textInput.setTextColor(ThemeUtils.getColor(this, R.attr.riot_primary_text_color));
 
         // set dialog message
         alertDialogBuilder
@@ -1799,7 +1813,7 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white));
+            getSupportActionBar().setHomeAsUpIndicator(CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white), R.attr.primary_control_color));
         }
 
         Menu menuNav = navigationView.getMenu();

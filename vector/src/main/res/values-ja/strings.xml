@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="title_activity_room">部屋</string>
+    <string name="title_activity_settings">設定</string>
+    <string name="title_activity_historical">履歴</string>
+
+    <string name="ok">ＯＫ</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
+    <string name="leave">退室</string>
+    <string name="send">送信</string>
+    <string name="copy">複写</string>
+    <string name="resend">再送信</string>
+    <string name="redact">編集</string>
+    <string name="share">共有</string>
+    <string name="delete">削除</string>
+    <string name="device_information">端末情報</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">暗号化された部屋での多人数通話はサポートされていません</string>
+    <string name="invite">招待</string>
+
+    <string name="action_mark_all_as_read">全ての発言を既読にする</string>
+    <string name="action_historical">履歴</string>
+    <string name="action_quick_reply">すぐに返信</string>
+    <string name="action_open">開く</string>
+    <string name="action_close">閉じる</string>
+    <string name="copied_to_clipboard">クリップボードへコピー</string>
+    <string name="dialog_title_warning">警告</string>
+
+    <string name="bottom_action_favourites">お気に入り</string>
+    <string name="bottom_action_people">対話</string>
+    <string name="bottom_action_rooms">部屋</string>
+
+    <string name="home_filter_placeholder_home">部屋を検索</string>
+    <string name="home_filter_placeholder_favorites">お気に入りを検索</string>
+    <string name="home_filter_placeholder_people">対話を検索</string>
+    <string name="home_filter_placeholder_rooms">部屋を検索</string>
+
+    <string name="invitations_header">招待中</string>
+    <string name="low_priority_header">低優先度</string>
+
+    <string name="direct_chats_header">会話</string>
+    <string name="no_public_room_placeholder">公開された部屋がありません</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="other">%d 名</item>
+</plurals>
+
+    <string name="send_bug_report">不具合報告</string>
+    <string name="send_bug_report_description">不具合の内容と状況の説明をお願い致します。あなたは何をしましたか？何が起こると思いますか？実際何が起こったのですか？</string>
+    <string name="send_bug_report_placeholder">ここに不具合内容を説明</string>
+    <string name="send_bug_report_include_screenshot">画面のスクリーンショット画像を送信</string>
+    <string name="send_bug_report_include_crash_logs">不具合発生時の動作記録を送信</string>
+    <string name="send_bug_report_include_logs">動作記録を送信</string>
+    <string name="send_bug_report_logs_description">開発者が問題を診断するために、このRiotの動作記録が不具合報告と一緒に送信されます。上記文章のみを送信したい場合は以下のチェックを解除してください：</string>
+    <string name="send_bug_report_alert_message">あなたは不満があって電話機を揺らしているようです。不具合報告を提出しますか？</string>
+    <string name="send_bug_report_app_crashed">前回アプリは異常停止しました。不具合報告を提出しますか？</string>
+
+    <string name="send_bug_report_sent">不具合報告の送信に成功しました</string>
+    <string name="send_bug_report_failed">不具合報告の送信に失敗しました (%s)</string>
+    <string name="join_room">部屋へ参加</string>
+    </resources>

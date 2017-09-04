@@ -49,6 +49,7 @@ import java.util.HashMap;
 
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**
@@ -731,7 +732,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             }
         }
         viewHolder.mMemberNameTextView.setText(memberName);
-        
+
         // 2b admin badge
         viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.GONE);
 
@@ -891,7 +892,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             });
         }
 
-        int backgroundColor = mContext.getResources().getColor(android.R.color.white);
+        int backgroundColor = ThemeUtils.getColor(mContext, R.attr.riot_primary_background_color);
 
         // multi selections mode
         // do not display a checkbox for oneself
@@ -901,7 +902,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             viewHolder.mMultipleSelectionCheckBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);
 
             if (viewHolder.mMultipleSelectionCheckBox.isChecked()) {
-                backgroundColor = mContext.getResources().getColor(R.color.vector_05_gray);
+                backgroundColor = ThemeUtils.getColor(mContext, R.attr.multi_selection_background_color);
             }
 
             viewHolder.mMultipleSelectionCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -909,10 +910,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     if (viewHolder.mMultipleSelectionCheckBox.isChecked()) {
                         mSelectedUserIds.add(participant.mUserId);
-                        viewHolder.mSwipeCellLayout.setBackgroundColor(mContext.getResources().getColor(R.color.vector_05_gray));
+                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.multi_selection_background_color));
                     } else {
                         mSelectedUserIds.remove(participant.mUserId);
-                        viewHolder.mSwipeCellLayout.setBackgroundColor(mContext.getResources().getColor(android.R.color.white));
+                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.riot_primary_background_color));
                     }
 
                     if (null != mOnParticipantsListener) {

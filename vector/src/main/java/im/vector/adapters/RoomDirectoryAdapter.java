@@ -194,7 +194,7 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
 
         mPendingDownloadByUrl.put(avatarURL, new ArrayList<>(Arrays.asList(weakImageView)));
 
-        new AsyncTask<Void, Void, Bitmap>() {
+        AsyncTask<Void, Void, Bitmap> task = new AsyncTask<Void, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Void... params) {
                 Bitmap bitmap = null;
@@ -226,7 +226,14 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
                     }
                 }
             }
-        }.execute();
+        };
+
+        try {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## downloadAvatar() failed " + e.getMessage());
+            task.cancel(true);
+        }
     }
 
     /*

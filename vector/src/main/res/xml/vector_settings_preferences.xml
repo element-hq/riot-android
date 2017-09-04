@@ -73,8 +73,20 @@
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"/>
 
         <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_12_24_timestamps"
+            android:key="SETTINGS_12_24_TIMESTAMPS_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_disable_markdown"
             android:key="SETTINGS_DISABLE_MARKDOWN_KEY"/>
+
+        <ListPreference
+            android:entries="@array/theme_readables"
+            android:entryValues="@array/theme_codes"
+            android:key="APPLICATION_THEME_KEY"
+            android:summary="%s"
+            android:title="@string/settings_theme"/>
+
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
@@ -186,7 +198,7 @@
             android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"/>
 
     </im.vector.preference.VectorPreferenceCategory>
-    
+
     <im.vector.preference.VectorDividerCategory />
 
     <!-- ************ Cryptography section ************ -->
