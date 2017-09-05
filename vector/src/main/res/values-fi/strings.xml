@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">fi</string>
-    <string name="resouces_country"/>
+    <string name="resouces_country">FI</string>
 
     <!-- titles -->
     <string name="title_activity_home">Keskustelut</string>
@@ -302,7 +302,7 @@
     <string name="room_preview_invitation_format">%s on kutsunut sinut huoneeseen</string>
     <string name="room_preview_unlinked_email_warning">Kutsu lähetettiin osoitteeseen %s, joka ei kuulu tälle tilille.\nVoit kirjautua sisään toisella tilillä tai lisätä sähköpostiosoitteesi tälle tilille.</string>
     <string name="room_preview_try_join_an_unknown_room">Olet avaamassa huonetta %s. Haluatko liittyä huoneeseen osallistuaksesi keskusteluun?</string>
-    <string name="room_preview_try_join_an_unknown_room_default"/> <!-- ??? what is this meant to be, I suspect grammar shenanigans -->
+    <string name="room_preview_try_join_an_unknown_room_default">huone</string> <!-- ??? what is this meant to be, I suspect grammar shenanigans -->
     <string name="room_preview_room_interactions_disabled">Tämä on esikatsely huoneesta. Liity huoneeseen osallistuaksesi keskusteluun.</string>
 
     <!-- Chat creation -->
@@ -647,7 +647,7 @@
     <string name="directory_title">Luettelo</string>
 
     <!-- GA use -->
-    <string name="ga_use_alert_message">Haluatko sallia automaattisten kaatumisraporttien lähettämisen parantaakseen sovelluksen toimivuutta?</string> <!-- ??? sounds suspicious -->
+    <string name="ga_use_alert_message">Haluatko auttaa sovelluksen parantamisessa sallimalla automaattisen kaatumisraporttien lähettämisen?</string> <!-- ??? sounds suspicious -->
     <string name="ga_use_settings">Lähetä kaatumisraportit automaattisesti</string>
     <string name="ga_use_disable_alert_message">Käynnistä sovellus uudelleen poistaaksesi automaattisten kaatumisraporttien lähettämisen.</string>
 
@@ -726,4 +726,37 @@
 
     <!-- historical -->
     <string name="historical_placeholder">Hae historiallista</string>
-</resources>
+<string name="user_directory_header">Käyttäjähakemisto</string>
+    <string name="people_search_user_directory">KÄYTTÄJÄHAKEMISTO (%s)</string>
+    <string name="settings_start_on_boot">Käynnistä automaattisesti</string>
+    <string name="settings_clear_medias_cache">Tyhjennä mediavälimuisti</string>
+    <string name="settings_keep_media">Säilytä media</string>
+
+    <string name="settings_hide_read_receipts">Piilota lukukuittaukset</string>
+    <string name="settings_dont_send_typings_notifs">Älä lähetä kirjoitusilmoituksia</string>
+    <string name="settings_always_show_timestamps">Näytä aina aikaleimat</string>
+    <string name="settings_disable_markdown">Ota markdown-muotoilu pois käytöstä</string>
+    <string name="settings_data_save_mode">Datansäästötila</string>
+
+    <string name="settings_user_interface">Käyttöliittymä</string>
+    <string name="settings_interface_language">Käyttöliittymän kieli</string>
+    <string name="settings_select_language">Valitse kieli</string>
+
+    <string name="media_saving_period_3_days">3 päivää</string>
+    <string name="media_saving_period_1_week">1 viikko</string>
+    <string name="media_saving_period_1_month">1 kuukausi</string>
+    <string name="media_saving_period_forever">Ikuisesti</string>
+
+    <string name="settings_theme">Teema</string>
+
+    <string name="font_size">Kirjaisinkoko</string>
+    <string name="tiny">Erittäin pieni</string>
+    <string name="small">Pieni</string>
+    <string name="normal">Normaali</string>
+    <string name="large">Iso</string>
+    <string name="larger">Isompi</string>
+    <string name="largest">Isoin</string>
+    <string name="huge">Valtava</string>
+<string name="offline">Offline</string>
+
+    </resources>
