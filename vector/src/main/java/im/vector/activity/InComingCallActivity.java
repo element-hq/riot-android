@@ -53,6 +53,7 @@ public class InComingCallActivity extends AppCompatActivity {
 
     private ImageView mCallingUserAvatarView;
     private TextView mRoomNameTextView;
+    private TextView mIncomingCallTitleTextView;
     private Button mIgnoreCallButton;
     private Button mAcceptCallButton;
     private String mCallId;
@@ -179,6 +180,7 @@ public class InComingCallActivity extends AppCompatActivity {
                 // UI widgets binding
                 mCallingUserAvatarView = (ImageView) findViewById(R.id.avatar_img);
                 mRoomNameTextView = (TextView) findViewById(R.id.room_name);
+                mIncomingCallTitleTextView = (TextView) findViewById(R.id.incoming_call_title);
                 mAcceptCallButton = (Button) findViewById(R.id.button_incoming_call_accept);
                 mIgnoreCallButton = (Button) findViewById(R.id.button_incoming_call_ignore);
 
@@ -192,6 +194,9 @@ public class InComingCallActivity extends AppCompatActivity {
 
                 // set the room display name
                 mRoomNameTextView.setText(VectorUtils.getCallingRoomDisplayName(this, mSession, mMxCall.getRoom()));
+
+                // set the title depending on video or audio call
+                mIncomingCallTitleTextView.setText(mMxCall.isVideo()?R.string.incoming_video_call:R.string.incoming_voice_call);
 
                 // set button handlers
                 mIgnoreCallButton.setOnClickListener(new View.OnClickListener() {
