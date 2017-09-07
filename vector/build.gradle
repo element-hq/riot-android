@@ -43,6 +43,10 @@ android {
         }
     }
 
+    dexOptions {
+        jumboMode true
+    }
+
     buildTypes {
         debug {
             resValue "string", "git_revision", "\"${gitRevision()}\""
