@@ -341,6 +341,8 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
 
             mLocalVideoLayoutConfig.mX = mPreviewRect.left * 100 / screenWidth;
             mLocalVideoLayoutConfig.mY = mPreviewRect.top * 100 / screenHeight;
+            mLocalVideoLayoutConfig.mDisplayWidth = screenWidth;
+            mLocalVideoLayoutConfig.mDisplayHeight = screenHeight;
 
             mIsCustomLocalVideoLayoutConfig = true;
             mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
@@ -689,8 +691,12 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    // call once
-                    if (mCall.isVideo() || (!mCall.isIncoming() && (TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState())))) {
+                    if (null != mCall.getCallView()) {
+                        mCallView = mCall.getCallView();
+                        insertCallView();
+                        computeVideoUiLayout();
+                        mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
+                    } else if (mCall.isVideo() || (!mCall.isIncoming() && (TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState())))) {
                         mCall.createCallView();
                     }
                 }
@@ -1127,6 +1133,8 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
         }
 
         mLocalVideoLayoutConfig.mIsPortrait = (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE);
+        mLocalVideoLayoutConfig.mDisplayWidth = screenWidth;
+        mLocalVideoLayoutConfig.mDisplayHeight = screenHeight;
 
         Log.d(LOG_TAG, "## computeVideoUiLayout() : x " + mLocalVideoLayoutConfig.mX + " y " +  mLocalVideoLayoutConfig.mY);
         Log.d(LOG_TAG, "## computeVideoUiLayout() : mWidth " + mLocalVideoLayoutConfig.mWidth + " mHeight " +  mLocalVideoLayoutConfig.mHeight);
