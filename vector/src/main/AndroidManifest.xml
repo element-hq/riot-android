@@ -63,6 +63,7 @@
         android:logo="@drawable/logo"
         android:label="@string/riot_app_name"
         android:largeHeap="true"
+        android:resizeableActivity="false"
         android:theme="@style/AppTheme" >
 
         <!-- activities list starts here -->

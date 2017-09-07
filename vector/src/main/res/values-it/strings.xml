@@ -14,19 +14,19 @@
 
     <!-- titles -->
     <string name="title_activity_home">Messaggi</string>
-    <string name="title_activity_room">Stanze</string>
+    <string name="title_activity_room">Stanza</string>
     <string name="title_activity_settings">Impostazioni</string>
-    <string name="title_activity_member_details">Dettaglio membri</string>
-    <string name="title_activity_historical">Storico</string>
+    <string name="title_activity_member_details">Dettagli membri</string>
+    <string name="title_activity_historical">Cronologia</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
     <string name="save">Salva</string>
-    <string name="leave">Lascia</string>
+    <string name="leave">Esci</string>
     <string name="send">Invia</string>
     <string name="copy">Copia</string>
-    <string name="resend">Rinvia</string>
+    <string name="resend">Reinvia</string>
     <string name="redact">Revisiona</string>
     <string name="quote">Cita</string>
     <string name="share">Condividi</string>
@@ -34,20 +34,20 @@
     <string name="forward">Inoltra</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">Vedi sorgente</string>
-    <string name="view_decrypted_source">Vedi sorgente decriptata</string>
+    <string name="view_decrypted_source">Vedi sorgente decifrato</string>
     <string name="delete">Elimina</string>
     <string name="rename">Rinomina</string>
-    <string name="report_content">Rapporto contenuti</string>
-    <string name="active_call">Attiva chiamata</string>
-    <string name="ongoing_conference_call">Chiamata conferenza in arrivo. Unisciti con sola voce o video.</string>
+    <string name="report_content">Segnala contenuto</string>
+    <string name="active_call">Chiamata attiva</string>
+    <string name="ongoing_conference_call">Chiamata conferenza in corso. Unisciti con video o sola voce.</string>
     <string name="ongoing_conference_call_voice">voce</string>
     <string name="ongoing_conference_call_video">video</string>
-    <string name="cannot_start_call">Impossibile avviare chiamata, riprova più tardi</string>
-    <string name="missing_permissions_warning">A causa di permessi insufficienti, alcune opzioni potrebbero mancare…</string>
+    <string name="cannot_start_call">Impossibile avviare la chiamata, riprova più tardi</string>
+    <string name="missing_permissions_warning">A causa di autorizzazioni insufficienti, alcune funzioni potrebbero mancare...</string>
     <string name="missing_permissions_to_start_conf_call">Non hai il permesso di invitare altri per iniziare una conferenza in questa stanza</string>
     <string name="missing_permissions_title_to_start_conf_call">Impossibile avviare chiamata</string>
     <string name="device_information">Informazioni dispositivo</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Le chiamate in modalità conferenza non sono supportate in una stanza criptata</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Le chiamate in modalità conferenza non sono supportate nelle stanze criptate</string>
     <string name="send_anyway">Invia comunque</string>
     <string name="or">o</string>
     <string name="and">e</string>
@@ -61,7 +61,7 @@
     <string name="action_video_call">Chiamata video</string>
     <string name="action_global_search">Ricerca globale</string>
     <string name="action_mark_all_as_read">Segna tutti come letti</string>
-    <string name="action_historical">Storico</string>
+    <string name="action_historical">Cronologia</string>
     <string name="action_quick_reply">Risposta rapida</string>
     <string name="action_open">Apri</string>
     <string name="action_close">Chiudi</string>
@@ -99,7 +99,7 @@
 
     <!-- Rooms fragment -->
     <string name="rooms_header">Stanze</string>
-    <string name="rooms_directory_header">Cartella delle stanze</string>
+    <string name="rooms_directory_header">Elenco stanze</string>
     <string name="no_room_placeholder">Nessuna stanza</string>
     <string name="no_public_room_placeholder">Nessuna stanza pubblica disponibile</string>
     <plurals name="public_room_nb_users">
@@ -109,27 +109,27 @@
 
     <string name="send_bug_report_include_logs">Invia registri</string>
     <string name="send_bug_report_include_crash_logs">Invia registri di crash</string>
-    <string name="send_bug_report_include_screenshot">Invia fermoimmagine</string>
+    <string name="send_bug_report_include_screenshot">Invia istantanea</string>
     <string name="send_bug_report">Rapporto bug</string>
-    <string name="send_bug_report_description">Per favore descrivi il bug. Cosa hai fatto? Cosa ti aspettavi sarebbe accaduto? Cosa è effettivamente successo?</string>
+    <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa hai fatto? Cosa ti aspettavi sarebbe accaduto? Cosa è effettivamente successo?</string>
     <string name="send_bug_report_placeholder">Descrivi il problema qui</string>
-    <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto del bug. Se preferisci che solo il testo soprastante sia inviato, per favore togli la spunta:</string>
+    <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Se preferisci inviare solo il testo soprastante, togli la spunta:</string>
     <string name="send_bug_report_alert_message">Sembra tu stia scuotendo il dispositivo per frustrazione. Desideri inviare il rapporto di un errore?</string>
     <string name="send_bug_report_app_crashed">L\'applicazione è crashata l\'ultima volta. Desideri inviare il rapporto del crash?</string>
 
-    <string name="send_bug_report_sent">Il rapporto bug è stato spedito con successo</string>
-    <string name="send_bug_report_failed">Il rapporto bug ha fallito l\'invio (%s)</string>
+    <string name="send_bug_report_sent">La segnalazione di errore è stata spedita con successo</string>
+    <string name="send_bug_report_failed">Invio segnalazione di errore fallito (%s)</string>
     <string name="send_bug_report_progress">Avanzamento (%s%%)</string>
 
     <string name="send_files_in">Invia file in</string>
-    <string name="read_receipt">Leggi ricevuta</string>
+    <string name="read_receipt">Leggi</string>
 
     <string name="join_room">Entra</string>
     <string name="username">Nome utente</string>
     <string name="create_account">Registrati</string>
-    <string name="login">Connettiti</string>
-    <string name="logout">Disconnettiti</string>
-    <string name="hs_url">URL server</string>
+    <string name="login">Accedi</string>
+    <string name="logout">Disconnetti</string>
+    <string name="hs_url">URL server home</string>
     <string name="identity_url">URL server identità</string>
     <string name="user">utente</string>
     <string name="users">utenti</string>
@@ -143,11 +143,11 @@
     <string name="option_take_photo_video">Cattura foto o video</string>
 
     <!-- Authentication -->
-    <string name="auth_login">Connettiti</string>
-    <string name="auth_register">Iscrizione</string>
+    <string name="auth_login">Accedi</string>
+    <string name="auth_register">Registrati</string>
     <string name="auth_submit">Invia</string>
     <string name="auth_skip">Salta</string>
-    <string name="auth_send_reset_email">Invia email di reset</string>
+    <string name="auth_send_reset_email">Invia email di ripristino</string>
     <string name="auth_return_to_login">Torna alla schermata di accesso</string>
     <string name="auth_user_id_placeholder">Email o nome utente</string>
     <string name="auth_password_placeholder">Password</string>
@@ -158,10 +158,10 @@
     <string name="auth_add_email_phone_message">"Aggiungi un indirizzo email e/o un numero di telefono al tuo account per permettere agli altri di trovarti.\n\nL\'indirizzo email ti permetterà anche di resettare la password."</string>
     <string name="auth_add_email_and_phone_message">"Aggiungi un indirizzo email ed un numero di telefono al tuo account per permettere agli altri di trovarti.\n\nL\'indirizzo email ti permetterà anche di resettare la password."</string>
     <string name="auth_email_placeholder">Indirizzo email</string>
-    <string name="auth_opt_email_placeholder">Indirizzo email (opzionale)</string>
+    <string name="auth_opt_email_placeholder">Indirizzo email (facoltativo)</string>
     <string name="auth_phone_number_placeholder">Numero di telefono</string>
-    <string name="auth_opt_phone_number_placeholder">Numero di telefono (opzionale)</string>
-    <string name="auth_repeat_password_placeholder">Ripeti password</string>
+    <string name="auth_opt_phone_number_placeholder">Numero di telefono (facoltativo)</string>
+    <string name="auth_repeat_password_placeholder">Conferma la password</string>
     <string name="auth_repeat_new_password_placeholder">Conferma la nuova password</string>
     <string name="auth_invalid_login_param">Nome utente e/o password non corretti</string>
     <string name="auth_invalid_user_name">Il nome utente può contenere solo lettere, numeri, punti, trattini e linee</string>
@@ -169,7 +169,7 @@
     <string name="auth_missing_password">Password mancante</string>
     <string name="auth_invalid_email">"Non risulta un indirizzo email valido"</string>
     <string name="auth_invalid_phone">"Non risulta un numero di telefono valido"</string>
-    <string name="auth_email_already_defined">L\'indirizzo email è già definito.</string>
+    <string name="auth_email_already_defined">L\'indirizzo email è già stato definito.</string>
     <string name="auth_missing_email">Indirizzo email mancante</string>
     <string name="auth_missing_phone">Numero di telefono mancante</string>
     <string name="auth_missing_email_or_phone">Indirizzo email o numero di telefono mancante</string>
@@ -184,29 +184,29 @@
     <string name="auth_home_server">Server home:</string>
     <string name="auth_identity_server">Server identità:</string>
     <string name="auth_reset_password_next_step_button">Ho verificato il mio indirizzo email</string>
-    <string name="auth_reset_password_message">Per resettare la password, inserisci l\'indirizzo email associato al tuo account:</string>
+    <string name="auth_reset_password_message">Per ripristinare la password, inserisci l\'indirizzo email associato al tuo account:</string>
     <string name="auth_reset_password_missing_email">L\'indirizzo email associato al tuo account deve essere inserito.</string>
     <string name="auth_reset_password_missing_password">Una nuova password deve essere inserita.</string>
     <string name="auth_reset_password_email_validation_message">Un\'email è stata inviata a %s. Appena avrai seguito il link lì contenuto, clicca qui sotto.</string>
     <string name="auth_reset_password_error_unauthorized">Verifica indirizzo email fallita: assicurati di aver cliccato sul link contenuto nell\'email</string>
-    <string name="auth_reset_password_success_message">Sei stato disconnesso da tutti i dispositivi e non riceverai più alcuna notifica. Per riabilitare le notifiche, riconnettiti su ciascun dispositivo.</string>
+    <string name="auth_reset_password_success_message">La tua password è stata ripristinata.\nSei stato disconnesso da tutti i dispositivi e non riceverai più alcuna notifica. Per riabilitare le notifiche, riconnettiti su ciascun dispositivo.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">L\'URL deve iniziare con http[s]://</string>
-    <string name="login_error_network_error">Impossibile connettersi: errore di Rete</string>
-    <string name="login_error_unable_login">Impossibile connettersi</string>
-    <string name="login_error_registration_network_error">Impossibile iscriversi: errore di Rete</string>
-    <string name="login_error_unable_register">Impossibile iscriversi</string>
-    <string name="login_error_unable_register_mail_ownership">Impossibile iscriversi: errore proprietario email</string>
+    <string name="login_error_network_error">Impossibile accedere: errore di rete</string>
+    <string name="login_error_unable_login">Impossibile accedere</string>
+    <string name="login_error_registration_network_error">Impossibile registrarsi: errore di rete</string>
+    <string name="login_error_unable_register">Impossibile registrarsi</string>
+    <string name="login_error_unable_register_mail_ownership">Impossibile registrarsi: errore proprietario email</string>
     <string name="login_error_invalid_home_server">Inserisci un URL valido</string>
 
-    <string name="login_error_forbidden">Nome utente/password invalidi</string>
+    <string name="login_error_forbidden">Nome utente/password non validi</string>
     <string name="login_error_unknown_token">Il token di accesso specificato non è stato riconosciuto</string>
     <string name="login_error_bad_json">JSON malformato</string>
     <string name="login_error_not_json">Non conteneva un JSON valido</string>
-    <string name="login_error_limit_exceeded">Troppe richieste sono state inviate</string>
+    <string name="login_error_limit_exceeded">Sono state inviate troppe richieste</string>
     <string name="login_error_user_in_use">Questo nome utente è già in uso</string>
-    <string name="login_error_login_email_not_yet">Il link sull\'email non è stato ancora cliccato</string>
+    <string name="login_error_login_email_not_yet">Il link nell\'email non è ancora stato cliccato</string>
 
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">È necessario eseguire nuovamente l\'accesso per generare le chiavi di crittografia da-utente-a-utente per questo dispositivo ed inviare la chiave pubblica al server home.\nSi tratta di un\'evenienza rara.\nCi scusiamo per l\'inconveniente.</string>
@@ -221,7 +221,7 @@
 
     <!-- image size selection -->
     <string name="compression_options">Invia come </string>
-    <string name="compression_opt_list_original">Originario</string>
+    <string name="compression_opt_list_original">Originale</string>
     <string name="compression_opt_list_large">Grande</string>
     <string name="compression_opt_list_medium">Medio</string>
     <string name="compression_opt_list_small">Piccolo</string>
@@ -254,9 +254,9 @@
     <string name="incoming_voice_call">Chiamata voce in arrivo</string>
     <string name="call_in_progress">Chiamata in corso</string>
 
-    <string name="call_error_user_not_responding">Il lato in remoto ha fallito la ricezione.</string>
+    <string name="call_error_user_not_responding">Il destinatario non ha risposto.</string>
     <string name="call_error_ice_failed">Connessione al supporto media fallita</string>
-    <string name="call_error_camera_init_failed">Non posso avviare la fotocamera</string>
+    <string name="call_error_camera_init_failed">Impossibile avviare la fotocamera</string>
     <string name="call_error_answered_elsewhere">chiamata risulta risposta altrove</string>
     <string name="call_error_peer_hangup_elsewhere">chiamata risulta agganciata altrove</string>
     <string name="call_error_peer_cancelled_call">chiamata annullata</string>
@@ -266,25 +266,25 @@
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Fai una foto o un video</string>
-    <string name="media_picker_cannot_record_video">Non posso registrare video</string>
+    <string name="media_picker_cannot_record_video">Impossibile registrare video</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informazione</string>
-    <string name="permissions_rationale_msg_storage">Riot necessita del permesso di accedere alla tua libreria di foto e video per inviare e salvare allegati.\n\nPer favore abilita l\'accesso sulla prossima finestrella così da poter inviare file dal tuo telefono.</string>
-    <string name="permissions_rationale_msg_camera">Riot necessita del permesso di usare la fotocamera per scattare foto e fare video chiamate.</string>
-    <string name="permissions_rationale_msg_camera_explanation">\n\nPer favore abilita il permesso sulla prossima finestrella al fine di effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot necessita del permesso di usare il microfono per eseguire audio chiamate.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPer favore abilita il permesso sulla prossima finestrella al fine di effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot necessita del permesso di usare la fotocamera ed il microfono per eseguire video chiamate.\n\nPer favore abilita il permesso sulla prossima finestrella al fine di effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_contacts">Riot necessita del permesso di accedere alla tua rubrica dei contatti per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.\n\nPer favore abilita il permesso sulla prossima finestrella al fine di scoprire quali contatti in rubrica sono raggiungibili su Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot necessita del permesso di accedere alla tua rubrica dei contatti per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.\n\nPermetti a Riot di accedere ai tuoi contatti?</string>
+    <string name="permissions_rationale_msg_storage">Riot necessita dell\'autorizzazione per accedere alla tua galleria di foto e video per inviare e salvare allegati.\n\nPer favore abilita l\'accesso sulla prossima finestrella così da poter inviare file dal tuo telefono.</string>
+    <string name="permissions_rationale_msg_camera">Riot necessita dell\'autorizzazione per usare la fotocamera per scattare foto e fare video chiamate.</string>
+    <string name="permissions_rationale_msg_camera_explanation">\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di effettuare la chiamata.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot necessita dell\'autorizzazione per usare il microfono per eseguire audio chiamate.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di effettuare la chiamata.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot necessita dell\'autorizzazione per usare la fotocamera ed il microfono per eseguire video chiamate.\n\nPer favore abilita il permesso sulla prossima finestrella al fine di effettuare la chiamata.</string>
+    <string name="permissions_rationale_msg_contacts">Riot necessita dell\'autorizzazione per accedere alla tua rubrica dei contatti per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di scoprire quali contatti in rubrica sono raggiungibili su Riot.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot necessita dell\'autorizzazione per accedere alla tua rubrica dei contatti per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.\n\nPermetti a Riot di accedere ai tuoi contatti?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Spiacenti… Azione non eseguita, a causa di mancati permessi</string>
+    <string name="permissions_action_not_performed_missing_permissions">Spiacenti… azione non eseguita a causa di mancate autorizzazioni</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvato</string>
-    <string name="media_slider_saved_message">Salva su Download</string>
-    <string name="yes">SI</string>
+    <string name="media_slider_saved_message">Salva nei download</string>
+    <string name="yes">SÌ</string>
     <string name="no">NO</string>
     <string name="_continue">Continua</string>
 
@@ -321,7 +321,7 @@
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Lascia stanza</string>
-    <string name="room_participants_leave_prompt_msg">Sei sicuro di voler lasciare la stanza?</string>
+    <string name="room_participants_leave_prompt_msg">Sei sicuro di voler uscire dalla stanza?</string>
     <string name="room_participants_remove_prompt_msg">Sei sicuro di voler rimuovere %s da questa chat?</string>
     <string name="room_participants_create">Crea</string>
 
@@ -341,7 +341,7 @@
     <string name="room_participants_action_remove">Rimuovi da questa stanza</string>
     <string name="room_participants_action_ban">Banna</string>
     <string name="room_participants_action_unban">Rimuovi ban</string>
-    <string name="room_participants_action_set_default_power_level">Riporta ad utente normale</string>
+    <string name="room_participants_action_set_default_power_level">Ripristina ad utente normale</string>
     <string name="room_participants_action_set_moderator">Rendi moderatore</string>
     <string name="room_participants_action_set_admin">Rendi amministratore</string>
     <string name="room_participants_action_ignore">Nascondi tutti i messaggi di questo utente</string>
@@ -383,13 +383,13 @@
     <string name="room_new_messages_notification">%1$d nuovi messaggi</string>
 
     <!-- unrecognized SSL certificate -->
-    <string name="ssl_trust">Affidabile</string>
-    <string name="ssl_do_not_trust">Non affidabile</string>
-    <string name="ssl_logout_account">Disconnettiti</string>
+    <string name="ssl_trust">Fidati</string>
+    <string name="ssl_do_not_trust">Non fidarti</string>
+    <string name="ssl_logout_account">Disconnetti</string>
     <string name="ssl_remain_offline">Ignora</string>
     <string name="ssl_fingerprint_hash">Impronta digitale (%s):</string>
     <string name="ssl_could_not_verify">Impossibile verificare l\'identità del server remoto.</string>
-    <string name="ssl_cert_not_trust">Ciò potrebbe significare che qualcuno sta maliziosamente intercettando il tuo traffico, oppure il tuo telefono non riconosce come affidabile il certificato fornito dal server remoto.</string>
+    <string name="ssl_cert_not_trust">Ciò potrebbe significare che qualcuno sta intercettando il tuo traffico, oppure il tuo telefono non riconosce come affidabile il certificato fornito dal server remoto.</string>
     <string name="ssl_cert_new_account_expl">Se l\'amministratore del server ha dichiarato che questa anomalia è prevista, assicurati che l\'impronta digitale corrisponda a quella fornita da loro.</string>
     <string name="ssl_unexpected_existing_expl">Il certificato è cambiato rispetto a quello ritenuto affidabile dal tuo telefono. Ciò è ALTAMENTE INUSUALE. Si raccomanda di NON ACCETTARE questo nuovo certificato.</string>
     <string name="ssl_expected_existing_expl">Il certificato è cambiato da quello precedente ritenuto affidabile ad uno non affidabile. Il server potrebbe aver rinnovato il proprio certificato. Contatta l\'amministratore del server per chiedere l\'impronta digitale prevista.</string>
@@ -429,7 +429,7 @@
     <string name="tab_title_search_files">FILE</string>
 
     <!-- Room recents -->
-    <string name="room_recents_join">AGGIUNGITI</string>
+    <string name="room_recents_join">ENTRATE</string>
     <string name="room_recents_directory">ELENCO</string>
     <string name="room_recents_favourites">PREFERITI</string>
     <string name="room_recents_conversations">STANZE</string>
@@ -437,7 +437,7 @@
     <string name="room_recents_invites">INVITI</string>
     <string name="room_recents_start_chat">Avvia chat</string>
     <string name="room_recents_create_room">Crea stanza</string>
-    <string name="room_recents_join_room">Aggiungiti alla stanza</string>
+    <string name="room_recents_join_room">Entra nella stanza</string>
     <string name="room_recents_join_room_title">Entra in una stanza</string>
     <string name="room_recents_join_room_prompt">Digita ID o soprannome (alias)</string>
 
@@ -533,7 +533,7 @@
     <string name="devices_details_last_seen_title">Ultima interazione</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
-    <string name="devices_delete_dialog_text">Questa operazioe richiede un\'autenticazione aggiuntiva.\nPer proseguire, inserisci la tua password.</string>
+    <string name="devices_delete_dialog_text">Questa operazione richiede un\'autenticazione aggiuntiva.\nPer proseguire, inserisci la tua password.</string>
     <string name="devices_delete_dialog_title">Autenticazione</string>
     <string name="devices_delete_pswd">Password:</string>
     <string name="devices_delete_submit_button_label">Invia</string>
@@ -541,7 +541,7 @@
     <string name="settings_logged_in">Connesso come</string>
     <string name="settings_home_server">Server home</string>
     <string name="settings_identity_server">Server identità</string>
-
+    
     <string name="settings_user_interface">Interfaccia utente</string>
     <string name="settings_interface_language">Lingua interfaccia</string>
     <string name="settings_select_language">Scegli una lingua</string>
@@ -679,7 +679,7 @@
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Richiesta chiave per l\'impronta digitale Ed25519</string>
     <string name="encryption_information_algorithm">Algoritmo</string>
     <string name="encryption_information_session_id">ID sessione</string>
-    <string name="encryption_information_decryption_error">Errore decriptazione</string>
+    <string name="encryption_information_decryption_error">Errore decifrazione</string>
 
     <string name="encryption_information_sender_device_information">Informazioni dispositivo mittente</string>
     <string name="encryption_information_device_name">Nome dispositivo</string>
