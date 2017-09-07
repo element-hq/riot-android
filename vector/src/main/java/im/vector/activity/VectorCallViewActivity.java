@@ -341,6 +341,8 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
 
             mLocalVideoLayoutConfig.mX = mPreviewRect.left * 100 / screenWidth;
             mLocalVideoLayoutConfig.mY = mPreviewRect.top * 100 / screenHeight;
+            mLocalVideoLayoutConfig.mDisplayWidth = screenWidth;
+            mLocalVideoLayoutConfig.mDisplayHeight = screenHeight;
 
             mIsCustomLocalVideoLayoutConfig = true;
             mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
@@ -1131,6 +1133,8 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
         }
 
         mLocalVideoLayoutConfig.mIsPortrait = (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE);
+        mLocalVideoLayoutConfig.mDisplayWidth = screenWidth;
+        mLocalVideoLayoutConfig.mDisplayHeight = screenHeight;
 
         Log.d(LOG_TAG, "## computeVideoUiLayout() : x " + mLocalVideoLayoutConfig.mX + " y " +  mLocalVideoLayoutConfig.mY);
         Log.d(LOG_TAG, "## computeVideoUiLayout() : mWidth " + mLocalVideoLayoutConfig.mWidth + " mHeight " +  mLocalVideoLayoutConfig.mHeight);
