@@ -53,6 +53,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
 import im.vector.util.PreferencesManager;
@@ -82,8 +83,8 @@ public class Matrix {
     // list of session
     private ArrayList<MXSession> mMXSessions;
 
-    // GCM registration manager
-    private GcmRegistrationManager mGCMRegistrationManager;
+    // Push registration manager
+    private PushManager mPushManager;
 
     // list of store : some sessions or activities use tmp stores
     // provide an storage to exchange them
@@ -115,10 +116,10 @@ public class Matrix {
 
             if ((null != instance) && (null != instance.mMXSessions)) {
                 if (mRefreshUnreadCounter) {
-                    GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
+                    PushManager gcmMgr = instance.getSharedPushManager();
 
                     // perform update: if the GCM is not yet available or if GCM registration failed
-                    if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
+                    if ((null != gcmMgr) && (!gcmMgr.usePush() || !gcmMgr.hasRegistrationToken())) {
                         int roomCount = 0;
 
                         for (MXSession session : instance.mMXSessions) {
@@ -261,7 +262,8 @@ public class Matrix {
         mMXSessions = new ArrayList<>();
         mTmpStores = new ArrayList<>();
 
-        mGCMRegistrationManager = new GcmRegistrationManager(mAppContext);
+        //TODO: Change to different Push Manager here
+        mPushManager = new GcmRegistrationManager(mAppContext);
     }
 
     /**
@@ -714,7 +716,7 @@ public class Matrix {
                 }
 
                 // clear GCM token before launching the splash screen
-                Matrix.getInstance(context).getSharedGCMRegistrationManager().clearGCMData(false, new SimpleApiCallback<Void>() {
+                Matrix.getInstance(context).getSharedPushManager().clearPushData(false, new SimpleApiCallback<Void>() {
                     @Override
                     public void onSuccess(final Void anything) {
                         Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
@@ -732,8 +734,8 @@ public class Matrix {
     /**
      * @return the GCM registration manager
      */
-    public GcmRegistrationManager getSharedGCMRegistrationManager() {
-        return mGCMRegistrationManager;
+    public PushManager getSharedPushManager() {
+        return mPushManager;
     }
 
     //==============================================================================================================

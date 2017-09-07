@@ -101,7 +101,7 @@ import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.ga.GAHelper;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.preference.ProgressBarPreference;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
@@ -497,17 +497,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY);
 
         if (null != useBackgroundSyncPref) {
-            final GcmRegistrationManager gcmMgr = Matrix.getInstance(appContext).getSharedGCMRegistrationManager();
+            final PushManager pushMgr = Matrix.getInstance(appContext).getSharedPushManager();
 
-            useBackgroundSyncPref.setChecked(gcmMgr.isBackgroundSyncAllowed());
+            useBackgroundSyncPref.setChecked(pushMgr.isBackgroundSyncAllowed());
 
             useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object aNewValue) {
                     boolean newValue = (boolean) aNewValue;
 
-                    if (newValue != gcmMgr.isBackgroundSyncAllowed()) {
-                        gcmMgr.setBackgroundSyncAllowed(newValue);
+                    if (newValue != pushMgr.isBackgroundSyncAllowed()) {
+                        pushMgr.setBackgroundSyncAllowed(newValue);
                     }
 
                     return true;
@@ -767,7 +767,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             });
 
-            Matrix.getInstance(context).getSharedGCMRegistrationManager().refreshPushersList(Matrix.getInstance(context).getSessions(), new SimpleApiCallback<Void>() {
+            Matrix.getInstance(context).getSharedPushManager().refreshPushersList(Matrix.getInstance(context).getSessions(), new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     refreshPushersList();
@@ -857,16 +857,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         BingRuleSet rules = mSession.getDataHandler().pushRules();
 
-        GcmRegistrationManager gcmMgr = Matrix.getInstance(appContext).getSharedGCMRegistrationManager();
+        PushManager pushMgr = Matrix.getInstance(appContext).getSharedPushManager();
 
         for (String resourceText : mPushesRuleByResourceId.keySet()) {
             CheckBoxPreference switchPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
                 if (resourceText.equals(PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)) {
-                    switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
+                    switchPreference.setChecked(pushMgr.areDeviceNotificationsAllowed());
                 } else if (resourceText.equals(PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY)) {
-                    switchPreference.setChecked(gcmMgr.isScreenTurnedOn());
+                    switchPreference.setChecked(pushMgr.isScreenTurnedOn());
                 } else {
                     switchPreference.setEnabled((null != rules) && isConnected);
                     switchPreference.setChecked(preferences.getBoolean(resourceText, false));
@@ -1048,32 +1048,32 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Update a push rule.
      */
     private void onPushRuleClick(final String fResourceText, final boolean newValue) {
-        final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
+        final PushManager pushMgr = Matrix.getInstance(getActivity()).getSharedPushManager();
 
         Log.d(LOG_TAG, "onPushRuleClick " + fResourceText + " : set to " + newValue);
 
         if (fResourceText.equals(PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY)) {
-            if (gcmMgr.isScreenTurnedOn() != newValue) {
-                gcmMgr.setScreenTurnedOn(newValue);
+            if (pushMgr.isScreenTurnedOn() != newValue) {
+                pushMgr.setScreenTurnedOn(newValue);
             }
             return;
         }
 
         if (fResourceText.equals(PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)) {
             boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
-            final boolean isAllowed = gcmMgr.areDeviceNotificationsAllowed();
+            final boolean isAllowed = pushMgr.areDeviceNotificationsAllowed();
 
             // avoid useless update
             if (isAllowed == newValue) {
                 return;
             }
 
-            gcmMgr.setDeviceNotificationsAllowed(!isAllowed);
+            pushMgr.setDeviceNotificationsAllowed(!isAllowed);
 
             // when using GCM
             // need to register on servers
-            if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistred() || gcmMgr.isServerUnRegistred())) {
-                final GcmRegistrationManager.ThirdPartyRegistrationListener listener = new GcmRegistrationManager.ThirdPartyRegistrationListener() {
+            if (isConnected && pushMgr.usePush() && (pushMgr.isServerRegistered() || pushMgr.isServerUnRegistred())) {
+                final PushManager.ThirdPartyRegistrationListener listener = new PushManager.ThirdPartyRegistrationListener() {
 
                     private void onDone() {
                         if (null != getActivity()) {
@@ -1094,7 +1094,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                     @Override
                     public void onThirdPartyRegistrationFailed() {
-                        gcmMgr.setDeviceNotificationsAllowed(isAllowed);
+                        pushMgr.setDeviceNotificationsAllowed(isAllowed);
                         onDone();
                     }
 
@@ -1105,16 +1105,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                     @Override
                     public void onThirdPartyUnregistrationFailed() {
-                        gcmMgr.setDeviceNotificationsAllowed(isAllowed);
+                        pushMgr.setDeviceNotificationsAllowed(isAllowed);
                         onDone();
                     }
                 };
 
                 displayLoadingView();
-                if (gcmMgr.isServerRegistred()) {
-                    gcmMgr.unregister(listener);
+                if (pushMgr.isServerRegistered()) {
+                    pushMgr.unregister(listener);
                 } else {
-                    gcmMgr.register(listener);
+                    pushMgr.register(listener);
                 }
             }
 
@@ -1516,8 +1516,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Refresh the pushers list
      */
     private void refreshPushersList() {
-        final GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
-        final List<Pusher> pushersList = new ArrayList<>(gcmRegistrationManager.mPushersList);
+        final PushManager pushMgr = Matrix.getInstance(getActivity()).getSharedPushManager();
+        final List<Pusher> pushersList = new ArrayList<>(pushMgr.mPushersList);
 
         if (pushersList.isEmpty()) {
             getPreferenceScreen().removePreference(mPushersSettingsCategory);
@@ -1542,7 +1542,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             for (final Pusher pusher : mDisplayedPushers) {
                 if (null != pusher.lang) {
-                    boolean isThisDeviceTarget = TextUtils.equals(gcmRegistrationManager.getGCMRegistrationToken(), pusher.pushkey);
+                    boolean isThisDeviceTarget = TextUtils.equals(pushMgr.getPushRegistrationToken(), pusher.pushkey);
 
                     VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity(), isThisDeviceTarget ? Typeface.BOLD : Typeface.NORMAL);
                     preference.setTitle(pusher.deviceDisplayName);
@@ -1566,7 +1566,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                                 dialog.dismiss();
 
                                                 displayLoadingView();
-                                                gcmRegistrationManager.unregister(mSession, pusher, new ApiCallback<Void>() {
+                                                pushMgr.unregister(mSession, pusher, new ApiCallback<Void>() {
                                                     @Override
                                                     public void onSuccess(Void info) {
                                                         refreshPushersList();
@@ -2052,10 +2052,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             return;
         }
 
-        final GcmRegistrationManager gcmmgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
+        final PushManager pushMgr = Matrix.getInstance(getActivity()).getSharedPushManager();
 
-        final int timeout = gcmmgr.getBackgroundSyncTimeOut() / 1000;
-        final int delay = gcmmgr.getBackgroundSyncDelay() / 1000;
+        final int timeout = pushMgr.getBackgroundSyncTimeOut() / 1000;
+        final int delay = pushMgr.getBackgroundSyncDelay() / 1000;
 
         // update the settings
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -2080,7 +2080,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     }
 
                     if (newTimeOut != timeout) {
-                        gcmmgr.setBackgroundSyncTimeOut(newTimeOut * 1000);
+                        pushMgr.setBackgroundSyncTimeOut(newTimeOut * 1000);
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -2113,7 +2113,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     }
 
                     if (newDelay != delay) {
-                        gcmmgr.setBackgroundSyncDelay(newDelay * 1000);
+                        pushMgr.setBackgroundSyncDelay(newDelay * 1000);
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -2129,7 +2129,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // theses settings are dedicated when a client does not support GCM
-        if (gcmmgr.hasRegistrationToken()) {
+        if (pushMgr.hasRegistrationToken()) {
             final Preference autoStartSyncPref = findPreference(PreferencesManager.SETTINGS_START_ON_BOOT_PREFERENCE_KEY);
             if (null != autoStartSyncPref) {
                 mBackgroundSyncCategory.removePreference(autoStartSyncPref);

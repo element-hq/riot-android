@@ -27,7 +27,7 @@ import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 
@@ -272,12 +272,12 @@ public class SplashActivity extends MXCActionBarActivity {
         }
 
         // trigger the GCM registration if required
-        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+        PushManager pushMgr = Matrix.getInstance(getApplicationContext()).getSharedPushManager();
 
-        if (!gcmRegistrationManager.isGCMRegistred()) {
-            gcmRegistrationManager.checkRegistrations();
+        if (!pushMgr.isPushRegistered()) {
+            pushMgr.checkRegistrations();
         } else {
-            gcmRegistrationManager.forceSessionsRegistration(null);
+            pushMgr.forceSessionsRegistration(null);
         }
 
         boolean noUpdate;

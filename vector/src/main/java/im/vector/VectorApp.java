@@ -65,7 +65,7 @@ import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
@@ -351,10 +351,10 @@ public class VectorApp extends Application {
      * Suspend background threads.
      */
     private void suspendApp() {
-        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(VectorApp.this).getSharedGCMRegistrationManager();
+        PushManager pushMgr = Matrix.getInstance(VectorApp.this).getSharedPushManager();
 
         // suspend the events thread if the client uses GCM
-        if (!gcmRegistrationManager.isBackgroundSyncAllowed() || (gcmRegistrationManager.useGCM() && gcmRegistrationManager.hasRegistrationToken())) {
+        if (!pushMgr.isBackgroundSyncAllowed() || (pushMgr.usePush() && pushMgr.hasRegistrationToken())) {
             Log.d(LOG_TAG, "suspendApp ; pause the event stream");
             CommonActivityUtils.pauseEventStream(VectorApp.this);
         } else {
@@ -367,8 +367,8 @@ public class VectorApp extends Application {
         for (MXSession session : sessions) {
             if (session.isAlive()) {
                 session.setIsOnline(false);
-                session.setSyncDelay(gcmRegistrationManager.isBackgroundSyncAllowed() ? gcmRegistrationManager.getBackgroundSyncDelay() : 0);
-                session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                session.setSyncDelay(pushMgr.isBackgroundSyncAllowed() ? pushMgr.getBackgroundSyncDelay() : 0);
+                session.setSyncTimeout(pushMgr.getBackgroundSyncTimeOut());
 
                 // remove older medias
                 if ((System.currentTimeMillis() - mLastMediasCheck) < (24 * 60 * 60 * 1000)) {
@@ -463,10 +463,10 @@ public class VectorApp extends Application {
 
                 // try to perform a GCM registration if it failed
                 // or if the GCM server generated a new push key
-                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGCMRegistrationManager();
+                PushManager pushMgr = Matrix.getInstance(this).getSharedPushManager();
 
-                if (null != gcmRegistrationManager) {
-                    gcmRegistrationManager.checkRegistrations();
+                if (null != pushMgr) {
+                    pushMgr.checkRegistrations();
                 }
             }
 

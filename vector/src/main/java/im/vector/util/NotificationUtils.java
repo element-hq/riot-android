@@ -19,7 +19,6 @@ package im.vector.util;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -712,7 +711,7 @@ public class NotificationUtils {
             }
 
             // turn the screen on for 3 seconds
-            if (Matrix.getInstance(VectorApp.getInstance()).getSharedGCMRegistrationManager().isScreenTurnedOn()) {
+            if (Matrix.getInstance(VectorApp.getInstance()).getSharedPushManager().isScreenTurnedOn()) {
                 PowerManager pm = (PowerManager)VectorApp.getInstance().getSystemService(Context.POWER_SERVICE);
                 PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "manageNotificationSound");
                 wl.acquire(3000);

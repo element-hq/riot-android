@@ -40,6 +40,6 @@ public class MatrixInstanceIDListenerService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(LOG_TAG, "onTokenRefresh " + refreshedToken);
 
-        Matrix.getInstance(this).getSharedGCMRegistrationManager().resetGCMRegistration(refreshedToken);
+        Matrix.getInstance(this).getSharedPushManager().resetPushServiceRegistration(refreshedToken);
     }
 }

@@ -52,7 +52,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.util.Pair;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -100,7 +99,7 @@ import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.VectorUnknownDevicesFragment;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ThemeUtils;
@@ -219,7 +218,7 @@ public class CommonActivityUtils {
             EventStreamService.removeNotification();
 
             // unregister from the GCM.
-            Matrix.getInstance(context).getSharedGCMRegistrationManager().unregister(session, null);
+            Matrix.getInstance(context).getSharedPushManager().unregister(session, null);
 
             // clear credentials
             Matrix.getInstance(context).clearSession(context, session, clearCredentials, new SimpleApiCallback<Void>() {
@@ -401,10 +400,10 @@ public class CommonActivityUtils {
         ThemeUtils.setApplicationTheme(context, theme);
 
         // reset the GCM
-        Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
+        Matrix.getInstance(context).getSharedPushManager().resetPushServiceRegistration();
         // clear the preferences when the application goes to the login screen.
         if (goToLoginPage) {
-            Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
+            Matrix.getInstance(context).getSharedPushManager().clearPreferences();
         }
 
         // clear credentials
@@ -1854,11 +1853,11 @@ public class CommonActivityUtils {
         } else {
             if (aSession.isAlive()) {
                 boolean isRefreshRequired;
-                GcmRegistrationManager gcmMgr = Matrix.getInstance(aContext).getSharedGCMRegistrationManager();
+                PushManager pushMgr = Matrix.getInstance(aContext).getSharedPushManager();
 
                 // update the badge count if the device is offline, GCM is not supported or GCM registration failed
                 isRefreshRequired = !Matrix.getInstance(aContext).isConnected();
-                isRefreshRequired |= (null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken());
+                isRefreshRequired |= (null != pushMgr) && (!pushMgr.usePush() || !pushMgr.hasRegistrationToken());
 
                 if (isRefreshRequired) {
                     updateBadgeCount(aContext, dataHandler);

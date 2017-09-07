@@ -74,7 +74,7 @@ import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorHomeActivity;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.util.NotificationUtils;
 import im.vector.util.VectorCallSoundManager;
 
@@ -181,7 +181,7 @@ public class EventStreamService extends Service {
     /**
      * GCM manager
      */
-    private GcmRegistrationManager mGcmRegistrationManager;
+    private PushManager mPushManager;
 
     /**
      * Tell if the service must be suspended after started.
@@ -440,8 +440,8 @@ public class EventStreamService extends Service {
                     return START_NOT_STICKY;
                 }
 
-                GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
-                if (!gcmManager.canStartAppInBackground()) {
+                PushManager pushMgr = Matrix.getInstance(getApplicationContext()).getSharedPushManager();
+                if (!pushMgr.canStartAppInBackground()) {
                     Log.e(LOG_TAG, "onStartCommand : no auto restart because the user disabled the background sync");
                     return START_NOT_STICKY;
                 }
@@ -594,7 +594,7 @@ public class EventStreamService extends Service {
      * internal start.
      */
     private void start() {
-        final GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+        final PushManager pushMgr = Matrix.getInstance(getApplicationContext()).getSharedPushManager();
         StreamAction state = getServiceState();
 
         if (state == StreamAction.START) {
@@ -635,9 +635,9 @@ public class EventStreamService extends Service {
             if (store.isReady()) {
                 startEventStream(session, store);
                 if (mSuspendWhenStarted) {
-                    if (null != gcmRegistrationManager) {
-                        session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
-                        session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                    if (null != pushMgr) {
+                        session.setSyncDelay(pushMgr.getBackgroundSyncDelay());
+                        session.setSyncTimeout(pushMgr.getBackgroundSyncTimeOut());
                     }
 
                     catchup(false);
@@ -651,9 +651,9 @@ public class EventStreamService extends Service {
                         startEventStream(fSession, store);
 
                         if (mSuspendWhenStarted) {
-                            if (null != gcmRegistrationManager) {
-                                session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
-                                session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                            if (null != pushMgr) {
+                                session.setSyncDelay(pushMgr.getBackgroundSyncDelay());
+                                session.setSyncTimeout(pushMgr.getBackgroundSyncTimeOut());
                             }
 
                             catchup(false);
@@ -688,9 +688,9 @@ public class EventStreamService extends Service {
             }
         }
 
-        mGcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+        mPushManager = Matrix.getInstance(getApplicationContext()).getSharedPushManager();
 
-        if (!mGcmRegistrationManager.useGCM()) {
+        if (!mPushManager.usePush()) {
             updateServiceForegroundState();
         }
 
@@ -831,11 +831,11 @@ public class EventStreamService extends Service {
         }
 
         // GA issue
-        if (null == mGcmRegistrationManager) {
+        if (null == mPushManager) {
             return;
         }
 
-        if ((!mGcmRegistrationManager.useGCM() || !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+        if ((!mPushManager.usePush() || !mPushManager.isServerRegistered()) && mPushManager.isBackgroundSyncAllowed() && mPushManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in foreground");
 
             if (-1 == mForegroundServiceIdentifier) {
@@ -963,7 +963,7 @@ public class EventStreamService extends Service {
             return;
         }
 
-        if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+        if (!mPushManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "prepareNotification : the push has been disable on this device");
             return;
         }
@@ -1204,7 +1204,7 @@ public class EventStreamService extends Service {
     public void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
         final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
-        if (!mGcmRegistrationManager.areDeviceNotificationsAllowed() || (null == messages) || (0 == messages.size())) {
+        if (!mPushManager.areDeviceNotificationsAllowed() || (null == messages) || (0 == messages.size())) {
             new Handler(getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
@@ -1240,7 +1240,7 @@ public class EventStreamService extends Service {
         final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
         NotificationUtils.NotifiedEvent eventToNotify = getEventToNotify();
-        if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+        if (!mPushManager.areDeviceNotificationsAllowed()) {
             mNotifiedEventsByRoomId = null;
             new Handler(getMainLooper()).post(new Runnable() {
                 @Override
@@ -1549,7 +1549,7 @@ public class EventStreamService extends Service {
             mIncomingCallId = callId;
 
             // turn the screen on for 3 seconds
-            if (Matrix.getInstance(VectorApp.getInstance()).getSharedGCMRegistrationManager().isScreenTurnedOn()) {
+            if (Matrix.getInstance(VectorApp.getInstance()).getSharedPushManager().isScreenTurnedOn()) {
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "MXEventListener");
                 wl.acquire(3000);

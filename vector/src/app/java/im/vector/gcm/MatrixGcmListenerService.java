@@ -32,6 +32,7 @@ import java.util.Map;
 import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 
 /**
@@ -105,14 +106,14 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
             // update the badge counter
             CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
 
-            GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+            PushManager pushMgr = Matrix.getInstance(getApplicationContext()).getSharedPushManager();
 
-            if (!gcmManager.areDeviceNotificationsAllowed()) {
+            if (!pushMgr.areDeviceNotificationsAllowed()) {
                 Log.d(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled");
                 return;
             }
 
-            if (!gcmManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
+            if (!pushMgr.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
                 Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled");
 
                 EventStreamService eventStreamService = EventStreamService.getInstance();
