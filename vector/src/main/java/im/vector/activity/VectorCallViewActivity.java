@@ -689,8 +689,12 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    // call once
-                    if (mCall.isVideo() || (!mCall.isIncoming() && (TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState())))) {
+                    if (null != mCall.getCallView()) {
+                        mCallView = mCall.getCallView();
+                        insertCallView();
+                        computeVideoUiLayout();
+                        mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
+                    } else if (mCall.isVideo() || (!mCall.isIncoming() && (TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState())))) {
                         mCall.createCallView();
                     }
                 }
