@@ -1,4 +1,21 @@
-package im.vector.push;
+/**
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ * Copyright 2017 Vector Creations Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ package im.vector.push;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,14 +28,10 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PushersResponse;
 import org.matrix.androidsdk.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -27,13 +40,19 @@ import im.vector.util.PreferencesManager;
 import retrofit.RetrofitError;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+
 /**
  * Helper class to handle the Push notification systems {@link SharedPreferences}
  */
 public abstract class PushManager {
     private static final String LOG_TAG = "PushManager";
 
-    private static final String PREFS_NOTIFICATION = "PushManager";
+    private static final String PREFS_PUSH = "PushManager";
 
     // GcmRegistrationManager because of history. TODO: Write migration for old settings to PushManager
     private static final String PREFS_ALLOW_NOTIFICATIONS = "GcmRegistrationManager.PREFS_ALLOW_NOTIFICATIONS";
@@ -105,7 +124,7 @@ public abstract class PushManager {
     protected RegistrationState mRegistrationState = RegistrationState.UNREGISTRATED;
 
     // defines the Push registration token
-    private String mPushKey = null;
+    protected String mPushKey = null;
 
     // 3 states : null not initialized (retrieved by flavor)
     private static Boolean mUsePush;
@@ -160,6 +179,89 @@ public abstract class PushManager {
      */
     public abstract String getPushRegistrationToken();
 
+
+    /**
+     * Register to Push Service.
+     * @param pushRegistrationListener the events listener.
+     */
+    protected void registerToPushService(final PushRegistrationListener pushRegistrationListener) {
+        Log.d(LOG_TAG, "registerToPushService with state " + mRegistrationState);
+
+        // do not use Push
+        if (!usePush()) {
+            Log.d(LOG_TAG, "registerPusher : Push is disabled");
+
+            // warn the listener
+            if (null != pushRegistrationListener) {
+                try {
+                    pushRegistrationListener.onPushRegistrationFailed();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "registerToPushService : onPusherRegistered/onPusherRegistrationFailed failed " + e.getLocalizedMessage());
+                }
+            }
+            return;
+        }
+        if (mRegistrationState == RegistrationState.UNREGISTRATED) {
+            mRegistrationState = RegistrationState.PUSH_REGISTRATING;
+
+            try {
+                new AsyncTask<Void, Void, String>() {
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        String registrationToken = getPushRegistrationToken();
+
+                        if (registrationToken != null) {
+                            mPushKey = registrationToken;
+                        }
+
+                        return registrationToken;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String pushKey) {
+                        mRegistrationState = (pushKey != null) ? RegistrationState.PUSH_REGISTRED : RegistrationState.UNREGISTRATED;
+                        setStoredRegistrationToken(pushKey);
+
+                        // warn the listener
+                        if (null != pushRegistrationListener) {
+                            try {
+                                if (pushKey != null) {
+                                    pushRegistrationListener.onPushRegistered();
+                                } else {
+                                    pushRegistrationListener.onPushRegistrationFailed();
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "registerToPushService : onPusherRegistered/onPusherRegistrationFailed failed " + e.getMessage());
+                            }
+                        }
+
+                        if (mRegistrationState == RegistrationState.PUSH_REGISTRED) {
+                            // register the sessions to the 3rd party server
+                            // this setting should be updated from the listener
+                            if (usePush()) {
+                                register(null);
+                            }
+                        }
+                    }
+                }.execute();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## registerToPushService() failed " + e.getMessage());
+                // warn the listener
+                if (null != pushRegistrationListener) {
+                    try {
+                        pushRegistrationListener.onPushRegistrationFailed();
+                    } catch (Exception e2) {
+                        Log.e(LOG_TAG, "registerToPushService : onPusherRegistered/onPusherRegistrationFailed failed " + e2.getMessage());
+                    }
+                }
+            }
+        } else if (mRegistrationState == RegistrationState.PUSH_REGISTRATING) {
+            pushRegistrationListener.onPushRegistrationFailed();
+        } else {
+            pushRegistrationListener.onPushRegistered();
+        }
+    }
+
     /**
      * Reset the Push registration.
      */
@@ -168,11 +270,52 @@ public abstract class PushManager {
     }
 
     /**
-     * Reset the Push registration.
+     * Reset the GCM registration.
      * @param newToken the new registration token
      */
-    public abstract void resetPushServiceRegistration(final String newToken);
+    public void resetPushServiceRegistration(final String newToken) {
+        Log.d(LOG_TAG, "resetGCMRegistration");
 
+        if (RegistrationState.SERVER_REGISTERED == mRegistrationState) {
+            Log.d(LOG_TAG, "resetGCMRegistration : unregister before retrieving the new GCM key");
+
+            unregister(new ThirdPartyRegistrationListener() {
+                @Override
+                public void onThirdPartyRegistered() {
+                }
+
+                @Override
+                public void onThirdPartyRegistrationFailed() {
+                }
+
+                @Override
+                public void onThirdPartyUnregistered() {
+                    Log.d(LOG_TAG, "resetGCMRegistration : unregistration is done --> start the registration process");
+                    resetPushServiceRegistration(newToken);
+                }
+
+                @Override
+                public void onThirdPartyUnregistrationFailed() {
+                    Log.d(LOG_TAG, "resetGCMRegistration : unregistration failed.");
+                }
+            });
+        } else {
+            final boolean clearEverything = TextUtils.isEmpty(newToken);
+
+            Log.d(LOG_TAG, "resetGCMRegistration : Clear the GCM data");
+            clearPushData(clearEverything, new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    if (!clearEverything) {
+                        Log.d(LOG_TAG, "resetGCMRegistration : make a full registration process.");
+                        register(null);
+                    } else {
+                        Log.d(LOG_TAG, "resetGCMRegistration : Ready to register.");
+                    }
+                }
+            });
+        }
+    }
     //================================================================================
     // third party registration management
     //================================================================================
@@ -191,6 +334,67 @@ public abstract class PushManager {
         }
 
         return tag;
+    }
+
+    /**
+     * Manage the 500 http error case.
+     */
+    private void manage500Error() {
+        Log.d(LOG_TAG, "got a 500 error -> reset the registration and try again");
+
+        Timer relaunchTimer = new Timer();
+
+        // wait 5 seconds before registering
+        relaunchTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (RegistrationState.PUSH_REGISTRED == mRegistrationState) {
+                    if (null != mPushKey) {
+                        mRegistrationState = RegistrationState.SERVER_REGISTERED;
+                    }
+
+                    if (RegistrationState.SERVER_REGISTERED == mRegistrationState) {
+
+                        Log.d(LOG_TAG, "500 error : unregister first");
+
+                        unregister(new ThirdPartyRegistrationListener() {
+                            @Override
+                            public void onThirdPartyRegistered() {
+                            }
+
+                            @Override
+                            public void onThirdPartyRegistrationFailed() {
+                            }
+
+                            @Override
+                            public void onThirdPartyUnregistered() {
+                                Log.d(LOG_TAG, "500 error : onThirdPartyUnregistered");
+
+                                setStoredRegistrationToken(null);
+                                mRegistrationState = RegistrationState.UNREGISTRATED;
+                                register(null);
+                            }
+
+                            @Override
+                            public void onThirdPartyUnregistrationFailed() {
+                                Log.d(LOG_TAG, "500 error : onThirdPartyUnregistrationFailed");
+
+                                setStoredRegistrationToken(null);
+                                mRegistrationState = RegistrationState.UNREGISTRATED;
+                                register(null);
+                            }
+                        });
+
+                    } else {
+                        Log.d(LOG_TAG, "500 error : no Push key");
+
+                        setStoredRegistrationToken(null);
+                        mRegistrationState = RegistrationState.UNREGISTRATED;
+                        register(null);
+                    }
+                }
+            }
+        }, 5000);
     }
 
     /**
@@ -408,88 +612,6 @@ public abstract class PushManager {
             } else {
                 dispatchOnThirdPartyRegistrationFailed();
             }
-        }
-    }
-
-    /**
-     * Register to Push Service.
-     * @param pushRegistrationListener the events listener.
-     */
-    protected void registerToPushService(final PushRegistrationListener pushRegistrationListener) {
-        Log.d(LOG_TAG, "registerToPushService with state " + mRegistrationState);
-
-        // do not use Push
-        if (!usePush()) {
-            Log.d(LOG_TAG, "registerPusher : Push is disabled");
-
-            // warn the listener
-            if (null != pushRegistrationListener) {
-                try {
-                    pushRegistrationListener.onPushRegistrationFailed();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "registerToPushService : onPusherRegistered/onPusherRegistrationFailed failed " + e.getLocalizedMessage());
-                }
-            }
-            return;
-        }
-        if (mRegistrationState == RegistrationState.UNREGISTRATED) {
-            mRegistrationState = RegistrationState.PUSH_REGISTRATING;
-
-            try {
-                new AsyncTask<Void, Void, String>() {
-                    @Override
-                    protected String doInBackground(Void... voids) {
-                        String registrationToken = getPushRegistrationToken();
-
-                        if (registrationToken != null) {
-                            mPushKey = registrationToken;
-                        }
-
-                        return registrationToken;
-                    }
-
-                    @Override
-                    protected void onPostExecute(String pushKey) {
-                        mRegistrationState = (pushKey != null) ? RegistrationState.PUSH_REGISTRED : RegistrationState.UNREGISTRATED;
-                        setStoredRegistrationToken(pushKey);
-
-                        // warn the listener
-                        if (null != pushRegistrationListener) {
-                            try {
-                                if (pushKey != null) {
-                                    pushRegistrationListener.onPushRegistered();
-                                } else {
-                                    pushRegistrationListener.onPushRegistrationFailed();
-                                }
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "registerToPushService : onPusherRegistered/onPusherRegistrationFailed failed " + e.getMessage());
-                            }
-                        }
-
-                        if (mRegistrationState == RegistrationState.PUSH_REGISTRED) {
-                            // register the sessions to the 3rd party server
-                            // this setting should be updated from the listener
-                            if (usePush()) {
-                                register(null);
-                            }
-                        }
-                    }
-                }.execute();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## registerToPushService() failed " + e.getMessage());
-                // warn the listener
-                if (null != pushRegistrationListener) {
-                    try {
-                        pushRegistrationListener.onPushRegistrationFailed();
-                    } catch (Exception e2) {
-                        Log.e(LOG_TAG, "registerToPushService : onPusherRegistered/onPusherRegistrationFailed failed " + e2.getMessage());
-                    }
-                }
-            }
-        } else if (mRegistrationState == RegistrationState.PUSH_REGISTRATING) {
-            pushRegistrationListener.onPushRegistrationFailed();
-        } else {
-            pushRegistrationListener.onPushRegistered();
         }
     }
 
@@ -912,7 +1034,7 @@ public abstract class PushManager {
      * @return the Push preferences
      */
     protected SharedPreferences getPushSharedPreferences() {
-        return mContext.getSharedPreferences(PREFS_NOTIFICATION, Context.MODE_PRIVATE);
+        return mContext.getSharedPreferences(PREFS_PUSH, Context.MODE_PRIVATE);
     }
 
     /**
@@ -1028,66 +1150,5 @@ public abstract class PushManager {
 
             mThirdPartyRegistrationListeners.clear();
         }
-    }
-
-    /**
-     * Manage the 500 http error case.
-     */
-    private void manage500Error() {
-        Log.d(LOG_TAG, "got a 500 error -> reset the registration and try again");
-
-        Timer relaunchTimer = new Timer();
-
-        // wait 5 seconds before registering
-        relaunchTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (RegistrationState.PUSH_REGISTRED == mRegistrationState) {
-                    if (null != mPushKey) {
-                        mRegistrationState = RegistrationState.SERVER_REGISTERED;
-                    }
-
-                    if (RegistrationState.SERVER_REGISTERED == mRegistrationState) {
-
-                        Log.d(LOG_TAG, "500 error : unregister first");
-
-                        unregister(new ThirdPartyRegistrationListener() {
-                            @Override
-                            public void onThirdPartyRegistered() {
-                            }
-
-                            @Override
-                            public void onThirdPartyRegistrationFailed() {
-                            }
-
-                            @Override
-                            public void onThirdPartyUnregistered() {
-                                Log.d(LOG_TAG, "500 error : onThirdPartyUnregistered");
-
-                                setStoredRegistrationToken(null);
-                                mRegistrationState = RegistrationState.UNREGISTRATED;
-                                register(null);
-                            }
-
-                            @Override
-                            public void onThirdPartyUnregistrationFailed() {
-                                Log.d(LOG_TAG, "500 error : onThirdPartyUnregistrationFailed");
-
-                                setStoredRegistrationToken(null);
-                                mRegistrationState = RegistrationState.UNREGISTRATED;
-                                register(null);
-                            }
-                        });
-
-                    } else {
-                        Log.d(LOG_TAG, "500 error : no Push key");
-
-                        setStoredRegistrationToken(null);
-                        mRegistrationState = RegistrationState.UNREGISTRATED;
-                        register(null);
-                    }
-                }
-            }
-        }, 5000);
     }
 }

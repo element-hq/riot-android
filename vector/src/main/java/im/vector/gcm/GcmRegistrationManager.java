@@ -20,13 +20,10 @@ package im.vector.gcm;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.util.Log;
 
-import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 
 import im.vector.Matrix;
@@ -50,24 +47,6 @@ public final class GcmRegistrationManager extends PushManager {
     private static final String DEFAULT_PUSHER_APP_ID = "im.vector.app.android";
     private static final String DEFAULT_PUSHER_URL = "https://matrix.org/_matrix/push/v1/notify";
     private static final String DEFAULT_PUSHER_FILE_TAG = "mobile";
-
-    private String mPusherAppName = null;
-    private String mPusherLang = null;
-
-    // the session registration listener
-    private final ArrayList<ThirdPartyRegistrationListener> mThirdPartyRegistrationListeners = new ArrayList<>();
-
-    // the pushers list
-    public ArrayList<Pusher> mPushersList = new ArrayList<>();
-
-    // the pusher base
-    private static final String mBasePusherDeviceName = Build.MODEL.trim();
-
-    // defines the GCM registration token
-    private String mPushKey = null;
-
-    // 3 states : null not initialized (retrieved by flavor)
-    private static Boolean mUseGCM;
 
     /**
      * Constructor
@@ -166,59 +145,10 @@ public final class GcmRegistrationManager extends PushManager {
         String registrationToken = getStoredRegistrationToken();
 
         if (TextUtils.isEmpty(registrationToken)) {
-            Log.d(LOG_TAG, "## getGCMRegistrationToken() : undefined token -> getting a nex one");
+            Log.d(LOG_TAG, "## getGCMRegistrationToken() : undefined token -> getting a new one");
             registrationToken = GCMHelper.getRegistrationToken();
         }
         return registrationToken;
-    }
-
-    /**
-     * Reset the GCM registration.
-     * @param newToken the new registration token
-     */
-    @Override
-    public void resetPushServiceRegistration(final String newToken) {
-        Log.d(LOG_TAG, "resetGCMRegistration");
-
-        if (RegistrationState.SERVER_REGISTERED == mRegistrationState) {
-            Log.d(LOG_TAG, "resetGCMRegistration : unregister before retrieving the new GCM key");
-
-            unregister(new ThirdPartyRegistrationListener() {
-                @Override
-                public void onThirdPartyRegistered() {
-                }
-
-                @Override
-                public void onThirdPartyRegistrationFailed() {
-                }
-
-                @Override
-                public void onThirdPartyUnregistered() {
-                    Log.d(LOG_TAG, "resetGCMRegistration : unregistration is done --> start the registration process");
-                    resetPushServiceRegistration(newToken);
-                }
-
-                @Override
-                public void onThirdPartyUnregistrationFailed() {
-                    Log.d(LOG_TAG, "resetGCMRegistration : unregistration failed.");
-                }
-            });
-        } else {
-            final boolean clearEverything = TextUtils.isEmpty(newToken);
-
-            Log.d(LOG_TAG, "resetGCMRegistration : Clear the GCM data");
-            clearPushData(clearEverything, new SimpleApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    if (!clearEverything) {
-                        Log.d(LOG_TAG, "resetGCMRegistration : make a full registration process.");
-                        register(null);
-                    } else {
-                        Log.d(LOG_TAG, "resetGCMRegistration : Ready to register.");
-                    }
-                }
-            });
-        }
     }
 
     //================================================================================
