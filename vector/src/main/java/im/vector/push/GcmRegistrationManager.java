@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package im.vector.gcm;
+package im.vector.push;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,7 +28,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 
 import im.vector.Matrix;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.push.PushManager;
+import im.vector.gcm.GCMHelper;
 
 import java.util.ArrayList;
 
@@ -60,6 +60,7 @@ public final class GcmRegistrationManager extends PushManager {
      * Check if the GCM registration has been broken with a new token ID.
      * The GCM could have cleared it (onTokenRefresh).
      */
+    @Override
     public void checkRegistrations() {
         Log.d(LOG_TAG, "checkRegistrations with state " + mRegistrationState);
 

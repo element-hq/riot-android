@@ -167,7 +167,40 @@ public abstract class PushManager {
      * Check if the push registration has been set up.
      * The Push could have cleared it (onTokenRefresh).
      */
-    public abstract void checkRegistrations();
+    public void checkRegistrations() {
+        Log.d(LOG_TAG, "checkRegistrations with state " + mRegistrationState);
+
+        if (!usePush()) {
+            Log.d(LOG_TAG, "checkRegistrations : Push is disabled");
+            return;
+        }
+
+        if (mRegistrationState == RegistrationState.UNREGISTRATED) {
+            Log.d(LOG_TAG, "checkPusherRegistration : try to connect to register to push server");
+
+            registerToPushService(new PushRegistrationListener() {
+                @Override
+                public void onPushRegistered() {
+                    Log.d(LOG_TAG, "checkRegistrations : reregistered");
+                    CommonActivityUtils.onPushServiceUpdate(mContext);
+                }
+
+                @Override
+                public void onPushRegistrationFailed() {
+                    Log.d(LOG_TAG, "checkRegistrations : onPusherRegistrationFailed");
+                }
+            });
+        } else if (mRegistrationState == RegistrationState.PUSH_REGISTRED) {
+            // register the 3rd party server
+            // the server registration might have failed
+            // so ensure that it will be done when the application is debackgrounded.
+            if (usePush() && areDeviceNotificationsAllowed()) {
+                register(null);
+            }
+        } else if (mRegistrationState == RegistrationState.SERVER_REGISTERED) {
+            refreshPushersList(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), null);
+        }
+    }
 
     //================================================================================
     // Push registration
