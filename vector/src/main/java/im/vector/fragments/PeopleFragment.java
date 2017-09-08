@@ -285,16 +285,20 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         final MXDataHandler dataHandler = mSession.getDataHandler();
         final IMXStore store = dataHandler.getStore();
 
-
         mDirectChats.clear();
         if (directChatIds != null && !directChatIds.isEmpty()) {
             for (String roomId : directChatIds) {
                 Room room = store.getRoom(roomId);
 
                 if ((null != room) && !room.isConferenceUserRoom()) {
-                    final Set<String> tags = room.getAccountData().getKeys();
-                    if ((null == tags) || !tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
-                        mDirectChats.add(dataHandler.getRoom(roomId));
+                    // it seems that the server syncs some left rooms
+                    if (null == room.getMember(mSession.getMyUserId())) {
+                        Log.e(LOG_TAG, "## initDirectChatsData(): invalid room " + room.getRoomId() + ", the user is not anymore member of it");
+                    } else {
+                        final Set<String> tags = room.getAccountData().getKeys();
+                        if ((null == tags) || !tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
+                            mDirectChats.add(dataHandler.getRoom(roomId));
+                        }
                     }
                 }
             }
