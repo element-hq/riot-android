@@ -837,6 +837,11 @@ public final class GcmRegistrationManager {
 
             @Override
             public void onMatrixError(MatrixError e) {
+                if (e.mStatus == 404) {
+                    // httpPusher is not available on server side anymore so assume the removal was successful
+                    onSuccess(null);
+                    return;
+                }
                 if (null != callback) {
                     callback.onMatrixError(e);
                 }
@@ -898,6 +903,11 @@ public final class GcmRegistrationManager {
 
                             @Override
                             public void onMatrixError(MatrixError e) {
+                                if (e.mStatus == 404) {
+                                    // httpPusher is not available on server side anymore so assume the removal was successful
+                                    onSuccess(null);
+                                    return;
+                                }
                                 Log.e(LOG_TAG, "unregisterSession onMatrixError " + e.errcode);
                                 onError(e.getLocalizedMessage());
                             }
