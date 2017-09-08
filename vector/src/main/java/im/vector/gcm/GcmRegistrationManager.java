@@ -134,7 +134,7 @@ public final class GcmRegistrationManager extends PushManager {
                 @Override
                 public void onPushRegistered() {
                     Log.d(LOG_TAG, "checkRegistrations : reregistered");
-                    CommonActivityUtils.onGcmUpdate(mContext);
+                    CommonActivityUtils.onPushServiceUpdate(mContext);
                 }
 
                 @Override

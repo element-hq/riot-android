@@ -100,7 +100,7 @@ public class EventStreamService extends Service {
         PAUSE,
         RESUME,
         CATCHUP,
-        GCM_STATUS_UPDATE,
+        PUSH_SERVICE_STATUS_UPDATE,
         AUTO_RESTART
     }
 
@@ -179,7 +179,7 @@ public class EventStreamService extends Service {
     private boolean mIsForeground = false;
 
     /**
-     * GCM manager
+     * Push manager
      */
     private PushManager mPushManager;
 
@@ -510,8 +510,8 @@ public class EventStreamService extends Service {
             case CATCHUP:
                 catchup(true);
                 break;
-            case GCM_STATUS_UPDATE:
-                gcmStatusUpdate();
+            case PUSH_SERVICE_STATUS_UPDATE:
+                pushStatusUpdate();
             default:
                 break;
         }
@@ -798,13 +798,13 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * The GCM status has been updated (i.e disabled or enabled).
+     * The Push status has been updated (i.e disabled or enabled).
      */
-    private void gcmStatusUpdate() {
-        Log.d(LOG_TAG, "## gcmStatusUpdate");
+    private void pushStatusUpdate() {
+        Log.d(LOG_TAG, "## pushStatusUpdate");
 
         if (mIsForeground) {
-            Log.d(LOG_TAG, "## gcmStatusUpdate : gcm status succeeds so stopForeground");
+            Log.d(LOG_TAG, "## pushStatusUpdate : push status succeeds so stopForeground");
             if (FOREGROUND_LISTENING_FOR_EVENTS == mForegroundServiceIdentifier) {
                 stopForeground(true);
                 mForegroundServiceIdentifier = -1;

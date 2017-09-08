@@ -217,7 +217,7 @@ public class CommonActivityUtils {
             // clear notification
             EventStreamService.removeNotification();
 
-            // unregister from the GCM.
+            // unregister from the Push System.
             Matrix.getInstance(context).getSharedPushManager().unregister(session, null);
 
             // clear credentials
@@ -399,7 +399,7 @@ public class CommonActivityUtils {
 
         ThemeUtils.setApplicationTheme(context, theme);
 
-        // reset the GCM
+        // reset the Push system
         Matrix.getInstance(context).getSharedPushManager().resetPushServiceRegistration();
         // clear the preferences when the application goes to the login screen.
         if (goToLoginPage) {
@@ -549,13 +549,13 @@ public class CommonActivityUtils {
     }
 
     /**
-     * Warn the events stream that there was a GCM status update.
+     * Warn the events stream that there was a Push Service status update.
      *
      * @param context the context.
      */
-    public static void onGcmUpdate(Context context) {
-        Log.d(LOG_TAG, "onGcmUpdate");
-        sendEventStreamAction(context, EventStreamService.StreamAction.GCM_STATUS_UPDATE);
+    public static void onPushServiceUpdate(Context context) {
+        Log.d(LOG_TAG, "onPushServiceUpdate");
+        sendEventStreamAction(context, EventStreamService.StreamAction.PUSH_SERVICE_STATUS_UPDATE);
     }
 
     /**

@@ -104,7 +104,7 @@ public abstract class PushManager {
     // the registration state
     protected RegistrationState mRegistrationState = RegistrationState.UNREGISTRATED;
 
-    // defines the GCM registration token
+    // defines the Push registration token
     private String mPushKey = null;
 
     // 3 states : null not initialized (retrieved by flavor)
@@ -146,17 +146,17 @@ public abstract class PushManager {
 
     /**
      * Check if the push registration has been set up.
-     * The GCM could have cleared it (onTokenRefresh).
+     * The Push could have cleared it (onTokenRefresh).
      */
     public abstract void checkRegistrations();
 
     //================================================================================
-    // GCM registration
+    // Push registration
     //================================================================================
 
     /**
      * Retrieve the Push registration token.
-     * @return the GCM registration token
+     * @return the Push registration token
      */
     public abstract String getPushRegistrationToken();
 
@@ -168,7 +168,7 @@ public abstract class PushManager {
     }
 
     /**
-     * Reset the GCM registration.
+     * Reset the Push registration.
      * @param newToken the new registration token
      */
     public abstract void resetPushServiceRegistration(final String newToken);
@@ -204,7 +204,7 @@ public abstract class PushManager {
             if (!areDeviceNotificationsAllowed()) {
                 Log.d(LOG_TAG, "registerPusher : the user disabled it.");
             }  else {
-                Log.d(LOG_TAG, "registerPusher : GCM is disabled.");
+                Log.d(LOG_TAG, "registerPusher : Push is disabled.");
             }
 
             if (null != listener) {
@@ -280,7 +280,7 @@ public abstract class PushManager {
 
                                     // an HTTP error 500 issue has been reported several times
                                     // it seems that the server is either rebooting
-                                    // or the GCM key seems triggering error on server side.
+                                    // or the Push key seems triggering error on server side.
                                     if ((null != retrofitError.getResponse()) && (500 == retrofitError.getResponse().getStatus())) {
                                         manage500Error();
                                     }
@@ -346,7 +346,7 @@ public abstract class PushManager {
 
     /**
      * Force to register the sessions to the third party servers.
-     * The GCM registration must have been done and there is no pending registration.
+     * The Push registration must have been done and there is no pending registration.
      * @param listener the listener
      */
     public void forceSessionsRegistration(final ThirdPartyRegistrationListener listener) {
@@ -366,7 +366,7 @@ public abstract class PushManager {
     }
 
     /**
-     * Register the current sessions to the 3rd party GCM server
+     * Register the current sessions to the 3rd party Push server
      * @param listener the registration listener.
      */
     public void register(final ThirdPartyRegistrationListener listener) {
@@ -384,13 +384,13 @@ public abstract class PushManager {
             registerToPushService(new PushRegistrationListener() {
                 @Override
                 public void onPushRegistered() {
-                    Log.d(LOG_TAG, "GCM registration failed again : register on server side");
+                    Log.d(LOG_TAG, "Push registration failed again : register on server side");
                     register(listener);
                 }
 
                 @Override
                 public void onPushRegistrationFailed() {
-                    Log.d(LOG_TAG, "register unregistrated : GCM registration failed again");
+                    Log.d(LOG_TAG, "register unregistrated : Push registration failed again");
                     dispatchOnThirdPartyRegistrationFailed();
                 }
             });
@@ -412,15 +412,15 @@ public abstract class PushManager {
     }
 
     /**
-     * Register to GCM.
+     * Register to Push Service.
      * @param pushRegistrationListener the events listener.
      */
     protected void registerToPushService(final PushRegistrationListener pushRegistrationListener) {
         Log.d(LOG_TAG, "registerToPushService with state " + mRegistrationState);
 
-        // do not use GCM
+        // do not use Push
         if (!usePush()) {
-            Log.d(LOG_TAG, "registerPusher : GCM is disabled");
+            Log.d(LOG_TAG, "registerPusher : Push is disabled");
 
             // warn the listener
             if (null != pushRegistrationListener) {
@@ -513,7 +513,7 @@ public abstract class PushManager {
                 // remove them
                 unregister(null);
             } else {
-                CommonActivityUtils.onGcmUpdate(mContext);
+                CommonActivityUtils.onPushServiceUpdate(mContext);
             }
 
             return;
@@ -580,7 +580,7 @@ public abstract class PushManager {
             if (usePush() && areDeviceNotificationsAllowed() && Matrix.hasValidSessions() ) {
                 register(null);
             } else {
-                CommonActivityUtils.onGcmUpdate(mContext);
+                CommonActivityUtils.onPushServiceUpdate(mContext);
             }
 
             dispatchOnThirdPartyUnregistered();
@@ -710,7 +710,7 @@ public abstract class PushManager {
     //================================================================================
 
     /**
-     * Tells if GCM has a push key.
+     * Tells if Push system has a push key.
      */
     public boolean hasRegistrationToken() {
         return null != mPushKey;
@@ -748,14 +748,14 @@ public abstract class PushManager {
     }
 
     //================================================================================
-    // GCM preferences
+    // Push preferences
     //================================================================================
 
     /**
      * Clear the Push preferences
      */
     public void clearPreferences() {
-        getNotificationSharedPreferences().edit().clear().commit();
+        getPushSharedPreferences().edit().clear().commit();
     }
 
     /**
@@ -779,7 +779,7 @@ public abstract class PushManager {
      * @return true the notifications must be triggered on this device
      */
     public boolean areDeviceNotificationsAllowed() {
-        return getNotificationSharedPreferences().getBoolean(PREFS_ALLOW_NOTIFICATIONS, true);
+        return getPushSharedPreferences().getBoolean(PREFS_ALLOW_NOTIFICATIONS, true);
     }
 
     /**
@@ -787,7 +787,7 @@ public abstract class PushManager {
      * @param areAllowed true to enable the device notifications.
      */
     public void setDeviceNotificationsAllowed(boolean areAllowed) {
-        if (!getNotificationSharedPreferences().edit()
+        if (!getPushSharedPreferences().edit()
                 .putBoolean(PREFS_ALLOW_NOTIFICATIONS, areAllowed)
                 .commit()) {
             Log.e(LOG_TAG, "## setDeviceNotificationsAllowed () : commit failed");
@@ -795,7 +795,7 @@ public abstract class PushManager {
 
         if (!usePush()) {
             // when Push is disabled, enable / disable the "Listen for events" notifications
-            CommonActivityUtils.onGcmUpdate(mContext);
+            CommonActivityUtils.onPushServiceUpdate(mContext);
         }
     }
 
@@ -803,7 +803,7 @@ public abstract class PushManager {
      * @return true if the notifications should turn the screen on for 3 seconds.
      */
     public boolean isScreenTurnedOn() {
-        return getNotificationSharedPreferences().getBoolean(PREFS_TURN_SCREEN_ON, false);
+        return getPushSharedPreferences().getBoolean(PREFS_TURN_SCREEN_ON, false);
     }
 
     /**
@@ -811,7 +811,7 @@ public abstract class PushManager {
      * @param flag true to enable the device notifications.
      */
     public void setScreenTurnedOn(boolean flag) {
-        if (!getNotificationSharedPreferences().edit()
+        if (!getPushSharedPreferences().edit()
                 .putBoolean(PREFS_TURN_SCREEN_ON, flag)
                 .commit()) {
             Log.e(LOG_TAG, "## setScreenTurnedOn() : commit failed");
@@ -822,7 +822,7 @@ public abstract class PushManager {
      * @return true if the background sync is allowed
      */
     public boolean isBackgroundSyncAllowed() {
-        return getNotificationSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
+        return getPushSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
     }
 
     /**
@@ -838,14 +838,14 @@ public abstract class PushManager {
      * @param isAllowed true to allow the background sync.
      */
     public void setBackgroundSyncAllowed(boolean isAllowed) {
-        if (!getNotificationSharedPreferences().edit()
+        if (!getPushSharedPreferences().edit()
                 .putBoolean(PREFS_ALLOW_BACKGROUND_SYNC, isAllowed)
                 .commit()) {
             Log.e(LOG_TAG, "## setBackgroundSyncAllowed() : commit failed");
         }
 
-        // when GCM is disabled, enable / disable the "Listen for events" notifications
-        CommonActivityUtils.onGcmUpdate(mContext);
+        // when Push is disabled, enable / disable the "Listen for events" notifications
+        CommonActivityUtils.onPushServiceUpdate(mContext);
     }
 
     /**
@@ -859,14 +859,14 @@ public abstract class PushManager {
         if (null != session) {
             currentValue = session.getSyncTimeout();
         }
-        return getNotificationSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, currentValue);
+        return getPushSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, currentValue);
     }
 
     /**
      * @param syncDelay the new sync delay in ms.
      */
     public void setBackgroundSyncTimeOut(int syncDelay) {
-        if (!getNotificationSharedPreferences().edit()
+        if (!getPushSharedPreferences().edit()
                 .putInt(PREFS_SYNC_TIMEOUT, syncDelay)
                 .commit()) {
             Log.e(LOG_TAG, "## setBackgroundSyncTimeOut() : commit failed");
@@ -879,7 +879,7 @@ public abstract class PushManager {
     public int getBackgroundSyncDelay() {
         // on fdroid version, the default sync delay is about 10 minutes
         // set a large value because many users don't know it can be defined from the settings page
-        if ((null == mPushKey) && (null == getStoredRegistrationToken()) && !getNotificationSharedPreferences().contains(PREFS_SYNC_DELAY)) {
+        if ((null == mPushKey) && (null == getStoredRegistrationToken()) && !getPushSharedPreferences().contains(PREFS_SYNC_DELAY)) {
             return 10 * 60 * 1000;
         } else {
             int currentValue = 0;
@@ -889,7 +889,7 @@ public abstract class PushManager {
                 currentValue = session.getSyncDelay();
             }
 
-            return getNotificationSharedPreferences().getInt(PREFS_SYNC_DELAY, currentValue);
+            return getPushSharedPreferences().getInt(PREFS_SYNC_DELAY, currentValue);
         }
     }
 
@@ -897,7 +897,7 @@ public abstract class PushManager {
      * @param syncDelay the delay between two syncs in ms.
      */
     public void setBackgroundSyncDelay(int syncDelay) {
-        if (!getNotificationSharedPreferences().edit()
+        if (!getPushSharedPreferences().edit()
                 .putInt(PREFS_SYNC_DELAY, syncDelay)
                 .commit()) {
             Log.e(LOG_TAG, "## setBackgroundSyncDelay() : commit failed");
@@ -905,13 +905,13 @@ public abstract class PushManager {
     }
 
     //================================================================================
-    // GCM push key
+    // PushService push key
     //================================================================================
 
     /**
-     * @return the GCM preferences
+     * @return the Push preferences
      */
-    private SharedPreferences getNotificationSharedPreferences() {
+    protected SharedPreferences getPushSharedPreferences() {
         return mContext.getSharedPreferences(PREFS_NOTIFICATION, Context.MODE_PRIVATE);
     }
 
@@ -919,17 +919,17 @@ public abstract class PushManager {
      * @return the registration stored for this version of the app or null if none is stored.
      */
     protected String getStoredRegistrationToken() {
-        return getNotificationSharedPreferences().getString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, null);
+        return getPushSharedPreferences().getString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, null);
     }
 
     /**
-     * Set the GCM registration for the currently-running version of this app.
+     * Set the Push registration for the currently-running version of this app.
      * @param registrationToken the registration token
      */
     protected void setStoredRegistrationToken(String registrationToken) {
         Log.d(LOG_TAG, "Saving registration token");
 
-        if (!getNotificationSharedPreferences().edit()
+        if (!getPushSharedPreferences().edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, registrationToken)
                 .commit()) {
             Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
@@ -938,7 +938,7 @@ public abstract class PushManager {
 
     /**
      * Clear the Push data
-     * @param clearRegistrationToken true to clear the provided GCM token
+     * @param clearRegistrationToken true to clear the provided Push token
      * @param callback the asynchronous callback
      */
     public abstract void clearPushData(final boolean clearRegistrationToken, final ApiCallback callback);
@@ -1080,7 +1080,7 @@ public abstract class PushManager {
                         });
 
                     } else {
-                        Log.d(LOG_TAG, "500 error : no GCM key");
+                        Log.d(LOG_TAG, "500 error : no Push key");
 
                         setStoredRegistrationToken(null);
                         mRegistrationState = RegistrationState.UNREGISTRATED;
