@@ -26,7 +26,7 @@
     <string name="share">Condividi</string>
     <string name="later">Ultimi</string>
     <string name="forward">Inoltra</string>
-    <string name="permalink">Permalink</string>
+    <string name="permalink">Collegamento permanente</string>
     <string name="view_source">Vedi sorgente</string>
     <string name="view_decrypted_source">Vedi sorgente decriptata</string>
     <string name="delete">Elimina</string>
@@ -37,7 +37,7 @@
     <string name="ongoing_conference_call_voice">voce</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Impossibile avviare chiamata, riprova più tardi</string>
-    <string name="missing_permissions_warning">A causa di permessi insufficienti, alcune opzioni potrebbero mancare…</string>
+    <string name="missing_permissions_warning">A causa di permessi mancanti, alcune funzionalità potrebbero mancare..</string>
     <string name="missing_permissions_to_start_conf_call">Non hai il permesso di invitare altri per iniziare una conferenza in questa stanza</string>
     <string name="missing_permissions_title_to_start_conf_call">Impossibile avviare chiamata</string>
     <string name="device_information">Informazioni dispositivo</string>
@@ -219,7 +219,7 @@
     <string name="attachment_cancel_download">"Annullare il download?</string>
     <string name="attachment_cancel_upload">Annullare l\'upload?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
-    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+    <string name="attachment_remaining_time_minutes">%1$d minuti %2$d secondi</string>
 
     <!-- room creation dialog Screen -->
     <string name="yesterday">Ieri</string>
@@ -435,7 +435,7 @@
     <string name="directory_search_rooms">%1$d stanze</string>
     <string name="directory_search_room_for">%1$d stanza trovata per %2$s</string>
     <string name="directory_search_rooms_for">%1$s stanze trovate per %2$s</string>
-    <string name="directory_searching_title">Elenco della ricerca…</string>
+    <string name="directory_searching_title">Elenco della ricerca..</string>
 
     <!-- home room settings -->
     <string name="room_settings_notifications">Notifiche</string>
@@ -601,7 +601,7 @@
     <string name="room_settings_labs_warning_message">Queste sono caratteristiche sperimentali che possono fallire in modo inatteso. Usare con cautela.</string>
     <string name="room_settings_labs_end_to_end">Crittografia da-utente-a-utente</string>
     <string name="room_settings_labs_end_to_end_is_active">La crittografia da-utente-a-utente è attiva</string>
-    <string name="room_settings_labs_end_to_end_warnings">Devi disconnetterti per abilitare la crittografia</string>
+    <string name="room_settings_labs_end_to_end_warnings">Devi disconnetterti per abilitare la crittografia.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Cripta solo per i dispositivi verificati</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Non inviare mai da questa stanza messaggi criptati a dispositivi non verificati.</string>
 
@@ -629,7 +629,7 @@
     <string name="directory_title">Elenco</string>
 
     <!-- GA use -->
-    <string name="ga_use_alert_message">Accetti di aiutarci per migliorare il comportamento dell\'applicazione inviando rapporti sui crash?</string>
+    <string name="ga_use_alert_message">Vuoi aiutarci a migliorare il comportamento dell\'applicazione inviando rapporti sui crash?</string>
     <string name="ga_use_settings">Invio rapporti sui crash automatico</string>
     <string name="ga_use_disable_alert_message">Devi riavviare l\'applicazione per disabilitare il rapporto sui crash.</string>
 
@@ -709,4 +709,42 @@
     <!-- historical -->
     <string name="historical_placeholder">Cerca nello storico</string>
 
-</resources>
+<string name="offline">Disconnesso</string>
+
+    <string name="user_directory_header">Rubrica utenti</string>
+    <string name="settings_start_on_boot">Avvia all\'accensione del telefono</string>
+    <string name="settings_hide_read_receipts">Nascondi notifiche di lettura</string>
+    <string name="settings_always_show_timestamps">Mostra sempre l\'ora dei messaggi</string>
+    <string name="settings_disable_markdown">Disabilita formattazione markdown</string>
+    <string name="settings_user_interface">Interfaccia utente</string>
+    <string name="settings_interface_language">Linguaggio Interfaccia</string>
+    <string name="settings_select_language">Scegli una lingua</string>
+
+    <string name="account_email_already_used_error">Questo indirizzo email è già in uso</string>
+    <string name="account_email_not_found_error">Invio email fallito: L\'indirizzo email non è stato trovato</string>
+    <string name="account_phone_number_already_used_error">Numero di telefono già in uso</string>
+
+    <string name="media_saving_period_1_week">1 settimana</string>
+    <string name="media_saving_period_1_month">1 mese</string>
+    <string name="media_saving_period_forever">Per sempre</string>
+
+    <string name="settings_theme">Tema</string>
+
+    <string name="font_size">Dimensione carattere</string>
+    <string name="tiny">Piccolo</string>
+    <string name="small">Piccolo</string>
+    <string name="normal">Normale</string>
+    <string name="large">Grande</string>
+    <string name="larger">Più grande</string>
+    <string name="membership_changes">% cambi di stato</string>
+
+    <string name="settings_clear_medias_cache">Cancella media</string>
+    <string name="settings_keep_media">Mantieni media</string>
+
+    <string name="huge">Gigante</string>
+<string name="settings_dont_send_typings_notifs">Non mostrare agli altri che stai scrivendo</string>
+    <string name="settings_data_save_mode">Modalità risparmio banda</string>
+
+    <string name="media_saving_period_3_days">Opzioni conservazione media</string>
+    <string name="largest">Grandissimo</string>
+    </resources>
