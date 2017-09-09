@@ -80,7 +80,7 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
     <string name="no_result_placeholder">Nincsenek találatok</string>
 
     <string name="rooms_header">Szobák</string>
-    <string name="rooms_directory_header">Szobakönyvtár</string>
+    <string name="rooms_directory_header">Szobajegyzék</string>
     <string name="no_room_placeholder">Nincsenek szobák</string>
     <string name="no_public_room_placeholder">Nincsenek elérhető nyilvános szobák</string>
     <plurals name="public_room_nb_users">
@@ -554,12 +554,12 @@ A folytatáshoz, kérlek írd be a jelszavad.</string>
     <string name="room_settings_category_access_visibility_title">Hozzáférés és láthatóság</string>
     <string name="room_settings_directory_visibility">Listázza ezt a szobát a szobák könyvtárba</string>
     <string name="room_settings_room_access_rules_pref_title">Szoba hozzáfárés</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Szoba előzmény olvashatóság</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Szoba előzmény olvashatósága</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Ki tud előzményt olvasni?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Ki tud hozzáférni a szobához?</string>
 
     <string name="room_settings_read_history_entry_anyone">Bárki</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Csak tagok (ez az opció kiválasztása óta)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Csak tagok (ezen opció kiválasztása óta)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Csak tagok (meghívásuk óta)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Csak tagok (csatlakozásuk óta)</string>
 
