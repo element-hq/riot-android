@@ -303,14 +303,14 @@ public abstract class PushManager {
     }
 
     /**
-     * Reset the GCM registration.
+     * Reset the PushService registration.
      * @param newToken the new registration token
      */
     public void resetPushServiceRegistration(final String newToken) {
-        Log.d(LOG_TAG, "resetGCMRegistration");
+        Log.d(LOG_TAG, "resetPushServiceRegistration");
 
         if (RegistrationState.SERVER_REGISTERED == mRegistrationState) {
-            Log.d(LOG_TAG, "resetGCMRegistration : unregister before retrieving the new GCM key");
+            Log.d(LOG_TAG, "resetPushServiceRegistration : unregister before retrieving the new PushService key");
 
             unregister(new ThirdPartyRegistrationListener() {
                 @Override
@@ -323,27 +323,27 @@ public abstract class PushManager {
 
                 @Override
                 public void onThirdPartyUnregistered() {
-                    Log.d(LOG_TAG, "resetGCMRegistration : unregistration is done --> start the registration process");
+                    Log.d(LOG_TAG, "resetPushServiceRegistration : unregistration is done --> start the registration process");
                     resetPushServiceRegistration(newToken);
                 }
 
                 @Override
                 public void onThirdPartyUnregistrationFailed() {
-                    Log.d(LOG_TAG, "resetGCMRegistration : unregistration failed.");
+                    Log.d(LOG_TAG, "resetPushServiceRegistration : unregistration failed.");
                 }
             });
         } else {
             final boolean clearEverything = TextUtils.isEmpty(newToken);
 
-            Log.d(LOG_TAG, "resetGCMRegistration : Clear the GCM data");
+            Log.d(LOG_TAG, "resetPushServiceRegistration : Clear the PushService data");
             clearPushData(clearEverything, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     if (!clearEverything) {
-                        Log.d(LOG_TAG, "resetGCMRegistration : make a full registration process.");
+                        Log.d(LOG_TAG, "resetPushServiceRegistration : make a full registration process.");
                         register(null);
                     } else {
-                        Log.d(LOG_TAG, "resetGCMRegistration : Ready to register.");
+                        Log.d(LOG_TAG, "resetPushServiceRegistration : Ready to register.");
                     }
                 }
             });
@@ -462,9 +462,9 @@ public abstract class PushManager {
         Log.d(LOG_TAG, "registerToThirdPartyServer of " + session.getMyUserId());
 
         session.getPushersRestClient()
-                .addHttpPusher(mPushKey, DEFAULT_PUSHER_APP_ID, computePushTag(session),
+                .addHttpPusher(mPushKey, getDefaultPusherAppId(), computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
-                        DEFAULT_PUSHER_URL, append, new ApiCallback<Void>() {
+                        getDefaultPusherUrl(), append, new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
                                 Log.d(LOG_TAG, "registerToThirdPartyServer succeeded");
@@ -810,9 +810,9 @@ public abstract class PushManager {
         Log.d(LOG_TAG, "unregister " + session.getMyUserId());
 
         session.getPushersRestClient()
-                .removeHttpPusher(mPushKey, DEFAULT_PUSHER_APP_ID, computePushTag(session),
+                .removeHttpPusher(mPushKey, getDefaultPusherAppId(), computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
-                        DEFAULT_PUSHER_URL, new ApiCallback<Void>() {
+                        getDefaultPusherUrl(), new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
                                 Log.d(LOG_TAG, "unregisterSession succeeded");
@@ -929,6 +929,18 @@ public abstract class PushManager {
         }
         return mUsePush;
     }
+
+    /**
+     * Get Default App ID (defined here to be able to overwrite it)
+     * @return
+     */
+    protected abstract String getDefaultPusherAppId();
+
+    /**
+     * Get Default Pusher Url (defined here to be able to overwrite it)
+     * @return
+     */
+    protected abstract String getDefaultPusherUrl();
 
     /**
      * @return true the notifications must be triggered on this device

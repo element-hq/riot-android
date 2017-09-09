@@ -256,4 +256,22 @@ public final class GcmRegistrationManager extends PushManager {
             }
         }
     }
+
+    /**
+     * Get Default App ID
+     * @return
+     */
+    @Override
+    protected String getDefaultPusherAppId() {
+        return DEFAULT_PUSHER_APP_ID;
+    }
+
+    /**
+     * Get Default Pusher Url
+     * @return
+     */
+    @Override
+    protected String getDefaultPusherUrl(){
+        return DEFAULT_PUSHER_URL;
+    }
 }
