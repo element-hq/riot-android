@@ -1496,16 +1496,20 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         Collection<RoomSummary> roomSummaries = mSession.getDataHandler().getStore().getSummaries();
         for (RoomSummary roomSummary : roomSummaries) {
-            String roomSummaryId = roomSummary.getRoomId();
-            Room room = mSession.getDataHandler().getStore().getRoom(roomSummaryId);
+            // reported by rageshake
+            // i don't see how it is possible to have a null roomSummary
+            if (null != roomSummary) {
+                String roomSummaryId = roomSummary.getRoomId();
+                Room room = mSession.getDataHandler().getStore().getRoom(roomSummaryId);
 
-            // check if the room exists
-            // the user conference rooms are not displayed.
-            if (room != null && !room.isConferenceUserRoom() && room.isInvited()) {
-                if (room.isDirectChatInvitation()) {
-                    mDirectChatInvitations.add(room);
-                } else {
-                    mRoomInvitations.add(room);
+                // check if the room exists
+                // the user conference rooms are not displayed.
+                if (room != null && !room.isConferenceUserRoom() && room.isInvited()) {
+                    if (room.isDirectChatInvitation()) {
+                        mDirectChatInvitations.add(room);
+                    } else {
+                        mRoomInvitations.add(room);
+                    }
                 }
             }
         }
