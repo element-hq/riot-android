@@ -84,8 +84,8 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <plurals name="public_room_nb_users">
 	<item quantity="one">1 użytkownik</item>
 	<item quantity="few">%d użytkowników</item>
-	<item quantity="many"></item>
-	<item quantity="other"></item>
+	<item quantity="many">%d użytkowników</item>
+	<item quantity="other"/>
 </plurals>
 
     <string name="send_bug_report_include_logs">Wyślij dzienniki</string>
@@ -166,7 +166,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="auth_reset_password_missing_email">Musi zostać wprowadzony e-mail powiązany z kontem.</string>
     <string name="auth_reset_password_missing_password">Nowe hasło musi zostać wprowadzone.</string>
     <string name="auth_reset_password_email_validation_message">Wiadomość została wysłana na adres %s. Po wejściu w znajdujący się tam link, naciśnij poniżej.</string>
-    <string name="auth_reset_password_error_unauthorized">Nie udało się zweryfikować adresu e-mail: upewnij się, że kliknąłeś w odnośnik z wiadomości.</string>
+    <string name="auth_reset_password_error_unauthorized">Nie udało się zweryfikować adresu e-mail: upewnij się, że kliknąłeś w odnośnik z wiadomości</string>
     <string name="login_error_must_start_http">URL musi zaczynać się od http[s]://</string>
     <string name="login_error_network_error">Nie udało się połączyć: Błąd sieci</string>
     <string name="login_error_unable_login">Logowanie nie powiodło się</string>
@@ -224,7 +224,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
 Przyznaj dostęp w następnym oknie.</string>
     <string name="permissions_rationale_msg_camera">Riot wymaga uprawnienia, aby wykonywać zdjęcia i nawiązywać połączenia wideo.</string>
     <string name="permissions_rationale_msg_record_audio">Riot wymaga uprawnienia, aby nagrywać dźwięk calls.</string>
-    <string name="permissions_action_not_performed_missing_permissions">Nie można wykonać operacji, ze względu na brak wymaganych uprawnień.</string>
+    <string name="permissions_action_not_performed_missing_permissions">Nie można wykonać operacji, ze względu na brak wymaganych uprawnień</string>
 
     <string name="media_slider_saved">Zapisano</string>
     <string name="media_slider_saved_message">Zapisz do pobranych</string>
@@ -496,7 +496,7 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="room_settings_room_internal_id">Wewnętrzne ID tego pokoju</string>
     <string name="room_settings_addresses_pref_title">Adresy</string>
     <string name="room_settings_labs_pref_title">Laboratorium</string>
-    <string name="room_settings_labs_warning_message">These are experimental features that may break in unexpected ways. Use with caution.</string>
+    <string name="room_settings_labs_warning_message">Znajdują się tu eksperymentalne funkcje, których należy używać z ostrożnością.</string>
     <string name="room_settings_labs_end_to_end">Szyfrowanie End-to-End</string>
     <string name="room_settings_labs_end_to_end_is_active">Szyfrowanie End-to-End jest aktywne</string>
     <string name="room_settings_addresses_add_new_address">Nowy adres (np. #foo:matrix.org)</string>
@@ -505,7 +505,7 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="room_settings_copy_room_id">Kopiuj ID pokoju</string>
     <string name="room_settings_copy_room_address">Kopiuj adres pokoju</string>
 
-    <string name="room_settings_addresses_e2e_enabled">Szyfrowanie jest włączone w tym pokoju</string>
+    <string name="room_settings_addresses_e2e_enabled">Szyfrowanie jest włączone w tym pokoju.</string>
     <string name="room_settings_addresses_e2e_disabled">Szyfrowanie jest wyłączone w tym pokoju.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Włącz szyfrowanie 
 (ostrzeżenie: nie może zostać wyłączone!)</string>
