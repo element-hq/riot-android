@@ -699,7 +699,7 @@ public class NotificationUtils {
         }
 
         if (!isBackground) {
-            builder.setLights(Color.GREEN, 500, 500);
+            builder.setDefaults(Notification.DEFAULT_LIGHTS);
 
             if (isBing) {
                 Uri ringTone = VectorCallSoundManager.getRingToneUri(R.raw.message, RING_TONE_MESSAGE_NOTIFICATION);
