@@ -207,9 +207,11 @@ public class CommonActivityUtils {
         if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
-            ArrayList<String> matrixIds = new ArrayList<>();
-            matrixIds.add(session.getMyUserId());
-            eventStreamService.stopAccounts(matrixIds);
+            if (null != eventStreamService) {
+                ArrayList<String> matrixIds = new ArrayList<>();
+                matrixIds.add(session.getMyUserId());
+                eventStreamService.stopAccounts(matrixIds);
+            }
 
             // Publish to the server that we're now offline
             MyPresenceManager.getInstance(context, session).advertiseOffline();
