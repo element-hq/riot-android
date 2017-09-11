@@ -1,2 +1,125 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="title_activity_home">Wiadomości</string>
+    <string name="title_activity_room">Pokój</string>
+    <string name="title_activity_settings">Ustawienia</string>
+    <string name="title_activity_member_details">Szczegóły użytkownika</string>
+    <string name="title_activity_historical">Historyczne</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Anuluj</string>
+    <string name="save">Zapisz</string>
+    <string name="leave">Opuść</string>
+    <string name="send">Wyślij</string>
+    <string name="copy">Kopiuj</string>
+    <string name="resend">Wyślij ponownie</string>
+    <string name="redact">Redaguj</string>
+    <string name="quote">Cytuj</string>
+    <string name="share">Podziel się</string>
+    <string name="later">Później</string>
+    <string name="forward">Dalej</string>
+    <string name="permalink">Odnośnik</string>
+    <string name="view_source">Zobacz źródło</string>
+    <string name="view_decrypted_source">Zobacz odszyfrowane źródło</string>
+    <string name="delete">Usuń</string>
+    <string name="rename">Zmień nazwę</string>
+    <string name="report_content">Zgłoś</string>
+    <string name="active_call">Aktywne połączenie</string>
+    <string name="ongoing_conference_call">" Konferencja w toku. Dołącz w formie głosowej lub wideo."</string>
+    <string name="ongoing_conference_call_voice">głos</string>
+    <string name="ongoing_conference_call_video">wideo</string>
+    <string name="cannot_start_call">Nie można zacząć połączenia, spróbuj później</string>
+    <string name="missing_permissions_warning">Ze względu na brak uprawnień, niektóre funkcje mogą nie działać.</string>
+    <string name="missing_permissions_to_start_conf_call">Potrzebujesz uprawnień zapraszającego, by zacząć konferencję w tym pokoju</string>
+    <string name="missing_permissions_title_to_start_conf_call">Nie można rozpocząć połączenia</string>
+    <string name="device_information">Informacje o urządzeniu</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Połączenia konferencyjne nie są dostępne w szyfrowanych pokojach</string>
+    <string name="send_anyway">Wyślij mimo to</string>
+    <string name="or">lub</string>
+    <string name="and">i</string>
+    <string name="invite">Zaproś</string>
+    <string name="offline">Offline</string>
+
+    <string name="action_sign_out">Wyloguj się</string>
+    <string name="action_sign_out_confirmation">Z powodów bezpieczeństwa, wylogowanie się usunie wszystkie klucze szyfrujące i uniemożliwi przeczytanie historii czatu, gdy zalogujesz się ponownie.
+Wybierz eksport, by zapisać kopię zapasową przed wylogowaniem.</string>
+    <string name="action_voice_call">Połączenie głosowe</string>
+    <string name="action_video_call">Połączenie wideo</string>
+    <string name="action_global_search">Wyszukiwanie globalne</string>
+    <string name="action_mark_all_as_read">Oznacz wszystkie jako przeczytane</string>
+    <string name="action_historical">Historyczne</string>
+    <string name="action_quick_reply">Szybka odpowiedź</string>
+    <string name="action_open">Otwórz</string>
+    <string name="action_close">Zamknij</string>
+    <string name="copied_to_clipboard">Skopiowano do schowka</string>
+    <string name="disable">Deaktywuj</string>
+
+    <string name="dialog_title_confirmation">Potwierdzenie</string>
+    <string name="dialog_title_warning">Ostrzeżenie</string>
+
+    <string name="bottom_action_home">Ekran główny</string>
+    <string name="bottom_action_favourites">Ulubione</string>
+    <string name="bottom_action_people">Ludzie</string>
+    <string name="bottom_action_rooms">Pokoje</string>
+
+    <string name="home_filter_placeholder_home">Szukaj pokoi</string>
+    <string name="home_filter_placeholder_favorites">Szukaj w ulubionych</string>
+    <string name="home_filter_placeholder_people">Szukaj ludzi</string>
+    <string name="home_filter_placeholder_rooms">Szukaj pokoi</string>
+
+    <string name="invitations_header">Zaproszenia</string>
+    <string name="low_priority_header">Niski priorytet</string>
+
+    <string name="direct_chats_header">Konwersacje</string>
+    <string name="local_address_book_header">Lokalna książka adresowa</string>
+    <string name="user_directory_header">Miejsca użytkownika</string>
+    <string name="matrix_only_filter">Tylko kontakty Matrix</string>
+    <string name="no_conversation_placeholder">Brak konwersacji</string>
+    <string name="no_contact_access_placeholder">Nie zezwolono Riot na dostęp do lokalnych kontaktów</string>
+    <string name="no_result_placeholder">Brak wyników</string>
+
+    <string name="rooms_header">Pokoje</string>
+    <string name="rooms_directory_header">Położenie pokoju</string>
+    <string name="no_room_placeholder">Brak pokoi</string>
+    <string name="no_public_room_placeholder">Brak dostępnych publicznych pokojów</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="one">użytkownik</item>
+	<item quantity="few">użytkowników</item>
+	<item quantity="many">użytkowników</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="send_bug_report_include_logs">Wyślij raport</string>
+    <string name="send_bug_report_include_crash_logs">Wyślij raport o błędach</string>
+    <string name="send_bug_report_include_screenshot">Wyślij zrzut ekranu</string>
+    <string name="send_bug_report">Zgłoś błąd</string>
+    <string name="send_bug_report_description">Opisz błąd. Co zrobiłeś? Czego oczekiwałaś? Co się wydarzyło?</string>
+    <string name="send_bug_report_placeholder">Opisz swój problem tutaj</string>
+    <string name="send_bug_report_logs_description">By zdiagnozować problemy, raporty z tego klienta zostaną wysłane wraz z tym raportem o błędach. Jeśli wolisz wysłać tylko powyższy tekst, odznacz to pole:</string>
+    <string name="send_bug_report_alert_message">Wydajesz się trząść telefonem z frustracji. Czy chcesz zgłosić raport o błędach?</string>
+    <string name="send_bug_report_app_crashed">Aplikacja nie została poprawnie zamknięta za ostatnim razem. Czy chcesz zgłosić raport o nieoczekiwanym zamknięciu?</string>
+
+    <string name="send_bug_report_sent">Raport o błędach został wysłany</string>
+    <string name="send_bug_report_failed">Nie udało się wysłać raportu o błędach</string>
+    <string name="send_bug_report_progress">Postęp</string>
+
+    <string name="send_files_in">Wyślij do</string>
+    <string name="read_receipt">Przeczytaj</string>
+
+    <string name="join_room">Dołącz do pokoju</string>
+    <string name="username">Nazwa użytkownika</string>
+    <string name="create_account">Zarejestruj się</string>
+    <string name="login">Zaloguj się</string>
+    <string name="logout">Wyloguj się</string>
+    <string name="hs_url">Adres URL serwera domowego</string>
+    <string name="user">użytkownik</string>
+    <string name="users">użytkownicy</string>
+    <string name="search">Szukaj</string>
+
+    <string name="start_new_chat">Zacznij nowy czat</string>
+    <string name="start_voice_call">Zacznij połączenie głosowe</string>
+    <string name="start_video_call">Zacznij połączenie wideo</string>
+
+    <string name="resouces_language">en</string>
+    <string name="resouces_country">UK</string>
+
+    </resources>
