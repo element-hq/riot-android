@@ -752,4 +752,9 @@
     <string name="larger">Larger</string>
     <string name="largest">Largest</string>
     <string name="huge">Huge</string>
+
+    <!-- Widget-->
+    <string name="widget_no_power_to_manage">You need permission to manage widgets in this room</string>
+    <string name="widget_creation_failure">Widget creation has failed</string>
+
 </resources>

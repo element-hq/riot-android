@@ -56,6 +56,7 @@ import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
 import im.vector.util.PreferencesManager;
+import im.vector.widgets.WidgetManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -106,6 +107,9 @@ public class Matrix {
         @Override
         public void onLiveEvent(Event event, RoomState roomState) {
             mRefreshUnreadCounter |=  Event.EVENT_TYPE_MESSAGE.equals(event.getType()) || Event.EVENT_TYPE_RECEIPT.equals(event.getType());
+
+            // TODO update to manage multisessions
+            WidgetManager.getSharedInstance().onLiveEvent(instance.getDefaultSession(), event);
         }
 
         @Override
