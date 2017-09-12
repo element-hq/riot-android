@@ -89,7 +89,7 @@ public class JitsiActivity extends AppCompatActivity {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
                 startActivityForResult(intent, CAN_DRAW_OVERLAY_REQUEST_CODE);
             } else {
-                Log.e(LOG_TAG, "## onCreate() : the user did not grant the overlay settings")
+                Log.e(LOG_TAG, "## onCreate() : the user did not grant the overlay settings");
                 this.finish();
             }
         } else {
