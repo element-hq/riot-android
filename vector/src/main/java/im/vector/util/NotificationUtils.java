@@ -702,7 +702,8 @@ public class NotificationUtils {
             builder.setDefaults(Notification.DEFAULT_LIGHTS);
 
             if (isBing) {
-                Uri ringTone = VectorCallSoundManager.getRingToneUri(R.raw.message, RING_TONE_MESSAGE_NOTIFICATION);
+                // need to add a settings to let the user decides which sound he wants to use
+                Uri ringTone = null; //VectorCallSoundManager.getRingToneUri(R.raw.message, RING_TONE_MESSAGE_NOTIFICATION);
 
                 if (null == ringTone) {
                     ringTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
