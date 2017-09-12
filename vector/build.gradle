@@ -32,6 +32,8 @@ android {
             exclude "lib/x86_64/libjingle_peerconnection_so.so"
             exclude "lib/arm64-v8a/libjingle_peerconnection_so.so"
         }
+
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -131,6 +133,8 @@ def gitBranchName() {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    compile 'com.android.support:multidex:1.0.0'
+
     compile 'me.leolin:ShortcutBadger:1.1.2@aar'
 
     compile 'com.android.support:appcompat-v7:25.3.1'
@@ -144,7 +148,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
-    //compile 'io.pristine:libjingle:9690@aar'
 
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
 
@@ -155,6 +158,25 @@ dependencies {
     compile(name: 'matrix-sdk', ext: 'aar')
     compile(name: 'olm-sdk', ext: 'aar')
 
+    /************* jitsi **************/
+    compile 'javax.inject:javax.inject:1'
+    compile 'com.facebook.fbui.textlayoutbuilder:textlayoutbuilder:1.0.0'
+    compile 'com.facebook.fresco:fresco:0.11.0'
+    compile 'com.facebook.fresco:imagepipeline-okhttp3:0.11.0'
+    compile 'com.facebook.soloader:soloader:0.1.0'
+    compile 'com.google.code.findbugs:jsr305:3.0.0'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'
+    compile 'com.squareup.okhttp3:okhttp-ws:3.4.1'
+    compile 'com.squareup.okio:okio:1.9.0'
+    compile 'org.webkit:android-jsc:r174650'
+
+    compile(name: 'jitsi-sdk', ext: 'aar')
+    compile(name: 'react-native-background-timer', ext: 'aar')
+    compile(name: 'react-native-fetch-blob', ext: 'aar')
+    compile(name: 'react-native-immersive', ext: 'aar')
+    compile(name: 'react-native-keep-awake', ext: 'aar')
+    compile(name: 'react-native-vector-icons', ext: 'aar')
     compile(name: 'react-native-webrtc', ext: 'aar')
     compile(name: 'react-native', ext: 'aar')
 
