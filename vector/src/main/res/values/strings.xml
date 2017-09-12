@@ -756,5 +756,7 @@
     <!-- Widget-->
     <string name="widget_no_power_to_manage">You need permission to manage widgets in this room</string>
     <string name="widget_creation_failure">Widget creation has failed</string>
+    <string name="event_formatter_jitsi_widget_added">VoIP conference added by %s</string>
+    <string name="event_formatter_jitsi_widget_removed">VoIP conference removed by %s</string>
 
 </resources>

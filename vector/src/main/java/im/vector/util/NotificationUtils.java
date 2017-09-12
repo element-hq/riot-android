@@ -336,7 +336,7 @@ public class NotificationUtils {
             String text;
             String header;
 
-            EventDisplay eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+            EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
             eventDisplay.setPrependMessagesWithAuthor(false);
 
             if (room.isInvited()) {
@@ -344,7 +344,7 @@ public class NotificationUtils {
                 CharSequence textualDisplay = eventDisplay.getTextualDisplay();
                 text = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
             } else if (1 == notifiedEvents.size()) {
-                eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
                 eventDisplay.setPrependMessagesWithAuthor(false);
 
                 header = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
@@ -445,7 +445,7 @@ public class NotificationUtils {
                 Room room = store.getRoom(latestEvent.roomId);
 
                 if (null != room) {
-                    EventDisplay eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                    EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
                     eventDisplay.setPrependMessagesWithAuthor(false);
                     String roomName = getRoomName(context, session, room, null);
 
@@ -535,7 +535,7 @@ public class NotificationUtils {
 
         for (NotifiedEvent notifiedEvent : notifiedEvents) {
             Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
-            EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
+            EventDisplay eventDisplay = new RiotEventDisplay(context, event, room.getLiveState());
             eventDisplay.setPrependMessagesWithAuthor(true);
             CharSequence textualDisplay = eventDisplay.getTextualDisplay();
 
@@ -567,7 +567,7 @@ public class NotificationUtils {
                 quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomId);
                 quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, (null == member) ? event.getSender() : member.getName());
 
-                EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
+                EventDisplay eventDisplay = new RiotEventDisplay(context, event, room.getLiveState());
                 eventDisplay.setPrependMessagesWithAuthor(false);
                 CharSequence textualDisplay = eventDisplay.getTextualDisplay();
                 String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
@@ -647,7 +647,7 @@ public class NotificationUtils {
 
                     // if there is a valid latest message
                     if (null != latestEvent) {
-                        EventDisplay eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                        EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
                         eventDisplay.setPrependMessagesWithAuthor(false);
 
                         String message = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
@@ -761,7 +761,7 @@ public class NotificationUtils {
 
             boolean isInvitationEvent = false;
 
-            EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
+            EventDisplay eventDisplay = new RiotEventDisplay(context, event, room.getLiveState());
             eventDisplay.setPrependMessagesWithAuthor(true);
             CharSequence textualDisplay = eventDisplay.getTextualDisplay();
             String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";

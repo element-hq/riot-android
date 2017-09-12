@@ -34,6 +34,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.EventDisplay;
 
 import im.vector.R;
+import im.vector.util.RiotEventDisplay;
 import im.vector.util.VectorUtils;
 
 /**
@@ -117,7 +118,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         // display the body
         TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
         // set the message text
-        EventDisplay display = new EventDisplay(mContext, event, (null != room) ? room.getLiveState() : null);
+        EventDisplay display = new RiotEventDisplay(mContext, event, (null != room) ? room.getLiveState() : null);
         CharSequence text = display.getTextualDisplay();
 
         if (null == text) {
