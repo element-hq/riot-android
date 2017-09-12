@@ -116,6 +116,8 @@ import im.vector.util.VectorUtils;
 import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
+import im.vector.widgets.Widget;
+import im.vector.widgets.WidgetManager;
 
 /**
  * Displays a single room with messages.
@@ -1557,7 +1559,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         setProgressVisibility(View.VISIBLE);
 
         // create the call object
-        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
+       /* mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
             @Override
             public void onSuccess(final IMXCall call) {
                 Log.d(LOG_TAG, "## startIpCall(): onSuccess");
@@ -1625,6 +1627,39 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             @Override
             public void onUnexpectedError(Exception e) {
                 Log.e(LOG_TAG, "## startIpCall(): onUnexpectedError Msg=" + e.getLocalizedMessage());
+                onError(e.getLocalizedMessage());
+            }
+        });*/
+
+
+        setProgressVisibility(View.VISIBLE);
+
+        WidgetManager.getSharedInstance().createJitsiWidget(mSession, mRoom, aIsVideoCall, new ApiCallback<Widget>() {
+            @Override
+            public void onSuccess(Widget widget) {
+                setProgressVisibility(View.GONE);
+
+                final Intent intent = new Intent(VectorRoomActivity.this, JitsiActivity.class);
+                intent.putExtra(JitsiActivity.EXTRA_WIDGET_ID, widget);
+                VectorRoomActivity.this.startActivity(intent);
+            }
+
+            private void onError(String errorMessage) {
+                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
                 onError(e.getLocalizedMessage());
             }
         });

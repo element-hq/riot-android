@@ -279,12 +279,12 @@ public class WidgetManager {
             widgetSessionId = widgetSessionId.substring(0, 7);
         }
         String roomId = room.getRoomId();
-        String confId = roomId.substring(0, roomId.indexOf(":") - 1) + widgetSessionId;
+        String confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase();
 
         // TODO: This url may come from scalar API
         // Note: this url can be used as is inside a web container (like iframe for Riot-web)
         // Riot-iOS does not directly use it but extracts params from it (see `[JitsiViewController openWidget:withVideo:]`)
-        String url = "https://scalar-staging.riot.im/scalar/api/widgets/jitsi.html?confId=" + confId + "&isAudioConf=" + (withVideo ? "false" : "true") + "&displayName=$matrix_display_name&avatarUrl=$matrix_avatar_url&email=$matrix_user_id@";
+        String url = "https://scalar.vector.im/api/widgets/jitsi.html?confId=" + confId + "&isAudioConf=" + (withVideo ? "false" : "true") + "&displayName=$matrix_display_name&avatarUrl=$matrix_avatar_url&email=$matrix_user_id";
 
         Map<String, Object> params = new HashMap<>();
         params.put("url", url);

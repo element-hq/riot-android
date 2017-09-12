@@ -16,8 +16,6 @@
 
 package im.vector.widgets;
 
-import android.content.pm.PackageInstaller;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -26,10 +24,11 @@ import com.google.gson.JsonObject;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.model.Event;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Widget {
+public class Widget implements Serializable {
     private static final String LOG_TAG = "Widget";
 
     // JSON parser
@@ -37,7 +36,7 @@ public class Widget {
 
     private String mWidgetId;
     private Event mWidgetEvent;
-    private MXSession mSession;
+    private String mSessionId;
 
     private String mType;
     private String mUrl;
@@ -57,7 +56,7 @@ public class Widget {
 
         mWidgetId = widgetEvent.stateKey;
         mWidgetEvent = widgetEvent;
-        mSession = session;
+        mSessionId = session.getMyUserId();
 
         JsonObject contentAsJson = widgetEvent.getContentAsJsonObject();
 
@@ -88,12 +87,12 @@ public class Widget {
 
         if (null != mUrl) {
             // Format the url string with user data
-            mUrl = mUrl.replace("$matrix_user_id", mSession.getMyUserId());
+            mUrl = mUrl.replace("$matrix_user_id", session.getMyUserId());
 
-            String displayName = mSession.getMyUser().displayname;
-            mUrl = mUrl.replace("$matrix_display_name", (null != displayName) ? displayName : mSession.getMyUserId());
+            String displayName = session.getMyUser().displayname;
+            mUrl = mUrl.replace("$matrix_display_name", (null != displayName) ? displayName : session.getMyUserId());
 
-            String avatarUrl = mSession.getMyUser().getAvatarUrl();
+            String avatarUrl = session.getMyUser().getAvatarUrl();
             mUrl = mUrl.replace("$matrix_avatar_url", (null != avatarUrl) ? avatarUrl : "");
         }
     }
@@ -120,10 +119,6 @@ public class Widget {
 
     public String getRoomId() {
         return mWidgetEvent.roomId;
-    }
-
-    public MXSession getSession() {
-        return mSession;
     }
 
     public String getType() {

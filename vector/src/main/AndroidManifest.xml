@@ -209,15 +209,7 @@
 
         <activity
             android:name="im.vector.activity.JitsiActivity"
-            android:label="@string/room_creation_title"
-            android:parentActivityName="im.vector.activity.VectorHomeActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.VectorRoomActivity"/>
-        </activity>
+            android:theme="@style/CallActivityTheme" />
 
         <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"
