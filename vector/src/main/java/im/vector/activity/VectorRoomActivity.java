@@ -261,7 +261,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 @Override
                 public void run() {
                     refreshNotificationsArea();
-                    refreshCallButtons();
+                    refreshCallButtons(true);
                 }
             });
         }
@@ -508,7 +508,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         @Override
         public void onCallError(String error) {
-            refreshCallButtons();
+            refreshCallButtons(true);
         }
 
         @Override
@@ -522,12 +522,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         @Override
         public void onCallAnsweredElsewhere() {
-            refreshCallButtons();
+            refreshCallButtons(true);
         }
 
         @Override
         public void onCallEnd(final int aReasonId) {
-            refreshCallButtons();
+            refreshCallButtons(true);
 
             // catch the flow where the hangup is done in VectorRoomActivity
             VectorCallSoundManager.releaseAudioFocus();
@@ -738,7 +738,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     }
 
                     manageSendMoreButtons();
-                    refreshCallButtons();
+                    refreshCallButtons(true);
                 }
             }
 
@@ -940,6 +940,42 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             public void onVideoCallClick(Widget widget) {
                 onCallClick(widget, true);
             }
+
+            @Override
+            public void onCloseWidgetClick(Widget widget) {
+                setProgressVisibility(View.VISIBLE);
+
+                WidgetManager.getSharedInstance().closeWidget(mSession, mRoom, widget.getWidgetId(), new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        setProgressVisibility(View.GONE);
+                    }
+
+                    private void onError(String errorMessage) {
+                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onActiveWidgetUpdate() {
+                refreshCallButtons(false);
+            }
         });
 
         View avatarLayout = findViewById(R.id.room_self_avatar);
@@ -1111,7 +1147,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         sendReadReceipt();
 
-        refreshCallButtons();
+        refreshCallButtons(true);
 
         updateRoomHeaderMembersStatus();
 
@@ -1566,6 +1602,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         VectorRoomActivity.this.startActivity(intent);
     }
 
+    /**
+     * Start a jisti call
+     *
+     * @param aIsVideoCall true if the call is a video one
+     */
     private void startJitsiCall(final boolean aIsVideoCall) {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
         setProgressVisibility(View.VISIBLE);
@@ -1608,7 +1649,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param aIsVideoCall true to video call, false to audio call
      */
     private void startIpCall(final boolean aIsVideoCall) {
-        if ((mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(this)) {
+        if (mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(this)) {
             startJitsiCall(aIsVideoCall);
             return;
         }
@@ -2387,13 +2428,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     /**
      * Refresh the call buttons display.
      */
-    private void refreshCallButtons() {
+    private void refreshCallButtons(boolean refreshOngoingConferenceCallView) {
         if ((null == sRoomPreviewData) && (null == mEventId) && canSendMessages()) {
             boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported();
             IMXCall call = VectorCallViewActivity.getActiveCall();
+            Widget activeWidget = mVectorOngoingConferenceCallView.getActiveWidget();
 
-            if (null == call) {
+            if ((null == call) && (null == activeWidget)) {
                 mStartCallLayout.setVisibility((isCallSupported && (mEditText.getText().length() == 0)) ? View.VISIBLE : View.GONE);
+                mStopCallLayout.setVisibility(View.GONE);
+            } else if (null != activeWidget) {
+                mStartCallLayout.setVisibility(View.GONE);
                 mStopCallLayout.setVisibility(View.GONE);
             } else {
                 // ensure that the listener is defined once
@@ -2406,7 +2451,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mStopCallLayout.setVisibility((call == roomCall) ? View.VISIBLE : View.GONE);
             }
 
-            mVectorOngoingConferenceCallView.refresh();
+            if (refreshOngoingConferenceCallView) {
+                mVectorOngoingConferenceCallView.refresh();
+            }
         }
     }
 

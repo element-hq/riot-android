@@ -18,6 +18,8 @@ package im.vector.widgets;
 
 import android.text.TextUtils;
 
+import com.google.gson.JsonObject;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -133,7 +135,11 @@ public class WidgetManager {
                 String widgetType = null;
 
                 try {
-                    widgetType = widgetEvent.getContentAsJsonObject().get("type").getAsString();
+                    JsonObject jsonObject = widgetEvent.getContentAsJsonObject();
+
+                    if (jsonObject.has("type")) {
+                        widgetType = jsonObject.get("type").getAsString();
+                    }
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage());
                 }

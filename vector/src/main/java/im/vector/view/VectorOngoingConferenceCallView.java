@@ -53,14 +53,26 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     public interface ICallClickListener {
         /**
          * The user clicks on the voice text.
-         * @param widget the
+         * @param widget the active widget (if any)
          */
         void onVoiceCallClick(Widget widget);
 
         /**
          * The user clicks on the video text.
+         * @param widget the active widget (if any)
          */
         void onVideoCallClick(Widget widget);
+
+        /**
+         * The user clicks on the close widget button.
+         * @param widget the widget
+         */
+        void onCloseWidgetClick(Widget widget);
+
+        /**
+         * Warn that the current active widget has been updated
+         */
+        void onActiveWidgetUpdate();
     }
 
     // call information
@@ -69,6 +81,9 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
 
     // the linked widget
     private Widget mActiveWidget;
+
+    // close widget icon
+    private View mCloseWidgetIcon;
 
     private ICallClickListener mCallClickListener;
 
@@ -185,6 +200,20 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         
         textView.setText(ss);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        mCloseWidgetIcon = findViewById(R.id.close_widget_icon_container);
+        mCloseWidgetIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mCallClickListener) {
+                    try {
+                        mCallClickListener.onCloseWidgetClick(mActiveWidget);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## initView() : onCloseWidgetClick failed " + e.getMessage());
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -211,10 +240,24 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     public void refresh() {
         if ((null != mRoom) && (null != mSession)) {
             List<Widget> mActiveWidgets = WidgetManager.getSharedInstance().getActiveJitsiWidgets(mSession, mRoom);
-            mActiveWidget = mActiveWidgets.isEmpty() ? null : mActiveWidgets.get(0);
+            Widget widget = mActiveWidgets.isEmpty() ? null : mActiveWidgets.get(0);
+
+            if (mActiveWidget != widget) {
+                mActiveWidget = widget;
+                if (null != mCallClickListener) {
+                    try {
+                        mCallClickListener.onActiveWidgetUpdate();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## refresh() : onActiveWidgetUpdate failed " + e.getMessage());
+                    }
+                }
+            }
 
             IMXCall call = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
-            setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || (null != mActiveWidget))  ? View.VISIBLE : View.GONE);
+            setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || (null != mActiveWidget)) ? View.VISIBLE : View.GONE);
+
+            // show the close widget button if the user is allowed to do it
+            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == WidgetManager.getSharedInstance().checkWidgetPermission(mSession, mRoom))) ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -240,5 +283,12 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         }
 
         WidgetManager.getSharedInstance().removeListener(mWidgetListener);
+    }
+
+    /**
+     * @return the current active widget
+     */
+    public Widget getActiveWidget() {
+        return mActiveWidget;
     }
 }
