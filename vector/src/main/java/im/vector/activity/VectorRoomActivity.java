@@ -1649,7 +1649,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param aIsVideoCall true to video call, false to audio call
      */
     private void startIpCall(final boolean aIsVideoCall) {
-        if (mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(this)) {
+        if ((mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(this)) {
             startJitsiCall(aIsVideoCall);
             return;
         }
