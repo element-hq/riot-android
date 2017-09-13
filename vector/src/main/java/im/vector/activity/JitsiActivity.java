@@ -107,7 +107,7 @@ public class JitsiActivity extends AppCompatActivity {
             loadURL();
         }
     }
-    
+
     /**
      * Load the jitsi call
      */
@@ -129,7 +129,6 @@ public class JitsiActivity extends AppCompatActivity {
             @Override
             public void onConferenceFailed(Map<String, Object> map) {
                 Log.e(LOG_TAG, "## onConferenceFailed() : " + map);
-                WidgetManager.getSharedInstance().closeWidget();
                 JitsiActivity.this.finish();
             }
 
