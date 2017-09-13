@@ -1634,7 +1634,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         setProgressVisibility(View.VISIBLE);
 
-        List<Widget> activeCalls = WidgetManager.getSharedInstance().getJitsiWidgets(mRoom.getRoomId());
+        List<Widget> activeCalls = WidgetManager.getSharedInstance().getActiveJitsiWidgets(mSession, mRoom);
 
         if (activeCalls.isEmpty()) {
             WidgetManager.getSharedInstance().createJitsiWidget(mSession, mRoom, aIsVideoCall, new ApiCallback<Widget>() {

@@ -204,7 +204,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      */
     public void refresh() {
         if ((null != mRoom) && (null != mSession)) {
-            boolean hasPendingJitsiCall = !WidgetManager.getSharedInstance().getJitsiWidgets(mRoom.getRoomId()).isEmpty();
+            boolean hasPendingJitsiCall = !WidgetManager.getSharedInstance().getActiveJitsiWidgets(mSession, mRoom).isEmpty();
             IMXCall call = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
 
             setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || hasPendingJitsiCall)  ? View.VISIBLE : View.GONE);

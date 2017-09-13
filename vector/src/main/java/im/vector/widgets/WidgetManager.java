@@ -21,21 +21,18 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,7 +40,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 
 public class WidgetManager {
-    private static final String LOG_TAG = "WidgetManager";
+    private static final String LOG_TAG = WidgetManager.class.getSimpleName();
 
     /**
      * The type of matrix event used for scalar widgets.
@@ -92,19 +89,14 @@ public class WidgetManager {
     private Map<String, ApiCallback<Widget>> mPendingWidgetCreationCallbacks = new HashMap<>();
 
     /**
-     * Store the active widgets by room Id
-     */
-    private Map<String, Map<String, Widget>> mPendingWidgetsByRoomId = new HashMap<>();
-
-    /**
      * List all active widgets in a room.
      *
      * @param session  the session.
      * @param room     the room to check.
-     * @param callback asynchronous callback
+     * @return the active widgets list
      */
-    public void getWidgets(MXSession session, Room room, final SimpleApiCallback<List<Widget>> callback) {
-        getWidgets(session, room, null, callback);
+    public List<Widget> getActiveWidgets(MXSession session, Room room) {
+        return getActiveWidgets(session, room, null);
     }
 
     /**
@@ -113,75 +105,81 @@ public class WidgetManager {
      * @param session     the session.
      * @param room        the room to check.
      * @param widgetTypes the the widget types
-     * @param callback    asynchronous callback
+     * @return the active widgets list
      */
-    public void getWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final SimpleApiCallback<List<Widget>> callback) {
+    public List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes) {
         // Get all im.vector.modular.widgets state events in the room
-        room.getLiveState().getStateEvents(session.getDataHandler().getStore(), new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)), new SimpleApiCallback<List<Event>>() {
+        List<Event> widgetEvents = room.getLiveState().getStateEvents(new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)));
 
+        // Widget id -> widget
+        Map<String, Widget> widgets = new HashMap<>();
+
+        // Order widgetEvents with the last event first
+        // There can be several im.vector.modular.widgets state events for a same widget but
+        // only the last one must be considered.
+
+        Collections.sort(widgetEvents, new Comparator<Event>() {
             @Override
-            public void onSuccess(List<Event> widgetEvents) {
-                // Widget id -> widget
-                Map<String, Widget> widgets = new HashMap<>();
-
-
-                // Order widgetEvents with the last event first
-                // There can be several im.vector.modular.widgets state events for a same widget but
-                // only the last one must be considered.
-
-                Collections.sort(widgetEvents, new Comparator<Event>() {
-                    @Override
-                    public int compare(Event e1, Event e2) {
-                        long diff = e1.getOriginServerTs() - e2.getOriginServerTs();
-                        return (diff < 0) ? +1 : ((diff > 0) ? -1 : 0);
-                    }
-                });
-
-                // Create each widget from its latest im.vector.modular.widgets state event
-                for (Event widgetEvent : widgetEvents) {
-                    // Filter widget types if required
-                    if (null != widgetTypes) {
-                        String widgetType = null;
-
-                        try {
-                            widgetType = widgetEvent.getContentAsJsonObject().get("type").getAsString();
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage());
-                        }
-
-                        if ((null != widgetType) && !widgetTypes.contains(widgetType)) {
-                            continue;
-                        }
-                    }
-
-                    // widgetEvent.stateKey = widget id
-                    if ((null != widgetEvent.stateKey) && !widgets.containsKey(widgetEvent.stateKey)) {
-                        Widget widget = null;
-
-                        try {
-                            widget = new Widget(session, widgetEvent);
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## getWidgets() : widget creation failed " + e.getMessage());
-                        }
-
-                        if (null != widget) {
-                            widgets.put(widget.getWidgetId(), widget);
-                        }
-                    }
-                }
-
-                // Return active widgets only
-                List<Widget> activeWidgets = new ArrayList<>();
-
-                for (Widget widget : widgets.values()) {
-                    if (widget.isActive()) {
-                        activeWidgets.add(widget);
-                    }
-                }
+            public int compare(Event e1, Event e2) {
+                long diff = e1.getOriginServerTs() - e2.getOriginServerTs();
+                return (diff < 0) ? +1 : ((diff > 0) ? -1 : 0);
             }
         });
+
+        // Create each widget from its latest im.vector.modular.widgets state event
+        for (Event widgetEvent : widgetEvents) {
+            // Filter widget types if required
+            if (null != widgetTypes) {
+                String widgetType = null;
+
+                try {
+                    widgetType = widgetEvent.getContentAsJsonObject().get("type").getAsString();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage());
+                }
+
+                if ((null != widgetType) && !widgetTypes.contains(widgetType)) {
+                    continue;
+                }
+            }
+
+            // widgetEvent.stateKey = widget id
+            if ((null != widgetEvent.stateKey) && !widgets.containsKey(widgetEvent.stateKey)) {
+                Widget widget = null;
+
+                try {
+                    widget = new Widget(session, widgetEvent);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## getWidgets() : widget creation failed " + e.getMessage());
+                }
+
+                if (null != widget) {
+                    widgets.put(widget.getWidgetId(), widget);
+                }
+            }
+        }
+
+        // Return active widgets only
+        List<Widget> activeWidgets = new ArrayList<>();
+
+        for (Widget widget : widgets.values()) {
+            if (widget.isActive()) {
+                activeWidgets.add(widget);
+            }
+        }
+
+        return activeWidgets;
     }
 
+    /**
+     * Provides the list of active widgets for a room
+     * @param session the session
+     * @param room the room
+     * @return the list of active widgets
+     */
+    public List<Widget> getActiveJitsiWidgets(final MXSession session, final Room room) {
+        return getActiveWidgets(session, room, new HashSet<>(Arrays.asList(WidgetManager.WIDGET_TYPE_JITSI)));
+    }
 
     /**
      * Check user's power for widgets management in a room.
@@ -370,8 +368,6 @@ public class WidgetManager {
      * @param widget the widget
      */
     private void onWidgetUpdate(Widget widget) {
-        refreshWidgetsList(widget);
-
         synchronized (mListeners) {
             for (IWidgetManagerEventsListener listener : mListeners) {
                 try {
@@ -431,48 +427,5 @@ public class WidgetManager {
 
             mPendingWidgetCreationCallbacks.remove(callbackKey);
         }
-    }
-
-    /**
-     * Refresh the active widgets list
-     * @param widget the new widget
-     */
-    private void refreshWidgetsList(Widget widget) {
-        Map<String, Widget> pendingWidgets = mPendingWidgetsByRoomId.get(widget.getRoomId());
-
-        if (null == pendingWidgets) {
-            pendingWidgets = new HashMap<>();
-            mPendingWidgetsByRoomId.put(widget.getRoomId(), pendingWidgets);
-        }
-
-        if (widget.isActive()) {
-            pendingWidgets.put(widget.getWidgetId(), widget);
-        } else {
-            pendingWidgets.remove(widget.getWidgetId());
-        }
-    }
-
-
-    /**
-     * @return the list of active jisti widgets
-     */
-    public List<Widget> getJitsiWidgets(String roomId) {
-        List<Widget> jitsiWidgets = new ArrayList<>();
-
-        if (mPendingWidgetsByRoomId.containsKey(roomId)) {
-            Map<String, Widget> pendingWidgets = mPendingWidgetsByRoomId.get(roomId);
-
-            if (!pendingWidgets.isEmpty()) {
-               Collection<Widget> widgets =  pendingWidgets.values();
-
-                for(Widget w : widgets) {
-                    if (TextUtils.equals(w.getType(), WidgetManager.WIDGET_TYPE_JITSI)) {
-                        jitsiWidgets.add(w);
-                    }
-                }
-            }
-        }
-
-        return jitsiWidgets;
     }
 }
