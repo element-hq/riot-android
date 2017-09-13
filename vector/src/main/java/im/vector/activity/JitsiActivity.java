@@ -270,7 +270,12 @@ public class JitsiActivity extends AppCompatActivity {
         super.onDestroy();
 
         if (null != mJitsiView) {
-            ((ViewGroup) (mJitsiView.getParent())).removeView(mJitsiView);
+            ViewGroup parent = (ViewGroup) (mJitsiView.getParent());
+
+            if (null != parent) {
+                parent.removeView(mJitsiView);
+            }
+            
             mJitsiView.dispose();
             mJitsiView = null;
         }
@@ -293,6 +298,14 @@ public class JitsiActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        // force a full screen display
+        // jisti lib forces it when the call is established
+        // but it is not properly restored when the application is suspended by an external app
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
         JitsiMeetView.onHostResume(this);
         WidgetManager.addListener(mWidgetListener);
         refreshStatusBar();

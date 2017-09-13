@@ -209,7 +209,7 @@
 
         <activity
             android:name="im.vector.activity.JitsiActivity"
-            android:theme="@style/CallActivityTheme" />
+            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 
         <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"
