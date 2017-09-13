@@ -32,6 +32,9 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import im.vector.R;
+import im.vector.activity.JitsiActivity;
+import im.vector.widgets.Widget;
+import im.vector.widgets.WidgetManager;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -86,6 +89,16 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             if ((null != mRoom) && TextUtils.equals(roomId, mRoom.getRoomId())) {
                 refresh();
             }
+        }
+    };
+
+    /**
+     * Jitsi calls management
+     */
+    private final WidgetManager.IWidgetManagerEventsListener mWidgetListener = new WidgetManager.IWidgetManagerEventsListener() {
+        @Override
+        public void onWidgetUpdate(Widget widget) {
+            refresh();
         }
     };
 
@@ -191,8 +204,10 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      */
     public void refresh() {
         if ((null != mRoom) && (null != mSession)) {
+            boolean hasPendingJitsiCall = !WidgetManager.getSharedInstance().getJitsiWidgets(mRoom.getRoomId()).isEmpty();
             IMXCall call = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
-            setVisibility((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) ? View.VISIBLE : View.GONE);
+
+            setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || hasPendingJitsiCall)  ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -205,6 +220,8 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.addListener(mCallsListener);
         }
+
+        WidgetManager.getSharedInstance().addListener(mWidgetListener);
     }
 
     /**
@@ -214,5 +231,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.removeListener(mCallsListener);
         }
+
+        WidgetManager.getSharedInstance().removeListener(mWidgetListener);
     }
 }

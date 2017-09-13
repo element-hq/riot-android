@@ -1634,35 +1634,43 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         setProgressVisibility(View.VISIBLE);
 
-        WidgetManager.getSharedInstance().createJitsiWidget(mSession, mRoom, aIsVideoCall, new ApiCallback<Widget>() {
-            @Override
-            public void onSuccess(Widget widget) {
-                setProgressVisibility(View.GONE);
+        List<Widget> activeCalls = WidgetManager.getSharedInstance().getJitsiWidgets(mRoom.getRoomId());
 
-                final Intent intent = new Intent(VectorRoomActivity.this, JitsiActivity.class);
-                intent.putExtra(JitsiActivity.EXTRA_WIDGET_ID, widget);
-                VectorRoomActivity.this.startActivity(intent);
-            }
+        if (activeCalls.isEmpty()) {
+            WidgetManager.getSharedInstance().createJitsiWidget(mSession, mRoom, aIsVideoCall, new ApiCallback<Widget>() {
+                @Override
+                public void onSuccess(Widget widget) {
+                    setProgressVisibility(View.GONE);
 
-            private void onError(String errorMessage) {
-                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
-            }
+                    final Intent intent = new Intent(VectorRoomActivity.this, JitsiActivity.class);
+                    intent.putExtra(JitsiActivity.EXTRA_WIDGET_ID, widget);
+                    VectorRoomActivity.this.startActivity(intent);
+                }
 
-            @Override
-            public void onNetworkError(Exception e) {
-                onError(e.getLocalizedMessage());
-            }
+                private void onError(String errorMessage) {
+                    CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                }
 
-            @Override
-            public void onMatrixError(MatrixError e) {
-                onError(e.getLocalizedMessage());
-            }
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
 
-            @Override
-            public void onUnexpectedError(Exception e) {
-                onError(e.getLocalizedMessage());
-            }
-        });
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
+            });
+        } else {
+            final Intent intent = new Intent(VectorRoomActivity.this, JitsiActivity.class);
+            intent.putExtra(JitsiActivity.EXTRA_WIDGET_ID, activeCalls.get(0));
+            VectorRoomActivity.this.startActivity(intent);
+        }
     }
 
     //================================================================================

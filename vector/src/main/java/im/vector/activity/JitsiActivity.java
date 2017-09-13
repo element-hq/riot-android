@@ -25,6 +25,7 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 
@@ -37,6 +38,7 @@ import java.util.Map;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.widgets.Widget;
+import im.vector.widgets.WidgetManager;
 
 public class JitsiActivity extends AppCompatActivity {
     private static final String LOG_TAG = "JitsiActivity";
@@ -55,13 +57,23 @@ public class JitsiActivity extends AppCompatActivity {
     public final static int CAN_DRAW_OVERLAY_REQUEST_CODE = 1234;
 
     // the jitsi view
-    private JitsiMeetView mJitsiView;
+    private static JitsiMeetView mJitsiView = null;
 
     // the linked widget
-    private Widget mWidget;
+    private static Widget mWidget = null;
 
     // call URL
     private String mCallUrl;
+
+    // tells if the call is ended
+    private boolean mIsJitsiCallInProgress = false;
+
+    /**
+     * @return the active jitsi widget
+     */
+    public static Widget getActiveWidget() {
+        return mWidget;
+    }
 
     @Override
     @SuppressLint("NewApi")
@@ -85,18 +97,17 @@ public class JitsiActivity extends AppCompatActivity {
         mJitsiView = new JitsiMeetView(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if ( !Settings.canDrawOverlays(this)) {
+            if (!Settings.canDrawOverlays(this)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
                 startActivityForResult(intent, CAN_DRAW_OVERLAY_REQUEST_CODE);
             } else {
-                Log.e(LOG_TAG, "## onCreate() : the user did not grant the overlay settings");
-                this.finish();
+                loadURL();
             }
         } else {
             loadURL();
         }
     }
-
+    
     /**
      * Load the jitsi call
      */
@@ -118,6 +129,7 @@ public class JitsiActivity extends AppCompatActivity {
             @Override
             public void onConferenceFailed(Map<String, Object> map) {
                 Log.e(LOG_TAG, "## onConferenceFailed() : " + map);
+                WidgetManager.getSharedInstance().closeWidget();
                 JitsiActivity.this.finish();
             }
 
@@ -128,6 +140,7 @@ public class JitsiActivity extends AppCompatActivity {
                 JitsiActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mIsJitsiCallInProgress = true;
                         findViewById(R.id.call_connecting_layout).setVisibility(View.GONE);
                     }
                 });
@@ -136,6 +149,7 @@ public class JitsiActivity extends AppCompatActivity {
             @Override
             public void onConferenceLeft(Map<String, Object> map) {
                 Log.d(LOG_TAG, "## onConferenceLeft() : " + map);
+                mIsJitsiCallInProgress = true;
                 JitsiActivity.this.finish();
             }
 
@@ -146,6 +160,7 @@ public class JitsiActivity extends AppCompatActivity {
                 JitsiActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mIsJitsiCallInProgress = true;
                         findViewById(R.id.call_connecting_progress_layout).setVisibility(View.GONE);
                     }
                 });
@@ -172,14 +187,23 @@ public class JitsiActivity extends AppCompatActivity {
     }
 
     @Override
+    public void finish() {
+        super.finish();
+
+        if (!mIsJitsiCallInProgress) {
+            if (null != mJitsiView) {
+                ((ViewGroup) (mJitsiView.getParent())).removeView(mJitsiView);
+                mJitsiView.dispose();
+                mJitsiView = null;
+            }
+            mWidget = null;
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        if (null != mJitsiView) {
-            mJitsiView.dispose();
-            mJitsiView = null;
-            JitsiMeetView.onHostDestroy(this);
-        }
+        JitsiMeetView.onHostDestroy(this);
     }
 
     @Override

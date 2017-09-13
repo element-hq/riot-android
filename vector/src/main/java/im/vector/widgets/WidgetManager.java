@@ -28,6 +28,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -89,6 +90,11 @@ public class WidgetManager {
      * Pending widget creation callback
      */
     private Map<String, ApiCallback<Widget>> mPendingWidgetCreationCallbacks = new HashMap<>();
+
+    /**
+     * Store the active widgets by room Id
+     */
+    private Map<String, Map<String, Widget>> mPendingWidgetsByRoomId = new HashMap<>();
 
     /**
      * List all active widgets in a room.
@@ -364,6 +370,8 @@ public class WidgetManager {
      * @param widget the widget
      */
     private void onWidgetUpdate(Widget widget) {
+        refreshWidgetsList(widget);
+
         synchronized (mListeners) {
             for (IWidgetManagerEventsListener listener : mListeners) {
                 try {
@@ -423,5 +431,48 @@ public class WidgetManager {
 
             mPendingWidgetCreationCallbacks.remove(callbackKey);
         }
+    }
+
+    /**
+     * Refresh the active widgets list
+     * @param widget the new widget
+     */
+    private void refreshWidgetsList(Widget widget) {
+        Map<String, Widget> pendingWidgets = mPendingWidgetsByRoomId.get(widget.getRoomId());
+
+        if (null == pendingWidgets) {
+            pendingWidgets = new HashMap<>();
+            mPendingWidgetsByRoomId.put(widget.getRoomId(), pendingWidgets);
+        }
+
+        if (widget.isActive()) {
+            pendingWidgets.put(widget.getWidgetId(), widget);
+        } else {
+            pendingWidgets.remove(widget.getWidgetId());
+        }
+    }
+
+
+    /**
+     * @return the list of active jisti widgets
+     */
+    public List<Widget> getJitsiWidgets(String roomId) {
+        List<Widget> jitsiWidgets = new ArrayList<>();
+
+        if (mPendingWidgetsByRoomId.containsKey(roomId)) {
+            Map<String, Widget> pendingWidgets = mPendingWidgetsByRoomId.get(roomId);
+
+            if (!pendingWidgets.isEmpty()) {
+               Collection<Widget> widgets =  pendingWidgets.values();
+
+                for(Widget w : widgets) {
+                    if (TextUtils.equals(w.getType(), WidgetManager.WIDGET_TYPE_JITSI)) {
+                        jitsiWidgets.add(w);
+                    }
+                }
+            }
+        }
+
+        return jitsiWidgets;
     }
 }
