@@ -117,6 +117,10 @@ public class Widget implements Serializable {
         return mWidgetEvent;
     }
 
+    public String getSessionId() {
+        return mSessionId;
+    }
+
     public String getRoomId() {
         return mWidgetEvent.roomId;
     }

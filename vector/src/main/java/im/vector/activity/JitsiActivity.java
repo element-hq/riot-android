@@ -22,7 +22,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +33,17 @@ import android.widget.RelativeLayout;
 
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 
 import java.net.URL;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.widgets.Widget;
@@ -57,23 +66,42 @@ public class JitsiActivity extends AppCompatActivity {
     public final static int CAN_DRAW_OVERLAY_REQUEST_CODE = 1234;
 
     // the jitsi view
-    private static JitsiMeetView mJitsiView = null;
+    private JitsiMeetView mJitsiView = null;
 
     // the linked widget
-    private static Widget mWidget = null;
+    private Widget mWidget = null;
 
     // call URL
     private String mCallUrl;
 
-    // tells if the call is ended
-    private boolean mIsJitsiCallInProgress = false;
+    // the session
+    private MXSession mSession;
 
-    /**
-     * @return the active jitsi widget
-     */
-    public static Widget getActiveWidget() {
-        return mWidget;
-    }
+    // the room
+    private Room mRoom;
+
+    @BindView(R.id.jsti_back_to_app_icon)
+    View mBackToAppIcon;
+
+    @BindView(R.id.jsti_close_widget_icon)
+    View mCloseWidgetIcon;
+
+    @BindView(R.id.jsti_connecting_text_view)
+    View mConnectingTextView;
+
+    @BindView(R.id.jitsi_progress_layout)
+    View mProgressLayout;
+
+    private final WidgetManager.IWidgetManagerEventsListener mWidgetListener = new WidgetManager.IWidgetManagerEventsListener() {
+        @Override
+        public void onWidgetUpdate(Widget widget) {
+            if (TextUtils.equals(widget.getWidgetId(), mWidget.getWidgetId())) {
+                if (!widget.isActive()) {
+                    JitsiActivity.this.finish();
+                }
+            }
+        }
+    };
 
     @Override
     @SuppressLint("NewApi")
@@ -81,6 +109,7 @@ public class JitsiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_jitsiview);
+        ButterKnife.bind(this);
 
         mWidget = (Widget)getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
 
@@ -94,7 +123,12 @@ public class JitsiActivity extends AppCompatActivity {
             return;
         }
 
+        mSession = Matrix.getMXSession(this, mWidget.getSessionId());
+        mRoom = mSession.getDataHandler().getRoom(mWidget.getRoomId());
+
         mJitsiView = new JitsiMeetView(this);
+
+        refreshStatusBar();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
@@ -106,6 +140,55 @@ public class JitsiActivity extends AppCompatActivity {
         } else {
             loadURL();
         }
+    }
+
+    /**
+     * Refresh the status bar
+     */
+    private void refreshStatusBar() {
+        boolean canCloseWidget = (null == WidgetManager.getSharedInstance().checkWidgetPermission(mSession, mRoom));
+
+        // close widget button
+        mCloseWidgetIcon.setVisibility(canCloseWidget ? View.VISIBLE : View.GONE);
+        mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mProgressLayout.setVisibility(View.VISIBLE);
+                WidgetManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        JitsiActivity.this.finish();
+                    }
+
+                    private void onError(String errorMessage) {
+                        CommonActivityUtils.displayToast(JitsiActivity.this, errorMessage);
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onError(e.getLocalizedMessage());
+
+                    }
+                });
+            }
+        });
+
+        mBackToAppIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JitsiActivity.this.finish();
+            }
+        });
     }
 
     /**
@@ -139,8 +222,7 @@ public class JitsiActivity extends AppCompatActivity {
                 JitsiActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mIsJitsiCallInProgress = true;
-                        findViewById(R.id.call_connecting_layout).setVisibility(View.GONE);
+                        mConnectingTextView.setVisibility(View.GONE);
                     }
                 });
             }
@@ -148,7 +230,6 @@ public class JitsiActivity extends AppCompatActivity {
             @Override
             public void onConferenceLeft(Map<String, Object> map) {
                 Log.d(LOG_TAG, "## onConferenceLeft() : " + map);
-                mIsJitsiCallInProgress = true;
                 JitsiActivity.this.finish();
             }
 
@@ -159,8 +240,7 @@ public class JitsiActivity extends AppCompatActivity {
                 JitsiActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mIsJitsiCallInProgress = true;
-                        findViewById(R.id.call_connecting_progress_layout).setVisibility(View.GONE);
+                        mProgressLayout.setVisibility(View.GONE);
                     }
                 });
             }
@@ -186,22 +266,15 @@ public class JitsiActivity extends AppCompatActivity {
     }
 
     @Override
-    public void finish() {
-        super.finish();
-
-        if (!mIsJitsiCallInProgress) {
-            if (null != mJitsiView) {
-                ((ViewGroup) (mJitsiView.getParent())).removeView(mJitsiView);
-                mJitsiView.dispose();
-                mJitsiView = null;
-            }
-            mWidget = null;
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (null != mJitsiView) {
+            ((ViewGroup) (mJitsiView.getParent())).removeView(mJitsiView);
+            mJitsiView.dispose();
+            mJitsiView = null;
+        }
+
         JitsiMeetView.onHostDestroy(this);
     }
 
@@ -214,12 +287,15 @@ public class JitsiActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         JitsiMeetView.onHostPause(this);
+        WidgetManager.removeListener(mWidgetListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         JitsiMeetView.onHostResume(this);
+        WidgetManager.addListener(mWidgetListener);
+        refreshStatusBar();
     }
 
     @Override

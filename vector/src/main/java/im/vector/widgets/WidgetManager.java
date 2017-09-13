@@ -191,7 +191,7 @@ public class WidgetManager {
      * @return an error if the user cannot act on widgets in this room. Else, null.
      */
 
-    private WidgetError checkWidgetPermission(MXSession session, Room room) {
+    public WidgetError checkWidgetPermission(MXSession session, Room room) {
         WidgetError error = null;
 
         if ((null != room) && (null != room.getLiveState()) && (null != room.getLiveState().getPowerLevels())) {
