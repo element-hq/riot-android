@@ -35,6 +35,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -79,7 +81,7 @@ import im.vector.util.VectorMarkdownParser;
 /**
  * The main application injection point
  */
-public class VectorApp extends Application {
+public class VectorApp extends MultiDexApplication {
     private static final String LOG_TAG = "VectorApp";
 
     // key to save the crash status
@@ -166,6 +168,12 @@ public class VectorApp extends Application {
             }
         }
     };
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {
