@@ -73,7 +73,7 @@ public class RiotEventDisplay extends EventDisplay {
                         List<Event> widgetEvents = mRoomState.getStateEvents(new HashSet<>(Arrays.asList(WidgetManager.WIDGET_EVENT_TYPE)));
 
                         for (Event widgetEvent : widgetEvents) {
-                            if (TextUtils.equals(widgetEvent.stateKey, mEvent.stateKey)) {
+                            if (TextUtils.equals(widgetEvent.stateKey, mEvent.stateKey) && !widgetEvent.getContentAsJsonObject().entrySet().isEmpty()) {
                                 closingWidgetEvent = widgetEvent;
                                 break;
                             }
@@ -85,7 +85,7 @@ public class RiotEventDisplay extends EventDisplay {
                     }
 
                     String type = (null != closingWidgetEvent) ? closingWidgetEvent.getContentAsJsonObject().get("type").getAsString() : "undefined";
-                    text = mContext.getString(R.string.event_formatter_widget_added, type, senderDisplayName);
+                    text = mContext.getString(R.string.event_formatter_widget_removed, type, senderDisplayName);
                 } else {
                     String type = mEvent.getContentAsJsonObject().get("type").getAsString();
                     text = mContext.getString(R.string.event_formatter_widget_added, type, senderDisplayName);

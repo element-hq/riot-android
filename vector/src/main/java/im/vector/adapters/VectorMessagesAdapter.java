@@ -968,7 +968,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             viewType = ROW_TYPE_ROOM_MEMBER;
 
         } else if (WidgetManager.WIDGET_EVENT_TYPE.equals(eventType)) {
-            return ROW_TYPE_NOTICE;
+            return ROW_TYPE_ROOM_MEMBER;
         } else {
             throw new RuntimeException("Unknown event type: " + eventType);
         }
