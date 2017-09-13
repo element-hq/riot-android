@@ -89,6 +89,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
+import im.vector.widgets.WidgetsManager;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements IMessagesAdapterActionsListener {
     private static final String LOG_TAG = "VectorMessageListFrg";
@@ -262,6 +263,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         // notify host activity
         if (null != mHostActivityListener)
             mHostActivityListener.onListTouch();
+    }
+
+    @Override
+    protected boolean canAddEvent(Event event) {
+        return TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType()) || super.canAddEvent(event);
     }
 
     /**

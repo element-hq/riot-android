@@ -76,6 +76,7 @@ import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.util.NotificationUtils;
+import im.vector.util.RiotEventDisplay;
 import im.vector.util.VectorCallSoundManager;
 
 /**
@@ -1160,7 +1161,7 @@ public class EventStreamService extends Service {
                 }
 
                 // test if the message is displayable
-                EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, roomState);
+                EventDisplay eventDisplay = new RiotEventDisplay(getApplicationContext(), event, roomState);
                 eventDisplay.setPrependMessagesWithAuthor(false);
                 String text = eventDisplay.getTextualDisplay().toString();
 
@@ -1346,7 +1347,7 @@ public class EventStreamService extends Service {
 
                     if (null != event) {
                         // test if the message is displayable
-                        EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, room.getLiveState());
+                        EventDisplay eventDisplay = new RiotEventDisplay(getApplicationContext(), event, room.getLiveState());
                         eventDisplay.setPrependMessagesWithAuthor(false);
                         body = eventDisplay.getTextualDisplay().toString();
                     }

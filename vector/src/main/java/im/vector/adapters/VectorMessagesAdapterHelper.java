@@ -60,8 +60,10 @@ import im.vector.R;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
+import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
+import im.vector.widgets.WidgetsManager;
 
 /**
  * An helper to display message information
@@ -639,7 +641,7 @@ public class VectorMessagesAdapterHelper {
             return (message.body != null) && (!message.body.equals(""));
         } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
                 || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)) {
-            EventDisplay display = new EventDisplay(context, event, roomState);
+            EventDisplay display = new RiotEventDisplay(context, event, roomState);
             return display.getTextualDisplay() != null;
         } else if (event.isCallEvent()) {
             return Event.EVENT_TYPE_CALL_INVITE.equals(eventType) ||
@@ -648,14 +650,16 @@ public class VectorMessagesAdapterHelper {
                     ;
         } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)) {
             // if we can display text for it, it's valid.
-            EventDisplay display = new EventDisplay(context, event, roomState);
+            EventDisplay display = new RiotEventDisplay(context, event, roomState);
             return display.getTextualDisplay() != null;
         } else if (Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)) {
             return true;
         } else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType) || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
             // if we can display text for it, it's valid.
-            EventDisplay display = new EventDisplay(context, event, roomState);
+            EventDisplay display = new RiotEventDisplay(context, event, roomState);
             return event.hasContentFields() && (display.getTextualDisplay() != null);
+        } else if (TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType())) {
+            return true;
         }
         return false;
     }

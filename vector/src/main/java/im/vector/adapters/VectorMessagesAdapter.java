@@ -89,7 +89,9 @@ import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.EventGroup;
 import im.vector.util.PreferencesManager;
+import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
+import im.vector.widgets.WidgetsManager;
 
 /**
  * An adapter which can display room information.
@@ -965,6 +967,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                         Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
             viewType = ROW_TYPE_ROOM_MEMBER;
 
+        } else if (WidgetsManager.WIDGET_EVENT_TYPE.equals(eventType)) {
+            return ROW_TYPE_ROOM_MEMBER;
         } else {
             throw new RuntimeException("Unknown event type: " + eventType);
         }
@@ -1115,7 +1119,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Message message = JsonUtils.toMessage(event.getContent());
             RoomState roomState = row.getRoomState();
 
-            EventDisplay display = new EventDisplay(mContext, event, roomState);
+            EventDisplay display = new RiotEventDisplay(mContext, event, roomState);
             CharSequence textualDisplay = display.getTextualDisplay();
 
             SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
@@ -1271,7 +1275,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             CharSequence notice;
 
-            EventDisplay display = new EventDisplay(mContext, msg, roomState);
+            EventDisplay display = new RiotEventDisplay(mContext, msg, roomState);
             notice = display.getTextualDisplay();
 
             TextView noticeTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);

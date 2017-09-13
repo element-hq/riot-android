@@ -52,8 +52,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
 
-    <!-- libjingle is designed for API >= 15 but the app should work from API >= 11 -->
-    <uses-sdk tools:overrideLibrary="io.pristine.libjingle"/>
+    <!-- jitsi -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         tools:replace="allowBackup,label"
@@ -206,6 +206,10 @@
         <activity
             android:name="im.vector.activity.VectorCallViewActivity"
             android:theme="@style/CallActivityTheme" />
+
+        <activity
+            android:name="im.vector.activity.JitsiCallActivity"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 
         <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"
