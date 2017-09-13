@@ -30,8 +30,10 @@ import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import im.vector.R;
 
@@ -39,6 +41,8 @@ import im.vector.widgets.WidgetManager;
 
 public class RiotEventDisplay extends EventDisplay {
     private static final String LOG_TAG = "RiotEventDisplay";
+
+    private static final Map<String, Event> mClosingWidgetEventByStateKey = new HashMap<>();
 
     // constructor
     public RiotEventDisplay(Context context, Event event, RoomState roomState) {
@@ -63,24 +67,28 @@ public class RiotEventDisplay extends EventDisplay {
                 String senderDisplayName = senderDisplayNameForEvent(mEvent, eventContent, prevEventContent, mRoomState);
 
                 if (0 == content.entrySet().size()) {
-                    List<Event> widgetEvents = mRoomState.getStateEvents(new HashSet<>(Arrays.asList(WidgetManager.WIDGET_EVENT_TYPE)));
+                    Event closingWidgetEvent = mClosingWidgetEventByStateKey.get(mEvent.stateKey);
 
-                    for (Event widgetEvent : widgetEvents) {
-                        if (TextUtils.equals(widgetEvent.stateKey, mEvent.stateKey)) {
-                            String type = widgetEvent.getContentAsJsonObject().get("type").getAsString();
+                    if (null == closingWidgetEvent) {
+                        List<Event> widgetEvents = mRoomState.getStateEvents(new HashSet<>(Arrays.asList(WidgetManager.WIDGET_EVENT_TYPE)));
 
-                            if (TextUtils.equals(type, WidgetManager.WIDGET_TYPE_JITSI)) {
-                                text = mContext.getString(R.string.event_formatter_jitsi_widget_removed, senderDisplayName);
+                        for (Event widgetEvent : widgetEvents) {
+                            if (TextUtils.equals(widgetEvent.stateKey, mEvent.stateKey)) {
+                                closingWidgetEvent = widgetEvent;
                                 break;
                             }
                         }
+
+                        if (null != closingWidgetEvent) {
+                            mClosingWidgetEventByStateKey.put(mEvent.stateKey, closingWidgetEvent);
+                        }
                     }
+
+                    String type = (null != closingWidgetEvent) ? closingWidgetEvent.getContentAsJsonObject().get("type").getAsString() : "undefined";
+                    text = mContext.getString(R.string.event_formatter_widget_added, type, senderDisplayName);
                 } else {
                     String type = mEvent.getContentAsJsonObject().get("type").getAsString();
-
-                    if (TextUtils.equals(type, WidgetManager.WIDGET_TYPE_JITSI)) {
-                        text = mContext.getString(R.string.event_formatter_jitsi_widget_added, senderDisplayName);
-                    }
+                    text = mContext.getString(R.string.event_formatter_widget_added, type, senderDisplayName);
                 }
             } else {
                 text = super.getTextualDisplay(displayNameColor);

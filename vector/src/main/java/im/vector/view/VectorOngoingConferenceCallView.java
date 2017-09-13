@@ -41,6 +41,8 @@ import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
 
+import java.util.List;
+
 /**
  * This class displays if there is an ongoing conference call.
  */
@@ -51,18 +53,22 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     public interface ICallClickListener {
         /**
          * The user clicks on the voice text.
+         * @param widget the
          */
-        void onVoiceCallClick();
+        void onVoiceCallClick(Widget widget);
 
         /**
          * The user clicks on the video text.
          */
-        void onVideoCallClick();
+        void onVideoCallClick(Widget widget);
     }
 
     // call information
     private MXSession mSession;
     private Room mRoom;
+
+    // the linked widget
+    private Widget mActiveWidget;
 
     private ICallClickListener mCallClickListener;
 
@@ -132,7 +138,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             public void onClick(View textView) {
                 if (null != mCallClickListener) {
                     try {
-                        mCallClickListener.onVoiceCallClick();
+                        mCallClickListener.onVoiceCallClick(mActiveWidget);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## initView() : onVoiceCallClick failed " + e.getMessage());
                     }
@@ -145,7 +151,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             public void onClick(View textView) {
                 if (null != mCallClickListener) {
                     try {
-                        mCallClickListener.onVideoCallClick();
+                        mCallClickListener.onVideoCallClick(mActiveWidget);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## initView() : onVideoCallClick failed " + e.getMessage());
                     }
@@ -204,10 +210,11 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      */
     public void refresh() {
         if ((null != mRoom) && (null != mSession)) {
-            boolean hasPendingJitsiCall = !WidgetManager.getSharedInstance().getActiveJitsiWidgets(mSession, mRoom).isEmpty();
-            IMXCall call = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
+            List<Widget> mActiveWidgets = WidgetManager.getSharedInstance().getActiveJitsiWidgets(mSession, mRoom);
+            mActiveWidget = mActiveWidgets.isEmpty() ? null : mActiveWidgets.get(0);
 
-            setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || hasPendingJitsiCall)  ? View.VISIBLE : View.GONE);
+            IMXCall call = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
+            setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || (null != mActiveWidget))  ? View.VISIBLE : View.GONE);
         }
     }
 

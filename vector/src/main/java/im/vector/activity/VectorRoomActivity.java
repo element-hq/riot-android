@@ -700,8 +700,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
 
                     fragment = IconAndTextDialogFragment.newInstance(icons, messages,
-                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
-                        ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
+                            ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
+                            ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
                     fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                         @Override
                         public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -853,7 +853,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             Log.d(LOG_TAG, "Create VectorMessageListFragment");
 
             // this fragment displays messages and handles all message logic
-            final String previewMode =  (null == sRoomPreviewData) ? (mIsUnreadPreviewMode
+            final String previewMode = (null == sRoomPreviewData) ? (mIsUnreadPreviewMode
                     ? VectorMessageListFragment.PREVIEW_MODE_UNREAD_MESSAGE : null) : VectorMessageListFragment.PREVIEW_MODE_READ_ONLY;
             mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, roomId, mEventId,
                     previewMode,
@@ -916,7 +916,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         mVectorOngoingConferenceCallView.initRoomInfo(mSession, mRoom);
         mVectorOngoingConferenceCallView.setCallClickListener(new VectorOngoingConferenceCallView.ICallClickListener() {
-
             private void startCall(boolean isVideo) {
                 if (CommonActivityUtils.checkPermissions(isVideo ? CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL : CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL,
                         VectorRoomActivity.this)) {
@@ -924,14 +923,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 }
             }
 
-            @Override
-            public void onVoiceCallClick() {
-                startCall(false);
+            private void onCallClick(Widget widget, boolean isVideo) {
+                if (null != widget) {
+                    manageWidget(widget, isVideo);
+                } else {
+                    startCall(isVideo);
+                }
             }
 
             @Override
-            public void onVideoCallClick() {
-                startCall(true);
+            public void onVoiceCallClick(Widget widget) {
+                onCallClick(widget, false);
+            }
+
+            @Override
+            public void onVideoCallClick(Widget widget) {
+                onCallClick(widget, true);
             }
         });
 
@@ -1220,7 +1227,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         }
                     });
                 }
-            } else if (requestCode == UNREAD_PREVIEW_REQUEST_CODE){
+            } else if (requestCode == UNREAD_PREVIEW_REQUEST_CODE) {
                 mVectorMessageListFragment.scrollToBottom(0);
             }
         }
@@ -1267,7 +1274,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void sendReadReceipt() {
         if ((null != mRoom) && (null == sRoomPreviewData)) {
             final Event latestDisplayedEvent = mLatestDisplayedEvent;
-            
+
             // send the read receipt
             mRoom.sendReadReceipt(latestDisplayedEvent, new ApiCallback<Void>() {
                 @Override
@@ -1321,7 +1328,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         if (mReadMarkerManager != null) {
-            mReadMarkerManager.onScroll(firstVisibleItem,visibleItemCount, totalItemCount, eventAtTop, eventAtBottom);
+            mReadMarkerManager.onScroll(firstVisibleItem, visibleItemCount, totalItemCount, eventAtTop, eventAtBottom);
         }
     }
 
@@ -1524,8 +1531,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         final Integer[] lTexts = new Integer[]{R.string.action_voice_call, R.string.action_video_call};
 
         IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts,
-            ThemeUtils.getColor(this, R.attr.riot_primary_background_color),
-            ThemeUtils.getColor(this, R.attr.riot_primary_text_color));
+                ThemeUtils.getColor(this, R.attr.riot_primary_background_color),
+                ThemeUtils.getColor(this, R.attr.riot_primary_text_color));
         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
             @Override
             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -1548,18 +1555,69 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     /**
+     * Manage widget
+     *
+     * @param widget       the widget
+     * @param aIsVideoCall true if it is a video call
+     */
+    private void manageWidget(Widget widget, boolean aIsVideoCall) {
+        final Intent intent = new Intent(VectorRoomActivity.this, JitsiActivity.class);
+        intent.putExtra(JitsiActivity.EXTRA_WIDGET_ID, widget);
+        VectorRoomActivity.this.startActivity(intent);
+    }
+
+    private void startJitsiCall(final boolean aIsVideoCall) {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+        setProgressVisibility(View.VISIBLE);
+
+        WidgetManager.getSharedInstance().createJitsiWidget(mSession, mRoom, aIsVideoCall, new ApiCallback<Widget>() {
+            @Override
+            public void onSuccess(Widget widget) {
+                setProgressVisibility(View.GONE);
+
+                final Intent intent = new Intent(VectorRoomActivity.this, JitsiActivity.class);
+                intent.putExtra(JitsiActivity.EXTRA_WIDGET_ID, widget);
+                VectorRoomActivity.this.startActivity(intent);
+            }
+
+            private void onError(String errorMessage) {
+                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    /**
      * Start an IP call: audio call if aIsVideoCall is false or video call if aIsVideoCall
      * is true.
      *
      * @param aIsVideoCall true to video call, false to audio call
      */
     private void startIpCall(final boolean aIsVideoCall) {
-        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+        if ((mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(this)) {
+            startJitsiCall(aIsVideoCall);
+            return;
+        }
 
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
         setProgressVisibility(View.VISIBLE);
 
         // create the call object
-       /* mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
+        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
             @Override
             public void onSuccess(final IMXCall call) {
                 Log.d(LOG_TAG, "## startIpCall(): onSuccess");
@@ -1629,48 +1687,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 Log.e(LOG_TAG, "## startIpCall(): onUnexpectedError Msg=" + e.getLocalizedMessage());
                 onError(e.getLocalizedMessage());
             }
-        });*/
-
-
-        setProgressVisibility(View.VISIBLE);
-
-        List<Widget> activeCalls = WidgetManager.getSharedInstance().getActiveJitsiWidgets(mSession, mRoom);
-
-        if (activeCalls.isEmpty()) {
-            WidgetManager.getSharedInstance().createJitsiWidget(mSession, mRoom, aIsVideoCall, new ApiCallback<Widget>() {
-                @Override
-                public void onSuccess(Widget widget) {
-                    setProgressVisibility(View.GONE);
-
-                    final Intent intent = new Intent(VectorRoomActivity.this, JitsiActivity.class);
-                    intent.putExtra(JitsiActivity.EXTRA_WIDGET_ID, widget);
-                    VectorRoomActivity.this.startActivity(intent);
-                }
-
-                private void onError(String errorMessage) {
-                    CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onError(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onError(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onError(e.getLocalizedMessage());
-                }
-            });
-        } else {
-            final Intent intent = new Intent(VectorRoomActivity.this, JitsiActivity.class);
-            intent.putExtra(JitsiActivity.EXTRA_WIDGET_ID, activeCalls.get(0));
-            VectorRoomActivity.this.startActivity(intent);
-        }
+        });
     }
 
     //================================================================================
@@ -2229,7 +2246,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
             changedTextColor = true;
             text = new SpannableString(getResources().getString(R.string.room_offline_notification));
-        } else if(mIsUnreadPreviewMode){
+        } else if (mIsUnreadPreviewMode) {
             isAreaVisible = true;
             iconId = R.drawable.scrolldown;
             textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
