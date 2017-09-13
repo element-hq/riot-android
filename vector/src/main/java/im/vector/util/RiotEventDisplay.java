@@ -37,7 +37,7 @@ import java.util.Map;
 
 import im.vector.R;
 
-import im.vector.widgets.WidgetManager;
+import im.vector.widgets.WidgetsManager;
 
 public class RiotEventDisplay extends EventDisplay {
     private static final String LOG_TAG = "RiotEventDisplay";
@@ -59,7 +59,7 @@ public class RiotEventDisplay extends EventDisplay {
         CharSequence text = null;
 
         try {
-            if (TextUtils.equals(mEvent.getType(), WidgetManager.WIDGET_EVENT_TYPE)) {
+            if (TextUtils.equals(mEvent.getType(), WidgetsManager.WIDGET_EVENT_TYPE)) {
                 JsonObject content = mEvent.getContentAsJsonObject();
 
                 EventContent eventContent = JsonUtils.toEventContent(mEvent.getContentAsJsonObject());
@@ -70,7 +70,7 @@ public class RiotEventDisplay extends EventDisplay {
                     Event closingWidgetEvent = mClosingWidgetEventByStateKey.get(mEvent.stateKey);
 
                     if (null == closingWidgetEvent) {
-                        List<Event> widgetEvents = mRoomState.getStateEvents(new HashSet<>(Arrays.asList(WidgetManager.WIDGET_EVENT_TYPE)));
+                        List<Event> widgetEvents = mRoomState.getStateEvents(new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_EVENT_TYPE)));
 
                         for (Event widgetEvent : widgetEvents) {
                             if (TextUtils.equals(widgetEvent.stateKey, mEvent.stateKey) && !widgetEvent.getContentAsJsonObject().entrySet().isEmpty()) {

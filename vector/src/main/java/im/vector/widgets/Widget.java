@@ -50,7 +50,7 @@ public class Widget implements Serializable {
      * @param widgetEvent the widget event
      */
     public Widget(MXSession session, Event widgetEvent) throws Exception {
-        if (!TextUtils.equals(widgetEvent.type, WidgetManager.WIDGET_EVENT_TYPE)) {
+        if (!TextUtils.equals(widgetEvent.type, WidgetsManager.WIDGET_EVENT_TYPE)) {
             throw new Exception("unsupported event type " + widgetEvent.type);
         }
 

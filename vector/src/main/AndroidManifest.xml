@@ -208,7 +208,7 @@
             android:theme="@style/CallActivityTheme" />
 
         <activity
-            android:name="im.vector.activity.JitsiActivity"
+            android:name="im.vector.activity.JitsiCallActivity"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 
         <activity

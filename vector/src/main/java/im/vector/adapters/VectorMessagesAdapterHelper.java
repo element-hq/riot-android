@@ -63,7 +63,7 @@ import im.vector.util.MatrixURLSpan;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
-import im.vector.widgets.WidgetManager;
+import im.vector.widgets.WidgetsManager;
 
 /**
  * An helper to display message information
@@ -658,7 +658,7 @@ public class VectorMessagesAdapterHelper {
             // if we can display text for it, it's valid.
             EventDisplay display = new RiotEventDisplay(context, event, roomState);
             return event.hasContentFields() && (display.getTextualDisplay() != null);
-        } else if (TextUtils.equals(WidgetManager.WIDGET_EVENT_TYPE, event.getType())) {
+        } else if (TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType())) {
             return true;
         }
         return false;

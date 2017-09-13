@@ -91,7 +91,7 @@ import im.vector.util.EventGroup;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
-import im.vector.widgets.WidgetManager;
+import im.vector.widgets.WidgetsManager;
 
 /**
  * An adapter which can display room information.
@@ -967,7 +967,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                         Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
             viewType = ROW_TYPE_ROOM_MEMBER;
 
-        } else if (WidgetManager.WIDGET_EVENT_TYPE.equals(eventType)) {
+        } else if (WidgetsManager.WIDGET_EVENT_TYPE.equals(eventType)) {
             return ROW_TYPE_ROOM_MEMBER;
         } else {
             throw new RuntimeException("Unknown event type: " + eventType);

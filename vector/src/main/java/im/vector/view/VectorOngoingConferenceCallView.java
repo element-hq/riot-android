@@ -32,9 +32,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import im.vector.R;
-import im.vector.activity.JitsiActivity;
 import im.vector.widgets.Widget;
-import im.vector.widgets.WidgetManager;
+import im.vector.widgets.WidgetsManager;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -116,7 +115,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     /**
      * Jitsi calls management
      */
-    private final WidgetManager.IWidgetManagerEventsListener mWidgetListener = new WidgetManager.IWidgetManagerEventsListener() {
+    private final WidgetsManager.onWidgetUpdateListener mWidgetListener = new WidgetsManager.onWidgetUpdateListener() {
         @Override
         public void onWidgetUpdate(Widget widget) {
             refresh();
@@ -239,7 +238,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      */
     public void refresh() {
         if ((null != mRoom) && (null != mSession)) {
-            List<Widget> mActiveWidgets = WidgetManager.getSharedInstance().getActiveJitsiWidgets(mSession, mRoom);
+            List<Widget> mActiveWidgets = WidgetsManager.getSharedInstance().getActiveJitsiWidgets(mSession, mRoom);
             Widget widget = mActiveWidgets.isEmpty() ? null : mActiveWidgets.get(0);
 
             if (mActiveWidget != widget) {
@@ -257,7 +256,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || (null != mActiveWidget)) ? View.VISIBLE : View.GONE);
 
             // show the close widget button if the user is allowed to do it
-            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == WidgetManager.getSharedInstance().checkWidgetPermission(mSession, mRoom))) ? View.VISIBLE : View.GONE);
+            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom))) ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -271,7 +270,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             mSession.mCallsManager.addListener(mCallsListener);
         }
 
-        WidgetManager.getSharedInstance().addListener(mWidgetListener);
+        WidgetsManager.getSharedInstance().addListener(mWidgetListener);
     }
 
     /**
@@ -282,7 +281,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             mSession.mCallsManager.removeListener(mCallsListener);
         }
 
-        WidgetManager.getSharedInstance().removeListener(mWidgetListener);
+        WidgetsManager.getSharedInstance().removeListener(mWidgetListener);
     }
 
     /**

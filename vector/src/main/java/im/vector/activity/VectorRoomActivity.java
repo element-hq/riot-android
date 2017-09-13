@@ -117,7 +117,7 @@ import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
-import im.vector.widgets.WidgetManager;
+import im.vector.widgets.WidgetsManager;
 
 /**
  * Displays a single room with messages.
@@ -945,7 +945,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             public void onCloseWidgetClick(Widget widget) {
                 setProgressVisibility(View.VISIBLE);
 
-                WidgetManager.getSharedInstance().closeWidget(mSession, mRoom, widget.getWidgetId(), new ApiCallback<Void>() {
+                WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, widget.getWidgetId(), new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
                         setProgressVisibility(View.GONE);
@@ -1597,8 +1597,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param aIsVideoCall true if it is a video call
      */
     private void manageWidget(Widget widget, boolean aIsVideoCall) {
-        final Intent intent = new Intent(VectorRoomActivity.this, JitsiActivity.class);
-        intent.putExtra(JitsiActivity.EXTRA_WIDGET_ID, widget);
+        final Intent intent = new Intent(VectorRoomActivity.this, JitsiCallActivity.class);
+        intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
         VectorRoomActivity.this.startActivity(intent);
     }
 
@@ -1611,17 +1611,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
         setProgressVisibility(View.VISIBLE);
 
-        WidgetManager.getSharedInstance().createJitsiWidget(mSession, mRoom, aIsVideoCall, new ApiCallback<Widget>() {
+        WidgetsManager.getSharedInstance().createJitsiWidget(mSession, mRoom, aIsVideoCall, new ApiCallback<Widget>() {
             @Override
             public void onSuccess(Widget widget) {
                 setProgressVisibility(View.GONE);
 
-                final Intent intent = new Intent(VectorRoomActivity.this, JitsiActivity.class);
-                intent.putExtra(JitsiActivity.EXTRA_WIDGET_ID, widget);
+                final Intent intent = new Intent(VectorRoomActivity.this, JitsiCallActivity.class);
+                intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
                 VectorRoomActivity.this.startActivity(intent);
             }
 
             private void onError(String errorMessage) {
+                setProgressVisibility(View.GONE);
                 CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
             }
 

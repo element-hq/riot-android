@@ -41,8 +41,8 @@ import java.util.UUID;
 import im.vector.R;
 import im.vector.VectorApp;
 
-public class WidgetManager {
-    private static final String LOG_TAG = WidgetManager.class.getSimpleName();
+public class WidgetsManager {
+    private static final String LOG_TAG = WidgetsManager.class.getSimpleName();
 
     /**
      * The type of matrix event used for scalar widgets.
@@ -76,12 +76,12 @@ public class WidgetManager {
     /**
      * unique instance
      */
-    private static final WidgetManager mSharedInstance = new WidgetManager();
+    private static final WidgetsManager mSharedInstance = new WidgetsManager();
 
     /**
      * @return the shared instance
      */
-    public static WidgetManager getSharedInstance() {
+    public static WidgetsManager getSharedInstance() {
         return mSharedInstance;
     }
 
@@ -184,7 +184,7 @@ public class WidgetManager {
      * @return the list of active widgets
      */
     public List<Widget> getActiveJitsiWidgets(final MXSession session, final Room room) {
-        return getActiveWidgets(session, room, new HashSet<>(Arrays.asList(WidgetManager.WIDGET_TYPE_JITSI)));
+        return getActiveWidgets(session, room, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)));
     }
 
     /**
@@ -330,8 +330,7 @@ public class WidgetManager {
         session.getRoomsApiClient().sendStateEvent(room.getRoomId(), WIDGET_EVENT_TYPE, widgetId, new HashMap<String, Object>(), callback);
     }
 
-
-    public interface IWidgetManagerEventsListener {
+    public interface onWidgetUpdateListener {
         /**
          * Warn that there is an update on a widget.
          *
@@ -340,14 +339,14 @@ public class WidgetManager {
         void onWidgetUpdate(Widget widget);
     }
 
-    private static final Set<IWidgetManagerEventsListener> mListeners = new HashSet<>();
+    private static final Set<onWidgetUpdateListener> mListeners = new HashSet<>();
 
     /**
      * Add a listener.
      *
      * @param listener the listener to add
      */
-    public static void addListener(IWidgetManagerEventsListener listener) {
+    public static void addListener(onWidgetUpdateListener listener) {
         if (null != listener) {
             synchronized (mListeners) {
                 mListeners.add(listener);
@@ -360,7 +359,7 @@ public class WidgetManager {
      *
      * @param listener the listener to remove
      */
-    public static void removeListener(IWidgetManagerEventsListener listener) {
+    public static void removeListener(onWidgetUpdateListener listener) {
         if (null != listener) {
             synchronized (mListeners) {
                 mListeners.remove(listener);
@@ -375,7 +374,7 @@ public class WidgetManager {
      */
     private void onWidgetUpdate(Widget widget) {
         synchronized (mListeners) {
-            for (IWidgetManagerEventsListener listener : mListeners) {
+            for (onWidgetUpdateListener listener : mListeners) {
                 try {
                     listener.onWidgetUpdate(widget);
                 } catch (Exception e) {
