@@ -18,9 +18,16 @@ package im.vector.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
+
+import java.io.File;
+
 import im.vector.R;
 import im.vector.ga.GAHelper;
 
@@ -98,6 +105,9 @@ public class PreferencesManager {
 
     public static final String SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY = "SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY";
 
+    public static final String SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY";
+    public static final String SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY";
+
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;
@@ -111,6 +121,81 @@ public class PreferencesManager {
      */
     public static boolean displayTimeIn12hFormat(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_12_24_TIMESTAMPS_KEY, false);
+    }
+
+    /**
+     * Update the notification ringtone
+     * @param context the context
+     * @param uri the new notification ringtone
+     */
+    public static void setNotificationRingTone(Context context, Uri uri) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        if (null != uri) {
+            editor.putString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, uri.toString());
+        } else {
+            editor.remove(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY);
+        }
+        editor.commit();
+    }
+
+    /**
+     * Provides the selected notification ring tone
+     * @param context the context
+     * @return the selected ring tone
+     */
+    public static Uri getNotificationRingTone(Context context) {
+        String url = PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, null);
+        Uri uri = null;
+
+        if (null != url) {
+            try {
+                uri = Uri.parse(url);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getNotificationRingTone() : Uri.parse failed");
+            }
+        }
+
+        if (null == uri) {
+            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
+
+        return uri;
+    }
+
+    /**
+     * Provide the notification ringtone filename
+     * @param context the context
+     * @return the filename
+     */
+    public static String getNotificationRingToneName(Context context) {
+        Uri toneUri = getNotificationRingTone(context);
+        String name = null;
+
+        Cursor cursor = null;
+
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(toneUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+
+            File file = new File(cursor.getString(column_index));
+            name = file.getName();
+
+            if (name.contains(".")) {
+                name = name.substring(0, name.lastIndexOf("."));
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getNotificationRingToneName() failed() : " + e.getMessage());
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return name;
     }
 
     /**

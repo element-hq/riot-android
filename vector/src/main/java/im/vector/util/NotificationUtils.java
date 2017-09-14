@@ -81,9 +81,6 @@ public class NotificationUtils {
     public static final String ACTION_MESSAGE_REPLY = "ACTION_MESSAGE_REPLY";
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
 
-    // notification sound
-    private static final String RING_TONE_MESSAGE_NOTIFICATION = "message.ogg";
-
     /**
      * Retrieve the room name.
      *
@@ -702,14 +699,7 @@ public class NotificationUtils {
             builder.setDefaults(Notification.DEFAULT_LIGHTS);
 
             if (isBing) {
-                // need to add a settings to let the user decides which sound he wants to use
-                Uri ringTone = null; //VectorCallSoundManager.getRingToneUri(R.raw.message, RING_TONE_MESSAGE_NOTIFICATION);
-
-                if (null == ringTone) {
-                    ringTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                }
-
-                builder.setSound(ringTone);
+                builder.setSound(PreferencesManager.getNotificationRingTone(context));
             }
 
             // turn the screen on for 3 seconds

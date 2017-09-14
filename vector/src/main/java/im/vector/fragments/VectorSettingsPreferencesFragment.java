@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -134,6 +135,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static final int REQUEST_NEW_PHONE_NUMBER = 456;
     private static final int REQUEST_PHONEBOOK_COUNTRY = 789;
     private static final int REQUEST_LOCALE = 777;
+    private static final int REQUEST_NOTIFICATION_RINGTONE = 888;
 
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
@@ -257,6 +259,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 return false;
             }
         });
+
+        EditTextPreference notificationRingTonePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
+        notificationRingTonePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(getActivity()));
+                getActivity().startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE);
+                return false;
+            }
+        });
+        refreshNotificationRingTone();
 
         // application version
         VectorCustomActionEditTextPreference versionTextPreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY);
@@ -1236,12 +1251,25 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         });
     }
 
+    /**
+     * Refresh the nofication filename
+     */
+    private void refreshNotificationRingTone() {
+        EditTextPreference notificationRingTonePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
+        notificationRingTonePreference.setSummary(PreferencesManager.getNotificationRingToneName(getActivity()));
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
+                case REQUEST_NOTIFICATION_RINGTONE: {
+                    PreferencesManager.setNotificationRingTone(getActivity(), (Uri)data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI));
+                    refreshNotificationRingTone();
+                    break;
+                }
                 case REQUEST_E2E_FILE_REQUEST_CODE:
                     importKeys(data);
                     break;

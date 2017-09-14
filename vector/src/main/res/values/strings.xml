@@ -477,6 +477,7 @@
     <string name="settings_summary_app_info_link">Application system info screen</string>
     <string name="settings_title_app_info_link">Application info</string>
 
+    <string name="settings_notification_ringtone">Notification sound</string>
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
     <string name="settings_enable_this_device">Enable notifications for this device</string>
     <string name="settings_turn_screen_on">Turn the screen on for 3 seconds</string>
