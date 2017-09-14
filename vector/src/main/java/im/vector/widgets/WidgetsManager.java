@@ -117,7 +117,7 @@ public class WidgetsManager {
      * @return the active widgets list
      */
     public List<Widget> getActiveWidgets(MXSession session, Room room) {
-        return getActiveWidgets(session, room, null);
+        return getActiveWidgets(session, room, null, null);
     }
 
     /**
@@ -126,9 +126,10 @@ public class WidgetsManager {
      * @param session     the session.
      * @param room        the room to check.
      * @param widgetTypes the the widget types
+     * @param excludedTypes the the excluded widget types
      * @return the active widgets list
      */
-    public List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes) {
+    public List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
         // Get all im.vector.modular.widgets state events in the room
         List<Event> widgetEvents = room.getLiveState().getStateEvents(new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)));
 
@@ -150,7 +151,7 @@ public class WidgetsManager {
         // Create each widget from its latest im.vector.modular.widgets state event
         for (Event widgetEvent : widgetEvents) {
             // Filter widget types if required
-            if (null != widgetTypes) {
+            if ((null != widgetTypes) || (null != excludedTypes)) {
                 String widgetType = null;
 
                 try {
@@ -163,8 +164,14 @@ public class WidgetsManager {
                     Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage());
                 }
 
-                if ((null != widgetType) && !widgetTypes.contains(widgetType)) {
-                    continue;
+                if (null != widgetType) {
+                    if ((null != widgetTypes) && !widgetTypes.contains(widgetType)) {
+                        continue;
+                    }
+
+                    if ((null != excludedTypes) && excludedTypes.contains(widgetType)) {
+                        continue;
+                    }
                 }
             }
 
@@ -204,9 +211,18 @@ public class WidgetsManager {
      * @return the list of active widgets
      */
     public List<Widget> getActiveJitsiWidgets(final MXSession session, final Room room) {
-        return getActiveWidgets(session, room, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)));
+        return getActiveWidgets(session, room, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)), null);
     }
 
+    /**
+     * Provides the widgets which can be displayed in a webview.
+     * @param session the session
+     * @param room the room
+     * @return the list of active widgets
+     */
+    public List<Widget> getActiveWebviewWidgets(final MXSession session, final Room room) {
+        return getActiveWidgets(session, room, null, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)));
+    }
     /**
      * Check user's power for widgets management in a room.
      *
