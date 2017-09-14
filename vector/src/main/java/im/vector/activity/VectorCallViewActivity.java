@@ -498,6 +498,10 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
 
             // add the call view only is the call is a video one
             if (mCall.isVideo()) {
+                // reported by a rageshake
+                if (null != mCallView.getParent()) {
+                    ((ViewGroup)mCallView.getParent()).removeView(mCallView);
+                }
                 layout.addView(mCallView, 1, params);
             }
             // init as GONE, will be displayed according to call states..
