@@ -71,7 +71,38 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
     @Override
     protected View onCreateView(ViewGroup parent) {
         View view = super.onCreateView(parent);
+        addClickListeners(view);
+        return view;
+    }
 
+    @Override
+    protected void onBindView(View view) {
+        super.onBindView(view);
+        addClickListeners(view);
+
+        // display the title in multi-line to avoid ellipsing.
+        try {
+            TextView title = (TextView) view.findViewById(android.R.id.title);
+            TextView summary = (TextView) view.findViewById(android.R.id.summary);
+            if (title != null) {
+                title.setSingleLine(false);
+                title.setTypeface(null, mTypeface);
+            }
+
+            if (title != summary) {
+                summary.setTypeface(null, mTypeface);
+            }
+
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "onBindView " + e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param view
+     */
+    private void addClickListeners(View view) {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -91,30 +122,6 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
                 }
             }
         });
-
-        return view;
-    }
-
-    @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
-
-        // display the title in multi-line to avoid ellipsing.
-        try {
-            TextView title = (TextView) view.findViewById(android.R.id.title);
-            TextView summary = (TextView) view.findViewById(android.R.id.summary);
-            if (title != null) {
-                title.setSingleLine(false);
-                title.setTypeface(null, mTypeface);
-            }
-
-            if (title != summary) {
-                summary.setTypeface(null, mTypeface);
-            }
-
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "onBindView " + e.getMessage());
-        }
     }
 
     /**
