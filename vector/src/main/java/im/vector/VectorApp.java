@@ -323,6 +323,15 @@ public class VectorApp extends MultiDexApplication {
         initApplicationLocale();
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
+            Log.d(LOG_TAG, "## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale().toString());
+            updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(this));
+        }
+    }
+
     /**
      * Parse a markdown text
      *
@@ -551,6 +560,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Restart an activity to manage language update
+     *
      * @param activity the activity to restart
      */
     private void restartActivity(Activity activity) {
@@ -838,7 +848,7 @@ public class VectorApp extends MultiDexApplication {
 
     private static final Locale mApplicationDefaultLanguage = new Locale("en", "UK");
 
-    private static final Map<Float, String> mPrefKeyByFontScale = new LinkedHashMap<Float , String>() {{
+    private static final Map<Float, String> mPrefKeyByFontScale = new LinkedHashMap<Float, String>() {{
         put(0.70f, FONT_SCALE_TINY);
         put(0.85f, FONT_SCALE_SMALL);
         put(1.00f, FONT_SCALE_NORMAL);
@@ -848,7 +858,7 @@ public class VectorApp extends MultiDexApplication {
         put(1.60f, FONT_SCALE_HUGE);
     }};
 
-    private static final Map<String, Integer> mFontTextScaleIdByPrefKey = new LinkedHashMap<String , Integer>() {{
+    private static final Map<String, Integer> mFontTextScaleIdByPrefKey = new LinkedHashMap<String, Integer>() {{
         put(FONT_SCALE_TINY, R.string.tiny);
         put(FONT_SCALE_SMALL, R.string.small);
         put(FONT_SCALE_NORMAL, R.string.normal);
@@ -891,6 +901,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Get the font scale
+     *
      * @return the font scale
      */
     public static String getFontScale() {
@@ -919,6 +930,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Provides the font scale value
+     *
      * @return the font scale
      */
     private static float getFontScaleValue() {
@@ -926,7 +938,7 @@ public class VectorApp extends MultiDexApplication {
 
         if (mPrefKeyByFontScale.containsValue(fontScale)) {
             for (Map.Entry<Float, String> entry : mPrefKeyByFontScale.entrySet()) {
-                if (TextUtils.equals(entry.getValue(),fontScale)) {
+                if (TextUtils.equals(entry.getValue(), fontScale)) {
                     return entry.getKey();
                 }
             }
@@ -937,6 +949,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Provides the font scale description
+     *
      * @return the font description
      */
     public static String getFontScaleDescription() {
@@ -952,6 +965,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Update the font size from the locale description.
+     *
      * @param fontScaleDescription the font scale description
      */
     public static void updateFontScale(String fontScaleDescription) {
@@ -1068,6 +1082,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Update the application locale
+     *
      * @param locale
      */
     public static void updateApplicationLocale(Locale locale) {
@@ -1076,6 +1091,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Update the application theme
+     *
      * @param theme the new theme
      */
     public static void updateApplicationTheme(String theme) {
@@ -1086,7 +1102,7 @@ public class VectorApp extends MultiDexApplication {
     /**
      * Update the application locale.
      *
-     * @param locale  the locale
+     * @param locale the locale
      * @param theme  the new theme
      */
     private static void updateApplicationSettings(Locale locale, String textSize, String theme) {
