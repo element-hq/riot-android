@@ -213,7 +213,7 @@
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 
         <activity
-            android:name="im.vector.activity.WidgetViewActivity"
+            android:name="im.vector.activity.WidgetActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 

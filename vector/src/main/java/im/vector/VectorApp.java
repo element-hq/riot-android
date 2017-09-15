@@ -65,7 +65,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.JitsiCallActivity;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorMediasPickerActivity;
-import im.vector.activity.WidgetViewActivity;
+import im.vector.activity.WidgetActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
@@ -569,7 +569,7 @@ public class VectorApp extends MultiDexApplication {
         if (!(activity instanceof VectorMediasPickerActivity)
                 && !(activity instanceof VectorCallViewActivity)
                 && !(activity instanceof JitsiCallActivity)
-                && !(activity instanceof WidgetViewActivity)) {
+                && !(activity instanceof WidgetActivity)) {
             activity.startActivity(activity.getIntent());
             activity.finish();
         }

@@ -35,8 +35,8 @@ import java.util.List;
 /**
  * This class displays if there is a pending active widget
  */
-public class VectorPendingActiveWidgetView extends RelativeLayout {
-    private static final String LOG_TAG = "OngConferenceCallView";
+public class ActiveWidgetBanner extends RelativeLayout {
+    private static final String LOG_TAG = ActiveWidgetBanner.class.getSimpleName();
 
     public interface onUpdateListener {
         /**
@@ -86,17 +86,17 @@ public class VectorPendingActiveWidgetView extends RelativeLayout {
     /**
      * constructors
      **/
-    public VectorPendingActiveWidgetView(Context context) {
+    public ActiveWidgetBanner(Context context) {
         super(context);
         initView();
     }
 
-    public VectorPendingActiveWidgetView(Context context, AttributeSet attrs) {
+    public ActiveWidgetBanner(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView();
     }
 
-    public VectorPendingActiveWidgetView(Context context, AttributeSet attrs, int defStyle) {
+    public ActiveWidgetBanner(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initView();
     }
@@ -105,7 +105,7 @@ public class VectorPendingActiveWidgetView extends RelativeLayout {
      * Common initialisation method.
      */
     private void initView() {
-        View.inflate(getContext(), R.layout.vector_pending_active_widget_view, this);
+        View.inflate(getContext(), R.layout.active_widget_banner, this);
         mWidgetTypeTextView = (TextView) findViewById(R.id.widget_type_text_view);
 
         mCloseWidgetIcon = findViewById(R.id.close_widget_icon_container);

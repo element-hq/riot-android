@@ -115,7 +115,7 @@ import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
-import im.vector.view.VectorPendingActiveWidgetView;
+import im.vector.view.ActiveWidgetBanner;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
@@ -255,7 +255,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private VectorOngoingConferenceCallView mVectorOngoingConferenceCallView;
 
     // pending active view
-    private VectorPendingActiveWidgetView mVectorPendingActiveWidgetView;
+    private ActiveWidgetBanner mActiveWidgetBanner;
 
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -604,7 +604,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.room_pending_call_view);
         mVectorOngoingConferenceCallView = (VectorOngoingConferenceCallView) findViewById(R.id.room_ongoing_conference_call_view);
-        mVectorPendingActiveWidgetView = (VectorPendingActiveWidgetView) findViewById(R.id.room_pending_widget_view);
+        mActiveWidgetBanner = (ActiveWidgetBanner) findViewById(R.id.room_pending_widget_view);
         mE2eImageView = (ImageView) findViewById(R.id.room_encrypted_image_view);
         mSyncInProgressView = findViewById(R.id.room_sync_in_progress);
 
@@ -924,8 +924,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         }
 
-        mVectorPendingActiveWidgetView.initRoomInfo(mSession, mRoom);
-        mVectorPendingActiveWidgetView.setOnUpdateListener(new VectorPendingActiveWidgetView.onUpdateListener() {
+        mActiveWidgetBanner.initRoomInfo(mSession, mRoom);
+        mActiveWidgetBanner.setOnUpdateListener(new ActiveWidgetBanner.onUpdateListener() {
             @Override
             public void onCloseWidgetClick(Widget widget) {
                 setProgressVisibility(View.VISIBLE);
@@ -964,12 +964,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             @Override
             public void onClick(Widget widget) {
-                final Intent intent = new Intent(VectorRoomActivity.this, WidgetViewActivity.class);
-                intent.putExtra(WidgetViewActivity.EXTRA_WIDGET_ID, widget);
+                final Intent intent = new Intent(VectorRoomActivity.this, WidgetActivity.class);
+                intent.putExtra(WidgetActivity.EXTRA_WIDGET_ID, widget);
                 VectorRoomActivity.this.startActivity(intent);
             }
         });
-
 
         mVectorOngoingConferenceCallView.initRoomInfo(mSession, mRoom);
         mVectorOngoingConferenceCallView.setCallClickListener(new VectorOngoingConferenceCallView.ICallClickListener() {
@@ -1093,8 +1092,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mVectorOngoingConferenceCallView.setCallClickListener(null);
         }
 
-        if (null != mVectorPendingActiveWidgetView) {
-            mVectorPendingActiveWidgetView.setOnUpdateListener(null);
+        if (null != mActiveWidgetBanner) {
+            mActiveWidgetBanner.setOnUpdateListener(null);
         }
 
         super.onDestroy();
@@ -1126,7 +1125,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         mVectorOngoingConferenceCallView.onActivityPause();
-        mVectorPendingActiveWidgetView.onActivityPause();
+        mActiveWidgetBanner.onActivityPause();
 
         // to have notifications for this room
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
@@ -1263,7 +1262,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if ((null == sRoomPreviewData) && (null == mEventId)) {
             mVectorPendingCallView.checkPendingCall();
             mVectorOngoingConferenceCallView.onActivityResume();
-            mVectorPendingActiveWidgetView.onActivityResume();
+            mActiveWidgetBanner.onActivityResume();
         }
 
         displayE2eRoomAlert();

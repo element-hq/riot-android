@@ -127,7 +127,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
-    <im.vector.view.VectorPendingActiveWidgetView
+    <im.vector.view.ActiveWidgetBanner
         android:id="@+id/room_pending_widget_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

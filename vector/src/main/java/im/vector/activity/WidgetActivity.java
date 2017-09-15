@@ -31,6 +31,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.Log;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,8 +40,11 @@ import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 
-public class WidgetViewActivity extends AppCompatActivity {
-    private static final String LOG_TAG = WidgetViewActivity.class.getSimpleName();
+/*
+ * This class displays a widget
+ */
+public class WidgetActivity extends AppCompatActivity {
+    private static final String LOG_TAG = WidgetActivity.class.getSimpleName();
 
     /**
      * The linked widget
@@ -79,7 +83,7 @@ public class WidgetViewActivity extends AppCompatActivity {
         public void onWidgetUpdate(Widget widget) {
             if (TextUtils.equals(widget.getWidgetId(), mWidget.getWidgetId())) {
                 if (!widget.isActive()) {
-                    WidgetViewActivity.this.finish();
+                    WidgetActivity.this.finish();
                 }
             }
         }
@@ -90,17 +94,35 @@ public class WidgetViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_widget_view);
+        setContentView(R.layout.activity_widget);
         ButterKnife.bind(this);
 
         mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
+
+        if ((null == mWidget) || (null == mWidget.getUrl())) {
+            Log.e(LOG_TAG, "## onCreate() : invalid widget");
+            finish();
+            return;
+        }
+
         mSession = Matrix.getMXSession(this, mWidget.getSessionId());
+
+        if (null == mSession) {
+            Log.e(LOG_TAG, "## onCreate() : invalid session");
+            finish();
+            return;
+        }
+
         mRoom = mSession.getDataHandler().getRoom(mWidget.getRoomId());
 
+        if (null == mRoom) {
+            Log.e(LOG_TAG, "## onCreate() : invalid room");
+            finish();
+            return;
+        }
+
         mWidgetTypeTextView.setText(mWidget.getType());
-
         refreshStatusBar();
-
         loadURL();
     }
 
@@ -119,12 +141,12 @@ public class WidgetViewActivity extends AppCompatActivity {
                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
-                        WidgetViewActivity.this.finish();
+                        WidgetActivity.this.finish();
                     }
 
                     private void onError(String errorMessage) {
                         mProgressLayout.setVisibility(View.GONE);
-                        CommonActivityUtils.displayToast(WidgetViewActivity.this, errorMessage);
+                        CommonActivityUtils.displayToast(WidgetActivity.this, errorMessage);
                     }
 
                     @Override
@@ -148,13 +170,13 @@ public class WidgetViewActivity extends AppCompatActivity {
         mBackToAppIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WidgetViewActivity.this.finish();
+                WidgetActivity.this.finish();
             }
         });
     }
 
     /**
-     * Load the jitsi call
+     * Load the widget call
      */
     @SuppressLint("NewApi")
     private void loadURL() {
@@ -206,8 +228,8 @@ public class WidgetViewActivity extends AppCompatActivity {
             }
 
             private void onError(String errorMessage) {
-                CommonActivityUtils.displayToast(WidgetViewActivity.this, errorMessage);
-                WidgetViewActivity.this.finish();
+                CommonActivityUtils.displayToast(WidgetActivity.this, errorMessage);
+                WidgetActivity.this.finish();
             }
 
             @Override
