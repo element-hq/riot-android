@@ -1,0 +1,228 @@
+/*
+ * Copyright 2017 Vector Creations Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.activity;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
+
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import im.vector.Matrix;
+import im.vector.R;
+import im.vector.widgets.Widget;
+import im.vector.widgets.WidgetsManager;
+
+public class WidgetViewActivity extends AppCompatActivity {
+    private static final String LOG_TAG = WidgetViewActivity.class.getSimpleName();
+
+    /**
+     * The linked widget
+     */
+    public static final String EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID";
+
+    // the linked widget
+    private Widget mWidget = null;
+
+    // the session
+    private MXSession mSession;
+
+    // the room
+    private Room mRoom;
+
+    @BindView(R.id.back_icon_container)
+    View mBackToAppIcon;
+
+    @BindView(R.id.close_widget_icon_container)
+    View mCloseWidgetIcon;
+
+    @BindView(R.id.widget_webview)
+    WebView mWidgetWebview;
+
+    /**
+     * Widget events listener
+     */
+    private final WidgetsManager.onWidgetUpdateListener mWidgetListener = new WidgetsManager.onWidgetUpdateListener() {
+        @Override
+        public void onWidgetUpdate(Widget widget) {
+            if (TextUtils.equals(widget.getWidgetId(), mWidget.getWidgetId())) {
+                if (!widget.isActive()) {
+                    WidgetViewActivity.this.finish();
+                }
+            }
+        }
+    };
+
+    @Override
+    @SuppressLint("NewApi")
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_widget_view);
+        ButterKnife.bind(this);
+
+        mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
+        mSession = Matrix.getMXSession(this, mWidget.getSessionId());
+        mRoom = mSession.getDataHandler().getRoom(mWidget.getRoomId());
+
+        refreshStatusBar();
+
+        loadURL();
+    }
+
+    /**
+     * Refresh the status bar
+     */
+    private void refreshStatusBar() {
+        boolean canCloseWidget = (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom));
+
+        // close widget button
+        mCloseWidgetIcon.setVisibility(canCloseWidget ? View.VISIBLE : View.GONE);
+        mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mProgressLayout.setVisibility(View.VISIBLE);
+                WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        WidgetViewActivity.this.finish();
+                    }
+
+                    private void onError(String errorMessage) {
+                        CommonActivityUtils.displayToast(WidgetViewActivity.this, errorMessage);
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onError(e.getLocalizedMessage());
+
+                    }
+                });
+            }
+        });
+
+        mBackToAppIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WidgetViewActivity.this.finish();
+            }
+        });
+    }
+
+    /**
+     * Load the jitsi call
+     */
+    @SuppressLint("NewApi")
+    private void loadURL() {
+        WebSettings settings = mWidgetWebview.getSettings();
+
+        // Enable Javascript
+        settings.setJavaScriptEnabled(true);
+
+        // Use WideViewport and Zoom out if there is no viewport defined
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+
+        // Enable pinch to zoom without the zoom buttons
+        settings.setBuiltInZoomControls(true);
+
+        // Allow use of Local Storage
+        settings.setDomStorageEnabled(true);
+
+        settings.setAllowFileAccessFromFileURLs(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
+
+        settings.setDisplayZoomControls(false);
+
+        mWidgetWebview.setWebViewClient(new WebViewClient());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            android.webkit.CookieManager cookieManager = android.webkit.CookieManager.getInstance();
+            cookieManager.setAcceptThirdPartyCookies(mWidgetWebview, true);
+        }
+
+        WidgetsManager.getFormattedWidgetUrl(this, mWidget, new ApiCallback<String>() {
+            @Override
+            public void onSuccess(String url) {
+                mWidgetWebview.loadUrl(url);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+
+            }
+        });
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        WidgetsManager.removeListener(mWidgetListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // force a full screen display
+        // jisti lib forces it when the call is established
+        // but it is not properly restored when the application is suspended by an external app
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        WidgetsManager.addListener(mWidgetListener);
+        refreshStatusBar();
+    }
+}

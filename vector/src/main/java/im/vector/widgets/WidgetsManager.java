@@ -481,10 +481,10 @@ public class WidgetsManager {
         getScalarToken(context, Matrix.getInstance(context).getSession(widget.getSessionId()), new ApiCallback<String>() {
             @Override
             public void onSuccess(String token) {
-                if (null != token) {
+                if (null == token) {
                     callback.onSuccess(widget.getUrl());
                 } else {
-                    callback.onSuccess(widget.getUrl() + "&" + token);
+                    callback.onSuccess(widget.getUrl() + "&scalar_token=" + token);
                 }
             }
 

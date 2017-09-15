@@ -212,6 +212,10 @@
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 
         <activity
+            android:name="im.vector.activity.WidgetViewActivity"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
+
+        <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"
             android:label="@string/media_picker_both_capture_title"
             android:parentActivityName="im.vector.activity.VectorRoomActivity"
