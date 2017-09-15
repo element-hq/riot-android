@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -170,7 +171,11 @@ public class WidgetActivity extends AppCompatActivity {
         mBackToAppIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WidgetActivity.this.finish();
+                if (mWidgetWebView.canGoBack()) {
+                    mWidgetWebView.goBack();
+                } else {
+                    WidgetActivity.this.finish();
+                }
             }
         });
     }
@@ -212,6 +217,10 @@ public class WidgetActivity extends AppCompatActivity {
 
         settings.setDisplayZoomControls(false);
 
+        // it does not wrong properly with WebChromeClient
+        // force to use the default one
+        //mWidgetWebView.setWebChromeClient(new WebChromeClient());
+        mWidgetWebView.setWebChromeClient(null);
         mWidgetWebView.setWebViewClient(new WebViewClient());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -253,6 +262,9 @@ public class WidgetActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        mWidgetWebView.pauseTimers();
+        mWidgetWebView.onPause();
+
         WidgetsManager.removeListener(mWidgetListener);
     }
 
@@ -274,7 +286,18 @@ public class WidgetActivity extends AppCompatActivity {
         super.onResume();
         displayInFullScreen();
         WidgetsManager.addListener(mWidgetListener);
+
+        mWidgetWebView.resumeTimers();
+        mWidgetWebView.onResume();
+
         refreshStatusBar();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mWidgetWebView.destroy();
+        mWidgetWebView = null;
+        super.onDestroy();
     }
 
     @Override
