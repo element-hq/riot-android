@@ -62,8 +62,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.JitsiCallActivity;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.activity.WidgetViewActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
@@ -162,8 +164,7 @@ public class VectorApp extends MultiDexApplication {
                 updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(context));
 
                 if (null != getCurrentActivity()) {
-                    getCurrentActivity().startActivity(getCurrentActivity().getIntent());
-                    getCurrentActivity().finish();
+                    restartActivity(getCurrentActivity());
                 }
             }
         }
@@ -245,19 +246,6 @@ public class VectorApp extends MultiDexApplication {
              */
             private String getActivityLocaleStatus(Activity activity) {
                 return getApplicationLocale().toString() + "_" + getFontScale() + "_" + ThemeUtils.getApplicationTheme(activity);
-            }
-
-            /**
-             * Restart an activity to manage language update
-             * @param activity the activity to restart
-             */
-            private void restartActivity(Activity activity) {
-                // avoid restarting activities when it is not required
-                // some of them has no text
-                if (!(activity instanceof VectorMediasPickerActivity) && !(activity instanceof VectorCallViewActivity)) {
-                    activity.startActivity(activity.getIntent());
-                    activity.finish();
-                }
             }
 
             @Override
@@ -559,6 +547,22 @@ public class VectorApp extends MultiDexApplication {
      */
     public static boolean isAppInBackground() {
         return (null == mCurrentActivity) && (null != getInstance()) && getInstance().mIsInBackground;
+    }
+
+    /**
+     * Restart an activity to manage language update
+     * @param activity the activity to restart
+     */
+    private void restartActivity(Activity activity) {
+        // avoid restarting activities when it is not required
+        // some of them has no text
+        if (!(activity instanceof VectorMediasPickerActivity)
+                && !(activity instanceof VectorCallViewActivity)
+                && !(activity instanceof JitsiCallActivity)
+                && !(activity instanceof WidgetViewActivity)) {
+            activity.startActivity(activity.getIntent());
+            activity.finish();
+        }
     }
 
     //==============================================================================================================

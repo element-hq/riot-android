@@ -209,10 +209,12 @@
 
         <activity
             android:name="im.vector.activity.JitsiCallActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 
         <activity
             android:name="im.vector.activity.WidgetViewActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 
         <activity

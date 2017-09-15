@@ -977,7 +977,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             private void onCallClick(Widget widget, boolean isVideo) {
                 if (null != widget) {
-                    manageWidget(widget, isVideo);
+                    launchJitsiActivity(widget, isVideo);
                 } else {
                     startCall(isVideo);
                 }
@@ -1654,7 +1654,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param widget       the widget
      * @param aIsVideoCall true if it is a video call
      */
-    private void manageWidget(Widget widget, boolean aIsVideoCall) {
+    private void launchJitsiActivity(Widget widget, boolean aIsVideoCall) {
         final Intent intent = new Intent(VectorRoomActivity.this, JitsiCallActivity.class);
         intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
         VectorRoomActivity.this.startActivity(intent);
@@ -1708,7 +1708,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param aIsVideoCall true to video call, false to audio call
      */
     private void startIpCall(final boolean aIsVideoCall) {
-        if ((mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(this)) {
+        if ((mRoom.getActiveMembers().size() > 1) && PreferencesManager.useJitsiConfCall(this)) {
             startJitsiCall(aIsVideoCall);
             return;
         }
