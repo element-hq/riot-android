@@ -115,6 +115,7 @@ import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
+import im.vector.view.ActiveWidgetBanner;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
@@ -252,6 +253,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     // outgoing call
     private VectorOngoingConferenceCallView mVectorOngoingConferenceCallView;
+
+    // pending active view
+    private ActiveWidgetBanner mActiveWidgetBanner;
 
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -600,6 +604,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.room_pending_call_view);
         mVectorOngoingConferenceCallView = (VectorOngoingConferenceCallView) findViewById(R.id.room_ongoing_conference_call_view);
+        mActiveWidgetBanner = (ActiveWidgetBanner) findViewById(R.id.room_pending_widget_view);
         mE2eImageView = (ImageView) findViewById(R.id.room_encrypted_image_view);
         mSyncInProgressView = findViewById(R.id.room_sync_in_progress);
 
@@ -806,7 +811,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     permissionsInfoDialog.show();
 
                 } else if (isUserAllowedToStartConfCall()) {
-                    displayVideoCallIpDialog();
+                    // cannot select if it is a video or a voice call
+                    if ((mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(VectorRoomActivity.this)) {
+                        startJitsiCall(true);
+                    } else {
+                        displayVideoCallIpDialog();
+                    }
                 } else {
                     displayConfCallNotAllowed();
                 }
@@ -914,6 +924,52 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         }
 
+        mActiveWidgetBanner.initRoomInfo(mSession, mRoom);
+        mActiveWidgetBanner.setOnUpdateListener(new ActiveWidgetBanner.onUpdateListener() {
+            @Override
+            public void onCloseWidgetClick(Widget widget) {
+                setProgressVisibility(View.VISIBLE);
+
+                WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, widget.getWidgetId(), new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        setProgressVisibility(View.GONE);
+                    }
+
+                    private void onError(String errorMessage) {
+                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onActiveWidgetUpdate() {
+                // something todo ?
+            }
+
+            @Override
+            public void onClick(Widget widget) {
+                final Intent intent = new Intent(VectorRoomActivity.this, WidgetActivity.class);
+                intent.putExtra(WidgetActivity.EXTRA_WIDGET_ID, widget);
+                VectorRoomActivity.this.startActivity(intent);
+            }
+        });
+
         mVectorOngoingConferenceCallView.initRoomInfo(mSession, mRoom);
         mVectorOngoingConferenceCallView.setCallClickListener(new VectorOngoingConferenceCallView.ICallClickListener() {
             private void startCall(boolean isVideo) {
@@ -925,7 +981,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             private void onCallClick(Widget widget, boolean isVideo) {
                 if (null != widget) {
-                    manageWidget(widget, isVideo);
+                    launchJitsiActivity(widget, isVideo);
                 } else {
                     startCall(isVideo);
                 }
@@ -1036,6 +1092,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mVectorOngoingConferenceCallView.setCallClickListener(null);
         }
 
+        if (null != mActiveWidgetBanner) {
+            mActiveWidgetBanner.setOnUpdateListener(null);
+        }
+
         super.onDestroy();
     }
 
@@ -1065,6 +1125,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         mVectorOngoingConferenceCallView.onActivityPause();
+        mActiveWidgetBanner.onActivityPause();
 
         // to have notifications for this room
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
@@ -1201,6 +1262,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if ((null == sRoomPreviewData) && (null == mEventId)) {
             mVectorPendingCallView.checkPendingCall();
             mVectorOngoingConferenceCallView.onActivityResume();
+            mActiveWidgetBanner.onActivityResume();
         }
 
         displayE2eRoomAlert();
@@ -1596,7 +1658,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param widget       the widget
      * @param aIsVideoCall true if it is a video call
      */
-    private void manageWidget(Widget widget, boolean aIsVideoCall) {
+    private void launchJitsiActivity(Widget widget, boolean aIsVideoCall) {
         final Intent intent = new Intent(VectorRoomActivity.this, JitsiCallActivity.class);
         intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
         VectorRoomActivity.this.startActivity(intent);

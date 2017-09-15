@@ -16,10 +16,17 @@
 
 package im.vector.widgets;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 
+import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -38,8 +45,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.util.PreferencesManager;
 
 public class WidgetsManager {
     private static final String LOG_TAG = WidgetsManager.class.getSimpleName();
@@ -53,6 +62,16 @@ public class WidgetsManager {
      * Known types widgets.
      */
     public static final String WIDGET_TYPE_JITSI = "jitsi";
+
+    /**
+     * Integration rest url
+     */
+    private static final String INTEGRATION_REST_URL = "https://scalar.vector.im";
+
+    /**
+     * Widget preferences
+     */
+    private static final String SCALAR_TOKEN_PREFERENCE_KEY = "SCALAR_TOKEN_PREFERENCE_KEY";
 
     /**
      * Widget error code
@@ -93,12 +112,12 @@ public class WidgetsManager {
     /**
      * List all active widgets in a room.
      *
-     * @param session  the session.
-     * @param room     the room to check.
+     * @param session the session.
+     * @param room    the room to check.
      * @return the active widgets list
      */
     public List<Widget> getActiveWidgets(MXSession session, Room room) {
-        return getActiveWidgets(session, room, null);
+        return getActiveWidgets(session, room, null, null);
     }
 
     /**
@@ -107,9 +126,10 @@ public class WidgetsManager {
      * @param session     the session.
      * @param room        the room to check.
      * @param widgetTypes the the widget types
+     * @param excludedTypes the the excluded widget types
      * @return the active widgets list
      */
-    public List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes) {
+    public List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
         // Get all im.vector.modular.widgets state events in the room
         List<Event> widgetEvents = room.getLiveState().getStateEvents(new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)));
 
@@ -131,7 +151,7 @@ public class WidgetsManager {
         // Create each widget from its latest im.vector.modular.widgets state event
         for (Event widgetEvent : widgetEvents) {
             // Filter widget types if required
-            if (null != widgetTypes) {
+            if ((null != widgetTypes) || (null != excludedTypes)) {
                 String widgetType = null;
 
                 try {
@@ -144,8 +164,14 @@ public class WidgetsManager {
                     Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage());
                 }
 
-                if ((null != widgetType) && !widgetTypes.contains(widgetType)) {
-                    continue;
+                if (null != widgetType) {
+                    if ((null != widgetTypes) && !widgetTypes.contains(widgetType)) {
+                        continue;
+                    }
+
+                    if ((null != excludedTypes) && excludedTypes.contains(widgetType)) {
+                        continue;
+                    }
                 }
             }
 
@@ -179,14 +205,24 @@ public class WidgetsManager {
 
     /**
      * Provides the list of active widgets for a room
+     *
+     * @param session the session
+     * @param room    the room
+     * @return the list of active widgets
+     */
+    public List<Widget> getActiveJitsiWidgets(final MXSession session, final Room room) {
+        return getActiveWidgets(session, room, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)), null);
+    }
+
+    /**
+     * Provides the widgets which can be displayed in a webview.
      * @param session the session
      * @param room the room
      * @return the list of active widgets
      */
-    public List<Widget> getActiveJitsiWidgets(final MXSession session, final Room room) {
-        return getActiveWidgets(session, room, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)));
+    public List<Widget> getActiveWebviewWidgets(final MXSession session, final Room room) {
+        return getActiveWidgets(session, room, null, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)));
     }
-
     /**
      * Check user's power for widgets management in a room.
      *
@@ -431,6 +467,139 @@ public class WidgetsManager {
             }
 
             mPendingWidgetCreationCallbacks.remove(callbackKey);
+        }
+    }
+
+    /**
+     * Format the widget URL to be displayed.
+     *
+     * @param context  context
+     * @param widget   the widget
+     * @param callback the callback
+     */
+    public static void getFormattedWidgetUrl(final Context context, final Widget widget, final ApiCallback<String> callback) {
+        getScalarToken(context, Matrix.getInstance(context).getSession(widget.getSessionId()), new ApiCallback<String>() {
+            @Override
+            public void onSuccess(String token) {
+                if (null == token) {
+                    callback.onSuccess(widget.getUrl());
+                } else {
+                    callback.onSuccess(widget.getUrl() + "&scalar_token=" + token);
+                }
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                if (null != callback) {
+                    callback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                if (null != callback) {
+                    callback.onMatrixError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                if (null != callback) {
+                    callback.onUnexpectedError(e);
+                }
+            }
+        });
+    }
+
+
+    /**
+     * Retrieve the scalar token
+     *
+     * @param context  the context
+     * @param session  the session
+     * @param callback the asynchronous callback
+     */
+    private static void getScalarToken(final Context context, final MXSession session, final ApiCallback<String> callback) {
+        final String preferenceKey = SCALAR_TOKEN_PREFERENCE_KEY + session.getMyUserId();
+
+        final String scalarToken = PreferenceManager.getDefaultSharedPreferences(context).getString(preferenceKey, null);
+
+        if (null != scalarToken) {
+            (new Handler(Looper.getMainLooper())).post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != scalarToken) {
+                        callback.onSuccess(scalarToken);
+                    }
+                }
+            });
+        } else {
+            session.openIdToken(new ApiCallback<Map<Object, Object>>() {
+                @Override
+                public void onSuccess(Map<Object, Object> tokensMap) {
+                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(new HomeserverConnectionConfig(Uri.parse(INTEGRATION_REST_URL)));
+
+                    widgetsRestClient.register(tokensMap, new ApiCallback<Map<String, String>>() {
+                        @Override
+                        public void onSuccess(Map<String, String> response) {
+                            String token = response.get("scalar_token");
+
+                            if (null != token) {
+                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString(preferenceKey, token);
+                                editor.commit();
+                            }
+
+                            if (null != callback) {
+                                callback.onSuccess(token);
+                            }
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            if (null != callback) {
+                                callback.onNetworkError(e);
+                            }
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            if (null != callback) {
+                                callback.onMatrixError(e);
+                            }
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            if (null != callback) {
+                                callback.onUnexpectedError(e);
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    if (null != callback) {
+                        callback.onNetworkError(e);
+                    }
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    if (null != callback) {
+                        callback.onMatrixError(e);
+                    }
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    if (null != callback) {
+                        callback.onUnexpectedError(e);
+                    }
+                }
+            });
         }
     }
 }
