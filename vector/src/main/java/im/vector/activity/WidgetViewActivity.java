@@ -17,19 +17,15 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -66,8 +62,14 @@ public class WidgetViewActivity extends AppCompatActivity {
     @BindView(R.id.close_widget_icon_container)
     View mCloseWidgetIcon;
 
-    @BindView(R.id.widget_webview)
-    WebView mWidgetWebview;
+    @BindView(R.id.widget_web_view)
+    WebView mWidgetWebView;
+
+    @BindView(R.id.widget_type_text_view)
+    TextView mWidgetTypeTextView;
+
+    @BindView(R.id.widget_progress_layout)
+    View mProgressLayout;
 
     /**
      * Widget events listener
@@ -95,6 +97,8 @@ public class WidgetViewActivity extends AppCompatActivity {
         mSession = Matrix.getMXSession(this, mWidget.getSessionId());
         mRoom = mSession.getDataHandler().getRoom(mWidget.getRoomId());
 
+        mWidgetTypeTextView.setText(mWidget.getType());
+
         refreshStatusBar();
 
         loadURL();
@@ -111,7 +115,7 @@ public class WidgetViewActivity extends AppCompatActivity {
         mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mProgressLayout.setVisibility(View.VISIBLE);
+                mProgressLayout.setVisibility(View.VISIBLE);
                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
@@ -119,6 +123,7 @@ public class WidgetViewActivity extends AppCompatActivity {
                     }
 
                     private void onError(String errorMessage) {
+                        mProgressLayout.setVisibility(View.GONE);
                         CommonActivityUtils.displayToast(WidgetViewActivity.this, errorMessage);
                     }
 
@@ -135,7 +140,6 @@ public class WidgetViewActivity extends AppCompatActivity {
                     @Override
                     public void onUnexpectedError(Exception e) {
                         onError(e.getLocalizedMessage());
-
                     }
                 });
             }
@@ -154,7 +158,19 @@ public class WidgetViewActivity extends AppCompatActivity {
      */
     @SuppressLint("NewApi")
     private void loadURL() {
-        WebSettings settings = mWidgetWebview.getSettings();
+
+        // xml value seems ignored
+        mWidgetWebView.setBackgroundColor(0);
+
+        // clear caches
+        mWidgetWebView.clearHistory();
+        mWidgetWebView.clearFormData();
+        mWidgetWebView.clearCache(true);
+
+        WebSettings settings = mWidgetWebView.getSettings();
+
+        // does not cache the data
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
         // Enable Javascript
         settings.setJavaScriptEnabled(true);
@@ -174,32 +190,39 @@ public class WidgetViewActivity extends AppCompatActivity {
 
         settings.setDisplayZoomControls(false);
 
-        mWidgetWebview.setWebViewClient(new WebViewClient());
+        mWidgetWebView.setWebViewClient(new WebViewClient());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             android.webkit.CookieManager cookieManager = android.webkit.CookieManager.getInstance();
-            cookieManager.setAcceptThirdPartyCookies(mWidgetWebview, true);
+            cookieManager.setAcceptThirdPartyCookies(mWidgetWebView, true);
         }
 
+        mProgressLayout.setVisibility(View.VISIBLE);
         WidgetsManager.getFormattedWidgetUrl(this, mWidget, new ApiCallback<String>() {
             @Override
             public void onSuccess(String url) {
-                mWidgetWebview.loadUrl(url);
+                mProgressLayout.setVisibility(View.GONE);
+                mWidgetWebView.loadUrl(url);
+            }
+
+            private void onError(String errorMessage) {
+                CommonActivityUtils.displayToast(WidgetViewActivity.this, errorMessage);
+                WidgetViewActivity.this.finish();
             }
 
             @Override
             public void onNetworkError(Exception e) {
-
+                onError(e.getLocalizedMessage());
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
-
+                onError(e.getLocalizedMessage());
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
-
+                onError(e.getLocalizedMessage());
             }
         });
     }
@@ -211,18 +234,32 @@ public class WidgetViewActivity extends AppCompatActivity {
         WidgetsManager.removeListener(mWidgetListener);
     }
 
+    /**
+     * Force to render the activity in fullscreen
+     */
+    private void displayInFullScreen() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-
-        // force a full screen display
-        // jisti lib forces it when the call is established
-        // but it is not properly restored when the application is suspended by an external app
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
+        displayInFullScreen();
         WidgetsManager.addListener(mWidgetListener);
         refreshStatusBar();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            displayInFullScreen();
+        }
     }
 }

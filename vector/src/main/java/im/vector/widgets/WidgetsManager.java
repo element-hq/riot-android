@@ -520,7 +520,9 @@ public class WidgetsManager {
      * @param callback the asynchronous callback
      */
     private static void getScalarToken(final Context context, final MXSession session, final ApiCallback<String> callback) {
-        final String scalarToken = PreferenceManager.getDefaultSharedPreferences(context).getString(SCALAR_TOKEN_PREFERENCE_KEY, null);
+        final String preferenceKey = SCALAR_TOKEN_PREFERENCE_KEY + session.getMyUserId();
+
+        final String scalarToken = PreferenceManager.getDefaultSharedPreferences(context).getString(preferenceKey, null);
 
         if (null != scalarToken) {
             (new Handler(Looper.getMainLooper())).post(new Runnable() {
@@ -545,7 +547,7 @@ public class WidgetsManager {
                             if (null != token) {
                                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                                 SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString(SCALAR_TOKEN_PREFERENCE_KEY, token);
+                                editor.putString(preferenceKey, token);
                                 editor.commit();
                             }
 

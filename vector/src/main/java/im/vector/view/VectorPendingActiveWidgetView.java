@@ -106,10 +106,7 @@ public class VectorPendingActiveWidgetView extends RelativeLayout {
      */
     private void initView() {
         View.inflate(getContext(), R.layout.vector_pending_active_widget_view, this);
-
         mWidgetTypeTextView = (TextView) findViewById(R.id.widget_type_text_view);
-
-
 
         mCloseWidgetIcon = findViewById(R.id.close_widget_icon_container);
         mCloseWidgetIcon.setOnClickListener(new OnClickListener() {

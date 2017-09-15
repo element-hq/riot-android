@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -36,6 +35,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.Log;
 
 import java.net.URL;
 import java.util.Map;
@@ -162,6 +162,7 @@ public class JitsiCallActivity extends AppCompatActivity {
                     }
 
                     private void onError(String errorMessage) {
+                        mProgressLayout.setVisibility(View.GONE);
                         CommonActivityUtils.displayToast(JitsiCallActivity.this, errorMessage);
                     }
 
@@ -178,7 +179,6 @@ public class JitsiCallActivity extends AppCompatActivity {
                     @Override
                     public void onUnexpectedError(Exception e) {
                         onError(e.getLocalizedMessage());
-
                     }
                 });
             }
@@ -296,20 +296,35 @@ public class JitsiCallActivity extends AppCompatActivity {
         WidgetsManager.removeListener(mWidgetListener);
     }
 
+    /**
+     * Force to render the activity in fullscreen
+     */
+    private void displayInFullScreen() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        // force a full screen display
-        // jisti lib forces it when the call is established
-        // but it is not properly restored when the application is suspended by an external app
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
+        displayInFullScreen();
         JitsiMeetView.onHostResume(this);
         WidgetsManager.addListener(mWidgetListener);
         refreshStatusBar();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            displayInFullScreen();
+        }
     }
 
     @Override
