@@ -747,4 +747,5 @@
 
     <string name="media_saving_period_3_days">Opzioni conservazione media</string>
     <string name="largest">Grandissimo</string>
+    <string name="people_search_user_directory">CARTELLA UTENTE (%s)</string>
     </resources>
