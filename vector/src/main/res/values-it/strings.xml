@@ -736,9 +736,9 @@
     <string name="normal">Normale</string>
     <string name="large">Grande</string>
     <string name="larger">Più grande</string>
-    <string name="membership_changes">% cambi di stato</string>
+    <string name="membership_changes">%d cambi di stato</string>
 
-    <string name="settings_clear_medias_cache">Cancella media</string>
+    <string name="settings_clear_medias_cache">Cancella cache media</string>
     <string name="settings_keep_media">Mantieni media</string>
 
     <string name="huge">Gigante</string>
