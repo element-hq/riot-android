@@ -44,7 +44,7 @@ import im.vector.widgets.WidgetsManager;
 /*
  * This class displays a widget
  */
-public class WidgetActivity extends AppCompatActivity {
+public class WidgetActivity extends RiotAppCompatActivity {
     private static final String LOG_TAG = WidgetActivity.class.getSimpleName();
 
     /**

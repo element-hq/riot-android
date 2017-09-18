@@ -37,7 +37,7 @@ import im.vector.util.CountryPhoneData;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ThemeUtils;
 
-public class CountryPickerActivity extends AppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
+public class CountryPickerActivity extends RiotAppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
 
     public static final String EXTRA_IN_WITH_INDICATOR = "EXTRA_IN_WITH_INDICATOR";
 

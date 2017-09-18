@@ -39,7 +39,7 @@ import java.util.HashMap;
 /**
  * AccountCreationActivity is the fallback account creation activity
  */
-public class AccountCreationActivity extends Activity {
+public class AccountCreationActivity extends RiotBaseActivity {
     private static final String LOG_TAG = "ACCreationActivity";
 
     public static String EXTRA_HOME_SERVER_ID = "AccountCreationActivity.EXTRA_HOME_SERVER_ID";

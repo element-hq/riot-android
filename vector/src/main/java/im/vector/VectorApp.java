@@ -17,6 +17,7 @@
 
 package im.vector;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -1105,6 +1106,8 @@ public class VectorApp extends MultiDexApplication {
      * @param locale the locale
      * @param theme  the new theme
      */
+    @SuppressWarnings("deprecation")
+    @SuppressLint("NewApi")
     private static void updateApplicationSettings(Locale locale, String textSize, String theme) {
         Context context = VectorApp.getInstance();
 
@@ -1119,6 +1122,39 @@ public class VectorApp extends MultiDexApplication {
 
         ThemeUtils.setApplicationTheme(context, theme);
         PhoneNumberUtils.onLocaleUpdate();
+    }
+
+    /**
+     * Compute a localised context
+     * @param context the context
+     * @return the localised context
+     */
+    @SuppressWarnings("deprecation")
+    @SuppressLint("NewApi")
+    public static Context getLocalisedContext(Context context) {
+        try {
+            Resources resources = context.getResources();
+            Locale locale = getApplicationLocale();
+            Configuration configuration = resources.getConfiguration();
+            configuration.fontScale = getFontScaleValue();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                configuration.setLocale(locale);
+                configuration.setLayoutDirection(locale);
+                return context.createConfigurationContext(configuration);
+            } else {
+                configuration.locale = locale;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    configuration.setLayoutDirection(locale);
+                }
+                resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+                return context;
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getLocalisedContext() failed : " + e.getMessage());
+        }
+
+        return context;
     }
 
     /**

@@ -41,7 +41,7 @@ import im.vector.VectorApp;
 /**
  * extends ActionBarActivity to manage the rageshake
  */
-public class MXCActionBarActivity extends AppCompatActivity {
+public class MXCActionBarActivity extends RiotAppCompatActivity {
     private static final String LOG_TAG = "MXCActBarActivity";
 
     public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";

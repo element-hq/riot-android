@@ -53,7 +53,7 @@ import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
 import im.vector.util.ThemeUtils;
 
-public class RoomDirectoryPickerActivity extends AppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
+public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
     // LOG TAG
     private static final String LOG_TAG = "RoomDirPickerActivity";
 

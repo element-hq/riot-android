@@ -127,7 +127,7 @@ import im.vector.view.VectorPendingCallView;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class VectorHomeActivity extends RiotAppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 

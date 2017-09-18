@@ -70,7 +70,7 @@ import im.vector.view.VectorPendingCallView;
 /**
  * VectorCallViewActivity is the call activity.
  */
-public class VectorCallViewActivity extends AppCompatActivity implements SensorEventListener {
+public class VectorCallViewActivity extends RiotAppCompatActivity implements SensorEventListener {
     private static final String LOG_TAG = "VCallViewActivity";
     private static final String HANGUP_MSG_HEADER_UI_CALL = "user hangup from header back arrow";
     private static final String HANGUP_MSG_BACK_KEY = "user hangup from back key";
