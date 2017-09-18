@@ -2297,6 +2297,33 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     })
                     .show();
         } else {
+            // TODo manage multi accounts
+            Matrix.getInstance(this).getDefaultSession().createRoomDirectMessage("@riot-bot:matrix.org", new ApiCallback<String>() {
+                @Override
+                public void onSuccess(String info) {
+                    Log.d(LOG_TAG, "## onRegistrationSuccess() : succeed to invite riot-bot");
+                }
+
+                private void onError(String error) {
+                    Log.e(LOG_TAG, "## onRegistrationSuccess() : failed  to invite riot-bot " + error);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError(e.getMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError(e.getMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError(e.getMessage());
+                }
+            });
+
             goToSplash();
             finish();
         }
