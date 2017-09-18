@@ -700,6 +700,11 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                         insertCallView();
                         computeVideoUiLayout();
                         mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
+
+                        // if the view is ready, launch the incoming call
+                        if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_FLEDGLING) && mCall.isIncoming()) {
+                            mCall.launchIncomingCall(mLocalVideoLayoutConfig);
+                        }
                     } else if (mCall.isVideo() || (!mCall.isIncoming() && (TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState())))) {
                         mCall.createCallView();
                     }
