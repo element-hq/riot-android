@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">pt</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country">UK</string>
 
     <!-- titles -->
     <string name="title_activity_home">Mensagens</string>
@@ -355,8 +355,8 @@
     <!--  Chat -->
     <string name="room_menu_search">Buscar</string>
     <string name="room_one_user_is_typing">%s está digitando…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s estão digitando…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; outros estão digitando…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s estão digitando…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; outros estão digitando…</string>
     <string name="room_message_placeholder_encrypted">Enviar mensagem criptografada…</string>
     <string name="room_message_placeholder_not_encrypted">Enviar uma mensagem (não criptografada)…</string>
     <string name="room_offline_notification">A conexão com o servidor se perdeu.</string>
@@ -634,7 +634,7 @@
     <string name="directory_title">Diretório</string>
 
     <!-- GA use -->
-    <string name="ga_use_alert_message">Você aceita ajudar-nos a melhorar o comportamento deste aplicativo e enviar relatórios de erros?</string>
+    <string name="ga_use_alert_message">Deseja ajudar a melhorar a aplicação ao enviar relatórios de erros automaticamente?</string>
     <string name="ga_use_settings">Automaticamente enviar relatórios de erros</string>
     <string name="ga_use_disable_alert_message">Você precisa reiniciar o aplicativo para desabilitar o envio de relatórios de erros.</string>
 
@@ -713,4 +713,37 @@
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
-</resources>
+<string name="settings_keep_media">Manter ficheiros multimédia</string>
+
+    <string name="settings_hide_read_receipts">Ocultar recibos de leitura</string>
+    <string name="settings_dont_send_typings_notifs">Não enviar notificações de escrita</string>
+    <string name="settings_always_show_timestamps">Mostrar sempre timestamps das mensagens</string>
+    <string name="settings_disable_markdown">Desativar formatação de markdown</string>
+    <string name="settings_data_save_mode">Modo de poupança de dados</string>
+
+    <string name="settings_user_interface">Interface de utilizador</string>
+    <string name="settings_interface_language">Idioma da Interface</string>
+    <string name="settings_select_language">Escolha um idioma</string>
+
+    <string name="media_saving_period_3_days">3 dias</string>
+    <string name="media_saving_period_1_week">1 semana</string>
+    <string name="media_saving_period_1_month">1 mês</string>
+    <string name="media_saving_period_forever">Para sempre</string>
+
+    <string name="settings_theme">Tema</string>
+
+    <string name="font_size">Tamanho do tipo de letra</string>
+    <string name="tiny">Minúsculo</string>
+    <string name="small">Pequeno</string>
+    <string name="normal">Normal</string>
+    <string name="large">Grande</string>
+    <string name="larger">Maior</string>
+    <string name="largest">Ainda maior</string>
+    <string name="huge">Enorme</string>
+<string name="offline">Offline</string>
+
+    <string name="user_directory_header">Lista de utilizadores</string>
+    <string name="people_search_user_directory">LISTA DE UTILIZADORES (%s)</string>
+    <string name="settings_start_on_boot">Iniciar no arranque</string>
+    <string name="settings_clear_medias_cache">Limpar cache de multimédia</string>
+    </resources>
