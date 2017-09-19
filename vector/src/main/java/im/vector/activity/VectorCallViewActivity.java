@@ -830,7 +830,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     private void toggleRearFrontCamera() {
         boolean wasCameraSwitched = false;
 
-        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) {
+        if ((null != mCall) && mCall.isVideo()) {
             wasCameraSwitched = mCall.switchRearFrontCamera();
         } else {
             Log.w(LOG_TAG, "## toggleRearFrontCamera(): Skipped");
