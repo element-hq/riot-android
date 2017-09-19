@@ -103,7 +103,10 @@
     <string name="no_room_placeholder">Brak pokojów</string>
     <string name="no_public_room_placeholder">Nie są dostępne publiczne pokoje</string>
     <plurals name="public_room_nb_users">
+        <item quantity="zero">0 użytkownik</item>
         <item quantity="one">1 użytkownik</item>
+        <item quantity="few">%d użytkowników</item>
+        <item quantity="many">%d użytkowników</item>
         <item quantity="other">%d użytkowników</item>
     </plurals>
 
