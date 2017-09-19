@@ -56,4 +56,78 @@
     <string name="send_bug_report_sent">不具合報告の送信に成功しました</string>
     <string name="send_bug_report_failed">不具合報告の送信に失敗しました (%s)</string>
     <string name="join_room">部屋へ参加</string>
+    <string name="missing_permissions_title_to_start_conf_call">通話が開始できません</string>
+    <string name="action_voice_call">音声通話</string>
+    <string name="action_video_call">映像付き通話</string>
+    <string name="action_global_search">全体検索</string>
+    <string name="local_address_book_header">端末の電話帳</string>
+    <string name="no_room_placeholder">部屋がありません</string>
+    <string name="search">検索</string>
+
+    <string name="option_send_files">ファイルを送信</string>
+    <string name="auth_return_to_login">ログイン画面へ戻る</string>
+    <string name="auth_phone_number_placeholder">電話番号</string>
+    <string name="auth_opt_phone_number_placeholder">電話番号 (任意で)</string>
+    <string name="auth_invalid_login_param">ユーザ名かパスワードが正しくありません</string>
+    <string name="auth_invalid_user_name">ユーザ名は半角英数字、ドット、ハイフン、アンダスコアのみで記して下さい</string>
+    <string name="auth_invalid_password">パスワードが短すぎます(最小6文字)</string>
+    <string name="auth_invalid_email">正しくない電子メールアドレスのようです</string>
+    <string name="auth_invalid_phone">正しくない電話番号のようです</string>
+    <string name="auth_email_already_defined">すでに登録されている電子メールアドレスです。</string>
+    <string name="auth_password_dont_match">パスワードが一致しません</string>
+    <string name="auth_forgot_password">パスワードを忘れた？</string>
+    <string name="auth_email_validation_message">登録を続行するには電子メールを確認して下さい</string>
+    <string name="login_error_must_start_http">URLはhttp://か、https://で始めて下さい</string>
+    <string name="login_error_network_error">ログインできません:通信エラー</string>
+    <string name="login_error_unable_login">ログインできません</string>
+    <string name="login_error_registration_network_error">登録できません:通信エラー</string>
+    <string name="login_error_unable_register">登録できません</string>
+    <string name="login_error_invalid_home_server">正しいURLを入力して下さい</string>
+
+    <string name="login_error_forbidden">ユーザ名かパスワードが正しくありません</string>
+    <string name="compression_opt_list_original">原寸</string>
+    <string name="compression_opt_list_large">大き目</string>
+    <string name="compression_opt_list_medium">中程度</string>
+    <string name="compression_opt_list_small">小さ目</string>
+
+    <string name="attachment_cancel_download">ダウンロードを停止しますか？</string>
+    <string name="attachment_cancel_upload">アップロードを停止しますか？</string>
+    <string name="attachment_remaining_time_seconds">%d秒</string>
+    <string name="attachment_remaining_time_minutes">%1$d分 %2$d秒</string>
+
+    <string name="yesterday">昨日</string>
+    <string name="today">今日</string>
+
+    <string name="room_info_room_name">部屋名</string>
+    <string name="call_ended">通話終了</string>
+    <string name="call_ring">呼出中…</string>
+    <string name="action_accept">許可</string>
+    <string name="action_ignore">拒否</string>
+
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="_continue">続ける</string>
+
+    <string name="room_jump_to_first_unread">最初の未読位置へ移動.</string>
+
+    <string name="room_e2e_alert_title">警告！</string>
+    <string name="format_time_s">秒</string>
+    <string name="format_time_m">分</string>
+    <string name="format_time_h">時間</string>
+    <string name="format_time_d">日</string>
+
+    <string name="room_participants_leave_prompt_title">部屋を退室</string>
+    <string name="room_participants_leave_prompt_msg">本当にこの部屋を退室しますか？</string>
+    <string name="room_participants_create">作成</string>
+
+    <string name="room_participants_online">接続中</string>
+    <string name="room_participants_offline">切断中</string>
+    <string name="room_participants_idle">待機中</string>
+    <string name="room_participants_action_invite">招待</string>
+    <string name="room_participants_action_leave">この部屋を退室する</string>
+    <string name="room_menu_search">検索</string>
+    <string name="room_one_user_is_typing">%sさんが文字入力中…</string>
+    <string name="room_two_users_are_typing">%1$sさんと %2$sさんが文字入力中…</string>
+    <string name="room_many_users_are_typing">%1$sさん、%2$sさん他が文字入力中…</string>
+    <string name="room_message_placeholder_encrypted">暗号文を送信…</string>
     </resources>
