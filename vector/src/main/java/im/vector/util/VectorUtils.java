@@ -809,14 +809,19 @@ public class VectorUtils {
                         InputStream stream = resource.mContentStream;
                         int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, thumbnailUri);
 
+                        Log.d(LOG_TAG, "## getThumbnailUriFromIntent() :  " + thumbnailUri + " rotationAngle " + rotationAngle);
+
                         String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mMimeType, 1024, rotationAngle, mediasCache);
                         thumbnailUri = Uri.parse(mediaUrl);
+                    } else if (null != resource) {
+                        Log.d(LOG_TAG, "## getThumbnailUriFromIntent() : cannot manage " + thumbnailUri + " mMimeType " + resource.mMimeType);
+                    } else {
+                        Log.d(LOG_TAG, "## getThumbnailUriFromIntent() : cannot manage " + thumbnailUri + " --> cannot open the dedicated file");
                     }
 
                     return thumbnailUri;
-
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## etThumbnailUriFromIntent failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## getThumbnailUriFromIntent failed " + e.getMessage());
                 }
             }
         }
