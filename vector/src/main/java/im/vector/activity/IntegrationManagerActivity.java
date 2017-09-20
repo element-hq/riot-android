@@ -19,43 +19,28 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.InputEvent;
-import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.ClientCertRequest;
-import android.webkit.HttpAuthHandler;
 import android.webkit.JavascriptInterface;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
+import android.webkit.PermissionRequest;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.call.MXChromeCall;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import java.io.InputStream;
@@ -68,14 +53,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 
 public class IntegrationManagerActivity extends RiotAppCompatActivity {
@@ -95,16 +78,15 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
     @BindView(R.id.integration_webview)
     WebView mWebView;
 
+    // parameters
     private MXSession mSession;
     private Room mRoom;
     private String mWidgetId;
     private String mScreenId;
     private String mScalarToken;
 
-    private String mUrl;
-
-    private IntegrationWebAppInterface mIntegrationWebAppInterface;
-
+    // success result
+    // must be copied else the conversion to string does not work
     private static final Map<String, Boolean> mSucceedResponse = new HashMap<String, Boolean>() {{
         put("success", true);
     }};
@@ -116,7 +98,22 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
         @JavascriptInterface
         public void onScalarEvent(String eventData) {
-            org.matrix.androidsdk.util.Log.d(LOG_TAG, "WebView Message : " + eventData);
+            Gson gson = JsonUtils.getGson(false);
+            final Map<String, Map<String, Object>> objectAsMap;
+
+            try {
+                objectAsMap = gson.fromJson(eventData, new TypeToken<Map<String, Map<String, Object>>>() {
+                }.getType());
+                IntegrationManagerActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(LOG_TAG, "onScalarEvent : " + objectAsMap);
+                        onScalarMessage(objectAsMap);
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onScalarEvent() failed " + e.getMessage());
+            }
         }
     }
 
@@ -148,7 +145,6 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
                 mScalarToken = scalarToken;
                 mProgressLayout.setVisibility(View.GONE);
                 launchUrl();
-
             }
 
             private void onError(String errorMessage) {
@@ -175,19 +171,29 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
     @SuppressLint("NewApi")
     private void launchUrl() {
-        mUrl = getInterfaceUrl();
+        String url = getInterfaceUrl();
 
-        if (null == mUrl) {
+        if (null == url) {
             this.finish();
             return;
         }
 
-        mIntegrationWebAppInterface = new IntegrationWebAppInterface();
-        mWebView.addJavascriptInterface(mIntegrationWebAppInterface, "Android");
+        mWebView.addJavascriptInterface(new IntegrationWebAppInterface(), "Android");
+
+        // Permission requests
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onPermissionRequest(final PermissionRequest request) {
+                IntegrationManagerActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        request.grant(request.getResources());
+                    }
+                });
+            }
+        });
 
         WebSettings settings = mWebView.getSettings();
-
-        WebView.setWebContentsDebuggingEnabled(true);
 
         // Enable Javascript
         settings.setJavaScriptEnabled(true);
@@ -215,133 +221,11 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
                     IntegrationManagerActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            String allo = "javascript:" + js;
                             mWebView.loadUrl("javascript:" + js);
                         }
                     });
-                    //
                 }
             }
-
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false;
-            }
-
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return shouldOverrideUrlLoading(view, request.getUrl().toString());
-            }
-
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                int a = 0;
-                a++;
-            }
-
-
-            /**
-             * Notify the host application that the WebView will load the resource
-             * specified by the given url.
-             *
-             * @param view The WebView that is initiating the callback.
-             * @param url The url of the resource the WebView will load.
-             */
-            public void onLoadResource(WebView view, String url) {
-                int a = 0;
-                a++;
-            }
-
-            public void onPageCommitVisible(WebView view, String url) {
-                int a = 0;
-                a++;
-            }
-
-            public WebResourceResponse shouldInterceptRequest(WebView view,
-                                                              String url) {
-                return null;
-            }
-
-            public WebResourceResponse shouldInterceptRequest(WebView view,
-                                                              WebResourceRequest request) {
-                return shouldInterceptRequest(view, request.getUrl().toString());
-            }
-
-            @Deprecated
-            public void onReceivedError(WebView view, int errorCode,
-                                        String description, String failingUrl) {
-                int a = 0;
-                a++;
-            }
-
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                if (request.isForMainFrame()) {
-                    onReceivedError(view,
-                            error.getErrorCode(), error.getDescription().toString(),
-                            request.getUrl().toString());
-                }
-            }
-
-            public void onReceivedHttpError(
-                    WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
-                int a = 0;
-                a++;
-            }
-
-            /**
-             * As the host application if the browser should resend data as the
-             * requested page was a result of a POST. The default is to not resend the
-             * data.
-             *
-             * @param view The WebView that is initiating the callback.
-             * @param dontResend The message to send if the browser should not resend
-             * @param resend The message to send if the browser should resend data
-             */
-            public void onFormResubmission(WebView view, Message dontResend,
-                                           Message resend) {
-                dontResend.sendToTarget();
-            }
-
-            /**
-             * Notify the host application to update its visited links database.
-             *
-             * @param view The WebView that is initiating the callback.
-             * @param url The url being visited.
-             * @param isReload True if this url is being reloaded.
-             */
-            public void doUpdateVisitedHistory(WebView view, String url,
-                                               boolean isReload) {
-                int a = 0;
-                a++;
-            }
-
-            /**
-             * Notify the host application that an SSL error occurred while loading a
-             * resource. The host application must call either handler.cancel() or
-             * handler.proceed(). Note that the decision may be retained for use in
-             * response to future SSL errors. The default behavior is to cancel the
-             * load.
-             *
-             * @param view The WebView that is initiating the callback.
-             * @param handler An SslErrorHandler object that will handle the user's
-             *            response.
-             * @param error The SSL error object.
-             */
-            public void onReceivedSslError(WebView view, SslErrorHandler handler,
-                                           SslError error) {
-                handler.cancel();
-            }
-
-            public void onReceivedClientCertRequest(WebView view, ClientCertRequest request) {
-                request.cancel();
-            }
-
-            public void onReceivedHttpAuthRequest(WebView view,
-                                                  HttpAuthHandler handler, String host, String realm) {
-                handler.cancel();
-            }
-
-            public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
-                return false;
-            }
-
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -349,9 +233,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
             cookieManager.setAcceptThirdPartyCookies(mWebView, true);
         }
 
-        //mWebView.setLis
-
-        mWebView.loadUrl(mUrl);
+        mWebView.loadUrl(url);
     }
 
     /**
@@ -439,7 +321,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
             displayInFullScreen();
         }
     }
-    
+
     /*
      * *********************************************************************************************
      * Private methods
@@ -448,22 +330,23 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
     /**
      * Manage the modular requests
+     *
      * @param JSData the js data request
      */
     private void onScalarMessage(Map<String, Map<String, Object>> JSData) {
+        if (null == JSData) {
+            Log.e(LOG_TAG, "## onScalarMessage() : invalid JSData");
+            return;
+        }
+
+        Map<String, Object> eventData = JSData.get("event.data");
+
+        if (null == eventData) {
+            Log.e(LOG_TAG, "## onScalarMessage() : invalid JSData");
+            return;
+        }
+
         try {
-            if (null == JSData) {
-                Log.e(LOG_TAG, "## onScalarMessage() : invalid JSData");
-                return;
-            }
-
-            Map<String, Object> eventData = JSData.get("event.data");
-
-            if (null == eventData) {
-                Log.e(LOG_TAG, "## onScalarMessage() : invalid JSData");
-                return;
-            }
-
             String roomIdInEvent = (String) eventData.get("room_id");
             String userId = (String) eventData.get("user_id");
             String action = (String) eventData.get("action");
@@ -524,7 +407,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onScalarMessage() : failed " + e.getMessage());
-            sendError(getString(R.string.widget_integration_failed_to_send_request), JSData);
+            sendError(getString(R.string.widget_integration_failed_to_send_request), eventData);
         }
     }
 
@@ -534,13 +417,31 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
      * *********************************************************************************************
      */
 
+    /**
+     * Send the response to the javascript
+     *
+     * @param jsString  the response data
+     * @param eventData the modular data
+     */
     private void sendResponse(String jsString, Map<String, Object> eventData) {
-        // TODO
+        try {
+            String functionLine = "sendResponseFromRiotAndroid('" + eventData.get("_id") + "' , " + jsString + ");";
+
+            // call the javascript method
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                mWebView.loadUrl("javascript:" + functionLine);
+            } else {
+                mWebView.evaluateJavascript(functionLine, null);
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## sendResponse() failed " + e.getMessage());
+        }
     }
 
     /**
      * Send a boolean response
-     * @param response the response
+     *
+     * @param response  the response
      * @param eventData the modular data
      */
     private void sendBoolResponse(boolean response, Map<String, Object> eventData) {
@@ -549,7 +450,8 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
     /**
      * Send an integer response
-     * @param response the response
+     *
+     * @param response  the response
      * @param eventData the modular data
      */
     private void sendIntegerResponse(int response, Map<String, Object> eventData) {
@@ -558,7 +460,8 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
     /**
      * Send an object response
-     * @param response the response
+     *
+     * @param response  the response
      * @param eventData the modular data
      */
     private void sendObjectResponse(Object response, Map<String, Object> eventData) {
@@ -566,7 +469,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
         if (null != response) {
             try {
-                jsString = "JSON.parse('" + JsonUtils.getGson(true).toJson(response) + "')";
+                jsString = "JSON.parse('" + JsonUtils.getGson(false).toJson(response) + "')";
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## sendObjectResponse() : toJson failed " + e.getMessage());
             }
@@ -581,7 +484,8 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
     /**
      * Send an error
-     * @param message the error message
+     *
+     * @param message   the error message
      * @param eventData the modular data
      */
     private void sendError(String message, Map<String, Object> eventData) {
@@ -619,17 +523,12 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
     /**
      * Send an object as a JSON map
-     * @param object the object to send
+     *
+     * @param object    the object to send
      * @param eventData the modular data
      */
     private void sendObjectAsJsonMap(Object object, Map<String, Object> eventData) {
-        Map<String, Object> ObjectAsMap = getObjectAsJsonMap(object);
-
-        if (null != ObjectAsMap) {
-            sendObjectResponse(ObjectAsMap, eventData);
-        } else {
-            sendError(getString(R.string.widget_integration_failed_to_send_request), eventData);
-        }
+        sendObjectResponse(getObjectAsJsonMap(object), eventData);
     }
 
     /*
@@ -644,8 +543,8 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
      * @param <T> the callback type
      */
     public class IntegrationManagerApiCallback<T> implements ApiCallback<T> {
-        String mDescription;
-        Map<String, Object> mEventData;
+        final String mDescription;
+        final Map<String, Object> mEventData;
 
         public IntegrationManagerApiCallback(final Map<String, Object> eventData, String description) {
             mDescription = description;
@@ -654,11 +553,12 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
         @Override
         public void onSuccess(T info) {
-            sendObjectResponse(mSucceedResponse, mEventData);
+            Log.d(LOG_TAG, mDescription + " succeeds");
+            sendObjectResponse(new HashMap<>(mSucceedResponse), mEventData);
         }
 
         private void onError(String error) {
-            Log.e(LOG_TAG, mDescription + " failed " + error);
+            Log.e(LOG_TAG, mDescription + " failed with error " + error);
             sendError(getString(R.string.widget_integration_failed_to_send_request), mEventData);
         }
 
@@ -685,14 +585,16 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
      * @param eventData the modular data
      */
     private void inviteUser(final String userId, final Map<String, Object> eventData) {
-        Log.d(LOG_TAG, "Received request to invite " + userId + " into room " + mRoom.getRoomId());
+        String descriptioon = "Received request to invite " + userId + " into room " + mRoom.getRoomId();
+
+        Log.d(LOG_TAG, descriptioon);
 
         RoomMember member = mRoom.getMember(userId);
 
         if ((null != member) && TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-            sendObjectResponse(mSucceedResponse, eventData);
+            sendObjectResponse(new HashMap<>(mSucceedResponse), eventData);
         } else {
-            mRoom.invite(userId, new IntegrationManagerApiCallback<Void>(eventData, "## inviteUser()"));
+            mRoom.invite(userId, new IntegrationManagerApiCallback<Void>(eventData, descriptioon));
         }
     }
 
@@ -727,10 +629,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
                 return;
             }
 
-            if (null != widgetType) {
-                widgetEventContent.put("type", widgetType);
-            }
-
+            widgetEventContent.put("type", widgetType);
             widgetEventContent.put("url", widgetUrl);
 
             if (null != widgetName) {
@@ -751,17 +650,20 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
      * @param eventData the modular data
      */
     private void getWidgets(Map<String, Object> eventData) {
-        List<Event> widgetEvents = WidgetsManager.getSharedInstance().getWidgetEvents(mRoom);
-        List<Map<String, Object>> responseData = new ArrayList<>();
-        Gson gson = JsonUtils.getGson(false);
+        Log.d(LOG_TAG, "Received request to get widget in room " + mRoom.getRoomId());
 
-        for (Event widgetEvent : widgetEvents) {
-            Map<String, Object> map = getObjectAsJsonMap(widgetEvent);
+        List<Widget> widgets = WidgetsManager.getSharedInstance().getActiveWidgets(mSession, mRoom);
+        List<Map<String, Object>> responseData = new ArrayList<>();
+
+        for (Widget widget : widgets) {
+            Map<String, Object> map = getObjectAsJsonMap(widget.getWidgetEvent());
 
             if (null != map) {
                 responseData.add(map);
             }
         }
+
+        Log.d(LOG_TAG, "## getWidgets() returns " + responseData);
 
         sendObjectResponse(responseData, eventData);
     }
@@ -772,6 +674,8 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
      * @param eventData the modular data
      */
     private void canSendEvent(Map<String, Object> eventData) {
+        Log.d(LOG_TAG, "Received request canSendEvent in room " + mRoom.getRoomId());
+
         RoomMember member = mRoom.getLiveState().getMember(mSession.getMyUserId());
 
         if ((null == member) || !TextUtils.equals(RoomMember.MEMBERSHIP_JOIN, member.membership)) {
@@ -781,6 +685,8 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
         String eventType = (String) eventData.get("event_type");
         boolean isState = (boolean) eventData.get("is_state");
+
+        Log.d(LOG_TAG, "## canSendEvent() : eventType " + eventType + " isState " + isState);
 
         PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
@@ -795,8 +701,10 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
         }
 
         if (canSend) {
+            Log.d(LOG_TAG, "## canSendEvent() returns true");
             sendBoolResponse(true, eventData);
         } else {
+            Log.d(LOG_TAG, "## canSendEvent() returns widget_integration_no_permission_in_room");
             sendError(getString(R.string.widget_integration_no_permission_in_room), eventData);
         }
     }
@@ -807,17 +715,55 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
      * @param userId    the user id
      * @param eventData the modular data
      */
-    private void getMembershipState(String userId, Map<String, Object> eventData) {
+    private void getMembershipState(final String userId, final Map<String, Object> eventData) {
         Log.d(LOG_TAG, "membership_state of " + userId + " in room " + mRoom.getRoomId() + " requested");
-        sendObjectAsJsonMap(mRoom.getMember(mSession.getMyUserId()), eventData);
+
+        mRoom.getMemberEvent(userId, new ApiCallback<Event>() {
+            @Override
+            public void onSuccess(Event event) {
+                Log.d(LOG_TAG, "membership_state of " + userId + " in room " + mRoom.getRoomId() + " returns " + event);
+
+                if (null != event) {
+                    sendObjectAsJsonMap(event.content, eventData);
+                } else {
+                    sendObjectResponse(null, eventData);
+                }
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom.getRoomId() + " failed " + e.getMessage());
+                sendError(getString(R.string.widget_integration_failed_to_send_request), eventData);
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom.getRoomId() + " failed " + e.getMessage());
+                sendError(getString(R.string.widget_integration_failed_to_send_request), eventData);
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom.getRoomId() + " failed " + e.getMessage());
+                sendError(getString(R.string.widget_integration_failed_to_send_request), eventData);
+            }
+        });
     }
 
+    /**
+     * Request the latest joined room event
+     *
+     * @param eventData the modular data
+     */
     private void getJoinRules(Map<String, Object> eventData) {
+        Log.d(LOG_TAG, "Received request join rules  in room " + mRoom.getRoomId());
         List<Event> joinedEvents = mRoom.getLiveState().getStateEvents(new HashSet<>(Arrays.asList(Event.EVENT_TYPE_STATE_ROOM_JOIN_RULES)));
 
         if (joinedEvents.size() > 0) {
+            Log.d(LOG_TAG, "Received request join rules returns " + joinedEvents.get(joinedEvents.size() - 1));
             sendObjectAsJsonMap(joinedEvents.get(joinedEvents.size() - 1), eventData);
         } else {
+            Log.e(LOG_TAG, "Received request join rules failed widget_integration_failed_to_send_request");
             sendError(getString(R.string.widget_integration_failed_to_send_request), eventData);
         }
     }
@@ -828,14 +774,15 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
      * @param eventData the modular data
      */
     private void setPlumbingState(final Map<String, Object> eventData) {
-        Log.d(LOG_TAG, "Received request to set plumbing state to status " + eventData.get("status") + " in room " + mRoom.getRoomId() + " requested");
+        String description = "Received request to set plumbing state to status " + eventData.get("status") + " in room " + mRoom.getRoomId() + " requested";
+        Log.d(LOG_TAG, description);
 
         String status = (String) eventData.get("status");
 
         Map<String, Object> params = new HashMap<>();
         params.put("status", status);
 
-        mSession.getRoomsApiClient().sendStateEvent(mRoom.getRoomId(), Event.EVENT_TYPE_ROOM_PLUMBING, null, params, new IntegrationManagerApiCallback<Void>(eventData, "## setPlumbingState()"));
+        mSession.getRoomsApiClient().sendStateEvent(mRoom.getRoomId(), Event.EVENT_TYPE_ROOM_PLUMBING, null, params, new IntegrationManagerApiCallback<Void>(eventData, description));
     }
 
     /**
@@ -861,8 +808,10 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
         }
 
         if (null != botOptionsEvent) {
+            Log.d(LOG_TAG, "Received request to get options for bot " + userId + " returns " + botOptionsEvent);
             sendObjectAsJsonMap(botOptionsEvent, eventData);
         } else {
+            Log.d(LOG_TAG, "Received request to get options for bot " + userId + " returns null");
             sendObjectResponse(null, eventData);
         }
     }
@@ -874,12 +823,13 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
      * @param eventData the modular data
      */
     private void setBotOptions(String userId, final Map<String, Object> eventData) {
-        Log.d(LOG_TAG, "Received request to set options for bot " + userId + " in room " + mRoom.getRoomId());
+        String description = "Received request to set options for bot " + userId + " in room " + mRoom.getRoomId();
+        Log.d(LOG_TAG, description);
 
         Map<String, Object> content = (Map<String, Object>) eventData.get("content");
         String stateKey = "_" + userId;
 
-        mSession.getRoomsApiClient().sendStateEvent(mRoom.getRoomId(), Event.EVENT_TYPE_ROOM_BOT_OPTIONS, stateKey, content, new IntegrationManagerApiCallback<Void>(eventData, "## setBotOptions()"));
+        mSession.getRoomsApiClient().sendStateEvent(mRoom.getRoomId(), Event.EVENT_TYPE_ROOM_BOT_OPTIONS, stateKey, content, new IntegrationManagerApiCallback<Void>(eventData, description));
     }
 
     /**
@@ -889,12 +839,14 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
      * @param eventData the modular data
      */
     private void setBotPower(final String userId, final Map<String, Object> eventData) {
-        Log.d(LOG_TAG, "Received request to set power level to " + eventData.get("level") + " for bot " + userId + " in room " + mRoom.getRoomId());
+        String description = "Received request to set power level to " + eventData.get("level") + " for bot " + userId + " in room " + mRoom.getRoomId();
+
+        Log.d(LOG_TAG, description);
 
         int level = (int) eventData.get("level");
 
         if (level >= 0) {
-            mRoom.updateUserPowerLevels(userId, level, new IntegrationManagerApiCallback<Void>(eventData, "## setBotPower()"));
+            mRoom.updateUserPowerLevels(userId, level, new IntegrationManagerApiCallback<Void>(eventData, description));
         } else {
             Log.e(LOG_TAG, "## setBotPower() : Power level must be positive integer.");
             sendError(getString(R.string.widget_integration_positive_power_level), eventData);

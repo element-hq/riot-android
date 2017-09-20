@@ -19,9 +19,12 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.PermissionRequest;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -217,10 +220,19 @@ public class WidgetActivity extends RiotAppCompatActivity {
 
         settings.setDisplayZoomControls(false);
 
-        // it does not wrong properly with WebChromeClient
-        // force to use the default one
-        //mWidgetWebView.setWebChromeClient(new WebChromeClient());
-        mWidgetWebView.setWebChromeClient(null);
+        // Permission requests
+        mWidgetWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onPermissionRequest(final PermissionRequest request) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        request.grant(request.getResources());
+                    }
+                });
+            }
+        });
+
         mWidgetWebView.setWebViewClient(new WebViewClient());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

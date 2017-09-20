@@ -1,60 +1,43 @@
-"use strict";
+var android_scalar_events = {};
 
-window.riotAndroid = {};
-window.riotAndroid.events = {};
-
-
-// debug tools
-function showToast(toast) {
-     Android.showToast(toast);
-}
-
-function sendObjectMessageToAndroid(parameters) {
-    var iframe = document.createElement('iframe');
-    iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));
-
-    document.documentElement.appendChild(iframe);
-    iframe.parentNode.removeChild(iframe);
-    iframe = null;
+var sendObjectMessageToRiotAndroid = function(parameters) {
+    Android.onScalarEvent(JSON.stringify(parameters));
 };
 
-// Listen to messages posted by Modular
-function onMessage(event) {
-	
-	showToast("hello")
+var onScalarMessageToRiotAndroid = function(event) {
 
-    // Do not SPAM ObjC with event already managed
-    if (riotAndroid.events[event.data._id]) {
+    console.log("onScalarMessageToRiotAndroid " + event.data._id);
+
+    if (android_scalar_events[event.data._id]) {
+        console.log("onScalarMessageToRiotAndroid : already managed");
         return;
     }
 
-    if (!event.origin) { // stupid chrome
+    if (!event.origin) {
         event.origin = event.originalEvent.origin;
     }
 
-    // Keep this event for future usage
-    riotAndroid.events[event.data._id] = event;
+    android_scalar_events[event.data._id] = event;
 
-    sendObjectMessageToAndroid({'event.data': event.data,});
+    console.log("onScalarMessageToRiotAndroid : manage " + event.data);
+    sendObjectMessageToRiotAndroid({'event.data': event.data,});
 };
 
+var sendResponseFromRiotAndroid = function(eventId, res) {
+    var event = android_scalar_events[eventId];
 
-window.addEventListener('message', onMessage, false);
-
-
-// android -> Modular JS bridge
-function sendResponse(eventId, res) {
-
-    // Retrieve the correspong JS event
-    var event = riotAndroid.events[eventId];
-
-    console.log("sendResponse to " + event.data.action + " for "+ eventId + ": " + JSON.stringify(res));
+    console.log("sendResponseFromRiotAndroid to " + event.data.action + " for "+ eventId + ": " + JSON.stringify(res));
 
     var data = JSON.parse(JSON.stringify(event.data));
+
     data.response = res;
+
+     console.log("sendResponseFromRiotAndroid  ---> " + data);
+
     event.source.postMessage(data, event.origin);
+    android_scalar_events[eventId] = true;
 
-    // Mark this event as handled
-    riotAndroid.events[eventId] = true;
-}
+      console.log("sendResponseFromRiotAndroid to done");
+};
 
+window.addEventListener('message', onScalarMessageToRiotAndroid, false);

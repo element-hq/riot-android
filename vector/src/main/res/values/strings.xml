@@ -760,4 +760,17 @@
     <string name="event_formatter_widget_added">%1$s widget added by %2$s</string>
     <string name="event_formatter_widget_removed">%1$s widget removed by %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Create conference calls with jitsi</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">You need to be able to invite users to do that.</string>
+    <string name="widget_integration_unable_to_create">Unable to create widget.</string>
+    <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
+    <string name="widget_integration_room_not_recognised">This room is not recognised.</string>
+    <string name="widget_integration_positive_power_level">Power level must be positive integer.</string>
+    <string name="widget_integration_must_be_in_room">You are not in this room.</string>
+    <string name="widget_integration_no_permission_in_room">You do not have permission to do that in this room.</string>
+    <string name="widget_integration_missing_room_id">Missing room_id in request.</string>
+    <string name="widget_integration_missing_user_id">Missing user_id in request.</string>
+    <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
+
 </resources>
