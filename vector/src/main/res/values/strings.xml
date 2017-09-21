@@ -10,6 +10,7 @@
     <string-array name="theme_readables">
         <item>Light Theme</item>
         <item>Dark Theme</item>
+        <item>Black Theme</item>
     </string-array>
 
     <!-- titles -->

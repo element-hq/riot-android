@@ -24,6 +24,7 @@
     <string-array name="theme_codes">
         <item>light</item>
         <item>dark</item>
+        <item>black</item>
     </string-array>
 
 </resources>
