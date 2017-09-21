@@ -38,10 +38,8 @@ public class Widget implements Serializable {
     private Event mWidgetEvent;
     private String mSessionId;
 
-    private String mType;
+    private WidgetContent mWidgetContent;
     private String mUrl;
-    private String mName;
-    private Map<String, Object> mData;
 
     /**
      * Constructor
@@ -58,32 +56,8 @@ public class Widget implements Serializable {
         mWidgetEvent = widgetEvent;
         mSessionId = session.getMyUserId();
 
-        JsonObject contentAsJson = widgetEvent.getContentAsJsonObject();
-
-        if (null != contentAsJson.get("type")) {
-            mType = contentAsJson.get("type").getAsString();
-        } else {
-            mType = null;
-        }
-
-        if (null != contentAsJson.get("url")) {
-            mUrl = contentAsJson.get("url").getAsString();
-        } else {
-            mUrl = null;
-        }
-
-        if (null != contentAsJson.get("name")) {
-            mName = contentAsJson.get("name").getAsString();
-        } else {
-            mName = null;
-        }
-
-        if (null != contentAsJson.get("data")) {
-            mData = new HashMap<>();
-            mData = (Map<String, Object>) mGson.fromJson(contentAsJson.get("data"), mData.getClass());
-        } else {
-            mData = null;
-        }
+        mWidgetContent = WidgetContent.toWidgetContent(widgetEvent.getContentAsJsonObject());
+        mUrl = mWidgetContent.url;
 
         if (null != mUrl) {
             // Format the url string with user data
@@ -103,7 +77,7 @@ public class Widget implements Serializable {
      * @return true if the widget is active
      */
     public boolean isActive() {
-        return (null != mType) && (null != mUrl);
+        return (null != mWidgetContent.type) && (null != mUrl);
     }
 
     /**
@@ -126,7 +100,7 @@ public class Widget implements Serializable {
     }
 
     public String getType() {
-        return mType;
+        return  mWidgetContent.type;
     }
 
     public String getUrl() {
@@ -134,11 +108,11 @@ public class Widget implements Serializable {
     }
 
     public String getName() {
-        return mName;
+        return  mWidgetContent.name;
     }
 
     public Map<String, Object> getData() {
-        return mData;
+        return mWidgetContent.data;
     }
 
     @Override
