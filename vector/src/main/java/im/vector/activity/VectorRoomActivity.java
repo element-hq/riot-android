@@ -1495,7 +1495,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             finish();
             return true;
         } else if (id == R.id.ic_action_matrix_apps) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
                 builder.setMessage(R.string.add_matrix_apps_not_supported);
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
