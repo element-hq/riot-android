@@ -772,5 +772,6 @@
     <string name="widget_integration_missing_room_id">Missing room_id in request.</string>
     <string name="widget_integration_missing_user_id">Missing user_id in request.</string>
     <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
+    <string name="settings_labs_matrix_apps">Matrix Apps</string>
 
 </resources>
