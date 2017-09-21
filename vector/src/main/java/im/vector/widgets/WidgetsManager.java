@@ -66,7 +66,12 @@ public class WidgetsManager {
     /**
      * Integration rest url
      */
-    private static final String INTEGRATION_REST_URL = "https://scalar.vector.im";
+    public static final String INTEGRATION_REST_URL = "https://scalar.vector.im";
+
+    /**
+     * Integration ui url
+     */
+    public static final String INTEGRATION_UI_URL = "https://scalar-staging.riot.im/scalar-web/";
 
     /**
      * Widget preferences
@@ -519,7 +524,7 @@ public class WidgetsManager {
      * @param session  the session
      * @param callback the asynchronous callback
      */
-    private static void getScalarToken(final Context context, final MXSession session, final ApiCallback<String> callback) {
+    public static void getScalarToken(final Context context, final MXSession session, final ApiCallback<String> callback) {
         final String preferenceKey = SCALAR_TOKEN_PREFERENCE_KEY + session.getMyUserId();
 
         final String scalarToken = PreferenceManager.getDefaultSharedPreferences(context).getString(preferenceKey, null);

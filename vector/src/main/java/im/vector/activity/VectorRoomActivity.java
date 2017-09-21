@@ -244,6 +244,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private MenuItem mResendUnsentMenuItem;
     private MenuItem mResendDeleteMenuItem;
     private MenuItem mSearchInRoomMenuItem;
+    private MenuItem mUseMatrixAppsMenuItem;
 
     // medias sending helper
     private VectorRoomMediasSender mVectorRoomMediasSender;
@@ -924,7 +925,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         }
 
-        mActiveWidgetBanner.initRoomInfo(mSession, mRoom);
+        if (PreferencesManager.useMatrixApps(this)) {
+            mActiveWidgetBanner.initRoomInfo(mSession, mRoom);
+        }
         mActiveWidgetBanner.setOnUpdateListener(new ActiveWidgetBanner.onUpdateListener() {
             @Override
             public void onCloseWidgetClick(Widget widget) {
@@ -1475,6 +1478,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
             mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
             mSearchInRoomMenuItem = menu.findItem(R.id.ic_action_search_in_room);
+            mUseMatrixAppsMenuItem = menu.findItem(R.id.ic_action_matrix_apps);
 
             // hide / show the unsent / resend all entries.
             refreshNotificationsArea();
@@ -1490,6 +1494,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (id == android.R.id.home) {
             finish();
             return true;
+        } else if (id == R.id.ic_action_matrix_apps) {
+            final Intent intent = new Intent(this, IntegrationManagerActivity.class);
+            intent.putExtra(IntegrationManagerActivity.EXTRA_SESSION_ID, mMyUserId);
+            intent.putExtra(IntegrationManagerActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            startActivity(intent);
         } else if (id == R.id.ic_action_search_in_room) {
             try {
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
@@ -2485,6 +2494,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != mSearchInRoomMenuItem) {
             // the server search does not work on encrypted rooms.
             mSearchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
+        }
+
+        if (null != mUseMatrixAppsMenuItem) {
+            mUseMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData) && PreferencesManager.useMatrixApps(this));
         }
     }
 

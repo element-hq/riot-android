@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.matrix.vector.activity.RoomActivity">
 
+    <item android:id="@+id/ic_action_matrix_apps"
+        android:title="@string/settings_labs_matrix_apps"
+        android:icon="@drawable/apps_icon"
+        app:showAsAction="always" />
+
     <item android:id="@+id/ic_action_search_in_room"
         android:title="@string/room_menu_search"
         android:icon="@drawable/ic_material_search_white"

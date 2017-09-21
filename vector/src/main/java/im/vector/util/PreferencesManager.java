@@ -104,6 +104,8 @@ public class PreferencesManager {
     public static final String SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY";
 
     public static final String SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY = "SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY";
+    public static final String SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY = "SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY";
+
 
     public static final String SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY";
     public static final String SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY";
@@ -209,13 +211,23 @@ public class PreferencesManager {
     }
 
     /**
-     * Tells if the conf calls must be with Jitsi.
+     * Tells if the conf calls must be done with Jitsi.
      *
      * @param context the context
      * @return true if the conference call must be done with jitsi.
      */
     public static boolean useJitsiConfCall(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY, false);
+    }
+
+    /**
+     * Tells if the matrix apps are supported.
+     *
+     * @param context the context
+     * @return true if the matrix apps are supported.
+     */
+    public static boolean useMatrixApps(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, false);
     }
 
     /**
