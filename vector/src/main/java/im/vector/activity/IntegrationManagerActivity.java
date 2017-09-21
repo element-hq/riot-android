@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
 import android.webkit.WebChromeClient;
@@ -190,6 +191,12 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
                         request.grant(request.getResources());
                     }
                 });
+            }
+
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message() + " line " + consoleMessage.lineNumber() + " source Id" +  consoleMessage.sourceId());
+                return super.onConsoleMessage(consoleMessage);
             }
         });
 
