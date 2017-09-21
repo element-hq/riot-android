@@ -1495,10 +1495,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             finish();
             return true;
         } else if (id == R.id.ic_action_matrix_apps) {
-            final Intent intent = new Intent(this, IntegrationManagerActivity.class);
-            intent.putExtra(IntegrationManagerActivity.EXTRA_SESSION_ID, mMyUserId);
-            intent.putExtra(IntegrationManagerActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-            startActivity(intent);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                builder.setMessage(R.string.add_matrix_apps_not_supported);
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.create().show();
+            } else {
+                final Intent intent = new Intent(this, IntegrationManagerActivity.class);
+                intent.putExtra(IntegrationManagerActivity.EXTRA_SESSION_ID, mMyUserId);
+                intent.putExtra(IntegrationManagerActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                startActivity(intent);
+            }
         } else if (id == R.id.ic_action_search_in_room) {
             try {
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
