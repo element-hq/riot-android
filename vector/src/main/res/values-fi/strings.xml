@@ -39,7 +39,7 @@
     <string name="ongoing_conference_call_voice">äänellä</string>
     <string name="ongoing_conference_call_video">videolla</string>
     <string name="cannot_start_call">Ei voitu aloittaa puhelua, yritä uudelleen</string>
-    <string name="missing_permissions_warning">Puuttuvien käyttölupien takia jotkut ominaisuudet eivät ole käytettävissä..</string>
+    <string name="missing_permissions_warning">Puuttuvien oikeuksien takia jotkut ominaisuudet eivät ole käytettävissä..</string>
     <string name="missing_permissions_to_start_conf_call">Sinulta puuttuu oikeus käynnistää ryhmäpuhelu tässä huoneessa</string>
     <string name="missing_permissions_title_to_start_conf_call">Puhelua ei voitu käynnistää</string>
     <string name="device_information">Laitteen tiedot</string>
