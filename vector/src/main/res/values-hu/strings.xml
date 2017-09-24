@@ -43,12 +43,12 @@
     <string name="invite">Meghívás</string>
 
     <string name="action_sign_out">Kijelentkezés</string>
-    <string name="action_sign_out_confirmation">Biztonsági okokból, kijelentkezés törölni fog minden végtől végig való titkosító kulcsot, ezáltal az előző titkosított csevegés előzmény nem lesz olvasható bejelentkezés után.
-Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés előtt.</string>
+    <string name="action_sign_out_confirmation">Biztonsági okokból a kijelentkezés törölni fog minden végtől végig való titkosító kulcsot, így bejelentkezéskor a korábbi titkosított üzenetek olvashatatlanok lesznek.
+A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</string>
     <string name="action_voice_call">Hanghívás</string>
     <string name="action_video_call">Videóhívás</string>
     <string name="action_global_search">Globális keresés</string>
-    <string name="action_mark_all_as_read">Minden olvasottnak jelölése</string>
+    <string name="action_mark_all_as_read">Mindent olvasottnak jelöl</string>
     <string name="action_historical">Előzmény</string>
     <string name="action_quick_reply">Gyors válasz</string>
     <string name="action_open">Megnyit</string>
@@ -69,18 +69,18 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
     <string name="home_filter_placeholder_people">Emberek keresése</string>
     <string name="home_filter_placeholder_rooms">Szobák keresése</string>
 
-    <string name="invitations_header">Meghívottak</string>
+    <string name="invitations_header">Meghívások</string>
     <string name="low_priority_header">Alacsony prioritás</string>
 
     <string name="direct_chats_header">Beszélgetések</string>
     <string name="local_address_book_header">Helyi címjegyzék</string>
-    <string name="matrix_only_filter">Csak Matrix kapcsolatok</string>
+    <string name="matrix_only_filter">Csak Matrix névjegyek</string>
     <string name="no_conversation_placeholder">Nincsenek beszélgetések</string>
-    <string name="no_contact_access_placeholder">Nem engedélyezted Riot -nak a helyi kapcsolatokhoz való hozzáférést</string>
+    <string name="no_contact_access_placeholder">Nem engedélyezted a Riotnak a helyi névjegyekhez való hozzáférést</string>
     <string name="no_result_placeholder">Nincsenek találatok</string>
 
     <string name="rooms_header">Szobák</string>
-    <string name="rooms_directory_header">Szobajegyzék</string>
+    <string name="rooms_directory_header">Szobalista</string>
     <string name="no_room_placeholder">Nincsenek szobák</string>
     <string name="no_public_room_placeholder">Nincsenek elérhető nyilvános szobák</string>
     <plurals name="public_room_nb_users">
@@ -89,14 +89,14 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
 </plurals>
 
     <string name="send_bug_report_include_logs">Naplók küldése</string>
-    <string name="send_bug_report_include_crash_logs">Hiba napló küldése</string>
+    <string name="send_bug_report_include_crash_logs">Hibanapló küldése</string>
     <string name="send_bug_report_include_screenshot">Képernyőkép küldése</string>
     <string name="send_bug_report">Hibajelentés</string>
     <string name="send_bug_report_description">Kérlek írd le a hibát. Mit csináltál? Mire számítottál, hogy történni fog? Mi történt valójában?</string>
     <string name="send_bug_report_placeholder">Írd le a problémádat ide</string>
-    <string name="send_bug_report_logs_description">A problémák kielemzése érdekében naplók erről a kliensről elküldésre kerülnek. Ha csak a fentebb írt szöveget szeretnéd elküldeni, kérlek szedd ki a pipát:</string>
-    <string name="send_bug_report_alert_message">Úgy néz ki mérgében rázza a telefont. Szeretne egy hibajelentést beküldeni?</string>
-    <string name="send_bug_report_app_crashed">Az alkalmazás legutoljára összeomlott. Szeretnél hibajelentést beküldeni?</string>
+    <string name="send_bug_report_logs_description">A problémák kielemzése érdekében a naplók erről a kliensről elküldésre kerülnek. Ha csak a fentebb írt szöveget szeretnéd elküldeni, kérlek szedd ki a pipát:</string>
+    <string name="send_bug_report_alert_message">Úgy tűnik, mintha mérgedben ráznád a telefont. Szeretnél hibajelentést beküldeni?</string>
+    <string name="send_bug_report_app_crashed">Az alkalmazás legutóbb összeomlott. Szeretnél hibajelentést beküldeni?</string>
 
     <string name="send_bug_report_sent">A hibajelentés sikeresen elküldve</string>
     <string name="send_bug_report_failed">A hibajelentést nem sikerült elküldeni (%s)</string>
@@ -110,49 +110,49 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
     <string name="create_account">Regisztráció</string>
     <string name="login">Bejelentkezés</string>
     <string name="logout">Kijelentkezés</string>
-    <string name="hs_url">Saját szerver URL-ja</string>
-    <string name="identity_url">Identitás szerver URL-ja</string>
+    <string name="hs_url">Saját szerver URL</string>
+    <string name="identity_url">Identitás szerver URL</string>
     <string name="user">felhasználó</string>
     <string name="users">felhasználók</string>
     <string name="search">Keresés</string>
 
-    <string name="start_new_chat">Új csevegés kezdeményezése</string>
-    <string name="start_voice_call">Hanghívás kezdeményezése</string>
-    <string name="start_video_call">Videóhívás kezdeményezése</string>
+    <string name="start_new_chat">Új csevegés indítása</string>
+    <string name="start_voice_call">Hanghívás indítása</string>
+    <string name="start_video_call">Videóhívás indítása</string>
 
-    <string name="option_send_files">Fájlok küldése</string>
-    <string name="option_take_photo_video">Készíts képet vagy videót</string>
+    <string name="option_send_files">Fájlküldés</string>
+    <string name="option_take_photo_video">Kép- vagy videókészítés</string>
 
     <string name="auth_login">Bejelentkezés</string>
     <string name="auth_register">Regisztráció</string>
     <string name="auth_submit">Beküldés</string>
     <string name="auth_skip">Kihagyás</string>
-    <string name="auth_send_reset_email">Visszaállító E-mail küldése</string>
+    <string name="auth_send_reset_email">Visszaállító e-mail küldése</string>
     <string name="auth_return_to_login">Visszatérés a kezdőképernyőre</string>
     <string name="auth_user_id_placeholder">E-mail vagy felhasználónév</string>
     <string name="auth_password_placeholder">Jelszó</string>
     <string name="auth_new_password_placeholder">Új jelszó</string>
     <string name="auth_user_name_placeholder">Felhasználónév</string>
-    <string name="auth_add_email_message">Adj meg e-mail címet a felhasználódhoz, hogy mások megtalálhassanak, és hogy visszaállíthasd a jelszavadat.</string>
-    <string name="auth_add_phone_message">Adj meg telefonszámot a felhasználódhoz, hogy mások megtalálhassanak.</string>
-    <string name="auth_add_email_phone_message">Adj meg e-mail címet vagy telefonszámot a felhasználódhoz, hogy mások megtalálhassanak.
+    <string name="auth_add_email_message">Adj meg e-mail címet a fiókodhoz, hogy mások megtalálhassanak, és hogy visszaállíthasd a jelszavadat.</string>
+    <string name="auth_add_phone_message">Adj meg telefonszámot a fiókodhoz, hogy mások megtalálhassanak.</string>
+    <string name="auth_add_email_phone_message">Adj meg e-mail címet vagy telefonszámot a fiókodhoz, hogy mások megtalálhassanak.
 
- Az E-mail cím megadása lehetővé teszi a jelszavad visszaállítását is.</string>
-    <string name="auth_add_email_and_phone_message">Adj meg e-mail címet vagy telefonszámot a felhasználódhoz, hogy mások megtalálhassanak.
+ Az e-mail cím megadása lehetővé teszi a jelszavad visszaállítását is.</string>
+    <string name="auth_add_email_and_phone_message">Adj meg e-mail címet vagy telefonszámot a fiókodhoz, hogy mások megtalálhassanak.
 
- Az E-mail cím megadása lehetővé teszi a jelszavad visszaállítását is.</string>
+ Az e-mail cím megadása lehetővé teszi a jelszavad visszaállítását is.</string>
     <string name="auth_email_placeholder">E-mail cím</string>
     <string name="auth_opt_email_placeholder">E-mail cím (nem kötelező)</string>
     <string name="auth_phone_number_placeholder">Telefonszám</string>
     <string name="auth_opt_phone_number_placeholder">Telefonszám (nem kötelező)</string>
     <string name="auth_repeat_password_placeholder">Jelszó ismétlése</string>
-    <string name="auth_repeat_new_password_placeholder">Erősítsd meg új jelszavadat</string>
+    <string name="auth_repeat_new_password_placeholder">Erősítsd meg az új jelszavadat</string>
     <string name="auth_invalid_login_param">Hibás felhasználónév és/vagy jelszó</string>
-    <string name="auth_invalid_user_name">Felhasználónevek csak betűket, számokat, pontokat, kötőjeleket és aláhúzásokat tartalmazhatnak</string>
-    <string name="auth_invalid_password">Jelszó túl rövid (min 6)</string>
+    <string name="auth_invalid_user_name">A felhasználónévben csak betűk, számok, pontok, kötőjelek és aláhúzásjelek lehetnek</string>
+    <string name="auth_invalid_password">A jelszó túl rövid (min. 6)</string>
     <string name="auth_missing_password">Hiányzó jelszó</string>
-    <string name="auth_invalid_email">Ez nem úgy néz ki mint egy érvényes e-mail cím</string>
-    <string name="auth_invalid_phone">Ez nem úgy néz ki mint egy érvényes telefonszám</string>
+    <string name="auth_invalid_email">Ez nem tűnik érvényes e-mail címnek</string>
+    <string name="auth_invalid_phone">Ez nem tűnik érvényes telefonszámnak</string>
     <string name="auth_email_already_defined">Ez az e-mail cím már használatban van.</string>
     <string name="auth_missing_email">Hiányzó e-mail cím</string>
     <string name="auth_missing_phone">Hiányzó telefonszám</string>
@@ -161,7 +161,7 @@ Válaszd a exportálást, biztonsági mentés készítéséhez kijelentkezés el
     <string name="auth_password_dont_match">A jelszók nem egyeznek</string>
     <string name="auth_forgot_password">Elfelejtetted a jelszavad?</string>
     <string name="auth_use_server_options">Személyre szabott szerver beállítások (haladó)</string>
-    <string name="auth_email_validation_message">Kérlek ellenőrizd az e-mail címedet a regisztráció folytatásához</string>
+    <string name="auth_email_validation_message">A regisztráció folytatásához nézd meg az e-mailjeidet</string>
     <string name="auth_threepid_warning_message">Regisztráció e-mail címmel és telefonszámmal egyszerre még nem támogatott (amíg az api kész nem lesz). Csak a telefonszám lesz számításba véve.
 
 Később hozzáadhatsz e-mail címet a profilodhoz a beállításokban.</string>
