@@ -186,5 +186,6 @@
         <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
         <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
         <item name="avatar_mask">@drawable/avatar_mask_black</item>
+        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_black</item>
     </style>
 </resources>
