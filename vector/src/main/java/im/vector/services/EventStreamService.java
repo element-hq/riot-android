@@ -1536,6 +1536,8 @@ public class EventStreamService extends Service {
 
             if ((null != bingRule) && bingRule.isCallRingNotificationSound(bingRule.notificationSound())) {
                 VectorCallSoundManager.startRinging();
+            } else if (null != bingRule) {
+                Log.d(LOG_TAG, "displayIncomingCallNotification : silent notification");
             }
 
             Notification notification = NotificationUtils.buildIncomingCallNotification(
