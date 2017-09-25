@@ -18,7 +18,6 @@ package im.vector.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 
 import im.vector.VectorApp;
 

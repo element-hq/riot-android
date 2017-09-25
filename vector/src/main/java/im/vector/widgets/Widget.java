@@ -19,13 +19,11 @@ package im.vector.widgets;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.model.Event;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Widget implements Serializable {

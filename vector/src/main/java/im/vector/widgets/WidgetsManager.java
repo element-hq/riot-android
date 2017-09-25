@@ -48,8 +48,6 @@ import java.util.UUID;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.util.PreferencesManager;
-
 public class WidgetsManager {
     private static final String LOG_TAG = WidgetsManager.class.getSimpleName();
 
