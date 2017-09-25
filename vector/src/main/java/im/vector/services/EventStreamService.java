@@ -1535,7 +1535,14 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "displayIncomingCallNotification : display the dedicated notification");
 
             if ((null != bingRule) && bingRule.isCallRingNotificationSound(bingRule.notificationSound())) {
-                VectorCallSoundManager.startRinging();
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int doNotDisturb = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).getCurrentInterruptionFilter();
+                    if (doNotDisturb == NotificationManager.INTERRUPTION_FILTER_ALL) {
+                        VectorCallSoundManager.startRinging();
+                    }
+                } else {
+                    VectorCallSoundManager.startRinging();
+                }
             }
 
             Notification notification = NotificationUtils.buildIncomingCallNotification(
