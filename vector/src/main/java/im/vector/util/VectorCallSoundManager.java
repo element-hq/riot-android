@@ -155,8 +155,18 @@ public class VectorCallSoundManager {
         // test if the ring tone has been cached
 
         if (null != ringToneUri) {
-            // provide it
-            return ringToneUri;
+            // check if the file exists
+            try {
+                File ringFile = new File(ringToneUri.toString());
+
+                // check if the file exists
+                if ((null != ringFile) && ringFile.exists() && ringFile.canRead()) {
+                    // provide it
+                    return ringToneUri;
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getRingToneUri() failed " + e.getMessage());
+            }
         }
 
         try {
@@ -235,6 +245,23 @@ public class VectorCallSoundManager {
     }
 
     /**
+     * Retrieve a ringtone from an uri
+     * @param ringToneUri the ringtone URI
+     * @return the ringtone
+     */
+    private static Ringtone uriToRingTone(Uri ringToneUri) {
+        if (null != ringToneUri) {
+            try {
+                return RingtoneManager.getRingtone(VectorApp.getInstance(), ringToneUri);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## uriToRingTone() failed " + e.getMessage());
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Provide a ringtone from a resource and a filename.
      * The audio file must have a ANDROID_LOOP metatada set to true to loop the sound.
      * @param resId The audio resource.
@@ -243,22 +270,8 @@ public class VectorCallSoundManager {
      * @return a RingTone, null if the operation fails.
      */
     private static Ringtone getRingTone(int resId, String filename, Uri defaultRingToneUri) {
-        Uri ringToneUri = getRingToneUri(resId, filename);
-        Ringtone ringtone = null;
-
-        if (null == ringToneUri) {
-            ringToneUri = defaultRingToneUri;
-        }
-
-        if (null != ringToneUri) {
-            try {
-                ringtone = RingtoneManager.getRingtone(VectorApp.getInstance(), ringToneUri);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## getRingTone() failed " + e.getMessage());
-            }
-        }
-
-        return ringtone;
+        Ringtone ringtone = uriToRingTone(getRingToneUri(resId, filename));
+        return (null != ringtone) ? ringtone : uriToRingTone(defaultRingToneUri);
     }
 
     /**
