@@ -92,6 +92,7 @@ public class PreferencesManager {
     public static final String SETTINGS_DISABLE_MARKDOWN_KEY = "SETTINGS_DISABLE_MARKDOWN_KEY";
     public static final String SETTINGS_DONT_SEND_TYPING_NOTIF_KEY = "SETTINGS_DONT_SEND_TYPING_NOTIF_KEY";
     public static final String SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY = "SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY";
+    public static final String SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY";
 
     public static final String SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY";
     public static final String SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY";
@@ -134,6 +135,16 @@ public class PreferencesManager {
      */
     public static boolean hideJoinLeaveMessages(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY, false);
+    }
+
+    /**
+     * Tells if the avatar / display name events must be hidden in the messages list.
+     *
+     * @param context the context
+     * @return true true if the avatar / display name events must be hidden in the messages list.
+     */
+    public static boolean hideAvatarDisplayNameChangeMessages(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY, false);
     }
 
     /**

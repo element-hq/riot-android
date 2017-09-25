@@ -56,10 +56,12 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.EventContent;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.JsonUtils;
@@ -1587,6 +1589,33 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 // it avoids displaying a pending message whereas the message has been sent
                 if (currentRow.getEvent().getAge() == Event.DUMMY_EVENT_AGE) {
                     currentRow.updateEvent(row.getEvent());
+                }
+            }
+
+            if (TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+                RoomMember roomMember = JsonUtils.toRoomMember(row.getEvent().getContent());
+                String membership = roomMember.membership;
+
+                if (PreferencesManager.hideJoinLeaveMessages(mContext)) {
+                    isSupported = !TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE) && !TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN);
+                }
+
+                if (isSupported && PreferencesManager.hideAvatarDisplayNameChangeMessages(mContext) && TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN)) {
+                    EventContent eventContent = JsonUtils.toEventContent(row.getEvent().getContentAsJsonObject());
+                    EventContent prevEventContent = row.getEvent().getPrevContent();
+
+                    String senderDisplayName = eventContent.displayname;
+                    String prevUserDisplayName = null;
+                    String avatar = eventContent.avatar_url;
+                    String prevAvatar = null;
+
+                    if ((null != prevEventContent)) {
+                        prevUserDisplayName = prevEventContent.displayname;
+                        prevAvatar = prevEventContent.avatar_url;
+                    }
+
+                    // !Updated display name && same avatar
+                    isSupported = TextUtils.equals(prevUserDisplayName, senderDisplayName) && TextUtils.equals(avatar, prevAvatar);
                 }
             }
         }
