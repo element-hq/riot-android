@@ -271,7 +271,14 @@ public class VectorCallSoundManager {
      */
     private static Ringtone getRingTone(int resId, String filename, Uri defaultRingToneUri) {
         Ringtone ringtone = uriToRingTone(getRingToneUri(resId, filename));
-        return (null != ringtone) ? ringtone : uriToRingTone(defaultRingToneUri);
+
+        if (null == ringtone) {
+            ringtone = uriToRingTone(defaultRingToneUri);
+        }
+
+        Log.d(LOG_TAG, "getRingTone() : resId " + resId + " filename " + filename + " defaultRingToneUri " + defaultRingToneUri + " returns " + ringtone);
+
+        return ringtone;
     }
 
     /**
