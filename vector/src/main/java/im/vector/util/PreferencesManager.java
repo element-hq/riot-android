@@ -200,9 +200,9 @@ public class PreferencesManager {
         Cursor cursor = null;
 
         try {
-            String[] proj = {MediaStore.Images.Media.DATA};
+            String[] proj = {MediaStore.Audio.Media.DATA};
             cursor = context.getContentResolver().query(toneUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
             cursor.moveToFirst();
 
             File file = new File(cursor.getString(column_index));
