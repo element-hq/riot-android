@@ -35,8 +35,8 @@ public class ErrorListener implements ApiFailureCallback {
 
     private static final String LOG_TAG = "ErrorListener";
 
-    private Activity mActivity;
-    private MXSession mSession;
+    private final Activity mActivity;
+    private final MXSession mSession;
 
     public ErrorListener(MXSession session, Activity activity) {
         mSession = session;

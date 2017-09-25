@@ -55,10 +55,10 @@ public class RegistrationManager {
 
     private static volatile RegistrationManager sInstance;
 
-    private static String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
-    private static String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
+    private static final String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
+    private static final String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
 
-    private static String NEXTLINK_BASE_URL = "https://riot.im/app";
+    private static final String NEXTLINK_BASE_URL = "https://riot.im/app";
 
     // JSON keys used for registration request
     private static final String JSON_KEY_CLIENT_SECRET = "client_secret";
@@ -71,7 +71,7 @@ public class RegistrationManager {
     private static final String JSON_KEY_PUBLIC_KEY = "public_key";
 
     // List of stages supported by the app
-    private static List<String> VECTOR_SUPPORTED_STAGES = Arrays.asList(
+    private static final List<String> VECTOR_SUPPORTED_STAGES = Arrays.asList(
             LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD,
             LoginRestClient.LOGIN_FLOW_TYPE_DUMMY,
             LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY,

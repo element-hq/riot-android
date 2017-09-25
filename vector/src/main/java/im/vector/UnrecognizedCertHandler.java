@@ -18,8 +18,8 @@ import java.util.HashSet;
 public class UnrecognizedCertHandler {
     private static final String LOG_TAG = "UnrecognizedCertHandler";
 
-    private static HashMap<String, HashSet<Fingerprint>> ignoredFingerprints = new HashMap<>();
-    private static HashSet<String> openDialogIds = new HashSet<>();
+    private static final HashMap<String, HashSet<Fingerprint>> ignoredFingerprints = new HashMap<>();
+    private static final HashSet<String> openDialogIds = new HashSet<>();
 
     public static void show(final HomeserverConnectionConfig hsConfig, final Fingerprint unrecognizedFingerprint, boolean existing, final Callback callback) {
         final Activity activity = VectorApp.getCurrentActivity();

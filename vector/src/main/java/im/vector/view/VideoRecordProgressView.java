@@ -38,14 +38,14 @@ public class VideoRecordProgressView extends View {
 
     private int mRoundCount = 0;
 
-    private RectF mRectF;
-    private Paint mPaint;
+    private final RectF mRectF;
+    private final Paint mPaint;
 
     private int mPowerColor;
     private int mRestColor;
 
-    private Handler mUIHandler = new Handler();
-    private Runnable mProgressHandler = new Runnable() {
+    private final Handler mUIHandler = new Handler();
+    private final Runnable mProgressHandler = new Runnable() {
         public void run() {
             mAngle += PROGRESS_STEP;
 

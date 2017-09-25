@@ -157,7 +157,7 @@ public class VectorApp extends MultiDexApplication {
      */
     private long mLastMediasCheck = 0;
 
-    private BroadcastReceiver mLanguageReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mLanguageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
@@ -226,7 +226,7 @@ public class VectorApp extends MultiDexApplication {
         MXSession.initUserAgent(getApplicationContext());
 
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
-            Map<String, String> mLocalesByActivity = new HashMap<>();
+            final Map<String, String> mLocalesByActivity = new HashMap<>();
 
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {

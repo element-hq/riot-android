@@ -32,7 +32,7 @@ import im.vector.Matrix;
  */
 public abstract class AbsFilterableAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> implements Filterable {
 
-    protected final Context mContext;
+    final Context mContext;
     protected final MXSession mSession;
 
     protected CharSequence mCurrentFilterPattern;

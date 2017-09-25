@@ -27,7 +27,7 @@ import im.vector.R;
 public class AddressPreference extends VectorCustomActionEditTextPreference {
 
     // members
-    protected Context mContext;
+    protected final Context mContext;
     protected ImageView mMainAddressIconView;
     protected boolean mIsMainIconVisible = false;
 

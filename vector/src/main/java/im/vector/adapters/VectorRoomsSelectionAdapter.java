@@ -43,10 +43,10 @@ import org.matrix.androidsdk.util.EventDisplay;
 public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
     private static final String LOG_TAG = "VectRoomsSelectAdapt";
 
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private int mLayoutResourceId;
-    private MXSession mSession;
+    private final Context mContext;
+    private final LayoutInflater mLayoutInflater;
+    private final int mLayoutResourceId;
+    private final MXSession mSession;
 
     /**
      * Constructor of a public rooms adapter.

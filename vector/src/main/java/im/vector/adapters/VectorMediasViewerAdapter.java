@@ -71,20 +71,20 @@ import java.util.List;
 public class VectorMediasViewerAdapter extends PagerAdapter {
     private static final String LOG_TAG = "MediasViewerAdapter";
 
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
+    private final Context mContext;
+    private final LayoutInflater mLayoutInflater;
 
     // medias
     private List<SlidableMediaInfo> mMediasMessagesList = null;
-    private int mMaxImageWidth;
-    private int mMaxImageHeight;
+    private final int mMaxImageWidth;
+    private final int mMaxImageHeight;
     private int mLatestPrimaryItemPosition = -1;
     private View mLatestPrimaryView = null;
-    private MXMediasCache mMediasCache;
-    private ArrayList<Integer> mHighResMediaIndex = new ArrayList<>();
+    private final MXMediasCache mMediasCache;
+    private final ArrayList<Integer> mHighResMediaIndex = new ArrayList<>();
     // current playing video
     private VideoView mPlayingVideoView = null;
-    private MXSession mSession;
+    private final MXSession mSession;
 
     private int mAutoPlayItemAt = -1;
 

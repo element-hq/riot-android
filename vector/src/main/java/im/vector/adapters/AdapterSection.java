@@ -38,16 +38,16 @@ public class AdapterSection<T> {
     // Place holder if no result after search
     private String mNoResultPlaceholder;
 
-    private int mHeaderSubView;
-    private int mContentView;
-    private int mHeaderViewType;
-    private int mContentViewType;
+    private final int mHeaderSubView;
+    private final int mContentView;
+    private final int mHeaderViewType;
+    private final int mContentViewType;
 
-    private List<T> mItems;
+    private final List<T> mItems;
 
-    private List<T> mFilteredItems;
+    private final List<T> mFilteredItems;
 
-    private Comparator<T> mComparator;
+    private final Comparator<T> mComparator;
 
     protected CharSequence mCurrentFilterPattern;
 

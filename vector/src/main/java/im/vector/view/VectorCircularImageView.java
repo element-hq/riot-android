@@ -69,7 +69,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
 
     // We use a lru cache to reduce the screen loading time.
     // Create a RoundedBitmapDrawable might be slow
-    static LruCache<String, RoundedBitmapDrawable> mCache = new LruCache<String, RoundedBitmapDrawable>(4 * 1024 * 1024) {
+    static final LruCache<String, RoundedBitmapDrawable> mCache = new LruCache<String, RoundedBitmapDrawable>(4 * 1024 * 1024) {
         @Override
         protected int sizeOf (String key, RoundedBitmapDrawable drawable) {
             return drawable.getBitmap().getRowBytes() * drawable.getBitmap().getHeight(); // size in bytes

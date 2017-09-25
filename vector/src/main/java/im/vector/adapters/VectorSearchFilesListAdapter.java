@@ -46,7 +46,7 @@ import im.vector.util.VectorUtils;
 public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
 
     // display the room name in the result view
-    private boolean mDisplayRoomName;
+    private final boolean mDisplayRoomName;
 
     public VectorSearchFilesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediasCache mediasCache) {
         super(session, context, mediasCache);

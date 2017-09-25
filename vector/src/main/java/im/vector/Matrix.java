@@ -75,16 +75,16 @@ public class Matrix {
     private static Matrix instance = null;
 
     // the application context
-    private Context mAppContext;
+    private final Context mAppContext;
 
     // login storage
-    private LoginStorage mLoginStorage;
+    private final LoginStorage mLoginStorage;
 
     // list of session
     private ArrayList<MXSession> mMXSessions;
 
     // GCM registration manager
-    private GcmRegistrationManager mGCMRegistrationManager;
+    private final GcmRegistrationManager mGCMRegistrationManager;
 
     // list of store : some sessions or activities use tmp stores
     // provide an storage to exchange them

@@ -82,10 +82,10 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     private PeopleAdapter mAdapter;
 
-    private List<Room> mDirectChats = new ArrayList<>();
-    private List<ParticipantAdapterItem> mLocalContacts = new ArrayList<>();
+    private final List<Room> mDirectChats = new ArrayList<>();
+    private final List<ParticipantAdapterItem> mLocalContacts = new ArrayList<>();
     // the known contacts are not sorted
-    private List<ParticipantAdapterItem> mKnownContacts = new ArrayList<>();
+    private final List<ParticipantAdapterItem> mKnownContacts = new ArrayList<>();
 
     // way to detect that the contacts list has been updated
     private int mContactsSnapshotSession = -1;

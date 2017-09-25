@@ -51,7 +51,7 @@ public class VectorMarkdownParser extends WebView {
     /**
      * Java <-> JS interface
      **/
-    private MarkDownWebAppInterface mMarkDownWebAppInterface = new MarkDownWebAppInterface();
+    private final MarkDownWebAppInterface mMarkDownWebAppInterface = new MarkDownWebAppInterface();
 
     public VectorMarkdownParser(Context context) {
         this(context, null);

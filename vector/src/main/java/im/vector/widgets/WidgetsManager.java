@@ -112,7 +112,7 @@ public class WidgetsManager {
     /**
      * Pending widget creation callback
      */
-    private Map<String, ApiCallback<Widget>> mPendingWidgetCreationCallbacks = new HashMap<>();
+    private final Map<String, ApiCallback<Widget>> mPendingWidgetCreationCallbacks = new HashMap<>();
 
     /**
      * List all active widgets in a room.

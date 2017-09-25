@@ -116,7 +116,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
      */
 
     class LanguageViewHolder extends RecyclerView.ViewHolder {
-        TextView vLocaleNameTextView;
+        private final TextView vLocaleNameTextView;
 
         private LanguageViewHolder(final View itemView) {
             super(itemView);

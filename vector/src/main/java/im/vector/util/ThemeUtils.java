@@ -68,8 +68,7 @@ public class ThemeUtils {
     public static final String THEME_LIGHT_VALUE = "light";
     public static final String THEME_BLACK_VALUE = "black";
 
-
-    public static Map<Integer, Integer> mColorByAttr = new HashMap<>();
+    public static final Map<Integer, Integer> mColorByAttr = new HashMap<>();
 
     /**
      * Provides the selected application theme

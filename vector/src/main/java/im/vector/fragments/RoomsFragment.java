@@ -87,7 +87,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     private RoomDirectoryData mSelectedRoomDirectory;
 
     // rooms list
-    private List<Room> mRooms = new ArrayList<>();
+    private final List<Room> mRooms = new ArrayList<>();
 
     /*
      * *********************************************************************************************

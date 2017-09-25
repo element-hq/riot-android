@@ -87,7 +87,7 @@ public class RoomUtils {
     public static Comparator<Room> getRoomsDateComparator(final MXSession session, final boolean reverseOrder) {
         return new Comparator<Room>() {
             private Comparator<RoomSummary> mRoomSummaryComparator;
-            private HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
+            private final HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
 
             /**
              * Retrieve the room summary comparator
@@ -147,7 +147,7 @@ public class RoomUtils {
     public static Comparator<Room> getNotifCountRoomsComparator(final MXSession session, final boolean pinMissedNotifications, final boolean pinUnreadMessages) {
         return new Comparator<Room>() {
             private Comparator<RoomSummary> mRoomSummaryComparator;
-            private HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
+            private final HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
 
             /**
              * Retrieve the room summary comparator

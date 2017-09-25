@@ -47,8 +47,7 @@ public class FallbackLoginActivity extends RiotBaseActivity {
 
     private static final String LOG_TAG = "FallbackLoginAct";
 
-
-    public static String EXTRA_HOME_SERVER_ID = "FallbackLoginActivity.EXTRA_HOME_SERVER_ID";
+    public static final  String EXTRA_HOME_SERVER_ID = "FallbackLoginActivity.EXTRA_HOME_SERVER_ID";
 
     WebView mWebView = null;
     private String mHomeServerUrl = null;

@@ -221,7 +221,7 @@ public class PhoneNumberUtils {
     /**
      * Phone numbers cache by text.
      */
-    static HashMap<String, Object> mPhoneNumberByText = new HashMap<>();
+    static final HashMap<String, Object> mPhoneNumberByText = new HashMap<>();
 
     /**
      * Provide libphonenumber phonenumber from an unformatted one.
@@ -261,7 +261,7 @@ public class PhoneNumberUtils {
     /**
      * E164 phone number by unformatted phonenumber
      */
-    static HashMap<String, String> mE164PhoneNumberByText = new HashMap<>();
+    static final HashMap<String, String> mE164PhoneNumberByText = new HashMap<>();
 
     /**
      * Convert an unformatted phone number to a E164 format one.

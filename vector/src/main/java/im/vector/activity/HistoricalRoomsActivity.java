@@ -86,7 +86,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
     private HomeRoomAdapter mHistoricalAdapter;
 
     // pending tasks
-    private List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
+    private final  List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
 
     // sessions
     private MXSession mSession;

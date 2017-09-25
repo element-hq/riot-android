@@ -42,7 +42,7 @@ import java.util.HashMap;
 public class AccountCreationActivity extends RiotBaseActivity {
     private static final String LOG_TAG = "ACCreationActivity";
 
-    public static String EXTRA_HOME_SERVER_ID = "AccountCreationActivity.EXTRA_HOME_SERVER_ID";
+    public static final String EXTRA_HOME_SERVER_ID = "AccountCreationActivity.EXTRA_HOME_SERVER_ID";
 
     // home server url
     private String mHomeServerUrl;

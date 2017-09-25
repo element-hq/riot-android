@@ -42,10 +42,10 @@ import java.util.HashMap;
  * AccountCreationCaptchaActivity displays a webview to check captchas.
  */
 public class AccountCreationCaptchaActivity extends RiotBaseActivity {
-    private static String LOG_TAG = "ACCCaptchaActivity";
+    private static final String LOG_TAG = "ACCCaptchaActivity";
 
-    public static String EXTRA_HOME_SERVER_URL = "AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL";
-    public static String EXTRA_SITE_KEY = "AccountCreationCaptchaActivity.EXTRA_SITE_KEY";
+    public static final String EXTRA_HOME_SERVER_URL = "AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL";
+    public static final String EXTRA_SITE_KEY = "AccountCreationCaptchaActivity.EXTRA_SITE_KEY";
 
     private static final String mRecaptchaHTMLString = "<html> " +
                         " <head> " +
