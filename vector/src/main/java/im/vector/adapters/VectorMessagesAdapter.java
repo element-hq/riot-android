@@ -1535,6 +1535,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // display the day separator
             VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
+
+            boolean isInSelectionMode = (null != mSelectedEventId);
+            boolean isSelected = TextUtils.equals(event.eventId, mSelectedEventId);
+
+            float alpha = (!isInSelectionMode || isSelected) ? 1.0f : 0.2f;
+
+            // the message body is dimmed when not selected
+            convertView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
+            convertView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
+
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getMergeView() failed " + e.getMessage());
         }
