@@ -441,6 +441,8 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name="im.vector.receiver.DismissNotificationReceiver"/>
+
         <!-- Shared items  -->
         <activity
             android:name=".activity.VectorSharedFilesActivity"

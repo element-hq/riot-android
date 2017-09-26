@@ -56,6 +56,8 @@ import im.vector.activity.LockScreenActivity;
 import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.receiver.DismissNotificationReceiver;
+import im.vector.services.EventStreamService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -286,11 +288,13 @@ public class NotificationUtils {
         public final BingRule mBingRule;
         public final String mRoomId;
         public final String mEventId;
+        public final long mOriginServerTs;
 
-        public NotifiedEvent(String roomId, String eventId, BingRule bingRule) {
+        public NotifiedEvent(String roomId, String eventId, BingRule bingRule, long originServerTs) {
             mRoomId = roomId;
             mEventId = eventId;
             mBingRule = bingRule;
+            mOriginServerTs = originServerTs;
         }
     }
 
@@ -799,6 +803,8 @@ public class NotificationUtils {
 
             builder.setGroup(context.getString(R.string.riot_app_name));
             builder.setGroupSummary(true);
+
+            builder.setDeleteIntent(PendingIntent.getBroadcast(context.getApplicationContext(), 0,  new Intent(context.getApplicationContext(), DismissNotificationReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
             try {
                 addTextStyle(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId);
