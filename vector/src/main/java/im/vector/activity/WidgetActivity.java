@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.PermissionRequest;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -306,8 +307,12 @@ public class WidgetActivity extends RiotAppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        mWidgetWebView.destroy();
-        mWidgetWebView = null;
+        if (null != mWidgetWebView) {
+            ((ViewGroup)(mWidgetWebView.getParent())).removeView(mWidgetWebView);
+            mWidgetWebView.removeAllViews();
+            mWidgetWebView.destroy();
+            mWidgetWebView = null;
+        }
         super.onDestroy();
     }
 
