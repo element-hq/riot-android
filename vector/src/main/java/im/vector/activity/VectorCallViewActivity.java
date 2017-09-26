@@ -1350,7 +1350,9 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                     mCall.answer();
                 } else {
                     if (mCall.isIncoming()) {
-                        VectorCallSoundManager.startRinging();
+                        // TODO IncomingCallActivity disables the ringing when the user accepts the call.
+                        // when IncomingCallActivity will be removed, it should be enabled again
+                        //VectorCallSoundManager.startRinging();
                     }
                     else {
                         VectorCallSoundManager.startRingBackSound(mCall.isVideo());

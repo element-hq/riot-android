@@ -316,6 +316,9 @@ public class InComingCallActivity extends RiotAppCompatActivity {
      * @param aSourceIntent the intent whose extras are transmitted
      */
     private void startCallViewActivity(final Intent aSourceIntent) {
+        // stop the ringing when the user presses on accept
+        VectorCallSoundManager.stopRinging();
+
         Intent intent = new Intent(this, VectorCallViewActivity.class);
         Bundle receivedData = aSourceIntent.getExtras();
         intent.putExtras(receivedData);
@@ -328,6 +331,8 @@ public class InComingCallActivity extends RiotAppCompatActivity {
      */
     private void onHangUp() {
         if (null != mMxCall) {
+            // stop the ringing when the user presses on reject
+            VectorCallSoundManager.stopRinging();
             mMxCall.hangup("");
         }
     }
