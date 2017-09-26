@@ -109,6 +109,10 @@ public class Widget implements Serializable {
         return  mWidgetContent.name;
     }
 
+    public String getHumanName() {
+        return mWidgetContent.getHumanName();
+    }
+
     public Map<String, Object> getData() {
         return mWidgetContent.data;
     }

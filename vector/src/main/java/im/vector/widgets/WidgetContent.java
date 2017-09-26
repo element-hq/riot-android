@@ -16,6 +16,7 @@
 
 package im.vector.widgets;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.JsonElement;
@@ -50,7 +51,13 @@ public class WidgetContent implements Serializable {
      * @return the human name
      */
     public String getHumanName() {
-        return (null != name) ? name : type;
+        if (!TextUtils.isEmpty(name)) {
+            return name + " widget";
+        } else if (!TextUtils.isEmpty(type)) {
+            return type;
+        } else {
+            return "custom widget";
+        }
     }
 
     /**

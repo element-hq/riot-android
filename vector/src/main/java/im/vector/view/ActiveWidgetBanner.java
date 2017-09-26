@@ -166,7 +166,7 @@ public class ActiveWidgetBanner extends RelativeLayout {
                 mActiveWidget = widget;
 
                 if (null != mActiveWidget) {
-                    mWidgetTypeTextView.setText(mActiveWidget.getName() + " widget ");
+                    mWidgetTypeTextView.setText(mActiveWidget.getHumanName());
                 }
 
                 if (null != mUpdateListener) {

@@ -17,6 +17,8 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,12 +37,14 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.util.Log;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 
@@ -125,7 +129,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
             return;
         }
 
-        mWidgetTypeTextView.setText(mWidget.getType());
+        mWidgetTypeTextView.setText(mWidget.getHumanName());
         refreshStatusBar();
         loadURL();
     }
@@ -141,33 +145,49 @@ public class WidgetActivity extends RiotAppCompatActivity {
         mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProgressLayout.setVisibility(View.VISIBLE);
-                WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        WidgetActivity.this.finish();
-                    }
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setMessage(R.string.widget_delete_message_confirmation)
+                        .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                mProgressLayout.setVisibility(View.VISIBLE);
+                                WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        WidgetActivity.this.finish();
+                                    }
 
-                    private void onError(String errorMessage) {
-                        mProgressLayout.setVisibility(View.GONE);
-                        CommonActivityUtils.displayToast(WidgetActivity.this, errorMessage);
-                    }
+                                    private void onError(String errorMessage) {
+                                        mProgressLayout.setVisibility(View.GONE);
+                                        CommonActivityUtils.displayToast(WidgetActivity.this, errorMessage);
+                                    }
 
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
 
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onError(e.getLocalizedMessage());
-                    }
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
 
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-                });
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
             }
         });
 

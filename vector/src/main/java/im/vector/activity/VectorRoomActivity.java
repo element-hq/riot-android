@@ -930,34 +930,51 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
         mActiveWidgetBanner.setOnUpdateListener(new ActiveWidgetBanner.onUpdateListener() {
             @Override
-            public void onCloseWidgetClick(Widget widget) {
-                setProgressVisibility(View.VISIBLE);
+            public void onCloseWidgetClick(final Widget widget) {
 
-                WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, widget.getWidgetId(), new ApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        setProgressVisibility(View.GONE);
-                    }
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setMessage(R.string.widget_delete_message_confirmation)
+                        .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                setProgressVisibility(View.VISIBLE);
 
-                    private void onError(String errorMessage) {
-                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
-                    }
+                                WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, widget.getWidgetId(), new ApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        setProgressVisibility(View.GONE);
+                                    }
 
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
+                                    private void onError(String errorMessage) {
+                                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                                    }
 
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onError(e.getLocalizedMessage());
-                    }
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
 
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-                });
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
             }
 
             @Override
