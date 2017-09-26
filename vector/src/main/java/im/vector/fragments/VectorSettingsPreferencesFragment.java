@@ -139,8 +139,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
+
     // members
     private MXSession mSession;
+
+    //
+    private boolean mIsWaitingAfterBingRulesUpdates;
+
     // disable some updates if there is
     private final IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
         @Override
@@ -152,6 +157,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingRulesUpdate() {
+            if (mIsWaitingAfterBingRulesUpdates) {
+                mIsWaitingAfterBingRulesUpdates = false;
+                hideLoadingView();
+            }
+
             refreshPreferences();
             refreshDisplay();
         }
@@ -332,7 +342,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if (newValue instanceof String) {
-                        VectorApp.updateApplicationTheme((String)newValue);
+                        VectorApp.updateApplicationTheme((String) newValue);
                         getActivity().startActivity(getActivity().getIntent());
                         getActivity().finish();
                         return true;
@@ -391,18 +401,18 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             keepMediaPeriodPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                     new AlertDialog.Builder(getActivity()).
+                    new AlertDialog.Builder(getActivity()).
                             setSingleChoiceItems(PreferencesManager.getMediasSavingItemsChoicesList(getActivity()),
                                     PreferencesManager.getSelectedMediasSavingPeriod(getActivity()),
                                     new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface d, int n) {
-                                    PreferencesManager.setSelectedMediasSavingPeriod(getActivity(), n);
-                                    d.cancel();
+                                        @Override
+                                        public void onClick(DialogInterface d, int n) {
+                                            PreferencesManager.setSelectedMediasSavingPeriod(getActivity(), n);
+                                            d.cancel();
 
-                                    keepMediaPeriodPreference.setSummary(PreferencesManager.getSelectedMediasSavingPeriodString(getActivity()));
-                                }
-                            }).show();
+                                            keepMediaPeriodPreference.setSummary(PreferencesManager.getSelectedMediasSavingPeriodString(getActivity()));
+                                        }
+                                    }).show();
                     return false;
                 }
             });
@@ -700,8 +710,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 List<MXSession> sessions = Matrix.getMXSessions(getActivity());
-                for(MXSession session : sessions) {
-                    session.setUseDataSaveMode((boolean)newValue);
+                for (MXSession session : sessions) {
+                    session.setUseDataSaveMode((boolean) newValue);
                 }
 
                 return true;
@@ -896,7 +906,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         addEmailPreference.setTitle(R.string.settings_add_email_address);
         addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
         addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-        addEmailPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.settings_icon_tint_color));
+        addEmailPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
         addEmailPreference.setOrder(100);
         addEmailPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
@@ -922,7 +932,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // display the "add phone number" entry
         Preference addPhoneNumberPreference = new Preference(getActivity());
         addPhoneNumberPreference.setKey(ADD_PHONE_NUMBER_PREFERENCE_KEY);
-        addPhoneNumberPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.settings_icon_tint_color));
+        addPhoneNumberPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
         addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number);
         addPhoneNumberPreference.setOrder(200);
 
@@ -1160,26 +1170,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 private void onDone() {
                     // check if the activity still exists
                     if (null != getActivity()) {
-                        // ensure that the response is done in the right thread.
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideLoadingView();
-
-                                BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
-                                boolean isEnabled = ((null != rule) && rule.isEnabled);
-
-                                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
-                                    isEnabled = !isEnabled;
-                                }
-
-                                final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putBoolean(fResourceText, isEnabled);
-                                editor.commit();
-                                hideLoadingView(true);
-                            }
-                        });
+                        // wait the server request echo
+                        // https://github.com/vector-im/riot-android/issues/1623
+                        // the bing rule uploads might be unsynchronized
+                        mIsWaitingAfterBingRulesUpdates = true;
                     }
                 }
 
@@ -1266,7 +1260,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_NOTIFICATION_RINGTONE: {
-                    PreferencesManager.setNotificationRingTone(getActivity(), (Uri)data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI));
+                    PreferencesManager.setNotificationRingTone(getActivity(), (Uri) data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI));
                     refreshNotificationRingTone();
                     break;
                 }
@@ -2027,7 +2021,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        LinearLayout linearLayout = (LinearLayout)layout.findViewById(R.id.text_selection_group_view);
+        LinearLayout linearLayout = (LinearLayout) layout.findViewById(R.id.text_selection_group_view);
 
         int childCount = linearLayout.getChildCount();
 
@@ -2037,7 +2031,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             View v = linearLayout.getChildAt(i);
 
             if (v instanceof CheckedTextView) {
-                final CheckedTextView checkedTextView = (CheckedTextView)v;
+                final CheckedTextView checkedTextView = (CheckedTextView) v;
                 checkedTextView.setChecked(TextUtils.equals(checkedTextView.getText(), scaleText));
 
                 checkedTextView.setOnClickListener(new View.OnClickListener() {
@@ -2879,7 +2873,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
     }
-
 
 
 }
