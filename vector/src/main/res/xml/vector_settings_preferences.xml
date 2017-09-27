@@ -89,7 +89,7 @@
             android:key="SETTINGS_DISABLE_MARKDOWN_KEY"/>
 
         <ListPreference
-            android:entries="@array/theme_readables"
+            android:entries="@array/theme_description"
             android:entryValues="@array/theme_codes"
             android:key="APPLICATION_THEME_KEY"
             android:summary="%s"

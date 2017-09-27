@@ -7,11 +7,9 @@
     <string name="resouces_country">UK</string>
 
     <!-- theme -->
-    <string-array name="theme_readables">
-        <item>Light Theme</item>
-        <item>Dark Theme</item>
-        <item>Black Theme</item>
-    </string-array>
+    <string name="light_theme">Light Theme</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="black_them">Black Theme</string>
 
     <!-- titles -->
     <string name="title_activity_home">Messages</string>

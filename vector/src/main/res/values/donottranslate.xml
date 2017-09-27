@@ -27,4 +27,9 @@
         <item>black</item>
     </string-array>
 
+    <string-array name="theme_description">
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+        <item>@string/black_them</item>
+    </string-array>
 </resources>

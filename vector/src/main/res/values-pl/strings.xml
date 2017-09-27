@@ -2,15 +2,8 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-
     <string name="resouces_language">pl</string>
     <string name="resouces_country">PL</string>
-
-    <!-- theme -->
-    <string-array name="theme_readables">
-        <item>Jasny motyw</item>
-        <item>Ciemny motyw</item>
-    </string-array>
 
     <!-- titles -->
     <string name="title_activity_home">Wiadomości</string>
