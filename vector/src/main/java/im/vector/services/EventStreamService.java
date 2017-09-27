@@ -1368,7 +1368,13 @@ public class EventStreamService extends Service {
                         // test if the message is displayable
                         EventDisplay eventDisplay = new RiotEventDisplay(getApplicationContext(), event, room.getLiveState());
                         eventDisplay.setPrependMessagesWithAuthor(false);
-                        body = eventDisplay.getTextualDisplay().toString();
+
+                        CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+
+                        // reported by GA
+                        if (null != textualDisplay) {
+                            body = textualDisplay.toString();
+                        }
                     }
 
                     if (!TextUtils.isEmpty(body)) {
