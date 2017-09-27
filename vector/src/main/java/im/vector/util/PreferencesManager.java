@@ -27,8 +27,14 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import im.vector.R;
+import im.vector.activity.LoginActivity;
 import im.vector.ga.GAHelper;
 
 public class PreferencesManager {
@@ -108,7 +114,6 @@ public class PreferencesManager {
     public static final String SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY = "SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY";
     public static final String SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY = "SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY";
 
-
     public static final String SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY";
     public static final String SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY";
 
@@ -116,6 +121,70 @@ public class PreferencesManager {
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;
     private static final int MEDIA_SAVING_FOREVER = 3;
+
+    // some preferences keys must be kept after a logout
+    private static final List<String> mKeysToKeepAfterLogout = Arrays.asList(
+            SETTINGS_HIDE_READ_RECEIPTS_KEY,
+            SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
+            SETTINGS_12_24_TIMESTAMPS_KEY,
+            SETTINGS_DONT_SEND_TYPING_NOTIF_KEY,
+            SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY,
+            SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY,
+            SETTINGS_MEDIA_SAVING_PERIOD_KEY,
+            SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY,
+
+            SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
+            SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
+            SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY,
+            SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY,
+            SETTINGS_START_ON_BOOT_PREFERENCE_KEY,
+            SETTINGS_INTERFACE_TEXT_SIZE_KEY,
+            SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY,
+            SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY,
+            SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY,
+            SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY,
+
+            SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
+            SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
+            SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY,
+            SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY,
+            SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY,
+            SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY,
+            SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY,
+            SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
+            SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY
+    );
+
+    /**
+     * Clear the preferences.
+     *
+     * @param context the context
+     */
+    public static void clearPreferences(Context context) {
+        Set<String> keysToKeep = new HashSet<>(mKeysToKeepAfterLogout);
+
+        // home server url
+        keysToKeep.add(LoginActivity.HOME_SERVER_URL_PREF);
+        keysToKeep.add(LoginActivity.IDENTITY_SERVER_URL_PREF);
+
+        // theme
+        keysToKeep.add(ThemeUtils.APPLICATION_THEME_KEY);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        // get all the existing keys
+        Set<String> keys = preferences.getAll().keySet();
+        // remove the one to keep
+
+        keys.removeAll(keysToKeep);
+
+        for(String key : keys) {
+            editor.remove(key);
+        }
+
+        editor.commit();
+    }
 
     /**
      * Tells if the timestamp must be displayed in 12h format
