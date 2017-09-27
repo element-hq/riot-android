@@ -409,7 +409,8 @@ public class VectorCallSoundManager {
             return;
         }
 
-        stopRinging();
+        // stop any playing ringtone
+        stopRingTones();
 
         // use the ringTone to manage sound volume properly
         mRingTone = getRingTone(R.raw.ring, RING_TONE_START_RINGING, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
