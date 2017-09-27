@@ -2249,7 +2249,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void manageSendMoreButtons() {
         boolean hasText = (mEditText.getText().length() > 0);
         mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
-        mEditText.setSingleLine(TextUtils.isEmpty(mEditText.getText()));
+
+        // the hint is only displayed in 1 line
+        if ((mEditText.getMaxLines() == 1) != TextUtils.isEmpty(mEditText.getText())) {
+            mEditText.setSingleLine(TextUtils.isEmpty(mEditText.getText()));
+            mEditText.setSelection(mEditText.length());
+        }
     }
 
     /**
