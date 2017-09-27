@@ -20,7 +20,7 @@ import android.content.Context;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -79,7 +79,7 @@ public class RegistrationManager {
             LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
 
     // Config
-    private HomeserverConnectionConfig mHsConfig;
+    private HomeServerConnectionConfig mHsConfig;
     private LoginRestClient mLoginRestClient;
     private ThirdPidRestClient mThirdPidRestClient;
     private ProfileRestClient mProfileRestClient;
@@ -152,7 +152,7 @@ public class RegistrationManager {
      *
      * @param hsConfig
      */
-    public void setHsConfig(final HomeserverConnectionConfig hsConfig) {
+    public void setHsConfig(final HomeServerConnectionConfig hsConfig) {
         mHsConfig = hsConfig;
         mLoginRestClient = null;
         mThirdPidRestClient = null;

@@ -23,7 +23,7 @@ import org.matrix.androidsdk.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 
 import java.util.ArrayList;
 
@@ -48,7 +48,7 @@ public class LoginStorage {
     /**
      * @return the list of home server configurations.
      */
-    public ArrayList<HomeserverConnectionConfig> getCredentialsList() {
+    public ArrayList<HomeServerConnectionConfig> getCredentialsList() {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
 
         String connectionConfigsString = prefs.getString(PREFS_KEY_CONNECTION_CONFIGS, null);
@@ -62,13 +62,13 @@ public class LoginStorage {
         try {
             JSONArray connectionConfigsStrings = new JSONArray(connectionConfigsString);
 
-            ArrayList<HomeserverConnectionConfig> configList = new ArrayList<>(
+            ArrayList<HomeServerConnectionConfig> configList = new ArrayList<>(
                     connectionConfigsStrings.length()
             );
 
             for (int i = 0; i < connectionConfigsStrings.length(); i++) {
                 configList.add(
-                        HomeserverConnectionConfig.fromJson(connectionConfigsStrings.getJSONObject(i))
+                        HomeServerConnectionConfig.fromJson(connectionConfigsStrings.getJSONObject(i))
                 );
             }
 
@@ -83,19 +83,19 @@ public class LoginStorage {
      * Add a credentials to the credentials list
      * @param config the home server config to add.
      */
-    public void addCredentials(HomeserverConnectionConfig config) {
+    public void addCredentials(HomeServerConnectionConfig config) {
         if (null != config && config.getCredentials() != null) {
             SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
 
-            ArrayList<HomeserverConnectionConfig> configs = getCredentialsList();
+            ArrayList<HomeServerConnectionConfig> configs = getCredentialsList();
 
             configs.add(config);
 
             ArrayList<JSONObject> serialized = new ArrayList<>(configs.size());
 
             try {
-                for (HomeserverConnectionConfig c : configs) {
+                for (HomeServerConnectionConfig c : configs) {
                     serialized.add(c.toJson());
                 }
             } catch (JSONException e) {
@@ -115,19 +115,19 @@ public class LoginStorage {
      * Remove the credentials from credentials list
      * @param config the credentials to remove
      */
-    public void removeCredentials(HomeserverConnectionConfig config) {
+    public void removeCredentials(HomeServerConnectionConfig config) {
         if (null != config && config.getCredentials() != null) {
             Log.d(LOG_TAG, "Removing account: " + config.getCredentials().userId);
 
             SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
 
-            ArrayList<HomeserverConnectionConfig> configs = getCredentialsList();
+            ArrayList<HomeServerConnectionConfig> configs = getCredentialsList();
             ArrayList<JSONObject> serialized = new ArrayList<>(configs.size());
 
             boolean found = false;
             try {
-                for (HomeserverConnectionConfig c : configs) {
+                for (HomeServerConnectionConfig c : configs) {
                     if (c.getCredentials().userId.equals(config.getCredentials().userId)) {
                         found = true;
                     } else {
@@ -154,17 +154,17 @@ public class LoginStorage {
      * If it does not match an existing credential it does *not* insert the new credentials.
      * @param config the credentials to insert
      */
-    public void replaceCredentials(HomeserverConnectionConfig config) {
+    public void replaceCredentials(HomeServerConnectionConfig config) {
         if (null != config && config.getCredentials() != null) {
             SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
 
-            ArrayList<HomeserverConnectionConfig> configs = getCredentialsList();
+            ArrayList<HomeServerConnectionConfig> configs = getCredentialsList();
             ArrayList<JSONObject> serialized = new ArrayList<>(configs.size());
 
             boolean found = false;
             try {
-                for (HomeserverConnectionConfig c : configs) {
+                for (HomeServerConnectionConfig c : configs) {
                     if (c.getCredentials().userId.equals(config.getCredentials().userId)) {
                         serialized.add(config.toJson());
                         found = true;

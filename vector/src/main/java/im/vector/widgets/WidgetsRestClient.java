@@ -15,7 +15,7 @@
  */
 package im.vector.widgets;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.RestClient;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.RestAdapterCallback;
@@ -26,7 +26,7 @@ public class WidgetsRestClient extends RestClient<WidgetsApi> {
     /**
      * {@inheritDoc}
      */
-    public WidgetsRestClient(HomeserverConnectionConfig hsConfig) {
+    public WidgetsRestClient(HomeServerConnectionConfig hsConfig) {
         super(hsConfig, WidgetsApi.class, "/api", false);
     }
 

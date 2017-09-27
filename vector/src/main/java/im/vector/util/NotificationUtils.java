@@ -787,7 +787,7 @@ public class NotificationUtils {
                             Log.e(LOG_TAG, "decodeFile failed with an oom");
                         }
                     } else {
-                        session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(context), room.getAvatarUrl(), size);
+                        session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), new ImageView(context), room.getAvatarUrl(), size);
                     }
                 }
             }

@@ -312,13 +312,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // home server
         EditTextPreference homeServerTextPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY);
         if (null != homeServerTextPreference) {
-            homeServerTextPreference.setSummary(mSession.getHomeserverConfig().getHomeserverUri().toString());
+            homeServerTextPreference.setSummary(mSession.getHomeServerConfig().getHomeserverUri().toString());
         }
 
         // identity server
         EditTextPreference identityServerTextPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY);
         if (null != identityServerTextPreference) {
-            identityServerTextPreference.setSummary(mSession.getHomeserverConfig().getIdentityServerUri().toString());
+            identityServerTextPreference.setSummary(mSession.getHomeServerConfig().getIdentityServerUri().toString());
         }
 
         // terms & conditions

@@ -28,10 +28,12 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.ssl.Fingerprint;
+import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -59,6 +61,7 @@ import im.vector.util.PreferencesManager;
 import im.vector.widgets.WidgetsManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -106,7 +109,7 @@ public class Matrix {
 
         @Override
         public void onLiveEvent(Event event, RoomState roomState) {
-            mRefreshUnreadCounter |=  Event.EVENT_TYPE_MESSAGE.equals(event.getType()) || Event.EVENT_TYPE_RECEIPT.equals(event.getType());
+            mRefreshUnreadCounter |= Event.EVENT_TYPE_MESSAGE.equals(event.getType()) || Event.EVENT_TYPE_RECEIPT.equals(event.getType());
 
             // TODO update to manage multisessions
             WidgetsManager.getSharedInstance().onLiveEvent(instance.getDefaultSession(), event);
@@ -130,7 +133,7 @@ public class Matrix {
                                 BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
                                 Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
 
-                                for(Room room : rooms) {
+                                for (Room room : rooms) {
                                     if (room.isInvited()) {
                                         roomCount++;
                                     } else {
@@ -271,6 +274,7 @@ public class Matrix {
     /**
      * Retrieve the static instance.
      * Create it if it does not exist yet.
+     *
      * @param appContext the application context
      * @return the shared instance
      */
@@ -328,6 +332,7 @@ public class Matrix {
 
     /**
      * Static method top the MXSession list
+     *
      * @param context the application content
      * @return the sessions list
      */
@@ -356,6 +361,7 @@ public class Matrix {
 
     /**
      * Tell if there is a corrupted store in the active session/
+     *
      * @param context the application context
      * @return true if there is a corrupted store.
      */
@@ -375,8 +381,9 @@ public class Matrix {
 
     /**
      * Retrieve the default session if one exists.
-     *
+     * <p>
      * The default session may be user-configured, or it may be the last session the user was using.
+     *
      * @return The default session or null.
      */
     public synchronized MXSession getDefaultSession() {
@@ -386,7 +393,7 @@ public class Matrix {
             return sessions.get(0);
         }
 
-        ArrayList<HomeserverConnectionConfig> hsConfigList = mLoginStorage.getCredentialsList();
+        ArrayList<HomeServerConnectionConfig> hsConfigList = mLoginStorage.getCredentialsList();
 
         // any account ?
         if ((hsConfigList == null) || (hsConfigList.size() == 0)) {
@@ -398,7 +405,7 @@ public class Matrix {
         HashSet<String> matrixIds = new HashSet<>();
         sessions = new ArrayList<>();
 
-        for(HomeserverConnectionConfig config: hsConfigList) {
+        for (HomeServerConnectionConfig config : hsConfigList) {
             // avoid duplicated accounts.
             // null userId has been reported by GA
             if (config.getCredentials() != null && !TextUtils.isEmpty(config.getCredentials().userId) && !matrixIds.contains(config.getCredentials().userId)) {
@@ -430,6 +437,7 @@ public class Matrix {
 
     /**
      * Static method to return a MXSession from an account Id.
+     *
      * @param matrixId the matrix id
      * @return the MXSession.
      */
@@ -438,8 +446,9 @@ public class Matrix {
     }
 
     /**
-     *Retrieve a session from an user Id.
+     * Retrieve a session from an user Id.
      * The application should be able to manage multi session.
+     *
      * @param matrixId the matrix id
      * @return the MXsession if it exists.
      */
@@ -465,13 +474,14 @@ public class Matrix {
 
     /**
      * Add an error listener to each sessions
+     *
      * @param activity the activity.
      */
     public static void setSessionErrorListener(Activity activity) {
         if ((null != instance) && (null != activity)) {
             Collection<MXSession> sessions = getMXSessions(activity);
 
-            for(MXSession session : sessions) {
+            for (MXSession session : sessions) {
                 if (session.isAlive()) {
                     session.setFailureCallback(new ErrorListener(session, activity));
                 }
@@ -486,7 +496,7 @@ public class Matrix {
         if ((null != instance) && (null != activity)) {
             Collection<MXSession> sessions = getMXSessions(activity);
 
-            for(MXSession session : sessions) {
+            for (MXSession session : sessions) {
                 if (session.isAlive()) {
                     session.setFailureCallback(null);
                 }
@@ -497,6 +507,7 @@ public class Matrix {
     /**
      * Return the used media caches.
      * This class can inherited to customized it.
+     *
      * @return the mediasCache.
      */
     public MXMediasCache getMediasCache() {
@@ -509,6 +520,7 @@ public class Matrix {
     /**
      * Return the used latestMessages caches.
      * This class can inherited to customized it.
+     *
      * @return the latest messages cache.
      */
     public MXLatestChatMessageCache getDefaultLatestChatMessageCache() {
@@ -517,8 +529,8 @@ public class Matrix {
         }
         return null;
     }
+
     /**
-     *
      * @return true if the matrix client instance defines a valid session
      */
     public static boolean hasValidSessions() {
@@ -535,7 +547,7 @@ public class Matrix {
             if (!res) {
                 Log.e(LOG_TAG, "hasValidSessions : has no session");
             } else {
-                for(MXSession session : instance.mMXSessions) {
+                for (MXSession session : instance.mMXSessions) {
                     // some GA issues reported that the data handler can be null
                     // so assume the application should be restarted
                     res &= (null != session.getDataHandler());
@@ -556,8 +568,9 @@ public class Matrix {
 
     /**
      * Clear a session.
-     * @param context the context.
-     * @param session the session to clear.
+     *
+     * @param context          the context.
+     * @param session          the session to clear.
      * @param clearCredentials true to clear the credentials.
      */
     public synchronized void clearSession(final Context context, final MXSession session, final boolean clearCredentials, final SimpleApiCallback<Void> aCallback) {
@@ -569,7 +582,7 @@ public class Matrix {
         Log.d(LOG_TAG, "## clearSession() " + session.getMyUserId() + " clearCredentials " + clearCredentials);
 
         if (clearCredentials) {
-            mLoginStorage.removeCredentials(session.getHomeserverConfig());
+            mLoginStorage.removeCredentials(session.getHomeServerConfig());
         }
 
         session.getDataHandler().removeListener(mLiveEventListener);
@@ -599,8 +612,9 @@ public class Matrix {
 
     /**
      * Clear any existing session.
-     * @param context the context.
-     * @param clearCredentials  true to clear the credentials.
+     *
+     * @param context          the context.
+     * @param clearCredentials true to clear the credentials.
      */
     public synchronized void clearSessions(Context context, boolean clearCredentials, ApiCallback<Void> callback) {
         List<MXSession> sessions;
@@ -615,10 +629,10 @@ public class Matrix {
     /**
      * Internal routine to clear the sessions data
      *
-     * @param context the context
-     * @param iterator the sessions iterator
+     * @param context          the context
+     * @param iterator         the sessions iterator
      * @param clearCredentials true to clear the credentials.
-     * @param callback the asynchronous callback
+     * @param callback         the asynchronous callback
      */
     private synchronized void clearSessions(final Context context, final Iterator<MXSession> iterator, final boolean clearCredentials, final ApiCallback<Void> callback) {
         if (!iterator.hasNext()) {
@@ -639,10 +653,11 @@ public class Matrix {
 
     /**
      * Set a default session.
+     *
      * @param session The session to store as the default session.
      */
     public synchronized void addSession(MXSession session) {
-        mLoginStorage.addCredentials(session.getHomeserverConfig());
+        mLoginStorage.addCredentials(session.getHomeServerConfig());
         synchronized (LOG_TAG) {
             mMXSessions.add(session);
         }
@@ -650,20 +665,22 @@ public class Matrix {
 
     /**
      * Creates an MXSession from some credentials.
+     *
      * @param hsConfig The HomeserverConnectionConfig to create a session from.
      * @return The session.
      */
-    public MXSession createSession(HomeserverConnectionConfig hsConfig) {
+    public MXSession createSession(HomeServerConnectionConfig hsConfig) {
         return createSession(mAppContext, hsConfig);
     }
 
     /**
      * Creates an MXSession from some credentials.
-     * @param context the context.
+     *
+     * @param context  the context.
      * @param hsConfig The HomeserverConnectionConfig to create a session from.
      * @return The session.
      */
-    public MXSession createSession(final Context context, HomeserverConnectionConfig hsConfig) {
+    public MXSession createSession(final Context context, HomeServerConnectionConfig hsConfig) {
         IMXStore store;
 
         Credentials credentials = hsConfig.getCredentials();
@@ -674,7 +691,9 @@ public class Matrix {
             store = new MXMemoryStore(hsConfig.getCredentials(), context);
         }
 
-        MXSession session = new MXSession(hsConfig, new MXDataHandler(store, credentials, new MXDataHandler.InvalidTokenListener() {
+        final MXSession session = new MXSession(hsConfig, new MXDataHandler(store, credentials), mAppContext);
+
+        session.getDataHandler().setRequestNetworkErrorListener(new MXDataHandler.RequestNetworkErrorListener() {
             @Override
             public void onTokenCorrupted() {
                 if (null != VectorApp.getCurrentActivity()) {
@@ -682,7 +701,35 @@ public class Matrix {
                     CommonActivityUtils.logout(VectorApp.getCurrentActivity());
                 }
             }
-        }), mAppContext);
+
+            @Override
+            public void onSSLCertificateError(UnrecognizedCertificateException unrecCertEx) {
+                if (null != VectorApp.getCurrentActivity()) {
+                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+                    Log.d(LOG_TAG, "## createSession() : Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
+
+                    UnrecognizedCertHandler.show(session.getHomeServerConfig(), fingerprint, true, new UnrecognizedCertHandler.Callback() {
+                        @Override
+                        public void onAccept() {
+                            LoginStorage loginStorage = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getLoginStorage();
+                            loginStorage.replaceCredentials(session.getHomeServerConfig());
+                        }
+
+                        @Override
+                        public void onIgnore() {
+                            // nothing to do
+                        }
+
+                        @Override
+                        public void onReject() {
+                            Log.d(LOG_TAG, "Found fingerprint: reject fingerprint");
+                            CommonActivityUtils.logout(VectorApp.getCurrentActivity(), Arrays.asList(session), true, null);
+                        }
+                    });
+                }
+
+            }
+        });
 
         // if a device id is defined, enable the encryption
         if (!TextUtils.isEmpty(credentials.deviceId)) {
@@ -699,6 +746,7 @@ public class Matrix {
      * Reload the matrix sessions.
      * The session caches are cleared before being reloaded.
      * Any opened activity is closed and the application switches to the splash screen.
+     *
      * @param context the context
      */
     public void reloadSessions(final Context context) {
@@ -709,9 +757,9 @@ public class Matrix {
             public void onSuccess(Void info) {
                 synchronized (LOG_TAG) {
                     // build a new sessions list
-                    ArrayList<HomeserverConnectionConfig> configs = mLoginStorage.getCredentialsList();
+                    ArrayList<HomeServerConnectionConfig> configs = mLoginStorage.getCredentialsList();
 
-                    for(HomeserverConnectionConfig config : configs) {
+                    for (HomeServerConnectionConfig config : configs) {
                         MXSession session = createSession(config);
                         mMXSessions.add(session);
                     }
@@ -728,7 +776,8 @@ public class Matrix {
                         if (null != VectorApp.getCurrentActivity()) {
                             VectorApp.getCurrentActivity().finish();
                         }
-                    }});
+                    }
+                });
             }
         });
     }
@@ -754,7 +803,7 @@ public class Matrix {
             sessions = getSessions();
         }
 
-        for(MXSession session : sessions) {
+        for (MXSession session : sessions) {
             if (null != session.getDataHandler()) {
                 session.getDataHandler().refreshPushRules();
             }
@@ -767,20 +816,22 @@ public class Matrix {
 
     /**
      * Add a network event listener.
+     *
      * @param networkEventListener the event listener to add
      */
     public void addNetworkEventListener(final IMXNetworkEventListener networkEventListener) {
-        if ((null != getDefaultSession()) && (null != networkEventListener)){
-           getDefaultSession().getNetworkConnectivityReceiver().addEventListener(networkEventListener);
+        if ((null != getDefaultSession()) && (null != networkEventListener)) {
+            getDefaultSession().getNetworkConnectivityReceiver().addEventListener(networkEventListener);
         }
     }
 
     /**
      * Remove a network event listener.
+     *
      * @param networkEventListener the event listener to remove
      */
     public void removeNetworkEventListener(final IMXNetworkEventListener networkEventListener) {
-        if ((null != getDefaultSession()) && (null != networkEventListener)){
+        if ((null != getDefaultSession()) && (null != networkEventListener)) {
             getDefaultSession().getNetworkConnectivityReceiver().removeEventListener(networkEventListener);
         }
     }
@@ -802,6 +853,7 @@ public class Matrix {
 
     /**
      * Add a tmp IMXStore in the currently used stores list
+     *
      * @param store the store
      * @return the store index
      */
@@ -823,6 +875,7 @@ public class Matrix {
 
     /**
      * Remove the dedicated store from the tmp stores list.
+     *
      * @param store the store to remove
      */
     public void removeTmpStore(IMXStore store) {
@@ -833,6 +886,7 @@ public class Matrix {
 
     /**
      * Return a tmp store.
+     *
      * @param storeIndex the store index.
      * @return the store
      */

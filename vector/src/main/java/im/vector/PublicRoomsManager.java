@@ -172,7 +172,7 @@ public class PublicRoomsManager {
                     // on some servers, it triggers an "internal server error"
                     // so try with the server url
                     if (MatrixError.UNKNOWN.equals(e.errcode) && (null == mRequestServer)) {
-                        mRequestServer = mSession.getHomeserverConfig().getHomeserverUri().getHost();
+                        mRequestServer = mSession.getHomeServerConfig().getHomeserverUri().getHost();
                         Log.e(LOG_TAG, "## launchPublicRoomsRequest() : mRequestServer == null fails -> try " + mRequestServer);
                         launchPublicRoomsRequest(callback);
                     } else {

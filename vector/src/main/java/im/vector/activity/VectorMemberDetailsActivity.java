@@ -1299,7 +1299,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         if (!TextUtils.isEmpty(avatarUrl)) {
             mFullMemberAvatarLayout.setVisibility(View.VISIBLE);
-            mSession.getMediasCache().loadBitmap(mSession.getHomeserverConfig(), mFullMemberAvatarImageView, avatarUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, null);
+            mSession.getMediasCache().loadBitmap(mSession.getHomeServerConfig(), mFullMemberAvatarImageView, avatarUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, null);
         }
     }
 

@@ -153,7 +153,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
             private void onDone(List<RoomDirectoryData> list) {
                 mLoadingView.setVisibility(View.GONE);
                 String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
-                String userHSUrl = mSession.getHomeserverConfig().getHomeserverUri().getHost();
+                String userHSUrl = mSession.getHomeServerConfig().getHomeserverUri().getHost();
 
                 List<String> hsUrlsList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
 

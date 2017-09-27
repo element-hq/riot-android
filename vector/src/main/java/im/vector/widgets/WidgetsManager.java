@@ -26,7 +26,7 @@ import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -540,7 +540,7 @@ public class WidgetsManager {
             session.openIdToken(new ApiCallback<Map<Object, Object>>() {
                 @Override
                 public void onSuccess(Map<Object, Object> tokensMap) {
-                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(new HomeserverConnectionConfig(Uri.parse(INTEGRATION_REST_URL)));
+                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(new HomeServerConnectionConfig(Uri.parse(INTEGRATION_REST_URL)));
 
                     widgetsRestClient.register(tokensMap, new ApiCallback<Map<String, String>>() {
                         @Override
