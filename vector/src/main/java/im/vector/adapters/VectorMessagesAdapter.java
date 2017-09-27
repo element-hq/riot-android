@@ -1543,8 +1543,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // the message body is dimmed when not selected
             convertView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
-            convertView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
-
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getMergeView() failed " + e.getMessage());
         }
