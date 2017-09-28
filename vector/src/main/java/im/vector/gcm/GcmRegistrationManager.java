@@ -514,7 +514,7 @@ public final class GcmRegistrationManager {
         session.getPushersRestClient()
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
-                        DEFAULT_PUSHER_URL, append, new ApiCallback<Void>() {
+                        DEFAULT_PUSHER_URL, append, isBackgroundSyncAllowed(),  new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
                                 Log.d(LOG_TAG, "registerToThirdPartyServer succeeded");
@@ -637,7 +637,7 @@ public final class GcmRegistrationManager {
      * @param listener the listener
      */
     public void forceSessionsRegistration(final ThirdPartyRegistrationListener listener) {
-        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) || (mRegistrationState == RegistrationState.GCM_REGISTRED)){
+        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) || (mRegistrationState == RegistrationState.GCM_REGISTRED)) {
             mRegistrationState = RegistrationState.GCM_REGISTRED;
 
             register(listener);
@@ -646,7 +646,7 @@ public final class GcmRegistrationManager {
                 try {
                     listener.onThirdPartyRegistrationFailed();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "forceSessionsRegistration failed " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "forceSessionsRegistration failed " + e.getMessage());
                 }
             }
         }

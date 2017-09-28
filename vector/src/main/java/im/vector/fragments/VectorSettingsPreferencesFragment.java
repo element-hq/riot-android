@@ -529,11 +529,35 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object aNewValue) {
-                    boolean newValue = (boolean) aNewValue;
+                    final boolean newValue = (boolean) aNewValue;
 
                     if (newValue != gcmMgr.isBackgroundSyncAllowed()) {
                         gcmMgr.setBackgroundSyncAllowed(newValue);
                     }
+
+                    displayLoadingView();
+
+                    Matrix.getInstance(VectorSettingsPreferencesFragment.this.getActivity()).getSharedGCMRegistrationManager().forceSessionsRegistration(new GcmRegistrationManager.ThirdPartyRegistrationListener() {
+                        @Override
+                        public void onThirdPartyRegistered() {
+                            hideLoadingView();
+                        }
+
+                        @Override
+                        public void onThirdPartyRegistrationFailed() {
+                            hideLoadingView();
+                        }
+
+                        @Override
+                        public void onThirdPartyUnregistered() {
+                            hideLoadingView();
+                        }
+
+                        @Override
+                        public void onThirdPartyUnregistrationFailed() {
+                            hideLoadingView();
+                        }
+                    });
 
                     return true;
                 }
