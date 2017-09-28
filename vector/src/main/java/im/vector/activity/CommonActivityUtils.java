@@ -559,6 +559,7 @@ public class CommonActivityUtils {
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             if ((null != sessions) && (sessions.size() > 0)) {
+                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(context).getSharedGCMRegistrationManager();
                 Log.e(LOG_TAG, "## startEventStreamService() : restart EventStreamService");
 
                 for (MXSession session : sessions) {
@@ -574,6 +575,9 @@ public class CommonActivityUtils {
                             Log.e(LOG_TAG, "## startEventStreamService() : check if the crypto of the session " + session.getMyUserId());
                             session.checkCrypto();
                         }
+
+                        session.setSyncDelay(gcmRegistrationManager.isBackgroundSyncAllowed() ? gcmRegistrationManager.getBackgroundSyncDelay() : 0);
+                        session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
 
                         // session to activate
                         matrixIds.add(session.getCredentials().userId);
