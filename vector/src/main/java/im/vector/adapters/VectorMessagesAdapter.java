@@ -62,6 +62,7 @@ import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.JsonUtils;
@@ -1153,11 +1154,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 if (null != event.eventId) {
                     synchronized (this) {
                         if (!mTextColorByEventId.containsKey(event.eventId)) {
-                            String sBody = body.toString();
-                            String displayName = mSession.getMyUser().displayname;
-                            String userID = mSession.getMyUserId();
+                            BingRule rule = mSession.getDataHandler().getBingRulesManager().fulfilledBingRule(event);
 
-                            if (EventUtils.caseInsensitiveFind(displayName, sBody) || EventUtils.caseInsensitiveFind(userID, sBody)) {
+                            if ((null != rule) && rule.isEnabled && rule.shouldHighlight()) {
                                 textColor = mHighlightMessageTextColor;
                             } else {
                                 textColor = mDefaultMessageTextColor;
