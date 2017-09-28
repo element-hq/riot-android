@@ -994,13 +994,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     displayWidget(widgets.get(0));
                 } else if (widgets.size() > 1) {
                     List<CharSequence> widgetNames = new ArrayList<>();
+                    CharSequence[] CharSequences = new CharSequence[widgetNames.size()];
 
                     for (Widget widget : widgets) {
                         widgetNames.add(widget.getHumanName());
                     }
 
                     new AlertDialog.Builder(VectorRoomActivity.this)
-                            .setSingleChoiceItems((CharSequence[]) widgetNames.toArray(), 0, new DialogInterface.OnClickListener() {
+                            .setSingleChoiceItems(widgetNames.toArray(CharSequences), 0, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface d, int n) {
                                     d.cancel();
