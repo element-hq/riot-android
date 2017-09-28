@@ -54,9 +54,9 @@ public class WidgetContent implements Serializable {
         if (!TextUtils.isEmpty(name)) {
             return name + " widget";
         } else if (!TextUtils.isEmpty(type)) {
-            return type;
+            return type + " " + id;
         } else {
-            return "custom widget";
+            return "Widget " + id;
         }
     }
 
