@@ -113,9 +113,9 @@ import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
+import im.vector.view.ActiveWidgetsBanner;
 import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
-import im.vector.view.ActiveWidgetBanner;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
@@ -256,7 +256,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private VectorOngoingConferenceCallView mVectorOngoingConferenceCallView;
 
     // pending active view
-    private ActiveWidgetBanner mActiveWidgetBanner;
+    private ActiveWidgetsBanner mActiveWidgetsBanner;
 
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -605,7 +605,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.room_pending_call_view);
         mVectorOngoingConferenceCallView = (VectorOngoingConferenceCallView) findViewById(R.id.room_ongoing_conference_call_view);
-        mActiveWidgetBanner = (ActiveWidgetBanner) findViewById(R.id.room_pending_widget_view);
+        mActiveWidgetsBanner = (ActiveWidgetsBanner) findViewById(R.id.room_pending_widgets_view);
         mE2eImageView = (ImageView) findViewById(R.id.room_encrypted_image_view);
         mSyncInProgressView = findViewById(R.id.room_sync_in_progress);
 
@@ -926,9 +926,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         if (PreferencesManager.useMatrixApps(this)) {
-            mActiveWidgetBanner.initRoomInfo(mSession, mRoom);
+            mActiveWidgetsBanner.initRoomInfo(mSession, mRoom);
         }
-        mActiveWidgetBanner.setOnUpdateListener(new ActiveWidgetBanner.onUpdateListener() {
+        mActiveWidgetsBanner.setOnUpdateListener(new ActiveWidgetsBanner.onUpdateListener() {
             @Override
             public void onCloseWidgetClick(final Widget widget) {
 
@@ -978,15 +978,44 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             @Override
-            public void onActiveWidgetUpdate() {
+            public void onActiveWidgetsListUpdate() {
                 // something todo ?
             }
 
-            @Override
-            public void onClick(Widget widget) {
+            private void displayWidget(Widget widget) {
                 final Intent intent = new Intent(VectorRoomActivity.this, WidgetActivity.class);
                 intent.putExtra(WidgetActivity.EXTRA_WIDGET_ID, widget);
                 VectorRoomActivity.this.startActivity(intent);
+            }
+
+            @Override
+            public void onClick(final List<Widget> widgets) {
+                if (widgets.size() == 1) {
+                    displayWidget(widgets.get(0));
+                } else if (widgets.size() > 1) {
+                    List<CharSequence> widgetNames = new ArrayList<>();
+
+                    for (Widget widget : widgets) {
+                        widgetNames.add(widget.getHumanName());
+                    }
+
+                    new AlertDialog.Builder(VectorRoomActivity.this)
+                            .setSingleChoiceItems((CharSequence[]) widgetNames.toArray(), 0, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface d, int n) {
+                                    d.cancel();
+                                    displayWidget(widgets.get(n));
+                                }
+                            })
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    displayWidget(widgets.get(0));
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                }
             }
         });
 
@@ -1112,8 +1141,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mVectorOngoingConferenceCallView.setCallClickListener(null);
         }
 
-        if (null != mActiveWidgetBanner) {
-            mActiveWidgetBanner.setOnUpdateListener(null);
+        if (null != mActiveWidgetsBanner) {
+            mActiveWidgetsBanner.setOnUpdateListener(null);
         }
 
         super.onDestroy();
@@ -1145,7 +1174,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         mVectorOngoingConferenceCallView.onActivityPause();
-        mActiveWidgetBanner.onActivityPause();
+        mActiveWidgetsBanner.onActivityPause();
 
         // to have notifications for this room
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
@@ -1282,7 +1311,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if ((null == sRoomPreviewData) && (null == mEventId)) {
             mVectorPendingCallView.checkPendingCall();
             mVectorOngoingConferenceCallView.onActivityResume();
-            mActiveWidgetBanner.onActivityResume();
+            mActiveWidgetsBanner.onActivityResume();
         }
 
         displayE2eRoomAlert();

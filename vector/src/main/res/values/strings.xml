@@ -763,6 +763,7 @@
     <string name="event_formatter_widget_removed">%1$s removed by %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Create conference calls with jitsi</string>
     <string name="widget_delete_message_confirmation">Are you sure you want to delete the widget?</string>
+    <string name="active_widgets">%1$d active widgets</string>
 
     // Widget Integration Manager
     <string name="widget_integration_need_to_be_able_to_invite">You need to be able to invite users to do that.</string>

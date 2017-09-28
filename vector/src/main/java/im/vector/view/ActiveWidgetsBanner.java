@@ -30,13 +30,14 @@ import im.vector.widgets.WidgetsManager;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class displays if there is a pending active widget
+ * This class displays the active widgets
  */
-public class ActiveWidgetBanner extends RelativeLayout {
-    private static final String LOG_TAG = ActiveWidgetBanner.class.getSimpleName();
+public class ActiveWidgetsBanner extends RelativeLayout {
+    private static final String LOG_TAG = ActiveWidgetsBanner.class.getSimpleName();
 
     public interface onUpdateListener {
         /**
@@ -48,21 +49,22 @@ public class ActiveWidgetBanner extends RelativeLayout {
         /**
          * Warn that the current active widget has been updated
          */
-        void onActiveWidgetUpdate();
+        void onActiveWidgetsListUpdate();
 
         /**
          * Click on the banner
-         * @param widget
          */
-        void onClick(Widget widget);
+        void onClick(List<Widget> widgets);
     }
+
+    private Context mContext;
 
     //
     private MXSession mSession;
     private Room mRoom;
 
-    // the linked widget
-    private Widget mActiveWidget;
+    // the active widgets list
+    private List<Widget> mActiveWidgets = new ArrayList<>();
 
     // close widget icon
     private View mCloseWidgetIcon;
@@ -86,25 +88,27 @@ public class ActiveWidgetBanner extends RelativeLayout {
     /**
      * constructors
      **/
-    public ActiveWidgetBanner(Context context) {
+    public ActiveWidgetsBanner(Context context) {
         super(context);
-        initView();
+        initView(context);
     }
 
-    public ActiveWidgetBanner(Context context, AttributeSet attrs) {
+    public ActiveWidgetsBanner(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView();
+        initView(context);
     }
 
-    public ActiveWidgetBanner(Context context, AttributeSet attrs, int defStyle) {
+    public ActiveWidgetsBanner(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initView();
+        initView(context);
     }
 
     /**
      * Common initialisation method.
      */
-    private void initView() {
+    private void initView(Context context) {
+        mContext = context;
+
         View.inflate(getContext(), R.layout.active_widget_banner, this);
         mWidgetTypeTextView = (TextView) findViewById(R.id.widget_type_text_view);
 
@@ -114,7 +118,7 @@ public class ActiveWidgetBanner extends RelativeLayout {
             public void onClick(View v) {
                 if (null != mUpdateListener) {
                     try {
-                        mUpdateListener.onCloseWidgetClick(mActiveWidget);
+                        mUpdateListener.onCloseWidgetClick(mActiveWidgets.get(0));
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## initView() : onCloseWidgetClick failed " + e.getMessage());
                     }
@@ -127,7 +131,7 @@ public class ActiveWidgetBanner extends RelativeLayout {
             public void onClick(View v) {
                 if (null != mUpdateListener) {
                     try {
-                        mUpdateListener.onClick(mActiveWidget);
+                        mUpdateListener.onClick(mActiveWidgets);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## initView() : onClick failed " + e.getMessage());
                     }
@@ -160,28 +164,31 @@ public class ActiveWidgetBanner extends RelativeLayout {
     public void refresh() {
         if ((null != mRoom) && (null != mSession)) {
             List<Widget> activeWidgets = WidgetsManager.getSharedInstance().getActiveWebviewWidgets(mSession, mRoom);
-            Widget widget = activeWidgets.isEmpty() ? null : activeWidgets.get(0);
+            Widget firstWidget = null;
 
-            if (mActiveWidget != widget) {
-                mActiveWidget = widget;
+            if ((activeWidgets.size() != mActiveWidgets.size()) || !mActiveWidgets.containsAll(activeWidgets)) {
+                mActiveWidgets = activeWidgets;
 
-                if (null != mActiveWidget) {
-                    mWidgetTypeTextView.setText(mActiveWidget.getHumanName());
+                if (1 == mActiveWidgets.size()) {
+                    firstWidget = mActiveWidgets.get(0);
+                    mWidgetTypeTextView.setText(firstWidget.getHumanName());
+                } else if (mActiveWidgets.size() > 1) {
+                    mWidgetTypeTextView.setText(mContext.getString(R.string.active_widgets, mActiveWidgets.size()));
                 }
 
                 if (null != mUpdateListener) {
                     try {
-                        mUpdateListener.onActiveWidgetUpdate();
+                        mUpdateListener.onActiveWidgetsListUpdate();
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## refresh() : onActiveWidgetUpdate failed " + e.getMessage());
                     }
                 }
             }
 
-            setVisibility((null != mActiveWidget) ? View.VISIBLE : View.GONE);
+            setVisibility((mActiveWidgets.size() > 0) ? View.VISIBLE : View.GONE);
 
             // show the close widget button if the user is allowed to do it
-            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom))) ? View.VISIBLE : View.GONE);
+            mCloseWidgetIcon.setVisibility(((null != firstWidget) && (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom))) ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -201,9 +208,9 @@ public class ActiveWidgetBanner extends RelativeLayout {
     }
 
     /**
-     * @return the current active widget
+     * @return the active widgets
      */
-    public Widget getActiveWidget() {
-        return mActiveWidget;
+    public List<Widget> getActiveWidgets() {
+        return mActiveWidgets;
     }
 }
