@@ -1207,33 +1207,24 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
     }
 
-
-    private final HashMap<String, Object> mBingRulesByEventId = new HashMap<>();
+    private final HashMap<String, Boolean> mHighlightStatusByEventId = new HashMap<>();
 
     @Override
     public boolean shouldHighlightEvent(Event event) {
-        String eventId = event.eventId;
-
-        // cache the dedicated rule because it is slow to find them out
-        Object ruleAsVoid = mBingRulesByEventId.get(eventId);
-
-        if (null != ruleAsVoid) {
-            if (ruleAsVoid instanceof BingRule) {
-                return ((BingRule) ruleAsVoid).shouldHighlight();
-            }
+        // sanity check
+        if ((null == event) || (null == event.eventId)) {
             return false;
         }
 
-        boolean res = false;
+        String eventId = event.eventId;
+        Boolean status = mHighlightStatusByEventId.get(eventId);
 
-        BingRule rule = mSession.getDataHandler().getBingRulesManager().fulfilledHighlightBingRule(event);
-
-        if (null != rule) {
-            res = rule.shouldHighlight();
-            mBingRulesByEventId.put(eventId, rule);
-        } else {
-            mBingRulesByEventId.put(eventId, eventId);
+        if (null != status) {
+            return status;
         }
+
+        boolean res = (null != mSession.getDataHandler().getBingRulesManager().fulfilledHighlightBingRule(event));
+        mHighlightStatusByEventId.put(eventId, res);
 
         return res;
     }
