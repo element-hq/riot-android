@@ -187,5 +187,6 @@
         <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
         <item name="avatar_mask">@drawable/avatar_mask_black</item>
         <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_black</item>
+        <item name="markdown_block_background_color">#FF4D4D4D</item>
     </style>
 </resources>
