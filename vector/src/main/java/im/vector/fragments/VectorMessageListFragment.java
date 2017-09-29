@@ -1226,7 +1226,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         boolean res = false;
 
-        BingRule rule = mSession.getDataHandler().getBingRulesManager().fulfilledBingRule(event);
+        BingRule rule = mSession.getDataHandler().getBingRulesManager().fulfilledHighlightBingRule(event);
 
         if (null != rule) {
             res = rule.shouldHighlight();

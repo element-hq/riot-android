@@ -65,7 +65,6 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.EventDisplay;
-import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
@@ -155,9 +154,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     // To keep track of events and avoid duplicates. For instance, we add a message event
     // when the current user sends one but it will also come down the event stream
     private final HashMap<String, MessageRow> mEventRowMap = new HashMap<>();
-
-    // avoid searching bing rule at each refresh
-    private HashMap<String, Integer> mTextColorByEventId = new HashMap<>();
 
     private final HashMap<String, Integer> mEventType = new HashMap<>();
 
@@ -771,9 +767,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Notify the fragment that some bing rules could have been updated.
      */
     public void onBingRulesUpdate() {
-        synchronized (this) {
-            mTextColorByEventId = new HashMap<>();
-        }
         this.notifyDataSetChanged();
     }
 
@@ -1140,9 +1133,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 return convertView;
             }
 
-            if ((null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event)) {
-                body.setSpan(new ForegroundColorSpan(mHighlightMessageTextColor), 0, body.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
 
             highlightPattern(bodyTextView, body, TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null, mPattern);
 
@@ -1155,25 +1145,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 textColor = mNotSentMessageTextColor;
             } else {
-                textColor = mDefaultMessageTextColor;
-
-                // sanity check
-                if (null != event.eventId) {
-                    synchronized (this) {
-                        if (!mTextColorByEventId.containsKey(event.eventId)) {
-                            BingRule rule = mSession.getDataHandler().getBingRulesManager().fulfilledBingRule(event);
-
-                            if ((null != rule) && rule.isEnabled && rule.shouldHighlight()) {
-                                textColor = mHighlightMessageTextColor;
-                            } else {
-                                textColor = mDefaultMessageTextColor;
-                            }
-
-                            mTextColorByEventId.put(event.eventId, textColor);
-                        } else {
-                            textColor = mTextColorByEventId.get(event.eventId);
-                        }
-                    }
+                if ((null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event)) {
+                    textColor = mHighlightMessageTextColor;
+                } else {
+                    textColor = mDefaultMessageTextColor;
                 }
             }
 
