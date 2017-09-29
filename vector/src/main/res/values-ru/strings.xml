@@ -52,8 +52,8 @@
     <string name="action_voice_call">Голосовой вызов</string>
     <string name="action_video_call">Видео вызов</string>
     <string name="action_global_search">Глобальный поиск</string>
-    <string name="action_mark_all_as_read">Отметить всё как прочитанное</string>
-    <string name="action_historical">Исторический</string>
+    <string name="action_mark_all_as_read">Пометить всё как прочитанное</string>
+    <string name="action_historical">История</string>
     <string name="action_quick_reply">Быстрый ответ</string>
     <string name="action_open">Открыть</string>
     <string name="action_close">Закрыть</string>
@@ -102,7 +102,7 @@
     
     <string name="send_bug_report_include_logs">Отправить журналы</string>
     <string name="send_bug_report_include_crash_logs">Отправить журналы ошибок</string>
-    <string name="send_bug_report_include_screenshot">Send screenshot</string>
+    <string name="send_bug_report_include_screenshot">Отправить скриншот</string>
     <string name="send_bug_report">Отчёт об ошибке</string>
     <string name="send_bug_report_description">Пожалуйста опишите ошибку. Что вы делали? Что вы ожидали получить? Что произошло?</string>
     <string name="send_bug_report_placeholder">Опишите проблему здесь</string>
@@ -111,7 +111,7 @@
     <string name="send_bug_report_sent">Отчёт об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчёта об ошибке (%s)</string>
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
-    <string name="send_bug_report_app_crashed">Программа при последнем пользовании закрылась с ошибкой. Хотели бы вы отправить отчёт о ошибке?</string>
+    <string name="send_bug_report_app_crashed">В прошлый раз программа завершилась с ошибкой. Хотели бы вы отправить отчёт об ошибке?</string>
     
     <string name="send_files_in">Предать в</string>
     <string name="read_receipt">Прочитан</string>
@@ -132,7 +132,7 @@
     <string name="start_video_call">Начать видеовызов</string>
 
     <string name="option_send_files">Отправка файлов</string>
-    <string name="option_take_photo_video">Снять фото или видео</string>
+    <string name="option_take_photo_video">Камера</string>
 
     <!-- Authentication -->
     <string name="auth_login">Вход</string>
@@ -145,10 +145,12 @@
     <string name="auth_password_placeholder">Пароль</string>
     <string name="auth_new_password_placeholder">Новый пароль</string>
     <string name="auth_user_name_placeholder">Логин</string>
-    <string name="auth_add_email_message">"Добавьте email к вашему аккаунту, чтобы другие пользователи могли найти вас и стал возможено восстановление пароля."</string>
+    <string name="auth_add_email_message">Добавьте email к вашему аккаунту, чтобы другие пользователи могли найти вас, а также, чтобы иметь возможность сбросить пароль.</string>
     <string name="auth_add_phone_message">"Добавьте телефон к вашему аккаунту, чтобы другие пользователи могли найти вас."</string>
     <string name="auth_add_email_phone_message">"Добавьте email и/или телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.\n\nEmail также позволит вам при необходимости восстановить пароль."</string>
-    <string name="auth_add_email_and_phone_message">"Добавьте email или телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.\n\nEmail также позволит вам при необходимости восстановить пароль."</string>
+    <string name="auth_add_email_and_phone_message">Добавьте email и телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.
+
+Email также позволит вам при необходимости восстановить пароль.</string>
     <string name="auth_email_placeholder">Email адрес</string>
     <string name="auth_opt_email_placeholder">Email адрес (дополнительный)</string>
     <string name="auth_phone_number_placeholder">Телефонный номер</string>
@@ -237,7 +239,7 @@
 
     <!-- call string -->
     <string name="call_connected">Вызов соеденен</string>
-    <string name="call_connecting">Соединение устанавливается…</string>
+    <string name="call_connecting">Устанавливается соединение…</string>
     <string name="call_ended">Вызов закончен</string>
     <string name="call_ring">Звонок…</string>
     <string name="incoming_call">Входящий вызов</string>
@@ -690,7 +692,7 @@
     <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных устройств</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Никогда не посылать зашифрованные сообщения для непроверенных устройств с этого устройства</string>
     
-    <string name="encryption_information_not_verified">Не проверено</string>
+    <string name="encryption_information_not_verified">НЕ проверено</string>
     <string name="encryption_information_verified">Проверено</string>
     <string name="encryption_information_blocked">В чёрном списке</string>
     
