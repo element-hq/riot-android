@@ -52,7 +52,7 @@
     <string name="action_voice_call">Голосовой вызов</string>
     <string name="action_video_call">Видео вызов</string>
     <string name="action_global_search">Глобальный поиск</string>
-    <string name="action_mark_all_as_read">Пометить всё как прочитанное</string>
+    <string name="action_mark_all_as_read">Пометить все как прочитанное</string>
     <string name="action_historical">История</string>
     <string name="action_quick_reply">Быстрый ответ</string>
     <string name="action_open">Открыть</string>
@@ -111,7 +111,7 @@
     <string name="send_bug_report_sent">Отчёт об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчёта об ошибке (%s)</string>
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
-    <string name="send_bug_report_app_crashed">В прошлый раз программа завершилась с ошибкой. Хотели бы вы отправить отчёт об ошибке?</string>
+    <string name="send_bug_report_app_crashed">В прошлый раз приложение некорректно завершило работу. Хотите отправить отчет о сбое?</string>
     
     <string name="send_files_in">Предать в</string>
     <string name="read_receipt">Прочитан</string>
