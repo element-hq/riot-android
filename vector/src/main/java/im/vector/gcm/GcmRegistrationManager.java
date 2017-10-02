@@ -139,7 +139,8 @@ public final class GcmRegistrationManager {
      */
     public GcmRegistrationManager(final Context appContext) {
         mContext = appContext.getApplicationContext();
-        mBasePusherDeviceName = mContext.getString(R.string.login_mobile_device);
+        // TODO customise it ?
+        mBasePusherDeviceName = Build.MODEL.trim();
 
         try {
             PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
