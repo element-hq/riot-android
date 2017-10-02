@@ -83,8 +83,7 @@
                             android:id="@+id/message_adapter_e2e_icon"
                             android:layout_width="14dp"
                             android:layout_height="14dp"
-                            android:src="@drawable/e2e_verified"
-                            android:tint="?attr/default_icon_tint_color" />
+                            android:src="@drawable/e2e_verified" />
 
                         <TextView
                             android:id="@+id/messagesAdapter_body"

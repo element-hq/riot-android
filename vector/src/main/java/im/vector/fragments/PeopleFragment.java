@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -81,10 +82,10 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     private PeopleAdapter mAdapter;
 
-    private List<Room> mDirectChats = new ArrayList<>();
-    private List<ParticipantAdapterItem> mLocalContacts = new ArrayList<>();
+    private final List<Room> mDirectChats = new ArrayList<>();
+    private final List<ParticipantAdapterItem> mLocalContacts = new ArrayList<>();
     // the known contacts are not sorted
-    private List<ParticipantAdapterItem> mKnownContacts = new ArrayList<>();
+    private final List<ParticipantAdapterItem> mKnownContacts = new ArrayList<>();
 
     // way to detect that the contacts list has been updated
     private int mContactsSnapshotSession = -1;
@@ -280,10 +281,13 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * Fill the direct chats adapter with data
      */
     private void initDirectChatsData() {
+        if ((null == mSession) || (null == mSession.getDataHandler())) {
+            Log.e(LOG_TAG, "## initDirectChatsData() : null session");
+        }
+
         final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
         final MXDataHandler dataHandler = mSession.getDataHandler();
         final IMXStore store = dataHandler.getStore();
-
 
         mDirectChats.clear();
         if (directChatIds != null && !directChatIds.isEmpty()) {
@@ -291,9 +295,14 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                 Room room = store.getRoom(roomId);
 
                 if ((null != room) && !room.isConferenceUserRoom()) {
-                    final Set<String> tags = room.getAccountData().getKeys();
-                    if ((null == tags) || !tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
-                        mDirectChats.add(dataHandler.getRoom(roomId));
+                    // it seems that the server syncs some left rooms
+                    if (null == room.getMember(mSession.getMyUserId())) {
+                        Log.e(LOG_TAG, "## initDirectChatsData(): invalid room " + room.getRoomId() + ", the user is not anymore member of it");
+                    } else {
+                        final Set<String> tags = room.getAccountData().getKeys();
+                        if ((null == tags) || !tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
+                            mDirectChats.add(dataHandler.getRoom(roomId));
+                        }
                     }
                 }
             }
@@ -325,8 +334,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * Get the known contacts list, sort it by presence and give it to adapter
      */
     private void initKnownContacts() {
-        new AsyncTask<Void, Void, Void>() {
-
+        final AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 // do not sort anymore the full known participants list
@@ -344,7 +352,21 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             protected void onPostExecute(Void args) {
                 mAdapter.setKnownContacts(mKnownContacts);
             }
-        }.execute();
+        };
+
+        try {
+            asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (final Exception e) {
+            Log.e(LOG_TAG, "## initKnownContacts() failed " + e.getMessage());
+            asyncTask.cancel(true);
+
+            (new android.os.Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    initKnownContacts();
+                }
+            }, 1000);
+        }
     }
 
     /**

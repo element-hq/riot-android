@@ -257,6 +257,10 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      * Init the rooms data
      */
     private void initData() {
+        if ((null == mSession) || (null == mSession.getDataHandler())) {
+            Log.e(LOG_TAG, "## initData() : null session");
+        }
+
         final List<Room> favourites = new ArrayList<>();
         final List<Room> directChats = new ArrayList<>();
         final List<Room> lowPriorities = new ArrayList<>();
@@ -271,21 +275,26 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
         for (Room room : roomCollection) {
             if (!room.isConferenceUserRoom() && !room.isInvited() &&!room.isDirectChatInvitation()) {
-                final RoomAccountData accountData = room.getAccountData();
-                final Set<String> tags = new HashSet<>();
-
-                if (accountData != null && accountData.hasTags()) {
-                    tags.addAll(accountData.getKeys());
-                }
-
-                if (tags.contains(RoomTag.ROOM_TAG_FAVOURITE)) {
-                    favourites.add(room);
-                } else if (tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
-                    lowPriorities.add(room);
-                } else if (directChatIds.contains(room.getRoomId())) {
-                    directChats.add(room);
+                // it seems that the server syncs some left rooms
+                if (null == room.getMember(mSession.getMyUserId())) {
+                    Log.e(LOG_TAG, "## initData(): invalid room " + room.getRoomId() + ", the user is not anymore member of it");
                 } else {
-                    otherRooms.add(room);
+                    final RoomAccountData accountData = room.getAccountData();
+                    final Set<String> tags = new HashSet<>();
+
+                    if (accountData != null && accountData.hasTags()) {
+                        tags.addAll(accountData.getKeys());
+                    }
+
+                    if (tags.contains(RoomTag.ROOM_TAG_FAVOURITE)) {
+                        favourites.add(room);
+                    } else if (tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
+                        lowPriorities.add(room);
+                    } else if (directChatIds.contains(room.getRoomId())) {
+                        directChats.add(room);
+                    } else {
+                        otherRooms.add(room);
+                    }
                 }
             }
         }

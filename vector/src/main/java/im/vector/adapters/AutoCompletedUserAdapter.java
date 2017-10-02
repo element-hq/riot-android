@@ -44,16 +44,16 @@ import java.util.List;
  */
 public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
     // the context
-    protected Context mContext;
+    protected final Context mContext;
 
     // the layout inflater
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
     // the layout to draw items
-    private int mLayoutResourceId;
+    private final int mLayoutResourceId;
 
     // the session
-    private MXSession mSession;
+    private final MXSession mSession;
 
     // the filter
     private android.widget.Filter mFilter;

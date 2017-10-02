@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -44,7 +43,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.ThemeUtils;
 
-public class PhoneNumberVerificationActivity extends AppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
+public class PhoneNumberVerificationActivity extends RiotAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
 
     private static final String LOG_TAG = PhoneNumberVerificationActivity.class.getSimpleName();
 

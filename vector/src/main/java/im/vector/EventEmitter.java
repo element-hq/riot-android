@@ -11,9 +11,8 @@ import java.util.Set;
 public class EventEmitter<T> {
     private static final String LOG_TAG = "EventEmitter";
 
-    private Set<Listener<T>> mCallbacks;
-
-    Handler mUiHandler;
+    private final  Set<Listener<T>> mCallbacks;
+    private final  Handler mUiHandler;
 
     public EventEmitter() {
         mCallbacks = new HashSet<>();

@@ -35,8 +35,11 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
@@ -48,6 +51,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -202,9 +206,13 @@ public class CommonActivityUtils {
         if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
-            ArrayList<String> matrixIds = new ArrayList<>();
-            matrixIds.add(session.getMyUserId());
-            eventStreamService.stopAccounts(matrixIds);
+
+            // reported by a rageshake
+            if (null != eventStreamService) {
+                ArrayList<String> matrixIds = new ArrayList<>();
+                matrixIds.add(session.getMyUserId());
+                eventStreamService.stopAccounts(matrixIds);
+            }
 
             // Publish to the server that we're now offline
             MyPresenceManager.getInstance(context, session).advertiseOffline();
@@ -376,24 +384,7 @@ public class CommonActivityUtils {
         }
 
         // clear the preferences
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        String theme = ThemeUtils.getApplicationTheme(context);
-        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, context.getResources().getString(R.string.default_hs_server_url));
-        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, context.getResources().getString(R.string.default_identity_server_url));
-        Boolean useGa = PreferencesManager.useGA(context);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.clear();
-        editor.putString(LoginActivity.HOME_SERVER_URL_PREF, homeServer);
-        editor.putString(LoginActivity.IDENTITY_SERVER_URL_PREF, identityServer);
-        editor.commit();
-
-        if (null != useGa) {
-            PreferencesManager.setUseGA(context, useGa);
-        }
-
-        ThemeUtils.setApplicationTheme(context, theme);
+        PreferencesManager.clearPreferences(context);
 
         // reset the GCM
         Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
@@ -568,6 +559,7 @@ public class CommonActivityUtils {
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             if ((null != sessions) && (sessions.size() > 0)) {
+                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(context).getSharedGCMRegistrationManager();
                 Log.e(LOG_TAG, "## startEventStreamService() : restart EventStreamService");
 
                 for (MXSession session : sessions) {
@@ -583,6 +575,9 @@ public class CommonActivityUtils {
                             Log.e(LOG_TAG, "## startEventStreamService() : check if the crypto of the session " + session.getMyUserId());
                             session.checkCrypto();
                         }
+
+                        session.setSyncDelay(gcmRegistrationManager.isBackgroundSyncAllowed() ? gcmRegistrationManager.getBackgroundSyncDelay() : 0);
+                        session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
 
                         // session to activate
                         matrixIds.add(session.getCredentials().userId);
@@ -1508,89 +1503,131 @@ public class CommonActivityUtils {
      * @param sourceFile     the file source path
      * @param dstDirPath     the dst path
      * @param outputFilename optional the output filename
-     * @return the downloads file path if the file exists or has been properly saved
+     * @param callback the asynchronous callback
      */
-    private static String saveFileInto(File sourceFile, String dstDirPath, String outputFilename) {
+    private static void saveFileInto(final File sourceFile, final String dstDirPath, final String outputFilename, final ApiCallback<String> callback) {
         // sanity check
         if ((null == sourceFile) || (null == dstDirPath)) {
-            return null;
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                   if (null != callback) {
+                       callback.onNetworkError(new Exception("Null parameters"));
+                   }
+                }
+            });
+            return;
         }
 
-        // defines another name for the external media
-        String dstFileName;
+        AsyncTask<Void, Void, Pair<String, Exception>> task = new AsyncTask<Void, Void, Pair<String, Exception>>() {
+            @Override
+            protected Pair<String, Exception> doInBackground(Void... params) {
+                Pair<String, Exception> result;
 
-        // build a filename is not provided
-        if (null == outputFilename) {
-            // extract the file extension from the uri
-            int dotPos = sourceFile.getName().lastIndexOf(".");
+                // defines another name for the external media
+                String dstFileName;
 
-            String fileExt = "";
-            if (dotPos > 0) {
-                fileExt = sourceFile.getName().substring(dotPos);
+                // build a filename is not provided
+                if (null == outputFilename) {
+                    // extract the file extension from the uri
+                    int dotPos = sourceFile.getName().lastIndexOf(".");
+
+                    String fileExt = "";
+                    if (dotPos > 0) {
+                        fileExt = sourceFile.getName().substring(dotPos);
+                    }
+
+                    dstFileName = "vector_" + System.currentTimeMillis() + fileExt;
+                } else {
+                    dstFileName = outputFilename;
+                }
+
+                File dstDir = Environment.getExternalStoragePublicDirectory(dstDirPath);
+                if (dstDir != null) {
+                    dstDir.mkdirs();
+                }
+
+                File dstFile = new File(dstDir, dstFileName);
+
+                // if the file already exists, append a marker
+                if (dstFile.exists()) {
+                    String baseFileName = dstFileName;
+                    String fileExt = "";
+
+                    int lastDotPos = dstFileName.lastIndexOf(".");
+
+                    if (lastDotPos > 0) {
+                        baseFileName = dstFileName.substring(0, lastDotPos);
+                        fileExt = dstFileName.substring(lastDotPos);
+                    }
+
+                    int counter = 1;
+
+                    while (dstFile.exists()) {
+                        dstFile = new File(dstDir, baseFileName + "(" + counter + ")" + fileExt);
+                        counter++;
+                    }
+                }
+
+                // Copy source file to destination
+                FileInputStream inputStream = null;
+                FileOutputStream outputStream = null;
+                try {
+                    dstFile.createNewFile();
+
+                    inputStream = new FileInputStream(sourceFile);
+                    outputStream = new FileOutputStream(dstFile);
+
+                    byte[] buffer = new byte[1024 * 10];
+                    int len;
+                    while ((len = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, len);
+                    }
+                    result = new Pair<>(dstFile.getAbsolutePath(), null);
+                } catch (Exception e) {
+                    result = new Pair<>(null, e);
+                } finally {
+                    // Close resources
+                    try {
+                        if (inputStream != null) inputStream.close();
+                        if (outputStream != null) outputStream.close();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## saveFileInto(): Exception Msg=" + e.getMessage());
+                        result = new Pair<>(null, e);
+                    }
+                }
+
+                return result;
             }
 
-            dstFileName = "vector_" + System.currentTimeMillis() + fileExt;
-        } else {
-            dstFileName = outputFilename;
-        }
-
-        File dstDir = Environment.getExternalStoragePublicDirectory(dstDirPath);
-        if (dstDir != null) {
-            dstDir.mkdirs();
-        }
-
-        File dstFile = new File(dstDir, dstFileName);
-
-        // if the file already exists, append a marker
-        if (dstFile.exists()) {
-            String baseFileName = dstFileName;
-            String fileExt = "";
-
-            int lastDotPos = dstFileName.lastIndexOf(".");
-
-            if (lastDotPos > 0) {
-                baseFileName = dstFileName.substring(0, lastDotPos);
-                fileExt = dstFileName.substring(lastDotPos);
+            @Override
+            protected void onPostExecute(Pair<String, Exception> result) {
+                if (null != callback) {
+                    if (null == result) {
+                        callback.onNetworkError(new Exception("Null parameters"));
+                    } else if (null != result.first) {
+                        callback.onSuccess(result.first);
+                    } else {
+                        callback.onNetworkError(result.second);
+                    }
+                }
             }
+        };
 
-            int counter = 1;
-
-            while (dstFile.exists()) {
-                dstFile = new File(dstDir, baseFileName + "(" + counter + ")" + fileExt);
-                counter++;
-            }
-        }
-
-        // Copy source file to destination
-        FileInputStream inputStream = null;
-        FileOutputStream outputStream = null;
         try {
-            dstFile.createNewFile();
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (final Exception e) {
+            Log.e(LOG_TAG, "## saveFileInto() failed " + e.getMessage());
+            task.cancel(true);
 
-            inputStream = new FileInputStream(sourceFile);
-            outputStream = new FileOutputStream(dstFile);
-
-            byte[] buffer = new byte[1024 * 10];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, len);
-            }
-        } catch (Exception e) {
-            dstFile = null;
-        } finally {
-            // Close resources
-            try {
-                if (inputStream != null) inputStream.close();
-                if (outputStream != null) outputStream.close();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## saveFileInto(): Exception Msg=" + e.getMessage());
-            }
-        }
-
-        if (null != dstFile) {
-            return dstFile.getAbsolutePath();
-        } else {
-            return null;
+            (new android.os.Handler(Looper.getMainLooper())).post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != callback) {
+                        callback.onUnexpectedError(e);
+                    }
+                }
+            });
         }
     }
 
@@ -1600,26 +1637,55 @@ public class CommonActivityUtils {
      * @param context  the context
      * @param srcFile  the source file.
      * @param filename the filename (optional)
-     * @return the downloads file path
+     * @param callback the asynchronous callback
      */
     @SuppressLint("NewApi")
-    public static String saveMediaIntoDownloads(Context context, File srcFile, String filename, String mimeType) {
-        String fullFilePath = saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename);
+    public static void saveMediaIntoDownloads(final Context context, final File srcFile, final String filename, final String mimeType, final SimpleApiCallback<String> callback) {
+        saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename, new ApiCallback<String>() {
+            @Override
+            public void onSuccess(String fullFilePath) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    if (null != fullFilePath) {
+                        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            if (null != fullFilePath) {
-                DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                        try {
+                            File file = new File(fullFilePath);
+                            downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage());
+                        }
+                    }
+                }
 
-                try {
-                    File file = new File(fullFilePath);
-                    downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage());
+                if (null != callback) {
+                    callback.onSuccess(fullFilePath);
                 }
             }
-        }
 
-        return fullFilePath;
+            @Override
+            public void onNetworkError(Exception e) {
+                Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                if (null != callback) {
+                    callback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                if (null != callback) {
+                    callback.onMatrixError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                if (null != callback) {
+                    callback.onUnexpectedError(e);
+                }
+            }
+        });
     }
 
     //==============================================================================================================
@@ -1982,11 +2048,35 @@ public class CommonActivityUtils {
                     String url = session.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
                     stream.close();
 
-                    String path = CommonActivityUtils.saveMediaIntoDownloads(appContext, new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain");
+                    CommonActivityUtils.saveMediaIntoDownloads(appContext, new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain", new SimpleApiCallback<String>() {
+                        @Override
+                        public void onSuccess(String path) {
+                            if (null != callback) {
+                                callback.onSuccess(path);
+                            }
+                        }
 
-                    if (null != callback) {
-                        callback.onSuccess(path);
-                    }
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            if (null != callback) {
+                                callback.onNetworkError(e);
+                            }
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            if (null != callback) {
+                                callback.onMatrixError(e);
+                            }
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            if (null != callback) {
+                                callback.onUnexpectedError(e);
+                            }
+                        }
+                    });
                 } catch (Exception e) {
                     if (null != callback) {
                         callback.onMatrixError(new MatrixError(null, e.getLocalizedMessage()));

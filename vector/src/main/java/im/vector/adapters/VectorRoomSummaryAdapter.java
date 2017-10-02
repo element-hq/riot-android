@@ -50,6 +50,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
+import im.vector.util.RiotEventDisplay;
 import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -912,7 +913,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         if (null != aChildRoomSummary) {
             if (aChildRoomSummary.getLatestReceivedEvent() != null) {
-                eventDisplay = new EventDisplay(mContext, aChildRoomSummary.getLatestReceivedEvent(), aChildRoomSummary.getLatestRoomState());
+                eventDisplay = new RiotEventDisplay(mContext, aChildRoomSummary.getLatestReceivedEvent(), aChildRoomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
                 messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color));
             }

@@ -50,8 +50,8 @@ public class RoomAdapter extends AbsAdapter {
 
     private static final int TYPE_PUBLIC_ROOM = 1;
 
-    private AdapterSection<Room> mRoomsSection;
-    private PublicRoomsAdapterSection mPublicRoomsSection;
+    private final AdapterSection<Room> mRoomsSection;
+    private final PublicRoomsAdapterSection mPublicRoomsSection;
 
     private final OnSelectItemListener mListener;
 

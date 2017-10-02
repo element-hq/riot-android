@@ -31,7 +31,7 @@ import im.vector.R;
  */
 public class VectorDividerCategory extends PreferenceCategory {
 
-    private Context mContext;
+    private final Context mContext;
 
     public VectorDividerCategory(Context context) {
         super(context);

@@ -20,7 +20,7 @@ import android.content.Context;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -55,10 +55,10 @@ public class RegistrationManager {
 
     private static volatile RegistrationManager sInstance;
 
-    private static String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
-    private static String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
+    private static final String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
+    private static final String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
 
-    private static String NEXTLINK_BASE_URL = "https://riot.im/app";
+    private static final String NEXTLINK_BASE_URL = "https://riot.im/app";
 
     // JSON keys used for registration request
     private static final String JSON_KEY_CLIENT_SECRET = "client_secret";
@@ -71,7 +71,7 @@ public class RegistrationManager {
     private static final String JSON_KEY_PUBLIC_KEY = "public_key";
 
     // List of stages supported by the app
-    private static List<String> VECTOR_SUPPORTED_STAGES = Arrays.asList(
+    private static final List<String> VECTOR_SUPPORTED_STAGES = Arrays.asList(
             LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD,
             LoginRestClient.LOGIN_FLOW_TYPE_DUMMY,
             LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY,
@@ -79,7 +79,7 @@ public class RegistrationManager {
             LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
 
     // Config
-    private HomeserverConnectionConfig mHsConfig;
+    private HomeServerConnectionConfig mHsConfig;
     private LoginRestClient mLoginRestClient;
     private ThirdPidRestClient mThirdPidRestClient;
     private ProfileRestClient mProfileRestClient;
@@ -152,7 +152,7 @@ public class RegistrationManager {
      *
      * @param hsConfig
      */
-    public void setHsConfig(final HomeserverConnectionConfig hsConfig) {
+    public void setHsConfig(final HomeServerConnectionConfig hsConfig) {
         mHsConfig = hsConfig;
         mLoginRestClient = null;
         mThirdPidRestClient = null;
@@ -887,12 +887,17 @@ public class RegistrationManager {
                             isDuplicated |= TextUtils.equals(credentials.userId, cred.userId) && TextUtils.equals(credentials.homeServer, cred.homeServer);
                         }
 
-                        if (!isDuplicated) {
-                            mHsConfig.setCredentials(credentials);
-                            MXSession session = Matrix.getInstance(context).createSession(mHsConfig);
-                            Matrix.getInstance(context).addSession(session);
+                        if (null == mHsConfig) {
+                            listener.onRegistrationFailed("null mHsConfig");
+                        } else {
+                            if (!isDuplicated) {
+                                mHsConfig.setCredentials(credentials);
+                                MXSession session = Matrix.getInstance(context).createSession(mHsConfig);
+                                Matrix.getInstance(context).addSession(session);
+                            }
+
+                            listener.onRegistrationSuccess();
                         }
-                        listener.onRegistrationSuccess();
                     }
                 }
 

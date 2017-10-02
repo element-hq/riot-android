@@ -552,7 +552,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                 mCamera.startPreview();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onSwitchCamera(): cannot init the other camera");
+                Log.e(LOG_TAG, "## onSwitchCamera(): cannot init the other camera " + e.getMessage());
                 // assume that only one camera can be used.
                 mSwitchCameraImageView.setVisibility(View.GONE);
                 onSwitchCamera();
@@ -895,7 +895,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         resource.mContentStream.close();
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "fails to retrieve the bitmap from uri");
+                    Log.e(LOG_TAG, "fails to retrieve the bitmap from uri " + e.getMessage());
                 }
             }
 
@@ -1298,12 +1298,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     outStream.flush();
                     outStream.close();
 
-
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "attachImageFromCamera fails to create thumbnail file");
+                    Log.e(LOG_TAG, "attachImageFromCamera fails to create thumbnail file " + e.getMessage());
                 }
-
-
 
                 // provide the Uri
                 Bundle conData = new Bundle();
@@ -1367,7 +1364,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             mCamera = Camera.open(mCameraId);
         } catch (Exception e) {
-            Log.e(LOG_TAG,"Cannot open the camera " + mCameraId);
+            Log.e(LOG_TAG,"Cannot open the camera " + mCameraId + " "  + e.getMessage());
         }
 
         // fall back: the camera initialisation failed
@@ -1377,7 +1374,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             try {
                 mCamera = Camera.open((Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
             }  catch (Exception e) {
-                Log.e(LOG_TAG,"Cannot open the camera " + mCameraId);
+                Log.e(LOG_TAG,"Cannot open the camera " + mCameraId + " "  + e.getMessage());
             }
         }
 
@@ -1416,44 +1413,48 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         Log.d(LOG_TAG, "## onSurfaceTextureSizeChanged(): width="+width+" height="+height);
 
         if (null != surface) {
-            // clear the texture to avoid staled area
-            // when switching the camera, some texture areas are not refreshed/cleared
-            // so, paint it in black
-            EGL10 egl = (EGL10) EGLContext.getEGL();
-            EGLDisplay display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-            egl.eglInitialize(display, null);
+            try {
+                // clear the texture to avoid staled area
+                // when switching the camera, some texture areas are not refreshed/cleared
+                // so, paint it in black
+                EGL10 egl = (EGL10) EGLContext.getEGL();
+                EGLDisplay display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+                egl.eglInitialize(display, null);
 
-            int[] attribList = {
-                    EGL10.EGL_RED_SIZE, 8,
-                    EGL10.EGL_GREEN_SIZE, 8,
-                    EGL10.EGL_BLUE_SIZE, 8,
-                    EGL10.EGL_ALPHA_SIZE, 8,
-                    EGL10.EGL_RENDERABLE_TYPE, EGL10.EGL_WINDOW_BIT,
-                    EGL10.EGL_NONE, 0,
-                    EGL10.EGL_NONE
-            };
-            EGLConfig[] configs = new EGLConfig[1];
-            int[] numConfigs = new int[1];
-            egl.eglChooseConfig(display, attribList, configs, configs.length, numConfigs);
-            EGLConfig config = configs[0];
-            EGLContext context = egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, new int[]{
-                    12440, 2,
-                    EGL10.EGL_NONE
-            });
-            EGLSurface eglSurface = egl.eglCreateWindowSurface(display, config, surface,
-                    new int[]{
-                            EGL10.EGL_NONE
-                    });
+                int[] attribList = {
+                        EGL10.EGL_RED_SIZE, 8,
+                        EGL10.EGL_GREEN_SIZE, 8,
+                        EGL10.EGL_BLUE_SIZE, 8,
+                        EGL10.EGL_ALPHA_SIZE, 8,
+                        EGL10.EGL_RENDERABLE_TYPE, EGL10.EGL_WINDOW_BIT,
+                        EGL10.EGL_NONE, 0,
+                        EGL10.EGL_NONE
+                };
+                EGLConfig[] configs = new EGLConfig[1];
+                int[] numConfigs = new int[1];
+                egl.eglChooseConfig(display, attribList, configs, configs.length, numConfigs);
+                EGLConfig config = configs[0];
+                EGLContext context = egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, new int[]{
+                        12440, 2,
+                        EGL10.EGL_NONE
+                });
+                EGLSurface eglSurface = egl.eglCreateWindowSurface(display, config, surface,
+                        new int[]{
+                                EGL10.EGL_NONE
+                        });
 
-            egl.eglMakeCurrent(display, eglSurface, eglSurface, context);
-            GLES20.glClearColor(0, 0, 0, 1);
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-            egl.eglSwapBuffers(display, eglSurface);
-            egl.eglDestroySurface(display, eglSurface);
-            egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE,
-                    EGL10.EGL_NO_CONTEXT);
-            egl.eglDestroyContext(display, context);
-            egl.eglTerminate(display);
+                egl.eglMakeCurrent(display, eglSurface, eglSurface, context);
+                GLES20.glClearColor(0, 0, 0, 1);
+                GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+                egl.eglSwapBuffers(display, eglSurface);
+                egl.eglDestroySurface(display, eglSurface);
+                egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE,
+                        EGL10.EGL_NO_CONTEXT);
+                egl.eglDestroyContext(display, context);
+                egl.eglTerminate(display);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onSurfaceTextureSizeChanged() failed " + e.getMessage());
+            }
         }
     }
 
@@ -1855,7 +1856,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         null,
                         MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC LIMIT " + GALLERY_TABLE_ITEM_SIZE);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## listLatestMedias(): " + e.getLocalizedMessage());
+                Log.e(LOG_TAG, "## listLatestMedias(): " + e.getMessage());
             }
 
             if (null != videoThumbnailsCursor) {

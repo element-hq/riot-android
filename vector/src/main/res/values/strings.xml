@@ -7,10 +7,9 @@
     <string name="resouces_country">UK</string>
 
     <!-- theme -->
-    <string-array name="theme_readables">
-        <item>Light Theme</item>
-        <item>Dark Theme</item>
-    </string-array>
+    <string name="light_theme">Light Theme</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="black_them">Black Theme</string>
 
     <!-- titles -->
     <string name="title_activity_home">Messages</string>
@@ -477,6 +476,7 @@
     <string name="settings_summary_app_info_link">Application system info screen</string>
     <string name="settings_title_app_info_link">Application info</string>
 
+    <string name="settings_notification_ringtone">Notification sound</string>
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
     <string name="settings_enable_this_device">Enable notifications for this device</string>
     <string name="settings_turn_screen_on">Turn the screen on for 3 seconds</string>
@@ -523,6 +523,10 @@
     <string name="settings_hide_read_receipts">Hide read receipts</string>
     <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
     <string name="settings_always_show_timestamps">Always show message timestamps</string>
+    <string name="settings_12_24_timestamps">Show timestamps in 12 hour format (e.g. 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Hide join/leave messages (invites/kicks/bans unaffected)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
+
     <string name="settings_disable_markdown">Disable markdown formatting</string>
     <string name="settings_data_save_mode">Data save mode</string>
 
@@ -751,4 +755,28 @@
     <string name="larger">Larger</string>
     <string name="largest">Largest</string>
     <string name="huge">Huge</string>
+
+    <!-- Widget-->
+    <string name="widget_no_power_to_manage">You need permission to manage widgets in this room</string>
+    <string name="widget_creation_failure">Widget creation has failed</string>
+    <string name="event_formatter_widget_added">%1$s added by %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s removed by %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Create conference calls with jitsi</string>
+    <string name="widget_delete_message_confirmation">Are you sure you want to delete the widget?</string>
+    <string name="active_widgets">%1$d active widgets</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">You need to be able to invite users to do that.</string>
+    <string name="widget_integration_unable_to_create">Unable to create widget.</string>
+    <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
+    <string name="widget_integration_room_not_recognised">This room is not recognised.</string>
+    <string name="widget_integration_positive_power_level">Power level must be positive integer.</string>
+    <string name="widget_integration_must_be_in_room">You are not in this room.</string>
+    <string name="widget_integration_no_permission_in_room">You do not have permission to do that in this room.</string>
+    <string name="widget_integration_missing_room_id">Missing room_id in request.</string>
+    <string name="widget_integration_missing_user_id">Missing user_id in request.</string>
+    <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
+    <string name="settings_labs_matrix_apps">Matrix Apps</string>
+    <string name="room_add_matrix_apps">Add Matrix apps</string>
+    <string name="add_matrix_apps_not_supported">Not supported on this device</string>
 </resources>

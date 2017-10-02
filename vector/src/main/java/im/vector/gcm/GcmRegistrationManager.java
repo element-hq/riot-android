@@ -286,45 +286,57 @@ public final class GcmRegistrationManager {
         if (mRegistrationState == RegistrationState.UNREGISTRATED) {
             mRegistrationState = RegistrationState.GCM_REGISTRATING;
 
-            new AsyncTask<Void, Void, String>() {
-                @Override
-                protected String doInBackground(Void... voids) {
-                    String registrationToken = getGCMRegistrationToken();
+            try {
+                new AsyncTask<Void, Void, String>() {
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        String registrationToken = getGCMRegistrationToken();
 
-                    if (registrationToken != null) {
-                        mRegistrationToken = registrationToken;
+                        if (registrationToken != null) {
+                            mRegistrationToken = registrationToken;
+                        }
+
+                        return registrationToken;
                     }
 
-                    return registrationToken;
-                }
+                    @Override
+                    protected void onPostExecute(String pushKey) {
+                        mRegistrationState = (pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED;
+                        setStoredRegistrationToken(pushKey);
 
-                @Override
-                protected void onPostExecute(String pushKey) {
-                    mRegistrationState = (pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED;
-                    setStoredRegistrationToken(pushKey);
-
-                    // warn the listener
-                    if (null != gcmRegistrationListener) {
-                        try {
-                            if (pushKey != null) {
-                                gcmRegistrationListener.onGCMRegistered();
-                            } else {
-                                gcmRegistrationListener.onGCMRegistrationFailed();
+                        // warn the listener
+                        if (null != gcmRegistrationListener) {
+                            try {
+                                if (pushKey != null) {
+                                    gcmRegistrationListener.onGCMRegistered();
+                                } else {
+                                    gcmRegistrationListener.onGCMRegistrationFailed();
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e.getMessage());
                             }
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e.getLocalizedMessage());
+                        }
+
+                        if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
+                            // register the sessions to the 3rd party server
+                            // this setting should be updated from the listener
+                            if (useGCM()) {
+                                register(null);
+                            }
                         }
                     }
-
-                    if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
-                        // register the sessions to the 3rd party server
-                        // this setting should be updated from the listener
-                        if (useGCM()) {
-                            register(null);
-                        }
+                }.execute();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## registerToGCM() failed " + e.getMessage());
+                // warn the listener
+                if (null != gcmRegistrationListener) {
+                    try {
+                        gcmRegistrationListener.onGCMRegistrationFailed();
+                    } catch (Exception e2) {
+                        Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e2.getMessage());
                     }
                 }
-            }.execute();
+            }
         } else if (mRegistrationState == RegistrationState.GCM_REGISTRATING) {
             gcmRegistrationListener.onGCMRegistrationFailed();
         } else {
@@ -502,7 +514,7 @@ public final class GcmRegistrationManager {
         session.getPushersRestClient()
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
-                        DEFAULT_PUSHER_URL, append, new ApiCallback<Void>() {
+                        DEFAULT_PUSHER_URL, append, isBackgroundSyncAllowed(),  new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
                                 Log.d(LOG_TAG, "registerToThirdPartyServer succeeded");
@@ -625,7 +637,7 @@ public final class GcmRegistrationManager {
      * @param listener the listener
      */
     public void forceSessionsRegistration(final ThirdPartyRegistrationListener listener) {
-        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) || (mRegistrationState == RegistrationState.GCM_REGISTRED)){
+        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) || (mRegistrationState == RegistrationState.GCM_REGISTRED)) {
             mRegistrationState = RegistrationState.GCM_REGISTRED;
 
             register(listener);
@@ -634,7 +646,7 @@ public final class GcmRegistrationManager {
                 try {
                     listener.onThirdPartyRegistrationFailed();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "forceSessionsRegistration failed " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "forceSessionsRegistration failed " + e.getMessage());
                 }
             }
         }
@@ -825,6 +837,11 @@ public final class GcmRegistrationManager {
 
             @Override
             public void onMatrixError(MatrixError e) {
+                if (e.mStatus == 404) {
+                    // httpPusher is not available on server side anymore so assume the removal was successful
+                    onSuccess(null);
+                    return;
+                }
                 if (null != callback) {
                     callback.onMatrixError(e);
                 }
@@ -886,6 +903,11 @@ public final class GcmRegistrationManager {
 
                             @Override
                             public void onMatrixError(MatrixError e) {
+                                if (e.mStatus == 404) {
+                                    // httpPusher is not available on server side anymore so assume the removal was successful
+                                    onSuccess(null);
+                                    return;
+                                }
                                 Log.e(LOG_TAG, "unregisterSession onMatrixError " + e.errcode);
                                 onError(e.getLocalizedMessage());
                             }
@@ -1016,6 +1038,14 @@ public final class GcmRegistrationManager {
     }
 
     /**
+     * Tell if the application can be restarted in background
+     * @return true if the application can be restarted in background
+     */
+    public boolean canStartAppInBackground() {
+        return isBackgroundSyncAllowed() || (null != getStoredRegistrationToken());
+    }
+
+    /**
      * Allow the background sync
      * @param isAllowed true to allow the background sync.
      */
@@ -1034,14 +1064,7 @@ public final class GcmRegistrationManager {
      * @return the sync timeout in ms.
      */
     public int getBackgroundSyncTimeOut() {
-        int currentValue = 30000;
-
-        MXSession session = Matrix.getInstance(mContext).getDefaultSession();
-
-        if (null != session) {
-            currentValue = session.getSyncTimeout();
-        }
-        return getGcmSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, currentValue);
+        return getGcmSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, 30000);
     }
 
     /**
@@ -1143,27 +1166,35 @@ public final class GcmRegistrationManager {
      * @param callback the asynchronous callback
      */
     public void clearGCMData(final boolean clearRegistrationToken, final ApiCallback callback) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                setStoredRegistrationToken(null);
-                mRegistrationToken = null;
-                mRegistrationState = RegistrationState.UNREGISTRATED;
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    setStoredRegistrationToken(null);
+                    mRegistrationToken = null;
+                    mRegistrationState = RegistrationState.UNREGISTRATED;
 
-                if (clearRegistrationToken) {
-                    GCMHelper.clearRegistrationToken();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void nothing) {
-                if (null != callback) {
-                    callback.onSuccess(null);
+                    if (clearRegistrationToken) {
+                        GCMHelper.clearRegistrationToken();
+                    }
+                    return null;
                 }
 
+                @Override
+                protected void onPostExecute(Void nothing) {
+                    if (null != callback) {
+                        callback.onSuccess(null);
+                    }
+
+                }
+            }.execute();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## clearGCMData failed " + e.getMessage());
+
+            if (null != callback) {
+                callback.onUnexpectedError(e);
             }
-        }.execute();
+        }
     }
 
     //================================================================================

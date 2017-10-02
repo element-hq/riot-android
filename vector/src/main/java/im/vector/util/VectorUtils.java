@@ -195,84 +195,91 @@ public class VectorUtils {
             return null;
         }
 
-        // this algorithm is the one defined in
-        // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
-        // calculateRoomName(room, userId)
+        try {
 
-        RoomState roomState = room.getLiveState();
+            // this algorithm is the one defined in
+            // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
+            // calculateRoomName(room, userId)
 
-        if (!TextUtils.isEmpty(roomState.name)) {
-            return roomState.name;
-        }
+            RoomState roomState = room.getLiveState();
 
-        String alias = roomState.alias;
+            if (!TextUtils.isEmpty(roomState.name)) {
+                return roomState.name;
+            }
 
-        if (TextUtils.isEmpty(alias) && (roomState.getAliases().size() > 0)) {
-            alias = roomState.getAliases().get(0);
-        }
+            String alias = roomState.alias;
 
-        if (!TextUtils.isEmpty(alias)) {
-            return alias;
-        }
+            if (TextUtils.isEmpty(alias) && (roomState.getAliases().size() > 0)) {
+                alias = roomState.getAliases().get(0);
+            }
 
-        String myUserId = session.getMyUserId();
+            if (!TextUtils.isEmpty(alias)) {
+                return alias;
+            }
 
-        Collection<RoomMember> members = roomState.getDisplayableMembers();
-        ArrayList<RoomMember> othersActiveMembers = new ArrayList<>();
-        ArrayList<RoomMember> activeMembers = new ArrayList<>();
+            String myUserId = session.getMyUserId();
 
-        for (RoomMember member : members) {
-            if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
-                if (!TextUtils.equals(member.getUserId(), myUserId)) {
-                    othersActiveMembers.add(member);
+            Collection<RoomMember> members = roomState.getDisplayableMembers();
+            ArrayList<RoomMember> othersActiveMembers = new ArrayList<>();
+            ArrayList<RoomMember> activeMembers = new ArrayList<>();
+
+            for (RoomMember member : members) {
+                if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
+                    if (!TextUtils.equals(member.getUserId(), myUserId)) {
+                        othersActiveMembers.add(member);
+                    }
+                    activeMembers.add(member);
                 }
-                activeMembers.add(member);
             }
-        }
 
-        Collections.sort(othersActiveMembers, new Comparator<RoomMember>() {
-            @Override
-            public int compare(RoomMember m1, RoomMember m2) {
-                long diff = m1.getOriginServerTs() - m2.getOriginServerTs();
+            Collections.sort(othersActiveMembers, new Comparator<RoomMember>() {
+                @Override
+                public int compare(RoomMember m1, RoomMember m2) {
+                    long diff = m1.getOriginServerTs() - m2.getOriginServerTs();
 
-                return (diff == 0) ? 0 : ((diff < 0) ? -1 : +1);
-            }
-        });
+                    return (diff == 0) ? 0 : ((diff < 0) ? -1 : +1);
+                }
+            });
 
-        String displayName;
+            String displayName;
 
-        if (othersActiveMembers.size() == 0) {
-            if (activeMembers.size() == 1) {
-                RoomMember member = activeMembers.get(0);
+            if (othersActiveMembers.size() == 0) {
+                if (activeMembers.size() == 1) {
+                    RoomMember member = activeMembers.get(0);
 
-                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
 
-                    if (!TextUtils.isEmpty(member.getInviterId())) {
-                        // extract who invited us to the room
-                        displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.getInviterId()));
+                        if (!TextUtils.isEmpty(member.getInviterId())) {
+                            // extract who invited us to the room
+                            displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.getInviterId()));
+                        } else {
+                            displayName = context.getString(R.string.room_displayname_room_invite);
+                        }
                     } else {
-                        displayName = context.getString(R.string.room_displayname_room_invite);
+                        displayName = context.getString(R.string.room_displayname_no_title);
                     }
                 } else {
                     displayName = context.getString(R.string.room_displayname_no_title);
                 }
-            } else {
-                displayName = context.getString(R.string.room_displayname_no_title);
-            }
-        } else if (othersActiveMembers.size() == 1) {
-            RoomMember member = othersActiveMembers.get(0);
-            displayName = roomState.getMemberName(member.getUserId());
-        } else if (othersActiveMembers.size() == 2) {
-            RoomMember member1 = othersActiveMembers.get(0);
-            RoomMember member2 = othersActiveMembers.get(1);
+            } else if (othersActiveMembers.size() == 1) {
+                RoomMember member = othersActiveMembers.get(0);
+                displayName = roomState.getMemberName(member.getUserId());
+            } else if (othersActiveMembers.size() == 2) {
+                RoomMember member1 = othersActiveMembers.get(0);
+                RoomMember member2 = othersActiveMembers.get(1);
 
-            displayName = context.getString(R.string.room_displayname_two_members, roomState.getMemberName(member1.getUserId()), roomState.getMemberName(member2.getUserId()));
-        } else {
-            RoomMember member = othersActiveMembers.get(0);
-            displayName = context.getString(R.string.room_displayname_more_than_two_members, roomState.getMemberName(member.getUserId()), othersActiveMembers.size() - 1);
+                displayName = context.getString(R.string.room_displayname_two_members, roomState.getMemberName(member1.getUserId()), roomState.getMemberName(member2.getUserId()));
+            } else {
+                RoomMember member = othersActiveMembers.get(0);
+                displayName = context.getString(R.string.room_displayname_more_than_two_members, roomState.getMemberName(member.getUserId()), othersActiveMembers.size() - 1);
+            }
+
+            return displayName;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getRoomDisplayName() failed " + e.getMessage());
         }
 
-        return displayName;
+        return room.getRoomId();
     }
 
     //==============================================================================================================
@@ -510,7 +517,7 @@ public class VectorUtils {
 
             // if the avatar is already cached, use it
             if (session.getMediasCache().isAvatarThumbnailCached(callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
-                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+                session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
             } else {
                 Bitmap bitmap = null;
 
@@ -520,7 +527,7 @@ public class VectorUtils {
                 }
 
                 // until the dedicated avatar is loaded.
-                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
             }
         }
     }
@@ -578,7 +585,7 @@ public class VectorUtils {
         imageView.setTag(null);
 
         if (session.getMediasCache().isAvatarThumbnailCached(avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
-            session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+            session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
         } else {
             if (null == mImagesThread) {
                 mImagesThread = new HandlerThread("ImagesThread", Thread.MIN_PRIORITY);
@@ -601,7 +608,7 @@ public class VectorUtils {
                         @Override
                         public void run() {
                             if (TextUtils.equals(tag, (String) imageView.getTag())) {
-                                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                                session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
                             }
                         }
                     });
@@ -637,7 +644,7 @@ public class VectorUtils {
                                                     // test if the imageView tag has not been updated
                                                     if (TextUtils.equals(tmptag2, (String) imageView.getTag())) {
                                                         final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
-                                                        session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                                                        session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
                                                     }
                                                 }
                                             });
@@ -809,14 +816,19 @@ public class VectorUtils {
                         InputStream stream = resource.mContentStream;
                         int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, thumbnailUri);
 
+                        Log.d(LOG_TAG, "## getThumbnailUriFromIntent() :  " + thumbnailUri + " rotationAngle " + rotationAngle);
+
                         String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mMimeType, 1024, rotationAngle, mediasCache);
                         thumbnailUri = Uri.parse(mediaUrl);
+                    } else if (null != resource) {
+                        Log.d(LOG_TAG, "## getThumbnailUriFromIntent() : cannot manage " + thumbnailUri + " mMimeType " + resource.mMimeType);
+                    } else {
+                        Log.d(LOG_TAG, "## getThumbnailUriFromIntent() : cannot manage " + thumbnailUri + " --> cannot open the dedicated file");
                     }
 
                     return thumbnailUri;
-
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## etThumbnailUriFromIntent failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## getThumbnailUriFromIntent failed " + e.getMessage());
                 }
             }
         }

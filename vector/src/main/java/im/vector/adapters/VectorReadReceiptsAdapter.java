@@ -44,11 +44,11 @@ import im.vector.util.VectorUtils;
  */
 public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
 
-    protected Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private int mLayoutResourceId;
-    private MXSession mSession;
-    private Room mRoom;
+    protected final Context mContext;
+    private final LayoutInflater mLayoutInflater;
+    private final int mLayoutResourceId;
+    private final MXSession mSession;
+    private final Room mRoom;
     //private MXMediasCache mMediasCache;
 
     public VectorReadReceiptsAdapter(Context context,int layoutResourceId, MXSession session,  Room room, MXMediasCache mediasCache) {

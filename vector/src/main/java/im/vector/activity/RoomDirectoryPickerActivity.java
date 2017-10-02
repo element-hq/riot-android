@@ -21,7 +21,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -53,7 +52,7 @@ import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
 import im.vector.util.ThemeUtils;
 
-public class RoomDirectoryPickerActivity extends AppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
+public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
     // LOG TAG
     private static final String LOG_TAG = "RoomDirPickerActivity";
 
@@ -154,7 +153,7 @@ public class RoomDirectoryPickerActivity extends AppCompatActivity implements Ro
             private void onDone(List<RoomDirectoryData> list) {
                 mLoadingView.setVisibility(View.GONE);
                 String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
-                String userHSUrl = mSession.getHomeserverConfig().getHomeserverUri().getHost();
+                String userHSUrl = mSession.getHomeServerConfig().getHomeserverUri().getHost();
 
                 List<String> hsUrlsList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
 

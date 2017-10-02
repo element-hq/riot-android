@@ -29,6 +29,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -69,20 +71,20 @@ import java.util.List;
 public class VectorMediasViewerAdapter extends PagerAdapter {
     private static final String LOG_TAG = "MediasViewerAdapter";
 
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
+    private final Context mContext;
+    private final LayoutInflater mLayoutInflater;
 
     // medias
     private List<SlidableMediaInfo> mMediasMessagesList = null;
-    private int mMaxImageWidth;
-    private int mMaxImageHeight;
+    private final int mMaxImageWidth;
+    private final int mMaxImageHeight;
     private int mLatestPrimaryItemPosition = -1;
     private View mLatestPrimaryView = null;
-    private MXMediasCache mMediasCache;
-    private ArrayList<Integer> mHighResMediaIndex = new ArrayList<>();
+    private final MXMediasCache mMediasCache;
+    private final ArrayList<Integer> mHighResMediaIndex = new ArrayList<>();
     // current playing video
     private VideoView mPlayingVideoView = null;
-    private MXSession mSession;
+    private final MXSession mSession;
 
     private int mAutoPlayItemAt = -1;
 
@@ -209,7 +211,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         }
 
         // else download it
-        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeServerConfig(), loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
@@ -276,7 +278,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
         final String viewportContent = "width=640";
         final String loadingUri = imageInfo.mMediaUrl;
-        final String downloadId = mMediasCache.loadBitmap(mContext, mSession.getHomeserverConfig(), loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo);
+        final String downloadId = mMediasCache.loadBitmap(mContext, mSession.getHomeServerConfig(), loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo);
 
         webView.getSettings().setDisplayZoomControls(false);
 
@@ -418,7 +420,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         }
 
         // check if the media is downloading
-        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeServerConfig(), mediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
@@ -562,12 +564,16 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         File file = mMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
 
         if (null != file) {
-            if (null != CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType)) {
-                Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-            }
+            CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                @Override
+                public void onSuccess(String path) {
+                    Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                }
+            });
+
         } else {
             downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
-            final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+            final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeServerConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
             if (null != downloadId) {
                 mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
@@ -585,9 +591,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         if (aDownloadId.equals(downloadId)) {
                             File file = mMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
                             if (null != file) {
-                                if (null != CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType)) {
-                                    Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-                                }
+
+                                CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String path) {
+                                        Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                    }
+                                });
                             }
                         }
                     }
@@ -662,7 +672,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         });
 
         // init the thumbnail views
-        mMediasCache.loadBitmap(mSession.getHomeserverConfig(), thumbView, thumbnailUrl, 0, 0, null, null);
+        mMediasCache.loadBitmap(mSession.getHomeServerConfig(), thumbView, thumbnailUrl, 0, 0, null, null);
 
         playView.setOnClickListener(new View.OnClickListener() {
             @Override

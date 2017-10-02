@@ -64,7 +64,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     private HomeRoomAdapter mFavoritesAdapter;
 
     // the favorite rooms list
-    private List<Room> mFavorites = new ArrayList<>();
+    private final  List<Room> mFavorites = new ArrayList<>();
 
     // Touch helper to handle the drag and drop on items
     private ItemTouchHelper mDragAndDropTouchHelper;

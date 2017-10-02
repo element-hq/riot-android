@@ -45,7 +45,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -127,7 +126,7 @@ import im.vector.view.VectorPendingCallView;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class VectorHomeActivity extends RiotAppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
@@ -872,10 +871,14 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         if (fragment != null) {
             resetFilter();
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment, mCurrentFragmentTag)
-                    .addToBackStack(mCurrentFragmentTag)
-                    .commit();
+            try {
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment, mCurrentFragmentTag)
+                        .addToBackStack(mCurrentFragmentTag)
+                        .commit();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## updateSelectedFragment() failed : " + e.getMessage());
+            }
         }
     }
     /**
@@ -1492,16 +1495,20 @@ public class VectorHomeActivity extends AppCompatActivity implements SearchView.
 
         Collection<RoomSummary> roomSummaries = mSession.getDataHandler().getStore().getSummaries();
         for (RoomSummary roomSummary : roomSummaries) {
-            String roomSummaryId = roomSummary.getRoomId();
-            Room room = mSession.getDataHandler().getStore().getRoom(roomSummaryId);
+            // reported by rageshake
+            // i don't see how it is possible to have a null roomSummary
+            if (null != roomSummary) {
+                String roomSummaryId = roomSummary.getRoomId();
+                Room room = mSession.getDataHandler().getStore().getRoom(roomSummaryId);
 
-            // check if the room exists
-            // the user conference rooms are not displayed.
-            if (room != null && !room.isConferenceUserRoom() && room.isInvited()) {
-                if (room.isDirectChatInvitation()) {
-                    mDirectChatInvitations.add(room);
-                } else {
-                    mRoomInvitations.add(room);
+                // check if the room exists
+                // the user conference rooms are not displayed.
+                if (room != null && !room.isConferenceUserRoom() && room.isInvited()) {
+                    if (room.isDirectChatInvitation()) {
+                        mDirectChatInvitations.add(room);
+                    } else {
+                        mRoomInvitations.add(room);
+                    }
                 }
             }
         }

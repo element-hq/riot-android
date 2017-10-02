@@ -1,3 +1,33 @@
+Changes in Riot 0.7.01 (2017-09-04)
+===================================================
+
+Features:
+ * Add dark theme.
+ * Add the 12/24 hours settings.
+ 
+Improvements:
+ * [Fdroid] Improve the sync when the application is backgrounded.
+ * Update the call notification priority to be displayed on the lock screen.
+ * Use the default incoming ring tone if the storage permission was not granted.
+ 
+Bugfixes:
+ * Fix many issues reported by Google analytics.
+ * Fix e2e export silent failure when the storage permission was not granted.
+ * Fix crashes when too many asynctasks were launched.
+ * Fix the notification sounds.
+ * Restore the video call video when the application is put in background and in foreground.
+ * Fix the audio call resuming	
+ * Fix the broken incoming video call	
+ * #1467 : Rotating the device while an image is uploading inserts the image twice.
+ * #1475 : messages composed with only one number are displayed as if they were emojis 
+ * #1503 : Do not enlarge non-emoji.
+ * #1510 : Rotating the device while the camera activity is running closes it 
+ * #1514 : 'Enable background sync' is viewable on fdroid build preference does not have an effect
+ * #1532 : [custom hs] high battery draining issue 
+ * #1537 : cannot update the profile image
+ * #1548 : Unable to decrypt: encryption not enabled 
+ * #1554 : Turn screen on for 3 seconds not working
+ 
 Changes in Riot 0.7.00 (2017-08-01)
 ===================================================
 

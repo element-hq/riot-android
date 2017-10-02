@@ -50,7 +50,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -239,7 +239,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private final LoginHandler mLoginHandler = new LoginHandler();
 
     // save the config because trust a certificate is asynchronous.
-    private HomeserverConnectionConfig mHomeserverConnectionConfig;
+    private HomeServerConnectionConfig mHomeserverConnectionConfig;
 
     // next link parameters
     private HashMap<String, String> mEmailValidationExtraParams;
@@ -867,7 +867,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * the user forgot his password
      */
     private void onForgotPasswordClick() {
-        final HomeserverConnectionConfig hsConfig = getHsConfig();
+        final HomeServerConnectionConfig hsConfig = getHsConfig();
 
         // it might be null if the identity / homeserver urls are invalids
         if (null == hsConfig) {
@@ -986,7 +986,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * The user warns the client that the reset password email has been received
      */
-    private void onForgotOnEmailValidated(final HomeserverConnectionConfig hsConfig) {
+    private void onForgotOnEmailValidated(final HomeServerConnectionConfig hsConfig) {
         if (mIsPasswordResetted) {
             Log.d(LOG_TAG, "onForgotOnEmailValidated : go back to login screen");
 
@@ -1209,7 +1209,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @param aHomeServer     home server url
      */
     private void submitEmailToken(final String aToken, final String aClientSecret, final String aSid, final String aSessionId, final String aHomeServer, final String aIdentityServer) {
-        final HomeserverConnectionConfig homeServerConfig = mHomeserverConnectionConfig = new HomeserverConnectionConfig(Uri.parse(aHomeServer), Uri.parse(aIdentityServer), null, new ArrayList<Fingerprint>(), false);
+        final HomeServerConnectionConfig homeServerConfig = mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(aHomeServer), Uri.parse(aIdentityServer), null, new ArrayList<Fingerprint>(), false);
         RegistrationManager.getInstance().setHsConfig(getHsConfig());
         Log.d(LOG_TAG, "## submitEmailToken(): IN");
 
@@ -1353,7 +1353,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         if (null == mRegistrationResponse) {
             try {
-                final HomeserverConnectionConfig hsConfig = getHsConfig();
+                final HomeServerConnectionConfig hsConfig = getHsConfig();
 
                 // invalid URL
                 if (null == hsConfig) {
@@ -1361,9 +1361,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 } else {
                     enableLoadingScreen(true);
 
-                    mLoginHandler.getSupportedRegistrationFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<HomeserverConnectionConfig>() {
+                    mLoginHandler.getSupportedRegistrationFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<HomeServerConnectionConfig>() {
                         @Override
-                        public void onSuccess(HomeserverConnectionConfig homeserverConnectionConfig) {
+                        public void onSuccess(HomeServerConnectionConfig homeserverConnectionConfig) {
                             // should never be called
                         }
 
@@ -1552,7 +1552,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         mIsPendingLogin = false;
 
-        final HomeserverConnectionConfig hsConfig = getHsConfig();
+        final HomeServerConnectionConfig hsConfig = getHsConfig();
         final String hsUrlString = getHomeServerUrl();
         final String identityUrlString = getIdentityServerUrl();
 
@@ -1605,13 +1605,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @param phoneNumberCountry the phone number country code
      * @param password           the user password
      */
-    private void login(final HomeserverConnectionConfig hsConfig, final String hsUrlString,
+    private void login(final HomeServerConnectionConfig hsConfig, final String hsUrlString,
                        final String identityUrlString, final String username, final String phoneNumber,
                        final String phoneNumberCountry, final String password) {
         try {
-            mLoginHandler.login(this, hsConfig, username, phoneNumber, phoneNumberCountry, password, new SimpleApiCallback<HomeserverConnectionConfig>(this) {
+            mLoginHandler.login(this, hsConfig, username, phoneNumber, phoneNumberCountry, password, new SimpleApiCallback<HomeServerConnectionConfig>(this) {
                 @Override
-                public void onSuccess(HomeserverConnectionConfig c) {
+                public void onSuccess(HomeServerConnectionConfig c) {
                     enableLoadingScreen(false);
                     goToSplash();
                     LoginActivity.this.finish();
@@ -1638,7 +1638,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     // try with the vector.im HS
                     if (TextUtils.equals(hsUrlString, getString(R.string.vector_im_server_url)) && TextUtils.equals(e.errcode, MatrixError.FORBIDDEN)) {
                         Log.e(LOG_TAG, "onLoginClick : test with matrix.org as HS");
-                        mHomeserverConnectionConfig = new HomeserverConnectionConfig(Uri.parse(getString(R.string.matrix_org_server_url)), Uri.parse(identityUrlString), null, new ArrayList<Fingerprint>(), false);
+                        mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(getString(R.string.matrix_org_server_url)), Uri.parse(identityUrlString), null, new ArrayList<Fingerprint>(), false);
                         login(mHomeserverConnectionConfig, getString(R.string.matrix_org_server_url), identityUrlString, username, phoneNumber, phoneNumberCountry, password);
                     } else {
                         Log.e(LOG_TAG, "onLoginClick : onMatrixError " + e.getLocalizedMessage());
@@ -1666,7 +1666,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         try {
-            final HomeserverConnectionConfig hsConfig = getHsConfig();
+            final HomeServerConnectionConfig hsConfig = getHsConfig();
 
             // invalid URL
             if (null == hsConfig) {
@@ -1955,7 +1955,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * @return the homeserver config. null if the url is not valid
      */
-    private HomeserverConnectionConfig getHsConfig() {
+    private HomeServerConnectionConfig getHsConfig() {
         if (null == mHomeserverConnectionConfig) {
             String hsUrlString = getHomeServerUrl();
 
@@ -1981,7 +1981,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             try {
                 mHomeserverConnectionConfig = null;
-                mHomeserverConnectionConfig = new HomeserverConnectionConfig(Uri.parse(hsUrlString), Uri.parse(identityServerUrlString), null, new ArrayList<Fingerprint>(), false);
+                mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(hsUrlString), Uri.parse(identityServerUrlString), null, new ArrayList<Fingerprint>(), false);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "getHsConfig fails " + e.getLocalizedMessage());
             }
@@ -2032,7 +2032,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 credentials.homeServer = homeServer;
                 credentials.accessToken = accessToken;
 
-                final HomeserverConnectionConfig hsConfig = getHsConfig();
+                final HomeServerConnectionConfig hsConfig = getHsConfig();
 
                 try {
                     hsConfig.setCredentials(credentials);
@@ -2297,6 +2297,33 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     })
                     .show();
         } else {
+            // TODo manage multi accounts
+            Matrix.getInstance(this).getDefaultSession().createRoomDirectMessage("@riot-bot:matrix.org", new ApiCallback<String>() {
+                @Override
+                public void onSuccess(String info) {
+                    Log.d(LOG_TAG, "## onRegistrationSuccess() : succeed to invite riot-bot");
+                }
+
+                private void onError(String error) {
+                    Log.e(LOG_TAG, "## onRegistrationSuccess() : failed  to invite riot-bot " + error);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError(e.getMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError(e.getMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError(e.getMessage());
+                }
+            });
+
             goToSplash();
             finish();
         }

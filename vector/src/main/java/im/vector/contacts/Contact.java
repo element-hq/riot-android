@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import im.vector.VectorApp;
@@ -151,7 +152,7 @@ public class Contact implements java.io.Serializable {
     private final ArrayList<String> mEmails = new ArrayList<>();
 
     // MXID by medium (email or phone number)
-    private HashMap<String, MXID> mMXIDsByElement = new HashMap<>();
+    private final Map<String, MXID> mMXIDsByElement = new HashMap<>();
 
     /**
      * Constructor

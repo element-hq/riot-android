@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -134,11 +135,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static final int REQUEST_NEW_PHONE_NUMBER = 456;
     private static final int REQUEST_PHONEBOOK_COUNTRY = 789;
     private static final int REQUEST_LOCALE = 777;
+    private static final int REQUEST_NOTIFICATION_RINGTONE = 888;
 
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
+
     // members
     private MXSession mSession;
+
+    //
+    private boolean mIsWaitingAfterBingRulesUpdates;
+
     // disable some updates if there is
     private final IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
         @Override
@@ -150,6 +157,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingRulesUpdate() {
+            if (mIsWaitingAfterBingRulesUpdates) {
+                mIsWaitingAfterBingRulesUpdates = false;
+                hideLoadingView();
+            }
+
             refreshPreferences();
             refreshDisplay();
         }
@@ -258,6 +270,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
+        EditTextPreference notificationRingTonePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
+        notificationRingTonePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(getActivity()));
+                getActivity().startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE);
+                return false;
+            }
+        });
+        refreshNotificationRingTone();
+
         // application version
         VectorCustomActionEditTextPreference versionTextPreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY);
         if (null != versionTextPreference) {
@@ -287,13 +312,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // home server
         EditTextPreference homeServerTextPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY);
         if (null != homeServerTextPreference) {
-            homeServerTextPreference.setSummary(mSession.getHomeserverConfig().getHomeserverUri().toString());
+            homeServerTextPreference.setSummary(mSession.getHomeServerConfig().getHomeserverUri().toString());
         }
 
         // identity server
         EditTextPreference identityServerTextPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY);
         if (null != identityServerTextPreference) {
-            identityServerTextPreference.setSummary(mSession.getHomeserverConfig().getIdentityServerUri().toString());
+            identityServerTextPreference.setSummary(mSession.getHomeServerConfig().getIdentityServerUri().toString());
         }
 
         // terms & conditions
@@ -317,7 +342,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if (newValue instanceof String) {
-                        VectorApp.updateApplicationTheme((String)newValue);
+                        VectorApp.updateApplicationTheme((String) newValue);
                         getActivity().startActivity(getActivity().getIntent());
                         getActivity().finish();
                         return true;
@@ -376,18 +401,18 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             keepMediaPeriodPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                     new AlertDialog.Builder(getActivity()).
+                    new AlertDialog.Builder(getActivity()).
                             setSingleChoiceItems(PreferencesManager.getMediasSavingItemsChoicesList(getActivity()),
                                     PreferencesManager.getSelectedMediasSavingPeriod(getActivity()),
                                     new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface d, int n) {
-                                    PreferencesManager.setSelectedMediasSavingPeriod(getActivity(), n);
-                                    d.cancel();
+                                        @Override
+                                        public void onClick(DialogInterface d, int n) {
+                                            PreferencesManager.setSelectedMediasSavingPeriod(getActivity(), n);
+                                            d.cancel();
 
-                                    keepMediaPeriodPreference.setSummary(PreferencesManager.getSelectedMediasSavingPeriodString(getActivity()));
-                                }
-                            }).show();
+                                            keepMediaPeriodPreference.setSummary(PreferencesManager.getSelectedMediasSavingPeriodString(getActivity()));
+                                        }
+                                    }).show();
                     return false;
                 }
             });
@@ -430,7 +455,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             });
                         }
                     };
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+                    try {
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.getMessage());
+                        task.cancel(true);
+                        hideLoadingView();
+                    }
                     return false;
                 }
             });
@@ -497,11 +529,35 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object aNewValue) {
-                    boolean newValue = (boolean) aNewValue;
+                    final boolean newValue = (boolean) aNewValue;
 
                     if (newValue != gcmMgr.isBackgroundSyncAllowed()) {
                         gcmMgr.setBackgroundSyncAllowed(newValue);
                     }
+
+                    displayLoadingView();
+
+                    Matrix.getInstance(VectorSettingsPreferencesFragment.this.getActivity()).getSharedGCMRegistrationManager().forceSessionsRegistration(new GcmRegistrationManager.ThirdPartyRegistrationListener() {
+                        @Override
+                        public void onThirdPartyRegistered() {
+                            hideLoadingView();
+                        }
+
+                        @Override
+                        public void onThirdPartyRegistrationFailed() {
+                            hideLoadingView();
+                        }
+
+                        @Override
+                        public void onThirdPartyUnregistered() {
+                            hideLoadingView();
+                        }
+
+                        @Override
+                        public void onThirdPartyUnregistrationFailed() {
+                            hideLoadingView();
+                        }
+                    });
 
                     return true;
                 }
@@ -678,8 +734,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 List<MXSession> sessions = Matrix.getMXSessions(getActivity());
-                for(MXSession session : sessions) {
-                    session.setUseDataSaveMode((boolean)newValue);
+                for (MXSession session : sessions) {
+                    session.setUseDataSaveMode((boolean) newValue);
                 }
 
                 return true;
@@ -874,7 +930,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         addEmailPreference.setTitle(R.string.settings_add_email_address);
         addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
         addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-        addEmailPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.settings_icon_tint_color));
+        addEmailPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
         addEmailPreference.setOrder(100);
         addEmailPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
@@ -900,7 +956,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // display the "add phone number" entry
         Preference addPhoneNumberPreference = new Preference(getActivity());
         addPhoneNumberPreference.setKey(ADD_PHONE_NUMBER_PREFERENCE_KEY);
-        addPhoneNumberPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R .drawable.ic_add_black), R.attr.settings_icon_tint_color));
+        addPhoneNumberPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
         addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number);
         addPhoneNumberPreference.setOrder(200);
 
@@ -1138,26 +1194,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 private void onDone() {
                     // check if the activity still exists
                     if (null != getActivity()) {
-                        // ensure that the response is done in the right thread.
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideLoadingView();
-
-                                BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
-                                boolean isEnabled = ((null != rule) && rule.isEnabled);
-
-                                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
-                                    isEnabled = !isEnabled;
-                                }
-
-                                final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putBoolean(fResourceText, isEnabled);
-                                editor.commit();
-                                hideLoadingView(true);
-                            }
-                        });
+                        // wait the server request echo
+                        // https://github.com/vector-im/riot-android/issues/1623
+                        // the bing rule uploads might be unsynchronized
+                        mIsWaitingAfterBingRulesUpdates = true;
                     }
                 }
 
@@ -1229,12 +1269,25 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         });
     }
 
+    /**
+     * Refresh the nofication filename
+     */
+    private void refreshNotificationRingTone() {
+        EditTextPreference notificationRingTonePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
+        notificationRingTonePreference.setSummary(PreferencesManager.getNotificationRingToneName(getActivity()));
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
+                case REQUEST_NOTIFICATION_RINGTONE: {
+                    PreferencesManager.setNotificationRingTone(getActivity(), (Uri) data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI));
+                    refreshNotificationRingTone();
+                    break;
+                }
                 case REQUEST_E2E_FILE_REQUEST_CODE:
                     importKeys(data);
                     break;
@@ -1260,11 +1313,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
                                 @Override
-                                public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
+                                public void onUploadError(final String uploadId, final int serverResponseCode, final String serverErrorMessage) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            hideLoadingView(false);
+                                            onCommonDone(serverResponseCode + " : " + serverErrorMessage);
                                         }
                                     });
                                 }
@@ -1992,7 +2045,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        LinearLayout linearLayout = (LinearLayout)layout.findViewById(R.id.text_selection_group_view);
+        LinearLayout linearLayout = (LinearLayout) layout.findViewById(R.id.text_selection_group_view);
 
         int childCount = linearLayout.getChildCount();
 
@@ -2002,7 +2055,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             View v = linearLayout.getChildAt(i);
 
             if (v instanceof CheckedTextView) {
-                final CheckedTextView checkedTextView = (CheckedTextView)v;
+                final CheckedTextView checkedTextView = (CheckedTextView) v;
                 checkedTextView.setChecked(TextUtils.equals(checkedTextView.getText(), scaleText));
 
                 checkedTextView.setOnClickListener(new View.OnClickListener() {
@@ -2705,29 +2758,25 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 displayLoadingView();
 
                 CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new ApiCallback<String>() {
-                    private void onDone(String message) {
-                        hideLoadingView();
-                        Toast.makeText(VectorApp.getInstance().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                    }
-
                     @Override
                     public void onSuccess(String filename) {
-                        onDone(filename);
+                        Toast.makeText(VectorApp.getInstance().getApplicationContext(), filename, Toast.LENGTH_SHORT).show();
+                        hideLoadingView();
                     }
 
                     @Override
                     public void onNetworkError(Exception e) {
-                        onDone(e.getLocalizedMessage());
+                        hideLoadingView();
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
-                        onDone(e.getLocalizedMessage());
+                        hideLoadingView();
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        onDone(e.getLocalizedMessage());
+                        hideLoadingView();
                     }
                 });
 
@@ -2848,7 +2897,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
     }
-
 
 
 }

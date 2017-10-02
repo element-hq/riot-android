@@ -73,11 +73,23 @@
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"/>
 
         <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_12_24_timestamps"
+            android:key="SETTINGS_12_24_TIMESTAMPS_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_hide_join_leave_messages"
+            android:key="SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_hide_avatar_display_name_changes_messages"
+            android:key="SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_disable_markdown"
             android:key="SETTINGS_DISABLE_MARKDOWN_KEY"/>
 
         <ListPreference
-            android:entries="@array/theme_readables"
+            android:entries="@array/theme_description"
             android:entryValues="@array/theme_codes"
             android:key="APPLICATION_THEME_KEY"
             android:summary="%s"
@@ -104,6 +116,11 @@
     <im.vector.preference.VectorDividerCategory/>
 
     <PreferenceCategory android:title="@string/settings_notifications">
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
+            android:title="@string/settings_notification_ringtone"
+            android:dialogTitle="@string/settings_notification_ringtone"/>
 
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_enable_all_notif"
@@ -192,6 +209,10 @@
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_data_save_mode"
             android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_labs_matrix_apps"
+            android:key="SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY"/>
 
     </im.vector.preference.VectorPreferenceCategory>
 

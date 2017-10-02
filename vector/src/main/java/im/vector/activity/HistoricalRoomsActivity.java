@@ -22,7 +22,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -63,7 +62,7 @@ import im.vector.view.SimpleDividerItemDecoration;
 /**
  * Displays the historical rooms list
  */
-public class HistoricalRoomsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, HomeRoomAdapter.OnSelectRoomListener, AbsAdapter.MoreRoomActionListener, RoomUtils.HistoricalRoomActionListener {
+public class HistoricalRoomsActivity extends RiotAppCompatActivity implements SearchView.OnQueryTextListener, HomeRoomAdapter.OnSelectRoomListener, AbsAdapter.MoreRoomActionListener, RoomUtils.HistoricalRoomActionListener {
 
     private static final String LOG_TAG = HistoricalRoomsActivity.class.getSimpleName();
 
@@ -86,7 +85,7 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
     private HomeRoomAdapter mHistoricalAdapter;
 
     // pending tasks
-    private List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
+    private final  List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
 
     // sessions
     private MXSession mSession;
@@ -273,8 +272,14 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
                 mHistoricalAdapter.setRooms(historicalRooms);
             }
         };
-        mSortingAsyncTasks.add(task);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        try {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            mSortingAsyncTasks.add(task);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## initHistoricalRoomsData() failed " + e.getMessage());
+            task.cancel(true);
+        }
     }
 
     /*

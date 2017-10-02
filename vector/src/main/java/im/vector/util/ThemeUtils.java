@@ -66,9 +66,9 @@ public class ThemeUtils {
     // the theme description
     public static final String THEME_DARK_VALUE = "dark";
     public static final String THEME_LIGHT_VALUE = "light";
+    public static final String THEME_BLACK_VALUE = "black";
 
-
-    public static Map<Integer, Integer> mColorByAttr = new HashMap<>();
+    public static final Map<Integer, Integer> mColorByAttr = new HashMap<>();
 
     /**
      * Provides the selected application theme
@@ -106,7 +106,11 @@ public class ThemeUtils {
 
         if (TextUtils.equals(aTheme, THEME_DARK_VALUE)) {
             VectorApp.getInstance().setTheme(R.style.AppTheme_Dark);
-        } else {
+        }
+        else if (TextUtils.equals(aTheme, THEME_BLACK_VALUE)) {
+            VectorApp.getInstance().setTheme(R.style.AppTheme_Black);
+        }
+        else {
             VectorApp.getInstance().setTheme(R.style.AppTheme);
         }
 
@@ -168,6 +172,58 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Dark);
             } else if (activity instanceof VectorUniversalLinkActivity) {
                 activity.setTheme(R.style.AppTheme_Dark);
+            }
+        }
+
+        if (TextUtils.equals(getApplicationTheme(activity), THEME_BLACK_VALUE)) {
+            if (activity instanceof AccountCreationActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof AccountCreationActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof CountryPickerActivity) {
+                activity.setTheme(R.style.CountryPickerTheme_Black);
+            } else if (activity instanceof FallbackLoginActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof HistoricalRoomsActivity) {
+                activity.setTheme(R.style.HomeActivityTheme_Black);
+            } else if (activity instanceof InComingCallActivity) {
+                activity.setTheme(R.style.CallAppTheme_Black);
+            } else if (activity instanceof LanguagePickerActivity) {
+                activity.setTheme(R.style.CountryPickerTheme_Black);
+            } else if (activity instanceof LoginActivity) {
+                activity.setTheme(R.style.LoginAppTheme_Black);
+            } else if (activity instanceof PhoneNumberAdditionActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Black);
+            } else if (activity instanceof PhoneNumberVerificationActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Black);
+            } else if (activity instanceof RoomDirectoryPickerActivity) {
+                activity.setTheme(R.style.DirectoryPickerTheme_Black);
+            } else if (activity instanceof SplashActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Black);
+            } else if (activity instanceof VectorBaseSearchActivity) {
+                activity.setTheme(R.style.SearchesAppTheme_Black);
+            } else if (activity instanceof VectorCallViewActivity) {
+                activity.setTheme(R.style.CallActivityTheme_Black);
+            } else if (activity instanceof VectorHomeActivity) {
+                activity.setTheme(R.style.HomeActivityTheme_Black);
+            } else if (activity instanceof VectorMediasPickerActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_FullScreen_Black);
+            } else if (activity instanceof VectorMediasViewerActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof VectorMemberDetailsActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Black);
+            } else if (activity instanceof VectorPublicRoomsActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof VectorRoomActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Black);
+            } else if (activity instanceof VectorRoomCreationActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof VectorRoomDetailsActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof VectorSettingsActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof VectorUniversalLinkActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
             }
         }
 

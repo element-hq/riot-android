@@ -43,20 +43,20 @@ public class MyPresenceManager {
     // Array of presence states ordered by priority. If the current device thinks our user is online,
     // it will disregard a presence event saying the user is unavailable and advertise that they are in
     // fact online as a correction.
-    private static String[] orderedPresenceArray = new String[] {
+    private static final String[] orderedPresenceArray = new String[] {
             User.PRESENCE_ONLINE,
             User.PRESENCE_UNAVAILABLE,
             User.PRESENCE_OFFLINE
     };
     // We need the reverse structure to associate an order to a given presence state
-    private static Map<String, Integer> presenceOrderMap = new HashMap<>();
+    private static final Map<String, Integer> presenceOrderMap = new HashMap<>();
     static {
         for (int i = 0; i < orderedPresenceArray.length; i++) {
             presenceOrderMap.put(orderedPresenceArray[i], i);
         }
     }
 
-    private static HashMap<MXSession, MyPresenceManager> instances = new HashMap<>();
+    private static final HashMap<MXSession, MyPresenceManager> instances = new HashMap<>();
 
     private MyUser myUser;
     private Handler mHandler;

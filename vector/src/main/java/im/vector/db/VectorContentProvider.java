@@ -30,7 +30,7 @@ import java.io.FileNotFoundException;
 import im.vector.VectorApp;
 
 public class VectorContentProvider extends ContentProvider {
-    public static String AUTHORITIES = "im.vector.VectorApp.provider";
+    public static final String AUTHORITIES = "im.vector.VectorApp.provider";
 
     private static final String BUG_SEPARATOR = "bugreport";
 

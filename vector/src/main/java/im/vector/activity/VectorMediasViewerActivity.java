@@ -31,6 +31,7 @@ import com.google.gson.JsonElement;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
@@ -42,6 +43,7 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.VectorMediasViewerAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.util.SlidableMediaInfo;
@@ -206,9 +208,12 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
         if (null != file) {
             // download
             if (action == R.id.ic_action_download) {
-                if (null != CommonActivityUtils.saveMediaIntoDownloads(this, file, mediaInfo.mFileName, mediaInfo.mMimeType)) {
-                    Toast.makeText(this, getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-                }
+                CommonActivityUtils.saveMediaIntoDownloads(this, file, mediaInfo.mFileName, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                    @Override
+                    public void onSuccess(String string) {
+                        Toast.makeText(VectorApp.getInstance(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                    }
+                });
             } else {
                 // shared
                 Uri mediaUri = null;
@@ -251,7 +256,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
             }
         } else {
             // else download it
-            final String downloadId = mediasCache.downloadMedia(this, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+            final String downloadId = mediasCache.downloadMedia(this, mSession.getHomeServerConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
             if (null != downloadId) {
                 mediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {

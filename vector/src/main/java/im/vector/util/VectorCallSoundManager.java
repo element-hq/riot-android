@@ -144,23 +144,29 @@ public class VectorCallSoundManager {
     }
 
     /**
-     * Provide a ringtone from a resource and a filename.
-     * The audio file must have a ANDROID_LOOP metatada set to true to loop the sound.
+     * Provide a ringtone uri from a resource and a filename.
      * @param resId The audio resource.
      * @param filename the audio filename
-     * @return a RingTone, null if the operation fails.
+     * @return the ringtone uri
      */
-    static private Ringtone getRingTone(int resId, String filename) {
+    public static Uri getRingToneUri(int resId, String filename) {
         Context context = VectorApp.getInstance();
         Uri ringToneUri = mRingtoneUrlByFileName.get(filename);
-        Ringtone ringtone = null;
-
         // test if the ring tone has been cached
-        if (null != ringToneUri) {
-            ringtone = RingtoneManager.getRingtone(context, ringToneUri);
 
-            // provide it
-            return ringtone;
+        if (null != ringToneUri) {
+            // check if the file exists
+            try {
+                File ringFile = new File(ringToneUri.toString());
+
+                // check if the file exists
+                if ((null != ringFile) && ringFile.exists() && ringFile.canRead()) {
+                    // provide it
+                    return ringToneUri;
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getRingToneUri() failed " + e.getMessage());
+            }
         }
 
         try {
@@ -208,7 +214,7 @@ public class VectorCallSoundManager {
 
                         fos.close();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## getRingTone():  Exception1 Msg=" + e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "## getRingToneUri():  Exception1 Msg=" + e.getMessage());
                     }
                 }
 
@@ -229,11 +235,48 @@ public class VectorCallSoundManager {
 
             if (null != ringToneUri) {
                 mRingtoneUrlByFileName.put(filename, ringToneUri);
-                ringtone = RingtoneManager.getRingtone(context, ringToneUri);
+                return ringToneUri;
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getRingTone():  Exception2 Msg=" + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "## getRingToneUri():  Exception2 Msg=" + e.getLocalizedMessage());
         }
+
+        return null;
+    }
+
+    /**
+     * Retrieve a ringtone from an uri
+     * @param ringToneUri the ringtone URI
+     * @return the ringtone
+     */
+    private static Ringtone uriToRingTone(Uri ringToneUri) {
+        if (null != ringToneUri) {
+            try {
+                return RingtoneManager.getRingtone(VectorApp.getInstance(), ringToneUri);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## uriToRingTone() failed " + e.getMessage());
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Provide a ringtone from a resource and a filename.
+     * The audio file must have a ANDROID_LOOP metatada set to true to loop the sound.
+     * @param resId The audio resource.
+     * @param filename the audio filename
+     * @param defaultRingToneUri
+     * @return a RingTone, null if the operation fails.
+     */
+    private static Ringtone getRingTone(int resId, String filename, Uri defaultRingToneUri) {
+        Ringtone ringtone = uriToRingTone(getRingToneUri(resId, filename));
+
+        if (null == ringtone) {
+            ringtone = uriToRingTone(defaultRingToneUri);
+        }
+
+        Log.d(LOG_TAG, "getRingTone() : resId " + resId + " filename " + filename + " defaultRingToneUri " + defaultRingToneUri + " returns " + ringtone);
 
         return ringtone;
     }
@@ -366,10 +409,11 @@ public class VectorCallSoundManager {
             return;
         }
 
-        stopRinging();
+        // stop any playing ringtone
+        stopRingTones();
 
         // use the ringTone to manage sound volume properly
-        mRingTone = getRingTone(R.raw.ring, RING_TONE_START_RINGING);
+        mRingTone = getRingTone(R.raw.ring, RING_TONE_START_RINGING, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 
         if (null != mRingTone) {
             setSpeakerphoneOn(false, true);

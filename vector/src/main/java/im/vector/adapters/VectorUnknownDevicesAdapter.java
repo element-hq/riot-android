@@ -61,11 +61,11 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
     }
 
     // context
-    private Context mContext;
+    private final Context mContext;
     // layout inflater
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
     // devices list
-    private List<Pair<String, List<MXDeviceInfo>>> mUnknownDevicesList;
+    private final List<Pair<String, List<MXDeviceInfo>>> mUnknownDevicesList;
     // listener
     private IVerificationAdapterListener mListener;
 

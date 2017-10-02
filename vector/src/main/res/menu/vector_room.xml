@@ -8,6 +8,11 @@
         android:icon="@drawable/ic_material_search_white"
         app:showAsAction="always" />
 
+    <item android:id="@+id/ic_action_matrix_apps"
+        android:title="@string/room_add_matrix_apps"
+        android:icon="@drawable/apps_icon"
+        app:showAsAction="collapseActionView" />
+
     <item android:id="@+id/ic_action_room_resend_unsent"
         android:title="@string/room_resend_unsent_messages"
         android:icon="@drawable/ic_material_send_black"

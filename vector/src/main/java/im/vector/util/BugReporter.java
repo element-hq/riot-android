@@ -127,14 +127,14 @@ public class BugReporter {
      * @param withDevicesLogs true to include the device log
      * @param withCrashLogs true to include the crash logs
      * @param withScreenshot true to include the screenshot
-     * @param bugDescription the bug description
+     * @param theBugDescription the bug description
      * @param listener the listener
      */
     private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final boolean withScreenshot, final String theBugDescription, final IMXBugReportListener listener) {
         new AsyncTask<Void, Integer, String>() {
 
             // enumerate files to delete
-            List<File> mBugReportFiles = new ArrayList<>();
+            final List<File> mBugReportFiles = new ArrayList<>();
 
             @Override
             protected String doInBackground(Void... voids) {

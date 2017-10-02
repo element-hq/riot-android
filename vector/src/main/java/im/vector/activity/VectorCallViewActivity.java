@@ -31,7 +31,6 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import org.matrix.androidsdk.util.Log;
@@ -70,7 +69,7 @@ import im.vector.view.VectorPendingCallView;
 /**
  * VectorCallViewActivity is the call activity.
  */
-public class VectorCallViewActivity extends AppCompatActivity implements SensorEventListener {
+public class VectorCallViewActivity extends RiotAppCompatActivity implements SensorEventListener {
     private static final String LOG_TAG = "VCallViewActivity";
     private static final String HANGUP_MSG_HEADER_UI_CALL = "user hangup from header back arrow";
     private static final String HANGUP_MSG_BACK_KEY = "user hangup from back key";
@@ -341,6 +340,8 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
 
             mLocalVideoLayoutConfig.mX = mPreviewRect.left * 100 / screenWidth;
             mLocalVideoLayoutConfig.mY = mPreviewRect.top * 100 / screenHeight;
+            mLocalVideoLayoutConfig.mDisplayWidth = screenWidth;
+            mLocalVideoLayoutConfig.mDisplayHeight = screenHeight;
 
             mIsCustomLocalVideoLayoutConfig = true;
             mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
@@ -426,7 +427,9 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
             // or it's still valid
             if (!canCallBeResumed() || (null == mCall.getSession().mCallsManager.getCallWithCallId(mCall.getCallId()))) {
                 Log.d(LOG_TAG, "Hide the call notifications because the current one cannot be resumed");
-                EventStreamService.getInstance().hideCallNotifications();
+                if (null != EventStreamService.getInstance()) {
+                    EventStreamService.getInstance().hideCallNotifications();
+                }
                 mCall = null;
                 mSavedCallView = null;
             }
@@ -490,9 +493,14 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             layout.removeView(mCallView);
+            layout.setVisibility(View.VISIBLE);
 
             // add the call view only is the call is a video one
             if (mCall.isVideo()) {
+                // reported by a rageshake
+                if (null != mCallView.getParent()) {
+                    ((ViewGroup)mCallView.getParent()).removeView(mCallView);
+                }
                 layout.addView(mCallView, 1, params);
             }
             // init as GONE, will be displayed according to call states..
@@ -676,7 +684,9 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
             }
         } else {
             Log.d(LOG_TAG, "## onCreate(): Hide the call notifications");
-            EventStreamService.getInstance().hideCallNotifications();
+            if (null != EventStreamService.getInstance()) {
+                EventStreamService.getInstance().hideCallNotifications();
+            }
             mSavedCallView = null;
             mSavedLocalVideoLayoutConfig = null;
 
@@ -684,7 +694,19 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mCall.createCallView();
+                    if (null != mCall.getCallView()) {
+                        mCallView = mCall.getCallView();
+                        insertCallView();
+                        computeVideoUiLayout();
+                        mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
+
+                        // if the view is ready, launch the incoming call
+                        if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_FLEDGLING) && mCall.isIncoming()) {
+                            mCall.launchIncomingCall(mLocalVideoLayoutConfig);
+                        }
+                    } else if (mCall.isVideo() || (!mCall.isIncoming() && (TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState())))) {
+                        mCall.createCallView();
+                    }
                 }
             });
         }
@@ -807,7 +829,7 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
     private void toggleRearFrontCamera() {
         boolean wasCameraSwitched = false;
 
-        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) {
+        if ((null != mCall) && mCall.isVideo()) {
             wasCameraSwitched = mCall.switchRearFrontCamera();
         } else {
             Log.w(LOG_TAG, "## toggleRearFrontCamera(): Skipped");
@@ -1119,6 +1141,8 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
         }
 
         mLocalVideoLayoutConfig.mIsPortrait = (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE);
+        mLocalVideoLayoutConfig.mDisplayWidth = screenWidth;
+        mLocalVideoLayoutConfig.mDisplayHeight = screenHeight;
 
         Log.d(LOG_TAG, "## computeVideoUiLayout() : x " + mLocalVideoLayoutConfig.mX + " y " +  mLocalVideoLayoutConfig.mY);
         Log.d(LOG_TAG, "## computeVideoUiLayout() : mWidth " + mLocalVideoLayoutConfig.mWidth + " mHeight " +  mLocalVideoLayoutConfig.mHeight);
@@ -1326,7 +1350,9 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
                     mCall.answer();
                 } else {
                     if (mCall.isIncoming()) {
-                        VectorCallSoundManager.startRinging();
+                        // TODO IncomingCallActivity disables the ringing when the user accepts the call.
+                        // when IncomingCallActivity will be removed, it should be enabled again
+                        //VectorCallSoundManager.startRinging();
                     }
                     else {
                         VectorCallSoundManager.startRingBackSound(mCall.isVideo());
@@ -1396,7 +1422,9 @@ public class VectorCallViewActivity extends AppCompatActivity implements SensorE
 
         if (mIsCallEnded || mIsCalleeBusy) {
             Log.d(LOG_TAG, "onDestroy: Hide the call notifications");
-            EventStreamService.getInstance().hideCallNotifications();
+            if (null != EventStreamService.getInstance()) {
+                EventStreamService.getInstance().hideCallNotifications();
+            }
 
             if (mIsCalleeBusy) {
                 VectorCallSoundManager.startBusyCallSound();
