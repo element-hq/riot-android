@@ -86,7 +86,7 @@
     <string name="send_bug_report_include_screenshot">తెర ఛాయాచిత్రంను పంపు</string>
     <string name="send_bug_report">"లోపపు నివేదనలు” "</string>
     <string name="send_bug_report_placeholder">ఇక్కడ మీ సమస్యను వివరించండి</string>
-    <string name="send_bug_report_failed">"లోపపు నివేదిక పంపబడదు "</string>
+    <string name="send_bug_report_failed">లోపపు నివేదిక పంపబడదు  (%s)</string>
     <string name="send_bug_report_progress">పురోగతి (%s%%)</string>
 
     <string name="send_files_in">లొపలికి పంపించండి</string>
@@ -98,7 +98,7 @@
     <string name="login">ప్రవేశ ద్వారం</string>
     <string name="logout">నిష్క్రమణ ద్వారం</string>
     <string name="hs_url">నివాసం సేవిక యు ఆర్ ఎల్</string>
-    <string name="identity_url">"గుర్తించిన సేవిక యు ఆర్ ఎల్ "</string>
+    <string name="identity_url">గుర్తించిన సేవిక యు ఆర్ ఎల్</string>
     <string name="user">వినియోగదారుడు</string>
     <string name="users">వినియోగదారులు</string>
     <string name="search">వెతుకు”</string>
@@ -142,7 +142,7 @@
     <string name="auth_reset_password_message">మీ పాస్వర్డ్ను పునః ప్రారంభం చేయడానికి, మీ ఖాతాకు లింక్ చేయబడిన ఇ-తపాలా చిరునామాను నమోదు చేయండి:</string>
     <string name="auth_reset_password_missing_email">మీ ఖాతాకు లింగికను చేయబడిన ఇ-తపాలా చిరునామా తప్పక నమోదు చేయబడాలి.</string>
     <string name="auth_reset_password_missing_password">ఒక కొత్త సాంకేతిక పదము తప్పక నమోదు చేయబడాలి.</string>
-    <string name="auth_reset_password_email_validation_message">% S కు ఒక ఇ-తపాలా పంపబడింది. మీరు కలిగి ఉన్న లింగికను మీరు అనుసరించిన తర్వాత, క్రింద నొక్కండి .</string>
+    <string name="auth_reset_password_email_validation_message">%s కు ఒక ఇ-తపాలా పంపబడింది. మీరు కలిగి ఉన్న లింగికను మీరు అనుసరించిన తర్వాత, క్రింద నొక్కండి .</string>
     <string name="auth_reset_password_error_unauthorized">ఇ-తపాలా చిరునామాను ధృవీకరించడంలో విఫలమైంది: మీరు ఇ-తపాలా లో లింగికను నొక్కారనీ నిర్ధారించుకోండి</string>
     <string name="auth_reset_password_success_message">"మీ సాంకేతిక పదము  పునః ప్రారంభం చెయ్యబడింది.
 
@@ -162,7 +162,7 @@
     <string name="normal">సాధారణ</string>
     <string name="font_size">టెక్స్ట్ పరిమాణం ఎంపిక</string>
     <string name="tiny">చిన్న</string>
-    <string name="notification_unread_notified_messages">ప్రకటనలు</string>
+    <string name="notification_unread_notified_messages">%d ప్రకటనలు</string>
     <string name="notification_unread_notified_messages_in_room">%2$d గదులు లో %1$d చదవని నోటిఫైడ్ సందేశాలు ఉనాయి</string>
 
     <string name="historical_placeholder">చారిత్రక</string>

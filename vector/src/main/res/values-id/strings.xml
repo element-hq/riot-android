@@ -251,7 +251,7 @@ Mohon maaf untuk ketidaknyamannya.</string>
 
     <string name="compression_options">"Kirim sebagai "</string>
     <string name="attachment_remaining_time_seconds">%d d</string>
-    <string name="attachment_remaining_time_minutes">%1$dm %s$dd</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$dd</string>
 
     <string name="room_info_room_topic">Topik ruang</string>
 

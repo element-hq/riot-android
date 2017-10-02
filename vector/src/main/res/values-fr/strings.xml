@@ -460,7 +460,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="historical_placeholder">Rechercher dans l\'historique</string>
 
 <plurals name="public_room_nb_users">
-	<item quantity="one">1 utilisateur</item>
+	<item quantity="one">%d utilisateur</item>
 	<item quantity="other">%d utilisateurs</item>
 </plurals>
 
