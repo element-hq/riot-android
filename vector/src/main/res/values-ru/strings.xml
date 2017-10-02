@@ -787,7 +787,7 @@ Email также позволит вам при необходимости во�
     <string name="active_widgets">активных виджетов: %1$d</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Для этого вы должны иметь возможность пригласить пользователей.</string>
+    <string name="widget_integration_need_to_be_able_to_invite">Для этого вы должны иметь возможность приглашать пользователей.</string>
     <string name="widget_integration_unable_to_create">Не удалось создать виджет.</string>
     <string name="widget_integration_failed_to_send_request">Не удалось отправить запрос.</string>
     <string name="widget_integration_room_not_recognised">Данная комната не распознана.</string>
