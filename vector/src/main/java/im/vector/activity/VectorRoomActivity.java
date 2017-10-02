@@ -1875,16 +1875,29 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mVectorMessageListFragment.cancelSelectionMode();
     }
 
+    private boolean mIsMarkDowning;
+
     /**
      * Send the editText text.
      */
     private void sendTextMessage() {
+        if (mIsMarkDowning) {
+            return;
+        }
+
+        // ensure that a message is not sent twice
+        // markdownToHtml seems being slow in some cases
+        mSendButtonLayout.setEnabled(false);
+        mIsMarkDowning = true;
+
         VectorApp.markdownToHtml(mEditText.getText().toString().trim(), new VectorMarkdownParser.IVectorMarkdownParserListener() {
             @Override
             public void onMarkdownParsed(final String text, final String HTMLText) {
                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mSendButtonLayout.setEnabled(true);
+                        mIsMarkDowning = false;
                         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                         sendMessage(text, TextUtils.equals(text, HTMLText) ? null : HTMLText, Message.FORMAT_MATRIX_HTML);
                         mEditText.setText("");
