@@ -872,6 +872,7 @@ public class RegistrationManager {
      */
     private void register(final Context context, final RegistrationParams params, final InternalRegistrationListener listener) {
         if (getLoginRestClient() != null) {
+            params.initial_device_display_name = context.getString(R.string.login_mobile_device);
             mLoginRestClient.register(params, new SimpleApiCallback<Credentials>() {
                 @Override
                 public void onSuccess(Credentials credentials) {

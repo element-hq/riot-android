@@ -119,7 +119,7 @@ public final class GcmRegistrationManager {
     }
 
     // the pusher base
-    private static final String mBasePusherDeviceName = Build.MODEL.trim();
+    private final String mBasePusherDeviceName;
 
     // the context
     private final Context mContext;
@@ -139,6 +139,7 @@ public final class GcmRegistrationManager {
      */
     public GcmRegistrationManager(final Context appContext) {
         mContext = appContext.getApplicationContext();
+        mBasePusherDeviceName = mContext.getString(R.string.login_mobile_device);
 
         try {
             PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);

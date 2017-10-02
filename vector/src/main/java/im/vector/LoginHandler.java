@@ -18,6 +18,7 @@
 package im.vector;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
@@ -133,7 +134,7 @@ public class LoginHandler {
             }
         };
 
-        callLogin(hsConfig, username, phoneNumber, phoneNumberCountry, password, loginCallback);
+        callLogin(ctx, hsConfig, username, phoneNumber, phoneNumberCountry, password, loginCallback);
     }
 
     /**
@@ -146,20 +147,22 @@ public class LoginHandler {
      * @param password
      * @param callback
      */
-    private void callLogin(final HomeServerConnectionConfig hsConfig, final String username,
+    private void callLogin(final Context ctx, final HomeServerConnectionConfig hsConfig, final String username,
                            final String phoneNumber, final String phoneNumberCountry,
                            final String password, final SimpleApiCallback<Credentials> callback) {
         LoginRestClient client = new LoginRestClient(hsConfig);
+        String deviceName = ctx.getString(R.string.login_mobile_device);
+
         if (!TextUtils.isEmpty(username)) {
             if (android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
                 // Login with 3pid
-                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, username.toLowerCase(), password, callback);
+                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, username.toLowerCase(), password, deviceName, callback);
             } else {
                 // Login with user
-                client.loginWithUser(username, password, callback);
+                client.loginWithUser(username, password, deviceName, callback);
             }
         } else if (!TextUtils.isEmpty(phoneNumber) && !TextUtils.isEmpty(phoneNumberCountry)) {
-            client.loginWithPhoneNumber(phoneNumber, phoneNumberCountry, password, callback);
+            client.loginWithPhoneNumber(phoneNumber, phoneNumberCountry, password, deviceName, callback);
         }
     }
 
@@ -238,6 +241,9 @@ public class LoginHandler {
     public void register(Context ctx, final HomeServerConnectionConfig hsConfig, final RegistrationParams params, final SimpleApiCallback<HomeServerConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
+
+        // avoid dispatching the device name
+        params.initial_device_display_name = ctx.getString(R.string.login_mobile_device);
 
         client.register(params, new SimpleApiCallback <Credentials> () {
             @Override

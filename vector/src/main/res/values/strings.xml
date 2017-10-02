@@ -198,6 +198,7 @@
     <string name="login_error_unable_register">Unable to register</string>
     <string name="login_error_unable_register_mail_ownership">Unable to register : email ownership failure</string>
     <string name="login_error_invalid_home_server">Enter valid URL</string>
+    <string name="login_mobile_device">Mobile</string>
 
     <string name="login_error_forbidden">Invalid username/password</string>
     <string name="login_error_unknown_token">The access token specified was not recognised</string>
