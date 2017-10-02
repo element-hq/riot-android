@@ -211,10 +211,6 @@
             android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"/>
 
         <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_labs_create_conference_with_jitsi"
-            android:key="SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY"/>
-
-        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_labs_matrix_apps"
             android:key="SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY"/>
 

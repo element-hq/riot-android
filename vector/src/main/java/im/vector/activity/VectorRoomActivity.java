@@ -813,7 +813,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                 } else if (isUserAllowedToStartConfCall()) {
                     // cannot select if it is a video or a voice call
-                    if ((mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(VectorRoomActivity.this)) {
+                    if (mRoom.getActiveMembers().size() > 2) {
                         startJitsiCall(true);
                     } else {
                         displayVideoCallIpDialog();
@@ -1782,7 +1782,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param aIsVideoCall true to video call, false to audio call
      */
     private void startIpCall(final boolean aIsVideoCall) {
-        if ((mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(this)) {
+        if (mRoom.getActiveMembers().size() > 2) {
             startJitsiCall(aIsVideoCall);
             return;
         }
