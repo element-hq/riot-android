@@ -555,7 +555,7 @@
 
 加密消息对还没有实现加密的客户端将会不可见。</string>
 
-    <string name="ga_use_alert_message">你接受帮助我们改善应用程序的行为并发送崩溃报告吗？</string>
+    <string name="ga_use_alert_message">你同意发送崩溃报告用来帮助我们改善应用程序的行为吗？</string>
     <string name="ga_use_settings">自动发送崩溃报告</string>
     <string name="ga_use_disable_alert_message">你需要重启应用程序来禁用崩溃报告。</string>
 
@@ -572,7 +572,7 @@
 你可以现在或稍后从应用设置中做这件事。</string>
 
     <string name="ok">确认</string>
-    <string name="redact">筹辑</string>
+    <string name="redact">撤回</string>
     <string name="send_bug_report_alert_message">你似乎在沮丧地摇晃手机。您要提交 bug 报告吗？</string>
     <string name="send_files_in">发送到</string>
     <string name="e2e_need_log_in_again">您需要重新登录才能为此设备生成端对端加密密钥，并将公钥提交给您的主服务器。
@@ -698,4 +698,33 @@
     <string name="settings_interface_language">界面语言</string>
     <string name="settings_select_language">选择一个语言</string>
 
-    </resources>
+    <string name="offline">离线</string>
+
+    <string name="user_directory_header">用户目录</string>
+    <string name="people_search_user_directory">用户目录 (%s)</string>
+    <string name="settings_start_on_boot">开机时自动启动</string>
+    <string name="settings_clear_medias_cache">清空缓存的媒体文件</string>
+    <string name="settings_keep_media">保存媒体文件</string>
+
+    <string name="settings_hide_read_receipts">隐藏到达</string>
+    <string name="settings_dont_send_typings_notifs">不发送打字通知</string>
+    <string name="settings_always_show_timestamps">总是显示消息时间戳</string>
+    <string name="settings_disable_markdown">禁用markdown格式化</string>
+    <string name="settings_data_save_mode">数据保存模式</string>
+
+    <string name="media_saving_period_3_days">3天</string>
+    <string name="media_saving_period_1_week">1周</string>
+    <string name="media_saving_period_1_month">1个月</string>
+    <string name="media_saving_period_forever">永远</string>
+
+    <string name="settings_theme">主题</string>
+
+    <string name="font_size">文字大小选择</string>
+    <string name="tiny">微小</string>
+    <string name="small">小</string>
+    <string name="normal">标准</string>
+    <string name="large">大</string>
+    <string name="larger">更大</string>
+    <string name="largest">最大</string>
+    <string name="huge">巨大</string>
+</resources>

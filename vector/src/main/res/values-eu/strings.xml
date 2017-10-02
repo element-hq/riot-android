@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="resouces_language">eu</string>
-    <string name="resouces_country"></string>
+    <string name="resouces_country">EB</string>
 
     <string name="title_activity_home">Mezuak</string>
     <string name="title_activity_room">Gela</string>
@@ -624,7 +624,7 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="room_settings_addresses_e2e_prompt_title">Abisua!</string>
     <string name="directory_title">Direktorioa</string>
 
-    <string name="ga_use_alert_message">Aplikazioa hobetzen laguntzeko kraskatze txostenak guri bidaltzea onartzen duzu?</string>
+    <string name="ga_use_alert_message">Aplikazioa hobetzen lagundu nahi duzu kraskatze txostenak automatikoki bidaliz?</string>
     <string name="ga_use_settings">Bidali automatikoki kraskatze txostenak</string>
     <string name="ga_use_disable_alert_message">Aplikazioa berrabiarazi behar duzu kraskatze txostenak desgaitzeko.</string>
 
@@ -713,4 +713,20 @@ Behin gela bateko zifratzea gaituta ezin da gero desgaitu (oraingoz)
 
 Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan ikusiko.</string>
 
-    </resources>
+    <string name="offline">Deskonektatuta</string>
+
+    <string name="user_directory_header">Erabiltzaile direktorioa</string>
+    <string name="people_search_user_directory">ERABILTZAILE DIREKTORIOA (%s)</string>
+    <string name="settings_data_save_mode">Datuak gordetzeko modua</string>
+
+    <string name="settings_theme">Itxura</string>
+
+    <string name="font_size">Letra-tamaina</string>
+    <string name="tiny">Oso txikia</string>
+    <string name="small">Txikia</string>
+    <string name="normal">Arrunta</string>
+    <string name="large">Handia</string>
+    <string name="larger">Oso handia</string>
+    <string name="largest">Handiena</string>
+    <string name="huge">Erraldoia</string>
+</resources>
