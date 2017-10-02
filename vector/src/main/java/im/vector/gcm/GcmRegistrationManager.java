@@ -1064,14 +1064,7 @@ public final class GcmRegistrationManager {
      * @return the sync timeout in ms.
      */
     public int getBackgroundSyncTimeOut() {
-        int currentValue = 30000;
-
-        MXSession session = Matrix.getInstance(mContext).getDefaultSession();
-
-        if (null != session) {
-            currentValue = session.getSyncTimeout();
-        }
-        return getGcmSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, currentValue);
+        return getGcmSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, 30000);
     }
 
     /**
