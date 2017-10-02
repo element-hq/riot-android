@@ -253,6 +253,11 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      * Init the rooms display
      */
     private void refreshRooms() {
+        if ((null == mSession) || (null == mSession.getDataHandler())) {
+            Log.e(LOG_TAG, "## refreshRooms() : null session");
+            return;
+        }
+
         IMXStore store = mSession.getDataHandler().getStore();
 
         if (null == store) {

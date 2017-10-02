@@ -257,6 +257,10 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      * Init the rooms data
      */
     private void initData() {
+        if ((null == mSession) || (null == mSession.getDataHandler())) {
+            Log.e(LOG_TAG, "## initData() : null session");
+        }
+
         final List<Room> favourites = new ArrayList<>();
         final List<Room> directChats = new ArrayList<>();
         final List<Room> lowPriorities = new ArrayList<>();
