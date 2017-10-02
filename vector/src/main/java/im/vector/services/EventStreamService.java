@@ -1571,15 +1571,7 @@ public class EventStreamService extends Service {
         // test if there is no active call
         else if (null == VectorCallViewActivity.getActiveCall()) {
             Log.d(LOG_TAG, "displayIncomingCallNotification : display the dedicated notification");
-
-            if ((null != bingRule) && bingRule.isCallRingNotificationSound(bingRule.notificationSound())) {
-                VectorCallSoundManager.startRinging();
-            } else if (null != bingRule) {
-                Log.d(LOG_TAG, "displayIncomingCallNotification : silent notification");
-            } else {
-                Log.d(LOG_TAG, "displayIncomingCallNotification : no rule to manage the ringing");
-                VectorCallSoundManager.startRinging();
-            }
+            VectorCallSoundManager.startRinging();
 
             Notification notification = NotificationUtils.buildIncomingCallNotification(
                     EventStreamService.this,
