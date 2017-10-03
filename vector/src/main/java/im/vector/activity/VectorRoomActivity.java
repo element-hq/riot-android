@@ -1948,7 +1948,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         ArrayList<SharedDataItem> sharedDataItems = new ArrayList<>();
 
         if (null != intent) {
-            sharedDataItems = new ArrayList<>(SharedDataItem.listSharedDataItems(intent));
+            sharedDataItems = new ArrayList<>(SharedDataItem.listSharedDataItems(intent, SharedDataItem.class.getClassLoader()));
         } else if (null != mLatestTakePictureCameraUri) {
             sharedDataItems.add(new SharedDataItem(Uri.parse(mLatestTakePictureCameraUri)));
             mLatestTakePictureCameraUri = null;
@@ -1960,29 +1960,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             // sanity checks
             if (null != bundle) {
-                bundle.setClassLoader(SharedDataItem.class.getClassLoader());
-
-                if (bundle.containsKey(Intent.EXTRA_STREAM)) {
-                    try {
-                        Object streamUri = bundle.get(Intent.EXTRA_STREAM);
-
-                        if (streamUri instanceof Uri) {
-                            sharedDataItems.add(new SharedDataItem((Uri) streamUri));
-                        } else if (streamUri instanceof List) {
-                            List<Object> streams = (List<Object>) streamUri;
-
-                            for (Object object : streams) {
-                                if (object instanceof Uri) {
-                                    sharedDataItems.add(new SharedDataItem((Uri) object));
-                                } else if (object instanceof SharedDataItem) {
-                                    sharedDataItems.add((SharedDataItem) object);
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "fail to extract the extra stream");
-                    }
-                } else if (bundle.containsKey(Intent.EXTRA_TEXT)) {
+                if (bundle.containsKey(Intent.EXTRA_TEXT)) {
                     mEditText.setText(mEditText.getText() + bundle.getString(Intent.EXTRA_TEXT));
 
                     mEditText.post(new Runnable() {

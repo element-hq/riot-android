@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -454,12 +455,22 @@ public class SharedDataItem implements Parcelable {
         return fileUri;
     }
 
+
     /**
      * List the item provided in an intent.
      * @param intent the intent.
      * @return the SharedDataItem list
      */
     public static List<SharedDataItem> listSharedDataItems(Intent intent) {
+        return listSharedDataItems(intent, null);
+    }
+
+    /**
+     * List the item provided in an intent.
+     * @param intent the intent.
+     * @return the SharedDataItem list
+     */
+    public static List<SharedDataItem> listSharedDataItems(Intent intent, ClassLoader loader) {
         ArrayList<SharedDataItem> sharedDataItems = new ArrayList<>();
 
         if (null != intent) {
@@ -512,6 +523,39 @@ public class SharedDataItem implements Parcelable {
                 }
             } else if (null != intent.getData()) {
                 sharedDataItems.add(new SharedDataItem(intent.getData()));
+            } else {
+                Bundle bundle = intent.getExtras();
+
+                if (null != bundle) {
+
+                    // provide a custom loader
+                    if (null != loader) {
+                        bundle.setClassLoader(SharedDataItem.class.getClassLoader());
+                    }
+
+                    // list the Uris list
+                    if (bundle.containsKey(Intent.EXTRA_STREAM)) {
+                        try {
+                            Object streamUri = bundle.get(Intent.EXTRA_STREAM);
+
+                            if (streamUri instanceof Uri) {
+                                sharedDataItems.add(new SharedDataItem((Uri) streamUri));
+                            } else if (streamUri instanceof List) {
+                                List<Object> streams = (List<Object>) streamUri;
+
+                                for (Object object : streams) {
+                                    if (object instanceof Uri) {
+                                        sharedDataItems.add(new SharedDataItem((Uri) object));
+                                    } else if (object instanceof SharedDataItem) {
+                                        sharedDataItems.add((SharedDataItem) object);
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "fail to extract the extra stream");
+                        }
+                    }
+                }
             }
         }
 
