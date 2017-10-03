@@ -30,6 +30,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -150,6 +152,48 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     // on Samsung devices, the application is suspended when the screen is turned off
     // so the call must not be suspended
     private boolean mIsScreenOff = false;
+
+    private static final IMXCall.MXCallListener mBackgroundListener = new IMXCall.MXCallListener() {
+        @Override
+        public void onStateDidChange(String state) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    manageRingTone();
+                }
+            });
+        }
+
+        @Override
+        public void onCallError(String error) {
+
+        }
+
+        @Override
+        public void onViewLoading(View callView) {
+
+        }
+
+        @Override
+        public void onViewReady() {
+
+        }
+
+        @Override
+        public void onCallAnsweredElsewhere() {
+
+        }
+
+        @Override
+        public void onCallEnd(final int aReasonId) {
+
+        }
+
+        @Override
+        public void onPreviewSizeChanged(int width, int height) {
+
+        }
+    };
 
     private final IMXCall.MXCallListener mListener = new IMXCall.MXCallListener() {
         private String mLastCallState = null;
@@ -451,6 +495,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     private void clearCallData() {
         if (null != mCall) {
             mCall.removeListener(mListener);
+            mCall.removeListener(mBackgroundListener);
         }
 
         // remove header call view
@@ -921,6 +966,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             if (null != mCall) {
                 mCall.onPause();
                 mCall.removeListener(mListener);
+                mCall.addListener(mBackgroundListener);
             }
         }
     }
@@ -940,6 +986,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         if (null != mCall) {
             if (!mIsScreenOff) {
                 mCall.onResume();
+                mCall.removeListener(mBackgroundListener);
                 mCall.addListener(mListener);
             }
 
@@ -1027,7 +1074,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
      * @param aOpacity UTILS_OPACITY_FULL to fade out, UTILS_OPACITY_NONE to fade in
      * @param aAnimDuration animation duration in milliseconds
      */
-        private void fadeVideoEdge(final float aOpacity, int aAnimDuration) {
+    private void fadeVideoEdge(final float aOpacity, int aAnimDuration) {
         if(null != mHeaderPendingCallView){
             if(aOpacity != mHeaderPendingCallView.getAlpha()) {
                 mHeaderPendingCallView.animate().alpha(aOpacity).setDuration(aAnimDuration).setInterpolator(new AccelerateInterpolator());
@@ -1325,17 +1372,12 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             }
         }
 
-        // ringing management
-        switch (callState) {
-            case IMXCall.CALL_STATE_CONNECTING:
-            case IMXCall.CALL_STATE_CREATE_ANSWER:
-            case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
-            case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
-                VectorCallSoundManager.stopRinging();
-                break;
+        // ring tone
+        manageRingTone();
 
+        // other management
+        switch (callState) {
             case IMXCall.CALL_STATE_CONNECTED:
-                VectorCallSoundManager.stopRinging();
                 VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1348,15 +1390,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                 if (mAutoAccept) {
                     mAutoAccept = false;
                     mCall.answer();
-                } else {
-                    if (mCall.isIncoming()) {
-                        // TODO IncomingCallActivity disables the ringing when the user accepts the call.
-                        // when IncomingCallActivity will be removed, it should be enabled again
-                        //VectorCallSoundManager.startRinging();
-                    }
-                    else {
-                        VectorCallSoundManager.startRingBackSound(mCall.isVideo());
-                    }
                 }
                 break;
 
@@ -1365,6 +1398,47 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                 break;
         }
         Log.d(LOG_TAG, "## manageSubViews(): OUT");
+    }
+
+    /**
+     * Manage the ring tones
+     */
+    private static void manageRingTone() {
+        if (null == mCall) {
+            Log.d(LOG_TAG, "## manageRingTone(): call instance = null, just return");
+            return;
+        }
+
+        String callState = mCall.getCallState();
+
+        // ringing management
+        switch (callState) {
+            case IMXCall.CALL_STATE_CONNECTING:
+            case IMXCall.CALL_STATE_CREATE_ANSWER:
+            case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
+            case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
+                VectorCallSoundManager.stopRinging();
+                break;
+
+            case IMXCall.CALL_STATE_CONNECTED:
+                VectorCallSoundManager.stopRinging();
+                break;
+
+            case IMXCall.CALL_STATE_RINGING:
+                if (mCall.isIncoming()) {
+                    // TODO IncomingCallActivity disables the ringing when the user accepts the call.
+                    // when IncomingCallActivity will be removed, it should be enabled again
+                    //VectorCallSoundManager.startRinging();
+                }
+                else {
+                    VectorCallSoundManager.startRingBackSound(mCall.isVideo());
+                }
+                break;
+
+            default:
+                // nothing to do..
+                break;
+        }
     }
 
     private void saveCallView() {
@@ -1418,6 +1492,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     public void onDestroy() {
         if (null != mCall) {
             mCall.removeListener(mListener);
+            mCall.removeListener(mBackgroundListener);
         }
 
         if (mIsCallEnded || mIsCalleeBusy) {

@@ -731,4 +731,37 @@ Ismeretlen eszközök:</string>
 <string name="offline">Nem elérhető</string>
 
     <string name="user_directory_header">Felhasználó jegyzék</string>
-    </resources>
+    <string name="light_theme">Világos téma</string>
+    <string name="dark_theme">Sötét téma</string>
+    <string name="black_them">Fekete téma</string>
+
+    <string name="login_mobile_device">Mobil</string>
+
+    <string name="settings_notification_ringtone">Értesítési hang</string>
+    <string name="settings_12_24_timestamps">Időbélyegek mutatása 12 órás formátumban (pl.: 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Csatlakozás/kilépés üzenetek elrejtése (meghívások/kirúgások/letiltások nem érintettek)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Profilkép és megjelenő név változások elrejtése</string>
+
+    <string name="widget_no_power_to_manage">Engedélyre van szükséged a kisalkalmazások ebben a szobában való kezeléséhez</string>
+    <string name="widget_creation_failure">Kisalkalmazás létrehozása sikertelen</string>
+    <string name="event_formatter_widget_added">%1$s hozzá lett adva %2$s által</string>
+    <string name="event_formatter_widget_removed">%1$s eltávolításra került %2$s által</string>
+    <string name="settings_labs_create_conference_with_jitsi">Hozz létre konferencia hívást a jitsi segítségével</string>
+    <string name="widget_delete_message_confirmation">Biztos vagy benne hogy törölni akarod ezt a kisalkalmazást?</string>
+    <string name="active_widgets">%1$d aktív kisalkalmazások</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">Képesnek kell lenned felhasználók meghívására ha ezt akarod csinálni.</string>
+    <string name="widget_integration_unable_to_create">Kisalkalmazás létrehozása sikertelen.</string>
+    <string name="widget_integration_failed_to_send_request">Felkérés elküldése sikertelen.</string>
+    <string name="widget_integration_room_not_recognised">Nem sikerült felismerni ezt a szobát.</string>
+    <string name="widget_integration_positive_power_level">Az erősségi szintnek egy pozitív egész számnak kell lennie.</string>
+    <string name="widget_integration_must_be_in_room">Nem vagy ebben a szobában.</string>
+    <string name="widget_integration_no_permission_in_room">Nincs engedélyed, hogy ezt csináld ebben a szobában.</string>
+    <string name="widget_integration_missing_room_id">Hiányzó szoba azonosító a kérésben.</string>
+    <string name="widget_integration_missing_user_id">Hiányzó felhasználó azonosító a kérésben.</string>
+    <string name="widget_integration_room_not_visible">%s szoba nem látható.</string>
+    <string name="settings_labs_matrix_apps">Matrix Alkalmazások</string>
+    <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
+    <string name="add_matrix_apps_not_supported">Nem támogatott ezen az eszközön</string>
+</resources>
