@@ -768,4 +768,37 @@ Email также позволит вам при необходимости во�
     <string name="huge">Огромный</string>
 <string name="settings_keep_media">Сохранить медиа</string>
 
+    <string name="light_theme">Светлая тема</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="black_them">Черная тема</string>
+
+    <string name="settings_notification_ringtone">Звук уведомлений</string>
+    <string name="settings_12_24_timestamps">Показывать временные метки в 12-часовом формате (например 2:30pm)</string>
+    <string name="event_formatter_widget_added">%1$s добавлен %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s удален %2$s</string>
+    <string name="add_matrix_apps_not_supported">Не поддерживается на этом устройстве</string>
+<string name="settings_hide_join_leave_messages">Скрывать сообщения присоединился/покинул (не затрагивает приглашение/кик/бан)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Скрывать изменения аватара и отображаемого имени</string>
+
+    <string name="widget_no_power_to_manage">Вам нужно разрешение на управление виджетами в этой комнате</string>
+    <string name="widget_creation_failure">Создание виджета не удалось</string>
+    <string name="settings_labs_create_conference_with_jitsi">Осуществлять конференц звонки через Jitsi</string>
+    <string name="widget_delete_message_confirmation">Вы уверены, что хотите удалить виджет?</string>
+    <string name="active_widgets">активных виджетов: %1$d</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">Для этого вы должны иметь возможность приглашать пользователей.</string>
+    <string name="widget_integration_unable_to_create">Не удалось создать виджет.</string>
+    <string name="widget_integration_failed_to_send_request">Не удалось отправить запрос.</string>
+    <string name="widget_integration_room_not_recognised">Данная комната не распознана.</string>
+    <string name="widget_integration_positive_power_level">Уровень доступа должен быть числом больше 0.</string>
+    <string name="widget_integration_must_be_in_room">Вы не состоите в этой комнате.</string>
+    <string name="widget_integration_no_permission_in_room">У вас нет разрешений делать это в данной комнате.</string>
+    <string name="widget_integration_missing_room_id">В запросе отсутствует room_id.</string>
+    <string name="widget_integration_missing_user_id">В запросе отсутствует user_id.</string>
+    <string name="widget_integration_room_not_visible">Комната %s не отображается.</string>
+    <string name="settings_labs_matrix_apps">Приложения Matrix</string>
+    <string name="room_add_matrix_apps">Добавить приложения Matrix</string>
+    <string name="login_mobile_device">Mobile</string>
+
     </resources>
