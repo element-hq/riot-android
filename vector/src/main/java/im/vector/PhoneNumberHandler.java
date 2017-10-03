@@ -52,7 +52,7 @@ public class PhoneNumberHandler implements TextWatcher, View.OnFocusChangeListen
     private EditText mPhoneNumberInput;
     private EditText mCountryCodeInput;
 
-    private int mDisplayMode;
+    private final int mDisplayMode;
 
     // Ex "FR"
     private String mCountryCode;

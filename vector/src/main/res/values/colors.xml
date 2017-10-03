@@ -23,6 +23,7 @@
     <!-- dedicated drawables are created for each theme -->
     <color name="riot_primary_background_color_light">@android:color/white</color>
     <color name="riot_primary_background_color_dark">#2d2d2d</color>
+    <color name="riot_primary_background_color_black">#000000</color>
 
     <color name="primary_color_light">#76CFA6</color>
     <color name="primary_color_dark">#353535</color>

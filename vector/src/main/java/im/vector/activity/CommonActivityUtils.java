@@ -52,7 +52,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.util.Pair;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -207,6 +206,8 @@ public class CommonActivityUtils {
         if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
+
+            // reported by a rageshake
             if (null != eventStreamService) {
                 ArrayList<String> matrixIds = new ArrayList<>();
                 matrixIds.add(session.getMyUserId());
@@ -383,24 +384,7 @@ public class CommonActivityUtils {
         }
 
         // clear the preferences
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        String theme = ThemeUtils.getApplicationTheme(context);
-        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, context.getResources().getString(R.string.default_hs_server_url));
-        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, context.getResources().getString(R.string.default_identity_server_url));
-        Boolean useGa = PreferencesManager.useGA(context);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.clear();
-        editor.putString(LoginActivity.HOME_SERVER_URL_PREF, homeServer);
-        editor.putString(LoginActivity.IDENTITY_SERVER_URL_PREF, identityServer);
-        editor.commit();
-
-        if (null != useGa) {
-            PreferencesManager.setUseGA(context, useGa);
-        }
-
-        ThemeUtils.setApplicationTheme(context, theme);
+        PreferencesManager.clearPreferences(context);
 
         // reset the GCM
         Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
@@ -575,6 +559,7 @@ public class CommonActivityUtils {
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             if ((null != sessions) && (sessions.size() > 0)) {
+                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(context).getSharedGCMRegistrationManager();
                 Log.e(LOG_TAG, "## startEventStreamService() : restart EventStreamService");
 
                 for (MXSession session : sessions) {
@@ -590,6 +575,9 @@ public class CommonActivityUtils {
                             Log.e(LOG_TAG, "## startEventStreamService() : check if the crypto of the session " + session.getMyUserId());
                             session.checkCrypto();
                         }
+
+                        session.setSyncDelay(gcmRegistrationManager.isBackgroundSyncAllowed() ? gcmRegistrationManager.getBackgroundSyncDelay() : 0);
+                        session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
 
                         // session to activate
                         matrixIds.add(session.getCredentials().userId);

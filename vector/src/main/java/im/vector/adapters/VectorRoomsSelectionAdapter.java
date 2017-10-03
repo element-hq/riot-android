@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import im.vector.R;
+import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -42,10 +43,10 @@ import org.matrix.androidsdk.util.EventDisplay;
 public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
     private static final String LOG_TAG = "VectRoomsSelectAdapt";
 
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private int mLayoutResourceId;
-    private MXSession mSession;
+    private final Context mContext;
+    private final LayoutInflater mLayoutInflater;
+    private final int mLayoutResourceId;
+    private final MXSession mSession;
 
     /**
      * Constructor of a public rooms adapter.
@@ -108,7 +109,7 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         }
 
         if (roomSummary.getLatestReceivedEvent() != null) {
-            EventDisplay eventDisplay = new EventDisplay(mContext, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
+            EventDisplay eventDisplay = new RiotEventDisplay(mContext, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
             eventDisplay.setPrependMessagesWithAuthor(true);
             roomMessageTxtView.setText(eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color)));
 

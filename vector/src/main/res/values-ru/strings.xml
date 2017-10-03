@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">ru</string>
-    <string name="resouces_country">UK</string>
+    <string name="resouces_country">RU</string>
     
     <!-- titles -->
     <string name="title_activity_home">Сообщения</string>
@@ -20,7 +20,7 @@
     <string name="send">Отправить</string>
     <string name="copy">Копировать</string>
     <string name="resend">Повторить отправку</string>
-    <string name="redact">Редактировать</string>
+    <string name="redact">Удалить</string>
     <string name="quote">Цитата</string>
     <string name="share">Поделиться</string>
     <string name="later">Позже</string>
@@ -52,8 +52,8 @@
     <string name="action_voice_call">Голосовой вызов</string>
     <string name="action_video_call">Видео вызов</string>
     <string name="action_global_search">Глобальный поиск</string>
-    <string name="action_mark_all_as_read">Отметить всё как прочитанное</string>
-    <string name="action_historical">Исторический</string>
+    <string name="action_mark_all_as_read">Пометить все как прочитанное</string>
+    <string name="action_historical">История</string>
     <string name="action_quick_reply">Быстрый ответ</string>
     <string name="action_open">Открыть</string>
     <string name="action_close">Закрыть</string>
@@ -102,7 +102,7 @@
     
     <string name="send_bug_report_include_logs">Отправить журналы</string>
     <string name="send_bug_report_include_crash_logs">Отправить журналы ошибок</string>
-    <string name="send_bug_report_include_screenshot">Send screenshot</string>
+    <string name="send_bug_report_include_screenshot">Отправить скриншот</string>
     <string name="send_bug_report">Отчёт об ошибке</string>
     <string name="send_bug_report_description">Пожалуйста опишите ошибку. Что вы делали? Что вы ожидали получить? Что произошло?</string>
     <string name="send_bug_report_placeholder">Опишите проблему здесь</string>
@@ -111,7 +111,7 @@
     <string name="send_bug_report_sent">Отчёт об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчёта об ошибке (%s)</string>
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
-    <string name="send_bug_report_app_crashed">Программа при последнем пользовании закрылась с ошибкой. Хотели бы вы отправить отчёт о ошибке?</string>
+    <string name="send_bug_report_app_crashed">В прошлый раз приложение некорректно завершило работу. Хотите отправить отчет о сбое?</string>
     
     <string name="send_files_in">Предать в</string>
     <string name="read_receipt">Прочитан</string>
@@ -132,7 +132,7 @@
     <string name="start_video_call">Начать видеовызов</string>
 
     <string name="option_send_files">Отправка файлов</string>
-    <string name="option_take_photo_video">Снять фото или видео</string>
+    <string name="option_take_photo_video">Камера</string>
 
     <!-- Authentication -->
     <string name="auth_login">Вход</string>
@@ -145,10 +145,12 @@
     <string name="auth_password_placeholder">Пароль</string>
     <string name="auth_new_password_placeholder">Новый пароль</string>
     <string name="auth_user_name_placeholder">Логин</string>
-    <string name="auth_add_email_message">"Добавьте email к вашему аккаунту, чтобы другие пользователи могли найти вас и стал возможено восстановление пароля."</string>
+    <string name="auth_add_email_message">Добавьте email к вашему аккаунту, чтобы другие пользователи могли найти вас, а также, чтобы иметь возможность сбросить пароль.</string>
     <string name="auth_add_phone_message">"Добавьте телефон к вашему аккаунту, чтобы другие пользователи могли найти вас."</string>
     <string name="auth_add_email_phone_message">"Добавьте email и/или телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.\n\nEmail также позволит вам при необходимости восстановить пароль."</string>
-    <string name="auth_add_email_and_phone_message">"Добавьте email или телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.\n\nEmail также позволит вам при необходимости восстановить пароль."</string>
+    <string name="auth_add_email_and_phone_message">Добавьте email и телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.
+
+Email также позволит вам при необходимости восстановить пароль.</string>
     <string name="auth_email_placeholder">Email адрес</string>
     <string name="auth_opt_email_placeholder">Email адрес (дополнительный)</string>
     <string name="auth_phone_number_placeholder">Телефонный номер</string>
@@ -174,7 +176,7 @@
     <string name="auth_recaptcha_message">Проверка не являетесь ли вы роботом</string>
     <string name="auth_username_in_use">Логин уже используется</string>
     <string name="auth_home_server">Сервер:</string>
-    <string name="auth_identity_server">Сервер авторизации:</string>
+    <string name="auth_identity_server">Сервер идентификации:</string>
     <string name="auth_reset_password_next_step_button">Я проверил мой email адрес</string>
     <string name="auth_reset_password_message">Для сброса пароля введите привязанный к учётной записи email:</string>
     <string name="auth_reset_password_missing_email">Должен быть введён привязанный к учётной записи email.</string>
@@ -237,13 +239,13 @@
 
     <!-- call string -->
     <string name="call_connected">Вызов соеденен</string>
-    <string name="call_connecting">Вызов соеденяеться…</string>
+    <string name="call_connecting">Устанавливается соединение…</string>
     <string name="call_ended">Вызов закончен</string>
     <string name="call_ring">Звонок…</string>
     <string name="incoming_call">Входящий вызов</string>
-    <string name="incoming_video_call">Входящий видио вызов</string>
-    <string name="incoming_voice_call">Входящий аудио вызов</string>
-    <string name="call_in_progress">Звонок выполняется</string>
+    <string name="incoming_video_call">Входящий видеовызов</string>
+    <string name="incoming_voice_call">Входящий голосовой вызов</string>
+    <string name="call_in_progress">Выполняется вызов</string>
     
     <string name="call_error_user_not_responding">Вызываемый абонент не отвечает.</string>
     <string name="call_error_ice_failed">Медиавызов не удался</string>
@@ -479,7 +481,7 @@
     <string name="settings_summary_app_info_link">Экран системной информации приложения</string>
     <string name="settings_title_app_info_link">Сведения о приложении</string>
     
-    <string name="settings_enable_all_notif">Включить уведомления для этой учётной записи</string>
+    <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
     <string name="settings_enable_this_device">Включить уведомления для этого устройства</string>
     <string name="settings_turn_screen_on">Включить экран на 3 секунды</string>
     
@@ -535,7 +537,7 @@
     
     <string name="settings_logged_in">Авторизован как</string>
     <string name="settings_home_server">Сервер</string>
-    <string name="settings_identity_server">Сервер авторизации</string>
+    <string name="settings_identity_server">Сервер идентификации</string>
     
     <string name="account_email_validation_title">Ожидается подтверждение</string>
     <string name="account_email_validation_message">Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
@@ -604,7 +606,7 @@
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Для генерации ссылки команда должна иметь адрес.</string>
-    <string name="room_settings_room_access_entry_only_invited">Только приглашённые</string>
+    <string name="room_settings_room_access_entry_only_invited">Только приглашенные</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Все у кого есть ссылка на комнату, кроме гостей</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Все у кого есть ссылка на комнату, включая гостей</string>
     
@@ -624,7 +626,7 @@
     <string name="room_settings_never_send_to_unverified_devices_summary">Никогда не отправлять шифрованное сообщение на непроверенные устройства в этой комнате с этого устройства.</string>
     
     <!-- Room settings: advanced addresses -->
-    <string name="room_settings_addresses_no_local_addresses">У этой комнаты ещё нет локального адреса</string>
+    <string name="room_settings_addresses_no_local_addresses">У этой комнаты еще нет локального адреса</string>
     <string name="room_settings_addresses_add_new_address">Новый адрес (например #foo:matrix.org")</string>
     
     <string name="room_settings_addresses_invalid_format_dialog_title">Неверный формат псевдонима</string>
@@ -648,12 +650,12 @@
     <string name="directory_title">Каталог</string>
     
     <!-- GA use -->
-    <string name="ga_use_alert_message">Вы согласны помочь нам улучшить приложение и отправлять отчёты о сбоях ?</string>
-    <string name="ga_use_settings">Автоматически отправлять отчёты о сбоях</string>
-    <string name="ga_use_disable_alert_message">Для отключения отчётов о сбоях необходимо перезапустить приложение.</string>
+    <string name="ga_use_alert_message">Вы согласны помочь нам улучшить приложение и автоматически отправлять отчеты о любых сбоях?</string>
+    <string name="ga_use_settings">Автоматически отправлять отчеты о сбоях</string>
+    <string name="ga_use_disable_alert_message">Для отключения отчетов о сбоях необходимо перезапустить приложение.</string>
     
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s пытается загрузить историю комнаты, но не может её найти.</string>
+    <string name="failed_to_load_timeline_position">%s пытается загрузить историю комнаты, но не может ее найти.</string>
     
     
     <!-- encryption dialog -->
@@ -690,7 +692,7 @@
     <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных устройств</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Никогда не посылать зашифрованные сообщения для непроверенных устройств с этого устройства</string>
     
-    <string name="encryption_information_not_verified">Не проверено</string>
+    <string name="encryption_information_not_verified">НЕ проверено</string>
     <string name="encryption_information_verified">Проверено</string>
     <string name="encryption_information_blocked">В чёрном списке</string>
     
@@ -748,4 +750,22 @@
     <string name="media_saving_period_forever">Навсегда</string>
 
     <string name="settings_clear_medias_cache">Очистить кэш</string>
+    <string name="offline">Недоступен</string>
+
+    <string name="user_directory_header">Каталог пользователей</string>
+    <string name="people_search_user_directory">КАТАЛОГ ПОЛЬЗОВАТЕЛЕЙ (%s)</string>
+    <string name="settings_data_save_mode">Режим сохранения данных</string>
+
+    <string name="settings_theme">Тема</string>
+
+    <string name="font_size">Размер шрифта</string>
+    <string name="tiny">Очень мелкий</string>
+    <string name="small">Малый</string>
+    <string name="normal">Нормальный</string>
+    <string name="large">Крупный</string>
+    <string name="larger">Большой</string>
+    <string name="largest">Самый большой</string>
+    <string name="huge">Огромный</string>
+<string name="settings_keep_media">Сохранить медиа</string>
+
     </resources>

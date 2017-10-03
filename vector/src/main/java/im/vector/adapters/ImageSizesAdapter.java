@@ -29,9 +29,9 @@ import im.vector.R;
  * An adapter which can display string
  */
 public class ImageSizesAdapter extends ArrayAdapter<ImageCompressionDescription> {
-    protected Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private int mLayoutResourceId;
+    protected final Context mContext;
+    private final LayoutInflater mLayoutInflater;
+    private final int mLayoutResourceId;
 
     /**
      * Construct an adapter which will display a list of image size

@@ -17,7 +17,6 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import org.matrix.androidsdk.util.Log;
@@ -38,7 +37,7 @@ import im.vector.Matrix;
  * currently displayed.
  */
 @SuppressLint("LongLogTag")
-public class VectorFakeRoomPreviewActivity extends Activity {
+public class VectorFakeRoomPreviewActivity extends RiotBaseActivity {
     private static final String LOG_TAG = "VectorFakeRoomPreviewActivity";
 
     @Override

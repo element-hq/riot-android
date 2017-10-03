@@ -46,7 +46,7 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
 
     private static final String LOG_TAG = "RoomDirectoryAdapter";
 
-    private List<RoomDirectoryData> mList;
+    private final List<RoomDirectoryData> mList;
 
     private final OnSelectRoomDirectoryListener mListener;
 

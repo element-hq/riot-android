@@ -18,10 +18,23 @@ package im.vector.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import im.vector.R;
+import im.vector.activity.LoginActivity;
 import im.vector.ga.GAHelper;
 
 public class PreferencesManager {
@@ -84,6 +97,8 @@ public class PreferencesManager {
     public static final String SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY";
     public static final String SETTINGS_DISABLE_MARKDOWN_KEY = "SETTINGS_DISABLE_MARKDOWN_KEY";
     public static final String SETTINGS_DONT_SEND_TYPING_NOTIF_KEY = "SETTINGS_DONT_SEND_TYPING_NOTIF_KEY";
+    public static final String SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY = "SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY";
+    public static final String SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY";
 
     public static final String SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY";
     public static final String SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY";
@@ -93,16 +108,81 @@ public class PreferencesManager {
     public static final String SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY";
 
     public static final String SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY";
-
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
-
     public static final String SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY";
+
+    public static final String SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY = "SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY";
+
+    public static final String SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY";
+    public static final String SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY";
 
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;
     private static final int MEDIA_SAVING_FOREVER = 3;
 
+    // some preferences keys must be kept after a logout
+    private static final List<String> mKeysToKeepAfterLogout = Arrays.asList(
+            SETTINGS_HIDE_READ_RECEIPTS_KEY,
+            SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
+            SETTINGS_12_24_TIMESTAMPS_KEY,
+            SETTINGS_DONT_SEND_TYPING_NOTIF_KEY,
+            SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY,
+            SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY,
+            SETTINGS_MEDIA_SAVING_PERIOD_KEY,
+            SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY,
+
+            SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
+            SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
+            SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY,
+            SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY,
+            SETTINGS_START_ON_BOOT_PREFERENCE_KEY,
+            SETTINGS_INTERFACE_TEXT_SIZE_KEY,
+            SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY,
+            SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY,
+            SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY,
+
+            SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
+            SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
+            SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY,
+            SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY,
+            SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY,
+            SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY,
+            SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY,
+            SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
+            SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY
+    );
+
+    /**
+     * Clear the preferences.
+     *
+     * @param context the context
+     */
+    public static void clearPreferences(Context context) {
+        Set<String> keysToKeep = new HashSet<>(mKeysToKeepAfterLogout);
+
+        // home server url
+        keysToKeep.add(LoginActivity.HOME_SERVER_URL_PREF);
+        keysToKeep.add(LoginActivity.IDENTITY_SERVER_URL_PREF);
+
+        // theme
+        keysToKeep.add(ThemeUtils.APPLICATION_THEME_KEY);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        // get all the existing keys
+        Set<String> keys = preferences.getAll().keySet();
+        // remove the one to keep
+
+        keys.removeAll(keysToKeep);
+
+        for(String key : keys) {
+            editor.remove(key);
+        }
+
+        editor.commit();
+    }
 
     /**
      * Tells if the timestamp must be displayed in 12h format
@@ -115,6 +195,102 @@ public class PreferencesManager {
     }
 
     /**
+     * Tells if the join / leave membership events must be hidden in the messages list.
+     *
+     * @param context the context
+     * @return true if the join / leave membership events must be hidden in the messages list
+     */
+    public static boolean hideJoinLeaveMessages(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY, false);
+    }
+
+    /**
+     * Tells if the avatar / display name events must be hidden in the messages list.
+     *
+     * @param context the context
+     * @return true true if the avatar / display name events must be hidden in the messages list.
+     */
+    public static boolean hideAvatarDisplayNameChangeMessages(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY, false);
+    }
+
+    /**
+     * Update the notification ringtone
+     * @param context the context
+     * @param uri the new notification ringtone
+     */
+    public static void setNotificationRingTone(Context context, Uri uri) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        if (null != uri) {
+            editor.putString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, uri.toString());
+        } else {
+            editor.remove(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY);
+        }
+        editor.commit();
+    }
+
+    /**
+     * Provides the selected notification ring tone
+     * @param context the context
+     * @return the selected ring tone
+     */
+    public static Uri getNotificationRingTone(Context context) {
+        String url = PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, null);
+        Uri uri = null;
+
+        if (null != url) {
+            try {
+                uri = Uri.parse(url);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getNotificationRingTone() : Uri.parse failed");
+            }
+        }
+
+        if (null == uri) {
+            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
+
+        Log.d(LOG_TAG, "## getNotificationRingTone() returns " + uri);
+        return uri;
+    }
+
+    /**
+     * Provide the notification ringtone filename
+     * @param context the context
+     * @return the filename
+     */
+    public static String getNotificationRingToneName(Context context) {
+        Uri toneUri = getNotificationRingTone(context);
+        String name = null;
+
+        Cursor cursor = null;
+
+        try {
+            String[] proj = {MediaStore.Audio.Media.DATA};
+            cursor = context.getContentResolver().query(toneUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+            cursor.moveToFirst();
+
+            File file = new File(cursor.getString(column_index));
+            name = file.getName();
+
+            if (name.contains(".")) {
+                name = name.substring(0, name.lastIndexOf("."));
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getNotificationRingToneName() failed() : " + e.getMessage());
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return name;
+    }
+
+    /**
      * Tells if the data save mode is enabled
      *
      * @param context the context
@@ -122,6 +298,16 @@ public class PreferencesManager {
      */
     public static boolean useDataSaveMode(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY, false);
+    }
+    
+    /**
+     * Tells if the matrix apps are supported.
+     *
+     * @param context the context
+     * @return true if the matrix apps are supported.
+     */
+    public static boolean useMatrixApps(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, false);
     }
 
     /**

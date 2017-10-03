@@ -20,12 +20,12 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
+
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -44,7 +44,7 @@ import im.vector.util.VectorUtils;
  * InComingCallActivity is Dialog Activity, displayed when an incoming call (audio or a video) over IP
  * is received by the user. The user is asked to accept or ignore.
  */
-public class InComingCallActivity extends AppCompatActivity {
+public class InComingCallActivity extends RiotAppCompatActivity {
     private static final String LOG_TAG = "InComingCallActivity";
 
     // only one instance of this class should be displayed
@@ -53,6 +53,7 @@ public class InComingCallActivity extends AppCompatActivity {
 
     private ImageView mCallingUserAvatarView;
     private TextView mRoomNameTextView;
+    private TextView mIncomingCallTitleTextView;
     private Button mIgnoreCallButton;
     private Button mAcceptCallButton;
     private String mCallId;
@@ -63,7 +64,7 @@ public class InComingCallActivity extends AppCompatActivity {
     private final IMXCall.MXCallListener mMxCallListener = new IMXCall.MXCallListener() {
         @Override
         public void onStateDidChange(String state) {
-            Log.d(LOG_TAG,"## onStateDidChange(): state="+state);
+            Log.d(LOG_TAG, "## onStateDidChange(): state=" + state);
         }
 
         @Override
@@ -90,7 +91,7 @@ public class InComingCallActivity extends AppCompatActivity {
         public void onViewReady() {
             Log.d(LOG_TAG, "## onViewReady(): ");
 
-            if(null != mMxCall) {
+            if (null != mMxCall) {
                 if (mMxCall.isIncoming()) {
                     mMxCall.launchIncomingCall(null);
                 } else {
@@ -149,16 +150,16 @@ public class InComingCallActivity extends AppCompatActivity {
             mMatrixId = intent.getStringExtra(VectorCallViewActivity.EXTRA_MATRIX_ID);
             mCallId = intent.getStringExtra(VectorCallViewActivity.EXTRA_CALL_ID);
 
-            if(null == mMatrixId){
+            if (null == mMatrixId) {
                 Log.e(LOG_TAG, "## onCreate(): matrix ID is missing in extras");
                 finish();
-            } else if(null == mCallId){
+            } else if (null == mCallId) {
                 Log.e(LOG_TAG, "## onCreate(): call ID is missing in extras");
                 finish();
-            } else if(null == (mSession = Matrix.getInstance(getApplicationContext()).getSession(mMatrixId))){
+            } else if (null == (mSession = Matrix.getInstance(getApplicationContext()).getSession(mMatrixId))) {
                 Log.e(LOG_TAG, "## onCreate(): invalid session (null)");
                 finish();
-            } else if(null == (mMxCall = mSession.mCallsManager.getCallWithCallId(mCallId))){
+            } else if (null == (mMxCall = mSession.mCallsManager.getCallWithCallId(mCallId))) {
                 Log.e(LOG_TAG, "## onCreate(): invalid call ID (null)");
                 // assume that the user tap on a staled notification
                 if (VectorCallSoundManager.isRinging()) {
@@ -179,8 +180,12 @@ public class InComingCallActivity extends AppCompatActivity {
                 // UI widgets binding
                 mCallingUserAvatarView = (ImageView) findViewById(R.id.avatar_img);
                 mRoomNameTextView = (TextView) findViewById(R.id.room_name);
+                mIncomingCallTitleTextView = (TextView) findViewById(R.id.incoming_call_title);
                 mAcceptCallButton = (Button) findViewById(R.id.button_incoming_call_accept);
                 mIgnoreCallButton = (Button) findViewById(R.id.button_incoming_call_ignore);
+
+                // set the title depending on video or audio call
+                mIncomingCallTitleTextView.setText(mMxCall.isVideo() ? R.string.incoming_video_call : R.string.incoming_voice_call);
 
                 mCallingUserAvatarView.post(new Runnable() {
                     @Override
@@ -220,7 +225,7 @@ public class InComingCallActivity extends AppCompatActivity {
                 this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        CommonActivityUtils.displayUnknownDevicesDialog(mSession, InComingCallActivity.this, (MXUsersDevicesMap<MXDeviceInfo>)intent.getSerializableExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES), null);
+                        CommonActivityUtils.displayUnknownDevicesDialog(mSession, InComingCallActivity.this, (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES), null);
                     }
                 });
             }
@@ -228,7 +233,7 @@ public class InComingCallActivity extends AppCompatActivity {
     }
 
     @Override
-    public  void finish() {
+    public void finish() {
         super.finish();
         synchronized (LOG_TAG) {
             if (this == sharedInstance) {
@@ -307,9 +312,13 @@ public class InComingCallActivity extends AppCompatActivity {
      * Helper method: starts the CallViewActivity in auto accept mode.
      * The extras provided in  are copied to
      * the CallViewActivity and {@link VectorCallViewActivity#EXTRA_AUTO_ACCEPT} is set to true.
+     *
      * @param aSourceIntent the intent whose extras are transmitted
      */
     private void startCallViewActivity(final Intent aSourceIntent) {
+        // stop the ringing when the user presses on accept
+        VectorCallSoundManager.stopRinging();
+
         Intent intent = new Intent(this, VectorCallViewActivity.class);
         Bundle receivedData = aSourceIntent.getExtras();
         intent.putExtras(receivedData);
@@ -322,6 +331,8 @@ public class InComingCallActivity extends AppCompatActivity {
      */
     private void onHangUp() {
         if (null != mMxCall) {
+            // stop the ringing when the user presses on reject
+            VectorCallSoundManager.stopRinging();
             mMxCall.hangup("");
         }
     }

@@ -552,7 +552,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                 mCamera.startPreview();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onSwitchCamera(): cannot init the other camera");
+                Log.e(LOG_TAG, "## onSwitchCamera(): cannot init the other camera " + e.getMessage());
                 // assume that only one camera can be used.
                 mSwitchCameraImageView.setVisibility(View.GONE);
                 onSwitchCamera();
@@ -895,7 +895,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         resource.mContentStream.close();
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "fails to retrieve the bitmap from uri");
+                    Log.e(LOG_TAG, "fails to retrieve the bitmap from uri " + e.getMessage());
                 }
             }
 
@@ -1298,12 +1298,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     outStream.flush();
                     outStream.close();
 
-
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "attachImageFromCamera fails to create thumbnail file");
+                    Log.e(LOG_TAG, "attachImageFromCamera fails to create thumbnail file " + e.getMessage());
                 }
-
-
 
                 // provide the Uri
                 Bundle conData = new Bundle();
@@ -1367,7 +1364,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             mCamera = Camera.open(mCameraId);
         } catch (Exception e) {
-            Log.e(LOG_TAG,"Cannot open the camera " + mCameraId);
+            Log.e(LOG_TAG,"Cannot open the camera " + mCameraId + " "  + e.getMessage());
         }
 
         // fall back: the camera initialisation failed
@@ -1377,7 +1374,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             try {
                 mCamera = Camera.open((Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
             }  catch (Exception e) {
-                Log.e(LOG_TAG,"Cannot open the camera " + mCameraId);
+                Log.e(LOG_TAG,"Cannot open the camera " + mCameraId + " "  + e.getMessage());
             }
         }
 
@@ -1859,7 +1856,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         null,
                         MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC LIMIT " + GALLERY_TABLE_ITEM_SIZE);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## listLatestMedias(): " + e.getLocalizedMessage());
+                Log.e(LOG_TAG, "## listLatestMedias(): " + e.getMessage());
             }
 
             if (null != videoThumbnailsCursor) {

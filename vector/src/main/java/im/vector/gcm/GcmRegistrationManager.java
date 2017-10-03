@@ -119,7 +119,7 @@ public final class GcmRegistrationManager {
     }
 
     // the pusher base
-    private static final String mBasePusherDeviceName = Build.MODEL.trim();
+    private final String mBasePusherDeviceName;
 
     // the context
     private final Context mContext;
@@ -139,6 +139,8 @@ public final class GcmRegistrationManager {
      */
     public GcmRegistrationManager(final Context appContext) {
         mContext = appContext.getApplicationContext();
+        // TODO customise it ?
+        mBasePusherDeviceName = Build.MODEL.trim();
 
         try {
             PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
@@ -514,7 +516,7 @@ public final class GcmRegistrationManager {
         session.getPushersRestClient()
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
-                        DEFAULT_PUSHER_URL, append, new ApiCallback<Void>() {
+                        DEFAULT_PUSHER_URL, append, isBackgroundSyncAllowed(),  new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
                                 Log.d(LOG_TAG, "registerToThirdPartyServer succeeded");
@@ -637,7 +639,7 @@ public final class GcmRegistrationManager {
      * @param listener the listener
      */
     public void forceSessionsRegistration(final ThirdPartyRegistrationListener listener) {
-        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) || (mRegistrationState == RegistrationState.GCM_REGISTRED)){
+        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) || (mRegistrationState == RegistrationState.GCM_REGISTRED)) {
             mRegistrationState = RegistrationState.GCM_REGISTRED;
 
             register(listener);
@@ -646,7 +648,7 @@ public final class GcmRegistrationManager {
                 try {
                     listener.onThirdPartyRegistrationFailed();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "forceSessionsRegistration failed " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "forceSessionsRegistration failed " + e.getMessage());
                 }
             }
         }
@@ -837,6 +839,11 @@ public final class GcmRegistrationManager {
 
             @Override
             public void onMatrixError(MatrixError e) {
+                if (e.mStatus == 404) {
+                    // httpPusher is not available on server side anymore so assume the removal was successful
+                    onSuccess(null);
+                    return;
+                }
                 if (null != callback) {
                     callback.onMatrixError(e);
                 }
@@ -898,6 +905,11 @@ public final class GcmRegistrationManager {
 
                             @Override
                             public void onMatrixError(MatrixError e) {
+                                if (e.mStatus == 404) {
+                                    // httpPusher is not available on server side anymore so assume the removal was successful
+                                    onSuccess(null);
+                                    return;
+                                }
                                 Log.e(LOG_TAG, "unregisterSession onMatrixError " + e.errcode);
                                 onError(e.getLocalizedMessage());
                             }
@@ -1054,14 +1066,7 @@ public final class GcmRegistrationManager {
      * @return the sync timeout in ms.
      */
     public int getBackgroundSyncTimeOut() {
-        int currentValue = 30000;
-
-        MXSession session = Matrix.getInstance(mContext).getDefaultSession();
-
-        if (null != session) {
-            currentValue = session.getSyncTimeout();
-        }
-        return getGcmSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, currentValue);
+        return getGcmSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, 30000);
     }
 
     /**

@@ -89,6 +89,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
+import im.vector.widgets.WidgetsManager;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements IMessagesAdapterActionsListener {
     private static final String LOG_TAG = "VectorMessageListFrg";
@@ -262,6 +263,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         // notify host activity
         if (null != mHostActivityListener)
             mHostActivityListener.onListTouch();
+    }
+
+    @Override
+    protected boolean canAddEvent(Event event) {
+        return TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType()) || super.canAddEvent(event);
     }
 
     /**
@@ -816,7 +822,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
         } else {
             // else download it
-            final String downloadId = mediasCache.downloadMedia(getActivity().getApplicationContext(), mSession.getHomeserverConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
+            final String downloadId = mediasCache.downloadMedia(getActivity().getApplicationContext(), mSession.getHomeServerConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
             mAdapter.notifyDataSetChanged();
 
             if (null != downloadId) {
@@ -1201,33 +1207,24 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
     }
 
-
-    private final HashMap<String, Object> mBingRulesByEventId = new HashMap<>();
+    private final HashMap<String, Boolean> mHighlightStatusByEventId = new HashMap<>();
 
     @Override
     public boolean shouldHighlightEvent(Event event) {
-        String eventId = event.eventId;
-
-        // cache the dedicated rule because it is slow to find them out
-        Object ruleAsVoid = mBingRulesByEventId.get(eventId);
-
-        if (null != ruleAsVoid) {
-            if (ruleAsVoid instanceof BingRule) {
-                return ((BingRule) ruleAsVoid).shouldHighlight();
-            }
+        // sanity check
+        if ((null == event) || (null == event.eventId)) {
             return false;
         }
 
-        boolean res = false;
+        String eventId = event.eventId;
+        Boolean status = mHighlightStatusByEventId.get(eventId);
 
-        BingRule rule = mSession.getDataHandler().getBingRulesManager().fulfilledBingRule(event);
-
-        if (null != rule) {
-            res = rule.shouldHighlight();
-            mBingRulesByEventId.put(eventId, rule);
-        } else {
-            mBingRulesByEventId.put(eventId, eventId);
+        if (null != status) {
+            return status;
         }
+
+        boolean res = (null != mSession.getDataHandler().getBingRulesManager().fulfilledHighlightBingRule(event));
+        mHighlightStatusByEventId.put(eventId, res);
 
         return res;
     }

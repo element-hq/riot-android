@@ -64,7 +64,7 @@ public class RoomDirectoryData implements Serializable {
      */
     public static RoomDirectoryData getIncludeAllServers(MXSession session, String serverUrl, String serverName) {
         // the self server url should be null
-        if (TextUtils.equals(session.getHomeserverConfig().getHomeserverUri().getHost(), serverUrl)) {
+        if (TextUtils.equals(session.getHomeServerConfig().getHomeserverUri().getHost(), serverUrl)) {
             return new RoomDirectoryData(null, serverName, null, null, true);
         } else {
             return new RoomDirectoryData(serverUrl, serverName, null, null, true);

@@ -1,2 +1,320 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="resouces_language">ఆంగ్లము</string>
+    <string name="resouces_country">యు కె</string>
+
+    <string name="title_activity_home">సందేశం</string>
+    <string name="title_activity_room">గది</string>
+    <string name="title_activity_settings">అమరికలు”</string>
+    <string name="title_activity_member_details">శభ్యునీ వివరాలు</string>
+    <string name="title_activity_historical">చరిత్రకమైన</string>
+
+    <string name="ok">అలాగే</string>
+    <string name="cancel">రధుచాయడం</string>
+    <string name="save">దాచు</string>
+    <string name="leave">వదిలివయడం</string>
+    <string name="send">పంపడం</string>
+    <string name="copy">నకిలి</string>
+    <string name="resend">మళ్లీ పంపి</string>
+    <string name="redact">సరి</string>
+    <string name="share">వాటా</string>
+    <string name="later">తరువాత</string>
+    <string name="forward">ఎదురు</string>
+    <string name="view_source">మూలాధార దర్శనం</string>
+    <string name="view_decrypted_source">వ్యక్తపరిచే మూలాధారాన్ని వీక్షించండి</string>
+    <string name="delete">తొలగించు</string>
+    <string name="rename">పునర్నామకరణ”</string>
+    <string name="report_content">నివేదానుసారం</string>
+    <string name="active_call">క్రియాశీల పిలుపు</string>
+    <string name="ongoing_conference_call">" సమావేశ పిలుపు కొనసాగుతున్నది.  వీడియో లొ నైన లేదా మాట్లాడటానికైనా చేరండీ."</string>
+    <string name="ongoing_conference_call_voice">మాట్లాడు</string>
+    <string name="ongoing_conference_call_video">వీడియో</string>
+    <string name="cannot_start_call">పిలుపుని ప్రారంభించలక పొతున్నాము, ధాయచసి కసేపటి తరువత ప్రయత్నీచండి</string>
+    <string name="missing_permissions_warning">సరైన అనుమతులు లేని కరనంగా, కుని లక్షణాలు పనిచేయవు.</string>
+    <string name="missing_permissions_to_start_conf_call">ఈ గది లొ మీరు పిలుపుని మోధలుపటాడనికి సరైన అనుమతులు లవు</string>
+    <string name="missing_permissions_title_to_start_conf_call">పిలుపును మొధలుపాటలేము</string>
+    <string name="device_information">పరికరం యొక సమాచారం</string>
+    <string name="send_anyway">ఏమైనప్పటికీ పంపుచు</string>
+    <string name="or">లేదా</string>
+    <string name="and">మరియు</string>
+    <string name="invite">ఆహ్వనించడము</string>
+    <string name="action_sign_out">సైన్ అవుట్ చేయండి</string>
+    <string name="action_voice_call">వాయిస్ కాల్</string>
+    <string name="action_video_call">విడియో కాల్</string>
+    <string name="action_global_search">ప్రపంచ శోధన</string>
+    <string name="action_mark_all_as_read">అన్నీ చదివినట్లు గుర్తించు</string>
+    <string name="action_historical">చారిత్రకమైన</string>
+    <string name="action_quick_reply">తక్షణ ప్రత్యుత్తరం</string>
+    <string name="action_open">తెరచిన</string>
+    <string name="action_close">మూత</string>
+    <string name="copied_to_clipboard">క్లిప్బోర్డ్కు కాపీ చేయబడింది</string>
+    <string name="disable">నిరుపయోగ</string>
+
+    <string name="dialog_title_confirmation">ధృవీకరణ</string>
+    <string name="dialog_title_warning">హెచ్చరిక</string>
+
+    <string name="bottom_action_home">నివాసం</string>
+    <string name="bottom_action_favourites">గుర్తుంచు</string>
+    <string name="bottom_action_people">ప్రజలు</string>
+    <string name="bottom_action_rooms">గది</string>
+
+    <string name="home_filter_placeholder_home">గది కోసం శోధించండి</string>
+    <string name="home_filter_placeholder_favorites">ఇష్టమైనవాతి కోసం శోధించండి</string>
+    <string name="home_filter_placeholder_people">ప్రజల కోసం శోధించండి</string>
+    <string name="home_filter_placeholder_rooms">గది కోసం శోధించండి</string>
+
+    <string name="invitations_header">ఆహ్వానాలను</string>
+    <string name="low_priority_header">తక్కువ ప్రాధాన్యత</string>
+
+    <string name="direct_chats_header">సంభాషణలు</string>
+    <string name="local_address_book_header">స్థానిక చిరునామా పుస్తకం</string>
+    <string name="matrix_only_filter">"మత్రిక  పరిచయాలు మాత్రమే"</string>
+    <string name="no_conversation_placeholder">సంభాషణలు లేవు</string>
+    <string name="no_contact_access_placeholder">మీరు మీ స్థానిక పరిచయాలను సాంగత్యం చేయడానికి రియోట్ను అనుమతించలేదు</string>
+    <string name="no_result_placeholder">ఫలితాలు లేవు</string>
+
+    <string name="rooms_header">గదులు</string>
+    <string name="rooms_directory_header">గదులు వివరములు</string>
+    <string name="no_room_placeholder">గదులు లేవు</string>
+    <string name="no_public_room_placeholder">బహిరంగ గదులు అందుబాటులో లేవు</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="one">వినియోగదారుడు</item>
+	<item quantity="other">%d వినియోగదారులు</item>
+</plurals>
+
+    <string name="send_bug_report_include_logs">నమోదులను పంపు</string>
+    <string name="send_bug_report_include_crash_logs">కుప్పకూలిన నమోదులను పంపు</string>
+    <string name="send_bug_report_include_screenshot">తెర ఛాయాచిత్రంను పంపు</string>
+    <string name="send_bug_report">"లోపపు నివేదనలు” "</string>
+    <string name="send_bug_report_placeholder">ఇక్కడ మీ సమస్యను వివరించండి</string>
+    <string name="send_bug_report_failed">లోపపు నివేదిక పంపబడదు  (%s)</string>
+    <string name="send_bug_report_progress">పురోగతి (%s%%)</string>
+
+    <string name="send_files_in">లొపలికి పంపించండి</string>
+    <string name="read_receipt">చదవండి</string>
+
+    <string name="join_room">గదిలొకి చేరండి</string>
+    <string name="username">వినియోగదారుడి పేరు</string>
+    <string name="create_account">నమోదు</string>
+    <string name="login">ప్రవేశ ద్వారం</string>
+    <string name="logout">నిష్క్రమణ ద్వారం</string>
+    <string name="hs_url">నివాసం సేవిక యు ఆర్ ఎల్</string>
+    <string name="identity_url">గుర్తించిన సేవిక యు ఆర్ ఎల్</string>
+    <string name="user">వినియోగదారుడు</string>
+    <string name="users">వినియోగదారులు</string>
+    <string name="search">వెతుకు”</string>
+
+    <string name="start_new_chat">కొత మాటామంతి ప్రారంభించు</string>
+    <string name="start_voice_call">వాయిస్ కాల్ని ప్రారంభించండి</string>
+    <string name="start_video_call">దృశ్యం కాల్ని ప్రారంభించండి</string>
+
+    <string name="option_send_files">దస్ర్తాలను పంపించు</string>
+    <string name="option_take_photo_video">చిత్రయం లేదా దృశ్యమును తీయండి</string>
+
+    <string name="auth_login">ప్రవేశ ద్వారం</string>
+    <string name="auth_register">నమోదు</string>
+    <string name="auth_submit">సమర్పణ</string>
+    <string name="auth_skip">దాటవేయు</string>
+    <string name="auth_send_reset_email">" పునః ప్రారంభమైన తపాల ను "</string>
+    <string name="auth_return_to_login">"ప్రవేశ ద్వారమునకు  తిరిగి వెళ్లు"</string>
+    <string name="auth_user_id_placeholder">ఇ-తపాలా లేదా వినియోగదారు పేరు</string>
+    <string name="auth_password_placeholder">రహస్యపదం</string>
+    <string name="auth_new_password_placeholder">కొత్త రహస్యపదం</string>
+    <string name="auth_user_name_placeholder">వినియోగదారుడి పేరు</string>
+    <string name="auth_email_placeholder">ఇ-తపాలా చిరునామా</string>
+    <string name="auth_opt_email_placeholder">ఇ-తపాలా చిరునామా (ఇచ్ఛాపూర్వక)</string>
+    <string name="auth_repeat_password_placeholder">రహస్యపదమును మళ్ళీ చెప్పు</string>
+    <string name="auth_repeat_new_password_placeholder">మీ కొత్త రహస్యపదమును నిర్ధారించండి</string>
+    <string name="auth_invalid_login_param">తప్పు వినియోగదారు పేరు లేదా తప్పు రహస్యపదము</string>
+    <string name="auth_invalid_password">రహస్యపదము మరీ చిన్నది</string>
+    <string name="auth_missing_password">రహస్యపదము లేధు</string>
+    <string name="auth_invalid_email">ఇది చెల్లుబాటు అయ్యే ఇ-తపాలా చిరునామా లాగా లేదు</string>
+    <string name="auth_email_already_defined">ఈ ఇ-తపాలా చిరునామా ఇప్పటికే నిర్వచించబడింది.</string>
+    <string name="auth_missing_email">ఇ-తపాలా చిరునామా</string>
+    <string name="auth_password_dont_match">రహస్యపదము సరితూగలేదు</string>
+    <string name="auth_forgot_password">రహస్యపదం మర్చిపోయారు?</string>
+    <string name="auth_use_server_options">కస్టమ్ సర్వర్ ఎంపికలు (ఆధునిక) ఉపయోగించండి</string>
+    <string name="auth_email_validation_message">దయచేసి నమోదును కొనసాగించడానికి మీ ఇమెయిల్ను తనిఖీ చేయండి</string>
+    <string name="auth_recaptcha_message">ఈ నివాస సేవిక మీరు రోబోట్ కాదని నిర్ధారించుకొవలనుకుంటునధి</string>
+    <string name="auth_username_in_use">ఈ పేరు వెరొకరు వడుకుంట్నునారు</string>
+    <string name="auth_home_server">"నివాసం "</string>
+    <string name="auth_identity_server">గుర్తింపు సేవిక:</string>
+    <string name="auth_reset_password_next_step_button">నేను నా ఇ-తపాలా చిరునామాను ధృవీకరించాను</string>
+    <string name="auth_reset_password_message">మీ పాస్వర్డ్ను పునః ప్రారంభం చేయడానికి, మీ ఖాతాకు లింక్ చేయబడిన ఇ-తపాలా చిరునామాను నమోదు చేయండి:</string>
+    <string name="auth_reset_password_missing_email">మీ ఖాతాకు లింగికను చేయబడిన ఇ-తపాలా చిరునామా తప్పక నమోదు చేయబడాలి.</string>
+    <string name="auth_reset_password_missing_password">ఒక కొత్త సాంకేతిక పదము తప్పక నమోదు చేయబడాలి.</string>
+    <string name="auth_reset_password_email_validation_message">%s కు ఒక ఇ-తపాలా పంపబడింది. మీరు కలిగి ఉన్న లింగికను మీరు అనుసరించిన తర్వాత, క్రింద నొక్కండి .</string>
+    <string name="auth_reset_password_error_unauthorized">ఇ-తపాలా చిరునామాను ధృవీకరించడంలో విఫలమైంది: మీరు ఇ-తపాలా లో లింగికను నొక్కారనీ నిర్ధారించుకోండి</string>
+    <string name="auth_reset_password_success_message">"మీ సాంకేతిక పదము  పునః ప్రారంభం చెయ్యబడింది.
+
+మీరు అన్ని పరికరాలనుండి నిష్క్రమణ అయ్యారు మరియు ఇకపై."</string>
+
+    <string name="quote">కోట్</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">గుప్తీకరించిన గదులలో కాన్ఫరెన్స్ కాల్లకు మద్దతు లేదు</string>
+    <string name="offline">ఆఫ్లైన్</string>
+
+    <string name="user_directory_header">వాడుకరి డైరెక్టరీ</string>
+    <string name="send_bug_report_description">దయచేసి బగ్ను వివరించండి. మీరు ఏం చేసావ్? మీరు ఏమి జరిగే అవకాశముంది అని అనుకుంటునారు? వాస్తవానికి ఏం జరిగింది?</string>
+    <string name="huge">భారీ</string>
+<string name="largest">అతిపెద్ద</string>
+    <string name="larger">పెద్ద</string>
+    <string name="large">పెద్ద</string>
+    <string name="small">చిన్న</string>
+    <string name="normal">సాధారణ</string>
+    <string name="font_size">టెక్స్ట్ పరిమాణం ఎంపిక</string>
+    <string name="tiny">చిన్న</string>
+    <string name="notification_unread_notified_messages">%d ప్రకటనలు</string>
+    <string name="notification_unread_notified_messages_in_room">%2$d గదులు లో %1$d చదవని నోటిఫైడ్ సందేశాలు ఉనాయి</string>
+
+    <string name="historical_placeholder">చారిత్రక</string>
+
+    <string name="select_room_directory">గది వివరం ఎంచుకోండి</string>
+    <string name="directory_server_fail_to_retrieve_server">సేవిక అందుబాటులో లేకపోవచ్చు లేదా ఓవర్లోడ్ కావచ్చు</string>
+    <string name="directory_server_type_homeserver">బహిరంగ గదులు నుండి జాబితా చేయడానికి ఒక ఇంటి సేవికను టైప్ చేయండి</string>
+    <string name="directory_server_placeholder">నివాసపు సేవిక URL</string>
+    <string name="directory_server_all_rooms_on_server">%S లో అన్ని గదుల సేవిక</string>
+    <string name="directory_server_native_rooms">అన్ని స్థానిక %s సేవిక</string>
+
+    <string name="encryption_information_verify_key_match">"నేను  మీటలను సరిపోతున్నానని ధృవీకరిస్తున్నాను"</string>
+
+    <string name="e2e_enabling_on_app_update">రియోట్ ఇప్పుడు ఎండ్-టు-ఎండ్ ఎన్క్రిప్షన్కు మద్దతిస్తుంది, కానీ దాన్ని ఎనేబుల్ చెయ్యడానికి మీరు మళ్లీ లాగిన్ కావాలి.
+
+అప్లికేషన్ సెట్టింగుల నుండి మీరు ఇప్పుడు లేదా తరువాత చేయవచ్చు.</string>
+
+    <string name="unknown_devices_alert_title">గదిలో తెలియని పరికరాలు ఉన్నాయి</string>
+    <string name="unknown_devices_alert_message">ఈ గది లొ ధృవీకరించబడని తెలియని పరికరాలను కలిగి ఉనాయి.
+పరికరములు తాము చెప్పుకుంటున్న వాడుకదారులకు చెందినవి అని హామీ లేదు.
+కొనసాగించటానికి ముందు ప్రతి పరికరానికి ధృవీకరణ ప్రాసెస్ ద్వారా వెళ్ళమని మేము మీకు సిఫార్సు చేస్తున్నాము, కానీ మీరు కావాలనుకుంటే ధృవీకరించకుండా సందేశాన్ని మళ్ళీ పంపించవచ్చు.
+తెలియని పరికరాలు:</string>
+
+    <string name="encryption_information_verify_device_warning2">ఇది సరిపోలితే, దిగువ ధృవీకరించు బటన్ను నొక్కండి. అది కాకపోతే, అప్పుడు ఎవరో ఈ పరికరాన్ని అడ్డుకుంటున్నారు మరియు మీరు బహుశా బ్లాక్ బటన్ను నొక్కాలనుకుంటున్నారు.
+భవిష్యత్తులో ఈ ధృవీకరణ ప్రక్రియ మరింత అధునాతనంగా ఉంటుంది.</string>
+    <string name="encryption_information_block">నిరోధిత జాబితాలోని</string>
+    <string name="encryption_information_unblock">ఆమోదంకానిజాబితా లొ లెదు</string>
+
+    <string name="encryption_information_verify_device">పరికరం ధృవీకరించండి</string>
+    <string name="encryption_information_verify_device_warning">" ఈ పరికరాన్ని విశ్వసించవచ్చని ధృవీకరించడానికి, దయచేసి దాని యజమాని ని ఇతర మార్గాల ద్వారా (ఉదా. వ్యక్తి లేదా ఫోన్ కాల్) ఉపయోగించి వారిని సంప్రదించి.వారి వినియోగదారు సెట్టింగ్ల్లో చూసే కీ దిగువ ఉన్న కీతో సరిపోలుతుందా లేదా అని అడగండి"</string>
+    <string name="send_bug_report_logs_description">సమస్యలను నిర్ధారించడానికి, ఈ క్లయింట్ నుండి లాగ్లు మరియు ఈ బగ్ నివేదికతో పంపబడతాయి. మీరు పైన ఉన్న వచనాన్ని మాత్రమే పంపించాలనుకుంటే, దయచేసి అన్టిక్ చెయ్యి:</string>
+    <string name="send_bug_report_alert_message">మీరు నిరాశతో ఫోన్ను వణుకు అనిపించవచ్చు. మీరు బగ్ నివేదికను సమర్పించాలనుకుంటున్నారా?</string>
+    <string name="send_bug_report_app_crashed">దరఖాస్తు క్రాష్ అయ్యింది. మీరు క్రాష్ నివేదికను సమర్పించాలనుకుంటున్నారా?</string>
+
+    <string name="send_bug_report_sent">బగ్ నివేదిక విజయవంతంగా పంపబడింది</string>
+    <string name="auth_add_email_message">మీ ఖాతాకు ఒక ఇమెయిల్ చిరునామాను జోడించి, వినియోగదారులు మిమ్మల్ని గుర్తించడం వీలు కల్పించి, పాస్ వర్డ్ ను రీసెట్ చెయ్యనివ్వండి.</string>
+    <string name="auth_add_phone_message">వినియోగదారులు మిమ్మల్ని కనుగొనడానికి మిమ్మల్ని అనుమతించడానికి మీ ఖాతాకు ఒక ఫోన్ నంబర్ను జోడించండి.</string>
+    <string name="auth_add_email_phone_message">వినియోగదారులు మిమ్మల్ని కనుగొనడానికి మిమ్మల్ని అనుమతించడానికి మీ ఖాతాకు ఇమెయిల్ చిరునామా మరియు / లేదా ఫోన్ నంబర్ను జోడించండి.
+
+ఇమెయిల్ చిరునామా మీ పాస్ వర్డ్ ను మళ్ళీ రీసెట్ చేస్తుంది.</string>
+    <string name="auth_add_email_and_phone_message">వినియోగదారులు మిమ్మల్ని కనుగొనడానికి మిమ్మల్ని అనుమతించడానికి మీ ఖాతాకు ఇమెయిల్ చిరునామా మరియు / లేదా ఫోన్ నంబర్ను జోడించండి.
+
+ఇమెయిల్ చిరునామా మీ పాస్ వర్డ్ ను మళ్ళీ రీసెట్ చేస్తుంది.</string>
+    <string name="auth_phone_number_placeholder">ఫోను నంబరు</string>
+    <string name="auth_opt_phone_number_placeholder">చరవాణి సంఖ్య (ఒప్షొనల్)</string>
+    <string name="auth_invalid_user_name">వినియోగదారు పేర్లు అక్షరాలు, సంఖ్యలు, చుక్కలు, హైపన్లు మరియు అండర్ స్కోర్లను మాత్రమే కలిగి ఉండవచ్చు</string>
+    <string name="auth_invalid_phone">ఇది చెల్లుబాటు అయ్యే ఫోన్ నంబర్ లాగా లేదు</string>
+    <string name="auth_missing_phone">ఫోన్ నంబర్ మిస్సింగ్</string>
+    <string name="auth_missing_email_or_phone">ఇమెయిల్ చిరునామా లేదా ఫోన్ నంబర్ మిస్సింగ్</string>
+    <string name="auth_invalid_token">చెల్లని టోకేను</string>
+    <string name="login_error_network_error">ప్రవేశం చేయడం సాధ్యపడలేదు: అల్లిక లోపం</string>
+    <string name="login_error_unable_login">ప్రవేశం చేయడం సాధ్యపడలేదు</string>
+    <string name="login_error_registration_network_error">నమోదు చేయలేకపోతున్నాము: నెట్వర్క్ లోపం</string>
+    <string name="login_error_unable_register">నమోదు చేయలేకపోతున్నాము</string>
+    <string name="login_error_unable_register_mail_ownership">నమోదు చేయలేకపోతున్నాము: ఇ-తపాలా యాజమాన్య వైఫల్యం</string>
+    <string name="login_error_invalid_home_server">చెల్లుబాటు అయ్యే URL ను నమోదు చేయండి</string>
+
+    <string name="login_error_forbidden">చెల్లని వినియోగదారు పేరు /సాంకేతిక</string>
+    <string name="login_error_unknown_token">పేర్కొన్న ప్రాప్యత చిహ్నము గుర్తించబడలేదు</string>
+    <string name="login_error_bad_json">తప్పు JSON</string>
+    <string name="login_error_not_json">చెల్లుబాటు అయ్యే JSON లేదు</string>
+    <string name="login_error_limit_exceeded">చాలా ఎక్కువ అభ్యర్థనలు పంపించబడ్డాయి</string>
+    <string name="login_error_user_in_use">ఈ వినియోగదారు పేరు ఇప్పటికే ఉపయోగించబడింది</string>
+    <string name="login_error_login_email_not_yet">ఇంకా నొక్కని ఇ-తపాలా లింగక</string>
+
+    <string name="e2e_need_log_in_again">ఈ పరికరం కోసం మీరు చివరికి ముగింపు ఎన్క్రిప్షన్ కీలను ఉత్పత్తి చేయడానికి తిరిగి లాగిన్ కావాలి మరియు మీ ఇంటి యజమానికి పబ్లిక్ కీని సమర్పించండి.
+ఇది ఒక సారి.
+అసౌకర్యానికి మన్నించాలి.</string>
+
+    <string name="read_receipts_list">రసీదులు జాబితా చదవండి</string>
+
+    <string name="membership_changes">%d సభ్యత్వం మార్పులు</string>
+
+    <string name="compression_options">"అవ్వండి "</string>
+    <string name="compression_opt_list_original">అసలు</string>
+    <string name="compression_opt_list_large">పెద్ద</string>
+    <string name="compression_opt_list_medium">మధ్యరకం</string>
+    <string name="compression_opt_list_small">చిన్న</string>
+
+    <string name="attachment_cancel_download">సమాచార దిగుమతి రద్దు చేయాలా?</string>
+    <string name="attachment_cancel_upload">ఎగుమతి రద్దు చేయాలా?</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <string name="attachment_remaining_time_minutes">1$dm %2$ds</string>
+
+    <string name="yesterday">నిన్న</string>
+    <string name="today">నేడు</string>
+
+    <string name="room_info_room_name">గది పేరు</string>
+    <string name="room_info_room_topic">గది అంశం</string>
+
+    <string name="settings_key_display_all_events">"అమరికలు  మీట అన్ని ఘటనలూ  ప్రదర్శిస్తుంది"</string>
+    <string name="settings_key_use_rage_shake">"అమరికలు  మీట  ఉపయోగం  విపరీతమైన కోరిక కదలడము"</string>
+
+    <string name="call_connected">పిలుపు బంధం చేయబడింది</string>
+    <string name="call_connecting">కాల్ కనెక్ట్ చేస్తోంది …</string>
+    <string name="call_ended">కాల్ ముగిసింది</string>
+    <string name="call_ring">కాలింగ్ …</string>
+    <string name="incoming_call">ఇన్కమింగ్ కాల్</string>
+    <string name="incoming_video_call">ఇన్కమింగ్ వీడియో కాల్</string>
+    <string name="incoming_voice_call">ఇన్కమింగ్ వాయిస్ కాల్</string>
+    <string name="call_in_progress">కాల్ ప్రోగ్రెస్</string>
+
+    <string name="call_error_user_not_responding">రిమోట్ వైపు తీయటానికి విఫలమైంది.</string>
+    <string name="call_error_ice_failed">మీడియా కనెక్షన్ విఫలమైంది</string>
+    <string name="call_error_camera_init_failed">కెమెరాను ప్రారంభించడం సాధ్యపడదు</string>
+    <string name="call_error_answered_elsewhere">కాల్ ఎక్కడైనా సమాధానమిచ్చారు</string>
+    <string name="call_error_peer_hangup_elsewhere">కాల్ వేరే చోట హంగ్ అప్ అయింది</string>
+    <string name="call_error_peer_cancelled_call">"కాల్  రద్దు చేయబడింది"</string>
+
+    <string name="action_accept">అంగీకరించు</string>
+    <string name="action_ignore">పట్టించుకోకుండా</string>
+
+    <string name="media_picker_both_capture_title">"చిత్రాన్ని లేదా దృశ్యాన్ని  తీసుకోండి"</string>
+    <string name="media_picker_cannot_record_video">వీడియో రికార్డ్ చేయలేరు</string>
+
+    <string name="permissions_rationale_popup_title">సమాచారం</string>
+    <string name="permissions_rationale_msg_storage">అటాచ్మెంట్లు పంపడానికి మరియు సేవ్ చేయడానికి మీ ఫోటో మరియు వీడియో లైబ్రరీని ప్రాప్తి చేయడానికి కలతకు అనుమతి అవసరం.
+
+దయచేసి మీ ఫోన్ నుండి ఫైల్లను పంపగల తదుపరి పాప్-అప్లో ప్రాప్యతను అనుమతించండి.</string>
+    <string name="permissions_rationale_msg_camera">చిత్రాలను మరియు వీడియో కాల్లను తీయడానికి మీ కెమెరాను ప్రాప్తి చేయడానికి రియట్ అనుమతి అవసరం.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+దయచేసి కాల్ చేయడానికి వీలుగా తదుపరి పాప్-అప్లో ప్రాప్యతను అనుమతించండి.</string>
+    <string name="permissions_rationale_msg_record_audio">ఆడియో కాల్లను చేయడానికి మీ మైక్రోఫోన్ను ప్రాప్యత చేయడానికి కు రియట్ కు అనుమతి అవసరం.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+దయచేసి కాల్ చేయడానికి వీలుగా తదుపరి పాప్-అప్లో ప్రాప్యతను అనుమతించండి.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">"మీ కెమెరాను మరియు మీ శబ్ద ప్రసారిణి సాంగత్యం చేయడానికి రియోట్కు అనుమతి అవసరం.
+
+దయచేసి   పిలుపు చేయడానికి వీలుగా తదుపరి పాప్-అప్ల్లో ప్రాప్యతను అనుమతించండి."</string>
+    <string name="permissions_action_not_performed_missing_permissions">క్షమించాలి .. మిస్సింగ్ అనుమతులు కారణంగా చర్య చేయలేదు</string>
+
+    <string name="media_slider_saved">సేవ్</string>
+    <string name="media_slider_saved_message">డౌన్లోడ్లకు సేవ్ చేయండి</string>
+    <string name="yes">అవును</string>
+    <string name="no">కాదు</string>
+    <string name="_continue">కొనసాగించు</string>
+
+    <string name="remove">తీసివేయు</string>
+    <string name="join">చేరండి</string>
+    <string name="preview">ప్రత్యేక ప్రదర్శన</string>
+    <string name="reject">తిరస్కరించు</string>
+
+    <string name="room_jump_to_first_unread">మొదటి చదవని సందేశానికి వెళ్ళు.</string>
+
+    <string name="room_preview_invitation_format">మీరు గదిలో చేరడానికి ఆహ్వానించబడ్డారు %s ద్వారా</string>
+    <string name="room_preview_try_join_an_unknown_room">మీరు %s ని ప్రాప్యత చేయడానికి ప్రయత్నిస్తున్నారు. చర్చలో పాల్గొనడానికి మీరు చేరాలనుకుంటున్నారా?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">ఓ గది</string>
+    <string name="room_preview_room_interactions_disabled">ఇది ఈ గది యొక్క పరిదృశ్యం. గది పరస్పర చర్యలు నిలిపివేయబడ్డాయి.</string>
+
+    <string name="room_creation_title">కొత్త మాటామంతి</string>
+    <string name="room_creation_add_member">సభ్యుని జోడించు</string>
+    <string name="room_header_active_members">%1$d/%2$d క్రియాశీల సభ్యులు</string>
+    <string name="room_title_members">%1$d సభ్యులు</string>
+    </resources>

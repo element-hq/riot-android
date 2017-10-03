@@ -16,7 +16,6 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,12 +42,11 @@ import java.util.HashMap;
  * FallbackLoginActivity is the fallback login activity
  * i.e this activity is created when the client does not support the
  */
-public class FallbackLoginActivity extends Activity {
+public class FallbackLoginActivity extends RiotBaseActivity {
 
     private static final String LOG_TAG = "FallbackLoginAct";
 
-
-    public static String EXTRA_HOME_SERVER_ID = "FallbackLoginActivity.EXTRA_HOME_SERVER_ID";
+    public static final  String EXTRA_HOME_SERVER_ID = "FallbackLoginActivity.EXTRA_HOME_SERVER_ID";
 
     WebView mWebView = null;
     private String mHomeServerUrl = null;

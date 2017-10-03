@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -56,12 +57,14 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.EventContent;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
+import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.EventDisplay;
-import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
@@ -89,7 +92,9 @@ import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.EventGroup;
 import im.vector.util.PreferencesManager;
+import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
+import im.vector.widgets.WidgetsManager;
 
 /**
  * An adapter which can display room information.
@@ -121,7 +126,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final HashMap<String, String> mEventFormattedTsMap = new HashMap<>();
 
     // define the e2e icon to use for a dedicated eventId
-    private HashMap<String, Integer> mE2eIconByEventId = new HashMap<>();
+    // can be a drawable or
+    private HashMap<String, Object> mE2eIconByEventId = new HashMap<>();
 
     // device info by device id
     private HashMap<String, MXDeviceInfo> mE2eDeviceByEventId = new HashMap<>();
@@ -148,9 +154,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     // To keep track of events and avoid duplicates. For instance, we add a message event
     // when the current user sends one but it will also come down the event stream
     private final HashMap<String, MessageRow> mEventRowMap = new HashMap<>();
-
-    // avoid searching bing rule at each refresh
-    private HashMap<String, Integer> mTextColorByEventId = new HashMap<>();
 
     private final HashMap<String, Integer> mEventType = new HashMap<>();
 
@@ -187,14 +190,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     private final Set<String> mHiddenEventIds = new HashSet<>();
 
-    private Locale mLocale;
-
+    private final Locale mLocale;
 
     // custom settings
-    private boolean mAlwaysShowTimeStamps;
-    private boolean mHideReadReceipts;
+    private final boolean mAlwaysShowTimeStamps;
+    private final boolean mHideReadReceipts;
 
     private static final Pattern mEmojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]|[\uD83E\uDD00-\uD83E\uDDFF]|[\uD83D\uDE00-\uD83D\uDE4F]|[\uD83D\uDE80-\uD83D\uDEFF]|[\u2600-\u26FF]\uFE0F?|[\u2700-\u27BF]\uFE0F?|\u24C2\uFE0F?|[\uD83C\uDDE6-\uD83C\uDDFF]{1,2}|[\uD83C\uDD70\uD83C\uDD71\uD83C\uDD7E\uD83C\uDD7F\uD83C\uDD8E\uD83C\uDD91-\uD83C\uDD9A]\uFE0F?|[\u0023\u002A\u0030-\u0039]\uFE0F?\u20E3|[\u2194-\u2199\u21A9-\u21AA]\uFE0F?|[\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55]\uFE0F?|[\u2934\u2935]\uFE0F?|[\u3030\u303D]\uFE0F?|[\u3297\u3299]\uFE0F?|[\uD83C\uDE01\uD83C\uDE02\uD83C\uDE1A\uD83C\uDE2F\uD83C\uDE32-\uD83C\uDE3A\uD83C\uDE50\uD83C\uDE51]\uFE0F?|[\u203C\u2049]\uFE0F?|[\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE]\uFE0F?|[\u00A9\u00AE]\uFE0F?|[\u2122\u2139]\uFE0F?|\uD83C\uDC04\uFE0F?|\uD83C\uDCCF\uFE0F?|[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?))");
+
+    // the color depends in the theme
+    private Drawable mPadlockDrawable;
 
     /**
      * Creates a messages adapter with the default layouts.
@@ -290,6 +295,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         mAlwaysShowTimeStamps = PreferencesManager.alwaysShowTimeStamps(VectorApp.getInstance());
         mHideReadReceipts = PreferencesManager.hideReadReceipts(VectorApp.getInstance());
+
+        mPadlockDrawable = CommonActivityUtils.tintDrawable(mContext, ContextCompat.getDrawable(mContext, R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color);
     }
 
     /*
@@ -760,9 +767,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Notify the fragment that some bing rules could have been updated.
      */
     public void onBingRulesUpdate() {
-        synchronized (this) {
-            mTextColorByEventId = new HashMap<>();
-        }
         this.notifyDataSetChanged();
     }
 
@@ -965,6 +969,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                         Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
             viewType = ROW_TYPE_ROOM_MEMBER;
 
+        } else if (WidgetsManager.WIDGET_EVENT_TYPE.equals(eventType)) {
+            return ROW_TYPE_ROOM_MEMBER;
         } else {
             throw new RuntimeException("Unknown event type: " + eventType);
         }
@@ -1115,7 +1121,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Message message = JsonUtils.toMessage(event.getContent());
             RoomState roomState = row.getRoomState();
 
-            EventDisplay display = new EventDisplay(mContext, event, roomState);
+            EventDisplay display = new RiotEventDisplay(mContext, event, roomState);
             CharSequence textualDisplay = display.getTextualDisplay();
 
             SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
@@ -1127,9 +1133,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 return convertView;
             }
 
-            if ((null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event)) {
-                body.setSpan(new ForegroundColorSpan(mHighlightMessageTextColor), 0, body.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
 
             highlightPattern(bodyTextView, body, TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null, mPattern);
 
@@ -1142,27 +1145,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 textColor = mNotSentMessageTextColor;
             } else {
-                textColor = mDefaultMessageTextColor;
-
-                // sanity check
-                if (null != event.eventId) {
-                    synchronized (this) {
-                        if (!mTextColorByEventId.containsKey(event.eventId)) {
-                            String sBody = body.toString();
-                            String displayName = mSession.getMyUser().displayname;
-                            String userID = mSession.getMyUserId();
-
-                            if (EventUtils.caseInsensitiveFind(displayName, sBody) || EventUtils.caseInsensitiveFind(userID, sBody)) {
-                                textColor = mHighlightMessageTextColor;
-                            } else {
-                                textColor = mDefaultMessageTextColor;
-                            }
-
-                            mTextColorByEventId.put(event.eventId, textColor);
-                        } else {
-                            textColor = mTextColorByEventId.get(event.eventId);
-                        }
-                    }
+                if ((null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event)) {
+                    textColor = mHighlightMessageTextColor;
+                } else {
+                    textColor = mDefaultMessageTextColor;
                 }
             }
 
@@ -1271,7 +1257,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             CharSequence notice;
 
-            EventDisplay display = new EventDisplay(mContext, msg, roomState);
+            EventDisplay display = new RiotEventDisplay(mContext, msg, roomState);
             notice = display.getTextualDisplay();
 
             TextView noticeTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
@@ -1530,6 +1516,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // display the day separator
             VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
+
+            boolean isInSelectionMode = (null != mSelectedEventId);
+            boolean isSelected = TextUtils.equals(event.eventId, mSelectedEventId);
+
+            float alpha = (!isInSelectionMode || isSelected) ? 1.0f : 0.2f;
+
+            // the message body is dimmed when not selected
+            convertView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getMergeView() failed " + e.getMessage());
         }
@@ -1584,6 +1578,33 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 // it avoids displaying a pending message whereas the message has been sent
                 if (currentRow.getEvent().getAge() == Event.DUMMY_EVENT_AGE) {
                     currentRow.updateEvent(row.getEvent());
+                }
+            }
+
+            if (TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+                RoomMember roomMember = JsonUtils.toRoomMember(row.getEvent().getContent());
+                String membership = roomMember.membership;
+
+                if (PreferencesManager.hideJoinLeaveMessages(mContext)) {
+                    isSupported = !TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE) && !TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN);
+                }
+
+                if (isSupported && PreferencesManager.hideAvatarDisplayNameChangeMessages(mContext) && TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN)) {
+                    EventContent eventContent = JsonUtils.toEventContent(row.getEvent().getContentAsJsonObject());
+                    EventContent prevEventContent = row.getEvent().getPrevContent();
+
+                    String senderDisplayName = eventContent.displayname;
+                    String prevUserDisplayName = null;
+                    String avatar = eventContent.avatar_url;
+                    String prevAvatar = null;
+
+                    if ((null != prevEventContent)) {
+                        prevUserDisplayName = prevEventContent.displayname;
+                        prevAvatar = prevEventContent.avatar_url;
+                    }
+
+                    // !Updated display name && same avatar
+                    isSupported = TextUtils.equals(prevUserDisplayName, senderDisplayName) && TextUtils.equals(avatar, prevAvatar);
                 }
             }
         }
@@ -1864,7 +1885,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     senderMargin.setVisibility(senderNameView.getVisibility());
                 }
                 e2eIconView.setVisibility(View.VISIBLE);
-                e2eIconView.setImageResource(mE2eIconByEventId.get(event.eventId));
+
+                Object icon = mE2eIconByEventId.get(event.eventId);
+
+                if (icon instanceof Drawable) {
+                    e2eIconView.setImageDrawable((Drawable)icon);
+                } else {
+                    e2eIconView.setImageResource((int)icon);
+                }
 
                 int type = getItemViewType(position);
 
@@ -1900,7 +1928,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Found the dedicated icon to display for each event id
      */
     private void manageCryptoEvents() {
-        HashMap<String, Integer> e2eIconByEventId = new HashMap<>();
+        HashMap<String, Object> e2eIconByEventId = new HashMap<>();
         HashMap<String, MXDeviceInfo> e2eDeviceInfoByEventId = new HashMap<>();
 
         if (mIsRoomEncrypted && mSession.isCryptoEnabled()) {
@@ -1915,7 +1943,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
                 // not encrypted event
                 else if (!event.isEncrypted()) {
-                    e2eIconByEventId.put(event.eventId, R.drawable.e2e_unencrypted);
+                    e2eIconByEventId.put(event.eventId, mPadlockDrawable);
                 }
                 // in error cases, do not display
                 else if (null != event.getCryptoError()) {

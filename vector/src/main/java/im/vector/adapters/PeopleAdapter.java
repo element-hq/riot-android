@@ -52,9 +52,9 @@ public class PeopleAdapter extends AbsAdapter {
 
     private static final int TYPE_CONTACT = 1;
 
-    private AdapterSection<Room> mDirectChatsSection;
-    private AdapterSection<ParticipantAdapterItem> mLocalContactsSection;
-    private KnownContactsAdapterSection mKnownContactsSection;
+    private final AdapterSection<Room> mDirectChatsSection;
+    private final AdapterSection<ParticipantAdapterItem> mLocalContactsSection;
+    private final KnownContactsAdapterSection mKnownContactsSection;
 
     private final OnSelectItemListener mListener;
 

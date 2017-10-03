@@ -213,7 +213,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
     /**
      * Called at the end of a scroll action
      *
-     * @param scrollState
+     * @param scrollState the scroll state
      */
     public void onScrollStateChanged(final int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE

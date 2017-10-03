@@ -16,7 +16,6 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import org.matrix.androidsdk.util.Log;
@@ -33,7 +32,7 @@ import im.vector.util.SharedDataItem;
 /**
  * Dummy activity used to manage the shared
  */
-public class VectorSharedFilesActivity extends Activity {
+public class VectorSharedFilesActivity extends RiotBaseActivity {
     private static final String LOG_TAG = "VectorSharedFilesAct";
 
     final String SHARED_FOLDER = "VectorShared";

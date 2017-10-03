@@ -104,7 +104,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     private View mSwipingCellView;
 
     private final MXSession mSession;
-    private Room mRoom;
+    private final Room mRoom;
     private final int mChildLayoutResourceId;
     private final int mGroupLayoutResourceId;
 
@@ -346,8 +346,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
                 // Comparator to order members alphabetically
                 final Comparator<ParticipantAdapterItem> comparator = new Comparator<ParticipantAdapterItem>() {
-
-                    private HashMap<String, User> usersMap = new HashMap<>();
+                    private final HashMap<String, User> usersMap = new HashMap<>();
 
                     /**
                      * Get an user snapshot from an user id.

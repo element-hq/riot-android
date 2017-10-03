@@ -1511,7 +1511,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * Refresh the addresses section
      */
     private void refreshAddresses() {
-        final String localSuffix = ":" + mSession.getHomeserverConfig().getHomeserverUri().getHost();
+        final String localSuffix = ":" + mSession.getHomeServerConfig().getHomeserverUri().getHost();
         final String canonicalAlias = mRoom.getLiveState().alias;
         final ArrayList<String> aliases = new ArrayList<>(mRoom.getAliases());
 

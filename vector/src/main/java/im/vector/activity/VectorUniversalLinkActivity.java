@@ -17,7 +17,6 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +24,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.ssl.Fingerprint;
@@ -45,7 +44,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
  * Dummy activity used to dispatch the vector URL links.
  */
 @SuppressLint("LongLogTag")
-public class VectorUniversalLinkActivity extends Activity {
+public class VectorUniversalLinkActivity extends RiotBaseActivity {
     private static final String LOG_TAG = "VectorUniversalLinkActivity";
 
     @Override
@@ -98,7 +97,7 @@ public class VectorUniversalLinkActivity extends Activity {
 
         String ISUrl = uri.getScheme() + "://" + uri.getHost();
 
-        final HomeserverConnectionConfig homeServerConfig = new HomeserverConnectionConfig(Uri.parse(ISUrl), Uri.parse(ISUrl), null, new ArrayList<Fingerprint>(), false);
+        final HomeServerConnectionConfig homeServerConfig = new HomeServerConnectionConfig(Uri.parse(ISUrl), Uri.parse(ISUrl), null, new ArrayList<Fingerprint>(), false);
 
         String token = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_TOKEN);
         String clientSecret = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_CLIENT_SECRET);

@@ -46,7 +46,7 @@ import im.vector.util.VectorUtils;
 public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
 
     // display the room name in the result view
-    private boolean mDisplayRoomName;
+    private final boolean mDisplayRoomName;
 
     public VectorSearchFilesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediasCache mediasCache) {
         super(session, context, mediasCache);
@@ -137,9 +137,9 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
             // detect if the media is encrypted
             if (null == encryptedFileInfo) {
                 int size = getContext().getResources().getDimensionPixelSize(R.dimen.member_list_avatar_size);
-                mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), thumbnailView, thumbUrl, size);
+                mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeServerConfig(), thumbnailView, thumbUrl, size);
             } else {
-                mSession.getMediasCache().loadBitmap(mSession.getHomeserverConfig(), thumbnailView, thumbUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, encryptedFileInfo);
+                mSession.getMediasCache().loadBitmap(mSession.getHomeServerConfig(), thumbnailView, thumbUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, encryptedFileInfo);
             }
         }
 

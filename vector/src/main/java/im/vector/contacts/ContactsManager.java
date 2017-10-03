@@ -94,7 +94,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     private boolean mRetryPIDsRetrievalOnConnect = false;
 
     // the application context
-    private Context mContext;
+    private final Context mContext;
 
     /**
      * Network events listener

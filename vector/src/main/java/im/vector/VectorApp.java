@@ -17,8 +17,8 @@
 
 package im.vector;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +35,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -60,8 +62,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.JitsiCallActivity;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.activity.WidgetActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
@@ -79,7 +83,7 @@ import im.vector.util.VectorMarkdownParser;
 /**
  * The main application injection point
  */
-public class VectorApp extends Application {
+public class VectorApp extends MultiDexApplication {
     private static final String LOG_TAG = "VectorApp";
 
     // key to save the crash status
@@ -152,7 +156,7 @@ public class VectorApp extends Application {
      */
     private long mLastMediasCheck = 0;
 
-    private BroadcastReceiver mLanguageReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mLanguageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
@@ -160,12 +164,17 @@ public class VectorApp extends Application {
                 updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(context));
 
                 if (null != getCurrentActivity()) {
-                    getCurrentActivity().startActivity(getCurrentActivity().getIntent());
-                    getCurrentActivity().finish();
+                    restartActivity(getCurrentActivity());
                 }
             }
         }
     };
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {
@@ -216,7 +225,7 @@ public class VectorApp extends Application {
         MXSession.initUserAgent(getApplicationContext());
 
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
-            Map<String, String> mLocalesByActivity = new HashMap<>();
+            final Map<String, String> mLocalesByActivity = new HashMap<>();
 
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -237,19 +246,6 @@ public class VectorApp extends Application {
              */
             private String getActivityLocaleStatus(Activity activity) {
                 return getApplicationLocale().toString() + "_" + getFontScale() + "_" + ThemeUtils.getApplicationTheme(activity);
-            }
-
-            /**
-             * Restart an activity to manage language update
-             * @param activity the activity to restart
-             */
-            private void restartActivity(Activity activity) {
-                // avoid restarting activities when it is not required
-                // some of them has no text
-                if (!(activity instanceof VectorMediasPickerActivity) && !(activity instanceof VectorCallViewActivity)) {
-                    activity.startActivity(activity.getIntent());
-                    activity.finish();
-                }
             }
 
             @Override
@@ -325,6 +321,15 @@ public class VectorApp extends Application {
 
         PreferencesManager.fixMigrationIssues(this);
         initApplicationLocale();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
+            Log.d(LOG_TAG, "## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale().toString());
+            updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(this));
+        }
     }
 
     /**
@@ -551,6 +556,23 @@ public class VectorApp extends Application {
      */
     public static boolean isAppInBackground() {
         return (null == mCurrentActivity) && (null != getInstance()) && getInstance().mIsInBackground;
+    }
+
+    /**
+     * Restart an activity to manage language update
+     *
+     * @param activity the activity to restart
+     */
+    private void restartActivity(Activity activity) {
+        // avoid restarting activities when it is not required
+        // some of them has no text
+        if (!(activity instanceof VectorMediasPickerActivity)
+                && !(activity instanceof VectorCallViewActivity)
+                && !(activity instanceof JitsiCallActivity)
+                && !(activity instanceof WidgetActivity)) {
+            activity.startActivity(activity.getIntent());
+            activity.finish();
+        }
     }
 
     //==============================================================================================================
@@ -826,7 +848,7 @@ public class VectorApp extends Application {
 
     private static final Locale mApplicationDefaultLanguage = new Locale("en", "UK");
 
-    private static final Map<Float, String> mPrefKeyByFontScale = new LinkedHashMap<Float , String>() {{
+    private static final Map<Float, String> mPrefKeyByFontScale = new LinkedHashMap<Float, String>() {{
         put(0.70f, FONT_SCALE_TINY);
         put(0.85f, FONT_SCALE_SMALL);
         put(1.00f, FONT_SCALE_NORMAL);
@@ -836,7 +858,7 @@ public class VectorApp extends Application {
         put(1.60f, FONT_SCALE_HUGE);
     }};
 
-    private static final Map<String, Integer> mFontTextScaleIdByPrefKey = new LinkedHashMap<String , Integer>() {{
+    private static final Map<String, Integer> mFontTextScaleIdByPrefKey = new LinkedHashMap<String, Integer>() {{
         put(FONT_SCALE_TINY, R.string.tiny);
         put(FONT_SCALE_SMALL, R.string.small);
         put(FONT_SCALE_NORMAL, R.string.normal);
@@ -879,6 +901,7 @@ public class VectorApp extends Application {
 
     /**
      * Get the font scale
+     *
      * @return the font scale
      */
     public static String getFontScale() {
@@ -907,6 +930,7 @@ public class VectorApp extends Application {
 
     /**
      * Provides the font scale value
+     *
      * @return the font scale
      */
     private static float getFontScaleValue() {
@@ -914,7 +938,7 @@ public class VectorApp extends Application {
 
         if (mPrefKeyByFontScale.containsValue(fontScale)) {
             for (Map.Entry<Float, String> entry : mPrefKeyByFontScale.entrySet()) {
-                if (TextUtils.equals(entry.getValue(),fontScale)) {
+                if (TextUtils.equals(entry.getValue(), fontScale)) {
                     return entry.getKey();
                 }
             }
@@ -925,6 +949,7 @@ public class VectorApp extends Application {
 
     /**
      * Provides the font scale description
+     *
      * @return the font description
      */
     public static String getFontScaleDescription() {
@@ -940,6 +965,7 @@ public class VectorApp extends Application {
 
     /**
      * Update the font size from the locale description.
+     *
      * @param fontScaleDescription the font scale description
      */
     public static void updateFontScale(String fontScaleDescription) {
@@ -1056,6 +1082,7 @@ public class VectorApp extends Application {
 
     /**
      * Update the application locale
+     *
      * @param locale
      */
     public static void updateApplicationLocale(Locale locale) {
@@ -1064,6 +1091,7 @@ public class VectorApp extends Application {
 
     /**
      * Update the application theme
+     *
      * @param theme the new theme
      */
     public static void updateApplicationTheme(String theme) {
@@ -1074,9 +1102,11 @@ public class VectorApp extends Application {
     /**
      * Update the application locale.
      *
-     * @param locale  the locale
+     * @param locale the locale
      * @param theme  the new theme
      */
+    @SuppressWarnings("deprecation")
+    @SuppressLint("NewApi")
     private static void updateApplicationSettings(Locale locale, String textSize, String theme) {
         Context context = VectorApp.getInstance();
 
@@ -1091,6 +1121,39 @@ public class VectorApp extends Application {
 
         ThemeUtils.setApplicationTheme(context, theme);
         PhoneNumberUtils.onLocaleUpdate();
+    }
+
+    /**
+     * Compute a localised context
+     * @param context the context
+     * @return the localised context
+     */
+    @SuppressWarnings("deprecation")
+    @SuppressLint("NewApi")
+    public static Context getLocalisedContext(Context context) {
+        try {
+            Resources resources = context.getResources();
+            Locale locale = getApplicationLocale();
+            Configuration configuration = resources.getConfiguration();
+            configuration.fontScale = getFontScaleValue();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                configuration.setLocale(locale);
+                configuration.setLayoutDirection(locale);
+                return context.createConfigurationContext(configuration);
+            } else {
+                configuration.locale = locale;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    configuration.setLayoutDirection(locale);
+                }
+                resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+                return context;
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getLocalisedContext() failed : " + e.getMessage());
+        }
+
+        return context;
     }
 
     /**

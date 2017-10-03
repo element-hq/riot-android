@@ -34,10 +34,10 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
     private final String LOG_TAG = StickySectionHelper.class.getSimpleName();
 
-    private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
+    private final RecyclerView mRecyclerView;
+    private final LinearLayoutManager mLayoutManager;
 
-    private List<Pair<Integer, SectionView>> mSectionViews = new ArrayList<>();
+    private final List<Pair<Integer, SectionView>> mSectionViews = new ArrayList<>();
 
     private int mHeaderBottom = 0;
 

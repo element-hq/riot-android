@@ -329,14 +329,14 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
     <string name="room_participants_header_admin_tools">ADMIN-WERKZEUGE</string>
     <string name="room_participants_header_call">ANRUFE</string>
-    <string name="room_participants_header_direct_chats">DIREKTE CHATS</string>
+    <string name="room_participants_header_direct_chats">DIREKT-CHATS</string>
     <string name="room_participants_header_devices">GERÄTE</string>
 
     <string name="room_participants_action_invite">Einladen</string>
     <string name="room_participants_action_leave">Diesen Raum verlassen</string>
     <string name="room_participants_action_remove">Aus diesem Raum entfernen</string>
-    <string name="room_participants_action_ban">Dauerhaft aus dem Raum ausschließen</string>
-    <string name="room_participants_action_unban">Dauerhaftes Ausschließen aus dem Raum aufheben</string>
+    <string name="room_participants_action_ban">Verbannen</string>
+    <string name="room_participants_action_unban">Verbannung aufheben</string>
     <string name="room_participants_action_set_default_power_level">Zum normalen Nutzer machen</string>
     <string name="room_participants_action_set_moderator">Zum Moderator machen</string>
     <string name="room_participants_action_set_admin">Zum Admin machen</string>
@@ -601,7 +601,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Alle, die den Raum-Link kennen (auch Gäste)</string>
 
     <!-- Room settings: banned users -->
-    <string name="room_settings_banned_users_title">Gebannte Nutzer</string>
+    <string name="room_settings_banned_users_title">Verbannte Benutzer</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Erweitert</string>
@@ -647,7 +647,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="directory_title">Verzeichnis</string>
 
     <!-- GA use -->
-    <string name="ga_use_alert_message">Stimmst du zu, uns dabei zu helfen, das Anwendungsverhalten der App zu verbessern und uns Absturzberichte zu übermitteln?</string>
+    <string name="ga_use_alert_message">Möchtest du uns dabei helfen die App zu verbessern indem automatisch Absturzberichte gesendet werden?</string>
     <string name="ga_use_settings">Absturzberichte automatisch übermitteln</string>
     <string name="ga_use_disable_alert_message">Du musst die Anwendung neustarten, um Absturzberichte auszuschalten.</string>
 
@@ -679,7 +679,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_export_room_keys_summary">Schlüssel in lokale Datei exportieren</string>
     <string name="encryption_export_export">Exportieren</string>
     <string name="encryption_export_enter_passphrase">Passphrase eingeben</string>
-    <string name="encryption_export_confirm_passphrase">Passphrase wiederholen</string>
+    <string name="encryption_export_confirm_passphrase">Passphrase bestätigen</string>
     <string name="encryption_export_saved_as">Die Ende-zu-Ende-Raumschlüssel wurden in \'%s\' gespeichert</string>
 
     <string name="encryption_import_e2e_room_keys">Ende-zu-Ende-Raumschlüssel importieren</string>
@@ -735,7 +735,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
 
     <string name="settings_start_on_boot">Starte beim Systemstart</string>
     <string name="settings_clear_medias_cache">Medien-Cache leeren</string>
-    <string name="settings_keep_media">Behalten Medien</string>
+    <string name="settings_keep_media">Medien behalten</string>
 
     <string name="settings_hide_read_receipts">Lesebestätigungen verbergen</string>
     <string name="settings_dont_send_typings_notifs">Sende nicht, dass ich tippe</string>
@@ -758,4 +758,9 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="normal">Normal</string>
     <string name="large">Groß</string>
     <string name="largest">Extra groß</string>
-</resources>
+<string name="larger">Größer</string>
+    <string name="tiny">Sehr klein</string>
+    <string name="huge">Riesig</string>
+<string name="settings_theme">Thema</string>
+
+    </resources>

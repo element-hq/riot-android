@@ -134,7 +134,7 @@ public class BugReporter {
         new AsyncTask<Void, Integer, String>() {
 
             // enumerate files to delete
-            List<File> mBugReportFiles = new ArrayList<>();
+            final List<File> mBugReportFiles = new ArrayList<>();
 
             @Override
             protected String doInBackground(Void... voids) {

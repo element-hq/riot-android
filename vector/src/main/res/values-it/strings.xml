@@ -6,12 +6,6 @@
     <string name="resouces_language">it</string>
     <string name="resouces_country">IT</string>
 
-    <!-- theme -->
-    <string-array name="theme_readables">
-        <item>Tema chiaro</item>
-        <item>Tema scuro</item>
-    </string-array>
-
     <!-- titles -->
     <string name="title_activity_home">Messaggi</string>
     <string name="title_activity_room">Stanza</string>
@@ -32,7 +26,7 @@
     <string name="share">Condividi</string>
     <string name="later">Ultimi</string>
     <string name="forward">Inoltra</string>
-    <string name="permalink">Permalink</string>
+    <string name="permalink">Collegamento permanente</string>
     <string name="view_source">Vedi sorgente</string>
     <string name="view_decrypted_source">Vedi sorgente decifrato</string>
     <string name="delete">Elimina</string>
@@ -230,7 +224,7 @@
     <string name="attachment_cancel_download">"Annullare il download?</string>
     <string name="attachment_cancel_upload">Annullare l\'upload?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
-    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+    <string name="attachment_remaining_time_minutes">%1$d minuti %2$d secondi</string>
 
     <!-- room creation dialog Screen -->
     <string name="yesterday">Ieri</string>
@@ -633,7 +627,7 @@
     <string name="room_settings_labs_warning_message">Queste sono caratteristiche sperimentali che possono fallire in modo inatteso. Usare con cautela.</string>
     <string name="room_settings_labs_end_to_end">Crittografia da-utente-a-utente</string>
     <string name="room_settings_labs_end_to_end_is_active">La crittografia da-utente-a-utente è attiva</string>
-    <string name="room_settings_labs_end_to_end_warnings">Devi disconnetterti per abilitare la crittografia</string>
+    <string name="room_settings_labs_end_to_end_warnings">Devi disconnetterti per abilitare la crittografia.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Cripta solo per i dispositivi verificati</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Non inviare mai da questa stanza messaggi criptati a dispositivi non verificati.</string>
 
@@ -662,7 +656,7 @@
     <string name="settings_theme">Tema</string>
 
     <!-- GA use -->
-    <string name="ga_use_alert_message">Accetti di aiutarci per migliorare il comportamento dell\'applicazione inviando rapporti sui crash?</string>
+    <string name="ga_use_alert_message">Vuoi aiutarci a migliorare il comportamento dell\'applicazione inviando rapporti sui crash?</string>
     <string name="ga_use_settings">Invio rapporti sui crash automatico</string>
     <string name="ga_use_disable_alert_message">Devi riavviare l\'applicazione per disabilitare il rapporto sui crash.</string>
 

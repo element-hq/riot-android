@@ -19,15 +19,12 @@ package im.vector.util;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.support.annotation.ColorInt;
@@ -59,6 +56,8 @@ import im.vector.activity.LockScreenActivity;
 import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.receiver.DismissNotificationReceiver;
+import im.vector.services.EventStreamService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -80,9 +79,6 @@ public class NotificationUtils {
     public static final String ACTION_MESSAGE_HEARD = "ACTION_MESSAGE_HEARD";
     public static final String ACTION_MESSAGE_REPLY = "ACTION_MESSAGE_REPLY";
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
-
-    // notification sound
-    private static final String RING_TONE_MESSAGE_NOTIFICATION = "message.ogg";
 
     /**
      * Retrieve the room name.
@@ -292,11 +288,13 @@ public class NotificationUtils {
         public final BingRule mBingRule;
         public final String mRoomId;
         public final String mEventId;
+        public final long mOriginServerTs;
 
-        public NotifiedEvent(String roomId, String eventId, BingRule bingRule) {
+        public NotifiedEvent(String roomId, String eventId, BingRule bingRule, long originServerTs) {
             mRoomId = roomId;
             mEventId = eventId;
             mBingRule = bingRule;
+            mOriginServerTs = originServerTs;
         }
     }
 
@@ -336,7 +334,7 @@ public class NotificationUtils {
             String text;
             String header;
 
-            EventDisplay eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+            EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
             eventDisplay.setPrependMessagesWithAuthor(false);
 
             if (room.isInvited()) {
@@ -344,7 +342,7 @@ public class NotificationUtils {
                 CharSequence textualDisplay = eventDisplay.getTextualDisplay();
                 text = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
             } else if (1 == notifiedEvents.size()) {
-                eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
                 eventDisplay.setPrependMessagesWithAuthor(false);
 
                 header = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
@@ -445,7 +443,7 @@ public class NotificationUtils {
                 Room room = store.getRoom(latestEvent.roomId);
 
                 if (null != room) {
-                    EventDisplay eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                    EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
                     eventDisplay.setPrependMessagesWithAuthor(false);
                     String roomName = getRoomName(context, session, room, null);
 
@@ -535,7 +533,7 @@ public class NotificationUtils {
 
         for (NotifiedEvent notifiedEvent : notifiedEvents) {
             Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
-            EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
+            EventDisplay eventDisplay = new RiotEventDisplay(context, event, room.getLiveState());
             eventDisplay.setPrependMessagesWithAuthor(true);
             CharSequence textualDisplay = eventDisplay.getTextualDisplay();
 
@@ -567,7 +565,7 @@ public class NotificationUtils {
                 quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomId);
                 quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, (null == member) ? event.getSender() : member.getName());
 
-                EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
+                EventDisplay eventDisplay = new RiotEventDisplay(context, event, room.getLiveState());
                 eventDisplay.setPrependMessagesWithAuthor(false);
                 CharSequence textualDisplay = eventDisplay.getTextualDisplay();
                 String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
@@ -647,7 +645,7 @@ public class NotificationUtils {
 
                     // if there is a valid latest message
                     if (null != latestEvent) {
-                        EventDisplay eventDisplay = new EventDisplay(context, latestEvent, room.getLiveState());
+                        EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
                         eventDisplay.setPrependMessagesWithAuthor(false);
 
                         String message = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
@@ -699,16 +697,10 @@ public class NotificationUtils {
         }
 
         if (!isBackground) {
-            builder.setLights(Color.GREEN, 500, 500);
+            builder.setDefaults(Notification.DEFAULT_LIGHTS);
 
             if (isBing) {
-                Uri ringTone = VectorCallSoundManager.getRingToneUri(R.raw.message, RING_TONE_MESSAGE_NOTIFICATION);
-
-                if (null == ringTone) {
-                    ringTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                }
-
-                builder.setSound(ringTone);
+                builder.setSound(PreferencesManager.getNotificationRingTone(context));
             }
 
             // turn the screen on for 3 seconds
@@ -761,7 +753,7 @@ public class NotificationUtils {
 
             boolean isInvitationEvent = false;
 
-            EventDisplay eventDisplay = new EventDisplay(context, event, room.getLiveState());
+            EventDisplay eventDisplay = new RiotEventDisplay(context, event, room.getLiveState());
             eventDisplay.setPrependMessagesWithAuthor(true);
             CharSequence textualDisplay = eventDisplay.getTextualDisplay();
             String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
@@ -795,7 +787,7 @@ public class NotificationUtils {
                             Log.e(LOG_TAG, "decodeFile failed with an oom");
                         }
                     } else {
-                        session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(context), room.getAvatarUrl(), size);
+                        session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), new ImageView(context), room.getAvatarUrl(), size);
                     }
                 }
             }
@@ -811,6 +803,8 @@ public class NotificationUtils {
 
             builder.setGroup(context.getString(R.string.riot_app_name));
             builder.setGroupSummary(true);
+
+            builder.setDeleteIntent(PendingIntent.getBroadcast(context.getApplicationContext(), 0,  new Intent(context.getApplicationContext(), DismissNotificationReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
             try {
                 addTextStyle(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId);

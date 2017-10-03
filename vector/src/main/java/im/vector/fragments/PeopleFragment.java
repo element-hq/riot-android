@@ -82,10 +82,10 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     private PeopleAdapter mAdapter;
 
-    private List<Room> mDirectChats = new ArrayList<>();
-    private List<ParticipantAdapterItem> mLocalContacts = new ArrayList<>();
+    private final List<Room> mDirectChats = new ArrayList<>();
+    private final List<ParticipantAdapterItem> mLocalContacts = new ArrayList<>();
     // the known contacts are not sorted
-    private List<ParticipantAdapterItem> mKnownContacts = new ArrayList<>();
+    private final List<ParticipantAdapterItem> mKnownContacts = new ArrayList<>();
 
     // way to detect that the contacts list has been updated
     private int mContactsSnapshotSession = -1;
@@ -281,10 +281,13 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * Fill the direct chats adapter with data
      */
     private void initDirectChatsData() {
+        if ((null == mSession) || (null == mSession.getDataHandler())) {
+            Log.e(LOG_TAG, "## initDirectChatsData() : null session");
+        }
+
         final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
         final MXDataHandler dataHandler = mSession.getDataHandler();
         final IMXStore store = dataHandler.getStore();
-
 
         mDirectChats.clear();
         if (directChatIds != null && !directChatIds.isEmpty()) {
@@ -292,9 +295,14 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                 Room room = store.getRoom(roomId);
 
                 if ((null != room) && !room.isConferenceUserRoom()) {
-                    final Set<String> tags = room.getAccountData().getKeys();
-                    if ((null == tags) || !tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
-                        mDirectChats.add(dataHandler.getRoom(roomId));
+                    // it seems that the server syncs some left rooms
+                    if (null == room.getMember(mSession.getMyUserId())) {
+                        Log.e(LOG_TAG, "## initDirectChatsData(): invalid room " + room.getRoomId() + ", the user is not anymore member of it");
+                    } else {
+                        final Set<String> tags = room.getAccountData().getKeys();
+                        if ((null == tags) || !tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
+                            mDirectChats.add(dataHandler.getRoom(roomId));
+                        }
                     }
                 }
             }
