@@ -763,4 +763,28 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="huge">Riesig</string>
 <string name="settings_theme">Thema</string>
 
-    </resources>
+    <string name="settings_12_24_timestamps">Zeitstempel im 12-Stunden-Format anzeigen (z. B. 2:30 p. m.)</string>
+    <string name="settings_hide_join_leave_messages">Betreten-/Verlassen-Meldungen verbergen (gilt nicht für Einladungen/Kicks/Bans)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Profilbild- und Anzeigenamen-Änderungen verbergen</string>
+
+    <string name="widget_no_power_to_manage">Für das Verwalten von Widgets in diesem Raum ist eine Berechtigung erforderlich</string>
+    <string name="widget_creation_failure">Widget konnte nicht erstellt werden</string>
+    <string name="event_formatter_widget_added">%1$s hinzugefügt von %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s entfernt von %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi aufbauen</string>
+    <string name="widget_delete_message_confirmation">Bist du sicher, dass du das Widget löschen möchtest?</string>
+    <string name="active_widgets">%1$d aktive Widgets</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">Du benötigst die Berechtigung, Benutzer einzuladen, um diese Aktion ausführen zu können.</string>
+    <string name="widget_integration_unable_to_create">Widget konnte nicht erstellt werden.</string>
+    <string name="widget_integration_room_not_recognised">Dieser Raum wurde nicht erkannt.</string>
+    <string name="widget_integration_positive_power_level">Berechtigungslevel muss eine positive ganze Zahl sein.</string>
+    <string name="widget_integration_must_be_in_room">Du bist nicht Mitglied in diesem Raum.</string>
+    <string name="widget_integration_no_permission_in_room">Du hast keine Berechtigung, diese Aktion in diesem Raum auszuführen.</string>
+    <string name="widget_integration_missing_room_id">Anfrage beinhaltet keine room_id.</string>
+    <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
+    <string name="settings_labs_matrix_apps">Matrix-Apps</string>
+    <string name="room_add_matrix_apps">Matrix-Apps hinzufügen</string>
+    <string name="add_matrix_apps_not_supported">Wird auf diesem Gerät nicht unterstützt</string>
+</resources>
