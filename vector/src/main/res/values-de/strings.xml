@@ -381,7 +381,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="ssl_trust">Vertrauen</string>
     <string name="ssl_do_not_trust">Nicht vertrauen</string>
     <string name="ssl_logout_account">Abmelden</string>
-    <string name="ssl_remain_offline">Offline bleiben</string>
+    <string name="ssl_remain_offline">Ignorieren</string>
     <string name="ssl_fingerprint_hash">Fingerabdruck (%s):</string>
     <string name="ssl_could_not_verify">Konnte Identität des Remote-Servers nicht verifizieren.</string>
     <string name="ssl_cert_not_trust">Dies kann bedeuten, dass jemand böswillig deinen Internetverkehr abfängt oder dass dein Telefon dem Zertifikat, dass der Remote-Server anbietet, nicht vertraut.</string>
@@ -397,7 +397,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_details_files">Dateien</string>
     <string name="room_details_settings">Einstellungen</string>
     <string name="room_details_selected">ausgewählt</string>
-    <string name="malformed_id">Ungültige ID. Eine E-Mail-Adresse oder eine Matrix-ID (\'@localpart:domain\') ist erforderlich.</string>
+    <string name="malformed_id">Ungültige ID. Eine E-Mail-Adresse oder eine Matrix-ID (\'@localpart:domain\') ist erforderlich</string>
     <string name="room_details_people_invited_group_name">EINGELADEN</string>
     <string name="room_details_people_present_group_name">TEILNEHMER</string>
 
@@ -787,4 +787,13 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="settings_labs_matrix_apps">Matrix-Apps</string>
     <string name="room_add_matrix_apps">Matrix-Apps hinzufügen</string>
     <string name="add_matrix_apps_not_supported">Wird auf diesem Gerät nicht unterstützt</string>
-</resources>
+<string name="settings_notification_ringtone">Benachrichtigungsklang</string>
+    <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
+    <string name="widget_integration_missing_user_id">Anfrage enthält keine user_id.</string>
+    <string name="light_theme">Light-Theme</string>
+    <string name="dark_theme">Dark-Theme</string>
+    <string name="black_them">Black-Theme</string>
+
+    <string name="login_mobile_device">Mobilgerät</string>
+
+    </resources>
