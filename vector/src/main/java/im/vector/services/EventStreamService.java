@@ -66,6 +66,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import im.vector.Matrix;
@@ -528,9 +529,9 @@ public class EventStreamService extends Service {
      */
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        Log.d(LOG_TAG, "## onTaskRemoved()");
+        int delay = 3000 + (new Random()).nextInt(5000);
 
-        stop();
+        Log.d(LOG_TAG, "## onTaskRemoved() : restarts after " + delay + " ms");
 
         // reset the service identifier
         mForegroundServiceIdentifier = -1;
@@ -544,7 +545,8 @@ public class EventStreamService extends Service {
         AlarmManager myAlarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         myAlarmService.set(
                 AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + 3000,
+                // use a random part to avoid matching to system auto restart value
+                SystemClock.elapsedRealtime() + delay,
                 restartPendingIntent);
 
         super.onTaskRemoved(rootIntent);
