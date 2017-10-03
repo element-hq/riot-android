@@ -1,3 +1,24 @@
+Changes in Riot 0.7.02 (2017-10-03)
+===================================================
+
+Features:
+ * Add black theme.
+ * Add widgets management.
+ * Update the third party call lib.
+ * Add notification ringtone selection.
+ 
+Bugfixes:
+ * Fix many issues reported by Google analytics.
+ * #1574 : Rotating the device when uploading photos still has a small bug 
+ * #1579 : Unexpected behaviour while clicking in the settings entry
+ * #1588 : i can not set profile picture when i click on profile picture it return to setting menu
+ * #1592 : Client unable to connect on server after certificate update
+ * #1613 : Phone rings for ever 
+ * #1616 : Sometimes Riot notifications reappear after being dismissed without being read
+ * #1622 : picked up call but continued vibrating, connection couldn't be established
+ * #1623 : checkboxes are not properly managed in the settings screen
+ * #1634 : sent message duplicated in ui including read receipts
+ 
 Changes in Riot 0.7.01 (2017-09-04)
 ===================================================
 
