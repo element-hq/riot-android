@@ -11,6 +11,10 @@
     <string name="dark_theme">Dark Theme</string>
     <string name="black_them">Black Theme</string>
 
+    <!-- permanent notification subtitle -->
+    <string name="notification_sync_in_progress">Synchronising</string>
+    <string name="notification_listen_for_events">Listen for events</string>
+
     <!-- titles -->
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_room">Room</string>
