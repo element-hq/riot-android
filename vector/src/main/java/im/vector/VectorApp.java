@@ -1228,7 +1228,7 @@ public class VectorApp extends MultiDexApplication {
         Collections.sort(sortedLocalesList, new Comparator<Locale>() {
             @Override
             public int compare(Locale lhs, Locale rhs) {
-                return localeToString(lhs).compareTo(localeToString(rhs));
+                return localeToLocalisedString(lhs).compareTo(localeToLocalisedString(rhs));
             }
         });
 
@@ -1241,11 +1241,11 @@ public class VectorApp extends MultiDexApplication {
      * @param locale the locale to convert
      * @return the string
      */
-    public static String localeToString(Locale locale) {
-        String res = locale.getDisplayLanguage();
+    public static String localeToLocalisedString(Locale locale) {
+        String res = locale.getDisplayLanguage(locale);
 
-        if (!TextUtils.isEmpty(locale.getDisplayCountry())) {
-            res += " (" + locale.getDisplayCountry() + ")";
+        if (!TextUtils.isEmpty(locale.getDisplayCountry(locale))) {
+            res += " (" + locale.getDisplayCountry(locale) + ")";
         }
 
         return res;
