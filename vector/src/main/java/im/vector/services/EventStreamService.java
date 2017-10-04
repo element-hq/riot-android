@@ -1463,7 +1463,7 @@ public class EventStreamService extends Service {
                     if (null != events) {
                         for (Event event : events) {
                             if (event.getOriginServerTs()  < minTs) {
-                                Log.d(LOG_TAG, "##refreshNotifiedMessagesList() : ignore event " + event.eventId + " in room " + event.roomId + " because of the TS "+ event.getOriginServerTs());
+                                //Log.d(LOG_TAG, "##refreshNotifiedMessagesList() : ignore event " + event.eventId + " in room " + event.roomId + " because of the TS "+ event.getOriginServerTs());
                             } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
                                 try {
                                     if ("invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString())) {
