@@ -790,9 +790,9 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
 <string name="settings_notification_ringtone">Benachrichtigungsklang</string>
     <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
     <string name="widget_integration_missing_user_id">Anfrage enthält keine user_id.</string>
-    <string name="light_theme">Light-Theme</string>
-    <string name="dark_theme">Dark-Theme</string>
-    <string name="black_them">Black-Theme</string>
+    <string name="light_theme">Helles Thema</string>
+    <string name="dark_theme">Dunkles Thema</string>
+    <string name="black_them">Schwarzes Thema</string>
 
     <string name="login_mobile_device">Mobilgerät</string>
 
