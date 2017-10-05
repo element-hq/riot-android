@@ -220,6 +220,12 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 Log.e(LOG_TAG, "## replaceText() : failed " + e.getMessage());
             }
         }
+
+        // fix a samsung keyboard issue
+        // "Joh" -> user selects "John" -> "John :" -> the user taps h -> "John : Johh"
+        // by this way, the predictive texts list seems being deleted
+        this.setInputType(this.getInputType() & (this.getInputType() & (~InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE)));
+        this.setInputType(this.getInputType() & (this.getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
     }
 
     @Override
