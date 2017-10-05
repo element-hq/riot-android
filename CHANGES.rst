@@ -1,3 +1,15 @@
+Changes in Riot 0.7.03 (2017-10-05)
+===================================================
+
+Improvements:
+ * Reduce the initial sync times
+ * Manage voice Jitsi call
+ 
+Bugfixes:
+ * #1641 : Language selector should be localized
+ * #1643 : Put Riot service in the foreground until the initial sync is done
+ * #1644 : Pin rooms with missed notifs and unread msg by default on the home page
+
 Changes in Riot 0.7.02 (2017-10-03)
 ===================================================
 

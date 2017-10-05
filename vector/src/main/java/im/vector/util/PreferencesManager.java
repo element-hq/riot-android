@@ -467,6 +467,18 @@ public class PreferencesManager {
             editor.putBoolean(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY, true);
             editor.commit();
         }
+
+        if (!preferences.contains(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY)) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, true);
+            editor.commit();
+        }
+
+        if (!preferences.contains(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY)) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, true);
+            editor.commit();
+        }
     }
 
     /**

@@ -1731,6 +1731,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void launchJitsiActivity(Widget widget, boolean aIsVideoCall) {
         final Intent intent = new Intent(VectorRoomActivity.this, JitsiCallActivity.class);
         intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
+        intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
         VectorRoomActivity.this.startActivity(intent);
     }
 

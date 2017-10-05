@@ -90,7 +90,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
                     Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
 
                     for(Locale locale : mLocalesList) {
-                        if (pattern.matcher(VectorApp.localeToString(locale)).find()) {
+                        if (pattern.matcher(VectorApp.localeToLocalisedString(locale)).find()) {
                             mFilteredLocalesList.add(locale);
                         }
                     }
@@ -124,7 +124,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
         }
 
         private void populateViews(final Locale locale) {
-            vLocaleNameTextView.setText(VectorApp.localeToString(locale));
+            vLocaleNameTextView.setText(VectorApp.localeToLocalisedString(locale));
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
