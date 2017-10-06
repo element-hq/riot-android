@@ -28,6 +28,8 @@ import android.os.HandlerThread;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.data.RoomDataItem;
 import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -35,6 +37,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.ImageUtils;
+import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -66,10 +69,6 @@ public class VectorRoomMediasSender {
         void onCancel();
     }
 
-    // save/restore instance
-    private static final String KEY_BUNDLE_MEDIAS_LIST = "KEY_BUNDLE_MEDIAS_LIST";
-    private static final String KEY_BUNDLE_COMPRESSION_PREFERENCES = "KEY_BUNDLE_COMPRESSION_PREFERENCES";
-
     private AlertDialog mImageSizesListDialog;
 
     // the linked room activity
@@ -86,7 +85,7 @@ public class VectorRoomMediasSender {
     private static android.os.Handler mMediasSendingHandler = null;
 
     // pending
-    private ArrayList<SharedDataItem> mSharedDataItems;
+    private List<RoomDataItem> mSharedDataItems;
     private String mImageCompressionDescription;
 
     /**
@@ -103,31 +102,6 @@ public class VectorRoomMediasSender {
             mHandlerThread.start();
 
             mMediasSendingHandler = new android.os.Handler(mHandlerThread.getLooper());
-        }
-    }
-
-    /**
-     * Restore some saved info.
-     * @param savedInstanceState the bundle
-     */
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (null != savedInstanceState) {
-            mSharedDataItems = (ArrayList<SharedDataItem>) savedInstanceState.getSerializable(KEY_BUNDLE_MEDIAS_LIST);
-            mImageCompressionDescription = (String)savedInstanceState.getSerializable(KEY_BUNDLE_COMPRESSION_PREFERENCES);
-        }
-    }
-
-    /**
-     * Save info.
-     * @param savedInstanceState the bundle
-     */
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        if (null != mSharedDataItems) {
-            savedInstanceState.putSerializable(KEY_BUNDLE_MEDIAS_LIST, mSharedDataItems);
-        }
-
-        if (null != mImageCompressionDescription) {
-            savedInstanceState.putSerializable(KEY_BUNDLE_COMPRESSION_PREFERENCES, mImageCompressionDescription);
         }
     }
 
@@ -150,7 +124,7 @@ public class VectorRoomMediasSender {
      * Send a list of images from their URIs
      * @param sharedDataItems the media URIs
      */
-    public void sendMedias(final ArrayList<SharedDataItem> sharedDataItems) {
+    public void sendMedias(final ArrayList<RoomDataItem> sharedDataItems) {
         if (null != sharedDataItems) {
             mSharedDataItems = new ArrayList<>(sharedDataItems);
             sendMedias();
@@ -194,7 +168,7 @@ public class VectorRoomMediasSender {
         mMediasSendingHandler.post(new Runnable() {
             @Override
             public void run() {
-                SharedDataItem sharedDataItem = mSharedDataItems.get(0);
+                RoomDataItem sharedDataItem = mSharedDataItems.get(0);
                 String mimeType = sharedDataItem.getMimeType(mVectorRoomActivity);
 
                 // avoid null case
@@ -269,7 +243,7 @@ public class VectorRoomMediasSender {
      * Send a text message.
      * @param sharedDataItem the media item.
      */
-    private void sendTextMessage(SharedDataItem sharedDataItem) {
+    private void sendTextMessage(RoomDataItem sharedDataItem) {
         CharSequence sequence = sharedDataItem.getText();
         String htmlText = sharedDataItem.getHtmlText();
         String text = null;
@@ -310,7 +284,7 @@ public class VectorRoomMediasSender {
      * @param sharedDataItem the item to send
      * @param resource the media resource
      */
-    private void sendVideoMessage(final SharedDataItem sharedDataItem, final ResourceUtils.Resource resource) {
+    private void sendVideoMessage(final RoomDataItem sharedDataItem, final ResourceUtils.Resource resource) {
         mVectorRoomActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -339,7 +313,7 @@ public class VectorRoomMediasSender {
      * @param sharedDataItem the item to send
      * @param resource the media resource
      */
-    private void sendFileMessage(final SharedDataItem sharedDataItem, final ResourceUtils.Resource resource) {
+    private void sendFileMessage(final RoomDataItem sharedDataItem, final ResourceUtils.Resource resource) {
         mVectorRoomActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -368,7 +342,7 @@ public class VectorRoomMediasSender {
      * @param sharedDataItem the item to send
      * @param resource the media resource
      */
-    private void sendImageMessage(final SharedDataItem sharedDataItem, final ResourceUtils.Resource resource) {
+    private void sendImageMessage(final RoomDataItem sharedDataItem, final ResourceUtils.Resource resource) {
         String mimeType = sharedDataItem.getMimeType(mVectorRoomActivity);
 
         // save the file in the filesystem
@@ -443,7 +417,7 @@ public class VectorRoomMediasSender {
      * @param sharedDataItem the sharedItem
      * @return the thumbnail if it exits.
      */
-    private Bitmap getMediasPickerThumbnail(SharedDataItem sharedDataItem) {
+    private Bitmap getMediasPickerThumbnail(RoomDataItem sharedDataItem) {
         Bitmap thumbnailBitmap = null;
 
         try {
@@ -749,7 +723,7 @@ public class VectorRoomMediasSender {
                 }
 
                 if (null != resizeBitmapStream) {
-                    String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, CommonActivityUtils.MIME_TYPE_JPEG);
+                    String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, ResourceUtils.MIME_TYPE_JPEG);
 
                     if (null != bitmapURL) {
                         imageUrl = bitmapURL;
@@ -788,7 +762,7 @@ public class VectorRoomMediasSender {
         boolean isManaged = false;
 
         // check if the media could be resized
-        if ((null != aThumbnailURL) && (CommonActivityUtils.MIME_TYPE_JPEG.equals(anImageMimeType) || CommonActivityUtils.MIME_TYPE_JPG.equals(anImageMimeType) || CommonActivityUtils.MIME_TYPE_IMAGE_ALL.equals(anImageMimeType))) {
+        if ((null != aThumbnailURL) && (ResourceUtils.MIME_TYPE_JPEG.equals(anImageMimeType) || ResourceUtils.MIME_TYPE_JPG.equals(anImageMimeType) || ResourceUtils.MIME_TYPE_IMAGE_ALL.equals(anImageMimeType))) {
             System.gc();
             FileInputStream imageStream;
 

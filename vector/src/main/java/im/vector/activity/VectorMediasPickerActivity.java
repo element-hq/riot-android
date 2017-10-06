@@ -60,8 +60,10 @@ import android.widget.TableRow;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import org.matrix.androidsdk.data.RoomDataItem;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -85,7 +87,6 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.util.ResourceUtils;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
 
@@ -502,9 +503,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
             }
             if (mIsVideoRecordingSupported) {
-                fileIntent.setType(CommonActivityUtils.MIME_TYPE_ALL_CONTENT);
+                fileIntent.setType(ResourceUtils.MIME_TYPE_ALL_CONTENT);
             } else {
-                fileIntent.setType(CommonActivityUtils.MIME_TYPE_IMAGE_ALL);
+                fileIntent.setType(ResourceUtils.MIME_TYPE_IMAGE_ALL);
             }
             startActivityForResult(fileIntent, REQUEST_MEDIAS);
         } catch(Exception e) {

@@ -65,6 +65,7 @@ import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomDataItem;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
@@ -86,6 +87,7 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.ResourceUtils;
 import org.matrix.androidsdk.view.AutoScrollDownListView;
 
 import java.util.ArrayList;
@@ -105,8 +107,6 @@ import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
-import im.vector.util.ResourceUtils;
-import im.vector.util.SharedDataItem;
 import im.vector.util.SlashComandsParser;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
@@ -875,7 +875,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         mVectorRoomMediasSender = new VectorRoomMediasSender(this, mVectorMessageListFragment, Matrix.getInstance(this).getMediasCache());
-        mVectorRoomMediasSender.onRestoreInstanceState(savedInstanceState);
 
         manageRoomPreview();
 
@@ -1119,8 +1118,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
-
-        mVectorRoomMediasSender.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(FIRST_VISIBLE_ROW, mVectorMessageListFragment.mMessageListView.getFirstVisiblePosition());
     }
 
@@ -1946,12 +1943,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
-        ArrayList<SharedDataItem> sharedDataItems = new ArrayList<>();
+        ArrayList<RoomDataItem> sharedDataItems = new ArrayList<>();
 
         if (null != intent) {
-            sharedDataItems = new ArrayList<>(SharedDataItem.listSharedDataItems(intent, SharedDataItem.class.getClassLoader()));
+            sharedDataItems = new ArrayList<>(RoomDataItem.listRoomDataItems(intent, RoomDataItem.class.getClassLoader()));
         } else if (null != mLatestTakePictureCameraUri) {
-            sharedDataItems.add(new SharedDataItem(Uri.parse(mLatestTakePictureCameraUri)));
+            sharedDataItems.add(new RoomDataItem(Uri.parse(mLatestTakePictureCameraUri)));
             mLatestTakePictureCameraUri = null;
         }
 
