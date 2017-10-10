@@ -66,7 +66,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Pusher;
-import org.matrix.androidsdk.data.RoomDataItem;
+import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -2809,10 +2809,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             return;
         }
 
-        ArrayList<RoomDataItem> sharedDataItems = new ArrayList<>(RoomDataItem.listRoomDataItems(intent));
+        ArrayList<RoomMediaMessage> sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
 
         if (sharedDataItems.size() > 0) {
-            final RoomDataItem sharedDataItem = sharedDataItems.get(0);
+            final RoomMediaMessage sharedDataItem = sharedDataItems.get(0);
             View dialogLayout = getActivity().getLayoutInflater().inflate(R.layout.dialog_import_e2e_keys, null);
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.encryption_import_room_keys);

@@ -19,7 +19,7 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import org.matrix.androidsdk.data.RoomDataItem;
+import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -113,10 +113,10 @@ public class VectorSharedFilesActivity extends RiotBaseActivity {
 
         sharedFolder.mkdir();
 
-        ArrayList<RoomDataItem> cachedFiles = new ArrayList<>(RoomDataItem.listRoomDataItems(intent));
+        ArrayList<RoomMediaMessage> cachedFiles = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
 
         if (null != cachedFiles) {
-            for(RoomDataItem sharedDataItem : cachedFiles) {
+            for(RoomMediaMessage sharedDataItem : cachedFiles) {
                 sharedDataItem.saveMedia(this, sharedFolder);
             }
         }
@@ -137,7 +137,7 @@ public class VectorSharedFilesActivity extends RiotBaseActivity {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
             shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, cachedFiles);
-            shareIntent.setExtrasClassLoader(RoomDataItem.class.getClassLoader());
+            shareIntent.setExtrasClassLoader(RoomMediaMessage.class.getClassLoader());
             shareIntent.setType("*/*");
 
             // files to share

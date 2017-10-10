@@ -60,7 +60,6 @@ import android.widget.TableRow;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import org.matrix.androidsdk.data.RoomDataItem;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.ResourceUtils;

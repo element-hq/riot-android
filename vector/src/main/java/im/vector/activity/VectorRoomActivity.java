@@ -65,8 +65,8 @@ import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomDataItem;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
+import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
@@ -1943,12 +1943,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
-        ArrayList<RoomDataItem> sharedDataItems = new ArrayList<>();
+        ArrayList<RoomMediaMessage> sharedDataItems = new ArrayList<>();
 
         if (null != intent) {
-            sharedDataItems = new ArrayList<>(RoomDataItem.listRoomDataItems(intent, RoomDataItem.class.getClassLoader()));
+            sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent, RoomMediaMessage.class.getClassLoader()));
         } else if (null != mLatestTakePictureCameraUri) {
-            sharedDataItems.add(new RoomDataItem(Uri.parse(mLatestTakePictureCameraUri)));
+            sharedDataItems.add(new RoomMediaMessage(Uri.parse(mLatestTakePictureCameraUri)));
             mLatestTakePictureCameraUri = null;
         }
 

@@ -933,7 +933,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 info.mFileName = videoMessage.body;
                 info.mMediaUrl = videoMessage.getUrl();
                 info.mThumbnailUrl = (null != videoMessage.info) ? videoMessage.info.thumbnail_url : null;
-                info.mMimeType = videoMessage.getVideoMimeType();
+                info.mMimeType = videoMessage.getMimeType();
                 info.mEncryptedFileInfo = videoMessage.file;
                 res.add(info);
             }
