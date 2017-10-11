@@ -933,7 +933,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 info.mFileName = videoMessage.body;
                 info.mMediaUrl = videoMessage.getUrl();
                 info.mThumbnailUrl = (null != videoMessage.info) ? videoMessage.info.thumbnail_url : null;
-                info.mMimeType = videoMessage.getVideoMimeType();
+                info.mMimeType = videoMessage.getMimeType();
                 info.mEncryptedFileInfo = videoMessage.file;
                 res.add(info);
             }
@@ -1010,7 +1010,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     Intent viewImageIntent = new Intent(getActivity(), VectorMediasViewerActivity.class);
 
                     viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, mAdapter.getMaxThumbnailWith());
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, mAdapter.getMaxThumbnailWidth());
                     viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, mAdapter.getMaxThumbnailHeight());
                     viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, mediaMessagesList);
                     viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);

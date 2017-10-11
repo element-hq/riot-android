@@ -326,7 +326,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * @return the max thumbnail width
      */
-    public int getMaxThumbnailWith() {
+    public int getMaxThumbnailWidth() {
         return mMaxImageWidth;
     }
 
@@ -1140,7 +1140,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             if (row.getEvent().isEncrypting()) {
                 textColor = mEncryptingMessageTextColor;
-            } else if (row.getEvent().isSending()) {
+            } else if (row.getEvent().isSending() || row.getEvent().isUnsent()) {
                 textColor = mSendingMessageTextColor;
             } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 textColor = mNotSentMessageTextColor;
@@ -1342,7 +1342,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             if (row.getEvent().isEncrypting()) {
                 textColor = mEncryptingMessageTextColor;
-            } else if (row.getEvent().isSending()) {
+            } else if (row.getEvent().isSending() || row.getEvent().isUnsent()) {
                 textColor = mSendingMessageTextColor;
             } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 textColor = mNotSentMessageTextColor;

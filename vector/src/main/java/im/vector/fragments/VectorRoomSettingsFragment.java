@@ -65,6 +65,7 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -84,7 +85,6 @@ import im.vector.preference.RoomAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
-import im.vector.util.ResourceUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 

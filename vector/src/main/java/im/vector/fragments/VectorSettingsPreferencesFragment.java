@@ -66,6 +66,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Pusher;
+import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -81,6 +82,7 @@ import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -108,8 +110,6 @@ import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
-import im.vector.util.ResourceUtils;
-import im.vector.util.SharedDataItem;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -2809,10 +2809,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             return;
         }
 
-        ArrayList<SharedDataItem> sharedDataItems = new ArrayList<>(SharedDataItem.listSharedDataItems(intent));
+        ArrayList<RoomMediaMessage> sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
 
         if (sharedDataItems.size() > 0) {
-            final SharedDataItem sharedDataItem = sharedDataItems.get(0);
+            final RoomMediaMessage sharedDataItem = sharedDataItems.get(0);
             View dialogLayout = getActivity().getLayoutInflater().inflate(R.layout.dialog_import_e2e_keys, null);
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.encryption_import_room_keys);

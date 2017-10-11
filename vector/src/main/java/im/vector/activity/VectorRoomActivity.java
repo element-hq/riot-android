@@ -66,6 +66,7 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
+import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
@@ -86,6 +87,7 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.ResourceUtils;
 import org.matrix.androidsdk.view.AutoScrollDownListView;
 
 import java.util.ArrayList;
@@ -105,8 +107,6 @@ import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
-import im.vector.util.ResourceUtils;
-import im.vector.util.SharedDataItem;
 import im.vector.util.SlashComandsParser;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorCallSoundManager;
@@ -875,7 +875,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         mVectorRoomMediasSender = new VectorRoomMediasSender(this, mVectorMessageListFragment, Matrix.getInstance(this).getMediasCache());
-        mVectorRoomMediasSender.onRestoreInstanceState(savedInstanceState);
 
         manageRoomPreview();
 
@@ -1119,8 +1118,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
-
-        mVectorRoomMediasSender.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(FIRST_VISIBLE_ROW, mVectorMessageListFragment.mMessageListView.getFirstVisiblePosition());
     }
 
@@ -1577,7 +1574,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mVectorMessageListFragment.resendUnsentMessages();
             refreshNotificationsArea();
         } else if (id == R.id.ic_action_room_delete_unsent) {
-            mVectorMessageListFragment.deleteUnsentMessages();
+            mVectorMessageListFragment.deleteUnsentEvents();
             refreshNotificationsArea();
         } else if (id == R.id.ic_action_room_leave) {
             if (null != mRoom) {
@@ -1946,12 +1943,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
-        ArrayList<SharedDataItem> sharedDataItems = new ArrayList<>();
+        ArrayList<RoomMediaMessage> sharedDataItems = new ArrayList<>();
 
         if (null != intent) {
-            sharedDataItems = new ArrayList<>(SharedDataItem.listSharedDataItems(intent, SharedDataItem.class.getClassLoader()));
+            sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent, RoomMediaMessage.class.getClassLoader()));
         } else if (null != mLatestTakePictureCameraUri) {
-            sharedDataItems.add(new SharedDataItem(Uri.parse(mLatestTakePictureCameraUri)));
+            sharedDataItems.add(new RoomMediaMessage(Uri.parse(mLatestTakePictureCameraUri)));
             mLatestTakePictureCameraUri = null;
         }
 
@@ -2352,7 +2349,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private class cancelAllClickableSpan extends ClickableSpan {
         @Override
         public void onClick(View widget) {
-            mVectorMessageListFragment.deleteUnsentMessages();
+            mVectorMessageListFragment.deleteUnsentEvents();
             refreshNotificationsArea();
         }
 
