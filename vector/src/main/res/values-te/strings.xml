@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">ఆంగ్లము</string>
-    <string name="resouces_country">యు కె</string>
+<resources>
+    <string name="resouces_language">te</string>
+    <string name="resouces_country">te</string>
 
     <string name="title_activity_home">సందేశం</string>
     <string name="title_activity_room">గది</string>
