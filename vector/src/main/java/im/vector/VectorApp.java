@@ -192,7 +192,7 @@ public class VectorApp extends MultiDexApplication {
             Log.e(LOG_TAG, "fails to retrieve the package info " + e.getMessage());
         }
 
-        VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true);
+        VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true, true);
 
         // not the first launch
         if (null != Matrix.getInstance(this).getDefaultSession()) {

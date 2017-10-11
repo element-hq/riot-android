@@ -300,9 +300,12 @@ public class Matrix {
     }
 
     /**
-     * @return the application version
+     * Provides the application version
+     * @param longformat true to append the build time
+     * @param useBuildNumber true to replace the git version by the build number
+     * @return the application version.
      */
-    public String getVersion(boolean longformat) {
+    public String getVersion(boolean longformat, boolean useBuildNumber) {
         String versionName = "";
         String flavor = "";
 
@@ -320,6 +323,13 @@ public class Matrix {
         }
 
         String gitVersion = mAppContext.getResources().getString(R.string.git_revision);
+        String buildNumber = mAppContext.getResources().getString(R.string.build_number);
+
+        if ((useBuildNumber) && !TextUtils.equals(buildNumber, "0")) {
+            gitVersion = "#" + buildNumber;
+            longformat = false;
+        }
+
         if (longformat) {
             String date = mAppContext.getResources().getString(R.string.git_revision_date);
             versionName += " (" + flavor + gitVersion + "-" + date + ")";

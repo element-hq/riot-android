@@ -211,7 +211,7 @@ public class BugReporter {
                             .addFormDataPart("user_agent", "Android")
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("device_id", deviceId)
-                            .addFormDataPart("version", Matrix.getInstance(context).getVersion(true))
+                            .addFormDataPart("version", Matrix.getInstance(context).getVersion(true, false))
                             .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
                             .addFormDataPart("matrix_sdk_version", matrixSdkVersion)
                             .addFormDataPart("olm_version",olmVersion)
