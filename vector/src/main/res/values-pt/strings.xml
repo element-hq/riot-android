@@ -794,4 +794,37 @@ Dispositivos desconhecidos:</string>
     <string name="people_search_user_directory">LISTA DE UTILIZADORES (%s)</string>
     <string name="settings_start_on_boot">Iniciar no arranque</string>
     <string name="settings_clear_medias_cache">Limpar cache de multimédia</string>
-    </resources>
+    <string name="light_theme">Tema Claro</string>
+    <string name="dark_theme">Tema Escuro</string>
+    <string name="black_them">Tema Preto</string>
+
+    <string name="login_mobile_device">Dispositivo Móvel</string>
+
+    <string name="settings_notification_ringtone">Som de notificação</string>
+    <string name="settings_12_24_timestamps">Utilizar formato de 12 horas (ex. 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Ocultar mensagens de entrada/saída (convites/expulsões/banimentos não são afetados)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Ocultar avatar e mostrar mudanças de nome</string>
+
+    <string name="widget_no_power_to_manage">Precisa de permissão para gerir os widgets nesta sala</string>
+    <string name="widget_creation_failure">Criação de widget falhou</string>
+    <string name="event_formatter_widget_added">%1$s adicionado por %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s removido por %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com o jitsi</string>
+    <string name="widget_delete_message_confirmation">Tem a certeza que quer remover o widget?</string>
+    <string name="active_widgets">Widgets ativos: %1$d</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">Tem que poder convidar utilizadores para fazer isso.</string>
+    <string name="widget_integration_unable_to_create">Não foi possível criar o widget.</string>
+    <string name="widget_integration_failed_to_send_request">O envio do pedido falhou.</string>
+    <string name="widget_integration_room_not_recognised">Esta sala não é reconhecida.</string>
+    <string name="widget_integration_positive_power_level">Nível de utilizador tem que ser um inteiro positivo.</string>
+    <string name="widget_integration_must_be_in_room">Não se encontra nesta sala.</string>
+    <string name="widget_integration_no_permission_in_room">Não tem permissão para fazer isso nesta sala.</string>
+    <string name="widget_integration_missing_room_id">O _id da sala está em falta no pedido.</string>
+    <string name="widget_integration_missing_user_id">O user_id está em falta no pedido.</string>
+    <string name="widget_integration_room_not_visible">Sala %s não se encontra visível.</string>
+    <string name="settings_labs_matrix_apps">Apps Matrix</string>
+    <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
+    <string name="add_matrix_apps_not_supported">Não é suportado neste dispositivo</string>
+</resources>
