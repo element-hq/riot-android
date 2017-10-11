@@ -55,6 +55,11 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
     public static final String EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID";
 
     /**
+     * set to true to start a video call
+     */
+    public static final String EXTRA_ENABLE_VIDEO = "EXTRA_ENABLE_VIDEO";
+
+    /**
      * Base server URL
      */
     private static final String JITSI_SERVER_URL = "https://jitsi.riot.im/";
@@ -67,6 +72,9 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
 
     // the linked widget
     private Widget mWidget = null;
+
+    // video call
+    private boolean mIsVideoCall;
 
     // call URL
     private String mCallUrl;
@@ -112,6 +120,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         ButterKnife.bind(this);
 
         mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
+        mIsVideoCall = getIntent().getBooleanExtra(EXTRA_ENABLE_VIDEO, true);
 
         try {
             Uri uri = Uri.parse(mWidget.getUrl());
@@ -196,7 +205,13 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
      */
     private void loadURL() {
         try {
-            mJitsiView.loadURL(new URL(mCallUrl));
+            Bundle config = new Bundle();
+            //config.putBoolean("startWithAudioMuted", true);
+            config.putBoolean("startWithVideoMuted", !mIsVideoCall);
+            Bundle urlObject = new Bundle();
+            urlObject.putBundle("config", config);
+            urlObject.putString("url", mCallUrl);
+            mJitsiView.loadURLObject(urlObject);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## loadURL() failed : " + e.getMessage());
             this.finish();

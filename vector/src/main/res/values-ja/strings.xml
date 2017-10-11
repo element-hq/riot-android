@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="title_activity_room">部屋</string>
+<resources>
+    <string name="resouces_language">ja</string>
+    <string name="resouces_country">JA</string>
+
+    <string name="title_activity_room">部屋</string>
     <string name="title_activity_settings">設定</string>
     <string name="title_activity_historical">履歴</string>
 

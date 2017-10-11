@@ -1,3 +1,36 @@
+Changes in Riot 0.7.03 (2017-10-05)
+===================================================
+
+Improvements:
+ * Reduce the initial sync times
+ * Manage voice Jitsi call
+ 
+Bugfixes:
+ * #1641 : Language selector should be localized
+ * #1643 : Put Riot service in the foreground until the initial sync is done
+ * #1644 : Pin rooms with missed notifs and unread msg by default on the home page
+
+Changes in Riot 0.7.02 (2017-10-03)
+===================================================
+
+Features:
+ * Add black theme.
+ * Add widgets management.
+ * Update the third party call lib.
+ * Add notification ringtone selection.
+ 
+Bugfixes:
+ * Fix many issues reported by Google analytics.
+ * #1574 : Rotating the device when uploading photos still has a small bug 
+ * #1579 : Unexpected behaviour while clicking in the settings entry (android 8)
+ * #1588 : i can not set profile picture when i click on profile picture it return to setting menu (android 8)
+ * #1592 : Client unable to connect on server after certificate update
+ * #1613 : Phone rings for ever 
+ * #1616 : Sometimes Riot notifications reappear after being dismissed without being read
+ * #1622 : picked up call but continued vibrating, connection couldn't be established
+ * #1623 : checkboxes are not properly managed in the settings screen (android 8)
+ * #1634 : sent message duplicated in ui including read receipts
+ 
 Changes in Riot 0.7.01 (2017-09-04)
 ===================================================
 
