@@ -68,6 +68,7 @@
 
     <!-- jitsi -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false"/>
 
     <application
         android:name="im.vector.VectorApp"
