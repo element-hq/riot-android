@@ -814,4 +814,7 @@ Email также позволит вам при необходимости во�
     <string name="room_add_matrix_apps">Добавить приложения Matrix</string>
     <string name="login_mobile_device">Mobile</string>
 
+    <string name="notification_sync_in_progress">Синхронизация</string>
+    <string name="notification_listen_for_events">Прослушивание событий</string>
+
     </resources>
