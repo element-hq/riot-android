@@ -46,8 +46,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.fragments.ImageSizeSelectionDialogFragment;
 import im.vector.fragments.VectorMessageListFragment;
@@ -199,6 +197,7 @@ public class VectorRoomMediasSender {
                     }
 
                     final String fFilename = sharedDataItem.getFileName(mVectorRoomActivity);
+
                     ResourceUtils.Resource resource = ResourceUtils.openResource(mVectorRoomActivity, sharedDataItem.getUri(), sharedDataItem.getMimeType(mVectorRoomActivity));
 
                     if (null == resource) {
@@ -222,8 +221,11 @@ public class VectorRoomMediasSender {
                         return;
                     }
 
-                    if (mimeType.startsWith("image/")) {
-                        sendImageMessage(sharedDataItem, resource);
+                    if (mimeType.startsWith("image/") &&
+                            (ResourceUtils.MIME_TYPE_JPEG.equals(mimeType) ||
+                                    ResourceUtils.MIME_TYPE_JPG.equals(mimeType) ||
+                                    ResourceUtils.MIME_TYPE_IMAGE_ALL.equals(mimeType))) {
+                        sendJpegImage(sharedDataItem, resource);
                     } else {
                         resource.close();
                         mVectorRoomActivity.runOnUiThread(new Runnable() {
@@ -289,11 +291,11 @@ public class VectorRoomMediasSender {
     //================================================================================
 
     /**
-     * Send an image message.
+     * Send  message.
      * @param sharedDataItem the item to send
      * @param resource the media resource
      */
-    private void sendImageMessage(final RoomMediaMessage sharedDataItem, final ResourceUtils.Resource resource) {
+    private void sendJpegImage(final RoomMediaMessage sharedDataItem, final ResourceUtils.Resource resource) {
         String mimeType = sharedDataItem.getMimeType(mVectorRoomActivity);
 
         // save the file in the filesystem
@@ -307,7 +309,7 @@ public class VectorRoomMediasSender {
             @Override
             public void run() {
                 if ((null != mSharedDataItems) && (mSharedDataItems.size() > 0)) {
-                    sendImageMessage(fMediaUrl, fMimeType, new OnImageUploadListener() {
+                    sendJpegImage(sharedDataItem, fMediaUrl, fMimeType, new OnImageUploadListener() {
                         @Override
                         public void onDone() {
                             // reported by GA
@@ -643,7 +645,7 @@ public class VectorRoomMediasSender {
      * @param anImageMimeType the image mimetype
      * @param aListener the listener
      */
-    private void sendImageMessage(final String anImageUrl, final String anImageMimeType, final OnImageUploadListener aListener) {
+    private void sendJpegImage(final RoomMediaMessage roomMediaMessage, final String anImageUrl, final String anImageMimeType, final OnImageUploadListener aListener) {
         // sanity check
         if ((null == anImageUrl) || (null == aListener)) {
             return;
@@ -693,7 +695,7 @@ public class VectorRoomMediasSender {
                     mVectorRoomActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl)));
+                            mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl), roomMediaMessage.getFileName(mVectorRoomActivity)));
                             aListener.onDone();
                         }
                     });
@@ -743,7 +745,7 @@ public class VectorRoomMediasSender {
                                             mVectorRoomActivity.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl)));
+                                                    mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl), roomMediaMessage.getFileName(mVectorRoomActivity)));
                                                     aListener.onDone();
                                                 }
                                             });
@@ -778,7 +780,7 @@ public class VectorRoomMediasSender {
             mVectorRoomActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(anImageUrl)));
+                    mVectorMessageListFragment.sendMediaMessage(roomMediaMessage);
                     if (null != aListener) {
                         aListener.onDone();
                     }

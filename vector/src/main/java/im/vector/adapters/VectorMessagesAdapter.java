@@ -326,7 +326,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * @return the max thumbnail width
      */
-    public int getMaxThumbnailWith() {
+    public int getMaxThumbnailWidth() {
         return mMaxImageWidth;
     }
 

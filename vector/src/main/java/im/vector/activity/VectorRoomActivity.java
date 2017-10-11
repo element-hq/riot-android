@@ -1574,7 +1574,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mVectorMessageListFragment.resendUnsentMessages();
             refreshNotificationsArea();
         } else if (id == R.id.ic_action_room_delete_unsent) {
-            mVectorMessageListFragment.deleteUnsentMessages();
+            mVectorMessageListFragment.deleteUnsentEvents();
             refreshNotificationsArea();
         } else if (id == R.id.ic_action_room_leave) {
             if (null != mRoom) {
@@ -2349,7 +2349,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private class cancelAllClickableSpan extends ClickableSpan {
         @Override
         public void onClick(View widget) {
-            mVectorMessageListFragment.deleteUnsentMessages();
+            mVectorMessageListFragment.deleteUnsentEvents();
             refreshNotificationsArea();
         }
 
