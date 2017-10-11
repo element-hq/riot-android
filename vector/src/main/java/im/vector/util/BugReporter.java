@@ -221,6 +221,11 @@ public class BugReporter {
                             .addFormDataPart("app_language", VectorApp.getApplicationLocale().toString())
                             .addFormDataPart("default_app_language", VectorApp.getDeviceLocale().toString());
 
+                    String buildNumber = context.getString(R.string.build_number);
+                    if (!TextUtils.isEmpty(buildNumber) && !buildNumber.equals("0")) {
+                        builder.addFormDataPart("build_number", buildNumber);
+                    }
+
                     // add the gzipped files
                     for (File file : gzippedFiles) {
                         builder.addFormDataPart("compressed-log", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file));

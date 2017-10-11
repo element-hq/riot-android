@@ -55,6 +55,7 @@ android {
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
             resValue "string", "git_branch_name", "\"${gitBranchName()}\""
+            resValue "string", "build_number", rootProject.ext.buildNumberProp
             minifyEnabled false
         }
 
@@ -62,6 +63,7 @@ android {
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
             resValue "string", "git_branch_name", "\"${gitBranchName()}\""
+            resValue "string", "build_number", rootProject.ext.buildNumberProp
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
