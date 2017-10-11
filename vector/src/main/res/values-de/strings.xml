@@ -238,7 +238,7 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
 
     <!-- call string -->
     <string name="call_connected">Anruf verbunden</string>
-    <string name="call_connecting">Anruf verbindet…</string>
+    <string name="call_connecting">Verbindungsaufbau…</string>
     <string name="call_ended">Anruf beendet</string>
     <string name="call_ring">Es klingelt…</string>
     <string name="incoming_call">Eingehender Anruf</string>
