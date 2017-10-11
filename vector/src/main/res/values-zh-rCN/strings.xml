@@ -727,4 +727,37 @@
     <string name="larger">更大</string>
     <string name="largest">最大</string>
     <string name="huge">巨大</string>
+<string name="light_theme">浅色主题</string>
+    <string name="dark_theme">深色主题</string>
+    <string name="black_them">黑色主题</string>
+
+    <string name="login_mobile_device">移动</string>
+
+    <string name="settings_notification_ringtone">通知声音</string>
+    <string name="settings_12_24_timestamps">用12小时制显示时间戳 （如：下午 2:30）</string>
+    <string name="settings_hide_join_leave_messages">隐藏加入/离开消息（邀请/踢出/封禁不受影响）</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">隐藏头像和显示名称的修改</string>
+
+    <string name="widget_no_power_to_manage">你需要权限来管理这个聊天室的小部件</string>
+    <string name="widget_creation_failure">创建小部件失败</string>
+    <string name="event_formatter_widget_added">%1$s 被 %2$s 添加</string>
+    <string name="event_formatter_widget_removed">%1$s 被 %2$s 移除</string>
+    <string name="settings_labs_create_conference_with_jitsi">用 jitsi 创建会议通话</string>
+    <string name="widget_delete_message_confirmation">你确定要删除这个小部件吗？</string>
+    <string name="active_widgets">%1$d 个活跃的小部件</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">你需要能够邀请用户来做那件事。</string>
+    <string name="widget_integration_unable_to_create">无法创建小部件。</string>
+    <string name="widget_integration_failed_to_send_request">发送请求失败。</string>
+    <string name="widget_integration_room_not_recognised">这个房间未被识别。</string>
+    <string name="widget_integration_positive_power_level">特权级别必须是正整数。</string>
+    <string name="widget_integration_must_be_in_room">你不在这个聊天室。</string>
+    <string name="widget_integration_no_permission_in_room">你没有权限在这个聊天室里面做那件事。</string>
+    <string name="widget_integration_missing_room_id">请求中没有 room_id.</string>
+    <string name="widget_integration_missing_user_id">请求中没有 user_id.</string>
+    <string name="widget_integration_room_not_visible">聊天室 %s 不可见。</string>
+    <string name="settings_labs_matrix_apps">Matrix 应用</string>
+    <string name="room_add_matrix_apps">添加 Matrix 应用</string>
+    <string name="add_matrix_apps_not_supported">在这个设备上不支持</string>
 </resources>
