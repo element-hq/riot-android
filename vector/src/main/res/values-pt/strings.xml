@@ -827,4 +827,7 @@ Dispositivos desconhecidos:</string>
     <string name="settings_labs_matrix_apps">Apps Matrix</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
     <string name="add_matrix_apps_not_supported">Não é suportado neste dispositivo</string>
-</resources>
+<string name="notification_sync_in_progress">A sincronizar</string>
+    <string name="notification_listen_for_events">À escuta de eventos</string>
+
+    </resources>
