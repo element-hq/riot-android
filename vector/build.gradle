@@ -99,6 +99,7 @@ android {
     lintOptions {
         disable 'InvalidPackage'
         disable 'MissingTranslation'
+        disable 'RestrictedApi'
     }
 
     repositories {
