@@ -70,7 +70,6 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
-import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.PhoneNumberUtils;
@@ -301,9 +300,6 @@ public class VectorApp extends MultiDexApplication {
                 }
             }
         });
-
-        // detect if the headset is plugged / unplugged.
-        registerReceiver(new HeadsetConnectionReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 
         // create the markdown parser
         try {

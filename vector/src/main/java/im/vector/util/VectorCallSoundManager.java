@@ -19,6 +19,8 @@ package im.vector.util;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
@@ -591,15 +593,12 @@ public class VectorCallSoundManager {
         if ((null != mAudioMode) && (null != mIsSpeakerOn)) {
             AudioManager audioManager = getAudioManager();
 
-            // ignore speaker button if a headset is connected
-            if (!audioManager.isBluetoothA2dpOn() && !audioManager.isWiredHeadsetOn()) {
-                if (mAudioMode!= audioManager.getMode()) {
-                    audioManager.setMode(mAudioMode);
-                }
+            if (mAudioMode != audioManager.getMode()) {
+                audioManager.setMode(mAudioMode);
+            }
 
-                if (mIsSpeakerOn != audioManager.isSpeakerphoneOn()) {
-                    audioManager.setSpeakerphoneOn(mIsSpeakerOn);
-                }
+            if (mIsSpeakerOn != audioManager.isSpeakerphoneOn()) {
+                audioManager.setSpeakerphoneOn(mIsSpeakerOn);
             }
 
             mAudioMode = null;
@@ -637,6 +636,20 @@ public class VectorCallSoundManager {
 
             if (audioManager.getMode() != audioMode) {
                 audioManager.setMode(audioMode);
+            }
+
+            if (!isSpeakerOn) {
+                try {
+                    if (HeadsetConnectionReceiver.isBTHeadsetPlugged()) {
+                        audioManager.startBluetoothSco();
+                        audioManager.setBluetoothScoOn(true);
+                    } else if (audioManager.isBluetoothScoOn()) {
+                        audioManager.stopBluetoothSco();
+                        audioManager.setBluetoothScoOn(false);
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## setSpeakerphoneOn() failed " + e.getMessage());
+                }
             }
 
             if (isSpeakerOn != audioManager.isSpeakerphoneOn()) {
