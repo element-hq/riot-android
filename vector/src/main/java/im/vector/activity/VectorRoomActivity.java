@@ -3565,23 +3565,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Display an e2e alert for the first opened room.
      */
     private void displayE2eRoomAlert() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!isFinishing()) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (!preferences.contains(E2E_WARNINGS_PREFERENCES) && (null != mRoom) && mRoom.isEncrypted()) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(E2E_WARNINGS_PREFERENCES, false);
-            editor.commit();
+            if (!preferences.contains(E2E_WARNINGS_PREFERENCES) && (null != mRoom) && mRoom.isEncrypted()) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(E2E_WARNINGS_PREFERENCES, false);
+                editor.commit();
 
-            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-            builder.setTitle(R.string.room_e2e_alert_title);
-            builder.setMessage(R.string.room_e2e_alert_message);
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // NOP
-                }
-            });
-            builder.create().show();
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                builder.setTitle(R.string.room_e2e_alert_title);
+                builder.setMessage(R.string.room_e2e_alert_message);
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // NOP
+                    }
+                });
+                builder.create().show();
+            }
         }
     }
 }
