@@ -699,7 +699,7 @@ public class NotificationUtils {
         if (!isBackground) {
             builder.setDefaults(Notification.DEFAULT_LIGHTS);
 
-            if (isBing) {
+            if (isBing && (null != PreferencesManager.getNotificationRingTone(context))) {
                 builder.setSound(PreferencesManager.getNotificationRingTone(context));
             }
 

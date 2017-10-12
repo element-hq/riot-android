@@ -276,7 +276,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(getActivity()));
+
+                if (null != PreferencesManager.getNotificationRingTone(getActivity())) {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(getActivity()));
+                }
                 getActivity().startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE);
                 return false;
             }

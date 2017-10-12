@@ -224,11 +224,7 @@ public class PreferencesManager {
     public static void setNotificationRingTone(Context context, Uri uri) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        if (null != uri) {
-            editor.putString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, uri.toString());
-        } else {
-            editor.remove(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY);
-        }
+        editor.putString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, (null != uri) ? uri.toString() : "");
         editor.commit();
     }
 
@@ -239,6 +235,12 @@ public class PreferencesManager {
      */
     public static Uri getNotificationRingTone(Context context) {
         String url = PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, null);
+
+        // the user selects "None"
+        if (TextUtils.equals(url, "")) {
+            return null;
+        }
+
         Uri uri = null;
 
         if (null != url) {
@@ -264,6 +266,11 @@ public class PreferencesManager {
      */
     public static String getNotificationRingToneName(Context context) {
         Uri toneUri = getNotificationRingTone(context);
+
+        if (null == toneUri) {
+            return null;
+        }
+
         String name = null;
 
         Cursor cursor = null;
