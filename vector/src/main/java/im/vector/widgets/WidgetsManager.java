@@ -183,6 +183,11 @@ public class WidgetsManager {
                 Widget widget = null;
 
                 try {
+                    if (null == widgetEvent.roomId) {
+                        Log.e(LOG_TAG, "## getWidgets() : set the room id to the event " + widgetEvent.eventId);
+                        widgetEvent.roomId = room.getRoomId();
+                    }
+
                     widget = new Widget(session, widgetEvent);
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## getWidgets() : widget creation failed " + e.getMessage());
@@ -355,18 +360,21 @@ public class WidgetsManager {
      * @param callback the asynchronous callback
      */
     public void closeWidget(MXSession session, Room room, String widgetId, final ApiCallback<Void> callback) {
-        WidgetError permissionError = checkWidgetPermission(session, room);
+        // sanity checks
+        if ((null != session) && (null != room) && (null != widgetId)) {
+            WidgetError permissionError = checkWidgetPermission(session, room);
 
-        if (null != permissionError) {
-            if (null != callback) {
-                callback.onMatrixError(permissionError);
+            if (null != permissionError) {
+                if (null != callback) {
+                    callback.onMatrixError(permissionError);
+                }
+                return;
             }
-            return;
-        }
 
-        // Send a state event with the widget data
-        // TODO: This API will be shortly replaced by a pure scalar API
-        session.getRoomsApiClient().sendStateEvent(room.getRoomId(), WIDGET_EVENT_TYPE, widgetId, new HashMap<String, Object>(), callback);
+            // Send a state event with the widget data
+            // TODO: This API will be shortly replaced by a pure scalar API
+            session.getRoomsApiClient().sendStateEvent(room.getRoomId(), WIDGET_EVENT_TYPE, widgetId, new HashMap<String, Object>(), callback);
+        }
     }
 
     public interface onWidgetUpdateListener {
