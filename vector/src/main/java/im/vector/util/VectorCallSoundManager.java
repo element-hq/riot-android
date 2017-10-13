@@ -398,6 +398,9 @@ public class VectorCallSoundManager {
                 }
             }, 300);
         }
+
+        // ensure that the audio config is properly restored
+        restoreAudioConfig();
     }
 
     /**
@@ -565,7 +568,6 @@ public class VectorCallSoundManager {
 
     private static Timer mRestoreAudioConfigTimer = null;
     private static TimerTask mRestoreAudioConfigTimerMask = null;
-    private static Handler mUIHandler = null;
 
     /**
      * Back up the current audio config.
@@ -599,6 +601,12 @@ public class VectorCallSoundManager {
 
             if (mIsSpeakerOn != audioManager.isSpeakerphoneOn()) {
                 audioManager.setSpeakerphoneOn(mIsSpeakerOn);
+            }
+
+            // stop the bluetooth
+            if (audioManager.isBluetoothScoOn()) {
+                audioManager.stopBluetoothSco();
+                audioManager.setBluetoothScoOn(false);
             }
 
             mAudioMode = null;

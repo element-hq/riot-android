@@ -333,6 +333,7 @@ public class InComingCallActivity extends RiotAppCompatActivity {
         if (null != mMxCall) {
             // stop the ringing when the user presses on reject
             VectorCallSoundManager.stopRinging();
+            VectorCallSoundManager.releaseAudioFocus();
             mMxCall.hangup("");
         }
     }
