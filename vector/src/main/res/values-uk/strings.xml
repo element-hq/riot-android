@@ -188,8 +188,8 @@
     <string name="auth_home_server">Сервер:</string>
     <string name="auth_identity_server">Сервер аутентифікації:</string>
     <string name="auth_reset_password_next_step_button">Я перевірив(ла) свою email адресу</string>
-    <string name="auth_reset_password_message">Для скидання паролю введіть email прив'язаний до облікового запису:</string>
-    <string name="auth_reset_password_missing_email">Необхідно ввести email прив'язаний до вашого облікового запису'.</string>
+    <string name="auth_reset_password_message">Для скидання паролю введіть email прив\'язаний до облікового запису:</string>
+    <string name="auth_reset_password_missing_email">Необхідно ввести email прив\'язаний до вашого облікового запису\'.</string>
     <string name="auth_reset_password_missing_password">Необхідно ввести новий пароль.</string>
     <string name="auth_reset_password_email_validation_message">На адресу %s надіслано електронний лист. Як тільки ви перейдете за посиланням у ньому, натисніть нижче.</string>
     <string name="auth_reset_password_error_unauthorized">Не вдалося перевірити email: переконайтеся, що ви перейшли за посиланням у листі</string>
@@ -205,12 +205,12 @@
     <string name="login_error_invalid_home_server">Введіть дійсний URL</string>
     <string name="login_mobile_device">Мобільний</string>
 
-    <string name="login_error_forbidden">Неправильне ім'я користувача або пароль</string>
+    <string name="login_error_forbidden">Неправильне ім\'я користувача або пароль</string>
     <string name="login_error_unknown_token">Вказаний токен доступу не розпізнано</string>
     <string name="login_error_bad_json">Викривлений JSON</string>
     <string name="login_error_not_json">Не є JSON</string>
     <string name="login_error_limit_exceeded">Надіслано забагато запитів</string>
-    <string name="login_error_user_in_use">Ім'я користувача вже використовується</string>
+    <string name="login_error_user_in_use">Ім\'я користувача вже використовується</string>
     <string name="login_error_login_email_not_yet">Ви не перейшли за посиланням в електронному листі</string>
 
     <!-- crypto warnings -->
@@ -250,8 +250,8 @@
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
 
     <!-- call string -->
-    <string name="call_connected">Виклик з'єднано</string>
-    <string name="call_connecting">Встановлюється з'єднання…</string>
+    <string name="call_connected">Виклик з\'єднано</string>
+    <string name="call_connecting">Встановлюється з\'єднання…</string>
     <string name="call_ended">Виклик завершено</string>
     <string name="call_ring">Телефоную…</string>
     <string name="incoming_call">Вхідний виклик</string>
@@ -304,7 +304,7 @@
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s запросив(ла) вас приєднатися до цієї кімнати</string>
-    <string name="room_preview_unlinked_email_warning">Запрошення надіслано на адресу %s, не пов'язану з цим обліковим записом.\nВи можете увійти під іншим обліковим записом чи приєднати email до цього.</string>
+    <string name="room_preview_unlinked_email_warning">Запрошення надіслано на адресу %s, не пов\'язану з цим обліковим записом.\nВи можете увійти під іншим обліковим записом чи приєднати email до цього.</string>
     <string name="room_preview_try_join_an_unknown_room">Ви намагаєтесь отримати доступ до %s. Бажаєте приєднатися щоб взяти участь у обговоренні?</string>
     <string name="room_preview_try_join_an_unknown_room_default">кімната</string>
     <string name="room_preview_room_interactions_disabled">Це попередній перегляд кімнати. Ви в режимі лише читання.</string>
@@ -351,7 +351,7 @@
     <string name="room_participants_action_set_admin">Зробити адміністратором</string>
     <string name="room_participants_action_ignore">Сховати всі повідомлення користувача</string>
     <string name="room_participants_action_unignore">Показати всі повідомлення користувача</string>
-    <string name="room_participants_invite_search_another_user">ID користувача, ім'я або email</string>
+    <string name="room_participants_invite_search_another_user">ID користувача, ім\'я або email</string>
     <string name="room_participants_action_mention">Згадати</string>
     <string name="room_participants_action_devices_list">Показати Список Пристроїв</string>
     <string name="room_participants_power_level_prompt">Ви не зможете скасувати цю дію, оскільки надаєте користувачу той же рівень доступу, що й у вас.\nВи впевнені?</string>
@@ -375,7 +375,7 @@
     <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; та інші друкують…</string>
     <string name="room_message_placeholder_encrypted">Надіслати шифроване повідомлення…</string>
     <string name="room_message_placeholder_not_encrypted">Надіслати повідомлення (нешифроване)…</string>
-    <string name="room_offline_notification">Зв'язок із сервером втрачено.</string>
+    <string name="room_offline_notification">Зв\'язок із сервером втрачено.</string>
     <string name="room_unsent_messages_notification">Повідомлення не надіслані. %1$s або %2$s зараз?</string>
     <string name="room_unknown_devices_messages_notification">Повідомлення не надіслані через присутність невідомих пристроїв. %1$s або %2$s зараз?</string>
     <string name="room_prompt_resend">Повторити надсилання</string>
@@ -397,7 +397,7 @@
     <string name="ssl_cert_not_trust">Це може означати, що хтось зі злими намірами намагається перехопити ваш трафік або ваш телефон не довіряє сертифікату, наданому віддаленим сервером.</string>
     <string name="ssl_cert_new_account_expl">Якщо адміністратор сервера сказав цього чекати, переконайтесь, що відбиток нижче збігається з відбитком, наданим ним.</string>
     <string name="ssl_unexpected_existing_expl">Сертифікат почав відрізнятися від того, якому довіряв ваш телефон. Це ДУЖЕ НЕЗВИЧАЙНО. Наполегливо радимо НЕ ПРИЙМАТИ цей новий сертифікат.</string>
-    <string name="ssl_expected_existing_expl">Сертифікат змінився з довіреного на недовірений. Сервер міг оновити свій сертифікат. Зв'яжіться з адміністратором сервера, щоб отримати дійсний відбиток.</string>
+    <string name="ssl_expected_existing_expl">Сертифікат змінився з довіреного на недовірений. Сервер міг оновити свій сертифікат. Зв\'яжіться з адміністратором сервера, щоб отримати дійсний відбиток.</string>
     <string name="ssl_only_accept">Приймайте сертифікат ЛИШЕ у випадку збігу відбитку вище з відбитком, оприлюдненим адміністратором сервера.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
@@ -474,7 +474,7 @@
     <!-- Vector Settings -->
 
     <string name="settings_profile_picture">Аватар</string>
-    <string name="settings_display_name">Показуване ім'я</string>
+    <string name="settings_display_name">Показуване ім\'я</string>
     <string name="settings_email_address">Email</string>
     <string name="settings_add_email_address">Додати email</string>
     <string name="settings_phone_number">Телефон</string>
@@ -692,7 +692,7 @@
 
     <string name="encryption_information_sender_device_information">Інформація про пристрій відправника</string>
     <string name="encryption_information_device_name">Назва пристрою</string>
-    <string name="encryption_information_name">Ім'я</string>
+    <string name="encryption_information_name">Ім\'я</string>
     <string name="encryption_information_device_id">ID пристрою</string>
     <string name="encryption_information_device_key">Ключ пристрою </string>
     <string name="encryption_information_verification">Перевірка</string>
@@ -726,7 +726,7 @@
     <string name="encryption_information_unblock">Дозволити</string>
 
     <string name="encryption_information_verify_device">Перевірити пристрій</string>
-    <string name="encryption_information_verify_device_warning"> Для перевірки пристрою будь ласка, зв'яжіться з його власником у інший спосіб (e.g. особисто чи телефоном) та запитайте, чи співпадає ключ, бачений ними у налаштуваннях користувача з наведеним нижче:</string>
+    <string name="encryption_information_verify_device_warning"> Для перевірки пристрою будь ласка, зв\'яжіться з його власником у інший спосіб (e.g. особисто чи телефоном) та запитайте, чи співпадає ключ, бачений ними у налаштуваннях користувача з наведеним нижче:</string>
     <string name="encryption_information_verify_device_warning2">Якщо вони співпадуть, натисніть кнопку Підтвердити нижче. Якщо ж ні, хтось прослуховує цей пристрій, і ви імовірно захочете його блокувати.</string>
     <string name="encryption_information_verify_key_match">Я підтверджую, що ключі співпадають</string>
 
