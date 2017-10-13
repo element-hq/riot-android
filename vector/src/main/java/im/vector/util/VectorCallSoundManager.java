@@ -304,6 +304,7 @@ public class VectorCallSoundManager {
             if (mRingBackPlayer.isPlaying()) {
                 mRingBackPlayer.stop();
             }
+            mRingBackPlayer.release();
             mRingBackPlayer = null;
         }
 
@@ -311,6 +312,7 @@ public class VectorCallSoundManager {
             if (mCallEndPlayer.isPlaying()) {
                 mCallEndPlayer.stop();
             }
+            mCallEndPlayer.release();
             mCallEndPlayer = null;
         }
 
@@ -318,6 +320,7 @@ public class VectorCallSoundManager {
             if (mBusyPlayer.isPlaying()) {
                 mBusyPlayer.stop();
             }
+            mBusyPlayer.release();
             mBusyPlayer = null;
         }
     }
