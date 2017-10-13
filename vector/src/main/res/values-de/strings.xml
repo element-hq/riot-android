@@ -796,4 +796,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
 
     <string name="login_mobile_device">Mobilgerät</string>
 
+    <string name="notification_sync_in_progress">Synchronisiere</string>
+    <string name="notification_listen_for_events">Nach Ereignissen lauschen</string>
+
     </resources>
