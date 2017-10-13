@@ -383,7 +383,7 @@ public class VectorMessagesAdapterMediasHelper {
      */
     void managePendingImageVideoUpload(final View convertView, final Event event, Message message) {
         final View uploadProgressLayout = convertView.findViewById(R.id.content_upload_progress_layout);
-        final ProgressBar uploadSpinner = (ProgressBar) convertView.findViewById(R.id.upload_event_spinner);
+        final ProgressBar uploadSpinner = convertView.findViewById(R.id.upload_event_spinner);
 
         final boolean isVideoMessage = message instanceof VideoMessage;
 
@@ -412,7 +412,7 @@ public class VectorMessagesAdapterMediasHelper {
             uploadingUrl = ((VideoMessage) message).info.thumbnail_url;
             isUploadingThumbnail = ((VideoMessage) message).isThumbnailLocalContent();
         } else {
-            uploadingUrl = ((ImageMessage) message).thumbnailUrl;
+            uploadingUrl = ((ImageMessage) message).info.thumbnailUrl;
             isUploadingThumbnail = ((ImageMessage) message).isThumbnailLocalContent();
         }
 
