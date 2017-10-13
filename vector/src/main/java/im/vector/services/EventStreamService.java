@@ -865,7 +865,11 @@ public class EventStreamService extends Service {
             }
 
             mIsForeground = true;
-        } else if ((!mGcmRegistrationManager.useGCM() || !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+        } else if (
+                // fdroid
+                (!mGcmRegistrationManager.useGCM() ||
+                        // the GCM registration was not done
+               TextUtils.isEmpty(mGcmRegistrationManager.getGCMRegistrationToken()) && !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in foreground because of GCM registration");
 
             if (FOREGROUND_LISTENING_FOR_EVENTS != mForegroundServiceIdentifier) {
