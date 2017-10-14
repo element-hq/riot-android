@@ -752,4 +752,40 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="tiny">Klein</string>
     <string name="larger">Groter</string>
     <string name="huge">Gigantisch</string>
+<string name="light_theme">Licht Thema</string>
+    <string name="dark_theme">Donker Thema</string>
+    <string name="black_them">Zwart Thema</string>
+
+    <string name="notification_sync_in_progress">Aan het synchroniseren</string>
+    <string name="notification_listen_for_events">Luisteren voor evenementen</string>
+
+    <string name="login_mobile_device">Mobiel</string>
+
+    <string name="settings_notification_ringtone">Notificatie geluid</string>
+    <string name="settings_12_24_timestamps">Tijdsaanduidingen in 12 uur formaat weergeven (bv. 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Toetreden/verlaten berichten verbergen (uitnodigingen/uitzettingen/verbanningen blijven zichtbaar)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Profielfoto en weergavenaam veranderingen verbergen</string>
+
+    <string name="widget_no_power_to_manage">Je hebt permissie nodig om widgets in deze ruimte te beheren</string>
+    <string name="widget_creation_failure">Het maken van de widget is niet goed gegaan</string>
+    <string name="event_formatter_widget_added">%1$s is toegevoegd door %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s is verwijderd door %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Maak vergadergesprekken met jitsi</string>
+    <string name="widget_delete_message_confirmation">Weet je zeker dat je deze widget wilt verwijderen?</string>
+    <string name="active_widgets">%1$d actieve widgets</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">Je moet gebruikers kunnen uitnodigen om dat te kunnen doen.</string>
+    <string name="widget_integration_unable_to_create">Niet mogelijk om de widget te maken.</string>
+    <string name="widget_integration_failed_to_send_request">Niet gelukt om een verzoek te verzenden.</string>
+    <string name="widget_integration_room_not_recognised">Deze ruimte wordt niet herkend.</string>
+    <string name="widget_integration_positive_power_level">Het machtsniveau moet een positief en heel getal zijn.</string>
+    <string name="widget_integration_must_be_in_room">Je zit niet in deze ruimte.</string>
+    <string name="widget_integration_no_permission_in_room">Je hebt niet de permissie om dat in deze ruimte te doen.</string>
+    <string name="widget_integration_missing_room_id">room_id mist in het verzoek.</string>
+    <string name="widget_integration_missing_user_id">user_id mist in het verzoek.</string>
+    <string name="widget_integration_room_not_visible">Ruimte %s is niet zichtbaar.</string>
+    <string name="settings_labs_matrix_apps">Matrix Apps</string>
+    <string name="room_add_matrix_apps">Matrix Apps toevoegen</string>
+    <string name="add_matrix_apps_not_supported">Niet ondersteund op dit apparaat</string>
 </resources>
