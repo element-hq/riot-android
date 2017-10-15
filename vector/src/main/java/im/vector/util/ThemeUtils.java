@@ -20,6 +20,7 @@ package im.vector.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
@@ -38,6 +39,7 @@ import im.vector.activity.FallbackLoginActivity;
 import im.vector.activity.HistoricalRoomsActivity;
 import im.vector.activity.InComingCallActivity;
 import im.vector.activity.LanguagePickerActivity;
+import im.vector.activity.LockScreenActivity;
 import im.vector.activity.LoginActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.PhoneNumberVerificationActivity;
@@ -172,6 +174,8 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Dark);
             } else if (activity instanceof VectorUniversalLinkActivity) {
                 activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof LockScreenActivity) {
+                activity.setTheme(R.style.Vector_Lock_Dark);
             }
         }
 
@@ -224,6 +228,15 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Black);
             } else if (activity instanceof VectorUniversalLinkActivity) {
                 activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof LockScreenActivity) {
+                activity.setTheme(R.style.Vector_Lock_Black);
+            }
+        }
+
+        if (TextUtils.equals(getApplicationTheme(activity), THEME_LIGHT_VALUE)) {
+            // Specific quirk for quick reply screen
+            if (activity instanceof LockScreenActivity) {
+                activity.setTheme(R.style.Vector_Lock_Light);
             }
         }
 
