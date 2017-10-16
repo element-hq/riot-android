@@ -36,4 +36,19 @@
 
     <color name="tab_bar_unselected_background_color_light">@color/primary_color_light</color>
     <color name="tab_bar_unselected_background_color_dark">@color/primary_color_dark</color>
+
+    <!-- Text Colors -->
+    <color name="primary_hint_text_color_light">#BBE7D3</color>
+    <color name="primary_hint_text_color_dark">#BBE7D3</color>
+
+    <color name="riot_primary_text_color_light">#FF3C3C3C</color>
+    <color name="default_text_hint_color_light">#903C3C3C</color>
+    <color name="default_text_light_color_light">#8E000000</color>
+    <color name="default_button_light_text_light">#FF747474</color>
+    <color name="default_text_dark_color_light">#FF212121</color>
+    <color name="riot_primary_text_color_dark">#dddddd</color>
+    <color name="default_text_hint_color_dark">#CCDDDDDD</color>
+    <color name="default_text_light_color_dark">#A4A4A4</color>
+    <color name="default_button_light_text_dark">#FF747474</color>
+    <color name="default_text_dark_color_dark">#DEDEDE</color>
 </resources>
