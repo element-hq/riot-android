@@ -669,6 +669,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     sendTextMessage();
                 }
 
+                if (!keyEvent.isShiftPressed() && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    sendTextMessage();
+                    return true;
+                }
+
                 return false;
             }
         });
