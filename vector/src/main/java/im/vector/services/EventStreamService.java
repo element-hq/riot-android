@@ -77,10 +77,9 @@ import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.DismissNotificationReceiver;
+import im.vector.util.CallsManager;
 import im.vector.util.NotificationUtils;
-import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
-import im.vector.util.VectorCallSoundManager;
 
 /**
  * A foreground service in charge of controlling whether the event stream is running or not.
@@ -193,91 +192,6 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * Calls events listener.
-     */
-    private final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
-
-        /**
-         * Manage hangup event.
-         * The ringing sound is disabled and pending incoming call is dismissed.
-         * @param callId the callId
-         */
-        private void manageHangUpEvent(String callId) {
-            if (null != callId) {
-                Log.d(LOG_TAG, "manageHangUpEvent : hide call notification and stopRinging for call " + callId);
-                hideCallNotifications();
-            } else {
-                Log.d(LOG_TAG, "manageHangUpEvent : stopRinging");
-            }
-            VectorCallSoundManager.stopRinging();
-        }
-
-        @Override
-        public void onIncomingCall(final IMXCall call, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
-            Log.d(LOG_TAG, "onIncomingCall " + call.getCallId());
-
-            IMXCall.MXCallListener callListener = new IMXCall.MXCallListener() {
-                @Override
-                public void onStateDidChange(String state) {
-                    Log.d(LOG_TAG, "dispatchOnStateDidChange " + call.getCallId() + " : " + state);
-
-                    // if there is no call push rule
-                    // display the incoming call notification but with no sound
-                    if (TextUtils.equals(state, IMXCall.CALL_STATE_CREATED) || TextUtils.equals(state, IMXCall.CALL_STATE_CREATING_CALL_VIEW)) {
-                        displayIncomingCallNotification(call.getSession(), call.getRoom(), null, call.getCallId(), null);
-                    }
-                }
-
-                @Override
-                public void onCallError(String error) {
-                    Log.d(LOG_TAG, "dispatchOnCallError " + call.getCallId() + " : " + error);
-                    manageHangUpEvent(call.getCallId());
-                }
-
-                @Override
-                public void onViewLoading(View callView) {
-                }
-
-                @Override
-                public void onViewReady() {
-                }
-
-                @Override
-                public void onCallAnsweredElsewhere() {
-                    Log.d(LOG_TAG, "onCallAnsweredElsewhere " + call.getCallId());
-                    manageHangUpEvent(call.getCallId());
-                }
-
-                @Override
-                public void onCallEnd(final int aReasonId) {
-                    Log.d(LOG_TAG, "dispatchOnCallEnd " + call.getCallId());
-                    manageHangUpEvent(call.getCallId());
-                }
-
-                @Override
-                public void onPreviewSizeChanged(int width, int height) {
-                }
-            };
-
-            call.addListener(callListener);
-        }
-
-        @Override
-        public void onCallHangUp(final IMXCall call) {
-            Log.d(LOG_TAG, "onCallHangUp " + call.getCallId());
-            manageHangUpEvent(call.getCallId());
-        }
-
-        @Override
-        public void onVoipConferenceStarted(String roomId) {
-        }
-
-        @Override
-        public void onVoipConferenceFinished(String roomId) {
-        }
-    };
-
-    /**
      * Track bing rules updates
      */
     private final BingRulesManager.onBingRulesUpdateListener mBingRulesUpdatesListener = new BingRulesManager.onBingRulesUpdateListener() {
@@ -335,16 +249,7 @@ public class EventStreamService extends Service {
                     catchup(false);
                 } else if (StreamAction.CATCHUP == mServiceState) {
                     Log.d(LOG_TAG, "onLiveEventsChunkProcessed : no Active call");
-
-                    // in some race conditions
-                    // the call listener does not dispatch the call end
-                    // for example when the call is stopped while the incoming call activity is creating
-                    // the call is not initialized so the answerelsewhere / stop don't make sense.
-                    if (VectorCallSoundManager.isRinging()) {
-                        Log.d(LOG_TAG, "onLiveEventsChunkProcessed : there is no more call but the device is still ringing");
-                        hideCallNotifications();
-                        VectorCallSoundManager.stopRinging();
-                    }
+                    CallsManager.getSharedInstance().checkDeadCalls();
                     setServiceState(StreamAction.PAUSE);
                 }
             }
@@ -385,8 +290,8 @@ public class EventStreamService extends Service {
                 if (null != session) {
                     session.stopEventStream();
                     session.getDataHandler().removeListener(mEventsListener);
-                    session.getDataHandler().getCallsManager().removeListener(mCallsManagerListener);
                     session.getDataHandler().getBingRulesManager().removeBingRulesUpdateListener(mBingRulesUpdatesListener);
+                    CallsManager.getSharedInstance().removeSession(session);
                     mSessions.remove(session);
                     mMatrixIds.remove(matrixId);
                 }
@@ -590,8 +495,8 @@ public class EventStreamService extends Service {
      */
     private void monitorSession(final MXSession session) {
         session.getDataHandler().addListener(mEventsListener);
-        session.getDataHandler().getCallsManager().addListener(mCallsManagerListener);
         session.getDataHandler().getBingRulesManager().addBingRulesUpdateListener(mBingRulesUpdatesListener);
+        CallsManager.getSharedInstance().addSession(session);
 
         final MXSession fSession = session;
         session.getDataHandler().addListener(new MXEventListener() {
@@ -730,8 +635,8 @@ public class EventStreamService extends Service {
                 if (session.isAlive()) {
                     session.stopEventStream();
                     session.getDataHandler().removeListener(mEventsListener);
-                    session.getDataHandler().getCallsManager().removeListener(mCallsManagerListener);
                     session.getDataHandler().getBingRulesManager().removeBingRulesUpdateListener(mBingRulesUpdatesListener);
+                    CallsManager.getSharedInstance().removeSession(session);
                 }
             }
         }
@@ -1590,7 +1495,7 @@ public class EventStreamService extends Service {
      * @param callId   the callId
      * @param bingRule the bing rule.
      */
-    private void displayIncomingCallNotification(MXSession session, Room room, Event event, String callId, BingRule bingRule) {
+    public void displayIncomingCallNotification(MXSession session, Room room, Event event, String callId, BingRule bingRule) {
         Log.d(LOG_TAG, "displayIncomingCallNotification : " + callId + " in " + room.getRoomId());
 
         // the incoming call in progress is already displayed
@@ -1600,10 +1505,8 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "displayIncomingCallNotification : a 'call in progress' notification is displayed");
         }
         // test if there is no active call
-        else if (null == VectorCallViewActivity.getActiveCall()) {
+        else if (null == CallsManager.getSharedInstance().getActiveCall()) {
             Log.d(LOG_TAG, "displayIncomingCallNotification : display the dedicated notification");
-            VectorCallSoundManager.startRinging();
-
             Notification notification = NotificationUtils.buildIncomingCallNotification(
                     EventStreamService.this,
                     NotificationUtils.getRoomName(getApplicationContext(), session, room, event),

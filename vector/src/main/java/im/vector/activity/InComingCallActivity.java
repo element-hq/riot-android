@@ -32,12 +32,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.okhttp.Call;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.util.VectorCallSoundManager;
+import im.vector.util.CallsManager;
 import im.vector.util.VectorUtils;
 
 /**
@@ -161,11 +163,7 @@ public class InComingCallActivity extends RiotAppCompatActivity {
                 finish();
             } else if (null == (mMxCall = mSession.mCallsManager.getCallWithCallId(mCallId))) {
                 Log.e(LOG_TAG, "## onCreate(): invalid call ID (null)");
-                // assume that the user tap on a staled notification
-                if (VectorCallSoundManager.isRinging()) {
-                    Log.e(LOG_TAG, "## onCreate(): the device was ringing so assume that the call " + mCallId + " does not exist anymore");
-                    VectorCallSoundManager.stopRinging();
-                }
+                CallsManager.getSharedInstance().checkDeadCalls();
                 finish();
             } else {
                 synchronized (LOG_TAG) {
@@ -316,26 +314,14 @@ public class InComingCallActivity extends RiotAppCompatActivity {
      * @param aSourceIntent the intent whose extras are transmitted
      */
     private void startCallViewActivity(final Intent aSourceIntent) {
-        // stop the ringing when the user presses on accept
-        VectorCallSoundManager.stopRinging();
-
-        Intent intent = new Intent(this, VectorCallViewActivity.class);
-        Bundle receivedData = aSourceIntent.getExtras();
-        intent.putExtras(receivedData);
-        intent.putExtra(VectorCallViewActivity.EXTRA_AUTO_ACCEPT, true);
-        startActivity(intent);
+        CallsManager.getSharedInstance().acceptCall(this, aSourceIntent);
     }
 
     /**
      * Hangup the call.
      */
     private void onHangUp() {
-        if (null != mMxCall) {
-            // stop the ringing when the user presses on reject
-            VectorCallSoundManager.stopRinging();
-            VectorCallSoundManager.releaseAudioFocus();
-            mMxCall.hangup("");
-        }
+        CallsManager.getSharedInstance().rejectCall();
     }
 
 }

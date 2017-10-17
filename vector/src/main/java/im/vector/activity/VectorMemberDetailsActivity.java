@@ -62,6 +62,7 @@ import im.vector.VectorApp;
 import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.fragments.VectorUnknownDevicesFragment;
+import im.vector.util.CallsManager;
 import im.vector.util.VectorUtils;
 
 /**
@@ -864,7 +865,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
         } else if (null != mRoomMember) {
             // 1:1 call
-            if ((null != searchCallableRoom()) && mSession.isVoipCallSupported() && (null == VectorCallViewActivity.getActiveCall())) {
+            if ((null != searchCallableRoom()) && mSession.isVoipCallSupported() && (null == CallsManager.getSharedInstance().getActiveCall())) {
                 // Offer voip call options
                 supportedActions.add(ITEM_ACTION_START_VOICE_CALL);
                 supportedActions.add(ITEM_ACTION_START_VIDEO_CALL);

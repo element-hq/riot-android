@@ -445,7 +445,7 @@
 
         <receiver android:name="im.vector.receiver.DismissNotificationReceiver"/>
 
-        <receiver android:name="im.vector.receiver.HeadsetConnectionReceiver">
+        <receiver android:name="org.matrix.androidsdk.receiver.HeadsetConnectionReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.HEADSET_PLUG"/>
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />

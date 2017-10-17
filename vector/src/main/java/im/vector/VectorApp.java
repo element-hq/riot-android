@@ -35,12 +35,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.provider.CallLog;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Pair;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
@@ -72,11 +74,11 @@ import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
+import im.vector.util.CallsManager;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
 import im.vector.util.ThemeUtils;
-import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
 
 /**
@@ -139,6 +141,11 @@ public class VectorApp extends MultiDexApplication {
     public VectorMarkdownParser mMarkdownParser;
 
     /**
+     * Calls manager
+     */
+    private CallsManager mCallsManager;
+
+    /**
      * @return the current instance
      */
     public static VectorApp getInstance() {
@@ -181,6 +188,7 @@ public class VectorApp extends MultiDexApplication {
         super.onCreate();
 
         instance = this;
+        mCallsManager = new CallsManager(this);
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
 
@@ -420,7 +428,7 @@ public class VectorApp extends MultiDexApplication {
                     Log.e(LOG_TAG, "## startActivityTransitionTimer() : the timer expires but there is an active activity.");
                 } else {
                     VectorApp.this.mIsInBackground = true;
-                    mIsCallingInBackground = (null != VectorCallViewActivity.getActiveCall());
+                    mIsCallingInBackground = (null != mCallsManager.getActiveCall());
 
                     // if there is a pending call
                     // the application is not suspended
@@ -475,27 +483,16 @@ public class VectorApp extends MultiDexApplication {
             ContactsManager.getInstance().clearSnapshot();
             ContactsManager.getInstance().refreshLocalContactsSnapshot();
 
-            boolean hasActiveCall = false;
-
-            ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
+            List<MXSession> sessions = Matrix.getInstance(this).getSessions();
             for (MXSession session : sessions) {
                 session.getMyUser().refreshUserInfos(null);
                 session.setIsOnline(true);
                 session.setSyncDelay(0);
                 session.setSyncTimeout(0);
-                hasActiveCall |= session.getDataHandler().getCallsManager().hasActiveCalls();
                 addSyncingSession(session);
             }
 
-            // detect if an infinite ringing has been triggered
-            if (VectorCallSoundManager.isRinging() && !hasActiveCall && (null != EventStreamService.getInstance())) {
-                Log.e(LOG_TAG, "## suspendApp() : fix an infinite ringing");
-                EventStreamService.getInstance().hideCallNotifications();
-
-                if (VectorCallSoundManager.isRinging()) {
-                    VectorCallSoundManager.stopRinging();
-                }
-            }
+            mCallsManager.checkDeadCalls();
         }
 
         MyPresenceManager.advertiseAllOnline();
