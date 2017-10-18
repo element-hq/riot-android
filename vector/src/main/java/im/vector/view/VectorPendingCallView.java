@@ -29,8 +29,8 @@ import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.Room;
 
 import im.vector.R;
-import im.vector.activity.VectorCallViewActivity;
 import im.vector.util.CallUtilities;
+import im.vector.util.CallsManager;
 import im.vector.util.VectorUtils;
 
 /**
@@ -138,7 +138,7 @@ public class VectorPendingCallView extends RelativeLayout {
      * If there is none, this view is gone.
      */
     public void checkPendingCall() {
-        IMXCall call = VectorCallViewActivity.getActiveCall();
+        IMXCall call = CallsManager.getSharedInstance().getActiveCall();
 
         // no more call
         if (null == call) {
@@ -200,8 +200,7 @@ public class VectorPendingCallView extends RelativeLayout {
      * Terminates the refresh processes.
      */
     public void onCallTerminated() {
-        mCall = null;
-        setVisibility(View.GONE);
+        checkPendingCall();
     }
 
     /**
@@ -254,7 +253,7 @@ public class VectorPendingCallView extends RelativeLayout {
     /**
      * Update the background color of the call view
      *
-     * @param primaryColor
+     * @param primaryColor the primary color
      */
     public void updateBackgroundColor(int primaryColor) {
         mMainView.setBackgroundColor(primaryColor);

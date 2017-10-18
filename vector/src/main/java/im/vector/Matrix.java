@@ -36,8 +36,6 @@ import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.store.MXFileStore;
 import org.matrix.androidsdk.data.store.MXMemoryStore;
@@ -50,7 +48,6 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 
-import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorHomeActivity;
@@ -164,98 +161,6 @@ public class Matrix {
 
             Log.d(LOG_TAG, "onLiveEventsChunkProcessed ");
             EventStreamService.checkDisplayedNotifications();
-        }
-    };
-
-    // a common call events listener
-    private static final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
-        private android.os.Handler mUIHandler = null;
-
-        /**
-         * @return the UI handler
-         */
-        private android.os.Handler getUIHandler() {
-            if (null == mUIHandler) {
-                mUIHandler = new android.os.Handler(Looper.getMainLooper());
-            }
-
-            return mUIHandler;
-        }
-
-        /**
-         * Called when there is an incoming call within the room.
-         */
-        @Override
-        public void onIncomingCall(final IMXCall call, final MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
-            if (null != call) {
-                getUIHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // can only manage one call instance.
-                        if (null == VectorCallViewActivity.getActiveCall()) {
-                            Log.d(LOG_TAG, "onIncomingCall with no active call");
-
-                            VectorHomeActivity homeActivity = VectorHomeActivity.getInstance();
-
-                            // if the home activity does not exist : the application has been woken up by a notification)
-                            if (null == homeActivity) {
-                                Log.d(LOG_TAG, "onIncomingCall : the home activity does not exist -> launch it");
-
-                                Context context = VectorApp.getInstance();
-
-                                // clear the activity stack to home activity
-                                Intent intent = new Intent(context, VectorHomeActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, call.getSession().getMyUserId());
-                                intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, call.getCallId());
-                                if (null != unknownDevices) {
-                                    intent.putExtra(VectorHomeActivity.EXTRA_CALL_UNKNOWN_DEVICES, unknownDevices);
-                                }
-                                context.startActivity(intent);
-                            } else {
-                                Log.d(LOG_TAG, "onIncomingCall : the home activity exists : but permissions have to be checked before");
-                                // check incoming call required permissions, before allowing the call..
-                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId(), unknownDevices);
-                            }
-                        } else {
-                            Log.d(LOG_TAG, "onIncomingCall : a call is already in progress -> cancel");
-                            call.hangup("busy");
-                        }
-                    }
-                });
-            }
-        }
-
-        /**
-         * Called when a called has been hung up
-         */
-        @Override
-        public void onCallHangUp(final IMXCall call) {
-            Log.d(LOG_TAG, "onCallHangUp");
-
-            final VectorHomeActivity homeActivity = VectorHomeActivity.getInstance();
-
-            if (null != homeActivity) {
-                getUIHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(LOG_TAG, "onCallHangUp : onCallHangunp");
-                        homeActivity.onCallEnd(call);
-                    }
-                });
-            } else {
-                Log.d(LOG_TAG, "onCallHangUp : homeactivity does not exist -> don't know what to do");
-            }
-        }
-
-
-        @Override
-        public void onVoipConferenceStarted(String roomId) {
-
-        }
-
-        @Override
-        public void onVoipConferenceFinished(String roomId) {
         }
     };
 
@@ -596,7 +501,6 @@ public class Matrix {
         }
 
         session.getDataHandler().removeListener(mLiveEventListener);
-        session.mCallsManager.removeListener(mCallsManagerListener);
 
         SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>() {
             @Override
@@ -747,7 +651,6 @@ public class Matrix {
         }
 
         session.getDataHandler().addListener(mLiveEventListener);
-        session.mCallsManager.addListener(mCallsManagerListener);
         session.setUseDataSaveMode(PreferencesManager.useDataSaveMode(context));
         return session;
     }

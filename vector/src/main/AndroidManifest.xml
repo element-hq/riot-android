@@ -445,16 +445,6 @@
 
         <receiver android:name="im.vector.receiver.DismissNotificationReceiver"/>
 
-        <receiver android:name="im.vector.receiver.HeadsetConnectionReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.HEADSET_PLUG"/>
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
-                <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />
-                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
-                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
-            </intent-filter>
-        </receiver>
-
         <!-- Shared items  -->
         <activity
             android:name=".activity.VectorSharedFilesActivity"

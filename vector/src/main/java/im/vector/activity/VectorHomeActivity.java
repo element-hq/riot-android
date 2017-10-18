@@ -114,10 +114,10 @@ import im.vector.fragments.RoomsFragment;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
+import im.vector.util.CallsManager;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
-import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
@@ -916,7 +916,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         mVectorPendingCallView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IMXCall call = VectorCallViewActivity.getActiveCall();
+                IMXCall call = CallsManager.getSharedInstance().getActiveCall();
                 if (null != call) {
                     final Intent intent = new Intent(VectorHomeActivity.this, VectorCallViewActivity.class);
                     intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
@@ -1882,37 +1882,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 @Override
                 public void run() {
                     VectorHomeActivity.this.startActivity(intent);
-                }
-            });
-        }
-    }
-
-    /**
-     * End of call management.
-     *
-     * @param call the ended call/
-     */
-    public void onCallEnd(IMXCall call) {
-        if (null != call) {
-            String callId = call.getCallId();
-            // either the call view has been put in background
-            // or the ringing started because of a notified call in lockscreen (the callview was never created)
-            final boolean isActiveCall = VectorCallViewActivity.isBackgroundedCallId(callId) ||
-                    (!mSession.mCallsManager.hasActiveCalls() && IMXCall.CALL_STATE_CREATED.equals(call.getCallState()));
-
-            VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (isActiveCall) {
-                        // suspend the app if required
-                        VectorApp.getInstance().onCallEnd();
-                        // hide the view
-                        mVectorPendingCallView.checkPendingCall();
-                        // clear call in progress notification
-                        EventStreamService.checkDisplayedNotifications();
-                        // and play a lovely sound
-                        VectorCallSoundManager.startEndCallSound();
-                    }
                 }
             });
         }

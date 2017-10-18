@@ -104,12 +104,12 @@ import im.vector.ViewedRoomTracker;
 import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.services.EventStreamService;
+import im.vector.util.CallsManager;
 import im.vector.util.NotificationUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.SlashComandsParser;
 import im.vector.util.ThemeUtils;
-import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
@@ -533,11 +533,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         @Override
         public void onCallEnd(final int aReasonId) {
             refreshCallButtons(true);
-
-            // catch the flow where the hangup is done in VectorRoomActivity
-            VectorCallSoundManager.releaseAudioFocus();
-            // and play a lovely sound
-            VectorCallSoundManager.startEndCallSound();
         }
 
         @Override
@@ -760,7 +755,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mVectorPendingCallView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IMXCall call = VectorCallViewActivity.getActiveCall();
+                IMXCall call = CallsManager.getSharedInstance().getActiveCall();
                 if (null != call) {
                     final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
                     intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
@@ -828,11 +823,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mStopCallLayout.setOnClickListener(new View.OnClickListener() {
                                                @Override
                                                public void onClick(View v) {
-                                                   IMXCall call = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
-
-                                                   if (null != call) {
-                                                       call.hangup(null);
-                                                   }
+                                                   CallsManager.getSharedInstance().onHangUp(null);
                                                }
                                            }
         );
@@ -1279,7 +1270,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         if (null != mCallId) {
-            IMXCall call = VectorCallViewActivity.getActiveCall();
+            IMXCall call = CallsManager.getSharedInstance().getActiveCall();
 
             // can only manage one call instance.
             // either there is no active call or resume the active one
@@ -1932,11 +1923,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
     }
 
-    @SuppressLint("NewApi")
     /**
      * Send the medias defined in the intent.
      * They are listed, checked and sent when it is possible.
      */
+    @SuppressLint("NewApi")
     private void sendMediasIntent(final Intent intent) {
         // sanity check
         if ((null == intent) && (null == mLatestTakePictureCameraUri)) {
@@ -2557,7 +2548,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void refreshCallButtons(boolean refreshOngoingConferenceCallView) {
         if ((null == sRoomPreviewData) && (null == mEventId) && canSendMessages()) {
             boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported();
-            IMXCall call = VectorCallViewActivity.getActiveCall();
+            IMXCall call = CallsManager.getSharedInstance().getActiveCall();
             Widget activeWidget = mVectorOngoingConferenceCallView.getActiveWidget();
 
             if ((null == call) && (null == activeWidget)) {
@@ -2567,11 +2558,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mStartCallLayout.setVisibility(View.GONE);
                 mStopCallLayout.setVisibility(View.GONE);
             } else {
+                IMXCall roomCall = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
+
                 // ensure that the listener is defined once
                 call.removeListener(mCallListener);
                 call.addListener(mCallListener);
-
-                IMXCall roomCall = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
 
                 mStartCallLayout.setVisibility(View.GONE);
                 mStopCallLayout.setVisibility((call == roomCall) ? View.VISIBLE : View.GONE);

@@ -93,6 +93,10 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         }
 
         @Override
+        public void onOutgoingCall(IMXCall call) {
+        }
+
+        @Override
         public void onCallHangUp(IMXCall call) {
 
         }
@@ -270,7 +274,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             mSession.mCallsManager.addListener(mCallsListener);
         }
 
-        WidgetsManager.getSharedInstance().addListener(mWidgetListener);
+        WidgetsManager.addListener(mWidgetListener);
     }
 
     /**
@@ -281,7 +285,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             mSession.mCallsManager.removeListener(mCallsListener);
         }
 
-        WidgetsManager.getSharedInstance().removeListener(mWidgetListener);
+        WidgetsManager.removeListener(mWidgetListener);
     }
 
     /**

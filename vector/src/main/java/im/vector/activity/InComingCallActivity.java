@@ -32,12 +32,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.okhttp.Call;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.util.VectorCallSoundManager;
+import im.vector.util.CallsManager;
 import im.vector.util.VectorUtils;
 
 /**
@@ -69,17 +71,6 @@ public class InComingCallActivity extends RiotAppCompatActivity {
 
         @Override
         public void onCallError(String aErrorMsg) {
-            Log.d(LOG_TAG, "## dispatchOnCallError(): error=" + aErrorMsg);
-
-            if (IMXCall.CALL_ERROR_USER_NOT_RESPONDING.equals(aErrorMsg)) {
-                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_user_not_responding));
-            } else if (IMXCall.CALL_ERROR_ICE_FAILED.equals(aErrorMsg)) {
-                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_ice_failed));
-            } else if (IMXCall.CALL_ERROR_CAMERA_INIT_FAILED.equals(aErrorMsg)) {
-                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_camera_init_failed));
-            } else {
-                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, aErrorMsg);
-            }
         }
 
         @Override
@@ -105,26 +96,10 @@ public class InComingCallActivity extends RiotAppCompatActivity {
          */
         @Override
         public void onCallAnsweredElsewhere() {
-            InComingCallActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d(LOG_TAG, "## onCallAnsweredElsewhere(): finish activity");
-                    CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_answered_elsewhere));
-                    InComingCallActivity.this.finish();
-                }
-            });
         }
 
         @Override
         public void onCallEnd(final int aReasonId) {
-            InComingCallActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d(LOG_TAG, "## onCallEnd(): finish activity");
-                    CommonActivityUtils.processEndCallInfo(InComingCallActivity.this, aReasonId);
-                    InComingCallActivity.this.finish();
-                }
-            });
         }
 
         @Override
@@ -161,11 +136,7 @@ public class InComingCallActivity extends RiotAppCompatActivity {
                 finish();
             } else if (null == (mMxCall = mSession.mCallsManager.getCallWithCallId(mCallId))) {
                 Log.e(LOG_TAG, "## onCreate(): invalid call ID (null)");
-                // assume that the user tap on a staled notification
-                if (VectorCallSoundManager.isRinging()) {
-                    Log.e(LOG_TAG, "## onCreate(): the device was ringing so assume that the call " + mCallId + " does not exist anymore");
-                    VectorCallSoundManager.stopRinging();
-                }
+                CallsManager.getSharedInstance().checkDeadCalls();
                 finish();
             } else {
                 synchronized (LOG_TAG) {
@@ -261,6 +232,8 @@ public class InComingCallActivity extends RiotAppCompatActivity {
             if (isWaitingUserResponse) {
                 mMxCall.onResume();
                 mMxCall.addListener(mMxCallListener);
+
+                CallsManager.getSharedInstance().setCallActivity(this);
             } else {
                 Log.d(LOG_TAG, "## onResume : the call has already been managed.");
                 finish();
@@ -291,6 +264,7 @@ public class InComingCallActivity extends RiotAppCompatActivity {
         if (null != mMxCall) {
             mMxCall.onPause();
             mMxCall.removeListener(mMxCallListener);
+            CallsManager.getSharedInstance().setCallActivity(null);
         }
     }
 
@@ -316,26 +290,14 @@ public class InComingCallActivity extends RiotAppCompatActivity {
      * @param aSourceIntent the intent whose extras are transmitted
      */
     private void startCallViewActivity(final Intent aSourceIntent) {
-        // stop the ringing when the user presses on accept
-        VectorCallSoundManager.stopRinging();
-
-        Intent intent = new Intent(this, VectorCallViewActivity.class);
-        Bundle receivedData = aSourceIntent.getExtras();
-        intent.putExtras(receivedData);
-        intent.putExtra(VectorCallViewActivity.EXTRA_AUTO_ACCEPT, true);
-        startActivity(intent);
+        CallsManager.getSharedInstance().acceptCall(this, aSourceIntent);
     }
 
     /**
      * Hangup the call.
      */
     private void onHangUp() {
-        if (null != mMxCall) {
-            // stop the ringing when the user presses on reject
-            VectorCallSoundManager.stopRinging();
-            VectorCallSoundManager.releaseAudioFocus();
-            mMxCall.hangup("");
-        }
+        CallsManager.getSharedInstance().rejectCall();
     }
 
 }
