@@ -34,7 +34,7 @@ import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
-import org.matrix.androidsdk.call.MXCall;
+import org.matrix.androidsdk.call.HeadsetConnectionReceiver;
 import org.matrix.androidsdk.util.Log;
 
 import android.util.TypedValue;
@@ -150,11 +150,15 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "## onStateDidChange(): new state=" + fState);
+
                     manageSubViews();
+
+                    if ((null != mCall) && mCall.isVideo() && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
+                        mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
+                    }
                 }
             });
         }
-
 
         @Override
         public void onCallError(String error) {
@@ -728,16 +732,36 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             }
         }
 
+        if (null != mCall) {
+            mCall.removeListener(mListener);
+        }
         saveCallView();
         CallsManager.getSharedInstance().setCallActivity(null);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        computeVideoUiLayout();
+        if ((null != mCall) && mCall.isVideo() && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
+            mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        if (null == mCallsManager.getActiveCall()) {
+            Log.d(LOG_TAG, "## onResume() : the call does not exist anymore");
+            finish();
+            return;
+        }
+
         mHeaderPendingCallView.checkPendingCall();
 
+        EventStreamService.getInstance().displayCallInProgressNotification(mCall.getSession(), mCall.getRoom(), mCall.getCallId());
         // compute video UI layout position after rotation & apply new position
         computeVideoUiLayout();
         if ((null != mCall) && mCall.isVideo() && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
@@ -745,6 +769,8 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         }
 
         if (null != mCall) {
+            mCall.addListener(mListener);
+
             if (!mIsScreenOff) {
                 mCall.onResume();
             }
@@ -785,7 +811,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             isSpeakerPhoneOn = mSavedSpeakerValue;
         } else {
             // default value: video => speaker ON, voice => speaker OFF
-            isSpeakerPhoneOn = mCall.isVideo(); //&& CallSoundManager .isHeadsetPlugged() ;
+            isSpeakerPhoneOn = mCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(this) ;
         }
 
         mCallsManager.setCallSpeakerphoneOn(isSpeakerPhoneOn);
@@ -1146,7 +1172,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         Log.d(LOG_TAG, "## manageSubViews(): OUT");
     }
 
-
     private void saveCallView() {
         if ((null != mCall) && !mCall.getCallState().equals(IMXCall.CALL_STATE_ENDED) && (null != mCallView) && (null != mCallView.getParent())) {
 
@@ -1163,8 +1188,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             // remove the call layout to avoid having a black screen
             RelativeLayout layout = (RelativeLayout)findViewById(R.id.call_layout);
             layout.setVisibility(View.GONE);
-
-            EventStreamService.getInstance().displayCallInProgressNotification(mSession, mCall.getRoom(), mCall.getCallId());
             mCallView = null;
         }
     }

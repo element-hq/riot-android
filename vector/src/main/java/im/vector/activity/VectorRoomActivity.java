@@ -59,8 +59,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.Call;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.MXCryptoError;
@@ -505,6 +503,40 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             if (mReadMarkerManager != null) {
                 mReadMarkerManager.onReadMarkerChanged(roomId);
             }
+        }
+    };
+
+    private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
+        @Override
+        public void onStateDidChange(String state) {
+        }
+
+        @Override
+        public void onCallError(String error) {
+            refreshCallButtons(true);
+        }
+
+        @Override
+        public void onViewLoading(View callview) {
+
+        }
+
+        @Override
+        public void onViewReady() {
+        }
+
+        @Override
+        public void onCallAnsweredElsewhere() {
+            refreshCallButtons(true);
+        }
+
+        @Override
+        public void onCallEnd(final int aReasonId) {
+            refreshCallButtons(true);
+        }
+
+        @Override
+        public void onPreviewSizeChanged(int width, int height) {
         }
     };
 
@@ -1891,11 +1923,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
     }
 
-    @SuppressLint("NewApi")
     /**
      * Send the medias defined in the intent.
      * They are listed, checked and sent when it is possible.
      */
+    @SuppressLint("NewApi")
     private void sendMediasIntent(final Intent intent) {
         // sanity check
         if ((null == intent) && (null == mLatestTakePictureCameraUri)) {
@@ -2527,6 +2559,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mStopCallLayout.setVisibility(View.GONE);
             } else {
                 IMXCall roomCall = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
+
+                // ensure that the listener is defined once
+                call.removeListener(mCallListener);
+                call.addListener(mCallListener);
 
                 mStartCallLayout.setVisibility(View.GONE);
                 mStopCallLayout.setVisibility((call == roomCall) ? View.VISIBLE : View.GONE);

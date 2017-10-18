@@ -61,14 +61,21 @@ public class CallUtilities {
      * @return the call status.
      */
     public static String getCallStatus(Context context, IMXCall call) {
-        // sanity check
+        // sanity checkisBTHeadsetPlugged
         if (null == call) {
             return null;
         }
 
         String callState = call.getCallState();
 
-        if (callState.equals(IMXCall.CALL_STATE_CONNECTING) || callState.equals(IMXCall.CALL_STATE_CREATE_ANSWER)
+        if (!call.isIncoming() &&
+                (callState.equals(IMXCall.CALL_STATE_CREATED)  ||
+                    callState.equals(IMXCall.CALL_STATE_CREATING_CALL_VIEW) ||
+                    callState.equals(IMXCall.CALL_STATE_FLEDGLING) ||
+                    callState.equals(IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA))) {
+
+            return context.getResources().getString(R.string.call_connecting);
+        } else  if (callState.equals(IMXCall.CALL_STATE_CONNECTING) || callState.equals(IMXCall.CALL_STATE_CREATE_ANSWER)
                 || callState.equals(IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA) || callState.equals(IMXCall.CALL_STATE_WAIT_CREATE_OFFER)
                 ) {
             return context.getResources().getString(R.string.call_connecting);
