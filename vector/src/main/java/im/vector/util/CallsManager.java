@@ -19,27 +19,28 @@ package im.vector.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.CallSoundsManager;
+import org.matrix.androidsdk.call.HeadsetConnectionReceiver;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.services.EventStreamService;
@@ -53,68 +54,85 @@ public class CallsManager {
     public static final String HANGUP_MSG_USER_CANCEL = "user hangup";
     public static final String HANGUP_MSG_NOT_DEFINED = "not defined";
 
+    // ring tones resource names
+    private static final String RING_TONE_START_RINGING = "ring.ogg";
+
+    private static CallsManager mSharedInstance = null;
 
     // application context
     private Context mContext;
 
     // the active call
     private IMXCall mActiveCall;
-
-    private static CallsManager mSharedInstance = null;
+    private CallSoundsManager mCallSoundsManager;
 
     private View mCallView = null;
     private IMXCall.VideoLayoutConfiguration mLocalVideoLayoutConfig = null;
 
-    public void setCallView(View callView) {
-        mCallView = callView;
-    }
+    private Handler mUiHandler = new Handler(Looper.getMainLooper());
 
-    public View getCallView() {
-        return mCallView;
-    }
+    private Activity mCallActivity;
 
-    public void setVideoLayoutConfiguration(IMXCall.VideoLayoutConfiguration aLocalVideoLayoutConfig) {
-        mLocalVideoLayoutConfig = aLocalVideoLayoutConfig;
-    }
+    private String mPrevCallState;
 
-    public IMXCall.VideoLayoutConfiguration getVideoLayoutConfiguration() {
-        return mLocalVideoLayoutConfig;
-    }
+    private HeadsetConnectionReceiver.OnHeadsetStatusUpdateListener mOnHeadsetStatusUpdateListener = new HeadsetConnectionReceiver.OnHeadsetStatusUpdateListener() {
 
-    public void toggleSpeaker() {
-        /*if(null != mCall) {
-            VectorCallSoundManager.toggleSpeaker();
-        } else {
-            Log.w(LOG_TAG, "## toggleSpeaker(): Failed");
-        }*/
-    }
+        private void onHeadsetUpdate(boolean isBTHeadsetUpdate) {
+            if (null != mActiveCall) {
+                boolean isHeadsetPlugged = HeadsetConnectionReceiver.isHeadsetPlugged(mContext);
 
-    public void setCallSpeakerphoneOn(boolean isSpeakerPhoneOn) {
-        //VectorCallSoundManager.setCallSpeakerphoneOn(isSpeakerPhoneOn);
-    }
+                // the user plugs a headset while the device is on loud speaker
+                if (mCallSoundsManager.isSpeakerOn() && isHeadsetPlugged) {
+                    Log.d(LOG_TAG, "toggle the call speaker because the call was on loudspeaker.");
+                    // change the audio path to the headset
+                    mCallSoundsManager.toggleSpeaker();
+                }
+                // the user unplugs the headset during video call
+                else if (!isHeadsetPlugged && mActiveCall.isVideo()) {
+                    Log.d(LOG_TAG, "toggle the call speaker because the headset was unplugged during a video call.");
+                    mCallSoundsManager.toggleSpeaker();
+                } else if (isBTHeadsetUpdate) {
+                    AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 
+                    if (HeadsetConnectionReceiver.isBTHeadsetPlugged()) {
+                        audioManager.startBluetoothSco();
+                        audioManager.setBluetoothScoOn(true);
+                    } else if (audioManager.isBluetoothScoOn()) {
+                        audioManager.stopBluetoothSco();
+                        audioManager.setBluetoothScoOn(false);
+                    }
+                }
 
+                if (mCallActivity instanceof VectorCallViewActivity) {
+                    ((VectorCallViewActivity) mCallActivity).refreshSpeakerButton();
+                }
+            }
+        }
 
-    /**
-     * hangup the call.
-     */
-    public void onHangUp(String hangUpMsg) {
-        /*mSavedCallView = null;
-        mSavedLocalVideoLayoutConfig = null;
-        mHangUpReason = hangUpMsg;
+        @Override
+        public void onWiredHeadsetUpdate(boolean isPlugged) {
+            onHeadsetUpdate(false);
+        }
 
-        if (null != mCall) {
-            mCall.hangup(hangUpMsg);
-        }*/
-    }
+        @Override
+        public void onBluetoothHeadsetUpdate(boolean isConnected) {
+            onHeadsetUpdate(true);
+        }
+    };
+
 
     /**
      * Constructor
+     *
      * @param context the context
      */
     public CallsManager(Context context) {
         mContext = context.getApplicationContext();
-        mSharedInstance = this;
+        mCallSoundsManager = mCallSoundsManager.getSharedInstance(mContext);
+
+        if (null != HeadsetConnectionReceiver.getInstance()) {
+            HeadsetConnectionReceiver.getInstance().addListener(mOnHeadsetStatusUpdateListener);
+        }
     }
 
     /**
@@ -128,13 +146,16 @@ public class CallsManager {
         return mSharedInstance;
     }
 
-
+    /**
+     * @return the active call
+     */
     public IMXCall getActiveCall() {
         return mActiveCall;
     }
 
     /**
      * Tells if the call Id is the active one.
+     *
      * @param callId the call id to test
      * @return true if it matches to the current active call.
      */
@@ -143,211 +164,235 @@ public class CallsManager {
     }
 
     /**
-     * Calls events listener.
+     * Save the callview.
+     *
+     * @param callView the callview
      */
-    private final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
-        /**
-         * Manage hangup event.
-         * The ringing sound is disabled and pending incoming call is dismissed.
-         * @param callId the callId
-         */
-        private void manageHangUpEvent(String callId) {
-            if (isActiveCall(callId)) {
-                if (null != callId) {
-                    Log.d(LOG_TAG, "manageHangUpEvent : hide call notification and stopRinging for call " + callId);
-                    EventStreamService.getInstance().hideCallNotifications();
-                } else {
-                    Log.d(LOG_TAG, "manageHangUpEvent : stopRinging");
-                }
-                //VectorCallSoundManager.stopRinging();
-                mActiveCall = null;
+    public void setCallView(View callView) {
+        mCallView = callView;
+    }
+
+    /**
+     * @return the callview
+     */
+    public View getCallView() {
+        return mCallView;
+    }
+
+    /**
+     * Save the layout conffig
+     *
+     * @param aLocalVideoLayoutConfig
+     */
+    public void setVideoLayoutConfiguration(IMXCall.VideoLayoutConfiguration aLocalVideoLayoutConfig) {
+        mLocalVideoLayoutConfig = aLocalVideoLayoutConfig;
+    }
+
+    /**
+     * @return the layout config
+     */
+    public IMXCall.VideoLayoutConfiguration getVideoLayoutConfiguration() {
+        return mLocalVideoLayoutConfig;
+    }
+
+    /**
+     * Set the call activity.
+     * This activity will be dismissed when the call ends.
+     *
+     * @param activity
+     */
+    public void setCallActivity(Activity activity) {
+        mCallActivity = activity;
+    }
+
+    /**
+     * Display the error messages
+     *
+     * @param toast the message
+     */
+    private void showToast(final String toast) {
+        mUiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(mContext, toast, Toast.LENGTH_LONG).show();
             }
-        }
+        });
+    }
 
+    private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
+        @Override
+        public void onStateDidChange(final String state) {
+            mUiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null == mActiveCall) {
+                        Log.d(LOG_TAG, "## onStateDidChange() : no more active call");
+                        return;
+                    }
 
-        /**
-         * Display the error messages
-         * @param toast the message
-         */
-        private void showToast(final String toast)  {
-            /*if (null != getInstance()) {
-                getInstance().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != getInstance()) {
-                            Toast.makeText(getInstance(), toast, Toast.LENGTH_LONG).show();
+                    Log.d(LOG_TAG, "dispatchOnStateDidChange " + mActiveCall.getCallId() + " : " + state);
+
+                    switch (state) {
+                        case IMXCall.CALL_STATE_CREATED:
+                        case IMXCall.CALL_STATE_CREATING_CALL_VIEW: {
+                            if (mActiveCall.isIncoming()) {
+                                EventStreamService.getInstance().displayIncomingCallNotification(mActiveCall.getSession(), mActiveCall.getRoom(), null, mActiveCall.getCallId(), null);
+                                startRinging();
+                            }
+
+                            break;
+                        }
+                        case IMXCall.CALL_STATE_CONNECTING:
+                        case IMXCall.CALL_STATE_CREATE_ANSWER:
+                        case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
+                        case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
+                            stopRinging();
+                            break;
+
+                        case IMXCall.CALL_STATE_CONNECTED:
+                            stopRinging();
+                            requestAudioFocus();
+                            break;
+
+                        case IMXCall.CALL_STATE_RINGING:
+                            if (!mActiveCall.isIncoming()) {
+                                startRingBackSound();
+                            }
+                            break;
+
+                        case IMXCall.CALL_STATE_ENDED: {
+                            endCall();
+                            break;
                         }
                     }
-                });
-            }*/
+
+                    mPrevCallState = state;
+                }
+            });
         }
 
         @Override
-        public void onIncomingCall(final IMXCall call, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
-            Log.d(LOG_TAG, "## onIncomingCall () :" + call.getCallId());
-
-            if (null != mActiveCall) {
-                Log.d(LOG_TAG, "## onIncomingCall () : rejected because " + mActiveCall + " is in progress");
-                call.hangup("busy");
-            } else {
-
-                mActiveCall = call;
-                VectorHomeActivity homeActivity = VectorHomeActivity.getInstance();
-
-                // if the home activity does not exist : the application has been woken up by a notification)
-                if (null == homeActivity) {
-                    Log.d(LOG_TAG, "onIncomingCall : the home activity does not exist -> launch it");
-
-                    Context context = VectorApp.getInstance();
-
-                    // clear the activity stack to home activity
-                    Intent intent = new Intent(context, VectorHomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, call.getSession().getMyUserId());
-                    intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, call.getCallId());
-                    if (null != unknownDevices) {
-                        intent.putExtra(VectorHomeActivity.EXTRA_CALL_UNKNOWN_DEVICES, unknownDevices);
+        public void onCallError(final String error) {
+            mUiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null == mActiveCall) {
+                        Log.d(LOG_TAG, "## onCallError() : no more active call");
+                        return;
                     }
-                    context.startActivity(intent);
-                } else {
-                    Log.d(LOG_TAG, "onIncomingCall : the home activity exists : but permissions have to be checked before");
-                    // check incoming call required permissions, before allowing the call..
-                    homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId(), unknownDevices);
+
+                    Log.d(LOG_TAG, "## onCallError(): error=" + error);
+                    if (IMXCall.CALL_ERROR_USER_NOT_RESPONDING.equals(error)) {
+                        showToast(mContext.getString(R.string.call_error_user_not_responding));
+                    } else if (IMXCall.CALL_ERROR_ICE_FAILED.equals(error)) {
+                        showToast(mContext.getString(R.string.call_error_ice_failed));
+                    } else if (IMXCall.CALL_ERROR_CAMERA_INIT_FAILED.equals(error)) {
+                        showToast(mContext.getString(R.string.call_error_camera_init_failed));
+                    } else {
+                        showToast(error);
+                    }
+
+                    endCall();
                 }
+            });
+        }
 
 
-                IMXCall.MXCallListener callListener = new IMXCall.MXCallListener() {
-                    @Override
-                    public void onStateDidChange(String state) {
-                        Log.d(LOG_TAG, "dispatchOnStateDidChange " + call.getCallId() + " : " + state);
+        @Override
+        public void onViewLoading(View callView) {
+        }
 
+        @Override
+        public void onViewReady() {
+        }
 
-                        // manage audio focus
-                        //VectorCallSoundManager.manageCallStateFocus(state);
-
-                        switch (state) {
-                            case IMXCall.CALL_STATE_CREATED:
-                            case IMXCall.CALL_STATE_CREATING_CALL_VIEW: {
-
-                                if (mActiveCall.isIncoming()) {
-                                    EventStreamService.getInstance().displayIncomingCallNotification(call.getSession(), call.getRoom(), null, call.getCallId(), null);
-                                    //VectorCallSoundManager.startRinging();
-                                }
-
-                                break;
-                            }
-                            case IMXCall.CALL_STATE_CONNECTING:
-                            case IMXCall.CALL_STATE_CREATE_ANSWER:
-                            case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
-                            case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
-                                //VectorCallSoundManager.stopRinging();
-                                break;
-
-                            case IMXCall.CALL_STATE_CONNECTED:
-                                //VectorCallSoundManager.stopRinging();
-                                break;
-
-                            case IMXCall.CALL_STATE_RINGING:
-                                if (mActiveCall.isIncoming()) {
-                                    // TODO IncomingCallActivity disables the ringing when the user accepts the call.
-                                    // when IncomingCallActivity will be removed, it should be enabled again
-                                    //VectorCallSoundManager.startRinging();
-                                } else {
-                                    //VectorCallSoundManager.startRingBackSound(mActiveCall.isVideo());
-                                }
-                                break;
-                        }
-
-                        /*if (TextUtils.equals(IMXCall.CALL_STATE_ENDED, fState) &&
-                                ((TextUtils.equals(IMXCall.CALL_STATE_RINGING, mLastCallState) && (null!=mCall) && !mCall.isIncoming())||
-                                        TextUtils.equals(IMXCall.CALL_STATE_INVITE_SENT, mLastCallState))) {
-
-                            if (!TextUtils.equals(HANGUP_MSG_USER_CANCEL, mHangUpReason)) {
-                                // display message only if the caller originated the hang up
-                                showToast(VectorCallViewActivity.this.getString(R.string.call_error_user_not_responding));
-                            }
-
-                            mIsCalleeBusy = true;
-                            Log.d(LOG_TAG, "## onStateDidChange(): the callee is busy");
-                        }
-                        mLastCallState = fState;*/
-
-
+        @Override
+        public void onCallAnsweredElsewhere() {
+            mUiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null == mActiveCall) {
+                        Log.d(LOG_TAG, "## onCallError() : no more active call");
+                        return;
                     }
 
-                    @Override
-                    public void onCallError(String error) {
-                        Log.d(LOG_TAG, "## onCallError(): error=" + error);
+                    Log.d(LOG_TAG, "onCallAnsweredElsewhere " + mActiveCall.getCallId());
+                    showToast(mContext.getString(R.string.call_error_answered_elsewhere));
+                    endCall();
+                }
+            });
+        }
 
-                        /*if (IMXCall.CALL_ERROR_USER_NOT_RESPONDING.equals(error)) {
-                            showToast(context.getString(R.string.call_error_user_not_responding));
-                            mIsCalleeBusy = true;
-                        } else if (IMXCall.CALL_ERROR_ICE_FAILED.equals(error)) {
-                            showToast(context.getString(R.string.call_error_ice_failed));
-                        } else if (IMXCall.CALL_ERROR_CAMERA_INIT_FAILED.equals(error)) {
-                            showToast(context.getString(R.string.call_error_camera_init_failed));
+        @Override
+        public void onCallEnd(final int aReasonId) {
+            mUiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null == mActiveCall) {
+                        Log.d(LOG_TAG, "## onCallEnd() : no more active call");
+                        return;
+                    }
+
+                    processEndCallInfo(aReasonId);
+                    endCall();
+                }
+            });
+        }
+
+        @Override
+        public void onPreviewSizeChanged(int width, int height) {
+        }
+    };
+
+    /**
+     * Calls events listener.
+     */
+    private final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
+        @Override
+        public void onIncomingCall(final IMXCall aCall, final MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
+            mUiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(LOG_TAG, "## onIncomingCall () :" + aCall.getCallId());
+
+                    if (null != mActiveCall) {
+                        Log.d(LOG_TAG, "## onIncomingCall () : rejected because " + mActiveCall + " is in progress");
+                        aCall.hangup("busy");
+                    } else {
+                        mActiveCall = aCall;
+                        VectorHomeActivity homeActivity = VectorHomeActivity.getInstance();
+
+                        // if the home activity does not exist : the application has been woken up by a notification)
+                        if (null == homeActivity) {
+                            Log.d(LOG_TAG, "onIncomingCall : the home activity does not exist -> launch it");
+
+                            Context context = VectorApp.getInstance();
+
+                            // clear the activity stack to home activity
+                            Intent intent = new Intent(context, VectorHomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, mActiveCall.getSession().getMyUserId());
+                            intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, mActiveCall.getCallId());
+                            if (null != unknownDevices) {
+                                intent.putExtra(VectorHomeActivity.EXTRA_CALL_UNKNOWN_DEVICES, unknownDevices);
+                            }
+                            context.startActivity(intent);
                         } else {
+                            Log.d(LOG_TAG, "onIncomingCall : the home activity exists : but permissions have to be checked before");
+                            // check incoming call required permissions, before allowing the call..
+                            homeActivity.startCall(mActiveCall.getSession().getMyUserId(), mActiveCall.getCallId(), unknownDevices);
+                        }
 
-                        }*/
-
-                        manageHangUpEvent(call.getCallId());
+                        mActiveCall.addListener(mCallListener);
                     }
-
-
-                    @Override
-                    public void onViewLoading(View callView) {
-                    }
-
-                    @Override
-                    public void onViewReady() {
-                    }
-
-                    @Override
-                    public void onCallAnsweredElsewhere() {
-                        Log.d(LOG_TAG, "onCallAnsweredElsewhere " + call.getCallId());
-                        manageHangUpEvent(call.getCallId());
-
-                        /*VectorCallViewActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d(LOG_TAG, "## onCallAnsweredElsewhere(): ");
-                                showToast(VectorCallViewActivity.this.getString(R.string.call_error_answered_elsewhere));
-                                clearCallData();
-                                VectorCallViewActivity.this.finish();
-                            }
-                        });*/
-                    }
-
-                    @Override
-                    public void onCallEnd(final int aReasonId) {
-                       /* VectorCallViewActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d(LOG_TAG, "## onCallEnd(): ");
-
-                                clearCallData();
-                                mIsCallEnded = true;
-                                CommonActivityUtils.processEndCallInfo(VectorCallViewActivity.this, aReasonId);
-                                VectorCallViewActivity.this.finish();
-                            }
-                        });
-                        Log.d(LOG_TAG, "dispatchOnCallEnd " + call.getCallId());
-                        manageHangUpEvent(call.getCallId());*/
-                    }
-
-                    @Override
-                    public void onPreviewSizeChanged(int width, int height) {
-                    }
-                };
-
-                call.addListener(callListener);
-            }
+                }
+            });
         }
 
         @Override
         public void onCallHangUp(final IMXCall call) {
             Log.d(LOG_TAG, "onCallHangUp " + call.getCallId());
-            manageHangUpEvent(call.getCallId());
+            endCall();
         }
 
         @Override
@@ -360,7 +405,30 @@ public class CallsManager {
     };
 
     /**
+     * Display a toast message according to the end call reason.
+     *
+     * @param aCallEndReason define the reason of the end call
+     */
+    public void processEndCallInfo(int aCallEndReason) {
+        if (IMXCall.END_CALL_REASON_UNDEFINED != aCallEndReason) {
+            switch (aCallEndReason) {
+                case IMXCall.END_CALL_REASON_PEER_HANG_UP:
+                    showToast(mContext.getString(R.string.call_error_peer_cancelled_call));
+                    break;
+
+                case IMXCall.END_CALL_REASON_PEER_HANG_UP_ELSEWHERE:
+                    showToast(mContext.getString(R.string.call_error_peer_hangup_elsewhere));
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
      * Listen the call events on the provided session
+     *
      * @param session the session.
      */
     public void addSession(MXSession session) {
@@ -369,6 +437,7 @@ public class CallsManager {
 
     /**
      * Remove the call events listener on the provided session
+     *
      * @param session
      */
     public void removeSession(MXSession session) {
@@ -383,7 +452,7 @@ public class CallsManager {
         List<MXSession> sessions = Matrix.getMXSessions(mContext);
         boolean hasActiveCall = false;
 
-        for(MXSession session : sessions) {
+        for (MXSession session : sessions) {
             hasActiveCall |= session.getDataHandler().getCallsManager().hasActiveCalls();
         }
 
@@ -395,34 +464,156 @@ public class CallsManager {
                 EventStreamService.getInstance().hideCallNotifications();
             }
 
-            mActiveCall = null;
-
-            /*if (VectorCallSoundManager.isRinging()) {
-                VectorCallSoundManager.stopRinging();
-            }*/
+            releaseCall();
         }
     }
 
+    /**
+     * Reject the incoming call
+     */
     public void rejectCall() {
         if (null != mActiveCall) {
-            // stop the ringing when the user presses on reject
-           // VectorCallSoundManager.stopRinging();
-           // VectorCallSoundManager.releaseAudioFocus();
-            mActiveCall.hangup("");
-
-            mActiveCall = null;
+            mActiveCall.hangup("Reject");
+            releaseCall();
         }
     }
 
-
+    /**
+     * Accept incoming call
+     *
+     * @param fromActivity  the caller activity
+     * @param aSourceIntent the call intantce
+     */
     public void acceptCall(Activity fromActivity, Intent aSourceIntent) {
         // stop the ringing when the user presses on accept
-        //VectorCallSoundManager.stopRinging();
+        stopRinging();
 
         Intent intent = new Intent(fromActivity, VectorCallViewActivity.class);
         Bundle receivedData = aSourceIntent.getExtras();
         intent.putExtras(receivedData);
         intent.putExtra(VectorCallViewActivity.EXTRA_AUTO_ACCEPT, true);
         fromActivity.startActivity(intent);
+    }
+
+    /**
+     * Toggle the speaker
+     */
+    public void toggleSpeaker() {
+        if (null != mActiveCall) {
+            mCallSoundsManager.toggleSpeaker();
+        } else {
+            Log.w(LOG_TAG, "## toggleSpeaker(): no active call");
+        }
+    }
+
+    /**
+     * Update the speaker status
+     *
+     * @param isSpeakerPhoneOn true to turn on the loud speaker.
+     */
+    public void setCallSpeakerphoneOn(boolean isSpeakerPhoneOn) {
+        if (null != mActiveCall) {
+            mCallSoundsManager.setCallSpeakerphoneOn(isSpeakerPhoneOn);
+        } else {
+            Log.w(LOG_TAG, "## toggleSpeaker(): no active call");
+        }
+    }
+
+    /**
+     * hangup the call.
+     */
+    public void onHangUp(String hangUpMsg) {
+        if (null != mActiveCall) {
+            mActiveCall.hangup(hangUpMsg);
+            endCall();
+        }
+    }
+
+    /**
+     * Start the ringing tone
+     */
+    private void startRinging() {
+        mCallSoundsManager.startRinging(R.raw.ring, RING_TONE_START_RINGING);
+    }
+
+    /**
+     * Stop any ringing
+     */
+    private void stopRinging() {
+        if (mCallSoundsManager.isRinging()) {
+            mCallSoundsManager.stopRinging();
+        }
+    }
+
+    /**
+     * Request the audio focus
+     */
+    private void requestAudioFocus() {
+        mCallSoundsManager.requestAudioFocus();
+    }
+
+    /**
+     * Play the ringback sound
+     */
+    private void startRingBackSound() {
+        mCallSoundsManager.startSound(R.raw.ringback, true, new CallSoundsManager.OnMediaListener() {
+            @Override
+            public void onMediaReadyToPlay() {
+                mCallSoundsManager.setSpeakerphoneOn(true, mActiveCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(mContext));
+            }
+
+            @Override
+            public void onMediaPlay() {
+
+            }
+
+            @Override
+            public void onMediaCompleted() {
+            }
+        });
+    }
+
+    /**
+     * Manage end of call
+     */
+    private void endCall() {
+        if (null != mActiveCall) {
+            mCallSoundsManager.startSound(R.raw.callend, false, new CallSoundsManager.OnMediaListener() {
+                @Override
+                public void onMediaReadyToPlay() {
+                }
+
+                @Override
+                public void onMediaPlay() {
+                }
+
+                @Override
+                public void onMediaCompleted() {
+                    releaseCall();
+                }
+            });
+        }
+    }
+
+    /**
+     * Release the active call
+     */
+    private void releaseCall() {
+        if (null != mActiveCall) {
+            mActiveCall.removeListener(mCallListener);
+            mActiveCall = null;
+
+            mCallSoundsManager.stopSounds();
+            mCallSoundsManager.releaseAudioFocus();
+
+            if (null != mCallActivity) {
+                mCallActivity.finish();
+                mCallActivity = null;
+            }
+            mCallView = null;
+            mLocalVideoLayoutConfig = null;
+
+            EventStreamService.getInstance().hideCallNotifications();
+        }
     }
 }

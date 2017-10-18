@@ -1722,39 +1722,6 @@ public class CommonActivityUtils {
     }
 
     //==============================================================================================================
-    // call utils
-    //==============================================================================================================
-
-    /**
-     * Display a toast message according to the end call reason.
-     *
-     * @param aCallingActivity calling activity
-     * @param aCallEndReason   define the reason of the end call
-     */
-    public static void processEndCallInfo(Activity aCallingActivity, int aCallEndReason) {
-        if (null != aCallingActivity) {
-            if (IMXCall.END_CALL_REASON_UNDEFINED != aCallEndReason) {
-                switch (aCallEndReason) {
-                    case IMXCall.END_CALL_REASON_PEER_HANG_UP:
-                        if (aCallingActivity instanceof InComingCallActivity) {
-                            CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_cancelled_call));
-                        } else {
-                            // let VectorCallActivity manage its
-                        }
-                        break;
-
-                    case IMXCall.END_CALL_REASON_PEER_HANG_UP_ELSEWHERE:
-                        CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_hangup_elsewhere));
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-
-    //==============================================================================================================
     // room utils
     //==============================================================================================================
 

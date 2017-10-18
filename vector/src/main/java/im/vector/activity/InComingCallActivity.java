@@ -71,17 +71,6 @@ public class InComingCallActivity extends RiotAppCompatActivity {
 
         @Override
         public void onCallError(String aErrorMsg) {
-            Log.d(LOG_TAG, "## dispatchOnCallError(): error=" + aErrorMsg);
-
-            if (IMXCall.CALL_ERROR_USER_NOT_RESPONDING.equals(aErrorMsg)) {
-                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_user_not_responding));
-            } else if (IMXCall.CALL_ERROR_ICE_FAILED.equals(aErrorMsg)) {
-                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_ice_failed));
-            } else if (IMXCall.CALL_ERROR_CAMERA_INIT_FAILED.equals(aErrorMsg)) {
-                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_camera_init_failed));
-            } else {
-                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, aErrorMsg);
-            }
         }
 
         @Override
@@ -107,26 +96,10 @@ public class InComingCallActivity extends RiotAppCompatActivity {
          */
         @Override
         public void onCallAnsweredElsewhere() {
-            InComingCallActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d(LOG_TAG, "## onCallAnsweredElsewhere(): finish activity");
-                    CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_answered_elsewhere));
-                    InComingCallActivity.this.finish();
-                }
-            });
         }
 
         @Override
         public void onCallEnd(final int aReasonId) {
-            InComingCallActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d(LOG_TAG, "## onCallEnd(): finish activity");
-                    CommonActivityUtils.processEndCallInfo(InComingCallActivity.this, aReasonId);
-                    InComingCallActivity.this.finish();
-                }
-            });
         }
 
         @Override
@@ -259,6 +232,8 @@ public class InComingCallActivity extends RiotAppCompatActivity {
             if (isWaitingUserResponse) {
                 mMxCall.onResume();
                 mMxCall.addListener(mMxCallListener);
+
+                CallsManager.getSharedInstance().setCallActivity(this);
             } else {
                 Log.d(LOG_TAG, "## onResume : the call has already been managed.");
                 finish();
@@ -289,6 +264,7 @@ public class InComingCallActivity extends RiotAppCompatActivity {
         if (null != mMxCall) {
             mMxCall.onPause();
             mMxCall.removeListener(mMxCallListener);
+            CallsManager.getSharedInstance().setCallActivity(null);
         }
     }
 

@@ -729,6 +729,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         }
 
         saveCallView();
+        CallsManager.getSharedInstance().setCallActivity(null);
     }
 
     @Override
@@ -766,6 +767,8 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
             // restore the backlight management
             initBackLightManagement();
+
+            CallsManager.getSharedInstance().setCallActivity(this);
 
         } else {
             this.finish();
