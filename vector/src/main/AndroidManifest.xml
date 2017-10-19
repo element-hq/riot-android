@@ -204,15 +204,6 @@
             android:theme="@android:style/Theme.Holo.Light.Dialog" />
 
         <activity
-            android:name="im.vector.activity.InComingCallActivity"
-            android:clearTaskOnLaunch="true"
-            android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTop"
-            android:taskAffinity=""
-            android:theme="@style/CallAppTheme" />
-
-        <activity
             android:name="im.vector.activity.VectorMediasViewerActivity"
             android:configChanges="orientation|screenSize"
             android:label="a filename"

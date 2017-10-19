@@ -236,12 +236,23 @@ public class CallsManager {
                         case IMXCall.CALL_STATE_CREATE_ANSWER:
                         case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
                         case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
+                            if (mActiveCall.isIncoming()) {
+                                mCallSoundsManager.stopSounds();
+                            }
                             break;
 
                         case IMXCall.CALL_STATE_CONNECTED:
                             EventStreamService.getInstance().displayCallInProgressNotification(mActiveCall.getSession(), mActiveCall.getRoom(), mActiveCall.getCallId());
                             mCallSoundsManager.stopSounds();
                             requestAudioFocus();
+
+                            mUiHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    setCallSpeakerphoneOn(mActiveCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(mContext));
+                                }
+                            });
+
                             break;
 
                         case IMXCall.CALL_STATE_RINGING:
@@ -385,6 +396,7 @@ public class CallsManager {
                             homeActivity.startCall(mActiveCall.getSession().getMyUserId(), mActiveCall.getCallId(), unknownDevices);
                         }
 
+                        startRinging();
                         mActiveCall.addListener(mCallListener);
                     }
                 }
@@ -539,6 +551,13 @@ public class CallsManager {
         if (mCallSoundsManager.isRinging()) {
             mCallSoundsManager.stopRinging();
         }
+    }
+
+    /**
+     * @return true if it's ringing
+     */
+    public boolean isRinging() {
+        return mCallSoundsManager.isRinging();
     }
 
     /**

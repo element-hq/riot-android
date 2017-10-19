@@ -1869,7 +1869,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     public void startCall(String sessionId, String callId, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
         // sanity checks
         if ((null != sessionId) && (null != callId)) {
-            final Intent intent = new Intent(VectorHomeActivity.this, InComingCallActivity.class);
+            final Intent intent = new Intent(VectorHomeActivity.this, VectorCallViewActivity.class);
 
             intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, sessionId);
             intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, callId);

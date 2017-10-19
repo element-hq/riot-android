@@ -68,13 +68,19 @@ public class CallUtilities {
 
         String callState = call.getCallState();
 
-        if (!call.isIncoming() &&
-                (callState.equals(IMXCall.CALL_STATE_CREATED)  ||
+        if ((callState.equals(IMXCall.CALL_STATE_CREATED)  ||
                     callState.equals(IMXCall.CALL_STATE_CREATING_CALL_VIEW) ||
                     callState.equals(IMXCall.CALL_STATE_FLEDGLING) ||
                     callState.equals(IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA))) {
-
-            return context.getResources().getString(R.string.call_connecting);
+            if (call.isIncoming()) {
+                if (call.isVideo()) {
+                    return context.getResources().getString(R.string.incoming_video_call);
+                } else {
+                    return context.getResources().getString(R.string.incoming_voice_call);
+                }
+            } else {
+                return context.getResources().getString(R.string.call_connecting);
+            }
         } else  if (callState.equals(IMXCall.CALL_STATE_CONNECTING) || callState.equals(IMXCall.CALL_STATE_CREATE_ANSWER)
                 || callState.equals(IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA) || callState.equals(IMXCall.CALL_STATE_WAIT_CREATE_OFFER)
                 ) {

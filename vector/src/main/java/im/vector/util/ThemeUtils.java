@@ -20,7 +20,6 @@ package im.vector.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
@@ -37,7 +36,6 @@ import im.vector.activity.AccountCreationActivity;
 import im.vector.activity.CountryPickerActivity;
 import im.vector.activity.FallbackLoginActivity;
 import im.vector.activity.HistoricalRoomsActivity;
-import im.vector.activity.InComingCallActivity;
 import im.vector.activity.LanguagePickerActivity;
 import im.vector.activity.LockScreenActivity;
 import im.vector.activity.LoginActivity;
@@ -136,8 +134,6 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Dark);
             } else if (activity instanceof HistoricalRoomsActivity) {
                 activity.setTheme(R.style.HomeActivityTheme_Dark);
-            } else if (activity instanceof InComingCallActivity) {
-                activity.setTheme(R.style.CallAppTheme_Dark);
             } else if (activity instanceof LanguagePickerActivity) {
                 activity.setTheme(R.style.CountryPickerTheme_Dark);
             } else if (activity instanceof LoginActivity) {
@@ -190,8 +186,6 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Black);
             } else if (activity instanceof HistoricalRoomsActivity) {
                 activity.setTheme(R.style.HomeActivityTheme_Black);
-            } else if (activity instanceof InComingCallActivity) {
-                activity.setTheme(R.style.CallAppTheme_Black);
             } else if (activity instanceof LanguagePickerActivity) {
                 activity.setTheme(R.style.CountryPickerTheme_Black);
             } else if (activity instanceof LoginActivity) {

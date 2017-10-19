@@ -31,10 +31,12 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
-import org.matrix.androidsdk.call.HeadsetConnectionReceiver;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
 
 import android.util.TypedValue;
@@ -81,8 +83,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     public static final String EXTRA_UNKNOWN_DEVICES = "CallViewActivity.EXTRA_UNKNOWN_DEVICES";
     public static final String EXTRA_AUTO_ACCEPT = "CallViewActivity.EXTRA_AUTO_ACCEPT";
 
-    private static final String EXTRA_MIC_MUTE_STATUS = "EXTRA_MIC_MUTE_STATUS";
-    private static final String EXTRA_SPEAKER_STATUS = "EXTRA_SPEAKER_STATUS";
     private static final String EXTRA_LOCAL_FRAME_LAYOUT = "EXTRA_LOCAL_FRAME_LAYOUT";
 
     private View mCallView;
@@ -90,9 +90,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     // account info
     private String mMatrixId = null;
     private MXSession mSession = null;
-
-    // call info
-    private boolean mAutoAccept = false;
 
     // graphical items
     private ImageView mHangUpImageView;
@@ -103,6 +100,10 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     private ImageView mMuteLocalCameraView;
     private VectorPendingCallView mHeaderPendingCallView;
     private View mButtonsContainerView;
+
+    private View mIncomingCallTabbar;
+    private View mAcceptIncomingCallButton;
+    private View mRejectIncomingCallButton;
 
     // video screen management
     private Timer mVideoFadingEdgesTimer;
@@ -132,12 +133,9 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     private SensorManager mSensorMgr;
     private Sensor mProximitySensor;
 
-    // activity life cycle management
-    private boolean mSavedSpeakerValue;
-    private boolean mIsSpeakerForcedFromLifeCycle;
-
     private IMXCall mCall;
     private CallsManager mCallsManager;
+    private int mPermissionCode;
 
     // on Samsung devices, the application is suspended when the screen is turned off
     // so the call must not be suspended
@@ -308,24 +306,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
      */
     private void insertCallView() {
         if(null != mCallView) {
-            // set the avatar
-            ImageView avatarView = (ImageView) VectorCallViewActivity.this.findViewById(R.id.call_other_member);
-
-            // the avatar side must be the half of the min screen side
-            Display display = getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-
-            int side = Math.min(size.x, size.y) / 2;
-
-            RelativeLayout.LayoutParams avatarLayoutParams = (RelativeLayout.LayoutParams)avatarView.getLayoutParams();
-            avatarLayoutParams.height = side;
-            avatarLayoutParams.width = side;
-
-            avatarView.setLayoutParams(avatarLayoutParams);
-
-            VectorUtils.loadCallAvatar(this, mSession, avatarView, mCall.getRoom());
-
             // insert the call view above the avatar
             RelativeLayout layout = (RelativeLayout)findViewById(R.id.call_layout);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -397,6 +377,10 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         mSwitchRearFrontCameraImageView = (ImageView) findViewById(R.id.call_switch_camera_view);
         mMuteLocalCameraView = (ImageView) findViewById(R.id.mute_local_camera);
         mButtonsContainerView =  findViewById(R.id.call_menu_buttons_layout_container);
+        mIncomingCallTabbar = findViewById(R.id.incoming_call_menu_buttons_layout_container);
+        mAcceptIncomingCallButton = findViewById(R.id.accept_incoming_call);
+        mRejectIncomingCallButton = findViewById(R.id.reject_incoming_call);
+
         View mainContainerLayoutView =  findViewById(R.id.call_layout);
 
         // when video is in full screen, touching the screen restore the edges (fade in)
@@ -457,28 +441,13 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         mSpeakerSelectionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mIsSpeakerForcedFromLifeCycle = false;
                 toggleSpeaker();
                 refreshSpeakerButton();
                 startVideoFadingEdgesScreenTimer();
             }
         });
 
-        mAutoAccept = intent.hasExtra(EXTRA_AUTO_ACCEPT);
-
-        // life cycle management
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
         if (null != savedInstanceState)  {
-
-            if (null != audioManager) {
-                // restore mic status
-                audioManager.setMicrophoneMute(savedInstanceState.getBoolean(EXTRA_MIC_MUTE_STATUS, false));
-                // restore speaker status (Cf. manageSubViews())
-                mIsSpeakerForcedFromLifeCycle = true;
-                mSavedSpeakerValue = savedInstanceState.getBoolean(EXTRA_SPEAKER_STATUS, mCall.isVideo());
-            }
-
             mLocalVideoLayoutConfig = (IMXCall.VideoLayoutConfiguration)savedInstanceState.getSerializable(EXTRA_LOCAL_FRAME_LAYOUT);
 
             // check if the layout is not out of bounds
@@ -492,10 +461,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             }
 
             mIsCustomLocalVideoLayoutConfig = (null != mLocalVideoLayoutConfig);
-
-        } else if (null != audioManager) {
-            // mic default value: enabled
-            audioManager.setMicrophoneMute(false);
         }
 
         // init call UI setting buttons
@@ -542,6 +507,52 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                 }
             });
         }
+
+        ImageView avatarView = findViewById(R.id.call_other_member);
+
+        // the avatar side must be the half of the min screen side
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        int side = Math.min(size.x, size.y) / 2;
+
+        RelativeLayout.LayoutParams avatarLayoutParams = (RelativeLayout.LayoutParams)avatarView.getLayoutParams();
+        avatarLayoutParams.height = side;
+        avatarLayoutParams.width = side;
+
+        avatarView.setLayoutParams(avatarLayoutParams);
+
+        VectorUtils.loadCallAvatar(this, mSession, avatarView, mCall.getRoom());
+
+        mIncomingCallTabbar.setVisibility(CallsManager.getSharedInstance().isRinging() && mCall.isIncoming() ? View.VISIBLE : View.GONE);
+        mPermissionCode = mCall.isVideo() ? CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL : CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+
+        // the user can only accept if the dedicated permissions are granted
+        mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.checkPermissions(mPermissionCode, this) ? View.VISIBLE : View.GONE);
+        mAcceptIncomingCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(LOG_TAG, "Accept the incoming call");
+                mIncomingCallTabbar.setVisibility(View.GONE);
+                mCall.createCallView();
+            }
+        });
+
+        mRejectIncomingCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(LOG_TAG, "Reject the incoming call");
+                mCallsManager.rejectCall();
+            }
+        });
+
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                CommonActivityUtils.displayUnknownDevicesDialog(mSession, VectorCallViewActivity.this, (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES), null);
+            }
+        });
 
         setupHeaderPendingCallView();
         Log.d(LOG_TAG,"## onCreate(): OUT");
@@ -721,6 +732,14 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     }
 
     @Override
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        if (aRequestCode == mPermissionCode) {
+            // the user can only accept if the dedicated permissions are granted
+            mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
 
@@ -788,33 +807,13 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             // init the call button
             manageSubViews();
 
-            // speaker phone state
-            initSpeakerPhoneState();
-
             // restore the backlight management
             initBackLightManagement();
-
             CallsManager.getSharedInstance().setCallActivity(this);
 
         } else {
             this.finish();
         }
-    }
-
-    /**
-     * Set the speaker phone state according to life cycle value and the kind of call.
-     */
-    private void initSpeakerPhoneState() {
-        // set speaker status
-        boolean isSpeakerPhoneOn;
-        if(mIsSpeakerForcedFromLifeCycle) {
-            isSpeakerPhoneOn = mSavedSpeakerValue;
-        } else {
-            // default value: video => speaker ON, voice => speaker OFF
-            isSpeakerPhoneOn = mCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(this) ;
-        }
-
-        mCallsManager.setCallSpeakerphoneOn(isSpeakerPhoneOn);
     }
 
     /**
@@ -1159,8 +1158,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                 break;
 
             case IMXCall.CALL_STATE_RINGING:
-                if (mAutoAccept) {
-                    mAutoAccept = false;
+                if (mCall.isIncoming()) {
                     mCall.answer();
                 }
                 break;
@@ -1196,13 +1194,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
-
-        // save audio settings
-        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-        if (null != audioManager) {
-            savedInstanceState.putBoolean(EXTRA_MIC_MUTE_STATUS, audioManager.isMicrophoneMute());
-            savedInstanceState.putBoolean(EXTRA_SPEAKER_STATUS, audioManager.isSpeakerphoneOn());
-        }
 
         if (mIsCustomLocalVideoLayoutConfig) {
             savedInstanceState.putSerializable(EXTRA_LOCAL_FRAME_LAYOUT, mLocalVideoLayoutConfig);
