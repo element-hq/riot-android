@@ -311,7 +311,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * Cancel the messages selection mode.
      */
     public void cancelSelectionMode() {
-        ((VectorMessagesAdapter) mAdapter).cancelSelectionMode();
+        if (null != mAdapter) {
+            ((VectorMessagesAdapter) mAdapter).cancelSelectionMode();
+        }
     }
 
     private final ApiCallback<Void> mDeviceVerificationCallback = new ApiCallback<Void>() {
