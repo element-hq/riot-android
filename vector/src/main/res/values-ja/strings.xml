@@ -134,4 +134,16 @@
     <string name="room_two_users_are_typing">%1$sさんと %2$sさんが文字入力中…</string>
     <string name="room_many_users_are_typing">%1$sさん、%2$sさん他が文字入力中…</string>
     <string name="room_message_placeholder_encrypted">暗号文を送信…</string>
+    <string name="light_theme">ライトテーマ</string>
+    <string name="dark_theme">ダークテーマ</string>
+    <string name="black_them">ブラックテーマ</string>
+
+    <string name="notification_sync_in_progress">同期中</string>
+    <string name="title_activity_home">メッセージ</string>
+    <string name="title_activity_member_details">メンバー詳細</string>
+    <string name="quote">引用</string>
+    <string name="later">後で</string>
+    <string name="forward">転送</string>
+    <string name="permalink">直リンク</string>
+    <string name="view_source">ソースコードを表示</string>
     </resources>
