@@ -247,7 +247,6 @@
 
         <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/media_picker_both_capture_title"
             android:launchMode="singleTop"
             android:parentActivityName="im.vector.activity.VectorRoomActivity"
