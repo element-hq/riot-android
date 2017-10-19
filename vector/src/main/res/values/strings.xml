@@ -486,7 +486,8 @@
     <string name="settings_enable_this_device">Enable notifications for this device</string>
     <string name="settings_turn_screen_on">Turn the screen on for 3 seconds</string>
 
-    <string name="settings_containing_my_name">Msgs containing my name</string>
+    <string name="settings_containing_my_display_name">Msgs containing my display name</string>
+    <string name="settings_containing_my_user_name">Msgs containing my user name</string>
     <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
     <string name="settings_messages_in_group_chat">Msgs in group chats</string>
     <string name="settings_invited_to_room">When i\'m invited to a room</string>

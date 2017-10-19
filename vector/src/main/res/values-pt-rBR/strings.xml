@@ -470,7 +470,6 @@
     <string name="settings_enable_this_device">Habilitar notificações para este dispositivo</string>
     <string name="settings_turn_screen_on">Acender a tela por 3 segundos</string>
 
-    <string name="settings_containing_my_name">Msgs contendo meu nome</string>
     <string name="settings_messages_in_one_to_one">Msgs em conversas diretas</string>
     <string name="settings_messages_in_group_chat">Msgs em salas</string>
     <string name="settings_invited_to_room">Quando eu sou convidado a uma sala</string>

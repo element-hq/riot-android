@@ -480,7 +480,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="settings_enable_this_device">Encender notificaciones para este dispostivo</string>
     <string name="settings_turn_screen_on">Encender la pantalla por 3 segundos</string>
 
-    <string name="settings_containing_my_name">Mensajes conteniendo mi nombre</string>
     <string name="settings_messages_in_one_to_one">Mensajes en chats de persona-a-persona</string>
     <string name="settings_messages_in_group_chat">Mensajes en chats de grupo</string>
     <string name="settings_invited_to_room">Cuando me invitan a una sala</string>

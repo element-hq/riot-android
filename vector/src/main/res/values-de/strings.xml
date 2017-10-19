@@ -476,7 +476,6 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="settings_enable_this_device">Benachrichtigungen für dieses Gerät aktivieren</string>
     <string name="settings_turn_screen_on">Bildschirm für 3 Sekunden aktivieren</string>
 
-    <string name="settings_containing_my_name">Nachrichten, die meinen Namen enthalten</string>
     <string name="settings_messages_in_one_to_one">Nachrichten in direkten Chats</string>
     <string name="settings_messages_in_group_chat">Nachrichten in Gruppen-Chats</string>
     <string name="settings_invited_to_room">Wenn ich in einen Raum eingeladen werde</string>

@@ -137,8 +137,13 @@
             android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"/>
 
         <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_containing_my_name"
-            android:key="SETTINGS_CONTAINING_MY_NAME_PREFERENCE_KEY"
+            android:title="@string/settings_containing_my_display_name"
+            android:key="SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY"
+            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_containing_my_user_name"
+            android:key="SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY"
             android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"/>
 
         <im.vector.preference.VectorSwitchPreference

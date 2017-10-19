@@ -309,7 +309,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="settings_enable_all_notif">Activer les notifications pour ce compte</string>
     <string name="settings_enable_this_device">Activer les notifications pour cet appareil</string>
-    <string name="settings_containing_my_name">Messages contenant mon nom</string>
     <string name="settings_messages_in_one_to_one">Messages dans les discussions directes</string>
     <string name="settings_messages_in_group_chat">Messages dans les discussions de groupe</string>
     <string name="settings_call_invitations">Demandes d\'appel</string>

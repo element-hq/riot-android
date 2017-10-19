@@ -391,7 +391,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="settings_enable_this_device">Włącz powiadomienia dla tego użytkownika</string>
     <string name="settings_turn_screen_on">Podświetl ekran na 3 sekundy</string>
 
-    <string name="settings_containing_my_name">Wiadomości zawierające moją nazwę</string>
     <string name="settings_messages_in_one_to_one">Wiadomości bezpośrednie</string>
     <string name="settings_messages_in_group_chat">Wiadomości w rozmowach grupowych</string>
     <string name="settings_invited_to_room">Zaproszenia do pokojów</string>

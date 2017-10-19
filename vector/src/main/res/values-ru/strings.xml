@@ -487,8 +487,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
     <string name="settings_enable_this_device">Включить уведомления для этого устройства</string>
     <string name="settings_turn_screen_on">Включить экран на 3 секунды</string>
-    
-    <string name="settings_containing_my_name">При обращении по имени</string>
+
     <string name="settings_messages_in_one_to_one">В персональных чатах</string>
     <string name="settings_messages_in_group_chat">В групповых чатах</string>
     <string name="settings_invited_to_room">Приглашения в чаты</string>
