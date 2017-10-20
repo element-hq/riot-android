@@ -19,7 +19,6 @@ package im.vector.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
@@ -28,13 +27,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import org.matrix.androidsdk.call.CallSoundsManager;
 import org.matrix.androidsdk.call.IMXCallListener;
 import org.matrix.androidsdk.call.MXCallListener;
 import org.matrix.androidsdk.call.VideoLayoutConfiguration;
@@ -45,7 +44,6 @@ import org.matrix.androidsdk.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,16 +72,11 @@ import im.vector.view.VectorPendingCallView;
  * VectorCallViewActivity is the call activity.
  */
 public class VectorCallViewActivity extends RiotAppCompatActivity implements SensorEventListener {
-    private static final String LOG_TAG = "VCallViewActivity";
-    private static final String HANGUP_MSG_HEADER_UI_CALL = "user hangup from header back arrow";
-    private static final String HANGUP_MSG_BACK_KEY = "user hangup from back key";
-    /** threshold used to manage the backlight during the call **/
-    private static final float PROXIMITY_THRESHOLD = 3.0f; // centimeters
+    private static final String LOG_TAG = VectorCallViewActivity.class.getSimpleName();
 
     public static final String EXTRA_MATRIX_ID = "CallViewActivity.EXTRA_MATRIX_ID";
     public static final String EXTRA_CALL_ID = "CallViewActivity.EXTRA_CALL_ID";
     public static final String EXTRA_UNKNOWN_DEVICES = "CallViewActivity.EXTRA_UNKNOWN_DEVICES";
-    public static final String EXTRA_AUTO_ACCEPT = "CallViewActivity.EXTRA_AUTO_ACCEPT";
 
     private static final String EXTRA_LOCAL_FRAME_LAYOUT = "EXTRA_LOCAL_FRAME_LAYOUT";
 
@@ -124,8 +117,10 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     // - 585 as screen height reference
     // - 18 as space between the local video and the container view containing the setting buttons
     //private static final float RATIO_TOP_MARGIN_LOCAL_USER_VIDEO = (float)(462.0/585.0);
-    private static final float VIDEO_TO_BUTTONS_VERTICAL_SPACE = (float) (18.0/585.0);
-    /**  local user video height is set as percent of the total screen height **/
+    private static final float VIDEO_TO_BUTTONS_VERTICAL_SPACE = (float) (18.0 / 585.0);
+    /**
+     * local user video height is set as percent of the total screen height
+     **/
     private static final int PERCENT_LOCAL_USER_VIDEO_SIZE = 25;
 
     private int mSourceVideoWidth = 0;
@@ -194,8 +189,17 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         }
     };
 
+    // track the audio config updates
+    private final CallSoundsManager.OnAudioConfigurationUpdateListener mAudioConfigListener = new CallSoundsManager.OnAudioConfigurationUpdateListener() {
+        @Override
+        public void onAudioConfigurationUpdate() {
+            refreshSpeakerButton();
+            refreshMuteMicButton();
+        }
+    };
+
     // to drag the local video preview
-    private final View.OnTouchListener mMainViewTouchListener =  new View.OnTouchListener() {
+    private final View.OnTouchListener mMainViewTouchListener = new View.OnTouchListener() {
 
         // fields
         private Rect mPreviewRect = null;
@@ -289,9 +293,9 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
      * The callView is setup in the SDK, and provided via dispatchOnViewLoading() in {@link #mListener}.
      */
     private void insertCallView() {
-        if(null != mCallView) {
+        if (null != mCallView) {
             // insert the call view above the avatar
-            RelativeLayout layout = (RelativeLayout)findViewById(R.id.call_layout);
+            RelativeLayout layout = findViewById(R.id.call_layout);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             layout.removeView(mCallView);
@@ -301,7 +305,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             if (mCall.isVideo()) {
                 // reported by a rageshake
                 if (null != mCallView.getParent()) {
-                    ((ViewGroup)mCallView.getParent()).removeView(mCallView);
+                    ((ViewGroup) mCallView.getParent()).removeView(mCallView);
                 }
                 layout.addView(mCallView, 1, params);
             }
@@ -310,10 +314,9 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         }
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG_TAG,"## onCreate(): IN");
+        Log.d(LOG_TAG, "## onCreate(): IN");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_callview);
@@ -353,19 +356,19 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         mCallsManager = CallsManager.getSharedInstance();
 
         // UI binding
-        mHangUpImageView = (ImageView) findViewById(R.id.hang_up_button);
-        mSpeakerSelectionView = (ImageView) findViewById(R.id.call_speaker_view);
-        mAvatarView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.call_other_member);
-        mMuteMicImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.mute_audio);
-        mHeaderPendingCallView = (VectorPendingCallView) findViewById(R.id.header_pending_callview);
-        mSwitchRearFrontCameraImageView = (ImageView) findViewById(R.id.call_switch_camera_view);
-        mMuteLocalCameraView = (ImageView) findViewById(R.id.mute_local_camera);
-        mButtonsContainerView =  findViewById(R.id.call_menu_buttons_layout_container);
+        mHangUpImageView = findViewById(R.id.hang_up_button);
+        mSpeakerSelectionView = findViewById(R.id.call_speaker_view);
+        mAvatarView = VectorCallViewActivity.this.findViewById(R.id.call_other_member);
+        mMuteMicImageView = VectorCallViewActivity.this.findViewById(R.id.mute_audio);
+        mHeaderPendingCallView = findViewById(R.id.header_pending_callview);
+        mSwitchRearFrontCameraImageView = findViewById(R.id.call_switch_camera_view);
+        mMuteLocalCameraView = findViewById(R.id.mute_local_camera);
+        mButtonsContainerView = findViewById(R.id.call_menu_buttons_layout_container);
         mIncomingCallTabbar = findViewById(R.id.incoming_call_menu_buttons_layout_container);
         mAcceptIncomingCallButton = findViewById(R.id.accept_incoming_call);
         mRejectIncomingCallButton = findViewById(R.id.reject_incoming_call);
 
-        View mainContainerLayoutView =  findViewById(R.id.call_layout);
+        View mainContainerLayoutView = findViewById(R.id.call_layout);
 
         // when video is in full screen, touching the screen restore the edges (fade in)
         mainContainerLayoutView.setOnClickListener(new View.OnClickListener() {
@@ -378,7 +381,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
         mainContainerLayoutView.setOnTouchListener(mMainViewTouchListener);
 
-        ImageView roomLinkImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.room_chat_link);
+        ImageView roomLinkImageView = VectorCallViewActivity.this.findViewById(R.id.room_chat_link);
         roomLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -410,7 +413,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             @Override
             public void onClick(View v) {
                 toggleMicMute();
-                refreshMuteMicButton();
                 startVideoFadingEdgesScreenTimer();
             }
         });
@@ -426,13 +428,12 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             @Override
             public void onClick(View v) {
                 toggleSpeaker();
-                refreshSpeakerButton();
                 startVideoFadingEdgesScreenTimer();
             }
         });
 
-        if (null != savedInstanceState)  {
-            mLocalVideoLayoutConfig = (VideoLayoutConfiguration)savedInstanceState.getSerializable(EXTRA_LOCAL_FRAME_LAYOUT);
+        if (null != savedInstanceState) {
+            mLocalVideoLayoutConfig = (VideoLayoutConfiguration) savedInstanceState.getSerializable(EXTRA_LOCAL_FRAME_LAYOUT);
 
             // check if the layout is not out of bounds
             if (null != mLocalVideoLayoutConfig) {
@@ -485,7 +486,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                         if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_READY) && mCall.isIncoming()) {
                             mCall.launchIncomingCall(mLocalVideoLayoutConfig);
                         }
-                    } else if (mCall.isVideo() || (!mCall.isIncoming() && (TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState())))) {
+                    } else if (!mCall.isIncoming() && (TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState()))) {
                         mCall.createCallView();
                     }
                 }
@@ -501,7 +502,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
         int side = Math.min(size.x, size.y) / 2;
 
-        RelativeLayout.LayoutParams avatarLayoutParams = (RelativeLayout.LayoutParams)avatarView.getLayoutParams();
+        RelativeLayout.LayoutParams avatarLayoutParams = (RelativeLayout.LayoutParams) avatarView.getLayoutParams();
         avatarLayoutParams.height = side;
         avatarLayoutParams.width = side;
 
@@ -518,7 +519,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             @Override
             public void onClick(View view) {
                 Log.d(LOG_TAG, "Accept the incoming call");
-                mIncomingCallTabbar.setVisibility(View.GONE);
+                mAcceptIncomingCallButton.setVisibility(View.GONE);
                 mCall.createCallView();
             }
         });
@@ -539,14 +540,14 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         });
 
         setupHeaderPendingCallView();
-        Log.d(LOG_TAG,"## onCreate(): OUT");
+        Log.d(LOG_TAG, "## onCreate(): OUT");
     }
 
     /**
      * Customize the header pending call view to match the video/audio call UI.
      */
-    private void setupHeaderPendingCallView(){
-        if(null != mHeaderPendingCallView) {
+    private void setupHeaderPendingCallView() {
+        if (null != mHeaderPendingCallView) {
             // set the gradient effect in the background
             View mainContainerView = mHeaderPendingCallView.findViewById(R.id.main_view);
             mainContainerView.setBackgroundResource(R.drawable.call_header_transparent_bg);
@@ -563,9 +564,9 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             });
 
             // center the text horizontally and remove any padding
-            LinearLayout textInfoContainerView = (LinearLayout)mHeaderPendingCallView.findViewById(R.id.call_info_container);
+            LinearLayout textInfoContainerView = mHeaderPendingCallView.findViewById(R.id.call_info_container);
             textInfoContainerView.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
-            textInfoContainerView.setPadding(0,0,0,0);
+            textInfoContainerView.setPadding(0, 0, 0, 0);
 
             // prevent the status call to be displayed
             mHeaderPendingCallView.enableCallStatusDisplay(false);
@@ -578,10 +579,10 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
      * OFF when the proximity sensor fires.
      */
     private void initBackLightManagement() {
-        if(null != mCall) {
-            if(mCall.isVideo()) {
+        if (null != mCall) {
+            if (mCall.isVideo()) {
                 // video call: set the backlight on
-                Log.d(LOG_TAG,"## initBackLightManagement(): backlight is ON");
+                Log.d(LOG_TAG, "## initBackLightManagement(): backlight is ON");
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // same as android:keepScreenOn="true" in layout
             } else {
                 if ((null == mSensorMgr) && (null != mCall) && TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_CONNECTED)) {
@@ -602,56 +603,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
     }
 
-    /**
-     * Toggle the mute feature of the mic.
-     */
-    private void toggleMicMute() {
-        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-        if(null != audioManager) {
-            boolean isMuted = audioManager.isMicrophoneMute();
-            Log.d(LOG_TAG,"## toggleMicMute(): current mute val="+isMuted+" new mute val="+!isMuted);
-            audioManager.setMicrophoneMute(!isMuted);
-        } else {
-            Log.w(LOG_TAG,"## toggleMicMute(): Failed due to invalid AudioManager");
-        }
-    }
-
-    /**
-     * Toggle the mute feature of the local camera.
-     */
-    private void toggleVideoMute() {
-        if(null != mCall) {
-            if(mCall.isVideo()) {
-                boolean isMuted = mCall.isVideoRecordingMuted();
-                mCall.muteVideoRecording(!isMuted);
-                Log.w(LOG_TAG, "## toggleVideoMute(): camera record turned to " + !isMuted);
-            }
-        } else {
-            Log.w(LOG_TAG, "## toggleVideoMute(): Failed");
-        }
-    }
-
-    /**
-     * Toggle the mute feature of the mic.
-     */
-    private void toggleSpeaker() {
-        mCallsManager.toggleSpeaker();
-    }
-
-    /**
-     * Toggle the cameras.
-     */
-    private void toggleRearFrontCamera() {
-        boolean wasCameraSwitched = false;
-
-        if ((null != mCall) && mCall.isVideo()) {
-            wasCameraSwitched = mCall.switchRearFrontCamera();
-        } else {
-            Log.w(LOG_TAG, "## toggleRearFrontCamera(): Skipped");
-        }
-        Log.w(LOG_TAG, "## toggleRearFrontCamera(): done? " + wasCameraSwitched);
-    }
-
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -664,40 +615,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         CommonActivityUtils.onTrimMemory(this, level);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // assume that the user cancels the call if it is ringing
-        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) || (keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
-            // this is a trick to reduce the ring volume :
-            // when the call is ringing, the AudioManager.Mode switch to MODE_IN_COMMUNICATION
-            // so the volume is the next call one whereas the user expects to reduce the ring volume.
-            if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_RINGING)) {
-                AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-                // IMXChrome call issue
-                if (audioManager.getMode() == AudioManager.MODE_IN_COMMUNICATION) {
-                    int musicVol = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL) * audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
-                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, musicVol, 0);
-                }
-            }
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-    /**
-     * Stop the proximity sensor.
-     */
-    private void stopProximitySensor() {
-        // do not release the proximity sensor while pausing the activity
-        // when the screen is turned off, the activity is paused.
-        if ((null != mProximitySensor) && (null != mSensorMgr)) {
-            mSensorMgr.unregisterListener(this);
-            mProximitySensor = null;
-            mSensorMgr = null;
-        }
-
-        turnScreenOn();
-    }
 
     @Override
     public void finish() {
@@ -740,16 +657,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         }
         saveCallView();
         CallsManager.getSharedInstance().setCallActivity(null);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        computeVideoUiLayout();
-        if ((null != mCall) && mCall.isVideo() && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
-            mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
-        }
+        CallSoundsManager.getSharedInstance(this).removeAudioConfigurationListener(mAudioConfigListener);
     }
 
     @Override
@@ -794,11 +702,104 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             // restore the backlight management
             initBackLightManagement();
             CallsManager.getSharedInstance().setCallActivity(this);
-
+            CallSoundsManager.getSharedInstance(this).addAudioConfigurationListener(mAudioConfigListener);
         } else {
             this.finish();
         }
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        computeVideoUiLayout();
+        if ((null != mCall) && mCall.isVideo() && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
+            mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+
+        if (mIsCustomLocalVideoLayoutConfig) {
+            savedInstanceState.putSerializable(EXTRA_LOCAL_FRAME_LAYOUT, mLocalVideoLayoutConfig);
+        }
+    }
+
+    //==============================================================================================================
+    // user interaction
+    //==============================================================================================================
+
+    /**
+     * Toggle the mute feature of the mic.
+     */
+    private void toggleMicMute() {
+        CallSoundsManager callSoundsManager = CallSoundsManager.getSharedInstance(this);
+        callSoundsManager.setMicrophoneMute(!callSoundsManager.isMicrophoneMute());
+    }
+
+    /**
+     * Toggle the mute feature of the local camera.
+     */
+    private void toggleVideoMute() {
+        if (null != mCall) {
+            if (mCall.isVideo()) {
+                boolean isMuted = mCall.isVideoRecordingMuted();
+                mCall.muteVideoRecording(!isMuted);
+                Log.w(LOG_TAG, "## toggleVideoMute(): camera record turned to " + !isMuted);
+            }
+        } else {
+            Log.w(LOG_TAG, "## toggleVideoMute(): Failed");
+        }
+    }
+
+    /**
+     * Toggle the mute feature of the mic.
+     */
+    private void toggleSpeaker() {
+        mCallsManager.toggleSpeaker();
+    }
+
+    /**
+     * Toggle the cameras.
+     */
+    private void toggleRearFrontCamera() {
+        boolean wasCameraSwitched = false;
+
+        if ((null != mCall) && mCall.isVideo()) {
+            wasCameraSwitched = mCall.switchRearFrontCamera();
+        } else {
+            Log.w(LOG_TAG, "## toggleRearFrontCamera(): Skipped");
+        }
+        Log.w(LOG_TAG, "## toggleRearFrontCamera(): done? " + wasCameraSwitched);
+    }
+
+    /**
+     * Helper method to start the room activity.
+     */
+    private void startRoomActivity() {
+        if (null != mCall) {
+            String roomId = mCall.getRoom().getRoomId();
+
+            if (null != VectorApp.getCurrentActivity()) {
+                HashMap<String, Object> params = new HashMap<>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                CommonActivityUtils.goToRoomPage(VectorApp.getCurrentActivity(), mSession, params);
+            } else {
+                Intent intent = new Intent(getApplicationContext(), VectorRoomActivity.class);
+                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
+                startActivity(intent);
+            }
+        }
+    }
+
+    //==============================================================================================================
+    // fade management
+    //==============================================================================================================
 
     /**
      * Stop the video fading timer.
@@ -842,17 +843,18 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
     /**
      * Set the fading effect on the view above the UI video.
-     * @param aOpacity UTILS_OPACITY_FULL to fade out, UTILS_OPACITY_NONE to fade in
+     *
+     * @param aOpacity      UTILS_OPACITY_FULL to fade out, UTILS_OPACITY_NONE to fade in
      * @param aAnimDuration animation duration in milliseconds
      */
     private void fadeVideoEdge(final float aOpacity, int aAnimDuration) {
-        if(null != mHeaderPendingCallView){
-            if(aOpacity != mHeaderPendingCallView.getAlpha()) {
+        if (null != mHeaderPendingCallView) {
+            if (aOpacity != mHeaderPendingCallView.getAlpha()) {
                 mHeaderPendingCallView.animate().alpha(aOpacity).setDuration(aAnimDuration).setInterpolator(new AccelerateInterpolator());
             }
         }
 
-        if(null != mButtonsContainerView) {
+        if (null != mButtonsContainerView) {
             if (aOpacity != mButtonsContainerView.getAlpha()) {
                 mButtonsContainerView.animate().alpha(aOpacity).setDuration(aAnimDuration).setInterpolator(new AccelerateInterpolator()).setListener(new AnimatorListenerAdapter() {
                     @Override
@@ -885,6 +887,10 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     private void fadeInVideoEdge() {
         fadeVideoEdge(CommonActivityUtils.UTILS_OPACITY_NONE, FADE_IN_DURATION);
     }
+
+    //==============================================================================================================
+    // UI items refresh
+    //==============================================================================================================
 
     /**
      * Compute the top margin of the view that contains the video
@@ -962,43 +968,17 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         mLocalVideoLayoutConfig.mDisplayWidth = screenWidth;
         mLocalVideoLayoutConfig.mDisplayHeight = screenHeight;
 
-        Log.d(LOG_TAG, "## computeVideoUiLayout() : x " + mLocalVideoLayoutConfig.mX + " y " +  mLocalVideoLayoutConfig.mY);
-        Log.d(LOG_TAG, "## computeVideoUiLayout() : mWidth " + mLocalVideoLayoutConfig.mWidth + " mHeight " +  mLocalVideoLayoutConfig.mHeight);
+        Log.d(LOG_TAG, "## computeVideoUiLayout() : x " + mLocalVideoLayoutConfig.mX + " y " + mLocalVideoLayoutConfig.mY);
+        Log.d(LOG_TAG, "## computeVideoUiLayout() : mWidth " + mLocalVideoLayoutConfig.mWidth + " mHeight " + mLocalVideoLayoutConfig.mHeight);
     }
 
-    /**
-     * Helper method to start the room activity.
-     */
-    private void startRoomActivity() {
-        if(null != mCall) {
-            String roomId = mCall.getRoom().getRoomId();
-
-            if (null != VectorApp.getCurrentActivity()) {
-                HashMap<String, Object> params = new HashMap<>();
-                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
-                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                CommonActivityUtils.goToRoomPage(VectorApp.getCurrentActivity(), mSession, params);
-            } else {
-                Intent intent = new Intent(getApplicationContext(), VectorRoomActivity.class);
-                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
-                startActivity(intent);
-            }
-        }
-    }
 
     /**
      * Update the mute mic icon according to mute mic status.
      */
     private void refreshMuteMicButton() {
-        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-        mMuteMicImageView.setVisibility(View.VISIBLE);
-
-        boolean  isMuted = audioManager.isMicrophoneMute();
-        Log.d(LOG_TAG,"## refreshMuteMicButton(): isMuted="+isMuted);
-
         // update icon
-        int iconId = isMuted?R.drawable.ic_material_mic_off_pink_red:R.drawable.ic_material_mic_off_grey;
+        int iconId = CallSoundsManager.getSharedInstance(this).isMicrophoneMute() ? R.drawable.ic_material_mic_off_pink_red : R.drawable.ic_material_mic_off_grey;
         mMuteMicImageView.setImageResource(iconId);
     }
 
@@ -1006,17 +986,10 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
      * Update the mute speaker icon according to speaker status.
      */
     public void refreshSpeakerButton() {
-        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-        boolean isOn = audioManager.isSpeakerphoneOn();
-        Log.d(LOG_TAG,"## refreshSpeakerButton(): isOn="+isOn);
-
         // update icon
-        int iconId = isOn?R.drawable.ic_material_speaker_phone_pink_red:R.drawable.ic_material_speaker_phone_grey;
+        int iconId = CallSoundsManager.getSharedInstance(this).isSpeakerphoneOn() ? R.drawable.ic_material_speaker_phone_pink_red : R.drawable.ic_material_speaker_phone_grey;
         mSpeakerSelectionView.setImageResource(iconId);
-
-        VectorCallViewActivity.this.setVolumeControlStream(audioManager.getMode());
     }
-
 
     /**
      * Update the mute video icon.
@@ -1026,13 +999,13 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             mMuteLocalCameraView.setVisibility(View.VISIBLE);
 
             boolean isMuted = mCall.isVideoRecordingMuted();
-            Log.d(LOG_TAG,"## refreshMuteVideoButton(): isMuted="+isMuted);
+            Log.d(LOG_TAG, "## refreshMuteVideoButton(): isMuted=" + isMuted);
 
             // update icon
-            int iconId = isMuted?R.drawable.ic_material_videocam_off_pink_red:R.drawable.ic_material_videocam_off_grey;
+            int iconId = isMuted ? R.drawable.ic_material_videocam_off_pink_red : R.drawable.ic_material_videocam_off_grey;
             mMuteLocalCameraView.setImageResource(iconId);
         } else {
-            Log.d(LOG_TAG,"## refreshMuteVideoButton(): View.INVISIBLE");
+            Log.d(LOG_TAG, "## refreshMuteVideoButton(): View.INVISIBLE");
             mMuteLocalCameraView.setVisibility(View.INVISIBLE);
         }
     }
@@ -1046,14 +1019,14 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         if ((null != mCall) && mCall.isVideo() && mCall.isSwitchCameraSupported()) {
             mSwitchRearFrontCameraImageView.setVisibility(View.VISIBLE);
 
-            boolean isSwitched= mCall.isCameraSwitched();
-            Log.d(LOG_TAG,"## refreshSwitchRearFrontCameraButton(): isSwitched="+isSwitched);
+            boolean isSwitched = mCall.isCameraSwitched();
+            Log.d(LOG_TAG, "## refreshSwitchRearFrontCameraButton(): isSwitched=" + isSwitched);
 
             // update icon
-            int iconId = isSwitched?R.drawable.ic_material_switch_video_pink_red:R.drawable.ic_material_switch_video_grey;
+            int iconId = isSwitched ? R.drawable.ic_material_switch_video_pink_red : R.drawable.ic_material_switch_video_grey;
             mSwitchRearFrontCameraImageView.setImageResource(iconId);
         } else {
-            Log.d(LOG_TAG,"## refreshSwitchRearFrontCameraButton(): View.INVISIBLE");
+            Log.d(LOG_TAG, "## refreshSwitchRearFrontCameraButton(): View.INVISIBLE");
             mSwitchRearFrontCameraImageView.setVisibility(View.INVISIBLE);
         }
     }
@@ -1132,21 +1105,13 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
         // other management
         switch (callState) {
-            case IMXCall.CALL_STATE_CONNECTED:
-                VectorCallViewActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshSpeakerButton();
-                    }
-                });
-                break;
-
             case IMXCall.CALL_STATE_RINGING:
+                // the call view is created when the user accepts the call.
                 if (mCall.isIncoming()) {
                     mCall.answer();
+                    mIncomingCallTabbar.setVisibility(View.GONE);
                 }
                 break;
-
             default:
                 // nothing to do..
                 break;
@@ -1154,6 +1119,9 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         Log.d(LOG_TAG, "## manageSubViews(): OUT");
     }
 
+    /**
+     * Save the call view before leaving the activity.
+     */
     private void saveCallView() {
         if ((null != mCall) && !mCall.getCallState().equals(IMXCall.CALL_STATE_ENDED) && (null != mCallView) && (null != mCallView.getParent())) {
 
@@ -1168,24 +1136,17 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             mCallsManager.setVideoLayoutConfiguration(mLocalVideoLayoutConfig);
 
             // remove the call layout to avoid having a black screen
-            RelativeLayout layout = (RelativeLayout)findViewById(R.id.call_layout);
+            RelativeLayout layout = findViewById(R.id.call_layout);
             layout.setVisibility(View.GONE);
             mCallView = null;
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
+    //==============================================================================================================
+    // Proximity sensor management
+    //==============================================================================================================
 
-        if (mIsCustomLocalVideoLayoutConfig) {
-            savedInstanceState.putSerializable(EXTRA_LOCAL_FRAME_LAYOUT, mLocalVideoLayoutConfig);
-        }
-    }
-
-    // ************* SensorEventListener *************
-
+    private static final float PROXIMITY_THRESHOLD = 3.0f; // centimeters
     private PowerManager.WakeLock mWakeLock;
     private int mField = 0x00000020;
 
@@ -1256,15 +1217,29 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         }
     }
 
+    /**
+     * Stop the proximity sensor.
+     */
+    private void stopProximitySensor() {
+        // do not release the proximity sensor while pausing the activity
+        // when the screen is turned off, the activity is paused.
+        if ((null != mProximitySensor) && (null != mSensorMgr)) {
+            mSensorMgr.unregisterListener(this);
+            mProximitySensor = null;
+            mSensorMgr = null;
+        }
+
+        turnScreenOn();
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (null != event) {
             float distanceCentimeters = event.values[0];
-            AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
 
             Log.d(LOG_TAG, "## onSensorChanged(): " + String.format("distance=%.3f", distanceCentimeters));
 
-            if (audioManager.isSpeakerphoneOn()) {
+            if (CallsManager.getSharedInstance().isSpeakerphoneOn()) {
                 Log.d(LOG_TAG, "## onSensorChanged(): Skipped due speaker ON");
             } else {
                 if (distanceCentimeters <= PROXIMITY_THRESHOLD) {
@@ -1280,7 +1255,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        Log.d(LOG_TAG,"## onAccuracyChanged(): accuracy="+accuracy);
+        Log.d(LOG_TAG, "## onAccuracyChanged(): accuracy=" + accuracy);
     }
-    // ***********************************************
 }

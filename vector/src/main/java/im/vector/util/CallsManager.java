@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -34,7 +33,6 @@ import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallListener;
 import org.matrix.androidsdk.call.IMXCallsManagerListener;
 import org.matrix.androidsdk.call.MXCallListener;
-import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.call.MXCallsManagerListener;
 import org.matrix.androidsdk.call.VideoLayoutConfiguration;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
@@ -87,7 +85,7 @@ public class CallsManager {
                 boolean isHeadsetPlugged = HeadsetConnectionReceiver.isHeadsetPlugged(mContext);
 
                 // the user plugs a headset while the device is on loud speaker
-                if (mCallSoundsManager.isSpeakerOn() && isHeadsetPlugged) {
+                if (mCallSoundsManager.isSpeakerphoneOn() && isHeadsetPlugged) {
                     Log.d(LOG_TAG, "toggle the call speaker because the call was on loudspeaker.");
                     // change the audio path to the headset
                     mCallSoundsManager.toggleSpeaker();
@@ -229,21 +227,19 @@ public class CallsManager {
 
                     switch (state) {
                         case IMXCall.CALL_STATE_CREATED:
-                        case IMXCall.CALL_STATE_CREATING_CALL_VIEW: {
                             if (mActiveCall.isIncoming()) {
                                 EventStreamService.getInstance().displayIncomingCallNotification(mActiveCall.getSession(), mActiveCall.getRoom(), null, mActiveCall.getCallId(), null);
                                 startRinging();
                             }
-
                             break;
-                        }
+                        case IMXCall.CALL_STATE_CREATING_CALL_VIEW:
                         case IMXCall.CALL_STATE_CONNECTING:
                         case IMXCall.CALL_STATE_CREATE_ANSWER:
                         case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
                         case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
                             if (mActiveCall.isIncoming()) {
                                 mCallSoundsManager.stopSounds();
-                            }
+                            } // else ringback
                             break;
 
                         case IMXCall.CALL_STATE_CONNECTED:
@@ -255,6 +251,7 @@ public class CallsManager {
                                 @Override
                                 public void run() {
                                     setCallSpeakerphoneOn(mActiveCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(mContext));
+                                    mCallSoundsManager.setMicrophoneMute(false);
                                 }
                             });
 
@@ -470,23 +467,6 @@ public class CallsManager {
     }
 
     /**
-     * Accept incoming call
-     *
-     * @param fromActivity  the caller activity
-     * @param aSourceIntent the call intantce
-     */
-    public void acceptCall(Activity fromActivity, Intent aSourceIntent) {
-        // stop the ringing when the user presses on accept
-        stopRinging();
-
-        Intent intent = new Intent(fromActivity, VectorCallViewActivity.class);
-        Bundle receivedData = aSourceIntent.getExtras();
-        intent.putExtras(receivedData);
-        intent.putExtra(VectorCallViewActivity.EXTRA_AUTO_ACCEPT, true);
-        fromActivity.startActivity(intent);
-    }
-
-    /**
      * Toggle the speaker
      */
     public void toggleSpeaker() {
@@ -529,19 +509,17 @@ public class CallsManager {
     }
 
     /**
-     * Stop any ringing
-     */
-    private void stopRinging() {
-        if (mCallSoundsManager.isRinging()) {
-            mCallSoundsManager.stopRinging();
-        }
-    }
-
-    /**
      * @return true if it's ringing
      */
     public boolean isRinging() {
         return mCallSoundsManager.isRinging();
+    }
+
+    /**
+     * @return true if the speaker is turned on.
+     */
+    public boolean isSpeakerphoneOn() {
+        return mCallSoundsManager.isSpeakerphoneOn();
     }
 
     /**

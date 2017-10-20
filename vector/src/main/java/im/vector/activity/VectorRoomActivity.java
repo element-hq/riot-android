@@ -1283,10 +1283,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                 intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, mCallId);
 
-                if (null == call) {
-                    intent.putExtra(VectorCallViewActivity.EXTRA_AUTO_ACCEPT, "anything");
-                }
-
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -1784,7 +1780,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         setProgressVisibility(View.VISIBLE);
 
         // create the call object
-        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
+        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), aIsVideoCall, new ApiCallback<IMXCall>() {
             @Override
             public void onSuccess(final IMXCall call) {
                 Log.d(LOG_TAG, "## startIpCall(): onSuccess");
@@ -1792,7 +1788,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     @Override
                     public void run() {
                         setProgressVisibility(View.GONE);
-                        call.setIsVideo(aIsVideoCall);
 
                         final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
 
