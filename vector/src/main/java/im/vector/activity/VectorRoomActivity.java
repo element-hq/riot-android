@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
@@ -674,7 +675,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     sendTextMessage();
                 }
 
-                if (!keyEvent.isShiftPressed() && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                if (!keyEvent.isShiftPressed() && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                        && getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS) {
                     sendTextMessage();
                     return true;
                 }
