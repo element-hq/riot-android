@@ -35,6 +35,9 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import org.matrix.androidsdk.call.IMXCallListener;
+import org.matrix.androidsdk.call.MXCallListener;
+import org.matrix.androidsdk.call.VideoLayoutConfiguration;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
@@ -66,7 +69,6 @@ import im.vector.services.EventStreamService;
 import im.vector.util.CallsManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
-
 
 /**
  * VectorCallViewActivity is the call activity.
@@ -113,7 +115,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     private static final short VIDEO_FADING_TIMER = 5000;
 
     // video display size
-    private IMXCall.VideoLayoutConfiguration mLocalVideoLayoutConfig;
+    private VideoLayoutConfiguration mLocalVideoLayoutConfig;
 
     // true when the user moves the preview
     private boolean mIsCustomLocalVideoLayoutConfig;
@@ -140,7 +142,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     // on Samsung devices, the application is suspended when the screen is turned off
     // so the call must not be suspended
     private boolean mIsScreenOff = false;
-    private final IMXCall.MXCallListener mListener = new IMXCall.MXCallListener() {
+    private final IMXCallListener mListener = new MXCallListener() {
         @Override
         public void onStateDidChange(String state) {
             final String fState = state;
@@ -159,41 +161,23 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         }
 
         @Override
-        public void onCallError(String error) {
-            Log.d(LOG_TAG, "## onCallError(): error=" + error);
-        }
-
-        @Override
-        public void onViewLoading(View callView) {
+        public void onCallViewCreated(View callView) {
             Log.d(LOG_TAG, "## onViewLoading():");
-
             mCallView = callView;
             insertCallView();
         }
 
         @Override
-        public void onViewReady() {
+        public void onReady() {
             // update UI before displaying the video
             computeVideoUiLayout();
             if (!mCall.isIncoming()) {
-                Log.d(LOG_TAG, "## onViewReady(): placeCall()");
+                Log.d(LOG_TAG, "## onReady(): placeCall()");
                 mCall.placeCall(mLocalVideoLayoutConfig);
             } else {
-                Log.d(LOG_TAG, "## onViewReady(): launchIncomingCall()");
+                Log.d(LOG_TAG, "## onReady(): launchIncomingCall()");
                 mCall.launchIncomingCall(mLocalVideoLayoutConfig);
             }
-        }
-
-        /**
-         * The call was answered on another device
-         */
-        @Override
-        public void onCallAnsweredElsewhere() {
-            Log.d(LOG_TAG, "## onCallAnsweredElsewhere(): ");
-        }
-
-        @Override
-        public void onCallEnd(final int aReasonId) {
         }
 
         @Override
@@ -448,7 +432,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         });
 
         if (null != savedInstanceState)  {
-            mLocalVideoLayoutConfig = (IMXCall.VideoLayoutConfiguration)savedInstanceState.getSerializable(EXTRA_LOCAL_FRAME_LAYOUT);
+            mLocalVideoLayoutConfig = (VideoLayoutConfiguration)savedInstanceState.getSerializable(EXTRA_LOCAL_FRAME_LAYOUT);
 
             // check if the layout is not out of bounds
             if (null != mLocalVideoLayoutConfig) {
@@ -498,7 +482,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                         mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
 
                         // if the view is ready, launch the incoming call
-                        if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_FLEDGLING) && mCall.isIncoming()) {
+                        if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_READY) && mCall.isIncoming()) {
                             mCall.launchIncomingCall(mLocalVideoLayoutConfig);
                         }
                     } else if (mCall.isVideo() || (!mCall.isIncoming() && (TextUtils.equals(IMXCall.CALL_STATE_CREATED, mCall.getCallState())))) {
@@ -913,7 +897,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
      */
     private void computeVideoUiLayout() {
         if (null == mLocalVideoLayoutConfig) {
-            mLocalVideoLayoutConfig = new IMXCall.VideoLayoutConfiguration();
+            mLocalVideoLayoutConfig = new VideoLayoutConfiguration();
         }
 
         // get the height of the screen

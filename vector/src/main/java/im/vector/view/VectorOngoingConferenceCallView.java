@@ -25,6 +25,8 @@ import android.text.style.ClickableSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 
+import org.matrix.androidsdk.call.IMXCallsManagerListener;
+import org.matrix.androidsdk.call.MXCallsManagerListener;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
@@ -86,21 +88,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
 
     private ICallClickListener mCallClickListener;
 
-    private final MXCallsManager.MXCallsManagerListener mCallsListener = new MXCallsManager.MXCallsManagerListener() {
-        @Override
-        public void onIncomingCall(IMXCall call, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
-
-        }
-
-        @Override
-        public void onOutgoingCall(IMXCall call) {
-        }
-
-        @Override
-        public void onCallHangUp(IMXCall call) {
-
-        }
-
+    private final IMXCallsManagerListener mCallsListener = new MXCallsManagerListener() {
         @Override
         public void onVoipConferenceStarted(String roomId) {
             if ((null != mRoom) && TextUtils.equals(roomId, mRoom.getRoomId())) {

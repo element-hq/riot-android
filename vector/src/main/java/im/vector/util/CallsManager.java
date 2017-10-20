@@ -31,7 +31,12 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.CallSoundsManager;
 import org.matrix.androidsdk.call.HeadsetConnectionReceiver;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.IMXCallListener;
+import org.matrix.androidsdk.call.IMXCallsManagerListener;
+import org.matrix.androidsdk.call.MXCallListener;
 import org.matrix.androidsdk.call.MXCallsManager;
+import org.matrix.androidsdk.call.MXCallsManagerListener;
+import org.matrix.androidsdk.call.VideoLayoutConfiguration;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
@@ -66,7 +71,7 @@ public class CallsManager {
     private CallSoundsManager mCallSoundsManager;
 
     private View mCallView = null;
-    private IMXCall.VideoLayoutConfiguration mLocalVideoLayoutConfig = null;
+    private VideoLayoutConfiguration mLocalVideoLayoutConfig = null;
 
     private final Handler mUiHandler = new Handler(Looper.getMainLooper());
 
@@ -174,14 +179,14 @@ public class CallsManager {
      *
      * @param aLocalVideoLayoutConfig the video config
      */
-    public void setVideoLayoutConfiguration(IMXCall.VideoLayoutConfiguration aLocalVideoLayoutConfig) {
+    public void setVideoLayoutConfiguration(VideoLayoutConfiguration aLocalVideoLayoutConfig) {
         mLocalVideoLayoutConfig = aLocalVideoLayoutConfig;
     }
 
     /**
      * @return the layout config
      */
-    public IMXCall.VideoLayoutConfiguration getVideoLayoutConfiguration() {
+    public VideoLayoutConfiguration getVideoLayoutConfiguration() {
         return mLocalVideoLayoutConfig;
     }
 
@@ -209,7 +214,7 @@ public class CallsManager {
         });
     }
 
-    private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
+    private final IMXCallListener mCallListener = new MXCallListener() {
         @Override
         public void onStateDidChange(final String state) {
             mUiHandler.post(new Runnable() {
@@ -309,15 +314,6 @@ public class CallsManager {
             });
         }
 
-
-        @Override
-        public void onViewLoading(View callView) {
-        }
-
-        @Override
-        public void onViewReady() {
-        }
-
         @Override
         public void onCallAnsweredElsewhere() {
             mUiHandler.post(new Runnable() {
@@ -348,16 +344,12 @@ public class CallsManager {
                 }
             });
         }
-
-        @Override
-        public void onPreviewSizeChanged(int width, int height) {
-        }
     };
 
     /**
      * Calls events listener.
      */
-    private final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
+    private final IMXCallsManagerListener mCallsManagerListener = new MXCallsManagerListener() {
         @Override
         public void onIncomingCall(final IMXCall aCall, final MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
             mUiHandler.post(new Runnable() {
@@ -422,14 +414,6 @@ public class CallsManager {
         @Override
         public void onCallHangUp(final IMXCall call) {
             Log.d(LOG_TAG, "onCallHangUp " + call.getCallId());
-        }
-
-        @Override
-        public void onVoipConferenceStarted(String roomId) {
-        }
-
-        @Override
-        public void onVoipConferenceFinished(String roomId) {
         }
     };
 

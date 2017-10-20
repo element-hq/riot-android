@@ -271,7 +271,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     @Override
                     public void run() {
                         call.setIsVideo(isVideo);
-                        call.setIsIncoming(false);
 
                         final Intent intent = new Intent(VectorMemberDetailsActivity.this, VectorCallViewActivity.class);
 

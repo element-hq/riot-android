@@ -70,7 +70,7 @@ public class CallUtilities {
 
         if ((callState.equals(IMXCall.CALL_STATE_CREATED)  ||
                     callState.equals(IMXCall.CALL_STATE_CREATING_CALL_VIEW) ||
-                    callState.equals(IMXCall.CALL_STATE_FLEDGLING) ||
+                    callState.equals(IMXCall.CALL_STATE_READY) ||
                     callState.equals(IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA))) {
             if (call.isIncoming()) {
                 if (call.isVideo()) {
