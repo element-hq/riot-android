@@ -26,13 +26,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.util.Log;
-import android.view.Display;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +51,7 @@ import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.view.PieFractionView;
+
 import im.vector.R;
 
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -88,7 +88,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     private int mAutoPlayItemAt = -1;
 
-    public VectorMediasViewerAdapter(Context context, MXSession session,  MXMediasCache mediasCache, List<SlidableMediaInfo> mediaMessagesList, int maxImageWidth, int maxImageHeight) {
+    public VectorMediasViewerAdapter(Context context, MXSession session, MXMediasCache mediasCache, List<SlidableMediaInfo> mediaMessagesList, int maxImageWidth, int maxImageHeight) {
         this.mContext = context;
         this.mSession = session;
         this.mMediasMessagesList = mediaMessagesList;
@@ -103,12 +103,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         return mMediasMessagesList.size();
     }
 
+
     @Override
     public void setPrimaryItem(ViewGroup container, final int position, Object object) {
         if (mLatestPrimaryItemPosition != position) {
             mLatestPrimaryItemPosition = position;
 
-            final View view = (View)object;
+            final View view = (View) object;
             mLatestPrimaryView = view;
 
             view.post(new Runnable() {
@@ -127,7 +128,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
 
                         if (mediaInfo.mMessageType.equals(Message.MSGTYPE_VIDEO)) {
-                            final VideoView videoView = (VideoView) view.findViewById(R.id.media_slider_videoview);
+                            final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
                             playVideo(view, videoView, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
                         }
 
@@ -139,7 +140,6 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     }
 
     /**
-     *
      * @param position the position of the item to play.
      */
     public void autoPlayItemAt(int position) {
@@ -148,7 +148,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      * Download the media if it was not yet done
-     * @param view the slider page view
+     *
+     * @param view     the slider page view
      * @param position the item position
      */
     private void downloadHighResMedia(final View view, final int position) {
@@ -169,23 +170,25 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     /**
      * Download the video file.
      * The download will only start if the video should be auto played.
-     * @param view the slider page view
+     *
+     * @param view     the slider page view
      * @param position the item position
      */
-    public void downloadVideo(final View view, final int position) {
+    private void downloadVideo(final View view, final int position) {
         downloadVideo(view, position, false);
     }
 
     /**
      * Download the video file
-     * @param view the slider page view
+     *
+     * @param view     the slider page view
      * @param position the item position
-     * @param force true to do not check the auto playmode
+     * @param force    true to do not check the auto playmode
      */
-    public void downloadVideo(final View view, final int position, boolean force) {
-        final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
-        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
-        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
+    private void downloadVideo(final View view, final int position, boolean force) {
+        final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
+        final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
 
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         final String loadingUri = mediaInfo.mMediaUrl;
@@ -269,12 +272,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      * Download the high res image
-     * @param view the slider page view
+     *
+     * @param view     the slider page view
      * @param position the item position
      */
     private void downloadHighResPict(final View view, final int position) {
-        final WebView webView = (WebView)view.findViewById(R.id.media_slider_image_webview);
-        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
+        final WebView webView = view.findViewById(R.id.media_slider_image_webview);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
         final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
         final String viewportContent = "width=640";
         final String loadingUri = imageInfo.mMediaUrl;
@@ -336,15 +340,15 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        View view  = mLayoutInflater.inflate(R.layout.adapter_vector_medias_viewer, null, false);
+        View view = mLayoutInflater.inflate(R.layout.adapter_vector_medias_viewer, null, false);
 
         // hide the pie chart
-        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
         pieFractionView.setVisibility(View.GONE);
 
-        final WebView imageWebView = (WebView)view.findViewById(R.id.media_slider_image_webview);
+        final WebView imageWebView = view.findViewById(R.id.media_slider_image_webview);
         final View videoLayout = view.findViewById(R.id.media_slider_videolayout);
-        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
+        final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
 
         imageWebView.getSettings().setDisplayZoomControls(false);
 
@@ -415,7 +419,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             loadImage(imageWebView, Uri.parse(mediaUri), viewportContent, css);
             container.addView(view, 0);
         } else {
-            loadVideo(position , view, mediaInfo.mThumbnailUrl, mediaUrl, mediaInfo.mMimeType);
+            loadVideo(position, view, mediaInfo.mThumbnailUrl, mediaUrl, mediaInfo.mMimeType);
             container.addView(view, 0);
         }
 
@@ -460,13 +464,14 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      * Switch from the video view to the video thumbnail
-     * @param view the page view
-     * @param display trur to display the video thumbnail, false to display the video player
+     *
+     * @param view    the page view
+     * @param display true to display the video thumbnail, false to display the video player
      */
-    private void displayVideoThumbnail(final View view, boolean display){
-        final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
-        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
-        final ImageView playView = (ImageView)view.findViewById(R.id.media_slider_video_playView);
+    private void displayVideoThumbnail(final View view, boolean display) {
+        final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
+        final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
+        final ImageView playView = view.findViewById(R.id.media_slider_video_playView);
 
         videoView.setVisibility(display ? View.GONE : View.VISIBLE);
         thumbView.setVisibility(display ? View.VISIBLE : View.GONE);
@@ -479,17 +484,18 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     public void stopPlayingVideo() {
         if (null != mPlayingVideoView) {
             mPlayingVideoView.stopPlayback();
-            displayVideoThumbnail((View)(mPlayingVideoView.getParent()), true);
+            displayVideoThumbnail((View) (mPlayingVideoView.getParent()), true);
             mPlayingVideoView = null;
         }
     }
 
     /**
      * Play a video.
-     * @param pageView the pageView
-     * @param videoView the video view
-     * @param videoUrl the video Url
-     * @param videoMimeType the video mimetype
+     *
+     * @param pageView      the pageView
+     * @param videoView     the video view
+     * @param videoUrl      the video Url
+     * @param videoMimeType the video mime type
      */
     private void playVideo(View pageView, VideoView videoView, String videoUrl, String videoMimeType) {
         // init the video view only if there is a valid file
@@ -559,7 +565,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     /**
      * Download the current video file
      */
-    public void downloadMedia() {
+    private void downloadMedia() {
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(mLatestPrimaryItemPosition);
         File file = mMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
 
@@ -632,15 +638,16 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      * Load the video items
-     * @param view the page view
-     * @param thumbnailUrl the thumbnail URL
-     * @param videoUrl the video Url
+     *
+     * @param view          the page view
+     * @param thumbnailUrl  the thumbnail URL
+     * @param videoUrl      the video Url
      * @param videoMimeType the video mime type
      */
     private void loadVideo(final int position, final View view, final String thumbnailUrl, final String videoUrl, final String videoMimeType) {
-        final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
-        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
-        final ImageView playView = (ImageView)view.findViewById(R.id.media_slider_video_playView);
+        final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
+        final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
+        final ImageView playView = view.findViewById(R.id.media_slider_video_playView);
 
         displayVideoThumbnail(view, !videoView.isPlaying());
 
@@ -653,7 +660,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         });
 
         // the video is renderer in DSA so trap the on click on the video view parent
-        ((View)videoView.getParent()).setOnClickListener(new View.OnClickListener() {
+        ((View) videoView.getParent()).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stopPlayingVideo();
@@ -693,10 +700,11 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      * Update the image page.
-     * @param webView the image is rendered in a webview.
-     * @param imageUri the image Uri.
-     * @param viewportContent  the viewport.
-     * @param css the css.
+     *
+     * @param webView         the image is rendered in a webview.
+     * @param imageUri        the image Uri.
+     * @param viewportContent the viewport.
+     * @param css             the css.
      */
     private void loadImage(WebView webView, Uri imageUri, String viewportContent, String css) {
         String html =
@@ -707,7 +715,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         css +
                         "</style></head>" +
                         "<body> <div class='wrap'>" + "<img " +
-                        ( "src='" + imageUri.toString() + "'") +
+                        ("src='" + imageUri.toString() + "'") +
                         " onerror='this.style.display=\"none\"' id='image' " + viewportContent + "/>" + "</div>" +
                         "</body>" + "</html>";
 
@@ -719,7 +727,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     }
 
     /**
-     *  Image rendering subroutine
+     * Image rendering subroutine
      */
     private String computeCss(String mediaUrl, int thumbnailWidth, int thumbnailHeight, int rotationAngle) {
         String css = "body { background-color: #000; height: 100%; width: 100%; margin: 0px; padding: 0px; }" +
@@ -768,7 +776,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 }
 
                 imageWidth = options.outWidth;
-                imageHeight =  options.outHeight;
+                imageHeight = options.outHeight;
 
                 imageStream.close();
                 fullSizeBitmap.recycle();
@@ -788,7 +796,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     private String calcCssRotation(int rot, int imageWidth, int imageHeight) {
         if (rot == 90 || rot == 180 || rot == 270) {
             Point displaySize = getDisplaySize();
-            double scale = Math.min((double)imageWidth / imageHeight, (double)displaySize.y / displaySize.x);
+            double scale = Math.min((double) imageWidth / imageHeight, (double) displaySize.y / displaySize.x);
 
             final String rot180 = "-webkit-transform: rotate(180deg);";
 
@@ -807,16 +815,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     @SuppressLint("NewApi")
     private Point getDisplaySize() {
         Point size = new Point();
-        WindowManager w = ((Activity)mContext).getWindowManager();
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)    {
-            w.getDefaultDisplay().getSize(size);
-        } else {
-            Display d = w.getDefaultDisplay();
-            size.x = d.getWidth();
-            size.y = d.getHeight();
-        }
-
+        WindowManager w = ((Activity) mContext).getWindowManager();
+        w.getDefaultDisplay().getSize(size);
         return size;
     }
 
