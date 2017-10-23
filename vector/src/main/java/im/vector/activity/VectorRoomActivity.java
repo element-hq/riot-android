@@ -462,17 +462,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         @Override
-        public void onEventEncrypting(Event event) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    refreshNotificationsArea();
-                }
-            });
-        }
-
-        @Override
-        public void onEventEncrypted(Event event) {
+        public void onEventSentStateUpdated(Event event) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -483,16 +473,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         @Override
         public void onEventSent(Event event, String prevEventId) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    refreshNotificationsArea();
-                }
-            });
-        }
-
-        @Override
-        public void onFailedSendingEvent(Event event) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
