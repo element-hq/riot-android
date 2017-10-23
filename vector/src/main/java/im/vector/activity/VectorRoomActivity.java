@@ -62,6 +62,8 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.IMXCallListener;
+import org.matrix.androidsdk.call.MXCallListener;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
@@ -517,23 +519,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
     };
 
-    private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
-        @Override
-        public void onStateDidChange(String state) {
-        }
-
+    private final IMXCallListener mCallListener = new MXCallListener() {
         @Override
         public void onCallError(String error) {
             refreshCallButtons(true);
-        }
-
-        @Override
-        public void onViewLoading(View callview) {
-
-        }
-
-        @Override
-        public void onViewReady() {
         }
 
         @Override
@@ -1296,10 +1285,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                 intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, mCallId);
 
-                if (null == call) {
-                    intent.putExtra(VectorCallViewActivity.EXTRA_AUTO_ACCEPT, "anything");
-                }
-
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -1797,7 +1782,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         setProgressVisibility(View.VISIBLE);
 
         // create the call object
-        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
+        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), aIsVideoCall, new ApiCallback<IMXCall>() {
             @Override
             public void onSuccess(final IMXCall call) {
                 Log.d(LOG_TAG, "## startIpCall(): onSuccess");
@@ -1805,8 +1790,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     @Override
                     public void run() {
                         setProgressVisibility(View.GONE);
-                        call.setIsVideo(aIsVideoCall);
-                        call.setIsIncoming(false);
 
                         final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
 

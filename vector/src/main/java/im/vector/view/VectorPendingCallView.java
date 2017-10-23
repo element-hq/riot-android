@@ -26,6 +26,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.IMXCallListener;
+import org.matrix.androidsdk.call.MXCallListener;
 import org.matrix.androidsdk.data.Room;
 
 import im.vector.R;
@@ -59,7 +61,7 @@ public class VectorPendingCallView extends RelativeLayout {
     private boolean mIsCallStatusHidden;
 
     // the call listener
-    private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
+    private final IMXCallListener mCallListener = new MXCallListener() {
         @Override
         public void onStateDidChange(String state) {
             refresh();
@@ -71,12 +73,8 @@ public class VectorPendingCallView extends RelativeLayout {
         }
 
         @Override
-        public void onViewLoading(View callView) {
+        public void onCallViewCreated(View callView) {
             refresh();
-        }
-
-        @Override
-        public void onViewReady() {
         }
 
         @Override
@@ -93,7 +91,6 @@ public class VectorPendingCallView extends RelativeLayout {
         public void onPreviewSizeChanged(int width, int height) {
         }
     };
-
 
     /**
      * constructors

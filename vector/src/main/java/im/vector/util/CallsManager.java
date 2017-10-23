@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -31,7 +30,11 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.CallSoundsManager;
 import org.matrix.androidsdk.call.HeadsetConnectionReceiver;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.call.MXCallsManager;
+import org.matrix.androidsdk.call.IMXCallListener;
+import org.matrix.androidsdk.call.IMXCallsManagerListener;
+import org.matrix.androidsdk.call.MXCallListener;
+import org.matrix.androidsdk.call.MXCallsManagerListener;
+import org.matrix.androidsdk.call.VideoLayoutConfiguration;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
@@ -66,7 +69,7 @@ public class CallsManager {
     private CallSoundsManager mCallSoundsManager;
 
     private View mCallView = null;
-    private IMXCall.VideoLayoutConfiguration mLocalVideoLayoutConfig = null;
+    private VideoLayoutConfiguration mLocalVideoLayoutConfig = null;
 
     private final Handler mUiHandler = new Handler(Looper.getMainLooper());
 
@@ -82,7 +85,7 @@ public class CallsManager {
                 boolean isHeadsetPlugged = HeadsetConnectionReceiver.isHeadsetPlugged(mContext);
 
                 // the user plugs a headset while the device is on loud speaker
-                if (mCallSoundsManager.isSpeakerOn() && isHeadsetPlugged) {
+                if (mCallSoundsManager.isSpeakerphoneOn() && isHeadsetPlugged) {
                     Log.d(LOG_TAG, "toggle the call speaker because the call was on loudspeaker.");
                     // change the audio path to the headset
                     mCallSoundsManager.toggleSpeaker();
@@ -174,14 +177,14 @@ public class CallsManager {
      *
      * @param aLocalVideoLayoutConfig the video config
      */
-    public void setVideoLayoutConfiguration(IMXCall.VideoLayoutConfiguration aLocalVideoLayoutConfig) {
+    public void setVideoLayoutConfiguration(VideoLayoutConfiguration aLocalVideoLayoutConfig) {
         mLocalVideoLayoutConfig = aLocalVideoLayoutConfig;
     }
 
     /**
      * @return the layout config
      */
-    public IMXCall.VideoLayoutConfiguration getVideoLayoutConfiguration() {
+    public VideoLayoutConfiguration getVideoLayoutConfiguration() {
         return mLocalVideoLayoutConfig;
     }
 
@@ -209,7 +212,7 @@ public class CallsManager {
         });
     }
 
-    private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
+    private final IMXCallListener mCallListener = new MXCallListener() {
         @Override
         public void onStateDidChange(final String state) {
             mUiHandler.post(new Runnable() {
@@ -224,24 +227,34 @@ public class CallsManager {
 
                     switch (state) {
                         case IMXCall.CALL_STATE_CREATED:
-                        case IMXCall.CALL_STATE_CREATING_CALL_VIEW: {
                             if (mActiveCall.isIncoming()) {
                                 EventStreamService.getInstance().displayIncomingCallNotification(mActiveCall.getSession(), mActiveCall.getRoom(), null, mActiveCall.getCallId(), null);
                                 startRinging();
                             }
-
                             break;
-                        }
+                        case IMXCall.CALL_STATE_CREATING_CALL_VIEW:
                         case IMXCall.CALL_STATE_CONNECTING:
                         case IMXCall.CALL_STATE_CREATE_ANSWER:
                         case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
                         case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
+                            if (mActiveCall.isIncoming()) {
+                                mCallSoundsManager.stopSounds();
+                            } // else ringback
                             break;
 
                         case IMXCall.CALL_STATE_CONNECTED:
                             EventStreamService.getInstance().displayCallInProgressNotification(mActiveCall.getSession(), mActiveCall.getRoom(), mActiveCall.getCallId());
                             mCallSoundsManager.stopSounds();
                             requestAudioFocus();
+
+                            mUiHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    setCallSpeakerphoneOn(mActiveCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(mContext));
+                                    mCallSoundsManager.setMicrophoneMute(false);
+                                }
+                            });
+
                             break;
 
                         case IMXCall.CALL_STATE_RINGING:
@@ -298,15 +311,6 @@ public class CallsManager {
             });
         }
 
-
-        @Override
-        public void onViewLoading(View callView) {
-        }
-
-        @Override
-        public void onViewReady() {
-        }
-
         @Override
         public void onCallAnsweredElsewhere() {
             mUiHandler.post(new Runnable() {
@@ -337,16 +341,12 @@ public class CallsManager {
                 }
             });
         }
-
-        @Override
-        public void onPreviewSizeChanged(int width, int height) {
-        }
     };
 
     /**
      * Calls events listener.
      */
-    private final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
+    private final IMXCallsManagerListener mCallsManagerListener = new MXCallsManagerListener() {
         @Override
         public void onIncomingCall(final IMXCall aCall, final MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
             mUiHandler.post(new Runnable() {
@@ -385,6 +385,7 @@ public class CallsManager {
                             homeActivity.startCall(mActiveCall.getSession().getMyUserId(), mActiveCall.getCallId(), unknownDevices);
                         }
 
+                        startRinging();
                         mActiveCall.addListener(mCallListener);
                     }
                 }
@@ -410,14 +411,6 @@ public class CallsManager {
         @Override
         public void onCallHangUp(final IMXCall call) {
             Log.d(LOG_TAG, "onCallHangUp " + call.getCallId());
-        }
-
-        @Override
-        public void onVoipConferenceStarted(String roomId) {
-        }
-
-        @Override
-        public void onVoipConferenceFinished(String roomId) {
         }
     };
 
@@ -474,23 +467,6 @@ public class CallsManager {
     }
 
     /**
-     * Accept incoming call
-     *
-     * @param fromActivity  the caller activity
-     * @param aSourceIntent the call intantce
-     */
-    public void acceptCall(Activity fromActivity, Intent aSourceIntent) {
-        // stop the ringing when the user presses on accept
-        stopRinging();
-
-        Intent intent = new Intent(fromActivity, VectorCallViewActivity.class);
-        Bundle receivedData = aSourceIntent.getExtras();
-        intent.putExtras(receivedData);
-        intent.putExtra(VectorCallViewActivity.EXTRA_AUTO_ACCEPT, true);
-        fromActivity.startActivity(intent);
-    }
-
-    /**
      * Toggle the speaker
      */
     public void toggleSpeaker() {
@@ -533,12 +509,17 @@ public class CallsManager {
     }
 
     /**
-     * Stop any ringing
+     * @return true if it's ringing
      */
-    private void stopRinging() {
-        if (mCallSoundsManager.isRinging()) {
-            mCallSoundsManager.stopRinging();
-        }
+    public boolean isRinging() {
+        return mCallSoundsManager.isRinging();
+    }
+
+    /**
+     * @return true if the speaker is turned on.
+     */
+    public boolean isSpeakerphoneOn() {
+        return mCallSoundsManager.isSpeakerphoneOn();
     }
 
     /**

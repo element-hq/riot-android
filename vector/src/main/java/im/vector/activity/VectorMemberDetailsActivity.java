@@ -264,15 +264,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
 
         // create the call object
-        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
+        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), isVideo, new ApiCallback<IMXCall>() {
             @Override
             public void onSuccess(final IMXCall call) {
                 VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        call.setIsVideo(isVideo);
-                        call.setIsIncoming(false);
-
                         final Intent intent = new Intent(VectorMemberDetailsActivity.this, VectorCallViewActivity.class);
 
                         intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
