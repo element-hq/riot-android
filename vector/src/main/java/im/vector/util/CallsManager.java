@@ -411,6 +411,16 @@ public class CallsManager {
         @Override
         public void onCallHangUp(final IMXCall call) {
             Log.d(LOG_TAG, "onCallHangUp " + call.getCallId());
+            mUiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null == mActiveCall) {
+                        Log.d(LOG_TAG, "## onCallEnd() : no more active call");
+                        return;
+                    }
+                    endCall(false);
+                }
+            });
         }
     };
 
@@ -561,7 +571,7 @@ public class CallsManager {
             mActiveCall = null;
 
             if (mCallSoundsManager.isRinging()) {
-                releaseCall();
+                releaseCall(call);
             } else {
                 mCallSoundsManager.startSound(isBusy ? R.raw.busy : R.raw.callend, false, new CallSoundsManager.OnMediaListener() {
                     @Override
