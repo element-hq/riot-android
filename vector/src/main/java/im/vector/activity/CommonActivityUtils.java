@@ -2089,7 +2089,11 @@ public class CommonActivityUtils {
         }
 
         fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, listener);
-        fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+        try {
+            fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## displayUnknownDevicesDialog() failed : " + e.getMessage());
+        }
     }
 
     /**
