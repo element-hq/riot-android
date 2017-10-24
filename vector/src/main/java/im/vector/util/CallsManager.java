@@ -505,6 +505,7 @@ public class CallsManager {
      * Start the ringing tone
      */
     private void startRinging() {
+        requestAudioFocus();
         mCallSoundsManager.startRinging(R.raw.ring, RING_TONE_START_RINGING);
     }
 
@@ -536,6 +537,7 @@ public class CallsManager {
         mCallSoundsManager.startSound(R.raw.ringback, true, new CallSoundsManager.OnMediaListener() {
             @Override
             public void onMediaReadyToPlay() {
+                requestAudioFocus();
                 mCallSoundsManager.setSpeakerphoneOn(true, mActiveCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(mContext));
             }
 
