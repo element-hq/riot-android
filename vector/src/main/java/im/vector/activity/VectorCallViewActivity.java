@@ -635,9 +635,15 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     @Override
     public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (aRequestCode == mPermissionCode) {
-            // the user can only accept if the dedicated permissions are granted
-            mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
-        }
+
+            if (CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL  == aRequestCode) {
+                // the user can only accept if the dedicated permissions are granted
+                mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
+            } else {
+                // the user can only accept if the dedicated permissions are granted
+                mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
+            }
+         }
     }
 
     @Override
