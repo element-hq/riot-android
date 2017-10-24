@@ -136,9 +136,9 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
         mSession = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
 
-        if (null == mSession) {
+        if ((null == mSession) || !mSession.isAlive()) {
             finish();
-            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            Log.d(LOG_TAG, "onCreate : invalid session");
             return;
         }
 

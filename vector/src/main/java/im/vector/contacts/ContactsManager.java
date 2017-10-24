@@ -182,7 +182,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
             MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
 
-            if ((null != session) && (null != mContactsList)) {
+            if ((null != session) && session.isAlive() && (null != mContactsList)) {
                 for (final Contact contact : mContactsList) {
                     Set<String> medias = contact.getMatrixIdMediums();
 

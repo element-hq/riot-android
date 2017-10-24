@@ -229,7 +229,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         mSession = Matrix.getInstance(appContext).getSession(matrixId);
 
         // sanity checks
-        if (null == mSession) {
+        if ((null == mSession) || !mSession.isAlive()) {
             getActivity().finish();
             return;
         }

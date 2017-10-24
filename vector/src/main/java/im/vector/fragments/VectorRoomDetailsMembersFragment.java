@@ -441,7 +441,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             mSession = anActivity.getSession();
 
             // GA issue
-            if (null != mSession) {
+            if ((null != mSession) && mSession.isAlive()) {
                 finalizeInit();
             } else {
                 Log.e(LOG_TAG, "## onCreateView : the session is null -> kill the activity");

@@ -151,7 +151,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
         String matrixId = args.getString(ARG_MATRIX_ID);
         mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
 
-        if (null == mSession) {
+        if ((null == mSession) || !mSession.isAlive()) {
             throw new RuntimeException("Must have valid default MXSession.");
         }
 

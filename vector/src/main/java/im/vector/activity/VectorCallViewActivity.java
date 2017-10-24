@@ -338,7 +338,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         mMatrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
 
         mSession = Matrix.getInstance(getApplicationContext()).getSession(mMatrixId);
-        if (null == mSession) {
+        if ((null == mSession) || !mSession.isAlive()) {
             Log.e(LOG_TAG, "invalid session");
             finish();
             return;

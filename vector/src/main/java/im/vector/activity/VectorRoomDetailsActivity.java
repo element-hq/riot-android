@@ -134,7 +134,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         // get current session
         mSession = Matrix.getInstance(getApplicationContext()).getSession(mMatrixId);
-        if (null == mSession) {
+
+        if ((null == mSession) || !mSession.isAlive()) {
             finish();
             return;
         }

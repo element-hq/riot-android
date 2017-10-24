@@ -175,7 +175,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         // get current session
         mSession = Matrix.getInstance(getApplicationContext()).getSession(mMatrixId);
-        if (null == mSession) {
+
+        if ((null == mSession) || !mSession.isAlive()) {
             finish();
             return;
         }

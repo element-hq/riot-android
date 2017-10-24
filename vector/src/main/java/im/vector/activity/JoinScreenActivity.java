@@ -64,7 +64,7 @@ public class JoinScreenActivity extends RiotBaseActivity {
         MXSession session = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
         Room room = session.getDataHandler().getRoom(roomId);
 
-        if ((null == session) || (null == room)) {
+        if ((null == session) || (null == room) || !session.isAlive()) {
             Log.e(LOG_TAG, "## onCreate() : undefined parameters");
             finish();
             return;
