@@ -38,6 +38,7 @@ import im.vector.activity.FallbackLoginActivity;
 import im.vector.activity.HistoricalRoomsActivity;
 import im.vector.activity.LanguagePickerActivity;
 import im.vector.activity.LockScreenActivity;
+import im.vector.activity.LoggingOutActivity;
 import im.vector.activity.LoginActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.PhoneNumberVerificationActivity;
@@ -146,6 +147,8 @@ public class ThemeUtils {
                 activity.setTheme(R.style.DirectoryPickerTheme_Dark);
             } else if (activity instanceof SplashActivity) {
                 activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof LoggingOutActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
             } else if (activity instanceof VectorBaseSearchActivity) {
                 activity.setTheme(R.style.SearchesAppTheme_Dark);
             } else if (activity instanceof VectorCallViewActivity) {
@@ -197,6 +200,8 @@ public class ThemeUtils {
             } else if (activity instanceof RoomDirectoryPickerActivity) {
                 activity.setTheme(R.style.DirectoryPickerTheme_Black);
             } else if (activity instanceof SplashActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Black);
+            } else if (activity instanceof LoggingOutActivity) {
                 activity.setTheme(R.style.AppTheme_NoActionBar_Black);
             } else if (activity instanceof VectorBaseSearchActivity) {
                 activity.setTheme(R.style.SearchesAppTheme_Black);

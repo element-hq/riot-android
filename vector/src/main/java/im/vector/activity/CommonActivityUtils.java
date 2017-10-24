@@ -382,7 +382,18 @@ public class CommonActivityUtils {
         Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
         // clear the preferences when the application goes to the login screen.
         if (goToLoginPage) {
+            // display a dummy activity until the logout is done
             Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
+
+            if (null != activity) {
+                // go to login page
+                activity.startActivity(new Intent(activity, LoggingOutActivity.class));
+                activity.finish();
+            } else {
+                Intent intent = new Intent(context, LoggingOutActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(intent);
+            }
         }
 
         // clear credentials
@@ -402,10 +413,11 @@ public class CommonActivityUtils {
                 MXMediasCache.clearThumbnailsCache(context);
 
                 if (goToLoginPage) {
-                    if (null != activity) {
+                    Activity activeActivity = VectorApp.getCurrentActivity();
+                    if (null != activeActivity) {
                         // go to login page
-                        activity.startActivity(new Intent(activity, LoginActivity.class));
-                        activity.finish();
+                        activeActivity.startActivity(new Intent(activeActivity, LoginActivity.class));
+                        activeActivity.finish();
                     } else {
                         Intent intent = new Intent(context, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

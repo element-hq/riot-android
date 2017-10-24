@@ -112,10 +112,17 @@
             android:name="im.vector.activity.FallbackLoginActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/login"></activity>
+
         <activity
             android:name="im.vector.activity.SplashActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity
+            android:name="im.vector.activity.LoggingOutActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <activity
             android:name="im.vector.activity.VectorHomeActivity"
             android:configChanges="orientation|screenSize"

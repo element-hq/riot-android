@@ -465,7 +465,7 @@ public class Matrix {
                 for (MXSession session : instance.mMXSessions) {
                     // some GA issues reported that the data handler can be null
                     // so assume the application should be restarted
-                    res &= (null != session.getDataHandler());
+                    res &= session.isAlive() && (null != session.getDataHandler());
                 }
 
                 if (!res) {
