@@ -294,7 +294,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_jump_to_first_unread">Zur ersten ungelesenen Nachricht springen.</string>
 
     <!-- Room Preview -->
-    <string name="room_preview_invitation_format">Du wurdest von %s eingeladen, diesen Raum zu betreten</string>
+    <string name="room_preview_invitation_format">Du wurdest von %s in diesen Raum eingeladen</string>
     <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet, der nicht mit diesem Account verknüpft ist.\nDu möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adresse zu diesem Account hinzufügen.</string>
     <string name="room_preview_try_join_an_unknown_room">Du möchtest auf %s zugreifen. Möchtest du den Raum betreten, um an der Diskussion teilzunehmen?</string>
     <string name="room_preview_try_join_an_unknown_room_default">einen Raum</string>
@@ -354,7 +354,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="people_search_local_contacts">LOKALE KONTAKTE (%d)</string>
     <string name="people_search_filter_text">Nur Matrix-Nutzer</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Nutzer mit ID einladen</string>
+    <string name="people_search_invite_by_id_dialog_title">Benutzer per ID einladen</string>
     <string name="people_search_invite_by_id_dialog_description">Bitte gebe eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
     <string name="people_search_invite_by_id_dialog_hint">E-Mail or Matrix-ID</string>
 
@@ -702,9 +702,10 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_information_unblock">Zulassen</string>
 
     <string name="encryption_information_verify_device">Gerät verifizieren</string>
-    <string name="encryption_information_verify_device_warning">Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere den Besitzer über andere Kanäle (z.B. persönlich oder telefonisch) und frage, ob der Schüssel, den er in seinen Nutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:</string>
-    <string name="encryption_information_verify_device_warning2">Wenn alles stimmt, drücke unten auf den Bestätigen-Button. Wenn nicht, fängt jemand anderes dieses Gerät ab und du möchtest wohl lieber den Blockieren-Button drücken.\nIn Zukunft wird dieser Bestätigungsprozess eleganter.</string>
-    <string name="encryption_information_verify_key_match">Die Schlüssel stimmen überein</string>
+    <string name="encryption_information_verify_device_warning">" Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere bitte den Besitzer des Gerätes über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er in seinen Benutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:"</string>
+    <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button. Stimmt er nicht überein, überwacht jemand anderes dieses Gerät und du solltest ggf. den Blockieren-Button drücken.
+In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
+    <string name="encryption_information_verify_key_match">Ja, die Schlüssel stimmen überein</string>
 
     <string name="e2e_enabling_on_app_update">Riot unterstützt jetzt Ende-zu-Ende-Verschlüsselung, du musst dich jedoch erneut anmelden, um sie zu aktivieren.
 
