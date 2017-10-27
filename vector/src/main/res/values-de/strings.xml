@@ -686,7 +686,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_import_room_keys">Raumschlüssel importieren</string>
     <string name="encryption_import_room_keys_summary">Schlüssel aus lokaler Datei importieren</string>
     <string name="encryption_import_import">Importieren</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Verschlüsselung nur mit verifizierten Geräten durchführen</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Nur für verifizierte Geräte verschlüsseln</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an unbestätigte Geräte senden</string>
 
     <string name="encryption_information_not_verified">NICHT verifiziert</string>
