@@ -52,10 +52,8 @@
 
     <string name="direct_chats_header">సంభాషణలు</string>
     <string name="local_address_book_header">స్థానిక చిరునామా పుస్తకం</string>
-    <string name="known_contacts_header">తెలిసిన పరిచయాలు</string>
     <string name="matrix_only_filter">మ్యాట్రిక్స్ పరిచయాలు మాత్రమే</string>
     <string name="no_conversation_placeholder">సంభాషణలు లేవు</string>
-    <string name="no_local_contact_placeholder">స్థానిక పరిచయాలు ఏవీ లేవు</string>
     <string name="no_contact_access_placeholder">మీరు మీ స్థానిక పరిచయాలను యాక్సెస్ చేయడానికి రియోట్ను అనుమతించలేదు</string>
     <string name="no_result_placeholder">ఫలితాలు లేవు</string>
 
@@ -150,16 +148,12 @@
     <string name="login_error_unable_register">నమోదు చేయడం సాధ్యం కాలేదు</string>
     <string name="login_error_unable_register_mail_ownership">నమోదు చేయడం సాధ్యం కాదు: ఇమెయిల్ యాజమాన్యం వైఫల్యం</string>
     <string name="login_error_invalid_home_server">చెల్లుబాటు అయ్యే URL ను ఇవ్వండి</string>
-
     <string name="login_error_forbidden">చెల్లని వాడుకరి పేరు/సంకేతపదము</string>
     <string name="login_error_bad_json">తప్పు JSON</string>
     <string name="login_error_not_json">చెల్లుబాటు అయ్యే JSON లేదు</string>
     <string name="login_error_limit_exceeded">చాలా ఎక్కువ అభ్యర్థనలు పంపించబడ్డాయి</string>
     <string name="login_error_user_in_use">ఈ వాడుకరి పేరు ఇప్పటికే ఉపయోగంలో ఉంది</string>
     <string name="read_receipts_list">రసీదుల జాబితా చదవండి</string>
-
-    <string name="choose_account">ఖాతాను ఎంచుకోండి</string>
-
     <string name="compression_options">వలె పంపు</string>
     <string name="compression_opt_list_original">వాస్తవ</string>
     <string name="compression_opt_list_large">పెద్దది</string>
@@ -221,7 +215,6 @@
     <string name="room_creation_title">కొత్త మాటామంతి</string>
     <string name="room_creation_add_member">సభ్యుని జోడించు</string>
     <string name="room_header_active_members">%1$d/%2$d క్రియాశీల సభ్యులు</string>
-    <string name="room_header_invite_members">అక్రియాశీల సభ్యులు</string>
     <string name="room_title_members">%1$d సభ్యులు</string>
     <string name="room_title_one_member">1 సభ్యుడు</string>
     <string name="room_e2e_alert_title">హెచ్చరిక!</string>
@@ -265,9 +258,6 @@
 
     <string name="people_search_invite_by_id"><u>ID ద్వారా ఆహ్వానించండి</u></string>
     <string name="people_search_local_contacts">స్థానిక పరిచయాలు (%d)</string>
-    <string name="people_search_known_contacts">తెలిసిన పరిచయాలు (%s)</string>
-    <string name="people_search_too_many_contacts">చాలా పరిచయాలు, దయచేసి శోధన ఫీల్డ్ని ఉపయోగించండి</string>
-
     <string name="people_search_invite_by_id_dialog_title">ID ద్వారా వాడుకరిని ఆహ్వానించండి</string>
     <string name="people_search_invite_by_id_dialog_description">దయచేసి ఒకటి లేదా అంతకంటే ఎక్కువ ఇమెయిల్ చిరునామాలను లేదా మ్యాట్రిక్స్ ID ని ఇవ్వండి</string>
     <string name="people_search_invite_by_id_dialog_hint">ఇమెయిల్ లేదా మ్యాట్రిక్స్ ID</string>
