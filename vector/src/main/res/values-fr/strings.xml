@@ -730,4 +730,40 @@ Appareils inconnus :</string>
     <string name="larger">Très grande</string>
     <string name="largest">La plus grande</string>
     <string name="huge">Énorme</string>
+<string name="light_theme">Thème clair</string>
+    <string name="dark_theme">Thème sombre</string>
+    <string name="black_them">Thème noir</string>
+
+    <string name="notification_sync_in_progress">Synchronisation en cours</string>
+    <string name="notification_listen_for_events">Écoute d\'évènements</string>
+
+    <string name="login_mobile_device">Portable</string>
+
+    <string name="settings_notification_ringtone">Son de notification</string>
+    <string name="settings_12_24_timestamps">Afficher l\'horodatage au format 12 heures (par ex. 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Masquer les messages d\'arrivée/départ (les invitations/exclusions/bannissements ne sont pas concernés)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Masquer les changements d\'avatar et de nom</string>
+
+    <string name="widget_no_power_to_manage">Vous avez besoin d\'une permission pour gérer les widgets de ce salon</string>
+    <string name="widget_creation_failure">La création du widget a échoué</string>
+    <string name="event_formatter_widget_added">%1$s ajouté par %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s supprimé par %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Créer des appels en téléconférence avec jitsi</string>
+    <string name="widget_delete_message_confirmation">Voulez-vous vraiment supprimer ce widget ?</string>
+    <string name="active_widgets">%1$d widgets actifs</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">Vous devez avoir la permission d\'inviter des utilisateurs pour faire cela.</string>
+    <string name="widget_integration_unable_to_create">Impossible de créer le widget.</string>
+    <string name="widget_integration_failed_to_send_request">Échec de l\'envoi de la requête.</string>
+    <string name="widget_integration_room_not_recognised">Ce salon n\'est pas reconnu.</string>
+    <string name="widget_integration_positive_power_level">Le rang doit être un entier positif.</string>
+    <string name="widget_integration_must_be_in_room">Vous n\'êtes pas dans ce salon.</string>
+    <string name="widget_integration_no_permission_in_room">Vous n\'avez pas la permission de faire cela dans ce salon.</string>
+    <string name="widget_integration_missing_room_id">room_id manquant dans la requête.</string>
+    <string name="widget_integration_missing_user_id">user_id manquant dans la requête.</string>
+    <string name="widget_integration_room_not_visible">Le salon %s n\'est pas visible.</string>
+    <string name="settings_labs_matrix_apps">Applications Matrix</string>
+    <string name="room_add_matrix_apps">Ajouter des applications Matrix</string>
+    <string name="add_matrix_apps_not_supported">Non pris en charge sur cet appareil</string>
 </resources>
