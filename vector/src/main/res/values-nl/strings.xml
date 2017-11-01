@@ -714,7 +714,7 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="directory_server_native_rooms">Alle lokale %s ruimtes</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d ongelezen genotificeerde berichten</string>
+    <string name="notification_unread_notified_messages">%d berichten waarin vermeld</string>
     <string name="notification_unread_notified_messages_in_room">%1$d ongelezen berichten in %2$d ruimtes</string>
 
     <!-- historical -->
