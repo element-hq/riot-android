@@ -31,20 +31,15 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.NotificationCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
-import android.view.View;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.call.MXCallsManager;
-import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.store.IMXStore;
@@ -73,7 +68,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
-import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.DismissNotificationReceiver;
@@ -112,7 +106,7 @@ public class EventStreamService extends Service {
      */
     public static final String EXTRA_STREAM_ACTION = "EventStreamService.EXTRA_STREAM_ACTION";
     public static final String EXTRA_MATRIX_IDS = "EventStreamService.EXTRA_MATRIX_IDS";
-    public static final String EXTRA_AUTO_RESTART_ACTION = "EventStreamService.EXTRA_AUTO_RESTART_ACTION";
+    private static final String EXTRA_AUTO_RESTART_ACTION = "EventStreamService.EXTRA_AUTO_RESTART_ACTION";
 
     /**
      * Notification identifiers
@@ -219,7 +213,7 @@ public class EventStreamService extends Service {
             //Log.d(LOG_TAG, "onBingEvent : the bingRule " + bingRule);
 
             Log.d(LOG_TAG, "prepareNotification : " + event.eventId + " in " + roomState.roomId);
-            prepareNotification(event, roomState, bingRule);
+            prepareNotification(event, bingRule);
         }
 
         @Override
@@ -312,7 +306,7 @@ public class EventStreamService extends Service {
             } else if (null == intent) {
                 Log.e(LOG_TAG, "onStartCommand : null intent -> restart the service");
                 restart = true;
-            } else if  (StreamAction.IDLE == mServiceState) {
+            } else if (StreamAction.IDLE == mServiceState) {
                 Log.e(LOG_TAG, "onStartCommand : automatically restart the service");
                 restart = true;
             } else if (StreamAction.STOP == mServiceState) {
@@ -491,6 +485,7 @@ public class EventStreamService extends Service {
 
     /**
      * Monitor the provided session.
+     *
      * @param session the session
      */
     private void monitorSession(final MXSession session) {
@@ -498,7 +493,6 @@ public class EventStreamService extends Service {
         session.getDataHandler().getBingRulesManager().addBingRulesUpdateListener(mBingRulesUpdatesListener);
         CallsManager.getSharedInstance().addSession(session);
 
-        final MXSession fSession = session;
         session.getDataHandler().addListener(new MXEventListener() {
             @Override
             public void onInitialSyncComplete(String toToken) {
@@ -536,7 +530,7 @@ public class EventStreamService extends Service {
             store.addMXStoreListener(new MXStoreListener() {
                 @Override
                 public void onStoreReady(String accountId) {
-                    startEventStream(fSession, store);
+                    startEventStream(session, store);
 
                     if (mSuspendWhenStarted) {
                         if (null != mGcmRegistrationManager) {
@@ -552,7 +546,7 @@ public class EventStreamService extends Service {
                 public void onStoreCorrupted(String accountId, String description) {
                     // start a new initial sync
                     if (null == store.getEventStreamToken()) {
-                        startEventStream(fSession, store);
+                        startEventStream(session, store);
                     } else {
                         // the data are out of sync
                         Matrix.getInstance(getApplicationContext()).reloadSessions(getApplicationContext());
@@ -771,10 +765,10 @@ public class EventStreamService extends Service {
 
             mIsForeground = true;
         } else if (
-                // fdroid
+            // fdroid
                 (!mGcmRegistrationManager.useGCM() ||
                         // the GCM registration was not done
-               TextUtils.isEmpty(mGcmRegistrationManager.getGCMRegistrationToken()) && !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+                        TextUtils.isEmpty(mGcmRegistrationManager.getGCMRegistrationToken()) && !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in foreground because of GCM registration");
 
             if (FOREGROUND_LISTENING_FOR_EVENTS != mForegroundServiceIdentifier) {
@@ -810,7 +804,8 @@ public class EventStreamService extends Service {
         PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
         // build the notification builder
-        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this);
+        NotificationUtils.addNotificationChannel(this);
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, NotificationUtils.NOTIFICATION_CHANNEL_ID);
         notifBuilder.setSmallIcon(R.drawable.permanent_notification_transparent);
         notifBuilder.setWhen(System.currentTimeMillis());
         notifBuilder.setContentTitle(getString(R.string.riot_app_name));
@@ -893,10 +888,9 @@ public class EventStreamService extends Service {
      * Prepare a notification for the expected event.
      *
      * @param event     the event
-     * @param roomState the room state
      * @param bingRule  the bing rule
      */
-    public void prepareNotification(Event event, RoomState roomState, BingRule bingRule) {
+    private void prepareNotification(Event event, BingRule bingRule) {
         if (mPendingNotifications.containsKey(event.eventId)) {
             Log.d(LOG_TAG, "prepareNotification : don't bing - the event was already binged");
             return;
@@ -979,12 +973,13 @@ public class EventStreamService extends Service {
     public static void cancelNotificationsForRoomId(String accountId, String roomId) {
         Log.d(LOG_TAG, "cancelNotificationsForRoomId " + accountId + " - " + roomId);
         if (null != mActiveEventStreamService) {
-            mActiveEventStreamService.cancelNotifications(accountId, roomId);
+            mActiveEventStreamService.cancelNotifications(roomId);
         }
     }
 
     /**
      * Provide the notifications handler
+     *
      * @return the notifications handler.
      */
     private android.os.Handler getNotificationsHandler() {
@@ -1068,10 +1063,9 @@ public class EventStreamService extends Service {
     /**
      * Cancel notifications for a dedicated room.
      *
-     * @param accountId the account
      * @param roomId    the room Id
      */
-    private void cancelNotifications(final String accountId, final String roomId) {
+    private void cancelNotifications(final String roomId) {
         getNotificationsHandler().post(new Runnable() {
             @Override
             public void run() {
@@ -1086,9 +1080,9 @@ public class EventStreamService extends Service {
     /**
      * Notify that a notification for even has been received.
      *
-     * @param event the notified event
-     * @param roomName the room name
-     * @param senderDisplayName the sender displayname
+     * @param event               the notified event
+     * @param roomName            the room name
+     * @param senderDisplayName   the sender displayname
      * @param unreadMessagesCount the unread messages count
      */
     public void onNotifiedEventWithBackgroundSyncDisabled(Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
@@ -1151,9 +1145,10 @@ public class EventStreamService extends Service {
      * Display a list of events as string.
      *
      * @param messages the messages list
-     * @param rule the bing rule to use
+     * @param rule     the bing rule to use
      */
-    public void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
+    private void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
+        NotificationUtils.addNotificationChannel(this);
         final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
         if (!mGcmRegistrationManager.areDeviceNotificationsAllowed() || (null == messages) || (0 == messages.size())) {
@@ -1184,7 +1179,7 @@ public class EventStreamService extends Service {
      * Refresh the messages notification.
      * Must always be called in getNotificationsHandler() thread.
      */
-    public void refreshMessagesNotification() {
+    private void refreshMessagesNotification() {
         // disabled background sync management
         mBackgroundNotificationStrings.clear();
         mBackgroundNotificationEventIds.clear();
@@ -1371,7 +1366,7 @@ public class EventStreamService extends Service {
 
                     if (null != events) {
                         for (Event event : events) {
-                            if (event.getOriginServerTs()  < minTs) {
+                            if (event.getOriginServerTs() < minTs) {
                                 //Log.d(LOG_TAG, "##refreshNotifiedMessagesList() : ignore event " + event.eventId + " in room " + event.roomId + " because of the TS "+ event.getOriginServerTs());
                             } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
                                 try {
@@ -1406,7 +1401,7 @@ public class EventStreamService extends Service {
                                         //Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
                                     }
                                 } else {
-                                    Log.d(LOG_TAG, "##refreshNotifiedMessagesList() : ignore event " + event.eventId + " in room " + event.roomId + " because of the TS "+ (event.originServerTs));
+                                    Log.d(LOG_TAG, "##refreshNotifiedMessagesList() : ignore event " + event.eventId + " in room " + event.roomId + " because of the TS " + (event.originServerTs));
                                 }
                             }
 
@@ -1453,7 +1448,7 @@ public class EventStreamService extends Service {
                                     NotificationUtils.NotifiedEvent event = events.get(i);
 
                                     if (room.isEventRead(event.mEventId) || (event.mOriginServerTs <= minTs)) {
-                                       // Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");
+                                        // Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");
 
                                         events.remove(i);
                                         isUpdated = true;
