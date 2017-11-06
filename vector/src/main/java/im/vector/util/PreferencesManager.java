@@ -225,7 +225,21 @@ public class PreferencesManager {
     public static void setNotificationRingTone(Context context, Uri uri) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, (null != uri) ? uri.toString() : "");
+
+        String value = "";
+
+        if (null != uri) {
+            value = uri.toString();
+
+            if (value.startsWith("file://")) {
+                // it should never happen
+                // else android.os.FileUriExposedException will be triggered.
+                // see https://github.com/vector-im/riot-android/issues/1725
+                return;
+            }
+        }
+
+        editor.putString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, value);
         editor.commit();
     }
 
@@ -244,7 +258,8 @@ public class PreferencesManager {
 
         Uri uri = null;
 
-        if (null != url) {
+        // https://github.com/vector-im/riot-android/issues/1725
+        if ((null != url) && !url.startsWith("file://")) {
             try {
                 uri = Uri.parse(url);
             } catch (Exception e) {
