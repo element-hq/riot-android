@@ -24,6 +24,9 @@ import android.content.pm.PackageInfo;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.crypto.IncomingRoomKeyRequest;
+import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation;
+import org.matrix.androidsdk.crypto.MXCrypto;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -652,6 +655,26 @@ public class Matrix {
 
         session.getDataHandler().addListener(mLiveEventListener);
         session.setUseDataSaveMode(PreferencesManager.useDataSaveMode(context));
+
+        session.getDataHandler().addListener(new MXEventListener() {
+            @Override
+            public void onInitialSyncComplete(String toToken) {
+                if (null != session.getCrypto()) {
+                    session.getCrypto().addRoomKeysRequestListener(new MXCrypto.IRoomKeysRequestListener() {
+                        @Override
+                        public void onRoomKeyRequest(IncomingRoomKeyRequest request) {
+                            KeyRequestHandler.getSharedInstance().handleKeyRequest(request);
+                        }
+
+                        @Override
+                        public void onRoomKeyRequestCancellation(IncomingRoomKeyRequestCancellation request) {
+                            KeyRequestHandler.getSharedInstance().handleKeyRequestCancellation(request);
+                        }
+                    });
+                }
+            }
+        });
+
         return session;
     }
 
