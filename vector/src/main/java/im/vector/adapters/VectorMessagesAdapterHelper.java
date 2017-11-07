@@ -571,7 +571,7 @@ public class VectorMessagesAdapterHelper {
 
             // the links are not yet supported by ConsoleHtmlTagHandler
             // the markdown tables are not properly supported
-            sequence = Html.fromHtml(htmlFormattedText.replace("\n", "<br/>"), null, isCustomizable ? htmlTagHandler : null);
+            sequence = Html.fromHtml(htmlFormattedText, null, isCustomizable ? htmlTagHandler : null);
 
             // sanity check
             if (!TextUtils.isEmpty(sequence)) {
