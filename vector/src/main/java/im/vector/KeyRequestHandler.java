@@ -53,12 +53,16 @@ public class KeyRequestHandler {
     // the user/device for which we currently have a dialog open
     private String mCurrentUser;
     private String mCurrentDevice;
+    private AlertDialog mAlertDialog;
 
     // userId -> deviceId -> [keyRequest]
     private Map<String, Map<String, List<IncomingRoomKeyRequest>>> mPendingKeyRequests = new HashMap<>();
 
+
+
     /**
      * Provide the shared instance
+     *
      * @return the shared instance
      */
     public static KeyRequestHandler getSharedInstance() {
@@ -77,6 +81,7 @@ public class KeyRequestHandler {
 
     /**
      * Handle incoming key request.
+     *
      * @param keyRequest the key request.
      */
     public void handleKeyRequest(IncomingRoomKeyRequest keyRequest) {
@@ -117,6 +122,7 @@ public class KeyRequestHandler {
 
     /**
      * Manage a cancellation request.
+     *
      * @param cancellation the cancellation request.
      */
     public void handleKeyRequestCancellation(IncomingRoomKeyRequestCancellation cancellation) {
@@ -132,7 +138,10 @@ public class KeyRequestHandler {
 
         if (TextUtils.equals(userId, mCurrentUser) && TextUtils.equals(deviceId, mCurrentDevice)) {
             Log.d(LOG_TAG, "## handleKeyRequestCancellation() : room key request cancellation for the user we currently have a dialog open for ");
-            // TODO: update the dialog. For now, we just ignore the cancellation.
+
+            if (null != mAlertDialog) {
+                mAlertDialog.cancel();
+            }
             return;
         }
 
@@ -195,31 +204,36 @@ public class KeyRequestHandler {
 
     /**
      * The Key share dialog is closed.
+     *
      * @param share true to share the key.
      */
     private void onDisplayKeyShareDialogClose(boolean share) {
-        if (share) {
-            List<IncomingRoomKeyRequest> requests = mPendingKeyRequests.get(mCurrentUser).get(mCurrentDevice);
+        // sanity check
+        if (mPendingKeyRequests.containsKey(mCurrentUser)) {
+            if (share) {
+                List<IncomingRoomKeyRequest> requests = mPendingKeyRequests.get(mCurrentUser).get(mCurrentDevice);
 
-            for (IncomingRoomKeyRequest req : requests) {
-                if (null != req.mShare) {
-                    try {
-                        req.mShare.run();
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onDisplayKeyShareDialogClose() : req.mShare failed " + e.getMessage());
+                for (IncomingRoomKeyRequest req : requests) {
+                    if (null != req.mShare) {
+                        try {
+                            req.mShare.run();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## onDisplayKeyShareDialogClose() : req.mShare failed " + e.getMessage());
+                        }
                     }
                 }
             }
-        }
 
-        mPendingKeyRequests.get(mCurrentUser).remove(mCurrentDevice);
+            mPendingKeyRequests.get(mCurrentUser).remove(mCurrentDevice);
 
-        if (mPendingKeyRequests.get(mCurrentUser).isEmpty()) {
-            mPendingKeyRequests.remove(mCurrentUser);
+            if (mPendingKeyRequests.get(mCurrentUser).isEmpty()) {
+                mPendingKeyRequests.remove(mCurrentUser);
+            }
         }
 
         mCurrentUser = null;
         mCurrentDevice = null;
+        mAlertDialog = null;
 
         processNextRequest();
     }
@@ -285,8 +299,9 @@ public class KeyRequestHandler {
 
     /**
      * Display the share key dialog
-     * @param session the session
-     * @param deviceInfo the device info
+     *
+     * @param session      the session
+     * @param deviceInfo   the device info
      * @param wasNewDevice true if the device was a new one.
      */
     private void displayKeyShareDialog(final MXSession session, final MXDeviceInfo deviceInfo, boolean wasNewDevice) {
@@ -339,8 +354,16 @@ public class KeyRequestHandler {
 
 
         // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        mAlertDialog = alertDialogBuilder.create();
+
+        mAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                onDisplayKeyShareDialogClose(false);
+            }
+        });
+
         // show it
-        alertDialog.show();
+        mAlertDialog.show();
     }
 }
