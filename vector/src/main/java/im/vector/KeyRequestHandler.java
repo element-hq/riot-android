@@ -181,7 +181,6 @@ public class KeyRequestHandler {
             return;
         }
 
-
         if (mPendingKeyRequests.isEmpty()) {
             return;
         }
@@ -304,7 +303,7 @@ public class KeyRequestHandler {
      * @param deviceInfo   the device info
      * @param wasNewDevice true if the device was a new one.
      */
-    private void displayKeyShareDialog(final MXSession session, final MXDeviceInfo deviceInfo, boolean wasNewDevice) {
+    private void displayKeyShareDialog(final MXSession session, final MXDeviceInfo deviceInfo, final boolean wasNewDevice) {
         if (null == VectorApp.getCurrentActivity()) {
             // wait that an activity is ready
             mCurrentUser = null;
@@ -340,12 +339,15 @@ public class KeyRequestHandler {
                 .setPositiveButton(R.string.start_verification,
                         new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog, int id) {
+                                dialog.dismiss();
                                 CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, mCurrentUser, session, activity, new SimpleApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
                                         if (deviceInfo.isVerified()) {
                                             dialog.dismiss();
                                             onDisplayKeyShareDialogClose(true);
+                                        } else {
+                                            displayKeyShareDialog(session, deviceInfo, wasNewDevice);
                                         }
                                     }
                                 });
