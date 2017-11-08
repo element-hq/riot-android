@@ -87,7 +87,9 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
 
     @Override
     public void onBindViewHolder(RoomDirectoryAdapter.RoomDirectoryViewHolder viewHolder, int position) {
-        viewHolder.populateViews(mList.get(position));
+        if (position < mList.size()) {
+            viewHolder.populateViews(mList.get(position));
+        }
     }
 
     @Override

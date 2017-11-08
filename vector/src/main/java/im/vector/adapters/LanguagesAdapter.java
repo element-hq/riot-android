@@ -67,7 +67,9 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
 
     @Override
     public void onBindViewHolder(LanguagesAdapter.LanguageViewHolder viewHolder, int position) {
-        viewHolder.populateViews(mFilteredLocalesList.get(position));
+        if (position < mFilteredLocalesList.size()) {
+            viewHolder.populateViews(mFilteredLocalesList.get(position));
+        }
     }
 
     @Override

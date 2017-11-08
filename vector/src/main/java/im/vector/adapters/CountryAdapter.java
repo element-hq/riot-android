@@ -71,7 +71,9 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
     @Override
     public void onBindViewHolder(CountryAdapter.CountryViewHolder viewHolder, int position) {
-        viewHolder.populateViews(mFilteredList.get(position));
+        if (position < mFilteredList.size()) {
+            viewHolder.populateViews(mFilteredList.get(position));
+        }
     }
 
     @Override
