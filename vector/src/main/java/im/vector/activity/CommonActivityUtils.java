@@ -1996,6 +1996,9 @@ public class CommonActivityUtils {
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (null != callback) {
+                    callback.onSuccess(null);
+                }
             }
         });
 

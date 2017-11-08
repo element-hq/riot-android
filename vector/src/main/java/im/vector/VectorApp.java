@@ -535,6 +535,10 @@ public class VectorApp extends MultiDexApplication {
         }
 
         mCurrentActivity = activity;
+
+        if (null != mCurrentActivity) {
+            KeyRequestHandler.getSharedInstance().processNextRequest();
+        }
     }
 
     /**
