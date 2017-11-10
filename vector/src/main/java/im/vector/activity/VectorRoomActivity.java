@@ -205,6 +205,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
     private String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
 
+    public static final int CONFIRM_MEDIA_REQUEST_CODE = 7;
+
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
 
@@ -1422,6 +1424,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 case UNREAD_PREVIEW_REQUEST_CODE:
                     mVectorMessageListFragment.scrollToBottom(0);
                     break;
+                case CONFIRM_MEDIA_REQUEST_CODE:
+                    List<RoomMediaMessage> sharedDataItems =
+                            new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(data, RoomMediaMessage.class.getClassLoader()));
+                    if (0 == sharedDataItems.size()) {
+                        sharedDataItems.add(new RoomMediaMessage(Uri.parse(data.getStringExtra(MediaPreviewerActivity.EXTRA_CAMERA_PICTURE_URI))));
+                    }
+                    mVectorRoomMediasSender.sendMedias(sharedDataItems);
+                    break;
             }
         }
     }
@@ -2020,7 +2030,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * They are listed, checked and sent when it is possible.
      */
     @SuppressLint("NewApi")
-    private void sendMediasIntent(final Intent intent) {
+    private void sendMediasIntent(Intent intent) {
         // sanity check
         if ((null == intent) && (null == mLatestTakePictureCameraUri)) {
             return;
@@ -2030,13 +2040,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         if (null != intent) {
             sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent, RoomMediaMessage.class.getClassLoader()));
-        }
-
-        if (null != mLatestTakePictureCameraUri) {
-            if (0 == sharedDataItems.size()) {
-                sharedDataItems.add(new RoomMediaMessage(Uri.parse(mLatestTakePictureCameraUri)));
-            }
-            mLatestTakePictureCameraUri = null;
         }
 
         // check the extras
@@ -2058,9 +2061,28 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         }
 
-        if (0 != sharedDataItems.size()) {
+        if (PreferencesManager.previewMediaWhenSending(this)) {
+            if (null != intent) {
+                intent.setClass(this, MediaPreviewerActivity.class);
+            } else {
+                intent = new Intent(this, MediaPreviewerActivity.class);
+            }
+
+            intent.putExtra(MediaPreviewerActivity.EXTRA_ROOM_TITLE, VectorUtils.getRoomDisplayName(this, mSession, mRoom));
+            if (null != mLatestTakePictureCameraUri) {
+                intent.putExtra(MediaPreviewerActivity.EXTRA_CAMERA_PICTURE_URI, mLatestTakePictureCameraUri);
+            }
+            startActivityForResult(intent, CONFIRM_MEDIA_REQUEST_CODE);
+        } else {
+            if (null != mLatestTakePictureCameraUri) {
+                if (0 == sharedDataItems.size()) {
+                    sharedDataItems.add(new RoomMediaMessage(Uri.parse(mLatestTakePictureCameraUri)));
+                }
+            }
             mVectorRoomMediasSender.sendMedias(sharedDataItems);
         }
+
+        mLatestTakePictureCameraUri = null;
     }
 
     /**

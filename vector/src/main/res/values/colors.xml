@@ -56,5 +56,8 @@
     <!-- Quote Colors -->
     <color name="quote_strip_color">#FFDDDDDD</color>
     <color name="quote_background_color">@android:color/transparent</color>
+    <color name="default_text_dark_color_dark">#DEDEDE</color>
 
+    <!-- Transparent status bar and toolbar colors -->
+    <color name="transparent_dark">#80000000</color>
 </resources>

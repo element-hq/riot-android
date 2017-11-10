@@ -625,6 +625,7 @@
     <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
     <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
+    <string name="settings_preview_media_before_sending">Preview media before sending</string>
 
     <string name="settings_deactivate_account_section">Deactivate account</string>
     <string name="settings_deactivate_my_account">Deactivate my account</string>
