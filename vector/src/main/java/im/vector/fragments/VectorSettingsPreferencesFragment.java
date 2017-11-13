@@ -1749,7 +1749,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 @Override
                 public void run() {
                     if (!TextUtils.isEmpty(errorMessage)) {
-                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VectorApp.getInstance(), errorMessage, Toast.LENGTH_SHORT).show();
                     }
                     hideLoadingView();
                 }
