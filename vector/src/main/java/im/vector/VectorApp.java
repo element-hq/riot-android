@@ -405,45 +405,54 @@ public class VectorApp extends MultiDexApplication {
     private void startActivityTransitionTimer() {
         Log.d(LOG_TAG, "## startActivityTransitionTimer()");
 
-        mActivityTransitionTimer = new Timer();
-        mActivityTransitionTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                // reported by GA
-                try {
-                    if (mActivityTransitionTimerTask != null) {
-                        mActivityTransitionTimerTask.cancel();
-                        mActivityTransitionTimerTask = null;
+        try {
+            mActivityTransitionTimer = new Timer();
+            mActivityTransitionTimerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    // reported by GA
+                    try {
+                        if (mActivityTransitionTimerTask != null) {
+                            mActivityTransitionTimerTask.cancel();
+                            mActivityTransitionTimerTask = null;
+                        }
+
+                        if (mActivityTransitionTimer != null) {
+                            mActivityTransitionTimer.cancel();
+                            mActivityTransitionTimer = null;
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## startActivityTransitionTimer() failed " + e.getMessage());
                     }
 
-                    if (mActivityTransitionTimer != null) {
-                        mActivityTransitionTimer.cancel();
-                        mActivityTransitionTimer = null;
-                    }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## startActivityTransitionTimer() failed " + e.getMessage());
-                }
-
-                if (null != mCurrentActivity) {
-                    Log.e(LOG_TAG, "## startActivityTransitionTimer() : the timer expires but there is an active activity.");
-                } else {
-                    VectorApp.this.mIsInBackground = true;
-                    mIsCallingInBackground = (null != mCallsManager.getActiveCall());
-
-                    // if there is a pending call
-                    // the application is not suspended
-                    if (!mIsCallingInBackground) {
-                        Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
-                        CommonActivityUtils.displayMemoryInformation(null, " app suspended");
-                        suspendApp();
+                    if (null != mCurrentActivity) {
+                        Log.e(LOG_TAG, "## startActivityTransitionTimer() : the timer expires but there is an active activity.");
                     } else {
-                        Log.d(LOG_TAG, "App not suspended due to call in progress");
+                        VectorApp.this.mIsInBackground = true;
+                        mIsCallingInBackground = (null != mCallsManager.getActiveCall());
+
+                        // if there is a pending call
+                        // the application is not suspended
+                        if (!mIsCallingInBackground) {
+                            Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
+                            CommonActivityUtils.displayMemoryInformation(null, " app suspended");
+                            suspendApp();
+                        } else {
+                            Log.d(LOG_TAG, "App not suspended due to call in progress");
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        mActivityTransitionTimer.schedule(mActivityTransitionTimerTask, MAX_ACTIVITY_TRANSITION_TIME_MS);
+            mActivityTransitionTimer.schedule(mActivityTransitionTimerTask, MAX_ACTIVITY_TRANSITION_TIME_MS);
+        } catch (Throwable throwable) {
+            Log.e(LOG_TAG, "## startActivityTransitionTimer() : failed to start the timer " + throwable.getMessage());
+
+            if (null != mActivityTransitionTimer) {
+                mActivityTransitionTimer.cancel();
+                mActivityTransitionTimer = null;
+            }
+        }
     }
 
     /**

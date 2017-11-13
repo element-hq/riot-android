@@ -830,21 +830,27 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         // stop current timer in progress
         stopVideoFadingEdgesScreenTimer();
 
-        mVideoFadingEdgesTimer = new Timer();
-        mVideoFadingEdgesTimerTask = new TimerTask() {
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        stopVideoFadingEdgesScreenTimer();
+        try {
+            mVideoFadingEdgesTimer = new Timer();
+            mVideoFadingEdgesTimerTask = new TimerTask() {
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            stopVideoFadingEdgesScreenTimer();
+                            fadeOutVideoEdge();
+                        }
+                    });
+                }
+            };
 
-                        fadeOutVideoEdge();
-                    }
-                });
-            }
-        };
+            mVideoFadingEdgesTimer.schedule(mVideoFadingEdgesTimerTask, VIDEO_FADING_TIMER);
+        } catch (Throwable throwable) {
+            Log.e(LOG_TAG, "## startVideoFadingEdgesScreenTimer() " + throwable.getMessage());
 
-        mVideoFadingEdgesTimer.schedule(mVideoFadingEdgesTimerTask, VIDEO_FADING_TIMER);
+            stopVideoFadingEdgesScreenTimer();
+            fadeOutVideoEdge();
+        }
     }
 
     /**

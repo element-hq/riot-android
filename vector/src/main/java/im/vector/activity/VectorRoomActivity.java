@@ -1992,34 +1992,41 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             if (timerTimeoutInMs > 0) {
 
-                mTypingTimerTask = new TimerTask() {
-                    public void run() {
-                        synchronized (LOG_TAG) {
-                            if (mTypingTimerTask != null) {
-                                mTypingTimerTask.cancel();
-                                mTypingTimerTask = null;
+                try {
+                    mTypingTimerTask = new TimerTask() {
+                        public void run() {
+                            synchronized (LOG_TAG) {
+                                if (mTypingTimerTask != null) {
+                                    mTypingTimerTask.cancel();
+                                    mTypingTimerTask = null;
+                                }
+
+                                if (mTypingTimer != null) {
+                                    mTypingTimer.cancel();
+                                    mTypingTimer = null;
+                                }
+
+                                Log.d(LOG_TAG, "##handleTypingNotification() : send end of typing");
+
+                                // Post a new typing notification
+                                VectorRoomActivity.this.handleTypingNotification(0 != mLastTypingDate);
                             }
-
-                            if (mTypingTimer != null) {
-                                mTypingTimer.cancel();
-                                mTypingTimer = null;
-                            }
-
-                            Log.d(LOG_TAG, "##handleTypingNotification() : send end of typing");
-
-                            // Post a new typing notification
-                            VectorRoomActivity.this.handleTypingNotification(0 != mLastTypingDate);
                         }
-                    }
-                };
+                    };
+                } catch (Throwable throwable) {
+                    Log.e(LOG_TAG, "## mTypingTimerTask creation failed " + throwable.getMessage());
+                    return;
+                }
 
                 try {
                     synchronized (LOG_TAG) {
                         mTypingTimer = new Timer();
                         mTypingTimer.schedule(mTypingTimerTask, TYPING_TIMEOUT_MS);
                     }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "fails to launch typing timer " + e.getLocalizedMessage());
+                } catch (Throwable throwable) {
+                    Log.e(LOG_TAG, "fails to launch typing timer " + throwable.getMessage());
+                    mTypingTimer = null;
+                    mTypingTimerTask = null;
                 }
 
                 // Compute the notification timeout in ms (consider the double of the local typing timeout)

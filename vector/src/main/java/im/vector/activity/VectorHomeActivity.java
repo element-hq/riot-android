@@ -1278,26 +1278,45 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 if (null != mFloatingActionButton) {
                     mFloatingActionButton.hide();
 
-                    mFloatingActionButtonTimer = new Timer();
-                    mFloatingActionButtonTimer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            synchronized (this) {
-                                if (null != mFloatingActionButtonTimer) {
-                                    mFloatingActionButtonTimer.cancel();
-                                    mFloatingActionButtonTimer = null;
-                                }
-                            }
-                            VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (null != mFloatingActionButton) {
-                                        mFloatingActionButton.show();
+                    try {
+                        mFloatingActionButtonTimer = new Timer();
+                        mFloatingActionButtonTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                synchronized (this) {
+                                    if (null != mFloatingActionButtonTimer) {
+                                        mFloatingActionButtonTimer.cancel();
+                                        mFloatingActionButtonTimer = null;
                                     }
                                 }
-                            });
+                                VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (null != mFloatingActionButton) {
+                                            mFloatingActionButton.show();
+                                        }
+                                    }
+                                });
+                            }
+                        }, 1000);
+                    } catch (Throwable throwable) {
+                        Log.e(LOG_TAG, "failed to init mFloatingActionButtonTimer " + throwable.getMessage());
+
+                        if (null != mFloatingActionButtonTimer) {
+                            mFloatingActionButtonTimer.cancel();
+                            mFloatingActionButtonTimer = null;
                         }
-                    }, 1000);
+
+                        VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (null != mFloatingActionButton) {
+                                    mFloatingActionButton.show();
+                                }
+                            }
+                        });
+
+                    }
                 }
             }
         }

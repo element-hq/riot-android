@@ -555,24 +555,36 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             mRefreshTimerTask = null;
         }
 
-        mRefreshTimer = new Timer();
-        mRefreshTimerTask = new TimerTask() {
-            public void run() {
-                mUIHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != mRefreshTimer) {
-                            mRefreshTimer.cancel();
+        try {
+            mRefreshTimer = new Timer();
+            mRefreshTimerTask = new TimerTask() {
+                public void run() {
+                    mUIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (null != mRefreshTimer) {
+                                mRefreshTimer.cancel();
+                            }
+                            mRefreshTimer = null;
+                            mRefreshTimerTask = null;
+                            mAdapter.updateRoomMembersDataModel(null);
                         }
-                        mRefreshTimer = null;
-                        mRefreshTimerTask = null;
-                        mAdapter.updateRoomMembersDataModel(null);
-                    }
-                });
-            }
-        };
+                    });
+                }
+            };
 
-        mRefreshTimer.schedule(mRefreshTimerTask, 1000);
+            mRefreshTimer.schedule(mRefreshTimerTask, 1000);
+        } catch (Throwable throwable) {
+            Log.e(LOG_TAG, "## delayedUpdateRoomMembersDataModel() failed " + throwable.getMessage());
+
+            if (null != mRefreshTimer) {
+                mRefreshTimer.cancel();
+                mRefreshTimer = null;
+            }
+
+            mRefreshTimerTask = null;
+            mAdapter.updateRoomMembersDataModel(null);
+        }
     }
 
     /**

@@ -27,6 +27,7 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,7 @@ import im.vector.util.ThemeUtils;
  * This class defines a base class to manage search in action bar
  */
 public class VectorBaseSearchActivity extends MXCActionBarActivity {
+    public static final String LOG_TAG = VectorBaseSearchActivity.class.getSimpleName();
 
     public interface IVectorSearchActivity {
         void refreshSearch();
@@ -85,26 +87,45 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
                 final String fPattern = mPatternToSearchEditText.getText().toString();
 
                 Timer timer = new Timer();
-                // wait a little delay before refreshing the results.
-                // it avoid UI lags when the user is typing.
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
-                                    VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            onPatternUpdate(true);
-                                        }
-                                    });
+
+                try {
+                    // wait a little delay before refreshing the results.
+                    // it avoid UI lags when the user is typing.
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
+                                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                onPatternUpdate(true);
+                                            }
+                                        });
+                                    }
                                 }
+                            });
+                        }
+                    }, 100);
+                } catch (Throwable throwable) {
+                    Log.e(LOG_TAG, "## failed to start the timer " + throwable.getMessage());
+
+                    VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
+                                VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        onPatternUpdate(true);
+                                    }
+                                });
                             }
-                        });
-                    }
-                }, 100);
+                        }
+                    });
+                }
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
