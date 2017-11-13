@@ -176,7 +176,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private static final String TAG_FRAGMENT_ATTACHMENTS_DIALOG = "TAG_FRAGMENT_ATTACHMENTS_DIALOG";
     private static final String TAG_FRAGMENT_CALL_OPTIONS = "TAG_FRAGMENT_CALL_OPTIONS";
 
-    private static final String LOG_TAG = "RoomActivity";
+    private static final String LOG_TAG = VectorRoomActivity.class.getSimpleName();
     private static final int TYPING_TIMEOUT_MS = 10000;
 
     private static final String FIRST_VISIBLE_ROW = "FIRST_VISIBLE_ROW";
@@ -568,20 +568,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // bind the widgets of the room header view. The room header view is displayed by
         // clicking on the title of the action bar
-        mRoomHeaderView = (RelativeLayout) findViewById(R.id.action_bar_header);
-        mActionBarHeaderRoomTopic = (TextView) findViewById(R.id.action_bar_header_room_topic);
-        mActionBarHeaderRoomName = (TextView) findViewById(R.id.action_bar_header_room_title);
+        mRoomHeaderView = findViewById(R.id.action_bar_header);
+        mActionBarHeaderRoomTopic = findViewById(R.id.action_bar_header_room_topic);
+        mActionBarHeaderRoomName = findViewById(R.id.action_bar_header_room_title);
 
         mActionBarHeaderActiveMembersLayout = findViewById(R.id.action_bar_header_room_members_layout);
-        mActionBarHeaderActiveMembersTextView = (TextView) findViewById(R.id.action_bar_header_room_members_text_view);
+        mActionBarHeaderActiveMembersTextView = findViewById(R.id.action_bar_header_room_members_text_view);
         mActionBarHeaderActiveMembersListButton = findViewById(R.id.action_bar_header_room_members_settings_view);
         mActionBarHeaderActiveMembersInviteButton = findViewById(R.id.action_bar_header_room_members_invite_view);
-        mActionBarHeaderRoomAvatar = (ImageView) mRoomHeaderView.findViewById(R.id.avatar_img);
+        mActionBarHeaderRoomAvatar = mRoomHeaderView.findViewById(R.id.avatar_img);
         mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
-        mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.room_pending_call_view);
-        mVectorOngoingConferenceCallView = (VectorOngoingConferenceCallView) findViewById(R.id.room_ongoing_conference_call_view);
-        mActiveWidgetsBanner = (ActiveWidgetsBanner) findViewById(R.id.room_pending_widgets_view);
-        mE2eImageView = (ImageView) findViewById(R.id.room_encrypted_image_view);
+        mVectorPendingCallView = findViewById(R.id.room_pending_call_view);
+        mVectorOngoingConferenceCallView = findViewById(R.id.room_ongoing_conference_call_view);
+        mActiveWidgetsBanner = findViewById(R.id.room_pending_widgets_view);
+        mE2eImageView = findViewById(R.id.room_encrypted_image_view);
         mSyncInProgressView = findViewById(R.id.room_sync_in_progress);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
@@ -595,9 +595,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // use a toolbar instead of the actionbar
         // to be able to display an expandable header
-        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.room_toolbar);
+        mToolbar = findViewById(R.id.room_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         // set the default custom action bar layout,
         // that will be displayed from the custom action bar layout
@@ -624,7 +627,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             Log.d(LOG_TAG, "Displaying " + roomId);
         }
 
-        mEditText = (VectorAutoCompleteTextView) findViewById(R.id.editText_messageBox);
+        mEditText = findViewById(R.id.editText_messageBox);
 
         // hide the header room as soon as the message input text area is touched
         mEditText.setOnClickListener(new View.OnClickListener() {
@@ -644,7 +647,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     sendTextMessage();
                 }
 
-                if (!keyEvent.isShiftPressed() && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                if ((null != keyEvent) && !keyEvent.isShiftPressed() && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER
                         && getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS) {
                     sendTextMessage();
                     return true;
@@ -657,7 +660,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mEditText.setAddColonOnFirstItem(true);
 
         mSendingMessagesLayout = findViewById(R.id.room_sending_message_layout);
-        mSendImageView = (ImageView) findViewById(R.id.room_send_image_view);
+        mSendImageView = findViewById(R.id.room_send_image_view);
         mSendButtonLayout = findViewById(R.id.room_send_layout);
         mSendButtonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -762,8 +765,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // notifications area
         mNotificationsArea = findViewById(R.id.room_notifications_area);
-        mNotificationIconImageView = (ImageView) mNotificationsArea.findViewById(R.id.room_notification_icon);
-        mNotificationTextView = (TextView) mNotificationsArea.findViewById(R.id.room_notification_message);
+        mNotificationIconImageView = mNotificationsArea.findViewById(R.id.room_notification_icon);
+        mNotificationTextView = mNotificationsArea.findViewById(R.id.room_notification_message);
 
         mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
 
@@ -1063,7 +1066,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         View avatarLayout = findViewById(R.id.room_self_avatar);
 
         if (null != avatarLayout) {
-            mAvatarImageView = (ImageView) avatarLayout.findViewById(R.id.avatar_img);
+            mAvatarImageView = avatarLayout.findViewById(R.id.avatar_img);
         }
 
         refreshSelfAvatar();
@@ -1512,24 +1515,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             finish();
             return true;
         } else if (id == R.id.ic_action_matrix_apps) {
-            // web page does not work on a Samsung S3 under android 4.3
-            // it works with a 4.2.2 or kitkat device so ...
-            if (false) { //Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                builder.setMessage(R.string.add_matrix_apps_not_supported);
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.create().show();
-            } else {
-                final Intent intent = new Intent(this, IntegrationManagerActivity.class);
-                intent.putExtra(IntegrationManagerActivity.EXTRA_SESSION_ID, mMyUserId);
-                intent.putExtra(IntegrationManagerActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                startActivity(intent);
-            }
+            final Intent intent = new Intent(this, IntegrationManagerActivity.class);
+            intent.putExtra(IntegrationManagerActivity.EXTRA_SESSION_ID, mMyUserId);
+            intent.putExtra(IntegrationManagerActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            startActivity(intent);
         } else if (id == R.id.ic_action_search_in_room) {
             try {
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
@@ -1644,7 +1633,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(VectorRoomActivity.this);
         Resources resource = getResources();
 
-        if ((null != resource) && (null != permissionsInfoDialog)) {
+        if ((null != resource)) {
             permissionsInfoDialog.setTitle(resource.getString(R.string.missing_permissions_title_to_start_conf_call));
             permissionsInfoDialog.setMessage(resource.getString(R.string.missing_permissions_to_start_conf_call));
 
@@ -1924,7 +1913,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         // check the extras
-        if (0 == sharedDataItems.size()) {
+        if ((0 == sharedDataItems.size()) && (null != intent)) {
             Bundle bundle = intent.getExtras();
 
             // sanity checks
@@ -2371,7 +2360,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         int iconId = -1;
         @ColorInt int textColor = -1;
-        boolean changedTextColor = false;
         boolean isAreaVisible = false;
         SpannableString text = new SpannableString("");
         boolean hasUnsentEvent = false;
@@ -2385,13 +2373,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             isAreaVisible = true;
             iconId = R.drawable.error;
             textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
-            changedTextColor = true;
             text = new SpannableString(getResources().getString(R.string.room_offline_notification));
         } else if (mIsUnreadPreviewMode) {
             isAreaVisible = true;
             iconId = R.drawable.scrolldown;
             textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
-            changedTextColor = true;
 
             mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -2433,8 +2419,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                 mNotificationTextView.setMovementMethod(LinkMovementMethod.getInstance());
                 textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
-                changedTextColor = true;
-
             } else if ((null != mIsScrolledToTheBottom) && (!mIsScrolledToTheBottom)) {
                 isAreaVisible = true;
 
@@ -2449,7 +2433,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 if (unreadCount > 0) {
                     iconId = R.drawable.newmessages;
                     textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
-                    changedTextColor = true;
 
                     if (unreadCount == 1) {
                         text = new SpannableString(getResources().getString(R.string.room_new_message_notification));
@@ -2459,7 +2442,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 } else {
                     iconId = R.drawable.scrolldown;
                     textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
-                    changedTextColor = true;
 
                     if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                         text = new SpannableString(mLatestTypingMessage);
@@ -2494,7 +2476,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 iconId = R.drawable.vector_typing;
                 text = new SpannableString(mLatestTypingMessage);
                 textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
-                changedTextColor = true;
             }
         }
 
@@ -2504,7 +2485,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mNotificationsArea.setVisibility(isAreaVisible ? View.VISIBLE : View.INVISIBLE);
         }
 
-        if ((-1 != iconId) && changedTextColor) {
+        if (-1 != iconId) {
             mNotificationIconImageView.setImageResource(iconId);
             mNotificationTextView.setText(text);
             mNotificationTextView.setTextColor(textColor);
@@ -2680,9 +2661,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void setActionBarDefaultCustomLayout() {
         // binding the widgets of the custom view
-        mActionBarCustomTitle = (TextView) findViewById(R.id.room_action_bar_title);
-        mActionBarCustomTopic = (TextView) findViewById(R.id.room_action_bar_topic);
-        mActionBarCustomArrowImageView = (ImageView) findViewById(R.id.open_chat_header_arrow);
+        mActionBarCustomTitle = findViewById(R.id.room_action_bar_title);
+        mActionBarCustomTopic = findViewById(R.id.room_action_bar_topic);
+        mActionBarCustomArrowImageView = findViewById(R.id.open_chat_header_arrow);
 
         // custom header
         View headerTextsContainer = findViewById(R.id.header_texts_container);
@@ -2986,11 +2967,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != sRoomPreviewData) {
             mRoomPreviewLayout.setVisibility(View.VISIBLE);
 
-            TextView invitationTextView = (TextView) findViewById(R.id.room_preview_invitation_textview);
-            TextView subInvitationTextView = (TextView) findViewById(R.id.room_preview_subinvitation_textview);
+            TextView invitationTextView = findViewById(R.id.room_preview_invitation_textview);
+            TextView subInvitationTextView = findViewById(R.id.room_preview_subinvitation_textview);
 
-            Button joinButton = (Button) findViewById(R.id.button_join_room);
-            Button declineButton = (Button) findViewById(R.id.button_decline);
+            Button joinButton = findViewById(R.id.button_join_room);
+            Button declineButton = findViewById(R.id.button_decline);
 
             final RoomEmailInvitation roomEmailInvitation = sRoomPreviewData.getRoomEmailInvitation();
 
@@ -3293,10 +3274,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         View dialogView = inflater.inflate(R.layout.dialog_text_edittext, null);
         alertDialogBuilder.setView(dialogView);
 
-        TextView titleText = (TextView) dialogView.findViewById(R.id.dialog_title);
+        TextView titleText = dialogView.findViewById(R.id.dialog_title);
         titleText.setText(getResources().getString(R.string.room_info_room_name));
 
-        final EditText textInput = (EditText) dialogView.findViewById(R.id.dialog_edit_text);
+        final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
         textInput.setText(mRoom.getLiveState().name);
 
         // set dialog message
@@ -3366,10 +3347,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         View dialogView = inflater.inflate(R.layout.dialog_text_edittext, null);
         alertDialogBuilder.setView(dialogView);
 
-        TextView titleText = (TextView) dialogView.findViewById(R.id.dialog_title);
+        TextView titleText = dialogView.findViewById(R.id.dialog_title);
         titleText.setText(getResources().getString(R.string.room_info_room_topic));
 
-        final EditText textInput = (EditText) dialogView.findViewById(R.id.dialog_edit_text);
+        final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
         textInput.setText(mRoom.getLiveState().topic);
 
         // set dialog message
