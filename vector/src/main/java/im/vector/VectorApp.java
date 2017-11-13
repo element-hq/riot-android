@@ -35,14 +35,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.provider.CallLog;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Pair;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
@@ -50,6 +49,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -278,6 +278,8 @@ public class VectorApp extends MultiDexApplication {
                     updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(activity));
                     restartActivity(activity);
                 }
+
+                listPermissionStatuses();
             }
 
             @Override
@@ -454,6 +456,26 @@ public class VectorApp extends MultiDexApplication {
             }
         }
     }
+
+    /**
+     * List the used permissions statuses.
+     */
+    private void listPermissionStatuses() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            final List<String> permissions = Arrays.asList(
+                    android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.RECORD_AUDIO,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    android.Manifest.permission.READ_CONTACTS);
+
+            Log.d(LOG_TAG, "## listPermissionStatuses() : list the permissions used by the app");
+            for (String permission : permissions) {
+                Log.d(LOG_TAG, "Status of [" + permission + "] : " +
+                        ((PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(instance, permission)) ? "PERMISSION_GRANTED" : "PERMISSION_DENIED"));
+            }
+        }
+    }
+
 
     /**
      * Stop the background detection.
