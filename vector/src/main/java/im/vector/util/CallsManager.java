@@ -250,8 +250,12 @@ public class CallsManager {
                             mUiHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    setCallSpeakerphoneOn(mActiveCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(mContext));
-                                    mCallSoundsManager.setMicrophoneMute(false);
+                                    if (null != mActiveCall) {
+                                        setCallSpeakerphoneOn(mActiveCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(mContext));
+                                        mCallSoundsManager.setMicrophoneMute(false);
+                                    } else {
+                                        Log.e(LOG_TAG, "## onStateDidChange() : no more active call");
+                                    }
                                 }
                             });
 
@@ -547,8 +551,12 @@ public class CallsManager {
         mCallSoundsManager.startSound(R.raw.ringback, true, new CallSoundsManager.OnMediaListener() {
             @Override
             public void onMediaReadyToPlay() {
-                requestAudioFocus();
-                mCallSoundsManager.setSpeakerphoneOn(true, mActiveCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(mContext));
+                if (null != mActiveCall) {
+                    requestAudioFocus();
+                    mCallSoundsManager.setSpeakerphoneOn(true, mActiveCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged(mContext));
+                } else {
+                    Log.e(LOG_TAG, "## startSound() : null mActiveCall");
+                }
             }
 
             @Override
