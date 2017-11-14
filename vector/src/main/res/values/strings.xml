@@ -249,6 +249,7 @@
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
 
     <!-- call string -->
+    <string name="call">Call</string>
     <string name="call_connected">Call connected</string>
     <string name="call_connecting">Call connecting…</string>
     <string name="call_ended">Call ended</string>

@@ -801,8 +801,8 @@ public class EventStreamService extends Service {
         PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
         // build the notification builder
-        NotificationUtils.addNotificationChannel(this);
-        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, NotificationUtils.NOTIFICATION_CHANNEL_ID);
+        NotificationUtils.addNotificationChannels(this);
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, NotificationUtils.LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID);
         notifBuilder.setSmallIcon(R.drawable.permanent_notification_transparent);
         notifBuilder.setWhen(System.currentTimeMillis());
         notifBuilder.setContentTitle(getString(R.string.riot_app_name));
@@ -1145,7 +1145,7 @@ public class EventStreamService extends Service {
      * @param rule     the bing rule to use
      */
     private void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
-        NotificationUtils.addNotificationChannel(this);
+        NotificationUtils.addNotificationChannels(this);
         final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
         if (!mGcmRegistrationManager.areDeviceNotificationsAllowed() || (null == messages) || (0 == messages.size())) {

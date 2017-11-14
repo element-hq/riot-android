@@ -112,33 +112,60 @@ public class NotificationUtils {
         return roomName;
     }
 
-    public static final String NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_ID";
-    public static String NOTIFICATION_NAME = null;
+    // on devices >= android O, we need to define a channel for each notifications
+    public static final String LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID";
+    public static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOTIFICATION_CHANNEL_ID";
+    public static final String CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID";
+
+    public static String DEFAULT_NOTIFICATION_NAME = null;
+    public static String CALL_NOTIFICATION_NAME = null;
+    public static String LISTEN_FOR_EVENTS_NOTIFICATION_NAME = null;
 
     /**
-     * Add a notification group.
+     * Add a notification groups.
      *
      * @param context the context
      */
     @SuppressLint("NewApi")
-    public static void addNotificationChannel(Context context) {
+    public static void addNotificationChannels(Context context) {
         if (Build.VERSION.SDK_INT < 26) {
             return;
         }
 
-        if (null == NOTIFICATION_NAME) {
-            NOTIFICATION_NAME = Matrix.getApplicationName();
+        if (null == DEFAULT_NOTIFICATION_NAME) {
+            DEFAULT_NOTIFICATION_NAME = Matrix.getApplicationName();
+        }
+
+        if (null == CALL_NOTIFICATION_NAME) {
+            CALL_NOTIFICATION_NAME =  context.getString(R.string.call);
+        }
+
+        if (null == LISTEN_FOR_EVENTS_NOTIFICATION_NAME) {
+            LISTEN_FOR_EVENTS_NOTIFICATION_NAME =  context.getString(R.string.notification_listen_for_events);
         }
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (null == notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID)) {
-            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription(NOTIFICATION_NAME);
+        if (null == notificationManager.getNotificationChannel(DEFAULT_NOTIFICATION_CHANNEL_ID)) {
+            NotificationChannel channel = new NotificationChannel(DEFAULT_NOTIFICATION_CHANNEL_ID, DEFAULT_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(DEFAULT_NOTIFICATION_NAME);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        if (null == notificationManager.getNotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)) {
+            NotificationChannel channel = new NotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID, LISTEN_FOR_EVENTS_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_MIN);
+            channel.setDescription(LISTEN_FOR_EVENTS_NOTIFICATION_NAME);
+            channel.setSound(null, null);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        if (null == notificationManager.getNotificationChannel(CALL_NOTIFICATION_CHANNEL_ID)) {
+            NotificationChannel channel = new NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID, CALL_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(CALL_NOTIFICATION_NAME);
+            channel.setSound(null, null);
             notificationManager.createNotificationChannel(channel);
         }
     }
-
 
     /**
      * Build an incoming call notification.
@@ -152,9 +179,9 @@ public class NotificationUtils {
      */
     @SuppressLint("NewApi")
     public static Notification buildIncomingCallNotification(Context context, String roomName, String matrixId, String callId) {
-        addNotificationChannel(context);
+        addNotificationChannels(context);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID);
         builder.setWhen(System.currentTimeMillis());
 
         builder.setContentTitle(roomName);
@@ -202,9 +229,9 @@ public class NotificationUtils {
      */
     @SuppressLint("NewApi")
     public static Notification buildPendingCallNotification(Context context, String roomName, String roomId, String matrixId, String callId) {
-        addNotificationChannel(context);
+        addNotificationChannels(context);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID);
         builder.setWhen(System.currentTimeMillis());
 
         builder.setContentTitle(roomName);
@@ -829,8 +856,8 @@ public class NotificationUtils {
 
             String roomName = getRoomName(context, session, room, event);
 
-            addNotificationChannel(context);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
+            addNotificationChannels(context);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, DEFAULT_NOTIFICATION_CHANNEL_ID);
             builder.setWhen(event.getOriginServerTs());
             builder.setContentTitle(roomName);
             builder.setContentText(body);
@@ -875,8 +902,8 @@ public class NotificationUtils {
      */
     public static Notification buildMessagesListNotification(Context context, List<CharSequence> messagesStrings, BingRule bingRule) {
         try {
-            addNotificationChannel(context);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
+            addNotificationChannels(context);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, DEFAULT_NOTIFICATION_CHANNEL_ID);
             builder.setWhen(System.currentTimeMillis());
             builder.setContentTitle("");
             builder.setContentText(messagesStrings.get(0));
