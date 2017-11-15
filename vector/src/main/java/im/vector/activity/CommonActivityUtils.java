@@ -2014,6 +2014,14 @@ public class CommonActivityUtils {
     public static void exportKeys(final MXSession session, final String password, final ApiCallback<String>callback) {
         final Context appContext = VectorApp.getInstance();
 
+        if (null == session.getCrypto()) {
+            if (null != callback) {
+                callback.onMatrixError(new MatrixError("EMPTY", "No crypto"));
+            }
+
+            return;
+        }
+
         session.getCrypto().exportRoomKeys(password, new ApiCallback<byte[]>() {
             @Override
             public void onSuccess(byte[] bytesArray) {
