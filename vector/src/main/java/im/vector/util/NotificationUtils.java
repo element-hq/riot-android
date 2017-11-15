@@ -19,6 +19,8 @@ package im.vector.util;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -57,7 +59,6 @@ import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.receiver.DismissNotificationReceiver;
-import im.vector.services.EventStreamService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ import java.util.Random;
 public class NotificationUtils {
     private static final String LOG_TAG = "NotificationUtils";
 
-    public static final String QUICK_LAUNCH_ACTION = "EventStreamService.QUICK_LAUNCH_ACTION";
+    private static final String QUICK_LAUNCH_ACTION = "EventStreamService.QUICK_LAUNCH_ACTION";
     public static final String TAP_TO_VIEW_ACTION = "EventStreamService.TAP_TO_VIEW_ACTION";
     public static final String CAR_VOICE_REPLY_KEY = "EventStreamService.CAR_VOICE_REPLY_KEY";
     public static final String ACTION_MESSAGE_HEARD = "ACTION_MESSAGE_HEARD";
@@ -111,6 +112,61 @@ public class NotificationUtils {
         return roomName;
     }
 
+    // on devices >= android O, we need to define a channel for each notifications
+    public static final String LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID";
+    public static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOTIFICATION_CHANNEL_ID";
+    public static final String CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID";
+
+    public static String DEFAULT_NOTIFICATION_NAME = null;
+    public static String CALL_NOTIFICATION_NAME = null;
+    public static String LISTEN_FOR_EVENTS_NOTIFICATION_NAME = null;
+
+    /**
+     * Add a notification groups.
+     *
+     * @param context the context
+     */
+    @SuppressLint("NewApi")
+    public static void addNotificationChannels(Context context) {
+        if (Build.VERSION.SDK_INT < 26) {
+            return;
+        }
+
+        if (null == DEFAULT_NOTIFICATION_NAME) {
+            DEFAULT_NOTIFICATION_NAME = Matrix.getApplicationName();
+        }
+
+        if (null == CALL_NOTIFICATION_NAME) {
+            CALL_NOTIFICATION_NAME =  context.getString(R.string.call);
+        }
+
+        if (null == LISTEN_FOR_EVENTS_NOTIFICATION_NAME) {
+            LISTEN_FOR_EVENTS_NOTIFICATION_NAME =  context.getString(R.string.notification_listen_for_events);
+        }
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (null == notificationManager.getNotificationChannel(DEFAULT_NOTIFICATION_CHANNEL_ID)) {
+            NotificationChannel channel = new NotificationChannel(DEFAULT_NOTIFICATION_CHANNEL_ID, DEFAULT_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(DEFAULT_NOTIFICATION_NAME);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        if (null == notificationManager.getNotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)) {
+            NotificationChannel channel = new NotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID, LISTEN_FOR_EVENTS_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_MIN);
+            channel.setDescription(LISTEN_FOR_EVENTS_NOTIFICATION_NAME);
+            channel.setSound(null, null);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        if (null == notificationManager.getNotificationChannel(CALL_NOTIFICATION_CHANNEL_ID)) {
+            NotificationChannel channel = new NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID, CALL_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(CALL_NOTIFICATION_NAME);
+            channel.setSound(null, null);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
     /**
      * Build an incoming call notification.
      * This notification starts the VectorHomeActivity which is in charge of centralizing the incoming call flow.
@@ -123,7 +179,9 @@ public class NotificationUtils {
      */
     @SuppressLint("NewApi")
     public static Notification buildIncomingCallNotification(Context context, String roomName, String matrixId, String callId) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        addNotificationChannels(context);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID);
         builder.setWhen(System.currentTimeMillis());
 
         builder.setContentTitle(roomName);
@@ -132,7 +190,7 @@ public class NotificationUtils {
 
         // Display the incoming call notification on the lock screen
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_MAX);
+            builder.setPriority(NotificationCompat.PRIORITY_MAX);
         }
 
         // clear the activity stack to home activity
@@ -171,7 +229,9 @@ public class NotificationUtils {
      */
     @SuppressLint("NewApi")
     public static Notification buildPendingCallNotification(Context context, String roomName, String roomId, String matrixId, String callId) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        addNotificationChannels(context);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID);
         builder.setWhen(System.currentTimeMillis());
 
         builder.setContentTitle(roomName);
@@ -180,7 +240,7 @@ public class NotificationUtils {
 
         // Display the incoming call notification on the lock screen
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_MAX);
+            builder.setPriority(NotificationCompat.PRIORITY_MAX);
         }
 
         // Build the pending intent for when the notification is clicked
@@ -211,7 +271,7 @@ public class NotificationUtils {
      * @param bitmap the bitmap to "square"
      * @return the squared bitmap
      */
-    public static Bitmap createSquareBitmap(Bitmap bitmap) {
+    private static Bitmap createSquareBitmap(Bitmap bitmap) {
         Bitmap resizedBitmap = null;
 
         if (null != bitmap) {
@@ -309,14 +369,14 @@ public class NotificationUtils {
      * @param notifiedEventsByRoomId the notified events by room ids
      */
     private static void addTextStyleWithSeveralRooms(Context context,
-                                                     android.support.v7.app.NotificationCompat.Builder builder,
+                                                     NotificationCompat.Builder builder,
                                                      NotifiedEvent eventToNotify,
                                                      boolean isInvitationEvent,
                                                      Map<String, List<NotifiedEvent>> notifiedEventsByRoomId) {
         // TODO manage multi accounts
         MXSession session = Matrix.getInstance(context).getDefaultSession();
         IMXStore store = session.getDataHandler().getStore();
-        android.support.v7.app.NotificationCompat.InboxStyle inboxStyle = new android.support.v7.app.NotificationCompat.InboxStyle();
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         int sum = 0;
         int roomsCount = 0;
@@ -493,7 +553,7 @@ public class NotificationUtils {
      * @param notifiedEventsByRoomId the notified events by room ids
      */
     private static void addTextStyle(Context context,
-                                     android.support.v7.app.NotificationCompat.Builder builder,
+                                     NotificationCompat.Builder builder,
                                      NotifiedEvent eventToNotify,
                                      boolean isInvitationEvent,
                                      Map<String, List<NotifiedEvent>> notifiedEventsByRoomId) {
@@ -512,7 +572,7 @@ public class NotificationUtils {
         // TODO manage multi accounts
         MXSession session = Matrix.getInstance(context).getDefaultSession();
         IMXStore store = session.getDataHandler().getStore();
-        android.support.v7.app.NotificationCompat.InboxStyle inboxStyle = new android.support.v7.app.NotificationCompat.InboxStyle();
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         String roomId = notifiedEventsByRoomId.keySet().iterator().next();
 
@@ -545,7 +605,7 @@ public class NotificationUtils {
 
         // adapt the notification display to the number of notified messages
         if ((1 == notifiedEvents.size()) && (null != latestText)) {
-            builder.setStyle(new android.support.v7.app.NotificationCompat.BigTextStyle().bigText(latestText));
+            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(latestText));
         } else {
             if (unreadCount > MAX_NUMBER_NOTIFICATION_LINES) {
                 inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages, unreadCount));
@@ -676,36 +736,36 @@ public class NotificationUtils {
     /**
      * Add the notification sound.
      *
-     * @param context the context
-     * @param builder the notification builder
+     * @param context      the context
+     * @param builder      the notification builder
      * @param isBackground true if the notification is a background one
-     * @param isBing true if the notification should play sound
+     * @param isBing       true if the notification should play sound
      */
-    private static void manageNotificationSound(Context context, android.support.v7.app.NotificationCompat.Builder builder, boolean isBackground, boolean isBing) {
+    private static void manageNotificationSound(Context context, NotificationCompat.Builder builder, boolean isBackground, boolean isBing) {
         @ColorInt int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
         int defaultColor = Color.TRANSPARENT;
 
         if (isBackground) {
-            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
+            builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
             builder.setColor(defaultColor);
         } else if (isBing) {
-            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_HIGH);
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
             builder.setColor(highlightColor);
         } else {
-            builder.setPriority(android.support.v7.app.NotificationCompat.PRIORITY_DEFAULT);
+            builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
             builder.setColor(Color.TRANSPARENT);
         }
 
         if (!isBackground) {
             builder.setDefaults(Notification.DEFAULT_LIGHTS);
 
-            if (isBing) {
+            if (isBing && (null != PreferencesManager.getNotificationRingTone(context))) {
                 builder.setSound(PreferencesManager.getNotificationRingTone(context));
             }
 
             // turn the screen on for 3 seconds
             if (Matrix.getInstance(VectorApp.getInstance()).getSharedGCMRegistrationManager().isScreenTurnedOn()) {
-                PowerManager pm = (PowerManager)VectorApp.getInstance().getSystemService(Context.POWER_SERVICE);
+                PowerManager pm = (PowerManager) VectorApp.getInstance().getSystemService(Context.POWER_SERVICE);
                 PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "manageNotificationSound");
                 wl.acquire(3000);
                 wl.release();
@@ -796,7 +856,8 @@ public class NotificationUtils {
 
             String roomName = getRoomName(context, session, room, event);
 
-            android.support.v7.app.NotificationCompat.Builder builder = new android.support.v7.app.NotificationCompat.Builder(context);
+            addNotificationChannels(context);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, DEFAULT_NOTIFICATION_CHANNEL_ID);
             builder.setWhen(event.getOriginServerTs());
             builder.setContentTitle(roomName);
             builder.setContentText(body);
@@ -804,7 +865,7 @@ public class NotificationUtils {
             builder.setGroup(context.getString(R.string.riot_app_name));
             builder.setGroupSummary(true);
 
-            builder.setDeleteIntent(PendingIntent.getBroadcast(context.getApplicationContext(), 0,  new Intent(context.getApplicationContext(), DismissNotificationReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
+            builder.setDeleteIntent(PendingIntent.getBroadcast(context.getApplicationContext(), 0, new Intent(context.getApplicationContext(), DismissNotificationReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
             try {
                 addTextStyle(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId);
@@ -841,7 +902,8 @@ public class NotificationUtils {
      */
     public static Notification buildMessagesListNotification(Context context, List<CharSequence> messagesStrings, BingRule bingRule) {
         try {
-            android.support.v7.app.NotificationCompat.Builder builder = new android.support.v7.app.NotificationCompat.Builder(context);
+            addNotificationChannels(context);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, DEFAULT_NOTIFICATION_CHANNEL_ID);
             builder.setWhen(System.currentTimeMillis());
             builder.setContentTitle("");
             builder.setContentText(messagesStrings.get(0));
@@ -849,7 +911,7 @@ public class NotificationUtils {
             builder.setGroup(context.getString(R.string.riot_app_name));
             builder.setGroupSummary(true);
 
-            android.support.v7.app.NotificationCompat.InboxStyle inboxStyle = new android.support.v7.app.NotificationCompat.InboxStyle();
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
             for (int i = 0; i < Math.min(MAX_NUMBER_NOTIFICATION_LINES, messagesStrings.size()); i++) {
                 inboxStyle.addLine(messagesStrings.get(i));

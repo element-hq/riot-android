@@ -49,9 +49,11 @@ import im.vector.db.VectorContentProvider;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.ThemeUtils;
 
+/**
+ * Display a medias list.
+ */
 public class VectorMediasViewerActivity extends MXCActionBarActivity {
-
-    public static final String LOG_TAG = "VectorMediasViewerAct";
+    public static final String LOG_TAG = VectorMediasViewerActivity.class.getSimpleName();
 
     public static final String KEY_INFO_LIST = "ImageSliderActivity.KEY_INFO_LIST";
     public static final String KEY_INFO_LIST_INDEX = "ImageSliderActivity.KEY_INFO_LIST_INDEX";
@@ -61,13 +63,19 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
     public static final String EXTRA_MATRIX_ID = "ImageSliderActivity.EXTRA_MATRIX_ID";
 
+    // session
     private MXSession mSession;
-    private MXMediasCache mxMediasCache;
+
+    // the pager
     private ViewPager mViewPager;
+
+    // the pager adapter
     private VectorMediasViewerAdapter mAdapter;
 
+    // the medias list
     private List<SlidableMediaInfo> mMediasList;
 
+    // the slide effect
     public class DepthPageTransformer implements ViewPager.PageTransformer {
         private static final float MIN_SCALE = 0.75f;
 
@@ -128,27 +136,31 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
         mSession = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
 
-        if (mSession == null) {
+        if ((null == mSession) || !mSession.isAlive()) {
+            finish();
+            Log.d(LOG_TAG, "onCreate : invalid session");
+            return;
+        }
+
+        mMediasList = (List<SlidableMediaInfo>) intent.getSerializableExtra(KEY_INFO_LIST);
+
+        if ((null == mMediasList) || (0 == mMediasList.size())) {
             finish();
             return;
         }
 
-        mxMediasCache = mSession.getMediasCache();
-
-        mMediasList = (List<SlidableMediaInfo>)intent.getSerializableExtra(KEY_INFO_LIST);
-
         setContentView(R.layout.activity_vector_medias_viewer);
-        mViewPager =(ViewPager) findViewById(R.id.view_pager);
+        mViewPager = findViewById(R.id.view_pager);
 
-        int position = intent.getIntExtra(KEY_INFO_LIST_INDEX, 0);
+        int position = Math.min(intent.getIntExtra(KEY_INFO_LIST_INDEX, 0), mMediasList.size() - 1);
         int maxImageWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
         int maxImageHeight = intent.getIntExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, 0);
 
-        mAdapter = new VectorMediasViewerAdapter(this, mSession, mxMediasCache, mMediasList, maxImageWidth, maxImageHeight);
-        mAdapter.autoPlayItemAt(position);
+        mAdapter = new VectorMediasViewerAdapter(this, mSession, mSession.getMediasCache(), mMediasList, maxImageWidth, maxImageHeight);
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(position);
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
+        mAdapter.autoPlayItemAt(position);
+        mViewPager.setCurrentItem(position);
 
         if (null != VectorMediasViewerActivity.this.getSupportActionBar()) {
             VectorMediasViewerActivity.this.getSupportActionBar().setTitle(mMediasList.get(position).mFileName);

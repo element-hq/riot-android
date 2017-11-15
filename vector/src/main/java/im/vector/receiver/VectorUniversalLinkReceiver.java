@@ -238,15 +238,19 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
             aContext.startActivity(intent);
 
-            final Timer wakeup = new Timer();
-
-            wakeup.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    wakeup.cancel();
-                    manageRoomOnActivity(aContext);
-                }
-            }, 200);
+            try {
+                final Timer wakeup = new Timer();
+                wakeup.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        wakeup.cancel();
+                        manageRoomOnActivity(aContext);
+                    }
+                }, 200);
+            } catch (Throwable throwable) {
+                Log.e(LOG_TAG, "## manageRoomOnActivity timer creation failed " + throwable.getMessage());
+                manageRoomOnActivity(aContext);
+            }
         }
     }
 

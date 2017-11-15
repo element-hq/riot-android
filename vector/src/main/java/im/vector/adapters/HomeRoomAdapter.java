@@ -75,25 +75,28 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
 
     @Override
     public void onBindViewHolder(final RoomViewHolder viewHolder, int position) {
-        final Room room = mFilteredRooms.get(position);
-        if (mLayoutRes == R.layout.adapter_item_room_invite) {
-            final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
-            invitationViewHolder.populateViews(mContext, mSession, room, mInvitationListener, mMoreActionListener);
-        } else {
-            viewHolder.populateViews(mContext, mSession, room, mSession.getDirectChatRoomIdsList().contains(room.getRoomId()), false, mMoreActionListener);
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onSelectRoom(room, viewHolder.getAdapterPosition());
-                }
-            });
-            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mListener.onLongClickRoom(v, room, viewHolder.getAdapterPosition());
-                    return true;
-                }
-            });
+        // reported by a rage shake
+        if (position < mFilteredRooms.size()) {
+            final Room room = mFilteredRooms.get(position);
+            if (mLayoutRes == R.layout.adapter_item_room_invite) {
+                final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
+                invitationViewHolder.populateViews(mContext, mSession, room, mInvitationListener, mMoreActionListener);
+            } else {
+                viewHolder.populateViews(mContext, mSession, room, mSession.getDirectChatRoomIdsList().contains(room.getRoomId()), false, mMoreActionListener);
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onSelectRoom(room, viewHolder.getAdapterPosition());
+                    }
+                });
+                viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        mListener.onLongClickRoom(v, room, viewHolder.getAdapterPosition());
+                        return true;
+                    }
+                });
+            }
         }
     }
 

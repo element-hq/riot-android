@@ -211,7 +211,7 @@ public class BugReporter {
                             .addFormDataPart("user_agent", "Android")
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("device_id", deviceId)
-                            .addFormDataPart("version", Matrix.getInstance(context).getVersion(true))
+                            .addFormDataPart("version", Matrix.getInstance(context).getVersion(true, false))
                             .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
                             .addFormDataPart("matrix_sdk_version", matrixSdkVersion)
                             .addFormDataPart("olm_version",olmVersion)
@@ -220,6 +220,11 @@ public class BugReporter {
                             .addFormDataPart("locale", Locale.getDefault().toString())
                             .addFormDataPart("app_language", VectorApp.getApplicationLocale().toString())
                             .addFormDataPart("default_app_language", VectorApp.getDeviceLocale().toString());
+
+                    String buildNumber = context.getString(R.string.build_number);
+                    if (!TextUtils.isEmpty(buildNumber) && !buildNumber.equals("0")) {
+                        builder.addFormDataPart("build_number", buildNumber);
+                    }
 
                     // add the gzipped files
                     for (File file : gzippedFiles) {
@@ -730,7 +735,7 @@ public class BugReporter {
         return null;
     }
 
-    private static final int BUFFER_SIZE = 1024 * 1024 * 5;
+    private static final int BUFFER_SIZE = 1024 * 1024 * 50;
 
     private static final String[] LOGCAT_CMD_ERROR = new String[]{
             "logcat", ///< Run 'logcat' command
@@ -748,102 +753,6 @@ public class BugReporter {
             "-d",
             "-v",
             "threadtime",
-            "Retrofit:S",
-            "ProgressBar:S",
-            "AbsListView:S",
-            "dalvikvm:S",
-            "OpenGLRenderer:S",
-            "NativeCrypto:S",
-            "VelocityTracker:S",
-            "MaliEGL:S",
-            "GraphicBuffer:S",
-            "WifiStateMachine:S",
-            "ActivityThread:S",
-            "PowerManagerService:S",
-            "BufferQueue:S",
-            "KeyguardUpdateMonitor:S",
-            "wpa_supplicant:S",
-            "ANRManager:S",
-            "InputReader:S",
-            "PowerUI:S",
-            "BatteryService:S",
-            "qdhwcomposer:S",
-            "ServiceDumpSys:S",
-            "DisplayPowerController:S",
-            "View:S",
-            "ListView:S",
-            "Posix:S",
-            "chatty:S",
-            "ViewRootImpl:S",
-            "TextView:S",
-            "MotionRecognitionManager:S",
-            "DisplayListCanvas:S",
-            "AudioManager:S",
-            "irsc_util:S",
-            "QCamera2HWI:S",
-            "audio_hw_primary:S",
-            "msm8974_platform:S",
-            "ACDB-LOADER:S",
-            "platform_parser:S",
-            "audio_hw_ssr:S",
-            "audio_hw_spkr_prot:S",
-            "Thermal-Lib:S",
-            "AudioFlinger:S",
-            "EffectDiracSound:S",
-            "BufferProvider:S",
-            "MonoPipe:S",
-            "bt_a2dp_hw:S",
-            "r_submix:S",
-            "AudioPolicyManagerCustom:S",
-            "RadioService:S",
-            "mediaserver:S",
-            "ListenService:S",
-            "InstallerConnection:S",
-            "SystemServer:S",
-            "SystemServiceManager:S",
-            "BaseMiuiBroadcastManager:S",
-            "BatteryStatsImpl:S",
-            "IntentFirewall:S",
-            "ServiceThread:S",
-            "AppOps:S",
-            "DisplayManagerService:S",
-            "SELinuxMMAC:S",
-            "PackageManager:S",
-            "PackageParser:S",
-            "PreinstallApp:S",
-            "VoldConnector:S",
-            "SoundTriggerHelper:S",
-            "AutomaticBrightnessController:S",
-            "KeyguardServiceDelegate:S",
-            "VoiceInteractionManagerService:S",
-            "SystemServer:S",
-            "UsbAlsaManager:S",
-            "Telecom:S",
-            "LocationManagerInjector:S",
-            "LocationPolicy:S",
-            "MmsServiceBroker:S",
-            "MountService:S",
-            "ACodec:S",
-            "OMXNodeInstance:S",
-            "MM_OSAL:S",
-            "OMXNodeInstance:S",
-            "SoftMPEG4Encoder:S",
-            "audio_hw_extn:S",
-            "audio_hw_fm:S",
-            "ContextImpl:S",
-            "ActiveAndroid:S",
-            "bt_a2dp_hw:S",
-            "BroadcastQueueInjector:S",
-            "AutoStartManagerService:S",
-            "Ext4Crypt:S",
-            "MccTable:S",
-            "DiracAPI:S",
-            "skia:S",
-            "libc-netbsd:S",
-            "chromium:S",
-            "v8:S",
-            "PreferenceGroup:S",
-            "Preference:S",
             "*:*"
     };
 

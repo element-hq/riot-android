@@ -292,7 +292,10 @@ public class PhoneNumberUtils {
         if (null == e164Pn) {
             e164Pn = "";
             try {
-                e164Pn = PhoneNumberUtil.getInstance().format(getPhoneNumber(phoneNumber, countryCode), PhoneNumberUtil.PhoneNumberFormat.E164);
+                Phonenumber.PhoneNumber pn = getPhoneNumber(phoneNumber, countryCode);
+                if (null != pn) {
+                    e164Pn = PhoneNumberUtil.getInstance().format(pn, PhoneNumberUtil.PhoneNumberFormat.E164);
+                }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## getE164format() failed " + e.getMessage());
             }

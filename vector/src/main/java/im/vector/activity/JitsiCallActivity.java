@@ -133,7 +133,19 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         }
 
         mSession = Matrix.getMXSession(this, mWidget.getSessionId());
+        if (null == mSession) {
+            Log.e(LOG_TAG, "## onCreate() : undefined session ");
+            this.finish();
+            return;
+        }
+
+
         mRoom = mSession.getDataHandler().getRoom(mWidget.getRoomId());
+        if (null == mRoom) {
+            Log.e(LOG_TAG, "## onCreate() : undefined room " + mWidget.getRoomId());
+            this.finish();
+            return;
+        }
 
         mJitsiView = new JitsiMeetView(this);
 

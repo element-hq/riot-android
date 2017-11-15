@@ -473,7 +473,6 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="settings_enable_this_device">Notificaties voor dit apparaat aanzetten</string>
     <string name="settings_turn_screen_on">Het scherm voor drie seconden aanzetten</string>
 
-    <string name="settings_containing_my_name">Naambevattende berichten</string>
     <string name="settings_messages_in_one_to_one">Berichten in privé-chats</string>
     <string name="settings_messages_in_group_chat">Berichten in groepchats</string>
     <string name="settings_invited_to_room">Wanneer ik voor een groep ben uitgenodigd</string>

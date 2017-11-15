@@ -37,6 +37,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -48,6 +49,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -70,14 +72,13 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
-import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
+import im.vector.util.CallsManager;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
 import im.vector.util.ThemeUtils;
-import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
 
 /**
@@ -140,6 +141,11 @@ public class VectorApp extends MultiDexApplication {
     public VectorMarkdownParser mMarkdownParser;
 
     /**
+     * Calls manager
+     */
+    private CallsManager mCallsManager;
+
+    /**
      * @return the current instance
      */
     public static VectorApp getInstance() {
@@ -182,6 +188,7 @@ public class VectorApp extends MultiDexApplication {
         super.onCreate();
 
         instance = this;
+        mCallsManager = new CallsManager(this);
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
 
@@ -192,7 +199,7 @@ public class VectorApp extends MultiDexApplication {
             Log.e(LOG_TAG, "fails to retrieve the package info " + e.getMessage());
         }
 
-        VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true);
+        VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true, true);
 
         // not the first launch
         if (null != Matrix.getInstance(this).getDefaultSession()) {
@@ -271,6 +278,8 @@ public class VectorApp extends MultiDexApplication {
                     updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(activity));
                     restartActivity(activity);
                 }
+
+                listPermissionStatuses();
             }
 
             @Override
@@ -301,9 +310,6 @@ public class VectorApp extends MultiDexApplication {
                 }
             }
         });
-
-        // detect if the headset is plugged / unplugged.
-        registerReceiver(new HeadsetConnectionReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 
         // create the markdown parser
         try {
@@ -401,46 +407,75 @@ public class VectorApp extends MultiDexApplication {
     private void startActivityTransitionTimer() {
         Log.d(LOG_TAG, "## startActivityTransitionTimer()");
 
-        mActivityTransitionTimer = new Timer();
-        mActivityTransitionTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                // reported by GA
-                try {
-                    if (mActivityTransitionTimerTask != null) {
-                        mActivityTransitionTimerTask.cancel();
-                        mActivityTransitionTimerTask = null;
+        try {
+            mActivityTransitionTimer = new Timer();
+            mActivityTransitionTimerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    // reported by GA
+                    try {
+                        if (mActivityTransitionTimerTask != null) {
+                            mActivityTransitionTimerTask.cancel();
+                            mActivityTransitionTimerTask = null;
+                        }
+
+                        if (mActivityTransitionTimer != null) {
+                            mActivityTransitionTimer.cancel();
+                            mActivityTransitionTimer = null;
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## startActivityTransitionTimer() failed " + e.getMessage());
                     }
 
-                    if (mActivityTransitionTimer != null) {
-                        mActivityTransitionTimer.cancel();
-                        mActivityTransitionTimer = null;
-                    }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## startActivityTransitionTimer() failed " + e.getMessage());
-                }
-
-                if (null != mCurrentActivity) {
-                    Log.e(LOG_TAG, "## startActivityTransitionTimer() : the timer expires but there is an active activity.");
-                } else {
-                    VectorApp.this.mIsInBackground = true;
-                    mIsCallingInBackground = (null != VectorCallViewActivity.getActiveCall());
-
-                    // if there is a pending call
-                    // the application is not suspended
-                    if (!mIsCallingInBackground) {
-                        Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
-                        CommonActivityUtils.displayMemoryInformation(null, " app suspended");
-                        suspendApp();
+                    if (null != mCurrentActivity) {
+                        Log.e(LOG_TAG, "## startActivityTransitionTimer() : the timer expires but there is an active activity.");
                     } else {
-                        Log.d(LOG_TAG, "App not suspended due to call in progress");
+                        VectorApp.this.mIsInBackground = true;
+                        mIsCallingInBackground = (null != mCallsManager.getActiveCall());
+
+                        // if there is a pending call
+                        // the application is not suspended
+                        if (!mIsCallingInBackground) {
+                            Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
+                            CommonActivityUtils.displayMemoryInformation(null, " app suspended");
+                            suspendApp();
+                        } else {
+                            Log.d(LOG_TAG, "App not suspended due to call in progress");
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        mActivityTransitionTimer.schedule(mActivityTransitionTimerTask, MAX_ACTIVITY_TRANSITION_TIME_MS);
+            mActivityTransitionTimer.schedule(mActivityTransitionTimerTask, MAX_ACTIVITY_TRANSITION_TIME_MS);
+        } catch (Throwable throwable) {
+            Log.e(LOG_TAG, "## startActivityTransitionTimer() : failed to start the timer " + throwable.getMessage());
+
+            if (null != mActivityTransitionTimer) {
+                mActivityTransitionTimer.cancel();
+                mActivityTransitionTimer = null;
+            }
+        }
     }
+
+    /**
+     * List the used permissions statuses.
+     */
+    private void listPermissionStatuses() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            final List<String> permissions = Arrays.asList(
+                    android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.RECORD_AUDIO,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    android.Manifest.permission.READ_CONTACTS);
+
+            Log.d(LOG_TAG, "## listPermissionStatuses() : list the permissions used by the app");
+            for (String permission : permissions) {
+                Log.d(LOG_TAG, "Status of [" + permission + "] : " +
+                        ((PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(instance, permission)) ? "PERMISSION_GRANTED" : "PERMISSION_DENIED"));
+            }
+        }
+    }
+
 
     /**
      * Stop the background detection.
@@ -479,27 +514,16 @@ public class VectorApp extends MultiDexApplication {
             ContactsManager.getInstance().clearSnapshot();
             ContactsManager.getInstance().refreshLocalContactsSnapshot();
 
-            boolean hasActiveCall = false;
-
-            ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
+            List<MXSession> sessions = Matrix.getInstance(this).getSessions();
             for (MXSession session : sessions) {
                 session.getMyUser().refreshUserInfos(null);
                 session.setIsOnline(true);
                 session.setSyncDelay(0);
                 session.setSyncTimeout(0);
-                hasActiveCall |= session.getDataHandler().getCallsManager().hasActiveCalls();
                 addSyncingSession(session);
             }
 
-            // detect if an infinite ringing has been triggered
-            if (VectorCallSoundManager.isRinging() && !hasActiveCall && (null != EventStreamService.getInstance())) {
-                Log.e(LOG_TAG, "## suspendApp() : fix an infinite ringing");
-                EventStreamService.getInstance().hideCallNotifications();
-
-                if (VectorCallSoundManager.isRinging()) {
-                    VectorCallSoundManager.stopRinging();
-                }
-            }
+            mCallsManager.checkDeadCalls();
         }
 
         MyPresenceManager.advertiseAllOnline();
@@ -542,6 +566,10 @@ public class VectorApp extends MultiDexApplication {
         }
 
         mCurrentActivity = activity;
+
+        if (null != mCurrentActivity) {
+            KeyRequestHandler.getSharedInstance().processNextRequest();
+        }
     }
 
     /**

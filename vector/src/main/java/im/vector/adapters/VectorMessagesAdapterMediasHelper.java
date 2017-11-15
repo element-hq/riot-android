@@ -60,8 +60,6 @@ import im.vector.listeners.IMessagesAdapterActionsListener;
 public class VectorMessagesAdapterMediasHelper {
     private static final String LOG_TAG = "AdapterMediasHelper";
 
-    private final HashMap<String, String> mMediaDownloadIdByEventId = new HashMap<>();
-
     private final MXSession mSession;
     private final Context mContext;
     private final int mMaxImageWidth;
@@ -260,12 +258,6 @@ public class VectorMessagesAdapterMediasHelper {
             } else {
                 downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
             }
-
-            // check the progress value
-            // display the progress layout only if the video is downloading
-            if (mMediasCache.getProgressValueForDownloadId(downloadId) < 0) {
-                downloadId = null;
-            }
         }
 
         final View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
@@ -383,7 +375,7 @@ public class VectorMessagesAdapterMediasHelper {
      */
     void managePendingImageVideoUpload(final View convertView, final Event event, Message message) {
         final View uploadProgressLayout = convertView.findViewById(R.id.content_upload_progress_layout);
-        final ProgressBar uploadSpinner = (ProgressBar) convertView.findViewById(R.id.upload_event_spinner);
+        final ProgressBar uploadSpinner = convertView.findViewById(R.id.upload_event_spinner);
 
         final boolean isVideoMessage = message instanceof VideoMessage;
 
@@ -412,7 +404,7 @@ public class VectorMessagesAdapterMediasHelper {
             uploadingUrl = ((VideoMessage) message).info.thumbnail_url;
             isUploadingThumbnail = ((VideoMessage) message).isThumbnailLocalContent();
         } else {
-            uploadingUrl = ((ImageMessage) message).thumbnailUrl;
+            uploadingUrl = ((ImageMessage) message).info.thumbnailUrl;
             isUploadingThumbnail = ((ImageMessage) message).isThumbnailLocalContent();
         }
 
@@ -564,13 +556,6 @@ public class VectorMessagesAdapterMediasHelper {
      */
     void managePendingFileDownload(View convertView, final Event event, FileMessage fileMessage, final int position) {
         String downloadId = mMediasCache.downloadIdFromUrl(fileMessage.getUrl());
-
-        // check the progress value
-        // display the progress layout only if the file is downloading
-        if (mMediasCache.getProgressValueForDownloadId(downloadId) < 0) {
-            downloadId = null;
-        }
-
         final View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
 
         if (null == downloadProgressLayout) {
@@ -667,7 +652,7 @@ public class VectorMessagesAdapterMediasHelper {
      * @param downloadProgressLayout the download progress layout
      */
     private void refreshDownloadViews(final Event event, final IMXMediaDownloadListener.DownloadStats downloadStats, final View downloadProgressLayout) {
-        if ((null != downloadStats) && isMediaDownloading(event, downloadStats.mDownloadId)) {
+        if ((null != downloadStats) && isMediaDownloading(event)) {
             downloadProgressLayout.setVisibility(View.VISIBLE);
 
             TextView downloadProgressStatsTextView = (TextView) downloadProgressLayout.findViewById(R.id.media_progress_text_view);
@@ -706,37 +691,29 @@ public class VectorMessagesAdapterMediasHelper {
      * Tells if the downloadId is the media download id.
      *
      * @param event      the event
-     * @param downloadId the download id.
      * @return true if the media is downloading (not the thumbnail)
      */
-    private boolean isMediaDownloading(Event event, String downloadId) {
-        String mediaDownloadId = mMediaDownloadIdByEventId.get(event.eventId);
+    private boolean isMediaDownloading(Event event) {
 
-        if (null == mediaDownloadId) {
-            mediaDownloadId = "";
+        if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE)) {
+            Message message = JsonUtils.toMessage(event.getContent());
 
-            if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE)) {
-                Message message = JsonUtils.toMessage(event.getContent());
+            String url = null;
 
-                String url = null;
-
-                if (TextUtils.equals(message.msgtype, Message.MSGTYPE_IMAGE)) {
-                    url = JsonUtils.toImageMessage(event.getContent()).getUrl();
-                } else if (TextUtils.equals(message.msgtype, Message.MSGTYPE_VIDEO)) {
-                    url = JsonUtils.toVideoMessage(event.getContent()).getUrl();
-                } else if (TextUtils.equals(message.msgtype, Message.MSGTYPE_FILE)) {
-                    url = JsonUtils.toFileMessage(event.getContent()).getUrl();
-                }
-
-                if (!TextUtils.isEmpty(url)) {
-                    mediaDownloadId = mSession.getMediasCache().downloadIdFromUrl(url);
-                }
+            if (TextUtils.equals(message.msgtype, Message.MSGTYPE_IMAGE)) {
+                url = JsonUtils.toImageMessage(event.getContent()).getUrl();
+            } else if (TextUtils.equals(message.msgtype, Message.MSGTYPE_VIDEO)) {
+                url = JsonUtils.toVideoMessage(event.getContent()).getUrl();
+            } else if (TextUtils.equals(message.msgtype, Message.MSGTYPE_FILE)) {
+                url = JsonUtils.toFileMessage(event.getContent()).getUrl();
             }
 
-            mMediaDownloadIdByEventId.put(event.eventId, mediaDownloadId);
+            if (!TextUtils.isEmpty(url)) {
+                return null != mSession.getMediasCache().downloadIdFromUrl(url);
+            }
         }
 
-        return TextUtils.equals(mediaDownloadId, downloadId);
+        return false;
     }
 
     //==============================================================================================================

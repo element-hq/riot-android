@@ -101,6 +101,12 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
 
         final Intent intent = getIntent();
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));
+
+        if ((null == mSession) || !mSession.isAlive()) {
+            finish();
+            return;
+        }
+
         mThreePid = (ThreePid) intent.getSerializableExtra(EXTRA_PID);
 
         mPhoneNumberCode.addTextChangedListener(this);

@@ -85,9 +85,13 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         super.cancelCatchingRequests();
         mIsBackPaginating = false;
         mCanPaginateBack = true;
-        mRoom.cancelRemoteHistoryRequest();
-        mNextBatch = mRoom.getLiveState().getToken();
-        mSession.getDataHandler().resetReplayAttackCheckInTimeline(mTimeLineId);
+        if (null != mRoom) {
+            mRoom.cancelRemoteHistoryRequest();
+            mNextBatch = mRoom.getLiveState().getToken();
+        }
+        if (null != mSession) {
+            mSession.getDataHandler().resetReplayAttackCheckInTimeline(mTimeLineId);
+        }
     }
 
     @Override

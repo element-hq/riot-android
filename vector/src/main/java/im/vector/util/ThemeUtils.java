@@ -36,8 +36,9 @@ import im.vector.activity.AccountCreationActivity;
 import im.vector.activity.CountryPickerActivity;
 import im.vector.activity.FallbackLoginActivity;
 import im.vector.activity.HistoricalRoomsActivity;
-import im.vector.activity.InComingCallActivity;
 import im.vector.activity.LanguagePickerActivity;
+import im.vector.activity.LockScreenActivity;
+import im.vector.activity.LoggingOutActivity;
 import im.vector.activity.LoginActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.PhoneNumberVerificationActivity;
@@ -134,8 +135,6 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Dark);
             } else if (activity instanceof HistoricalRoomsActivity) {
                 activity.setTheme(R.style.HomeActivityTheme_Dark);
-            } else if (activity instanceof InComingCallActivity) {
-                activity.setTheme(R.style.CallAppTheme_Dark);
             } else if (activity instanceof LanguagePickerActivity) {
                 activity.setTheme(R.style.CountryPickerTheme_Dark);
             } else if (activity instanceof LoginActivity) {
@@ -147,6 +146,8 @@ public class ThemeUtils {
             } else if (activity instanceof RoomDirectoryPickerActivity) {
                 activity.setTheme(R.style.DirectoryPickerTheme_Dark);
             } else if (activity instanceof SplashActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
+            } else if (activity instanceof LoggingOutActivity) {
                 activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
             } else if (activity instanceof VectorBaseSearchActivity) {
                 activity.setTheme(R.style.SearchesAppTheme_Dark);
@@ -172,6 +173,8 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Dark);
             } else if (activity instanceof VectorUniversalLinkActivity) {
                 activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof LockScreenActivity) {
+                activity.setTheme(R.style.Vector_Lock_Dark);
             }
         }
 
@@ -186,8 +189,6 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Black);
             } else if (activity instanceof HistoricalRoomsActivity) {
                 activity.setTheme(R.style.HomeActivityTheme_Black);
-            } else if (activity instanceof InComingCallActivity) {
-                activity.setTheme(R.style.CallAppTheme_Black);
             } else if (activity instanceof LanguagePickerActivity) {
                 activity.setTheme(R.style.CountryPickerTheme_Black);
             } else if (activity instanceof LoginActivity) {
@@ -199,6 +200,8 @@ public class ThemeUtils {
             } else if (activity instanceof RoomDirectoryPickerActivity) {
                 activity.setTheme(R.style.DirectoryPickerTheme_Black);
             } else if (activity instanceof SplashActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Black);
+            } else if (activity instanceof LoggingOutActivity) {
                 activity.setTheme(R.style.AppTheme_NoActionBar_Black);
             } else if (activity instanceof VectorBaseSearchActivity) {
                 activity.setTheme(R.style.SearchesAppTheme_Black);
@@ -224,6 +227,15 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Black);
             } else if (activity instanceof VectorUniversalLinkActivity) {
                 activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof LockScreenActivity) {
+                activity.setTheme(R.style.Vector_Lock_Black);
+            }
+        }
+
+        if (TextUtils.equals(getApplicationTheme(activity), THEME_LIGHT_VALUE)) {
+            // Specific quirk for quick reply screen
+            if (activity instanceof LockScreenActivity) {
+                activity.setTheme(R.style.Vector_Lock_Light);
             }
         }
 

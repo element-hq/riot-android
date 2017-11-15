@@ -115,6 +115,11 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
         final Intent intent = getIntent();
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));
 
+        if ((null == mSession) || !mSession.isAlive()) {
+            finish();
+            return;
+        }
+
         initViews();
     }
 

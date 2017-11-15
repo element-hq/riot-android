@@ -382,7 +382,18 @@ public class CommonActivityUtils {
         Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
         // clear the preferences when the application goes to the login screen.
         if (goToLoginPage) {
+            // display a dummy activity until the logout is done
             Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
+
+            if (null != activity) {
+                // go to login page
+                activity.startActivity(new Intent(activity, LoggingOutActivity.class));
+                activity.finish();
+            } else {
+                Intent intent = new Intent(context, LoggingOutActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(intent);
+            }
         }
 
         // clear credentials
@@ -402,10 +413,11 @@ public class CommonActivityUtils {
                 MXMediasCache.clearThumbnailsCache(context);
 
                 if (goToLoginPage) {
-                    if (null != activity) {
+                    Activity activeActivity = VectorApp.getCurrentActivity();
+                    if (null != activeActivity) {
                         // go to login page
-                        activity.startActivity(new Intent(activity, LoginActivity.class));
-                        activity.finish();
+                        activeActivity.startActivity(new Intent(activeActivity, LoginActivity.class));
+                        activeActivity.finish();
                     } else {
                         Intent intent = new Intent(context, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -1722,39 +1734,6 @@ public class CommonActivityUtils {
     }
 
     //==============================================================================================================
-    // call utils
-    //==============================================================================================================
-
-    /**
-     * Display a toast message according to the end call reason.
-     *
-     * @param aCallingActivity calling activity
-     * @param aCallEndReason   define the reason of the end call
-     */
-    public static void processEndCallInfo(Activity aCallingActivity, int aCallEndReason) {
-        if (null != aCallingActivity) {
-            if (IMXCall.END_CALL_REASON_UNDEFINED != aCallEndReason) {
-                switch (aCallEndReason) {
-                    case IMXCall.END_CALL_REASON_PEER_HANG_UP:
-                        if (aCallingActivity instanceof InComingCallActivity) {
-                            CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_cancelled_call));
-                        } else {
-                            // let VectorCallActivity manage its
-                        }
-                        break;
-
-                    case IMXCall.END_CALL_REASON_PEER_HANG_UP_ELSEWHERE:
-                        CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_hangup_elsewhere));
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-
-    //==============================================================================================================
     // room utils
     //==============================================================================================================
 
@@ -2017,6 +1996,9 @@ public class CommonActivityUtils {
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (null != callback) {
+                    callback.onSuccess(null);
+                }
             }
         });
 
@@ -2122,7 +2104,11 @@ public class CommonActivityUtils {
         }
 
         fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, listener);
-        fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+        try {
+            fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## displayUnknownDevicesDialog() failed : " + e.getMessage());
+        }
     }
 
     /**

@@ -21,6 +21,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- required on android 6.0.0 devices -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <!-- shared files from external application -->
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
@@ -61,7 +64,9 @@
     <uses-permission android:name="com.majeur.launcher.permission.UPDATE_BADGE" />
 
     <!-- bluetooth headset -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+
     <uses-feature
         android:name="android.hardware.bluetooth"
         android:required="false" />
@@ -107,10 +112,17 @@
             android:name="im.vector.activity.FallbackLoginActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/login"></activity>
+
         <activity
             android:name="im.vector.activity.SplashActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity
+            android:name="im.vector.activity.LoggingOutActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <activity
             android:name="im.vector.activity.VectorHomeActivity"
             android:configChanges="orientation|screenSize"
@@ -202,15 +214,6 @@
             android:theme="@android:style/Theme.Holo.Light.Dialog" />
 
         <activity
-            android:name="im.vector.activity.InComingCallActivity"
-            android:clearTaskOnLaunch="true"
-            android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTop"
-            android:taskAffinity=""
-            android:theme="@style/CallAppTheme" />
-
-        <activity
             android:name="im.vector.activity.VectorMediasViewerActivity"
             android:configChanges="orientation|screenSize"
             android:label="a filename"
@@ -245,7 +248,6 @@
 
         <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/media_picker_both_capture_title"
             android:launchMode="singleTop"
             android:parentActivityName="im.vector.activity.VectorRoomActivity"

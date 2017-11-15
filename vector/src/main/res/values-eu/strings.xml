@@ -456,7 +456,6 @@ Ziur zaude?</string>
     <string name="settings_enable_this_device">Gaitu jakinarazpenak gailu honetan</string>
     <string name="settings_turn_screen_on">Piztu pantaila 3 segundoz</string>
 
-    <string name="settings_containing_my_name">Nire izena aipatzen duten mezuak</string>
     <string name="settings_messages_in_one_to_one">Biren arteko txatetako mezuak</string>
     <string name="settings_messages_in_group_chat">Talde txatetako mezuak</string>
     <string name="settings_invited_to_room">Gela batera gonbidatzen nautenean</string>

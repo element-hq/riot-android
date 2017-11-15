@@ -475,7 +475,6 @@
     <string name="settings_enable_this_device">Abilita notifiche per questo dispositivo</string>
     <string name="settings_turn_screen_on">Accendi lo schermo per 3 secondi alla notifica</string>
 
-    <string name="settings_containing_my_name">Messaggi contenenti il mio nome</string>
     <string name="settings_messages_in_one_to_one">Messaggi nelle chat a due</string>
     <string name="settings_messages_in_group_chat">Messaggi nelle chat di gruppo</string>
     <string name="settings_invited_to_room">Quando ricevi un invito in una stanza</string>

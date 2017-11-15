@@ -21,14 +21,14 @@
         <item name="primary_control_color">@android:color/white</item>
 
         <!-- application bar text hint color -->
-        <item name="primary_hint_text_color">#BBE7D3</item>
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_light</item>
 
         <!-- default text colors -->
-        <item name="riot_primary_text_color">#FF3C3C3C</item>
-        <item name="default_text_hint_color">#903C3C3C</item>
-        <item name="default_text_light_color">#8E000000</item>
-        <item name="default_button_light_text_color">#FF747474</item>
-        <item name="default_text_dark_color">#FF212121</item>
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_light</item>
+        <item name="default_text_hint_color">@color/default_text_hint_color_light</item>
+        <item name="default_text_light_color">@color/default_text_light_color_light</item>
+        <item name="default_button_light_text_color">@color/default_button_light_text_light</item>
+        <item name="default_text_dark_color">@color/default_text_light_color_light</item>
 
         <!-- room message colors -->
         <item name="unsent_message_text_color">#FFFF4444</item>
@@ -112,14 +112,14 @@
         <item name="primary_control_color">#5EA584</item>
 
         <!-- application bar text hint color -->
-        <item name="primary_hint_text_color">#BBE7D3</item>
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_dark</item>
 
         <!-- default text colors -->
-        <item name="riot_primary_text_color">#dddddd</item>
-        <item name="default_text_hint_color">#CCDDDDDD</item>
-        <item name="default_text_light_color">#A4A4A4</item>
-        <item name="default_button_light_text_color">#FF747474</item>
-        <item name="default_text_dark_color">#DEDEDE</item>
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
+        <item name="default_text_hint_color">@color/default_text_hint_color_dark</item>
+        <item name="default_text_light_color">@color/default_text_light_color_dark</item>
+        <item name="default_button_light_text_color">@color/default_button_light_text_dark</item>
+        <item name="default_text_dark_color">@color/default_text_light_color_dark</item>
 
         <!-- room message colors -->
         <item name="unsent_message_text_color">#FFFF4444</item>
@@ -188,5 +188,24 @@
         <item name="avatar_mask">@drawable/avatar_mask_black</item>
         <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_black</item>
         <item name="markdown_block_background_color">#FF4D4D4D</item>
+    </style>
+
+    <style name="Theme.Vector.EmptyLight" parent="">
+        <item name="primary_color">@color/primary_color_light</item>
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_light</item>
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_light</item>
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_light</item>
+        <item name="message_text_color">?attr/riot_primary_text_color</item>
+    </style>
+    <style name="Theme.Vector.EmptyDark" parent="">
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_dark</item>
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_dark</item>
+        <item name="primary_color">@color/primary_color_dark</item>
+        <item name="message_text_color">?attr/riot_primary_text_color</item>
+    </style>
+    <style name="Theme.Vector.EmptyBlack" parent="@style/Theme.Vector.EmptyDark">
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
+        <item name="primary_color">@color/riot_primary_background_color_black</item>
     </style>
 </resources>

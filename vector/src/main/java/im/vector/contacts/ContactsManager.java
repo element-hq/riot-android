@@ -81,7 +81,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     private List<Contact> mContactsList = null;
 
     // the listeners
-    private ArrayList<ContactsManagerListener> mListeners = null;
+    private List<ContactsManagerListener> mListeners = new ArrayList<>();
 
     // a contacts population is in progress
     private boolean mIsPopulating = false;
@@ -116,13 +116,11 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
          * @param mxid the mxid
          */
         private void onContactPresenceUpdate(Contact contact, Contact.MXID mxid) {
-            if (null != mListeners) {
-                for (ContactsManagerListener listener : mListeners) {
-                    try {
-                        listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getMessage());
-                    }
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getMessage());
                 }
             }
         }
@@ -131,13 +129,11 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
          * Warn that some PIDs have been retrieved from the contacts data.
          */
         private void onPIDsUpdate() {
-            if (null != mListeners) {
-                for (ContactsManagerListener listener : mListeners) {
-                    try {
-                        listener.onPIDsUpdate();
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onPIDsUpdate failed " + e.getMessage());
-                    }
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onPIDsUpdate();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onPIDsUpdate failed " + e.getMessage());
                 }
             }
         }
@@ -182,7 +178,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
             MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
 
-            if ((null != session) && (null != mContactsList)) {
+            if ((null != session) && session.isAlive() && (null != mContactsList)) {
                 for (final Contact contact : mContactsList) {
                     Set<String> medias = contact.getMatrixIdMediums();
 
@@ -291,7 +287,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * reset
      */
     public void reset() {
-        mListeners = null;
+        mListeners.clear();
         clearSnapshot();
     }
 
@@ -347,11 +343,9 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @param listener the listener to add.
      */
     public void addListener(ContactsManagerListener listener) {
-        if (null == mListeners) {
-            mListeners = new ArrayList<>();
+        if (null != listener) {
+            mListeners.add(listener);
         }
-
-        mListeners.add(listener);
     }
 
     /**
@@ -360,7 +354,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @param listener the listener to remove.
      */
     public void removeListener(ContactsManagerListener listener) {
-        if (null != mListeners) {
+        if (null != listener) {
             mListeners.remove(listener);
         }
     }
@@ -595,22 +589,20 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                     // the PIDs retrieval is done on demand.
                 }
 
-                if (null != mListeners) {
-                    Handler handler = new Handler(Looper.getMainLooper());
+                Handler handler = new Handler(Looper.getMainLooper());
 
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (ContactsManagerListener listener : mListeners) {
-                                try {
-                                    listener.onRefresh();
-                                } catch (Exception e) {
-                                    Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getMessage());
-                                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (ContactsManagerListener listener : mListeners) {
+                            try {
+                                listener.onRefresh();
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getMessage());
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         });
 

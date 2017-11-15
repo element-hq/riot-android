@@ -309,7 +309,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
         else {
             mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
-            if (null != mSession) {
+            if ((null != mSession) && mSession.isAlive()) {
                 mRoom = mSession.getDataHandler().getRoom(roomId);
                 mBingRulesManager = mSession.getDataHandler().getBingRulesManager();
             }

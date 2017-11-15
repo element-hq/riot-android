@@ -86,7 +86,8 @@ public class PreferencesManager {
     public static final String SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY = "SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY";
     public static final String SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY = "SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY";
     public static final String SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY = "SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY";
-    public static final String SETTINGS_CONTAINING_MY_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_NAME_PREFERENCE_KEY";
+    public static final String SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY";
+    public static final String SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY";
     public static final String SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY";
     public static final String SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY";
     public static final String SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY";
@@ -224,11 +225,21 @@ public class PreferencesManager {
     public static void setNotificationRingTone(Context context, Uri uri) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
+
+        String value = "";
+
         if (null != uri) {
-            editor.putString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, uri.toString());
-        } else {
-            editor.remove(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY);
+            value = uri.toString();
+
+            if (value.startsWith("file://")) {
+                // it should never happen
+                // else android.os.FileUriExposedException will be triggered.
+                // see https://github.com/vector-im/riot-android/issues/1725
+                return;
+            }
         }
+
+        editor.putString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, value);
         editor.commit();
     }
 
@@ -239,9 +250,16 @@ public class PreferencesManager {
      */
     public static Uri getNotificationRingTone(Context context) {
         String url = PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, null);
+
+        // the user selects "None"
+        if (TextUtils.equals(url, "")) {
+            return null;
+        }
+
         Uri uri = null;
 
-        if (null != url) {
+        // https://github.com/vector-im/riot-android/issues/1725
+        if ((null != url) && !url.startsWith("file://")) {
             try {
                 uri = Uri.parse(url);
             } catch (Exception e) {
@@ -264,6 +282,11 @@ public class PreferencesManager {
      */
     public static String getNotificationRingToneName(Context context) {
         Uri toneUri = getNotificationRingTone(context);
+
+        if (null == toneUri) {
+            return null;
+        }
+
         String name = null;
 
         Cursor cursor = null;

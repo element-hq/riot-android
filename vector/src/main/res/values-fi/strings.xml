@@ -483,7 +483,6 @@
     <string name="settings_enable_this_device">Ota käyttöön ilmoitukset tällä laitteella</string>
     <string name="settings_turn_screen_on">Näyttö päälle kolmeksi sekunniksi</string>
 
-    <string name="settings_containing_my_name">Viestit nimelläni</string>
     <string name="settings_messages_in_one_to_one">Viestit yksityiskeskusteluissa</string>
     <string name="settings_messages_in_group_chat">Viestit ryhmäkeskusteluissa</string>
     <string name="settings_invited_to_room">Kun minut kutsutaan huoneeseen</string>

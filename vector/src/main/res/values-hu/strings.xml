@@ -456,7 +456,6 @@ Biztos vagy benne?</string>
     <string name="settings_enable_this_device">Értesítések engedélyezése ehhez a készülékhez</string>
     <string name="settings_turn_screen_on">Kapcsolja be a képernyőt 3 másodpercre</string>
 
-    <string name="settings_containing_my_name">Üzenetek amik tartalmazzák a nevemet</string>
     <string name="settings_messages_in_one_to_one">Üzenetek közvetlen (1-1) csevegéseknél</string>
     <string name="settings_messages_in_group_chat">Üzenetek több résztvevős csevegéseknél</string>
     <string name="settings_invited_to_room">Amikor meghívnak egy szobába</string>

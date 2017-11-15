@@ -673,7 +673,7 @@ public class VectorUtils {
      * @return the version. an empty string is not found.
      */
     public static String getApplicationVersion(final Context context) {
-        return im.vector.Matrix.getInstance(context).getVersion(false);
+        return im.vector.Matrix.getInstance(context).getVersion(false, true);
     }
 
     /**

@@ -128,7 +128,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
         Intent intent = getIntent();
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_SESSION_ID));
 
-        if (null == mSession) {
+        if ((null == mSession) || !mSession.isAlive()) {
             Log.e(LOG_TAG, "## onCreate() : invalid session");
             finish();
             return;

@@ -229,7 +229,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         mSession = Matrix.getInstance(appContext).getSession(matrixId);
 
         // sanity checks
-        if (null == mSession) {
+        if ((null == mSession) || !mSession.isAlive()) {
             getActivity().finish();
             return;
         }
@@ -243,7 +243,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             mPushesRuleByResourceId.put(PreferencesManager.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY, BingRule.RULE_ID_DISABLE_ALL);
             mPushesRuleByResourceId.put(PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, DUMMY_RULE);
             mPushesRuleByResourceId.put(PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY, DUMMY_RULE);
-            mPushesRuleByResourceId.put(PreferencesManager.SETTINGS_CONTAINING_MY_NAME_PREFERENCE_KEY, BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
+            mPushesRuleByResourceId.put(PreferencesManager.SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY, BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
+            mPushesRuleByResourceId.put(PreferencesManager.SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY, BingRule.RULE_ID_CONTAIN_USER_NAME);
             mPushesRuleByResourceId.put(PreferencesManager.SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY, BingRule.RULE_ID_ONE_TO_ONE_ROOM);
             mPushesRuleByResourceId.put(PreferencesManager.SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY, BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS);
             mPushesRuleByResourceId.put(PreferencesManager.SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY, BingRule.RULE_ID_INVITE_ME);
@@ -276,7 +277,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(getActivity()));
+
+                if (null != PreferencesManager.getNotificationRingTone(getActivity())) {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(getActivity()));
+                }
                 getActivity().startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE);
                 return false;
             }
@@ -1745,7 +1749,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 @Override
                 public void run() {
                     if (!TextUtils.isEmpty(errorMessage)) {
-                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VectorApp.getInstance(), errorMessage, Toast.LENGTH_SHORT).show();
                     }
                     hideLoadingView();
                 }

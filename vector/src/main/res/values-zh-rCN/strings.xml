@@ -314,7 +314,6 @@
 
     <string name="settings_enable_all_notif">启用这个账户的通知</string>
     <string name="settings_enable_this_device">启用这个设备的通知</string>
-    <string name="settings_containing_my_name">含有我的名字的消息</string>
     <string name="settings_messages_in_one_to_one">一对一聊天的消息</string>
     <string name="settings_messages_in_group_chat">群聊的消息</string>
     <string name="settings_invited_to_room">当我被邀请到一个聊天室的时候</string>
