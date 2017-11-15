@@ -194,7 +194,6 @@
     <string name="settings_notification_ringtone">通知音</string>
     <string name="settings_enable_all_notif">このアカウントで通知を許可</string>
     <string name="settings_enable_this_device">この端末で通知を許可</string>
-    <string name="settings_containing_my_name">自分の名前が発言に含まれたとき</string>
     <string name="settings_messages_in_one_to_one">1対1対話に発言されたとき</string>
     <string name="settings_messages_in_group_chat">部屋で発言されたとき</string>
     <string name="settings_invited_to_room">部屋へ招待されたとき</string>
