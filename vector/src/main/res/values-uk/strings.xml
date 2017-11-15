@@ -486,7 +486,7 @@
     <string name="settings_enable_all_notif">Увімкнути сповіщення для цього облікового запису</string>
     <string name="settings_enable_this_device">Увімкнути сповіщення для цього пристрою</string>
     <string name="settings_turn_screen_on">Увімкнути екран на 3 секунди</string>
-    
+
     <string name="settings_messages_in_one_to_one">В особистих чатах</string>
     <string name="settings_messages_in_group_chat">У групових чатах</string>
     <string name="settings_invited_to_room">Запрошення до кімнат</string>

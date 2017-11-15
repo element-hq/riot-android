@@ -1,3 +1,30 @@
+Changes in Riot 0.7.04 (2017-11-15)
+===================================================
+
+Features:
+ 
+ * Add the e2e share keys.
+ 
+Improvements:
+ 
+ * Add external keyboard functionality (to send messages).
+ * Refactor the call UI : the incoming call screen is removed.
+ * Refactor the call management (and fix the audio path issues).
+ * Update the android tools to the latest ones.
+ * Add a dummy splash screen when a logout is in progress
+ 
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * Fix a battery draining issue after ending a video call.
+ * #119 : Notifications: implement @room notifications on mobile
+ * #208 : Attached image: `thumbnail_info` and `thumbnail_url` must be moved in `content.info` dictionary 
+ * #1296 : Application crashes while swiping medias
+ * #1684 : Camera viewfinder rotation is broken (regression).
+ * #1685 : app sends notifications even when i told it not to.
+ * #1715 : Eats battery after video call
+ * #1725 : app crashes while triggering a notification.
+ 
 Changes in Riot 0.7.03 (2017-10-05)
 ===================================================
 
