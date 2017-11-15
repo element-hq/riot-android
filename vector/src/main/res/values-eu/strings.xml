@@ -728,4 +728,40 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="larger">Oso handia</string>
     <string name="largest">Handiena</string>
     <string name="huge">Erraldoia</string>
+<string name="light_theme">Gai argia</string>
+    <string name="dark_theme">Gai iluna</string>
+    <string name="black_them">Gai beltza</string>
+
+    <string name="notification_sync_in_progress">Sinkronizatzen</string>
+    <string name="notification_listen_for_events">Entzun gertaerak</string>
+
+    <string name="login_mobile_device">Mugikorra</string>
+
+    <string name="settings_notification_ringtone">Jakinarazpen-soinua</string>
+    <string name="settings_12_24_timestamps">Erakutsi denbora-markak 12 ordutako formatuan (adib 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Ezkutatu elkartu/utzi mezuak (gonbidatu/kanporatu/debekatu mezuei eraginik ez)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Ezkutatu abatarraren eta pantaila-izenen aldaketak</string>
+
+    <string name="widget_no_power_to_manage">Baimena behar duzu gela honetako trepetak kudeatzeko</string>
+    <string name="widget_creation_failure">Trepetaren sorrerak huts egin du</string>
+    <string name="event_formatter_widget_added">%1$s gehitu du %2$s erabiltzaileak</string>
+    <string name="event_formatter_widget_removed">%1$s kendu du %2$s erabiltzaileak</string>
+    <string name="settings_labs_create_conference_with_jitsi">Sortu konferentzia deiak jitsi bidez</string>
+    <string name="widget_delete_message_confirmation">Ziur trepeta ezabatu nahi duzula?</string>
+    <string name="active_widgets">%1$d trepeta aktibo</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">Erabiltzaileak gonbidatzeko baimena behar duzu hori egin ahal izateko.</string>
+    <string name="widget_integration_unable_to_create">Ezin izan da trepeta sortu.</string>
+    <string name="widget_integration_failed_to_send_request">Eskariaren bidalketak huts egin du.</string>
+    <string name="widget_integration_room_not_recognised">Ez da gela hau ezagutzen.</string>
+    <string name="widget_integration_positive_power_level">Botere maila osoko zenbaki positibo bat izan behar da.</string>
+    <string name="widget_integration_must_be_in_room">Ez zaude gela honetan.</string>
+    <string name="widget_integration_no_permission_in_room">Ez duzu gela honetan hori egiteko baimenik.</string>
+    <string name="widget_integration_missing_room_id">Eskarian room_id falta da.</string>
+    <string name="widget_integration_missing_user_id">Eskarian user_id falta da.</string>
+    <string name="widget_integration_room_not_visible">%s gela ez dago ikusgai.</string>
+    <string name="settings_labs_matrix_apps">Matrix aplikazioak</string>
+    <string name="room_add_matrix_apps">Gehitu Matrix aplikazioak</string>
+    <string name="add_matrix_apps_not_supported">Ez da gailu honetan onartzen</string>
 </resources>

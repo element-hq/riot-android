@@ -763,4 +763,7 @@ Ismeretlen eszközök:</string>
     <string name="settings_labs_matrix_apps">Matrix Alkalmazások</string>
     <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
     <string name="add_matrix_apps_not_supported">Nem támogatott ezen az eszközön</string>
-</resources>
+<string name="notification_listen_for_events">Események figyelése</string>
+
+    <string name="notification_sync_in_progress">Szinkronizálás</string>
+    </resources>

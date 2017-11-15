@@ -106,8 +106,8 @@
     <string name="send_bug_report_placeholder">Problembeschreibung</string>
     <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Logdateien dieses Matrix-Clients zusammen mit dem Fehlerbericht übermittelt. Wenn du nur den oben eingegebenen Text senden möchtest, bitte die nachfolgenden Haken entsprechend entfernen:</string>
     <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du einen Fehlerbericht senden?</string>
-    <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich gesendet</string>
-    <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht gesendet werden (%s)</string>
+    <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich übermittelt</string>
+    <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
     <string name="send_bug_report_progress">Fortschritt (%s%%)</string>
     <string name="send_bug_report_app_crashed">Die Anwendung ist während der letzten Benutzung abgestürzt. Möchtest du eine Fehlermeldung übermitteln?</string>
 
@@ -177,7 +177,7 @@
     <string name="auth_reset_password_message">Um dein Passwort zurückzusetzen, gib deine mit deinem Account verknüpfte E-Mail-Adresse ein:</string>
     <string name="auth_reset_password_missing_email">Die E-Mail-Adresse, die mit deinem Account verknüpft ist, muss eingegeben werden.</string>
     <string name="auth_reset_password_missing_password">Ein neues Passwort muss eingegeben werden.</string>
-    <string name="auth_reset_password_email_validation_message">Eine E-Mail wurde an %s gesendet. Nachdem du den Link darin angeklickt hast, klicke unten.</string>
+    <string name="auth_reset_password_email_validation_message">Eine E-Mail wurde an %s gesendet. Bitte dem in der E-Mail enthaltenen Link folgen und anschließend unten klicken.</string>
     <string name="auth_reset_password_error_unauthorized">Verifizierung der E-Mail-Adresse ist fehlgeschlagen: Stelle sicher, dass du den Link in der E-Mail geöffnet hast</string>
     <string name="auth_reset_password_success_message">Dein Passwort wurde zurückgesetzt.
 
@@ -238,7 +238,7 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
 
     <!-- call string -->
     <string name="call_connected">Anruf verbunden</string>
-    <string name="call_connecting">Anruf verbindet…</string>
+    <string name="call_connecting">Verbindungsaufbau…</string>
     <string name="call_ended">Anruf beendet</string>
     <string name="call_ring">Es klingelt…</string>
     <string name="incoming_call">Eingehender Anruf</string>
@@ -294,8 +294,9 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="room_jump_to_first_unread">Zur ersten ungelesenen Nachricht springen.</string>
 
     <!-- Room Preview -->
-    <string name="room_preview_invitation_format">Du wurdest von %s eingeladen, diesen Raum zu betreten</string>
-    <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet, der nicht mit diesem Account verknüpft ist.\nDu möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adresse zu diesem Account hinzufügen.</string>
+    <string name="room_preview_invitation_format">Du wurdest von %s in diesen Raum eingeladen</string>
+    <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet, der nicht mit diesem Account verknüpft ist.
+Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adresse zu diesem Account hinzufügen.</string>
     <string name="room_preview_try_join_an_unknown_room">Du möchtest auf %s zugreifen. Möchtest du den Raum betreten, um an der Diskussion teilzunehmen?</string>
     <string name="room_preview_try_join_an_unknown_room_default">einen Raum</string>
     <string name="room_preview_room_interactions_disabled">Dies ist eine Vorschau dieses Raums. Raum-Interaktionen wurden deaktiviert.</string>
@@ -354,7 +355,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
     <string name="people_search_local_contacts">LOKALE KONTAKTE (%d)</string>
     <string name="people_search_filter_text">Nur Matrix-Nutzer</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Nutzer mit ID einladen</string>
+    <string name="people_search_invite_by_id_dialog_title">Benutzer per ID einladen</string>
     <string name="people_search_invite_by_id_dialog_description">Bitte gebe eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
     <string name="people_search_invite_by_id_dialog_hint">E-Mail or Matrix-ID</string>
 
@@ -646,7 +647,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="directory_title">Verzeichnis</string>
 
     <!-- GA use -->
-    <string name="ga_use_alert_message">Möchtest du uns dabei helfen die App zu verbessern indem automatisch Absturzberichte gesendet werden?</string>
+    <string name="ga_use_alert_message">Stimmst du zu, uns dabei zu helfen, das Anwendungsverhalten der App zu verbessern und uns Absturzberichte zu übermitteln?</string>
     <string name="ga_use_settings">Absturzberichte automatisch übermitteln</string>
     <string name="ga_use_disable_alert_message">Du musst die Anwendung neustarten, um Absturzberichte auszuschalten.</string>
 
@@ -685,7 +686,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_import_room_keys">Raumschlüssel importieren</string>
     <string name="encryption_import_room_keys_summary">Schlüssel aus lokaler Datei importieren</string>
     <string name="encryption_import_import">Importieren</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Verschlüsselung nur mit verifizierten Geräten durchführen</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Nur für verifizierte Geräte verschlüsseln</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an unbestätigte Geräte senden</string>
 
     <string name="encryption_information_not_verified">NICHT verifiziert</string>
@@ -701,9 +702,10 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_information_unblock">Zulassen</string>
 
     <string name="encryption_information_verify_device">Gerät verifizieren</string>
-    <string name="encryption_information_verify_device_warning">Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere den Besitzer über andere Kanäle (z.B. persönlich oder telefonisch) und frage, ob der Schüssel, den er in seinen Nutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:</string>
-    <string name="encryption_information_verify_device_warning2">Wenn alles stimmt, drücke unten auf den Bestätigen-Button. Wenn nicht, fängt jemand anderes dieses Gerät ab und du möchtest wohl lieber den Blockieren-Button drücken.\nIn Zukunft wird dieser Bestätigungsprozess eleganter.</string>
-    <string name="encryption_information_verify_key_match">Die Schlüssel stimmen überein</string>
+    <string name="encryption_information_verify_device_warning">" Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere bitte den Besitzer des Gerätes über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er in seinen Benutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:"</string>
+    <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button. Stimmt er nicht überein, überwacht jemand anderes dieses Gerät und du solltest ggf. den Blockieren-Button drücken.
+In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
+    <string name="encryption_information_verify_key_match">Ja, die Schlüssel stimmen überein</string>
 
     <string name="e2e_enabling_on_app_update">Riot unterstützt jetzt Ende-zu-Ende-Verschlüsselung, du musst dich jedoch erneut anmelden, um sie zu aktivieren.
 
@@ -771,7 +773,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="event_formatter_widget_added">%1$s hinzugefügt von %2$s</string>
     <string name="event_formatter_widget_removed">%1$s entfernt von %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi aufbauen</string>
-    <string name="widget_delete_message_confirmation">Bist du sicher, dass du das Widget löschen möchtest?</string>
+    <string name="widget_delete_message_confirmation">Soll das Widget wirklich gelöscht werden?</string>
     <string name="active_widgets">%1$d aktive Widgets</string>
 
     // Widget Integration Manager
@@ -794,5 +796,8 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="black_them">Schwarzes Thema</string>
 
     <string name="login_mobile_device">Mobilgerät</string>
+
+    <string name="notification_sync_in_progress">Synchronisiere</string>
+    <string name="notification_listen_for_events">Nach Ereignissen lauschen</string>
 
     </resources>

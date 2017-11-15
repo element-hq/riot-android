@@ -388,8 +388,8 @@ Tem a certeza?</string>
     <string name="room_one_user_is_typing">%s está a escrever…</string>
     <string name="room_two_users_are_typing">%1$s e %2$s estão a escrever…</string>
     <string name="room_many_users_are_typing">%1$s, %2$s e outros estão a escrever…</string>
-    <string name="room_message_placeholder_encrypted">Enviar mensagem cifrada…</string>
-    <string name="room_message_placeholder_not_encrypted">Enviar mensagem (não cifrada)…</string>
+    <string name="room_message_placeholder_encrypted">Enviar mensagem encriptada…</string>
+    <string name="room_message_placeholder_not_encrypted">Enviar mensagem (não encriptada)…</string>
     <string name="room_offline_notification">A conexão com o servidor foi perdida.</string>
     <string name="room_unsent_messages_notification">Mensagens não enviadas. %1$s ou %2$s agora?</string>
     <string name="room_unknown_devices_messages_notification">Mensagens não enviadas devido à presença de dispositivos desconhecidos. %1$s ou %2$s agora?</string>
@@ -826,4 +826,7 @@ Dispositivos desconhecidos:</string>
     <string name="settings_labs_matrix_apps">Apps Matrix</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
     <string name="add_matrix_apps_not_supported">Não é suportado neste dispositivo</string>
-</resources>
+<string name="notification_sync_in_progress">A sincronizar</string>
+    <string name="notification_listen_for_events">À escuta de eventos</string>
+
+    </resources>

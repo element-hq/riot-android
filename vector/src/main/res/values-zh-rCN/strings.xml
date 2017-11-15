@@ -759,4 +759,7 @@
     <string name="settings_labs_matrix_apps">Matrix 应用</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
     <string name="add_matrix_apps_not_supported">在这个设备上不支持</string>
-</resources>
+<string name="notification_sync_in_progress">同步中</string>
+    <string name="notification_listen_for_events">聆听事件</string>
+
+    </resources>
