@@ -47,7 +47,6 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
-import org.matrix.androidsdk.data.EventTimeline;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -468,7 +467,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             mSession.getCrypto().getDeviceList().downloadKeys(Collections.singletonList(event.getSender()), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
                 @Override
                 public void onSuccess(MXUsersDevicesMap<MXDeviceInfo> info) {
-                    if (dialog.isShowing()) {
+                    Activity activity = getActivity();
+
+                    if ((null != activity) && !activity.isFinishing() && dialog.isShowing()) {
                         EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
 
                         MXDeviceInfo deviceInfo = mSession.getCrypto().deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
