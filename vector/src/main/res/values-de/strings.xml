@@ -94,8 +94,8 @@
     <string name="no_room_placeholder">Keine Räume</string>
     <string name="no_public_room_placeholder">Keine öffentl. Räume verfügbar</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 Nutzer</item>
-	<item quantity="other">%d Nutzer</item>
+	<item quantity="one">1 Benutzer</item>
+	<item quantity="other">%d Benutzer</item>
 </plurals>
 
     <string name="send_bug_report_include_logs">Logdateien übermitteln</string>
@@ -126,7 +126,7 @@
     <string name="search">Suchen</string>
 
     <string name="start_new_chat">Neuen Chat starten</string>
-    <string name="start_voice_call">Sprach-Anruf starten</string>
+    <string name="start_voice_call">Sprachanruf starten</string>
     <string name="start_video_call">Video-Anruf starten</string>
 
     <string name="option_send_files">Dateien senden</string>
@@ -143,10 +143,14 @@
     <string name="auth_password_placeholder">Passwort</string>
     <string name="auth_new_password_placeholder">Neues Passwort</string>
     <string name="auth_user_name_placeholder">Benutzername</string>
-    <string name="auth_add_email_message">Füge eine E-Mail-Adresse zu deinem Account hinzu, damit andere Nutzer dich finden können und du dein Passwort zurücksetzen kannst.</string>
-    <string name="auth_add_phone_message">Füge eine Telefonnummer zu deinem Account hinzu, damit andere Nutzer dich finden können.</string>
-    <string name="auth_add_email_phone_message">Füge eine E-Mail-Adresse und/oder eine Telefonnummer zu deinem Account hinzu, damit andere Nutzer dich finden können.\n\nDie E-Mail-Adresse erlaubt dir außerdem dein Passwort zurückzusetzen.</string>
-    <string name="auth_add_email_and_phone_message">Füge eine E-Mail-Adresse und eine Telefonnummer zu deinem Account hinzu, damit Nutzer dich finden können.\n\nDie E-Mail-Adresse erlaubt dir außerdem dein Passwort zurückzusetzen.</string>
+    <string name="auth_add_email_message">Füge eine E-Mail-Adresse zu deinem Account hinzu, damit andere Benutzer dich finden können und du dein Passwort zurücksetzen kannst.</string>
+    <string name="auth_add_phone_message">Füge eine Telefonnummer zu deinem Benutzerkonto hinzu, damit andere Benutzer dich finden können.</string>
+    <string name="auth_add_email_phone_message">Füge eine E-Mail-Adresse und/oder eine Telefonnummer zu deinem Benutzerkonto hinzu, damit andere Benutzer dich finden können.
+
+Das Hinzufügen einer E-Mail-Adresse erlaubt es dir außerdem, dein Passwort zurückzusetzen.</string>
+    <string name="auth_add_email_and_phone_message">Füge eine E-Mail-Adresse und eine Telefonnummer zu deinem Benutzerkonto hinzu, damit andere Benutzer dich finden können.
+
+Das Hinzufügen einer E-Mail-Adresse erlaubt es dir außerdem, dein Passwort zurückzusetzen.</string>
     <string name="auth_email_placeholder">E-Mail-Adresse</string>
     <string name="auth_opt_email_placeholder">E-Mail-Adresse (optional)</string>
     <string name="auth_phone_number_placeholder">Telefonnummer</string>
@@ -243,8 +247,8 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="call_ring">Es klingelt…</string>
     <string name="incoming_call">Eingehender Anruf</string>
     <string name="incoming_video_call">Eingehender Video-Anruf</string>
-    <string name="incoming_voice_call">Eingehender Sprach-Anruf</string>
-    <string name="call_in_progress">Anruf im Gange</string>
+    <string name="incoming_voice_call">Eingehender Sprachanruf</string>
+    <string name="call_in_progress">Anruf aktiv</string>
 
     <string name="call_error_user_not_responding">Die Gegenseite hat den Anruf nicht angenommen.</string>
     <string name="call_error_ice_failed">Medien-Verbindung fehlgeschlagen</string>
@@ -264,14 +268,20 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="permissions_rationale_popup_title">Information</string>
     <string name="permissions_rationale_msg_storage">Riot benötigt die Berechtigung, auf deine Fotos und Videos zugreifen zu können, um Anhänge zu senden und zu speichern.\n\nBitte erlaube den Zugriff im nächsten Dialog, um Dateien von deinem Gerät zu versenden.</string>
     <string name="permissions_rationale_msg_camera">Riot benötigt die Berechtigung, auf deine Kamera zugreifen zu können, um Bilder aufzunehmen und Video-Anrufe durchzuführen.</string>
-    <string name="permissions_rationale_msg_camera_explanation">\n\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu tätigen.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">\n\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu tätigen.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot benötigt die Berechtigung, auf deine Kamera und dein Mikrofon zugreifen zu können, um Video-Anrufe tätigen zu können.
+    <string name="permissions_rationale_msg_camera_explanation">
 
-Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu starten.</string>
-    <string name="permissions_rationale_msg_contacts">Riot benötigt die Berechtigung, auf deine Kontakte im Adressbuch zugreifen zu können, um andere Matrix-Nutzer aufgrund ihrer E-Mail-Adresse und Telefonnummer zu finden.\n\nBitte erlaube den Zugriff im nächsten Dialog, um Kontakte im Adressbuch zu finden, die über Riot erreichbar sind.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot benötigt die Berechtigung, auf deine Adressbuch-Kontakte zugreifen zu dürfen, um andere Matrix-Nutzer anhand ihrer E-Mail-Adresse und/oder ihrer Telefonnummer finden zu können.
+Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu durchzuführen.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot benötigt die Berechtigung, auf deine Kamera und dein Mikrofon zugreifen zu können, um Video-Anrufe durchführen zu können.
+
+Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
+    <string name="permissions_rationale_msg_contacts">Riot benötigt die Berechtigung, auf deine Kontakte im Adressbuch zugreifen zu können, um andere Matrix-Benutzer mit Hilfe ihrer E-Mail-Adresse oder Telefonnummer zu finden.
+
+Bitte erlaube den Zugriff im nächsten Dialog, um Kontakte im Adressbuch zu finden, die über Riot erreichbar sind.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot benötigt die Berechtigung, auf deine Adressbuch-Kontakte zugreifen zu dürfen, um andere Matrix-Benutzer mit Hilfe ihrer E-Mail-Adresse und/oder ihrer Telefonnummer finden zu können.
 
 Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
@@ -338,22 +348,23 @@ Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adr
     <string name="room_participants_action_remove">Aus diesem Raum entfernen</string>
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Verbannung aufheben</string>
-    <string name="room_participants_action_set_default_power_level">Zum normalen Nutzer machen</string>
+    <string name="room_participants_action_set_default_power_level">Zum normalen Benutzer herabstufen</string>
     <string name="room_participants_action_set_moderator">Zum Moderator machen</string>
     <string name="room_participants_action_set_admin">Zum Admin machen</string>
     <string name="room_participants_action_ignore">Alle Nachrichten dieses Nutzers verbergen</string>
     <string name="room_participants_action_unignore">Alle Nachrichten dieses Nutzers anzeigen</string>
-    <string name="room_participants_invite_search_another_user">Nutzer-ID, Name oder E-Mail-Adresse</string>
+    <string name="room_participants_invite_search_another_user">Benutzer-ID, Name oder E-Mail-Adresse</string>
     <string name="room_participants_action_mention">Erwähnen</string>
     <string name="room_participants_action_devices_list">Geräteliste anzeigen</string>
-    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht zurücknehmen können, da du diesem Nutzer dasselbe Berechtigungslevel wie dir selbst gibst.\nBist du sicher?</string>
+    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der Benutzer dasselbe Berechtigungslevel wie du selbst erhalten wirst.
+Bist du sicher?</string>
 
     <string name="room_participants_invite_prompt_msg">"Bist du sicher, dass du %s in diesen Chat einladen willst?"</string>
 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Mit ID einladen</u></string>
     <string name="people_search_local_contacts">LOKALE KONTAKTE (%d)</string>
-    <string name="people_search_filter_text">Nur Matrix-Nutzer</string>
+    <string name="people_search_filter_text">Nur Matrix-Benutzer</string>
 
     <string name="people_search_invite_by_id_dialog_title">Benutzer per ID einladen</string>
     <string name="people_search_invite_by_id_dialog_description">Bitte gebe eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
@@ -502,7 +513,7 @@ Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adr
 
     <string name="settings_user_settings">Nutzereinstellungen</string>
     <string name="settings_notifications">Benachrichtigungen</string>
-    <string name="settings_ignored_users">Ignorierte Nutzer</string>
+    <string name="settings_ignored_users">Ignorierte Benutzer</string>
     <string name="settings_other">Sonstiges</string>
     <string name="settings_advanced">Erweitert</string>
     <string name="settings_cryptography">Verschlüsselung</string>
@@ -713,7 +724,11 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Raum enthält unbekannte Geräte</string>
-    <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Geräte, die noch nicht verifiziert wurden.\nEs gibt also keine Garantie, dass diese Geräte wirklich zu dem angegebenen Nutzer gehören.\nWir empfehlen, den Verifizierungsprozess für jedes Gerät zu durchlaufen bevor du fortfährst. Du kannst die Nachricht aber auch ohne Verifizierung senden, wenn du das vorziehst.\n\nUnbekannte Geräte:</string>
+    <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Geräte, die noch nicht verifiziert wurden.
+Es gibt also keine Garantie, dass diese Geräte wirklich dem angegebenen Benutzer gehören.
+Wir empfehlen, den Verifizierungsprozess für jedes Gerät zu durchlaufen, bevor du fortfährst. Du kannst die Nachricht aber auch ohne Verifizierung senden, wenn du das vorziehst.
+
+Unbekannte Geräte:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Raum-Verzeichnis auswählen</string>
@@ -751,7 +766,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="offline">Offline</string>
 
     <string name="user_directory_header">Benutzer-Verzeichnis</string>
-    <string name="people_search_user_directory">NUTZER-VERZEICHNIS (%s)</string>
+    <string name="people_search_user_directory">BENUTZER-VERZEICHNIS (%s)</string>
     <string name="settings_data_save_mode">Datensparsamer Modus</string>
 
     <string name="font_size">Schriftgröße</string>
@@ -800,4 +815,10 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="notification_sync_in_progress">Synchronisiere</string>
     <string name="notification_listen_for_events">Nach Ereignissen lauschen</string>
 
+    <string name="settings_containing_my_display_name">Nachrichten, die meinen Anzeigenamen enthalten</string>
+    <string name="settings_containing_my_user_name">Nachrichten, die meinen Benutzernamen enthalten</string>
+    <string name="you_added_a_new_device">Du hast das neue Gerät \'%s\' hinzugefügt, das jetzt Verschlüsselungs-Schlüssel anfordert.</string>
+    <string name="your_unverified_device_requesting">Dein bislang nicht verifiziertes Gerät \'%s\' fordert Verschlüsselungs-Schlüssel an.</string>
+    <string name="start_verification">Verifizierung starten</string>
+    <string name="call">Anruf</string>
     </resources>
