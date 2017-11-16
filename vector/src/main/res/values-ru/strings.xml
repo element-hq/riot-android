@@ -814,6 +814,15 @@ Email также позволит вам при необходимости во�
     <string name="login_mobile_device">Mobile</string>
 
     <string name="notification_sync_in_progress">Синхронизация</string>
-    <string name="notification_listen_for_events">Прослушивание событий</string>
+    <string name="notification_listen_for_events">Мониторинг событий</string>
 
-    </resources>
+    <string name="call">Вызов</string>
+    <string name="settings_containing_my_user_name">Сообщения, содержащие мое имя пользователя</string>
+    <string name="you_added_a_new_device">Вы добавили новое устройство \'%s\', запрашивающее ключи шифрования.</string>
+    <string name="your_unverified_device_requesting">Ваше непроверенное устройство \'%s\' запрашивает ключи шифрования.</string>
+    <string name="settings_containing_my_display_name">Сообщения, содержащие мое отображаемое имя</string>
+    <string name="start_verification">Начать проверку</string>
+    <string name="share_without_verifying">Поделиться без проверки</string>
+    <string name="ignore_request">Игнорировать запрос</string>
+
+</resources>
