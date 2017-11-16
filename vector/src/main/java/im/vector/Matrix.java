@@ -21,14 +21,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.os.Looper;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequest;
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation;
 import org.matrix.androidsdk.crypto.MXCrypto;
-import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.ssl.Fingerprint;
@@ -41,7 +38,6 @@ import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.store.MXFileStore;
-import org.matrix.androidsdk.data.store.MXMemoryStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
@@ -72,7 +68,7 @@ import java.util.List;
  */
 public class Matrix {
     // the log tag
-    private static final String LOG_TAG = "Matrix";
+    private static final String LOG_TAG = Matrix.class.getSimpleName();
 
     // static instance
     private static Matrix instance = null;
@@ -168,7 +164,7 @@ public class Matrix {
     };
 
     // constructor
-    protected Matrix(Context appContext) {
+    private Matrix(Context appContext) {
         instance = this;
 
         mAppContext = appContext.getApplicationContext();
@@ -209,7 +205,8 @@ public class Matrix {
 
     /**
      * Provides the application version
-     * @param longformat true to append the build time
+     *
+     * @param longformat     true to append the build time
      * @param useBuildNumber true to replace the git version by the build number
      * @return the application version.
      */
@@ -275,26 +272,6 @@ public class Matrix {
         }
 
         return sessions;
-    }
-
-    /**
-     * Tell if there is a corrupted store in the active session/
-     *
-     * @param context the application context
-     * @return true if there is a corrupted store.
-     */
-    public static boolean hasCorruptedStore(Context context) {
-        boolean hasCorruptedStore = false;
-        ArrayList<MXSession> sessions = Matrix.getMXSessions(context);
-
-        if (null != sessions) {
-            for (MXSession session : sessions) {
-                if (session.isAlive()) {
-                    hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
-                }
-            }
-        }
-        return hasCorruptedStore;
     }
 
     /**
@@ -597,16 +574,16 @@ public class Matrix {
      * @param hsConfig The HomeserverConnectionConfig to create a session from.
      * @return The session.
      */
-    public MXSession createSession(final Context context, HomeServerConnectionConfig hsConfig) {
+    private MXSession createSession(final Context context, HomeServerConnectionConfig hsConfig) {
         IMXStore store;
 
         Credentials credentials = hsConfig.getCredentials();
 
-        if (true) {
-            store = new MXFileStore(hsConfig, context);
-        } else {
+        /*if (true) {*/
+        store = new MXFileStore(hsConfig, context);
+        /*} else {
             store = new MXMemoryStore(hsConfig.getCredentials(), context);
-        }
+        }*/
 
         final MXSession session = new MXSession(hsConfig, new MXDataHandler(store, credentials), mAppContext);
 
@@ -807,17 +784,6 @@ public class Matrix {
         }
 
         return -1;
-    }
-
-    /**
-     * Remove the dedicated store from the tmp stores list.
-     *
-     * @param store the store to remove
-     */
-    public void removeTmpStore(IMXStore store) {
-        if (null != store) {
-            mTmpStores.remove(store);
-        }
     }
 
     /**

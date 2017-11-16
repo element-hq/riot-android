@@ -51,8 +51,8 @@ import im.vector.util.PhoneNumberUtils;
 /**
  * Manage the local contacts
  */
-public class ContactsManager implements SharedPreferences.OnSharedPreferenceChangeListener  {
-    private static final String LOG_TAG = "ContactsManager";
+public class ContactsManager implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final String LOG_TAG = ContactsManager.class.getSimpleName();
 
     /**
      * Contacts update listener
@@ -81,7 +81,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     private List<Contact> mContactsList = null;
 
     // the listeners
-    private List<ContactsManagerListener> mListeners = new ArrayList<>();
+    private final List<ContactsManagerListener> mListeners = new ArrayList<>();
 
     // a contacts population is in progress
     private boolean mIsPopulating = false;
@@ -236,7 +236,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     /**
      * Constructor
      */
-    public ContactsManager() {
+    private ContactsManager() {
         mContext = VectorApp.getInstance().getApplicationContext();
         PreferenceManager.getDefaultSharedPreferences(mContext).registerOnSharedPreferenceChangeListener(this);
     }
@@ -265,6 +265,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
     /**
      * Tell if the contacts snapshot list is ready
+     *
      * @return true if the contacts snapshot list is ready
      */
     public boolean didPopulateLocalContacts() {
@@ -312,7 +313,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     private void onCountryCodeUpdate() {
         synchronized (LOG_TAG) {
             if (null != mContactsList) {
-                for(Contact contact : mContactsList) {
+                for (Contact contact : mContactsList) {
                     contact.onCountryCodeUpdate();
                 }
             }
@@ -618,6 +619,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     /**
      * Tells if the contacts book access has been requested.
      * For android > M devices, it only tells if the permission has been granted.
+     *
      * @return true it was requested once
      */
     public boolean isContactBookAccessRequested() {
@@ -631,6 +633,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
     /**
      * Update the contacts book access.
+     *
      * @param isAllowed true to allowed the contacts book access.
      */
     public void setIsContactBookAccessAllowed(boolean isAllowed) {
@@ -646,6 +649,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
     /**
      * Tells if the contacts book access has been granted
+     *
      * @return true if it was granted.
      */
     public boolean isContactBookAccessAllowed() {

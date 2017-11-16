@@ -65,14 +65,15 @@ public class ThemeUtils {
     public static final String APPLICATION_THEME_KEY = "APPLICATION_THEME_KEY";
 
     // the theme description
-    public static final String THEME_DARK_VALUE = "dark";
-    public static final String THEME_LIGHT_VALUE = "light";
-    public static final String THEME_BLACK_VALUE = "black";
+    private static final String THEME_DARK_VALUE = "dark";
+    private static final String THEME_LIGHT_VALUE = "light";
+    private static final String THEME_BLACK_VALUE = "black";
 
-    public static final Map<Integer, Integer> mColorByAttr = new HashMap<>();
+    private static final Map<Integer, Integer> mColorByAttr = new HashMap<>();
 
     /**
      * Provides the selected application theme
+     *
      * @param context the context
      * @return the selected application theme
      */
@@ -95,6 +96,7 @@ public class ThemeUtils {
 
     /**
      * Update the application theme
+     *
      * @param aTheme the new theme
      */
     public static void setApplicationTheme(Context context, String aTheme) {
@@ -107,11 +109,9 @@ public class ThemeUtils {
 
         if (TextUtils.equals(aTheme, THEME_DARK_VALUE)) {
             VectorApp.getInstance().setTheme(R.style.AppTheme_Dark);
-        }
-        else if (TextUtils.equals(aTheme, THEME_BLACK_VALUE)) {
+        } else if (TextUtils.equals(aTheme, THEME_BLACK_VALUE)) {
             VectorApp.getInstance().setTheme(R.style.AppTheme_Black);
-        }
-        else {
+        } else {
             VectorApp.getInstance().setTheme(R.style.AppTheme);
         }
 
@@ -241,14 +241,17 @@ public class ThemeUtils {
 
         mColorByAttr.clear();
     }
-    
+
     /**
      * Translates color attributes to colors
-     * @param c Context
+     *
+     * @param c              Context
      * @param colorAttribute Color Attribute
      * @return Requested Color
      */
-    public static @ColorInt int getColor(Context c, @AttrRes final int colorAttribute) {
+    public static
+    @ColorInt
+    int getColor(Context c, @AttrRes final int colorAttribute) {
         if (mColorByAttr.containsKey(colorAttribute)) {
             return mColorByAttr.get(colorAttribute);
         }
@@ -270,7 +273,8 @@ public class ThemeUtils {
 
     /**
      * Get the resource Id applied to the current theme
-     * @param c the context
+     *
+     * @param c          the context
      * @param resourceId the resource id
      * @return the resource Id for the current theme
      */

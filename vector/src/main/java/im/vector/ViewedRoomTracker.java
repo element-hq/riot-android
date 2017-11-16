@@ -25,7 +25,7 @@ public class ViewedRoomTracker {
     private String mViewedRoomId = null;
     private String mMatrixId = null;
 
-    private ViewedRoomTracker(){
+    private ViewedRoomTracker() {
     }
 
     public static synchronized ViewedRoomTracker getInstance() {
@@ -37,10 +37,6 @@ public class ViewedRoomTracker {
 
     public String getViewedRoomId() {
         return mViewedRoomId;
-    }
-
-    public String getMatrixId() {
-        return mMatrixId;
     }
 
     public void setViewedRoomId(String roomId) {

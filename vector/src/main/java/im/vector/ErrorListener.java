@@ -16,7 +16,9 @@
 package im.vector;
 
 import android.app.Activity;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -32,7 +34,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.store.LoginStorage;
 
 public class ErrorListener implements ApiFailureCallback {
-    private static final String LOG_TAG = "ErrorListener";
+    private static final String LOG_TAG = ErrorListener.class.getSimpleName();
 
     private final Activity mActivity;
     private final MXSession mSession;

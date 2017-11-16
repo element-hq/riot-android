@@ -41,7 +41,7 @@ import im.vector.listeners.IMessagesAdapterActionsListener;
 
 // Class to track some matrix items click}
 public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
-    private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
+    private static final String LOG_TAG = MatrixURLSpan.class.getSimpleName();
 
     public static final Parcelable.Creator<MatrixURLSpan> CREATOR = new Parcelable.Creator<MatrixURLSpan>() {
         @Override
@@ -64,13 +64,13 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
     // listener
     private final IMessagesAdapterActionsListener mActionsListener;
 
-    public MatrixURLSpan(String url, Pattern pattern, IMessagesAdapterActionsListener actionsListener) {
+    private MatrixURLSpan(String url, Pattern pattern, IMessagesAdapterActionsListener actionsListener) {
         mURL = url;
         mPattern = pattern;
         mActionsListener = actionsListener;
     }
 
-    public MatrixURLSpan(Parcel src) {
+    private MatrixURLSpan(Parcel src) {
         mURL = src.readString();
         mPattern = null;
         mActionsListener = null;
@@ -80,7 +80,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
         return getSpanTypeIdInternal();
     }
 
-    public int getSpanTypeIdInternal() {
+    private int getSpanTypeIdInternal() {
         return getClass().hashCode();
     }
 
@@ -88,7 +88,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
         writeToParcelInternal(dest, flags);
     }
 
-    public void writeToParcelInternal(Parcel dest, int flags) {
+    private void writeToParcelInternal(Parcel dest, int flags) {
         dest.writeString(mURL);
     }
 
@@ -96,8 +96,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
         return 0;
     }
 
-
-    public String getURL() {
+    private String getURL() {
         return mURL;
     }
 

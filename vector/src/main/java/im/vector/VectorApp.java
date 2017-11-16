@@ -85,7 +85,7 @@ import im.vector.util.VectorMarkdownParser;
  * The main application injection point
  */
 public class VectorApp extends MultiDexApplication {
-    private static final String LOG_TAG = "VectorApp";
+    private static final String LOG_TAG = VectorApp.class.getSimpleName();
 
     // key to save the crash status
     private static final String PREFS_CRASH_KEY = "PREFS_CRASH_KEY";
@@ -138,7 +138,7 @@ public class VectorApp extends MultiDexApplication {
     /**
      * Markdown parser
      */
-    public VectorMarkdownParser mMarkdownParser;
+    private VectorMarkdownParser mMarkdownParser;
 
     /**
      * Calls manager
@@ -604,22 +604,6 @@ public class VectorApp extends MultiDexApplication {
     }
 
     //==============================================================================================================
-    // Calls management.
-    //==============================================================================================================
-
-    /**
-     * The application is warned that a call is ended.
-     */
-    public void onCallEnd() {
-        if (isAppInBackground() && mIsCallingInBackground) {
-            Log.d(LOG_TAG, "onCallEnd : Suspend the events thread because the call was ended whereas the application was in background");
-            suspendApp();
-        }
-
-        mIsCallingInBackground = false;
-    }
-
-    //==============================================================================================================
     // cert management : store the active activities.
     //==============================================================================================================
 
@@ -866,13 +850,13 @@ public class VectorApp extends MultiDexApplication {
     private static final String APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY";
     private static final String APPLICATION_FONT_SCALE_KEY = "APPLICATION_FONT_SCALE_KEY";
 
-    public static final String FONT_SCALE_TINY = "FONT_SCALE_TINY";
-    public static final String FONT_SCALE_SMALL = "FONT_SCALE_SMALL";
-    public static final String FONT_SCALE_NORMAL = "FONT_SCALE_NORMAL";
-    public static final String FONT_SCALE_LARGE = "FONT_SCALE_LARGE";
-    public static final String FONT_SCALE_LARGER = "FONT_SCALE_LARGER";
-    public static final String FONT_SCALE_LARGEST = "FONT_SCALE_LARGEST";
-    public static final String FONT_SCALE_HUGE = "FONT_SCALE_HUGE";
+    private static final String FONT_SCALE_TINY = "FONT_SCALE_TINY";
+    private static final String FONT_SCALE_SMALL = "FONT_SCALE_SMALL";
+    private static final String FONT_SCALE_NORMAL = "FONT_SCALE_NORMAL";
+    private static final String FONT_SCALE_LARGE = "FONT_SCALE_LARGE";
+    private static final String FONT_SCALE_LARGER = "FONT_SCALE_LARGER";
+    private static final String FONT_SCALE_LARGEST = "FONT_SCALE_LARGEST";
+    private static final String FONT_SCALE_HUGE = "FONT_SCALE_HUGE";
 
     private static final Locale mApplicationDefaultLanguage = new Locale("en", "UK");
 
@@ -1153,6 +1137,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Compute a localised context
+     *
      * @param context the context
      * @return the localised context
      */

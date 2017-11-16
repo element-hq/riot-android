@@ -39,7 +39,7 @@ import im.vector.activity.VectorRoomActivity;
 
 public class SlashComandsParser {
 
-    private static final String LOG_TAG = "SlashComandsParser";
+    private static final String LOG_TAG = SlashComandsParser.class.getSimpleName();
 
     // defines the command line operations
     // the user can write theses messages to perform some room events

@@ -24,10 +24,10 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +39,7 @@ import im.vector.ga.GAHelper;
 
 public class PreferencesManager {
 
-    private static final String LOG_TAG = "PreferencesManager";
+    private static final String LOG_TAG = PreferencesManager.class.getSimpleName();
 
     public static final String SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY = "SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY";
     public static final String SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY";
@@ -93,29 +93,29 @@ public class PreferencesManager {
     public static final String SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY";
     public static final String SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY";
 
-    public static final String SETTINGS_HIDE_READ_RECEIPTS_KEY = "SETTINGS_HIDE_READ_RECEIPTS_KEY";
-    public static final String SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY";
-    public static final String SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY";
-    public static final String SETTINGS_DISABLE_MARKDOWN_KEY = "SETTINGS_DISABLE_MARKDOWN_KEY";
-    public static final String SETTINGS_DONT_SEND_TYPING_NOTIF_KEY = "SETTINGS_DONT_SEND_TYPING_NOTIF_KEY";
-    public static final String SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY = "SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY";
-    public static final String SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY";
+    private static final String SETTINGS_HIDE_READ_RECEIPTS_KEY = "SETTINGS_HIDE_READ_RECEIPTS_KEY";
+    private static final String SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY";
+    private static final String SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY";
+    private static final String SETTINGS_DISABLE_MARKDOWN_KEY = "SETTINGS_DISABLE_MARKDOWN_KEY";
+    private static final String SETTINGS_DONT_SEND_TYPING_NOTIF_KEY = "SETTINGS_DONT_SEND_TYPING_NOTIF_KEY";
+    private static final String SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY = "SETTINGS_HIDE_JOIN_LEAVE_MESSAGES_KEY";
+    private static final String SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY";
 
     public static final String SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY";
-    public static final String SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY";
+    private static final String SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY";
 
-    public static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
-    public static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
+    private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
+    private static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
     public static final String SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY";
 
     public static final String SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY";
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
     public static final String SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY";
 
-    public static final String SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY = "SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY";
-    public static final String SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY = "SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY";
+    private static final String SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY = "SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY";
+    private static final String SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY = "SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY";
 
-    public static final String SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY";
+    private static final String SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY";
     public static final String SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY";
 
     private static final int MEDIA_SAVING_3_DAYS = 0;
@@ -180,7 +180,7 @@ public class PreferencesManager {
 
         keys.removeAll(keysToKeep);
 
-        for(String key : keys) {
+        for (String key : keys) {
             editor.remove(key);
         }
 
@@ -219,8 +219,9 @@ public class PreferencesManager {
 
     /**
      * Update the notification ringtone
+     *
      * @param context the context
-     * @param uri the new notification ringtone
+     * @param uri     the new notification ringtone
      */
     public static void setNotificationRingTone(Context context, Uri uri) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -245,6 +246,7 @@ public class PreferencesManager {
 
     /**
      * Provides the selected notification ring tone
+     *
      * @param context the context
      * @return the selected ring tone
      */
@@ -277,6 +279,7 @@ public class PreferencesManager {
 
     /**
      * Provide the notification ringtone filename
+     *
      * @param context the context
      * @return the filename
      */
@@ -305,8 +308,7 @@ public class PreferencesManager {
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getNotificationRingToneName() failed() : " + e.getMessage());
-        }
-        finally {
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -334,7 +336,7 @@ public class PreferencesManager {
     public static boolean useJitsiConfCall(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY, true);
     }
-    
+
     /**
      * Tells if the matrix apps are supported.
      *
@@ -359,7 +361,7 @@ public class PreferencesManager {
      * Tells if the application is started on boot
      *
      * @param context the context
-     * @param value true to start the application on boot
+     * @param value   true to start the application on boot
      */
     public static void setAutoStartOnBoot(Context context, boolean value) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -396,7 +398,7 @@ public class PreferencesManager {
      * Updates the selected saving period.
      *
      * @param context the context
-     * @param index the selected period index
+     * @param index   the selected period index
      */
     public static void setSelectedMediasSavingPeriod(Context context, int index) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -416,11 +418,11 @@ public class PreferencesManager {
 
         switch (selection) {
             case MEDIA_SAVING_3_DAYS:
-                return (System.currentTimeMillis()/1000) - (3 * 24 * 60 * 60);
+                return (System.currentTimeMillis() / 1000) - (3 * 24 * 60 * 60);
             case MEDIA_SAVING_1_WEEK:
-                return (System.currentTimeMillis()/1000) - (7 * 24 * 60 * 60);
+                return (System.currentTimeMillis() / 1000) - (7 * 24 * 60 * 60);
             case MEDIA_SAVING_1_MONTH:
-                return (System.currentTimeMillis()/1000) - (30 * 24 * 60 * 60);
+                return (System.currentTimeMillis() / 1000) - (30 * 24 * 60 * 60);
             case MEDIA_SAVING_FOREVER:
                 return 0;
         }
@@ -517,7 +519,7 @@ public class PreferencesManager {
     /**
      * Update the markdown enable status.
      *
-     * @param context the context
+     * @param context   the context
      * @param isEnabled true to enable the markdown
      */
     public static void setMarkdownEnabled(Context context, boolean isEnabled) {

@@ -68,9 +68,8 @@ import im.vector.widgets.WidgetsManager;
 /**
  * An helper to display message information
  */
-public class VectorMessagesAdapterHelper {
-    private static final String LOG_TAG = "AdapterHelper";
-
+class VectorMessagesAdapterHelper {
+    private static final String LOG_TAG = VectorMessagesAdapterHelper.class.getSimpleName();
 
     private IMessagesAdapterActionsListener mEventsListener;
     private final MXSession mSession;
@@ -122,11 +121,10 @@ public class VectorMessagesAdapterHelper {
      * @param convertView  the base view
      * @param row          the message row
      * @param isMergedView true if the cell is merged
-     * @return the dedicated textView
      */
-    public TextView setSenderValue(View convertView, MessageRow row, boolean isMergedView) {
+    public void setSenderValue(View convertView, MessageRow row, boolean isMergedView) {
         // manage sender text
-        TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
+        TextView senderTextView = convertView.findViewById(R.id.messagesAdapter_sender);
 
         if (null != senderTextView) {
             Event event = row.getEvent();
@@ -164,8 +162,6 @@ public class VectorMessagesAdapterHelper {
                 }
             }
         }
-
-        return senderTextView;
     }
 
     /**
@@ -176,7 +172,7 @@ public class VectorMessagesAdapterHelper {
      * @return the dedicated textView
      */
     static TextView setTimestampValue(View convertView, String value) {
-        TextView tsTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_timestamp);
+        TextView tsTextView = convertView.findViewById(R.id.messagesAdapter_timestamp);
 
         if (null != tsTextView) {
             if (TextUtils.isEmpty(value)) {
@@ -299,7 +295,7 @@ public class VectorMessagesAdapterHelper {
         }
 
         if (null != avatarLayoutView) {
-            ImageView avatarImageView = (ImageView) avatarLayoutView.findViewById(R.id.avatar_img);
+            ImageView avatarImageView = avatarLayoutView.findViewById(R.id.avatar_img);
 
             if (isMergedView) {
                 avatarLayoutView.setVisibility(View.GONE);
@@ -353,7 +349,7 @@ public class VectorMessagesAdapterHelper {
 
         if (null != headerLayout) {
             if (null != newValue) {
-                TextView headerText = (TextView) convertView.findViewById(R.id.messagesAdapter_message_header_text);
+                TextView headerText = convertView.findViewById(R.id.messagesAdapter_message_header_text);
                 headerText.setText(newValue);
                 headerLayout.setVisibility(View.VISIBLE);
 
@@ -435,7 +431,7 @@ public class VectorMessagesAdapterHelper {
         imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_4).findViewById(R.id.avatar_img));
         imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_5).findViewById(R.id.avatar_img));
 
-        TextView moreText = (TextView) avatarsListView.findViewById(R.id.message_more_than_expected);
+        TextView moreText = avatarsListView.findViewById(R.id.message_more_than_expected);
 
         int index = 0;
         int bound = Math.min(receipts.size(), imageViews.size());

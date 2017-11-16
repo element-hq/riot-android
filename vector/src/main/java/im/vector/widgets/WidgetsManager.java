@@ -59,12 +59,12 @@ public class WidgetsManager {
     /**
      * Known types widgets.
      */
-    public static final String WIDGET_TYPE_JITSI = "jitsi";
+    private static final String WIDGET_TYPE_JITSI = "jitsi";
 
     /**
      * Integration rest url
      */
-    public static final String INTEGRATION_REST_URL = "https://scalar.vector.im";
+    private static final String INTEGRATION_REST_URL = "https://scalar.vector.im";
 
     /**
      * Integration ui url
@@ -132,7 +132,7 @@ public class WidgetsManager {
      * @param excludedTypes the the excluded widget types
      * @return the active widgets list
      */
-    public List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
+    private List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
         // Get all im.vector.modular.widgets state events in the room
         List<Event> widgetEvents = room.getLiveState().getStateEvents(new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)));
 
@@ -262,7 +262,7 @@ public class WidgetsManager {
      * @param content  the widget content.
      * @param callback the asynchronous callback
      */
-    public void createWidget(MXSession session, Room room, String widgetId, Map<String, Object> content, final ApiCallback<Widget> callback) {
+    private void createWidget(MXSession session, Room room, String widgetId, Map<String, Object> content, final ApiCallback<Widget> callback) {
         WidgetError permissionError = checkWidgetPermission(session, room);
 
         if (null != permissionError) {

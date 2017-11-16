@@ -23,7 +23,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +54,7 @@ import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
 public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
-    private static final String LOG_TAG = "FavouritesFragment";
+    private static final String LOG_TAG = FavouritesFragment.class.getSimpleName();
 
     @BindView(R.id.favorites_recycler_view)
     RecyclerView mFavoritesRecyclerView;
@@ -64,7 +66,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     private HomeRoomAdapter mFavoritesAdapter;
 
     // the favorite rooms list
-    private final  List<Room> mFavorites = new ArrayList<>();
+    private final List<Room> mFavorites = new ArrayList<>();
 
     // Touch helper to handle the drag and drop on items
     private ItemTouchHelper mDragAndDropTouchHelper;
@@ -184,7 +186,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     @Override
     public void onSummariesUpdate() {
         super.onSummariesUpdate();
-            
+
         if (isResumed()) {
             if (!mActivity.isWaitingViewVisible()) {
                 refreshFavorites();

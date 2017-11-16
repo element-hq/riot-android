@@ -27,18 +27,18 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.util.PreferencesManager;
 
 public class VectorBootReceiver extends BroadcastReceiver {
-    private static final String LOG_TAG = "VectorBootReceiver";
+    private static final String LOG_TAG = VectorBootReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(LOG_TAG, "## onReceive() : " + intent.getAction());
         if (TextUtils.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED) ||
-                TextUtils.equals(intent.getAction(),Intent.ACTION_BOOT_COMPLETED)) {
+                TextUtils.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED)) {
             if (PreferencesManager.autoStartOnBoot(context)) {
-                Log.d(LOG_TAG,  "## onReceive() : starts the application");
+                Log.d(LOG_TAG, "## onReceive() : starts the application");
                 CommonActivityUtils.startEventStreamService(context);
             } else {
-                Log.d(LOG_TAG,  "## onReceive() : the autostart is disabled");
+                Log.d(LOG_TAG, "## onReceive() : the autostart is disabled");
             }
         }
     }

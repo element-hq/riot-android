@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 
 import im.vector.Matrix;
 import im.vector.services.EventStreamService;
@@ -45,6 +44,7 @@ public class DismissNotificationReceiver extends BroadcastReceiver {
 
     /**
      * Get the latest notification dismiss timestamp.
+     *
      * @param context the context
      * @return the timestamp
      */
@@ -54,10 +54,11 @@ public class DismissNotificationReceiver extends BroadcastReceiver {
 
     /**
      * Set the latest notification dismiss timestamp.
+     *
      * @param context the context
-     * @param ts the timestamp
+     * @param ts      the timestamp
      */
-    public static void setNotificationDismissTs(Context context, long ts) {
+    private static void setNotificationDismissTs(Context context, long ts) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong(DISMISS_NOTIFICATIONS_TS_KEY, ts);
@@ -66,17 +67,19 @@ public class DismissNotificationReceiver extends BroadcastReceiver {
 
     /**
      * Get the latest notified message timestamp.
+     *
      * @param context the context
      * @return the timestamp
      */
-    public static long getLatestNotifiedMessageTs(Context context) {
+    private static long getLatestNotifiedMessageTs(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getLong(LATEST_NOTIFIED_MESSAGE_TS_KEY, 0);
     }
 
     /**
      * Set the latest notified message timestamp.
+     *
      * @param context the context
-     * @param ts the timestamp
+     * @param ts      the timestamp
      */
     public static void setLatestNotifiedMessageTs(Context context, long ts) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

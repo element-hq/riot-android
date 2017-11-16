@@ -33,13 +33,13 @@ import im.vector.Matrix;
 public abstract class AbsFilterableAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> implements Filterable {
 
     final Context mContext;
-    protected final MXSession mSession;
+    final MXSession mSession;
 
-    protected CharSequence mCurrentFilterPattern;
-    protected Filter mFilter;
+    CharSequence mCurrentFilterPattern;
+    private final Filter mFilter;
 
-    protected final AbsAdapter.InvitationListener mInvitationListener;
-    protected final AbsAdapter.MoreRoomActionListener mMoreActionListener;
+    final AbsAdapter.InvitationListener mInvitationListener;
+    final AbsAdapter.MoreRoomActionListener mMoreActionListener;
 
     /*
      * *********************************************************************************************
@@ -47,8 +47,8 @@ public abstract class AbsFilterableAdapter<T extends RecyclerView.ViewHolder> ex
      * *********************************************************************************************
      */
 
-    public AbsFilterableAdapter(final Context context, final AbsAdapter.InvitationListener invitationListener,
-                                final AbsAdapter.MoreRoomActionListener moreActionListener) {
+    AbsFilterableAdapter(final Context context, final AbsAdapter.InvitationListener invitationListener,
+                         final AbsAdapter.MoreRoomActionListener moreActionListener) {
         mContext = context;
 
         mInvitationListener = invitationListener;

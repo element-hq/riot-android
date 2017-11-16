@@ -82,7 +82,7 @@ public class HomeSectionView extends RelativeLayout {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public HomeSectionView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    private HomeSectionView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setup();
     }
@@ -256,6 +256,7 @@ public class HomeSectionView extends RelativeLayout {
 
     /**
      * Scrolls the list to display the item first
+     *
      * @param index the item index
      */
     public void scrollToPosition(int index) {

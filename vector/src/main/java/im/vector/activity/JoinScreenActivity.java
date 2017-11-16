@@ -19,6 +19,7 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -32,7 +33,7 @@ import im.vector.Matrix;
  * JoinScreenActivity is a dummy activity to join / reject a room invitation
  */
 public class JoinScreenActivity extends RiotBaseActivity {
-    public static final String LOG_TAG = "JoinScreenActivity";
+    private static final String LOG_TAG = JoinScreenActivity.class.getSimpleName();
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID";

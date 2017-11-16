@@ -27,16 +27,17 @@ import android.content.Context;
 
 import org.matrix.androidsdk.util.Log;
 
-public class Analytics {
-    private static final String LOG_TAG = "Analytics";
+class Analytics {
+    private static final String LOG_TAG = Analytics.class.getSimpleName();
 
-    public static GoogleAnalytics mAnalytics;
+    private static GoogleAnalytics mAnalytics;
     public static Tracker mTracker;
 
     /**
      * Initialise Google Analytics immediately so it will catch all sorts of errors prior to EasyTracker onStart. Also makes sensible
      * exception stack traces if you want.
-     * @param context App context
+     *
+     * @param context   App context
      * @param trackerId The tracker ID to use.
      * @return A GoogleAnalytics reference
      */
@@ -66,10 +67,11 @@ public class Analytics {
 
     /**
      * Send the GA stats event
+     *
      * @param category the category
-     * @param action the action
-     * @param label the label
-     * @param value the value
+     * @param action   the action
+     * @param label    the label
+     * @param value    the value
      */
     public static void sendEvent(String category, String action, String label, long value) {
         // add sanity check, GA could have been disabled.

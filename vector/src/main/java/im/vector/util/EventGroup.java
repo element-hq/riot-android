@@ -40,8 +40,7 @@ import org.matrix.androidsdk.util.Log;
  * A EventGroup is a special event that can contain MessageRows
  */
 public class EventGroup extends Event {
-
-    private static final String LOG_TAG = "EventGroup";
+    private static final String LOG_TAG = EventGroup.class.getSimpleName();
 
     // events rows map
     private final Map<String, MessageRow> mRowsMap;
@@ -60,7 +59,7 @@ public class EventGroup extends Event {
      */
     public EventGroup(Set<String> hiddenGroupIds) {
         // defines an MessageRowGroup unique ID
-        eventId =  getClass().getName() + '@' + Integer.toHexString(hashCode()) + "-" + System.currentTimeMillis();
+        eventId = getClass().getName() + '@' + Integer.toHexString(hashCode()) + "-" + System.currentTimeMillis();
 
         // init field
         mRowsMap = new HashMap<>();
@@ -97,7 +96,7 @@ public class EventGroup extends Event {
      * @param row the message row
      * @return true if the messageRow is defined in this group.
      */
-    public boolean contains(MessageRow row) {
+    private boolean contains(MessageRow row) {
         return (null != row) && (null != row.getEvent()) && mRowsMap.containsKey(row.getEvent().eventId);
     }
 
@@ -255,6 +254,7 @@ public class EventGroup extends Event {
 
     /**
      * Provides a message rows list to display unique avatars
+     *
      * @param maxCount the max number of items
      * @return the messages row list
      */
@@ -262,7 +262,7 @@ public class EventGroup extends Event {
         Set<String> senders = new HashSet<>();
         List<MessageRow> rows = new ArrayList<>();
 
-        for(MessageRow row : mRows) {
+        for (MessageRow row : mRows) {
             String rowSender = row.getEvent().sender;
 
             if ((null != rowSender) && !senders.contains(rowSender)) {

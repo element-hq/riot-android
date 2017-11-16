@@ -23,9 +23,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import im.vector.VectorApp;
 
-public class GCMHelper {
-
-    private static final String LOG_TAG = "GCMHelper";
+class GCMHelper {
+    private static final String LOG_TAG = GCMHelper.class.getSimpleName();
 
     /**
      * Retrieves the GCM registration token.

@@ -72,7 +72,7 @@ import java.util.Random;
  * Util class for creating notifications.
  */
 public class NotificationUtils {
-    private static final String LOG_TAG = "NotificationUtils";
+    private static final String LOG_TAG = NotificationUtils.class.getSimpleName();
 
     private static final String QUICK_LAUNCH_ACTION = "EventStreamService.QUICK_LAUNCH_ACTION";
     public static final String TAP_TO_VIEW_ACTION = "EventStreamService.TAP_TO_VIEW_ACTION";
@@ -114,12 +114,12 @@ public class NotificationUtils {
 
     // on devices >= android O, we need to define a channel for each notifications
     public static final String LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID";
-    public static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOTIFICATION_CHANNEL_ID";
-    public static final String CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID";
+    private static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOTIFICATION_CHANNEL_ID";
+    private static final String CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID";
 
-    public static String DEFAULT_NOTIFICATION_NAME = null;
-    public static String CALL_NOTIFICATION_NAME = null;
-    public static String LISTEN_FOR_EVENTS_NOTIFICATION_NAME = null;
+    private static String DEFAULT_NOTIFICATION_NAME = null;
+    private static String CALL_NOTIFICATION_NAME = null;
+    private static String LISTEN_FOR_EVENTS_NOTIFICATION_NAME = null;
 
     /**
      * Add a notification groups.
@@ -137,11 +137,11 @@ public class NotificationUtils {
         }
 
         if (null == CALL_NOTIFICATION_NAME) {
-            CALL_NOTIFICATION_NAME =  context.getString(R.string.call);
+            CALL_NOTIFICATION_NAME = context.getString(R.string.call);
         }
 
         if (null == LISTEN_FOR_EVENTS_NOTIFICATION_NAME) {
-            LISTEN_FOR_EVENTS_NOTIFICATION_NAME =  context.getString(R.string.notification_listen_for_events);
+            LISTEN_FOR_EVENTS_NOTIFICATION_NAME = context.getString(R.string.notification_listen_for_events);
         }
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

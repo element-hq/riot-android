@@ -18,11 +18,13 @@ package im.vector.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
+
 import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
@@ -40,13 +42,10 @@ import java.util.Map;
  * SplashActivity displays a splash while loading and inittializing the client.
  */
 public class SplashActivity extends MXCActionBarActivity {
-
-    private static final String LOG_TAG = "SplashActivity";
+    private static final String LOG_TAG = SplashActivity.class.getSimpleName();
 
     public static final String EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID";
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
-
-    private Collection<MXSession> mSessions;
 
     private HashMap<MXSession, IMXEventListener> mListeners;
     private HashMap<MXSession, IMXEventListener> mDoneListeners;
@@ -60,7 +59,7 @@ public class SplashActivity extends MXCActionBarActivity {
         boolean hasCorruptedStore = false;
         ArrayList<MXSession> sessions = Matrix.getMXSessions(this);
 
-        for(MXSession session : sessions) {
+        for (MXSession session : sessions) {
             if (session.isAlive()) {
                 hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
             }
@@ -126,9 +125,9 @@ public class SplashActivity extends MXCActionBarActivity {
 
         setContentView(R.layout.vector_activity_splash);
 
-        mSessions =  Matrix.getInstance(getApplicationContext()).getSessions();
+        Collection<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
 
-        if (mSessions == null) {
+        if (sessions == null) {
             Log.e(LOG_TAG, "onCreate no Sessions");
             finish();
             return;
@@ -139,7 +138,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
         ArrayList<String> matrixIds = new ArrayList<>();
 
-        for(final MXSession session : mSessions) {
+        for (final MXSession session : sessions) {
             final MXSession fSession = session;
 
             final IMXEventListener eventListener = new MXEventListener() {
@@ -254,7 +253,7 @@ public class SplashActivity extends MXCActionBarActivity {
         if (Matrix.getInstance(this).mHasBeenDisconnected) {
             matrixIds = new ArrayList<>();
 
-            for(MXSession session : mSessions) {
+            for (MXSession session : sessions) {
                 matrixIds.add(session.getCredentials().userId);
             }
 
@@ -282,7 +281,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
         boolean noUpdate;
 
-        synchronized(LOG_TAG) {
+        synchronized (LOG_TAG) {
             noUpdate = (mListeners.size() == 0);
         }
 
@@ -301,7 +300,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
         Collection<MXSession> sessions = mDoneListeners.keySet();
 
-        for(MXSession session : sessions) {
+        for (MXSession session : sessions) {
             if (session.isAlive()) {
                 session.getDataHandler().removeListener(mDoneListeners.get(session));
                 session.setFailureCallback(null);

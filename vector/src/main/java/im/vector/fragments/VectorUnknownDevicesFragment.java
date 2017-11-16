@@ -117,7 +117,7 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View v = inflater.inflate(R.layout.dialog_unknown_devices, null);
-        mExpandableListView = (ExpandableListView) v.findViewById(R.id.unknown_devices_list_view);
+        mExpandableListView = v.findViewById(R.id.unknown_devices_list_view);
 
         mDevicesList = getDevicesList();
         final VectorUnknownDevicesAdapter adapter = new VectorUnknownDevicesAdapter(getContext(), mDevicesList);

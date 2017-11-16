@@ -41,7 +41,7 @@ import im.vector.util.PhoneNumberUtils;
  */
 public class Contact implements java.io.Serializable {
 
-    private static final String LOG_TAG = "Contact";
+    private static final String LOG_TAG = Contact.class.getSimpleName();
 
     // a contact field (like email)
     // is linked to a matrix id/
@@ -57,7 +57,8 @@ public class Contact implements java.io.Serializable {
 
         /**
          * Constructor
-         * @param matrixId the matrix id
+         *
+         * @param matrixId  the matrix id
          * @param accountId the account id
          */
         public MXID(String matrixId, String accountId) {
@@ -156,6 +157,7 @@ public class Contact implements java.io.Serializable {
 
     /**
      * Constructor
+     *
      * @param contactId the contact id.
      */
     public Contact(String contactId) {
@@ -167,6 +169,7 @@ public class Contact implements java.io.Serializable {
     }
 
     // emails list
+
     /**
      * @return the emails list.
      */
@@ -176,6 +179,7 @@ public class Contact implements java.io.Serializable {
 
     /**
      * Add an email address to the list.
+     *
      * @param anEmailAddress the email address to add
      */
     public void addEmailAdress(String anEmailAddress) {
@@ -183,7 +187,7 @@ public class Contact implements java.io.Serializable {
             mEmails.add(anEmailAddress);
 
             // test if the email address also matches to a matrix ID
-            MXID mxid =  PIDsRetriever.getInstance().getMXID(anEmailAddress);
+            MXID mxid = PIDsRetriever.getInstance().getMXID(anEmailAddress);
 
             if (null != mxid) {
                 mMXIDsByElement.put(anEmailAddress, mxid);
@@ -200,7 +204,8 @@ public class Contact implements java.io.Serializable {
 
     /**
      * Add a phone number address to the list.
-     * @param aPn the phone number to add
+     *
+     * @param aPn     the phone number to add
      * @param aPnE164 the E164 phone number to add
      */
     public void addPhoneNumber(String aPn, String aPnE164) {
@@ -210,7 +215,7 @@ public class Contact implements java.io.Serializable {
             mPhoneNumbers.add(pn);
 
             // test if the phone number also matches to a matrix ID
-            MXID mxid =  PIDsRetriever.getInstance().getMXID(pn.mMsisdnPhoneNumber);
+            MXID mxid = PIDsRetriever.getInstance().getMXID(pn.mMsisdnPhoneNumber);
             if (null != mxid) {
                 mMXIDsByElement.put(pn.mMsisdnPhoneNumber, mxid);
             }
@@ -230,6 +235,7 @@ public class Contact implements java.io.Serializable {
 
     /**
      * Defines a thumbnail URI.
+     *
      * @return the thumbnail uri.
      */
     public String getThumbnailUri() {
@@ -238,6 +244,7 @@ public class Contact implements java.io.Serializable {
 
     /**
      * Defines a new thumbnail uri.
+     *
      * @param aThumbnailUri the new thumbnail ur.
      */
     public void setThumbnailUri(String aThumbnailUri) {
@@ -260,7 +267,7 @@ public class Contact implements java.io.Serializable {
             }
         }
 
-        for(PhoneNumber pn : getPhonenumbers()) {
+        for (PhoneNumber pn : getPhonenumbers()) {
             Contact.MXID mxid = pidRetriever.getMXID(pn.mMsisdnPhoneNumber);
 
             if (null != mxid) {
@@ -271,8 +278,9 @@ public class Contact implements java.io.Serializable {
 
     /**
      * Defines a matrix identifier for a dedicated medim
+     *
      * @param medium the medium
-     * @param mxid the matrixId
+     * @param mxid   the matrixId
      */
     public void put(String medium, MXID mxid) {
         if ((null != medium) && (null != mxid) && !TextUtils.isEmpty(mxid.mMatrixId)) {
@@ -281,15 +289,8 @@ public class Contact implements java.io.Serializable {
     }
 
     /**
-     * Check if the contact could contain some matrix Ids
-     * @return true if the contact could contain some matrix IDs
-     */
-    private boolean couldContainMatridIds() {
-        return (0 != (mEmails.size() + mPhoneNumbers.size()));
-    }
-
-    /**
      * Tell if one field contains the pattern
+     *
      * @param pattern the pattern to find
      * @return true if it is found.
      */
@@ -306,13 +307,13 @@ public class Contact implements java.io.Serializable {
         }
 
         if (!matched) {
-            for(String email : mEmails) {
+            for (String email : mEmails) {
                 matched |= email.toLowerCase().contains(pattern);
             }
         }
 
         if (!matched) {
-            for(PhoneNumber pn : mPhoneNumbers) {
+            for (PhoneNumber pn : mPhoneNumbers) {
                 matched |= pn.mMsisdnPhoneNumber.toLowerCase().contains(pattern)
                         || pn.mRawPhoneNumber.toLowerCase().contains(pattern)
                         || (pn.mE164PhoneNumber != null && pn.mE164PhoneNumber.toLowerCase().contains(pattern));
@@ -324,6 +325,7 @@ public class Contact implements java.io.Serializable {
 
     /**
      * Tell whether a matrix id or an email / phonenumber has the provided prefix.
+     *
      * @param prefix the prefix
      * @return true if one item matched
      */
@@ -335,7 +337,7 @@ public class Contact implements java.io.Serializable {
 
         ArrayList<MXID> matchedMatrixIds = new ArrayList<>();
 
-        for(String email : mEmails) {
+        for (String email : mEmails) {
             if (email.startsWith(prefix)) {
                 return true;
             }
@@ -360,7 +362,7 @@ public class Contact implements java.io.Serializable {
             }
         }
 
-        for(MXID mxid : matchedMatrixIds) {
+        for (MXID mxid : matchedMatrixIds) {
             if ((null != mxid.mMatrixId) && mxid.mMatrixId.startsWith("@" + prefix)) {
                 return true;
             }
@@ -378,6 +380,7 @@ public class Contact implements java.io.Serializable {
 
     /**
      * Retrieve a MXID from an identifier
+     *
      * @param media the media
      * @return the matched MXID if it exists.
      */
@@ -391,6 +394,7 @@ public class Contact implements java.io.Serializable {
 
     /**
      * Set the display name.
+     *
      * @param displayName the new display name.
      */
     public void setDisplayName(String displayName) {
@@ -404,7 +408,7 @@ public class Contact implements java.io.Serializable {
         String res = mDisplayName;
 
         if (TextUtils.isEmpty(res)) {
-            for(String email : mEmails) {
+            for (String email : mEmails) {
                 if (!TextUtils.isEmpty(email)) {
                     return email;
                 }
@@ -412,7 +416,7 @@ public class Contact implements java.io.Serializable {
         }
 
         if (TextUtils.isEmpty(res)) {
-            for(PhoneNumber pn : mPhoneNumbers) {
+            for (PhoneNumber pn : mPhoneNumbers) {
                 return pn.mRawPhoneNumber;
             }
         }
@@ -429,6 +433,7 @@ public class Contact implements java.io.Serializable {
 
     /**
      * Return the contact thumbnail bitmap.
+     *
      * @param context the context.
      * @return the contact thumbnail bitmap.
      */

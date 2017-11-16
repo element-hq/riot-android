@@ -63,7 +63,6 @@ import im.vector.view.SimpleDividerItemDecoration;
  * Displays the historical rooms list
  */
 public class HistoricalRoomsActivity extends RiotAppCompatActivity implements SearchView.OnQueryTextListener, HomeRoomAdapter.OnSelectRoomListener, AbsAdapter.MoreRoomActionListener, RoomUtils.HistoricalRoomActionListener {
-
     private static final String LOG_TAG = HistoricalRoomsActivity.class.getSimpleName();
 
     @BindView(R.id.search_view)
@@ -85,7 +84,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
     private HomeRoomAdapter mHistoricalAdapter;
 
     // pending tasks
-    private final  List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
+    private final List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
 
     // sessions
     private MXSession mSession;
@@ -173,13 +172,13 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         // Remove unwanted left margin
-        LinearLayout searchEditFrame = (LinearLayout) mSearchView.findViewById(R.id.search_edit_frame);
+        LinearLayout searchEditFrame = mSearchView.findViewById(R.id.search_edit_frame);
         if (searchEditFrame != null) {
             ViewGroup.MarginLayoutParams searchEditFrameParams = (ViewGroup.MarginLayoutParams) searchEditFrame.getLayoutParams();
             searchEditFrameParams.leftMargin = 0;
             searchEditFrame.setLayoutParams(searchEditFrameParams);
         }
-        ImageView searchIcon = (ImageView) mSearchView.findViewById(R.id.search_mag_icon);
+        ImageView searchIcon = mSearchView.findViewById(R.id.search_mag_icon);
         if (searchIcon != null) {
             ViewGroup.MarginLayoutParams searchIconParams = (ViewGroup.MarginLayoutParams) searchIcon.getLayoutParams();
             searchIconParams.leftMargin = 0;
@@ -194,7 +193,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setQueryHint(getString(R.string.historical_placeholder));
 
-        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
     }
 
@@ -340,7 +339,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
      *
      * @param errorMessage the localized error message
      */
-    protected void onRequestDone(final String errorMessage) {
+    private void onRequestDone(final String errorMessage) {
         if (!this.isFinishing()) {
             runOnUiThread(new Runnable() {
                 @Override

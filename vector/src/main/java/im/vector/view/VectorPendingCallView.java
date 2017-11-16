@@ -119,10 +119,10 @@ public class VectorPendingCallView extends RelativeLayout {
         // retrieve the UI items
         mMainView = findViewById(R.id.main_view);
 
-        mCallDescriptionTextView = (TextView) findViewById(R.id.pending_call_room_name_textview);
+        mCallDescriptionTextView = findViewById(R.id.pending_call_room_name_textview);
         mCallDescriptionTextView.setVisibility(View.GONE);
 
-        mCallStatusTextView = (TextView) findViewById(R.id.pending_call_status_textview);
+        mCallStatusTextView = findViewById(R.id.pending_call_status_textview);
         mCallStatusTextView.setVisibility(View.GONE);
 
         // UI handler

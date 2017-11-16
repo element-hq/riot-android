@@ -307,7 +307,7 @@ public class RegistrationManager {
                 @Override
                 public void onRegistrationFailed(String message) {
                     if (TextUtils.equals(ERROR_MISSING_STAGE, message)
-                            && (mPhoneNumber == null || isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN))){
+                            && (mPhoneNumber == null || isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN))) {
                         if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                             attemptRegistration(context, listener);
                         } else {
@@ -405,7 +405,7 @@ public class RegistrationManager {
      * @param stage
      * @return true if completed
      */
-    public boolean isCompleted(final String stage) {
+    private boolean isCompleted(final String stage) {
         return mRegistrationResponse != null && mRegistrationResponse.completed != null && mRegistrationResponse.completed.contains(stage);
     }
 
@@ -425,7 +425,7 @@ public class RegistrationManager {
      * @param stage
      * @return true if required
      */
-    public boolean isRequired(final String stage) {
+    private boolean isRequired(final String stage) {
         return mRequiredStages.contains(stage);
     }
 
@@ -450,7 +450,7 @@ public class RegistrationManager {
     /**
      * @return true if captcha is mandatory for registration and not completed yet
      */
-    public boolean isCaptchaRequired() {
+    private boolean isCaptchaRequired() {
         return mRegistrationResponse != null
                 && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)
                 && (mRegistrationResponse.completed == null || !mRegistrationResponse.completed.contains(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA));
@@ -980,6 +980,7 @@ public class RegistrationManager {
 
     public interface ThreePidRequestListener {
         void onThreePidRequested(ThreePid pid);
+
         void onThreePidRequestFailed(@StringRes int errorMessageRes);
     }
 

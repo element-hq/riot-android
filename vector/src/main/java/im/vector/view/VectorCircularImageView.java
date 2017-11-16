@@ -35,7 +35,7 @@ import org.matrix.androidsdk.util.Log;
  * Display a circular image.
  */
 public class VectorCircularImageView extends android.support.v7.widget.AppCompatImageView {
-    private static final String LOG_TAG = "VCirImageView";
+    private static final String LOG_TAG = VectorCircularImageView.class.getSimpleName();
 
     public VectorCircularImageView(Context context) {
         super(context);
@@ -54,7 +54,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
         super.setImageDrawable(drawable);
 
         if ((null != drawable) && (drawable instanceof BitmapDrawable)) {
-            final Bitmap b = ((BitmapDrawable)drawable).getBitmap();
+            final Bitmap b = ((BitmapDrawable) drawable).getBitmap();
 
             if (null != b) {
                 this.post(new Runnable() {
@@ -69,9 +69,9 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
 
     // We use a lru cache to reduce the screen loading time.
     // Create a RoundedBitmapDrawable might be slow
-    static final LruCache<String, RoundedBitmapDrawable> mCache = new LruCache<String, RoundedBitmapDrawable>(4 * 1024 * 1024) {
+    private static final LruCache<String, RoundedBitmapDrawable> mCache = new LruCache<String, RoundedBitmapDrawable>(4 * 1024 * 1024) {
         @Override
-        protected int sizeOf (String key, RoundedBitmapDrawable drawable) {
+        protected int sizeOf(String key, RoundedBitmapDrawable drawable) {
             return drawable.getBitmap().getRowBytes() * drawable.getBitmap().getHeight(); // size in bytes
         }
     };
@@ -84,6 +84,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
     /**
      * Update the bitmap.
      * The bitmap is first squared before adding corners
+     *
      * @param bm the new bitmap
      */
     public void setImageBitmap(final Bitmap bm) {
@@ -108,7 +109,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
                 mConversionImagesThreadHandler = new android.os.Handler(mConversionImagesThread.getLooper());
                 mUIHandler = new Handler(Looper.getMainLooper());
             }
-            
+
             mConversionImagesThreadHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -118,7 +119,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
                         // nothing to do
                     }
                     // larger than high
-                    else if (width > height){
+                    else if (width > height) {
                         try {
                             squareBitmap = Bitmap.createBitmap(
                                     squareBitmap,

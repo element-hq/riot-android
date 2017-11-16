@@ -66,13 +66,13 @@ public class VideoRecordProgressView extends View {
     public VideoRecordProgressView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        int[] attrArray = new int[] {android.R.attr.layout_width, android.R.attr.layout_height};
+        int[] attrArray = new int[]{android.R.attr.layout_width, android.R.attr.layout_height};
         TypedArray typedArray = context.obtainStyledAttributes(attrs, attrArray);
         int width = typedArray.getDimensionPixelSize(0, 0);
         int height = typedArray.getDimensionPixelSize(1, 0);
-		if (typedArray != null) {
-			typedArray.recycle();
-		}
+        if (typedArray != null) {
+            typedArray.recycle();
+        }
         mRectF = new RectF(0, 0, width, height);
         mPaint = new Paint();
     }

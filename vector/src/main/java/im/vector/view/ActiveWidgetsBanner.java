@@ -20,9 +20,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import org.matrix.androidsdk.util.Log;
+
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
@@ -42,6 +44,7 @@ public class ActiveWidgetsBanner extends RelativeLayout {
     public interface onUpdateListener {
         /**
          * The user clicks on the close widget button.
+         *
          * @param widget the widget
          */
         void onCloseWidgetClick(Widget widget);
@@ -110,7 +113,7 @@ public class ActiveWidgetsBanner extends RelativeLayout {
         mContext = context;
 
         View.inflate(getContext(), R.layout.active_widget_banner, this);
-        mWidgetTypeTextView = (TextView) findViewById(R.id.widget_type_text_view);
+        mWidgetTypeTextView = findViewById(R.id.widget_type_text_view);
 
         mCloseWidgetIcon = findViewById(R.id.close_widget_icon_container);
         mCloseWidgetIcon.setOnClickListener(new OnClickListener() {
@@ -142,8 +145,9 @@ public class ActiveWidgetsBanner extends RelativeLayout {
 
     /**
      * Define the room and the session.
+     *
      * @param session the session
-     * @param room the room
+     * @param room    the room
      */
     public void initRoomInfo(MXSession session, Room room) {
         mSession = session;
@@ -152,6 +156,7 @@ public class ActiveWidgetsBanner extends RelativeLayout {
 
     /**
      * Set a listener
+     *
      * @param listener the new listener
      */
     public void setOnUpdateListener(onUpdateListener listener) {
@@ -161,7 +166,7 @@ public class ActiveWidgetsBanner extends RelativeLayout {
     /**
      * Refresh the view visibility
      */
-    public void refresh() {
+    private void refresh() {
         if ((null != mRoom) && (null != mSession)) {
             List<Widget> activeWidgets = WidgetsManager.getSharedInstance().getActiveWebviewWidgets(mSession, mRoom);
             Widget firstWidget = null;
@@ -205,12 +210,5 @@ public class ActiveWidgetsBanner extends RelativeLayout {
      */
     public void onActivityPause() {
         WidgetsManager.getSharedInstance().removeListener(mWidgetListener);
-    }
-
-    /**
-     * @return the active widgets
-     */
-    public List<Widget> getActiveWidgets() {
-        return mActiveWidgets;
     }
 }

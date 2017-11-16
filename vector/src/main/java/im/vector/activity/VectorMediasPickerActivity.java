@@ -93,7 +93,7 @@ import im.vector.view.VideoRecordView;
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
  */
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements TextureView.SurfaceTextureListener {
-    private static final String LOG_TAG = "VectorMedPicker";
+    private static final String LOG_TAG = VectorMediasPickerActivity.class.getSimpleName();
 
     // public keys
     // boolean, display a mask to show the avatar rendering
@@ -243,26 +243,26 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // camera preview
         mPreviewScrollView = findViewById(R.id.medias_picker_scrollView);
         mSwitchCameraImageView = findViewById(R.id.medias_picker_switch_camera);
-        mCameraTextureView =  (TextureView) findViewById(R.id.medias_picker_texture_view);
+        mCameraTextureView = findViewById(R.id.medias_picker_texture_view);
         mCameraTextureView.setSurfaceTextureListener(this);
-        mCameraTextureMaskView = (ImageView) findViewById(R.id.medias_picker_texture_mask_view);
-        mRecordAnimationView = (VideoRecordView)findViewById(R.id.medias_record_animation);
+        mCameraTextureMaskView = findViewById(R.id.medias_picker_texture_mask_view);
+        mRecordAnimationView = findViewById(R.id.medias_record_animation);
 
         // preview
         mPreviewLayout = findViewById(R.id.medias_picker_preview_layout);
 
         // image preview
         mImagePreviewLayout = findViewById(R.id.medias_picker_preview_image_layout);
-        mImagePreviewImageView = (ImageView) findViewById(R.id.medias_picker_preview_image_view);
-        mImagePreviewAvatarModeMaskView = (ImageView) findViewById(R.id.medias_picker_preview_avatar_mode_mask);
+        mImagePreviewImageView = findViewById(R.id.medias_picker_preview_image_view);
+        mImagePreviewAvatarModeMaskView = findViewById(R.id.medias_picker_preview_avatar_mode_mask);
 
         // video preview
         mVideoPreviewLayout = findViewById(R.id.medias_picker_preview_video_layout);
-        mVideoView = (VideoView) findViewById(R.id.medias_picker_preview_video_view);
-        mVideoButtonView = (ImageView) findViewById(R.id.medias_picker_preview_video_button);
+        mVideoView = findViewById(R.id.medias_picker_preview_video_view);
+        mVideoButtonView = findViewById(R.id.medias_picker_preview_video_button);
 
-        mTakeImageView = (ImageView) findViewById(R.id.medias_picker_camera_button);
-        mGalleryTableLayout = (TableLayout)findViewById(R.id.gallery_table_layout);
+        mTakeImageView = findViewById(R.id.medias_picker_camera_button);
+        mGalleryTableLayout = findViewById(R.id.gallery_table_layout);
 
         //
         mSwitchCameraImageView.setVisibility((Camera.getNumberOfCameras() > 1) ? View.VISIBLE : View.GONE);
@@ -327,7 +327,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 if (null != mVideoUri) {
                     sendVideoFile();
                 } else {
-                   attachImageFrom(mTakenImageOrigin);
+                    attachImageFrom(mTakenImageOrigin);
                 }
             }
         });
@@ -339,7 +339,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mHandlerThread.start();
         mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
 
-        if (!restoreInstanceState(savedInstanceState)){
+        if (!restoreInstanceState(savedInstanceState)) {
             // default UI: if a taken image is not in preview, then display: live camera preview + "take picture"/switch/exit buttons
             updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
         }
@@ -352,8 +352,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     @Override
     public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         //if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_RECORDING) {
-            // do nothing
-            // the user has to long press again on the focus button
+        // do nothing
+        // the user has to long press again on the focus button
         //}
     }
 
@@ -417,6 +417,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * Restores the saved instance.
+     *
      * @param savedInstanceState the savedInstanceState
      * @return true if some items have been restored
      */
@@ -466,8 +467,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * This method returns the selected image to the calling activity.
      *
      * @param requestCode request ID
-     * @param resultCode operation status
-     * @param data data passed from the called activity
+     * @param resultCode  operation status
+     * @param data        data passed from the called activity
      */
     @SuppressLint("NewApi")
     @Override
@@ -507,7 +508,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 fileIntent.setType(ResourceUtils.MIME_TYPE_IMAGE_ALL);
             }
             startActivityForResult(fileIntent, REQUEST_MEDIAS);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Toast.makeText(VectorMediasPickerActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
         }
     }
@@ -734,8 +735,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 newHeight = (int) (((float) newWidth) * previewSize.height / previewSize.width);
 
                 // max value
-                if (newHeight > (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO)) {
-                    newHeight =  (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
+                if (newHeight > (int) (mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO)) {
+                    newHeight = (int) (mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
                     newWidth = (int) (((float) newHeight) * previewSize.width / previewSize.height);
                 }
             }
@@ -766,8 +767,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             if ((layout.height != mCameraPreviewLayoutHeight) && !mIsVideoMode) {
                 mCameraPreviewLayoutHeight = layout.height;
                 // set the height of the relative layout containing the texture view
-                if(null != mCameraPreviewLayout) {
-                    RelativeLayout.LayoutParams previewLayoutParams = (RelativeLayout.LayoutParams)mCameraPreviewLayout.getLayoutParams();
+                if (null != mCameraPreviewLayout) {
+                    RelativeLayout.LayoutParams previewLayoutParams = (RelativeLayout.LayoutParams) mCameraPreviewLayout.getLayoutParams();
                     previewLayoutParams.height = mCameraPreviewLayoutHeight;
                     mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
                 }
@@ -792,16 +793,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mScreenHeight = metrics.heightPixels;
         mScreenWidth = metrics.widthPixels;
 
-        mCameraPreviewLayoutHeight = (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
+        mCameraPreviewLayoutHeight = (int) (mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
 
         // set the height of the relative layout containing the texture view
-        mCameraPreviewLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_layout);
+        mCameraPreviewLayout = findViewById(R.id.medias_picker_camera_preview_layout);
         ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
         previewLayoutParams.height = mCameraPreviewLayoutHeight;
         mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
 
         // set the height of the layout including the texture view and the gallery (total sum > screen height to allow scrolling)
-        mPreviewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_preview_gallery_layout);
+        mPreviewAndGalleryLayout = findViewById(R.id.medias_picker_preview_gallery_layout);
         computePreviewAndGalleryHeight();
     }
 
@@ -813,18 +814,18 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private void computePreviewAndGalleryHeight() {
         int galleryRowsCount = getGalleryRowsCount();
 
-        if(null != mPreviewAndGalleryLayout) {
+        if (null != mPreviewAndGalleryLayout) {
             ViewGroup.LayoutParams previewAndGalleryLayoutParams = mPreviewAndGalleryLayout.getLayoutParams();
             int galleryHeight = (galleryRowsCount * mScreenWidth / GALLERY_COLUMN_COUNT);
             previewAndGalleryLayoutParams.height = mCameraPreviewLayoutHeight + galleryHeight;
             mPreviewAndGalleryLayout.setLayoutParams(previewAndGalleryLayoutParams);
-        }
-        else
+        } else
             Log.w(LOG_TAG, "## computePreviewAndGalleryHeight(): GalleryTable height not set");
     }
 
     /**
      * Exit activity handler.
+     *
      * @param aView view
      */
     public void onExitButton(@SuppressWarnings("UnusedParameters") View aView) {
@@ -834,13 +835,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * Display the image preview.
      *
-     * @param bitmap the bitmap.
-     * @param aCameraImageUrl image from camera
+     * @param bitmap           the bitmap.
+     * @param aCameraImageUrl  image from camera
      * @param aGalleryImageUri image ref as an Uri
-     * @param aOrigin CAMERA or GALLERY
+     * @param aOrigin          CAMERA or GALLERY
      */
-    private void displayImagePreview(final Bitmap bitmap, final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin){
-        final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
+    private void displayImagePreview(final Bitmap bitmap, final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin) {
+        final RelativeLayout progressBar = findViewById(R.id.medias_preview_progress_bar_layout);
         progressBar.setVisibility(View.VISIBLE);
         mTakeImageView.setEnabled(false);
 
@@ -879,7 +880,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             if (null != newBitmap) {// from camera
                 mImagePreviewImageView.setImageBitmap(newBitmap);
             } else {
-                if(null != defaultUri) {
+                if (null != defaultUri) {
                     mImagePreviewImageView.setImageURI(defaultUri);
                 }
             }
@@ -925,7 +926,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 int newHeight;
 
                 newHeight = screenHeight;
-                newWidth = (int) (((float) newHeight) * imageW/ imageH);
+                newWidth = (int) (((float) newHeight) * imageW / imageH);
 
                 if (newWidth > screenWidth) {
                     newWidth = screenWidth;
@@ -946,14 +947,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Update the UI according to camera action. Two UIs are displayed:
      * the camera real time preview (default configuration) or the taken picture.
      * (the taken picture comes from the camera or from the gallery)
-     *
+     * <p>
      * When the taken image is displayed, only two buttons are displayed: "attach"
      * the current image or "re take"(cancel) another image with the camera.
      * We also have to distinguish the origin of the taken image: from the camera
      * or from the gallery.
      *
      * @param aIsTakenImageDisplayed true to display the taken image, false to show the camera preview
-     * @param aImageOrigin IMAGE_ORIGIN_CAMERA or IMAGE_ORIGIN_GALLERY
+     * @param aImageOrigin           IMAGE_ORIGIN_CAMERA or IMAGE_ORIGIN_GALLERY
      */
     private void updateUiConfiguration(boolean aIsTakenImageDisplayed, int aImageOrigin) {
         // save current configuration for lifecyle management
@@ -968,8 +969,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (aIsTakenImageDisplayed) {
             mPreviewLayout.setVisibility(View.VISIBLE);
             mPreviewScrollView.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             // the default UI: hide gallery preview, show the surface view
             mPreviewScrollView.setVisibility(View.VISIBLE);
             mPreviewLayout.setVisibility(View.GONE);
@@ -984,8 +984,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             if (null != mCamera) {
                 mCamera.startPreview();
             }
-        } catch (Exception ex){
-            Log.w(LOG_TAG,"## startCameraPreview(): Exception Msg="+ ex.getMessage());
+        } catch (Exception ex) {
+            Log.w(LOG_TAG, "## startCameraPreview(): Exception Msg=" + ex.getMessage());
         }
     }
 
@@ -1127,10 +1127,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * Create an unique image name.
+     *
      * @return the unique file name
      */
     private static String buildNewImageName(Context context) {
-        String nameRetValue = "VectorImage_"+ new SimpleDateFormat("yyyy-MM-dd_hhmmss").format(new Date()) + ".jpg";
+        String nameRetValue = "VectorImage_" + new SimpleDateFormat("yyyy-MM-dd_hhmmss").format(new Date()) + ".jpg";
 
         // save new name in preference
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -1143,6 +1144,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * Retrieves the saved image name.
+     *
      * @param context the context
      * @return the saved image name.
      */
@@ -1153,7 +1155,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * Create a thumbnail from an image stream with a rotation angle.
-     * @param imageStream the image stream
+     *
+     * @param imageStream   the image stream
      * @param rotationAngle the rotation angle
      * @return the thumbnail
      */
@@ -1194,6 +1197,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * Create a thumbnail bitmap from an image URL if there is some exif metadata which implies to rotate
      * the image. This method is used to process the image taken by the from the camera.
+     *
      * @param aImageUrl the image url
      * @return a thumbnail if the exif metadata implies to rotate the image.
      */
@@ -1245,23 +1249,22 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param aImageOrigin camera, otherwise gallery
      */
     private void attachImageFrom(int aImageOrigin) {
-        if(IMAGE_ORIGIN_CAMERA == aImageOrigin){
+        if (IMAGE_ORIGIN_CAMERA == aImageOrigin) {
             attachImageFromCamera();
-        }
-        else if(IMAGE_ORIGIN_GALLERY == aImageOrigin){
+        } else if (IMAGE_ORIGIN_GALLERY == aImageOrigin) {
             attachImageFromGallery();
-        }
-        else {
-            Log.w(LOG_TAG,"## attachImageFrom(): unknown image origin");
+        } else {
+            Log.w(LOG_TAG, "## attachImageFrom(): unknown image origin");
         }
     }
 
     /**
      * Returns the thumbnail path of shot image.
+     *
      * @param picturePath the image path
      * @return the thumbnail image path.
      */
-    public static String getThumbnailPath(String picturePath) {
+    private static String getThumbnailPath(String picturePath) {
         if (!TextUtils.isEmpty(picturePath) && picturePath.endsWith(".jpg")) {
             return picturePath.replace(".jpg", "_thumb.jpg");
         }
@@ -1329,9 +1332,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * Compute the avatar mask bitmap and apply it to the provided ImageView
+     *
      * @param maskView the mask view
-     * @param width the image width to hide
-     * @param height the image height to hide
+     * @param width    the image width to hide
+     * @param height   the image height to hide
      */
     private void drawCircleMask(final ImageView maskView, final int width, final int height) {
         // remove any background
@@ -1349,7 +1353,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
         eraser.setColor(Color.TRANSPARENT);
 
-        canvas.drawCircle(width/2, height/2, Math.min(width/2, height/2), eraser);
+        canvas.drawCircle(width / 2, height / 2, Math.min(width / 2, height / 2), eraser);
         canvas.drawBitmap(bitmap, 0, 0, null);
 
         maskView.setImageBitmap(bitmap);
@@ -1364,7 +1368,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             mCamera = Camera.open(mCameraId);
         } catch (Exception e) {
-            Log.e(LOG_TAG,"Cannot open the camera " + mCameraId + " "  + e.getMessage());
+            Log.e(LOG_TAG, "Cannot open the camera " + mCameraId + " " + e.getMessage());
         }
 
         // fall back: the camera initialisation failed
@@ -1373,14 +1377,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mSwitchCameraImageView.setVisibility(View.GONE);
             try {
                 mCamera = Camera.open((Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
-            }  catch (Exception e) {
-                Log.e(LOG_TAG,"Cannot open the camera " + mCameraId + " "  + e.getMessage());
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "Cannot open the camera " + mCameraId + " " + e.getMessage());
             }
         }
 
         // cannot start the cam
         if (null == mCamera) {
-            Log.w(LOG_TAG,"## onSurfaceTextureAvailable() camera creation failed");
+            Log.w(LOG_TAG, "## onSurfaceTextureAvailable() camera creation failed");
             return;
         }
 
@@ -1410,7 +1414,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        Log.d(LOG_TAG, "## onSurfaceTextureSizeChanged(): width="+width+" height="+height);
+        Log.d(LOG_TAG, "## onSurfaceTextureSizeChanged(): width=" + width + " height=" + height);
 
         if (null != surface) {
             try {
@@ -1500,6 +1504,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * Provide the camera recording profile
+     *
      * @param cameraId the selected camera id
      * @return the profile (cannot be null);
      */
@@ -1508,11 +1513,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         // we should test by camera id but hasProfile failed on some devices
         if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_480P)) {
-             try {
-                 camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
-             } catch (Exception e) {
-                 Log.e(LOG_TAG, "## getCamcorderProfile() : " + e.getMessage());
-             }
+            try {
+                camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getCamcorderProfile() : " + e.getMessage());
+            }
         }
 
         if ((null == camcorderProfile) && CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_720P)) {
@@ -1534,8 +1539,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * @return an unique video file name
      */
-    private static String buildNewVideoName(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hhmmss") ;
+    private static String buildNewVideoName() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hhmmss");
         return "VectorVideo_" + dateFormat.format(new Date()) + ".mp4";
     }
 
@@ -1549,10 +1554,18 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
         switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break;
-            case Surface.ROTATION_90: degrees = 90; break;
-            case Surface.ROTATION_180: degrees = 180; break;
-            case Surface.ROTATION_270: degrees = 270; break;
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
         }
 
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -1788,6 +1801,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * Populate mMediaStoreImagesList with the images retrieved from the MediaStore.
      * Max number of retrieved medias is set to GALLERY_TABLE_ITEM_SIZE.
+     *
      * @return the medias list
      */
     private List<MediaStoreMedia> listLatestMedias() {
@@ -1802,7 +1816,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     imagesProjection, // Which columns to return
                     null,       // Return all image files
                     null,
-                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ GALLERY_TABLE_ITEM_SIZE);
+                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT " + GALLERY_TABLE_ITEM_SIZE);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## listLatestMedias() : " + e.getMessage());
         }
@@ -1911,9 +1925,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * Provides the number of medias which will be displayed in the gallery.
      * The maximum value is GALLERY_TABLE_ITEM_SIZE.
+     *
      * @return the number of displayed medias
      */
-    private int getMediaStoreMediasCount(){
+    private int getMediaStoreMediasCount() {
         int retValue = 0;
         Cursor imageThumbnailsCursor = null;
 
@@ -1956,16 +1971,17 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * Computes the gallery rows count.
+     *
      * @return teh gallery rows count.
      */
     private int getGalleryRowsCount() {
         int rowsCountRetVal;
 
         mGalleryImageCount = getMediaStoreMediasCount();
-        if((0==mGalleryImageCount) || (0 != (mGalleryImageCount%GALLERY_COLUMN_COUNT))) {
-            rowsCountRetVal = (mGalleryImageCount/GALLERY_COLUMN_COUNT) +1;
+        if ((0 == mGalleryImageCount) || (0 != (mGalleryImageCount % GALLERY_COLUMN_COUNT))) {
+            rowsCountRetVal = (mGalleryImageCount / GALLERY_COLUMN_COUNT) + 1;
         } else {
-            rowsCountRetVal = mGalleryImageCount/GALLERY_COLUMN_COUNT;
+            rowsCountRetVal = mGalleryImageCount / GALLERY_COLUMN_COUNT;
             mGalleryImageCount--; // save one cell for the folder icon
         }
 
@@ -1977,7 +1993,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      */
     private void refreshRecentsMediasList() {
         // start the progress bar and disable the take button
-        final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
+        final RelativeLayout progressBar = findViewById(R.id.medias_preview_progress_bar_layout);
         progressBar.setVisibility(View.VISIBLE);
         mTakeImageView.setEnabled(false);
         mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
@@ -2021,7 +2037,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         TableRow.LayoutParams rawLayoutParams;
         TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
 
-        if(null != mGalleryTableLayout) {
+        if (null != mGalleryTableLayout) {
             mGalleryTableLayout.removeAllViews();
             mGalleryTableLayout.setBackgroundColor(Color.WHITE);
 
@@ -2030,7 +2046,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             tableLayoutWidth = metrics.widthPixels;
 
             // raw layout configuration
-            cellWidth = (tableLayoutWidth -(GALLERY_COLUMN_COUNT * CELL_MARGIN)) / GALLERY_COLUMN_COUNT;
+            cellWidth = (tableLayoutWidth - (GALLERY_COLUMN_COUNT * CELL_MARGIN)) / GALLERY_COLUMN_COUNT;
             cellHeight = cellWidth;
 
             if (0 == tableLayoutWidth) {
@@ -2047,7 +2063,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
             MediaStoreMedia recentMedia;
             // loop to produce full raws filled in, with an icon folder in last cell
-            for(itemIndex=0; itemIndex<mGalleryImageCount; itemIndex++) {
+            for (itemIndex = 0; itemIndex < mGalleryImageCount; itemIndex++) {
                 try {
                     recentMedia = mMediaStoreMediasList.get(itemIndex);
                 } catch (IndexOutOfBoundsException e) {
@@ -2063,7 +2079,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 }
 
                 // build the content layout for each cell
-                if(null != recentMedia) {
+                if (null != recentMedia) {
                     recentMediaView = new RecentMediaLayout(this);
 
                     if (null != recentMedia.mThumbnail) {
@@ -2113,11 +2129,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 }
             });
 
-            if(0 == itemIndex) {
+            if (0 == itemIndex) {
                 tableRow = new TableRow(this);
             }
 
-            if(null != tableRow)
+            if (null != tableRow)
                 tableRow.addView(recentMediaView, rawLayoutParams);
 
             // do not forget to add last row
@@ -2132,7 +2148,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * The user clicked on a gallery image
      */
-    private void onClickGalleryImage(final MediaStoreMedia aMediaItem){
+    private void onClickGalleryImage(final MediaStoreMedia aMediaItem) {
         if (null != mCamera) {
             mCamera.stopPreview();
         }

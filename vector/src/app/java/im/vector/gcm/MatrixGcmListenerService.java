@@ -38,8 +38,7 @@ import im.vector.services.EventStreamService;
  * Class implementing GcmListenerService.
  */
 public class MatrixGcmListenerService extends FirebaseMessagingService {
-
-    private static final String LOG_TAG = "GcmListenerService";
+    private static final String LOG_TAG = MatrixGcmListenerService.class.getSimpleName();
 
     // Tells if the events service running state has been tested
     private Boolean mCheckLaunched = false;
@@ -49,6 +48,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
 
     /**
      * Try to create an event from the GCM data
+     *
      * @param data the GCM data
      * @return the event
      */
@@ -179,6 +179,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
             public void run() {
                 onMessageReceivedInternal(data);
             }
-        });  onMessageReceivedInternal(data);
+        });
+        onMessageReceivedInternal(data);
     }
 }

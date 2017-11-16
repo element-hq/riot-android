@@ -68,10 +68,6 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     private String mComparisonDisplayName;
     private static final String mTrimRegEx = "[_!~`@#$%^&*\\-+();:=\\{\\}\\[\\],.<>?]";
 
-    // auto reference fields to speed up search
-    public int mReferenceGroupPosition = -1;
-    public int mReferenceChildPosition = -1;
-
     /**
      * Constructor from a room member.
      *
@@ -368,7 +364,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
                 }
             }
         }
-        
+
         // test user id
         if (!TextUtils.isEmpty(mLowerCaseMatrixId) && mLowerCaseMatrixId.startsWith((prefix.startsWith("@") ? "" : "@") + prefix)) {
             return true;
@@ -479,6 +475,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Tries to retrieve the PIDs.
+     *
      * @return true if they are retrieved.
      */
     public boolean retrievePids() {

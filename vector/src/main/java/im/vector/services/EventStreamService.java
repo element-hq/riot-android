@@ -79,8 +79,7 @@ import im.vector.util.RiotEventDisplay;
  * A foreground service in charge of controlling whether the event stream is running or not.
  */
 public class EventStreamService extends Service {
-
-    private static final String LOG_TAG = "EventStreamService";
+    private static final String LOG_TAG = EventStreamService.class.getSimpleName();
 
     /**
      * static instance
@@ -884,8 +883,8 @@ public class EventStreamService extends Service {
     /**
      * Prepare a notification for the expected event.
      *
-     * @param event     the event
-     * @param bingRule  the bing rule
+     * @param event    the event
+     * @param bingRule the bing rule
      */
     private void prepareNotification(Event event, BingRule bingRule) {
         if (mPendingNotifications.containsKey(event.eventId)) {
@@ -1060,7 +1059,7 @@ public class EventStreamService extends Service {
     /**
      * Cancel notifications for a dedicated room.
      *
-     * @param roomId    the room Id
+     * @param roomId the room Id
      */
     private void cancelNotifications(final String roomId) {
         getNotificationsHandler().post(new Runnable() {

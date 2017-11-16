@@ -51,12 +51,12 @@ import im.vector.R;
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
  */
 public class LockScreenActivity extends RiotBaseActivity { // do NOT extend from UC*Activity, we do not want to login on this screen!
-    public static final String LOG_TAG = "LockScreenActivity";
+    private static final String LOG_TAG = LockScreenActivity.class.getSimpleName();
 
     public static final String EXTRA_SENDER_NAME = "extra_sender_name";
     public static final String EXTRA_MESSAGE_BODY = "extra_chat_body";
     public static final String EXTRA_ROOM_ID = "extra_room_id";
-    public static final String EXTRA_MATRIX_ID = "extra_matrix_id";
+    private static final String EXTRA_MATRIX_ID = "extra_matrix_id";
 
     private static LockScreenActivity mLockScreenActivity = null;
 
@@ -120,8 +120,8 @@ public class LockScreenActivity extends RiotBaseActivity { // do NOT extend from
         ((TextView) findViewById(R.id.lock_screen_sender)).setText(intent.getStringExtra(EXTRA_SENDER_NAME) + " : ");
         ((TextView) findViewById(R.id.lock_screen_body)).setText(intent.getStringExtra(EXTRA_MESSAGE_BODY));
         ((TextView) findViewById(R.id.lock_screen_room_name)).setText(room.getName(session.getCredentials().userId));
-        final ImageButton sendButton = (ImageButton) findViewById(R.id.lock_screen_sendbutton);
-        final EditText editText = (EditText) findViewById(R.id.lock_screen_edittext);
+        final ImageButton sendButton = findViewById(R.id.lock_screen_sendbutton);
+        final EditText editText = findViewById(R.id.lock_screen_edittext);
 
         // disable send button
         sendButton.setEnabled(false);
@@ -202,7 +202,7 @@ public class LockScreenActivity extends RiotBaseActivity { // do NOT extend from
             }
         });
 
-        mMainLayout = (LinearLayout) findViewById(R.id.lock_main_layout);
+        mMainLayout = findViewById(R.id.lock_main_layout);
     }
 
     private void refreshMainLayout() {

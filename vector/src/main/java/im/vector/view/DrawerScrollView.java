@@ -33,12 +33,12 @@ public class DrawerScrollView extends ScrollView {
     private static final String LOG_TAG = DrawerScrollView.class.getSimpleName();
 
     //Tag for views that should stick, must be with at least one flag among FLAG_HEADER, FLAG_FOOTER
-    public static final String STICKY_TAG = "sticky";
+    private static final String STICKY_TAG = "sticky";
 
     //Tag for views that should stick as header
-    public static final String FLAG_HEADER = "-header";
+    private static final String FLAG_HEADER = "-header";
     //Tag for views that should stick as footer
-    public static final String FLAG_FOOTER = "-footer";
+    private static final String FLAG_FOOTER = "-footer";
 
     // List of sticky headers
     private List<View> mHeaders;

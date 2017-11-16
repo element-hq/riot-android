@@ -128,7 +128,7 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
         }
 
         // thumbnail
-        ImageView thumbnailView = (ImageView)convertView.findViewById(R.id.file_search_thumbnail);
+        ImageView thumbnailView = convertView.findViewById(R.id.file_search_thumbnail);
 
         // default avatar
         thumbnailView.setImageResource(avatarId);
@@ -144,11 +144,11 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
         }
 
         // filename
-        TextView filenameTextView = (TextView)convertView.findViewById(R.id.file_search_filename);
+        TextView filenameTextView = convertView.findViewById(R.id.file_search_filename);
         filenameTextView.setText(message.body);
 
         // room and date&time
-        TextView roomNameTextView = (TextView)convertView.findViewById(R.id.file_search_room_name);
+        TextView roomNameTextView = convertView.findViewById(R.id.file_search_room_name);
         String info = "";
         if (mDisplayRoomName) {
             Room room = mSession.getDataHandler().getStore().getRoom(event.roomId);
@@ -159,11 +159,11 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
             }
         }
 
-        info +=  AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
+        info += AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
         roomNameTextView.setText(info);
 
         // file size
-        TextView fileSizeTextView = (TextView)convertView.findViewById(R.id.search_file_size);
+        TextView fileSizeTextView = convertView.findViewById(R.id.search_file_size);
 
         if ((null != mediaSize) && (mediaSize > 1)) {
             fileSizeTextView.setText(Formatter.formatFileSize(mContext, mediaSize));

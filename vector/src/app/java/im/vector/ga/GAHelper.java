@@ -28,8 +28,7 @@ import im.vector.VectorApp;
 import im.vector.util.PreferencesManager;
 
 public class GAHelper {
-
-    private static final String LOG_TAG = "GAHelper";
+    private static final String LOG_TAG = GAHelper.class.getSimpleName();
 
     //==============================================================================================================
     // Google analytics

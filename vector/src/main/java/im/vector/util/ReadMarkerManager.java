@@ -121,7 +121,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
 
         if (jumpToFirstUnreadView != null) {
             mJumpToUnreadView = jumpToFirstUnreadView;
-            TextView jumpToUnreadLabel = (TextView) jumpToFirstUnreadView.findViewById(R.id.jump_to_first_unread_label);
+            TextView jumpToUnreadLabel = jumpToFirstUnreadView.findViewById(R.id.jump_to_first_unread_label);
             jumpToUnreadLabel.setPaintFlags(jumpToUnreadLabel.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             // Actions views
             mCloseJumpToUnreadView = jumpToFirstUnreadView.findViewById(R.id.close_jump_to_first_unread);
@@ -170,7 +170,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
      * Called after the activity/fragment resumed
      */
     public void onResume() {
-        ((VectorMessagesAdapter)mVectorMessageListFragment.getMessageAdapter()).setReadMarkerListener(this);
+        ((VectorMessagesAdapter) mVectorMessageListFragment.getMessageAdapter()).setReadMarkerListener(this);
         updateJumpToBanner();
     }
 
