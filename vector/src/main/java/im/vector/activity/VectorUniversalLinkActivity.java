@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
@@ -45,7 +46,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
  */
 @SuppressLint("LongLogTag")
 public class VectorUniversalLinkActivity extends RiotBaseActivity {
-    private static final String LOG_TAG = "VectorUniversalLinkActivity";
+    private static final String LOG_TAG = VectorUniversalLinkActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +77,19 @@ public class VectorUniversalLinkActivity extends RiotBaseActivity {
             } else {
                 intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
             }
-        } catch (Exception ex){
-            Log.e(LOG_TAG,"## onCreate(): Exception - Msg="+ex.getMessage());
+        } catch (Exception ex) {
+            Log.e(LOG_TAG, "## onCreate(): Exception - Msg=" + ex.getMessage());
         }
 
         if (null != intentAction) {
-            Intent myBroadcastIntent = new Intent(intentAction, getIntent().getData());
+            // since android O
+            // set the class to avoid having "Background execution not allowed"
+            Intent myBroadcastIntent = new Intent(this,
+                    TextUtils.equals(intentAction, VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK) ?
+                            VectorUniversalLinkReceiver.class : VectorRegistrationReceiver.class);
+
+            myBroadcastIntent.setAction(intentAction);
+            myBroadcastIntent.setData(getIntent().getData());
             sendBroadcast(myBroadcastIntent);
             finish();
         }
@@ -89,11 +97,12 @@ public class VectorUniversalLinkActivity extends RiotBaseActivity {
 
     /**
      * Email binding management
-     * @param uri the uri.
+     *
+     * @param uri        the uri.
      * @param aMapParams the parsed params
      */
     private void emailBinding(Uri uri, HashMap<String, String> aMapParams) {
-        Log.d(LOG_TAG,"## emailBinding()");
+        Log.d(LOG_TAG, "## emailBinding()");
 
         String ISUrl = uri.getScheme() + "://" + uri.getHost();
 
