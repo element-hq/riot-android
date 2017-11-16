@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.util.Log;
@@ -478,7 +479,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      */
     private void stopHomeActivitySpinner(Context aContext) {
         Intent myBroadcastIntent = new Intent(VectorHomeActivity.BROADCAST_ACTION_STOP_WAITING_VIEW);
-        aContext.sendBroadcast(myBroadcastIntent);
+        LocalBroadcastManager.getInstance(aContext).sendBroadcast(myBroadcastIntent);
     }
 }
 

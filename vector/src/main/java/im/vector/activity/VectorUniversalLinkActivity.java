@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
@@ -81,7 +82,14 @@ public class VectorUniversalLinkActivity extends RiotBaseActivity {
         }
 
         if (null != intentAction) {
-            Intent myBroadcastIntent = new Intent(intentAction, getIntent().getData());
+            // since android O
+            // set the class to avoid having "Background execution not allowed"
+            Intent myBroadcastIntent = new Intent(this,
+                    TextUtils.equals(intentAction, VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK) ?
+                            VectorUniversalLinkReceiver.class : VectorRegistrationReceiver.class);
+
+            myBroadcastIntent.setAction(intentAction);
+            myBroadcastIntent.setData(getIntent().getData());
             sendBroadcast(myBroadcastIntent);
             finish();
         }

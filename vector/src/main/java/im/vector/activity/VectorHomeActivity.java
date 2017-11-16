@@ -1154,8 +1154,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
 
                 if (null != uri) {
-                    Intent myBroadcastIntent = new Intent(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK_RESUME);
-
+                    // since android O
+                    // set the class to avoid having "Background execution not allowed"
+                    Intent myBroadcastIntent = new Intent(VectorApp.getInstance(), VectorUniversalLinkReceiver.class);
+                    myBroadcastIntent.setAction(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK_RESUME);
                     myBroadcastIntent.putExtras(getIntent().getExtras());
                     myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
                     sendBroadcast(myBroadcastIntent);
