@@ -1096,6 +1096,11 @@ public final class GcmRegistrationManager {
      * @param syncDelay the delay between two syncs in ms.
      */
     public void setBackgroundSyncDelay(int syncDelay) {
+        // 0 means wait to have a push
+        if (null == mRegistrationToken) {
+            syncDelay = Math.max(syncDelay, 1000);
+        }
+
         if (!getGcmSharedPreferences().edit()
                 .putInt(PREFS_SYNC_DELAY, syncDelay)
                 .commit()) {
