@@ -144,6 +144,8 @@
 
     <string name="option_send_files">Send files</string>
     <string name="option_take_photo_video">Take photo or video</string>
+    <string name="option_take_photo">Take photo</string>
+    <string name="option_take_video">Take video</string>
 
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
@@ -786,6 +788,7 @@
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="add_matrix_apps_not_supported">Not supported on this device</string>
+    <string name="settings_labs_native_camera">Use native camera</string>
 
     // share keys
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>

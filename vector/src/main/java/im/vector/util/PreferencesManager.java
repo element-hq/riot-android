@@ -118,6 +118,8 @@ public class PreferencesManager {
     private static final String SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY";
     public static final String SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY";
 
+    private static final String SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY = "SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY";
+
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;
@@ -215,6 +217,16 @@ public class PreferencesManager {
      */
     public static boolean hideAvatarDisplayNameChangeMessages(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY, false);
+    }
+
+    /**
+     * Tells the native camera to take a photo or record a video.
+     *
+     * @param context the context
+     * @return true to use the native camera app to record video or take photo.
+     */
+    public static boolean useNativeCamera(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY, false);
     }
 
     /**

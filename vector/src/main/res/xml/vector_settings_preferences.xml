@@ -223,6 +223,10 @@
             android:title="@string/settings_labs_matrix_apps"
             android:key="SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY"/>
 
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_labs_native_camera"
+            android:key="SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"/>
+
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
