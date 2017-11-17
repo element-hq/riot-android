@@ -596,7 +596,8 @@ public class EventStreamService extends Service {
         mActiveEventStreamService = this;
 
         for (final MXSession session : mSessions) {
-            if (null == session.getDataHandler() || (null == session.getDataHandler().getStore())) {
+            // session == null has been reported by GA
+            if ((null == session) || (null == session.getDataHandler()) || (null == session.getDataHandler().getStore())) {
                 Log.e(LOG_TAG, "start : the session is not anymore valid.");
                 return;
             }
