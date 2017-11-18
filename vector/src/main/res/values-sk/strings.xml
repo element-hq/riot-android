@@ -39,7 +39,7 @@
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Nie je možné začať hovor. Prosím, skúste to neskôr</string>
     <string name="missing_permissions_warning">Pretože neboli udelené všetky potrebné oprávnenia, niektoré funkcie môžu byť nedostupné.</string>
-    <string name="missing_permissions_to_start_conf_call">Aby ste mohli začať hovor, musíte mať právo pozývať používateľov do miestnosti.</string>
+    <string name="missing_permissions_to_start_conf_call">Aby ste mohli začať hovor, musíte mať právo pozývať používateľov do miestnosti</string>
     <string name="missing_permissions_title_to_start_conf_call">Nie je možné začať konferenciu</string>
     <string name="device_information">Informácie o zariadení</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenčné hovory nie sú podporované v šifrovaných miestnostiach</string>
@@ -94,7 +94,7 @@
 	<item quantity="one">1 používateľ</item>
 	<item quantity="few">%d používatelia</item>
 	<item quantity="many">%d používateľov</item>
-	<item quantity="other"></item>
+	<item quantity="other"/>
 </plurals>
 
     <string name="send_bug_report_include_logs">Odoslať záznamy</string>
