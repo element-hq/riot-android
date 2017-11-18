@@ -26,7 +26,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.provider.MediaStore;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -698,7 +697,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                         icons = new Integer[]{
                                 R.drawable.ic_material_file,
-                                R.drawable.vector_micro_green
+                                R.drawable.vector_micro_green,
                                 R.drawable.ic_material_camera,
                                 R.drawable.ic_material_videocam
                         };
@@ -711,7 +710,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                         icons = new Integer[]{
                                 R.drawable.ic_material_file,  // R.string.option_send_files
-                                R.drawable.vector_micro_green
+                                R.drawable.vector_micro_green,
                                 R.drawable.ic_material_camera, // R.string.option_take_photo
                         };
                     }
