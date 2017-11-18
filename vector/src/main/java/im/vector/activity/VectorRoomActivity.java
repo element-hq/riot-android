@@ -26,6 +26,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -690,23 +691,27 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
                         messages  = new Integer[]{
                                 R.string.option_send_files,
+                                R.string.option_send_voice,
                                 R.string.option_take_photo,
                                 R.string.option_take_video,
                         };
 
                         icons = new Integer[]{
                                 R.drawable.ic_material_file,
+                                R.drawable.vector_micro_green
                                 R.drawable.ic_material_camera,
                                 R.drawable.ic_material_videocam
                         };
                     } else {
                         messages  = new Integer[]{
                                 R.string.option_send_files,
+                                R.string.option_send_voice,
                                 R.string.option_take_photo_video
                         };
 
                         icons = new Integer[]{
                                 R.drawable.ic_material_file,  // R.string.option_send_files
+                                R.drawable.vector_micro_green
                                 R.drawable.ic_material_camera, // R.string.option_take_photo
                         };
                     }
@@ -721,6 +726,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                             if (selectedVal == R.string.option_send_files) {
                                 VectorRoomActivity.this.launchFileSelectionIntent();
+                            } else if (selectedVal == R.string.option_send_voice ) {
+                                VectorRoomActivity.this.launchAudioRecorderIntent();
                             } else if (selectedVal == R.string.option_take_photo_video) {
                                 if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
                                     launchCamera();
@@ -2161,6 +2168,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG, true);
             startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
         }
+    }
+
+    /**
+     * Launch audio recorder intent
+     */
+    @SuppressLint("NewApi")
+    private void launchAudioRecorderIntent() {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+        Intent fileIntent = new Intent( MediaStore.Audio.Media.RECORD_SOUND_ACTION );
+        startActivityForResult(fileIntent, REQUEST_FILES_REQUEST_CODE);
     }
 
     /**
