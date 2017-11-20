@@ -1,7 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import im.vector.activity.VectorHomeActivity;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 
 // Class to track some matrix items click}
@@ -55,7 +54,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
         }
     };
 
-    // the URL to trakc
+    // the URL to track
     private final String mURL;
 
     // URL regex
@@ -76,11 +75,22 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
         mActionsListener = null;
     }
 
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
     public int getSpanTypeId() {
         return getSpanTypeIdInternal();
     }
 
-    private int getSpanTypeIdInternal() {
+    /*
+     * *********************************************************************************************
+     *  Inherited from ParcelableSpan
+     * *********************************************************************************************
+     */
+
+    public int getSpanTypeIdInternal() {
         return getClass().hashCode();
     }
 
@@ -88,14 +98,15 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
         writeToParcelInternal(dest, flags);
     }
 
-    private void writeToParcelInternal(Parcel dest, int flags) {
+    public void writeToParcelInternal(Parcel dest, int flags) {
         dest.writeString(mURL);
     }
 
-    public int describeContents() {
-        return 0;
-    }
-
+    /*
+     * *********************************************************************************************
+     *  Custom methods
+     * *********************************************************************************************
+     */
     private String getURL() {
         return mURL;
     }
