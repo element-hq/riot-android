@@ -69,7 +69,7 @@ import java.util.List;
  * An images slider
  */
 public class VectorMediasViewerAdapter extends PagerAdapter {
-    private static final String LOG_TAG = "MediasViewerAdapter";
+    private static final String LOG_TAG = VectorMediasViewerAdapter.class.getSimpleName();
 
     private final Context mContext;
     private final LayoutInflater mLayoutInflater;

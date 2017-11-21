@@ -61,15 +61,15 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     // Butterknife unbinder
     private Unbinder mUnBinder;
 
-    protected VectorHomeActivity mActivity;
+    VectorHomeActivity mActivity;
 
-    protected String mCurrentFilter;
+    String mCurrentFilter;
 
-    protected MXSession mSession;
+    MXSession mSession;
 
-    protected OnRoomChangedListener mOnRoomChangedListener;
+    OnRoomChangedListener mOnRoomChangedListener;
 
-    protected final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+    final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             // warn only if there is dy i.e the list has been really scrolled not refreshed
@@ -79,8 +79,8 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         }
     };
 
-    protected int mPrimaryColor = -1;
-    protected int mSecondaryColor = -1;
+    int mPrimaryColor = -1;
+    int mSecondaryColor = -1;
 
     /*
      * *********************************************************************************************
@@ -296,7 +296,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
      *
      * @param room
      */
-    public void openRoom(final Room room) {
+    void openRoom(final Room room) {
         // sanity checks
         // reported by GA
         if ((null == mSession.getDataHandler()) || (null == mSession.getDataHandler().getStore())) {

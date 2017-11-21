@@ -77,7 +77,7 @@ import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorRoomDetailsMembersFragment extends Fragment {
-    private static final String LOG_TAG = "VectorRoomDetailsMembers";
+    private static final String LOG_TAG = VectorRoomDetailsMembersFragment.class.getSimpleName();
 
     // activity request codes
     private static final int GET_MENTION_REQUEST_CODE = 666;
@@ -776,9 +776,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         });
 
         // search room members management
-        mPatternToSearchEditText = (EditText) mViewHierarchy.findViewById(R.id.search_value_edit_text);
-        mClearSearchImageView = (ImageView) mViewHierarchy.findViewById(R.id.clear_search_icon_image_view);
-        mSearchNoResultTextView = (TextView) mViewHierarchy.findViewById(R.id.search_no_results_text_view);
+        mPatternToSearchEditText = mViewHierarchy.findViewById(R.id.search_value_edit_text);
+        mClearSearchImageView = mViewHierarchy.findViewById(R.id.clear_search_icon_image_view);
+        mSearchNoResultTextView = mViewHierarchy.findViewById(R.id.search_no_results_text_view);
 
         // add IME search action handler
         mPatternToSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -812,7 +812,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         });
 
         mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
-        mParticipantsListView = (ExpandableListView) mViewHierarchy.findViewById(R.id.room_details_members_exp_list_view);
+        mParticipantsListView = mViewHierarchy.findViewById(R.id.room_details_members_exp_list_view);
         mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, mRoom.getRoomId(), mxMediasCache);
         mParticipantsListView.setAdapter(mAdapter);
         // the group indicator is managed in the adapter (group view creation)
@@ -991,6 +991,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
     /**
      * Invite an user Ids list.
+     *
      * @param userIds the user IDs list
      */
     private void inviteUserIds(List<String> userIds) {
@@ -1030,7 +1031,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == INVITE_USER_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
-            final List<String> userIds = (List<String>)data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_OUT_SELECTED_USER_IDS);
+            final List<String> userIds = (List<String>) data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_OUT_SELECTED_USER_IDS);
 
             if ((null != userIds) && (userIds.size() > 0)) {
                 inviteUserIds(userIds);

@@ -66,7 +66,7 @@ public class LanguagePickerActivity extends RiotAppCompatActivity implements Lan
         setTitle(R.string.settings_select_language);
         setContentView(R.layout.activity_langagues_picker);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             if (getSupportActionBar() != null) {
@@ -91,7 +91,7 @@ public class LanguagePickerActivity extends RiotAppCompatActivity implements Lan
             mSearchView.setQueryHint(getString(R.string.search_hint));
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             mSearchView.setOnQueryTextListener(this);
-            SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
             searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
         }
         return true;
@@ -124,7 +124,7 @@ public class LanguagePickerActivity extends RiotAppCompatActivity implements Lan
 
     private void initViews() {
         mLanguagesEmptyView = findViewById(R.id.languages_empty_view);
-        RecyclerView languagesRecyclerView = (RecyclerView) findViewById(R.id.languages_recycler_view);
+        RecyclerView languagesRecyclerView = findViewById(R.id.languages_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         languagesRecyclerView.setLayoutManager(layoutManager);

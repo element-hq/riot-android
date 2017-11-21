@@ -21,7 +21,7 @@ import android.text.TextUtils;
 import java.util.Comparator;
 import java.util.List;
 
-public class KnownContactsAdapterSection extends AdapterSection<ParticipantAdapterItem> {
+class KnownContactsAdapterSection extends AdapterSection<ParticipantAdapterItem> {
 
     // Tells if the search result is limited
     private boolean mIsLimited;
@@ -43,6 +43,7 @@ public class KnownContactsAdapterSection extends AdapterSection<ParticipantAdapt
 
     /**
      * Defines a custom extra string
+     *
      * @param extraHeader the extra header string
      */
     public void setCustomHeaderExtra(String extraHeader) {
@@ -55,7 +56,7 @@ public class KnownContactsAdapterSection extends AdapterSection<ParticipantAdapt
 
         if (getNbItems() > 0) {
             if (!TextUtils.isEmpty(mCustomHeaderExtra)) {
-                newTitle = mTitle.concat("   " + mCustomHeaderExtra +", " + getNbItems());
+                newTitle = mTitle.concat("   " + mCustomHeaderExtra + ", " + getNbItems());
             } else if (!mIsLimited) {
                 newTitle = mTitle.concat("   " + getNbItems());
             } else {

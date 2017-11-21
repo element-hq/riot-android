@@ -36,7 +36,6 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.Log;
 
-import java.net.URL;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -229,7 +228,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             this.finish();
         }
 
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.call_layout);
+        RelativeLayout layout = findViewById(R.id.call_layout);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         layout.setVisibility(View.VISIBLE);

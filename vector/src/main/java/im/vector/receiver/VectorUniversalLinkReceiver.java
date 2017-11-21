@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.util.Log;
@@ -54,7 +55,7 @@ import im.vector.activity.VectorRoomActivity;
  * An universal link receiver.
  */
 public class VectorUniversalLinkReceiver extends BroadcastReceiver {
-    private static final String LOG_TAG = "VectorUniversalLinkReceiver";
+    private static final String LOG_TAG = VectorUniversalLinkReceiver.class.getSimpleName();
 
     public static final String BROADCAST_ACTION_UNIVERSAL_LINK = "im.vector.receiver.UNIVERSAL_LINK";
     public static final String BROADCAST_ACTION_UNIVERSAL_LINK_RESUME = "im.vector.receiver.UNIVERSAL_LINK_RESUME";
@@ -80,7 +81,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     // index of each item in path
     public static final String ULINK_ROOM_ID_OR_ALIAS_KEY = "ULINK_ROOM_ID_OR_ALIAS_KEY";
     public static final String ULINK_MATRIX_USER_ID_KEY = "ULINK_MATRIX_USER_ID_KEY";
-    public static final String ULINK_EVENT_ID_KEY = "ULINK_EVENT_ID_KEY";
+    private static final String ULINK_EVENT_ID_KEY = "ULINK_EVENT_ID_KEY";
     /*public static final String ULINK_EMAIL_ID_KEY = "email";
     public static final String ULINK_SIGN_URL_KEY = "signurl";
     public static final String ULINK_ROOM_NAME_KEY = "room_name";
@@ -478,7 +479,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      */
     private void stopHomeActivitySpinner(Context aContext) {
         Intent myBroadcastIntent = new Intent(VectorHomeActivity.BROADCAST_ACTION_STOP_WAITING_VIEW);
-        aContext.sendBroadcast(myBroadcastIntent);
+        LocalBroadcastManager.getInstance(aContext).sendBroadcast(myBroadcastIntent);
     }
 }
 

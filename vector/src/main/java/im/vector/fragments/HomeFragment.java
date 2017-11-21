@@ -21,7 +21,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -274,7 +276,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
 
         for (Room room : roomCollection) {
-            if (!room.isConferenceUserRoom() && !room.isInvited() &&!room.isDirectChatInvitation()) {
+            if (!room.isConferenceUserRoom() && !room.isInvited() && !room.isDirectChatInvitation()) {
                 // it seems that the server syncs some left rooms
                 if (null == room.getMember(mSession.getMyUserId())) {
                     Log.e(LOG_TAG, "## initData(): invalid room " + room.getRoomId() + ", the user is not anymore member of it");
@@ -321,7 +323,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      * @param comparator
      * @param section
      */
-    public void sortAndDisplay(final List<Room> rooms, final Comparator comparator, final HomeSectionView section) {
+    private void sortAndDisplay(final List<Room> rooms, final Comparator comparator, final HomeSectionView section) {
         try {
             Collections.sort(rooms, comparator);
         } catch (Exception e) {

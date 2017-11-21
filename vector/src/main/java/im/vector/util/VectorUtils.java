@@ -80,7 +80,7 @@ import im.vector.adapters.ParticipantAdapterItem;
 
 public class VectorUtils {
 
-    private static final String LOG_TAG = "VectorUtils";
+    private static final String LOG_TAG = VectorUtils.class.getSimpleName();
 
     //public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
@@ -456,17 +456,6 @@ public class VectorUtils {
                 });
             }
         }
-    }
-
-    /**
-     * Set the default vector room avatar.
-     *
-     * @param imageView   the image view.
-     * @param roomId      the room id.
-     * @param displayName the room display name.
-     */
-    public static void setDefaultRoomVectorAvatar(ImageView imageView, String roomId, String displayName) {
-        VectorUtils.setDefaultMemberAvatar(imageView, roomId, displayName);
     }
 
     /**
@@ -1002,48 +991,6 @@ public class VectorUtils {
                     + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
                     + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
             Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-
-    /**
-     * List the URLs in a text.
-     *
-     * @param text the text to parse
-     * @return the list of URLss
-     */
-    public static List<String> listURLs(String text) {
-        ArrayList<String> URLs = new ArrayList<>();
-
-        // sanity checks
-        if (!TextUtils.isEmpty(text)) {
-            Matcher matcher = mUrlPattern.matcher(text);
-
-            while (matcher.find()) {
-                int matchStart = matcher.start(1);
-                int matchEnd = matcher.end();
-
-                String charBef = "";
-                String charAfter = "";
-
-                if (matchStart > 2) {
-                    charBef = text.substring(matchStart - 2, matchStart);
-                }
-
-                if ((matchEnd - 1) < text.length()) {
-                    charAfter = text.substring(matchEnd - 1, matchEnd);
-                }
-
-                // keep the link between parenthesis, it might be a link [title](link)
-                if (!TextUtils.equals(charAfter, ")") || !TextUtils.equals(charBef, "](")) {
-                    String url = text.substring(matchStart, matchEnd);
-
-                    if (URLs.indexOf(url) < 0) {
-                        URLs.add(url);
-                    }
-                }
-            }
-        }
-
-        return URLs;
-    }
 
     //==============================================================================================================
     // ExpandableListView tools

@@ -22,7 +22,7 @@ import org.matrix.androidsdk.rest.callback.RestAdapterCallback;
 
 import java.util.Map;
 
-public class WidgetsRestClient extends RestClient<WidgetsApi> {
+class WidgetsRestClient extends RestClient<WidgetsApi> {
     /**
      * {@inheritDoc}
      */

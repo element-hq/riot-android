@@ -22,6 +22,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -93,10 +95,13 @@ import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.ResourceUtils;
 import org.matrix.androidsdk.view.AutoScrollDownListView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -189,6 +194,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private static final int INVITE_USER_REQUEST_CODE = 4;
     public static final int UNREAD_PREVIEW_REQUEST_CODE = 5;
 
+    private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
+    private String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
+
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
     private Room mRoom;
@@ -277,8 +285,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     private String mCallId = null;
 
-    private static String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
-
     // typing event management
     private Timer mTypingTimer = null;
     private TimerTask mTypingTimerTask;
@@ -300,6 +306,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     // progress bar to warn that the sync is not yet done
     private View mSyncInProgressView;
+
+    // action to do after requesting the camera permission
+    private int mCameraPermissionAction;
 
     /** **/
     private final ApiCallback<Void> mDirectMessageListener = new SimpleApiCallback<Void>(this) {
@@ -678,16 +687,32 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         fragment.dismissAllowingStateLoss();
                     }
 
-                    final Integer[] messages = new Integer[]{
-                            R.string.option_send_files,
-                            R.string.option_take_photo_video,
-                    };
+                    final Integer[] messages;
+                    final Integer[] icons;
 
-                    final Integer[] icons = new Integer[]{
-                            R.drawable.ic_material_file,  // R.string.option_send_files
-                            R.drawable.ic_material_camera, // R.string.option_take_photo
-                    };
+                    if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
+                        messages  = new Integer[]{
+                                R.string.option_send_files,
+                                R.string.option_take_photo,
+                                R.string.option_take_video,
+                        };
 
+                        icons = new Integer[]{
+                                R.drawable.ic_material_file,
+                                R.drawable.ic_material_camera,
+                                R.drawable.ic_material_videocam
+                        };
+                    } else {
+                        messages  = new Integer[]{
+                                R.string.option_send_files,
+                                R.string.option_take_photo_video
+                        };
+
+                        icons = new Integer[]{
+                                R.drawable.ic_material_file,  // R.string.option_send_files
+                                R.drawable.ic_material_camera, // R.string.option_take_photo
+                        };
+                    }
 
                     fragment = IconAndTextDialogFragment.newInstance(icons, messages,
                             ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
@@ -702,6 +727,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                             } else if (selectedVal == R.string.option_take_photo_video) {
                                 if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
                                     launchCamera();
+                                } else {
+                                    mCameraPermissionAction = R.string.option_take_photo_video;
+                                }
+                            } else if (selectedVal == R.string.option_take_photo) {
+                                if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
+                                    launchNativeCamera();
+                                } else {
+                                    mCameraPermissionAction = R.string.option_take_photo;
+                                }
+                            } else if (selectedVal == R.string.option_take_video) {
+                                if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
+                                    launchNativeVideoRecorder();
+                                } else {
+                                    mCameraPermissionAction = R.string.option_take_video;
                                 }
                             }
                         }
@@ -1909,8 +1948,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         if (null != intent) {
             sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent, RoomMediaMessage.class.getClassLoader()));
-        } else if (null != mLatestTakePictureCameraUri) {
-            sharedDataItems.add(new RoomMediaMessage(Uri.parse(mLatestTakePictureCameraUri)));
+        }
+
+        if (null != mLatestTakePictureCameraUri) {
+            if (0 == sharedDataItems.size()) {
+                sharedDataItems.add(new RoomMediaMessage(Uri.parse(mLatestTakePictureCameraUri)));
+            }
             mLatestTakePictureCameraUri = null;
         }
 
@@ -2151,6 +2194,79 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     /**
      * Launch the camera
      */
+    private void launchNativeVideoRecorder() {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        final Intent captureIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        // lowest quality
+        captureIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+        startActivityForResult(captureIntent, TAKE_IMAGE_REQUEST_CODE);
+    }
+
+    /**
+     * Launch the camera
+     */
+    private void launchNativeCamera() {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // the following is a fix for buggy 2.x devices
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, CAMERA_VALUE_TITLE + formatter.format(date));
+        // The Galaxy S not only requires the name of the file to output the image to, but will also not
+        // set the mime type of the picture it just took (!!!). We assume that the Galaxy S takes image/jpegs
+        // so the attachment uploader doesn't freak out about there being no mimetype in the content database.
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        Uri dummyUri = null;
+        try {
+            dummyUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+            if (null == dummyUri) {
+                Log.e(LOG_TAG, "Cannot use the external storage media to save image");
+            }
+        }
+        catch (UnsupportedOperationException uoe) {
+            Log.e(LOG_TAG, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI - no SD card? Attempting to insert into device storage.");
+        }
+        catch (Exception e) {
+            Log.e(LOG_TAG, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI. "+e);
+        }
+
+        if (null == dummyUri) {
+            try {
+                dummyUri = getContentResolver().insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, values);
+                if (null == dummyUri) {
+                    Log.e(LOG_TAG, "Cannot use the internal storage to save media to save image");
+                }
+
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "Unable to insert camera URI into internal storage. Giving up. " + e);
+            }
+        }
+
+        if (dummyUri != null) {
+            captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, dummyUri);
+            Log.d(LOG_TAG, "trying to take a photo on " + dummyUri.toString());
+        } else {
+            Log.d(LOG_TAG, "trying to take a photo with no predefined uri");
+        }
+
+        // Store the dummy URI which will be set to a placeholder location. When all is lost on samsung devices,
+        // this will point to the data we're looking for.
+        // Because Activities tend to use a single MediaProvider for all their intents, this field will only be the
+        // *latest* TAKE_PICTURE Uri. This is deemed acceptable as the normal flow is to create the intent then immediately
+        // fire it, meaning onActivityResult/getUri will be the next thing called, not another createIntentFor.
+        mLatestTakePictureCameraUri = dummyUri == null ? null : dummyUri.toString();
+
+        startActivityForResult(captureIntent, TAKE_IMAGE_REQUEST_CODE);
+    }
+
+    /**
+     * Launch the camera
+     */
     private void launchCamera() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
@@ -2214,7 +2330,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // Because external storage permission is not mandatory to launch the camera,
             // external storage permission is not tested.
             if (isCameraPermissionGranted) {
-                launchCamera();
+                if (R.string.option_take_photo_video == mCameraPermissionAction) {
+                    launchCamera();
+                } else if (R.string.option_take_photo == mCameraPermissionAction) {
+                    launchNativeCamera();
+                } else if (R.string.option_take_video == mCameraPermissionAction) {
+                    launchNativeVideoRecorder();
+                }
             } else {
                 CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
             }

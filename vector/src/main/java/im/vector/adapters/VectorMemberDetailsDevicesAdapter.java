@@ -15,7 +15,9 @@
  */
 
 package im.vector.adapters;
+
 import android.content.Context;
+
 import org.matrix.androidsdk.util.Log;
 
 import android.text.TextUtils;
@@ -37,18 +39,20 @@ import im.vector.R;
  */
 public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo> {
 
-    private static final String LOG_TAG = "VRoomCreationAdapter";
+    private static final String LOG_TAG = VectorMemberDetailsDevicesAdapter.class.getSimpleName();
 
     // remove participants listener
     public interface IDevicesAdapterListener {
         /**
          * Verify device button handler
+         *
          * @param aDeviceInfo device info
          */
         void OnVerifyDeviceClick(MXDeviceInfo aDeviceInfo);
 
         /**
          * Block device button handler
+         *
          * @param aDeviceInfo device info
          */
         void OnBlockDeviceClick(MXDeviceInfo aDeviceInfo);
@@ -56,9 +60,6 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
 
     // layout info
     private final LayoutInflater mLayoutInflater;
-
-    // account info
-    private final MXSession mSession;
 
     // used layouts
     private final int mItemLayoutResourceId;
@@ -71,19 +72,19 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
 
     /**
      * Constructor
-     * @param aContext app context
+     *
+     * @param aContext              app context
      * @param aItemLayoutResourceId layout id to be displayed on each row
-     * @param aSession session
+     * @param aSession              session
      */
     public VectorMemberDetailsDevicesAdapter(Context aContext, int aItemLayoutResourceId, MXSession aSession) {
         super(aContext, aItemLayoutResourceId);
 
         mLayoutInflater = LayoutInflater.from(aContext);
         mItemLayoutResourceId = aItemLayoutResourceId;
-        mSession = aSession;
 
-        if(null != mSession.getCredentials()) {
-            myDeviceId = mSession.getCredentials().deviceId;
+        if (null != aSession.getCredentials()) {
+            myDeviceId = aSession.getCredentials().deviceId;
         } else {
             myDeviceId = null;
         }
@@ -91,6 +92,7 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
 
     /**
      * Defines a listener.
+     *
      * @param aListener the new listener.
      */
     public void setDevicesAdapterListener(IDevicesAdapterListener aListener) {
@@ -105,7 +107,7 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
 
             MXDeviceInfo deviceInfo = null;
 
-            for(int i = 0; i < getCount(); i++) {
+            for (int i = 0; i < getCount(); i++) {
                 if (TextUtils.equals(myDeviceId, getItem(i).deviceId)) {
                     deviceInfo = getItem(i);
                     break;
@@ -132,11 +134,11 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
         final MXDeviceInfo deviceItem = getItem(position);
 
         // retrieve the ui items
-        final Button buttonVerify = (Button) convertView.findViewById(R.id.button_verify);
-        final Button buttonBlock = (Button) convertView.findViewById(R.id.button_block);
-        final TextView deviceNameTextView = (TextView) convertView.findViewById(R.id.device_name);
-        final TextView deviceIdTextView = (TextView) convertView.findViewById(R.id.device_id);
-        final ImageView e2eIconView = (ImageView)convertView.findViewById(R.id.device_e2e_icon);
+        final Button buttonVerify = convertView.findViewById(R.id.button_verify);
+        final Button buttonBlock = convertView.findViewById(R.id.button_block);
+        final TextView deviceNameTextView = convertView.findViewById(R.id.device_name);
+        final TextView deviceIdTextView = convertView.findViewById(R.id.device_id);
+        final ImageView e2eIconView = convertView.findViewById(R.id.device_e2e_icon);
 
         buttonVerify.setTransformationMethod(null);
         buttonBlock.setTransformationMethod(null);
@@ -146,7 +148,7 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
         deviceIdTextView.setText(deviceItem.deviceId);
 
         // display e2e icon status
-        switch(deviceItem.mVerified) {
+        switch (deviceItem.mVerified) {
             case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
                 e2eIconView.setImageResource(R.drawable.e2e_verified);
                 break;
@@ -161,7 +163,7 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
         }
 
         // display buttons label according to verification status
-        switch(deviceItem.mVerified) {
+        switch (deviceItem.mVerified) {
             case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
                 buttonVerify.setText(R.string.encryption_information_verify);
                 buttonBlock.setText(R.string.encryption_information_block);

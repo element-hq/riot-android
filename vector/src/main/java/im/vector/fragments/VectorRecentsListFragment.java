@@ -69,7 +69,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     private static final String KEY_EXPAND_STATE_ROOMS_GROUP = "KEY_EXPAND_STATE_ROOMS_GROUP";
     private static final String KEY_EXPAND_STATE_LOW_PRIORITY_GROUP = "KEY_EXPAND_STATE_LOW_PRIORITY_GROUP";
     private static final String KEY_EXPAND_STATE_FAVOURITE_GROUP = "KEY_EXPAND_STATE_FAVOURITE_GROUP";
-    private static final String KEY_EXPAND_STATE_DIRECT_MESSAGES_GROUP = "KEY_EXPAND_STATE_DIRECT_MESSAGES_GROUP";
 
     /**
      * warns the activity when there is a scroll in the recents
@@ -77,19 +76,21 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     public interface IVectorRecentsScrollEventListener {
         // warn the user over scrolls up
         void onRecentsListOverScrollUp();
+
         // warn the user scrolls up
         void onRecentsListScrollUp();
+
         // warn when the user scrolls downs
         void onRecentsListScrollDown();
+
         // warn when the list content can be fully displayed without scrolling
         void onRecentsListFitsScreen();
     }
 
-    private static final String LOG_TAG = "VectorRecentsListFrg";
+    private static final String LOG_TAG = VectorRecentsListFragment.class.getSimpleName();
 
-    public static final String ARG_LAYOUT_ID = "VectorRecentsListFragment.ARG_LAYOUT_ID";
-    public static final String ARG_MATRIX_ID = "VectorRecentsListFragment.ARG_MATRIX_ID";
-
+    static final String ARG_LAYOUT_ID = "VectorRecentsListFragment.ARG_LAYOUT_ID";
+    static final String ARG_MATRIX_ID = "VectorRecentsListFragment.ARG_MATRIX_ID";
 
     public static VectorRecentsListFragment newInstance(String matrixId, int layoutResId) {
         VectorRecentsListFragment f = new VectorRecentsListFragment();
@@ -100,30 +101,30 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         return f;
     }
 
-    protected String mMatrixId;
-    protected MXSession mSession;
-    protected MXEventListener mEventsListener;
-    protected RecentsExpandableListView mRecentsListView;
-    protected VectorRoomSummaryAdapter mAdapter;
-    protected View mWaitingView = null;
+    String mMatrixId;
+    private MXSession mSession;
+    private MXEventListener mEventsListener;
+    RecentsExpandableListView mRecentsListView;
+    VectorRoomSummaryAdapter mAdapter;
+    View mWaitingView = null;
 
     // drag and drop management
-    protected RelativeLayout mSelectedCellLayout;
-    protected View mDraggedView;
-    protected boolean mIgnoreScrollEvent;
-    protected int mOriginGroupPosition = -1;
-    protected int mOriginChildPosition = -1;
-    protected int mDestGroupPosition = -1;
-    protected int mDestChildPosition = -1;
-    protected boolean mIsWaitingTagOrderEcho;
-    protected boolean mIsWaitingDirectChatEcho;
+    private RelativeLayout mSelectedCellLayout;
+    private View mDraggedView;
+    private boolean mIgnoreScrollEvent;
+    private int mOriginGroupPosition = -1;
+    private int mOriginChildPosition = -1;
+    private int mDestGroupPosition = -1;
+    private int mDestChildPosition = -1;
+    private boolean mIsWaitingTagOrderEcho;
+    private boolean mIsWaitingDirectChatEcho;
 
-    protected int mFirstVisibleIndex = 0;
+    private int mFirstVisibleIndex = 0;
 
-    protected boolean mIsPaused = false;
+    private boolean mIsPaused = false;
 
     // set to true to force refresh when an events chunk has been processed.
-    protected boolean refreshOnChunkEnd = false;
+    private boolean refreshOnChunkEnd = false;
 
     // public room management
     private boolean mIsLoadingPublicRooms = false;
@@ -132,7 +133,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     private int mScrollToIndex = -1;
 
     // scroll events listener
-    IVectorRecentsScrollEventListener mScrollEventListener = null;
+    private IVectorRecentsScrollEventListener mScrollEventListener = null;
 
     private final PublicRoomsManager.PublicRoomsManagerListener mPublicRoomsListener = new PublicRoomsManager.PublicRoomsManagerListener() {
         @Override
@@ -169,7 +170,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
-        mRecentsListView = (RecentsExpandableListView)v.findViewById(R.id.fragment_recents_list);
+        mRecentsListView = v.findViewById(R.id.fragment_recents_list);
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter
@@ -177,7 +178,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
         mRecentsListView.setAdapter(mAdapter);
 
-        mSelectedCellLayout = (RelativeLayout)v.findViewById(R.id.fragment_recents_selected_cell_layout);
+        mSelectedCellLayout = v.findViewById(R.id.fragment_recents_selected_cell_layout);
         mRecentsListView.mDragAndDropEventsListener = this;
 
         // Set rooms click listener:
@@ -279,7 +280,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if ((0 == firstVisibleItem) && ((totalItemCount+1) < visibleItemCount)) {
+                if ((0 == firstVisibleItem) && ((totalItemCount + 1) < visibleItemCount)) {
                     onFitScreen();
                 } else if (firstVisibleItem < mFirstVisibleIndex) {
                     mFirstVisibleIndex = firstVisibleItem;
@@ -298,7 +299,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                         if (off > mPrevOffset) {
                             onScrollDown();
-                        } else if (off < mPrevOffset){
+                        } else if (off < mPrevOffset) {
                             onScrollUp();
                         }
 
@@ -371,7 +372,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
-    protected void showWaitingView() {
+    void showWaitingView() {
         findWaitingView();
 
         if (null != mWaitingView) {
@@ -379,7 +380,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
-    protected void hideWaitingView() {
+    void hideWaitingView() {
         findWaitingView();
 
         if (null != mWaitingView) {
@@ -388,34 +389,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     /**
-     * @return true if the directory group is displayed
-     */
-    public boolean isDirectoryGroupDisplayed() {
-        return mAdapter.isDirectoryGroupDisplayed();
-    }
-
-    /**
-     * Set the directory group visibility
-     * @param isDisplayed true to display the directory group.
-     */
-    public void setIsDirectoryDisplayed(boolean isDisplayed) {
-        mAdapter.setForceDirectoryGroupDisplay(isDisplayed);
-        mAdapter.notifyDataSetChanged();
-
-        if (isDisplayed) {
-            mRecentsListView.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (-1 != mAdapter.getDirectoryGroupPosition()) {
-                        mRecentsListView.expandGroup(mAdapter.getDirectoryGroupPosition());
-                    }
-                }
-            });
-        }
-    }
-
-    /**
      * Test if the attached activity managed IVectorRecentsScrollEventListener.
+     *
      * @return the listener, null if it is not suppported
      */
     private IVectorRecentsScrollEventListener getListener() {
@@ -430,9 +405,10 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     /**
      * Apply a filter to the rooms list
+     *
      * @param pattern the pattern to search
      */
-    public void applyFilter(String pattern) {
+    void applyFilter(String pattern) {
         // will be done while resuming
         if (null == mRecentsListView) {
             return;
@@ -454,23 +430,16 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     private void expandsAllSections() {
         final int groupCount = mAdapter.getGroupCount();
 
-        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+        for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
             mRecentsListView.expandGroup(groupIndex);
         }
-    }
-
-    /**
-     * Refresh the summaries list
-     */
-    public void refresh() {
-        notifyDataSetChanged();
     }
 
     /**
      * Refresh the summaries list.
      * It also expands or collapses the section according to the latest known user preferences.
      */
-    protected void notifyDataSetChanged(){
+    void notifyDataSetChanged() {
         mAdapter.notifyDataSetChanged();
 
         mRecentsListView.post(new Runnable() {
@@ -511,27 +480,28 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     /**
      * Update the group visibility preference.
+     *
      * @param aGroupPosition the group position
-     * @param aValue the new value.
+     * @param aValue         the new value.
      */
-    protected void updateGroupExpandStatus(int aGroupPosition, boolean aValue) {
+    void updateGroupExpandStatus(int aGroupPosition, boolean aValue) {
         if (null != getActivity()) {
             Context context;
             String groupKey;
 
-            if(mAdapter.isInvitedRoomPosition(aGroupPosition)){
+            if (mAdapter.isInvitedRoomPosition(aGroupPosition)) {
                 groupKey = KEY_EXPAND_STATE_INVITES_GROUP;
-            } else if(mAdapter.isFavouriteRoomPosition(aGroupPosition)){
+            } else if (mAdapter.isFavouriteRoomPosition(aGroupPosition)) {
                 groupKey = KEY_EXPAND_STATE_FAVOURITE_GROUP;
-            } else if(mAdapter.isNoTagRoomPosition(aGroupPosition)){ // "Rooms" group
+            } else if (mAdapter.isNoTagRoomPosition(aGroupPosition)) { // "Rooms" group
                 groupKey = KEY_EXPAND_STATE_ROOMS_GROUP;
-            } else if(mAdapter.isLowPriorityRoomPosition(aGroupPosition)){
+            } else if (mAdapter.isLowPriorityRoomPosition(aGroupPosition)) {
                 groupKey = KEY_EXPAND_STATE_LOW_PRIORITY_GROUP;
-            } else if(mAdapter.isDirectoryGroupPosition(aGroupPosition)) { // public rooms (search mode)
+            } else if (mAdapter.isDirectoryGroupPosition(aGroupPosition)) { // public rooms (search mode)
                 groupKey = KEY_EXPAND_STATE_LOW_PRIORITY_GROUP;
             } else {
                 // unknown group position, just skipp
-                Log.w(LOG_TAG, "## updateGroupExpandStatus(): Failure - Unknown group: "+aGroupPosition);
+                Log.w(LOG_TAG, "## updateGroupExpandStatus(): Failure - Unknown group: " + aGroupPosition);
                 return;
             }
 
@@ -687,12 +657,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     @Override
-    public void onGroupCollapsedNotif(int aGroupPosition){
+    public void onGroupCollapsedNotif(int aGroupPosition) {
         updateGroupExpandStatus(aGroupPosition, CommonActivityUtils.GROUP_IS_COLLAPSED);
     }
 
     @Override
-    public void onGroupExpandedNotif(int aGroupPosition){
+    public void onGroupExpandedNotif(int aGroupPosition) {
         updateGroupExpandStatus(aGroupPosition, CommonActivityUtils.GROUP_IS_EXPANDED);
     }
 
@@ -869,7 +839,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
-    protected boolean isDragAndDropSupported() {
+    boolean isDragAndDropSupported() {
         return true;
     }
 
@@ -912,13 +882,14 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     /**
      * Drag and drop managemnt
-     * @param y the touch Y position
+     *
+     * @param y             the touch Y position
      * @param groupPosition the touched group position
      * @param childPosition the touched child position
      */
     public void onTouchMove(int y, int groupPosition, int childPosition) {
         // check if the recents list is drag & drop mode
-        if ((null != mDraggedView) && (!mIgnoreScrollEvent)){
+        if ((null != mDraggedView) && (!mIgnoreScrollEvent)) {
 
             // display the cell if it is not yet visible
             if (mSelectedCellLayout.getVisibility() != View.VISIBLE) {
@@ -986,6 +957,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     /**
      * Called the list view is over scrolled
+     *
      * @param isTop set to true when the list is top over scrolled.
      */
     @Override
@@ -997,6 +969,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     /**
      * Retrieves the RoomTag.ROOM_TAG.XX value from the group position
+     *
      * @param groupPosition the group position.
      * @return the room tag.
      */
@@ -1012,6 +985,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     /**
      * Check if a group is movable.
+     *
      * @param groupPosition the group position
      * @return true if the group is movable.
      */
@@ -1079,10 +1053,11 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     /**
      * Update the room tag.
-     * @param session the session
-     * @param roomId the room id.
+     *
+     * @param session  the session
+     * @param roomId   the room id.
      * @param tagOrder the tag order.
-     * @param newtag the new tag.
+     * @param newtag   the new tag.
      */
     private void updateRoomTag(MXSession session, String roomId, Double tagOrder, String newtag) {
         Room room = session.getDataHandler().getRoom(roomId);
@@ -1177,20 +1152,5 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     @Override
     public void moveToLowPriority(MXSession session, String roomId) {
         updateRoomTag(session, roomId, null, RoomTag.ROOM_TAG_LOW_PRIORITY);
-    }
-
-    /**
-     * @return the first visible position of the listview
-     */
-    public int getFirstVisiblePosition() {
-        return mRecentsListView.getFirstVisiblePosition();
-    }
-
-    /**
-     * Update the list position
-     * @param position the new position
-     */
-    public void setFirstVisiblePosition(final int position) {
-        mScrollToIndex = position;
     }
 }

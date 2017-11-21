@@ -20,7 +20,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -37,9 +39,7 @@ public class SectionView extends RelativeLayout {
     private AdapterSection mSection;
 
     private int mHeaderTop;
-    private int mHeaderBottom;
     private int mFooterTop;
-    private int mFooterBottom;
 
     // header subview
     private View mSubView;
@@ -84,10 +84,10 @@ public class SectionView extends RelativeLayout {
         View headerView = inflate(getContext(), R.layout.adapter_sticky_header, null);
 
         // extract the UI items
-        mTitleView = (TextView) headerView.findViewById(R.id.section_title);
+        mTitleView = headerView.findViewById(R.id.section_title);
         mTitleView.setText(section.getTitle());
 
-        mLoadingView = (ProgressBar) headerView.findViewById(R.id.section_loading);
+        mLoadingView = headerView.findViewById(R.id.section_loading);
         mLoadingView.setVisibility(View.INVISIBLE);
 
         // custom subview ?
@@ -126,31 +126,8 @@ public class SectionView extends RelativeLayout {
         mLoadingView.setVisibility(View.INVISIBLE);
     }
 
-    /**
-     * @return true if the loading view is visible
-     */
-    public boolean isLoadingViewVisisble() {
-        return (View.INVISIBLE == mLoadingView.getVisibility());
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        //Log.d(LOG_TAG, "onMeasure parent height" + MeasureSpec.getSize(heightMeasureSpec));
-    }
-
-    @Override
-    protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld) {
-        super.onSizeChanged(xNew, yNew, xOld, yOld);
-        //Log.d(LOG_TAG, "onSizeChanged yOld " + yOld + " yNew" + yNew);
-    }
-
     public boolean isStickyHeader() {
         return getTranslationY() == mHeaderTop;
-    }
-
-    public boolean isStickyFooter() {
-        return getTranslationY() == mFooterTop;
     }
 
     /**
@@ -207,7 +184,7 @@ public class SectionView extends RelativeLayout {
      */
     public void setHeaderBottom(int headerBottom) {
         Log.d(LOG_TAG, "sectionview " + mSection.getTitle() + " setHeaderBottom " + headerBottom);
-        mHeaderBottom = headerBottom;
+        //mHeaderBottom = headerBottom;
         setBottom(headerBottom);
     }
 
@@ -237,7 +214,7 @@ public class SectionView extends RelativeLayout {
      */
     public void setFooterBottom(int footerBottom) {
         Log.d(LOG_TAG, "sectionview " + mSection.getTitle() + " setFooterBottom " + footerBottom);
-        mFooterBottom = footerBottom;
+        //mFooterBottom = footerBottom;
     }
 
     /**

@@ -21,7 +21,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -39,7 +41,7 @@ import java.util.HashMap;
  * AccountCreationActivity is the fallback account creation activity
  */
 public class AccountCreationActivity extends RiotBaseActivity {
-    private static final String LOG_TAG = "ACCreationActivity";
+    private static final String LOG_TAG = AccountCreationActivity.class.getSimpleName();
 
     public static final String EXTRA_HOME_SERVER_ID = "AccountCreationActivity.EXTRA_HOME_SERVER_ID";
 
@@ -60,14 +62,14 @@ public class AccountCreationActivity extends RiotBaseActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // required to have the right translated title
         setTitle(R.string.create_account);
         setContentView(R.layout.activity_account_creation);
 
-        final WebView webView = (WebView) findViewById(R.id.account_creation_webview);
+        final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 
         Intent intent = getIntent();
@@ -85,7 +87,7 @@ public class AccountCreationActivity extends RiotBaseActivity {
 
         webView.loadUrl(mHomeServerUrl + "_matrix/static/client/register/");
 
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler,
                                            SslError error) {
@@ -157,14 +159,15 @@ public class AccountCreationActivity extends RiotBaseActivity {
             @Override
             public boolean shouldOverrideUrlLoading(android.webkit.WebView view, java.lang.String url) {
 
-                if ((null != url) &&  url.startsWith("js:")) {
+                if ((null != url) && url.startsWith("js:")) {
                     String json = url.substring(3);
                     HashMap<String, String> parameters = null;
 
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8");
-                        parameters = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {}.getType());
+                        parameters = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+                        }.getType());
 
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage());
@@ -174,14 +177,14 @@ public class AccountCreationActivity extends RiotBaseActivity {
                     if (null != parameters) {
                         // check the required paramaters
                         if (parameters.containsKey("homeServer") && parameters.containsKey("userId") && parameters.containsKey("accessToken") && parameters.containsKey("action")) {
-                            final String userId =  parameters.get("userId");
-                            final String accessToken =  parameters.get("accessToken");
+                            final String userId = parameters.get("userId");
+                            final String accessToken = parameters.get("accessToken");
                             final String homeServer = parameters.get("homeServer");
-                            String action =  parameters.get("action");
+                            String action = parameters.get("action");
 
                             // remove the trailing /
                             if (mHomeServerUrl.endsWith("/")) {
-                                mHomeServerUrl = mHomeServerUrl.substring(0, mHomeServerUrl.length()-1);
+                                mHomeServerUrl = mHomeServerUrl.substring(0, mHomeServerUrl.length() - 1);
                             }
 
                             // check the action

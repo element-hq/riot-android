@@ -188,7 +188,7 @@ public class BugReporterMultipartBody extends RequestBody {
         return byteCount;
     }
 
-    private static StringBuilder appendQuotedString(StringBuilder target, String key) {
+    private static void appendQuotedString(StringBuilder target, String key) {
         target.append('"');
         for (int i = 0, len = key.length(); i < len; i++) {
             char ch = key.charAt(i);
@@ -208,7 +208,6 @@ public class BugReporterMultipartBody extends RequestBody {
             }
         }
         target.append('"');
-        return target;
     }
 
     public static final class Part {

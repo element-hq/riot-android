@@ -34,15 +34,6 @@ public class GAHelper {
     private static Thread.UncaughtExceptionHandler mDefaultExceptionHandler = null;
 
     /**
-     * Tells if the GA use can be updated
-     *
-     * @return true if it can be updated
-     */
-    public static boolean isGAUseUpdatable() {
-        return false;
-    }
-
-    /**
      * Initialize the google analytics
      */
     public static void initGoogleAnalytics(Context context) {

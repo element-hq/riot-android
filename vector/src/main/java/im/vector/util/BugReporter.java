@@ -72,7 +72,7 @@ import im.vector.Matrix;
  * BugReporter creates and sends the bug reports.
  */
 public class BugReporter {
-    private static final String LOG_TAG = "BugReporter";
+    private static final String LOG_TAG = BugReporter.class.getSimpleName();
 
     /**
      * Bug report upload listener
@@ -123,12 +123,12 @@ public class BugReporter {
     /**
      * Send a bug report.
      *
-     * @param context the application context
-     * @param withDevicesLogs true to include the device log
-     * @param withCrashLogs true to include the crash logs
-     * @param withScreenshot true to include the screenshot
+     * @param context           the application context
+     * @param withDevicesLogs   true to include the device log
+     * @param withCrashLogs     true to include the crash logs
+     * @param withScreenshot    true to include the screenshot
      * @param theBugDescription the bug description
-     * @param listener the listener
+     * @param listener          the listener
      */
     private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final boolean withScreenshot, final String theBugDescription, final IMXBugReportListener listener) {
         new AsyncTask<Void, Integer, String>() {
@@ -193,7 +193,7 @@ public class BugReporter {
                 String deviceId = "undefined";
                 String userId = "undefined";
                 String matrixSdkVersion = "undefined";
-                String olmVersion =  "undefined";
+                String olmVersion = "undefined";
 
 
                 if (null != session) {
@@ -214,7 +214,7 @@ public class BugReporter {
                             .addFormDataPart("version", Matrix.getInstance(context).getVersion(true, false))
                             .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
                             .addFormDataPart("matrix_sdk_version", matrixSdkVersion)
-                            .addFormDataPart("olm_version",olmVersion)
+                            .addFormDataPart("olm_version", olmVersion)
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())
@@ -381,7 +381,7 @@ public class BugReporter {
                 mBugReportCall = null;
 
                 // delete when the bug report has been successfully sent
-                for(File file : mBugReportFiles) {
+                for (File file : mBugReportFiles) {
                     file.delete();
                 }
 
@@ -422,13 +422,13 @@ public class BugReporter {
         dialog.setTitle(R.string.send_bug_report);
         dialog.setView(dialogLayout);
 
-        final EditText bugReportText = (EditText) dialogLayout.findViewById(R.id.bug_report_edit_text);
-        final CheckBox includeLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_logs);
-        final CheckBox includeCrashLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_crash_logs);
-        final CheckBox includeScreenShotButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_screenshot);
+        final EditText bugReportText = dialogLayout.findViewById(R.id.bug_report_edit_text);
+        final CheckBox includeLogsButton = dialogLayout.findViewById(R.id.bug_report_button_include_logs);
+        final CheckBox includeCrashLogsButton = dialogLayout.findViewById(R.id.bug_report_button_include_crash_logs);
+        final CheckBox includeScreenShotButton = dialogLayout.findViewById(R.id.bug_report_button_include_screenshot);
 
-        final ProgressBar progressBar = (ProgressBar) dialogLayout.findViewById(R.id.bug_report_progress_view);
-        final TextView progressTextView = (TextView) dialogLayout.findViewById(R.id.bug_report_progress_text_view);
+        final ProgressBar progressBar = dialogLayout.findViewById(R.id.bug_report_progress_view);
+        final TextView progressTextView = dialogLayout.findViewById(R.id.bug_report_progress_text_view);
 
         dialog.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
             @Override
@@ -583,6 +583,7 @@ public class BugReporter {
 
     /**
      * Provides the crash file
+     *
      * @param context the context
      * @return the crash file
      */
@@ -592,6 +593,7 @@ public class BugReporter {
 
     /**
      * Remove the crash file
+     *
      * @param context
      */
     public static void deleteCrashFile(Context context) {
@@ -605,7 +607,7 @@ public class BugReporter {
     /**
      * Save the crash report
      *
-     * @param context       the context
+     * @param context          the context
      * @param crashDescription teh crash description
      */
     public static void saveCrashReport(Context context, String crashDescription) {
@@ -632,10 +634,11 @@ public class BugReporter {
 
     /**
      * Read the crash description file and return its content.
+     *
      * @param context teh context
      * @return the crash description
      */
-    public static String getCrashDescription(Context context) {
+    private static String getCrashDescription(Context context) {
         String crashDescription = null;
         File crashFile = getCrashFile(context);
 

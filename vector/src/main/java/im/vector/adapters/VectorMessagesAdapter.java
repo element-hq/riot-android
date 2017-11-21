@@ -33,7 +33,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -63,7 +62,6 @@ import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
@@ -100,14 +98,13 @@ import im.vector.widgets.WidgetsManager;
  * An adapter which can display room information.
  */
 public class VectorMessagesAdapter extends AbstractMessagesAdapter {
-
-    private static final String LOG_TAG = "VMessagesAdapter";
+    private static final String LOG_TAG = VectorMessagesAdapter.class.getSimpleName();
 
     // an event is selected when the user taps on it
     private String mSelectedEventId;
 
     // events listeners
-    protected IMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
+    IMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
 
     // current date : used to compute the day header
     private Date mReferenceDate = new Date();
@@ -147,9 +144,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_EMOJI = 9;
     static final int NUM_ROW_TYPES = 10;
 
-    protected final Context mContext;
+    final Context mContext;
     private final HashMap<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
-    protected final LayoutInflater mLayoutInflater;
+    final LayoutInflater mLayoutInflater;
 
     // To keep track of events and avoid duplicates. For instance, we add a message event
     // when the current user sends one but it will also come down the event stream
@@ -163,7 +160,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final int mSendingMessageTextColor;
     private final int mEncryptingMessageTextColor;
     private final int mHighlightMessageTextColor;
-    protected int mSearchHighlightMessageTextColor;
+    int mSearchHighlightMessageTextColor;
 
     private final int mMaxImageWidth;
     private final int mMaxImageHeight;
@@ -172,7 +169,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final MXMediasCache mMediasCache;
 
     // session
-    protected final MXSession mSession;
+    final MXSession mSession;
 
     private boolean mIsSearchMode = false;
     private boolean mIsPreviewMode = false;
@@ -186,7 +183,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private MatrixLinkMovementMethod mLinkMovementMethod;
 
     private final VectorMessagesAdapterMediasHelper mMediasHelper;
-    protected final VectorMessagesAdapterHelper mHelper;
+    final VectorMessagesAdapterHelper mHelper;
 
     private final Set<String> mHiddenEventIds = new HashSet<>();
 
@@ -199,7 +196,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private static final Pattern mEmojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]|[\uD83E\uDD00-\uD83E\uDDFF]|[\uD83D\uDE00-\uD83D\uDE4F]|[\uD83D\uDE80-\uD83D\uDEFF]|[\u2600-\u26FF]\uFE0F?|[\u2700-\u27BF]\uFE0F?|\u24C2\uFE0F?|[\uD83C\uDDE6-\uD83C\uDDFF]{1,2}|[\uD83C\uDD70\uD83C\uDD71\uD83C\uDD7E\uD83C\uDD7F\uD83C\uDD8E\uD83C\uDD91-\uD83C\uDD9A]\uFE0F?|[\u0023\u002A\u0030-\u0039]\uFE0F?\u20E3|[\u2194-\u2199\u21A9-\u21AA]\uFE0F?|[\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55]\uFE0F?|[\u2934\u2935]\uFE0F?|[\u3030\u303D]\uFE0F?|[\u3297\u3299]\uFE0F?|[\uD83C\uDE01\uD83C\uDE02\uD83C\uDE1A\uD83C\uDE2F\uD83C\uDE32-\uD83C\uDE3A\uD83C\uDE50\uD83C\uDE51]\uFE0F?|[\u203C\u2049]\uFE0F?|[\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE]\uFE0F?|[\u00A9\u00AE]\uFE0F?|[\u2122\u2139]\uFE0F?|\uD83C\uDC04\uFE0F?|\uD83C\uDCCF\uFE0F?|[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?))");
 
     // the color depends in the theme
-    private Drawable mPadlockDrawable;
+    private final Drawable mPadlockDrawable;
 
     /**
      * Creates a messages adapter with the default layouts.
@@ -232,18 +229,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param videoResLayoutId  the video message layout
      * @param mediasCache       the medias cache.
      */
-    public VectorMessagesAdapter(MXSession session,
-                                 Context context,
-                                 int textResLayoutId,
-                                 int imageResLayoutId,
-                                 int noticeResLayoutId,
-                                 int roomMemberResLayoutId,
-                                 int emoteRestLayoutId,
-                                 int fileResLayoutId,
-                                 int videoResLayoutId,
-                                 int mergeResLayoutId,
-                                 int emojiResLayoutId,
-                                 MXMediasCache mediasCache) {
+    VectorMessagesAdapter(MXSession session,
+                          Context context,
+                          int textResLayoutId,
+                          int imageResLayoutId,
+                          int noticeResLayoutId,
+                          int roomMemberResLayoutId,
+                          int emoteRestLayoutId,
+                          int fileResLayoutId,
+                          int videoResLayoutId,
+                          int mergeResLayoutId,
+                          int emojiResLayoutId,
+                          MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
         mRowTypeToLayoutId.put(ROW_TYPE_TEXT, textResLayoutId);
@@ -378,7 +375,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param row the message row to test
      * @return true if the row can be merged
      */
-    protected boolean supportMessageRowMerge(MessageRow row) {
+    boolean supportMessageRowMerge(MessageRow row) {
         return EventGroup.isSupported(row);
     }
 
@@ -865,6 +862,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Test if a string contains emojis.
      * It seems that the regex [emoji_regex]+ does not work.
      * Some characters like ?, # or digit are accepted.
+     *
      * @param body the body to test
      * @return true if the body contains only emojis
      */
@@ -877,7 +875,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             int start = -1;
             int end = -1;
 
-            while(matcher.find()) {
+            while (matcher.find()) {
                 int nextStart = matcher.start();
 
                 // first emoji position
@@ -1125,7 +1123,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             CharSequence textualDisplay = display.getTextualDisplay();
 
             SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
-            final TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
+            final TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
 
             // cannot refresh it
             if (null == bodyTextView) {
@@ -1200,7 +1198,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             // display a type watermark
-            final ImageView imageTypeView = (ImageView) convertView.findViewById(R.id.messagesAdapter_image_type);
+            final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
 
             if (null == imageTypeView) {
                 Log.e(LOG_TAG, "getImageVideoView : invalid layout");
@@ -1228,7 +1226,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             this.manageSubView(position, convertView, imageLayout, type);
 
-            ImageView imageView = (ImageView) convertView.findViewById(R.id.messagesAdapter_image);
+            ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
             addContentViewListeners(convertView, imageView, position);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage());
@@ -1260,7 +1258,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             EventDisplay display = new RiotEventDisplay(mContext, msg, roomState);
             notice = display.getTextualDisplay();
 
-            TextView noticeTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
+            TextView noticeTextView = convertView.findViewById(R.id.messagesAdapter_body);
 
             if (null == noticeTextView) {
                 Log.e(LOG_TAG, "getNoticeRoomMemberView : invalid layout");
@@ -1314,7 +1312,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Event event = row.getEvent();
             RoomState roomState = row.getRoomState();
 
-            TextView emoteTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
+            TextView emoteTextView = convertView.findViewById(R.id.messagesAdapter_body);
 
             if (null == emoteTextView) {
                 Log.e(LOG_TAG, "getEmoteView : invalid layout");
@@ -1381,7 +1379,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Event event = row.getEvent();
 
             final FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
-            final TextView fileTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_filename);
+            final TextView fileTextView = convertView.findViewById(R.id.messagesAdapter_filename);
 
             if (null == fileTextView) {
                 Log.e(LOG_TAG, "getFileView : invalid layout");
@@ -1393,7 +1391,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // display the right message type icon.
             // Audio and File messages are managed by the same method
-            final ImageView imageTypeView = (ImageView) convertView.findViewById(R.id.messagesAdapter_image_type);
+            final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
 
             if (null != imageTypeView) {
                 imageTypeView.setImageResource(Message.MSGTYPE_AUDIO.equals(fileMessage.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
@@ -1451,8 +1449,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             final EventGroup event = (EventGroup) row.getEvent();
 
             View headerLayout = convertView.findViewById(R.id.messagesAdapter_merge_header_layout);
-            TextView headerTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_merge_header_text_view);
-            TextView summaryTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_merge_summary);
+            TextView headerTextView = convertView.findViewById(R.id.messagesAdapter_merge_header_text_view);
+            TextView summaryTextView = convertView.findViewById(R.id.messagesAdapter_merge_summary);
             View separatorLayout = convertView.findViewById(R.id.messagesAdapter_merge_separator);
             View avatarsLayout = convertView.findViewById(R.id.messagesAdapter_merge_avatar_list);
 
@@ -1538,7 +1536,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param text     the text to display
      * @param pattern  the pattern to highlight
      */
-    protected void highlightPattern(TextView textView, Spannable text, String pattern) {
+    void highlightPattern(TextView textView, Spannable text, String pattern) {
         highlightPattern(textView, text, null, pattern);
     }
 
@@ -1701,7 +1699,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param position the event position
      * @return the header
      */
-    protected String headerMessage(int position) {
+    String headerMessage(int position) {
         Date prevMessageDate = null;
         Date messageDate = null;
 
@@ -1748,7 +1746,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         contentView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
         contentView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
 
-        TextView tsTextView = (TextView) contentView.findViewById(R.id.messagesAdapter_timestamp);
+        TextView tsTextView = contentView.findViewById(R.id.messagesAdapter_timestamp);
         if (isInSelectionMode && isSelected) {
             tsTextView.setVisibility(View.VISIBLE);
         }
@@ -1789,7 +1787,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param shouldBeMerged true if the event should be merged
      * @return true to merge the event
      */
-    protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
+    boolean mergeView(Event event, int position, boolean shouldBeMerged) {
         if (shouldBeMerged) {
             shouldBeMerged = null == headerMessage(position);
         }
@@ -1807,7 +1805,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         String text = null;
 
         if (null != contentView) {
-            TextView bodyTextView = (TextView) contentView.findViewById(R.id.messagesAdapter_body);
+            TextView bodyTextView = contentView.findViewById(R.id.messagesAdapter_body);
 
             if (null != bodyTextView) {
                 text = bodyTextView.getText().toString();
@@ -1871,7 +1869,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param position     the item position
      */
     private void displayE2eIcon(View inflatedView, int position) {
-        ImageView e2eIconView = (ImageView) inflatedView.findViewById(R.id.message_adapter_e2e_icon);
+        ImageView e2eIconView = inflatedView.findViewById(R.id.message_adapter_e2e_icon);
 
         if (null != e2eIconView) {
             View senderMargin = inflatedView.findViewById(R.id.e2e_sender_margin);
@@ -1889,9 +1887,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 Object icon = mE2eIconByEventId.get(event.eventId);
 
                 if (icon instanceof Drawable) {
-                    e2eIconView.setImageDrawable((Drawable)icon);
+                    e2eIconView.setImageDrawable((Drawable) icon);
                 } else {
-                    e2eIconView.setImageResource((int)icon);
+                    e2eIconView.setImageResource((int) icon);
                 }
 
                 int type = getItemViewType(position);

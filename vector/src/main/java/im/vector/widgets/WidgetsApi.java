@@ -21,7 +21,7 @@ import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.POST;
 
-public interface WidgetsApi {
+interface WidgetsApi {
     /**
      * register to the server
      * @param body the body content

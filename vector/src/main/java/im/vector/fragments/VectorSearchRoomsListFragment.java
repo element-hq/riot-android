@@ -46,14 +46,12 @@ import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.view.RecentsExpandableListView;
 
 public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
-
-    private static final String LOG_TAG = "VectorSrchRListFrag";
-
     // the session
     private MXSession mSession;
 
     /**
      * Static constructor
+     *
      * @param matrixId the matrix id
      * @return a VectorRoomsSearchResultsListFragment instance
      */
@@ -80,7 +78,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
         mWaitingView = v.findViewById(R.id.listView_spinner_views);
-        mRecentsListView = (RecentsExpandableListView)v.findViewById(R.id.fragment_recents_list);
+        mRecentsListView = v.findViewById(R.id.fragment_recents_list);
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter
@@ -190,7 +188,8 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
     /**
      * Preview the dedicated room if it was not joined.
-     * @param roomId the roomId
+     *
+     * @param roomId    the roomId
      * @param roomAlias the room alias
      */
     private void previewRoom(final String roomId, final String roomAlias) {
@@ -219,7 +218,8 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
     /**
      * Search a pattern in the room
-     * @param pattern the pattern to search
+     *
+     * @param pattern                the pattern to search
      * @param onSearchResultListener the search listener.
      */
     public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
@@ -273,8 +273,9 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
     /**
      * Update the group visibility preference.
+     *
      * @param aGroupPosition the group position
-     * @param aValue the new value.
+     * @param aValue         the new value.
      */
     protected void updateGroupExpandStatus(int aGroupPosition, boolean aValue) {
         // do nothing

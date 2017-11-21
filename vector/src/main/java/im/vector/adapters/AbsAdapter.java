@@ -20,7 +20,9 @@ import android.content.Context;
 import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,21 +44,20 @@ import im.vector.util.StickySectionHelper;
 import im.vector.view.SectionView;
 
 public abstract class AbsAdapter extends AbsFilterableAdapter {
-
     private static final String LOG_TAG = AbsAdapter.class.getSimpleName();
 
-    protected static final int TYPE_HEADER_DEFAULT = -1;
+    static final int TYPE_HEADER_DEFAULT = -1;
 
-    protected static final int TYPE_ROOM_INVITATION = -2;
+    static final int TYPE_ROOM_INVITATION = -2;
 
-    protected static final int TYPE_ROOM = -3;
+    static final int TYPE_ROOM = -3;
 
     // Helper handling the sticky view for each section
     private StickySectionHelper mStickySectionHelper;
 
     // List of sections with the position of their header view
     /// Ex <0, section 1 with 2 items>, <3, section 2>
-    private List<Pair<Integer, AdapterSection>> mSections;
+    private final List<Pair<Integer, AdapterSection>> mSections;
 
     private final AdapterSection<Room> mInviteSection;
 
@@ -66,7 +67,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      * *********************************************************************************************
      */
 
-    protected AbsAdapter(final Context context, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
+    AbsAdapter(final Context context, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
         super(context, invitationListener, moreActionListener);
 
         registerAdapterDataObserver(new AdapterDataObserver());
@@ -91,11 +92,6 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
         super.onAttachedToRecyclerView(recyclerView);
 
         mStickySectionHelper = new StickySectionHelper(recyclerView, mSections);
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
     }
 
     @Override
@@ -250,7 +246,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      * @param position
      * @return item at the given position
      */
-    public Object getItemForPosition(final int position) {
+    Object getItemForPosition(final int position) {
         for (int i = 0; i < mSections.size(); i++) {
             Pair<Integer, AdapterSection> section = mSections.get(i);
             if (position > section.first) {
@@ -268,7 +264,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      *
      * @param section
      */
-    protected void addSection(AdapterSection section) {
+    void addSection(AdapterSection section) {
         addSection(section, -1);
     }
 
@@ -278,7 +274,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      * @param section
      * @param index
      */
-    protected void addSection(AdapterSection section, int index) {
+    private void addSection(AdapterSection section, int index) {
         int headerPos = 0;
         if (mSections.size() > 0) {
             int prevPos = mSections.get(mSections.size() - 1).first;
@@ -295,7 +291,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
     /**
      * Notify that sections have changed and must be updated internally
      */
-    protected void updateSections() {
+    void updateSections() {
         List<AdapterSection> list = getSections();
         mSections.clear();
         for (AdapterSection section : list) {
@@ -316,7 +312,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      *
      * @return list of sections
      */
-    protected List<AdapterSection> getSections() {
+    List<AdapterSection> getSections() {
         List<AdapterSection> list = new ArrayList<>();
         for (int i = 0; i < mSections.size(); i++) {
             AdapterSection section = mSections.get(i).second;
@@ -330,7 +326,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      *
      * @return
      */
-    protected List<Pair<Integer, AdapterSection>> getSectionsArray() {
+    List<Pair<Integer, AdapterSection>> getSectionsArray() {
         return new ArrayList<>(mSections);
     }
 
@@ -340,7 +336,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      * @param section
      * @return section header position
      */
-    protected int getSectionHeaderPosition(final AdapterSection section) {
+    int getSectionHeaderPosition(final AdapterSection section) {
         for (Pair<Integer, AdapterSection> adapterSection : mSections) {
             if (adapterSection.second == section) {
                 return adapterSection.first;
@@ -350,23 +346,13 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
     }
 
     /**
-     * Refresh data of a section
-     */
-    public void refreshSection(final AdapterSection section) {
-        int startPos = getSectionHeaderPosition(section) + 1;
-        if (section.getNbItems() > 0 && startPos > 0) {
-            notifyItemRangeChanged(startPos, startPos + section.getNbItems() - 1);
-        }
-    }
-
-    /**
      * Filter the given section of rooms with the given pattern
      *
      * @param section
      * @param filterPattern
      * @return nb of items matching the filter
      */
-    protected int filterRoomSection(final AdapterSection<Room> section, final String filterPattern) {
+    int filterRoomSection(final AdapterSection<Room> section, final String filterPattern) {
         if (!TextUtils.isEmpty(filterPattern)) {
             List<Room> filteredRoom = RoomUtils.getFilteredRooms(mContext, mSession, section.getItems(), filterPattern);
             section.setFilteredItems(filteredRoom, filterPattern);

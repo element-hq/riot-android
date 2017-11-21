@@ -40,12 +40,11 @@ import im.vector.adapters.VectorReadReceiptsAdapter;
  * A dialog fragment showing the read receipts
  */
 public class VectorReadReceiptsDialogFragment extends DialogFragment {
-    private static final String LOG_TAG = "ReadRctDlgFragment";
+    private static final String LOG_TAG = VectorPublicRoomsListFragment.class.getSimpleName();
 
-    public static final String ARG_ROOM_ID = "VectorReadReceiptsDialogFragment.ARG_ROOM_ID";
-    public static final String ARG_EVENT_ID = "VectorReadReceiptsDialogFragment.ARG_EVENT_ID";
-    public static final String ARG_SESSION_ID = "VectorReadReceiptsDialogFragment.ARG_SESSION_ID";
-
+    private static final String ARG_ROOM_ID = "VectorReadReceiptsDialogFragment.ARG_ROOM_ID";
+    private static final String ARG_EVENT_ID = "VectorReadReceiptsDialogFragment.ARG_EVENT_ID";
+    private static final String ARG_SESSION_ID = "VectorReadReceiptsDialogFragment.ARG_SESSION_ID";
 
     public static VectorReadReceiptsDialogFragment newInstance(String userId, String roomId, String eventId) {
         VectorReadReceiptsDialogFragment f = new VectorReadReceiptsDialogFragment();
@@ -57,8 +56,6 @@ public class VectorReadReceiptsDialogFragment extends DialogFragment {
         return f;
     }
 
-    private ListView mListView;
-    private VectorReadReceiptsAdapter mAdapter;
     private String mRoomId;
     private String mEventId;
     private MXSession mSession;
@@ -71,7 +68,7 @@ public class VectorReadReceiptsDialogFragment extends DialogFragment {
         mEventId = getArguments().getString(ARG_EVENT_ID);
 
         // sanity check
-        if ((mSession == null) || TextUtils.isEmpty(mRoomId) ||  TextUtils.isEmpty(mEventId)) {
+        if ((mSession == null) || TextUtils.isEmpty(mRoomId) || TextUtils.isEmpty(mEventId)) {
             Log.e(LOG_TAG, "## onCreate() : invalid parameters");
             dismiss();
         }
@@ -87,9 +84,10 @@ public class VectorReadReceiptsDialogFragment extends DialogFragment {
     /**
      * Return the used medias cache.
      * This method can be overridden to use another medias cache
+     *
      * @return the used medias cache
      */
-    public MXMediasCache getMXMediasCache() {
+    private MXMediasCache getMXMediasCache() {
         return Matrix.getInstance(getActivity()).getMediasCache();
     }
 
@@ -98,13 +96,13 @@ public class VectorReadReceiptsDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_dialog_member_list, container, false);
-        mListView = ((ListView)v.findViewById(R.id.listView_members));
+        ListView listView = v.findViewById(R.id.listView_members);
 
         final Room room = mSession.getDataHandler().getRoom(mRoomId);
-        mAdapter = new VectorReadReceiptsAdapter(getActivity(), R.layout.adapter_item_read_receipt, mSession, room, getMXMediasCache());
+        VectorReadReceiptsAdapter adapter = new VectorReadReceiptsAdapter(getActivity(), R.layout.adapter_item_read_receipt, mSession, room, getMXMediasCache());
 
-        mAdapter.addAll(new ArrayList<>(mSession.getDataHandler().getStore().getEventReceipts(mRoomId, mEventId, true, true)));
-        mListView.setAdapter(mAdapter);
+        adapter.addAll(new ArrayList<>(mSession.getDataHandler().getStore().getEventReceipts(mRoomId, mEventId, true, true)));
+        listView.setAdapter(adapter);
 
         return v;
     }

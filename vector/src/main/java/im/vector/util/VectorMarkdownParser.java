@@ -33,7 +33,7 @@ import android.webkit.WebView;
  * This class uses a webview.
  */
 public class VectorMarkdownParser extends WebView {
-    private static final String LOG_TAG = "VMarkdownParser";
+    private static final String LOG_TAG = VectorMarkdownParser.class.getSimpleName();
 
     // tell if the parser is properly initialised
     private boolean mIsInitialised = false;

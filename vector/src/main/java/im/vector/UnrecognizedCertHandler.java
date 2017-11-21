@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class UnrecognizedCertHandler {
-    private static final String LOG_TAG = "UnrecognizedCertHandler";
+    private static final String LOG_TAG = UnrecognizedCertHandler.class.getSimpleName();
 
     private static final HashMap<String, HashSet<Fingerprint>> ignoredFingerprints = new HashMap<>();
     private static final HashSet<String> openDialogIds = new HashSet<>();
@@ -71,15 +71,15 @@ public class UnrecognizedCertHandler {
 
         View layout = inflater.inflate(R.layout.ssl_fingerprint_prompt, null);
 
-        TextView sslFingerprintTitle = (TextView) layout.findViewById(R.id.ssl_fingerprint_title);
+        TextView sslFingerprintTitle = layout.findViewById(R.id.ssl_fingerprint_title);
         sslFingerprintTitle.setText(
                 String.format(activity.getString(R.string.ssl_fingerprint_hash), unrecognizedFingerprint.getType().toString())
         );
 
-        TextView sslFingerprint = (TextView) layout.findViewById(R.id.ssl_fingerprint);
+        TextView sslFingerprint = layout.findViewById(R.id.ssl_fingerprint);
         sslFingerprint.setText(unrecognizedFingerprint.getBytesAsHexString());
 
-        TextView sslUserId = (TextView) layout.findViewById(R.id.ssl_user_id);
+        TextView sslUserId = layout.findViewById(R.id.ssl_user_id);
         if (hsConfig.getCredentials() != null) {
             sslUserId.setText(
                     activity.getString(R.string.username) + ":  " + hsConfig.getCredentials().userId
@@ -90,7 +90,7 @@ public class UnrecognizedCertHandler {
             );
         }
 
-        TextView sslExpl = (TextView) layout.findViewById(R.id.ssl_explanation);
+        TextView sslExpl = layout.findViewById(R.id.ssl_explanation);
         if (existing) {
             if (hsConfig.getAllowedFingerprints().size() > 0) {
                 sslExpl.setText(activity.getString(R.string.ssl_expected_existing_expl));

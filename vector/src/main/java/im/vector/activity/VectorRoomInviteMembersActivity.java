@@ -57,7 +57,7 @@ import im.vector.view.VectorAutoCompleteTextView;
  * This class provides a way to search other user to invite them in a dedicated room
  */
 public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
-    private static final String LOG_TAG = "VectorInviteMembersAct";
+    private static final String LOG_TAG = VectorRoomInviteMembersActivity.class.getSimpleName();
 
     // room identifier
     public static final String EXTRA_ROOM_ID = "VectorInviteMembersActivity.EXTRA_ROOM_ID";
@@ -88,9 +88,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
     // adapter
     private VectorParticipantsAdapter mAdapter;
-
-    // dummy link to open a dedicated dialog to invite members with matrix id, email or MSISDN
-    private View mInviteByIdTextView;
 
     // tell if a confirmation dialog must be displayed to validate the user ids list
     private boolean mAddConfirmationDialog;
@@ -204,7 +201,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         mLoadingView = findViewById(R.id.search_in_progress_view);
 
-        mListView = (ExpandableListView) findViewById(R.id.room_details_members_list);
+        mListView = findViewById(R.id.room_details_members_list);
         // the chevron is managed in the header view
         mListView.setGroupIndicator(null);
 
@@ -229,8 +226,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             }
         });
 
-        mInviteByIdTextView = findViewById(R.id.search_invite_by_id);
-        mInviteByIdTextView.setOnClickListener(new View.OnClickListener() {
+        View inviteByIdTextView = findViewById(R.id.search_invite_by_id);
+        inviteByIdTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 displayInviteByUserId();
@@ -315,7 +312,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         final ArrayList<String> displayNames = new ArrayList<>();
 
         // list the hidden user Ids
-        for(ParticipantAdapterItem item : mHiddenParticipantItems) {
+        for (ParticipantAdapterItem item : mHiddenParticipantItems) {
             hiddenUserIds.add(item.mUserId);
         }
 
@@ -407,7 +404,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         dialog.setTitle(R.string.people_search_invite_by_id_dialog_title);
         dialog.setView(dialogLayout);
 
-        final VectorAutoCompleteTextView inviteTextView = (VectorAutoCompleteTextView) dialogLayout.findViewById(R.id.invite_by_id_edit_text);
+        final VectorAutoCompleteTextView inviteTextView = dialogLayout.findViewById(R.id.invite_by_id_edit_text);
         inviteTextView.initAutoCompletion(mSession);
         inviteTextView.setProvideMatrixIdOnly(true);
 

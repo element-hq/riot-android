@@ -26,6 +26,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
+
 import org.matrix.androidsdk.util.Log;
 
 import im.vector.R;
@@ -35,8 +36,7 @@ import im.vector.VectorApp;
  * Manages the rage sakes
  */
 public class RageShake implements SensorEventListener {
-
-    private static final String LOG_TAG = "RageShake";
+    private static final String LOG_TAG = RageShake.class.getSimpleName();
 
     // the context
     private Context mContext;
@@ -107,7 +107,7 @@ public class RageShake implements SensorEventListener {
     public void start(Context context) {
         mContext = context;
 
-        SensorManager sm = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
+        SensorManager sm = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         Sensor s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (s == null) {
             Log.e(LOG_TAG, "No accelerometer in this device. Cannot use rage shake.");
@@ -159,8 +159,7 @@ public class RageShake implements SensorEventListener {
             mLastX = x;
             mLastY = y;
             mLastZ = z;
-        }
-        else {
+        } else {
             long timeDiff = now - mLastUpdate;
 
             if (timeDiff > 0) {
@@ -175,10 +174,9 @@ public class RageShake implements SensorEventListener {
                         if (preferences.getBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), true)) {
                             promptForReport();
                         }
-                    }
-                    else {
-                        Log.d(LOG_TAG, "Suppress shaking - not passed interval. Ms to go: "+(mTimeToNextShakeMs -
-                                (System.currentTimeMillis() - mLastShakeTimestamp))+" ms");
+                    } else {
+                        Log.d(LOG_TAG, "Suppress shaking - not passed interval. Ms to go: " + (mTimeToNextShakeMs -
+                                (System.currentTimeMillis() - mLastShakeTimestamp)) + " ms");
                     }
                     mLastShake = now;
                 }

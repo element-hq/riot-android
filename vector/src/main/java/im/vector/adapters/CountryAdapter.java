@@ -127,8 +127,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
         private CountryViewHolder(final View itemView) {
             super(itemView);
-            vCountryName = (TextView) itemView.findViewById(R.id.country_name);
-            vCallingCode = (TextView) itemView.findViewById(R.id.country_calling_code);
+            vCountryName = itemView.findViewById(R.id.country_name);
+            vCallingCode = itemView.findViewById(R.id.country_calling_code);
         }
 
         private void populateViews(final CountryPhoneData country) {

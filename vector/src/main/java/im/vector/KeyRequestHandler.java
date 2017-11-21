@@ -48,7 +48,7 @@ public class KeyRequestHandler {
     private static final String LOG_TAG = KeyRequestHandler.class.getSimpleName();
 
     // shared instance
-    static KeyRequestHandler mInstance = null;
+    private static KeyRequestHandler mInstance = null;
 
     // the user/device for which we currently have a dialog open
     private String mCurrentUser;
@@ -56,9 +56,7 @@ public class KeyRequestHandler {
     private AlertDialog mAlertDialog;
 
     // userId -> deviceId -> [keyRequest]
-    private Map<String, Map<String, List<IncomingRoomKeyRequest>>> mPendingKeyRequests = new HashMap<>();
-
-
+    private final Map<String, Map<String, List<IncomingRoomKeyRequest>>> mPendingKeyRequests = new HashMap<>();
 
     /**
      * Provide the shared instance
@@ -76,7 +74,7 @@ public class KeyRequestHandler {
     /**
      * Constructor
      */
-    public KeyRequestHandler() {
+    private KeyRequestHandler() {
     }
 
     /**

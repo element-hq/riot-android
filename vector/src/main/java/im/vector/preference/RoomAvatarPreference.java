@@ -50,7 +50,7 @@ public class RoomAvatarPreference extends UserAvatarPreference {
 
     @Override
     public void refreshAvatar() {
-        if ((null !=  mAvatarView) && (null != mRoom)) {
+        if ((null != mAvatarView) && (null != mRoom)) {
             VectorUtils.loadRoomAvatar(mContext, mSession, mAvatarView, mRoom);
         }
     }

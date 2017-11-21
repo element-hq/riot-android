@@ -41,7 +41,7 @@ import im.vector.widgets.WidgetContent;
 import im.vector.widgets.WidgetsManager;
 
 public class RiotEventDisplay extends EventDisplay {
-    private static final String LOG_TAG = "RiotEventDisplay";
+    private static final String LOG_TAG = RiotEventDisplay.class.getSimpleName();
 
     private static final Map<String, Event> mClosingWidgetEventByStateKey = new HashMap<>();
 
@@ -88,7 +88,7 @@ public class RiotEventDisplay extends EventDisplay {
                     String type = (null != closingWidgetEvent) ? WidgetContent.toWidgetContent(closingWidgetEvent.getContentAsJsonObject()).getHumanName() : "undefined";
                     text = mContext.getString(R.string.event_formatter_widget_removed, type, senderDisplayName);
                 } else {
-                    String type =  WidgetContent.toWidgetContent(mEvent.getContentAsJsonObject()).getHumanName();
+                    String type = WidgetContent.toWidgetContent(mEvent.getContentAsJsonObject()).getHumanName();
                     text = mContext.getString(R.string.event_formatter_widget_added, type, senderDisplayName);
                 }
             } else {

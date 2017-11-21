@@ -217,7 +217,7 @@ public class RoomUtils {
      * @param reverseOrder
      * @return ordered list
      */
-    public static Comparator<RoomSummary> getRoomSummaryComparator(final boolean reverseOrder) {
+    private static Comparator<RoomSummary> getRoomSummaryComparator(final boolean reverseOrder) {
         return new Comparator<RoomSummary>() {
             public int compare(RoomSummary leftRoomSummary, RoomSummary rightRoomSummary) {
                 int retValue;
@@ -253,9 +253,9 @@ public class RoomUtils {
      * @param pinUnreadMessages      whether unread messages should be pinned
      * @return comparator
      */
-    public static Comparator<RoomSummary> getNotifCountRoomSummaryComparator(final BingRulesManager bingRulesManager,
-                                                                             final boolean pinMissedNotifications,
-                                                                             final boolean pinUnreadMessages) {
+    private static Comparator<RoomSummary> getNotifCountRoomSummaryComparator(final BingRulesManager bingRulesManager,
+                                                                              final boolean pinMissedNotifications,
+                                                                              final boolean pinUnreadMessages) {
         return new Comparator<RoomSummary>() {
             public int compare(RoomSummary leftRoomSummary, RoomSummary rightRoomSummary) {
                 int retValue;
@@ -296,11 +296,11 @@ public class RoomUtils {
                     retValue = 1;
                 } else if (pinMissedNotifications && (rightNotificationCount == 0) && (leftNotificationCount > 0)) {
                     retValue = -1;
-                } else if(pinUnreadMessages && (rightUnreadCount > 0) && (leftUnreadCount == 0)) {
+                } else if (pinUnreadMessages && (rightUnreadCount > 0) && (leftUnreadCount == 0)) {
                     retValue = 1;
-                } else if(pinUnreadMessages && (rightUnreadCount == 0) && (leftUnreadCount > 0)) {
+                } else if (pinUnreadMessages && (rightUnreadCount == 0) && (leftUnreadCount > 0)) {
                     retValue = -1;
-                } else if ( (deltaTimestamp = rightRoomSummary.getLatestReceivedEvent().getOriginServerTs()
+                } else if ((deltaTimestamp = rightRoomSummary.getLatestReceivedEvent().getOriginServerTs()
                         - leftRoomSummary.getLatestReceivedEvent().getOriginServerTs()) > 0) {
                     retValue = 1;
                 } else if (deltaTimestamp < 0) {
@@ -310,20 +310,6 @@ public class RoomUtils {
                 }
 
                 return retValue;
-            }
-        };
-    }
-
-    /**
-     * Get a comparator to sort tagged rooms
-     *
-     * @param taggedRoomsById
-     * @return comparator
-     */
-    public static Comparator<Room> getTaggedRoomComparator(final List<String> taggedRoomsById) {
-        return new Comparator<Room>() {
-            public int compare(Room r1, Room r2) {
-                return taggedRoomsById.indexOf(r1.getRoomId()) - taggedRoomsById.indexOf(r2.getRoomId());
             }
         };
     }
@@ -608,10 +594,10 @@ public class RoomUtils {
     /**
      * Update a room Tag
      *
-     * @param session the session
-     * @param roomId the room Id
-     * @param aTagOrder the new tag order
-     * @param newTag the new Tag
+     * @param session     the session
+     * @param roomId      the room Id
+     * @param aTagOrder   the new tag order
+     * @param newTag      the new Tag
      * @param apiCallback the asynchronous callback
      */
     public static void updateRoomTag(final MXSession session, final String roomId, final Double aTagOrder, final String newTag, final ApiCallback<Void> apiCallback) {

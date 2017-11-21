@@ -102,9 +102,9 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         final View mRoomAvatarLayout;
 
         MemberDetailsViewHolder(View aParentView) {
-            mActionImageView = (ImageView) aParentView.findViewById(R.id.adapter_member_details_icon);
-            mActionDescTextView = (TextView) aParentView.findViewById(R.id.adapter_member_details_action_text);
-            mVectorCircularImageView = (VectorCircularImageView) aParentView.findViewById(R.id.room_avatar_image_view);
+            mActionImageView = aParentView.findViewById(R.id.adapter_member_details_icon);
+            mActionDescTextView = aParentView.findViewById(R.id.adapter_member_details_action_text);
+            mVectorCircularImageView = aParentView.findViewById(R.id.room_avatar_image_view);
             mRoomAvatarLayout = aParentView.findViewById(R.id.room_avatar_layout);
         }
     }

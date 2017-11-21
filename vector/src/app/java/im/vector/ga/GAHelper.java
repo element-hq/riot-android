@@ -28,8 +28,7 @@ import im.vector.VectorApp;
 import im.vector.util.PreferencesManager;
 
 public class GAHelper {
-
-    private static final String LOG_TAG = "GAHelper";
+    private static final String LOG_TAG = GAHelper.class.getSimpleName();
 
     //==============================================================================================================
     // Google analytics
@@ -37,15 +36,6 @@ public class GAHelper {
 
     // default exception handler
     private static Thread.UncaughtExceptionHandler mDefaultExceptionHandler = null;
-
-    /**
-     * Tells if the GA use can be updated
-     *
-     * @return true if it can be updated
-     */
-    public static boolean isGAUseUpdatable() {
-        return true;
-    }
 
     /**
      * Initialize the google analytics

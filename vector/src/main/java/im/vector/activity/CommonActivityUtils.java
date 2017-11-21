@@ -61,13 +61,11 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -110,7 +108,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  * Contains useful functions which are called in multiple activities.
  */
 public class CommonActivityUtils {
-    private static final String LOG_TAG = "CommonActivityUtils";
+    private static final String LOG_TAG = CommonActivityUtils.class.getSimpleName();
 
     /**
      * Schemes
@@ -149,7 +147,7 @@ public class CommonActivityUtils {
     // Android M permission request code management
     private static final boolean PERMISSIONS_GRANTED = true;
     private static final boolean PERMISSIONS_DENIED = !PERMISSIONS_GRANTED;
-    public static final int PERMISSION_BYPASSED = 0x0;
+    private static final int PERMISSION_BYPASSED = 0x0;
     public static final int PERMISSION_CAMERA = 0x1;
     private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1 << 1;
     private static final int PERMISSION_RECORD_AUDIO = 0x1 << 2;
@@ -162,15 +160,15 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_ROOM_DETAILS = PERMISSION_CAMERA;
     public static final int REQUEST_CODE_PERMISSION_VIDEO_RECORDING = PERMISSION_CAMERA | PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
-    public static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
+    private static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
 
     /**
      * Logout a sessions list
      *
-     * @param context the context
-     * @param sessions the sessions list
-     * @param clearCredentials  true to clear the credentials
-     * @param callback the asynchronous callback
+     * @param context          the context
+     * @param sessions         the sessions list
+     * @param clearCredentials true to clear the credentials
+     * @param callback         the asynchronous callback
      */
     public static void logout(Context context, List<MXSession> sessions, boolean clearCredentials, final SimpleApiCallback<Void> callback) {
         logout(context, sessions.iterator(), clearCredentials, callback);
@@ -179,10 +177,10 @@ public class CommonActivityUtils {
     /**
      * Internal method to logout a sessions list
      *
-     * @param context the context
-     * @param sessions the sessions iterator
-     * @param clearCredentials  true to clear the credentials
-     * @param callback the asynchronous callback
+     * @param context          the context
+     * @param sessions         the sessions iterator
+     * @param clearCredentials true to clear the credentials
+     * @param callback         the asynchronous callback
      */
     private static void logout(final Context context, final Iterator<MXSession> sessions, final boolean clearCredentials, final SimpleApiCallback<Void> callback) {
         if (!sessions.hasNext()) {
@@ -703,10 +701,10 @@ public class CommonActivityUtils {
             finalPermissionsListToBeGranted = permissionsListToBeGranted;
 
             // if some permissions were already denied: display a dialog to the user before asking again..
-            if(!permissionListAlreadyDenied.isEmpty()) {
+            if (!permissionListAlreadyDenied.isEmpty()) {
                 if (null != resource) {
                     // add the user info text to be displayed to explain why the permission is required by the App
-                    if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL){
+                    if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
                         // Permission request for VOIP call
                         if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
                                 && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
@@ -754,7 +752,7 @@ public class CommonActivityUtils {
 
                 // display the dialog with the info text
                 AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
-                if(null != resource) {
+                if (null != resource) {
                     permissionsInfoDialog.setTitle(R.string.permissions_rationale_popup_title);
                 }
 
@@ -858,10 +856,9 @@ public class CommonActivityUtils {
      *
      * @param aPermissionsToBeGrantedBitMap
      * @param fragment
-     * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
      */
-    public static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Fragment fragment) {
-        return checkPermissions(aPermissionsToBeGrantedBitMap, fragment.getActivity(), fragment);
+    public static void checkPermissions(final int aPermissionsToBeGrantedBitMap, final Fragment fragment) {
+        checkPermissions(aPermissionsToBeGrantedBitMap, fragment.getActivity(), fragment);
     }
 
     /**
@@ -1251,72 +1248,6 @@ public class CommonActivityUtils {
     }
 
     /**
-     * Return the 1:1 room with the most recent message, that the searched user and the current
-     * logged user have joined.
-     * Among the list of the 1:1 rooms, joined by the user, the room with the most recent
-     * posted message is chosen to be returned.
-     *
-     * @param aSession        session
-     * @param aSearchedUserId the searched user ID
-     * @return 1:1 room joined by the user with the most recent message, null otherwise
-     */
-    private static Room findLatestOneToOneRoom(final MXSession aSession, final String aSearchedUserId) {
-        long serverTimeStamp = 0, newServerTimeStamp;
-        RoomSummary summary;
-        Room mostRecentRoomRetValue = null;
-        IMXStore mStore = aSession.getDataHandler().getStore();
-
-        // get all the "one to one" rooms where the user has joined
-        ArrayList<Room> roomsFoundList = findOneToOneRoomList(aSession, aSearchedUserId);
-
-        // parse all the 1:1 rooms and take the one with the most recent message.
-        if (!roomsFoundList.isEmpty()) {
-            for (Room room : roomsFoundList) {
-
-                summary = mStore.getSummary(room.getRoomId());
-                try {
-                    // test on the most recent time stamp
-                    if ((null != summary) && ((newServerTimeStamp = summary.getLatestReceivedEvent().getOriginServerTs()) > serverTimeStamp)) {
-                        mostRecentRoomRetValue = room;
-                        serverTimeStamp = newServerTimeStamp;
-                    }
-                } catch (Exception ex) {
-                    Log.e(LOG_TAG, "## findLatestOneToOneRoom(): Exception Msg=" + ex.getMessage());
-                }
-            }
-        }
-
-        return mostRecentRoomRetValue;
-    }
-
-    /**
-     * Check if the room is a 1:1 room and if the searched user has joined this room.
-     * The user ID is searched in the room only if the room is a 1:1 room.
-     * This method is useful to check if we can create a new 1:1 room when it is
-     * asked from a already existing room (see {@link VectorMemberDetailsActivity#ITEM_ACTION_START_CHAT}).
-     *
-     * @param aRoom           room to be checked
-     * @param aSearchedUserId the user ID to be searched in the room
-     * @return true if the room is a 1:1 room where the user ID is present, false otherwise
-     */
-    public static boolean isOneToOneRoomJoinedByUserId(final Room aRoom, final String aSearchedUserId) {
-        boolean retVal = false;
-        List<RoomMember> memberList;
-
-        if ((null != aRoom) && (null != (memberList = (List<RoomMember>) aRoom.getJoinedMembers()))) {
-            if (CommonActivityUtils.ROOM_SIZE_ONE_TO_ONE == memberList.size()) {
-                for (RoomMember member : memberList) {
-                    if (member.getUserId().equals(aSearchedUserId)) {
-                        retVal = true;
-                    }
-                }
-            }
-        }
-
-        return retVal;
-    }
-
-    /**
      * Set a room as a direct chat room.<br>
      * In case of success the corresponding room is displayed.
      *
@@ -1507,7 +1438,7 @@ public class CommonActivityUtils {
      * @param sourceFile     the file source path
      * @param dstDirPath     the dst path
      * @param outputFilename optional the output filename
-     * @param callback the asynchronous callback
+     * @param callback       the asynchronous callback
      */
     private static void saveFileInto(final File sourceFile, final String dstDirPath, final String outputFilename, final ApiCallback<String> callback) {
         // sanity check
@@ -1515,9 +1446,9 @@ public class CommonActivityUtils {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                   if (null != callback) {
-                       callback.onNetworkError(new Exception("Null parameters"));
-                   }
+                    if (null != callback) {
+                        callback.onNetworkError(new Exception("Null parameters"));
+                    }
                 }
             });
             return;
@@ -1723,16 +1654,6 @@ public class CommonActivityUtils {
         Toast.makeText(aContext, aTextToDisplay, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * Display a snack.
-     *
-     * @param aTargetView    the parent view.
-     * @param aTextToDisplay the text to display.
-     */
-    public static void displaySnack(View aTargetView, CharSequence aTextToDisplay) {
-        Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
-    }
-
     //==============================================================================================================
     // room utils
     //==============================================================================================================
@@ -1788,13 +1709,6 @@ public class CommonActivityUtils {
     }
 
     /**
-     * @return the badge value
-     */
-    public static int getBadgeCount() {
-        return mBadgeValue;
-    }
-
-    /**
      * Refresh the badge count for specific configurations.<br>
      * The refresh is only effective if the device is:
      * <ul><li>offline</li><li>does not support GCM</li>
@@ -1834,7 +1748,7 @@ public class CommonActivityUtils {
      * @param aContext     App context
      * @param aDataHandler data handler instance
      */
-    public static void updateBadgeCount(Context aContext, MXDataHandler aDataHandler) {
+    private static void updateBadgeCount(Context aContext, MXDataHandler aDataHandler) {
         //sanity check
         if ((null == aContext) || (null == aDataHandler)) {
             Log.w(LOG_TAG, "## updateBadgeCount(): invalid input null values");
@@ -1974,13 +1888,13 @@ public class CommonActivityUtils {
 
         TextView textView;
 
-        textView = (TextView) layout.findViewById(R.id.encrypted_device_info_device_name);
+        textView = layout.findViewById(R.id.encrypted_device_info_device_name);
         textView.setText(deviceInfo.displayName());
 
-        textView = (TextView) layout.findViewById(R.id.encrypted_device_info_device_id);
+        textView = layout.findViewById(R.id.encrypted_device_info_device_id);
         textView.setText(deviceInfo.deviceId);
 
-        textView = (TextView) layout.findViewById(R.id.encrypted_device_info_device_key);
+        textView = layout.findViewById(R.id.encrypted_device_info_device_key);
         textView.setText(deviceInfo.fingerprint());
 
         builder.setView(layout);
@@ -2007,12 +1921,21 @@ public class CommonActivityUtils {
 
     /**
      * Export the e2e keys for a dedicated session.
-     * @param session the session
+     *
+     * @param session  the session
      * @param password the password
      * @param callback the asynchronous callback.
      */
-    public static void exportKeys(final MXSession session, final String password, final ApiCallback<String>callback) {
+    public static void exportKeys(final MXSession session, final String password, final ApiCallback<String> callback) {
         final Context appContext = VectorApp.getInstance();
+
+        if (null == session.getCrypto()) {
+            if (null != callback) {
+                callback.onMatrixError(new MatrixError("EMPTY", "No crypto"));
+            }
+
+            return;
+        }
 
         session.getCrypto().exportRoomKeys(password, new ApiCallback<byte[]>() {
             @Override
@@ -2085,10 +2008,11 @@ public class CommonActivityUtils {
 
     /**
      * Display the unknown e2e devices
-     * @param session the session
-     * @param activity the calling activity
+     *
+     * @param session        the session
+     * @param activity       the calling activity
      * @param unknownDevices the unknown devices list
-     * @param listener optional listener to add an optional "Send anyway" button
+     * @param listener       optional listener to add an optional "Send anyway" button
      */
     public static void displayUnknownDevicesDialog(MXSession session, FragmentActivity activity, MXUsersDevicesMap<MXDeviceInfo> unknownDevices, VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
         // sanity checks
@@ -2113,7 +2037,8 @@ public class CommonActivityUtils {
 
     /**
      * Update the menu icons colors
-     * @param menu the menu
+     *
+     * @param menu  the menu
      * @param color the color
      */
     public static void tintMenuIcons(Menu menu, int color) {
@@ -2131,7 +2056,8 @@ public class CommonActivityUtils {
 
     /**
      * Tint the drawable with the menu icon color
-     * @param context the context
+     *
+     * @param context  the context
      * @param drawable the drawable to tint
      * @return the tinted drawable
      */

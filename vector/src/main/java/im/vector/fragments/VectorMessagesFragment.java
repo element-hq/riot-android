@@ -18,7 +18,9 @@ package im.vector.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -29,7 +31,7 @@ import im.vector.Matrix;
 import im.vector.R;
 
 public class VectorMessagesFragment extends MatrixMessagesFragment {
-    private static final String LOG_TAG = "VectorMessagesFragment";
+    private static final String LOG_TAG = VectorMessagesFragment.class.getSimpleName();
 
     public static VectorMessagesFragment newInstance(MXSession session, String roomId, MatrixMessagesListener listener) {
         VectorMessagesFragment fragment = new VectorMessagesFragment();
@@ -59,7 +61,7 @@ public class VectorMessagesFragment extends MatrixMessagesFragment {
         String errorMessage = "";
 
         if (error instanceof MatrixError) {
-            MatrixError matrixError = (MatrixError)error;
+            MatrixError matrixError = (MatrixError) error;
 
             if (TextUtils.equals(matrixError.errcode, MatrixError.NOT_FOUND)) {
                 errorMessage = getContext().getString(R.string.failed_to_load_timeline_position, Matrix.getApplicationName());
@@ -67,7 +69,7 @@ public class VectorMessagesFragment extends MatrixMessagesFragment {
                 errorMessage = matrixError.getLocalizedMessage();
             }
         } else if (error instanceof Exception) {
-            errorMessage = ((Exception)error).getLocalizedMessage();
+            errorMessage = ((Exception) error).getLocalizedMessage();
         }
 
         if (!TextUtils.isEmpty(errorMessage)) {
