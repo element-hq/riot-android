@@ -774,4 +774,18 @@ Appareils inconnus :</string>
     <string name="share_without_verifying">Partager sans vérifier</string>
     <string name="ignore_request">Ignorer la demande</string>
 
-</resources>
+<string name="notification_noisy_notifications">Notifications bruyantes</string>
+    <string name="notification_silent_notifications">Notifications silencieuses</string>
+
+    <string name="option_take_photo">Prendre une photo</string>
+    <string name="option_take_video">Prendre une vidéo</string>
+
+    <string name="settings_analytics">Statistiques d\'utilisation</string>
+    <string name="settings_opt_out_of_analytics">Ne pas envoyer de données</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot collecte des données anonymes pour nous permettre d\'améliorer l\'application.</string>
+
+
+    <string name="settings_labs_native_camera">Utiliser la caméra native</string>
+
+    // share keys
+    </resources>
