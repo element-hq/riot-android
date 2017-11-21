@@ -390,7 +390,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     @Override
                     public void run() {
                         enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                        mSession.createRoomDirectMessage(mMemberId, mCreateDirectMessageCallBack);
+                        mSession.createDirectMessageRoom(mMemberId, mCreateDirectMessageCallBack);
                     }
                 });
                 break;

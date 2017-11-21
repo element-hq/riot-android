@@ -300,7 +300,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 } else {
                     // direct message flow
                     mSpinnerView.setVisibility(View.VISIBLE);
-                    mSession.createRoomDirectMessage(mParticipants.get(0).mUserId, mCreateDirectMessageCallBack);
+                    mSession.createDirectMessageRoom(mParticipants.get(0).mUserId, mCreateDirectMessageCallBack);
                 }
             }
             return true;
