@@ -765,4 +765,13 @@ Appareils inconnus :</string>
     <string name="settings_labs_matrix_apps">Applications Matrix</string>
     <string name="room_add_matrix_apps">Ajouter des applications Matrix</string>
     <string name="add_matrix_apps_not_supported">Non pris en charge sur cet appareil</string>
+<string name="call">Appel</string>
+    <string name="settings_containing_my_display_name">Messages contenant mon nom affiché</string>
+    <string name="settings_containing_my_user_name">Messages contenant mon nom d\'utilisateur</string>
+    <string name="you_added_a_new_device">Vous avez ajouté un nouvel appareil \"%s\", qui demande les clés de chiffrement.</string>
+    <string name="your_unverified_device_requesting">Votre appareil non vérifié \"%s\" demande les clés de chiffrement.</string>
+    <string name="start_verification">Commencer la vérification</string>
+    <string name="share_without_verifying">Partager sans vérifier</string>
+    <string name="ignore_request">Ignorer la demande</string>
+
 </resources>

@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="resouces_language">da</string>
+    <string name="resouces_country">DK</string>
+
+    <string name="light_theme">Lyst Tema</string>
+    <string name="dark_theme">Mørkt Tema</string>
+    <string name="black_them">Sort Tema</string>
+
+    <string name="notification_sync_in_progress">Synkroniserer</string>
+    <string name="notification_listen_for_events">Lyt efter begivenheder</string>
+
+    <string name="title_activity_home">Beskeder</string>
+    <string name="title_activity_room">Rum</string>
+    <string name="title_activity_settings">Indstillinger</string>
+    <string name="title_activity_member_details">Medlemsdetaljer</string>
+    <string name="title_activity_historical">Historisk</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Afbryd</string>
+    <string name="save">Gem</string>
+    <string name="leave">Forlad</string>
+    <string name="send">Send</string>
+    <string name="copy">Kopier</string>
+    <string name="resend">Send igen</string>
+    <string name="redact">Tilbagehold</string>
+    <string name="quote">Citér</string>
+    <string name="share">Del</string>
+    <string name="later">Senere</string>
+    <string name="forward">Videresend</string>
+    <string name="permalink">Permanent link</string>
+    <string name="view_source">Se Kilde</string>
+    <string name="view_decrypted_source">Se Dekrypteret Kilde</string>
+    <string name="delete">Slet</string>
+    <string name="rename">Omdøb</string>
+    <string name="report_content">Rapporter indhold</string>
+    <string name="active_call">Aktivt opkald</string>
+    <string name="ongoing_conference_call">" Igangværende konferenceopkald. Forbind med stemme eller video."</string>
+    <string name="ongoing_conference_call_voice">stemme</string>
+    <string name="ongoing_conference_call_video">video</string>
+    <string name="cannot_start_call">Kan ikke starte opkaldet, forsøg igen senere</string>
+    <string name="missing_permissions_warning">Grundet manglende tilladelser kan nogle funktioner mangle..</string>
+    <string name="missing_permissions_to_start_conf_call">Du mangler tilladelse til at invitere til en konference i dette rum</string>
+    <string name="missing_permissions_title_to_start_conf_call">Kan ikke starte opkald</string>
+    <string name="device_information">Enhedsinformation</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konferenceopkald er ikke understøttede i krypterede rum</string>
+    <string name="send_anyway">Send Alligevel</string>
+    <string name="or">eller</string>
+    <string name="and">og</string>
+    <string name="invite">Invitér</string>
+    <string name="offline">Offline</string>
+
+    <string name="action_sign_out">Log ud</string>
+    <string name="action_sign_out_confirmation">Af sikkerhedshensyn vil alle krypteringsnøgler blive slettet når du logger ud, hvilket vil gøre din i forvejen krypterede chathistorik ulæselig hvis du logger ind igen.
+Vælg eksportér for at backe dem op inden du logger ud.</string>
+    <string name="action_voice_call">Stemmeopkald</string>
+    <string name="action_video_call">Videoopkald</string>
+    <string name="action_global_search">Global søgning</string>
+    <string name="action_mark_all_as_read">Markér alle som læst</string>
+    <string name="action_historical">Historisk</string>
+    <string name="action_quick_reply">Hurtigsvar</string>
+    <string name="action_open">Åben</string>
+    <string name="action_close">Luk</string>
+    <string name="copied_to_clipboard">Kopieret til udklipsholder</string>
+    <string name="disable">Slå fra</string>
+
+    <string name="dialog_title_confirmation">Bekræftigelse</string>
+    <string name="dialog_title_warning">Advarsel</string>
+
+    <string name="bottom_action_home">Hjem</string>
+    <string name="bottom_action_favourites">Favoritter</string>
+    <string name="bottom_action_people">Folk</string>
+    <string name="bottom_action_rooms">Rum</string>
+
+    <string name="home_filter_placeholder_home">Søg efter rum</string>
+    <string name="home_filter_placeholder_favorites">Søg efter favoritter</string>
+    <string name="home_filter_placeholder_people">Søg efter folk</string>
+    <string name="home_filter_placeholder_rooms">Søg efter rum</string>
+
+    <string name="invitations_header">Invitationer</string>
+    <string name="low_priority_header">Lav prioritet</string>
+
+    <string name="direct_chats_header">Samtaler</string>
+    <string name="local_address_book_header">Lokal adressebog</string>
+    <string name="user_directory_header">Bruger katalog</string>
+    <string name="matrix_only_filter">Kun Matrix kontakter</string>
+    <string name="no_conversation_placeholder">Ingen samtaler</string>
+    <string name="no_contact_access_placeholder">Du gav ikke Riot tilladelse til at se dine lokale kontakter</string>
+    <string name="no_result_placeholder">Ingen resultater</string>
+
+    <string name="rooms_header">Rum</string>
+    <string name="rooms_directory_header">Rum katalog</string>
+    <string name="no_room_placeholder">Ingen rum</string>
+    <string name="no_public_room_placeholder">Ingen offentlige rum er tilgængelige</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="one">1 bruger</item>
+	<item quantity="other">%d brugere</item>
+</plurals>
+
+    <string name="send_bug_report_include_logs">Send logfiler</string>
+    <string name="send_bug_report_include_crash_logs">Send crashlogfiler</string>
+    <string name="send_bug_report_include_screenshot">Send screenshot</string>
+    <string name="send_bug_report">Fejlmelding</string>
+    <string name="send_bug_report_description">Beskriv venligst fejlen. Hvad gjorde du? Hvad forventede du ville ske? Hvad skete der rent faktisk?</string>
+    <string name="send_bug_report_placeholder">Beskriv dit problem her</string>
+    <string name="send_bug_report_logs_description">For at diagnosticere problemer vil logs fra denne klient blive sendt sammen med fejlrapporten. Hvis du vil foretrække kun at sende teksten foroven, bedes du fjerne fluebenet:</string>
+    <string name="send_bug_report_alert_message">Du lader til at ryste din telefon i frustration. Vil du sende en fejlmeddelelse?</string>
+    <string name="send_bug_report_app_crashed">Programmet crashede sidst. Vil du sende en crash rapport?</string>
+
+    <string name="send_bug_report_sent">Fejlrapporten lykkedes med at blive sendt</string>
+    <string name="send_bug_report_failed">Fejlmeddelelsen kunne ikke sendes (%s)</string>
+    <string name="send_bug_report_progress">Fremskridt (%s%%)</string>
+
+    <string name="send_files_in">Send ind i</string>
+    <string name="read_receipt">Læs</string>
+
+    <string name="join_room">Forbind til Rum</string>
+    <string name="username">Brugernavn</string>
+    <string name="create_account">Registrér</string>
+    <string name="login">Log ind</string>
+    <string name="logout">Log ud</string>
+    <string name="hs_url">Home Server URL</string>
+    <string name="identity_url">Identity Server URL</string>
+    <string name="user">bruger</string>
+    <string name="users">brugere</string>
+    <string name="search">Søg</string>
+
+    <string name="start_new_chat">Start Ny Chat</string>
+    <string name="start_voice_call">Start Stemmeopkald</string>
+    <string name="start_video_call">Start Videoopkald</string>
+
+    <string name="option_send_files">Send filer</string>
+    <string name="option_take_photo_video">Tag billede eller video</string>
+
+    <string name="auth_login">Log ind</string>
+    <string name="auth_register">Registrér</string>
+    <string name="auth_submit">Send</string>
+    <string name="auth_skip">Spring over</string>
+    <string name="auth_send_reset_email">Send Gendannelses Email</string>
+    <string name="auth_return_to_login">Vend tilbage til log-ind-skærmen</string>
+    <string name="auth_user_id_placeholder">Email eller brugernavn</string>
+    <string name="auth_password_placeholder">Password</string>
+    <string name="auth_new_password_placeholder">Nyt password</string>
+    <string name="auth_user_name_placeholder">Brugernavn</string>
+    <string name="auth_add_email_message">Tilføj en mailadresse til din konto for at lade brugere opdage dig og for at gendanne dit password.</string>
+    <string name="auth_add_phone_message">Tilføj et telefonnummer til din konto for at lade andre brugere opdage dig.</string>
+    <string name="auth_add_email_phone_message">Tilføj en emailadresse og/eller et telefonnummer til din konto for at lade andre brugere opdage dig.
+
+En emailadresse vil også lade dig gendanne dit password.</string>
+    <string name="auth_add_email_and_phone_message">Tilføj en emailadresse og et telefonnummer til din konto for at lade andre brugere opdage dig.
+
+En emailadresse vil også lade dig gendanne dit password.</string>
+    <string name="auth_email_placeholder">Emailadresse</string>
+    <string name="auth_opt_email_placeholder">Emailadresse (valgfri)</string>
+    <string name="auth_phone_number_placeholder">Telefonnummer</string>
+    <string name="auth_opt_phone_number_placeholder">Telefonnummer (valgfrit)</string>
+    <string name="auth_repeat_password_placeholder">Gentag Password</string>
+    <string name="auth_repeat_new_password_placeholder">Bekræft dit nye password</string>
+    <string name="auth_invalid_login_param">Forkert brugernavn og/eller password</string>
+    <string name="auth_invalid_user_name">Brugernavne må kun indeholde bogstaver, numre, punktummer, bindestrege og underscores</string>
+    <string name="auth_invalid_password">Password for kort (min 6)</string>
+    <string name="auth_missing_password">Manglende password</string>
+    <string name="auth_invalid_email">Dette ligner ikke en gyldig emailadresse</string>
+    <string name="auth_invalid_phone">Dette ligner ikke et gyldigt telefonnummer</string>
+    <string name="auth_email_already_defined">Den emailadresse er allerede i brug.</string>
+    <string name="auth_missing_email">Manglende emailadresse</string>
+    <string name="auth_missing_phone">Manglende telefonnummer</string>
+    <string name="auth_missing_email_or_phone">Manglende emailadresse eller telefonnummer</string>
+    <string name="auth_invalid_token">Ugyldig token</string>
+    <string name="auth_password_dont_match">Passwordsne passer ikke</string>
+    <string name="auth_forgot_password">Glemt password?</string>
+    <string name="auth_use_server_options">Anvend brugerdefinerede server indstillinger (avanceret)</string>
+    <string name="auth_email_validation_message">Tjek venligst din email for at fortsætte registreringen</string>
+    <string name="auth_threepid_warning_message">Registrering med email og telefonnummer på samme tid er ikke understøttet før API\'en eksisterer. Kun telefonnummeret bliver taget med.
+
+Du kan tilføje din emailadresse til din profil i indstillinger.</string>
+    <string name="auth_recaptcha_message">Denne Home Server vil gerne være sikker på du ikke er en robot</string>
+    <string name="auth_username_in_use">Brugernavnet er allerede optaget</string>
+    <string name="auth_home_server">Home Server:</string>
+    <string name="auth_identity_server">Identity Server:</string>
+    <string name="auth_reset_password_next_step_button">Jeg har verificeret min emailadresse</string>
+    <string name="auth_reset_password_message">For at gendanne dit password skal du skrive emailadressen forbundet til din konto:</string>
+    <string name="auth_reset_password_missing_email">Emailadressen forbundet til din konto skal skrives.</string>
+    <string name="auth_reset_password_missing_password">Et nyt password skal skrives.</string>
+    <string name="auth_reset_password_email_validation_message">En email er blevet sendt til %s. Når du har fulgt linket den indeholder skal du trykke nedenunder.</string>
+    <string name="auth_reset_password_error_unauthorized">Kunne ikke verificere emailadresse: vær sikker på du klikkede på linket i emailen</string>
+    <string name="auth_reset_password_success_message">Dit password er blevet gendannet.
+
+Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifikationer. For at slå notifikationer til igen skal du logge ind på hver enhed igen.</string>
+
+    <string name="login_error_must_start_http">URLen skal starte med http[s]://</string>
+    <string name="login_error_network_error">Kunne ikke logge ind: Netværksfejl</string>
+    <string name="login_error_unable_login">Kunne ikke logge ind</string>
+    <string name="login_error_registration_network_error">Kunne ikke registrere: Netværksfejl</string>
+    <string name="login_error_unable_register">Kunne ikke registrere</string>
+    <string name="login_error_unable_register_mail_ownership">Kunne ikke registrere : email ejerskabsfejl</string>
+    <string name="login_error_invalid_home_server">Skriv gyldig URL</string>
+    <string name="login_mobile_device">Mobil</string>
+
+    <string name="login_error_forbidden">Ugyldigt brugernavn/password</string>
+    <string name="login_error_unknown_token">Adgangstokenen du skrev blev ikke godkendt</string>
+    <string name="login_error_bad_json">Fejlformet JSON</string>
+    <string name="login_error_not_json">Indeholdt ikke gyldig JSON</string>
+    <string name="login_error_limit_exceeded">For mange forespørgsler blev sendt</string>
+    <string name="login_error_user_in_use">Brugernavnet er allerede i brug</string>
+    <string name="login_error_login_email_not_yet">Emaillinket som ikke er blevet trykket på endnu</string>
+
+    </resources>

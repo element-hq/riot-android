@@ -54,11 +54,11 @@
     <string name="send_bug_report_include_crash_logs">不具合発生時の動作記録を送信</string>
     <string name="send_bug_report_include_logs">動作記録を送信</string>
     <string name="send_bug_report_logs_description">開発者が問題を診断するために、このRiotの動作記録が不具合報告と一緒に送信されます。上記文章のみを送信したい場合は以下のチェックを解除してください：</string>
-    <string name="send_bug_report_alert_message">あなたは不満があって電話機を揺らしているようです。不具合報告を提出しますか？</string>
-    <string name="send_bug_report_app_crashed">前回アプリは異常停止しました。不具合報告を提出しますか？</string>
+    <string name="send_bug_report_alert_message">あなたは不満で端末を振っているようです。不具合を報告しますか？</string>
+    <string name="send_bug_report_app_crashed">前回アプリケーションは正常に停止しませんでした。クラッシュを報告しますか？</string>
 
-    <string name="send_bug_report_sent">不具合報告の送信に成功しました</string>
-    <string name="send_bug_report_failed">不具合報告の送信に失敗しました (%s)</string>
+    <string name="send_bug_report_sent">不具合を報告しました</string>
+    <string name="send_bug_report_failed">不具合の報告の送信に失敗しました (%s)</string>
     <string name="join_room">部屋へ参加</string>
     <string name="missing_permissions_title_to_start_conf_call">通話が開始できません</string>
     <string name="action_voice_call">音声通話</string>
@@ -150,7 +150,7 @@
     <string name="dialog_title_confirmation">確認</string>
     <string name="disable">無効にする</string>
 
-    <string name="send_bug_report_progress">転送中 (%s%%)</string>
+    <string name="send_bug_report_progress">送信中 (%s%%)</string>
 
     <string name="login_error_user_in_use">このユーザ名はすでに使用されています</string>
     <string name="remove">除去</string>
@@ -342,7 +342,7 @@
 
     <string name="start_new_chat">対話を開始</string>
     <string name="start_voice_call">音声通話を開始</string>
-    <string name="start_video_call">映像付き音声通話を開始</string>
+    <string name="start_video_call">ビデオ通話を開始</string>
 
     <string name="option_take_photo_video">写真または動画を撮影</string>
 
@@ -367,13 +367,13 @@
     <string name="rooms_header">部屋</string>
     <string name="rooms_directory_header">部屋一覧</string>
     <string name="user_directory_header">利用者一覧</string>
-    <string name="send_files_in">送信中 :</string>
-    <string name="logout">回線完全切断</string>
-    <string name="create_account">利用者登録</string>
+    <string name="send_files_in">送信する</string>
+    <string name="logout">ログアウト</string>
+    <string name="create_account">新規登録</string>
     <string name="login">ログイン</string>
-    <string name="auth_register">利用者登録</string>
-    <string name="auth_submit">受諾</string>
-    <string name="auth_skip">省く</string>
+    <string name="auth_register">新規登録</string>
+    <string name="auth_submit">送信</string>
+    <string name="auth_skip">飛ばす</string>
     <string name="auth_user_id_placeholder">ユーザ名または電子メール</string>
     <string name="auth_password_placeholder">パスワード</string>
     <string name="auth_new_password_placeholder">新しいパスワード</string>
@@ -586,6 +586,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="permissions_action_not_performed_missing_permissions">申し訳ありません..権限がないために操作が実行されませんでした</string>
 
     <string name="report_content">発言を通報する</string>
-    <string name="read_receipt">読む</string>
+    <string name="read_receipt">既読</string>
 
     </resources>
