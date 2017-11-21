@@ -569,18 +569,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         final CheckBoxPreference useGaPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY);
+        useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (null != getActivity()) {
+                    // update the pikwik use
+                    PreferencesManager.setUsePiwik(getActivity(), (boolean)newValue);
+                    // GA can be used
+                    if (PreferencesManager.isGAUseAllowed(getActivity())) {
+                        boolean useGA = PreferencesManager.useGA(getActivity());
 
-        if (!GAHelper.isGAUseUpdatable()) {
-            PreferenceCategory otherCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_OTHERS_PREFERENCE_KEY);
-            otherCategory.removePreference(useGaPref);
-        } else {
-            useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (null != getActivity()) {
-                        Boolean useGA = PreferencesManager.useGA(getActivity());
-
-                        if ((null != useGA) && !useGA) {
+                        if (!useGA) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                             builder.setMessage(getString(R.string.ga_use_disable_alert_message)).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -592,11 +591,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         }
                         GAHelper.initGoogleAnalytics(getActivity());
                     }
-
-                    return true;
                 }
-            });
-        }
+
+                return true;
+            }
+        });
+
 
         mUserSettingsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_USER_SETTINGS_PREFERENCE_KEY);
         mContactSettingsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_CONTACT_PREFERENCE_KEYS);

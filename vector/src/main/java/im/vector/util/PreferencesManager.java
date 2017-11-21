@@ -107,6 +107,7 @@ public class PreferencesManager {
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     private static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
     public static final String SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY";
+    private static final String SETTINGS_PIWIK_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_PIWIK_USE_SETTINGS_PREFERENCE_KEY";
 
     public static final String SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY";
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
@@ -592,6 +593,15 @@ public class PreferencesManager {
     }
 
     /**
+     * Tells if Google analytics use is allowed
+     * @param context the context
+     * @return true if the GA is allowed to be used
+     */
+    public static boolean isGAUseAllowed(Context context) {
+        return TextUtils.equals(context.getResources().getString(R.string.allow_ga_use), "true");
+    }
+
+    /**
      * Update the GA use.
      *
      * @param context the context
@@ -600,7 +610,7 @@ public class PreferencesManager {
     public static void setUseGA(Context context, boolean value) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, value);
+        editor.putBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, value && isGAUseAllowed(context));
         editor.commit();
 
         GAHelper.initGoogleAnalytics(context);
@@ -619,10 +629,7 @@ public class PreferencesManager {
             return preferences.getBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, false);
         } else {
             try {
-                // test if the client should not use GA
-                boolean allowGA = TextUtils.equals(context.getResources().getString(R.string.allow_ga_use), "true");
-
-                if (!allowGA) {
+                if (!isGAUseAllowed(context)) {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, false);
                     editor.commit();
@@ -633,6 +640,41 @@ public class PreferencesManager {
                 Log.e(LOG_TAG, "useGA " + e.getLocalizedMessage());
             }
 
+            return null;
+        }
+    }
+
+    /**
+     * Update the Piwik use.
+     *
+     * @param context the context
+     * @param value   the new value
+     */
+    public static void setUsePiwik(Context context, boolean value) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SETTINGS_PIWIK_USE_SETTINGS_PREFERENCE_KEY, value);
+        editor.commit();
+    }
+
+    /**
+     * Tells if Piwik can be used
+     *
+     * @param context the context
+     * @return null if not defined, true / false when defined
+     */
+    public static Boolean usePiwik(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Boolean useGa = useGA(context);
+
+        if ((null != useGa) && isGAUseAllowed(context)) {
+            setUsePiwik(context, useGa);
+            return useGa;
+        }
+
+        if (preferences.contains(SETTINGS_PIWIK_USE_SETTINGS_PREFERENCE_KEY)) {
+            return preferences.getBoolean(SETTINGS_PIWIK_USE_SETTINGS_PREFERENCE_KEY, false);
+        } else {
             return null;
         }
     }

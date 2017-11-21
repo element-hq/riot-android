@@ -43,6 +43,10 @@ import android.util.Pair;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
+import org.piwik.sdk.Piwik;
+import org.piwik.sdk.Tracker;
+import org.piwik.sdk.TrackerConfig;
+import org.piwik.sdk.extra.TrackHelper;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -280,6 +284,9 @@ public class VectorApp extends MultiDexApplication {
                 }
 
                 listPermissionStatuses();
+
+                // piwik
+                onNewScreen(activity);
             }
 
             @Override
@@ -1262,5 +1269,46 @@ public class VectorApp extends MultiDexApplication {
         }
 
         return res;
+    }
+
+    //==============================================================================================================
+    // Piwik management
+    //==============================================================================================================
+
+    // the piwik tracker
+    private Tracker mPiwikTracker;
+
+    /**
+     * @return the piwik instance
+     */
+    private Tracker getPiwikTracker() {
+        if (mPiwikTracker == null) {
+            try {
+                mPiwikTracker = Piwik.getInstance(this).newTracker(new TrackerConfig("https://piwik.riot.im/", 1, "AndroidPiwikTracker"));
+            } catch (Throwable t) {
+                Log.e(LOG_TAG, "## getPiwikTracker() : newTracker failed " + t.getMessage());
+            }
+        }
+
+        return mPiwikTracker;
+    }
+
+    /**
+     * A new activity has been resumed
+     * @param activity the new activity
+     */
+    private void onNewScreen(Activity activity) {
+        Boolean usePiwik = PreferencesManager.usePiwik(this);
+       if ((null != usePiwik) && usePiwik) {
+            Tracker tracker = getPiwikTracker();
+
+            if (null != tracker) {
+                try {
+                    TrackHelper.track().screen(activity).with(tracker);
+                } catch (Throwable t) {
+                    Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());
+                }
+            }
+        }
     }
 }

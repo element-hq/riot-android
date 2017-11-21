@@ -187,6 +187,9 @@ dependencies {
     compile(name: 'react-native-webrtc', ext: 'aar')
     compile(name: 'react-native', ext: 'aar')
 
+    // another tracking than GA
+    compile 'org.piwik.sdk:piwik-sdk:2.0.0'
+
     // use the matrix SDK as a part of the project
     // you have to uncomment some lines in settings.gradle
     //compile project(':matrix-sdk')
