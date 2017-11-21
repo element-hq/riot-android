@@ -107,7 +107,8 @@ public class PreferencesManager {
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     private static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
     public static final String SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY";
-    private static final String SETTINGS_PIWIK_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_PIWIK_USE_SETTINGS_PREFERENCE_KEY";
+    private static final String SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY = "SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY";
+    public static final String SETTINGS_ANALYTICS_PREFERENCE_KEY = "SETTINGS_ANALYTICS_PREFERENCE_KEY";
 
     public static final String SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY";
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
@@ -645,37 +646,12 @@ public class PreferencesManager {
     }
 
     /**
-     * Update the Piwik use.
-     *
-     * @param context the context
-     * @param value   the new value
-     */
-    public static void setUsePiwik(Context context, boolean value) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SETTINGS_PIWIK_USE_SETTINGS_PREFERENCE_KEY, value);
-        editor.commit();
-    }
-
-    /**
      * Tells if Piwik can be used
      *
      * @param context the context
      * @return null if not defined, true / false when defined
      */
-    public static Boolean usePiwik(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        Boolean useGa = useGA(context);
-
-        if ((null != useGa) && isGAUseAllowed(context)) {
-            setUsePiwik(context, useGa);
-            return useGa;
-        }
-
-        if (preferences.contains(SETTINGS_PIWIK_USE_SETTINGS_PREFERENCE_KEY)) {
-            return preferences.getBoolean(SETTINGS_PIWIK_USE_SETTINGS_PREFERENCE_KEY, false);
-        } else {
-            return null;
-        }
+    public static Boolean trackWithPiwik(Context context) {
+        return  !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY, false);
     }
 }

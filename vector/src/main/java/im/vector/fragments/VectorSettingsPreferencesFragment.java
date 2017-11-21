@@ -569,14 +569,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         final CheckBoxPreference useGaPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY);
-        useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (null != getActivity()) {
-                    // update the pikwik use
-                    PreferencesManager.setUsePiwik(getActivity(), (boolean)newValue);
-                    // GA can be used
-                    if (PreferencesManager.isGAUseAllowed(getActivity())) {
+
+        if (!PreferencesManager.isGAUseAllowed(getActivity())) {
+            PreferenceCategory analyticsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_ANALYTICS_PREFERENCE_KEY);
+            analyticsCategory.removePreference(useGaPref);
+        } else {
+            useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (null != getActivity()) {
                         boolean useGA = PreferencesManager.useGA(getActivity());
 
                         if (!useGA) {
@@ -591,11 +592,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         }
                         GAHelper.initGoogleAnalytics(getActivity());
                     }
-                }
 
-                return true;
-            }
-        });
+                    return true;
+                }
+            });
+        }
 
 
         mUserSettingsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_USER_SETTINGS_PREFERENCE_KEY);

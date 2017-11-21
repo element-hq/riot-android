@@ -1298,10 +1298,8 @@ public class VectorApp extends MultiDexApplication {
      * @param activity the new activity
      */
     private void onNewScreen(Activity activity) {
-        Boolean usePiwik = PreferencesManager.usePiwik(this);
-       if ((null != usePiwik) && usePiwik) {
+       if (PreferencesManager.trackWithPiwik(this)) {
             Tracker tracker = getPiwikTracker();
-
             if (null != tracker) {
                 try {
                     TrackHelper.track().screen(activity).with(tracker);

@@ -538,6 +538,12 @@
     <string name="settings_hide_join_leave_messages">Hide join/leave messages (invites/kicks/bans unaffected)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
 
+    <!-- analytics -->
+    <string name="settings_analytics">Analytics</string>
+    <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
+
+
     <string name="settings_disable_markdown">Disable markdown formatting</string>
     <string name="settings_data_save_mode">Data save mode</string>
 
@@ -683,7 +689,6 @@
 
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
-
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">End-to-end encryption information</string>
