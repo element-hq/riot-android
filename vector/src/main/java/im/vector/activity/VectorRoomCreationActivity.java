@@ -376,7 +376,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             }
         }
 
-        params.addParticipantsIds(mSession.getHomeServerConfig(), ids);
+        params.addParticipantIds(mSession.getHomeServerConfig(), ids);
 
         mSession.createRoom(params, new SimpleApiCallback<String>(VectorRoomCreationActivity.this) {
             @Override
