@@ -1302,7 +1302,7 @@ public class VectorApp extends MultiDexApplication {
             Tracker tracker = getPiwikTracker();
             if (null != tracker) {
                 try {
-                    TrackHelper.track().screen(activity).with(tracker);
+                    TrackHelper.track().screen("/android/" +   Matrix.getApplicationName() + "/" + activity.getClass().getName().replace(".", "/")).with(tracker);
                 } catch (Throwable t) {
                     Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());
                 }
