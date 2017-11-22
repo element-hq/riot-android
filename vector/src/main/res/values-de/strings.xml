@@ -708,7 +708,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_information_none">Nichts</string>
 
     <string name="encryption_information_verify">Bestätigen</string>
-    <string name="encryption_information_unverify">Ablehnen</string>
+    <string name="encryption_information_unverify">Verifiz. widerrufen</string>
     <string name="encryption_information_block">Blockieren</string>
     <string name="encryption_information_unblock">Zulassen</string>
 
@@ -827,15 +827,15 @@ Unbekannte Geräte:</string>
     <string name="option_take_photo">Foto aufnehmen</string>
     <string name="option_take_video">Video aufnehmen</string>
 
-    <string name="settings_opt_out_of_analytics_summary">Riot sammelt anonyme Analysedaten um uns zu ermöglichen die Anwendung zu verbessern.</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot sammelt anonymisierte Analysedaten, um die Anwendung kontinuierlich verbessern zu können.</string>
 
 
-    <string name="settings_labs_native_camera">Nutze native Kamera</string>
+    <string name="settings_labs_native_camera">Systemeigene Kamera verwenden</string>
 
     // share keys
-    <string name="share_without_verifying">Teile ohne zu verifizieren</string>
+    <string name="share_without_verifying">Ohne Verifizierung teilen</string>
     <string name="ignore_request">Anfrage ignorieren</string>
 
-<string name="settings_analytics">Analyse</string>
-    <string name="settings_opt_out_of_analytics">Zustimmung zur App-Analyse verweigern</string>
+<string name="settings_analytics">Anonymisierte Analysedaten</string>
+    <string name="settings_opt_out_of_analytics">Zustimmung zur Übermittlung von anonymisierten Analysedaten verweigern</string>
     </resources>
