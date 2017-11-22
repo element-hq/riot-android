@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.rest.model.CreateRoomParams;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 
@@ -366,13 +367,27 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     private void createRoom(final List<ParticipantAdapterItem> participants) {
         mSpinnerView.setVisibility(View.VISIBLE);
 
-        mSession.createRoom(new SimpleApiCallback<String>(VectorRoomCreationActivity.this) {
+        CreateRoomParams params = new CreateRoomParams();
+
+        List<String> ids = new ArrayList<>();
+        for(ParticipantAdapterItem item : participants) {
+            if (null != item.mUserId) {
+                ids.add(item.mUserId);
+            }
+        }
+
+        params.addParticipantsIds(mSession.getHomeServerConfig(), ids);
+
+        mSession.createRoom(params, new SimpleApiCallback<String>(VectorRoomCreationActivity.this) {
             @Override
             public void onSuccess(final String roomId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        inviteParticipants(mSession.getDataHandler().getRoom(roomId), participants, 0);
+                        HashMap<String, Object> params = new HashMap<>();
+                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                        CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);
                     }
                 });
             }
@@ -404,79 +419,5 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 onError(e.getLocalizedMessage());
             }
         });
-    }
-
-    /**
-     * Invite some participants.
-     *
-     * @param room         the room
-     * @param participants the participants list
-     * @param index        the start index
-     */
-    private void inviteParticipants(final Room room, final List<ParticipantAdapterItem> participants, final int index) {
-        // detect if all members have been invited
-        if (index >= participants.size()) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    // update the read markers
-                    room.markAllAsRead(null);
-                    HashMap<String, Object> params = new HashMap<>();
-                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
-                    CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);
-                }
-            });
-
-            return;
-        }
-
-        final ApiCallback<Void> callback = new ApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void info) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        inviteParticipants(room, participants, index + 1);
-                    }
-                });
-            }
-
-            public void onError(final String errorMessage) {
-                runOnUiThread(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(VectorRoomCreationActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                                inviteParticipants(room, participants, index + 1);
-                            }
-                        });
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                onError(e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                onError(e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                onError(e.getLocalizedMessage());
-            }
-        };
-
-        String userId = participants.get(index).mUserId;
-
-        if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
-            room.inviteByEmail(userId, callback);
-        } else {
-            ArrayList<String> userIDs = new ArrayList<>();
-            userIDs.add(userId);
-            room.invite(userIDs, callback);
-        }
     }
 }
