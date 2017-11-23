@@ -400,19 +400,21 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     @Override
     public void remove(MessageRow row) {
-        if (mIsSearchMode) {
-            mLiveMessagesRowList.remove(row);
-        } else {
-            removeFromEventGroup(row);
+        if (null != row) {
+            if (mIsSearchMode) {
+                mLiveMessagesRowList.remove(row);
+            } else {
+                removeFromEventGroup(row);
 
-            // get the position before removing the item
-            int position = getPosition(row);
+                // get the position before removing the item
+                int position = getPosition(row);
 
-            // remove it
-            super.remove(row);
+                // remove it
+                super.remove(row);
 
-            // check merge
-            checkEventGroupsMerge(row, position);
+                // check merge
+                checkEventGroupsMerge(row, position);
+            }
         }
     }
 
