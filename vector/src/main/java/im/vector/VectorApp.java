@@ -128,6 +128,7 @@ public class VectorApp extends MultiDexApplication {
     public static int VERSION_BUILD = -1;
     private static String VECTOR_VERSION_STRING = "";
     private static String SDK_VERSION_STRING = "";
+    private static String SHORT_VERSION = "";
 
     /**
      * Tells if there a pending call whereas the application is backgrounded.
@@ -211,6 +212,14 @@ public class VectorApp extends MultiDexApplication {
         } else {
             SDK_VERSION_STRING = "";
         }
+
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            SHORT_VERSION = pInfo.versionName;
+        } catch (Exception e) {
+        }
+
+
 
         mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
 
@@ -405,6 +414,8 @@ public class VectorApp extends MultiDexApplication {
         PIDsRetriever.getInstance().onAppBackgrounded();
 
         MyPresenceManager.advertiseAllUnavailable();
+
+        onAppPause();
     }
 
     /**
@@ -1285,6 +1296,12 @@ public class VectorApp extends MultiDexApplication {
         if (mPiwikTracker == null) {
             try {
                 mPiwikTracker = Piwik.getInstance(this).newTracker(new TrackerConfig("https://piwik.riot.im/", 1, "AndroidPiwikTracker"));
+                // sends the tracking information each minute
+                // the app might be killed in background
+                mPiwikTracker.setDispatchInterval(30 * 1000);
+
+                // TODO define an identifier
+                //mPiwikTracker.setUserId()
             } catch (Throwable t) {
                 Log.e(LOG_TAG, "## getPiwikTracker() : newTracker failed " + t.getMessage());
             }
@@ -1302,9 +1319,26 @@ public class VectorApp extends MultiDexApplication {
             Tracker tracker = getPiwikTracker();
             if (null != tracker) {
                 try {
-                    TrackHelper.track().screen("/android/" +   Matrix.getApplicationName() + "/" + activity.getClass().getName().replace(".", "/")).with(tracker);
+                    TrackHelper.track().screen("/android/" +   Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/"+ activity.getClass().getName().replace(".", "/")).with(tracker);
                 } catch (Throwable t) {
                     Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());
+                }
+            }
+        }
+    }
+
+    /**
+     * The application is paused.
+     */
+    private void onAppPause() {
+        if (PreferencesManager.trackWithPiwik(this)) {
+            Tracker tracker = getPiwikTracker();
+            if (null != tracker) {
+                try {
+                    // force to send the pending actions
+                    tracker.dispatch();
+                } catch (Throwable t) {
+                    Log.e(LOG_TAG, "## onAppPause() : failed " + t.getMessage());
                 }
             }
         }
