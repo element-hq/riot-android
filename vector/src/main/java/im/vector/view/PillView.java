@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 
+import im.vector.Matrix;
 import im.vector.R;
 /**
  *
@@ -73,7 +74,14 @@ public class PillView extends LinearLayout {
      * @return true if a pill can be made.
      */
     public static boolean isPillable(String url) {
-        return (null != url) && url.startsWith("https://matrix.to");
+        boolean isSupported = (null != url) && url.startsWith("https://matrix.to/#/");
+
+        if (isSupported) {
+            String linkedItem = url.substring("https://matrix.to/#/".length());
+            isSupported = MXSession.isRoomAlias(linkedItem) || MXSession.isUserId(linkedItem);
+        }
+
+        return isSupported;
     }
 
     /**
