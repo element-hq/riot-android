@@ -75,7 +75,7 @@ If you use GCM, you will need to generate your own google-services.json.
 Open riot-android/vector/src/appmyriot/AndroidManifest.xml
 Comment the provider section.
 Change the application name to myRiot with "android:label="myRiot""
-Any other field can be customised by add the resources in this directory classpath.
+Any other field can be customised by adding the resources in this directory classpath.
 Open Android studio, select your flavour.
 Build and run the app : you made your first Riot app.
 
