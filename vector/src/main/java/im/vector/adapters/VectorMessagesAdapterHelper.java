@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -503,6 +504,9 @@ class VectorMessagesAdapterHelper {
         }
     }
 
+    // cache the pills to avoid compute them again
+    Map<String, Drawable> mPillsCache = new HashMap<>();
+
     /**
      * Trap the clicked URL.
      *
@@ -518,12 +522,17 @@ class VectorMessagesAdapterHelper {
             int flags = strBuilder.getSpanFlags(span);
 
             if (PillView.isPillable(span.getURL())) {
-                PillView aView = new PillView(mContext);
-                aView.setText(strBuilder.subSequence(start, end), span.getURL());
-                aView.setHighlighted(isHighlighted);
+                String key = span.getURL() + " " + isHighlighted;
+                Drawable drawable = mPillsCache.get(key);
 
-                Drawable drawable = aView.getDrawable();
+                if (null == drawable) {
+                    PillView aView = new PillView(mContext);
+                    aView.setText(strBuilder.subSequence(start, end), span.getURL());
+                    aView.setHighlighted(isHighlighted);
+                    drawable = aView.getDrawable();
+                }
                 if (null != drawable) {
+                    mPillsCache.put(key, drawable);
                     ImageSpan imageSpan = new ImageSpan(drawable);
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
                     strBuilder.setSpan(imageSpan, start, end, flags);
