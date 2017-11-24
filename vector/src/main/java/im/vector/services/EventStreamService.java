@@ -456,14 +456,13 @@ public class EventStreamService extends Service {
 
     @Override
     public void onDestroy() {
-        stop();
-        super.onDestroy();
-
         if (!mIsSelfDestroyed) {
             Log.d(LOG_TAG, "## onDestroy() : restart it");
             autoRestart();
         } else {
             Log.d(LOG_TAG, "## onDestroy()");
+            stop();
+            super.onDestroy();
         }
 
         mIsSelfDestroyed = false;
