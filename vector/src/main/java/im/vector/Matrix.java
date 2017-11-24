@@ -449,7 +449,7 @@ public class Matrix {
                 }
 
                 if (!res) {
-                    Log.e(LOG_TAG, "hasValidSessions : one sesssion has no valid data hanlder");
+                    Log.e(LOG_TAG, "hasValidSessions : one sesssion has no valid data handler");
                 }
             }
         }
