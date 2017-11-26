@@ -271,7 +271,7 @@
                         android:inputType="textCapSentences|textMultiLine"
                         android:textSize="14sp"
                         android:dropDownAnchor="@+id/room_sending_message_layout"
-                        android:hint="@string/room_message_placeholder_not_encrypted"
+                        android:hint="@string/room_message_placeholder"
                         android:id="@+id/editText_messageBox"
                         android:textColor="?attr/riot_primary_text_color"
                         android:background="@android:color/transparent"
