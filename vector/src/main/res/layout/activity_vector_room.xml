@@ -371,48 +371,10 @@
                 android:background="?attr/room_activity_divider_color" />
 
             <RelativeLayout
-                android:id="@+id/room_notifications_area"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/bottom_separator"
-                android:layout_alignParentLeft="true"
-                android:minHeight="42dp"
-                android:visibility="invisible">
-
-                <ImageView
-                    android:id="@+id/room_notification_icon"
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:padding="5dp"
-                    android:src="@drawable/vector_typing" />
-
-                <TextView
-                    android:id="@+id/room_notification_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="68dp"
-                    android:layout_marginRight="13dp"
-                    android:text="a text here "
-                    android:textColor="?attr/room_notification_text_color" />
-
-            </RelativeLayout>
-
-            <View
-                android:id="@+id/room_notification_separator"
-                android:layout_width="match_parent"
-                android:layout_marginLeft="13dp"
-                android:layout_height="1dp"
-                android:layout_above="@id/room_notifications_area"
-                android:background="?attr/room_activity_divider_color" />
-
-            <RelativeLayout
                 android:id="@+id/anchor_fragment_messages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/room_notification_separator"
+                android:layout_above="@id/bottom_separator"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
 

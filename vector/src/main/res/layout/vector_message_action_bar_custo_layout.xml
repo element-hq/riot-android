@@ -24,7 +24,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/room_action_bar_topic"
+            android:id="@+id/room_action_bar_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
