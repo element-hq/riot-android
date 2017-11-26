@@ -224,6 +224,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     // action bar header
     private android.support.v7.widget.Toolbar mToolbar;
+    private View mActionBarCustomTitleBlock;
     private TextView mActionBarCustomTitle;
     private TextView mActionBarCustomNotification;
     private ImageView mActionBarCustomArrowImageView;
@@ -666,7 +667,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mVectorPendingCallView = findViewById(R.id.room_pending_call_view);
         mVectorOngoingConferenceCallView = findViewById(R.id.room_ongoing_conference_call_view);
         mActiveWidgetsBanner = findViewById(R.id.room_pending_widgets_view);
-        mE2eImageView = findViewById(R.id.room_encrypted_image_view);
+        mE2eImageView = findViewById(R.id.room_action_bar_encryption);
         mSyncInProgressView = findViewById(R.id.room_sync_in_progress);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
@@ -2632,6 +2633,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void setActionBarDefaultCustomLayout() {
         // binding the widgets of the custom view
+        mActionBarCustomTitleBlock = findViewById(R.id.room_action_bar_title_block);
         mActionBarCustomTitle = findViewById(R.id.room_action_bar_title);
         mActionBarCustomNotification = findViewById(R.id.room_action_bar_notification);
         mActionBarCustomArrowImageView = findViewById(R.id.open_chat_header_arrow);
@@ -2805,7 +2807,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void updateRoomHeaderMembersStatus() {
         if (null != mActionBarHeaderActiveMembersLayout) {
             // refresh only if the action bar is hidden
-            if (mActionBarCustomTitle.getVisibility() == View.GONE) {
+            if (mActionBarCustomTitleBlock.getVisibility() == View.GONE) {
                 String text = generateRoomMemberStatus();
 
                 if (null != text && !TextUtils.isEmpty(text)) {
@@ -2847,7 +2849,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             // hide the name and the topic in the action bar.
             // these items are hidden when the header view is opened
-            mActionBarCustomTitle.setVisibility(View.GONE);
+            mActionBarCustomTitleBlock.setVisibility(View.GONE);
             mActionBarCustomNotification.setVisibility(View.GONE);
 
             // update the UI content of the action bar header
@@ -2861,7 +2863,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // hide the room header only if it is displayed
             if (View.VISIBLE == mRoomHeaderView.getVisibility()) {
                 // show the name and the topic in the action bar.
-                mActionBarCustomTitle.setVisibility(View.VISIBLE);
+                mActionBarCustomTitleBlock.setVisibility(View.VISIBLE);
                 mActionBarCustomNotification.setVisibility(View.VISIBLE);
 
                 // update title and topic (action bar)
