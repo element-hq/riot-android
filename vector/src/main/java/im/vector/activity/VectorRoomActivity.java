@@ -517,6 +517,89 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     };
 
     //================================================================================
+    // Utility functions that generate notification/error messages
+    //================================================================================
+
+    /**
+     * Generate the string for the typing message
+     *
+     * @return the room typing messsage ("username is typing...")
+     */
+    private String generateRoomTypingMessage() {
+        String message = null;
+
+        List<String> typingUsers = mRoom.getTypingUsers();
+
+        if (null != typingUsers) {
+            String myUserId = mSession.getMyUserId();
+            ArrayList<String> names = new ArrayList<>();
+
+            for (int i = 0; i < typingUsers.size(); i++) {
+                RoomMember member = mRoom.getMember(typingUsers.get(i));
+                // check if the user is known and not oneself
+                if ((null != member) && !TextUtils.equals(myUserId, member.getUserId()) && (null != member.displayname)) {
+                    names.add(member.displayname);
+                }
+            }
+
+            // display the proper message based on the currently typing users
+            if (1 == names.size()) {
+                message = String.format(this.getString(R.string.room_one_user_is_typing), names.get(0));
+            } else if (2 == names.size()) {
+                message = String.format(this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
+            } else if (names.size() > 2) {
+                message = String.format(this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
+            }
+        }
+
+        return message;
+    }
+
+    /** Generates the text for room active member count in headers.
+     *
+     * @return the text to be used in various headers, null if none could be generated
+     */
+    private String generateRoomMemberStatus() {
+        String text = null;
+
+        if ((null != mRoom) || (null != sRoomPreviewData)) {
+            int joinedMembersCount = 0;
+            int activeMembersCount = 0;
+
+            RoomState roomState = (null != sRoomPreviewData) ? sRoomPreviewData.getRoomState() : mRoom.getState();
+
+            if (null != roomState) {
+                Collection<RoomMember> members = roomState.getDisplayableMembers();
+                for (RoomMember member : members) {
+                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                        joinedMembersCount++;
+                        User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
+                        if ((null != user) && user.isActive()) {
+                            activeMembersCount++;
+                        }
+                    }
+                }
+
+                // in preview mode, the room state might be a publicRoom
+                // so try to use the public room info.
+                if ((roomState instanceof PublicRoom) && (0 == joinedMembersCount)) {
+                    activeMembersCount = joinedMembersCount = ((PublicRoom) roomState).numJoinedMembers;
+                }
+
+                // actually generate the text based on collected data
+                if (joinedMembersCount == 1) {
+                    text = getResources().getString(R.string.room_title_one_member);
+                } else if (null != sRoomPreviewData) {
+                    text = getResources().getString(R.string.room_title_members, joinedMembersCount);
+                } else {
+                    text = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
+                }
+            }
+        }
+        return text;
+    }
+
+    //================================================================================
     // Activity classes
     //================================================================================
 
@@ -2517,41 +2600,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     /**
-     * Generate the string for the typing message
-     *
-     * @return the room typing messsage ("username is typing...")
-     */
-    private String generateRoomTypingMessage() {
-        String message = null;
-
-        List<String> typingUsers = mRoom.getTypingUsers();
-
-        if (null != typingUsers) {
-            String myUserId = mSession.getMyUserId();
-            ArrayList<String> names = new ArrayList<>();
-
-            for (int i = 0; i < typingUsers.size(); i++) {
-                RoomMember member = mRoom.getMember(typingUsers.get(i));
-                // check if the user is known and not oneself
-                if ((null != member) && !TextUtils.equals(myUserId, member.getUserId()) && (null != member.displayname)) {
-                    names.add(member.displayname);
-                }
-            }
-
-            // display the proper message based on the currently typing users
-            if (1 == names.size()) {
-                message = String.format(this.getString(R.string.room_one_user_is_typing), names.get(0));
-            } else if (2 == names.size()) {
-                message = String.format(this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
-            } else if (names.size() > 2) {
-                message = String.format(this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
-            }
-        }
-
-        return message;
-    }
-
-    /**
      * Display the typing status in the notification area.
      */
     private void onRoomTypings() {
@@ -2760,50 +2808,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mSendingMessagesLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
             mCanNotPostTextView.setVisibility(!canSendMessage ? View.VISIBLE : View.GONE);
         }
-    }
-
-    /** Generates the text for room active member count in headers.
-     *
-     * @return the text to be used in various headers, null if none could be generated
-     */
-    private String generateRoomMemberStatus() {
-        String text = null;
-
-        if ((null != mRoom) || (null != sRoomPreviewData)) {
-            int joinedMembersCount = 0;
-            int activeMembersCount = 0;
-
-            RoomState roomState = (null != sRoomPreviewData) ? sRoomPreviewData.getRoomState() : mRoom.getState();
-
-            if (null != roomState) {
-                Collection<RoomMember> members = roomState.getDisplayableMembers();
-                for (RoomMember member : members) {
-                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-                        joinedMembersCount++;
-                        User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
-                        if ((null != user) && user.isActive()) {
-                            activeMembersCount++;
-                        }
-                    }
-                }
-
-                // in preview mode, the room state might be a publicRoom
-                // so try to use the public room info.
-                if ((roomState instanceof PublicRoom) && (0 == joinedMembersCount)) {
-                    activeMembersCount = joinedMembersCount = ((PublicRoom) roomState).numJoinedMembers;
-                }
-
-                // actually generate the text based on collected data
-                if (joinedMembersCount == 1) {
-                    text = getResources().getString(R.string.room_title_one_member);
-                } else if (null != sRoomPreviewData) {
-                    text = getResources().getString(R.string.room_title_members, joinedMembersCount);
-                } else {
-                    text = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
-                }
-            }
-        }
-        return text;
     }
 
     /**
