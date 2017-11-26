@@ -406,27 +406,29 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 @Override
                 public void run() {
                     String eventType = event.getType();
+                    Log.d(LOG_TAG, "Received event type: " + eventType);
 
-                    // The various events that could possibly change the room title
+                    // Events that could change the room title
                     if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(eventType)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)) {
                         setTitle();
                         updateRoomHeaderMembersStatus();
                         updateRoomHeaderAvatar();
-                    } else if (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)) {
-                        checkSendEventStatus();
-                    } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)) {
-                        Log.d(LOG_TAG, "Updating room topic.");
+                    }
+                    // Events that could change the room topic
+                    else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)) {
                         RoomState roomState = JsonUtils.toRoomState(event.getContent());
                         setTopic(roomState.topic);
-                    } else if (Event.EVENT_TYPE_TYPING.equals(eventType)) {
-                        Log.d(LOG_TAG, "on room typing");
+                    // Events that could change the ability to send messages
+                    else if (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)) {
+                        checkSendEventStatus();
+                    }
+                    else if (Event.EVENT_TYPE_TYPING.equals(eventType)) {
                         onRoomTypings();
                     }
                     // header room specific
                     else if (Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType)) {
-                        Log.d(LOG_TAG, "Event room avatar");
                         updateRoomHeaderAvatar();
                     } else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
                         boolean canSendEncryptedEvent = mRoom.isEncrypted() && mSession.isCryptoEnabled();
