@@ -246,9 +246,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     private ReadMarkerManager mReadMarkerManager;
 
+    // unsent events
+    private View mResendPrompt;
+    private Button mResendConfirmButton;
+    private Button mResendCancelButton;
+
     // room preview
     private View mRoomPreviewLayout;
 
+    // menu
     private MenuItem mResendUnsentMenuItem;
     private MenuItem mResendDeleteMenuItem;
     private MenuItem mSearchInRoomMenuItem;
@@ -705,6 +711,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         } else {
             Log.d(LOG_TAG, "Displaying " + roomId);
         }
+
+        // resend events
+        mResendPrompt = findViewById(R.id.room_prompt_resend);
+        mResendConfirmButton = findViewById(R.id.button_resend_confirm);
+        mResendCancelButton = findViewById(R.id.button_resend_cancel);
+
+        mResendConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mVectorMessageListFragment.resendUnsentMessages();
+            }
+        });
+
+        mResendCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mVectorMessageListFragment.deleteUnsentEvents();
+            }
+        });
 
         mEditText = findViewById(R.id.editText_messageBox);
 
@@ -2463,42 +2488,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     //================================================================================
 
     /**
-     * Track the cancel all click.
-     */
-    private class cancelAllClickableSpan extends ClickableSpan {
-        @Override
-        public void onClick(View widget) {
-            mVectorMessageListFragment.deleteUnsentEvents();
-        }
-
-        @Override
-        public void updateDrawState(TextPaint ds) {
-            super.updateDrawState(ds);
-            ds.setColor(ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color));
-            ds.bgColor = 0;
-            ds.setUnderlineText(true);
-        }
-    }
-
-    /**
-     * Track the resend all click.
-     */
-    private class resendAllClickableSpan extends ClickableSpan {
-        @Override
-        public void onClick(View widget) {
-            mVectorMessageListFragment.resendUnsentMessages();
-        }
-
-        @Override
-        public void updateDrawState(TextPaint ds) {
-            super.updateDrawState(ds);
-            ds.setColor(ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color));
-            ds.bgColor = 0;
-            ds.setUnderlineText(true);
-        }
-    }
-
-    /**
      * Refresh the notifications area.
      */
     private void refreshNotificationsArea() {
@@ -2538,7 +2527,36 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != mUseMatrixAppsMenuItem) {
             mUseMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData) && PreferencesManager.useMatrixApps(this));
         }
+
+        // todo call from an upper level function
+        refreshUnsentEvents();
     }
+
+    /**
+     * Refresh messages about unsent events.
+     */
+    private void refreshUnsentEvents() {
+        List<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
+        List<Event> unknownDeviceEvents = mSession.getDataHandler().getStore().getUnknownDeviceEvents(mRoom.getRoomId());
+
+        boolean hasUndeliverableEvents = (null != undeliveredEvents) && (undeliveredEvents.size() > 0);
+        boolean hasUnknownDeviceEvents = (null != unknownDeviceEvents) && (unknownDeviceEvents.size() > 0);
+
+        boolean hasUnsentEvent = hasUndeliverableEvents || hasUnknownDeviceEvents;
+
+        if(null != mResendPrompt) {
+            mResendPrompt.setVisibility(hasUnsentEvent ? View.VISIBLE : View.GONE);
+        }
+
+        if(null != mResendUnsentMenuItem) {
+            mResendUnsentMenuItem.setVisible(hasUnsentEvent);
+        }
+
+        if(null != mResendDeleteMenuItem) {
+            mResendDeleteMenuItem.setVisible(hasUnsentEvent);
+        }
+    }
+
 
     /**
      * Refresh the call buttons display.

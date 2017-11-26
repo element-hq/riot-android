@@ -362,12 +362,58 @@
                     android:visibility="gone" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/room_prompt_resend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_above="@id/room_bottom_layout"
+                android:visibility="invisible">
+
+                <Button
+                    android:id="@+id/button_resend_cancel"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/vector_fuchsia_color"
+                    android:background="@android:color/white"
+                    android:text="@string/room_prompt_cancel"/>
+
+                <Button
+                    android:id="@+id/button_resend_confirm"
+                    android:layout_toStartOf="@id/button_resend_cancel"
+                    android:layout_toLeftOf="@id/button_resend_cancel"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/vector_green_color"
+                    android:textColor="@android:color/white"
+                    android:text="@string/room_prompt_resend"/>
+
+                <TextView
+                    android:id="@+id/text_resend_prompt"
+                    android:layout_toStartOf="@id/button_resend_confirm"
+                    android:layout_toLeftOf="@id/button_resend_confirm"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/room_resend_unsent_messages"/>
+
+            </RelativeLayout>
+
             <View
                 android:id="@+id/bottom_separator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_alignParentLeft="true"
-                android:layout_above="@id/room_bottom_layout"
+                android:layout_above="@id/room_prompt_resend"
                 android:background="?attr/room_activity_divider_color" />
 
             <RelativeLayout

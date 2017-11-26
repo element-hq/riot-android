@@ -382,9 +382,9 @@
     <string name="room_offline_notification">Connectivity to the server has been lost.</string>
     <string name="room_unsent_messages_notification">Messages not sent. %1$s or %2$s now?</string>
     <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown devices being present. %1$s or %2$s now?</string>
-    <string name="room_prompt_resend">Resend all</string>
-    <string name="room_prompt_cancel">cancel all</string>
-    <string name="room_resend_unsent_messages">Resend unsent messages</string>
+    <string name="room_prompt_resend">Resend</string>
+    <string name="room_prompt_cancel">Forget</string>
+    <string name="room_resend_unsent_messages">Some messages were not sent</string>
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
