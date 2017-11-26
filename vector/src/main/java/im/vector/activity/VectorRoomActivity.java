@@ -432,7 +432,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                             break;
                         case Event.EVENT_TYPE_MESSAGE_ENCRYPTION:
                             boolean canSendEncryptedEvent = mRoom.isEncrypted() && mSession.isCryptoEnabled();
-                            mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.e2e_verified : R.drawable.e2e_unencrypted);
+                            mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.room_encryption_ok : R.drawable.room_encryption_disabled);
                             mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
                             break;
                     }
@@ -1353,7 +1353,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
 
             boolean canSendEncryptedEvent = mRoom.isEncrypted() && mSession.isCryptoEnabled();
-            mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.e2e_verified : R.drawable.e2e_unencrypted);
+            mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.room_encryption_ok : R.drawable.room_encryption_disabled);
             mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
         }
 

@@ -257,24 +257,11 @@
                     android:id="@+id/room_sending_message_layout"
                     android:layout_alignParentRight="true"
                     android:layout_toRightOf="@id/room_self_avatar_container"
+                    android:layout_marginLeft="8dp"
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:minHeight="56dp"
                     android:layout_height="wrap_content">
-
-                    <RelativeLayout
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/room_encrypted_image_view"
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/e2e_verified"
-                            android:tint="?attr/default_icon_tint_color" />
-
-                    </RelativeLayout>
 
                     <im.vector.view.VectorAutoCompleteTextView
                         android:layout_width="0dp"

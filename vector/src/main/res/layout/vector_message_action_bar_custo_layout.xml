@@ -35,10 +35,20 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/open_chat_header_arrow"
+        android:id="@+id/room_encrypted_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/room_encryption_disabled"
+        android:tint="?attr/primary_control_color" />
+
+    <ImageView
+        android:id="@+id/open_chat_header_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/room_encrypted_image_view"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:src="@drawable/ic_arrow_drop_down_white" />
