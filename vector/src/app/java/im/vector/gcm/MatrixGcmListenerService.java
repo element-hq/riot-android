@@ -33,6 +33,7 @@ import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.services.EventStreamService;
+import im.vector.util.PreferencesManager;
 
 /**
  * Class implementing GcmListenerService.
@@ -54,13 +55,13 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
      */
     private Event parseEvent(Map<String, String> data) {
         // accept only event with room id.
-        if ((null == data) || !data.containsKey("room_id") || !data.containsKey("id")) {
+        if ((null == data) || !data.containsKey("room_id") || !data.containsKey("event_id")) {
             return null;
         }
 
         try {
             Event event = new Event();
-            event.eventId = data.get("id");
+            event.eventId = data.get("event_id");
             event.sender = data.get("sender");
             event.roomId = data.get("room_id");
             event.setType(data.get("type"));
@@ -112,8 +113,16 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                 return;
             }
 
-            if (!gcmManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
-                Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled");
+            boolean useBatteryOptim = !PreferencesManager.isIgnoringBatteryOptimizations(getApplicationContext()) && EventStreamService.isStopped();
+
+            if ((!gcmManager.isBackgroundSyncAllowed() || useBatteryOptim)
+                    && VectorApp.isAppInBackground()) {
+
+                if (!gcmManager.isBackgroundSyncAllowed()) {
+                    Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled");
+                } else {
+                    Log.d(LOG_TAG, "## onMessageReceivedInternal() : use the battery optimisation");
+                }
 
                 EventStreamService eventStreamService = EventStreamService.getInstance();
 

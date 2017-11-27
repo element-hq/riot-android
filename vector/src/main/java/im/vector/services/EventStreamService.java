@@ -458,6 +458,7 @@ public class EventStreamService extends Service {
     public void onDestroy() {
         if (!mIsSelfDestroyed) {
             Log.d(LOG_TAG, "## onDestroy() : restart it");
+            setServiceState(StreamAction.STOP);
             autoRestart();
         } else {
             Log.d(LOG_TAG, "## onDestroy()");
@@ -500,6 +501,15 @@ public class EventStreamService extends Service {
     private void setServiceState(StreamAction newState) {
         Log.d(LOG_TAG, "setState from " + mServiceState + " to " + newState);
         mServiceState = newState;
+    }
+
+    /**
+     * Tells if the service stopped.
+     *
+     * @return true if the service is stopped.
+     */
+    public static boolean isStopped() {
+        return (null == getInstance()) || (getInstance().mServiceState == StreamAction.STOP);
     }
 
     /**

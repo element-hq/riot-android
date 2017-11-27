@@ -40,8 +40,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.util.PreferencesManager;
-import retrofit.RetrofitError;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,6 +133,9 @@ public final class GcmRegistrationManager {
     // 3 states : null not initialized (retrieved by flavor)
     private static Boolean mUseGCM;
 
+    //
+    private boolean mLastBatteryOptimizationStatus;
+
     /**
      * Constructor
      *
@@ -172,6 +173,7 @@ public final class GcmRegistrationManager {
         });
 
         mRegistrationState = getStoredRegistrationState();
+        mLastBatteryOptimizationStatus = PreferencesManager.isIgnoringBatteryOptimizations(mContext);
     }
 
     /**
@@ -484,7 +486,42 @@ public final class GcmRegistrationManager {
         }, 30 * 1000);
     }
 
+
     /**
+     * Tells if the registration was done with event id only.
+     *
+     * @return true if the registration was done with event Id only
+     */
+    public void onAppResume() {
+        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) &&
+                (mLastBatteryOptimizationStatus != PreferencesManager.isIgnoringBatteryOptimizations(mContext))) {
+            Log.d(LOG_TAG, "## onAppResume() : force the GCM registration");
+
+            forceSessionsRegistration(new ThirdPartyRegistrationListener() {
+                @Override
+                public void onThirdPartyRegistered() {
+
+                }
+
+                @Override
+                public void onThirdPartyRegistrationFailed() {
+
+                }
+
+                @Override
+                public void onThirdPartyUnregistered() {
+
+                }
+
+                @Override
+                public void onThirdPartyUnregistrationFailed() {
+
+                }
+            });
+        }
+    }
+
+     /**
      * Register the session to the 3rd-party app server
      *
      * @param session  the session to register.
@@ -518,10 +555,12 @@ public final class GcmRegistrationManager {
 
         Log.d(LOG_TAG, "registerToThirdPartyServer of " + session.getMyUserId());
 
+        boolean eventIdOnlyPushes =  isBackgroundSyncAllowed() && PreferencesManager.isIgnoringBatteryOptimizations(mContext);
+
         session.getPushersRestClient()
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
-                        DEFAULT_PUSHER_URL, append, isBackgroundSyncAllowed(), new ApiCallback<Void>() {
+                        DEFAULT_PUSHER_URL, append, eventIdOnlyPushes, new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
                                 Log.d(LOG_TAG, "registerToThirdPartyServer succeeded");

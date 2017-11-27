@@ -34,6 +34,9 @@
     <!-- start the background sync on boot -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- disable the battery optimisation on some devices to let the background sync works -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+
     <!-- videocall feature-->
     <!-- android.permission.CAMERA defines android.hardware.camera -->
     <uses-feature

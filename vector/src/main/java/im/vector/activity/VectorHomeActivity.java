@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -614,6 +615,22 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         displayCryptoCorruption();
 
         addBadgeEventsListener();
+
+        disableBatteryOptimisation();
+    }
+
+    /**
+     * Request to disable the background
+     */
+    private void disableBatteryOptimisation() {
+        if (!PreferencesManager.isIgnoringBatteryOptimizations(this) &&
+                !PreferencesManager.didRequestDisableBackgroundOptimisation(this)) {
+            PreferencesManager.setRequestDisableBackgroundSync(this);
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            startActivity(intent);
+        }
     }
 
     @Override

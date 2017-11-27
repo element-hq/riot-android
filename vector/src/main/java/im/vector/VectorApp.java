@@ -542,6 +542,7 @@ public class VectorApp extends MultiDexApplication {
             }
 
             mCallsManager.checkDeadCalls();
+            Matrix.getInstance(this).getSharedGCMRegistrationManager().onAppResume();
         }
 
         MyPresenceManager.advertiseAllOnline();

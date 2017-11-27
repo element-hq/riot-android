@@ -16,11 +16,15 @@
  */
 package im.vector.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -122,6 +126,8 @@ public class PreferencesManager {
 
     private static final String SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY = "SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY";
 
+    private static final String REQUEST_DISABLE_OPTIMISATION_KEY = "REQUEST_DISABLE_OPTIMISATION_KEY";
+
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;
@@ -189,6 +195,44 @@ public class PreferencesManager {
         }
 
         editor.commit();
+    }
+
+    /**
+     * Tells if there was a request to disable the battery optimisation on some android >= M devices.
+     *
+     * @param context the context
+     * @return true if there was a request
+     */
+    public static boolean didRequestDisableBackgroundOptimisation(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(REQUEST_DISABLE_OPTIMISATION_KEY, false);
+    }
+
+    /**
+     * Mark as requested the background optimisation.
+     *
+     * @param context the context
+     */
+    public static void setRequestDisableBackgroundSync(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(REQUEST_DISABLE_OPTIMISATION_KEY, true);
+        editor.commit();
+    }
+
+
+    /**
+     * Tells if the battery optimisations are ignored
+     *
+     * @param context the context
+     * @return true if they ignored
+     */
+    @SuppressLint("NewApi")
+    public static boolean isIgnoringBatteryOptimizations(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
+        }
+
+        return true;
     }
 
     /**
@@ -595,6 +639,7 @@ public class PreferencesManager {
 
     /**
      * Tells if Google analytics use is allowed
+     *
      * @param context the context
      * @return true if the GA is allowed to be used
      */
@@ -652,6 +697,6 @@ public class PreferencesManager {
      * @return null if not defined, true / false when defined
      */
     public static Boolean trackWithPiwik(Context context) {
-        return  !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY, false);
+        return !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY, false);
     }
 }
