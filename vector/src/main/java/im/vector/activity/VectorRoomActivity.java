@@ -244,6 +244,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private String mLatestTypingMessage;
     private Boolean mIsScrolledToTheBottom;
     private Event mLatestDisplayedEvent; // the event at the bottom of the list
+    private ImageView mScrollDownImage;
 
     private ReadMarkerManager mReadMarkerManager;
 
@@ -669,6 +670,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mActiveWidgetsBanner = findViewById(R.id.room_pending_widgets_view);
         mE2eImageView = findViewById(R.id.room_action_bar_encryption);
         mSyncInProgressView = findViewById(R.id.room_sync_in_progress);
+        mScrollDownImage = findViewById(R.id.image_scrolldown);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
         findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
@@ -676,6 +678,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                 return false;
+            }
+        });
+
+        // jump to the bottom when the button is clicked
+        mScrollDownImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mReadMarkerManager != null) {
+                    mReadMarkerManager.handleJumpToBottom();
+                } else {
+                    mVectorMessageListFragment.scrollToBottom(0);
+                }
             }
         });
 
@@ -2525,6 +2539,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         if (null != mUseMatrixAppsMenuItem) {
             mUseMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData) && PreferencesManager.useMatrixApps(this));
+        }
+
+        if (null != mScrollDownImage && null != mIsScrolledToTheBottom) {
+            mScrollDownImage.setVisibility(mIsScrolledToTheBottom ? View.GONE : View.VISIBLE);
         }
 
         // todo call from an upper level function

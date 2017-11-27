@@ -426,6 +426,17 @@
                 android:layout_alignBottom="@id/anchor_fragment_messages"
                 android:visibility="gone"
                 android:indeterminate="true" />
+
+            <ImageView
+                android:id="@+id/image_scrolldown"
+                android:layout_alignParentRight="true"
+                android:layout_above="@id/room_prompt_resend"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/scrolldown"
+                android:visibility="invisible"/>
         </RelativeLayout>
     </RelativeLayout>
 
