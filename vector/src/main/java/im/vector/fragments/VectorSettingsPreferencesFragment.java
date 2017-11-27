@@ -1593,7 +1593,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             for (final Pusher pusher : mDisplayedPushers) {
                 if (null != pusher.lang) {
-                    boolean isThisDeviceTarget = TextUtils.equals(gcmRegistrationManager.getGCMRegistrationToken(), pusher.pushkey);
+                    boolean isThisDeviceTarget = TextUtils.equals(gcmRegistrationManager.getCurrentRegistrationToken(), pusher.pushkey);
 
                     VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity(), isThisDeviceTarget ? Typeface.BOLD : Typeface.NORMAL);
                     preference.setTitle(pusher.deviceDisplayName);

@@ -174,6 +174,7 @@ public final class GcmRegistrationManager {
 
         mRegistrationState = getStoredRegistrationState();
         mLastBatteryOptimizationStatus = PreferencesManager.isIgnoringBatteryOptimizations(mContext);
+        mRegistrationToken = getStoredRegistrationToken();
     }
 
     /**
@@ -262,7 +263,7 @@ public final class GcmRegistrationManager {
      *
      * @return the GCM registration token
      */
-    public String getGCMRegistrationToken() {
+    private String getGCMRegistrationToken() {
         String registrationToken = getStoredRegistrationToken();
 
         if (TextUtils.isEmpty(registrationToken)) {
@@ -321,6 +322,7 @@ public final class GcmRegistrationManager {
                                 if (pushKey != null) {
                                     gcmRegistrationListener.onGCMRegistered();
                                 } else {
+                                    // stay in GCM_REGISTRATING state
                                     gcmRegistrationListener.onGCMRegistrationFailed();
                                 }
                             } catch (Exception e) {
@@ -347,6 +349,7 @@ public final class GcmRegistrationManager {
                         Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e2.getMessage());
                     }
                 }
+                mRegistrationState = setStoredRegistrationState(RegistrationState.UNREGISTRATED);
             }
         } else if (mRegistrationState == RegistrationState.GCM_REGISTRATING) {
             gcmRegistrationListener.onGCMRegistrationFailed();
@@ -521,7 +524,7 @@ public final class GcmRegistrationManager {
         }
     }
 
-     /**
+    /**
      * Register the session to the 3rd-party app server
      *
      * @param session  the session to register.
@@ -555,7 +558,7 @@ public final class GcmRegistrationManager {
 
         Log.d(LOG_TAG, "registerToThirdPartyServer of " + session.getMyUserId());
 
-        boolean eventIdOnlyPushes =  isBackgroundSyncAllowed() && PreferencesManager.isIgnoringBatteryOptimizations(mContext);
+        boolean eventIdOnlyPushes = isBackgroundSyncAllowed() && PreferencesManager.isIgnoringBatteryOptimizations(mContext);
 
         session.getPushersRestClient()
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
@@ -710,7 +713,9 @@ public final class GcmRegistrationManager {
 
         addSessionsRegistrationListener(listener);
 
-        if (mRegistrationState == RegistrationState.SERVER_REGISTRATING) {
+        if (mRegistrationState == RegistrationState.GCM_REGISTRATING) {
+            // please wait
+        } else if (mRegistrationState == RegistrationState.SERVER_REGISTRATING) {
             // please wait
         } else if (mRegistrationState == RegistrationState.UNREGISTRATED) {
             Log.d(LOG_TAG, "register unregistrated : try to register again");
@@ -738,7 +743,7 @@ public final class GcmRegistrationManager {
             dispatchOnThirdPartyRegistrationFailed();
         } else {
             // check if the notifications must be displayed
-            if (useGCM() && areDeviceNotificationsAllowed()) {
+            if (useGCM() && areDeviceNotificationsAllowed() && !TextUtils.isEmpty(mRegistrationToken)) {
                 mRegistrationState = setStoredRegistrationState(RegistrationState.SERVER_REGISTRATING);
                 registerToThirdPartyServer(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), 0);
             } else {
@@ -986,7 +991,14 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * Tell if GCM is rregistred i.e. ready to use
+     * @return the current registration token
+     */
+    public String getCurrentRegistrationToken() {
+        return mRegistrationToken;
+    }
+
+    /**
+     * Tell if GCM is registred i.e. ready to use
      */
     public boolean isGCMRegistred() {
         return (mRegistrationState == RegistrationState.GCM_REGISTRED) || (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
