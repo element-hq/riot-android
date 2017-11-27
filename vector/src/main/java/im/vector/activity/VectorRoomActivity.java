@@ -2515,7 +2515,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // if no network is available, display an error message
         if (!Matrix.getInstance(this).isConnected()) {
-            textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
+            textColor = ThemeUtils.getColor(this, R.attr.primary_hint_text_color);
             text = new SpannableString(getResources().getString(R.string.room_offline_notification));
         }
         // if someone is typing, display the typing message
