@@ -554,10 +554,6 @@
 
 加密消息对还没有实现加密的客户端将会不可见。</string>
 
-    <string name="ga_use_alert_message">你同意发送崩溃报告用来帮助我们改善应用程序的行为吗？</string>
-    <string name="ga_use_settings">自动发送崩溃报告</string>
-    <string name="ga_use_disable_alert_message">你需要重启应用程序来禁用崩溃报告。</string>
-
     <string name="encryption_information_claimed_ed25519_fingerprint_key">声称的 Ed25519 指纹密钥</string>
     <string name="encryption_information_blocked">已列入黑名单</string>
 

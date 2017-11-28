@@ -645,14 +645,8 @@
     <!-- Directory -->
     <string name="directory_title">Luettelo</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Haluatko auttaa sovelluksen parantamisessa sallimalla automaattisen kaatumisraporttien lähettämisen?</string> <!-- ??? sounds suspicious -->
-    <string name="ga_use_settings">Lähetä kaatumisraportit automaattisesti</string>
-    <string name="ga_use_disable_alert_message">Käynnistä sovellus uudelleen poistaaksesi automaattisten kaatumisraporttien lähettämisen.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s yritti löytää tietyn kohdan huoneen historiassa, mutta sitä ei löytynyt.</string> <!-- ??? -->
-
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">Salauksen lisätiedot</string> <!-- ??? all of this encryption stuff here translated to Finnish sounds sort of dubious -->

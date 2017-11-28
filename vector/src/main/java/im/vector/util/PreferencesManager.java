@@ -39,7 +39,6 @@ import java.util.Set;
 
 import im.vector.R;
 import im.vector.activity.LoginActivity;
-import im.vector.ga.GAHelper;
 
 public class PreferencesManager {
 
@@ -110,7 +109,6 @@ public class PreferencesManager {
 
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     private static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
-    public static final String SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY";
     private static final String SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY = "SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY";
     public static final String SETTINGS_ANALYTICS_PREFERENCE_KEY = "SETTINGS_ANALYTICS_PREFERENCE_KEY";
 
@@ -146,7 +144,6 @@ public class PreferencesManager {
 
             SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
             SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
-            SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY,
             SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY,
             SETTINGS_START_ON_BOOT_PREFERENCE_KEY,
             SETTINGS_INTERFACE_TEXT_SIZE_KEY,
@@ -517,13 +514,6 @@ public class PreferencesManager {
         // some key names have been updated to supported language switch
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (preferences.contains(context.getString(R.string.ga_use_settings))) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.ga_use_settings), false));
-            editor.remove(context.getString(R.string.ga_use_settings));
-            editor.commit();
-        }
-
         if (preferences.contains(context.getString(R.string.settings_pin_missed_notifications))) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.settings_pin_missed_notifications), false));
@@ -635,59 +625,6 @@ public class PreferencesManager {
      */
     public static boolean pinUnreadMessages(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, false);
-    }
-
-    /**
-     * Tells if Google analytics use is allowed
-     *
-     * @param context the context
-     * @return true if the GA is allowed to be used
-     */
-    public static boolean isGAUseAllowed(Context context) {
-        return TextUtils.equals(context.getResources().getString(R.string.allow_ga_use), "true");
-    }
-
-    /**
-     * Update the GA use.
-     *
-     * @param context the context
-     * @param value   the new value
-     */
-    public static void setUseGA(Context context, boolean value) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, value && isGAUseAllowed(context));
-        editor.commit();
-
-        GAHelper.initGoogleAnalytics(context);
-    }
-
-    /**
-     * Tells if GA can be used
-     *
-     * @param context the context
-     * @return null if not defined, true / false when defined
-     */
-    public static Boolean useGA(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (preferences.contains(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY)) {
-            return preferences.getBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, false);
-        } else {
-            try {
-                if (!isGAUseAllowed(context)) {
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, false);
-                    editor.commit();
-
-                    return false;
-                }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "useGA " + e.getLocalizedMessage());
-            }
-
-            return null;
-        }
     }
 
     /**

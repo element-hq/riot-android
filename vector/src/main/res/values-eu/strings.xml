@@ -623,12 +623,7 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="room_settings_addresses_e2e_prompt_title">Abisua!</string>
     <string name="directory_title">Direktorioa</string>
 
-    <string name="ga_use_alert_message">Aplikazioa hobetzen lagundu nahi duzu kraskatze txostenak automatikoki bidaliz?</string>
-    <string name="ga_use_settings">Bidali automatikoki kraskatze txostenak</string>
-    <string name="ga_use_disable_alert_message">Aplikazioa berrabiarazi behar duzu kraskatze txostenak desgaitzeko.</string>
-
     <string name="failed_to_load_timeline_position">%s gela honetako denbora-lerroko puntu zehatz kargatzen saiatu da baina ezin izan du aurkitu.</string>
-
 
     <string name="encryption_information_title">Muturretik muturrerako zifratzearen informazioa</string>
 

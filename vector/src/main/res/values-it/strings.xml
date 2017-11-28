@@ -654,14 +654,8 @@
     <string name="directory_title">Elenco</string>
     <string name="settings_theme">Tema</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Vuoi aiutarci a migliorare il comportamento dell\'applicazione inviando rapporti sui crash?</string>
-    <string name="ga_use_settings">Invio rapporti sui crash automatico</string>
-    <string name="ga_use_disable_alert_message">Devi riavviare l\'applicazione per disabilitare il rapporto sui crash.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s stava cercando di caricare un punto specifico della cronologia di questa stanza, ma era impossibilitato ad accedervi.</string>
-
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">Informazioni crittografia da-utente-a-utente</string>

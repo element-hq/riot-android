@@ -103,7 +103,6 @@ import im.vector.activity.LanguagePickerActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
-import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.preference.ProgressBarPreference;
 import im.vector.preference.UserAvatarPreference;
@@ -567,37 +566,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             });
         }
-
-        final CheckBoxPreference useGaPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY);
-
-        if (!PreferencesManager.isGAUseAllowed(getActivity())) {
-            PreferenceCategory analyticsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_ANALYTICS_PREFERENCE_KEY);
-            analyticsCategory.removePreference(useGaPref);
-        } else {
-            useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (null != getActivity()) {
-                        boolean useGA = PreferencesManager.useGA(getActivity());
-
-                        if (!useGA) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                            builder.setMessage(getString(R.string.ga_use_disable_alert_message)).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do something here
-                                }
-                            }).show();
-                        }
-                        GAHelper.initGoogleAnalytics(getActivity());
-                    }
-
-                    return true;
-                }
-            });
-        }
-
 
         mUserSettingsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_USER_SETTINGS_PREFERENCE_KEY);
         mContactSettingsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_CONTACT_PREFERENCE_KEYS);

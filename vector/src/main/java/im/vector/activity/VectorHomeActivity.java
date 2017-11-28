@@ -189,8 +189,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private MXEventListener mEventsListener;
     private MXEventListener mLiveEventListener;
 
-    private AlertDialog.Builder mUseGAAlert;
-
     // when a member is banned, the session must be reloaded
     public static boolean mClearCacheRequired = false;
 
@@ -542,30 +540,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         });
 
         mVectorPendingCallView.checkPendingCall();
-
-        // check if the GA accepts to send crash reports.
-        // do not display this alert if there is an universal link management
-        if ((null == PreferencesManager.useGA(this)) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
-            mUseGAAlert = new AlertDialog.Builder(this);
-
-            mUseGAAlert.setMessage(getApplicationContext().getString(R.string.ga_use_alert_message)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (null != VectorApp.getInstance()) {
-                        mUseGAAlert = null;
-                        PreferencesManager.setUseGA(VectorHomeActivity.this, true);
-                    }
-                }
-            }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (null != VectorApp.getInstance()) {
-                        mUseGAAlert = null;
-                        PreferencesManager.setUseGA(VectorHomeActivity.this, false);
-                    }
-                }
-            }).show();
-        }
 
         if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
             // crash reported by a rage shake

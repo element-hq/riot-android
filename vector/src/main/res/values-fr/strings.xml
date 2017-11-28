@@ -658,9 +658,6 @@ Une fois le chiffrement activé pour un salon, il ne peut plus être désactivé
 
 Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas encore implémenté le chiffrement.</string>
 
-    <string name="ga_use_alert_message">Souhaitez-vous nous aider à améliorer l\'application en envoyant des rapports d\'erreur automatiques ?</string>
-    <string name="ga_use_disable_alert_message">Vous devez redémarrer l\'application pour désactiver les rapports d\'erreur.</string>
-
     <string name="failed_to_load_timeline_position">%s a essayé de charger un point précis dans l\'historique du salon mais ne l\'a pas trouvé.</string>
 
 

@@ -329,10 +329,6 @@
         android:key="SETTINGS_ANALYTICS_PREFERENCE_KEY" >
 
         <im.vector.preference.VectorSwitchPreference
-            android:title="@string/ga_use_settings"
-            android:key="SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY"/>
-
-        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_opt_out_of_analytics"
             android:summary="@string/settings_opt_out_of_analytics_summary"
             android:key="SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY"/>

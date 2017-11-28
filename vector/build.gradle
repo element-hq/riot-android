@@ -199,7 +199,6 @@ dependencies {
     // app flavor only
     appCompile 'com.google.firebase:firebase-core:11.6.2'
     appCompile 'com.google.firebase:firebase-messaging:11.6.2'
-    appCompile 'com.google.android.gms:play-services-analytics:11.6.2'
 
     // fdroid flavor only
 }

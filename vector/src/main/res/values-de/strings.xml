@@ -657,14 +657,8 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <!-- Directory -->
     <string name="directory_title">Verzeichnis</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Stimmst du zu, uns dabei zu helfen, das Anwendungsverhalten der App zu verbessern und uns Absturzberichte zu übermitteln?</string>
-    <string name="ga_use_settings">Absturzberichte automatisch übermitteln</string>
-    <string name="ga_use_disable_alert_message">Du musst die Anwendung neustarten, um Absturzberichte auszuschalten.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s versuchte einen bestimmten Punkt in diesem Chatverlauf zu laden, konnte ihn aber nicht finden.</string>
-
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">Ende-zu-Ende-Verschlüsselungs-Informationen</string>
