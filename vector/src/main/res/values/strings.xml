@@ -4,7 +4,7 @@
     <!-- should the same value as the file name -->
 
     <string name="resouces_language">en</string>
-    <string name="resouces_country">UK</string>
+    <string name="resouces_country">US</string>
 
     <!-- theme -->
     <string name="light_theme">Light Theme</string>
