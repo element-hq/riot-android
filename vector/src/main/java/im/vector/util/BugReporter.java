@@ -322,10 +322,12 @@ public class BugReporter {
                         if ((null == response) || (null == response.body())) {
                             serverError = "Failed with error " + responseCode;
                         } else {
-                            InputStream is = response.body().byteStream();
+                            InputStream is = null;
 
-                            if (null != is) {
-                                try {
+                            try {
+                                is = response.body().byteStream();
+
+                                if (null != is) {
                                     int ch;
                                     StringBuilder b = new StringBuilder();
                                     while ((ch = is.read()) != -1) {
@@ -346,14 +348,16 @@ public class BugReporter {
                                     if (null == serverError) {
                                         serverError = "Failed with error " + responseCode;
                                     }
-                                } catch (Exception e) {
-                                    Log.e(LOG_TAG, "## sendBugReport() : failed to parse error " + e.getMessage());
-                                } finally {
-                                    try {
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## sendBugReport() : failed to parse error " + e.getMessage());
+                            } finally {
+                                try {
+                                    if (null != is) {
                                         is.close();
-                                    } catch (Exception e) {
-                                        Log.e(LOG_TAG, "## sendBugReport() : failed to close the error stream " + e.getMessage());
                                     }
+                                } catch (Exception e) {
+                                    Log.e(LOG_TAG, "## sendBugReport() : failed to close the error stream " + e.getMessage());
                                 }
                             }
                         }
