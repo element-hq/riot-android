@@ -532,9 +532,6 @@
     <string name="directory_title">部屋一覧</string>
     <string name="settings_theme">外観</string>
 
-    <string name="ga_use_settings">アプリが異常終了したら開発者へ自動で報告</string>
-    <string name="ga_use_disable_alert_message">異常終了の自動報告を止める場合は、アプリを再起動する必要があります。</string>
-
     <string name="encryption_information_title">End-to-end 暗号についての情報</string>
 
     <string name="encryption_information_device_name">端末名</string>
