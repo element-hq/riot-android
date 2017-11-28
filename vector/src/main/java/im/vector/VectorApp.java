@@ -252,6 +252,8 @@ public class VectorApp extends MultiDexApplication {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
                 ThemeUtils.setActivityTheme(activity);
+                // piwik
+                onNewScreen(activity);
             }
 
             @Override
@@ -293,9 +295,6 @@ public class VectorApp extends MultiDexApplication {
                 }
 
                 listPermissionStatuses();
-
-                // piwik
-                onNewScreen(activity);
             }
 
             @Override
