@@ -766,4 +766,13 @@ Ismeretlen eszközök:</string>
 <string name="notification_listen_for_events">Események figyelése</string>
 
     <string name="notification_sync_in_progress">Szinkronizálás</string>
-    </resources>
+    <string name="call">Hívás</string>
+    <string name="settings_containing_my_display_name">Megjelenítendő nevemet tartalmazó üzenetek</string>
+    <string name="settings_containing_my_user_name">Felhasználónevemet tartalmazó üzenetek</string>
+    <string name="you_added_a_new_device">Hozzá adtál egy új eszközt \'%s\', mely titkosító kulcsot kér.</string>
+    <string name="your_unverified_device_requesting">Nem ellenőrzött eszközöd \'%s\' egy titkosító kulcsot kér.</string>
+    <string name="start_verification">Ellenőrzés elindítása</string>
+    <string name="share_without_verifying">Megosztás ellenőrzés nélkül</string>
+    <string name="ignore_request">Kérelem figyelmen kívül hagyása</string>
+
+</resources>

@@ -78,7 +78,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     @BindView(R.id.recyclerview)
     RecyclerView mRecycler;
 
-    CheckBox mMatrixUserOnlyCheckbox;
+    private CheckBox mMatrixUserOnlyCheckbox;
 
     private PeopleAdapter mAdapter;
 
@@ -244,7 +244,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         mAdapter = new PeopleAdapter(getActivity(), new PeopleAdapter.OnSelectItemListener() {
             @Override
             public void onSelectItem(Room room, int position) {
-               openRoom(room);
+                openRoom(room);
             }
 
             @Override
@@ -373,14 +373,14 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * Display the public rooms loading view
      */
     private void showKnownContactLoadingView() {
-        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1).showLoadingView();
+        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount() - 1).showLoadingView();
     }
 
     /**
      * Hide the public rooms loading view
      */
     private void hideKnownContactLoadingView() {
-        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1).hideLoadingView();
+        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount() - 1).hideLoadingView();
     }
 
     /**
@@ -601,8 +601,8 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     @Override
     public void onToggleDirectChat(String roomId, boolean isDirectChat) {
-        if(!isDirectChat){
-           mAdapter.removeDirectChat(roomId);
+        if (!isDirectChat) {
+            mAdapter.removeDirectChat(roomId);
         }
     }
 

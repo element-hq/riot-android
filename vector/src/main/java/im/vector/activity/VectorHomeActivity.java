@@ -17,6 +17,7 @@
 
 package im.vector.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -32,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -155,7 +157,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     // i.e the user tries to send several files with VECTOR
     public static final String EXTRA_SHARED_INTENT_PARAMS = "VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS";
 
-    public static final boolean WAITING_VIEW_STOP = false;
+    private static final boolean WAITING_VIEW_STOP = false;
     public static final boolean WAITING_VIEW_START = true;
 
     public static final String BROADCAST_ACTION_STOP_WAITING_VIEW = "im.vector.activity.ACTION_STOP_WAITING_VIEW";
@@ -543,7 +545,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         // check if the GA accepts to send crash reports.
         // do not display this alert if there is an universal link management
-        if (null == PreferencesManager.useGA(this) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
+        if ((null == PreferencesManager.useGA(this)) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
             mUseGAAlert = new AlertDialog.Builder(this);
 
             mUseGAAlert.setMessage(getApplicationContext().getString(R.string.ga_use_alert_message)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
@@ -613,6 +615,22 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         displayCryptoCorruption();
 
         addBadgeEventsListener();
+
+        disableBatteryOptimisation();
+    }
+
+    /**
+     * Request to disable the background
+     */
+    private void disableBatteryOptimisation() {
+        if (!PreferencesManager.isIgnoringBatteryOptimizations(this) &&
+                !PreferencesManager.didRequestDisableBackgroundOptimisation(this)) {
+            PreferencesManager.setRequestDisableBackgroundSync(this);
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -881,6 +899,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             }
         }
     }
+
     /**
      * Update UI colors to match the selected tab
      *
@@ -904,7 +923,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         }
 
         // Set color of toolbar search view
-        EditText edit = (EditText) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText edit = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         edit.setTextColor(ThemeUtils.getColor(this, R.attr.primary_text_color));
         edit.setHintTextColor(ThemeUtils.getColor(this, R.attr.primary_hint_text_color));
     }
@@ -934,16 +953,16 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         addUnreadBadges();
 
-		// init the search view
+        // init the search view
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         // Remove unwanted left margin
-        LinearLayout searchEditFrame = (LinearLayout) mSearchView.findViewById(R.id.search_edit_frame);
+        LinearLayout searchEditFrame = mSearchView.findViewById(R.id.search_edit_frame);
         if (searchEditFrame != null) {
             ViewGroup.MarginLayoutParams searchEditFrameParams = (ViewGroup.MarginLayoutParams) searchEditFrame.getLayoutParams();
             searchEditFrameParams.leftMargin = 0;
             searchEditFrame.setLayoutParams(searchEditFrameParams);
         }
-        ImageView searchIcon = (ImageView) mSearchView.findViewById(R.id.search_mag_icon);
+        ImageView searchIcon = mSearchView.findViewById(R.id.search_mag_icon);
         if (searchIcon != null) {
             ViewGroup.MarginLayoutParams searchIconParams = (ViewGroup.MarginLayoutParams) searchIcon.getLayoutParams();
             searchIconParams.leftMargin = 0;
@@ -1093,62 +1112,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         }
 
         //TODO add listener to know when filtering is done and dismiss the keyboard
-    }
-
-    /**
-     * Handle a universal link intent
-     *
-     * @param intent
-     */
-    private void handleUniversalLink(final Intent intent) {
-        final Uri uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-        intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-
-        // detect the room could be opened without waiting the next sync
-        HashMap<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
-
-        if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
-            Log.d(LOG_TAG, "Has a valid universal link");
-
-            final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY);
-
-            // it is a room ID ?
-            if (MXSession.isRoomId(roomIdOrAlias)) {
-                Log.d(LOG_TAG, "Has a valid universal link to the room ID " + roomIdOrAlias);
-                Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
-
-                if (null != room) {
-                    Log.d(LOG_TAG, "Has a valid universal link to a known room");
-                    // open the room asap
-                    mUniversalLinkToOpen = uri;
-                } else {
-                    Log.d(LOG_TAG, "Has a valid universal link but the room is not yet known");
-                    // wait the next sync
-                    intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
-                }
-            } else if (MXSession.isRoomAlias(roomIdOrAlias)) {
-                Log.d(LOG_TAG, "Has a valid universal link of the room Alias " + roomIdOrAlias);
-
-                // it is a room alias
-                // convert the room alias to room Id
-                mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new SimpleApiCallback<String>() {
-                    @Override
-                    public void onSuccess(String roomId) {
-                        Log.d(LOG_TAG, "Retrieve the room ID " + roomId);
-
-                        getIntent().putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
-
-                        // the room exists, opens it
-                        if (null != mSession.getDataHandler().getRoom(roomId, false)) {
-                            Log.d(LOG_TAG, "Find the room from room ID : process it");
-                            processIntentUniversalLink();
-                        } else {
-                            Log.d(LOG_TAG, "Don't know the room");
-                        }
-                    }
-                });
-            }
-        }
     }
 
     /**
@@ -1403,7 +1366,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         View dialogView = inflater.inflate(R.layout.dialog_join_room_by_id, null);
         alertDialogBuilder.setView(dialogView);
 
-        final EditText textInput = (EditText) dialogView.findViewById(R.id.join_room_edit_text);
+        final EditText textInput = dialogView.findViewById(R.id.join_room_edit_text);
         textInput.setTextColor(ThemeUtils.getColor(this, R.attr.riot_primary_text_color));
 
         // set dialog message
@@ -1631,9 +1594,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         dialog.setTitle(R.string.encryption_export_room_keys);
         dialog.setView(dialogLayout);
 
-        final TextInputEditText passPhrase1EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
-        final TextInputEditText passPhrase2EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
-        final Button exportButton = (Button) dialogLayout.findViewById(R.id.dialog_e2e_keys_export_button);
+        final TextInputEditText passPhrase1EditText = dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+        final TextInputEditText passPhrase2EditText = dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
+        final Button exportButton = dialogLayout.findViewById(R.id.dialog_e2e_keys_export_button);
         final TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1726,7 +1689,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     private void refreshSlidingMenu() {
         // use a dedicated view
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -1849,18 +1812,18 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         }
 
         // init the main menu
-        TextView displayNameTextView = (TextView) navigationView.findViewById(R.id.home_menu_main_displayname);
+        TextView displayNameTextView = navigationView.findViewById(R.id.home_menu_main_displayname);
 
         if (null != displayNameTextView) {
             displayNameTextView.setText(mSession.getMyUser().displayname);
         }
 
-        TextView userIdTextView = (TextView) navigationView.findViewById(R.id.home_menu_main_matrix_id);
+        TextView userIdTextView = navigationView.findViewById(R.id.home_menu_main_matrix_id);
         if (null != userIdTextView) {
             userIdTextView.setText(mSession.getMyUserId());
         }
 
-        ImageView mainAvatarView = (ImageView) navigationView.findViewById(R.id.home_menu_main_avatar);
+        ImageView mainAvatarView = navigationView.findViewById(R.id.home_menu_main_avatar);
 
         if (null != mainAvatarView) {
             VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
@@ -2013,6 +1976,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     /**
      * Add the unread messages badges.
      */
+    @SuppressLint("RestrictedApi")
     private void addUnreadBadges() {
         final float scale = getResources().getDisplayMetrics().density;
         int badgeOffsetX = (int) (18 * scale + 0.5f);
@@ -2025,7 +1989,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         for (int menuIndex = 0; menuIndex < mBottomNavigationView.getMenu().size(); menuIndex++) {
             try {
                 int itemId = mBottomNavigationView.getMenu().getItem(menuIndex).getItemId();
-                BottomNavigationItemView navigationItemView = (BottomNavigationItemView) mBottomNavigationView.findViewById(itemId);
+                BottomNavigationItemView navigationItemView = mBottomNavigationView.findViewById(itemId);
+
 
                 navigationItemView.setShiftingMode(false);
 

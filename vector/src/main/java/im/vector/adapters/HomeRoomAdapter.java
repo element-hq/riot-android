@@ -33,8 +33,6 @@ import im.vector.R;
 import im.vector.util.RoomUtils;
 
 public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
-    private static final String LOG_TAG = HomeRoomAdapter.class.getSimpleName();
-
     private final int mLayoutRes;
     private final List<Room> mRooms;
     private final List<Room> mFilteredRooms;

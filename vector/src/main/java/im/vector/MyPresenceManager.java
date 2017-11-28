@@ -16,8 +16,6 @@
 package im.vector;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.MyUser;
@@ -33,23 +31,17 @@ import java.util.Map;
  * Singleton class for handling the current user's presence.
  */
 public class MyPresenceManager {
-    private static final String LOG_TAG = "MyPresenceManager";
-
-    // The delay we wait for before actually advertising in case it changes in the meantime.
-    // This is useful when saying we're unavailable on an activity's onPause to differentiate between
-    // backgrounding the app and just switching activities.
-    private static final int DELAY_TS = 3000;
-
     // Array of presence states ordered by priority. If the current device thinks our user is online,
     // it will disregard a presence event saying the user is unavailable and advertise that they are in
     // fact online as a correction.
-    private static final String[] orderedPresenceArray = new String[] {
+    private static final String[] orderedPresenceArray = new String[]{
             User.PRESENCE_ONLINE,
             User.PRESENCE_UNAVAILABLE,
             User.PRESENCE_OFFLINE
     };
     // We need the reverse structure to associate an order to a given presence state
     private static final Map<String, Integer> presenceOrderMap = new HashMap<>();
+
     static {
         for (int i = 0; i < orderedPresenceArray.length; i++) {
             presenceOrderMap.put(orderedPresenceArray[i], i);
@@ -59,12 +51,10 @@ public class MyPresenceManager {
     private static final HashMap<MXSession, MyPresenceManager> instances = new HashMap<>();
 
     private MyUser myUser;
-    private Handler mHandler;
     private String latestAdvertisedPresence = ""; // Presence we're advertising
 
     private MyPresenceManager(Context context, MXSession session) {
         myUser = session.getMyUser();
-        mHandler = new Handler(Looper.getMainLooper());
 
         myUser.addEventListener(new MXEventListener() {
             @Override
@@ -91,6 +81,7 @@ public class MyPresenceManager {
 
     /**
      * Create an instance without any check.
+     *
      * @param context the context
      * @param session the session
      * @return the presence manager
@@ -103,6 +94,7 @@ public class MyPresenceManager {
 
     /**
      * Search a presence manager from a dedicated session
+     *
      * @param context the context
      * @param session the session
      * @return the linked presence manager
@@ -117,11 +109,12 @@ public class MyPresenceManager {
 
     /**
      * Create an MyPresenceManager instance for each session if it was not yet done.
-     * @param context the context
+     *
+     * @param context  the context
      * @param sessions the sessions
      */
     public static synchronized void createPresenceManager(Context context, Collection<MXSession> sessions) {
-        for(MXSession session : sessions) {
+        for (MXSession session : sessions) {
             if (!instances.containsKey(session)) {
                 createInstance(context, session);
             }
@@ -130,6 +123,7 @@ public class MyPresenceManager {
 
     /**
      * Remove a presence manager for a session.
+     *
      * @param session the session
      */
     public static synchronized void remove(MXSession session) {
@@ -138,9 +132,10 @@ public class MyPresenceManager {
 
     /**
      * Send the advertise presence message.
+     *
      * @param presence the presence message.
      */
-    public void advertisePresence(String presence) {
+    private void advertisePresence(String presence) {
         if (!latestAdvertisedPresence.equals(presence)) {
             latestAdvertisedPresence = presence;
         }
@@ -149,17 +144,13 @@ public class MyPresenceManager {
     private static void advertiseAll(String presence) {
         Collection<MyPresenceManager> values = instances.values();
 
-        for(MyPresenceManager myPresenceManager : values) {
+        for (MyPresenceManager myPresenceManager : values) {
             myPresenceManager.advertisePresence(presence);
         }
     }
 
     public static void advertiseAllOnline() {
         advertiseAll(User.PRESENCE_ONLINE);
-    }
-
-    public static void advertiseAllOffline() {
-        advertiseAll(User.PRESENCE_OFFLINE);
     }
 
     public static void advertiseAllUnavailable() {

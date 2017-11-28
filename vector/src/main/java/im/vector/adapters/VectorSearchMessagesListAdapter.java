@@ -66,6 +66,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
     /**
      * Define the pattern to highlight into the message body.
+     *
      * @param pattern the pattern to hilight
      */
     public void setTextToHighlight(String pattern) {
@@ -106,17 +107,17 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
 
         // refresh the avatar
-        ImageView avatarView = (ImageView) convertView.findViewById(R.id.messagesAdapter_roundAvatar).findViewById(R.id.avatar_img);
+        ImageView avatarView = convertView.findViewById(R.id.messagesAdapter_roundAvatar).findViewById(R.id.avatar_img);
         mHelper.loadMemberAvatar(avatarView, row);
 
         // display the sender
-        TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
+        TextView senderTextView = convertView.findViewById(R.id.messagesAdapter_sender);
         if (senderTextView != null) {
             senderTextView.setText(VectorMessagesAdapterHelper.getUserDisplayName(event.getSender(), roomState));
         }
 
         // display the body
-        TextView bodyTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_body);
+        TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
         // set the message text
         EventDisplay display = new RiotEventDisplay(mContext, event, (null != room) ? room.getLiveState() : null);
         CharSequence text = display.getTextualDisplay();
@@ -135,7 +136,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         }
 
         // display timestamp
-        TextView timeTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_timestamp);
+        TextView timeTextView = convertView.findViewById(R.id.messagesAdapter_timestamp);
         timeTextView.setText(AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true));
 
         // display the room name
@@ -143,7 +144,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         roomNameLayout.setVisibility(mDisplayRoomName ? View.VISIBLE : View.GONE);
 
         if (mDisplayRoomName) {
-            TextView roomTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_message_room_name_textview);
+            TextView roomTextView = convertView.findViewById(R.id.messagesAdapter_message_room_name_textview);
             roomTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, room));
         }
 
@@ -156,7 +157,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         if (!TextUtils.isEmpty(headerMessage)) {
             dayLayout.setVisibility(View.VISIBLE);
 
-            TextView headerText = (TextView)convertView.findViewById(R.id.messagesAdapter_message_header_text);
+            TextView headerText = convertView.findViewById(R.id.messagesAdapter_message_header_text);
             headerText.setText(headerMessage);
 
             dayLayout.findViewById(R.id.messagesAdapter_message_header_top_margin).setVisibility(View.GONE);

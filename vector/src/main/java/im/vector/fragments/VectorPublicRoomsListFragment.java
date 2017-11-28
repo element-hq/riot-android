@@ -20,7 +20,9 @@ package im.vector.fragments;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class VectorPublicRoomsListFragment extends Fragment {
-    private static final String LOG_TAG = "VectorPubRoomsListFrg";
+    private static final String LOG_TAG = VectorPublicRoomsListFragment.class.getSimpleName();
 
     private static final String ARG_LAYOUT_ID = "VectorPublicRoomsListFragment.ARG_LAYOUT_ID";
     private static final String ARG_MATRIX_ID = "VectorPublicRoomsListFragment.ARG_MATRIX_ID";
@@ -67,7 +69,6 @@ public class VectorPublicRoomsListFragment extends Fragment {
         return f;
     }
 
-    private String mMatrixId;
     private MXSession mSession;
     private ListView mRecentsListView;
     private VectorPublicRoomsAdapter mAdapter;
@@ -81,7 +82,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
      * -> scroll over the top triggers a back pagination
      * -> scroll over the bottom triggers a forward pagination
      */
-    protected final AbsListView.OnScrollListener mScrollListener = new AbsListView.OnScrollListener() {
+    private final AbsListView.OnScrollListener mScrollListener = new AbsListView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             //check only when the user scrolls the content
@@ -109,8 +110,8 @@ public class VectorPublicRoomsListFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         Bundle args = getArguments();
 
-        mMatrixId = args.getString(ARG_MATRIX_ID);
-        mSession = Matrix.getInstance(getActivity()).getSession(mMatrixId);
+        String matrixId = args.getString(ARG_MATRIX_ID);
+        mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
 
         if (null == mSession) {
             throw new RuntimeException("Must have valid default MXSession.");
@@ -119,7 +120,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
         mPattern = args.getString(ARG_SEARCHED_PATTERN, null);
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
-        mRecentsListView = (ListView)v.findViewById(R.id.fragment_public_rooms_list);
+        mRecentsListView = v.findViewById(R.id.fragment_public_rooms_list);
         mInitializationSpinnerView = v.findViewById(R.id.listView_global_spinner_views);
         mForwardPaginationView = v.findViewById(R.id.listView_forward_spinner_view);
 
@@ -226,7 +227,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
                 private void onError(String message) {
                     if (null != getActivity()) {
                         Log.e(LOG_TAG, "## startPublicRoomsSearch() failed " + message);
-                        Toast.makeText(getActivity(),message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                         mInitializationSpinnerView.setVisibility(View.GONE);
                     }
                 }
@@ -270,7 +271,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
             private void onError(String message) {
                 if (null != getActivity()) {
                     Log.e(LOG_TAG, "## forwardPaginate() failed " + message);
-                    Toast.makeText(getActivity(),message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                     mForwardPaginationView.setVisibility(View.GONE);
                 }
             }

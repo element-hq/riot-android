@@ -66,8 +66,7 @@ import im.vector.util.VectorUtils;
  * The first list row can be customized.
  */
 public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
-
-    private static final String LOG_TAG = "VectorAddPartsAdapt";
+    private static final String LOG_TAG = VectorParticipantsAdapter.class.getSimpleName();
 
     private static final String KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP = "KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP";
     private static final String KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP = "KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP";
@@ -801,7 +800,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
         }
 
-        TextView sectionNameTxtView = (TextView) convertView.findViewById(R.id.people_header_text_view);
+        TextView sectionNameTxtView = convertView.findViewById(R.id.people_header_text_view);
 
         if (null != sectionNameTxtView) {
             final String title = getGroupTitle(groupPosition);
@@ -828,7 +827,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.getInstance().arePIDsRetrieved() ? View.VISIBLE : View.GONE);
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.heading_image);
+        ImageView imageView = convertView.findViewById(R.id.heading_image);
         View matrixView = convertView.findViewById(R.id.people_header_matrix_contacts_layout);
 
         // reported by GA
@@ -861,7 +860,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             matrixView.setVisibility(((groupPosition == mLocalContactsSectionPosition) && groupShouldBeExpanded) ? View.VISIBLE : View.GONE);
 
             // matrix user checkbox
-            CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.contacts_filter_checkbox);
+            CheckBox checkBox = convertView.findViewById(R.id.contacts_filter_checkbox);
             checkBox.setChecked(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(KEY_FILTER_MATRIX_USERS_ONLY, false));
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -921,10 +920,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         final ParticipantAdapterItem participant = list.get(childPosition);
 
         // retrieve the ui items
-        final ImageView thumbView = (ImageView) convertView.findViewById(R.id.filtered_list_avatar);
-        final TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
-        final TextView statusTextView = (TextView) convertView.findViewById(R.id.filtered_list_status);
-        final ImageView matrixUserBadge = (ImageView) convertView.findViewById(R.id.filtered_list_matrix_user);
+        final ImageView thumbView = convertView.findViewById(R.id.filtered_list_avatar);
+        final TextView nameTextView = convertView.findViewById(R.id.filtered_list_name);
+        final TextView statusTextView = convertView.findViewById(R.id.filtered_list_status);
+        final ImageView matrixUserBadge = convertView.findViewById(R.id.filtered_list_matrix_user);
 
         // reported by GA
         // it should never happen but it happened...
@@ -985,7 +984,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         convertView.setAlpha(participant.mIsValid ? 1f : 0.5f);
 
         // the checkbox is not managed here
-        final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.filtered_list_checkbox);
+        final CheckBox checkBox = convertView.findViewById(R.id.filtered_list_checkbox);
         checkBox.setVisibility(View.GONE);
 
         final View addParticipantImageView = convertView.findViewById(R.id.filtered_list_add_button);

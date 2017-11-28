@@ -27,7 +27,6 @@ import im.vector.R;
 
 /**
  * Customize PreferenceCategory class to redefine some attributes.
- *
  */
 public class VectorDividerCategory extends PreferenceCategory {
 

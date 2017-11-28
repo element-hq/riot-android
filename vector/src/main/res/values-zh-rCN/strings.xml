@@ -762,4 +762,13 @@
 <string name="notification_sync_in_progress">同步中</string>
     <string name="notification_listen_for_events">聆听事件</string>
 
-    </resources>
+    <string name="call">通话</string>
+    <string name="settings_containing_my_display_name">包含我昵称的消息</string>
+    <string name="settings_containing_my_user_name">包含我用户名的消息</string>
+    <string name="you_added_a_new_device">你添加了一个新设备 \'%s\'，它正在请求加密密钥。</string>
+    <string name="your_unverified_device_requesting">你的未验证的设备 \'%s\' 正在请求加密密钥。</string>
+    <string name="start_verification">开始验证</string>
+    <string name="share_without_verifying">不验证而分享</string>
+    <string name="ignore_request">忽略请求</string>
+
+</resources>

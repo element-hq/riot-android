@@ -18,7 +18,9 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +43,7 @@ import org.matrix.androidsdk.util.EventDisplay;
  * An adapter which display the rooms list
  */
 public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
-    private static final String LOG_TAG = "VectRoomsSelectAdapt";
+    private static final String LOG_TAG = VectorRoomsSelectionAdapter.class.getSimpleName();
 
     private final Context mContext;
     private final LayoutInflater mLayoutInflater;
@@ -50,7 +52,8 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
 
     /**
      * Constructor of a public rooms adapter.
-     * @param context the context
+     *
+     * @param context          the context
      * @param layoutResourceId the layout
      */
     public VectorRoomsSelectionAdapter(Context context, int layoutResourceId, MXSession session) {
@@ -64,11 +67,12 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
     /**
      * Provides the formatted timestamp to display.
      * null means that the timestamp text must be hidden.
+     *
      * @param event the event.
-     * @return  the formatted timestamp to display.
+     * @return the formatted timestamp to display.
      */
     private String getFormattedTimestamp(Event event) {
-        String text =  AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
+        String text = AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
 
         // don't display the today before the time
         String today = mContext.getString(R.string.today) + " ";
@@ -94,11 +98,11 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         String roomName = roomSummary.getRoomName();
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar);
-        TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
-        TextView roomMessageTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
+        ImageView avatarImageView = convertView.findViewById(R.id.room_avatar);
+        TextView roomNameTxtView = convertView.findViewById(R.id.roomSummaryAdapter_roomName);
+        TextView roomMessageTxtView = convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
 
-        TextView timestampTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
+        TextView timestampTxtView = convertView.findViewById(R.id.roomSummaryAdapter_ts);
         View separatorView = convertView.findViewById(R.id.recents_separator);
 
         // display the room avatar

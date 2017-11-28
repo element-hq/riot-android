@@ -4,7 +4,7 @@
     <!-- should the same value as the file name -->
 
     <string name="resouces_language">en</string>
-    <string name="resouces_country">UK</string>
+    <string name="resouces_country">US</string>
 
     <!-- theme -->
     <string name="light_theme">Light Theme</string>
@@ -14,6 +14,8 @@
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Synchronising</string>
     <string name="notification_listen_for_events">Listen for events</string>
+    <string name="notification_noisy_notifications">Noisy notifications</string>
+    <string name="notification_silent_notifications">Silent notifications</string>
 
     <!-- titles -->
     <string name="title_activity_home">Messages</string>
@@ -144,6 +146,8 @@
 
     <string name="option_send_files">Send files</string>
     <string name="option_take_photo_video">Take photo or video</string>
+    <string name="option_take_photo">Take photo</string>
+    <string name="option_take_video">Take video</string>
 
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
@@ -534,6 +538,12 @@
     <string name="settings_hide_join_leave_messages">Hide join/leave messages (invites/kicks/bans unaffected)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
 
+    <!-- analytics -->
+    <string name="settings_analytics">Analytics</string>
+    <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
+
+
     <string name="settings_disable_markdown">Disable markdown formatting</string>
     <string name="settings_data_save_mode">Data save mode</string>
 
@@ -680,7 +690,6 @@
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
 
-
     <!-- encryption dialog -->
     <string name="encryption_information_title">End-to-end encryption information</string>
 
@@ -786,6 +795,7 @@
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="add_matrix_apps_not_supported">Not supported on this device</string>
+    <string name="settings_labs_native_camera">Use native camera</string>
 
     // share keys
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
@@ -793,5 +803,14 @@
     <string name="start_verification">Start verification</string>
     <string name="share_without_verifying">Share without verifying</string>
     <string name="ignore_request">Ignore request</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Warning!</string>
+    <string name="conference_call_warning_message">Conference calling is in development and may not be reliable.</string>
+
+    // slash commands
+    <string name="command_error">Command error</string>
+    <string name="unrecognized_command">Unrecognized command: %s</string>
+
 
 </resources>

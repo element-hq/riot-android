@@ -37,7 +37,6 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.util.Log;
 
 import butterknife.BindView;
@@ -328,7 +327,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
     @Override
     protected void onDestroy() {
         if (null != mWidgetWebView) {
-            ((ViewGroup)(mWidgetWebView.getParent())).removeView(mWidgetWebView);
+            ((ViewGroup) (mWidgetWebView.getParent())).removeView(mWidgetWebView);
             mWidgetWebView.removeAllViews();
             mWidgetWebView.destroy();
             mWidgetWebView = null;

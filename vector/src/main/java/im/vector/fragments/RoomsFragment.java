@@ -385,12 +385,12 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
 
             // we load public rooms 20 by 20, when the 10th one becomes visible, starts loading the next 20
-            SectionView sectionView = mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1);
+            SectionView sectionView = mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount() - 1);
             AdapterSection lastSection = sectionView != null ? sectionView.getSection() : null;
 
             if (null != lastSection) {
                 // detect if the last visible item is inside another section
-                for(int i = 0; i < mAdapter.getSectionsCount()-1; i++) {
+                for (int i = 0; i < mAdapter.getSectionsCount() - 1; i++) {
                     SectionView prevSectionView = mAdapter.getSectionViewForSectionIndex(i);
 
                     if ((null != prevSectionView) && (null != prevSectionView.getSection())) {
@@ -464,14 +464,14 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      * Display the public rooms loading view
      */
     private void showPublicRoomsLoadingView() {
-        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1).showLoadingView();
+        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount() - 1).showLoadingView();
     }
 
     /**
      * Hide the public rooms loading view
      */
     private void hidePublicRoomsLoadingView() {
-        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1).hideLoadingView();
+        mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount() - 1).hideLoadingView();
     }
 
     /**
@@ -553,7 +553,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                                 mRecycler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        SectionView publicSectionView = mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount()-1);
+                                        SectionView publicSectionView = mAdapter.getSectionViewForSectionIndex(mAdapter.getSectionsCount() - 1);
 
                                         // simulate a click on the header is to display the full list
                                         if ((null != publicSectionView) && !publicSectionView.isStickyHeader()) {

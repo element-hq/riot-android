@@ -25,7 +25,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +56,7 @@ import im.vector.util.ThemeUtils;
 
 public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
     // LOG TAG
-    private static final String LOG_TAG = "RoomDirPickerActivity";
+    private static final String LOG_TAG = RoomDirectoryPickerActivity.class.getSimpleName();
 
     private static final String EXTRA_SESSION_ID = "EXTRA_SESSION_ID";
     public static final String EXTRA_OUT_ROOM_DIRECTORY_DATA = "EXTRA_OUT_ROOM_DIRECTORY_DATA";
@@ -91,7 +93,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
         setContentView(R.layout.activity_room_directory_picker);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             if (getSupportActionBar() != null) {
@@ -168,7 +170,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
                 }
 
                 // Add custom directory servers
-                for(String hsURL : hsUrlsList) {
+                for (String hsURL : hsUrlsList) {
                     if (!TextUtils.equals(userHSUrl, hsURL)) {
                         list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(mSession, hsURL, hsURL));
                     }
@@ -220,7 +222,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_directory_picker, null);
         alert.setView(dialogView);
 
-        final EditText editText = (EditText) dialogView.findViewById(R.id.directory_picker_edit_text);
+        final EditText editText = dialogView.findViewById(R.id.directory_picker_edit_text);
 
         alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -277,7 +279,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     */
 
     private void initViews() {
-        RecyclerView roomDirectoryRecyclerView = (RecyclerView) findViewById(R.id.room_directory_recycler_view);
+        RecyclerView roomDirectoryRecyclerView = findViewById(R.id.room_directory_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         roomDirectoryRecyclerView.setLayoutManager(layoutManager);

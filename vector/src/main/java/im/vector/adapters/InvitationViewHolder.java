@@ -39,7 +39,7 @@ public class InvitationViewHolder extends RoomViewHolder {
     }
 
     void populateViews(final Context context, final MXSession session, final Room room,
-                       final AbsAdapter.InvitationListener invitationListener , final AbsAdapter.MoreRoomActionListener moreRoomActionListener) {
+                       final AbsAdapter.InvitationListener invitationListener, final AbsAdapter.MoreRoomActionListener moreRoomActionListener) {
         super.populateViews(context, session, room, room.isDirectChatInvitation(), true, moreRoomActionListener);
 
         vPreViewButton.setOnClickListener(new View.OnClickListener() {

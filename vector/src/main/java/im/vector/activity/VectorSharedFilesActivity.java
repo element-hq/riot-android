@@ -34,9 +34,9 @@ import im.vector.Matrix;
  * Dummy activity used to manage the shared
  */
 public class VectorSharedFilesActivity extends RiotBaseActivity {
-    private static final String LOG_TAG = "VectorSharedFilesAct";
+    private static final String LOG_TAG = VectorSharedFilesActivity.class.getSimpleName();
 
-    final String SHARED_FOLDER = "VectorShared";
+    private final String SHARED_FOLDER = "VectorShared";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class VectorSharedFilesActivity extends RiotBaseActivity {
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(homeIntent);
             }
-        }  else {
+        } else {
             Log.d(LOG_TAG, "onCreate : null intent");
 
             Intent homeIntent = new Intent(this, VectorHomeActivity.class);
@@ -98,7 +98,8 @@ public class VectorSharedFilesActivity extends RiotBaseActivity {
 
     /**
      * Extract the medias list, copy them into a tmp directory and provide them to the home activity
-     * @param intent the intent
+     *
+     * @param intent        the intent
      * @param isAppLaunched true if the application is resumed
      */
     private void launchActivity(Intent intent, boolean isAppLaunched) {
@@ -116,7 +117,7 @@ public class VectorSharedFilesActivity extends RiotBaseActivity {
         ArrayList<RoomMediaMessage> cachedFiles = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
 
         if (null != cachedFiles) {
-            for(RoomMediaMessage sharedDataItem : cachedFiles) {
+            for (RoomMediaMessage sharedDataItem : cachedFiles) {
                 sharedDataItem.saveMedia(this, sharedFolder);
             }
         }

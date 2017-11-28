@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.support.annotation.ColorInt;
@@ -72,7 +73,7 @@ import java.util.Random;
  * Util class for creating notifications.
  */
 public class NotificationUtils {
-    private static final String LOG_TAG = "NotificationUtils";
+    private static final String LOG_TAG = NotificationUtils.class.getSimpleName();
 
     private static final String QUICK_LAUNCH_ACTION = "EventStreamService.QUICK_LAUNCH_ACTION";
     public static final String TAP_TO_VIEW_ACTION = "EventStreamService.TAP_TO_VIEW_ACTION";
@@ -114,12 +115,17 @@ public class NotificationUtils {
 
     // on devices >= android O, we need to define a channel for each notifications
     public static final String LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID";
-    public static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOTIFICATION_CHANNEL_ID";
-    public static final String CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID";
 
-    public static String DEFAULT_NOTIFICATION_NAME = null;
-    public static String CALL_NOTIFICATION_NAME = null;
-    public static String LISTEN_FOR_EVENTS_NOTIFICATION_NAME = null;
+    private static final String NOISY_NOTIFICATION_CHANNEL_ID_BASE = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE";
+    private static String NOISY_NOTIFICATION_CHANNEL_ID = null;
+
+    private static final String SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID";
+    private static final String CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID";
+
+    private static String NOISY_NOTIFICATION_CHANNEL_NAME = null;
+    private static String SILENT_NOTIFICATION_CHANNEL_NAME = null;
+    private static String CALL_NOTIFICATION_CHANNEL_NAME = null;
+    private static String LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME = null;
 
     /**
      * Add a notification groups.
@@ -132,36 +138,79 @@ public class NotificationUtils {
             return;
         }
 
-        if (null == DEFAULT_NOTIFICATION_NAME) {
-            DEFAULT_NOTIFICATION_NAME = Matrix.getApplicationName();
+        if (null == NOISY_NOTIFICATION_CHANNEL_NAME) {
+            NOISY_NOTIFICATION_CHANNEL_NAME = context.getString(R.string.notification_noisy_notifications);
         }
 
-        if (null == CALL_NOTIFICATION_NAME) {
-            CALL_NOTIFICATION_NAME =  context.getString(R.string.call);
+        if (null == SILENT_NOTIFICATION_CHANNEL_NAME) {
+            SILENT_NOTIFICATION_CHANNEL_NAME = context.getString(R.string.notification_silent_notifications);
         }
 
-        if (null == LISTEN_FOR_EVENTS_NOTIFICATION_NAME) {
-            LISTEN_FOR_EVENTS_NOTIFICATION_NAME =  context.getString(R.string.notification_listen_for_events);
+        if (null == CALL_NOTIFICATION_CHANNEL_NAME) {
+            CALL_NOTIFICATION_CHANNEL_NAME = context.getString(R.string.call);
+        }
+
+        if (null == LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME) {
+            LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME = context.getString(R.string.notification_listen_for_events);
         }
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (null == notificationManager.getNotificationChannel(DEFAULT_NOTIFICATION_CHANNEL_ID)) {
-            NotificationChannel channel = new NotificationChannel(DEFAULT_NOTIFICATION_CHANNEL_ID, DEFAULT_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription(DEFAULT_NOTIFICATION_NAME);
+        // A notification channel cannot be updated :
+        // it must be deleted and created with another channel id
+        if ((null == NOISY_NOTIFICATION_CHANNEL_ID)) {
+            List<NotificationChannel> channels = notificationManager.getNotificationChannels();
+
+            for (NotificationChannel channel : channels) {
+                if (channel.getId().startsWith(NOISY_NOTIFICATION_CHANNEL_ID_BASE)) {
+                    NOISY_NOTIFICATION_CHANNEL_ID = channel.getId();
+                }
+            }
+        }
+
+        if (null != NOISY_NOTIFICATION_CHANNEL_ID) {
+            NotificationChannel channel = notificationManager.getNotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID);
+            Uri notificationSound = channel.getSound();
+            Uri expectedSound = PreferencesManager.getNotificationRingTone(context);
+
+            // the notification sound has been updated
+            // need to delete it, to create a new one
+            // else the sound won't be updated
+            if (((null == notificationSound) ^ (null == expectedSound)) ||
+                    ((null != notificationSound) &&
+                            !TextUtils.equals(notificationSound.toString(), expectedSound.toString()))) {
+                notificationManager.deleteNotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID);
+                NOISY_NOTIFICATION_CHANNEL_ID = null;
+            }
+        }
+
+        if (null == NOISY_NOTIFICATION_CHANNEL_ID) {
+            NOISY_NOTIFICATION_CHANNEL_ID = NOISY_NOTIFICATION_CHANNEL_ID_BASE + System.currentTimeMillis();
+
+            NotificationChannel channel = new NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID, NOISY_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(NOISY_NOTIFICATION_CHANNEL_NAME);
+            channel.setSound(PreferencesManager.getNotificationRingTone(context), null);
+            channel.enableVibration(true);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        if (null == notificationManager.getNotificationChannel(SILENT_NOTIFICATION_CHANNEL_NAME)) {
+            NotificationChannel channel = new NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID, SILENT_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(SILENT_NOTIFICATION_CHANNEL_NAME);
+            channel.setSound(null, null);
             notificationManager.createNotificationChannel(channel);
         }
 
         if (null == notificationManager.getNotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)) {
-            NotificationChannel channel = new NotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID, LISTEN_FOR_EVENTS_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_MIN);
-            channel.setDescription(LISTEN_FOR_EVENTS_NOTIFICATION_NAME);
+            NotificationChannel channel = new NotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID, LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_MIN);
+            channel.setDescription(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME);
             channel.setSound(null, null);
             notificationManager.createNotificationChannel(channel);
         }
 
         if (null == notificationManager.getNotificationChannel(CALL_NOTIFICATION_CHANNEL_ID)) {
-            NotificationChannel channel = new NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID, CALL_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription(CALL_NOTIFICATION_NAME);
+            NotificationChannel channel = new NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID, CALL_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(CALL_NOTIFICATION_CHANNEL_NAME);
             channel.setSound(null, null);
             notificationManager.createNotificationChannel(channel);
         }
@@ -741,6 +790,7 @@ public class NotificationUtils {
      * @param isBackground true if the notification is a background one
      * @param isBing       true if the notification should play sound
      */
+    @SuppressLint("NewApi")
     private static void manageNotificationSound(Context context, NotificationCompat.Builder builder, boolean isBackground, boolean isBing) {
         @ColorInt int highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
         int defaultColor = Color.TRANSPARENT;
@@ -761,6 +811,10 @@ public class NotificationUtils {
 
             if (isBing && (null != PreferencesManager.getNotificationRingTone(context))) {
                 builder.setSound(PreferencesManager.getNotificationRingTone(context));
+
+                if (Build.VERSION.SDK_INT >= 26) {
+                    builder.setChannelId(NOISY_NOTIFICATION_CHANNEL_ID);
+                }
             }
 
             // turn the screen on for 3 seconds
@@ -857,7 +911,7 @@ public class NotificationUtils {
             String roomName = getRoomName(context, session, room, event);
 
             addNotificationChannels(context);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, DEFAULT_NOTIFICATION_CHANNEL_ID);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID);
             builder.setWhen(event.getOriginServerTs());
             builder.setContentTitle(roomName);
             builder.setContentText(body);
@@ -903,7 +957,7 @@ public class NotificationUtils {
     public static Notification buildMessagesListNotification(Context context, List<CharSequence> messagesStrings, BingRule bingRule) {
         try {
             addNotificationChannels(context);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, DEFAULT_NOTIFICATION_CHANNEL_ID);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID);
             builder.setWhen(System.currentTimeMillis());
             builder.setContentTitle("");
             builder.setContentText(messagesStrings.get(0));

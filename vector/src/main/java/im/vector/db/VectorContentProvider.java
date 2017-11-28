@@ -22,6 +22,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
@@ -30,14 +31,17 @@ import java.io.FileNotFoundException;
 import im.vector.VectorApp;
 
 public class VectorContentProvider extends ContentProvider {
-    public static final String AUTHORITIES = "im.vector.VectorApp.provider";
+    private static final String LOG_TAG = VectorContentProvider.class.getSimpleName();
+
+    private static final String AUTHORITIES = "im.vector.VectorApp.provider";
 
     private static final String BUG_SEPARATOR = "bugreport";
 
     /**
      * Convert an absolute file path to a Content path
+     *
      * @param context the application context
-     * @param path the absolute path to convert.
+     * @param path    the absolute path to convert.
      * @return the content URI.
      */
     public static Uri absolutePathToUri(Context context, String path) {
@@ -79,6 +83,7 @@ public class VectorContentProvider extends ContentProvider {
                 return ParcelFileDescriptor.open(privateFile, ParcelFileDescriptor.MODE_READ_ONLY);
             }
         } catch (Exception e) {
+            Log.e(LOG_TAG, "## openFile() failed " + e.getMessage());
         }
 
         return null;

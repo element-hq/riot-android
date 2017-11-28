@@ -27,11 +27,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 public class Widget implements Serializable {
-    private static final String LOG_TAG = "Widget";
-
-    // JSON parser
-    private static final Gson mGson = new Gson();
-
     private String mWidgetId;
     private Event mWidgetEvent;
     private String mSessionId;
@@ -97,7 +92,7 @@ public class Widget implements Serializable {
         return mWidgetEvent.roomId;
     }
 
-    public String getType() {
+    private String getType() {
         return  mWidgetContent.type;
     }
 
@@ -105,16 +100,12 @@ public class Widget implements Serializable {
         return mUrl;
     }
 
-    public String getName() {
+    private String getName() {
         return  mWidgetContent.name;
     }
 
     public String getHumanName() {
         return mWidgetContent.getHumanName();
-    }
-
-    public Map<String, Object> getData() {
-        return mWidgetContent.data;
     }
 
     @Override

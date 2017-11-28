@@ -18,7 +18,9 @@ package im.vector.util;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,7 +135,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
      *
      * @param bottom new bottom
      */
-    public void setBottom(int bottom) {
+    private void setBottom(int bottom) {
         mFooterTop = bottom;
         mFooterBottom = bottom;
     }
@@ -213,7 +215,7 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                 int sectionHeight = current.getStickyHeaderHeight();
                 current.setFooterTop(mFooterTop - current.getStickyHeaderHeight());
                 current.setFooterBottom(mFooterTop);
-                if(!current.getSection().shouldBeHidden()){
+                if (!current.getSection().shouldBeHidden()) {
                     mFooterTop -= sectionHeight;
                 }
             }
@@ -281,13 +283,11 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
      * Remove the given view from its parent
      *
      * @param view to remove from its parent
-     * @return parent
      */
-    private static ViewGroup removeViewFromParent(final View view) {
+    private static void removeViewFromParent(final View view) {
         final ViewParent parent = view.getParent();
         if (parent instanceof ViewGroup) {
             ((ViewGroup) parent).removeView(view);
         }
-        return ((ViewGroup) parent);
     }
 }

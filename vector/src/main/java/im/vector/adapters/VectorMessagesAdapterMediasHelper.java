@@ -49,16 +49,14 @@ import org.matrix.androidsdk.rest.model.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
-import java.util.HashMap;
-
 import im.vector.R;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 
 /**
  * An helper to display medias information
  */
-public class VectorMessagesAdapterMediasHelper {
-    private static final String LOG_TAG = "AdapterMediasHelper";
+class VectorMessagesAdapterMediasHelper {
+    private static final String LOG_TAG = VectorMessagesAdapterMediasHelper.class.getSimpleName();
 
     private final MXSession mSession;
     private final Context mContext;
@@ -100,7 +98,7 @@ public class VectorMessagesAdapterMediasHelper {
      */
     void managePendingUpload(final View convertView, final Event event, final int type, final String mediaUrl) {
         final View uploadProgressLayout = convertView.findViewById(R.id.content_upload_progress_layout);
-        final ProgressBar uploadSpinner = (ProgressBar) convertView.findViewById(R.id.upload_event_spinner);
+        final ProgressBar uploadSpinner = convertView.findViewById(R.id.upload_event_spinner);
 
         // the dedicated UI items are not found
         if ((null == uploadProgressLayout) || (null == uploadSpinner)) {
@@ -240,12 +238,12 @@ public class VectorMessagesAdapterMediasHelper {
             }
         }
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.messagesAdapter_image);
+        ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
 
         // reset the bitmap
         imageView.setImageBitmap(null);
 
-        RelativeLayout informationLayout = (RelativeLayout) convertView.findViewById(R.id.messagesAdapter_image_layout);
+        RelativeLayout informationLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
         final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) informationLayout.getLayoutParams();
 
         // the thumbnails are always pre - rotated
@@ -496,7 +494,7 @@ public class VectorMessagesAdapterMediasHelper {
      * @param progress             the progress value
      */
     private static void updateUploadProgress(View uploadProgressLayout, int progress) {
-        ProgressBar progressBar = (ProgressBar) uploadProgressLayout.findViewById(R.id.media_progress_view);
+        ProgressBar progressBar = uploadProgressLayout.findViewById(R.id.media_progress_view);
 
         if (null != progressBar) {
             progressBar.setProgress(progress);
@@ -514,8 +512,8 @@ public class VectorMessagesAdapterMediasHelper {
         if (null != uploadStats) {
             uploadProgressLayout.setVisibility(View.VISIBLE);
 
-            TextView uploadProgressStatsTextView = (TextView) uploadProgressLayout.findViewById(R.id.media_progress_text_view);
-            ProgressBar progressBar = (ProgressBar) uploadProgressLayout.findViewById(R.id.media_progress_view);
+            TextView uploadProgressStatsTextView = uploadProgressLayout.findViewById(R.id.media_progress_text_view);
+            ProgressBar progressBar = uploadProgressLayout.findViewById(R.id.media_progress_view);
 
             if (null != uploadProgressStatsTextView) {
                 uploadProgressStatsTextView.setText(formatUploadStats(mContext, uploadStats));
@@ -630,7 +628,7 @@ public class VectorMessagesAdapterMediasHelper {
      */
     private void showUploadFailure(View convertView, int type, boolean show) {
         if (VectorMessagesAdapter.ROW_TYPE_FILE == type) {
-            TextView fileTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_filename);
+            TextView fileTextView = convertView.findViewById(R.id.messagesAdapter_filename);
 
             if (null != fileTextView) {
                 fileTextView.setTextColor(show ? mNotSentMessageTextColor : mDefaultMessageTextColor);
@@ -655,8 +653,8 @@ public class VectorMessagesAdapterMediasHelper {
         if ((null != downloadStats) && isMediaDownloading(event)) {
             downloadProgressLayout.setVisibility(View.VISIBLE);
 
-            TextView downloadProgressStatsTextView = (TextView) downloadProgressLayout.findViewById(R.id.media_progress_text_view);
-            ProgressBar progressBar = (ProgressBar) downloadProgressLayout.findViewById(R.id.media_progress_view);
+            TextView downloadProgressStatsTextView = downloadProgressLayout.findViewById(R.id.media_progress_text_view);
+            ProgressBar progressBar = downloadProgressLayout.findViewById(R.id.media_progress_view);
 
             if (null != downloadProgressStatsTextView) {
                 downloadProgressStatsTextView.setText(formatDownloadStats(mContext, downloadStats));
@@ -690,7 +688,7 @@ public class VectorMessagesAdapterMediasHelper {
     /**
      * Tells if the downloadId is the media download id.
      *
-     * @param event      the event
+     * @param event the event
      * @return true if the media is downloading (not the thumbnail)
      */
     private boolean isMediaDownloading(Event event) {

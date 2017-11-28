@@ -88,8 +88,7 @@ import im.vector.util.PhoneNumberUtils;
  * Displays the login screen.
  */
 public class LoginActivity extends MXCActionBarActivity implements RegistrationManager.RegistrationListener, RegistrationManager.UsernameValidityListener {
-
-    private static final String LOG_TAG = "LoginActivity";
+    private static final String LOG_TAG = LoginActivity.class.getSimpleName();
 
     private static final int ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314;
     private static final int FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315;
@@ -157,10 +156,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     // the login account name
     private EditText mLoginEmailTextView;
 
-    // the login phone number
-    private EditText mLoginPhoneNumber;
-    private EditText mLoginPhoneNumberCountryCode;
-
     // the login password
     private EditText mLoginPasswordTextView;
 
@@ -225,7 +220,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private EditText mEmailAddress;
     private View mPhoneNumberLayout;
     private EditText mPhoneNumber;
-    private EditText mPhoneNumberCountryCode;
     private Button mSubmitThreePidButton;
     private Button mSkipThreePidButton;
 
@@ -394,49 +388,49 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         // bind UI widgets
-        mLoginMaskView = (RelativeLayout) findViewById(R.id.flow_ui_mask_login);
+        mLoginMaskView = findViewById(R.id.flow_ui_mask_login);
 
         // login
-        mLoginEmailTextView = (EditText) findViewById(R.id.login_user_name);
-        mLoginPhoneNumber = (EditText) findViewById(R.id.login_phone_number_value);
-        mLoginPhoneNumberCountryCode = (EditText) findViewById(R.id.login_phone_number_country);
-        mLoginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
-        mLoginPasswordTextView = (EditText) findViewById(R.id.login_password);
+        mLoginEmailTextView = findViewById(R.id.login_user_name);
+        EditText loginPhoneNumber = findViewById(R.id.login_phone_number_value);
+        EditText loginPhoneNumberCountryCode = findViewById(R.id.login_phone_number_country);
+        loginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
+        mLoginPasswordTextView = findViewById(R.id.login_password);
 
         // account creation
-        mCreationUsernameTextView = (EditText) findViewById(R.id.creation_your_name);
-        mCreationPassword1TextView = (EditText) findViewById(R.id.creation_password1);
-        mCreationPassword2TextView = (EditText) findViewById(R.id.creation_password2);
+        mCreationUsernameTextView = findViewById(R.id.creation_your_name);
+        mCreationPassword1TextView = findViewById(R.id.creation_password1);
+        mCreationPassword2TextView = findViewById(R.id.creation_password2);
 
         // account creation - three pid
-        mThreePidInstructions = (TextView) findViewById(R.id.instructions);
-        mEmailAddress = (EditText) findViewById(R.id.registration_email);
+        mThreePidInstructions = findViewById(R.id.instructions);
+        mEmailAddress = findViewById(R.id.registration_email);
         mPhoneNumberLayout = findViewById(R.id.registration_phone_number);
-        mPhoneNumber = (EditText) findViewById(R.id.registration_phone_number_value);
-        mPhoneNumberCountryCode = (EditText) findViewById(R.id.registration_phone_number_country);
-        mPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
-        mSubmitThreePidButton = (Button) findViewById(R.id.button_submit);
-        mSkipThreePidButton = (Button) findViewById(R.id.button_skip);
+        mPhoneNumber = findViewById(R.id.registration_phone_number_value);
+        EditText phoneNumberCountryCode = findViewById(R.id.registration_phone_number_country);
+        phoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
+        mSubmitThreePidButton = findViewById(R.id.button_submit);
+        mSkipThreePidButton = findViewById(R.id.button_skip);
 
         // forgot password
-        mPasswordForgottenTxtView = (TextView) findViewById(R.id.login_forgot_password);
-        mForgotEmailTextView = (TextView) findViewById(R.id.forget_email_address);
-        mForgotPassword1TextView = (EditText) findViewById(R.id.forget_new_password);
-        mForgotPassword2TextView = (EditText) findViewById(R.id.forget_confirm_new_password);
+        mPasswordForgottenTxtView = findViewById(R.id.login_forgot_password);
+        mForgotEmailTextView = findViewById(R.id.forget_email_address);
+        mForgotPassword1TextView = findViewById(R.id.forget_new_password);
+        mForgotPassword2TextView = findViewById(R.id.forget_confirm_new_password);
 
         mHomeServerOptionLayout = findViewById(R.id.homeserver_layout);
-        mHomeServerText = (EditText) findViewById(R.id.login_matrix_server_url);
-        mIdentityServerText = (EditText) findViewById(R.id.login_identity_url);
+        mHomeServerText = findViewById(R.id.login_matrix_server_url);
+        mIdentityServerText = findViewById(R.id.login_identity_url);
 
-        mLoginButton = (Button) findViewById(R.id.button_login);
-        mRegisterButton = (Button) findViewById(R.id.button_register);
-        mForgotPasswordButton = (Button) findViewById(R.id.button_reset_password);
-        mForgotValidateEmailButton = (Button) findViewById(R.id.button_forgot_email_validate);
+        mLoginButton = findViewById(R.id.button_login);
+        mRegisterButton = findViewById(R.id.button_register);
+        mForgotPasswordButton = findViewById(R.id.button_reset_password);
+        mForgotValidateEmailButton = findViewById(R.id.button_forgot_email_validate);
 
         mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
-        mUseCustomHomeServersCheckbox = (CheckBox) findViewById(R.id.display_server_url_expand_checkbox);
+        mUseCustomHomeServersCheckbox = findViewById(R.id.display_server_url_expand_checkbox);
 
-        mProgressTextView = (TextView) findViewById(R.id.flow_progress_message_textview);
+        mProgressTextView = findViewById(R.id.flow_progress_message_textview);
 
         mMainLayout = findViewById(R.id.main_input_layout);
         mButtonsView = findViewById(R.id.login_actions_bar);
@@ -556,10 +550,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
         });
 
-        mLoginPhoneNumberHandler = new PhoneNumberHandler(this, mLoginPhoneNumber, mLoginPhoneNumberCountryCode,
+        mLoginPhoneNumberHandler = new PhoneNumberHandler(this, loginPhoneNumber, loginPhoneNumberCountryCode,
                 PhoneNumberHandler.DISPLAY_COUNTRY_ISO_CODE, REQUEST_LOGIN_COUNTRY);
         mLoginPhoneNumberHandler.setCountryCode(PhoneNumberUtils.getCountryCode(this));
-        mRegistrationPhoneNumberHandler = new PhoneNumberHandler(this, mPhoneNumber, mPhoneNumberCountryCode,
+        mRegistrationPhoneNumberHandler = new PhoneNumberHandler(this, mPhoneNumber, phoneNumberCountryCode,
                 PhoneNumberHandler.DISPLAY_COUNTRY_ISO_CODE, REQUEST_REGISTRATION_COUNTRY);
 
         refreshDisplay();
@@ -1577,7 +1571,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             return;
         }
 
-        if (TextUtils.isEmpty(username) && !mLoginPhoneNumberHandler.isPhoneNumberValidForCountry()){
+        if (TextUtils.isEmpty(username) && !mLoginPhoneNumberHandler.isPhoneNumberValidForCountry()) {
             // Check if phone number is empty or just invalid
             if (mLoginPhoneNumberHandler.getPhoneNumber() != null) {
                 Toast.makeText(this, R.string.auth_invalid_phone, Toast.LENGTH_SHORT).show();
@@ -1941,6 +1935,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     /**
      * Sanitize an URL
+     *
      * @param url the url to sanitize
      * @return the sanitized url
      */
@@ -1949,7 +1944,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             return url;
         }
 
-        return url.replaceAll("\\s","");
+        return url.replaceAll("\\s", "");
     }
 
     /**
@@ -2219,7 +2214,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        final TextInputEditText tokenView = (TextInputEditText) dialogLayout.findViewById(R.id.phone_number_code_value);
+                        final TextInputEditText tokenView = dialogLayout.findViewById(R.id.phone_number_code_value);
                         submitPhoneNumber(tokenView.getText().toString(), pid);
                     }
                 });
@@ -2233,7 +2228,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * Submit the phone number token entered by the user
      *
      * @param token code entered by the user
-     * @param pid phone number pid
+     * @param pid   phone number pid
      */
     private void submitPhoneNumber(final String token, final ThreePid pid) {
         if (TextUtils.isEmpty(token)) {
@@ -2298,7 +2293,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     .show();
         } else {
             // TODo manage multi accounts
-            Matrix.getInstance(this).getDefaultSession().createRoomDirectMessage("@riot-bot:matrix.org", new ApiCallback<String>() {
+            Matrix.getInstance(this).getDefaultSession().createDirectMessageRoom("@riot-bot:matrix.org", new ApiCallback<String>() {
                 @Override
                 public void onSuccess(String info) {
                     Log.d(LOG_TAG, "## onRegistrationSuccess() : succeed to invite riot-bot");

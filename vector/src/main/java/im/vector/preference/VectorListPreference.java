@@ -92,6 +92,7 @@ public class VectorListPreference extends ListPreference {
 
     /**
      * Set the warning icon visibility.
+     *
      * @param isVisible to display the icon
      */
     public void setWarningIconVisible(boolean isVisible) {

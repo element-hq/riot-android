@@ -24,7 +24,6 @@ public class SlidableMediaInfo implements Serializable {
     // Message.MSGTYPE_XXX
     public String mFileName;
     public String mMessageType;
-    public String mIdentifier;
     public String mMediaUrl;
     public String mThumbnailUrl;
     public String mMimeType;

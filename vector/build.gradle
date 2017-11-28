@@ -187,6 +187,9 @@ dependencies {
     compile(name: 'react-native-webrtc', ext: 'aar')
     compile(name: 'react-native', ext: 'aar')
 
+    // another tracking than GA
+    compile 'org.piwik.sdk:piwik-sdk:2.0.0'
+
     // use the matrix SDK as a part of the project
     // you have to uncomment some lines in settings.gradle
     //compile project(':matrix-sdk')
@@ -194,9 +197,15 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
+<<<<<<< HEAD
     appCompile 'com.google.firebase:firebase-core:11.6.0'
     appCompile 'com.google.firebase:firebase-messaging:11.6.0'
     appCompile 'com.google.android.gms:play-services-analytics:11.6.0'
+=======
+    appCompile 'com.google.firebase:firebase-core:11.6.2'
+    appCompile 'com.google.firebase:firebase-messaging:11.6.2'
+    appCompile 'com.google.android.gms:play-services-analytics:11.6.2'
+>>>>>>> origin/prepare_release_28_11
 
     // fdroid flavor only
 }

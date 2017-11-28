@@ -33,13 +33,13 @@ import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.services.EventStreamService;
+import im.vector.util.PreferencesManager;
 
 /**
  * Class implementing GcmListenerService.
  */
 public class MatrixGcmListenerService extends FirebaseMessagingService {
-
-    private static final String LOG_TAG = "GcmListenerService";
+    private static final String LOG_TAG = MatrixGcmListenerService.class.getSimpleName();
 
     // Tells if the events service running state has been tested
     private Boolean mCheckLaunched = false;
@@ -49,18 +49,19 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
 
     /**
      * Try to create an event from the GCM data
+     *
      * @param data the GCM data
      * @return the event
      */
     private Event parseEvent(Map<String, String> data) {
         // accept only event with room id.
-        if ((null == data) || !data.containsKey("room_id") || !data.containsKey("id")) {
+        if ((null == data) || !data.containsKey("room_id") || !data.containsKey("event_id")) {
             return null;
         }
 
         try {
             Event event = new Event();
-            event.eventId = data.get("id");
+            event.eventId = data.get("event_id");
             event.sender = data.get("sender");
             event.roomId = data.get("room_id");
             event.setType(data.get("type"));
@@ -112,8 +113,16 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                 return;
             }
 
-            if (!gcmManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
-                Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled");
+            boolean useBatteryOptim = !PreferencesManager.isIgnoringBatteryOptimizations(getApplicationContext()) && EventStreamService.isStopped();
+
+            if ((!gcmManager.isBackgroundSyncAllowed() || useBatteryOptim)
+                    && VectorApp.isAppInBackground()) {
+
+                if (!gcmManager.isBackgroundSyncAllowed()) {
+                    Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled");
+                } else {
+                    Log.d(LOG_TAG, "## onMessageReceivedInternal() : use the battery optimisation");
+                }
 
                 EventStreamService eventStreamService = EventStreamService.getInstance();
 
@@ -179,6 +188,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
             public void run() {
                 onMessageReceivedInternal(data);
             }
-        });  onMessageReceivedInternal(data);
+        });
+        onMessageReceivedInternal(data);
     }
 }

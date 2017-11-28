@@ -27,38 +27,38 @@ import java.io.Serializable;
  */
 public class RoomDirectoryData implements Serializable {
 
-    public static final String DEFAULT_HOME_SERVER_NAME = "Matrix";
+    private static final String DEFAULT_HOME_SERVER_NAME = "Matrix";
 
     /**
      * The display name
      */
-    final String mDisplayName;
+    private final String mDisplayName;
 
     /**
      * The directory server URL (might be null)
      */
-    final String mServerUrl;
+    private final String mServerUrl;
 
     /**
      * The third party server identifier
      */
-    final String mThirdPartyInstanceId;
+    private final String mThirdPartyInstanceId;
 
     /**
      * Tell if all the federated servers must be included
      */
-    final boolean mIncludeAllNetworks;
+    private final boolean mIncludeAllNetworks;
 
     /**
      * the avatar url
      */
-    final String mAvatarUrl;
+    private final String mAvatarUrl;
 
     /**
      * Creator
      *
-     * @param session the session
-     * @param serverUrl the home server url
+     * @param session    the session
+     * @param serverUrl  the home server url
      * @param serverName the home server displayname
      * @return a new instance
      */
@@ -73,6 +73,7 @@ public class RoomDirectoryData implements Serializable {
 
     /**
      * Provides the default value
+     *
      * @return the default value
      */
     public static RoomDirectoryData getDefault() {

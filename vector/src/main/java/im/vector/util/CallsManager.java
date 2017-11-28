@@ -496,7 +496,7 @@ public class CallsManager {
      *
      * @param isSpeakerPhoneOn true to turn on the loud speaker.
      */
-    public void setCallSpeakerphoneOn(boolean isSpeakerPhoneOn) {
+    private void setCallSpeakerphoneOn(boolean isSpeakerPhoneOn) {
         if (null != mActiveCall) {
             mCallSoundsManager.setCallSpeakerphoneOn(isSpeakerPhoneOn);
         } else {

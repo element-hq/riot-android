@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.vector" xmlns:tools="http://schemas.android.com/tools" android:installLocation="auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="im.vector"
+    android:installLocation="auto">
 
     <application
-        tools:replace="allowBackup,label"
-        android:allowBackup="false"
         android:name="im.vector.VectorApp"
+        android:allowBackup="false"
         android:icon="@drawable/logo"
-        android:logo="@drawable/logo"
         android:label="@string/riot_app_name"
         android:largeHeap="true"
-        android:theme="@style/AppTheme" >
+        android:logo="@drawable/logo"
+        android:theme="@style/AppTheme"
+        tools:replace="allowBackup,label">
 
         <!-- google analytics -->
         <meta-data
@@ -18,21 +20,23 @@
             android:value="@integer/google_play_services_version" />
 
         <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background dispatching on non-Google Play devices -->
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
         <!-- GCM components -->
         <service
             android:name="im.vector.gcm.MatrixGcmListenerService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -42,9 +46,13 @@
             android:name="im.vector.gcm.MatrixInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-    </application>
 
+        <provider
+            android:name="im.vector.db.VectorContentProvider"
+            android:authorities="im.vector.VectorApp.provider"
+            android:exported="true" />
+    </application>
 </manifest>

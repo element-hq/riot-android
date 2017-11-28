@@ -33,9 +33,9 @@ import im.vector.util.VectorUtils;
 
 public class UserAvatarPreference extends EditTextPreference {
 
-    protected Context mContext;
-    protected ImageView mAvatarView;
-    protected MXSession mSession;
+    Context mContext;
+    ImageView mAvatarView;
+    MXSession mSession;
     private ProgressBar mLoadingProgressBar;
 
     public UserAvatarPreference(Context context) {
@@ -57,50 +57,21 @@ public class UserAvatarPreference extends EditTextPreference {
     protected View onCreateView(ViewGroup parent) {
         setWidgetLayoutResource(R.layout.vector_settings_round_avatar);
         View layout = super.onCreateView(parent);
-        mAvatarView = (ImageView)layout.findViewById(R.id.avatar_img);
-        mLoadingProgressBar = (ProgressBar)layout.findViewById(R.id.avatar_update_progress_bar);
+        mAvatarView = layout.findViewById(R.id.avatar_img);
+        mLoadingProgressBar = layout.findViewById(R.id.avatar_update_progress_bar);
         refreshAvatar();
         return layout;
     }
 
     public void refreshAvatar() {
-        if ((null !=  mAvatarView) && (null != mSession)) {
+        if ((null != mAvatarView) && (null != mSession)) {
             MyUser myUser = mSession.getMyUser();
             VectorUtils.loadUserAvatar(mContext, mSession, mAvatarView, myUser.getAvatarUrl(), myUser.user_id, myUser.displayname);
         }
     }
 
-    public void enableProgressBar(boolean aIsProgressBarEnabled) {
-        if (null !=  mLoadingProgressBar) {
-            if(aIsProgressBarEnabled)
-                mLoadingProgressBar.setVisibility(View.VISIBLE);
-            else
-                mLoadingProgressBar.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Retrieve the progress bar display status, returning true if
-     * the progress par is visible or false if the progress bar is hidden.
-     * @return true if the progress bar is visible, false otherwise
-     */
-    public boolean isProgressBarEnabled() {
-        boolean retCode = false;
-        if(null != mLoadingProgressBar){
-            retCode = (mLoadingProgressBar.getVisibility()==View.VISIBLE);
-        }
-        return retCode;
-    }
-
     public void setSession(MXSession session) {
         mSession = session;
         refreshAvatar();
-    }
-
-    public void performClick(PreferenceScreen preferenceScreen) {
-        // call only the click listener
-        if (getOnPreferenceClickListener() != null) {
-            getOnPreferenceClickListener().onPreferenceClick(this);
-        }
     }
 }

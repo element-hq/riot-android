@@ -17,6 +17,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Html;
 import android.text.Spannable;
@@ -24,6 +25,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
+import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.view.Gravity;
@@ -53,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,14 +66,14 @@ import im.vector.util.MatrixURLSpan;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
+import im.vector.view.PillView;
 import im.vector.widgets.WidgetsManager;
 
 /**
  * An helper to display message information
  */
-public class VectorMessagesAdapterHelper {
-    private static final String LOG_TAG = "AdapterHelper";
-
+class VectorMessagesAdapterHelper {
+    private static final String LOG_TAG = VectorMessagesAdapterHelper.class.getSimpleName();
 
     private IMessagesAdapterActionsListener mEventsListener;
     private final MXSession mSession;
@@ -122,11 +125,10 @@ public class VectorMessagesAdapterHelper {
      * @param convertView  the base view
      * @param row          the message row
      * @param isMergedView true if the cell is merged
-     * @return the dedicated textView
      */
-    public TextView setSenderValue(View convertView, MessageRow row, boolean isMergedView) {
+    public void setSenderValue(View convertView, MessageRow row, boolean isMergedView) {
         // manage sender text
-        TextView senderTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_sender);
+        TextView senderTextView = convertView.findViewById(R.id.messagesAdapter_sender);
 
         if (null != senderTextView) {
             Event event = row.getEvent();
@@ -164,8 +166,6 @@ public class VectorMessagesAdapterHelper {
                 }
             }
         }
-
-        return senderTextView;
     }
 
     /**
@@ -176,7 +176,7 @@ public class VectorMessagesAdapterHelper {
      * @return the dedicated textView
      */
     static TextView setTimestampValue(View convertView, String value) {
-        TextView tsTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_timestamp);
+        TextView tsTextView = convertView.findViewById(R.id.messagesAdapter_timestamp);
 
         if (null != tsTextView) {
             if (TextUtils.isEmpty(value)) {
@@ -299,7 +299,7 @@ public class VectorMessagesAdapterHelper {
         }
 
         if (null != avatarLayoutView) {
-            ImageView avatarImageView = (ImageView) avatarLayoutView.findViewById(R.id.avatar_img);
+            ImageView avatarImageView = avatarLayoutView.findViewById(R.id.avatar_img);
 
             if (isMergedView) {
                 avatarLayoutView.setVisibility(View.GONE);
@@ -353,7 +353,7 @@ public class VectorMessagesAdapterHelper {
 
         if (null != headerLayout) {
             if (null != newValue) {
-                TextView headerText = (TextView) convertView.findViewById(R.id.messagesAdapter_message_header_text);
+                TextView headerText = convertView.findViewById(R.id.messagesAdapter_message_header_text);
                 headerText.setText(newValue);
                 headerLayout.setVisibility(View.VISIBLE);
 
@@ -435,7 +435,7 @@ public class VectorMessagesAdapterHelper {
         imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_4).findViewById(R.id.avatar_img));
         imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_5).findViewById(R.id.avatar_img));
 
-        TextView moreText = (TextView) avatarsListView.findViewById(R.id.message_more_than_expected);
+        TextView moreText = avatarsListView.findViewById(R.id.message_more_than_expected);
 
         int index = 0;
         int bound = Math.min(receipts.size(), imageViews.size());
@@ -504,18 +504,41 @@ public class VectorMessagesAdapterHelper {
         }
     }
 
+    // cache the pills to avoid compute them again
+    Map<String, Drawable> mPillsCache = new HashMap<>();
+
     /**
      * Trap the clicked URL.
      *
-     * @param strBuilder the input string
-     * @param span       the URL
+     * @param strBuilder    the input string
+     * @param span          the URL
+     * @param isHighlighted true if the message is highlighted
      */
-    private void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span) {
+    private void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final boolean isHighlighted) {
         int start = strBuilder.getSpanStart(span);
         int end = strBuilder.getSpanEnd(span);
 
         if (start >= 0 && end >= 0) {
             int flags = strBuilder.getSpanFlags(span);
+
+            if (PillView.isPillable(span.getURL())) {
+                String key = span.getURL() + " " + isHighlighted;
+                Drawable drawable = mPillsCache.get(key);
+
+                if (null == drawable) {
+                    PillView aView = new PillView(mContext);
+                    aView.setText(strBuilder.subSequence(start, end), span.getURL());
+                    aView.setHighlighted(isHighlighted);
+                    drawable = aView.getDrawable();
+                }
+                if (null != drawable) {
+                    mPillsCache.put(key, drawable);
+                    ImageSpan imageSpan = new ImageSpan(drawable);
+                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                    strBuilder.setSpan(imageSpan, start, end, flags);
+                }
+            }
+
             ClickableSpan clickable = new ClickableSpan() {
                 public void onClick(View view) {
                     if (null != mEventsListener) {
@@ -523,6 +546,7 @@ public class VectorMessagesAdapterHelper {
                     }
                 }
             };
+
             strBuilder.setSpan(clickable, start, end, flags);
             strBuilder.removeSpan(span);
         }
@@ -536,8 +560,9 @@ public class VectorMessagesAdapterHelper {
      * @param htmlFormattedText  the html formatted text
      * @param pattern            the  pattern
      * @param highLightTextStyle the highlight text style
+     * @param isHighlighted      true when the message is highlighted
      */
-    void highlightPattern(TextView textView, Spannable text, String htmlFormattedText, String pattern, CharacterStyle highLightTextStyle) {
+    void highlightPattern(TextView textView, Spannable text, String htmlFormattedText, String pattern, CharacterStyle highLightTextStyle, boolean isHighlighted) {
         // sanity check
         if (null == textView) {
             return;
@@ -602,7 +627,7 @@ public class VectorMessagesAdapterHelper {
 
         if ((null != urls) && (urls.length > 0)) {
             for (URLSpan span : urls) {
-                makeLinkClickable(strBuilder, span);
+                makeLinkClickable(strBuilder, span, isHighlighted);
             }
         }
 

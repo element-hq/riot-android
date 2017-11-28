@@ -51,7 +51,7 @@ import org.matrix.androidsdk.util.Log;
  * Custom AppCompatMultiAutoCompleteTextView to display matrix id / displayname
  */
 public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextView {
-    private static final String LOG_TAG = "VAutoCompleteTextView";
+    private static final String LOG_TAG = VectorAutoCompleteTextView.class.getSimpleName();
 
     // results adapter
     private AutoCompletedUserAdapter mAdapter;
@@ -150,7 +150,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             try {
                 Field popup = AutoCompleteTextView.class.getDeclaredField("mPopup");
                 popup.setAccessible(true);
-                mListPopupWindow = (android.widget.ListPopupWindow)popup.get(this);
+                mListPopupWindow = (android.widget.ListPopupWindow) popup.get(this);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mListPopupWindow " + e.getMessage());
             }
@@ -160,6 +160,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     /**
      * Tells if the pasted text is always the user matrix id
      * even if the matched pattern is a display name.
+     *
      * @param provideMatrixIdOnly true to always paste an user Id.
      */
     public void setProvideMatrixIdOnly(boolean provideMatrixIdOnly) {
@@ -269,12 +270,12 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                         }
 
                         mAdapter.getFilter().filter(subText, new Filter.FilterListener() {
-                                    @Override
-                                    public void onFilterComplete(int count) {
-                                        adjustPopupSize();
-                                        VectorAutoCompleteTextView.this.onFilterComplete(count);
-                                    }
-                                });
+                            @Override
+                            public void onFilterComplete(int count) {
+                                adjustPopupSize();
+                                VectorAutoCompleteTextView.this.onFilterComplete(count);
+                            }
+                        });
                     }
                 }
             }, 700);

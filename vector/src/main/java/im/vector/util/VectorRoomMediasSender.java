@@ -30,6 +30,7 @@ import android.text.TextUtils;
 
 import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.util.Log;
+
 import android.view.View;
 import android.widget.Toast;
 
@@ -52,7 +53,7 @@ import im.vector.fragments.VectorMessageListFragment;
 
 // VectorRoomMediasSender helps the vectorRoomActivity to manage medias .
 public class VectorRoomMediasSender {
-    private static final String LOG_TAG = "VectorRoomMedHelp";
+    private static final String LOG_TAG = VectorRoomMediasSender.class.getSimpleName();
 
     private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
 
@@ -62,6 +63,7 @@ public class VectorRoomMediasSender {
     private interface OnImageUploadListener {
         // the image has been successfully resized and the upload starts
         void onDone();
+
         // the resize has been cancelled
         void onCancel();
     }
@@ -87,6 +89,7 @@ public class VectorRoomMediasSender {
 
     /**
      * Constructor
+     *
      * @param roomActivity the room activity.
      */
     public VectorRoomMediasSender(VectorRoomActivity roomActivity, VectorMessageListFragment vectorMessageListFragment, MXMediasCache mediasCache) {
@@ -119,6 +122,7 @@ public class VectorRoomMediasSender {
 
     /**
      * Send a list of images from their URIs
+     *
      * @param sharedDataItems the media URIs
      */
     public void sendMedias(final ArrayList<RoomMediaMessage> sharedDataItems) {
@@ -252,6 +256,7 @@ public class VectorRoomMediasSender {
 
     /**
      * Send a text message.
+     *
      * @param sharedDataItem the media item.
      */
     private void sendTextMessage(RoomMediaMessage sharedDataItem) {
@@ -292,8 +297,9 @@ public class VectorRoomMediasSender {
 
     /**
      * Send  message.
+     *
      * @param sharedDataItem the item to send
-     * @param resource the media resource
+     * @param resource       the media resource
      */
     private void sendJpegImage(final RoomMediaMessage sharedDataItem, final ResourceUtils.Resource resource) {
         String mimeType = sharedDataItem.getMimeType(mVectorRoomActivity);
@@ -358,6 +364,7 @@ public class VectorRoomMediasSender {
 
         /**
          * Compute the image size to fit in a square.
+         *
          * @param maxSide the square to fit size
          * @return the image size
          */
@@ -375,11 +382,11 @@ public class VectorRoomMediasSender {
                 double scale = Math.min(ratioX, ratioY);
 
                 // the ratio must a power of 2
-                scale = 1.0d / Integer.highestOneBit((int)Math.floor(1.0 / scale));
+                scale = 1.0d / Integer.highestOneBit((int) Math.floor(1.0 / scale));
 
                 // apply the scale factor and padding to 2
-                resized.mWidth  = (int)(Math.floor(resized.mWidth * scale / 2) * 2);
-                resized.mHeight = (int)(Math.floor(resized.mHeight * scale / 2) * 2);
+                resized.mWidth = (int) (Math.floor(resized.mWidth * scale / 2) * 2);
+                resized.mHeight = (int) (Math.floor(resized.mHeight * scale / 2) * 2);
             }
 
             return resized;
@@ -432,6 +439,7 @@ public class VectorRoomMediasSender {
 
         /**
          * Provides the defined compression description.
+         *
          * @param context the context
          * @return the list of compression description
          */
@@ -459,7 +467,8 @@ public class VectorRoomMediasSender {
 
         /**
          * Returns the scaled size from a compression description
-         * @param context the context
+         *
+         * @param context                the context
          * @param compressionDescription the compression description
          * @return the scaled size.
          */
@@ -499,7 +508,8 @@ public class VectorRoomMediasSender {
 
     /**
      * Compute the compressed image sizes.
-     * @param imageWidth the image width
+     *
+     * @param imageWidth  the image width
      * @param imageHeight the image height
      * @return the compression sizes
      */
@@ -558,13 +568,14 @@ public class VectorRoomMediasSender {
 
     /**
      * Add an entry in the dialog lists.
-     * @param context the context.
-     * @param textsList the texts list.
+     *
+     * @param context         the context.
+     * @param textsList       the texts list.
      * @param descriptionText the image description text
-     * @param imageSize the image size.
-     * @param fileSize the file size (in bytes)
+     * @param imageSize       the image size.
+     * @param fileSize        the file size (in bytes)
      */
-    private static void addDialogEntry (Context context, ArrayList<String> textsList, String descriptionText, ImageSize imageSize, int fileSize) {
+    private static void addDialogEntry(Context context, ArrayList<String> textsList, String descriptionText, ImageSize imageSize, int fileSize) {
         if ((null != imageSize) && (null != textsList)) {
             textsList.add(descriptionText + ": " + android.text.format.Formatter.formatFileSize(context, fileSize) + " (" + imageSize.mWidth + "x" + imageSize.mHeight + ")");
         }
@@ -572,8 +583,9 @@ public class VectorRoomMediasSender {
 
     /**
      * Create the image compression texts list.
-     * @param context  the context
-     * @param imageSizes the image compressions
+     *
+     * @param context       the context
+     * @param imageSizes    the image compressions
      * @param imagefileSize the image file size
      * @return the texts list to display
      */
@@ -591,10 +603,11 @@ public class VectorRoomMediasSender {
     /**
      * Apply an image with an expected size.
      * A rotation might also be applied if provided.
-     * @param anImageUrl the image URI.
-     * @param filename the image filename.
-     * @param srcImageSize the source image size
-     * @param dstImageSize the expected image size.
+     *
+     * @param anImageUrl    the image URI.
+     * @param filename      the image filename.
+     * @param srcImageSize  the source image size
+     * @param dstImageSize  the expected image size.
      * @param rotationAngle the rotation angle to apply.
      * @return the resized image.
      */
@@ -603,7 +616,7 @@ public class VectorRoomMediasSender {
 
         try {
             // got a dst image size
-            if (null!= dstImageSize) {
+            if (null != dstImageSize) {
                 FileInputStream imageStream = new FileInputStream(new File(filename));
 
                 InputStream resizeBitmapStream = null;
@@ -641,9 +654,10 @@ public class VectorRoomMediasSender {
 
     /**
      * Offer to resize the image before sending it.
-     * @param anImageUrl the image url.
+     *
+     * @param anImageUrl      the image url.
      * @param anImageMimeType the image mimetype
-     * @param aListener the listener
+     * @param aListener       the listener
      */
     private void sendJpegImage(final RoomMediaMessage roomMediaMessage, final String anImageUrl, final String anImageMimeType, final OnImageUploadListener aListener) {
         // sanity check

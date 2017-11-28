@@ -79,8 +79,7 @@ import im.vector.util.RiotEventDisplay;
  * A foreground service in charge of controlling whether the event stream is running or not.
  */
 public class EventStreamService extends Service {
-
-    private static final String LOG_TAG = "EventStreamService";
+    private static final String LOG_TAG = EventStreamService.class.getSimpleName();
 
     /**
      * static instance
@@ -177,6 +176,12 @@ public class EventStreamService extends Service {
      * It is used when the service is automatically restarted by Android.
      */
     private boolean mSuspendWhenStarted = false;
+
+    /**
+     * Tells if the service self destroyed.
+     * Use to restart the service is killed by the OS.
+     */
+    private boolean mIsSelfDestroyed = false;
 
     /**
      * @return the event stream instance
@@ -394,6 +399,7 @@ public class EventStreamService extends Service {
             }
             case STOP:
                 Log.d(LOG_TAG, "## onStartCommand(): service stopped");
+                mIsSelfDestroyed = true;
                 stopSelf();
                 break;
             case PAUSE:
@@ -412,14 +418,12 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * onTaskRemoved is called when the user swipes the application from the active applications.
-     * On some devices, the service is not automatically restarted.
+     * Restart the service
      */
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
+    private void autoRestart() {
         int delay = 3000 + (new Random()).nextInt(5000);
 
-        Log.d(LOG_TAG, "## onTaskRemoved() : restarts after " + delay + " ms");
+        Log.d(LOG_TAG, "## autoRestart() : restarts after " + delay + " ms");
 
         // reset the service identifier
         mForegroundServiceIdentifier = -1;
@@ -436,14 +440,33 @@ public class EventStreamService extends Service {
                 // use a random part to avoid matching to system auto restart value
                 SystemClock.elapsedRealtime() + delay,
                 restartPendingIntent);
+    }
 
+    /**
+     * onTaskRemoved is called when the user swipes the application from the active applications.
+     * On some devices, the service is not automatically restarted.
+     */
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Log.d(LOG_TAG, "## onTaskRemoved");
+
+        autoRestart();
         super.onTaskRemoved(rootIntent);
     }
 
     @Override
     public void onDestroy() {
-        Log.d(LOG_TAG, "the service is destroyed");
-        stop();
+        if (!mIsSelfDestroyed) {
+            Log.d(LOG_TAG, "## onDestroy() : restart it");
+            setServiceState(StreamAction.STOP);
+            autoRestart();
+        } else {
+            Log.d(LOG_TAG, "## onDestroy()");
+            stop();
+            super.onDestroy();
+        }
+
+        mIsSelfDestroyed = false;
     }
 
     @Override
@@ -478,6 +501,15 @@ public class EventStreamService extends Service {
     private void setServiceState(StreamAction newState) {
         Log.d(LOG_TAG, "setState from " + mServiceState + " to " + newState);
         mServiceState = newState;
+    }
+
+    /**
+     * Tells if the service stopped.
+     *
+     * @return true if the service is stopped.
+     */
+    public static boolean isStopped() {
+        return (null == getInstance()) || (getInstance().mServiceState == StreamAction.STOP);
     }
 
     /**
@@ -597,7 +629,8 @@ public class EventStreamService extends Service {
         mActiveEventStreamService = this;
 
         for (final MXSession session : mSessions) {
-            if (null == session.getDataHandler() || (null == session.getDataHandler().getStore())) {
+            // session == null has been reported by GA
+            if ((null == session) || (null == session.getDataHandler()) || (null == session.getDataHandler().getStore())) {
                 Log.e(LOG_TAG, "start : the session is not anymore valid.");
                 return;
             }
@@ -765,7 +798,7 @@ public class EventStreamService extends Service {
             // fdroid
                 (!mGcmRegistrationManager.useGCM() ||
                         // the GCM registration was not done
-                        TextUtils.isEmpty(mGcmRegistrationManager.getGCMRegistrationToken()) && !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+                        TextUtils.isEmpty(mGcmRegistrationManager.getCurrentRegistrationToken()) && !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in foreground because of GCM registration");
 
             if (FOREGROUND_LISTENING_FOR_EVENTS != mForegroundServiceIdentifier) {
@@ -884,8 +917,8 @@ public class EventStreamService extends Service {
     /**
      * Prepare a notification for the expected event.
      *
-     * @param event     the event
-     * @param bingRule  the bing rule
+     * @param event    the event
+     * @param bingRule the bing rule
      */
     private void prepareNotification(Event event, BingRule bingRule) {
         if (mPendingNotifications.containsKey(event.eventId)) {
@@ -1060,7 +1093,7 @@ public class EventStreamService extends Service {
     /**
      * Cancel notifications for a dedicated room.
      *
-     * @param roomId    the room Id
+     * @param roomId the room Id
      */
     private void cancelNotifications(final String roomId) {
         getNotificationsHandler().post(new Runnable() {

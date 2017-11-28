@@ -32,9 +32,6 @@ import im.vector.util.VectorUtils;
  * Displays the client settings.
  */
 public class VectorSettingsActivity extends MXCActionBarActivity {
-    // session
-    private MXSession mSession;
-
     // the UI items
     private VectorSettingsPreferencesFragment mFragment;
 
@@ -46,13 +43,13 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
         setTitle(R.string.title_activity_settings);
 
         Intent intent = getIntent();
-        mSession = getSession(this, intent);
+        MXSession session = getSession(this, intent);
 
-        if (null == mSession) {
-            mSession = Matrix.getInstance(VectorSettingsActivity.this).getDefaultSession();
+        if (null == session) {
+            session = Matrix.getInstance(VectorSettingsActivity.this).getDefaultSession();
         }
 
-        if (mSession == null) {
+        if (session == null) {
             finish();
             return;
         }
@@ -60,7 +57,7 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
         setContentView(R.layout.activity_vector_settings);
 
         // display the fragment
-        mFragment = VectorSettingsPreferencesFragment.newInstance(mSession.getMyUserId());
+        mFragment = VectorSettingsPreferencesFragment.newInstance(session.getMyUserId());
         getFragmentManager().beginTransaction().replace(R.id.vector_settings_page, mFragment).commit();
     }
 
@@ -82,11 +79,11 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode,@NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
             boolean granted = false;
 
-            for(int i = 0; i < aGrantResults.length; i++) {
+            for (int i = 0; i < aGrantResults.length; i++) {
                 granted |= (PackageManager.PERMISSION_GRANTED == aGrantResults[i]);
             }
 

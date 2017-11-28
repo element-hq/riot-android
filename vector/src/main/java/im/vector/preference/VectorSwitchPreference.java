@@ -33,17 +33,15 @@ import im.vector.R;
 /**
  * This class should fix the android issue
  * https://code.google.com/p/android/issues/detail?id=26194
- *
  */
 public class VectorSwitchPreference extends CheckBoxPreference {
-    private static final String LOG_TAG = "VectorSwitchPreference";
-
+    private static final String LOG_TAG = VectorSwitchPreference.class.getSimpleName();
 
     /**
      * Construct a new SwitchPreference with the given style options.
      *
-     * @param context The Context that will style this preference
-     * @param attrs Style attributes that differ from the default
+     * @param context  The Context that will style this preference
+     * @param attrs    Style attributes that differ from the default
      * @param defStyle Theme attribute defining the default style options
      */
     public VectorSwitchPreference(Context context, AttributeSet attrs, int defStyle) {
@@ -55,7 +53,7 @@ public class VectorSwitchPreference extends CheckBoxPreference {
      * Construct a new SwitchPreference with the given style options.
      *
      * @param context The Context that will style this preference
-     * @param attrs Style attributes that differ from the default
+     * @param attrs   Style attributes that differ from the default
      */
     public VectorSwitchPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -89,7 +87,7 @@ public class VectorSwitchPreference extends CheckBoxPreference {
 
         // display the title in multi-line to avoid ellipsing.
         try {
-            TextView textView = (TextView) view.findViewById(android.R.id.title);
+            TextView textView = view.findViewById(android.R.id.title);
             if (textView != null) {
                 textView.setSingleLine(false);
             }
@@ -109,14 +107,14 @@ public class VectorSwitchPreference extends CheckBoxPreference {
         }
 
         int count = viewGroup.getChildCount();
-        for(int n = 0; n < count; ++n) {
+        for (int n = 0; n < count; ++n) {
             View childView = viewGroup.getChildAt(n);
-            if(childView instanceof Switch) {
+            if (childView instanceof Switch) {
                 final Switch switchView = (Switch) childView;
                 switchView.setOnCheckedChangeListener(null);
                 return;
-            } else if (childView instanceof ViewGroup){
-                ViewGroup childGroup = (ViewGroup)childView;
+            } else if (childView instanceof ViewGroup) {
+                ViewGroup childGroup = (ViewGroup) childView;
                 clearListenerInViewGroup(childGroup);
             }
         }

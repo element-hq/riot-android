@@ -53,7 +53,7 @@ import im.vector.util.ThemeUtils;
  * Display a medias list.
  */
 public class VectorMediasViewerActivity extends MXCActionBarActivity {
-    public static final String LOG_TAG = VectorMediasViewerActivity.class.getSimpleName();
+    private static final String LOG_TAG = VectorMediasViewerActivity.class.getSimpleName();
 
     public static final String KEY_INFO_LIST = "ImageSliderActivity.KEY_INFO_LIST";
     public static final String KEY_INFO_LIST_INDEX = "ImageSliderActivity.KEY_INFO_LIST_INDEX";

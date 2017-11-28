@@ -114,7 +114,7 @@ import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String LOG_TAG = "VPreferenceFragment";
+    private static final String LOG_TAG = VectorSettingsPreferencesFragment.class.getSimpleName();
 
     // arguments indexes
     private static final String ARG_MATRIX_ID = "VectorSettingsPreferencesFragment.ARG_MATRIX_ID";
@@ -570,17 +570,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         final CheckBoxPreference useGaPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY);
 
-        if (!GAHelper.isGAUseUpdatable()) {
-            PreferenceCategory otherCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_OTHERS_PREFERENCE_KEY);
-            otherCategory.removePreference(useGaPref);
+        if (!PreferencesManager.isGAUseAllowed(getActivity())) {
+            PreferenceCategory analyticsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_ANALYTICS_PREFERENCE_KEY);
+            analyticsCategory.removePreference(useGaPref);
         } else {
             useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if (null != getActivity()) {
-                        Boolean useGA = PreferencesManager.useGA(getActivity());
+                        boolean useGA = PreferencesManager.useGA(getActivity());
 
-                        if ((null != useGA) && !useGA) {
+                        if (!useGA) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                             builder.setMessage(getString(R.string.ga_use_disable_alert_message)).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -597,6 +597,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             });
         }
+
 
         mUserSettingsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_USER_SETTINGS_PREFERENCE_KEY);
         mContactSettingsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_CONTACT_PREFERENCE_KEYS);
@@ -992,9 +993,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 alertDialog.setView(view);
                 alertDialog.setTitle(getString(R.string.settings_change_password));
 
-                final EditText oldPasswordText = (EditText) view.findViewById(R.id.change_password_old_pwd_text);
-                final EditText newPasswordText = (EditText) view.findViewById(R.id.change_password_new_pwd_text);
-                final EditText confirmNewPasswordText = (EditText) view.findViewById(R.id.change_password_confirm_new_pwd_text);
+                final EditText oldPasswordText = view.findViewById(R.id.change_password_old_pwd_text);
+                final EditText newPasswordText = view.findViewById(R.id.change_password_new_pwd_text);
+                final EditText confirmNewPasswordText = view.findViewById(R.id.change_password_confirm_new_pwd_text);
 
                 // Setting Positive "Yes" Button
                 alertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -1592,7 +1593,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             for (final Pusher pusher : mDisplayedPushers) {
                 if (null != pusher.lang) {
-                    boolean isThisDeviceTarget = TextUtils.equals(gcmRegistrationManager.getGCMRegistrationToken(), pusher.pushkey);
+                    boolean isThisDeviceTarget = TextUtils.equals(gcmRegistrationManager.getCurrentRegistrationToken(), pusher.pushkey);
 
                     VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity(), isThisDeviceTarget ? Typeface.BOLD : Typeface.NORMAL);
                     preference.setTitle(pusher.deviceDisplayName);
@@ -2049,7 +2050,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        LinearLayout linearLayout = (LinearLayout) layout.findViewById(R.id.text_selection_group_view);
+        LinearLayout linearLayout = layout.findViewById(R.id.text_selection_group_view);
 
         int childCount = linearLayout.getChildCount();
 
@@ -2475,16 +2476,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         if (null != aDeviceInfo) {
             //device ID
-            TextView textView = (TextView) layout.findViewById(R.id.device_id);
+            TextView textView = layout.findViewById(R.id.device_id);
             textView.setText(aDeviceInfo.device_id);
 
             // device name
-            textView = (TextView) layout.findViewById(R.id.device_name);
+            textView = layout.findViewById(R.id.device_name);
             String displayName = (TextUtils.isEmpty(aDeviceInfo.display_name)) ? LABEL_UNAVAILABLE_DATA : aDeviceInfo.display_name;
             textView.setText(displayName);
 
             // last seen info
-            textView = (TextView) layout.findViewById(R.id.device_last_seen);
+            textView = layout.findViewById(R.id.device_last_seen);
             if (!TextUtils.isEmpty(aDeviceInfo.last_seen_ip)) {
                 String lastSeenIp = aDeviceInfo.last_seen_ip;
                 String lastSeenTime = LABEL_UNAVAILABLE_DATA;
@@ -2674,7 +2675,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 View layout = inflater.inflate(R.layout.devices_settings_delete, null);
 
 
-                final EditText passwordEditText = (EditText) layout.findViewById(R.id.delete_password);
+                final EditText passwordEditText = layout.findViewById(R.id.delete_password);
                 builder.setIcon(android.R.drawable.ic_dialog_alert);
                 builder.setTitle(R.string.devices_delete_dialog_title);
                 builder.setView(layout);
@@ -2729,9 +2730,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         dialog.setTitle(R.string.encryption_export_room_keys);
         dialog.setView(dialogLayout);
 
-        final TextInputEditText passPhrase1EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
-        final TextInputEditText passPhrase2EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
-        final Button exportButton = (Button) dialogLayout.findViewById(R.id.dialog_e2e_keys_export_button);
+        final TextInputEditText passPhrase1EditText = dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+        final TextInputEditText passPhrase2EditText = dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
+        final Button exportButton = dialogLayout.findViewById(R.id.dialog_e2e_keys_export_button);
         final TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -2822,8 +2823,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             dialog.setTitle(R.string.encryption_import_room_keys);
             dialog.setView(dialogLayout);
 
-            final TextInputEditText passPhraseEditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
-            final Button importButton = (Button) dialogLayout.findViewById(R.id.dialog_e2e_keys_import_button);
+            final TextInputEditText passPhraseEditText = dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+            final Button importButton = dialogLayout.findViewById(R.id.dialog_e2e_keys_import_button);
 
             passPhraseEditText.addTextChangedListener(new TextWatcher() {
                 @Override

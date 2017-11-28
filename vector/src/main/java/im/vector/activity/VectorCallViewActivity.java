@@ -98,7 +98,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
     private View mIncomingCallTabbar;
     private View mAcceptIncomingCallButton;
-    private View mRejectIncomingCallButton;
 
     // video screen management
     private Timer mVideoFadingEdgesTimer;
@@ -366,7 +365,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         mButtonsContainerView = findViewById(R.id.call_menu_buttons_layout_container);
         mIncomingCallTabbar = findViewById(R.id.incoming_call_menu_buttons_layout_container);
         mAcceptIncomingCallButton = findViewById(R.id.accept_incoming_call);
-        mRejectIncomingCallButton = findViewById(R.id.reject_incoming_call);
+        View rejectIncomingCallButton = findViewById(R.id.reject_incoming_call);
 
         View mainContainerLayoutView = findViewById(R.id.call_layout);
 
@@ -524,7 +523,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             }
         });
 
-        mRejectIncomingCallButton.setOnClickListener(new View.OnClickListener() {
+        rejectIncomingCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(LOG_TAG, "Reject the incoming call");
@@ -636,14 +635,14 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (aRequestCode == mPermissionCode) {
 
-            if (CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL  == aRequestCode) {
+            if (CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL == aRequestCode) {
                 // the user can only accept if the dedicated permissions are granted
                 mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
             } else {
                 // the user can only accept if the dedicated permissions are granted
                 mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
             }
-         }
+        }
     }
 
     @Override

@@ -70,8 +70,8 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
      */
     public static final String EXTRA_SESSION_ID = "EXTRA_SESSION_ID";
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
-    public static final String EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID";
-    public static final String EXTRA_SCREEN_ID = "EXTRA_SCREEN_ID";
+    private static final String EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID";
+    private static final String EXTRA_SCREEN_ID = "EXTRA_SCREEN_ID";
 
     @BindView(R.id.integration_progress_layout)
     View mProgressLayout;
@@ -195,7 +195,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
 
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message() + " line " + consoleMessage.lineNumber() + " source Id" +  consoleMessage.sourceId());
+                Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message() + " line " + consoleMessage.lineNumber() + " source Id" + consoleMessage.sourceId());
                 return super.onConsoleMessage(consoleMessage);
             }
         });
