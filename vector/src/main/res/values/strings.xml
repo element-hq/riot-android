@@ -808,4 +808,9 @@
     <string name="conference_call_warning_title">Warning!</string>
     <string name="conference_call_warning_message">Conference calling is in development and may not be reliable.</string>
 
+    // slash commands
+    <string name="command_error">Command error</string>
+    <string name="unrecognized_command">Unrecognized command: %s</string>
+
+
 </resources>
