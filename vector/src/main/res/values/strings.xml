@@ -804,4 +804,8 @@
     <string name="share_without_verifying">Share without verifying</string>
     <string name="ignore_request">Ignore request</string>
 
+    // conference call
+    <string name="conference_call_warning_title">Warning!</string>
+    <string name="conference_call_warning_message">Conference calling is in development and may not be reliable.</string>
+
 </resources>
