@@ -118,16 +118,32 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        return getView(position, convertView, parent, true);
+    }
+
+    /**
+     * Get the updated view for a specified position.
+     *
+     * @param position the position
+     * @param convertView the convert view
+     * @param parent the parent view
+     * @param loadAvatar true to refresh the avatar
+     *
+     * @return the view
+     */
+    public View getView(int position, View convertView, ViewGroup parent, boolean loadAvatar) {
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(mLayoutResourceId, parent, false);
         }
 
         User user = getItem(position);
 
-        VectorCircularImageView avatarView = convertView.findViewById(R.id.item_user_auto_complete_avatar);
-        TextView userNameTextView = convertView.findViewById(R.id.item_user_auto_complete_name);
+        if (loadAvatar) {
+            VectorCircularImageView avatarView = convertView.findViewById(R.id.item_user_auto_complete_avatar);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, user.getAvatarUrl(), user.user_id, user.displayname);
+        }
 
-        VectorUtils.loadUserAvatar(mContext, mSession, avatarView, user.getAvatarUrl(), user.user_id, user.displayname);
+        TextView userNameTextView = convertView.findViewById(R.id.item_user_auto_complete_name);
 
         if (!mIsSearchingMatrixId) {
             String value = user.displayname;
