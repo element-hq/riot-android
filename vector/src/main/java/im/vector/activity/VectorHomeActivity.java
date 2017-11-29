@@ -187,10 +187,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private Timer mFloatingActionButtonTimer;
 
     private MXEventListener mEventsListener;
-    private MXEventListener mLiveEventListener;
-
-    // when a member is banned, the session must be reloaded
-    public static boolean mClearCacheRequired = false;
 
     // sliding menu management
     private int mSlidingMenuIndex = -1;
@@ -447,39 +443,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             selectedMenu.performClick();
         }
 
-        // clear the notification if they are not anymore valid
-        // i.e the event has been read from another client
-        // or deleted it
-        // + other actions which require a background listener
-        mLiveEventListener = new MXEventListener() {
-            @Override
-            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
-                // treat any pending URL link workflow, that was started previously
-                processIntentUniversalLink();
-
-                if (mClearCacheRequired) {
-                    mClearCacheRequired = false;
-                    Matrix.getInstance(VectorHomeActivity.this).reloadSessions(VectorHomeActivity.this);
-                }
-            }
-
-            @Override
-            public void onStoreReady() {
-                if (null != mSharedFilesIntent) {
-                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d(LOG_TAG, "shared intent : the store is now ready, display sendFilesTo");
-                            CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, mSharedFilesIntent);
-                            mSharedFilesIntent = null;
-                        }
-                    });
-                }
-            }
-        };
-
-        mSession.getDataHandler().addListener(mLiveEventListener);
-
         // initialize the public rooms list
         PublicRoomsManager.getInstance().setSession(mSession);
         PublicRoomsManager.getInstance().refreshPublicRoomsCount(null);
@@ -715,11 +678,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         // release the static instance if it is the current implementation
         if (sharedInstance == this) {
             sharedInstance = null;
-        }
-
-        // GA issue : mSession was null
-        if ((null != mSession) && mSession.isAlive()) {
-            mSession.getDataHandler().removeListener(mLiveEventListener);
         }
     }
 
@@ -2203,8 +2161,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 }
 
                 mRefreshOnChunkEnd = false;
-
                 mSyncInProgressView.setVisibility(View.GONE);
+
+                // treat any pending URL link workflow, that was started previously
+                processIntentUniversalLink();
             }
 
             @Override
@@ -2235,6 +2195,12 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             @Override
             public void onStoreReady() {
                 onForceRefresh();
+
+                if (null != mSharedFilesIntent) {
+                    Log.d(LOG_TAG, "shared intent : the store is now ready, display sendFilesTo");
+                    CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, mSharedFilesIntent);
+                    mSharedFilesIntent = null;
+                }
             }
 
             @Override
