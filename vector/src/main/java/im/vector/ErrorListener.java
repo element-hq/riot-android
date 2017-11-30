@@ -48,41 +48,32 @@ public class ErrorListener implements ApiFailureCallback {
     public void onNetworkError(final Exception e) {
         Log.e(LOG_TAG, "Network error: " + e.getMessage());
 
-        // do not trigger toaster if the application is in background
+        // Do not trigger toaster if the application is in background
         if (!VectorApp.isAppInBackground()) {
             UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
             if (unrecCertEx == null) {
                 handleNetworkError(e);
-                return;
+            }
+            else {
+                handleCertError(unrecCertEx, e);
             }
 
-            final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-            Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
-
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    UnrecognizedCertHandler.show(mSession.getHomeServerConfig(), fingerprint, true, new UnrecognizedCertHandler.Callback() {
-                        @Override
-                        public void onAccept() {
-                            LoginStorage loginStorage = Matrix.getInstance(mActivity.getApplicationContext()).getLoginStorage();
-                            loginStorage.replaceCredentials(mSession.getHomeServerConfig());
-                        }
-
-                        @Override
-                        public void onIgnore() {
-                            handleNetworkError(e);
-                        }
-
-                        @Override
-                        public void onReject() {
-                            Log.d(LOG_TAG, "Found fingerprint: reject fingerprint");
-                            CommonActivityUtils.logout(mActivity, Arrays.asList(mSession), true, null);
-                        }
-                    });
-                }
-            });
         }
+    }
+
+    @Override
+    public void onMatrixError(MatrixError e) {
+        Log.e(LOG_TAG, "Matrix error: " + e.errcode + " - " + e.error);
+
+        // The access token was not recognized: log out
+        if (MatrixError.UNKNOWN_TOKEN.equals(e.errcode)) {
+            CommonActivityUtils.logout(mActivity);
+        }
+    }
+
+    @Override
+    public void onUnexpectedError(Exception e) {
+        Log.e(LOG_TAG, "Unexpected error: " + e.getMessage());
     }
 
     private void handleNetworkError(Exception e) {
@@ -96,17 +87,31 @@ public class ErrorListener implements ApiFailureCallback {
         }
     }
 
-    @Override
-    public void onMatrixError(MatrixError e) {
-        Log.e(LOG_TAG, "Matrix error: " + e.errcode + " - " + e.error);
-        // The access token was not recognized: log out
-        if (MatrixError.UNKNOWN_TOKEN.equals(e.errcode)) {
-            CommonActivityUtils.logout(mActivity);
-        }
-    }
+    private void handleCertError(UnrecognizedCertificateException unrecCertEx, final Exception e) {
+        final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+        Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
 
-    @Override
-    public void onUnexpectedError(Exception e) {
-        Log.e(LOG_TAG, "Unexpected error: " + e.getMessage());
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+            UnrecognizedCertHandler.show(mSession.getHomeServerConfig(), fingerprint, true, new UnrecognizedCertHandler.Callback() {
+                @Override
+                public void onAccept() {
+                    LoginStorage loginStorage = Matrix.getInstance(mActivity.getApplicationContext()).getLoginStorage();
+                    loginStorage.replaceCredentials(mSession.getHomeServerConfig());
+                }
+
+                @Override
+                public void onIgnore() {
+                    handleNetworkError(e);
+                }
+
+                @Override
+                public void onReject() {
+                    CommonActivityUtils.logout(mActivity, Arrays.asList(mSession), true, null);
+                }
+            });
+            }
+        });
     }
 }
