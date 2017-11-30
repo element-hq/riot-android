@@ -33,6 +33,9 @@ import java.util.Arrays;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.store.LoginStorage;
 
+/**
+ * Listen to error threw by the Matrix client when querying the API
+ */
 public class ErrorListener implements ApiFailureCallback {
     private static final String LOG_TAG = ErrorListener.class.getSimpleName();
 

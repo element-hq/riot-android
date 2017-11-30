@@ -8,6 +8,10 @@ import org.matrix.androidsdk.util.Log;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Generic callback management class, runs callbacks in the UI loop
+ * @param <T>
+ */
 public class EventEmitter<T> {
     private static final String LOG_TAG = EventEmitter.class.getSimpleName();
 
