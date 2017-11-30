@@ -1,6 +1,5 @@
 package im.vector;
 
-
 import android.os.Handler;
 import android.os.Looper;
 
@@ -31,7 +30,7 @@ public class EventEmitter<T> {
     /**
      * Fires all registered callbacks on the UI thread.
      *
-     * @param t
+     * @param t passed to the callback
      */
     public void fire(final T t) {
         final Set<Listener<T>> callbacks = new HashSet<>(mCallbacks);
