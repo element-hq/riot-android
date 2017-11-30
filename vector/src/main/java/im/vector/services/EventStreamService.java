@@ -1132,7 +1132,7 @@ public class EventStreamService extends Service {
                 }
 
                 if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTED) && session.isCryptoEnabled()) {
-                    session.getCrypto().decryptEvent(event, null);
+                    session.getDataHandler().decryptEvent(event, null);
                 }
 
                 // test if the message is displayable
