@@ -77,14 +77,12 @@ public class ErrorListener implements ApiFailureCallback {
     }
 
     private void handleNetworkError(Exception e) {
-        if (!VectorApp.isAppInBackground()) {
-            mActivity.runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mActivity, mActivity.getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+            Toast.makeText(mActivity, mActivity.getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void handleCertError(UnrecognizedCertificateException unrecCertEx, final Exception e) {
