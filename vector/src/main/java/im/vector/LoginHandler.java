@@ -182,7 +182,7 @@ public class LoginHandler {
             @Override
             public void onSuccess(List<LoginFlow> flows) {
                 Log.d(LOG_TAG, "getSupportedLoginFlows " + flows);
-                callback.onSuccess(flows);
+                    callback.onSuccess(flows);
             }
 
             @Override
