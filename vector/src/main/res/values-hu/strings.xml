@@ -775,4 +775,18 @@ Ismeretlen eszközök:</string>
     <string name="share_without_verifying">Megosztás ellenőrzés nélkül</string>
     <string name="ignore_request">Kérelem figyelmen kívül hagyása</string>
 
-</resources>
+<string name="notification_noisy_notifications">Hangos értesítések</string>
+    <string name="notification_silent_notifications">Csendes értesítések</string>
+
+    <string name="option_take_photo">Fényképezés</string>
+    <string name="option_take_video">Videó felvétel</string>
+
+    <string name="settings_analytics">Személytelen analitikai adatok</string>
+    <string name="settings_opt_out_of_analytics">Analitikai adatgyűjtés kikapcsolása</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot személytelenített analitikai adatokat gyűjt az alkalmazás fejlesztéséhez.</string>
+
+
+    <string name="settings_labs_native_camera">Beépített kamera használata</string>
+
+    // share keys
+    </resources>
