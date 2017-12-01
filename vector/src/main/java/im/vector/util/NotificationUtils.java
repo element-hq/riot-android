@@ -906,7 +906,7 @@ public class NotificationUtils {
                 }
             }
 
-            Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
+            Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
 
             String roomName = getRoomName(context, session, room, event);
 
@@ -937,7 +937,7 @@ public class NotificationUtils {
             }
 
             builder.setSmallIcon(R.drawable.message_notification_transparent);
-            manageNotificationSound(context, builder, isBackground, bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
+            manageNotificationSound(context, builder, isBackground, bingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
 
             return builder.build();
         } catch (Exception e) {
@@ -984,7 +984,7 @@ public class NotificationUtils {
 
             builder.setSmallIcon(R.drawable.message_notification_transparent);
 
-            manageNotificationSound(context, builder, false, bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
+            manageNotificationSound(context, builder, false, bingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
 
             return builder.build();
         } catch (Exception e) {

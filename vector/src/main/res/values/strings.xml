@@ -807,5 +807,9 @@
     <string name="command_error">Command error</string>
     <string name="unrecognized_command">Unrecognized command: %s</string>
 
+    // notification statuses
+    <string name="notification_off">Off</string>
+    <string name="notification_on">On</string>
+    <string name="notification_noisy">Noisy</string>
 
 </resources>
