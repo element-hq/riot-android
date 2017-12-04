@@ -2093,7 +2093,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             editor.commit();
 
             if (TextUtils.isEmpty(mSession.getCredentials().deviceId)) {
-                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                new AlertDialog.Builder(VectorHomeActivity.this)
                         .setMessage(R.string.e2e_enabling_on_app_update)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override

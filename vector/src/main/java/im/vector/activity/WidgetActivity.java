@@ -144,7 +144,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
         mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                new AlertDialog.Builder(WidgetActivity.this)
                         .setMessage(R.string.widget_delete_message_confirmation)
                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
                             @Override

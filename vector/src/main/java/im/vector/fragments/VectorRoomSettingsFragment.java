@@ -364,7 +364,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     // leave room
-                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                    new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.room_participants_leave_prompt_title)
                             .setMessage(getString(R.string.room_participants_leave_prompt_msg))
                             .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
@@ -1752,7 +1752,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         boolean newValue = (boolean) newValueAsVoid;
 
                         if (newValue != mRoom.isEncrypted()) {
-                            new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                            new AlertDialog.Builder(getActivity())
                                     .setTitle(R.string.room_settings_addresses_e2e_prompt_title)
                                     .setMessage(R.string.room_settings_addresses_e2e_prompt_message)
                                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {

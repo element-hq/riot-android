@@ -660,7 +660,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
                 if (TextUtils.isEmpty(mSession.getCredentials().deviceId)) {
-                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                    new AlertDialog.Builder(getActivity())
                             .setMessage(R.string.room_settings_labs_end_to_end_warnings)
                             .setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
                                 @Override
@@ -1431,7 +1431,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final String mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, getActivity()).toLowerCase();
         final String dialogMessage = getString(R.string.settings_delete_threepid_confirmation, mediumFriendlyName, preferenceSummary);
 
-        new AlertDialog.Builder(VectorApp.getCurrentActivity())
+        new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(dialogMessage)
                 .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
@@ -1518,7 +1518,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        new AlertDialog.Builder(getActivity())
                                 .setMessage(getString(R.string.settings_unignore_user, userId))
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
@@ -1620,7 +1620,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             @Override
                             public boolean onPreferenceLongClick(Preference preference) {
                                 final String dialogMessage = getString(R.string.settings_delete_notification_targets_confirmation);
-                                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                                new AlertDialog.Builder(getActivity())
                                         .setTitle(R.string.dialog_title_confirmation)
                                         .setMessage(dialogMessage)
                                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
