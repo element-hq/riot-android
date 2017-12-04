@@ -233,6 +233,16 @@ public class PreferencesManager {
     }
 
     /**
+     * Tells if a background service can be started.
+     *
+     * @param context the context
+     * @return true if a background service can be started.
+     */
+    public static boolean canStartBackgroundService(Context context) {
+        return  (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) || isIgnoringBatteryOptimizations(context);
+    }
+
+    /**
      * Tells if the timestamp must be displayed in 12h format
      *
      * @param context the context

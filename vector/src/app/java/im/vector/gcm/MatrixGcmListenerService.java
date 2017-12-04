@@ -113,7 +113,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                 return;
             }
 
-            boolean useBatteryOptim = !PreferencesManager.isIgnoringBatteryOptimizations(getApplicationContext()) && EventStreamService.isStopped();
+            boolean useBatteryOptim = !PreferencesManager.canStartBackgroundService(getApplicationContext()) && EventStreamService.isStopped();
 
             if ((!gcmManager.isBackgroundSyncAllowed() || useBatteryOptim)
                     && VectorApp.isAppInBackground()) {
