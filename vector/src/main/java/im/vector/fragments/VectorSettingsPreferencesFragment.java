@@ -143,9 +143,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     // members
     private MXSession mSession;
 
-    //
-    private boolean mIsWaitingAfterBingRulesUpdates;
-
     // disable some updates if there is
     private final IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
         @Override
@@ -157,11 +154,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingRulesUpdate() {
-            if (mIsWaitingAfterBingRulesUpdates) {
-                mIsWaitingAfterBingRulesUpdates = false;
-                hideLoadingView();
-            }
-
             refreshPreferences();
             refreshDisplay();
         }
@@ -532,21 +524,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                             new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface d, int index) {
-                                                    BingRule rule = bingRulePreference.updateWithStatusIndex(index);
+                                                    BingRule rule = bingRulePreference.createRule(index);
                                                     d.cancel();
 
                                                     if (null != rule) {
                                                         displayLoadingView();
-                                                        mSession.getDataHandler().getBingRulesManager().addRule(rule, new BingRulesManager.onBingRuleUpdateListener() {
-
+                                                        mSession.getDataHandler().getBingRulesManager().updateRule(bingRulePreference.getRule(), rule, new BingRulesManager.onBingRuleUpdateListener() {
                                                             private void onDone() {
-                                                                // check if the activity still exists
-                                                                if (null != getActivity()) {
-                                                                    // wait the server request echo
-                                                                    // https://github.com/vector-im/riot-android/issues/1623
-                                                                    // the bing rule uploads might be unsynchronized
-                                                                    mIsWaitingAfterBingRulesUpdates = true;
-                                                                }
+                                                                refreshDisplay();
+                                                                hideLoadingView();
                                                             }
 
                                                             @Override
@@ -556,6 +542,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                                                             @Override
                                                             public void onBingRuleUpdateFailure(String errorMessage) {
+                                                                if (null != getActivity()) {
+                                                                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                                                                }
                                                                 onDone();
                                                             }
                                                         });
@@ -1216,16 +1205,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         if (null != rule) {
             displayLoadingView();
-            mSession.getDataHandler().getBingRulesManager().toggleRule(rule, new BingRulesManager.onBingRuleUpdateListener() {
-
+            mSession.getDataHandler().getBingRulesManager().updateEnableRuleStatus(rule, !rule.isEnabled, new BingRulesManager.onBingRuleUpdateListener() {
                 private void onDone() {
-                    // check if the activity still exists
-                    if (null != getActivity()) {
-                        // wait the server request echo
-                        // https://github.com/vector-im/riot-android/issues/1623
-                        // the bing rule uploads might be unsynchronized
-                        mIsWaitingAfterBingRulesUpdates = true;
-                    }
+                    refreshDisplay();
+                    hideLoadingView();
                 }
 
                 @Override
@@ -1235,6 +1218,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                 @Override
                 public void onBingRuleUpdateFailure(String errorMessage) {
+                    if (null != getActivity()) {
+                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                    }
                     onDone();
                 }
             });
@@ -1413,14 +1399,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     }
                     // check if the rule is only defined by don't notify
                     else if (isEnabled) {
-                        List<JsonElement> actions = rule.actions;
+                        List<Object> actions = rule.actions;
 
                         // no action -> noting will be done
-                        if ((null == actions) || (0 == actions.size())) {
+                        if ((null == actions) || actions.isEmpty()) {
                             isEnabled = false;
                         } else if (1 == actions.size()) {
                             try {
-                                isEnabled = !TextUtils.equals(actions.get(0).getAsString(), BingRule.ACTION_DONT_NOTIFY);
+                                isEnabled = !TextUtils.equals((String)(actions.get(0)), BingRule.ACTION_DONT_NOTIFY);
                             } catch (Exception e) {
                                 Log.e(LOG_TAG, "## refreshPreferences failed " + e.getMessage());
                             }

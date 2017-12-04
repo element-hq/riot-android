@@ -63,6 +63,13 @@ public class BingRulePreference extends VectorCustomActionEditTextPreference {
     }
 
     /**
+     * @return the selected bing rule
+     */
+    public BingRule getRule() {
+        return mBingRule;
+    }
+
+    /**
      * Refresh the summary
      */
     public void refreshSummary() {
@@ -73,11 +80,27 @@ public class BingRulePreference extends VectorCustomActionEditTextPreference {
      * @return the bing rule status index
      */
     public int getRuleStatusIndex() {
-        if ((null != mBingRule) && mBingRule.isEnabled) {
-            if (mBingRule.shouldHighlight()) {
-                return NOTIFICATION_NOISY_INDEX;
-            } else {
-                return NOTIFICATION_ON_INDEX;
+        if (null != mBingRule) {
+            if (TextUtils.equals(mBingRule.ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
+                if (mBingRule.shouldNotNotify()) {
+                    if (mBingRule.isEnabled) {
+                        return NOTIFICATION_OFF_INDEX;
+                    } else {
+                        return NOTIFICATION_ON_INDEX;
+                    }
+                } else if (mBingRule.shouldNotify()) {
+                    return NOTIFICATION_NOISY_INDEX;
+                }
+            }
+
+            if (mBingRule.isEnabled) {
+                if (mBingRule.shouldNotNotify()) {
+                    return NOTIFICATION_OFF_INDEX;
+                } else if (null != mBingRule.getNotificationSound()) {
+                    return NOTIFICATION_NOISY_INDEX;
+                } else {
+                    return NOTIFICATION_ON_INDEX;
+                }
             }
         }
 
@@ -99,25 +122,52 @@ public class BingRulePreference extends VectorCustomActionEditTextPreference {
     }
 
     /**
-     * Update the bing rule with the select items
+     * Create a bing rule with the updated required at index.
      *
      * @param index index
+     * @return a bing rule with the updated flags / null if there is no update
      */
-    public BingRule updateWithStatusIndex(int index) {
-        if (null != mBingRule) {
-            if (NOTIFICATION_OFF_INDEX == index) {
-                mBingRule.isEnabled = false;
-            } else {
-                mBingRule.isEnabled = true;
-                mBingRule.setNotify(true);
-                mBingRule.setHighlight(NOTIFICATION_NOISY_INDEX == index);
+    public BingRule createRule(int index) {
+        BingRule rule = null;
 
+        if ((null != mBingRule) && (index != getRuleStatusIndex())) {
+            rule = new BingRule(mBingRule);
+
+            if (TextUtils.equals(rule.ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
+                if (NOTIFICATION_OFF_INDEX == index) {
+                    rule.isEnabled = true;
+                    rule.setNotify(false);
+                } else if (NOTIFICATION_ON_INDEX == index) {
+                    rule.isEnabled = false;
+                    rule.setNotify(false);
+                } else if (NOTIFICATION_NOISY_INDEX == index) {
+                    rule.isEnabled = true;
+                    rule.setNotify(true);
+                    rule.setNotificationSound(BingRule.ACTION_VALUE_DEFAULT);
+                }
+
+                return rule;
+            }
+
+
+            if (NOTIFICATION_OFF_INDEX == index) {
+                if (TextUtils.equals(mBingRule.kind, BingRule.KIND_UNDERRIDE) || TextUtils.equals(rule.ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
+                    rule.setNotify(false);
+                } else {
+                    rule.isEnabled = false;
+                }
+            } else {
+                rule.isEnabled = true;
+                rule.setNotify(true);
+                rule.setHighlight(!TextUtils.equals(mBingRule.kind, BingRule.KIND_UNDERRIDE) && !TextUtils.equals(rule.ruleId, BingRule.RULE_ID_INVITE_ME) && (NOTIFICATION_NOISY_INDEX == index));
                 if (NOTIFICATION_NOISY_INDEX == index) {
-                    mBingRule.setNotificationSound(TextUtils.equals(mBingRule.ruleId, BingRule.RULE_ID_CALL) ? BingRule.ACTION_VALUE_RING : BingRule.ACTION_VALUE_DEFAULT);
+                    rule.setNotificationSound(TextUtils.equals(rule.ruleId, BingRule.RULE_ID_CALL) ? BingRule.ACTION_VALUE_RING : BingRule.ACTION_VALUE_DEFAULT);
+                } else {
+                    rule.removeNotificationSound();
                 }
             }
         }
 
-        return mBingRule;
+        return rule;
     }
 }
