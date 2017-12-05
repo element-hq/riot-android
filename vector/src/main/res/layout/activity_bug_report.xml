@@ -1,5 +1,4 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -37,6 +36,7 @@
             android:visibility="gone" />
 
         <ScrollView
+            android:id="@+id/bug_report_scrollview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -67,6 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/send_bug_report_placeholder"
+                        android:minHeight="40dp"
                         android:textColor="?attr/riot_primary_text_color" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -137,4 +138,11 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
+
+    <View
+        android:id="@+id/bug_report_mask_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@android:color/transparent" />
 </FrameLayout>
