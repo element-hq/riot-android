@@ -566,7 +566,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
             intent.setData(Uri.parse("package:" + getPackageName()));
-            startActivity(intent);
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## disableBatteryOptimisation() : cannot request ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS");
+            }
         }
     }
 
