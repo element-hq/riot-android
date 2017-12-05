@@ -813,4 +813,6 @@
     <string name="notification_on">On</string>
     <string name="notification_noisy">Noisy</string>
 
+    <string name="encrypted_message">Encrypted message</string>
+
 </resources>

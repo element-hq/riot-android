@@ -216,7 +216,6 @@ public class PreferencesManager {
         editor.commit();
     }
 
-
     /**
      * Tells if the battery optimisations are ignored
      *
@@ -225,10 +224,10 @@ public class PreferencesManager {
      */
     @SuppressLint("NewApi")
     public static boolean isIgnoringBatteryOptimizations(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
         }
-
+        // do not ask for android 6 & 7.
         return true;
     }
 
@@ -239,7 +238,7 @@ public class PreferencesManager {
      * @return true if a background service can be started.
      */
     public static boolean canStartBackgroundService(Context context) {
-        return  (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) || isIgnoringBatteryOptimizations(context);
+        return (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) || isIgnoringBatteryOptimizations(context);
     }
 
     /**
