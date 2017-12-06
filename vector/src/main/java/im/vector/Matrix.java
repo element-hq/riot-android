@@ -94,11 +94,12 @@ public class Matrix {
 
     // i.e the event has been read from another client
     private static final MXEventListener mLiveEventListener = new MXEventListener() {
+        boolean mClearCacheRequired = false;
+
         @Override
         public void onIgnoredUsersListUpdate() {
             // the application cache will be cleared at next launch if the application is not yet launched
-            // else it will be done when onLiveEventsChunkProcessed will be called in VectorHomeActivity.
-            VectorHomeActivity.mClearCacheRequired = true;
+            mClearCacheRequired = true;
         }
 
         private boolean mRefreshUnreadCounter = false;
@@ -117,7 +118,10 @@ public class Matrix {
             // we need to compute the application badge values
 
             if ((null != instance) && (null != instance.mMXSessions)) {
-                if (mRefreshUnreadCounter) {
+                if (mClearCacheRequired && !VectorApp.isAppInBackground()) {
+                    mClearCacheRequired = false;
+                    instance.reloadSessions(VectorApp.getInstance());
+                } else if (mRefreshUnreadCounter) {
                     GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
 
                     // perform update: if the GCM is not yet available or if GCM registration failed
@@ -449,7 +453,7 @@ public class Matrix {
                 }
 
                 if (!res) {
-                    Log.e(LOG_TAG, "hasValidSessions : one sesssion has no valid data hanlder");
+                    Log.e(LOG_TAG, "hasValidSessions : one sesssion has no valid data handler");
                 }
             }
         }

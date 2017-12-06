@@ -148,8 +148,8 @@ public class EventStreamService extends Service {
     private static android.os.Handler mNotificationsHandler = null;
 
     // get the text to display when the background sync is disabled
-    private final List<CharSequence> mBackgroundNotificationStrings = new ArrayList<>();
-    private final Set<String> mBackgroundNotificationEventIds = new HashSet<>();
+    private static final List<CharSequence> mBackgroundNotificationStrings = new ArrayList<>();
+    private static final Set<String> mBackgroundNotificationEventIds = new HashSet<>();
 
     /**
      * call in progress (foreground notification)
@@ -176,6 +176,12 @@ public class EventStreamService extends Service {
      * It is used when the service is automatically restarted by Android.
      */
     private boolean mSuspendWhenStarted = false;
+
+    /**
+     * Tells if the service self destroyed.
+     * Use to restart the service is killed by the OS.
+     */
+    private boolean mIsSelfDestroyed = false;
 
     /**
      * @return the event stream instance
@@ -393,6 +399,7 @@ public class EventStreamService extends Service {
             }
             case STOP:
                 Log.d(LOG_TAG, "## onStartCommand(): service stopped");
+                mIsSelfDestroyed = true;
                 stopSelf();
                 break;
             case PAUSE:
@@ -411,14 +418,12 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * onTaskRemoved is called when the user swipes the application from the active applications.
-     * On some devices, the service is not automatically restarted.
+     * Restart the service
      */
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
+    private void autoRestart() {
         int delay = 3000 + (new Random()).nextInt(5000);
 
-        Log.d(LOG_TAG, "## onTaskRemoved() : restarts after " + delay + " ms");
+        Log.d(LOG_TAG, "## autoRestart() : restarts after " + delay + " ms");
 
         // reset the service identifier
         mForegroundServiceIdentifier = -1;
@@ -435,14 +440,33 @@ public class EventStreamService extends Service {
                 // use a random part to avoid matching to system auto restart value
                 SystemClock.elapsedRealtime() + delay,
                 restartPendingIntent);
+    }
 
+    /**
+     * onTaskRemoved is called when the user swipes the application from the active applications.
+     * On some devices, the service is not automatically restarted.
+     */
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Log.d(LOG_TAG, "## onTaskRemoved");
+
+        autoRestart();
         super.onTaskRemoved(rootIntent);
     }
 
     @Override
     public void onDestroy() {
-        Log.d(LOG_TAG, "the service is destroyed");
-        stop();
+        if (!mIsSelfDestroyed) {
+            Log.d(LOG_TAG, "## onDestroy() : restart it");
+            setServiceState(StreamAction.STOP);
+            autoRestart();
+        } else {
+            Log.d(LOG_TAG, "## onDestroy()");
+            stop();
+            super.onDestroy();
+        }
+
+        mIsSelfDestroyed = false;
     }
 
     @Override
@@ -457,7 +481,12 @@ public class EventStreamService extends Service {
      * @param store   the store
      */
     private void startEventStream(final MXSession session, final IMXStore store) {
-        session.startEventStream(store.getEventStreamToken());
+        // resume if it was only suspended
+        if (null != session.getCurrentSyncToken()) {
+            session.resumeEventStream();
+        } else {
+            session.startEventStream(store.getEventStreamToken());
+        }
     }
 
     /**
@@ -477,6 +506,15 @@ public class EventStreamService extends Service {
     private void setServiceState(StreamAction newState) {
         Log.d(LOG_TAG, "setState from " + mServiceState + " to " + newState);
         mServiceState = newState;
+    }
+
+    /**
+     * Tells if the service stopped.
+     *
+     * @return true if the service is stopped.
+     */
+    public static boolean isStopped() {
+        return (null == getInstance()) || (getInstance().mServiceState == StreamAction.STOP);
     }
 
     /**
@@ -592,6 +630,11 @@ public class EventStreamService extends Service {
         }
 
         Log.d(LOG_TAG, "## start : start the service");
+
+        // release previous instance
+        if ((null != mActiveEventStreamService) && (this != mActiveEventStreamService)) {
+            mActiveEventStreamService.stop();
+        }
 
         mActiveEventStreamService = this;
 
@@ -765,7 +808,7 @@ public class EventStreamService extends Service {
             // fdroid
                 (!mGcmRegistrationManager.useGCM() ||
                         // the GCM registration was not done
-                        TextUtils.isEmpty(mGcmRegistrationManager.getGCMRegistrationToken()) && !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+                        TextUtils.isEmpty(mGcmRegistrationManager.getCurrentRegistrationToken()) && !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in foreground because of GCM registration");
 
             if (FOREGROUND_LISTENING_FOR_EVENTS != mForegroundServiceIdentifier) {
@@ -1075,11 +1118,59 @@ public class EventStreamService extends Service {
     }
 
     /**
+     * Try to trigger a notification when the event stream is not created.
+     *
+     * @param context             the context
+     * @param event               the notified event
+     * @param roomName            the room name
+     * @param senderDisplayName   the sender display name
+     * @param unreadMessagesCount the unread messages count
+     */
+    public static void onStaticNotifiedEvent(Context context, Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
+        final NotificationManagerCompat nm = NotificationManagerCompat.from(context);
+        NotificationUtils.addNotificationChannels(context);
+
+        if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
+            mBackgroundNotificationEventIds.add(event.eventId);
+
+            String header = (TextUtils.isEmpty(roomName) ? event.roomId : roomName) + ": " +
+                    (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName) + " ";
+
+            String text;
+
+            if (event.isEncrypted()) {
+                text = context.getString(R.string.encrypted_message);
+            } else {
+                EventDisplay eventDisplay = new RiotEventDisplay(context, event, null);
+                eventDisplay.setPrependMessagesWithAuthor(false);
+                text = eventDisplay.getTextualDisplay().toString();
+            }
+
+            if (!TextUtils.isEmpty(text)) {
+                SpannableString notifiedLine = new SpannableString(header + text);
+                notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                mBackgroundNotificationStrings.add(0, notifiedLine);
+                Notification notification = NotificationUtils.buildMessagesListNotification(context, mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
+
+                if (null != notification) {
+                    nm.notify(NOTIF_ID_MESSAGE, notification);
+                } else {
+                    nm.cancel(NOTIF_ID_MESSAGE);
+                }
+            }
+        } else if (0 == unreadMessagesCount) {
+            mBackgroundNotificationStrings.clear();
+            nm.cancel(NOTIF_ID_MESSAGE);
+        }
+    }
+
+    /**
      * Notify that a notification for even has been received.
      *
      * @param event               the notified event
      * @param roomName            the room name
-     * @param senderDisplayName   the sender displayname
+     * @param senderDisplayName   the sender display name
      * @param unreadMessagesCount the unread messages count
      */
     public void onNotifiedEventWithBackgroundSyncDisabled(Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
@@ -1099,13 +1190,18 @@ public class EventStreamService extends Service {
                 }
 
                 if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTED) && session.isCryptoEnabled()) {
-                    session.getCrypto().decryptEvent(event, null);
+                    session.getDataHandler().decryptEvent(event, null);
                 }
 
                 // test if the message is displayable
                 EventDisplay eventDisplay = new RiotEventDisplay(getApplicationContext(), event, roomState);
                 eventDisplay.setPrependMessagesWithAuthor(false);
                 String text = eventDisplay.getTextualDisplay().toString();
+
+                // display a dedicated message in decryption error cases
+                if (null != event.getCryptoError()) {
+                    text = getApplicationContext().getString(R.string.encrypted_message);
+                }
 
                 // sanity check
                 if (!TextUtils.isEmpty(text) && (null != roomState)) {

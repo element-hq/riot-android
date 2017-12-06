@@ -410,7 +410,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_settings_addresses_e2e_prompt_title">Attention !</string>
     <string name="directory_title">Répertoire</string>
 
-    <string name="ga_use_settings">Envoyer automatiquement les rapports d\'erreur</string>
     <string name="encryption_information_title">Informations sur le chiffrement de bout en bout</string>
 
     <string name="encryption_information_device_info">Informations sur l\'événement</string>
@@ -657,9 +656,6 @@ Les appareils ne pourront pas encore déchiffrer l\'historique de messages d\'av
 Une fois le chiffrement activé pour un salon, il ne peut plus être désactivé (pour l\'instant).
 
 Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas encore implémenté le chiffrement.</string>
-
-    <string name="ga_use_alert_message">Souhaitez-vous nous aider à améliorer l\'application en envoyant des rapports d\'erreur automatiques ?</string>
-    <string name="ga_use_disable_alert_message">Vous devez redémarrer l\'application pour désactiver les rapports d\'erreur.</string>
 
     <string name="failed_to_load_timeline_position">%s a essayé de charger un point précis dans l\'historique du salon mais ne l\'a pas trouvé.</string>
 

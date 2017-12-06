@@ -46,8 +46,12 @@
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
         <item name="tab_bar_inverted_background_color">#FFF2F2F2</item>
-        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_light</item>
-        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_light</item>
+        <item name="tab_bar_selected_background_color">
+            @color/tab_bar_selected_background_color_light
+        </item>
+        <item name="tab_bar_unselected_background_color">
+            @color/tab_bar_unselected_background_color_light
+        </item>
 
         <!-- list colors -->
         <item name="list_header_background_color">#f6f6f6</item>
@@ -85,10 +89,19 @@
         <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_light</item>
         <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_light</item>
         <item name="line_divider">@drawable/line_divider_light</item>
-        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_light</item>
-        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_light</item>
+        <item name="vector_tabbar_selected_background">
+            @drawable/vector_tabbar_selected_background_light
+        </item>
+        <item name="vector_tabbar_unselected_background">
+            @drawable/vector_tabbar_unselected_background_light
+        </item>
         <item name="vector_tabbar_background">@drawable/vector_tabbar_background_light</item>
 
+        <item name="pill_background_user_id">@drawable/pill_background_user_id_light</item>
+        <item name="pill_background_room_alias">@drawable/pill_background_room_alias_light</item>
+
+        <item name="pill_text_color_user_id">@color/riot_primary_text_color_light</item>
+        <item name="pill_text_color_room_alias">@android:color/white</item>
     </style>
 
     <!-- DARK THEME COLORS -->
@@ -137,8 +150,12 @@
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
         <item name="tab_bar_inverted_background_color">?attr/primary_color</item>
-        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_dark</item>
-        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_dark</item>
+        <item name="tab_bar_selected_background_color">
+            @color/tab_bar_selected_background_color_dark
+        </item>
+        <item name="tab_bar_unselected_background_color">
+            @color/tab_bar_unselected_background_color_dark
+        </item>
 
         <!-- list colors -->
         <item name="list_header_background_color">#5A5A5A</item>
@@ -176,11 +193,21 @@
         <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_dark</item>
         <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_dark</item>
         <item name="line_divider">@drawable/line_divider_dark</item>
-        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_dark</item>
-        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_dark</item>
+        <item name="vector_tabbar_selected_background">
+            @drawable/vector_tabbar_selected_background_dark
+        </item>
+        <item name="vector_tabbar_unselected_background">
+            @drawable/vector_tabbar_unselected_background_dark
+        </item>
         <item name="vector_tabbar_background">@drawable/vector_tabbar_background_dark</item>
+
+        <item name="pill_background_user_id">@drawable/pill_background_user_id_dark</item>
+        <item name="pill_background_room_alias">@drawable/pill_background_room_alias_dark</item>
+
+        <item name="pill_text_color_user_id">@android:color/white</item>
+        <item name="pill_text_color_room_alias">@color/riot_primary_text_color_light</item>
     </style>
-    
+
     <!-- BLACK THEME COLORS -->
     <style name="Theme.Vector.Black" parent="@style/Theme.Vector.Dark">
         <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
@@ -197,6 +224,7 @@
         <item name="primary_hint_text_color">@color/primary_hint_text_color_light</item>
         <item name="message_text_color">?attr/riot_primary_text_color</item>
     </style>
+
     <style name="Theme.Vector.EmptyDark" parent="">
         <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
         <item name="riot_primary_background_color">@color/riot_primary_background_color_dark</item>
@@ -204,6 +232,7 @@
         <item name="primary_color">@color/primary_color_dark</item>
         <item name="message_text_color">?attr/riot_primary_text_color</item>
     </style>
+
     <style name="Theme.Vector.EmptyBlack" parent="@style/Theme.Vector.EmptyDark">
         <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
         <item name="primary_color">@color/riot_primary_background_color_black</item>

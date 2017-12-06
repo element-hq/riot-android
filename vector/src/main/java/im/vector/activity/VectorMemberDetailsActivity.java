@@ -390,7 +390,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     @Override
                     public void run() {
                         enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                        mSession.createRoomDirectMessage(mMemberId, mCreateDirectMessageCallBack);
+                        mSession.createDirectMessageRoom(mMemberId, mCreateDirectMessageCallBack);
                     }
                 });
                 break;
@@ -743,7 +743,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         if (currentSelfPowerLevel == newPowerLevel) {
             // ask to the user to confirmation thu upgrade.
-            new AlertDialog.Builder(VectorApp.getCurrentActivity())
+            new AlertDialog.Builder(VectorMemberDetailsActivity.this)
                     .setMessage(R.string.room_participants_power_level_prompt)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override

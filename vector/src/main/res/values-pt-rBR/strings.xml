@@ -632,11 +632,6 @@
     <!-- Directory -->
     <string name="directory_title">Diretório</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Você quer nos ajudar a melhorar este aplicativo autorizando o envio de relatórios de erros?</string>
-    <string name="ga_use_settings">Automaticamente enviar relatórios de erros</string>
-    <string name="ga_use_disable_alert_message">Você precisa reiniciar o aplicativo para desabilitar o envio de relatórios de erros.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s estava tentando carregar um ponto específico da linha do tempo desta sala mas não conseguiu encontraá-lo.</string>
 

@@ -669,14 +669,8 @@
     <!-- Directory -->
     <string name="directory_title">Каталог</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Бажаєте допомогти покращити застосунок, автоматично надсилаючи звіти про падіння?</string>
-    <string name="ga_use_settings">Автоматично надсилати звіти про падіння</string>
-    <string name="ga_use_disable_alert_message">Щоб вимкнути звіти про падіння, перезапустіть застосунок.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s намагався завантажити певну точку на шкалі часу цієї кімнати, але не зміг її знайти.</string>
-
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">Дані про наскрізне шифрування</string>

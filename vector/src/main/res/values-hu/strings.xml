@@ -608,13 +608,8 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
 
     <string name="directory_title">Könyvtár</string>
 
-    <string name="ga_use_alert_message">Szeretnél segíteni az alkalmazás tökéletesítésében a hibajelentések automatikus elküldésével?</string>
-    <string name="ga_use_settings">Automatikus hibajelentés küldése</string>
-    <string name="ga_use_disable_alert_message">Újra kell indítanod az alkalmazást hogy kikapcsold a hibajelentés küldését.</string>
-
     <string name="failed_to_load_timeline_position">%s megpróbált betölteni egy adott időpontot ennek a szobának idővonalán de nem sikerült neki megtalálni.</string>
-
-
+    
     <string name="encryption_information_title">Végtől végig titkosítás információ</string>
 
     <string name="encryption_information_device_info">Esemény információ</string>

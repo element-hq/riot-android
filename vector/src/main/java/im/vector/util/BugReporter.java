@@ -32,9 +32,8 @@ import java.util.Locale;
 import java.util.zip.GZIPOutputStream;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -45,17 +44,8 @@ import org.json.JSONObject;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.MediaType;
@@ -67,6 +57,7 @@ import com.squareup.okhttp.Response;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.Matrix;
+import im.vector.activity.BugReportActivity;
 
 /**
  * BugReporter creates and sends the bug reports.
@@ -77,7 +68,7 @@ public class BugReporter {
     /**
      * Bug report upload listener
      */
-    private interface IMXBugReportListener {
+    public interface IMXBugReportListener {
         /**
          * The bug report has been cancelled
          */
@@ -130,7 +121,7 @@ public class BugReporter {
      * @param theBugDescription the bug description
      * @param listener          the listener
      */
-    private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final boolean withScreenshot, final String theBugDescription, final IMXBugReportListener listener) {
+    public static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final boolean withScreenshot, final String theBugDescription, final IMXBugReportListener listener) {
         new AsyncTask<Void, Integer, String>() {
 
             // enumerate files to delete
@@ -234,7 +225,7 @@ public class BugReporter {
                     mBugReportFiles.addAll(gzippedFiles);
 
                     if (withScreenshot) {
-                        Bitmap bitmap = takeScreenshot();
+                        Bitmap bitmap = mScreenshot;
 
                         if (null != bitmap) {
                             File logCatScreenshotFile = new File(context.getCacheDir().getAbsolutePath(), LOG_CAT_SCREENSHOT_FILENAME);
@@ -255,6 +246,8 @@ public class BugReporter {
                             }
                         }
                     }
+
+                    mScreenshot = null;
 
                     // add some github tags
                     try {
@@ -322,10 +315,12 @@ public class BugReporter {
                         if ((null == response) || (null == response.body())) {
                             serverError = "Failed with error " + responseCode;
                         } else {
-                            InputStream is = response.body().byteStream();
+                            InputStream is = null;
 
-                            if (null != is) {
-                                try {
+                            try {
+                                is = response.body().byteStream();
+
+                                if (null != is) {
                                     int ch;
                                     StringBuilder b = new StringBuilder();
                                     while ((ch = is.read()) != -1) {
@@ -346,14 +341,16 @@ public class BugReporter {
                                     if (null == serverError) {
                                         serverError = "Failed with error " + responseCode;
                                     }
-                                } catch (Exception e) {
-                                    Log.e(LOG_TAG, "## sendBugReport() : failed to parse error " + e.getMessage());
-                                } finally {
-                                    try {
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## sendBugReport() : failed to parse error " + e.getMessage());
+                            } finally {
+                                try {
+                                    if (null != is) {
                                         is.close();
-                                    } catch (Exception e) {
-                                        Log.e(LOG_TAG, "## sendBugReport() : failed to close the error stream " + e.getMessage());
                                     }
+                                } catch (Exception e) {
+                                    Log.e(LOG_TAG, "## sendBugReport() : failed to close the error stream " + e.getMessage());
                                 }
                             }
                         }
@@ -402,10 +399,14 @@ public class BugReporter {
         }.execute();
     }
 
+    private static Bitmap mScreenshot = null;
+
     /**
      * Send a bug report either with email or with Vector.
      */
     public static void sendBugReport() {
+        mScreenshot = takeScreenshot();
+
         final Activity currentActivity = VectorApp.getCurrentActivity();
 
         // no current activity so cannot display an alert
@@ -414,167 +415,8 @@ public class BugReporter {
             return;
         }
 
-        final Context appContext = currentActivity.getApplicationContext();
-        LayoutInflater inflater = currentActivity.getLayoutInflater();
-        View dialogLayout = inflater.inflate(R.layout.dialog_bug_report, null);
-
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(currentActivity);
-        dialog.setTitle(R.string.send_bug_report);
-        dialog.setView(dialogLayout);
-
-        final EditText bugReportText = dialogLayout.findViewById(R.id.bug_report_edit_text);
-        final CheckBox includeLogsButton = dialogLayout.findViewById(R.id.bug_report_button_include_logs);
-        final CheckBox includeCrashLogsButton = dialogLayout.findViewById(R.id.bug_report_button_include_crash_logs);
-        final CheckBox includeScreenShotButton = dialogLayout.findViewById(R.id.bug_report_button_include_screenshot);
-
-        final ProgressBar progressBar = dialogLayout.findViewById(R.id.bug_report_progress_view);
-        final TextView progressTextView = dialogLayout.findViewById(R.id.bug_report_progress_text_view);
-
-        dialog.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // will be overridden to avoid dismissing the dialog while displaying the progress
-            }
-        });
-
-        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // will be overridden to avoid dismissing the dialog while displaying the progress
-            }
-        });
-
-        //
-        final AlertDialog bugReportDialog = dialog.show();
-        final Button cancelButton = bugReportDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-        final Button sendButton = bugReportDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-
-        if (null != cancelButton) {
-            cancelButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // check if there is no upload in progress
-                    if (includeLogsButton.isEnabled()) {
-                        bugReportDialog.dismiss();
-                    } else {
-                        mIsCancelled = true;
-                        cancelButton.setEnabled(false);
-                    }
-                }
-            });
-        }
-
-        if (null != sendButton) {
-            sendButton.setEnabled(false);
-
-            sendButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // disable the active area while uploading the bug report
-                    bugReportText.setEnabled(false);
-                    sendButton.setEnabled(false);
-                    includeLogsButton.setEnabled(false);
-                    includeCrashLogsButton.setEnabled(false);
-                    includeScreenShotButton.setEnabled(false);
-
-                    progressTextView.setVisibility(View.VISIBLE);
-                    progressTextView.setText(appContext.getString(R.string.send_bug_report_progress, 0 + ""));
-
-                    progressBar.setVisibility(View.VISIBLE);
-                    progressBar.setProgress(0);
-
-                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), includeCrashLogsButton.isChecked(), includeScreenShotButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
-                        @Override
-                        public void onUploadFailed(String reason) {
-                            try {
-                                if (null != VectorApp.getInstance() && !TextUtils.isEmpty(reason)) {
-                                    Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show();
-                                }
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "## onUploadFailed() : failed to display the toast " + e.getMessage());
-                            }
-
-                            try {
-                                // restore the dialog if the upload failed
-                                bugReportText.setEnabled(true);
-                                sendButton.setEnabled(true);
-                                includeLogsButton.setEnabled(true);
-                                includeCrashLogsButton.setEnabled(true);
-                                includeScreenShotButton.setEnabled(true);
-                                cancelButton.setEnabled(true);
-
-                                progressTextView.setVisibility(View.GONE);
-                                progressBar.setVisibility(View.GONE);
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "## onUploadFailed() : failed to restore the dialog button " + e.getMessage());
-
-                                try {
-                                    bugReportDialog.dismiss();
-                                } catch (Exception e2) {
-                                    Log.e(LOG_TAG, "## onUploadFailed() : failed to dismiss the dialog " + e2.getMessage());
-                                }
-                            }
-
-                            mIsCancelled = false;
-                        }
-
-                        @Override
-                        public void onUploadCancelled() {
-                            onUploadFailed(null);
-                        }
-
-                        @Override
-                        public void onProgress(int progress) {
-                            if (progress > 100) {
-                                Log.e(LOG_TAG, "## onProgress() : progress > 100");
-                                progress = 100;
-                            } else if (progress < 0) {
-                                Log.e(LOG_TAG, "## onProgress() : progress < 0");
-                                progress = 0;
-                            }
-
-                            progressBar.setProgress(progress);
-                            progressTextView.setText(appContext.getString(R.string.send_bug_report_progress, progress + ""));
-                        }
-
-                        @Override
-                        public void onUploadSucceed() {
-                            try {
-                                if (null != VectorApp.getInstance()) {
-                                    Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_sent), Toast.LENGTH_LONG).show();
-                                }
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the toast " + e.getMessage());
-                            }
-
-                            try {
-                                bugReportDialog.dismiss();
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the dialog " + e.getMessage());
-                            }
-                        }
-                    });
-                }
-            });
-        }
-
-        bugReportText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (null != sendButton) {
-                    sendButton.setEnabled(bugReportText.getText().toString().length() > 10);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        Intent intent = new Intent(currentActivity, BugReportActivity.class);
+        currentActivity.startActivity(intent);
     }
 
     //==============================================================================================================

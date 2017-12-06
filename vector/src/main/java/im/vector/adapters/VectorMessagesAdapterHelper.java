@@ -17,6 +17,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Html;
 import android.text.Spannable;
@@ -24,6 +25,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
+import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.view.Gravity;
@@ -53,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,6 +66,7 @@ import im.vector.util.MatrixURLSpan;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
+import im.vector.view.PillView;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -500,18 +504,41 @@ class VectorMessagesAdapterHelper {
         }
     }
 
+    // cache the pills to avoid compute them again
+    Map<String, Drawable> mPillsCache = new HashMap<>();
+
     /**
      * Trap the clicked URL.
      *
-     * @param strBuilder the input string
-     * @param span       the URL
+     * @param strBuilder    the input string
+     * @param span          the URL
+     * @param isHighlighted true if the message is highlighted
      */
-    private void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span) {
+    private void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final boolean isHighlighted) {
         int start = strBuilder.getSpanStart(span);
         int end = strBuilder.getSpanEnd(span);
 
         if (start >= 0 && end >= 0) {
             int flags = strBuilder.getSpanFlags(span);
+
+            if (PillView.isPillable(span.getURL())) {
+                String key = span.getURL() + " " + isHighlighted;
+                Drawable drawable = mPillsCache.get(key);
+
+                if (null == drawable) {
+                    PillView aView = new PillView(mContext);
+                    aView.setText(strBuilder.subSequence(start, end), span.getURL());
+                    aView.setHighlighted(isHighlighted);
+                    drawable = aView.getDrawable();
+                }
+                if (null != drawable) {
+                    mPillsCache.put(key, drawable);
+                    ImageSpan imageSpan = new ImageSpan(drawable);
+                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                    strBuilder.setSpan(imageSpan, start, end, flags);
+                }
+            }
+
             ClickableSpan clickable = new ClickableSpan() {
                 public void onClick(View view) {
                     if (null != mEventsListener) {
@@ -519,6 +546,7 @@ class VectorMessagesAdapterHelper {
                     }
                 }
             };
+
             strBuilder.setSpan(clickable, start, end, flags);
             strBuilder.removeSpan(span);
         }
@@ -532,8 +560,9 @@ class VectorMessagesAdapterHelper {
      * @param htmlFormattedText  the html formatted text
      * @param pattern            the  pattern
      * @param highLightTextStyle the highlight text style
+     * @param isHighlighted      true when the message is highlighted
      */
-    void highlightPattern(TextView textView, Spannable text, String htmlFormattedText, String pattern, CharacterStyle highLightTextStyle) {
+    void highlightPattern(TextView textView, Spannable text, String htmlFormattedText, String pattern, CharacterStyle highLightTextStyle, boolean isHighlighted) {
         // sanity check
         if (null == textView) {
             return;
@@ -598,7 +627,7 @@ class VectorMessagesAdapterHelper {
 
         if ((null != urls) && (urls.length > 0)) {
             for (URLSpan span : urls) {
-                makeLinkClickable(strBuilder, span);
+                makeLinkClickable(strBuilder, span, isHighlighted);
             }
         }
 

@@ -274,8 +274,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param isEncrypted true when the room is encrypted
      */
     public void setIsRoomEncrypted(boolean isEncrypted) {
-        ((VectorMessagesAdapter) mAdapter).mIsRoomEncrypted = isEncrypted;
-        mAdapter.notifyDataSetChanged();
+        if (((VectorMessagesAdapter) mAdapter).mIsRoomEncrypted != isEncrypted) {
+            ((VectorMessagesAdapter) mAdapter).mIsRoomEncrypted = isEncrypted;
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     /**

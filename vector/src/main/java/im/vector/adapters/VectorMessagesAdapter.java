@@ -400,19 +400,21 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     @Override
     public void remove(MessageRow row) {
-        if (mIsSearchMode) {
-            mLiveMessagesRowList.remove(row);
-        } else {
-            removeFromEventGroup(row);
+        if (null != row) {
+            if (mIsSearchMode) {
+                mLiveMessagesRowList.remove(row);
+            } else {
+                removeFromEventGroup(row);
 
-            // get the position before removing the item
-            int position = getPosition(row);
+                // get the position before removing the item
+                int position = getPosition(row);
 
-            // remove it
-            super.remove(row);
+                // remove it
+                super.remove(row);
 
-            // check merge
-            checkEventGroupsMerge(row, position);
+                // check merge
+                checkEventGroupsMerge(row, position);
+            }
         }
     }
 
@@ -1131,8 +1133,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 return convertView;
             }
 
+            boolean shouldHighlighted = (null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event);
 
-            highlightPattern(bodyTextView, body, TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null, mPattern);
+            highlightPattern(bodyTextView, body, TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null, mPattern, shouldHighlighted);
 
             int textColor;
 
@@ -1143,11 +1146,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 textColor = mNotSentMessageTextColor;
             } else {
-                if ((null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event)) {
-                    textColor = mHighlightMessageTextColor;
-                } else {
-                    textColor = mDefaultMessageTextColor;
-                }
+                textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
             }
 
             bodyTextView.setTextColor(textColor);
@@ -1334,7 +1333,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
             }
 
-            highlightPattern(emoteTextView, new SpannableString(body), htmlString, null);
+            highlightPattern(emoteTextView, new SpannableString(body), htmlString, null, false);
 
             int textColor;
 
@@ -1537,7 +1536,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param pattern  the pattern to highlight
      */
     void highlightPattern(TextView textView, Spannable text, String pattern) {
-        highlightPattern(textView, text, null, pattern);
+        highlightPattern(textView, text, null, pattern, false);
     }
 
     /**
@@ -1547,9 +1546,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param text              the text to display
      * @param htmlFormattedText the text in HTML format
      * @param pattern           the pattern to highlight
+     * @param isHighlighted     true when the event is highlighted
      */
-    private void highlightPattern(TextView textView, Spannable text, String htmlFormattedText, String pattern) {
-        mHelper.highlightPattern(textView, text, htmlFormattedText, pattern, new BackgroundColorSpan(mSearchHighlightMessageTextColor));
+    private void highlightPattern(TextView textView, Spannable text, String htmlFormattedText, String pattern, boolean isHighlighted) {
+        mHelper.highlightPattern(textView, text, htmlFormattedText, pattern, new BackgroundColorSpan(mSearchHighlightMessageTextColor), isHighlighted);
     }
 
     /**

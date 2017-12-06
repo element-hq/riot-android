@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -186,12 +187,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private Timer mFloatingActionButtonTimer;
 
     private MXEventListener mEventsListener;
-    private MXEventListener mLiveEventListener;
-
-    private AlertDialog.Builder mUseGAAlert;
-
-    // when a member is banned, the session must be reloaded
-    public static boolean mClearCacheRequired = false;
 
     // sliding menu management
     private int mSlidingMenuIndex = -1;
@@ -448,39 +443,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             selectedMenu.performClick();
         }
 
-        // clear the notification if they are not anymore valid
-        // i.e the event has been read from another client
-        // or deleted it
-        // + other actions which require a background listener
-        mLiveEventListener = new MXEventListener() {
-            @Override
-            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
-                // treat any pending URL link workflow, that was started previously
-                processIntentUniversalLink();
-
-                if (mClearCacheRequired) {
-                    mClearCacheRequired = false;
-                    Matrix.getInstance(VectorHomeActivity.this).reloadSessions(VectorHomeActivity.this);
-                }
-            }
-
-            @Override
-            public void onStoreReady() {
-                if (null != mSharedFilesIntent) {
-                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d(LOG_TAG, "shared intent : the store is now ready, display sendFilesTo");
-                            CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, mSharedFilesIntent);
-                            mSharedFilesIntent = null;
-                        }
-                    });
-                }
-            }
-        };
-
-        mSession.getDataHandler().addListener(mLiveEventListener);
-
         // initialize the public rooms list
         PublicRoomsManager.getInstance().setSession(mSession);
         PublicRoomsManager.getInstance().refreshPublicRoomsCount(null);
@@ -541,30 +503,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         });
 
         mVectorPendingCallView.checkPendingCall();
-
-        // check if the GA accepts to send crash reports.
-        // do not display this alert if there is an universal link management
-        if ((null == PreferencesManager.useGA(this)) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
-            mUseGAAlert = new AlertDialog.Builder(this);
-
-            mUseGAAlert.setMessage(getApplicationContext().getString(R.string.ga_use_alert_message)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (null != VectorApp.getInstance()) {
-                        mUseGAAlert = null;
-                        PreferencesManager.setUseGA(VectorHomeActivity.this, true);
-                    }
-                }
-            }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (null != VectorApp.getInstance()) {
-                        mUseGAAlert = null;
-                        PreferencesManager.setUseGA(VectorHomeActivity.this, false);
-                    }
-                }
-            }).show();
-        }
 
         if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
             // crash reported by a rage shake
@@ -724,11 +662,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         // release the static instance if it is the current implementation
         if (sharedInstance == this) {
             sharedInstance = null;
-        }
-
-        // GA issue : mSession was null
-        if ((null != mSession) && mSession.isAlive()) {
-            mSession.getDataHandler().removeListener(mLiveEventListener);
         }
     }
 
@@ -2144,7 +2077,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             editor.commit();
 
             if (TextUtils.isEmpty(mSession.getCredentials().deviceId)) {
-                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                new AlertDialog.Builder(VectorHomeActivity.this)
                         .setMessage(R.string.e2e_enabling_on_app_update)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
@@ -2212,8 +2145,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 }
 
                 mRefreshOnChunkEnd = false;
-
                 mSyncInProgressView.setVisibility(View.GONE);
+
+                // treat any pending URL link workflow, that was started previously
+                processIntentUniversalLink();
             }
 
             @Override
@@ -2244,6 +2179,12 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             @Override
             public void onStoreReady() {
                 onForceRefresh();
+
+                if (null != mSharedFilesIntent) {
+                    Log.d(LOG_TAG, "shared intent : the store is now ready, display sendFilesTo");
+                    CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, mSharedFilesIntent);
+                    mSharedFilesIntent = null;
+                }
             }
 
             @Override
