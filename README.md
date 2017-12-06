@@ -43,14 +43,14 @@ How to build JitsiMeet libs:
 Recompile the provided aar files until we have gradle 
 ======================================================
 
-- generate the olm-sdk.aar
+- generate olm-sdk.aar
 
 clone the repository http://git.matrix.org/git/olm.git/
 open the android project in /android
 build it
 copy  /android/olm-sdk/build/outputs/aarvector/libs/olm-sdk.aar to riot-android/vector/libs/.
 	
-- generate the matrix-sdk.aar
+- generate matrix-sdk.aar
 
 clone the repository https://github.com/matrix-org/matrix-android-sdk
 open the project with android studio
