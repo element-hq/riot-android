@@ -178,13 +178,7 @@ public class LoginHandler {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
 
-        client.getSupportedLoginFlows(new SimpleApiCallback<List<LoginFlow>>() {
-            @Override
-            public void onSuccess(List<LoginFlow> flows) {
-                Log.d(LOG_TAG, "getSupportedLoginFlows " + flows);
-                callback.onSuccess(flows);
-            }
-
+        client.getSupportedLoginFlows(new SimpleApiCallback<List<LoginFlow>>(callback) {
             @Override
             public void onNetworkError(final Exception e) {
                 UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
@@ -210,16 +204,6 @@ public class LoginHandler {
                 } else {
                     callback.onNetworkError(e);
                 }
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                callback.onUnexpectedError(e);
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                callback.onMatrixError(e);
             }
         });
     }
