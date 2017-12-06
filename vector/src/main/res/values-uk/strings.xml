@@ -487,6 +487,8 @@
     <string name="settings_enable_this_device">Увімкнути сповіщення для цього пристрою</string>
     <string name="settings_turn_screen_on">Увімкнути екран на 3 секунди</string>
 
+    <string name="settings_containing_my_display_name">Повідомлення, що містять моє показуване ім\'я</string>
+    <string name="settings_containing_my_user_name">Повідомлення, що містять моє ім\'я користувача</string>
     <string name="settings_messages_in_one_to_one">В особистих чатах</string>
     <string name="settings_messages_in_group_chat">У групових чатах</string>
     <string name="settings_invited_to_room">Запрошення до кімнат</string>
@@ -509,7 +511,7 @@
     <string name="settings_privacy_policy">Політика конфіденційності</string>
     <string name="settings_clear_cache">Очистити кеш</string>
     <string name="settings_clear_medias_cache">Очистити медіа кеш</string>
-    <string name="settings_keep_media">Зберегти медіа</string>
+    <string name="settings_keep_media">Зберігати медіа</string>
 
     <string name="settings_user_settings">Налаштування користувача</string>
     <string name="settings_notifications">Сповіщення</string>
@@ -531,6 +533,11 @@
     <string name="settings_12_24_timestamps">Показувати час надсилання в 12 годинному форматі (e.g. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Приховати сповіщення про вступ/вихід з кімнат (не діє на запрошення/кіки/бани)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Приховати аватари та показувати зміну імен</string>
+
+    <!-- analytics -->
+    <string name="settings_analytics">Телеметрія</string>
+    <string name="settings_opt_out_of_analytics">Вимкнути телеметрію</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot збирає анонімну статистику задля покращення застосунку.</string>
 
     <string name="settings_disable_markdown">Вимкнути розмітку Markdown</string>
     <string name="settings_data_save_mode">Режим економії трафіку</string>
@@ -784,4 +791,22 @@
 
     <string name="room_add_matrix_apps">Додати застосунки Matrix</string>
     <string name="add_matrix_apps_not_supported">Не підтримується цим пристроєм</string>
+    <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Щойно доданий вами пристрій \'%s\' править ключі шифрування.</string>
+    <string name="your_unverified_device_requesting">Ваш неперевірений пристрій  \'%s\' править ключі шифрування.</string>
+    <string name="start_verification">Почати перевірку</string>
+    <string name="share_without_verifying">Поділитись без перевірки</string>
+    <string name="ignore_request">Ігнорувати запит</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Попередження!</string>
+    <string name="conference_call_warning_message">Конференц дзвінки у розробці та можуть бути ненадійними.</string>
+
+    // slash commands
+    <string name="command_error">Помилка виконання команди</string>
+    <string name="unrecognized_command">Команду %s не розпізнано</string>
+
+
 </resources>
