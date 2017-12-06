@@ -204,4 +204,191 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
     <string name="login_error_user_in_use">Brugernavnet er allerede i brug</string>
     <string name="login_error_login_email_not_yet">Emaillinket som ikke er blevet trykket på endnu</string>
 
+    <string name="notification_noisy_notifications">Larmende notifikationer</string>
+    <string name="notification_silent_notifications">Stille notifikationer</string>
+
+    <string name="option_take_photo">Tag billed</string>
+    <string name="option_take_video">Optag video</string>
+
+    <string name="e2e_need_log_in_again">Du skal logge ind igen for at generere end-to-end krypteringsnøgler for denne enhed og sende public keyen til din homeserver.
+Dette skal kun gøres én gang.
+Beklager ulejligheden.</string>
+
+    <string name="membership_changes">%medlemsskabsændringer</string>
+
+    <string name="compression_options">"Send som "</string>
+    <string name="compression_opt_list_original">Original</string>
+    <string name="compression_opt_list_large">Stor</string>
+    <string name="compression_opt_list_medium">Middel</string>
+    <string name="compression_opt_list_small">Lille</string>
+
+    <string name="attachment_cancel_download">Afbryd hentningen?</string>
+    <string name="attachment_cancel_upload">Afbryd uploadningen?</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <string name="attachment_remaining_time_minutes">%1$dm:%2$ds</string>
+
+    <string name="yesterday">I går</string>
+    <string name="today">I dag</string>
+
+    <string name="room_info_room_name">Rum navn</string>
+    <string name="room_info_room_topic">Rum emne</string>
+
+    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
+    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
+
+    <string name="call">Opkald</string>
+    <string name="call_connected">Opkald forbundet</string>
+    <string name="call_connecting">Opkald forbinder…</string>
+    <string name="call_ended">Opkald afsluttet</string>
+    <string name="call_ring">Ringer…</string>
+    <string name="incoming_call">Indgående Opkald</string>
+    <string name="incoming_video_call">Indgående Videoopkald</string>
+    <string name="incoming_voice_call">Indgående Stemmeopkald</string>
+    <string name="call_in_progress">Opkald I Gang</string>
+
+    <string name="call_error_user_not_responding">Den anden side tog den ikke.</string>
+    <string name="call_error_ice_failed">Medie Forbindelse Mislykkedes</string>
+    <string name="call_error_camera_init_failed">Kan ikke starte kameraet</string>
+    <string name="call_error_answered_elsewhere">opkald besvaret et andet sted</string>
+    <string name="call_error_peer_hangup_elsewhere">opkald afsluttet et andet sted</string>
+    <string name="call_error_peer_cancelled_call">opkald afbrudt</string>
+
+    <string name="action_accept">ACCEPTER</string>
+    <string name="action_ignore">IGNORÉR</string>
+
+    <string name="media_picker_both_capture_title">Tag et billede eller optag en video</string>
+    <string name="media_picker_cannot_record_video">Kan ikke optage video</string>
+
+    <string name="permissions_rationale_popup_title">Information</string>
+    <string name="permissions_rationale_msg_storage">Riot skal bruge tilladelse til at tilgå dit billed- og videoarkiv for at sende og gemme vedhæftninger.
+Giv venligst tilladelse ved næste pop-up for at kunne sende filer fra din telefon.</string>
+    <string name="permissions_rationale_msg_camera">Riot skal bruge tilladelse til at bruge dit kamera for at billeder og lave videoopkald.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+Giv venligst tilladelse ved næste pop-up for at kunne lave opkald.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot skal bruge tilladelse til at bruge din mikrofon for at lave lydopkald.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Giv venligst tilladelse ved næste pop-up for at kunne lave opkaldet.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot skal bruge tilladelse til at bruge dit kamera og din mikrofon for at lave videoopkald.
+
+Giv venligst tilladelse ved næste pop-up for at lave opkaldet.</string>
+    <string name="permissions_rationale_msg_contacts">Riot skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
+
+Giv venligst tilladelse ved næste pop-up for at finde kontakter der er på Riot.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
+
+Vil du give Riot adgang til dine kontakter?</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">Beklager... Handlingen blev ikke udført fordi der mangler tilladelser</string>
+
+    <string name="media_slider_saved">Gemt</string>
+    <string name="media_slider_saved_message">Gem til downloads</string>
+    <string name="yes">JA</string>
+    <string name="no">NEJ</string>
+    <string name="_continue">Fortsæt</string>
+
+    <string name="remove">Fjern</string>
+    <string name="join">Forbind</string>
+    <string name="preview">Forhåndsvisning</string>
+    <string name="reject">Afvis</string>
+
+    <string name="room_jump_to_first_unread">Spring til første ulæste besked.</string>
+
+    <string name="room_preview_invitation_format">Du er blevet inviteret til at forbinde til dette rum af %s</string>
+    <string name="room_preview_unlinked_email_warning">Denne invitation blev sendt til %s som ikke er tilknyttet denne konto.
+Det kan være du vil logge ind med en anden konto eller tilføje denne email til din konto.</string>
+    <string name="room_preview_try_join_an_unknown_room">Du forsøger at tilgå %s. Vil du forbinde for at deltage i diskussionen?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">et rum</string>
+    <string name="room_preview_room_interactions_disabled">Dette er en forhåndsvisning af dette rum. Interaktion med rummet er slået fra.</string>
+
+    <string name="room_creation_title">Ny chat</string>
+    <string name="room_creation_add_member">Tilføj medlem</string>
+    <string name="room_header_active_members">%1$d/%2$d aktive medlemmer</string>
+    <string name="room_title_members">%1$d medlemmer</string>
+    <string name="room_title_one_member">1 medlem</string>
+    <string name="room_e2e_alert_title">Advarsel!</string>
+    <string name="room_e2e_alert_message">Ende-til-ende kryptering er i beta og kan være upålideligt.
+
+Du bør endnu ikke stole på det til at holde din data sikker.
+
+Din enhed kan endnu ikke kryptere historien fra før du forbandt til rummet.
+
+Krypterede beskeder vil ikke være synlige for klienter der ikke har implementeret kryptering endnu.</string>
+
+    <string name="format_time_s">s</string>
+    <string name="format_time_m">m</string>
+    <string name="format_time_h">t</string>
+    <string name="format_time_d">d</string>
+
+    <string name="room_participants_leave_prompt_title">Forlad rum</string>
+    <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlade rummet?</string>
+    <string name="room_participants_remove_prompt_msg">Er du sikker på du vil fjerne %s fra denne chat?</string>
+    <string name="room_participants_create">Skab</string>
+
+    <string name="room_participants_online">Online</string>
+    <string name="room_participants_offline">Offline</string>
+    <string name="room_participants_idle">Passiv</string>
+    <string name="room_participants_now">nu</string>
+    <string name="room_participants_ago">siden</string>
+
+    <string name="room_participants_header_admin_tools">ADMINSTRATIONSVÆRKTØJER</string>
+    <string name="room_participants_header_call">OPKALD</string>
+    <string name="room_participants_header_direct_chats">DIREKTE CHATS</string>
+    <string name="room_participants_header_devices">ENHEDER</string>
+
+    <string name="room_participants_action_invite">Invitér</string>
+    <string name="room_participants_action_leave">Forlad dette rum</string>
+    <string name="room_participants_action_remove">Fjern fra dette rum</string>
+    <string name="room_participants_action_ban">Bandlys</string>
+    <string name="room_participants_action_unban">Ophæv bandlysning</string>
+    <string name="room_participants_action_set_default_power_level">Gør til normal bruger</string>
+    <string name="room_participants_action_set_moderator">Gør til moderator</string>
+    <string name="room_participants_action_set_admin">Gør til administrator</string>
+    <string name="room_participants_action_ignore">Skjul alle beskeder fra denne bruger</string>
+    <string name="room_participants_action_unignore">Vis alle beskeder fra denne bruger</string>
+    <string name="room_participants_invite_search_another_user">Bruger ID, navn eller emailadresse</string>
+    <string name="room_participants_action_mention">Nævn</string>
+    <string name="room_participants_action_devices_list">Hvis Enhedsliste</string>
+    <string name="room_participants_power_level_prompt">Du vil ikke kunne omgøre denne ændring da du forfremmer brugeren til at have samme magt niveau som dig selv.
+Er du sikker?</string>
+
+    <string name="room_participants_invite_prompt_msg">Er du sikker på du vil invitere %s til denne chat?</string>
+
+    <string name="people_search_invite_by_id"><u>Invitér med ID</u></string>
+    <string name="people_search_local_contacts">LOKALE KONTAKTER (%d)</string>
+    <string name="people_search_user_directory">BRUGERKATALOG (%s)</string>
+    <string name="people_search_filter_text">Kun Matrix brugere</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Invitér bruger med ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Indtast venligst en eller flere emails eller Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email eller Matrix ID</string>
+
+    <string name="room_menu_search">Søg</string>
+    <string name="room_one_user_is_typing">%s skriver…</string>
+    <string name="room_two_users_are_typing">"%1$s &amp; %2$s  skriver…"</string>
+    <string name="room_many_users_are_typing">%1$s, %2$s og andre skriver…</string>
+    <string name="room_message_placeholder_encrypted">Send en krypteret besked…</string>
+    <string name="room_message_placeholder_not_encrypted">Send en besked (ukrypteret)…</string>
+    <string name="room_offline_notification">Forbindelsen til serveren blev mistet.</string>
+    <string name="room_unsent_messages_notification">Beskeder blev ikke sendt. %1$s eller %2$s nu?</string>
+    <string name="room_unknown_devices_messages_notification">Beskeder blev ikke sendt fordi der er en ukendt enhed til stede. %1$s eller %2$s?</string>
+    <string name="room_prompt_resend">Send alle igen</string>
+    <string name="room_prompt_cancel">afbryd alle</string>
+    <string name="room_resend_unsent_messages">Send usendte beskeder igen</string>
+    <string name="room_delete_unsent_messages">Slet usendte beskeder</string>
+    <string name="room_message_file_not_found">Fil ikke fundet</string>
+    <string name="room_do_not_have_permission_to_post">Du har ikke tilladelse til at skrive i dette rum</string>
+    <string name="room_new_message_notification">1 ny besked</string>
+    <string name="room_new_messages_notification">%1$d nye beskeder</string>
+
+    <string name="ssl_trust">Stol på</string>
+    <string name="ssl_do_not_trust">Stol ikke på</string>
+    <string name="ssl_logout_account">Log ud</string>
+    <string name="ssl_remain_offline">Ignorér</string>
+    <string name="ssl_fingerprint_hash">Fingeraftryk (%s):</string>
+    <string name="ssl_could_not_verify">Kunne ikke verificere serverens identitet.</string>
+    <string name="ssl_cert_not_trust">Dette kan betyde at nogen med onde hensigter opsnapper din trafik eller at din telefon ikke stoler på certifikatet som serveren sendte.</string>
+    <string name="ssl_cert_new_account_expl">Hvis serveradministratoren har sagt det er forventeligt skal du sikre dig at fingeraftrykket forneden passer med det fingeraftryk de har oplyst.</string>
+    <string name="ssl_unexpected_existing_expl">Certifikatet har ændret sig fra det din telefon stolede på. Dette er HØJST USÆDVANLIGT. Det anbefales at du IKKE ACCEPTERE dette nye certifikat.</string>
     </resources>
