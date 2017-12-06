@@ -636,14 +636,8 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <!-- Directory -->
     <string name="directory_title">Adresboek</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Wil je om ons te helpen met het verbeteren van de applicatie door middel van het doorsturen van crashes ?</string>
-    <string name="ga_use_settings">Automatisch crash rapporten versturen</string>
-    <string name="ga_use_disable_alert_message">Je moet de applicatie herstarten om de crash vermeldingen uit te schakelen.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s probeerde een specifiek punt in de geschiedenis van deze ruimte te laden, maar kon het niet vinden.</string>
-
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">Eind-tot-eind versleuteling informatie</string>

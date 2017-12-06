@@ -103,8 +103,8 @@ import im.vector.activity.LanguagePickerActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
-import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.preference.BingRulePreference;
 import im.vector.preference.ProgressBarPreference;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
@@ -143,9 +143,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     // members
     private MXSession mSession;
 
-    //
-    private boolean mIsWaitingAfterBingRulesUpdates;
-
     // disable some updates if there is
     private final IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
         @Override
@@ -157,11 +154,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingRulesUpdate() {
-            if (mIsWaitingAfterBingRulesUpdates) {
-                mIsWaitingAfterBingRulesUpdates = false;
-                hideLoadingView();
-            }
-
             refreshPreferences();
             refreshDisplay();
         }
@@ -507,19 +499,62 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // push rules
         for (String resourceText : mPushesRuleByResourceId.keySet()) {
-            final CheckBoxPreference switchPreference = (CheckBoxPreference) findPreference(resourceText);
+            final Preference preference = findPreference(resourceText);
 
-            if (null != switchPreference) {
-                switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
-                        // on some old android APIs,
-                        // the callback is called even if there is no user interaction
-                        // so the value will be checked to ensure there is really no update.
-                        onPushRuleClick(preference.getKey(), (boolean) newValueAsVoid);
-                        return true;
-                    }
-                });
+            if (null != preference) {
+                if (preference instanceof CheckBoxPreference) {
+                    preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
+                            // on some old android APIs,
+                            // the callback is called even if there is no user interaction
+                            // so the value will be checked to ensure there is really no update.
+                            onPushRuleClick(preference.getKey(), (boolean) newValueAsVoid);
+                            return true;
+                        }
+                    });
+                } else if (preference instanceof BingRulePreference) {
+                    final BingRulePreference bingRulePreference = (BingRulePreference)preference;
+                    bingRulePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            new AlertDialog.Builder(getActivity()).
+                                    setSingleChoiceItems(bingRulePreference.getBingRuleStatuses(),
+                                            bingRulePreference.getRuleStatusIndex(),
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface d, int index) {
+                                                    BingRule rule = bingRulePreference.createRule(index);
+                                                    d.cancel();
+
+                                                    if (null != rule) {
+                                                        displayLoadingView();
+                                                        mSession.getDataHandler().getBingRulesManager().updateRule(bingRulePreference.getRule(), rule, new BingRulesManager.onBingRuleUpdateListener() {
+                                                            private void onDone() {
+                                                                refreshDisplay();
+                                                                hideLoadingView();
+                                                            }
+
+                                                            @Override
+                                                            public void onBingRuleUpdateSuccess() {
+                                                                onDone();
+                                                            }
+
+                                                            @Override
+                                                            public void onBingRuleUpdateFailure(String errorMessage) {
+                                                                if (null != getActivity()) {
+                                                                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                                                                }
+                                                                onDone();
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            }).show();
+                            return true;
+                        }
+                    });
+                }
             }
         }
 
@@ -567,37 +602,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             });
         }
-
-        final CheckBoxPreference useGaPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY);
-
-        if (!PreferencesManager.isGAUseAllowed(getActivity())) {
-            PreferenceCategory analyticsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_ANALYTICS_PREFERENCE_KEY);
-            analyticsCategory.removePreference(useGaPref);
-        } else {
-            useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (null != getActivity()) {
-                        boolean useGA = PreferencesManager.useGA(getActivity());
-
-                        if (!useGA) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                            builder.setMessage(getString(R.string.ga_use_disable_alert_message)).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do something here
-                                }
-                            }).show();
-                        }
-                        GAHelper.initGoogleAnalytics(getActivity());
-                    }
-
-                    return true;
-                }
-            });
-        }
-
 
         mUserSettingsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_USER_SETTINGS_PREFERENCE_KEY);
         mContactSettingsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_CONTACT_PREFERENCE_KEYS);
@@ -656,7 +660,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
                 if (TextUtils.isEmpty(mSession.getCredentials().deviceId)) {
-                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                    new AlertDialog.Builder(getActivity())
                             .setMessage(R.string.room_settings_labs_end_to_end_warnings)
                             .setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
                                 @Override
@@ -914,16 +918,23 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         GcmRegistrationManager gcmMgr = Matrix.getInstance(appContext).getSharedGCMRegistrationManager();
 
         for (String resourceText : mPushesRuleByResourceId.keySet()) {
-            CheckBoxPreference switchPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
+            Preference preference = preferenceManager.findPreference(resourceText);
 
-            if (null != switchPreference) {
-                if (resourceText.equals(PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)) {
-                    switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
-                } else if (resourceText.equals(PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY)) {
-                    switchPreference.setChecked(gcmMgr.isScreenTurnedOn());
+            if (null != preference) {
+                if (preference instanceof BingRulePreference) {
+                    BingRulePreference bingRulePreference = (BingRulePreference)preference;
+                    bingRulePreference.setEnabled((null != rules) && isConnected);
+                    bingRulePreference.setBingRule(mSession.getDataHandler().pushRules().findDefaultRule(mPushesRuleByResourceId.get(resourceText)));
                 } else {
-                    switchPreference.setEnabled((null != rules) && isConnected);
-                    switchPreference.setChecked(preferences.getBoolean(resourceText, false));
+                    CheckBoxPreference switchPreference = (CheckBoxPreference)preference;
+                    if (resourceText.equals(PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)) {
+                        switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
+                    } else if (resourceText.equals(PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY)) {
+                        switchPreference.setChecked(gcmMgr.isScreenTurnedOn());
+                    } else {
+                        switchPreference.setEnabled((null != rules) && isConnected);
+                        switchPreference.setChecked(preferences.getBoolean(resourceText, false));
+                    }
                 }
             }
         }
@@ -1194,16 +1205,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         if (null != rule) {
             displayLoadingView();
-            mSession.getDataHandler().getBingRulesManager().toggleRule(rule, new BingRulesManager.onBingRuleUpdateListener() {
-
+            mSession.getDataHandler().getBingRulesManager().updateEnableRuleStatus(rule, !rule.isEnabled, new BingRulesManager.onBingRuleUpdateListener() {
                 private void onDone() {
-                    // check if the activity still exists
-                    if (null != getActivity()) {
-                        // wait the server request echo
-                        // https://github.com/vector-im/riot-android/issues/1623
-                        // the bing rule uploads might be unsynchronized
-                        mIsWaitingAfterBingRulesUpdates = true;
-                    }
+                    refreshDisplay();
+                    hideLoadingView();
                 }
 
                 @Override
@@ -1213,6 +1218,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                 @Override
                 public void onBingRuleUpdateFailure(String errorMessage) {
+                    if (null != getActivity()) {
+                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                    }
                     onDone();
                 }
             });
@@ -1378,31 +1386,35 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         if (null != mBingRuleSet) {
             for (String resourceText : mPushesRuleByResourceId.keySet()) {
-                String ruleId = mPushesRuleByResourceId.get(resourceText);
+                Preference preference = findPreference(resourceText);
 
-                BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
-                boolean isEnabled = ((null != rule) && rule.isEnabled);
+                if ((null != preference) &&  (preference instanceof CheckBoxPreference)) {
+                    String ruleId = mPushesRuleByResourceId.get(resourceText);
 
-                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
-                    isEnabled = !isEnabled;
-                }
-                // check if the rule is only defined by don't notify
-                else if (isEnabled) {
-                    List<JsonElement> actions = rule.actions;
+                    BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
+                    boolean isEnabled = ((null != rule) && rule.isEnabled);
 
-                    // no action -> noting will be done
-                    if ((null == actions) || (0 == actions.size())) {
-                        isEnabled = false;
-                    } else if (1 == actions.size()) {
-                        try {
-                            isEnabled = !TextUtils.equals(actions.get(0).getAsString(), BingRule.ACTION_DONT_NOTIFY);
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## refreshPreferences failed " + e.getMessage());
+                    if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
+                        isEnabled = !isEnabled;
+                    }
+                    // check if the rule is only defined by don't notify
+                    else if (isEnabled) {
+                        List<Object> actions = rule.actions;
+
+                        // no action -> noting will be done
+                        if ((null == actions) || actions.isEmpty()) {
+                            isEnabled = false;
+                        } else if (1 == actions.size()) {
+                            try {
+                                isEnabled = !TextUtils.equals((String)(actions.get(0)), BingRule.ACTION_DONT_NOTIFY);
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## refreshPreferences failed " + e.getMessage());
+                            }
                         }
                     }
-                }
 
-                editor.putBoolean(resourceText, isEnabled);
+                    editor.putBoolean(resourceText, isEnabled);
+                }
             }
         }
 
@@ -1419,7 +1431,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final String mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, getActivity()).toLowerCase();
         final String dialogMessage = getString(R.string.settings_delete_threepid_confirmation, mediumFriendlyName, preferenceSummary);
 
-        new AlertDialog.Builder(VectorApp.getCurrentActivity())
+        new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(dialogMessage)
                 .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
@@ -1506,7 +1518,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        new AlertDialog.Builder(getActivity())
                                 .setMessage(getString(R.string.settings_unignore_user, userId))
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
@@ -1593,7 +1605,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             for (final Pusher pusher : mDisplayedPushers) {
                 if (null != pusher.lang) {
-                    boolean isThisDeviceTarget = TextUtils.equals(gcmRegistrationManager.getGCMRegistrationToken(), pusher.pushkey);
+                    boolean isThisDeviceTarget = TextUtils.equals(gcmRegistrationManager.getCurrentRegistrationToken(), pusher.pushkey);
 
                     VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity(), isThisDeviceTarget ? Typeface.BOLD : Typeface.NORMAL);
                     preference.setTitle(pusher.deviceDisplayName);
@@ -1608,7 +1620,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             @Override
                             public boolean onPreferenceLongClick(Preference preference) {
                                 final String dialogMessage = getString(R.string.settings_delete_notification_targets_confirmation);
-                                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                                new AlertDialog.Builder(getActivity())
                                         .setTitle(R.string.dialog_title_confirmation)
                                         .setMessage(dialogMessage)
                                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {

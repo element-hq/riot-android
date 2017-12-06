@@ -14,7 +14,7 @@
     <string name="send">送信</string>
     <string name="copy">複写</string>
     <string name="resend">再送信</string>
-    <string name="redact">編集</string>
+    <string name="redact">削除</string>
     <string name="share">共有</string>
     <string name="delete">削除</string>
     <string name="device_information">端末情報</string>
@@ -532,9 +532,6 @@
     <string name="directory_title">部屋一覧</string>
     <string name="settings_theme">外観</string>
 
-    <string name="ga_use_settings">アプリが異常終了したら開発者へ自動で報告</string>
-    <string name="ga_use_disable_alert_message">異常終了の自動報告を止める場合は、アプリを再起動する必要があります。</string>
-
     <string name="encryption_information_title">End-to-end 暗号についての情報</string>
 
     <string name="encryption_information_device_name">端末名</string>
@@ -588,4 +585,55 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="report_content">発言を通報する</string>
     <string name="read_receipt">既読</string>
 
+    <string name="option_take_photo">写真を撮影</string>
+    <string name="option_take_video">動画を撮影</string>
+
+    <string name="ignore_request">要求を無視する</string>
+
+<string name="share_without_verifying">検証せずに共有する</string>
+    <string name="start_verification">検証を開始する</string>
+    <string name="widget_integration_missing_user_id">リクエストに user_id がありません。</string>
+    <string name="widget_integration_missing_room_id">リクエストに room_id がありません。</string>
+    <string name="widget_integration_room_not_recognised">この部屋は承認されていません。</string>
+    <string name="widget_integration_failed_to_send_request">リクエストの送信に失敗しました。</string>
+    <string name="widget_integration_unable_to_create">ウィジェットを作成できません。</string>
+    <string name="widget_integration_need_to_be_able_to_invite">それを行うためにはユーザーを招待可能にする必要があります。</string>
+    <string name="event_formatter_widget_removed">%1$s は %2$s によって削除されました</string>
+    <string name="widget_no_power_to_manage">この部屋のウィジェットを管理する権限が必要です</string>
+    <string name="widget_creation_failure">ウィジェットの作成に失敗しました</string>
+    <string name="event_formatter_widget_added">%1$s は %2$s によって追加されました</string>
+    <string name="widget_delete_message_confirmation">ウィジェットを削除してもよろしいですか？</string>
+    <string name="directory_server_fail_to_retrieve_server">サーバーが利用できないか、オーバーロードしている可能性があります</string>
+    <string name="unknown_devices_alert_message">この部屋は検証されていない不明なデバイスが含まれています。
+つまり、デバイスが主張するユーザーに属しているという保証はありません。
+続行する前に、各デバイスの検証プロセスを進めることをおすすめしますが、検証することなくメッセージを再送信することができます。
+
+不明なデバイス:</string>
+
+    <string name="unknown_devices_alert_title">部屋に不明なデバイスが含まれています</string>
+    <string name="e2e_enabling_on_app_update">Riotはエンドツーエンドの暗号化をサポートするようになりましたが、有効にするには再度ログインする必要があります。
+
+アプリケーションの設定から今すぐまたは後で行うことができます。</string>
+
+    <string name="encryption_information_verify_key_match">キーが一致していることを確認</string>
+
+    <string name="encryption_information_verify_device_warning2">一致する場合は、下の確認ボタンを押します。そうでない場合は、他の誰かがこのデバイスを盗聴しているので、代わりにブロックボタンを押すことをおすすめします。
+将来この検証プロセスはより洗練されたものになるでしょう。</string>
+    <string name="encryption_information_verify_device">デバイスの検証</string>
+    <string name="encryption_information_unknown_device">不明なデバイス</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">このデバイスから未認証のデバイスに暗号化されたメッセージを送信しない</string>
+
+    <string name="encryption_never_send_to_unverified_devices_title">認証済みデバイスに対してのみ暗号化</string>
+    <string name="encryption_import_import">インポート</string>
+    <string name="encryption_import_room_keys_summary">ローカルファイルからキーをインポート</string>
+    <string name="encryption_import_room_keys">ルームキーをインポート</string>
+    <string name="encryption_import_e2e_room_keys">部屋のエンドツーエンド暗号鍵をインポート</string>
+
+    <string name="encryption_export_confirm_passphrase">パスフレーズを確認</string>
+    <string name="encryption_export_enter_passphrase">パスフレーズを入力</string>
+    <string name="encryption_export_export">エクスポート</string>
+    <string name="encryption_export_room_keys_summary">暗号鍵をローカルファイルにエクスポートする</string>
+    <string name="encryption_export_room_keys">部屋の暗号鍵をエクスポート</string>
+    <string name="encryption_information_verification">検証</string>
+    <string name="call">通話</string>
     </resources>

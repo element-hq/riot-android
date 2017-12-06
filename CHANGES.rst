@@ -1,3 +1,42 @@
+Changes in Riot 0.7.06 (2017-12-06)
+===================================================
+
+Features:
+ 
+ * Update the global notification rules UI to have tree states (off, on, noisy) instead of a toogle (on, off).
+ 
+Improvements:
+ 
+ * Move the bug report dialog to an activity.
+ * Remove Google Analytics.
+ 
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * Improve the notification management on android 8 devices when the application is in battery optimisation mode.
+ * Fix some invalid avatars while using the autocompletion text.
+ 
+Changes in Riot 0.7.05 (2017-11-28)
+===================================================
+
+Features:
+ 
+ * Add a settings to use the native camera application instead of the in-app one. 
+ * Add piwik.
+ * Display pills(without avatar) on room history.
+ 
+Improvements:
+ 
+ * Improve the notfications on android 8 devices.
+ 
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * Fix the notification sound management on Android 8 devices.
+ * #1700 : Jump to first unread message didn't jump anywhere, just stayed at the same position where it was before, although there are more unread messages
+ * #1772 : unrecognised / commands shouldn't be relayed to the room.
+ 
+
 Changes in Riot 0.7.04 (2017-11-15)
 ===================================================
 

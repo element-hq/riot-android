@@ -648,14 +648,8 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <!-- Directory -->
     <string name="directory_title">Directorio</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">¿Aceptas el ayudarnos en mejorar el funcionamiento de la applicación y enviar reportes de error?</string>
-    <string name="ga_use_settings">Automaticamente enviar reportes de error</string>
-    <string name="ga_use_disable_alert_message">Necesitas reiniciar la applicación para apagar los reportes de error.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s estuvo intentando cargar un punto especifico en el historial de esta sala pero no lo pudo encontrar.</string>
-
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">Información de la cifración de Persona-a-Persona</string>

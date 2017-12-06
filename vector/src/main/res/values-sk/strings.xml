@@ -652,10 +652,6 @@ Ak v miestnosti povolíte šifrovanie, šifrovanie nie je viac možné zakázať
     <string name="directory_title">Adresár</string>
     <string name="settings_theme">Téma</string>
 
-    <string name="ga_use_alert_message">Chcete sa podieľať na vylepšovaní aplikácie zasielaním hlásení o zlyhaní?</string>
-    <string name="ga_use_settings">Automaticky odosielať hlásenia o zlyhaní</string>
-    <string name="ga_use_disable_alert_message">Ak si želáte zakázať odosielanie hlásení o zlyhaní, musíte reštartovať aplikáciu.</string>
-
     <string name="failed_to_load_timeline_position">%s sa pokúšal zobraziť konkrétny bod v histórii tejto miestnosti, no zodpovedajúcu udalosť sa nepodarilo nájsť.</string>
 
 

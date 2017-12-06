@@ -149,9 +149,9 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     compile 'com.squareup.retrofit:retrofit:1.6.1'
-    compile 'com.google.code.gson:gson:2.3'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
-    compile 'com.squareup.okhttp:okhttp:2.2.0'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.7.5'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
 
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
 
@@ -197,9 +197,8 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
-    appCompile 'com.google.firebase:firebase-core:11.6.0'
-    appCompile 'com.google.firebase:firebase-messaging:11.6.0'
-    appCompile 'com.google.android.gms:play-services-analytics:11.6.0'
+    appCompile 'com.google.firebase:firebase-core:11.6.2'
+    appCompile 'com.google.firebase:firebase-messaging:11.6.2'
 
     // fdroid flavor only
 }

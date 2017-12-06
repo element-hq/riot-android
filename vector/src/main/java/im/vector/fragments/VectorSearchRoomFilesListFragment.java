@@ -365,7 +365,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                         // decrypt the encrypted events
                         if (mRoom.isEncrypted()) {
                             for (Event event : eventsChunk.chunk) {
-                                mSession.getCrypto().decryptEvent(event, mTimeLineId);
+                                mSession.getDataHandler().decryptEvent(event, mTimeLineId);
                             }
                         }
 

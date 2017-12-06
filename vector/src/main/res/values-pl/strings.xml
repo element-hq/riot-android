@@ -512,10 +512,6 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="directory_title">Katalog</string>
     <string name="settings_theme">Motyw</string>
 
-    <string name="ga_use_alert_message">Chcesz pomóc w udoskonalaniu aplikacji pozwalając na automatyczne wysyłanie raportów o błędach?</string>
-    <string name="ga_use_settings">Automatycznie wysyłaj zgłoszenia błędów</string>
-    <string name="encryption_information_title">Informacje o szyfrowaniu end-to-end</string>
-
     <string name="encryption_information_user_id">ID użytkownika</string>
     <string name="encryption_information_algorithm">Algorytm</string>
     <string name="encryption_information_session_id">ID sesji</string>

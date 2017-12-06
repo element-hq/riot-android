@@ -659,12 +659,7 @@ Email также позволит вам при необходимости во�
     
     <!-- Directory -->
     <string name="directory_title">Каталог</string>
-    
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Вы согласны помочь нам улучшить приложение и автоматически отправлять отчеты о любых сбоях?</string>
-    <string name="ga_use_settings">Автоматически отправлять отчеты о сбоях</string>
-    <string name="ga_use_disable_alert_message">Для отключения отчетов о сбоях необходимо перезапустить приложение.</string>
-    
+
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s пытается загрузить историю комнаты, но не может ее найти.</string>
     
@@ -826,4 +821,18 @@ Email также позволит вам при необходимости во�
     <string name="share_without_verifying">Поделиться без проверки</string>
     <string name="ignore_request">Игнорировать запрос</string>
 
-</resources>
+<string name="notification_noisy_notifications">Шумные уведомления</string>
+    <string name="notification_silent_notifications">Тихие уведомления</string>
+
+    <string name="option_take_photo">Сделать фото</string>
+    <string name="option_take_video">Снять видео</string>
+
+    <string name="settings_analytics">Аналитика</string>
+    <string name="settings_opt_out_of_analytics">Отказ от аналитики</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot собирает анонимную аналитику, чтобы сделать приложение еще лучше.</string>
+
+
+    <string name="settings_labs_native_camera">Использовать встроенную камеру</string>
+
+    // share keys
+    </resources>

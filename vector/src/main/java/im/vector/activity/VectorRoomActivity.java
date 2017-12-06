@@ -836,9 +836,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     permissionsInfoDialog.show();
 
                 } else if (isUserAllowedToStartConfCall()) {
-                    // cannot select if it is a video or a voice call
-                    if ((mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(VectorRoomActivity.this)) {
-                        startJitsiCall(true);
+                    if (mRoom.getActiveMembers().size() > 2) {
+                        AlertDialog.Builder startConfDialog = new AlertDialog.Builder(VectorRoomActivity.this);
+                        startConfDialog.setTitle(R.string.conference_call_warning_title);
+                        startConfDialog.setMessage(R.string.conference_call_warning_message);
+                        startConfDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                        startConfDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (PreferencesManager.useJitsiConfCall(VectorRoomActivity.this)) {
+                                    startJitsiCall(true);
+                                } else {
+                                    displayVideoCallIpDialog();
+                                }
+                            }
+                        });
+                        startConfDialog.setNegativeButton(R.string.cancel, null);
+                        startConfDialog.show();
                     } else {
                         displayVideoCallIpDialog();
                     }
@@ -951,7 +965,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             @Override
             public void onCloseWidgetClick(final Widget widget) {
 
-                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                new AlertDialog.Builder(VectorRoomActivity.this)
                         .setMessage(R.string.widget_delete_message_confirmation)
                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
                             @Override
@@ -1556,7 +1570,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         } else if (id == R.id.ic_action_room_leave) {
             if (null != mRoom) {
                 Log.d(LOG_TAG, "Leave the room " + mRoom.getRoomId());
-                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                new AlertDialog.Builder(VectorRoomActivity.this)
                         .setTitle(R.string.room_participants_leave_prompt_title)
                         .setMessage(R.string.room_participants_leave_prompt_msg)
                         .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {

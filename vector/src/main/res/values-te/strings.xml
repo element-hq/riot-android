@@ -456,7 +456,6 @@
     <string name="room_settings_copy_room_address">గది చిరునామానునకలు చేయండి</string>
 
     <string name="room_settings_addresses_e2e_prompt_title">హెచ్చరిక!</string>
-    <string name="ga_use_settings">స్వయంచాలకంగా క్రాష్ నివేదికలను పంపండి</string>
     <string name="encryption_information_device_info">సంఘటన సమాచారం</string>
     <string name="encryption_information_user_id">వాడుకరి id</string>
     <string name="encryption_information_curve25519_identity_key">Curve25519 గుర్తింపు కీ</string>
