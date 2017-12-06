@@ -44,23 +44,27 @@ Recompile the provided aar files until we have gradle
 ======================================================
 
 - generate the olm-sdk.aar
-	clone the repository http://git.matrix.org/git/olm.git/
-	open the android project in /android
-	build it
-	copy  /android/olm-sdk/build/outputs/aarvector/libs/olm-sdk.aar to riot-android/vector/libs/.
+
+clone the repository http://git.matrix.org/git/olm.git/
+open the android project in /android
+build it
+copy  /android/olm-sdk/build/outputs/aarvector/libs/olm-sdk.aar to riot-android/vector/libs/.
 	
 - generate the matrix-sdk.aar
-   clone the repository https://github.com/matrix-org/matrix-android-sdk
-   open the project with android studio
-   build it
-   copy /matrix-android-sdk/matrix-sdk/build/outputs/aar/matrix-sdk-debug-....aar to riot-android/vector/libs/.
+
+clone the repository https://github.com/matrix-org/matrix-android-sdk
+open the project with android studio
+build it
+copy /matrix-android-sdk/matrix-sdk/build/outputs/aar/matrix-sdk-debug-....aar to riot-android/vector/libs/.
    
 - generate the other aar files
-  see the section "Jitsi integration"
+
+see the section "Jitsi integration"
    
 - compile the matrix SDK with the Riot-android project
-   in riot-android/settings.gradle, uncomment //include.. and //project..
-   in riot-android/vector/build.gradle, comment compile(name: 'matrix-sdk', ext: 'aar') and uncomment compile project(':matrix-sdk')
+
+in riot-android/settings.gradle, uncomment //include.. and //project..
+in riot-android/vector/build.gradle, comment compile(name: 'matrix-sdk', ext: 'aar') and uncomment compile project(':matrix-sdk')
 
 Make your own flavour
 =====================
