@@ -92,7 +92,7 @@ public class LoginHandler {
                       final SimpleApiCallback<HomeServerConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
 
-        final SimpleApiCallback<Credentials> loginCallback = new SimpleApiCallback<Credentials>() {
+        final SimpleApiCallback<Credentials> loginCallback = new SimpleApiCallback<Credentials>(callback) {
             @Override
             public void onSuccess(Credentials credentials) {
                 onRegistrationDone(appCtx, hsConfig, credentials, callback);
@@ -100,38 +100,22 @@ public class LoginHandler {
 
             @Override
             public void onNetworkError(final Exception e) {
-                UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
-                if (unrecCertEx != null) {
-                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-                    UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
-                        @Override
-                        public void onAccept() {
-                            login(appCtx, hsConfig, username, phoneNumber, phoneNumberCountry, password, callback);
-                        }
+                if(!UnrecognizedCertHandler.handle(hsConfig, e, new UnrecognizedCertHandler.Callback() {
+                    @Override
+                    public void onAccept() {
+                        login(appCtx, hsConfig, username, phoneNumber, phoneNumberCountry, password, callback);
+                    }
 
-                        @Override
-                        public void onIgnore() {
-                            callback.onNetworkError(e);
-                        }
+                    @Override
+                    public void onIgnore() {
+                        callback.onNetworkError(e);
+                    }
 
-                        @Override
-                        public void onReject() {
-                            callback.onNetworkError(e);
-                        }
-                    });
-                } else {
-                    callback.onNetworkError(e);
-                }
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                callback.onUnexpectedError(e);
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                callback.onMatrixError(e);
+                    @Override
+                    public void onReject() {
+                        callback.onNetworkError(e);
+                    }
+                })) { callback.onNetworkError(e); }
             }
         };
 
@@ -181,29 +165,22 @@ public class LoginHandler {
         client.getSupportedLoginFlows(new SimpleApiCallback<List<LoginFlow>>(callback) {
             @Override
             public void onNetworkError(final Exception e) {
-                UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
-                if (unrecCertEx != null) {
-                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+                if(!UnrecognizedCertHandler.handle(hsConfig, e, new UnrecognizedCertHandler.Callback() {
+                    @Override
+                    public void onAccept() {
+                        getSupportedLoginFlows(appCtx, hsConfig, callback);
+                    }
 
-                    UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
-                        @Override
-                        public void onAccept() {
-                            getSupportedLoginFlows(appCtx, hsConfig, callback);
-                        }
+                    @Override
+                    public void onIgnore() {
+                        callback.onNetworkError(e);
+                    }
 
-                        @Override
-                        public void onIgnore() {
-                            callback.onNetworkError(e);
-                        }
-
-                        @Override
-                        public void onReject() {
-                            callback.onNetworkError(e);
-                        }
-                    });
-                } else {
-                    callback.onNetworkError(e);
-                }
+                    @Override
+                    public void onReject() {
+                        callback.onNetworkError(e);
+                    }
+                })) { callback.onNetworkError(e); };
             }
         });
     }
@@ -233,7 +210,7 @@ public class LoginHandler {
         // avoid dispatching the device name
         params.initial_device_display_name = ctx.getString(R.string.login_mobile_device);
 
-        client.register(params, new SimpleApiCallback<Credentials>() {
+        client.register(params, new SimpleApiCallback<Credentials>(callback) {
             @Override
             public void onSuccess(Credentials credentials) {
                 onRegistrationDone(appCtx, hsConfig, credentials, callback);
@@ -241,40 +218,22 @@ public class LoginHandler {
 
             @Override
             public void onNetworkError(final Exception e) {
-                UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
-                if (unrecCertEx != null) {
-                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-                    Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
+                if(!UnrecognizedCertHandler.handle(hsConfig, e, new UnrecognizedCertHandler.Callback() {
+                    @Override
+                    public void onAccept() {
+                        getSupportedRegistrationFlows(appCtx, hsConfig, callback);
+                    }
 
-                    UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
-                        @Override
-                        public void onAccept() {
-                            getSupportedRegistrationFlows(appCtx, hsConfig, callback);
-                        }
+                    @Override
+                    public void onIgnore() {
+                        callback.onNetworkError(e);
+                    }
 
-                        @Override
-                        public void onIgnore() {
-                            callback.onNetworkError(e);
-                        }
-
-                        @Override
-                        public void onReject() {
-                            callback.onNetworkError(e);
-                        }
-                    });
-                } else {
-                    callback.onNetworkError(e);
-                }
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                callback.onUnexpectedError(e);
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                callback.onMatrixError(e);
+                    @Override
+                    public void onReject() {
+                        callback.onNetworkError(e);
+                    }
+                })) { callback.onNetworkError(e); }
             }
         });
     }
@@ -295,47 +254,25 @@ public class LoginHandler {
         final ThreePid pid = new ThreePid(null, ThreePid.MEDIUM_EMAIL);
         ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
 
-        pid.submitValidationToken(restClient, aToken, aClientSecret, aSid, new ApiCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean isSuccess) {
-                aRespCallback.onSuccess(isSuccess);
-            }
-
+        pid.submitValidationToken(restClient, aToken, aClientSecret, aSid, new SimpleApiCallback<Boolean>(aRespCallback) {
             @Override
             public void onNetworkError(final Exception e) {
-                UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
-                if (unrecCertEx != null) {
-                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+                if(!UnrecognizedCertHandler.handle(aHomeServerConfig, e, new UnrecognizedCertHandler.Callback() {
+                    @Override
+                    public void onAccept() {
+                        submitEmailTokenValidation(aCtx, aHomeServerConfig, aToken, aClientSecret, aSid, aRespCallback);
+                    }
 
-                    UnrecognizedCertHandler.show(aHomeServerConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
-                        @Override
-                        public void onAccept() {
-                            submitEmailTokenValidation(aCtx, aHomeServerConfig, aToken, aClientSecret, aSid, aRespCallback);
-                        }
+                    @Override
+                    public void onIgnore() {
+                        aRespCallback.onNetworkError(e);
+                    }
 
-                        @Override
-                        public void onIgnore() {
-                            aRespCallback.onNetworkError(e);
-                        }
-
-                        @Override
-                        public void onReject() {
-                            aRespCallback.onNetworkError(e);
-                        }
-                    });
-                } else {
-                    aRespCallback.onNetworkError(e);
-                }
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                aRespCallback.onUnexpectedError(e);
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                aRespCallback.onMatrixError(e);
+                    @Override
+                    public void onReject() {
+                        aRespCallback.onNetworkError(e);
+                    }
+                })) { aRespCallback.onNetworkError(e); }
             }
         });
     }

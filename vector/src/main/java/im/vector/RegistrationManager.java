@@ -904,30 +904,22 @@ public class RegistrationManager {
 
                 @Override
                 public void onNetworkError(final Exception e) {
-                    UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
-                    if (unrecCertEx != null) {
-                        final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-                        Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
+                    if(!UnrecognizedCertHandler.handle(mHsConfig, e, new UnrecognizedCertHandler.Callback() {
+                        @Override
+                        public void onAccept() {
+                            register(context, params, listener);
+                        }
 
-                        UnrecognizedCertHandler.show(mHsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
-                            @Override
-                            public void onAccept() {
-                                register(context, params, listener);
-                            }
+                        @Override
+                        public void onIgnore() {
+                            listener.onRegistrationFailed(e.getLocalizedMessage());
+                        }
 
-                            @Override
-                            public void onIgnore() {
-                                listener.onRegistrationFailed(e.getLocalizedMessage());
-                            }
-
-                            @Override
-                            public void onReject() {
-                                listener.onRegistrationFailed(e.getLocalizedMessage());
-                            }
-                        });
-                    } else {
-                        listener.onRegistrationFailed(e.getLocalizedMessage());
-                    }
+                        @Override
+                        public void onReject() {
+                            listener.onRegistrationFailed(e.getLocalizedMessage());
+                        }
+                    })) { listener.onRegistrationFailed(e.getLocalizedMessage()); }
                 }
 
                 @Override
