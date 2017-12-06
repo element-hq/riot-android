@@ -481,7 +481,12 @@ public class EventStreamService extends Service {
      * @param store   the store
      */
     private void startEventStream(final MXSession session, final IMXStore store) {
-        session.startEventStream(store.getEventStreamToken());
+        // resume if it was only suspended
+        if (null != session.getCurrentSyncToken()) {
+            session.resumeEventStream();
+        } else {
+            session.startEventStream(store.getEventStreamToken());
+        }
     }
 
     /**
@@ -625,6 +630,11 @@ public class EventStreamService extends Service {
         }
 
         Log.d(LOG_TAG, "## start : start the service");
+
+        // release previous instance
+        if ((null != mActiveEventStreamService) && (this != mActiveEventStreamService)) {
+            mActiveEventStreamService.stop();
+        }
 
         mActiveEventStreamService = this;
 

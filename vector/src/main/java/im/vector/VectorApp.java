@@ -508,9 +508,8 @@ public class VectorApp extends MultiDexApplication {
         }
 
         if (isAppInBackground() && !mIsCallingInBackground) {
-
             // the event stream service has been killed
-            if (null == EventStreamService.getInstance()) {
+            if (EventStreamService.isStopped()) {
                 CommonActivityUtils.startEventStreamService(VectorApp.this);
             } else {
                 CommonActivityUtils.resumeEventStream(VectorApp.this);
