@@ -55,7 +55,7 @@ copy  /android/olm-sdk/build/outputs/aarvector/libs/olm-sdk.aar to riot-android/
 clone the repository https://github.com/matrix-org/matrix-android-sdk
 open the project with android studio
 build it
-copy /matrix-android-sdk/matrix-sdk/build/outputs/aar/matrix-sdk-debug-....aar to riot-android/vector/libs/.
+copy /matrix-android-sdk/matrix-sdk/build/outputs/aar/matrix-sdk-debug-....aar to riot-android/vector/libs/matrix-sdk.aar
    
 - generate the other aar files
 
