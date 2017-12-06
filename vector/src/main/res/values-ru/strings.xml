@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">ru</string>
-    <string name="resouces_country">RU</string>
+    <string name="resouces_country">US</string>
     
     <!-- titles -->
     <string name="title_activity_home">Сообщения</string>
@@ -835,4 +835,20 @@ Email также позволит вам при необходимости во�
     <string name="settings_labs_native_camera">Использовать встроенную камеру</string>
 
     // share keys
-    </resources>
+    <string name="title_activity_bug_report">Отчет об ошибке</string>
+
+    <string name="conference_call_warning_title">Внимание!</string>
+    <string name="conference_call_warning_message">Конференц-связь находится в разработке и может быть ненадежной.</string>
+
+    // slash commands
+    <string name="command_error">Ошибка команды</string>
+    <string name="unrecognized_command">Нераспознанная команда: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Выкл</string>
+    <string name="notification_on">Вкл</string>
+    <string name="notification_noisy">Шумно</string>
+
+    <string name="encrypted_message">Зашифрованное сообщение</string>
+
+</resources>
