@@ -552,26 +552,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         displayCryptoCorruption();
 
         addBadgeEventsListener();
-
-        disableBatteryOptimisation();
-    }
-
-    /**
-     * Request to disable the background
-     */
-    private void disableBatteryOptimisation() {
-        if (!PreferencesManager.isIgnoringBatteryOptimizations(this) &&
-                !PreferencesManager.didRequestDisableBackgroundOptimisation(this)) {
-            PreferencesManager.setRequestDisableBackgroundSync(this);
-            Intent intent = new Intent();
-            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            intent.setData(Uri.parse("package:" + getPackageName()));
-            try {
-                startActivity(intent);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## disableBatteryOptimisation() : cannot request ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS");
-            }
-        }
     }
 
     @Override

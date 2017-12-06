@@ -203,42 +203,20 @@ public class PreferencesManager {
     public static boolean didRequestDisableBackgroundOptimisation(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(REQUEST_DISABLE_OPTIMISATION_KEY, false);
     }
-
-    /**
-     * Mark as requested the background optimisation.
-     *
-     * @param context the context
-     */
-    public static void setRequestDisableBackgroundSync(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(REQUEST_DISABLE_OPTIMISATION_KEY, true);
-        editor.commit();
-    }
-
-    /**
-     * Tells if the battery optimisations are ignored
-     *
-     * @param context the context
-     * @return true if they ignored
-     */
-    @SuppressLint("NewApi")
-    public static boolean isIgnoringBatteryOptimizations(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
-        }
-        // do not ask for android 6 & 7.
-        return true;
-    }
-
+    
     /**
      * Tells if a background service can be started.
      *
      * @param context the context
      * @return true if a background service can be started.
      */
+    @SuppressLint("NewApi")
     public static boolean canStartBackgroundService(Context context) {
-        return (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) || isIgnoringBatteryOptimizations(context);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
+        }
+
+        return true;
     }
 
     /**
