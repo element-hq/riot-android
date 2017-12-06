@@ -410,7 +410,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_settings_addresses_e2e_prompt_title">Attention !</string>
     <string name="directory_title">Répertoire</string>
 
-    <string name="ga_use_settings">Envoyer automatiquement les rapports d\'erreur</string>
     <string name="encryption_information_title">Informations sur le chiffrement de bout en bout</string>
 
     <string name="encryption_information_device_info">Informations sur l\'événement</string>
@@ -658,9 +657,6 @@ Une fois le chiffrement activé pour un salon, il ne peut plus être désactivé
 
 Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas encore implémenté le chiffrement.</string>
 
-    <string name="ga_use_alert_message">Souhaitez-vous nous aider à améliorer l\'application en envoyant des rapports d\'erreur automatiques ?</string>
-    <string name="ga_use_disable_alert_message">Vous devez redémarrer l\'application pour désactiver les rapports d\'erreur.</string>
-
     <string name="failed_to_load_timeline_position">%s a essayé de charger un point précis dans l\'historique du salon mais ne l\'a pas trouvé.</string>
 
 
@@ -774,4 +770,18 @@ Appareils inconnus :</string>
     <string name="share_without_verifying">Partager sans vérifier</string>
     <string name="ignore_request">Ignorer la demande</string>
 
-</resources>
+<string name="notification_noisy_notifications">Notifications bruyantes</string>
+    <string name="notification_silent_notifications">Notifications silencieuses</string>
+
+    <string name="option_take_photo">Prendre une photo</string>
+    <string name="option_take_video">Prendre une vidéo</string>
+
+    <string name="settings_analytics">Statistiques d\'utilisation</string>
+    <string name="settings_opt_out_of_analytics">Ne pas envoyer de données</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot collecte des données anonymes pour nous permettre d\'améliorer l\'application.</string>
+
+
+    <string name="settings_labs_native_camera">Utiliser la caméra native</string>
+
+    // share keys
+    </resources>

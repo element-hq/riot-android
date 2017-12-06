@@ -173,7 +173,7 @@ public final class GcmRegistrationManager {
         });
 
         mRegistrationState = getStoredRegistrationState();
-        mLastBatteryOptimizationStatus = PreferencesManager.isIgnoringBatteryOptimizations(mContext);
+        mLastBatteryOptimizationStatus = PreferencesManager.canStartBackgroundService(mContext);
         mRegistrationToken = getStoredRegistrationToken();
     }
 
@@ -497,7 +497,7 @@ public final class GcmRegistrationManager {
      */
     public void onAppResume() {
         if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) &&
-                (mLastBatteryOptimizationStatus != PreferencesManager.isIgnoringBatteryOptimizations(mContext))) {
+                (mLastBatteryOptimizationStatus != PreferencesManager.canStartBackgroundService(mContext))) {
             Log.d(LOG_TAG, "## onAppResume() : force the GCM registration");
 
             forceSessionsRegistration(new ThirdPartyRegistrationListener() {
@@ -558,7 +558,7 @@ public final class GcmRegistrationManager {
 
         Log.d(LOG_TAG, "registerToThirdPartyServer of " + session.getMyUserId());
 
-        boolean eventIdOnlyPushes = isBackgroundSyncAllowed() && PreferencesManager.isIgnoringBatteryOptimizations(mContext);
+        boolean eventIdOnlyPushes = isBackgroundSyncAllowed() && PreferencesManager.canStartBackgroundService(mContext);
 
         session.getPushersRestClient()
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),

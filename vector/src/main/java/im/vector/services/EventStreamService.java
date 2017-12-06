@@ -148,8 +148,8 @@ public class EventStreamService extends Service {
     private static android.os.Handler mNotificationsHandler = null;
 
     // get the text to display when the background sync is disabled
-    private final List<CharSequence> mBackgroundNotificationStrings = new ArrayList<>();
-    private final Set<String> mBackgroundNotificationEventIds = new HashSet<>();
+    private static final List<CharSequence> mBackgroundNotificationStrings = new ArrayList<>();
+    private static final Set<String> mBackgroundNotificationEventIds = new HashSet<>();
 
     /**
      * call in progress (foreground notification)
@@ -481,7 +481,12 @@ public class EventStreamService extends Service {
      * @param store   the store
      */
     private void startEventStream(final MXSession session, final IMXStore store) {
-        session.startEventStream(store.getEventStreamToken());
+        // resume if it was only suspended
+        if (null != session.getCurrentSyncToken()) {
+            session.resumeEventStream();
+        } else {
+            session.startEventStream(store.getEventStreamToken());
+        }
     }
 
     /**
@@ -625,6 +630,11 @@ public class EventStreamService extends Service {
         }
 
         Log.d(LOG_TAG, "## start : start the service");
+
+        // release previous instance
+        if ((null != mActiveEventStreamService) && (this != mActiveEventStreamService)) {
+            mActiveEventStreamService.stop();
+        }
 
         mActiveEventStreamService = this;
 
@@ -1108,11 +1118,59 @@ public class EventStreamService extends Service {
     }
 
     /**
+     * Try to trigger a notification when the event stream is not created.
+     *
+     * @param context             the context
+     * @param event               the notified event
+     * @param roomName            the room name
+     * @param senderDisplayName   the sender display name
+     * @param unreadMessagesCount the unread messages count
+     */
+    public static void onStaticNotifiedEvent(Context context, Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
+        final NotificationManagerCompat nm = NotificationManagerCompat.from(context);
+        NotificationUtils.addNotificationChannels(context);
+
+        if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
+            mBackgroundNotificationEventIds.add(event.eventId);
+
+            String header = (TextUtils.isEmpty(roomName) ? event.roomId : roomName) + ": " +
+                    (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName) + " ";
+
+            String text;
+
+            if (event.isEncrypted()) {
+                text = context.getString(R.string.encrypted_message);
+            } else {
+                EventDisplay eventDisplay = new RiotEventDisplay(context, event, null);
+                eventDisplay.setPrependMessagesWithAuthor(false);
+                text = eventDisplay.getTextualDisplay().toString();
+            }
+
+            if (!TextUtils.isEmpty(text)) {
+                SpannableString notifiedLine = new SpannableString(header + text);
+                notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                mBackgroundNotificationStrings.add(0, notifiedLine);
+                Notification notification = NotificationUtils.buildMessagesListNotification(context, mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
+
+                if (null != notification) {
+                    nm.notify(NOTIF_ID_MESSAGE, notification);
+                } else {
+                    nm.cancel(NOTIF_ID_MESSAGE);
+                }
+            }
+        } else if (0 == unreadMessagesCount) {
+            mBackgroundNotificationStrings.clear();
+            nm.cancel(NOTIF_ID_MESSAGE);
+        }
+    }
+
+    /**
      * Notify that a notification for even has been received.
      *
      * @param event               the notified event
      * @param roomName            the room name
-     * @param senderDisplayName   the sender displayname
+     * @param senderDisplayName   the sender display name
      * @param unreadMessagesCount the unread messages count
      */
     public void onNotifiedEventWithBackgroundSyncDisabled(Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
@@ -1132,13 +1190,18 @@ public class EventStreamService extends Service {
                 }
 
                 if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTED) && session.isCryptoEnabled()) {
-                    session.getCrypto().decryptEvent(event, null);
+                    session.getDataHandler().decryptEvent(event, null);
                 }
 
                 // test if the message is displayable
                 EventDisplay eventDisplay = new RiotEventDisplay(getApplicationContext(), event, roomState);
                 eventDisplay.setPrependMessagesWithAuthor(false);
                 String text = eventDisplay.getTextualDisplay().toString();
+
+                // display a dedicated message in decryption error cases
+                if (null != event.getCryptoError()) {
+                    text = getApplicationContext().getString(R.string.encrypted_message);
+                }
 
                 // sanity check
                 if (!TextUtils.isEmpty(text) && (null != roomState)) {

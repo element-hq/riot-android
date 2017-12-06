@@ -33,6 +33,7 @@ import java.util.Map;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.AccountCreationActivity;
+import im.vector.activity.BugReportActivity;
 import im.vector.activity.CountryPickerActivity;
 import im.vector.activity.FallbackLoginActivity;
 import im.vector.activity.HistoricalRoomsActivity;
@@ -125,7 +126,9 @@ public class ThemeUtils {
      */
     public static void setActivityTheme(Activity activity) {
         if (TextUtils.equals(getApplicationTheme(activity), THEME_DARK_VALUE)) {
-            if (activity instanceof AccountCreationActivity) {
+            if (activity instanceof BugReportActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof AccountCreationActivity) {
                 activity.setTheme(R.style.AppTheme_Dark);
             } else if (activity instanceof AccountCreationActivity) {
                 activity.setTheme(R.style.AppTheme_Dark);
@@ -179,7 +182,9 @@ public class ThemeUtils {
         }
 
         if (TextUtils.equals(getApplicationTheme(activity), THEME_BLACK_VALUE)) {
-            if (activity instanceof AccountCreationActivity) {
+            if (activity instanceof BugReportActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof AccountCreationActivity) {
                 activity.setTheme(R.style.AppTheme_Black);
             } else if (activity instanceof AccountCreationActivity) {
                 activity.setTheme(R.style.AppTheme_Black);

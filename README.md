@@ -27,6 +27,7 @@ And it should build the project (you need to have the right android SDKs)
 
 Jitsi integration
 ==================
+
 How to build JitsiMeet libs:
 - clone https://github.com/jitsi/jitsi-meet
 - build jitsi-meet following instruction at https://github.com/jitsi/jitsi-meet#building-the-sources
@@ -39,6 +40,31 @@ How to build JitsiMeet libs:
 - build the jitsi android project (gradlew assembleRelease in the "android" folder)
 - copy the react-... aar to the libs folder (see build.gradle to have a list of them)
 
+Recompile the provided aar files until we have gradle 
+======================================================
+
+- generate olm-sdk.aar
+
+clone the repository http://git.matrix.org/git/olm.git/
+open the android project in /android
+build it
+copy  /android/olm-sdk/build/outputs/aarvector/libs/olm-sdk.aar to riot-android/vector/libs/.
+	
+- generate matrix-sdk.aar
+
+clone the repository https://github.com/matrix-org/matrix-android-sdk
+open the project with android studio
+build it
+copy /matrix-android-sdk/matrix-sdk/build/outputs/aar/matrix-sdk-debug-....aar to riot-android/vector/libs/matrix-sdk.aar
+   
+- generate the other aar files
+
+see the section "Jitsi integration"
+   
+- compile the matrix SDK with the Riot-android project
+
+in riot-android/settings.gradle, uncomment //include.. and //project..
+in riot-android/vector/build.gradle, comment compile(name: 'matrix-sdk', ext: 'aar') and uncomment compile project(':matrix-sdk')
 
 Make your own flavour
 =====================

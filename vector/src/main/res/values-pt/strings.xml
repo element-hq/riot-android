@@ -673,11 +673,6 @@ Mensagens cifradas não serão visíveis para clientes que não ainda não imple
     <!-- Directory -->
     <string name="directory_title">Diretório</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Deseja ajudar a melhorar a aplicação ao enviar relatórios de erros automaticamente?</string>
-    <string name="ga_use_settings">Enviar relatórios de erros automaticamente</string>
-    <string name="ga_use_disable_alert_message">Necessita de reiniciar a aplicação para desativar os relatórios de erros.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s estava a tentar carregar um ponto específico do histórico da sala mas não foi possível encontrá-lo.</string>
 

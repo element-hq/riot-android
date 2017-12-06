@@ -563,15 +563,6 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
                 long delta = System.currentTimeMillis() - t0;
 
-                if (0 != mContactsList.size()) {
-                    VectorApp.sendGAStats(VectorApp.getInstance(),
-                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
-                            VectorApp.GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION,
-                            mContactsList.size() + " contacts in " + delta + " ms",
-                            delta
-                    );
-                }
-
                 Log.d(LOG_TAG, "## refreshLocalContactsSnapshot(): retrieve " + mContactsList.size() + " contacts in " + delta + " ms");
 
                 // define the PIDs listener

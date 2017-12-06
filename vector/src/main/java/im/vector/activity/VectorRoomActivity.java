@@ -964,7 +964,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             @Override
             public void onCloseWidgetClick(final Widget widget) {
 
-                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                new AlertDialog.Builder(VectorRoomActivity.this)
                         .setMessage(R.string.widget_delete_message_confirmation)
                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
                             @Override
@@ -1596,7 +1596,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         } else if (id == R.id.ic_action_room_leave) {
             if (null != mRoom) {
                 Log.d(LOG_TAG, "Leave the room " + mRoom.getRoomId());
-                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                new AlertDialog.Builder(VectorRoomActivity.this)
                         .setTitle(R.string.room_participants_leave_prompt_title)
                         .setMessage(R.string.room_participants_leave_prompt_msg)
                         .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {

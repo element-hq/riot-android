@@ -556,7 +556,7 @@ public class CommonActivityUtils {
         // the events stream service is launched
         // either the application has never be launched
         // or the service has been killed on low memory
-        if (EventStreamService.getInstance() == null) {
+        if (EventStreamService.isStopped()) {
             ArrayList<String> matrixIds = new ArrayList<>();
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 

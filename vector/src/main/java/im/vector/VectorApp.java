@@ -74,7 +74,6 @@ import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.WidgetActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
-import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
@@ -236,8 +235,6 @@ public class VectorApp extends MultiDexApplication {
         Log.d(LOG_TAG, " Local time: " + (new SimpleDateFormat("MM-dd HH:mm:ss.SSSZ", Locale.US)).format(new Date()));
         Log.d(LOG_TAG, "----------------------------------------------------------------");
         Log.d(LOG_TAG, "----------------------------------------------------------------\n\n\n\n");
-
-        GAHelper.initGoogleAnalytics(getApplicationContext());
 
         mRageShake.start(this);
 
@@ -511,9 +508,8 @@ public class VectorApp extends MultiDexApplication {
         }
 
         if (isAppInBackground() && !mIsCallingInBackground) {
-
             // the event stream service has been killed
-            if (null == EventStreamService.getInstance()) {
+            if (EventStreamService.isStopped()) {
                 CommonActivityUtils.startEventStreamService(VectorApp.this);
             } else {
                 CommonActivityUtils.resumeEventStream(VectorApp.this);
@@ -735,106 +731,6 @@ public class VectorApp extends MultiDexApplication {
         return isSyncing;
     }
 
-    //==============================================================================================================
-    // GA management
-    //==============================================================================================================
-    /**
-     * GA tags
-     */
-    public static final String GOOGLE_ANALYTICS_STATS_CATEGORY = "stats";
-
-    public static final String GOOGLE_ANALYTICS_STATS_ROOMS_ACTION = "rooms";
-    public static final String GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION = "storePreload";
-    public static final String GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION = "mountData";
-    public static final String GOOGLE_ANALYTICS_STARTUP_LAUNCH_SCREEN_ACTION = "launchScreen";
-    public static final String GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION = "Contacts";
-
-    /**
-     * Send a GA stats
-     *
-     * @param context  the context
-     * @param category the category
-     * @param action   the action
-     * @param label    the label
-     * @param value    the value
-     */
-    public static void sendGAStats(Context context, String category, String action, String label, long value) {
-        GAHelper.sendGAStats(context, category, action, label, value);
-    }
-
-    /**
-     * An uncaught exception has been triggered
-     *
-     * @param threadName the thread name
-     * @param throwable  the throwable
-     * @return the exception description
-     */
-    public static String uncaughtException(String threadName, Throwable throwable) {
-        StringBuilder b = new StringBuilder();
-        String appName = Matrix.getApplicationName();
-
-        b.append(appName + " Build : " + VectorApp.VERSION_BUILD + "\n");
-        b.append(appName + " Version : " + VectorApp.VECTOR_VERSION_STRING + "\n");
-        b.append("SDK Version : " + VectorApp.SDK_VERSION_STRING + "\n");
-        b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n");
-
-        b.append("Memory statuses \n");
-
-        long freeSize = 0L;
-        long totalSize = 0L;
-        long usedSize = -1L;
-        try {
-            Runtime info = Runtime.getRuntime();
-            freeSize = info.freeMemory();
-            totalSize = info.totalMemory();
-            usedSize = totalSize - freeSize;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        b.append("usedSize   " + (usedSize / 1048576L) + " MB\n");
-        b.append("freeSize   " + (freeSize / 1048576L) + " MB\n");
-        b.append("totalSize   " + (totalSize / 1048576L) + " MB\n");
-
-        b.append("Thread: ");
-        b.append(threadName);
-
-        Activity a = VectorApp.getCurrentActivity();
-        if (a != null) {
-            b.append(", Activity:");
-            b.append(a.getLocalClassName());
-        }
-
-        b.append(", Exception: ");
-
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw, true);
-        throwable.printStackTrace(pw);
-        b.append(sw.getBuffer().toString());
-        Log.e("FATAL EXCEPTION", b.toString());
-
-        String bugDescription = b.toString();
-
-        if (null != VectorApp.getInstance()) {
-            VectorApp.getInstance().setAppCrashed(bugDescription);
-        }
-
-        return bugDescription;
-    }
-
-    /**
-     * Warn that the application crashed
-     *
-     * @param description the crash description
-     */
-    private void setAppCrashed(String description) {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(PREFS_CRASH_KEY, true);
-        editor.commit();
-
-        BugReporter.saveCrashReport(this, description);
-    }
-
     /**
      * Tells if the application crashed
      *
@@ -876,7 +772,7 @@ public class VectorApp extends MultiDexApplication {
     private static final String FONT_SCALE_LARGEST = "FONT_SCALE_LARGEST";
     private static final String FONT_SCALE_HUGE = "FONT_SCALE_HUGE";
 
-    private static final Locale mApplicationDefaultLanguage = new Locale("en", "UK");
+    private static final Locale mApplicationDefaultLanguage = new Locale("en", "US");
 
     private static final Map<Float, String> mPrefKeyByFontScale = new LinkedHashMap<Float, String>() {{
         put(0.70f, FONT_SCALE_TINY);

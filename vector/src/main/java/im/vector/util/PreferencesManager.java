@@ -39,13 +39,12 @@ import java.util.Set;
 
 import im.vector.R;
 import im.vector.activity.LoginActivity;
-import im.vector.ga.GAHelper;
 
 public class PreferencesManager {
 
     private static final String LOG_TAG = PreferencesManager.class.getSimpleName();
 
-    public static final String SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY = "SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY";
+    public static final String SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY = "SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY_2";
     public static final String SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY";
     public static final String SETTINGS_VERSION_PREFERENCE_KEY = "SETTINGS_VERSION_PREFERENCE_KEY";
     public static final String SETTINGS_OLM_VERSION_PREFERENCE_KEY = "SETTINGS_OLM_VERSION_PREFERENCE_KEY";
@@ -90,12 +89,12 @@ public class PreferencesManager {
     public static final String SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY = "SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY";
     public static final String SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY = "SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY";
     public static final String SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY = "SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY";
-    public static final String SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY";
-    public static final String SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY";
-    public static final String SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY";
-    public static final String SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY";
-    public static final String SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY";
-    public static final String SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY";
+    public static final String SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY_2";
+    public static final String SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY_2";
+    public static final String SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY_2";
+    public static final String SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY_2";
+    public static final String SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY_2";
+    public static final String SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY_2";
 
     private static final String SETTINGS_HIDE_READ_RECEIPTS_KEY = "SETTINGS_HIDE_READ_RECEIPTS_KEY";
     private static final String SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY";
@@ -110,9 +109,7 @@ public class PreferencesManager {
 
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     private static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
-    public static final String SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY = "SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY";
     private static final String SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY = "SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY";
-    public static final String SETTINGS_ANALYTICS_PREFERENCE_KEY = "SETTINGS_ANALYTICS_PREFERENCE_KEY";
 
     public static final String SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY";
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
@@ -126,7 +123,6 @@ public class PreferencesManager {
 
     private static final String SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY = "SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY";
 
-    private static final String REQUEST_DISABLE_OPTIMISATION_KEY = "REQUEST_DISABLE_OPTIMISATION_KEY";
 
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
@@ -146,7 +142,6 @@ public class PreferencesManager {
 
             SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
             SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
-            SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY,
             SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY,
             SETTINGS_START_ON_BOOT_PREFERENCE_KEY,
             SETTINGS_INTERFACE_TEXT_SIZE_KEY,
@@ -198,37 +193,14 @@ public class PreferencesManager {
     }
 
     /**
-     * Tells if there was a request to disable the battery optimisation on some android >= M devices.
+     * Tells if a background service can be started.
      *
      * @param context the context
-     * @return true if there was a request
-     */
-    public static boolean didRequestDisableBackgroundOptimisation(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(REQUEST_DISABLE_OPTIMISATION_KEY, false);
-    }
-
-    /**
-     * Mark as requested the background optimisation.
-     *
-     * @param context the context
-     */
-    public static void setRequestDisableBackgroundSync(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(REQUEST_DISABLE_OPTIMISATION_KEY, true);
-        editor.commit();
-    }
-
-
-    /**
-     * Tells if the battery optimisations are ignored
-     *
-     * @param context the context
-     * @return true if they ignored
+     * @return true if a background service can be started.
      */
     @SuppressLint("NewApi")
-    public static boolean isIgnoringBatteryOptimizations(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    public static boolean canStartBackgroundService(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
         }
 
@@ -527,13 +499,6 @@ public class PreferencesManager {
         // some key names have been updated to supported language switch
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (preferences.contains(context.getString(R.string.ga_use_settings))) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.ga_use_settings), false));
-            editor.remove(context.getString(R.string.ga_use_settings));
-            editor.commit();
-        }
-
         if (preferences.contains(context.getString(R.string.settings_pin_missed_notifications))) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.settings_pin_missed_notifications), false));
@@ -645,59 +610,6 @@ public class PreferencesManager {
      */
     public static boolean pinUnreadMessages(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, false);
-    }
-
-    /**
-     * Tells if Google analytics use is allowed
-     *
-     * @param context the context
-     * @return true if the GA is allowed to be used
-     */
-    public static boolean isGAUseAllowed(Context context) {
-        return TextUtils.equals(context.getResources().getString(R.string.allow_ga_use), "true");
-    }
-
-    /**
-     * Update the GA use.
-     *
-     * @param context the context
-     * @param value   the new value
-     */
-    public static void setUseGA(Context context, boolean value) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, value && isGAUseAllowed(context));
-        editor.commit();
-
-        GAHelper.initGoogleAnalytics(context);
-    }
-
-    /**
-     * Tells if GA can be used
-     *
-     * @param context the context
-     * @return null if not defined, true / false when defined
-     */
-    public static Boolean useGA(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (preferences.contains(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY)) {
-            return preferences.getBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, false);
-        } else {
-            try {
-                if (!isGAUseAllowed(context)) {
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean(SETTINGS_GA_USE_SETTINGS_PREFERENCE_KEY, false);
-                    editor.commit();
-
-                    return false;
-                }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "useGA " + e.getLocalizedMessage());
-            }
-
-            return null;
-        }
     }
 
     /**
