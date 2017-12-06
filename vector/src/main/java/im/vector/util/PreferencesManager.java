@@ -110,7 +110,6 @@ public class PreferencesManager {
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     private static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
     private static final String SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY = "SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY";
-    public static final String SETTINGS_ANALYTICS_PREFERENCE_KEY = "SETTINGS_ANALYTICS_PREFERENCE_KEY";
 
     public static final String SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY";
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
@@ -124,7 +123,6 @@ public class PreferencesManager {
 
     private static final String SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY = "SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY";
 
-    private static final String REQUEST_DISABLE_OPTIMISATION_KEY = "REQUEST_DISABLE_OPTIMISATION_KEY";
 
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
@@ -194,16 +192,6 @@ public class PreferencesManager {
         editor.commit();
     }
 
-    /**
-     * Tells if there was a request to disable the battery optimisation on some android >= M devices.
-     *
-     * @param context the context
-     * @return true if there was a request
-     */
-    public static boolean didRequestDisableBackgroundOptimisation(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(REQUEST_DISABLE_OPTIMISATION_KEY, false);
-    }
-    
     /**
      * Tells if a background service can be started.
      *

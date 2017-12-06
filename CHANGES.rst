@@ -1,3 +1,21 @@
+Changes in Riot 0.7.06 (2017-12-06)
+===================================================
+
+Features:
+ 
+ * Update the global notification rules UI to have tree states (off, on, noisy) instead of a toogle (on, off).
+ 
+Improvements:
+ 
+ * Move the bug report dialog to an activity.
+ * Remove Google Analytics.
+ 
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * Improve the notification management on android 8 devices when the application is in battery optimisation mode.
+ * Fix some invalid avatars while using the autocompletion text.
+ 
 Changes in Riot 0.7.05 (2017-11-28)
 ===================================================
 
