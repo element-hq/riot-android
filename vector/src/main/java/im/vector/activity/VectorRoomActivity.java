@@ -405,9 +405,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                 @Override
                 public void run() {
-                    Log.d(LOG_TAG, "Received event type: " + event.getType());
+                    String eventType = event.getType();
+                    Log.d(LOG_TAG, "Received event type: " + eventType);
 
-                    switch(event.getType()) {
+                    switch(eventType) {
                         case Event.EVENT_TYPE_STATE_ROOM_NAME:
                         case Event.EVENT_TYPE_STATE_ROOM_ALIASES:
                         case Event.EVENT_TYPE_STATE_ROOM_MEMBER:
