@@ -784,4 +784,20 @@ Ismeretlen eszközök:</string>
     <string name="settings_labs_native_camera">Beépített kamera használata</string>
 
     // share keys
-    </resources>
+    <string name="title_activity_bug_report">Hiba jelentés</string>
+
+    <string name="conference_call_warning_title">Figyelmeztetés!</string>
+    <string name="conference_call_warning_message">A konferenciabeszélgetés fejlesztés alatt van, elképzelhető, hogy nem működik még megfelelően.</string>
+
+    // slash commands
+    <string name="command_error">Utasítás hiba</string>
+    <string name="unrecognized_command">Ismeretlen utasítás: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Ki</string>
+    <string name="notification_on">Be</string>
+    <string name="notification_noisy">Hangos</string>
+
+    <string name="encrypted_message">Titkosított üzenet</string>
+
+</resources>
