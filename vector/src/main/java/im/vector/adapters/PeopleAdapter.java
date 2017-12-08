@@ -67,7 +67,7 @@ public class PeopleAdapter extends AbsAdapter {
      * *********************************************************************************************
      */
 
-    public PeopleAdapter(final Context context, final OnSelectItemListener listener, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
+    public PeopleAdapter(final Context context, final OnSelectItemListener listener, final RoomInvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
         super(context, invitationListener, moreActionListener);
         mListener = listener;
 
@@ -139,7 +139,7 @@ public class PeopleAdapter extends AbsAdapter {
             case TYPE_ROOM:
                 final RoomViewHolder roomViewHolder = (RoomViewHolder) viewHolder;
                 final Room room = (Room) getItemForPosition(position);
-                roomViewHolder.populateViews(mContext, mSession, room, true, false, mMoreActionListener);
+                roomViewHolder.populateViews(mContext, mSession, room, true, false, mMoreRoomActionListener);
                 roomViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

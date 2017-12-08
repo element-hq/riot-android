@@ -110,6 +110,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
+import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
@@ -166,6 +167,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private static final String TAG_FRAGMENT_FAVOURITES = "TAG_FRAGMENT_FAVOURITES";
     private static final String TAG_FRAGMENT_PEOPLE = "TAG_FRAGMENT_PEOPLE";
     private static final String TAG_FRAGMENT_ROOMS = "TAG_FRAGMENT_ROOMS";
+    private static final String TAG_FRAGMENT_GROUPS = "TAG_FRAGMENT_GROUPS";
 
     // Key used to restore the proper fragment after orientation change
     private static final String CURRENT_MENU_ID = "CURRENT_MENU_ID";
@@ -784,6 +786,15 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
+                break;
+            case R.id.bottom_action_groups:
+                Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_GROUPS);
+                if (fragment == null) {
+                    fragment = GroupsFragment.newInstance();
+                }
+                mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_groups));
                 break;
         }
 

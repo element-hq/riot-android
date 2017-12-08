@@ -63,7 +63,7 @@ import im.vector.view.SectionView;
 import im.vector.view.SimpleDividerItemDecoration;
 
 public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.OnRoomChangedListener {
-    private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
+    private static final String LOG_TAG = RoomsFragment.class.getSimpleName();
 
     // activity result codes
     private static final int DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE = 314;

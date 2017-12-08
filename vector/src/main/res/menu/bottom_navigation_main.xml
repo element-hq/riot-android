@@ -25,4 +25,10 @@
         android:enabled="true"
         android:icon="@drawable/ic_people_black_24dp"/>
 
+    <item
+        android:title=""
+        android:id="@+id/bottom_action_groups"
+        android:enabled="true"
+        android:icon="@drawable/ic_group_work_black_24dp"/>
+
 </menu>

@@ -192,7 +192,7 @@ public class HomeSectionView extends RelativeLayout {
      */
     public void setupRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
                                   final boolean nestedScrollEnabled, final HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener,
-                                  final AbsAdapter.InvitationListener invitationListener,
+                                  final AbsAdapter.RoomInvitationListener invitationListener,
                                   final AbsAdapter.MoreRoomActionListener moreActionListener) {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);

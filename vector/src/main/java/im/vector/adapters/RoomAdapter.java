@@ -61,7 +61,7 @@ public class RoomAdapter extends AbsAdapter {
      * *********************************************************************************************
      */
 
-    public RoomAdapter(final Context context, final OnSelectItemListener listener, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
+    public RoomAdapter(final Context context, final OnSelectItemListener listener, final RoomInvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
         super(context, invitationListener, moreActionListener);
 
         mListener = listener;
@@ -125,7 +125,7 @@ public class RoomAdapter extends AbsAdapter {
             case TYPE_ROOM:
                 final RoomViewHolder roomViewHolder = (RoomViewHolder) viewHolder;
                 final Room room = (Room) getItemForPosition(position);
-                roomViewHolder.populateViews(mContext, mSession, room, false, false, mMoreActionListener);
+                roomViewHolder.populateViews(mContext, mSession, room, false, false, mMoreRoomActionListener);
                 roomViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -89,6 +89,8 @@
     <string name="home_filter_placeholder_favorites">Search for favourites</string>
     <string name="home_filter_placeholder_people">Search for people</string>
     <string name="home_filter_placeholder_rooms">Search for rooms</string>
+    <string name="home_filter_placeholder_groups">Search for groups</string>
+
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -112,6 +114,11 @@
         <item quantity="one">1 user</item>
         <item quantity="other">%d users</item>
     </plurals>
+
+    <!-- Groups fragment -->
+    <string name="groups_invite_header">Invite</string>
+    <string name="groups_header">Groups</string>
+    <string name="no_group_placeholder">No groups</string>
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
