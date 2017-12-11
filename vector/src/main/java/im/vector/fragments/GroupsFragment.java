@@ -25,8 +25,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.groups.GroupsManager;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.group.Group;
 import org.matrix.androidsdk.util.Log;
 
@@ -88,8 +93,8 @@ public class GroupsFragment extends AbsHomeFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.setInvitation(mActivity.getRoomInvitations());
         mRecycler.addOnScrollListener(mScrollListener);
+        refreshGroups();
     }
 
     @Override
@@ -151,5 +156,27 @@ public class GroupsFragment extends AbsHomeFragment {
 
         }, null, null);
         mRecycler.setAdapter(mAdapter);
+    }
+
+    /**
+     * Refresh the groups list
+     */
+    private void refreshGroups() {
+        GroupsManager groupsManager = mSession.getGroupsManager();
+
+        mJoinedGroups.clear();
+        mJoinedGroups.addAll(groupsManager.getJoinedGroups());
+        mAdapter.setGroups(mJoinedGroups);
+
+        mInvitedGroups.clear();
+        mInvitedGroups.addAll(groupsManager.getInvitedGroups());
+        mAdapter.setInvitedGroups(mInvitedGroups);
+
+        mSession.getGroupsManager().refreshGroupProfiles(new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

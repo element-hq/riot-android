@@ -377,7 +377,7 @@ public class VectorUtils {
             int idx = 0;
             char initial = name.charAt(idx);
 
-            if ((initial == '@' || initial == '#') && (name.length() > 1)) {
+            if ((initial == '@' || initial == '#' || initial == '+') && (name.length() > 1)) {
                 idx++;
             }
 
