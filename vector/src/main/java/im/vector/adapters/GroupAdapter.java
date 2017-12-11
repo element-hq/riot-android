@@ -64,11 +64,12 @@ public class GroupAdapter extends AbsAdapter {
         mListener = listener;
 
         mInvitedGroupsSection = new AdapterSection<>(context.getString(R.string.groups_invite_header), -1,
-                R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_GROUP_INVITATION, new ArrayList<Group>(), Group.mGroupsComparator);
+                R.layout.adapter_item_group_invite, TYPE_HEADER_DEFAULT, TYPE_GROUP_INVITATION, new ArrayList<Group>(), Group.mGroupsComparator);
         mInvitedGroupsSection.setEmptyViewPlaceholder(context.getString(R.string.no_group_placeholder), context.getString(R.string.no_result_placeholder));
+        mInvitedGroupsSection.setIsHiddenWhenEmpty(true);
 
         mGroupsSection = new AdapterSection<>(context.getString(R.string.groups_header), -1,
-                R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_GROUP, new ArrayList<Group>(), Group.mGroupsComparator);
+                R.layout.adapter_item_group_view, TYPE_HEADER_DEFAULT, TYPE_GROUP, new ArrayList<Group>(), Group.mGroupsComparator);
         mGroupsSection.setEmptyViewPlaceholder(context.getString(R.string.no_group_placeholder), context.getString(R.string.no_result_placeholder));
 
         addSection(mInvitedGroupsSection);

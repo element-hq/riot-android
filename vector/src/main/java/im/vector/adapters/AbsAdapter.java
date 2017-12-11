@@ -475,7 +475,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
     }
 
     public interface GroupInvitationListener {
-        void onPreviewGroup(MXSession session, String groupId);
+        void onJoinGroup(MXSession session, String groupId);
 
         void onRejectInvitation(MXSession session, String groupId);
     }

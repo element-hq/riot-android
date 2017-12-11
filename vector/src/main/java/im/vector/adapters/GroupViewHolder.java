@@ -42,40 +42,21 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.room_avatar)
     ImageView vGroupAvatar;
 
-    @BindView(R.id.room_name)
+    @BindView(R.id.group_name)
     TextView vGroupName;
 
-    @BindView(R.id.room_name_server)
+    @BindView(R.id.group_topic)
     @Nullable
-    TextView vGroupNameServer;
+    TextView vGroupTopic;
 
-    @BindView(R.id.room_message)
-    @Nullable
-    TextView vGroupLastMessage;
+    @BindView(R.id.group_members_count)
+    TextView vGroupMembersCount;
 
-    @BindView(R.id.room_update_date)
-    @Nullable
-    TextView vGroupTimestamp;
-
-    @BindView(R.id.indicator_unread_message)
-    @Nullable
-    View vGroupUnreadIndicator;
-
-    @BindView(R.id.room_unread_count)
-    TextView vGroupUnreadCount;
-
-    @BindView(R.id.direct_chat_indicator)
-    @Nullable
-    View mDirectChatIndicator;
-
-    @BindView(R.id.room_avatar_encrypted_icon)
-    View vGroupEncryptedIcon;
-
-    @BindView(R.id.room_more_action_click_area)
+    @BindView(R.id.group_more_action_click_area)
     @Nullable
     View vGroupMoreActionClickArea;
 
-    @BindView(R.id.room_more_action_anchor)
+    @BindView(R.id.group_more_action_anchor)
     @Nullable
     View vGroupMoreActionAnchor;
 
@@ -101,16 +82,16 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
         }
 
         if (isInvitation) {
-            vGroupUnreadCount.setText("!");
-            vGroupUnreadCount.setTypeface(null, Typeface.BOLD);
+            vGroupMembersCount.setText("!");
+            vGroupMembersCount.setTypeface(null, Typeface.BOLD);
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(100);
             shape.setColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color));
-            vGroupUnreadCount.setBackground(shape);
-            vGroupUnreadCount.setVisibility(View.VISIBLE);
+            vGroupMembersCount.setBackground(shape);
+            vGroupMembersCount.setVisibility(View.VISIBLE);
         } else {
-            vGroupUnreadCount.setVisibility(View.GONE);
+            vGroupMembersCount.setVisibility(View.GONE);
         }
 
         vGroupName.setText(group.getName());
@@ -118,21 +99,7 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
 
         VectorUtils.loadGroupAvatar(context, session, vGroupAvatar, group);
 
-        vGroupLastMessage.setText(group.getShortDescription());
-
-        if (mDirectChatIndicator != null) {
-            mDirectChatIndicator.setVisibility(View.INVISIBLE);
-        }
-
-        vGroupEncryptedIcon.setVisibility(View.INVISIBLE);
-
-        if (vGroupUnreadIndicator != null) {
-            vGroupUnreadIndicator.setVisibility(View.INVISIBLE);
-        }
-
-        if (vGroupTimestamp != null) {
-            vGroupTimestamp.setText(null);
-        }
+        vGroupTopic.setText(group.getShortDescription());
 
         if (vGroupMoreActionClickArea != null && vGroupMoreActionAnchor != null) {
             vGroupMoreActionClickArea.setOnClickListener(new View.OnClickListener() {

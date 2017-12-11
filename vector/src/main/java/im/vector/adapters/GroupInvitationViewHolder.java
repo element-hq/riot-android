@@ -29,11 +29,11 @@ import im.vector.R;
 
 public class GroupInvitationViewHolder extends GroupViewHolder {
 
-    @BindView(R.id.recents_invite_reject_button)
+    @BindView(R.id.group_invite_reject_button)
     Button vRejectButton;
 
-    @BindView(R.id.recents_invite_preview_button)
-    Button vPreViewButton;
+    @BindView(R.id.group_invite_join_button)
+    Button vJoinButton;
 
     GroupInvitationViewHolder(View itemView) {
         super(itemView);
@@ -44,11 +44,11 @@ public class GroupInvitationViewHolder extends GroupViewHolder {
                               final AbsAdapter.MoreGroupActionListener moreGroupActionListener) {
         super.populateViews(context, session, group, invitationListener, true, moreGroupActionListener);
 
-        vPreViewButton.setOnClickListener(new View.OnClickListener() {
+        vJoinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != invitationListener) {
-                    invitationListener.onPreviewGroup(session, group.getGroupId());
+                    invitationListener.onJoinGroup(session, group.getGroupId());
                 }
             }
         });

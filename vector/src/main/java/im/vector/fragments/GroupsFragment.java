@@ -16,46 +16,82 @@
 
 package im.vector.fragments;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.groups.GroupsManager;
+import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.group.Group;
+import org.matrix.androidsdk.rest.model.group.GroupProfile;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorHomeActivity;
+import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.GroupAdapter;
+import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
 public class GroupsFragment extends AbsHomeFragment {
-    private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
+    private static final String LOG_TAG = GroupsFragment.class.getSimpleName();
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecycler;
 
     // groups management
     private GroupAdapter mAdapter;
+    private GroupsManager mGroupsManager;
 
     // rooms list
     private final List<Group> mJoinedGroups = new ArrayList<>();
     private final List<Group> mInvitedGroups = new ArrayList<>();
+
+    // refresh when there is a group event
+    private final MXEventListener mEventListener = new MXEventListener() {
+        @Override
+        public void onNewGroupInvitation(String groupId) {
+            refreshGroups();
+        }
+
+        @Override
+        public void onJoinGroup(String groupId) {
+            refreshGroups();
+        }
+
+        @Override
+        public void onLeaveGroup(String groupId) {
+            refreshGroups();
+        }
+    };
 
     /*
      * *********************************************************************************************
@@ -82,6 +118,7 @@ public class GroupsFragment extends AbsHomeFragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mGroupsManager = mSession.getGroupsManager();
         mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_groups);
         mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_groups_secondary);
 
@@ -93,13 +130,15 @@ public class GroupsFragment extends AbsHomeFragment {
     @Override
     public void onResume() {
         super.onResume();
+        mSession.getDataHandler().addListener(mEventListener);
         mRecycler.addOnScrollListener(mScrollListener);
-        refreshGroups();
+        refreshGroupsAnProfiles();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        mSession.getDataHandler().removeListener(mEventListener);
         mRecycler.removeOnScrollListener(mScrollListener);
     }
 
@@ -151,10 +190,56 @@ public class GroupsFragment extends AbsHomeFragment {
 
         mAdapter = new GroupAdapter(getActivity(), new GroupAdapter.OnGroupSelectItemListener() {
             @Override
-            public void onSelectItem(Group room, int position) {
+            public void onSelectItem(Group group, int position) {
+
             }
 
-        }, null, null);
+        }, new AbsAdapter.GroupInvitationListener() {
+            @Override
+            public void onJoinGroup(MXSession session, String groupId) {
+                mActivity.showWaitingView();
+                mGroupsManager.joinGroup(groupId, new ApiCallback<Void>() {
+
+                    private void onDone(String errorMessage) {
+                        if ((null != errorMessage) && (null != getActivity())) {
+                            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+                        }
+                        mActivity.stopWaitingView();
+                    }
+
+                    @Override
+                    public void onSuccess(Void info) {
+                        onDone(null);
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onDone(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onDone(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onDone(e.getLocalizedMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onRejectInvitation(MXSession session, String groupId) {
+                leaveOrReject(groupId);
+            }
+        }, new AbsAdapter.MoreGroupActionListener() {
+            @Override
+            public void onMoreActionClick(View itemView, Group group) {
+                displayGroupPopupMenu(group, itemView);
+            }
+        });
+
         mRecycler.setAdapter(mAdapter);
     }
 
@@ -162,21 +247,111 @@ public class GroupsFragment extends AbsHomeFragment {
      * Refresh the groups list
      */
     private void refreshGroups() {
-        GroupsManager groupsManager = mSession.getGroupsManager();
-
         mJoinedGroups.clear();
-        mJoinedGroups.addAll(groupsManager.getJoinedGroups());
+        mJoinedGroups.addAll(mGroupsManager.getJoinedGroups());
         mAdapter.setGroups(mJoinedGroups);
 
         mInvitedGroups.clear();
-        mInvitedGroups.addAll(groupsManager.getInvitedGroups());
+        mInvitedGroups.addAll(mGroupsManager.getInvitedGroups());
         mAdapter.setInvitedGroups(mInvitedGroups);
+    }
 
+    /**
+     * refresh the groups list and their profiles.
+     */
+    private void refreshGroupsAnProfiles() {
+        refreshGroups();
         mSession.getGroupsManager().refreshGroupProfiles(new SimpleApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 mAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    /**
+     * Leave or reject a group invitation.
+     *
+     * @param groupId the group Id
+     */
+    private void leaveOrReject(String groupId) {
+        mActivity.showWaitingView();
+        mGroupsManager.leaveGroup(groupId, new ApiCallback<Void>() {
+
+            private void onDone(String errorMessage) {
+                if ((null != errorMessage) && (null != getActivity())) {
+                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+                }
+                mActivity.stopWaitingView();
+            }
+
+            @Override
+            public void onSuccess(Void info) {
+                onDone(null);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onDone(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onDone(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onDone(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    @SuppressLint("NewApi")
+    private void displayGroupPopupMenu(final Group group, final View actionView) {
+        final Context context = getActivity();
+        final PopupMenu popup;
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            popup = new PopupMenu(context, actionView, Gravity.END);
+        } else {
+            popup = new PopupMenu(context, actionView);
+        }
+        popup.getMenuInflater().inflate(R.menu.vector_home_group_settings, popup.getMenu());
+        CommonActivityUtils.tintMenuIcons(popup.getMenu(), ThemeUtils.getColor(context, R.attr.settings_icon_tint_color));
+
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(final MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.ic_action_select_remove_group: {
+                        leaveOrReject(group.getGroupId());
+                        break;
+                    }
+                }
+                return false;
+            }
+        });
+
+
+        // force to display the icon
+        try {
+            Field[] fields = popup.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## displayGroupPopupMenu() : failed " + e.getMessage());
+        }
+
+        popup.show();
     }
 }
