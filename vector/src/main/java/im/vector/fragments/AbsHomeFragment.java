@@ -330,6 +330,14 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
         }
     }
 
+    /**
+     * Manage the fab actions
+     * @return true if the fragment has a dedicated action.
+     */
+    public boolean onFabClick() {
+        return false;
+    }
+
     /*
      * *********************************************************************************************
      * Private methods

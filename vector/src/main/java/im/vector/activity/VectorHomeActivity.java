@@ -907,7 +907,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onFloatingButtonClick();
+                    Fragment fragment = getSelectedFragment();
+
+                    if (!(fragment instanceof AbsHomeFragment) || !((AbsHomeFragment)fragment).onFabClick() ) {
+                        onFloatingButtonClick();
+                    }
                 }
             });
         }
@@ -1019,6 +1023,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             case R.id.bottom_action_rooms:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROOMS);
                 break;
+            case R.id.bottom_action_groups:
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_GROUPS);
+                break;
+
         }
 
         return fragment;

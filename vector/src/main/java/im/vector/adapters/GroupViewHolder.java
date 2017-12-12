@@ -99,7 +99,11 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
 
         VectorUtils.loadGroupAvatar(context, session, vGroupAvatar, group);
 
-        vGroupTopic.setText(group.getShortDescription());
+        if (TextUtils.isEmpty(group.getShortDescription())) {
+            vGroupTopic.setText(group.getGroupId());
+        } else {
+            vGroupTopic.setText(group.getShortDescription());
+        }
 
         if (vGroupMoreActionClickArea != null && vGroupMoreActionAnchor != null) {
             vGroupMoreActionClickArea.setOnClickListener(new View.OnClickListener() {

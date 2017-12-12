@@ -17,20 +17,27 @@
 package im.vector.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -280,7 +287,7 @@ public class GroupsFragment extends AbsHomeFragment {
 
             private void onDone(String errorMessage) {
                 if ((null != errorMessage) && (null != getActivity())) {
-                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
                 mActivity.stopWaitingView();
             }
@@ -353,5 +360,99 @@ public class GroupsFragment extends AbsHomeFragment {
         }
 
         popup.show();
+    }
+
+    @Override
+    public boolean onFabClick() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_create_group, null);
+        alertDialogBuilder.setView(dialogView);
+
+        final EditText nameEditText = dialogView.findViewById(R.id.community_name_edit_text);
+        final EditText idEditText = dialogView.findViewById(R.id.community_id_edit_text);
+        final String hostName = mSession.getHomeServerConfig().getHomeserverUri().getHost();
+        TextView hsNameView = dialogView.findViewById(R.id.community_hs_name_text_view);
+        hsNameView.setText(":" + hostName);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setTitle(R.string.create_community)
+                .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        String localPart = idEditText.getText().toString().trim();
+                        String groupName = nameEditText.getText().toString().trim();
+
+                        mActivity.showWaitingView();
+
+                        mGroupsManager.createGroup(localPart, groupName, new ApiCallback<String>() {
+                            private void onDone(String errorMessage) {
+                                if (null != getActivity()) {
+                                    if (null != errorMessage) {
+                                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                                    }
+
+                                    mActivity.stopWaitingView();
+
+                                    refreshGroups();
+                                }
+                            }
+
+                            @Override
+                            public void onSuccess(String groupId) {
+                                onDone(null);
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onDone(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onDone(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onDone(e.getLocalizedMessage());
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+        final Button createButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+        idEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                createButton.setEnabled(MXSession.isGroupId("+" + idEditText.getText().toString().trim() + ":" + hostName));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        createButton.setEnabled(false);
+        return true;
     }
 }
