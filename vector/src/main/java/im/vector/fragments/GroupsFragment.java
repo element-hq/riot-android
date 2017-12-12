@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -60,7 +61,10 @@ import java.util.List;
 import butterknife.BindView;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorGroupDetailsActivity;
 import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorRoomActivity;
+import im.vector.activity.VectorRoomDetailsActivity;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.GroupAdapter;
 import im.vector.util.RoomUtils;
@@ -197,8 +201,40 @@ public class GroupsFragment extends AbsHomeFragment {
 
         mAdapter = new GroupAdapter(getActivity(), new GroupAdapter.OnGroupSelectItemListener() {
             @Override
-            public void onSelectItem(Group group, int position) {
+            public void onSelectItem(final Group group, final int position) {
+                mActivity.showWaitingView();
+                mGroupsManager.refreshGroupData(group.getGroupId(), new ApiCallback<Void>() {
+                    private void onDone() {
+                        if (null != getActivity()) {
+                            mActivity.stopWaitingView();
 
+                            Intent intent = new Intent(getActivity(), VectorGroupDetailsActivity.class);
+                            intent.putExtra(VectorGroupDetailsActivity.EXTRA_GROUP_ID, group.getGroupId());
+                            intent.putExtra(VectorGroupDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(Void info) {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onDone();
+                    }
+                });
             }
 
         }, new AbsAdapter.GroupInvitationListener() {

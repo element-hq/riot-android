@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+        <!-- tab fragments container -->
+        <FrameLayout
+            android:id="@+id/group_details_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- progress bar -->
+        <FrameLayout
+            android:id="@+id/group_loading_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/waiting_background_color"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/loading_settings_progress_bar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:visibility="visible" />
+        </FrameLayout>
+    </RelativeLayout>
+
+</FrameLayout>
