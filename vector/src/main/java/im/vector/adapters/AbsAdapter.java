@@ -40,6 +40,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
+import im.vector.util.GroupUtils;
 import im.vector.util.RoomUtils;
 import im.vector.util.StickySectionHelper;
 import im.vector.view.SectionView;
@@ -396,7 +397,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
     int filterGroupSection(final AdapterSection<Group> section, final String filterPattern) {
         if (null != section) {
             if (!TextUtils.isEmpty(filterPattern)) {
-                List<Group> filteredGroups = RoomUtils.getFilteredGroups(section.getItems(), filterPattern);
+                List<Group> filteredGroups = GroupUtils.getFilteredGroups(section.getItems(), filterPattern);
                 section.setFilteredItems(filteredGroups, filterPattern);
             } else {
                 section.resetFilter();
@@ -406,8 +407,6 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
             return 0;
         }
     }
-
-
 
     /*
      * *********************************************************************************************

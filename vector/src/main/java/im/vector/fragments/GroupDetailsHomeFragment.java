@@ -67,8 +67,8 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.view.HomeSectionView;
 
-public class VectorGroupDetailsHomeFragment extends Fragment {
-    private static final String LOG_TAG = VectorGroupDetailsHomeFragment.class.getSimpleName();
+public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
+    private static final String LOG_TAG = GroupDetailsHomeFragment.class.getSimpleName();
 
     @BindView(R.id.nested_scrollview)
     NestedScrollView mNestedScrollView;
@@ -97,26 +97,11 @@ public class VectorGroupDetailsHomeFragment extends Fragment {
     }
 
     @Override
-    @CallSuper
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-    }
-
-    @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         mSession = Matrix.getInstance(getContext()).getDefaultSession();
-        mActivity = (VectorGroupDetailsActivity) getActivity();
-
-        //mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_home);
-        //mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_home_secondary);
-
-        initViews();
-
-        //mActivity.showWaitingView();
-    }
+        mActivity = (VectorGroupDetailsActivity) getActivity();}
 
     @Override
     public void onResume() {
@@ -138,8 +123,8 @@ public class VectorGroupDetailsHomeFragment extends Fragment {
      * UI management
      * *********************************************************************************************
      */
-
-    private void initViews() {
+    @Override
+    protected void initViews() {
         // Rooms list
         mFeaturedRoomsSection.setTitle(R.string.bottom_action_rooms);
         mFeaturedRoomsSection.setPlaceholders(getString(R.string.no_room_placeholder), getString(R.string.no_result_placeholder));

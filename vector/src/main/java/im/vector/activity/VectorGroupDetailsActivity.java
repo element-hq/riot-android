@@ -41,9 +41,9 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.contacts.ContactsManager;
-import im.vector.fragments.VectorGroupDetailsHomeFragment;
-import im.vector.fragments.VectorGroupDetailsPeopleFragment;
-import im.vector.fragments.VectorGroupDetailsRoomsFragment;
+import im.vector.fragments.GroupDetailsHomeFragment;
+import im.vector.fragments.GroupDetailsPeopleFragment;
+import im.vector.fragments.GroupDetailsRoomsFragment;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
@@ -84,9 +84,9 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
     private View mLoadingView;
 
     // fragments
-    private VectorGroupDetailsHomeFragment mVectorGroupDetailsHomeFragment;
-    private VectorGroupDetailsPeopleFragment mVectorGroupDetailsPeopleFragment;
-    private VectorGroupDetailsRoomsFragment mVectorGroupDetailsRoomsFragment;
+    private GroupDetailsHomeFragment mGroupDetailsHomeFragment;
+    private GroupDetailsPeopleFragment mGroupDetailsPeopleFragment;
+    private GroupDetailsRoomsFragment mGroupDetailsRoomsFragment;
 
     // activity life cycle management:
     // - Bundle keys
@@ -291,38 +291,38 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
         resetUi();
 
         if (fragmentTag.equals(TAG_FRAGMENT_GROUP_HOME)) {
-            mVectorGroupDetailsHomeFragment = (VectorGroupDetailsHomeFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_HOME);
+            mGroupDetailsHomeFragment = (GroupDetailsHomeFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_HOME);
 
-            if (null == mVectorGroupDetailsHomeFragment) {
-                mVectorGroupDetailsHomeFragment = new VectorGroupDetailsHomeFragment();
-                ft.replace(R.id.group_details_fragment_container, mVectorGroupDetailsHomeFragment, TAG_FRAGMENT_GROUP_HOME);
+            if (null == mGroupDetailsHomeFragment) {
+                mGroupDetailsHomeFragment = new GroupDetailsHomeFragment();
+                ft.replace(R.id.group_details_fragment_container, mGroupDetailsHomeFragment, TAG_FRAGMENT_GROUP_HOME);
                 Log.d(LOG_TAG, "## onTabSelected() home frag replace");
             } else {
-                ft.attach(mVectorGroupDetailsHomeFragment);
+                ft.attach(mGroupDetailsHomeFragment);
                 Log.d(LOG_TAG, "## onTabSelected() home frag attach");
             }
             mCurrentTabIndex = GROUP_HOME_TAB_INDEX;
         } else if (fragmentTag.equals(TAG_FRAGMENT_GROUP_PEOPLE)) {
-            mVectorGroupDetailsPeopleFragment = (VectorGroupDetailsPeopleFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_PEOPLE);
+            mGroupDetailsPeopleFragment = (GroupDetailsPeopleFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_PEOPLE);
 
-            if (null == mVectorGroupDetailsPeopleFragment) {
-                mVectorGroupDetailsPeopleFragment = new VectorGroupDetailsPeopleFragment();
-                ft.replace(R.id.group_details_fragment_container, mVectorGroupDetailsPeopleFragment, TAG_FRAGMENT_GROUP_PEOPLE);
+            if (null == mGroupDetailsPeopleFragment) {
+                mGroupDetailsPeopleFragment = new GroupDetailsPeopleFragment();
+                ft.replace(R.id.group_details_fragment_container, mGroupDetailsPeopleFragment, TAG_FRAGMENT_GROUP_PEOPLE);
                 Log.d(LOG_TAG, "## onTabSelected() people frag replace");
             } else {
-                ft.attach(mVectorGroupDetailsPeopleFragment);
+                ft.attach(mGroupDetailsPeopleFragment);
                 Log.d(LOG_TAG, "## onTabSelected() people frag attach");
             }
             mCurrentTabIndex = GROUP_PEOPLE_TAB_INDEX;
         } else if (fragmentTag.equals(TAG_FRAGMENT_GROUP_ROOMS)) {
-            mVectorGroupDetailsRoomsFragment = (VectorGroupDetailsRoomsFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_ROOMS);
+            mGroupDetailsRoomsFragment = (GroupDetailsRoomsFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_ROOMS);
 
-            if (null == mVectorGroupDetailsRoomsFragment) {
-                mVectorGroupDetailsRoomsFragment = new VectorGroupDetailsRoomsFragment();
-                ft.replace(R.id.group_details_fragment_container, mVectorGroupDetailsRoomsFragment, TAG_FRAGMENT_GROUP_ROOMS);
+            if (null == mGroupDetailsRoomsFragment) {
+                mGroupDetailsRoomsFragment = new GroupDetailsRoomsFragment();
+                ft.replace(R.id.group_details_fragment_container, mGroupDetailsRoomsFragment, TAG_FRAGMENT_GROUP_ROOMS);
                 Log.d(LOG_TAG, "## onTabSelected() rooms frag replace");
             } else {
-                ft.attach(mVectorGroupDetailsRoomsFragment);
+                ft.attach(mGroupDetailsRoomsFragment);
                 Log.d(LOG_TAG, "## onTabSelected() rooms frag attach");
             }
             mCurrentTabIndex = GROUP_ROOMS_TAB_INDEX;
@@ -345,16 +345,16 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
         saveUiTabContext(tab);
 
         if (fragmentTag.equals(TAG_FRAGMENT_GROUP_HOME)) {
-            if (null != mVectorGroupDetailsHomeFragment) {
-                ft.detach(mVectorGroupDetailsHomeFragment);
+            if (null != mGroupDetailsHomeFragment) {
+                ft.detach(mGroupDetailsHomeFragment);
             }
         } else if (fragmentTag.equals(TAG_FRAGMENT_GROUP_PEOPLE)) {
-            if (null != mVectorGroupDetailsPeopleFragment) {
-                ft.detach(mVectorGroupDetailsPeopleFragment);
+            if (null != mGroupDetailsPeopleFragment) {
+                ft.detach(mGroupDetailsPeopleFragment);
             }
         } else if (fragmentTag.equals(TAG_FRAGMENT_GROUP_ROOMS)) {
-            if (null != mVectorGroupDetailsRoomsFragment) {
-                ft.detach(mVectorGroupDetailsRoomsFragment);
+            if (null != mGroupDetailsRoomsFragment) {
+                ft.detach(mGroupDetailsRoomsFragment);
             }
         }
     }

@@ -17,37 +17,21 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.CallSuper;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.model.group.GroupRoom;
-import org.matrix.androidsdk.rest.model.group.GroupUser;
-import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.R;
-import im.vector.util.RoomUtils;
-import im.vector.util.VectorUtils;
+import im.vector.util.GroupUtils;
 
 public class GroupDetailsRoomsAdapter extends AbsAdapter {
-
-    private static final String LOG_TAG = GroupDetailsRoomsAdapter.class.getSimpleName();
-
     private static final int TYPE_GROUP_ROOMS = 22;
 
     private final AdapterSection<GroupRoom> mGroupRoomsSection;
@@ -66,7 +50,7 @@ public class GroupDetailsRoomsAdapter extends AbsAdapter {
         mListener = listener;
 
         mGroupRoomsSection = new AdapterSection<>(context.getString(R.string.rooms), -1,
-                R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_GROUP_ROOMS, new ArrayList<GroupRoom>(), null);
+                R.layout.adapter_item_group_user_room_view, TYPE_HEADER_DEFAULT, TYPE_GROUP_ROOMS, new ArrayList<GroupRoom>(), null);
         mGroupRoomsSection.setEmptyViewPlaceholder(null, context.getString(R.string.no_result_placeholder));
 
         addSection(mGroupRoomsSection);
@@ -83,7 +67,7 @@ public class GroupDetailsRoomsAdapter extends AbsAdapter {
         final LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
         if (viewType == TYPE_GROUP_ROOMS) {
-            return new GroupRoomViewHolder(inflater.inflate(R.layout.adapter_item_contact_view, viewGroup, false));
+            return new GroupRoomViewHolder(inflater.inflate(R.layout.adapter_item_group_user_room_view, viewGroup, false));
         }
         return null;
     }
@@ -116,7 +100,7 @@ public class GroupDetailsRoomsAdapter extends AbsAdapter {
     int filterGroupRoomsSection(final AdapterSection<GroupRoom> section, final String filterPattern) {
         if (null != section) {
             if (!TextUtils.isEmpty(filterPattern)) {
-                List<GroupRoom> filteredGroupRooms = RoomUtils.getFilteredGroupRooms(section.getItems(), filterPattern);
+                List<GroupRoom> filteredGroupRooms = GroupUtils.getFilteredGroupRooms(section.getItems(), filterPattern);
                 section.setFilteredItems(filteredGroupRooms, filterPattern);
             } else {
                 section.resetFilter();
@@ -130,11 +114,7 @@ public class GroupDetailsRoomsAdapter extends AbsAdapter {
 
     @Override
     protected int applyFilter(String pattern) {
-        int nbResults = 0;
-
-        nbResults += filterGroupRoomsSection(mGroupRoomsSection, pattern);
-
-        return nbResults;
+        return filterGroupRoomsSection(mGroupRoomsSection, pattern);
     }
 
     /*
