@@ -48,6 +48,13 @@ public abstract class AbsFilterableAdapter<T extends RecyclerView.ViewHolder> ex
      * *********************************************************************************************
      */
 
+    AbsFilterableAdapter(final Context context) {
+        mContext = context;
+
+        mSession = Matrix.getInstance(context).getDefaultSession();
+        mFilter = createFilter();
+    }
+
     AbsFilterableAdapter(final Context context, final AbsAdapter.RoomInvitationListener invitationListener,
                          final AbsAdapter.MoreRoomActionListener moreActionListener) {
         mContext = context;

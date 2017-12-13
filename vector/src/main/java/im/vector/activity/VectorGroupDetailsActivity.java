@@ -144,7 +144,17 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
 
         // tab creation and restore tabs UI context
         mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+
         createNavigationTabs(savedInstanceState, selectedTab);
+    }
+
+    /**
+     * @return the used group
+     */
+    public Group getGroup() {
+        return mGroup;
     }
 
     @Override
@@ -272,11 +282,6 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
         mCurrentTabIndex = tabIndexToRestore;
     }
 
-    //public static final int GROUP_HOME_TAB_INDEX = 0;
-    //public static final int GROUP_PEOPLE_TAB_INDEX = 1;
-    //public static final int GROUP_ROOMS_TAB_INDEX = 2;
-
-
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
         Bundle tabHolder = (Bundle) tab.getTag();
@@ -353,7 +358,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
             }
         }
     }
-    
+
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
     }

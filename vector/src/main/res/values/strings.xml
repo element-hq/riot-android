@@ -836,5 +836,6 @@
     <string name="group_details_home">Home</string>
     <string name="group_details_people">People</string>
     <string name="group_details_rooms">Rooms</string>
-
+    <string name="featured_rooms">Featured rooms</string>
+    <string name="featured_users">Featured users</string>
 </resources>

@@ -107,7 +107,9 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mActivity = (VectorHomeActivity) getActivity();
+        if (getActivity() instanceof VectorHomeActivity) {
+            mActivity = (VectorHomeActivity) getActivity();
+        }
         mSession = Matrix.getInstance(getActivity()).getDefaultSession();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER)) {
@@ -119,7 +121,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
     @CallSuper
     public void onResume() {
         super.onResume();
-        if (mPrimaryColor != -1) {
+        if ((mPrimaryColor != -1) && (null != mActivity)) {
             mActivity.updateTabStyle(mPrimaryColor, mSecondaryColor != -1 ? mSecondaryColor : mPrimaryColor);
         }
     }

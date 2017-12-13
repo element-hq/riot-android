@@ -31,6 +31,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.model.group.GroupRoom;
+import org.matrix.androidsdk.rest.model.group.GroupRooms;
+import org.matrix.androidsdk.rest.model.group.GroupUser;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.List;
@@ -39,6 +42,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
 import im.vector.adapters.AbsAdapter;
+import im.vector.adapters.AbsFilterableAdapter;
+import im.vector.adapters.HomeGroupRoomAdapter;
+import im.vector.adapters.HomeGroupUserAdapter;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.util.ThemeUtils;
@@ -59,7 +65,7 @@ public class HomeSectionView extends RelativeLayout {
     @BindView(R.id.section_placeholder)
     TextView mPlaceHolder;
 
-    private HomeRoomAdapter mAdapter;
+    private AbsFilterableAdapter mAdapter;
 
     private boolean mHideIfEmpty;
     private String mNoItemPlaceholder;
@@ -131,12 +137,33 @@ public class HomeSectionView extends RelativeLayout {
             // reported by GA
             // the adapter value is tested by it seems crashed when calling getBadgeCount
             try {
-                setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
-                final int badgeCount = mAdapter.getBadgeCount();
+                boolean isEmpty = true;
+                boolean hasNoResult = true;
+                int badgeCount = 0;
+
+                if (mAdapter instanceof HomeRoomAdapter) {
+                    HomeRoomAdapter homeRoomAdapter = (HomeRoomAdapter) mAdapter;
+
+                    isEmpty = homeRoomAdapter.isEmpty();
+                    hasNoResult = homeRoomAdapter.hasNoResult();
+                    badgeCount = homeRoomAdapter.getBadgeCount();
+                } else if (mAdapter instanceof HomeGroupUserAdapter) {
+                    HomeGroupUserAdapter homeGroupUserAdapter = (HomeGroupUserAdapter) mAdapter;
+
+                    isEmpty = homeGroupUserAdapter.isEmpty();
+                    hasNoResult = homeGroupUserAdapter.hasNoResult();
+                } else if (mAdapter instanceof HomeGroupRoomAdapter) {
+                    HomeGroupRoomAdapter homeGroupRoomAdapter = (HomeGroupRoomAdapter) mAdapter;
+
+                    isEmpty = homeGroupRoomAdapter.isEmpty();
+                    hasNoResult = homeGroupRoomAdapter.hasNoResult();
+                }
+
+                setVisibility(mHideIfEmpty && isEmpty ? GONE : VISIBLE);
                 mBadge.setText(RoomUtils.formatUnreadMessagesCounter(badgeCount));
                 mBadge.setVisibility(badgeCount == 0 ? GONE : VISIBLE);
-                mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
-                mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);
+                mRecyclerView.setVisibility(hasNoResult ? GONE : VISIBLE);
+                mPlaceHolder.setVisibility(hasNoResult ? VISIBLE : GONE);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## onDataUpdated() failed " + e.getMessage());
             }
@@ -177,7 +204,17 @@ public class HomeSectionView extends RelativeLayout {
      */
     public void setHideIfEmpty(final boolean hideIfEmpty) {
         mHideIfEmpty = hideIfEmpty;
-        setVisibility(mHideIfEmpty && (mAdapter == null || mAdapter.isEmpty()) ? GONE : VISIBLE);
+        boolean isEmpty = true;
+
+        if (mAdapter instanceof HomeRoomAdapter) {
+            isEmpty = ((HomeRoomAdapter) mAdapter).isEmpty();
+        } else if (mAdapter instanceof HomeGroupUserAdapter) {
+            isEmpty = ((HomeGroupUserAdapter) mAdapter).isEmpty();
+        } else if (mAdapter instanceof HomeGroupRoomAdapter) {
+            isEmpty = ((HomeGroupRoomAdapter) mAdapter).isEmpty();
+        }
+
+        setVisibility(mHideIfEmpty && (mAdapter == null || isEmpty) ? GONE : VISIBLE);
     }
 
     /**
@@ -190,15 +227,65 @@ public class HomeSectionView extends RelativeLayout {
      * @param invitationListener   listener for invite buttons
      * @param moreActionListener   listener for room menu
      */
-    public void setupRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
-                                  final boolean nestedScrollEnabled, final HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener,
-                                  final AbsAdapter.RoomInvitationListener invitationListener,
-                                  final AbsAdapter.MoreRoomActionListener moreActionListener) {
+    public void setupRoomRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
+                                      final boolean nestedScrollEnabled, final HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener,
+                                      final AbsAdapter.RoomInvitationListener invitationListener,
+                                      final AbsAdapter.MoreRoomActionListener moreActionListener) {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setNestedScrollingEnabled(nestedScrollEnabled);
 
         mAdapter = new HomeRoomAdapter(getContext(), itemResId, onSelectRoomListener, invitationListener, moreActionListener);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                onDataUpdated();
+            }
+        });
+    }
+
+    /**
+     * Setup the recycler and its adapter with the given params
+     *
+     * @param layoutManager             layout manager
+     * @param itemResId                 cell layout
+     * @param nestedScrollEnabled       whether nested scroll should be enabled
+     * @param onSelectGroupUserListener listener for user click
+     */
+    public void setupGroupUserRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
+                                           final boolean nestedScrollEnabled, final HomeGroupUserAdapter.OnSelectGroupUserListener onSelectGroupUserListener) {
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setNestedScrollingEnabled(nestedScrollEnabled);
+
+        mAdapter = new HomeGroupUserAdapter(getContext(), itemResId, onSelectGroupUserListener);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                onDataUpdated();
+            }
+        });
+    }
+
+    /**
+     * Setup the recycler and its adapter with the given params
+     *
+     * @param layoutManager             layout manager
+     * @param itemResId                 cell layout
+     * @param nestedScrollEnabled       whether nested scroll should be enabled
+     * @param onSelectGroupUserListener listener for user click
+     */
+    public void setupGroupRoomRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
+                                           final boolean nestedScrollEnabled, final HomeGroupRoomAdapter.OnSelectGroupRoomListener onSelectGroupUserListener) {
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setNestedScrollingEnabled(nestedScrollEnabled);
+
+        mAdapter = new HomeGroupRoomAdapter(getContext(), itemResId, onSelectGroupUserListener);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -249,8 +336,30 @@ public class HomeSectionView extends RelativeLayout {
      * @param rooms
      */
     public void setRooms(final List<Room> rooms) {
-        if (mAdapter != null) {
-            mAdapter.setRooms(rooms);
+        if ((mAdapter != null) && (mAdapter instanceof HomeRoomAdapter)) {
+            ((HomeRoomAdapter) mAdapter).setRooms(rooms);
+        }
+    }
+
+    /**
+     * Set the group users
+     *
+     * @param users
+     */
+    public void setGroupUsers(final List<GroupUser> users) {
+        if ((mAdapter != null) && (mAdapter instanceof HomeGroupUserAdapter)) {
+            ((HomeGroupUserAdapter) mAdapter).setGroupUsers(users);
+        }
+    }
+
+    /**
+     * Set the group rooms
+     *
+     * @param rooms
+     */
+    public void setGroupRooms(final List<GroupRoom> rooms) {
+        if ((mAdapter != null) && (mAdapter instanceof HomeGroupRoomAdapter)) {
+            ((HomeGroupRoomAdapter) mAdapter).setGroupRooms(rooms);
         }
     }
 
