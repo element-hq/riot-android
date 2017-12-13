@@ -44,8 +44,11 @@ import android.util.Pair;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 import org.piwik.sdk.Piwik;
+import org.piwik.sdk.QueryParams;
+import org.piwik.sdk.TrackMe;
 import org.piwik.sdk.Tracker;
 import org.piwik.sdk.TrackerConfig;
+import org.piwik.sdk.extra.CustomVariables;
 import org.piwik.sdk.extra.TrackHelper;
 
 import java.io.File;
@@ -1186,6 +1189,19 @@ public class VectorApp extends MultiDexApplication {
     private Tracker mPiwikTracker;
 
     /**
+     * Set the visit variable
+     * @param trackMe
+     * @param id
+     * @param name
+     * @param value
+     */
+    private static final void visitVariables(TrackMe trackMe, int id, String name, String value) {
+        CustomVariables customVariables = new CustomVariables(trackMe.get(QueryParams.VISIT_SCOPE_CUSTOM_VARIABLES));
+        customVariables.put(id, name, value);
+        trackMe.set(QueryParams.VISIT_SCOPE_CUSTOM_VARIABLES, customVariables.toString());
+    }
+
+    /**
      * @return the piwik instance
      */
     private Tracker getPiwikTracker() {
@@ -1196,8 +1212,19 @@ public class VectorApp extends MultiDexApplication {
                 // the app might be killed in background
                 mPiwikTracker.setDispatchInterval(30 * 1000);
 
-                // TODO define an identifier
-                //mPiwikTracker.setUserId()
+                //
+                TrackMe trackMe = mPiwikTracker.getDefaultTrackMe();
+
+                visitVariables(trackMe, 1, "App Platform", "Android Platform");
+                visitVariables(trackMe, 2, "App Version", SHORT_VERSION);
+                visitVariables(trackMe, 4, "Chosen Language", getApplicationLocale().toString());
+
+                if (null != Matrix.getInstance(this).getDefaultSession()) {
+                    MXSession session = Matrix.getInstance(this).getDefaultSession();
+
+                    visitVariables(trackMe, 7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
+                    visitVariables(trackMe, 8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
+                }
             } catch (Throwable t) {
                 Log.e(LOG_TAG, "## getPiwikTracker() : newTracker failed " + t.getMessage());
             }
