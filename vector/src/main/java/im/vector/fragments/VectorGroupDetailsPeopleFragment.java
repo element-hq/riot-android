@@ -17,9 +17,114 @@
 
 package im.vector.fragments;
 
+import android.os.Bundle;
+import android.support.annotation.CallSuper;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Filter;
+
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.rest.model.group.GroupUser;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import im.vector.Matrix;
+import im.vector.R;
+
+import im.vector.activity.VectorGroupDetailsActivity;
+import im.vector.adapters.GroupDetailsPeopleAdapter;
+import im.vector.view.EmptyViewItemDecoration;
+import im.vector.view.SimpleDividerItemDecoration;
 
 public class VectorGroupDetailsPeopleFragment extends Fragment {
     // internal constants values
     private static final String LOG_TAG = VectorGroupDetailsPeopleFragment.class.getSimpleName();
+
+    @BindView(R.id.recyclerview)
+    RecyclerView mRecycler;
+
+    @BindView(R.id.search_view)
+    SearchView mSearchView;
+
+    private GroupDetailsPeopleAdapter mAdapter;
+
+    private MXSession mSession;
+    private VectorGroupDetailsActivity mActivity;
+
+    @Override
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_group_details_people, container, false);
+    }
+
+    @Override
+    @CallSuper
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mAdapter.getFilter().filter(newText, new Filter.FilterListener() {
+                    @Override
+                    public void onFilterComplete(int count) {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onActivityCreated(final Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mSession = Matrix.getInstance(getContext()).getDefaultSession();
+        mActivity = (VectorGroupDetailsActivity) getActivity();
+
+        initViews();
+
+        mAdapter.onFilterDone(mSearchView.getQuery().toString());
+    }
+
+    /*
+     * *********************************************************************************************
+     * UI management
+     * *********************************************************************************************
+     */
+
+    /**
+     * Prepare views
+     */
+    private void initViews() {
+        int margin = (int) getResources().getDimension(R.dimen.item_decoration_left_margin);
+        mRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mRecycler.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, margin));
+        mRecycler.addItemDecoration(new EmptyViewItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, 40, 16, 14));
+        mAdapter = new GroupDetailsPeopleAdapter(getActivity(), new GroupDetailsPeopleAdapter.OnSelectUserListener() {
+            @Override
+            public void onSelectItem(GroupUser user, int position) {
+                int a = 0;
+                a++;
+
+            }
+        });
+        mRecycler.setAdapter(mAdapter);
+
+        mAdapter.setJoinedGroupUsers(mActivity.getGroup().getGroupUsers().getUsers());
+        mAdapter.setInvitedGroupUsers(mActivity.getGroup().getInvitedGroupUsers().getUsers());
+    }
 }

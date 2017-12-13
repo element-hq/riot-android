@@ -838,4 +838,11 @@
     <string name="group_details_rooms">Rooms</string>
     <string name="featured_rooms">Featured rooms</string>
     <string name="featured_users">Featured users</string>
+    <string name="no_users_placeholder">No users</string>
+
+    <string name="rooms">Rooms</string>
+    <string name="joined">Joined</string>
+    <string name="invited">Invited</string>
+    <string name="filter_group_members">Filter group members</string>
+
 </resources>

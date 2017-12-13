@@ -38,6 +38,8 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.group.Group;
+import org.matrix.androidsdk.rest.model.group.GroupRoom;
+import org.matrix.androidsdk.rest.model.group.GroupUser;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
@@ -703,7 +705,6 @@ public class RoomUtils {
         }
     }
 
-
     /**
      * Create a list of groups by filtering the given list with the given pattern
      *
@@ -725,6 +726,54 @@ public class RoomUtils {
             return filteredGroups;
         } else {
             return groupsToFilter;
+        }
+    }
+
+    /**
+     * Create a list of groups by filtering the given list with the given pattern
+     *
+     * @param groupsUsersToFilter
+     * @param constraint
+     * @return filtered group users
+     */
+    public static List<GroupUser> getFilteredGroupUsers(final List<GroupUser> groupsUsersToFilter, final CharSequence constraint) {
+        final String filterPattern = constraint != null ? constraint.toString().trim() : null;
+        if (!TextUtils.isEmpty(filterPattern)) {
+            List<GroupUser> filteredGroupUsers = new ArrayList<>();
+            Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
+
+            for (final GroupUser groupUser : groupsUsersToFilter) {
+                if (pattern.matcher(groupUser.getDisplayname()).find()) {
+                    filteredGroupUsers.add(groupUser);
+                }
+            }
+            return filteredGroupUsers;
+        } else {
+            return groupsUsersToFilter;
+        }
+    }
+
+    /**
+     * Create a list of groups by filtering the given list with the given pattern
+     *
+     * @param groupRoomsToFilter
+     * @param constraint
+     * @return filtered group users
+     */
+    public static List<GroupRoom> getFilteredGroupRooms(final List<GroupRoom> groupRoomsToFilter, final CharSequence constraint) {
+        final String filterPattern = constraint != null ? constraint.toString().trim() : null;
+        if (!TextUtils.isEmpty(filterPattern)) {
+            List<GroupRoom> filteredGroupRooms = new ArrayList<>();
+            Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
+
+            for (final GroupRoom groupRoom : groupRoomsToFilter) {
+                if (pattern.matcher(groupRoom.getDisplayName()).find()) {
+                    filteredGroupRooms.add(groupRoom);
+                }
+            }
+            return filteredGroupRooms;
+        } else {
+            return groupRoomsToFilter;
         }
     }
 

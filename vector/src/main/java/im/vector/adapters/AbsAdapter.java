@@ -92,6 +92,13 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
         registerAdapterDataObserver(new AdapterDataObserver());
         mSections = new ArrayList<>();
     }
+
+    AbsAdapter(final Context context) {
+        super(context);
+        registerAdapterDataObserver(new AdapterDataObserver());
+        mSections = new ArrayList<>();
+    }
+
     /*
      * *********************************************************************************************
      * RecyclerView.Adapter methods
@@ -399,6 +406,8 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
             return 0;
         }
     }
+
+
 
     /*
      * *********************************************************************************************
