@@ -24,6 +24,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
@@ -36,6 +37,8 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.groups.GroupsManager;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.group.Group;
 import org.matrix.androidsdk.util.Log;
 
@@ -44,6 +47,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.contacts.ContactsManager;
+import im.vector.fragments.GroupDetailsBaseFragment;
 import im.vector.fragments.GroupDetailsHomeFragment;
 import im.vector.fragments.GroupDetailsPeopleFragment;
 import im.vector.fragments.GroupDetailsRoomsFragment;
@@ -70,13 +74,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
     private static final String TAG_FRAGMENT_GROUP_ROOMS = "TAG_FRAGMENT_GROUP_ROOMS";
     private static final String KEY_FRAGMENT_TAG = "KEY_FRAGMENT_TAG";
 
-    // a tab can be selected at launch (with EXTRA_SELECTED_TAB_ID)
-    // so the tab index must be fixed.
-    public static final int GROUP_HOME_TAB_INDEX = 0;
-    public static final int GROUP_PEOPLE_TAB_INDEX = 1;
-    public static final int GROUP_ROOMS_TAB_INDEX = 2;
-
-    private int mCurrentTabIndex = -1;
+    private String mCurrentFragmentTag;
     private ActionBar mActionBar;
 
     // private classes
@@ -202,6 +200,40 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (null != mGroup) {
+            mGroupsManager.refreshGroupData(mGroup.getGroupId(), new ApiCallback<Void>() {
+                private void onDone() {
+                    if (null != mCurrentFragmentTag) {
+                        GroupDetailsBaseFragment fragment = (GroupDetailsBaseFragment) getSupportFragmentManager().findFragmentByTag(mCurrentFragmentTag);
+
+                        if (null != fragment) {
+                            fragment.refreshViews();
+                        }
+                    }
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone();
+                }
+            });
+        }
     }
 
     /**
@@ -275,14 +307,13 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
 
         if (-1 == tabIndexToRestore) {
             // default value: display the search in rooms tab
-            tabIndexToRestore = GROUP_HOME_TAB_INDEX;
+            tabIndexToRestore = 0;
         }
 
         mActionBar.setStackedBackgroundDrawable(new ColorDrawable(ThemeUtils.getColor(this, R.attr.tab_bar_background_color)));
 
         // set the tab to display & set current tab index
         mActionBar.setSelectedNavigationItem(tabIndexToRestore);
-        mCurrentTabIndex = tabIndexToRestore;
     }
 
     @Override
@@ -304,7 +335,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
                 ft.attach(mGroupDetailsHomeFragment);
                 Log.d(LOG_TAG, "## onTabSelected() home frag attach");
             }
-            mCurrentTabIndex = GROUP_HOME_TAB_INDEX;
+            mCurrentFragmentTag = TAG_FRAGMENT_GROUP_HOME;
         } else if (fragmentTag.equals(TAG_FRAGMENT_GROUP_PEOPLE)) {
             mGroupDetailsPeopleFragment = (GroupDetailsPeopleFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_PEOPLE);
 
@@ -316,7 +347,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
                 ft.attach(mGroupDetailsPeopleFragment);
                 Log.d(LOG_TAG, "## onTabSelected() people frag attach");
             }
-            mCurrentTabIndex = GROUP_PEOPLE_TAB_INDEX;
+            mCurrentFragmentTag = TAG_FRAGMENT_GROUP_PEOPLE;
         } else if (fragmentTag.equals(TAG_FRAGMENT_GROUP_ROOMS)) {
             mGroupDetailsRoomsFragment = (GroupDetailsRoomsFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_ROOMS);
 
@@ -328,7 +359,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
                 ft.attach(mGroupDetailsRoomsFragment);
                 Log.d(LOG_TAG, "## onTabSelected() rooms frag attach");
             }
-            mCurrentTabIndex = GROUP_ROOMS_TAB_INDEX;
+            mCurrentFragmentTag = TAG_FRAGMENT_GROUP_ROOMS;
         }
 
         mActionBar.setStackedBackgroundDrawable(new ColorDrawable(ThemeUtils.getColor(this, R.attr.tab_bar_background_color)));

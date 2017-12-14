@@ -76,5 +76,7 @@ public abstract class GroupDetailsBaseFragment extends Fragment {
      * Abstract methods
      * *********************************************************************************************
      */
+
     protected abstract void initViews();
+    public abstract void refreshViews();
 }

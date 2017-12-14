@@ -9,7 +9,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp">
 
         <im.vector.view.VectorCircularImageView
             android:id="@+id/group_avatar"
@@ -32,17 +35,17 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:background="#0f0"
-                tools:text="The group name"/>
+                tools:text="The group name" />
 
             <TextView
                 android:id="@+id/group_topic_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="5"
                 android:layout_below="@+id/group_name_text_view"
+                android:maxLines="5"
                 android:textSize="14sp"
                 tools:background="#00f"
-                tools:text="The group topic"/>
+                tools:text="The group topic" />
 
             <LinearLayout
                 android:id="@+id/group_members_rooms_view"
@@ -95,9 +98,12 @@
         android:background="@color/vector_silver_color" />
 
     <ScrollView
-        android:layout_margin="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/html_text_view"
@@ -106,12 +112,14 @@
             tools:text="an HTML text here" />
     </ScrollView>
 
-
     <TextView
         android:id="@+id/no_html_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/group_no_long_description"
         android:textColor="@color/vector_silver_color" />
 </LinearLayout>

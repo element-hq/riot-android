@@ -64,7 +64,7 @@ public class GroupDetailsRoomsFragment extends GroupDetailsBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        refreshData();
+        refreshViews();
     }
 
     @Override
@@ -116,9 +116,13 @@ public class GroupDetailsRoomsFragment extends GroupDetailsBaseFragment {
                 return true;
             }
         });
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setQueryHint(getString(R.string.filter_group_rooms));
+        mSearchView.setIconifiedByDefault(false);
     }
 
-    private void refreshData() {
+    @Override
+    public void refreshViews() {
         mAdapter.setGroupRooms(mActivity.getGroup().getGroupRooms().getRoomsList());
     }
 }

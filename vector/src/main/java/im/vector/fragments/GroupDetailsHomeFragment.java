@@ -88,7 +88,7 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        refreshData();
+        refreshViews();
     }
 
     /*
@@ -98,7 +98,8 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
      */
     @Override
     protected void initViews() {
-
+        mGroupMembersIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_groups), mGroupMembersTextView.getCurrentTextColor()));
+        mGroupRoomsIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_rooms), mGroupMembersTextView.getCurrentTextColor()));
     }
 
     /*
@@ -107,10 +108,8 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
      * *********************************************************************************************
      */
 
-    /**
-     * Init the rooms data
-     */
-    private void refreshData() {
+    @Override
+    public void refreshViews() {
         Group group = mActivity.getGroup();
 
         VectorUtils.loadGroupAvatar(mActivity, mSession, mGroupAvatar, group);
@@ -121,10 +120,10 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
         mGroupTopicTextView.setVisibility(TextUtils.isEmpty(mGroupTopicTextView.getText()) ? View.GONE : View.VISIBLE);
 
         int roomCount = (null != group.getGroupRooms()) ? group.getGroupRooms().getEstimatedRoomCount() : 0;
-        mGroupRoomsTextView.setText((1 == roomCount) ? getString(R.string.group_one_member) : getString(R.string.group_members, roomCount));
+        int memberCount = (null != group.getGroupUsers()) ? group.getGroupUsers().getEstimatedUsersCount() : 1;
 
-        int memberCount = (null != group.getGroupUsers()) ? group.getGroupUsers().getEstimatedUsersCount() : 0;
-        mGroupMembersTextView.setText((1 == memberCount) ? getString(R.string.group_one_room) : getString(R.string.group_rooms, memberCount));
+        mGroupRoomsTextView.setText((1 == roomCount) ? getString(R.string.group_one_room) : getString(R.string.group_rooms, roomCount));
+        mGroupMembersTextView.setText((1 == memberCount) ? getString(R.string.group_one_member) : getString(R.string.group_members, memberCount));
 
         if (!TextUtils.isEmpty(group.getLongDescription())) {
             mGroupHtmlTextView.setVisibility(View.VISIBLE);
@@ -138,8 +137,5 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
             noLongDescriptionTextView.setVisibility(View.VISIBLE);
             mGroupHtmlTextView.setVisibility(View.GONE);
         }
-
-        mGroupMembersIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_groups), mGroupMembersTextView.getCurrentTextColor()));
-        mGroupRoomsIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_rooms), mGroupMembersTextView.getCurrentTextColor()));
     }
 }

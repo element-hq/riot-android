@@ -49,13 +49,12 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.group.Group;
-import org.matrix.androidsdk.rest.model.group.GroupProfile;
-import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -198,39 +197,49 @@ public class GroupsFragment extends AbsHomeFragment {
         mAdapter = new GroupAdapter(getActivity(), new GroupAdapter.OnGroupSelectItemListener() {
             @Override
             public void onSelectItem(final Group group, final int position) {
-                mActivity.showWaitingView();
-                mGroupsManager.refreshGroupData(group.getGroupId(), new ApiCallback<Void>() {
-                    private void onDone() {
-                        if (null != getActivity()) {
-                            mActivity.stopWaitingView();
+                // some information has already been downloaded
+                if ((null != group.getGroupUsers()) && (null != group.getGroupRooms())) {
+                    // display it
+                    Intent intent = new Intent(getActivity(), VectorGroupDetailsActivity.class);
+                    intent.putExtra(VectorGroupDetailsActivity.EXTRA_GROUP_ID, group.getGroupId());
+                    intent.putExtra(VectorGroupDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    startActivity(intent);
+                } else {
+                    // retrieve the information server side
+                    mActivity.showWaitingView();
+                    mGroupsManager.refreshGroupData(group.getGroupId(), new ApiCallback<Void>() {
+                        private void onDone() {
+                            if (null != getActivity()) {
+                                mActivity.stopWaitingView();
 
-                            Intent intent = new Intent(getActivity(), VectorGroupDetailsActivity.class);
-                            intent.putExtra(VectorGroupDetailsActivity.EXTRA_GROUP_ID, group.getGroupId());
-                            intent.putExtra(VectorGroupDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                            startActivity(intent);
+                                Intent intent = new Intent(getActivity(), VectorGroupDetailsActivity.class);
+                                intent.putExtra(VectorGroupDetailsActivity.EXTRA_GROUP_ID, group.getGroupId());
+                                intent.putExtra(VectorGroupDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                                startActivity(intent);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onSuccess(Void info) {
-                        onDone();
-                    }
+                        @Override
+                        public void onSuccess(Void info) {
+                            onDone();
+                        }
 
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onDone();
-                    }
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onDone();
+                        }
 
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onDone();
-                    }
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onDone();
+                        }
 
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onDone();
-                    }
-                });
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onDone();
+                        }
+                    });
+                }
             }
 
         }, new AbsAdapter.GroupInvitationListener() {

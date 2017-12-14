@@ -42,6 +42,7 @@ import im.vector.R;
 import im.vector.activity.VectorGroupDetailsActivity;
 import im.vector.adapters.GroupDetailsPeopleAdapter;
 import im.vector.util.GroupUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
@@ -63,7 +64,7 @@ public class GroupDetailsPeopleFragment extends GroupDetailsBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        refreshData();
+        refreshViews();
     }
 
     @Override
@@ -115,9 +116,14 @@ public class GroupDetailsPeopleFragment extends GroupDetailsBaseFragment {
                 return true;
             }
         });
+
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setQueryHint(getString(R.string.filter_group_members));
+        mSearchView.setIconifiedByDefault(false);
     }
 
-    private void refreshData() {
+    @Override
+    public void refreshViews() {
         mAdapter.setJoinedGroupUsers(mActivity.getGroup().getGroupUsers().getUsers());
         mAdapter.setInvitedGroupUsers(mActivity.getGroup().getInvitedGroupUsers().getUsers());
     }

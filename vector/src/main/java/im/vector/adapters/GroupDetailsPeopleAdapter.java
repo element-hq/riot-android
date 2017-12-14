@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import org.matrix.androidsdk.rest.model.group.GroupUser;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import im.vector.R;
@@ -40,6 +41,13 @@ public class GroupDetailsPeopleAdapter extends AbsAdapter {
 
     private final OnSelectUserListener mListener;
 
+    private static final Comparator<GroupUser> mComparator = new Comparator<GroupUser>() {
+        @Override
+        public int compare(GroupUser lhs, GroupUser rhs) {
+            return lhs.getDisplayname().compareTo(rhs.getDisplayname());
+        }
+    };
+
     /*
      * *********************************************************************************************
      * Constructor
@@ -52,14 +60,14 @@ public class GroupDetailsPeopleAdapter extends AbsAdapter {
         mListener = listener;
 
         mJoinedUsersSection = new AdapterSection<>(context.getString(R.string.joined), -1,
-                R.layout.adapter_item_group_user_room_view, TYPE_HEADER_DEFAULT, TYPE_JOINED_USERS, new ArrayList<GroupUser>(), null);
+                R.layout.adapter_item_group_user_room_view, TYPE_HEADER_DEFAULT, TYPE_JOINED_USERS, new ArrayList<GroupUser>(), mComparator);
         mJoinedUsersSection.setEmptyViewPlaceholder(context.getString(R.string.no_users_placeholder), context.getString(R.string.no_result_placeholder));
 
 
         mInvitedUsersSection = new AdapterSection<>(context.getString(R.string.invited), -1,
-                R.layout.adapter_item_group_user_room_view, TYPE_HEADER_DEFAULT, TYPE_INVITED_USERS, new ArrayList<GroupUser>(), null);
+                R.layout.adapter_item_group_user_room_view, TYPE_HEADER_DEFAULT, TYPE_INVITED_USERS, new ArrayList<GroupUser>(), mComparator);
         mInvitedUsersSection.setEmptyViewPlaceholder(context.getString(R.string.no_users_placeholder), context.getString(R.string.no_result_placeholder));
-
+        mInvitedUsersSection.setIsHiddenWhenEmpty(true);
 
         addSection(mJoinedUsersSection);
         addSection(mInvitedUsersSection);
