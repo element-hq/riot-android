@@ -331,8 +331,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             tabIndexToRestore = PEOPLE_TAB_INDEX;
         }
 
-        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(ThemeUtils.getColor(this, R.attr.tab_bar_background_color)));
-
         // set the tab to display & set current tab index
         mActionBar.setSelectedNavigationItem(tabIndexToRestore);
         mCurrentTabIndex = tabIndexToRestore;

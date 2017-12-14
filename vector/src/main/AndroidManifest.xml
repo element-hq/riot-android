@@ -323,6 +323,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_group_details"
             android:launchMode="singleTop"
+            android:theme="@style/GroupAppTheme"
             android:windowSoftInputMode="adjustResize">
         </activity>
 

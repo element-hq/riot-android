@@ -16,8 +16,11 @@
 
 package im.vector.fragments;
 
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 
@@ -33,6 +36,7 @@ import org.matrix.androidsdk.rest.model.group.Group;
 
 import butterknife.BindView;
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.util.VectorUtils;
 
 public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
@@ -135,8 +139,7 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
             mGroupHtmlTextView.setVisibility(View.GONE);
         }
 
-        // manage colours
-        //mGroupMembersIconView
-        //mGroupRoomsIconView
+        mGroupMembersIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_groups), mGroupMembersTextView.getCurrentTextColor()));
+        mGroupRoomsIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_rooms), mGroupMembersTextView.getCurrentTextColor()));
     }
 }

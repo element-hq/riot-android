@@ -810,7 +810,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         stopWaitingView();
 
         // don't display the fab for the favorites tab
-        mFloatingActionButton.setVisibility((item.getItemId() != R.id.bottom_action_favourites) ? View.VISIBLE : View.GONE);
+        boolean displayFab = (item.getItemId() != R.id.bottom_action_favourites) && (item.getItemId() != R.id.bottom_action_groups);
+
+        mFloatingActionButton.setVisibility(displayFab ? View.VISIBLE : View.GONE);
 
         mCurrentMenuId = item.getItemId();
 

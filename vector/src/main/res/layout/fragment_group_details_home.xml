@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_margin="20dp">
 
         <im.vector.view.VectorCircularImageView
             android:id="@+id/group_avatar"
@@ -28,6 +28,7 @@
                 android:id="@+id/group_name_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLines="3"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:background="#0f0"
@@ -37,6 +38,7 @@
                 android:id="@+id/group_topic_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLines="5"
                 android:layout_below="@+id/group_name_text_view"
                 android:textSize="14sp"
                 tools:background="#00f"
@@ -93,7 +95,7 @@
         android:background="@color/vector_silver_color" />
 
     <ScrollView
-        android:layout_margin="10dp"
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -109,7 +111,7 @@
         android:id="@+id/no_html_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="20dp"
         android:text="@string/group_no_long_description"
         android:textColor="@color/vector_silver_color" />
 </LinearLayout>

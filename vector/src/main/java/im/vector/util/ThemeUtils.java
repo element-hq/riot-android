@@ -47,6 +47,7 @@ import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorCallViewActivity;
+import im.vector.activity.VectorGroupDetailsActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.VectorMediasViewerActivity;
@@ -178,6 +179,8 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Dark);
             } else if (activity instanceof LockScreenActivity) {
                 activity.setTheme(R.style.Vector_Lock_Dark);
+            } else if (activity instanceof VectorGroupDetailsActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
             }
         }
 
@@ -234,6 +237,8 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Black);
             } else if (activity instanceof LockScreenActivity) {
                 activity.setTheme(R.style.Vector_Lock_Black);
+            } else if (activity instanceof VectorGroupDetailsActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
             }
         }
 
