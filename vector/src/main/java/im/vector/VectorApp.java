@@ -1233,6 +1233,27 @@ public class VectorApp extends MultiDexApplication {
         return mPiwikTracker;
     }
 
+
+    /**
+     * Add the stats variables to the piwik screen.
+     *
+     * @return the piwik screen
+     */
+    private TrackHelper.Screen addCustomVariables(TrackHelper.Screen screen) {
+        screen.variable(1, "App Platform", "Android Platform");
+        screen.variable(2, "App Version", SHORT_VERSION);
+        screen.variable(4, "Chosen Language", getApplicationLocale().toString());
+
+        if (null != Matrix.getInstance(this).getDefaultSession()) {
+            MXSession session = Matrix.getInstance(this).getDefaultSession();
+
+            screen.variable(7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
+            screen.variable(8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
+        }
+
+        return screen;
+    }
+
     /**
      * A new activity has been resumed
      * @param activity the new activity
@@ -1242,7 +1263,8 @@ public class VectorApp extends MultiDexApplication {
             Tracker tracker = getPiwikTracker();
             if (null != tracker) {
                 try {
-                    TrackHelper.track().screen("/android/" +   Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/"+ activity.getClass().getName().replace(".", "/")).with(tracker);
+                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" +   Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/"+ activity.getClass().getName().replace(".", "/"));
+                    addCustomVariables(screen).with(tracker);
                 } catch (Throwable t) {
                     Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());
                 }
