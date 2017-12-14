@@ -16,74 +16,54 @@
 
 package im.vector.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GestureDetectorCompat;
+
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.LinearLayoutManager;
 
-import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.rest.model.group.GroupRoom;
-import org.matrix.androidsdk.rest.model.group.GroupUser;
-import org.matrix.androidsdk.util.Log;
-
+import android.text.Html;
 import android.text.TextUtils;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomAccountData;
-import org.matrix.androidsdk.data.RoomTag;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.matrix.androidsdk.rest.model.group.Group;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorGroupDetailsActivity;
-import im.vector.activity.VectorHomeActivity;
-import im.vector.activity.VectorMemberDetailsActivity;
-import im.vector.activity.VectorRoomActivity;
-import im.vector.adapters.HomeGroupRoomAdapter;
-import im.vector.adapters.HomeGroupUserAdapter;
-import im.vector.adapters.HomeRoomAdapter;
-import im.vector.util.PreferencesManager;
-import im.vector.util.RoomUtils;
-import im.vector.view.HomeSectionView;
+import im.vector.util.VectorUtils;
 
 public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
     private static final String LOG_TAG = GroupDetailsHomeFragment.class.getSimpleName();
 
-    @BindView(R.id.nested_scrollview)
-    NestedScrollView mNestedScrollView;
+    @BindView(R.id.group_avatar)
+    ImageView mGroupAvatar;
 
-    @BindView(R.id.featured_rooms_section)
-    HomeSectionView mFeaturedRoomsSection;
+    @BindView(R.id.group_name_text_view)
+    TextView mGroupNameTextView;
 
-    @BindView(R.id.featured_users_section)
-    HomeSectionView mFeaturedUsersSection;
+    @BindView(R.id.group_topic_text_view)
+    TextView mGroupTopicTextView;
 
-    private List<HomeSectionView> mHomeSectionViews = new ArrayList<>();
+    @BindView(R.id.group_members_icon_view)
+    ImageView mGroupMembersIconView;
 
-    private MXSession mSession;
+    @BindView(R.id.group_members_text_view)
+    TextView mGroupMembersTextView;
 
-    private VectorGroupDetailsActivity mActivity;
+    @BindView(R.id.group_rooms_icon_view)
+    ImageView mGroupRoomsIconView;
+
+    @BindView(R.id.group_rooms_text_view)
+    TextView mGroupRoomsTextView;
+
+    @BindView(R.id.html_text_view)
+    TextView mGroupHtmlTextView;
+
+    @BindView(R.id.no_html_text_view)
+    TextView noLongDescriptionTextView;
 
     /*
      * *********************************************************************************************
@@ -97,25 +77,14 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
     }
 
     @Override
-    public void onActivityCreated(final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        mSession = Matrix.getInstance(getContext()).getDefaultSession();
-        mActivity = (VectorGroupDetailsActivity) getActivity();}
+    public void onPause() {
+        super.onPause();
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        initData();
-
-        for (HomeSectionView homeSectionView : mHomeSectionViews) {
-            homeSectionView.scrollToPosition(0);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
+        refreshData();
     }
 
     /*
@@ -125,85 +94,7 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
      */
     @Override
     protected void initViews() {
-        // Rooms list
-        mFeaturedRoomsSection.setTitle(R.string.bottom_action_rooms);
-        mFeaturedRoomsSection.setPlaceholders(getString(R.string.no_room_placeholder), getString(R.string.no_result_placeholder));
-        mFeaturedRoomsSection.setupGroupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
-                R.layout.adapter_item_circular_contact_view, true, new HomeGroupRoomAdapter.OnSelectGroupRoomListener() {
-                    @Override
-                    public void onSelectGroupRoom(GroupRoom groupRoom, int position) {
-                        Room room = mSession.getDataHandler().getStore().getRoom(groupRoom.roomId);
 
-                        // Launch corresponding room activity
-                        HashMap<String, Object> params = new HashMap<>();
-                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, groupRoom.roomId);
-                        params.put(VectorRoomActivity.EXTRA_IS_UNREAD_PREVIEW_MODE, (null == room));
-                        CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
-                    }
-                });
-        mHomeSectionViews.add(mFeaturedRoomsSection);
-
-        // group users list
-        mFeaturedUsersSection.setTitle(R.string.featured_users);
-        mFeaturedUsersSection.setHideIfEmpty(true);
-        mFeaturedUsersSection.setPlaceholders("should never happen", getString(R.string.no_result_placeholder));
-        mFeaturedUsersSection.setupGroupUserRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
-                R.layout.adapter_item_circular_contact_view, true, new HomeGroupUserAdapter.OnSelectGroupUserListener() {
-                    @Override
-                    public void onSelectGroupUser(GroupUser groupUser, int position) {
-                        Intent userIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-                        userIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, groupUser.userId);
-
-                        if (!TextUtils.isEmpty(groupUser.avatarUrl)) {
-                            userIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_AVATAR_URL, groupUser.avatarUrl);
-                        }
-
-                        if (!TextUtils.isEmpty(groupUser.displayname)) {
-                            userIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_DISPLAY_NAME, groupUser.displayname);
-                        }
-
-                        userIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                        startActivity(userIntent);
-                    }
-                });
-        mHomeSectionViews.add(mFeaturedUsersSection);
-
-
-        // Add listeners to hide the floating button when needed
-        final GestureDetectorCompat gestureDetector = new GestureDetectorCompat(mActivity, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent event) {
-                return true;
-            }
-
-            @Override
-            public boolean onFling(MotionEvent event1, MotionEvent event2,
-                                   float velocityX, float velocityY) {
-                /*if (mActivity.getFloatingActionButton() != null
-                        && mNestedScrollView.getBottom() > mActivity.getFloatingActionButton().getTop()) {
-                    mActivity.hideFloatingActionButton(getTag());
-                }*/
-                return true;
-            }
-        });
-
-        mNestedScrollView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                if (null != mNestedScrollView) {
-                    gestureDetector.onTouchEvent(event);
-                    return mNestedScrollView.onTouchEvent(event);
-                } else {
-                    return false;
-                }
-            }
-        });
-        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                //mActivity.hideFloatingActionButton(getTag());
-            }
-        });
     }
 
     /*
@@ -215,12 +106,37 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
     /**
      * Init the rooms data
      */
-    private void initData() {
-        if ((null == mSession) || (null == mSession.getDataHandler())) {
-            Log.e(LOG_TAG, "## initData() : null session");
+    private void refreshData() {
+        Group group = mActivity.getGroup();
+
+        VectorUtils.loadGroupAvatar(mActivity, mSession, mGroupAvatar, group);
+
+        mGroupNameTextView.setText(group.getDisplayName());
+
+        mGroupTopicTextView.setText(group.getShortDescription());
+        mGroupTopicTextView.setVisibility(TextUtils.isEmpty(mGroupTopicTextView.getText()) ? View.GONE : View.VISIBLE);
+
+        int roomCount = (null != group.getGroupRooms()) ? group.getGroupRooms().getEstimatedRoomCount() : 0;
+        mGroupRoomsTextView.setText((1 == roomCount) ? getString(R.string.group_one_member) : getString(R.string.group_members, roomCount));
+
+        int memberCount = (null != group.getGroupUsers()) ? group.getGroupUsers().getEstimatedUsersCount() : 0;
+        mGroupMembersTextView.setText((1 == memberCount) ? getString(R.string.group_one_room) : getString(R.string.group_rooms, memberCount));
+
+        if (!TextUtils.isEmpty(group.getLongDescription())) {
+            mGroupHtmlTextView.setVisibility(View.VISIBLE);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(),Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                mGroupHtmlTextView.setText(group.getLongDescription());
+            }
+            noLongDescriptionTextView.setVisibility(View.GONE);
+        } else {
+            noLongDescriptionTextView.setVisibility(View.VISIBLE);
+            mGroupHtmlTextView.setVisibility(View.GONE);
         }
 
-        mFeaturedRoomsSection.setGroupRooms(mActivity.getGroup().getGroupRooms().getRoomsList());
-        mFeaturedUsersSection.setGroupUsers(mActivity.getGroup().getGroupUsers().getUsers());
+        // manage colours
+        //mGroupMembersIconView
+        //mGroupRoomsIconView
     }
 }

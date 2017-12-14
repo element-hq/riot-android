@@ -483,7 +483,7 @@ public class VectorUtils {
      */
     public static void loadGroupAvatar(Context context, MXSession session, ImageView imageView, Group group) {
         if (null != group) {
-            VectorUtils.loadUserAvatar(context, session, imageView, group.getAvatarUrl(), group.getGroupId(), group.getName());
+            VectorUtils.loadUserAvatar(context, session, imageView, group.getAvatarUrl(), group.getGroupId(), group.getDisplayName());
         }
     }
 

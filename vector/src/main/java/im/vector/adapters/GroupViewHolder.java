@@ -94,7 +94,7 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
             vGroupMembersCount.setVisibility(View.GONE);
         }
 
-        vGroupName.setText(group.getName());
+        vGroupName.setText(group.getDisplayName());
         vGroupName.setTypeface(null, Typeface.NORMAL);
 
         VectorUtils.loadGroupAvatar(context, session, vGroupAvatar, group);

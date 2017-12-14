@@ -53,7 +53,7 @@ public class GroupUtils {
             Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
 
             for (final Group group : groupsToFilter) {
-                if (pattern.matcher(group.getName()).find()) {
+                if (pattern.matcher(group.getDisplayName()).find()) {
                     filteredGroups.add(group);
                 }
             }
