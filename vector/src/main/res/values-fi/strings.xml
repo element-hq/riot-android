@@ -54,9 +54,9 @@
     <string name="action_sign_out_confirmation">Turvallisuussyistä uloskirjautuminen poistaa salausavaimet. Ilman salausavaimia et voi lukea viestihistoriaa salatuissa huoneissa.\nValitse \"vie\" tehdäksesi varmuuskopio avaimista.</string>
     <string name="action_voice_call">Äänipuhelu</string>
     <string name="action_video_call">Videopuhelu</string>
-    <string name="action_global_search">Haku kaikkialta</string>
+    <string name="action_global_search">Laaja haku</string>
     <string name="action_mark_all_as_read">Merkitse kaikki luetuiksi</string>
-    <string name="action_historical">Historiallinen</string>
+    <string name="action_historical">Historia</string>
     <string name="action_quick_reply">Pikavastaus</string>
     <string name="action_open">Avaa</string>
     <string name="action_close">Sulje</string>
@@ -76,7 +76,7 @@
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Hae huoneita</string>
     <string name="home_filter_placeholder_favorites">Hae suosikkeja</string>
-    <string name="home_filter_placeholder_people">Hae henkilöitä</string>
+    <string name="home_filter_placeholder_people">Etsi henkilöitä</string>
     <string name="home_filter_placeholder_rooms">Hae huoneita</string>
 
     <!-- Home fragment -->
@@ -87,7 +87,7 @@
     <string name="direct_chats_header">Keskustelut</string>
     <string name="local_address_book_header">Paikallinen osoitekirja</string>
     <string name="matrix_only_filter">Ainoastaan Matrix-yhteyshenkilöt</string>
-    <string name="no_conversation_placeholder">Ei keskusteluja</string>
+    <string name="no_conversation_placeholder">Ei keskusteluita</string>
     <string name="no_contact_access_placeholder">Et sallinut Riotille pääsyä paikallisiin yhteystietoihisi</string>
     <string name="no_result_placeholder">Ei tuloksia</string>
 
@@ -114,7 +114,7 @@
     <string name="send_bug_report_progress">Lähetetään (%s%%)</string>
     <string name="send_bug_report_app_crashed">Sovellus kaatui viimeksi. Haluatko tehdä kaatumisesta ilmoituksen?</string>
 
-    <string name="send_files_in">Lähetä [johonkin]</string>
+    <string name="send_files_in">Lähetä</string>
     <string name="read_receipt">Luettu</string>
 
     <string name="join_room">Liity huoneeseen</string>
@@ -389,7 +389,7 @@
     <string name="ssl_remain_offline">Jätä huomiotta</string> <!-- ??? -->
     <string name="ssl_fingerprint_hash">Sormenjälki (%s):</string>
     <string name="ssl_could_not_verify">Palvelimen identiteettiä ei voitu varmistaa.</string> <!-- ??? -->
-    <string name="ssl_cert_not_trust">Tämä voi tarkoittaa että joku yrittää kaapata sinun viestintääsi, tai että laitteesi ei luota palvelimen varmenteeseen.</string>
+    <string name="ssl_cert_not_trust">Tämä voi tarkoittaa että joku yrittää kaapata sinun viestintääsi tai että laitteesi ei luota palvelimen varmenteeseen.</string>
     <string name="ssl_cert_new_account_expl">Jos palvelimen ylläpitäjä sanoo että tämä on odotettua, varmista että alla oleva sormenjälki on sama kuin hänen antama.</string>
     <string name="ssl_unexpected_existing_expl">Sertifikaatti johon laitteesi luotti aikaisemmin on vaihtunut. Tämä on HYVIN EPÄTAVALLISTA. Suositellaan että ET hyväksy tätä uutta sertifikaattia.</string>
     <string name="ssl_expected_existing_expl">Sertifikaatti on vaihtunut luotetusta sertifikaatista uuteen. Palvelin on voinut uudistaa sertifikaattinsa. Ota yhteyttä palvelimen ylläpitäjään ja selvitä oikean sertifikaatin sormenjälki.</string>
@@ -415,7 +415,7 @@
     <string name="room_event_action_cancel_download">Peru lataus</string>
 
     <!-- Room display name -->
-    <string name="room_displayname_invite_from">Kutsu %s[:lta]</string> <!-- Grammar problem -->
+    <string name="room_displayname_invite_from">Kutsu käyttäjältä %s</string> <!-- Grammar problem -->
     <string name="room_displayname_room_invite">Huonekutsu</string>
     <string name="room_displayname_two_members">%1$s ja %2$s</string>
     <string name="room_displayname_more_than_two_members">%1$s ja %2$d muuta</string>
@@ -516,7 +516,7 @@
     <string name="settings_contact">Paikalliset yhteystiedot</string>
     <string name="settings_contacts_app_permission">Osoitekirjakäyttölupa</string>
     <string name="settings_contacts_phonebook_country">Osoitekirjan maa</string>
-    <string name="settings_home_display">Kotinäyttö</string>
+    <string name="settings_home_display">Koti</string>
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Laitteet</string>
@@ -711,14 +711,14 @@
     <string name="directory_server_type_homeserver">Syötä kotipalvelin jolta listataan julkiset huoneet</string>
     <string name="directory_server_placeholder">Kotipalvelimen URL</string>
     <string name="directory_server_all_rooms_on_server">Kaikki huoneet palvelimella %s</string>
-    <string name="directory_server_native_rooms">Kaikki kotoperäiset %s huoneet</string>
+    <string name="directory_server_native_rooms">Kaikki alkuperäiset %s huoneet</string>
 
     <!-- Notifications -->
     <string name="notification_unread_notified_messages">%d lukematonta ilmoitettua viestiä</string>
     <string name="notification_unread_notified_messages_in_room">%1$d unread messages in %2$d rooms"</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Hae historiallista</string>
+    <string name="historical_placeholder">Hae historiatietoja</string>
 <string name="user_directory_header">Käyttäjähakemisto</string>
     <string name="people_search_user_directory">KÄYTTÄJÄHAKEMISTO (%s)</string>
     <string name="settings_start_on_boot">Käynnistä automaattisesti</string>
@@ -752,4 +752,79 @@
     <string name="huge">Valtava</string>
 <string name="offline">Offline</string>
 
-    </resources>
+    <string name="light_theme">Vaalea teema</string>
+    <string name="dark_theme">Tumma teema</string>
+    <string name="black_them">Musta teema</string>
+
+    <string name="notification_sync_in_progress">Synkronoidaan</string>
+    <string name="notification_listen_for_events">Seuraa tapahtumia</string>
+    <string name="notification_noisy_notifications">Korostetut ilmoitukset</string>
+    <string name="notification_silent_notifications">Hiljaiset ilmoitukset</string>
+
+    <string name="title_activity_bug_report">Virheraportti</string>
+
+    <string name="option_take_photo">Ota kuva</string>
+    <string name="option_take_video">Kaappaa video</string>
+
+    <string name="login_mobile_device">Mobiili</string>
+
+    <string name="call">Puhelu</string>
+    <string name="settings_notification_ringtone">Ilmoitusääni</string>
+    <string name="settings_containing_my_display_name">Viesti sisältää näyttönimeni</string>
+    <string name="settings_containing_my_user_name">Viesti sisältää käyttäjänimeni</string>
+    <string name="settings_12_24_timestamps">Näytä aikaleimat 12h muodossa (esim. 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Piilota liittymis-/poistumisilmoitukset (ei vaikuta kutsuihin/poistoihin/estoihin)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Piilota kuvan ja näyttönimen muutokset</string>
+
+    <string name="settings_analytics">Analytiikka</string>
+    <string name="settings_opt_out_of_analytics">Älä jaa analytiikkatietoja</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
+
+
+    <string name="widget_no_power_to_manage">Tarvitse oikeudet pienoissovellusten hallintaan tässä huoneessa</string>
+    <string name="widget_creation_failure">Pienoissovelluksen luonti epäonnistui</string>
+    <string name="event_formatter_widget_added">%1$s listättiin %2$s toimesta</string>
+    <string name="event_formatter_widget_removed">%1$s poistettiin %2$s toimesta</string>
+    <string name="settings_labs_create_conference_with_jitsi">Luo konferenssipuhelu jitsin avulla</string>
+    <string name="widget_delete_message_confirmation">Haluatko varmasti poistaa pienoissovelluksen?</string>
+    <string name="active_widgets">%1$d aktiivista pienoissovellusta</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">Sinulla tarvitsee olla oikeus kutsua käyttäjiä.</string>
+    <string name="widget_integration_unable_to_create">Pienoissovellusta ei voitu luoda.</string>
+    <string name="widget_integration_failed_to_send_request">Pyynnön lähetys epäonnistui.</string>
+    <string name="widget_integration_room_not_recognised">Huonetta ei voida tunnistaa.</string>
+    <string name="widget_integration_positive_power_level">Oikeustason täytyy olla positiivinen luku.</string>
+    <string name="widget_integration_must_be_in_room">Et ole tässä huoneessa.</string>
+    <string name="widget_integration_no_permission_in_room">Sinulla ei ole oikeutta suorittaa toimintoa tässä huoneessa.</string>
+    <string name="widget_integration_missing_room_id">room_id puuttuu pyynnöstä.</string>
+    <string name="widget_integration_missing_user_id">user_id puuttuu pyynnöstä.</string>
+    <string name="widget_integration_room_not_visible">Huone %s ei ole näkyvillä.</string>
+    <string name="settings_labs_matrix_apps">Matrix Sovellukset</string>
+    <string name="room_add_matrix_apps">Lisää Matrix sovellus</string>
+    <string name="add_matrix_apps_not_supported">Ei tuettu tällä laitteella</string>
+    <string name="settings_labs_native_camera">Käytä alkuperäistä kamerasovellusta</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Lisäsit uuden laitteen \'%s\', joka haluaa salausavaimet.</string>
+    <string name="your_unverified_device_requesting">Tunnistamaton laite \'%s\' haluaa salausavaimet.</string>
+    <string name="start_verification">Aloita varmennus</string>
+    <string name="share_without_verifying">Jaa ilman varmennusta</string>
+    <string name="ignore_request">Hylkää pyyntö</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Varoitus!</string>
+    <string name="conference_call_warning_message">Konferenssipuhelu on yhtä kehitysvaiheessa eikä välttämättä ole luotettava.</string>
+
+    // slash commands
+    <string name="command_error">Virheellinen komento</string>
+    <string name="unrecognized_command">Tuntematon komento: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Off</string>
+    <string name="notification_on">On</string>
+    <string name="notification_noisy">Äänekäs</string>
+
+    <string name="encrypted_message">Salattu viesti</string>
+
+</resources>
