@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/community_name" />
+
+    <EditText
+        android:id="@+id/community_name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="@string/community_name_hint"
+        android:textColor="?attr/riot_primary_text_color"
+        android:textColorHint="?attr/default_text_hint_color" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/community_id" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:id="@+id/community_plus_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@color/vector_silver_color"
+            android:text="+"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/community_hs_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@color/vector_silver_color"
+            android:text=":a_server_name.org"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/community_id_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/community_hs_name_text_view"
+            android:layout_toRightOf="@+id/community_plus_text_view"
+            android:hint="@string/community_id_hint"
+            android:textColor="?attr/riot_primary_text_color"
+            android:textColorHint="?attr/default_text_hint_color" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -52,8 +52,6 @@ import org.piwik.sdk.extra.CustomVariables;
 import org.piwik.sdk.extra.TrackHelper;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,7 +77,6 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
-import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
@@ -1232,6 +1229,7 @@ public class VectorApp extends MultiDexApplication {
 
         return mPiwikTracker;
     }
+
 
     /**
      * Add the stats variables to the piwik screen.

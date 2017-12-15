@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/circular_room_view"
+    android:layout_width="90dp"
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
+    tools:background="#22ff0000">
+
+    <include
+        android:id="@+id/room_avatar_layout"
+        layout="@layout/adapter_item_circular_avatar_contact_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/contact_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/room_avatar_layout"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-regular"
+        android:gravity="center_horizontal"
+        android:lines="2"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="?attr/riot_primary_text_color"
+        android:textSize="12sp"
+        tools:background="#220000ff"
+        tools:text="#a very long room name" />
+</RelativeLayout>

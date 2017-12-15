@@ -23,6 +23,12 @@
         android:title=""
         android:id="@+id/bottom_action_rooms"
         android:enabled="true"
-        android:icon="@drawable/ic_people_black_24dp"/>
+        android:icon="@drawable/riot_tab_rooms"/>
+
+    <item
+        android:title=""
+        android:id="@+id/bottom_action_groups"
+        android:enabled="true"
+        android:icon="@drawable/riot_tab_groups"/>
 
 </menu>

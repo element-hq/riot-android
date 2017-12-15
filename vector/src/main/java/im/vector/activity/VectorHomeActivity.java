@@ -33,7 +33,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -110,6 +109,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
+import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
@@ -117,7 +117,6 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
-import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -166,6 +165,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private static final String TAG_FRAGMENT_FAVOURITES = "TAG_FRAGMENT_FAVOURITES";
     private static final String TAG_FRAGMENT_PEOPLE = "TAG_FRAGMENT_PEOPLE";
     private static final String TAG_FRAGMENT_ROOMS = "TAG_FRAGMENT_ROOMS";
+    private static final String TAG_FRAGMENT_GROUPS = "TAG_FRAGMENT_GROUPS";
 
     // Key used to restore the proper fragment after orientation change
     private static final String CURRENT_MENU_ID = "CURRENT_MENU_ID";
@@ -488,7 +488,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         }
 
         if (null != mFloatingActionButton) {
-            if (mCurrentMenuId == R.id.bottom_action_favourites) {
+            if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups)) {
                 mFloatingActionButton.setVisibility(View.GONE);
             } else {
                 mFloatingActionButton.show();
@@ -785,6 +785,15 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
                 break;
+            case R.id.bottom_action_groups:
+                Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_GROUPS);
+                if (fragment == null) {
+                    fragment = GroupsFragment.newInstance();
+                }
+                mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_groups));
+                break;
         }
 
         synchronized (this) {
@@ -799,7 +808,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         stopWaitingView();
 
         // don't display the fab for the favorites tab
-        mFloatingActionButton.setVisibility((item.getItemId() != R.id.bottom_action_favourites) ? View.VISIBLE : View.GONE);
+        boolean displayFab = (item.getItemId() != R.id.bottom_action_favourites) && (item.getItemId() != R.id.bottom_action_groups);
+
+        mFloatingActionButton.setVisibility(displayFab ? View.VISIBLE : View.GONE);
 
         mCurrentMenuId = item.getItemId();
 
@@ -896,7 +907,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onFloatingButtonClick();
+                    Fragment fragment = getSelectedFragment();
+
+                    if (!(fragment instanceof AbsHomeFragment) || !((AbsHomeFragment)fragment).onFabClick() ) {
+                        onFloatingButtonClick();
+                    }
                 }
             });
         }
@@ -1008,6 +1023,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             case R.id.bottom_action_rooms:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROOMS);
                 break;
+            case R.id.bottom_action_groups:
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_GROUPS);
+                break;
+
         }
 
         return fragment;

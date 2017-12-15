@@ -35,7 +35,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.ResourceUtils;
 
