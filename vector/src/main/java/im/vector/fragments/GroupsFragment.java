@@ -138,7 +138,7 @@ public class GroupsFragment extends AbsHomeFragment {
         super.onResume();
         mSession.getDataHandler().addListener(mEventListener);
         mRecycler.addOnScrollListener(mScrollListener);
-        refreshGroupsAnProfiles();
+        refreshGroupsAndProfiles();
     }
 
     @Override
@@ -307,12 +307,14 @@ public class GroupsFragment extends AbsHomeFragment {
     /**
      * refresh the groups list and their profiles.
      */
-    private void refreshGroupsAnProfiles() {
+    private void refreshGroupsAndProfiles() {
         refreshGroups();
         mSession.getGroupsManager().refreshGroupProfiles(new SimpleApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                mAdapter.notifyDataSetChanged();
+                if ((null != mActivity) && !mActivity.isFinishing()) {
+                    mAdapter.notifyDataSetChanged();
+                }
             }
         });
     }

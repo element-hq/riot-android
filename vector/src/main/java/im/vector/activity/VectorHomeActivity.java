@@ -490,7 +490,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         }
 
         if (null != mFloatingActionButton) {
-            if (mCurrentMenuId == R.id.bottom_action_favourites) {
+            if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups)) {
                 mFloatingActionButton.setVisibility(View.GONE);
             } else {
                 mFloatingActionButton.show();
