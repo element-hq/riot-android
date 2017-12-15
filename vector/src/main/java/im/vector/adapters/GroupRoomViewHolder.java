@@ -75,7 +75,7 @@ public class GroupRoomViewHolder extends RecyclerView.ViewHolder {
         }
 
         vContactName.setText(groupRoom.getDisplayName());
-        VectorUtils.loadUserAvatar(context, session, vContactAvatar, groupRoom.avatarUrl, groupRoom.roomId, groupRoom.getDisplayName());
+        VectorUtils.loadUserAvatar(context, session, vContactAvatar, groupRoom.avatar_url, groupRoom.roomId, groupRoom.getDisplayName());
 
         if (null != vContactDesc) {
             vContactDesc.setText(groupRoom.topic);

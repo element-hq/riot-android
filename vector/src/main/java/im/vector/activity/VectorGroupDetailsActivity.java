@@ -260,6 +260,24 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
     }
 
     /**
+     * SHow the waiting view
+     */
+    public void showWaitingView() {
+        if (null != mLoadingView) {
+            mLoadingView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Hide the waiting view
+     */
+    public void stopWaitingView() {
+        if (null != mLoadingView) {
+            mLoadingView.setVisibility(View.GONE);
+        }
+    }
+
+    /**
      * Initialise the navigation tabs.
      *
      * @param aSavedInstanceState the saved instance

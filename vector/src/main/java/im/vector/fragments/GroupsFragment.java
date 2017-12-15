@@ -198,7 +198,7 @@ public class GroupsFragment extends AbsHomeFragment {
             @Override
             public void onSelectItem(final Group group, final int position) {
                 // some information has already been downloaded
-                if ((null != group.getGroupUsers()) && (null != group.getGroupRooms())) {
+                if ((null != group.getGroupUsers()) && (0 != group.getGroupUsers().getEstimatedUsersCount())) {
                     // display it
                     Intent intent = new Intent(getActivity(), VectorGroupDetailsActivity.class);
                     intent.putExtra(VectorGroupDetailsActivity.EXTRA_GROUP_ID, group.getGroupId());

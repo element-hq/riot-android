@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.group.GroupRoom;
 import org.matrix.androidsdk.rest.model.group.GroupUser;
 
@@ -92,7 +93,13 @@ public class GroupDetailsRoomsFragment extends GroupDetailsBaseFragment {
         mAdapter = new GroupDetailsRoomsAdapter(getActivity(), new GroupDetailsRoomsAdapter.OnSelectRoomListener() {
             @Override
             public void onSelectItem(GroupRoom groupRoom, int position) {
-               GroupUtils.openGroupRoom(mActivity, mSession, groupRoom);
+                mActivity.showWaitingView();
+                GroupUtils.openGroupRoom(mActivity, mSession, groupRoom, new SimpleApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        mActivity.stopWaitingView();
+                    }
+                });
             }
         });
         mRecycler.setAdapter(mAdapter);

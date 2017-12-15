@@ -22,6 +22,10 @@ import android.text.TextUtils;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.group.Group;
 import org.matrix.androidsdk.rest.model.group.GroupRoom;
 import org.matrix.androidsdk.rest.model.group.GroupUser;
@@ -141,13 +145,56 @@ public class GroupUtils {
      * @param session the session
      * @param groupRoom the group room
      */
-    public static void openGroupRoom(Activity fromActivity, MXSession session, GroupRoom groupRoom) {
+    public static void openGroupRoom(final Activity fromActivity, final MXSession session, final GroupRoom groupRoom, final SimpleApiCallback<Void> callback) {
         Room room = session.getDataHandler().getStore().getRoom(groupRoom.roomId);
 
-        Intent roomIntent = new Intent(fromActivity, VectorRoomActivity.class);
-        roomIntent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
-        roomIntent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, groupRoom.roomId);
-        roomIntent.putExtra(VectorRoomActivity.EXTRA_IS_UNREAD_PREVIEW_MODE, (null == room));
-        fromActivity.startActivity(roomIntent);
+        if ((null == room) || (null == room.getMember(session.getMyUserId()))) {
+            final RoomPreviewData roomPreviewData = new RoomPreviewData(session, groupRoom.roomId, null, groupRoom.getAlias(), null);
+
+            roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
+                private void onDone() {
+                    if (null != callback) {
+                        callback.onSuccess(null);
+                    }
+
+                    CommonActivityUtils.previewRoom(fromActivity, roomPreviewData);
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone();
+                }
+
+                private void onError() {
+                    roomPreviewData.setRoomState(groupRoom);
+                    roomPreviewData.setRoomName(groupRoom.name);
+                    onDone();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError();
+                }
+            });
+        } else {
+            Intent roomIntent = new Intent(fromActivity, VectorRoomActivity.class);
+            roomIntent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+            roomIntent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, groupRoom.roomId);
+            fromActivity.startActivity(roomIntent);
+
+            if (null != callback) {
+                callback.onSuccess(null);
+            }
+        }
     }
 }
