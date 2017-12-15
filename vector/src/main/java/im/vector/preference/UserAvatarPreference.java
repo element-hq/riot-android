@@ -17,6 +17,7 @@
 package im.vector.preference;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.util.AttributeSet;
 import android.view.View;
@@ -72,5 +73,10 @@ public class UserAvatarPreference extends EditTextPreference {
     public void setSession(MXSession session) {
         mSession = session;
         refreshAvatar();
+    }
+
+    @Override
+    protected void showDialog(Bundle state) {
+        // do nothing
     }
 }
