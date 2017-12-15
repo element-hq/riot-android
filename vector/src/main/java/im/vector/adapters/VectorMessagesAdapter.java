@@ -1156,7 +1156,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             addContentViewListeners(convertView, bodyTextView, position);
         } catch (Exception e) {
+            StackTraceElement[] callstacks = Thread.currentThread().getStackTrace();
+
+            StringBuilder sb = new StringBuilder();
+            for (StackTraceElement element : callstacks) {
+                sb.append(element.toString());
+                sb.append("\n");
+            }
+
             Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getTextView() callstack \n" + sb.toString());
         }
 
         return convertView;
