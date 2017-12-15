@@ -43,7 +43,6 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
-import im.vector.view.RecentsExpandableListView;
 
 public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     // the session

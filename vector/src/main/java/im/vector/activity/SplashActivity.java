@@ -36,7 +36,6 @@ import im.vector.services.EventStreamService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * SplashActivity displays a splash while loading and inittializing the client.

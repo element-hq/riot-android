@@ -18,9 +18,6 @@
 package im.vector.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,18 +28,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 
-import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.model.group.GroupUser;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import im.vector.Matrix;
 import im.vector.R;
 
-import im.vector.activity.VectorGroupDetailsActivity;
 import im.vector.adapters.GroupDetailsPeopleAdapter;
 import im.vector.util.GroupUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 

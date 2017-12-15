@@ -19,7 +19,6 @@ package im.vector.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -41,7 +40,6 @@ import im.vector.contacts.ContactsManager;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
-import im.vector.util.ThemeUtils;
 
 /**
  * This class implements the room details screen, using a tab UI pattern.

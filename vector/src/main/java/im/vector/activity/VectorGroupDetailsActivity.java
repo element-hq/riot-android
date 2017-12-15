@@ -16,27 +16,17 @@
 
 package im.vector.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.groups.GroupsManager;
-import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.group.Group;
@@ -46,14 +36,10 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.contacts.ContactsManager;
 import im.vector.fragments.GroupDetailsBaseFragment;
 import im.vector.fragments.GroupDetailsHomeFragment;
 import im.vector.fragments.GroupDetailsPeopleFragment;
 import im.vector.fragments.GroupDetailsRoomsFragment;
-import im.vector.fragments.VectorRoomDetailsMembersFragment;
-import im.vector.fragments.VectorRoomSettingsFragment;
-import im.vector.fragments.VectorSearchRoomFilesListFragment;
 import im.vector.util.ThemeUtils;
 
 /**

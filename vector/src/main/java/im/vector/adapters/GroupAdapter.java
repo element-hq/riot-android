@@ -27,8 +27,6 @@ import org.matrix.androidsdk.rest.model.group.Group;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import im.vector.R;

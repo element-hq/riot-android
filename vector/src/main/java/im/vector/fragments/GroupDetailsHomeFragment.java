@@ -16,13 +16,9 @@
 
 package im.vector.fragments;
 
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 
 import android.text.Html;
 import android.text.TextUtils;

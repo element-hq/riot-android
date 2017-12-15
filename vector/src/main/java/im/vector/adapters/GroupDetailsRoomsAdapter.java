@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.matrix.androidsdk.rest.model.group.GroupRoom;
-import org.matrix.androidsdk.rest.model.group.GroupUser;
 
 import java.util.ArrayList;
 import java.util.Comparator;

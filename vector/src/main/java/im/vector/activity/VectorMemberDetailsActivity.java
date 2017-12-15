@@ -58,7 +58,6 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.fragments.VectorUnknownDevicesFragment;

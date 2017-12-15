@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.Button;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.model.group.Group;
 
 import butterknife.BindView;

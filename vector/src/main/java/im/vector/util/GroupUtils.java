@@ -31,12 +31,10 @@ import org.matrix.androidsdk.rest.model.group.GroupRoom;
 import org.matrix.androidsdk.rest.model.group.GroupUser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 
@@ -119,8 +117,8 @@ public class GroupUtils {
      * Open the detailed group user page
      *
      * @param fromActivity the caller activity
-     * @param session the session
-     * @param groupUser the group user
+     * @param session      the session
+     * @param groupUser    the group user
      */
     public static void openGroupUserPage(Activity fromActivity, MXSession session, GroupUser groupUser) {
         Intent userIntent = new Intent(fromActivity, VectorMemberDetailsActivity.class);
@@ -142,8 +140,8 @@ public class GroupUtils {
      * Open the detailed group room page
      *
      * @param fromActivity the caller activity
-     * @param session the session
-     * @param groupRoom the group room
+     * @param session      the session
+     * @param groupRoom    the group room
      */
     public static void openGroupRoom(final Activity fromActivity, final MXSession session, final GroupRoom groupRoom, final SimpleApiCallback<Void> callback) {
         Room room = session.getDataHandler().getStore().getRoom(groupRoom.roomId);
