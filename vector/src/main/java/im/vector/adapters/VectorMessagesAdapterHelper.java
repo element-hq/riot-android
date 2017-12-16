@@ -552,6 +552,45 @@ class VectorMessagesAdapterHelper {
         }
     }
 
+    /** Determine how many backticks bracket a message, for code block
+     * handling (issue 145) */
+    public int getTickCount(final Message message) {
+        final String mb = message.body;
+        if (mb.startsWith("```") && mb.endsWith("```")) {
+            return 3;
+        }
+        else if (mb.startsWith("``") && mb.endsWith("``")) {
+            return 2;
+        }
+        else if (mb.startsWith("`") && mb.endsWith("`")) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    /** Handling for ROW_TYPE_CODE (issue 145) */
+    void highlightCode(final TextView textView, final Spannable text, final int tickCount) {
+        // sanity check
+        if (null == textView) {
+            return;
+        }
+
+        final int background = (tickCount==1) ?
+                ThemeUtils.getColor(mContext, R.attr.code_block_1_background_color) :
+                (tickCount==2) ?
+                ThemeUtils.getColor(mContext, R.attr.code_block_2_background_color) :
+                ThemeUtils.getColor(mContext, R.attr.code_block_3_background_color);
+        textView.setBackgroundColor(background);
+
+        textView.setText(text);
+
+        if (null != mLinkMovementMethod) {
+            textView.setMovementMethod(mLinkMovementMethod);
+        }
+    }
+
     /**
      * Highlight the pattern in the text.
      *

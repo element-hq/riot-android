@@ -142,7 +142,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_HIDDEN = 7;
     static final int ROW_TYPE_ROOM_MEMBER = 8;
     static final int ROW_TYPE_EMOJI = 9;
-    static final int NUM_ROW_TYPES = 10;
+    static final int ROW_TYPE_CODE = 10;
+    static final int ROW_TYPE_CODE1 = 11;
+    static final int NUM_ROW_TYPES = 12;
 
     final Context mContext;
     private final HashMap<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
@@ -212,6 +214,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_message_merge,
                 R.layout.adapter_item_vector_message_emoji,
+                R.layout.adapter_item_vector_message_code,
                 mediasCache);
     }
 
@@ -240,6 +243,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                           int videoResLayoutId,
                           int mergeResLayoutId,
                           int emojiResLayoutId,
+                          int codeResLayoutId,
                           MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
@@ -253,6 +257,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_MERGE, mergeResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, R.layout.adapter_item_vector_hidden_message);
         mRowTypeToLayoutId.put(ROW_TYPE_EMOJI, emojiResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_CODE, codeResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_CODE1, textResLayoutId);
 
         mMediasCache = mediasCache;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -669,6 +675,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         switch (viewType) {
             case ROW_TYPE_EMOJI:
+            case ROW_TYPE_CODE:
+            case ROW_TYPE_CODE1:
             case ROW_TYPE_TEXT:
                 inflatedView = getTextView(viewType, position, convertView, parent);
                 break;
@@ -942,6 +950,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (Message.MSGTYPE_TEXT.equals(msgType)) {
                 if (containsOnlyEmojis(message.body)) {
                     viewType = ROW_TYPE_EMOJI;
+                } else if (1 == mHelper.getTickCount(message)) {
+                    viewType = ROW_TYPE_CODE1;
+                } else if (mHelper.getTickCount(message) >= 2) {
+                    viewType = ROW_TYPE_CODE;
                 } else {
                     viewType = ROW_TYPE_TEXT;
                 }
@@ -1135,7 +1147,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             boolean shouldHighlighted = (null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event);
 
-            highlightPattern(bodyTextView, body, TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null, mPattern, shouldHighlighted);
+            final int tickCount = mHelper.getTickCount(message);
+            if (0==tickCount) {
+                highlightPattern(bodyTextView, body,
+                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null,
+                        mPattern, shouldHighlighted);
+            } else {
+                final String bodyNoTicks = message.body.substring(tickCount, message.body.length()-tickCount);
+                mHelper.highlightCode(bodyTextView, new SpannableString(bodyNoTicks), tickCount);
+            }
 
             int textColor;
 
