@@ -18,7 +18,7 @@ package im.vector.adapters;
 
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 
 import java.util.Comparator;
 import java.util.List;

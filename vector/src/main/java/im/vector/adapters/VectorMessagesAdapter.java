@@ -54,12 +54,12 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.rest.model.EncryptedEventContent;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageMessage;
-import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.message.FileMessage;
+import org.matrix.androidsdk.rest.model.message.ImageMessage;
+import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.EventDisplay;
@@ -1156,7 +1156,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             addContentViewListeners(convertView, bodyTextView, position);
         } catch (Exception e) {
+            StackTraceElement[] callstacks = e.getStackTrace();
+
+            StringBuilder sb = new StringBuilder();
+            for (StackTraceElement element : callstacks) {
+                sb.append(element.toString());
+                sb.append("\n");
+            }
+
             Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getTextView() callstack \n" + sb.toString());
         }
 
         return convertView;

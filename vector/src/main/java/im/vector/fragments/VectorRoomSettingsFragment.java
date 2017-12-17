@@ -75,8 +75,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import im.vector.Matrix;
-import im.vector.R;
-import im.vector.VectorApp;
+import im.vector.R;;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.VectorMemberDetailsActivity;

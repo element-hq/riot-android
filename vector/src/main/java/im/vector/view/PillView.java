@@ -29,7 +29,6 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 
-import im.vector.Matrix;
 import im.vector.R;
 /**
  *

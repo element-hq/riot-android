@@ -318,6 +318,15 @@
             android:label="@string/title_activity_bug_report"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
+        <activity
+            android:name="im.vector.activity.VectorGroupDetailsActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_group_details"
+            android:launchMode="singleTop"
+            android:theme="@style/GroupAppTheme"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+
         <activity android:name=".activity.VectorUniversalLinkActivity">
 
             <intent-filter>

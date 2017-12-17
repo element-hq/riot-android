@@ -21,32 +21,33 @@ import android.view.View;
 import android.widget.Button;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.model.group.Group;
 
 import butterknife.BindView;
 import im.vector.R;
 
-public class InvitationViewHolder extends RoomViewHolder {
+public class GroupInvitationViewHolder extends GroupViewHolder {
 
-    @BindView(R.id.recents_invite_reject_button)
+    @BindView(R.id.group_invite_reject_button)
     Button vRejectButton;
 
-    @BindView(R.id.recents_invite_preview_button)
-    Button vPreViewButton;
+    @BindView(R.id.group_invite_join_button)
+    Button vJoinButton;
 
-    InvitationViewHolder(View itemView) {
+    GroupInvitationViewHolder(View itemView) {
         super(itemView);
     }
 
-    void populateViews(final Context context, final MXSession session, final Room room,
-                       final AbsAdapter.InvitationListener invitationListener, final AbsAdapter.MoreRoomActionListener moreRoomActionListener) {
-        super.populateViews(context, session, room, room.isDirectChatInvitation(), true, moreRoomActionListener);
+    @Override
+    public void populateViews(final Context context, final MXSession session, final Group group, final AbsAdapter.GroupInvitationListener invitationListener, final boolean isInvitation,
+                              final AbsAdapter.MoreGroupActionListener moreGroupActionListener) {
+        super.populateViews(context, session, group, invitationListener, true, moreGroupActionListener);
 
-        vPreViewButton.setOnClickListener(new View.OnClickListener() {
+        vJoinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != invitationListener) {
-                    invitationListener.onPreviewRoom(session, room.getRoomId());
+                    invitationListener.onJoinGroup(session, group.getGroupId());
                 }
             }
         });
@@ -55,7 +56,7 @@ public class InvitationViewHolder extends RoomViewHolder {
             @Override
             public void onClick(View v) {
                 if (null != invitationListener) {
-                    invitationListener.onRejectInvitation(session, room.getRoomId());
+                    invitationListener.onRejectInvitation(session, group.getGroupId());
                 }
             }
         });

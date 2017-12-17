@@ -53,7 +53,7 @@ import im.vector.util.RoomUtils;
 /**
  * Abstract fragment providing the universal search
  */
-public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.InvitationListener, AbsAdapter.MoreRoomActionListener, RoomUtils.MoreActionListener {
+public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.RoomInvitationListener, AbsAdapter.MoreRoomActionListener, RoomUtils.MoreActionListener {
 
     private static final String LOG_TAG = AbsHomeFragment.class.getSimpleName();
     private static final String CURRENT_FILTER = "CURRENT_FILTER";
@@ -107,7 +107,9 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mActivity = (VectorHomeActivity) getActivity();
+        if (getActivity() instanceof VectorHomeActivity) {
+            mActivity = (VectorHomeActivity) getActivity();
+        }
         mSession = Matrix.getInstance(getActivity()).getDefaultSession();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER)) {
@@ -119,7 +121,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     @CallSuper
     public void onResume() {
         super.onResume();
-        if (mPrimaryColor != -1) {
+        if ((mPrimaryColor != -1) && (null != mActivity)) {
             mActivity.updateTabStyle(mPrimaryColor, mSecondaryColor != -1 ? mSecondaryColor : mPrimaryColor);
         }
     }
@@ -328,6 +330,14 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
 
             CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
         }
+    }
+
+    /**
+     * Manage the fab actions
+     * @return true if the fragment has a dedicated action.
+     */
+    public boolean onFabClick() {
+        return false;
     }
 
     /*

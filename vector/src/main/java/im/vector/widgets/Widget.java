@@ -18,13 +18,10 @@ package im.vector.widgets;
 
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.model.Event;
 
 import java.io.Serializable;
-import java.util.Map;
 
 public class Widget implements Serializable {
     private String mWidgetId;

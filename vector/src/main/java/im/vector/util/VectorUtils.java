@@ -55,7 +55,8 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.group.Group;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.ImageUtils;
@@ -71,7 +72,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
@@ -376,7 +376,7 @@ public class VectorUtils {
             int idx = 0;
             char initial = name.charAt(idx);
 
-            if ((initial == '@' || initial == '#') && (name.length() > 1)) {
+            if ((initial == '@' || initial == '#' || initial == '+') && (name.length() > 1)) {
                 idx++;
             }
 
@@ -469,6 +469,20 @@ public class VectorUtils {
     public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         if (null != room) {
             VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayName(context, session, room));
+        }
+    }
+
+    /**
+     * Set the group avatar in an imageView.
+     *
+     * @param context   the context
+     * @param session   the session
+     * @param imageView the image view
+     * @param group     the group
+     */
+    public static void loadGroupAvatar(Context context, MXSession session, ImageView imageView, Group group) {
+        if (null != group) {
+            VectorUtils.loadUserAvatar(context, session, imageView, group.getAvatarUrl(), group.getGroupId(), group.getDisplayName());
         }
     }
 
@@ -590,18 +604,20 @@ public class VectorUtils {
             if (null != bitmap) {
                 imageView.setImageBitmap(bitmap);
 
-                final String tag = avatarUrl + userId + displayName;
-                imageView.setTag(tag);
+                if (!TextUtils.isEmpty(avatarUrl)) {
+                    final String tag = avatarUrl + userId + displayName;
+                    imageView.setTag(tag);
 
-                if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
-                    mImagesThreadHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (TextUtils.equals(tag, (String) imageView.getTag())) {
-                                session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                    if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
+                        mImagesThreadHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (TextUtils.equals(tag, (String) imageView.getTag())) {
+                                    session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             } else {
                 final String tmpTag0 = "00" + avatarUrl + "-" + userId + "--" + displayName;
@@ -615,7 +631,7 @@ public class VectorUtils {
                             imageView.setTag(null);
                             setDefaultMemberAvatar(imageView, userId, displayName);
 
-                            if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
+                            if (!TextUtils.isEmpty(avatarUrl) && !MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
                                 final String tmpTag1 = "11" + avatarUrl + "-" + userId + "--" + displayName;
                                 imageView.setTag(tmpTag1);
 

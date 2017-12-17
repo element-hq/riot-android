@@ -24,6 +24,7 @@
     <string name="title_activity_member_details">Member Details</string>
     <string name="title_activity_historical">Historical</string>
     <string name="title_activity_bug_report">Bug report</string>
+    <string name="title_activity_group_details">Community details</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -89,6 +90,7 @@
     <string name="home_filter_placeholder_favorites">Search for favourites</string>
     <string name="home_filter_placeholder_people">Search for people</string>
     <string name="home_filter_placeholder_rooms">Search for rooms</string>
+    <string name="home_filter_placeholder_groups">Search for communities</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -112,6 +114,11 @@
         <item quantity="one">1 user</item>
         <item quantity="other">%d users</item>
     </plurals>
+
+    <!-- Groups fragment -->
+    <string name="groups_invite_header">Invite</string>
+    <string name="groups_header">Groups</string>
+    <string name="no_group_placeholder">No groups</string>
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
@@ -815,4 +822,34 @@
 
     <string name="encrypted_message">Encrypted message</string>
 
+    // groups creation
+    <string name="create">Create</string>
+    <string name="create_community">Create Community</string>
+    <string name="community_name">Community name</string>
+    <string name="community_name_hint">Example</string>
+    <string name="community_id">Community Id</string>
+    <string name="community_id_hint">example</string>
+    <string name="group_id_cannot_be_empty">Community ID cannot be empty</string>
+    <string name="group_id_invalid_characters"> Community IDs may only contain characters a-z, 0-9, or \'=_-./\'</string>
+
+    // group details
+    <string name="group_details_home">Home</string>
+    <string name="group_details_people">People</string>
+    <string name="group_details_rooms">Rooms</string>
+    <string name="featured_rooms">Featured rooms</string>
+    <string name="featured_users">Featured users</string>
+    <string name="no_users_placeholder">No users</string>
+
+    <string name="rooms">Rooms</string>
+    <string name="joined">Joined</string>
+    <string name="invited">Invited</string>
+    <string name="filter_group_members">Filter group members</string>
+    <string name="filter_group_rooms">Filter group rooms</string>
+
+    <string name="group_one_member">1 member</string>
+    <string name="group_members">%d members</string>
+
+    <string name="group_one_room">1 room</string>
+    <string name="group_rooms">%d rooms</string>
+    <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
 </resources>

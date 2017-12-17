@@ -49,7 +49,6 @@ import org.matrix.androidsdk.rest.model.login.Credentials;
 
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
-import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
