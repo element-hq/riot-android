@@ -92,34 +92,17 @@ public class LoginHandler {
                       final SimpleApiCallback<HomeServerConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
 
-        final SimpleApiCallback<Credentials> loginCallback = new SimpleApiCallback<Credentials>(callback) {
+        callLogin(ctx, hsConfig, username, phoneNumber, phoneNumberCountry, password, new UnrecognizedCertApiCallback<Credentials>(hsConfig, callback) {
             @Override
             public void onSuccess(Credentials credentials) {
                 onRegistrationDone(appCtx, hsConfig, credentials, callback);
             }
 
             @Override
-            public void onNetworkError(final Exception e) {
-                if(!UnrecognizedCertHandler.handle(hsConfig, e, new UnrecognizedCertHandler.Callback() {
-                    @Override
-                    public void onAccept() {
-                        login(appCtx, hsConfig, username, phoneNumber, phoneNumberCountry, password, callback);
-                    }
-
-                    @Override
-                    public void onIgnore() {
-                        callback.onNetworkError(e);
-                    }
-
-                    @Override
-                    public void onReject() {
-                        callback.onNetworkError(e);
-                    }
-                })) { callback.onNetworkError(e); }
+            public void onAcceptedCert() {
+                login(appCtx, hsConfig, username, phoneNumber, phoneNumberCountry, password, callback);
             }
-        };
-
-        callLogin(ctx, hsConfig, username, phoneNumber, phoneNumberCountry, password, loginCallback);
+        });
     }
 
     /**
@@ -162,25 +145,10 @@ public class LoginHandler {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
 
-        client.getSupportedLoginFlows(new SimpleApiCallback<List<LoginFlow>>(callback) {
+        client.getSupportedLoginFlows(new UnrecognizedCertApiCallback<List<LoginFlow>>(hsConfig, callback) {
             @Override
-            public void onNetworkError(final Exception e) {
-                if(!UnrecognizedCertHandler.handle(hsConfig, e, new UnrecognizedCertHandler.Callback() {
-                    @Override
-                    public void onAccept() {
-                        getSupportedLoginFlows(appCtx, hsConfig, callback);
-                    }
-
-                    @Override
-                    public void onIgnore() {
-                        callback.onNetworkError(e);
-                    }
-
-                    @Override
-                    public void onReject() {
-                        callback.onNetworkError(e);
-                    }
-                })) { callback.onNetworkError(e); };
+            public void onAcceptedCert() {
+                getSupportedLoginFlows(appCtx, hsConfig, callback);
             }
         });
     }
@@ -210,30 +178,15 @@ public class LoginHandler {
         // avoid dispatching the device name
         params.initial_device_display_name = ctx.getString(R.string.login_mobile_device);
 
-        client.register(params, new SimpleApiCallback<Credentials>(callback) {
+        client.register(params, new UnrecognizedCertApiCallback<Credentials>(hsConfig, callback) {
             @Override
             public void onSuccess(Credentials credentials) {
                 onRegistrationDone(appCtx, hsConfig, credentials, callback);
             }
 
             @Override
-            public void onNetworkError(final Exception e) {
-                if(!UnrecognizedCertHandler.handle(hsConfig, e, new UnrecognizedCertHandler.Callback() {
-                    @Override
-                    public void onAccept() {
-                        getSupportedRegistrationFlows(appCtx, hsConfig, callback);
-                    }
-
-                    @Override
-                    public void onIgnore() {
-                        callback.onNetworkError(e);
-                    }
-
-                    @Override
-                    public void onReject() {
-                        callback.onNetworkError(e);
-                    }
-                })) { callback.onNetworkError(e); }
+            public void onAcceptedCert() {
+                getSupportedRegistrationFlows(appCtx, hsConfig, callback);
             }
         });
     }
@@ -254,25 +207,10 @@ public class LoginHandler {
         final ThreePid pid = new ThreePid(null, ThreePid.MEDIUM_EMAIL);
         ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
 
-        pid.submitValidationToken(restClient, aToken, aClientSecret, aSid, new SimpleApiCallback<Boolean>(aRespCallback) {
+        pid.submitValidationToken(restClient, aToken, aClientSecret, aSid, new UnrecognizedCertApiCallback<Boolean>(aHomeServerConfig, aRespCallback) {
             @Override
-            public void onNetworkError(final Exception e) {
-                if(!UnrecognizedCertHandler.handle(aHomeServerConfig, e, new UnrecognizedCertHandler.Callback() {
-                    @Override
-                    public void onAccept() {
-                        submitEmailTokenValidation(aCtx, aHomeServerConfig, aToken, aClientSecret, aSid, aRespCallback);
-                    }
-
-                    @Override
-                    public void onIgnore() {
-                        aRespCallback.onNetworkError(e);
-                    }
-
-                    @Override
-                    public void onReject() {
-                        aRespCallback.onNetworkError(e);
-                    }
-                })) { aRespCallback.onNetworkError(e); }
+            public void onAcceptedCert() {
+                submitEmailTokenValidation(aCtx, aHomeServerConfig, aToken, aClientSecret, aSid, aRespCallback);
             }
         });
     }
