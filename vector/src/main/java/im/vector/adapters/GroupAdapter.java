@@ -86,32 +86,43 @@ public class GroupAdapter extends AbsAdapter {
 
     @Override
     protected void populateViewHolder(int viewType, RecyclerView.ViewHolder viewHolder, int position) {
+        View groupView = null;
+        Group group = null;
 
         switch (viewType) {
             case TYPE_GROUP: {
                 final GroupViewHolder groupViewHolder = (GroupViewHolder) viewHolder;
-                final Group group = (Group) getItemForPosition(position);
+                group = (Group) getItemForPosition(position);
                 groupViewHolder.populateViews(mContext, mSession, group, null, false, mMoreGroupActionListener);
-                groupViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mListener.onSelectItem(group, -1);
-                    }
-                });
+                groupView = groupViewHolder.itemView;
+
                 break;
             }
             case TYPE_GROUP_INVITATION: {
                 final GroupInvitationViewHolder groupViewHolder = (GroupInvitationViewHolder) viewHolder;
-                final Group group = (Group) getItemForPosition(position);
+                group = (Group) getItemForPosition(position);
                 groupViewHolder.populateViews(mContext, mSession, group, mGroupInvitationListener, true, mMoreGroupActionListener);
-                groupViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mListener.onSelectItem(group, -1);
-                    }
-                });
+                groupView = groupViewHolder.itemView;
                 break;
             }
+        }
+
+        if (null != groupView) {
+            final Group fGroup = group;
+
+            groupView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onSelectItem(fGroup, -1);
+                }
+            });
+
+            groupView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return mListener.onLongPressItem(fGroup, -1);
+                }
+            });
         }
     }
 
@@ -155,5 +166,6 @@ public class GroupAdapter extends AbsAdapter {
 
     public interface OnGroupSelectItemListener {
         void onSelectItem(Group item, int position);
+        boolean onLongPressItem(Group item, int position);
     }
 }
