@@ -55,7 +55,7 @@ public class GroupDetailsRoomsAdapter extends AbsAdapter {
         super(context);
         mListener = listener;
 
-        mGroupRoomsSection = new AdapterSection<>(context.getString(R.string.rooms), -1,
+        mGroupRoomsSection = new AdapterSection<>(context, context.getString(R.string.rooms), -1,
                 R.layout.adapter_item_group_user_room_view, TYPE_HEADER_DEFAULT, TYPE_GROUP_ROOMS, new ArrayList<GroupRoom>(), mComparator);
         mGroupRoomsSection.setEmptyViewPlaceholder(null, context.getString(R.string.no_result_placeholder));
 

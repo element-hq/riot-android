@@ -122,6 +122,8 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
             return;
         }
 
+        Log.d(LOG_TAG, "## onCreate() : displaying " + mGroup.getGroupId());
+
         int selectedTab = intent.getIntExtra(EXTRA_SELECTED_TAB_ID, -1);
 
         setContentView(R.layout.activity_vector_group_details);

@@ -59,12 +59,11 @@ public class GroupDetailsPeopleAdapter extends AbsAdapter {
 
         mListener = listener;
 
-        mJoinedUsersSection = new AdapterSection<>(context.getString(R.string.joined), -1,
+        mJoinedUsersSection = new AdapterSection<>(context, context.getString(R.string.joined), -1,
                 R.layout.adapter_item_group_user_room_view, TYPE_HEADER_DEFAULT, TYPE_JOINED_USERS, new ArrayList<GroupUser>(), mComparator);
         mJoinedUsersSection.setEmptyViewPlaceholder(context.getString(R.string.no_users_placeholder), context.getString(R.string.no_result_placeholder));
 
-
-        mInvitedUsersSection = new AdapterSection<>(context.getString(R.string.invited), -1,
+        mInvitedUsersSection = new AdapterSection<>(context, context.getString(R.string.invited), -1,
                 R.layout.adapter_item_group_user_room_view, TYPE_HEADER_DEFAULT, TYPE_INVITED_USERS, new ArrayList<GroupUser>(), mComparator);
         mInvitedUsersSection.setEmptyViewPlaceholder(context.getString(R.string.no_users_placeholder), context.getString(R.string.no_result_placeholder));
         mInvitedUsersSection.setIsHiddenWhenEmpty(true);

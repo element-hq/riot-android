@@ -75,15 +75,15 @@ public class PeopleAdapter extends AbsAdapter {
         mNoContactAccessPlaceholder = context.getString(R.string.no_contact_access_placeholder);
         mNoResultPlaceholder = context.getString(R.string.no_result_placeholder);
 
-        mDirectChatsSection = new AdapterSection<>(context.getString(R.string.direct_chats_header), -1,
+        mDirectChatsSection = new AdapterSection<>(context, context.getString(R.string.direct_chats_header), -1,
                 R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession, false));
         mDirectChatsSection.setEmptyViewPlaceholder(context.getString(R.string.no_conversation_placeholder), context.getString(R.string.no_result_placeholder));
 
-        mLocalContactsSection = new AdapterSection<>(context.getString(R.string.local_address_book_header),
+        mLocalContactsSection = new AdapterSection<>(context, context.getString(R.string.local_address_book_header),
                 R.layout.adapter_local_contacts_sticky_header_subview, R.layout.adapter_item_contact_view, TYPE_HEADER_LOCAL_CONTACTS, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), ParticipantAdapterItem.alphaComparator);
         mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ? mNoContactAccessPlaceholder : mNoResultPlaceholder);
 
-        mKnownContactsSection = new KnownContactsAdapterSection(context.getString(R.string.user_directory_header), -1,
+        mKnownContactsSection = new KnownContactsAdapterSection(context, context.getString(R.string.user_directory_header), -1,
                 R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), null);
         mKnownContactsSection.setEmptyViewPlaceholder(null, context.getString(R.string.no_result_placeholder));
         mKnownContactsSection.setIsHiddenWhenNoFilter(true);
