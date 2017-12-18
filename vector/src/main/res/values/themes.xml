@@ -75,7 +75,7 @@
         <item name="home_navigation_icon_color">#FF4D4D4D</item>
 
         <!-- room notification text color (typing, unsent...) -->
-        <item name="room_notification_text_color">#a0a29f</item>
+        <item name="room_notification_text_color">@android:color/white</item>
 
         <!-- icon colors -->
         <item name="default_icon_tint_color">@color/vector_green_color</item>
@@ -179,7 +179,7 @@
         <item name="home_navigation_icon_color">?attr/primary_control_color</item>
 
         <!-- room notification text color (typing, unsent...) -->
-        <item name="room_notification_text_color">#FF9D9D9D</item>
+        <item name="room_notification_text_color">@android:color/white</item>
 
         <!-- icon colors -->
         <item name="default_icon_tint_color">@color/vector_green_color</item>

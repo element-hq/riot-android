@@ -257,24 +257,11 @@
                     android:id="@+id/room_sending_message_layout"
                     android:layout_alignParentRight="true"
                     android:layout_toRightOf="@id/room_self_avatar_container"
+                    android:layout_marginLeft="8dp"
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:minHeight="56dp"
                     android:layout_height="wrap_content">
-
-                    <RelativeLayout
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/room_encrypted_image_view"
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/e2e_verified"
-                            android:tint="?attr/default_icon_tint_color" />
-
-                    </RelativeLayout>
 
                     <im.vector.view.VectorAutoCompleteTextView
                         android:layout_width="0dp"
@@ -284,7 +271,7 @@
                         android:inputType="textCapSentences|textMultiLine"
                         android:textSize="14sp"
                         android:dropDownAnchor="@+id/room_sending_message_layout"
-                        android:hint="@string/room_message_placeholder_not_encrypted"
+                        android:hint="@string/room_message_placeholder"
                         android:id="@+id/editText_messageBox"
                         android:textColor="?attr/riot_primary_text_color"
                         android:background="@android:color/transparent"
@@ -362,57 +349,65 @@
                     android:visibility="gone" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/room_prompt_resend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_above="@id/room_bottom_layout"
+                android:visibility="invisible">
+
+                <Button
+                    android:id="@+id/button_resend_cancel"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/vector_fuchsia_color"
+                    android:background="@android:color/white"
+                    android:text="@string/room_prompt_cancel"/>
+
+                <Button
+                    android:id="@+id/button_resend_confirm"
+                    android:layout_toStartOf="@id/button_resend_cancel"
+                    android:layout_toLeftOf="@id/button_resend_cancel"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/vector_green_color"
+                    android:textColor="@android:color/white"
+                    android:text="@string/room_prompt_resend"/>
+
+                <TextView
+                    android:id="@+id/text_resend_prompt"
+                    android:layout_toStartOf="@id/button_resend_confirm"
+                    android:layout_toLeftOf="@id/button_resend_confirm"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/room_resend_unsent_messages"/>
+
+            </RelativeLayout>
+
             <View
                 android:id="@+id/bottom_separator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_alignParentLeft="true"
-                android:layout_above="@id/room_bottom_layout"
-                android:background="?attr/room_activity_divider_color" />
-
-            <RelativeLayout
-                android:id="@+id/room_notifications_area"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/bottom_separator"
-                android:layout_alignParentLeft="true"
-                android:minHeight="42dp"
-                android:visibility="invisible">
-
-                <ImageView
-                    android:id="@+id/room_notification_icon"
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:padding="5dp"
-                    android:src="@drawable/vector_typing" />
-
-                <TextView
-                    android:id="@+id/room_notification_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="68dp"
-                    android:layout_marginRight="13dp"
-                    android:text="a text here "
-                    android:textColor="?attr/room_notification_text_color" />
-
-            </RelativeLayout>
-
-            <View
-                android:id="@+id/room_notification_separator"
-                android:layout_width="match_parent"
-                android:layout_marginLeft="13dp"
-                android:layout_height="1dp"
-                android:layout_above="@id/room_notifications_area"
+                android:layout_above="@id/room_prompt_resend"
                 android:background="?attr/room_activity_divider_color" />
 
             <RelativeLayout
                 android:id="@+id/anchor_fragment_messages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/room_notification_separator"
+                android:layout_above="@id/bottom_separator"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
 
@@ -431,6 +426,17 @@
                 android:layout_alignBottom="@id/anchor_fragment_messages"
                 android:visibility="gone"
                 android:indeterminate="true" />
+
+            <ImageView
+                android:id="@+id/image_scrolldown"
+                android:layout_alignParentRight="true"
+                android:layout_above="@id/room_prompt_resend"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/scrolldown"
+                android:visibility="invisible"/>
         </RelativeLayout>
     </RelativeLayout>
 
