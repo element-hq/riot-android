@@ -16,8 +16,8 @@
     <color name="tab_people_secondary">#D97051</color>
     <color name="tab_rooms">@color/vector_green_color</color>
     <color name="tab_rooms_secondary">#5EA584</color>
-    <color name="tab_groups">#76adf9</color>
-    <color name="tab_groups_secondary">#3D8AF7</color>
+    <color name="tab_groups">#a6d0e5</color>
+    <color name="tab_groups_secondary">#81bddb</color>
 
     <!-- color of the direct chat avatar ring -->
     <color name="direct_chat_ring_color">#8076cfa6</color>
