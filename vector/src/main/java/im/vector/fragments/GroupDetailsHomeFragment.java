@@ -148,11 +148,13 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment implement
      * Update the long description text
      */
     private void refreshLongDescription() {
-        Group group = mActivity.getGroup();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(), Html.FROM_HTML_MODE_LEGACY, this, null));
-        } else {
-            mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(), this, null));
+        if (null != mGroupHtmlTextView) {
+            Group group = mActivity.getGroup();
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(), Html.FROM_HTML_MODE_LEGACY, this, null));
+            } else {
+                mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(), this, null));
+            }
         }
     }
 

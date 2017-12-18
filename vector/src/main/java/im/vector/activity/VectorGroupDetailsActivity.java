@@ -24,6 +24,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.groups.GroupsManager;
@@ -36,6 +37,7 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.fragments.GroupDetailsBaseFragment;
 import im.vector.fragments.GroupDetailsHomeFragment;
 import im.vector.fragments.GroupDetailsPeopleFragment;
@@ -69,6 +71,8 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
     private Group mGroup;
 
     private View mLoadingView;
+
+    private ProgressBar mGroupSyncInProgress;
 
     // fragments
     private GroupDetailsHomeFragment mGroupDetailsHomeFragment;
@@ -114,15 +118,22 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
 
         mGroupsManager = mSession.getGroupsManager();
 
-        mGroup = mGroupsManager.getGroup(intent.getStringExtra(EXTRA_GROUP_ID));
+        String groupId = intent.getStringExtra(EXTRA_GROUP_ID);
 
-        if (null == mGroup) {
-            Log.e(LOG_TAG, "unknown group");
+        if (!MXSession.isGroupId(groupId)) {
+            Log.e(LOG_TAG, "invalid group id " + groupId);
             finish();
             return;
         }
 
-        Log.d(LOG_TAG, "## onCreate() : displaying " + mGroup.getGroupId());
+        mGroup = mGroupsManager.getGroup(groupId);
+
+        if (null == mGroup) {
+            Log.d(LOG_TAG, "## onCreate() : displaying " + groupId + " in preview mode");
+            mGroup = new Group(groupId);
+        } else {
+            Log.d(LOG_TAG, "## onCreate() : displaying " + groupId);
+        }
 
         int selectedTab = intent.getIntExtra(EXTRA_SELECTED_TAB_ID, -1);
 
@@ -135,6 +146,8 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
+
+        mGroupSyncInProgress = findViewById(R.id.group_sync_in_progress);
 
         createNavigationTabs(savedInstanceState, selectedTab);
     }
@@ -190,13 +203,18 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
         super.onResume();
 
         if (null != mGroup) {
-            mGroupsManager.refreshGroupData(mGroup.getGroupId(), new ApiCallback<Void>() {
+            mGroupSyncInProgress.setVisibility(View.VISIBLE);
+            mGroupsManager.refreshGroupData(mGroup, new ApiCallback<Void>() {
                 private void onDone() {
                     if (null != mCurrentFragmentTag) {
                         GroupDetailsBaseFragment fragment = (GroupDetailsBaseFragment) getSupportFragmentManager().findFragmentByTag(mCurrentFragmentTag);
 
                         if (null != fragment) {
                             fragment.refreshViews();
+                        }
+
+                        if (null != mGroupSyncInProgress) {
+                            mGroupSyncInProgress.setVisibility(View.GONE);
                         }
                     }
                 }

@@ -7,11 +7,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/group_sync_in_progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:background="@android:color/transparent"
+            android:indeterminateTint="@color/tab_groups_secondary"
+            android:indeterminate="true"/>
+
         <!-- tab fragments container -->
         <FrameLayout
             android:id="@+id/group_details_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_below="@+id/group_sync_in_progress"
+            />
 
         <!-- progress bar -->
         <FrameLayout

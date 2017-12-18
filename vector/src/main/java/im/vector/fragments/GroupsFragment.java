@@ -198,49 +198,11 @@ public class GroupsFragment extends AbsHomeFragment {
         mAdapter = new GroupAdapter(getActivity(), new GroupAdapter.OnGroupSelectItemListener() {
             @Override
             public void onSelectItem(final Group group, final int position) {
-                // some information has already been downloaded
-                if ((null != group.getGroupUsers()) && (0 != group.getGroupUsers().getEstimatedUsersCount())) {
-                    // display it
-                    Intent intent = new Intent(getActivity(), VectorGroupDetailsActivity.class);
-                    intent.putExtra(VectorGroupDetailsActivity.EXTRA_GROUP_ID, group.getGroupId());
-                    intent.putExtra(VectorGroupDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                    startActivity(intent);
-                } else {
-                    // retrieve the information server side
-                    mActivity.showWaitingView();
-                    mGroupsManager.refreshGroupData(group.getGroupId(), new ApiCallback<Void>() {
-                        private void onDone() {
-                            if (null != getActivity()) {
-                                mActivity.stopWaitingView();
-
-                                Intent intent = new Intent(getActivity(), VectorGroupDetailsActivity.class);
-                                intent.putExtra(VectorGroupDetailsActivity.EXTRA_GROUP_ID, group.getGroupId());
-                                intent.putExtra(VectorGroupDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                                startActivity(intent);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(Void info) {
-                            onDone();
-                        }
-
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            onDone();
-                        }
-
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            onDone();
-                        }
-
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            onDone();
-                        }
-                    });
-                }
+                // display it
+                Intent intent = new Intent(getActivity(), VectorGroupDetailsActivity.class);
+                intent.putExtra(VectorGroupDetailsActivity.EXTRA_GROUP_ID, group.getGroupId());
+                intent.putExtra(VectorGroupDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                startActivity(intent);
             }
 
             @Override

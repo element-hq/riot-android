@@ -136,6 +136,13 @@ public interface IMessagesAdapterActionsListener {
     void onMessageIdClick(String messageId);
 
     /**
+     * A group id has been clicked in a message body.
+     *
+     * @param groupId the group id.
+     */
+    void onGroupIdClick(String groupId);
+
+    /**
      * The required indexes are not anymore valid.
      */
     void onInvalidIndexes();

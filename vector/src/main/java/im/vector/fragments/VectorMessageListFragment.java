@@ -1173,6 +1173,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
     }
 
+    @Override
+    public void onGroupIdClick(String groupId) {
+        try {
+            onURLClick(Uri.parse(VectorUtils.getPermalink(groupId, null)));
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage());
+        }
+    }
+
     private int mInvalidIndexesCount = 0;
 
     @Override

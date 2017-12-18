@@ -140,6 +140,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     // jump to a member details sheet
     public static final String EXTRA_MEMBER_ID = "VectorHomeActivity.EXTRA_MEMBER_ID";
 
+    // jump to a group details sheet
+    public static final String EXTRA_GROUP_ID = "VectorHomeActivity.EXTRA_GROUP_ID";
+
     // there are two ways to open an external link
     // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened as soon there is an event check processed (application is launched when clicking on the URI link)
     // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that an event chunk is processed.
@@ -176,6 +179,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private Uri mUniversalLinkToOpen = null;
 
     private String mMemberIdToOpen = null;
+
+    private String mGroupIdToOpen = null;
 
     @BindView(R.id.listView_spinner_views)
     View mWaitingView;
@@ -311,6 +316,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             intent.removeExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
             intent.removeExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
             intent.removeExtra(EXTRA_MEMBER_ID);
+            intent.removeExtra(EXTRA_GROUP_ID);
             intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
         } else {
 
@@ -338,6 +344,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
             mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
             intent.removeExtra(EXTRA_MEMBER_ID);
+
+            mGroupIdToOpen = intent.getStringExtra(EXTRA_GROUP_ID);
+            intent.removeExtra(EXTRA_GROUP_ID);
 
             // the home activity has been launched with an universal link
             if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
@@ -539,6 +548,14 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             mMemberIdToOpen = null;
         }
 
+        if (null != mGroupIdToOpen) {
+            Intent groupIntent = new Intent(VectorHomeActivity.this, VectorGroupDetailsActivity.class);
+            groupIntent.putExtra(VectorGroupDetailsActivity.EXTRA_GROUP_ID, mGroupIdToOpen);
+            groupIntent.putExtra(VectorGroupDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            startActivity(groupIntent);
+            mGroupIdToOpen = null;
+        }
+
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
         TypedValue vectorActionBarColor = new TypedValue();
@@ -690,6 +707,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         mMemberIdToOpen = intent.getStringExtra(EXTRA_MEMBER_ID);
         intent.removeExtra(EXTRA_MEMBER_ID);
 
+        mGroupIdToOpen = intent.getStringExtra(EXTRA_GROUP_ID);
+        intent.removeExtra(EXTRA_GROUP_ID);
 
         // start waiting view
         if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
