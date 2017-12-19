@@ -17,17 +17,17 @@
 package im.vector.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.TabListener;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.groups.GroupsManager;
+import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.group.Group;
@@ -37,53 +37,57 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
+import im.vector.adapters.GroupDetailsFragmentPagerAdapter;
 import im.vector.fragments.GroupDetailsBaseFragment;
-import im.vector.fragments.GroupDetailsHomeFragment;
-import im.vector.fragments.GroupDetailsPeopleFragment;
-import im.vector.fragments.GroupDetailsRoomsFragment;
 import im.vector.util.ThemeUtils;
+import im.vector.view.RiotViewPager;
 
 /**
  *
  */
-public class VectorGroupDetailsActivity extends MXCActionBarActivity implements TabListener {
+public class VectorGroupDetailsActivity extends MXCActionBarActivity {
     private static final String LOG_TAG = VectorRoomDetailsActivity.class.getSimpleName();
 
     // the group ID
     public static final String EXTRA_GROUP_ID = "EXTRA_GROUP_ID";
-
-    // open a dedicated tab at launch
-    public static final String EXTRA_SELECTED_TAB_ID = "VectorGroupDetailsActivity.EXTRA_SELECTED_TAB_ID";
-
-    // tab related items
-    private static final String TAG_FRAGMENT_GROUP_HOME = "TAG_FRAGMENT_GROUP_HOME";
-    private static final String TAG_FRAGMENT_GROUP_PEOPLE = "TAG_FRAGMENT_GROUP_PEOPLE";
-    private static final String TAG_FRAGMENT_GROUP_ROOMS = "TAG_FRAGMENT_GROUP_ROOMS";
-    private static final String KEY_FRAGMENT_TAG = "KEY_FRAGMENT_TAG";
-
-    private String mCurrentFragmentTag;
-    private ActionBar mActionBar;
+    public static final String EXTRA_TAB_INDEX = "VectorUnifiedSearchActivity.EXTRA_TAB_INDEX";
 
     // private classes
     private MXSession mSession;
     private GroupsManager mGroupsManager;
     private Group mGroup;
 
+    // UI views
     private View mLoadingView;
-
     private ProgressBar mGroupSyncInProgress;
 
-    // fragments
-    private GroupDetailsHomeFragment mGroupDetailsHomeFragment;
-    private GroupDetailsPeopleFragment mGroupDetailsPeopleFragment;
-    private GroupDetailsRoomsFragment mGroupDetailsRoomsFragment;
+    private RiotViewPager mPager;
+    private GroupDetailsFragmentPagerAdapter mPagerAdapter;
 
-    // activity life cycle management:
-    // - Bundle keys
-    private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
+    private MXEventListener mGroupEventsListener = new MXEventListener() {
+        private void refresh(String groupId) {
+            if ((null != mGroup) && TextUtils.equals(mGroup.getGroupId(), groupId)) {
+                refreshGroupInfo();
+            }
+        }
 
-    // todo manage leave group
+        @Override
+        public void onLeaveGroup(String groupId) {
+            if ((null != mRoom) && TextUtils.equals(groupId, mGroup.getGroupId())) {
+                VectorGroupDetailsActivity.this.finish();
+            }
+        }
+
+        @Override
+        public void onNewGroupInvitation(String groupId) {
+            refresh(groupId);
+        }
+
+        @Override
+        public void onJoinGroup(String groupId) {
+            refresh(groupId);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,21 +139,34 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
             Log.d(LOG_TAG, "## onCreate() : displaying " + groupId);
         }
 
-        int selectedTab = intent.getIntExtra(EXTRA_SELECTED_TAB_ID, -1);
-
         setContentView(R.layout.activity_vector_group_details);
 
         // UI widgets binding & init fields
         mLoadingView = findViewById(R.id.group_loading_layout);
 
         // tab creation and restore tabs UI context
-        mActionBar = getSupportActionBar();
-        mActionBar.setDisplayShowHomeEnabled(true);
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+
+        if (null != actionBar) {
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         mGroupSyncInProgress = findViewById(R.id.group_sync_in_progress);
 
-        createNavigationTabs(savedInstanceState, selectedTab);
+        mPager = findViewById(R.id.groups_pager);
+        mPagerAdapter = new GroupDetailsFragmentPagerAdapter(getSupportFragmentManager(), this);
+        mPager.setAdapter(mPagerAdapter);
+
+        TabLayout layout = findViewById(R.id.group_tabs);
+        ThemeUtils.setTabLayoutTheme(this, layout);
+
+        if (intent.hasExtra(EXTRA_TAB_INDEX)) {
+            mPager.setCurrentItem(getIntent().getIntExtra(EXTRA_TAB_INDEX, 0));
+        } else {
+            mPager.setCurrentItem((null != savedInstanceState) ? savedInstanceState.getInt(EXTRA_TAB_INDEX, 0) : 0);
+        }
+        layout.setupWithViewPager(mPager);
     }
 
     /**
@@ -174,13 +191,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(LOG_TAG, "## onSaveInstanceState(): ");
-
-        // save current tab
-        if (null != mActionBar) {
-            int currentIndex = mActionBar.getSelectedNavigationIndex();
-            outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
-        }
+        outState.putInt(EXTRA_TAB_INDEX, mPager.getCurrentItem());
     }
 
     @Override
@@ -196,26 +207,50 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
     @Override
     protected void onPause() {
         super.onPause();
+        mSession.getDataHandler().removeListener(mGroupEventsListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        refreshGroupInfo();
+        mSession.getDataHandler().addListener(mGroupEventsListener);
+    }
 
+    /**
+     * SHow the waiting view
+     */
+    public void showWaitingView() {
+        if (null != mLoadingView) {
+            mLoadingView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Hide the waiting view
+     */
+    public void stopWaitingView() {
+        if (null != mLoadingView) {
+            mLoadingView.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Refresh the group information
+     */
+    private void refreshGroupInfo() {
         if (null != mGroup) {
             mGroupSyncInProgress.setVisibility(View.VISIBLE);
             mGroupsManager.refreshGroupData(mGroup, new ApiCallback<Void>() {
                 private void onDone() {
-                    if (null != mCurrentFragmentTag) {
-                        GroupDetailsBaseFragment fragment = (GroupDetailsBaseFragment) getSupportFragmentManager().findFragmentByTag(mCurrentFragmentTag);
+                    GroupDetailsBaseFragment fragment = (GroupDetailsBaseFragment) mPagerAdapter.getItem(mPager.getCurrentItem());
 
-                        if (null != fragment) {
-                            fragment.refreshViews();
-                        }
+                    if (null != fragment) {
+                        fragment.refreshViews();
+                    }
 
-                        if (null != mGroupSyncInProgress) {
-                            mGroupSyncInProgress.setVisibility(View.GONE);
-                        }
+                    if (null != mGroupSyncInProgress) {
+                        mGroupSyncInProgress.setVisibility(View.GONE);
                     }
                 }
 
@@ -240,186 +275,5 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity implements 
                 }
             });
         }
-    }
-
-    /**
-     * Update the tag of the tab with its the UI values
-     *
-     * @param aTabToUpdate the tab to be updated
-     */
-    private void saveUiTabContext(ActionBar.Tab aTabToUpdate) {
-        Bundle tabTag = (Bundle) aTabToUpdate.getTag();
-        aTabToUpdate.setTag(tabTag);
-    }
-
-    /**
-     * Reset the UI to its init state:
-     * - "waiting while searching" screen disabled
-     * - background image visible
-     * - no results message disabled
-     */
-    private void resetUi() {
-        // stop "wait while searching" screen
-        if (null != mLoadingView) {
-            mLoadingView.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * SHow the waiting view
-     */
-    public void showWaitingView() {
-        if (null != mLoadingView) {
-            mLoadingView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
-     * Hide the waiting view
-     */
-    public void stopWaitingView() {
-        if (null != mLoadingView) {
-            mLoadingView.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Initialise the navigation tabs.
-     *
-     * @param aSavedInstanceState the saved instance
-     * @param defaultSelectedTab  the default selected tab
-     */
-    private void createNavigationTabs(Bundle aSavedInstanceState, int defaultSelectedTab) {
-        int tabIndexToRestore;
-
-        // Set the tabs navigation mode
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        ActionBar.Tab tabToBeAdded = mActionBar.newTab();
-        String tabTitle = getResources().getString(R.string.group_details_home);
-        tabToBeAdded.setText(tabTitle);
-        tabToBeAdded.setTabListener(this);
-        Bundle tabBundle = new Bundle();
-        tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_GROUP_HOME);
-        tabToBeAdded.setTag(tabBundle);
-        mActionBar.addTab(tabToBeAdded);
-
-        tabToBeAdded = mActionBar.newTab();
-        tabTitle = getResources().getString(R.string.group_details_people);
-        tabToBeAdded.setText(tabTitle);
-        tabToBeAdded.setTabListener(this);
-        tabBundle = new Bundle();
-        tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_GROUP_PEOPLE);
-        tabToBeAdded.setTag(tabBundle);
-        mActionBar.addTab(tabToBeAdded);
-
-        tabToBeAdded = mActionBar.newTab();
-        tabTitle = getResources().getString(R.string.group_details_rooms);
-        tabToBeAdded.setText(tabTitle);
-        tabToBeAdded.setTabListener(this);
-        tabBundle = new Bundle();
-        tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_GROUP_ROOMS);
-        tabToBeAdded.setTag(tabBundle);
-        mActionBar.addTab(tabToBeAdded);
-
-        // set the default tab to be displayed
-        tabIndexToRestore = (null != aSavedInstanceState) ? aSavedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, -1) : -1;
-
-        if (-1 == tabIndexToRestore) {
-            tabIndexToRestore = defaultSelectedTab;
-        }
-
-        if (-1 == tabIndexToRestore) {
-            // default value: display the search in rooms tab
-            tabIndexToRestore = 0;
-        }
-
-        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(ThemeUtils.getColor(this, R.attr.tab_bar_background_color)));
-
-        // set the tab to display & set current tab index
-        mActionBar.setSelectedNavigationItem(tabIndexToRestore);
-    }
-
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-        Bundle tabHolder = (Bundle) tab.getTag();
-        String fragmentTag = tabHolder.getString(KEY_FRAGMENT_TAG, "");
-        Log.d(LOG_TAG, "## onTabSelected() FragTag=" + fragmentTag);
-
-        resetUi();
-
-        if (fragmentTag.equals(TAG_FRAGMENT_GROUP_HOME)) {
-            mGroupDetailsHomeFragment = (GroupDetailsHomeFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_HOME);
-
-            if (null == mGroupDetailsHomeFragment) {
-                mGroupDetailsHomeFragment = new GroupDetailsHomeFragment();
-                ft.replace(R.id.group_details_fragment_container, mGroupDetailsHomeFragment, TAG_FRAGMENT_GROUP_HOME);
-                Log.d(LOG_TAG, "## onTabSelected() home frag replace");
-            } else {
-                ft.attach(mGroupDetailsHomeFragment);
-                Log.d(LOG_TAG, "## onTabSelected() home frag attach");
-            }
-            mCurrentFragmentTag = TAG_FRAGMENT_GROUP_HOME;
-        } else if (fragmentTag.equals(TAG_FRAGMENT_GROUP_PEOPLE)) {
-            mGroupDetailsPeopleFragment = (GroupDetailsPeopleFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_PEOPLE);
-
-            if (null == mGroupDetailsPeopleFragment) {
-                mGroupDetailsPeopleFragment = new GroupDetailsPeopleFragment();
-                ft.replace(R.id.group_details_fragment_container, mGroupDetailsPeopleFragment, TAG_FRAGMENT_GROUP_PEOPLE);
-                Log.d(LOG_TAG, "## onTabSelected() people frag replace");
-            } else {
-                ft.attach(mGroupDetailsPeopleFragment);
-                Log.d(LOG_TAG, "## onTabSelected() people frag attach");
-            }
-            mCurrentFragmentTag = TAG_FRAGMENT_GROUP_PEOPLE;
-        } else if (fragmentTag.equals(TAG_FRAGMENT_GROUP_ROOMS)) {
-            mGroupDetailsRoomsFragment = (GroupDetailsRoomsFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GROUP_ROOMS);
-
-            if (null == mGroupDetailsRoomsFragment) {
-                mGroupDetailsRoomsFragment = new GroupDetailsRoomsFragment();
-                ft.replace(R.id.group_details_fragment_container, mGroupDetailsRoomsFragment, TAG_FRAGMENT_GROUP_ROOMS);
-                Log.d(LOG_TAG, "## onTabSelected() rooms frag replace");
-            } else {
-                ft.attach(mGroupDetailsRoomsFragment);
-                Log.d(LOG_TAG, "## onTabSelected() rooms frag attach");
-            }
-            mCurrentFragmentTag = TAG_FRAGMENT_GROUP_ROOMS;
-        }
-
-        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(ThemeUtils.getColor(this, R.attr.tab_bar_background_color)));
-
-        // reset the activity title
-        // some fragments update it (VectorRoomDetailsMembersFragment for example)
-        if (null != getSupportActionBar()) {
-            getSupportActionBar().setTitle(this.getResources().getString(R.string.title_activity_group_details));
-        }
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-        Bundle tabHolder = (Bundle) tab.getTag();
-        String fragmentTag = tabHolder.getString(KEY_FRAGMENT_TAG, "");
-        Log.d(LOG_TAG, "## onTabUnselected() FragTag=" + fragmentTag);
-
-        // save tab UI context before leaving the tab...
-        saveUiTabContext(tab);
-
-        if (fragmentTag.equals(TAG_FRAGMENT_GROUP_HOME)) {
-            if (null != mGroupDetailsHomeFragment) {
-                ft.detach(mGroupDetailsHomeFragment);
-            }
-        } else if (fragmentTag.equals(TAG_FRAGMENT_GROUP_PEOPLE)) {
-            if (null != mGroupDetailsPeopleFragment) {
-                ft.detach(mGroupDetailsPeopleFragment);
-            }
-        } else if (fragmentTag.equals(TAG_FRAGMENT_GROUP_ROOMS)) {
-            if (null != mGroupDetailsRoomsFragment) {
-                ft.detach(mGroupDetailsRoomsFragment);
-            }
-        }
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
     }
 }
