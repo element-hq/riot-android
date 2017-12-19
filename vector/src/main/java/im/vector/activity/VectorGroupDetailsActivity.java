@@ -16,13 +16,16 @@
 
 package im.vector.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
 import org.matrix.androidsdk.MXSession;
@@ -167,6 +170,27 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
             mPager.setCurrentItem((null != savedInstanceState) ? savedInstanceState.getInt(EXTRA_TAB_INDEX, 0) : 0);
         }
         layout.setupWithViewPager(mPager);
+
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // dismiss the keyboard when swiping
+                final View view = getCurrentFocus();
+                if (view != null) {
+                    final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     /**
