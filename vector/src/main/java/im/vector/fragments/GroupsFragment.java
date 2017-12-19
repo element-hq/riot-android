@@ -218,7 +218,7 @@ public class GroupsFragment extends AbsHomeFragment {
 
                     private void onDone(String errorMessage) {
                         if ((null != errorMessage) && (null != getActivity())) {
-                            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                         }
                         mActivity.stopWaitingView();
                     }

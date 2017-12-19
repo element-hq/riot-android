@@ -55,6 +55,7 @@ import java.util.Set;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
@@ -182,7 +183,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         if (null == pattern) {
             pattern = "";
         } else {
-            pattern = pattern.toLowerCase().trim().toLowerCase();
+            pattern = pattern.toLowerCase().trim().toLowerCase(VectorApp.getApplicationLocale());
         }
 
         if (!pattern.equals(mPattern) || TextUtils.isEmpty(mPattern)) {
@@ -306,7 +307,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 iterator.remove();
             } else if (!TextUtils.isEmpty(item.mDisplayName)) {
                 // Add to the display names list
-                displayNamesList.add(item.mDisplayName.toLowerCase());
+                displayNamesList.add(item.mDisplayName.toLowerCase(VectorApp.getApplicationLocale()));
             }
         }
 

@@ -106,7 +106,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="send_bug_report_description">Por favor describe el error. ¿Qué hiciste? ¿Qué esperabas que sucediera? ¿Qué sucedió realmente?</string>
     <string name="send_bug_report_placeholder">Describe tu problema aquí</string>
     <string name="send_bug_report_logs_description">Para diagnosticar los problemas, informes de este cliente se enviarán junto a este reporte de error. Si prefiere solamente enviar el texto de arriba, desmarque:</string>
-    <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaria enviar un reporte de error?</string>
+    <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaría enviar un reporte de error?</string>
     <string name="send_bug_report_sent">El reporte de error ha sido enviado</string>
     <string name="send_bug_report_failed">El reporte de error no se pudo enviar (%s)</string>
     <string name="send_bug_report_progress">Progreso (%s%%)</string>
@@ -273,11 +273,11 @@ Disculpe por la inconveniencia.</string>
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Información</string>
     <string name="permissions_rationale_msg_storage">Riot necesita tu permiso para entrar en tu almacenaje de fotos y videos para enviar y guardar archivos.\n\nPor favor permite el acceso en el siguiente mensaje para poder enviar archivos desde su dispostivo.</string>
-    <string name="permissions_rationale_msg_camera">Riot necesita tu permiso para usar tu camara para tomar fotos y hacer llamadas de video.</string>
+    <string name="permissions_rationale_msg_camera">Riot necesita tu permiso para usar tu cámara para tomar fotos y hacer llamadas de video.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
     <string name="permissions_rationale_msg_record_audio">Riot necesita tu permiso para usar tu micrófono para hacer llamadas de voz.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot necesita tu permiso para usar su camara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot necesita tu permiso para usar su cámara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
     <string name="permissions_rationale_msg_contacts">Riot necesita tu permiso para leer tus contactos y directorio para encontrar a otros usuarios por sus correos electrónicos y números telefónicos.\n\nPor favor permite el acceso en el siguiente mensaje para encontrar usuarios de Riot en su directorio.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.\n\n¿Permitir el acceso a Riot para leer tus contactos ?</string>
 
@@ -304,7 +304,7 @@ Disculpe por la inconveniencia.</string>
     <string name="room_preview_unlinked_email_warning">Esta invitación fue enviado a %s, que no esta asociado con esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
     <string name="room_preview_try_join_an_unknown_room">Estás intentando entrar a %s. ¿Desea entrar para participar en la conversación?</string>
     <string name="room_preview_try_join_an_unknown_room_default">una sala</string>
-    <string name="room_preview_room_interactions_disabled">Esto es un preestreno de esta sala. Los interacciones estan impedidos.</string>
+    <string name="room_preview_room_interactions_disabled">Esto es un preestreno de esta sala. Los interacciones están impedidos.</string>
 
     <!-- Chat creation -->
     <string name="room_creation_title">Chat Nuevo</string>
@@ -633,7 +633,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Formato de alias no válido</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' no es formato válido de alias</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">No habra dirección principal seleccionado. La dirección principal de esta sala por defecto sera seleccionado al azar"</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">No habra dirección principal seleccionado. La dirección principal de esta sala por defecto será seleccionado al azar"</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Avisos de la dirección principal</string>
 
     <string name="room_settings_set_main_address">Escojer como Dirección Principal</string>
@@ -708,7 +708,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
     <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte el dueño de este dispositivo por otro medio (e.g. cara-a-cara o por llamada) y verifique que la clave de este dispositivo que ellos ven en su página de configuraciones coincide con el de abajo:</string>
-    <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione Verificar. Si no, otro esta interceptando este dispositivo y vas a querer bloquearlo.\nEn el futuro, este procceso sera mas sofisticado.</string>
+    <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione Verificar. Si no, otro esta interceptando este dispositivo y vas a querer bloquearlo.\nEn el futuro, este procceso será mas sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
     <string name="e2e_enabling_on_app_update">Riot ahora cuenta con cifrado de extremo-a-extremo pero necesitas reentrar tu cuenta para prenderlo.

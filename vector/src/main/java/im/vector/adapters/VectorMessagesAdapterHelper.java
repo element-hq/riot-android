@@ -60,6 +60,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
@@ -570,8 +571,8 @@ class VectorMessagesAdapterHelper {
 
         if (!TextUtils.isEmpty(pattern) && !TextUtils.isEmpty(text) && (text.length() >= pattern.length())) {
 
-            String lowerText = text.toString().toLowerCase();
-            String lowerPattern = pattern.toLowerCase();
+            String lowerText = text.toString().toLowerCase(VectorApp.getApplicationLocale());
+            String lowerPattern = pattern.toLowerCase(VectorApp.getApplicationLocale());
 
             int start = 0;
             int pos = lowerText.indexOf(lowerPattern, start);

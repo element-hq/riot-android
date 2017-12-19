@@ -40,6 +40,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
@@ -247,7 +248,7 @@ public class PeopleAdapter extends AbsAdapter {
     private int filterLocalContacts(final String pattern) {
         if (!TextUtils.isEmpty(pattern)) {
             List<ParticipantAdapterItem> filteredLocalContacts = new ArrayList<>();
-            final String formattedPattern = pattern.toLowerCase().trim().toLowerCase();
+            final String formattedPattern = pattern.toLowerCase(VectorApp.getApplicationLocale()).trim();
 
             List<ParticipantAdapterItem> sectionItems = new ArrayList<>(mLocalContactsSection.getItems());
             for (final ParticipantAdapterItem item : sectionItems) {
@@ -282,7 +283,7 @@ public class PeopleAdapter extends AbsAdapter {
     private int filterKnownContacts(final String pattern) {
         List<ParticipantAdapterItem> filteredKnownContacts = new ArrayList<>();
         if (!TextUtils.isEmpty(pattern)) {
-            final String formattedPattern = pattern.toLowerCase().trim().toLowerCase();
+            final String formattedPattern = pattern.trim().toLowerCase(VectorApp.getApplicationLocale());
             List<ParticipantAdapterItem> sectionItems = new ArrayList<>(mKnownContactsSection.getItems());
             for (final ParticipantAdapterItem item : sectionItems) {
                 if (item.startsWith(formattedPattern)) {

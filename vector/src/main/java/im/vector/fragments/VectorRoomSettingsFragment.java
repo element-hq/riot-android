@@ -76,6 +76,7 @@ import java.util.Comparator;
 
 import im.vector.Matrix;
 import im.vector.R;;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
@@ -1289,7 +1290,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         Collections.sort(bannedMembers, new Comparator<RoomMember>() {
             @Override
             public int compare(RoomMember m1, RoomMember m2) {
-                return m1.getUserId().toLowerCase().compareTo(m2.getUserId().toLowerCase());
+                return m1.getUserId().toLowerCase(VectorApp.getApplicationLocale()).compareTo(m2.getUserId().toLowerCase(VectorApp.getApplicationLocale()));
             }
         });
 

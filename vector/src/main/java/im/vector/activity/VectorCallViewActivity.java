@@ -1248,7 +1248,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         if (null != event) {
             float distanceCentimeters = event.values[0];
 
-            Log.d(LOG_TAG, "## onSensorChanged(): " + String.format("distance=%.3f", distanceCentimeters));
+            Log.d(LOG_TAG, "## onSensorChanged(): " + String.format(VectorApp.getApplicationLocale(), "distance=%.3f", distanceCentimeters));
 
             if (CallsManager.getSharedInstance().isSpeakerphoneOn()) {
                 Log.d(LOG_TAG, "## onSensorChanged(): Skipped due speaker ON");

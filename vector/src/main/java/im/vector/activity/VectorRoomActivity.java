@@ -2414,7 +2414,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             if (TextUtils.equals(mSession.getMyUser().displayname, text)) {
                 // current user
                 if (TextUtils.isEmpty(mEditText.getText())) {
-                    mEditText.setText(String.format("%s ", SlashComandsParser.CMD_EMOTE));
+                    mEditText.setText(String.format(VectorApp.getApplicationLocale(), "%s ", SlashComandsParser.CMD_EMOTE));
                     mEditText.setSelection(mEditText.getText().length());
                 }
             } else {
@@ -2707,11 +2707,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             if (0 == names.size()) {
                 mLatestTypingMessage = null;
             } else if (1 == names.size()) {
-                mLatestTypingMessage = String.format(this.getString(R.string.room_one_user_is_typing), names.get(0));
+                mLatestTypingMessage = String.format(VectorApp.getApplicationLocale(), this.getString(R.string.room_one_user_is_typing), names.get(0));
             } else if (2 == names.size()) {
-                mLatestTypingMessage = String.format(this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
+                mLatestTypingMessage = String.format(VectorApp.getApplicationLocale(), this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
             } else if (names.size() > 2) {
-                mLatestTypingMessage = String.format(this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
+                mLatestTypingMessage = String.format(VectorApp.getApplicationLocale(), this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
             }
         }
 

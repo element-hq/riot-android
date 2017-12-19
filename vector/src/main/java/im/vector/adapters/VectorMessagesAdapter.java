@@ -311,13 +311,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     @SuppressWarnings("deprecation")
     private void getScreenSize(Point size) {
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            display.getSize(size);
-        } else {
-            size.set(display.getWidth(), display.getHeight());
-        }
+        wm.getDefaultDisplay().getSize(size);
     }
 
     /**

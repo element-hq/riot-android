@@ -1427,7 +1427,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * @param preferenceSummary the displayed 3pid
      */
     private void displayDelete3PIDConfirmationDialog(final ThirdPartyIdentifier pid, final CharSequence preferenceSummary) {
-        final String mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, getActivity()).toLowerCase();
+        final String mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, getActivity()).toLowerCase(VectorApp.getApplicationLocale());
         final String dialogMessage = getString(R.string.settings_delete_threepid_confirmation, mediumFriendlyName, preferenceSummary);
 
         new AlertDialog.Builder(getActivity())
@@ -1494,7 +1494,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         Collections.sort(ignoredUsersList, new Comparator<String>() {
             @Override
             public int compare(String u1, String u2) {
-                return u1.toLowerCase().compareTo(u2.toLowerCase());
+                return u1.toLowerCase(VectorApp.getApplicationLocale()).compareTo(u2.toLowerCase(VectorApp.getApplicationLocale()));
             }
         });
 

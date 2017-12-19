@@ -97,7 +97,7 @@ public class VectorContentProvider extends ContentProvider {
     @Override
     public String getType(Uri arg0) {
         String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(arg0.toString().toLowerCase());
+        String extension = MimeTypeMap.getFileExtensionFromUrl(arg0.toString().toLowerCase(VectorApp.getApplicationLocale()));
         if (extension != null) {
             MimeTypeMap mime = MimeTypeMap.getSingleton();
             type = mime.getMimeTypeFromExtension(extension);

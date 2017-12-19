@@ -402,7 +402,7 @@ public class VectorUtils {
             firstChar = name.substring(idx, idx + chars);
         }
 
-        return firstChar.toUpperCase();
+        return firstChar.toUpperCase(VectorApp.getApplicationLocale());
     }
 
     /**

@@ -1579,16 +1579,14 @@ public class CommonActivityUtils {
         saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename, new ApiCallback<String>() {
             @Override
             public void onSuccess(String fullFilePath) {
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    if (null != fullFilePath) {
-                        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                if (null != fullFilePath) {
+                    DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 
-                        try {
-                            File file = new File(fullFilePath);
-                            downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage());
-                        }
+                    try {
+                        File file = new File(fullFilePath);
+                        downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage());
                     }
                 }
 
