@@ -260,17 +260,17 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="media_picker_cannot_record_video">Kan geen video opnemen"</string>
 
     <!-- permissions Android M -->
-    <string name="permissions_rationale_popup_title">%s permissies</string>
-    <string name="permissions_rationale_msg_storage">%s heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.
+    <string name="permissions_rationale_popup_title">Informatie</string>
+    <string name="permissions_rationale_msg_storage">Riot heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.
 
 Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.</string>
-    <string name="permissions_rationale_msg_camera">%s heeft toegang nodig tot je camera om afbeeldingen en video oproepen te maken..</string>
+    <string name="permissions_rationale_msg_camera">Riot heeft toegang nodig tot je camera om afbeeldingen en video oproepen te maken..</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de camera om een oproep te maken.</string>
-    <string name="permissions_rationale_msg_record_audio">%s heeft toegang nodig tot je microfoon om spraakoproepen te maken.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot heeft toegang nodig tot je microfoon om spraakoproepen te maken.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de microfoon om een oproep te maken.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot heeft permissie nodig om je camera en microfoon te gebruiken voor videogesprekken.\n\nGeef toegang op de volgende pop-ups om een oproep te maken.</string>
     <string name="permissions_rationale_msg_contacts">Je adresboek e-mails worden geupload om matrix IDs te zoeken.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Je adresboek e-mails zijn geupload voor het zoeken van matix IDs.\nGeef je %s toegang tot je contacten ?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Je adresboek e-mails zijn geupload voor het zoeken van matix IDs.\nGeef je Riot toegang tot je contacten ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry.. De actie is niet ondernomen door missende permissies</string>
 
