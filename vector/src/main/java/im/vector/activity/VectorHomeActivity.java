@@ -459,6 +459,19 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         initViews();
     }
 
+    /**
+     * Display the TAB if it is required
+     */
+    private void showFloatingActionButton() {
+        if (null != mFloatingActionButton) {
+            if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups)) {
+                mFloatingActionButton.setVisibility(View.GONE);
+            } else {
+                mFloatingActionButton.show();
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -496,13 +509,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             addEventsListener();
         }
 
-        if (null != mFloatingActionButton) {
-            if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups)) {
-                mFloatingActionButton.setVisibility(View.GONE);
-            } else {
-                mFloatingActionButton.show();
-            }
-        }
+        showFloatingActionButton();
 
         this.runOnUiThread(new Runnable() {
             @Override
@@ -820,18 +827,14 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 mFloatingActionButtonTimer.cancel();
                 mFloatingActionButtonTimer = null;
             }
-            mFloatingActionButton.show();
         }
 
         // clear waiting view
         stopWaitingView();
 
-        // don't display the fab for the favorites tab
-        boolean displayFab = (item.getItemId() != R.id.bottom_action_favourites) && (item.getItemId() != R.id.bottom_action_groups);
-
-        mFloatingActionButton.setVisibility(displayFab ? View.VISIBLE : View.GONE);
-
         mCurrentMenuId = item.getItemId();
+
+        showFloatingActionButton();
 
         if (fragment != null) {
             resetFilter();
@@ -928,7 +931,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 public void onClick(View v) {
                     Fragment fragment = getSelectedFragment();
 
-                    if (!(fragment instanceof AbsHomeFragment) || !((AbsHomeFragment)fragment).onFabClick() ) {
+                    if (!(fragment instanceof AbsHomeFragment) || !((AbsHomeFragment) fragment).onFabClick()) {
                         onFloatingButtonClick();
                     }
                 }
@@ -1211,9 +1214,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                 VectorHomeActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (null != mFloatingActionButton) {
-                                            mFloatingActionButton.show();
-                                        }
+                                        showFloatingActionButton();
                                     }
                                 });
                             }
@@ -1229,9 +1230,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                         VectorHomeActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (null != mFloatingActionButton) {
-                                    mFloatingActionButton.show();
-                                }
+                                showFloatingActionButton();
                             }
                         });
 
