@@ -75,6 +75,9 @@ import im.vector.widgets.WidgetsManager;
 class VectorMessagesAdapterHelper {
     private static final String LOG_TAG = VectorMessagesAdapterHelper.class.getSimpleName();
 
+    /** Enable multiline mode, split on ``` at start of line and capture delimiters */
+    private static final Pattern FENCED_CODE_BLOCK_PATTERN = Pattern.compile("(?m)(?<=^```)|(?=^```)");
+
     private IMessagesAdapterActionsListener mEventsListener;
     private final MXSession mSession;
     private final Context mContext;
@@ -552,38 +555,26 @@ class VectorMessagesAdapterHelper {
         }
     }
 
-    /** Determine how many backticks bracket a message, for code block
-     * handling (issue 145) */
-    public int getTickCount(final Message message) {
-        final String mb = message.body;
-        if (mb.startsWith("```") && mb.endsWith("```")) {
-            return 3;
-        }
-        else if (mb.startsWith("``") && mb.endsWith("``")) {
-            return 2;
-        }
-        else if (mb.startsWith("`") && mb.endsWith("`")) {
-            return 1;
-        }
-        else {
-            return 0;
-        }
+    /** Determine if the message contains any code blocks (issue 145). */
+    public boolean containsFencedCodeBlocks(final Message message) {
+        final String[] blocks = getFencedCodeBlocks(message);
+        return (blocks.length > 1);
     }
 
-    /** Handling for ROW_TYPE_CODE (issue 145) */
-    void highlightCode(final TextView textView, final Spannable text, final int tickCount) {
+    /** Result includes the ``` delimiters as separate entries (issue 145). */
+    public String[] getFencedCodeBlocks(final Message message) {
+        return FENCED_CODE_BLOCK_PATTERN.split(message.body);
+    }
+
+    /** Issue 145 */
+    void highlightFencedCode(final TextView textView, final Spannable text) {
         // sanity check
         if (null == textView) {
             return;
         }
 
-        final int background = (tickCount==1) ?
-                ThemeUtils.getColor(mContext, R.attr.code_block_1_background_color) :
-                (tickCount==2) ?
-                ThemeUtils.getColor(mContext, R.attr.code_block_2_background_color) :
-                ThemeUtils.getColor(mContext, R.attr.code_block_3_background_color);
+        final int background = ThemeUtils.getColor(mContext, R.attr.fenced_code_block_background_color);
         textView.setBackgroundColor(background);
-
         textView.setText(text);
 
         if (null != mLinkMovementMethod) {

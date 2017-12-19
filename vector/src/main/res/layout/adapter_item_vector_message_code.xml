@@ -85,24 +85,15 @@
                             android:layout_height="14dp"
                             android:src="@drawable/e2e_verified" />
 
-                        <HorizontalScrollView
+                        <LinearLayout
+                            android:id="@+id/messages_container"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/messagesAdapter_body"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="left"
-                                android:layout_marginLeft="4dp"
-                                android:layout_toRightOf="@id/message_adapter_e2e_icon"
-                                android:autoLink="none"
-                                android:fontFamily="monospace"
-                                android:text="A body"
-                                android:textIsSelectable="false"
-                                android:textSize="14sp" />
-                        </HorizontalScrollView>
-
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_gravity="left"
+                            android:layout_marginLeft="4dp"
+                            android:layout_toRightOf="@id/message_adapter_e2e_icon"
+                            />
                     </RelativeLayout>
 
                 </FrameLayout>

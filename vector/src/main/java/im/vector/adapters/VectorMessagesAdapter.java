@@ -44,6 +44,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -92,6 +93,7 @@ import im.vector.util.EventGroup;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
+import im.vector.util.VectorMarkdownParser;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -143,8 +145,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_ROOM_MEMBER = 8;
     static final int ROW_TYPE_EMOJI = 9;
     static final int ROW_TYPE_CODE = 10;
-    static final int ROW_TYPE_CODE1 = 11;
-    static final int NUM_ROW_TYPES = 12;
+    static final int NUM_ROW_TYPES = 11;
 
     final Context mContext;
     private final HashMap<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
@@ -258,7 +259,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, R.layout.adapter_item_vector_hidden_message);
         mRowTypeToLayoutId.put(ROW_TYPE_EMOJI, emojiResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_CODE, codeResLayoutId);
-        mRowTypeToLayoutId.put(ROW_TYPE_CODE1, textResLayoutId);
 
         mMediasCache = mediasCache;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -676,7 +676,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         switch (viewType) {
             case ROW_TYPE_EMOJI:
             case ROW_TYPE_CODE:
-            case ROW_TYPE_CODE1:
             case ROW_TYPE_TEXT:
                 inflatedView = getTextView(viewType, position, convertView, parent);
                 break;
@@ -950,9 +949,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (Message.MSGTYPE_TEXT.equals(msgType)) {
                 if (containsOnlyEmojis(message.body)) {
                     viewType = ROW_TYPE_EMOJI;
-                } else if (1 == mHelper.getTickCount(message)) {
-                    viewType = ROW_TYPE_CODE1;
-                } else if (mHelper.getTickCount(message) >= 2) {
+                } else if (PreferencesManager.isMarkdownEnabled(mContext)
+                            && mHelper.containsFencedCodeBlocks(message)) {
                     viewType = ROW_TYPE_CODE;
                 } else {
                     viewType = ROW_TYPE_TEXT;
@@ -1137,24 +1135,27 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             CharSequence textualDisplay = display.getTextualDisplay();
 
             SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
-            final TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
-
-            // cannot refresh it
-            if (null == bodyTextView) {
-                Log.e(LOG_TAG, "getTextView : invalid layout");
-                return convertView;
-            }
 
             boolean shouldHighlighted = (null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event);
 
-            final int tickCount = mHelper.getTickCount(message);
-            if (0==tickCount) {
+            final List<TextView> textViews;
+            if (ROW_TYPE_CODE==viewType) {
+                textViews = populateRowTypeCode(message, convertView, shouldHighlighted);
+            } else {
+                final TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
+
+                // cannot refresh it
+                if (null == bodyTextView) {
+                    Log.e(LOG_TAG, "getTextView : invalid layout");
+                    return convertView;
+                }
+
                 highlightPattern(bodyTextView, body,
                         TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null,
                         mPattern, shouldHighlighted);
-            } else {
-                final String bodyNoTicks = message.body.substring(tickCount, message.body.length()-tickCount);
-                mHelper.highlightCode(bodyTextView, new SpannableString(bodyNoTicks), tickCount);
+
+                textViews = new ArrayList<>();
+                textViews.add(bodyTextView);
             }
 
             int textColor;
@@ -1169,12 +1170,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
             }
 
-            bodyTextView.setTextColor(textColor);
+            for (final TextView tv:textViews) {
+                tv.setTextColor(textColor);
+            }
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
             this.manageSubView(position, convertView, textLayout, ROW_TYPE_TEXT);
 
-            addContentViewListeners(convertView, bodyTextView, position);
+            for (final TextView tv:textViews) {
+                addContentViewListeners(convertView, tv, position);
+            }
         } catch (Exception e) {
             StackTraceElement[] callstacks = e.getStackTrace();
 
@@ -1189,6 +1194,48 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         return convertView;
+    }
+
+    /** For ROW_TYPE_CODE message which may contain mixture of
+     * fenced and inline code blocks and non-code (issue 145) */
+    private List<TextView> populateRowTypeCode(final Message message,
+                                               final View convertView,
+                                               final boolean shouldHighlighted) {
+        final List<TextView> textViews = new ArrayList<>();
+        final LinearLayout container = (LinearLayout)convertView.findViewById(R.id.messages_container);
+        container.removeAllViews();
+        final String[] blocks = mHelper.getFencedCodeBlocks(message);
+        for (int i=0; i<blocks.length; i++) {
+            // Start of fenced block
+            if (blocks[i].equals("```") && i<=blocks.length-3 && blocks[i+2].equals("```")) {
+                final SpannableString threeTickBlock = new SpannableString(blocks[i+1]);
+                final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
+                container.addView(blockView);
+                final TextView tv = (TextView)blockView.findViewById(R.id.messagesAdapter_body);
+                mHelper.highlightFencedCode(tv, threeTickBlock);
+                i += 2;
+                textViews.add(tv);
+            }
+            else {
+                // Not a fenced block
+                final TextView tv = (TextView)mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
+                final String ithBlock = blocks[i];
+                VectorApp.markdownToHtml(blocks[i],
+                        new VectorMarkdownParser.IVectorMarkdownParserListener() {
+                            @Override
+                            public void onMarkdownParsed(final String text, final String HTMLText) {
+                                highlightPattern(tv, new SpannableString(ithBlock),
+                                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(HTMLText) : null,
+                                        mPattern, shouldHighlighted);
+                            }
+                        });
+
+                container.addView(tv);
+                textViews.add(tv);
+            }
+        }
+
+        return textViews;
     }
 
     /**
