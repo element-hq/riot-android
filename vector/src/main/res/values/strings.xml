@@ -117,7 +117,7 @@
 
     <!-- Groups fragment -->
     <string name="groups_invite_header">Invite</string>
-    <string name="groups_header">Groups</string>
+    <string name="groups_header">Communities</string>
     <string name="no_group_placeholder">No groups</string>
 
     <string name="send_bug_report_include_logs">Send logs</string>
