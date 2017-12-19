@@ -21,6 +21,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import im.vector.R;
 import im.vector.fragments.GroupDetailsHomeFragment;
@@ -33,16 +34,16 @@ import im.vector.fragments.GroupDetailsRoomsFragment;
 public class GroupDetailsFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final String LOG_TAG = GroupDetailsFragmentPagerAdapter.class.getSimpleName();
 
-    private static final int HOME_FRAGMENT_INDEX = 0;
-    private static final int PEOPLE_FRAGMENT_INDEX = 1;
-    private static final int ROOMS_FRAGMENT_INDEX = 2;
+    public static final int HOME_FRAGMENT_INDEX = 0;
+    public static final int PEOPLE_FRAGMENT_INDEX = 1;
+    public static final int ROOMS_FRAGMENT_INDEX = 2;
     private static final int FRAGMENTS_COUNT = 3;
 
     private final Context mContext;
 
-    private Fragment mHomeFragment;
-    private Fragment mPeopleFragment;
-    private Fragment mRoomsFragment;
+    private GroupDetailsHomeFragment mHomeFragment;
+    private GroupDetailsPeopleFragment mPeopleFragment;
+    private GroupDetailsRoomsFragment mRoomsFragment;
 
     public GroupDetailsFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -105,5 +106,29 @@ public class GroupDetailsFragmentPagerAdapter extends FragmentPagerAdapter {
         }
 
         return super.getPageTitle(position);
+    }
+
+
+    @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        super.setPrimaryItem(container, position, object);
+
+        if (HOME_FRAGMENT_INDEX == position) {
+            if (null != mPeopleFragment) {
+                mPeopleFragment.iconifySearch(true);
+            }
+
+            if (null != mRoomsFragment) {
+                mRoomsFragment.iconifySearch(true);
+            }
+        } else  if (PEOPLE_FRAGMENT_INDEX == position) {
+            if (null != mPeopleFragment) {
+                mPeopleFragment.iconifySearch(false);
+            }
+        } else  if (ROOMS_FRAGMENT_INDEX == position) {
+            if (null != mRoomsFragment) {
+                mRoomsFragment.iconifySearch(false);
+            }
+        }
     }
 }
