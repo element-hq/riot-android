@@ -16,11 +16,13 @@
 
 package im.vector.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import org.matrix.androidsdk.MXSession;
 
@@ -71,6 +73,19 @@ public abstract class GroupDetailsBaseFragment extends Fragment {
         mActivity = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (null != mActivity) {
+            // dismiss the keyboard when swiping
+            final View view = mActivity.getCurrentFocus();
+            if (view != null) {
+                final InputMethodManager inputMethodManager = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
+    }
     /*
      * *********************************************************************************************
      * Abstract methods

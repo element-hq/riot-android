@@ -66,19 +66,6 @@ public class GroupDetailsRoomsFragment extends GroupDetailsBaseFragment {
         mAdapter.onFilterDone(mCurrentFilter);
     }
 
-    /**
-     * Iconify the search to avoid displaying the keyboard.
-     *
-     * @param iconified true to iconified
-     */
-    public void iconifySearch(boolean iconified) {
-        if (null != mSearchView) {
-            if (mSearchView.isIconified() != iconified) {
-                mSearchView.setIconified(iconified);
-            }
-        }
-    }
-
     /*
      * *********************************************************************************************
      * UI management
@@ -129,7 +116,9 @@ public class GroupDetailsRoomsFragment extends GroupDetailsBaseFragment {
         });
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setQueryHint(getString(R.string.filter_group_rooms));
-        mSearchView.setIconified(true);
+        mSearchView.setFocusable(false);
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.clearFocus();
     }
 
     @Override

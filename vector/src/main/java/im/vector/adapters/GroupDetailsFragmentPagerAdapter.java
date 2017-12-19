@@ -107,28 +107,4 @@ public class GroupDetailsFragmentPagerAdapter extends FragmentPagerAdapter {
 
         return super.getPageTitle(position);
     }
-
-
-    @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        super.setPrimaryItem(container, position, object);
-
-        if (HOME_FRAGMENT_INDEX == position) {
-            if (null != mPeopleFragment) {
-                mPeopleFragment.iconifySearch(true);
-            }
-
-            if (null != mRoomsFragment) {
-                mRoomsFragment.iconifySearch(true);
-            }
-        } else  if (PEOPLE_FRAGMENT_INDEX == position) {
-            if (null != mPeopleFragment) {
-                mPeopleFragment.iconifySearch(false);
-            }
-        } else  if (ROOMS_FRAGMENT_INDEX == position) {
-            if (null != mRoomsFragment) {
-                mRoomsFragment.iconifySearch(false);
-            }
-        }
-    }
 }
