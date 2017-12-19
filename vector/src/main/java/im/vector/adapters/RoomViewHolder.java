@@ -40,7 +40,7 @@ import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
 
 public class RoomViewHolder extends RecyclerView.ViewHolder {
-    private static final String LOG_TAG = PeopleAdapter.class.getSimpleName();
+    private static final String LOG_TAG = RoomViewHolder.class.getSimpleName();
 
     @BindView(R.id.room_avatar)
     ImageView vRoomAvatar;
