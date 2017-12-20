@@ -2270,7 +2270,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
 
                 // share / forward the message
-                menu.findItem(R.id.ic_action_vector_share).setVisible(true);
+                menu.findItem(R.id.ic_action_vector_share).setVisible(!mIsRoomEncrypted);
                 menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
 
                 // save the media in the downloads directory
