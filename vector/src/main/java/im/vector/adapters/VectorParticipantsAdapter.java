@@ -434,7 +434,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
                         mIsOfflineContactsSearch = false;
                         mKnownContactsLimited = (null != searchUsersResponse.limited) ? searchUsersResponse.limited : false;
-                        onKnownContactsSearchEnd(participantItemList, theFirstEntry, searchListener);
+                        onKnownContactsSearchEnd(participantItemList, theFirstEntry, false, searchListener);
                     }
                 }
 
@@ -571,7 +571,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             }
         }
 
-        onKnownContactsSearchEnd(participantItemList, theFirstEntry, searchListener);
+        onKnownContactsSearchEnd(participantItemList, theFirstEntry, true, searchListener);
     }
 
     /**
@@ -580,9 +580,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      *
      * @param participantItemList the known contacts list
      * @param theFirstEntry       the adapter first entry
+     * @param sort                true to sort participantItemList
      * @param searchListener      the search listener
      */
-    private void onKnownContactsSearchEnd(List<ParticipantAdapterItem> participantItemList, final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
+    private void onKnownContactsSearchEnd(List<ParticipantAdapterItem> participantItemList, final ParticipantAdapterItem theFirstEntry, final boolean sort, final OnParticipantsSearchListener searchListener) {
         // ensure that the PIDs have been retrieved
         // it might have failed
         ContactsManager.getInstance().retrievePids();
@@ -656,7 +657,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         if (!TextUtils.isEmpty(mPattern)) {
-            if (roomContactsList.size() > 0) {
+            if ((roomContactsList.size() > 0) && sort) {
                 Collections.sort(roomContactsList, mSortMethod);
             }
             mParticipantsListsList.add(roomContactsList);
