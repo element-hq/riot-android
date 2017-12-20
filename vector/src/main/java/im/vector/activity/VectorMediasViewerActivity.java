@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,8 +36,6 @@ import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.List;
 
 import im.vector.Matrix;
@@ -74,6 +71,8 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
     // the medias list
     private List<SlidableMediaInfo> mMediasList;
+
+    private MenuItem mShareMenuItem;
 
     // the slide effect
     public class DepthPageTransformer implements ViewPager.PageTransformer {
@@ -176,6 +175,11 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                 if (null != VectorMediasViewerActivity.this.getSupportActionBar()) {
                     VectorMediasViewerActivity.this.getSupportActionBar().setTitle(mMediasList.get(position).mFileName);
                 }
+
+                // disable shared for encrypted files as they are saved in a tmp folder
+                if (null != mShareMenuItem) {
+                    mShareMenuItem.setVisible(null == mMediasList.get(position).mEncryptedFileInfo);
+                }
             }
 
             @Override
@@ -204,6 +208,11 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
         getMenuInflater().inflate(R.menu.vector_medias_viewer, menu);
         CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
 
+        mShareMenuItem = menu.findItem(R.id.ic_action_share);
+        if (null != mShareMenuItem) {
+            mShareMenuItem.setVisible(null == mMediasList.get(mViewPager.getCurrentItem()).mEncryptedFileInfo);
+        }
+
         return true;
     }
 
@@ -212,60 +221,60 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
      */
     private void onAction(final int position, final int action) {
         MXMediasCache mediasCache = Matrix.getInstance(this).getMediasCache();
-        SlidableMediaInfo mediaInfo = mMediasList.get(position);
-
-        File file = mediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+        final SlidableMediaInfo mediaInfo = mMediasList.get(position);
 
         // check if the media has already been downloaded
-        if (null != file) {
-            // download
-            if (action == R.id.ic_action_download) {
-                CommonActivityUtils.saveMediaIntoDownloads(this, file, mediaInfo.mFileName, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
-                    @Override
-                    public void onSuccess(String string) {
-                        Toast.makeText(VectorApp.getInstance(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+        if (mediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
+            mediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+                @Override
+                public void onSuccess(File file) {
+                    // sanity check
+                    if (null == file) {
+                        return;
                     }
-                });
-            } else {
-                // shared
-                Uri mediaUri = null;
 
-                File renamedFile = file;
+                    if (action == R.id.ic_action_download) {
+                        CommonActivityUtils.saveMediaIntoDownloads(VectorMediasViewerActivity.this, file, mediaInfo.mFileName, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                            @Override
+                            public void onSuccess(String savedMediaPath) {
+                                Toast.makeText(VectorApp.getInstance(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        if (null != mediaInfo.mFileName) {
+                            File dstFile = new File(file.getParent(), mediaInfo.mFileName);
 
-                if (!TextUtils.isEmpty(mediaInfo.mFileName))
-                    try {
-                        InputStream fin = new FileInputStream(file);
-                        String tmpUrl = mediasCache.saveMedia(fin, mediaInfo.mFileName, mediaInfo.mMimeType);
+                            if (dstFile.exists()) {
+                                dstFile.delete();
+                            }
 
-                        if (null != tmpUrl) {
-                            renamedFile = mediasCache.mediaCacheFile(tmpUrl, mediaInfo.mMimeType);
+                            file.renameTo(dstFile);
+                            file = dstFile;
                         }
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onAction() : mediasCache.mediaCacheFile.absolutePathToUri failed " + e.getMessage());
-                    }
 
+                        // shared / forward
+                        Uri mediaUri = null;
+                        try {
+                            mediaUri = VectorContentProvider.absolutePathToUri(VectorMediasViewerActivity.this, file.getAbsolutePath());
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "onMediaAction onAction.absolutePathToUri: " + e.getMessage());
+                        }
 
-                if (null != renamedFile) {
-                    try {
-                        mediaUri = VectorContentProvider.absolutePathToUri(this, renamedFile.getAbsolutePath());
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onAction() : RiotContentProvider.absolutePathToUri failed " + e.getMessage());
-                    }
-                }
-
-                if (null != mediaUri) {
-                    try {
-                        final Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.setType(mediaInfo.mMimeType);
-                        sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
-                        startActivity(sendIntent);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onAction : cannot display the media " + mediaUri + " mimeType " + mediaInfo.mMimeType);
-                        CommonActivityUtils.displayToast(this, e.getLocalizedMessage());
+                        if (null != mediaUri) {
+                            try {
+                                final Intent sendIntent = new Intent();
+                                sendIntent.setAction(Intent.ACTION_SEND);
+                                sendIntent.setType(mediaInfo.mMimeType);
+                                sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
+                                startActivity(sendIntent);
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## onAction : cannot display the media " + mediaUri + " mimeType " + mediaInfo.mMimeType);
+                                CommonActivityUtils.displayToast(VectorMediasViewerActivity.this, e.getLocalizedMessage());
+                            }
+                        }
                     }
                 }
-            }
+            });
         } else {
             // else download it
             final String downloadId = mediasCache.downloadMedia(this, mSession.getHomeServerConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);

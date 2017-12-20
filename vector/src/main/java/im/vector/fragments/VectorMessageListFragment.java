@@ -757,64 +757,65 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      */
     void onMediaAction(final int menuAction, final String mediaUrl, final String mediaMimeType, final String filename, final EncryptedFileInfo encryptedFileInfo) {
         MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
-        File file = mediasCache.mediaCacheFile(mediaUrl, mediaMimeType);
-
         // check if the media has already been downloaded
-        if (null != file) {
-            // download
-            if ((menuAction == ACTION_VECTOR_SAVE) || (menuAction == ACTION_VECTOR_OPEN)) {
-                CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, filename, mediaMimeType, new SimpleApiCallback<String>() {
-                    @Override
-                    public void onSuccess(String savedMediaPath) {
-                        if (null != savedMediaPath) {
-                            if (menuAction == ACTION_VECTOR_SAVE) {
-                                Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+        if (mediasCache.isMediaCached(mediaUrl, mediaMimeType)) {
+            mediasCache.createTmpMediaFile(mediaUrl, mediaMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
+                @Override
+                public void onSuccess(File file) {
+                    // sanity check
+                    if (null == file) {
+                        return;
+                    }
+
+                    if ((menuAction == ACTION_VECTOR_SAVE) || (menuAction == ACTION_VECTOR_OPEN)) {
+                        CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, filename, mediaMimeType, new SimpleApiCallback<String>() {
+                            @Override
+                            public void onSuccess(String savedMediaPath) {
+                                if (null != savedMediaPath) {
+                                    if (menuAction == ACTION_VECTOR_SAVE) {
+                                        Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        if (null != filename) {
+                            File dstFile = new File(file.getParent(), filename);
+
+                            if (dstFile.exists()) {
+                                dstFile.delete();
+                            }
+
+                            file.renameTo(dstFile);
+                            file = dstFile;
+                        }
+
+                        // shared / forward
+                        Uri mediaUri = null;
+                        try {
+                            mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), file.getAbsolutePath());
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getMessage());
+                        }
+
+
+                        if (null != mediaUri) {
+                            final Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.setType(mediaMimeType);
+                            sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
+
+                            if (menuAction == ACTION_VECTOR_FORWARD) {
+                                CommonActivityUtils.sendFilesTo(getActivity(), sendIntent);
                             } else {
-                                CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                                startActivity(sendIntent);
                             }
                         }
                     }
-                });
-            } else {
-                // shared / forward
-                Uri mediaUri = null;
-
-                File renamedFile = file;
-
-                if (!TextUtils.isEmpty(filename)) {
-                    try {
-                        InputStream fin = new FileInputStream(file);
-                        String tmpUrl = mediasCache.saveMedia(fin, filename, mediaMimeType);
-
-                        if (null != tmpUrl) {
-                            renamedFile = mediasCache.mediaCacheFile(tmpUrl, mediaMimeType);
-                        }
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onMediaAction shared / forward failed : " + e.getLocalizedMessage());
-                    }
                 }
-
-                if (null != renamedFile) {
-                    try {
-                        mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), renamedFile.getAbsolutePath());
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getLocalizedMessage());
-                    }
-                }
-
-                if (null != mediaUri) {
-                    final Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.setType(mediaMimeType);
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
-
-                    if (menuAction == ACTION_VECTOR_FORWARD) {
-                        CommonActivityUtils.sendFilesTo(getActivity(), sendIntent);
-                    } else {
-                        startActivity(sendIntent);
-                    }
-                }
-            }
+            });
         } else {
             // else download it
             final String downloadId = mediasCache.downloadMedia(getActivity().getApplicationContext(), mSession.getHomeServerConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
