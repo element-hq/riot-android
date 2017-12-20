@@ -8,7 +8,7 @@
     <string name="title_activity_home">Üzenetek</string>
     <string name="title_activity_room">Szoba</string>
     <string name="title_activity_settings">Beállítások</string>
-    <string name="title_activity_historical">Előzmény</string>
+    <string name="title_activity_historical">Előzmények</string>
 
     <string name="ok">OK</string>
     <string name="cancel">Mégse</string>
@@ -33,7 +33,7 @@
     <string name="ongoing_conference_call_video">videó</string>
     <string name="cannot_start_call">Nem sikerült hívást kezdeményezni, próbáld meg később</string>
     <string name="missing_permissions_warning">Hiányzó engedélyek miatt egyes funkciók talán nem elérhetőek..</string>
-    <string name="missing_permissions_to_start_conf_call">A szobában konferencia kezdeményezéséhez meghívási jogra van szükséged.</string>
+    <string name="missing_permissions_to_start_conf_call">Ezen szobában való értekezlet indításához meghívási jogosultság szükséges</string>
     <string name="missing_permissions_title_to_start_conf_call">Nem sikerült hívást kezdeményezni</string>
     <string name="device_information">Eszközinformáció</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Titkosított szobákban nem támogatott a konferenciahívás</string>
@@ -49,7 +49,7 @@ A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</
     <string name="action_video_call">Videóhívás</string>
     <string name="action_global_search">Globális keresés</string>
     <string name="action_mark_all_as_read">Mindent olvasottnak jelöl</string>
-    <string name="action_historical">Előzmény</string>
+    <string name="action_historical">Előzmények</string>
     <string name="action_quick_reply">Gyors válasz</string>
     <string name="action_open">Megnyit</string>
     <string name="action_close">Bezár</string>
@@ -488,7 +488,7 @@ Biztos vagy benne?</string>
     <string name="settings_contacts_phonebook_country">Telefonkönyv országa</string>
     <string name="settings_home_display">Kezdőképernyő megjelenítés</string>
     <string name="settings_pin_missed_notifications">Nem látott értesítésekkel rendelkező szobák kitűzése</string>
-    <string name="settings_pin_unread_messages">Nem olvasott üzenetekkel rendelkező szobák kitűzése</string>
+    <string name="settings_pin_unread_messages">Olvasatlan üzenetekkel rendelkező szobák kitűzése</string>
     <string name="settings_devices_list">Eszközök</string>
     <string name="devices_details_dialog_title">Eszköz adatai</string>
     <string name="devices_details_id_title">Azonosító</string>
@@ -680,8 +680,8 @@ Ismeretlen eszközök:</string>
     <string name="directory_server_all_rooms_on_server">Összes szoba a %s szerveren</string>
     <string name="directory_server_native_rooms">Összes anyanyelvi %s szoba</string>
 
-    <string name="notification_unread_notified_messages">%d nem olvasott figyelmeztetés üzenet</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d nem olvasott figyelmeztetés üzenetek a %2$d szobákban</string>
+    <string name="notification_unread_notified_messages">%d olvasatlan figyelmeztetés üzenet</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d olvasatlan figyelmeztetés üzenet %2$d szobában</string>
 
     <string name="historical_placeholder">Előzmények keresése</string>
 
