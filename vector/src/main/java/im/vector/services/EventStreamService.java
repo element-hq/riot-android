@@ -113,11 +113,13 @@ public class EventStreamService extends Service {
     private static final int NOTIF_ID_MESSAGE = 60;
     private static final int NOTIF_ID_FOREGROUND_SERVICE = 61;
 
+    private static final int FOREGROUND_NOT_IN_FOREGROUND = -1;
     private static final int FOREGROUND_INITIAL_SYNCING = 41;
     private static final int FOREGROUND_LISTENING_FOR_EVENTS = 42;
-    private static final int FOREGROUND_NOTIF_ID_PENDING_CALL = 44;
-    private static final int FOREGROUND_ID_INCOMING_CALL = 45;
-    private int mForegroundServiceIdentifier = -1;
+    private static final int FOREGROUND_PENDING_CALL = 44;
+    private static final int FOREGROUND_INCOMING_CALL = 45;
+
+    private int mForegroundServiceIdentifier = FOREGROUND_NOT_IN_FOREGROUND;
 
     /**
      * Default bing rule
@@ -426,7 +428,8 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "## autoRestart() : restarts after " + delay + " ms");
 
         // reset the service identifier
-        mForegroundServiceIdentifier = -1;
+        mForegroundServiceIdentifier = FOREGROUND_NOT_IN_FOREGROUND;
+        stopForeground(true);
 
         // restart the services after 3 seconds
         Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
@@ -761,10 +764,11 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "## gcmStatusUpdate");
 
         if (mIsForeground) {
-            Log.d(LOG_TAG, "## gcmStatusUpdate : gcm status succeeds so stopForeground");
+            Log.d(LOG_TAG, "## gcmStatusUpdate : gcm status succeeds so stopForeground (" + mForegroundServiceIdentifier + ")");
+
             if (FOREGROUND_LISTENING_FOR_EVENTS == mForegroundServiceIdentifier) {
                 stopForeground(true);
-                mForegroundServiceIdentifier = -1;
+                mForegroundServiceIdentifier = FOREGROUND_NOT_IN_FOREGROUND;
                 mIsForeground = false;
             }
         }
@@ -778,7 +782,7 @@ public class EventStreamService extends Service {
      * to strongly reduce the likelihood of the App being killed.
      */
     private void updateServiceForegroundState() {
-        Log.d(LOG_TAG, "## updateServiceForegroundState");
+        Log.d(LOG_TAG, "## updateServiceForegroundState from state " + mForegroundServiceIdentifier);
 
         MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
 
@@ -819,11 +823,11 @@ public class EventStreamService extends Service {
 
             mIsForeground = true;
         } else {
-            Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in background");
+            Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in background from state " + mForegroundServiceIdentifier);
 
             if ((FOREGROUND_LISTENING_FOR_EVENTS == mForegroundServiceIdentifier) || (FOREGROUND_INITIAL_SYNCING == mForegroundServiceIdentifier)) {
                 stopForeground(true);
-                mForegroundServiceIdentifier = -1;
+                mForegroundServiceIdentifier = FOREGROUND_NOT_IN_FOREGROUND;
             }
             mIsForeground = false;
         }
@@ -1602,7 +1606,7 @@ public class EventStreamService extends Service {
                     callId);
 
             startForeground(NOTIF_ID_FOREGROUND_SERVICE, notification);
-            mForegroundServiceIdentifier = FOREGROUND_ID_INCOMING_CALL;
+            mForegroundServiceIdentifier = FOREGROUND_INCOMING_CALL;
 
             mIncomingCallId = callId;
 
@@ -1628,7 +1632,7 @@ public class EventStreamService extends Service {
         if (null != callId) {
             Notification notification = NotificationUtils.buildPendingCallNotification(getApplicationContext(), room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
             startForeground(NOTIF_ID_FOREGROUND_SERVICE, notification);
-            mForegroundServiceIdentifier = FOREGROUND_NOTIF_ID_PENDING_CALL;
+            mForegroundServiceIdentifier = FOREGROUND_PENDING_CALL;
             mCallIdInProgress = callId;
         }
     }
@@ -1640,14 +1644,14 @@ public class EventStreamService extends Service {
         NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // hide the call
-        if ((FOREGROUND_NOTIF_ID_PENDING_CALL == mForegroundServiceIdentifier) || (FOREGROUND_ID_INCOMING_CALL == mForegroundServiceIdentifier)) {
-            if (FOREGROUND_NOTIF_ID_PENDING_CALL == mForegroundServiceIdentifier) {
+        if ((FOREGROUND_PENDING_CALL == mForegroundServiceIdentifier) || (FOREGROUND_INCOMING_CALL == mForegroundServiceIdentifier)) {
+            if (FOREGROUND_PENDING_CALL == mForegroundServiceIdentifier) {
                 mCallIdInProgress = null;
             } else {
                 mIncomingCallId = null;
             }
             nm.cancel(NOTIF_ID_FOREGROUND_SERVICE);
-            mForegroundServiceIdentifier = -1;
+            mForegroundServiceIdentifier = FOREGROUND_NOT_IN_FOREGROUND;
             stopForeground(true);
             updateServiceForegroundState();
         }
