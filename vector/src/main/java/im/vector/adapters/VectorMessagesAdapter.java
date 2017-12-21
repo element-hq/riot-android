@@ -1100,7 +1100,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         // selection mode
-        manageSelectionMode(convertView, event);
+        manageSelectionMode(convertView, event, msgType);
 
         // read marker
         setReadMarker(convertView, row, isMergedView, avatarLayoutView, bodyLayoutView);
@@ -1175,10 +1175,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
-            this.manageSubView(position, convertView, textLayout, ROW_TYPE_TEXT);
+            this.manageSubView(position, convertView, textLayout, viewType);
 
             for (final TextView tv:textViews) {
-                addContentViewListeners(convertView, tv, position);
+                addContentViewListeners(convertView, tv, position, viewType);
             }
         } catch (Exception e) {
             StackTraceElement[] callstacks = e.getStackTrace();
@@ -1302,7 +1302,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             this.manageSubView(position, convertView, imageLayout, type);
 
             ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
-            addContentViewListeners(convertView, imageView, position);
+            addContentViewListeners(convertView, imageView, position, type);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage());
         }
@@ -1351,7 +1351,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
             this.manageSubView(position, convertView, textLayout, viewType);
 
-            addContentViewListeners(convertView, noticeTextView, position);
+            addContentViewListeners(convertView, noticeTextView, position, viewType);
 
             // android seems having a big issue when the text is too long and an alpha !=1 is applied:
             // ---> the text is not displayed.
@@ -1428,7 +1428,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
             this.manageSubView(position, convertView, textLayout, ROW_TYPE_EMOTE);
 
-            addContentViewListeners(convertView, emoteTextView, position);
+            addContentViewListeners(convertView, emoteTextView, position, ROW_TYPE_EMOTE);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage());
         }
@@ -1479,7 +1479,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             View fileLayout = convertView.findViewById(R.id.messagesAdapter_file_layout);
             this.manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);
 
-            addContentViewListeners(convertView, fileTextView, position);
+            addContentViewListeners(convertView, fileTextView, position, ROW_TYPE_FILE);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage());
         }
@@ -1807,7 +1807,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param contentView the cell view.
      * @param event       the linked event
      */
-    private void manageSelectionMode(final View contentView, final Event event) {
+    private void manageSelectionMode(final View contentView, final Event event, final int msgType) {
         final String eventId = event.eventId;
 
         boolean isInSelectionMode = (null != mSelectedEventId);
@@ -1832,7 +1832,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 @Override
                 public void onClick(View v) {
                     if (TextUtils.equals(eventId, mSelectedEventId)) {
-                        onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+                        onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                     } else {
                         onEventTap(eventId);
                     }
@@ -1843,7 +1843,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 @Override
                 public boolean onLongClick(View v) {
                     if (!mIsSearchMode) {
-                        onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+                        onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                         mSelectedEventId = eventId;
                         notifyDataSetChanged();
                         return true;
@@ -1877,14 +1877,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param contentView the cell view
      * @return the displayed text.
      */
-    private String getEventText(View contentView) {
+    private String getEventText(View contentView, Event event, int msgType) {
         String text = null;
 
         if (null != contentView) {
-            TextView bodyTextView = contentView.findViewById(R.id.messagesAdapter_body);
+            if (ROW_TYPE_CODE==msgType) {
+                final Message message = JsonUtils.toMessage(event.getContent());
+                text = message.body;
+            } else {
+                TextView bodyTextView = contentView.findViewById(R.id.messagesAdapter_body);
 
-            if (null != bodyTextView) {
-                text = bodyTextView.getText().toString();
+                if (null != bodyTextView) {
+                    text = bodyTextView.getText().toString();
+                }
             }
         }
 
@@ -1898,7 +1903,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param contentView the main message view
      * @param position    the item position
      */
-    private void addContentViewListeners(final View convertView, final View contentView, final int position) {
+    private void addContentViewListeners(final View convertView, final View contentView, final int position, final int msgType) {
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1920,7 +1925,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     Event event = row.getEvent();
 
                     if (!mIsSearchMode) {
-                        onMessageClick(event, getEventText(contentView), convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                        onMessageClick(event, getEventText(contentView, event, msgType), convertView.findViewById(R.id.messagesAdapter_action_anchor));
                         mSelectedEventId = event.eventId;
                         notifyDataSetChanged();
                         return true;
