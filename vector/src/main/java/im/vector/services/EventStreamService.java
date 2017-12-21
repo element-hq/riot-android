@@ -73,6 +73,7 @@ import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.DismissNotificationReceiver;
 import im.vector.util.CallsManager;
 import im.vector.util.NotificationUtils;
+import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 
 /**
@@ -429,7 +430,6 @@ public class EventStreamService extends Service {
 
         // reset the service identifier
         mForegroundServiceIdentifier = FOREGROUND_NOT_IN_FOREGROUND;
-        stopForeground(true);
 
         // restart the services after 3 seconds
         Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
@@ -462,6 +462,16 @@ public class EventStreamService extends Service {
         if (!mIsSelfDestroyed) {
             Log.d(LOG_TAG, "## onDestroy() : restart it");
             setServiceState(StreamAction.STOP);
+
+            // stop the foreground service on devices which don't allow restart the background service
+            // during the initial syncing
+            // and if the GCM registration was done
+            if (!PreferencesManager.canStartBackgroundService(getApplicationContext()) &&
+                    (mForegroundServiceIdentifier == FOREGROUND_INITIAL_SYNCING)
+                    && Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager().hasRegistrationToken()) {
+                stopForeground(true);
+            }
+
             autoRestart();
         } else {
             Log.d(LOG_TAG, "## onDestroy()");
