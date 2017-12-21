@@ -65,7 +65,10 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
             event.sender = data.get("sender");
             event.roomId = data.get("room_id");
             event.setType(data.get("type"));
-            event.updateContent((new JsonParser()).parse(data.get("content")).getAsJsonObject());
+
+            if (data.containsKey("content")) {
+                event.updateContent((new JsonParser()).parse(data.get("content")).getAsJsonObject());
+            }
 
             return event;
         } catch (Exception e) {
@@ -117,7 +120,6 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
 
             if ((!gcmManager.isBackgroundSyncAllowed() || useBatteryOptim)
                     && VectorApp.isAppInBackground()) {
-
                 EventStreamService eventStreamService = EventStreamService.getInstance();
                 Event event = parseEvent(data);
 
@@ -127,12 +129,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                     Log.d(LOG_TAG, "## onMessageReceivedInternal() : use the battery optimisation with eventStreamService " + eventStreamService);
                 }
 
-                if (null != eventStreamService) {
-                    eventStreamService.onNotifiedEventWithBackgroundSyncDisabled(event, data.get("room_name"), data.get("sender_display_name"), unreadCount);
-                } else {
-                    EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, data.get("room_name"), data.get("sender_display_name"), unreadCount);
-                }
-
+                EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, data.get("room_name"), data.get("sender_display_name"), unreadCount);
                 return;
             }
 

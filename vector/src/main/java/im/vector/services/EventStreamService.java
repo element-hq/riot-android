@@ -1136,18 +1136,27 @@ public class EventStreamService extends Service {
 
         if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
             mBackgroundNotificationEventIds.add(event.eventId);
-
-            String header = (TextUtils.isEmpty(roomName) ? event.roomId : roomName) + ": " +
-                    (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName) + " ";
-
+            String header = "";
             String text;
 
-            if (event.isEncrypted()) {
-                text = context.getString(R.string.encrypted_message);
+            if (null == event.content) {
+                if (1 == mBackgroundNotificationEventIds.size()) {
+                    text =  context.getString(R.string.one_new_message);
+                } else {
+                    text =  context.getString(R.string.new_messages, mBackgroundNotificationEventIds.size());
+                }
+                mBackgroundNotificationStrings.clear();
             } else {
-                EventDisplay eventDisplay = new RiotEventDisplay(context, event, null);
-                eventDisplay.setPrependMessagesWithAuthor(false);
-                text = eventDisplay.getTextualDisplay().toString();
+                header = (TextUtils.isEmpty(roomName) ? event.roomId : roomName) + ": " +
+                        (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName) + " ";
+
+                if (event.isEncrypted()) {
+                    text = context.getString(R.string.encrypted_message);
+                } else {
+                    EventDisplay eventDisplay = new RiotEventDisplay(context, event, null);
+                    eventDisplay.setPrependMessagesWithAuthor(false);
+                    text = eventDisplay.getTextualDisplay().toString();
+                }
             }
 
             if (!TextUtils.isEmpty(text)) {
@@ -1166,75 +1175,6 @@ public class EventStreamService extends Service {
         } else if (0 == unreadMessagesCount) {
             mBackgroundNotificationStrings.clear();
             nm.cancel(NOTIF_ID_MESSAGE);
-        }
-    }
-
-    /**
-     * Notify that a notification for even has been received.
-     *
-     * @param event               the notified event
-     * @param roomName            the room name
-     * @param senderDisplayName   the sender display name
-     * @param unreadMessagesCount the unread messages count
-     */
-    public void onNotifiedEventWithBackgroundSyncDisabled(Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
-        if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
-            mBackgroundNotificationEventIds.add(event.eventId);
-
-            // TODO the session id should be provided by the server
-            MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
-
-            if (null != session) {
-                RoomState roomState = null;
-
-                try {
-                    roomState = session.getDataHandler().getRoom(event.roomId).getLiveState();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "Fail to retrieve the roomState of " + event.roomId);
-                }
-
-                if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTED) && session.isCryptoEnabled()) {
-                    session.getDataHandler().decryptEvent(event, null);
-                }
-
-                // test if the message is displayable
-                EventDisplay eventDisplay = new RiotEventDisplay(getApplicationContext(), event, roomState);
-                eventDisplay.setPrependMessagesWithAuthor(false);
-                String text = eventDisplay.getTextualDisplay().toString();
-
-                // display a dedicated message in decryption error cases
-                if (null != event.getCryptoError()) {
-                    text = getApplicationContext().getString(R.string.encrypted_message);
-                }
-
-                // sanity check
-                if (!TextUtils.isEmpty(text) && (null != roomState)) {
-
-                    if (TextUtils.isEmpty(roomName)) {
-                        roomName = roomState.getDisplayName(session.getMyUserId());
-                    }
-
-                    if (TextUtils.isEmpty(senderDisplayName)) {
-                        senderDisplayName = roomState.getMemberName(event.sender);
-                    }
-
-                    String header = roomName + ": " + senderDisplayName + " ";
-
-                    SpannableString notifiedLine = new SpannableString(header + text);
-                    notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                    Log.d(LOG_TAG, "## onMessageReceivedInternal() : trigger a notification " + notifiedLine);
-
-                    mBackgroundNotificationStrings.add(0, notifiedLine);
-                    BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
-                    BingRule rule = bingRulesManager.isReady() ? bingRulesManager.fulfilledBingRule(event) : new BingRule(false);
-
-                    displayMessagesNotification(mBackgroundNotificationStrings, rule);
-                }
-            }
-        } else if (0 == unreadMessagesCount) {
-            mBackgroundNotificationStrings.clear();
-            displayMessagesNotification(mBackgroundNotificationStrings, null);
         }
     }
 

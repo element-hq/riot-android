@@ -852,4 +852,7 @@
     <string name="group_one_room">1 room</string>
     <string name="group_rooms">%d rooms</string>
     <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
+
+    <string name="one_new_message">1 new message</string>
+    <string name="new_messages">%d new messages</string>
 </resources>

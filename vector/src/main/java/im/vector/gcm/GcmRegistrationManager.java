@@ -558,7 +558,7 @@ public final class GcmRegistrationManager {
 
         Log.d(LOG_TAG, "registerToThirdPartyServer of " + session.getMyUserId());
 
-        boolean eventIdOnlyPushes = isBackgroundSyncAllowed() && PreferencesManager.canStartBackgroundService(mContext);
+        boolean eventIdOnlyPushes = isBackgroundSyncAllowed();
 
         session.getPushersRestClient()
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
