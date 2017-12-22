@@ -77,6 +77,9 @@ import im.vector.widgets.WidgetsManager;
 class VectorMessagesAdapterHelper {
     private static final String LOG_TAG = VectorMessagesAdapterHelper.class.getSimpleName();
 
+    /** Enable multiline mode, split on ``` at start of line and capture delimiters */
+    private static final Pattern FENCED_CODE_BLOCK_PATTERN = Pattern.compile("(?m)(?<=^```)|(?=^```)");
+
     private IMessagesAdapterActionsListener mEventsListener;
     private final MXSession mSession;
     private final Context mContext;
@@ -551,6 +554,33 @@ class VectorMessagesAdapterHelper {
 
             strBuilder.setSpan(clickable, start, end, flags);
             strBuilder.removeSpan(span);
+        }
+    }
+
+    /** Determine if the message contains any code blocks (issue 145). */
+    public boolean containsFencedCodeBlocks(final Message message) {
+        final String[] blocks = getFencedCodeBlocks(message);
+        return (blocks.length > 1);
+    }
+
+    /** Result includes the ``` delimiters as separate entries (issue 145). */
+    public String[] getFencedCodeBlocks(final Message message) {
+        return FENCED_CODE_BLOCK_PATTERN.split(message.body);
+    }
+
+    /** Issue 145 */
+    void highlightFencedCode(final TextView textView, final Spannable text) {
+        // sanity check
+        if (null == textView) {
+            return;
+        }
+
+        final int background = ThemeUtils.getColor(mContext, R.attr.fenced_code_block_background_color);
+        textView.setBackgroundColor(background);
+        textView.setText(text);
+
+        if (null != mLinkMovementMethod) {
+            textView.setMovementMethod(mLinkMovementMethod);
         }
     }
 

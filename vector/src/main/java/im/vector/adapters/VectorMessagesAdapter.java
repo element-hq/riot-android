@@ -44,6 +44,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -92,6 +93,7 @@ import im.vector.util.EventGroup;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
+import im.vector.util.VectorMarkdownParser;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -142,7 +144,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_HIDDEN = 7;
     static final int ROW_TYPE_ROOM_MEMBER = 8;
     static final int ROW_TYPE_EMOJI = 9;
-    static final int NUM_ROW_TYPES = 10;
+    static final int ROW_TYPE_CODE = 10;
+    static final int NUM_ROW_TYPES = 11;
 
     final Context mContext;
     private final HashMap<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
@@ -212,6 +215,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_message_merge,
                 R.layout.adapter_item_vector_message_emoji,
+                R.layout.adapter_item_vector_message_code,
                 mediasCache);
     }
 
@@ -240,6 +244,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                           int videoResLayoutId,
                           int mergeResLayoutId,
                           int emojiResLayoutId,
+                          int codeResLayoutId,
                           MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
@@ -253,6 +258,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_MERGE, mergeResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, R.layout.adapter_item_vector_hidden_message);
         mRowTypeToLayoutId.put(ROW_TYPE_EMOJI, emojiResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_CODE, codeResLayoutId);
 
         mMediasCache = mediasCache;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -663,6 +669,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         switch (viewType) {
             case ROW_TYPE_EMOJI:
+            case ROW_TYPE_CODE:
             case ROW_TYPE_TEXT:
                 inflatedView = getTextView(viewType, position, convertView, parent);
                 break;
@@ -936,6 +943,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (Message.MSGTYPE_TEXT.equals(msgType)) {
                 if (containsOnlyEmojis(message.body)) {
                     viewType = ROW_TYPE_EMOJI;
+                } else if (PreferencesManager.isMarkdownEnabled(mContext)
+                            && mHelper.containsFencedCodeBlocks(message)) {
+                    viewType = ROW_TYPE_CODE;
                 } else {
                     viewType = ROW_TYPE_TEXT;
                 }
@@ -1084,7 +1094,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         // selection mode
-        manageSelectionMode(convertView, event);
+        manageSelectionMode(convertView, event, msgType);
 
         // read marker
         setReadMarker(convertView, row, isMergedView, avatarLayoutView, bodyLayoutView);
@@ -1119,17 +1129,28 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             CharSequence textualDisplay = display.getTextualDisplay();
 
             SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
-            final TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
-
-            // cannot refresh it
-            if (null == bodyTextView) {
-                Log.e(LOG_TAG, "getTextView : invalid layout");
-                return convertView;
-            }
 
             boolean shouldHighlighted = (null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event);
 
-            highlightPattern(bodyTextView, body, TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null, mPattern, shouldHighlighted);
+            final List<TextView> textViews;
+            if (ROW_TYPE_CODE==viewType) {
+                textViews = populateRowTypeCode(message, convertView, shouldHighlighted);
+            } else {
+                final TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
+
+                // cannot refresh it
+                if (null == bodyTextView) {
+                    Log.e(LOG_TAG, "getTextView : invalid layout");
+                    return convertView;
+                }
+
+                highlightPattern(bodyTextView, body,
+                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null,
+                        mPattern, shouldHighlighted);
+
+                textViews = new ArrayList<>();
+                textViews.add(bodyTextView);
+            }
 
             int textColor;
 
@@ -1143,12 +1164,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
             }
 
-            bodyTextView.setTextColor(textColor);
+            for (final TextView tv:textViews) {
+                tv.setTextColor(textColor);
+            }
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
-            this.manageSubView(position, convertView, textLayout, ROW_TYPE_TEXT);
+            this.manageSubView(position, convertView, textLayout, viewType);
 
-            addContentViewListeners(convertView, bodyTextView, position);
+            for (final TextView tv:textViews) {
+                addContentViewListeners(convertView, tv, position, viewType);
+            }
         } catch (Exception e) {
             StackTraceElement[] callstacks = e.getStackTrace();
 
@@ -1163,6 +1188,48 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         return convertView;
+    }
+
+    /** For ROW_TYPE_CODE message which may contain mixture of
+     * fenced and inline code blocks and non-code (issue 145) */
+    private List<TextView> populateRowTypeCode(final Message message,
+                                               final View convertView,
+                                               final boolean shouldHighlighted) {
+        final List<TextView> textViews = new ArrayList<>();
+        final LinearLayout container = (LinearLayout)convertView.findViewById(R.id.messages_container);
+        container.removeAllViews();
+        final String[] blocks = mHelper.getFencedCodeBlocks(message);
+        for (int i=0; i<blocks.length; i++) {
+            // Start of fenced block
+            if (blocks[i].equals("```") && i<=blocks.length-3 && blocks[i+2].equals("```")) {
+                final SpannableString threeTickBlock = new SpannableString(blocks[i+1]);
+                final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
+                container.addView(blockView);
+                final TextView tv = (TextView)blockView.findViewById(R.id.messagesAdapter_body);
+                mHelper.highlightFencedCode(tv, threeTickBlock);
+                i += 2;
+                textViews.add(tv);
+            }
+            else {
+                // Not a fenced block
+                final TextView tv = (TextView)mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
+                final String ithBlock = blocks[i];
+                VectorApp.markdownToHtml(blocks[i],
+                        new VectorMarkdownParser.IVectorMarkdownParserListener() {
+                            @Override
+                            public void onMarkdownParsed(final String text, final String HTMLText) {
+                                highlightPattern(tv, new SpannableString(ithBlock),
+                                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(HTMLText) : null,
+                                        mPattern, shouldHighlighted);
+                            }
+                        });
+
+                container.addView(tv);
+                textViews.add(tv);
+            }
+        }
+
+        return textViews;
     }
 
     /**
@@ -1229,7 +1296,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             this.manageSubView(position, convertView, imageLayout, type);
 
             ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
-            addContentViewListeners(convertView, imageView, position);
+            addContentViewListeners(convertView, imageView, position, type);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage());
         }
@@ -1278,7 +1345,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
             this.manageSubView(position, convertView, textLayout, viewType);
 
-            addContentViewListeners(convertView, noticeTextView, position);
+            addContentViewListeners(convertView, noticeTextView, position, viewType);
 
             // android seems having a big issue when the text is too long and an alpha !=1 is applied:
             // ---> the text is not displayed.
@@ -1355,7 +1422,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
             this.manageSubView(position, convertView, textLayout, ROW_TYPE_EMOTE);
 
-            addContentViewListeners(convertView, emoteTextView, position);
+            addContentViewListeners(convertView, emoteTextView, position, ROW_TYPE_EMOTE);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage());
         }
@@ -1406,7 +1473,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             View fileLayout = convertView.findViewById(R.id.messagesAdapter_file_layout);
             this.manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);
 
-            addContentViewListeners(convertView, fileTextView, position);
+            addContentViewListeners(convertView, fileTextView, position, ROW_TYPE_FILE);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage());
         }
@@ -1734,7 +1801,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param contentView the cell view.
      * @param event       the linked event
      */
-    private void manageSelectionMode(final View contentView, final Event event) {
+    private void manageSelectionMode(final View contentView, final Event event, final int msgType) {
         final String eventId = event.eventId;
 
         boolean isInSelectionMode = (null != mSelectedEventId);
@@ -1759,7 +1826,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 @Override
                 public void onClick(View v) {
                     if (TextUtils.equals(eventId, mSelectedEventId)) {
-                        onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+                        onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                     } else {
                         onEventTap(eventId);
                     }
@@ -1770,7 +1837,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 @Override
                 public boolean onLongClick(View v) {
                     if (!mIsSearchMode) {
-                        onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+                        onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                         mSelectedEventId = eventId;
                         notifyDataSetChanged();
                         return true;
@@ -1804,14 +1871,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param contentView the cell view
      * @return the displayed text.
      */
-    private String getEventText(View contentView) {
+    private String getEventText(View contentView, Event event, int msgType) {
         String text = null;
 
         if (null != contentView) {
-            TextView bodyTextView = contentView.findViewById(R.id.messagesAdapter_body);
+            if (ROW_TYPE_CODE==msgType) {
+                final Message message = JsonUtils.toMessage(event.getContent());
+                text = message.body;
+            } else {
+                TextView bodyTextView = contentView.findViewById(R.id.messagesAdapter_body);
 
-            if (null != bodyTextView) {
-                text = bodyTextView.getText().toString();
+                if (null != bodyTextView) {
+                    text = bodyTextView.getText().toString();
+                }
             }
         }
 
@@ -1825,7 +1897,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param contentView the main message view
      * @param position    the item position
      */
-    private void addContentViewListeners(final View convertView, final View contentView, final int position) {
+    private void addContentViewListeners(final View convertView, final View contentView, final int position, final int msgType) {
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1847,7 +1919,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     Event event = row.getEvent();
 
                     if (!mIsSearchMode) {
-                        onMessageClick(event, getEventText(contentView), convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                        onMessageClick(event, getEventText(contentView, event, msgType), convertView.findViewById(R.id.messagesAdapter_action_anchor));
                         mSelectedEventId = event.eventId;
                         notifyDataSetChanged();
                         return true;

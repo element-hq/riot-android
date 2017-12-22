@@ -41,6 +41,7 @@
         <item name="search_mode_room_name_text_color">#333C3C3C</item>
         <item name="unread_marker_line_color">@color/vector_green_color</item>
         <item name="markdown_block_background_color">#FFEEEEEE</item>
+        <item name="fenced_code_block_background_color">#FF00FF00</item>
         <item name="room_activity_divider_color">#FFF2F2F2</item>
 
         <!-- tab bar colors -->
@@ -145,6 +146,7 @@
         <item name="search_mode_room_name_text_color">#CCC3C3C3</item>
         <item name="unread_marker_line_color">@color/vector_green_color</item>
         <item name="markdown_block_background_color">@android:color/black</item>
+        <item name="fenced_code_block_background_color">#FF00FF00</item>
         <item name="room_activity_divider_color">#565656</item>
 
         <!-- tab bar colors -->
@@ -215,6 +217,7 @@
         <item name="avatar_mask">@drawable/avatar_mask_black</item>
         <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_black</item>
         <item name="markdown_block_background_color">#FF4D4D4D</item>
+        <item name="fenced_code_block_background_color">#FF00FF00</item>
     </style>
 
     <style name="Theme.Vector.EmptyLight" parent="">
