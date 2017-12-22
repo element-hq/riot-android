@@ -1,3 +1,11 @@
+Changes in Riot 0.7.07 (2017-12-18)
+===================================================
+ 
+Bugfixes:
+
+ * Improve piwik management.
+ * fix #1802 : Expected status header not present (until we update OkHttp to 3.X)
+
 Changes in Riot 0.7.06 (2017-12-06)
 ===================================================
 
