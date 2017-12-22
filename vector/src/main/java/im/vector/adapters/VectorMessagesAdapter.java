@@ -944,7 +944,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 if (containsOnlyEmojis(message.body)) {
                     viewType = ROW_TYPE_EMOJI;
                 } else if (PreferencesManager.isMarkdownEnabled(mContext)
-                            && mHelper.containsFencedCodeBlocks(message)) {
+                        && mHelper.containsFencedCodeBlocks(message)) {
                     viewType = ROW_TYPE_CODE;
                 } else {
                     viewType = ROW_TYPE_TEXT;
@@ -1133,7 +1133,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             boolean shouldHighlighted = (null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event);
 
             final List<TextView> textViews;
-            if (ROW_TYPE_CODE==viewType) {
+            if (ROW_TYPE_CODE == viewType) {
                 textViews = populateRowTypeCode(message, convertView, shouldHighlighted);
             } else {
                 final TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
@@ -1164,14 +1164,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
             }
 
-            for (final TextView tv:textViews) {
+            for (final TextView tv : textViews) {
                 tv.setTextColor(textColor);
             }
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
             this.manageSubView(position, convertView, textLayout, viewType);
 
-            for (final TextView tv:textViews) {
+            for (final TextView tv : textViews) {
                 addContentViewListeners(convertView, tv, position, viewType);
             }
         } catch (Exception e) {
@@ -1190,29 +1190,30 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return convertView;
     }
 
-    /** For ROW_TYPE_CODE message which may contain mixture of
-     * fenced and inline code blocks and non-code (issue 145) */
+    /**
+     * For ROW_TYPE_CODE message which may contain mixture of
+     * fenced and inline code blocks and non-code (issue 145)
+     */
     private List<TextView> populateRowTypeCode(final Message message,
                                                final View convertView,
                                                final boolean shouldHighlighted) {
         final List<TextView> textViews = new ArrayList<>();
-        final LinearLayout container = (LinearLayout)convertView.findViewById(R.id.messages_container);
+        final LinearLayout container = (LinearLayout) convertView.findViewById(R.id.messages_container);
         container.removeAllViews();
         final String[] blocks = mHelper.getFencedCodeBlocks(message);
-        for (int i=0; i<blocks.length; i++) {
+        for (int i = 0; i < blocks.length; i++) {
             // Start of fenced block
-            if (blocks[i].equals("```") && i<=blocks.length-3 && blocks[i+2].equals("```")) {
-                final SpannableString threeTickBlock = new SpannableString(blocks[i+1]);
+            if (blocks[i].equals("```") && i <= blocks.length - 3 && blocks[i + 2].equals("```")) {
+                final SpannableString threeTickBlock = new SpannableString(blocks[i + 1]);
                 final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
                 container.addView(blockView);
-                final TextView tv = (TextView)blockView.findViewById(R.id.messagesAdapter_body);
+                final TextView tv = (TextView) blockView.findViewById(R.id.messagesAdapter_body);
                 mHelper.highlightFencedCode(tv, threeTickBlock);
                 i += 2;
                 textViews.add(tv);
-            }
-            else {
+            } else {
                 // Not a fenced block
-                final TextView tv = (TextView)mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
+                final TextView tv = (TextView) mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
                 final String ithBlock = blocks[i];
                 VectorApp.markdownToHtml(blocks[i],
                         new VectorMarkdownParser.IVectorMarkdownParserListener() {
@@ -1875,7 +1876,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         String text = null;
 
         if (null != contentView) {
-            if (ROW_TYPE_CODE==msgType) {
+            if (ROW_TYPE_CODE == msgType) {
                 final Message message = JsonUtils.toMessage(event.getContent());
                 text = message.body;
             } else {
