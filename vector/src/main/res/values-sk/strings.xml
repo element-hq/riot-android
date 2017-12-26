@@ -104,7 +104,7 @@
     <string name="send_bug_report_description">Prosím, Napíšte text hlásenia. Čo ste práve robili? Čo ste očakávali? Čo sa v skutočnosti udialo?</string>
     <string name="send_bug_report_placeholder">Tu popíšte váš problém</string>
     <string name="send_bug_report_logs_description">S cieľom lepšej diagnostiky problému sa spolu s vašim hlásením odošlú záznami o činnosti programu Riot. Ak si želáte odoslať len text hlásenia, odškrtnite niektoré z nasledujúcich polí:</string>
-    <string name="send_bug_report_alert_message">Zdá sa, že v zlosti triasiete zariadením. Chceli by ste odoslať hlásenie o chybe?</string>
+    <string name="send_bug_report_alert_message">Zdá sa, že v zlosti trasiete zariadením. Chceli by ste odoslať hlásenie o chybe?</string>
     <string name="send_bug_report_app_crashed">Posledné spustenie aplikácie skončilo pádom. Chceli by ste odoslať hlásenie o chybe?</string>
 
     <string name="send_bug_report_sent">Hlásenie o chybe bolo úspešne odoslané</string>
