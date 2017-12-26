@@ -768,4 +768,34 @@ Neznáme zariadenia:</string>
     <string name="share_without_verifying">Zdieľať bez overenia</string>
     <string name="ignore_request">Ignorovať žiadosť</string>
 
+<string name="notification_noisy_notifications">Hlučné oznámenia</string>
+    <string name="notification_silent_notifications">Tiché oznámenia</string>
+
+    <string name="title_activity_bug_report">Hlásenie o chybe</string>
+
+    <string name="option_take_photo">Poslať fotku</string>
+    <string name="option_take_video">Poslať video</string>
+
+    <string name="settings_analytics">Štatistika</string>
+    <string name="settings_opt_out_of_analytics">Odhlásiť sa zo zasielania štatistiky</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot zbiera anonymné štatistiky, ktoré nám umožňujú aplikáciu ďalej vylepšovať.</string>
+
+
+    <string name="settings_labs_native_camera">Používať vstavaný fotoaparát a kameru</string>
+
+    // share keys
+    <string name="conference_call_warning_title">Upozornenie!</string>
+    <string name="conference_call_warning_message">Konferenčné hovory sú stále vo vývoji a nemusia byť úplne spoľahlivé.</string>
+
+    // slash commands
+    <string name="command_error">Chybný príkaz</string>
+    <string name="unrecognized_command">Nerozpoznaný príkaz: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Vypnuté</string>
+    <string name="notification_on">Zapnuté</string>
+    <string name="notification_noisy">Hlučné</string>
+
+    <string name="encrypted_message">Šifrovaná správa</string>
+
 </resources>
