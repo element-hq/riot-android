@@ -53,7 +53,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Vídeo</string>
     <string name="action_global_search">Búsqueda global</string>
-    <string name="action_mark_all_as_read">Marcar todos como visto</string>
+    <string name="action_mark_all_as_read">Marcar todo como visto</string>
     <string name="action_historical">Histórico</string>
     <string name="action_quick_reply">Respuesta rápida</string>
     <string name="action_open">Abrir</string>
@@ -767,4 +767,79 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="huge">Grandísimo</string>
 <string name="user_directory_header">directorio del usuario</string>
     <string name="people_search_user_directory">DIRECTORIO DEL USUARIO (%s)</string>
-    </resources>
+    <string name="light_theme">Tema claro</string>
+    <string name="dark_theme">Tema oscuro</string>
+    <string name="black_them">Tema negro</string>
+
+    <string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="notification_listen_for_events">Escuchando por eventos</string>
+    <string name="notification_noisy_notifications">Notificaciones ruidosas</string>
+    <string name="notification_silent_notifications">Notificaciones silenciosas</string>
+
+    <string name="title_activity_bug_report">Informe de error</string>
+
+    <string name="option_take_photo">Tomar foto</string>
+    <string name="option_take_video">Tomar video</string>
+
+    <string name="login_mobile_device">Móvil</string>
+
+    <string name="call">LLamar</string>
+    <string name="settings_notification_ringtone">Sonido de notificación</string>
+    <string name="settings_containing_my_display_name">Mensajes que contengan mi nombre público</string>
+    <string name="settings_containing_my_user_name">Mensajes que contengan mi nombre de usuario</string>
+    <string name="settings_12_24_timestamps">Mostrar la hora en formato de 12 horas (ej: 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Esconder mensajes de unirse/partir (invitaciones/kicks/baneos no son afectados)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Esconder cambios de avatar y nombres públicos</string>
+
+    <string name="settings_analytics">Análisis anónimo de uso</string>
+    <string name="settings_opt_out_of_analytics">Darse de baja del análisis anónimo de uso</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot recolecta datos de uso anónimamente para ayudar a mejorar la aplicación.</string>
+
+
+    <string name="widget_no_power_to_manage">Necesitas permisos para manejar los widgets de esta sala</string>
+    <string name="widget_creation_failure">La creación del widget ha fallado</string>
+    <string name="event_formatter_widget_added">%1$s añadido por %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s removido por %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Crear llamada de conferencia con jitsi</string>
+    <string name="widget_delete_message_confirmation">¿Estás seguro de querer eliminar el widget?</string>
+    <string name="active_widgets">%1$d widget activos</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">Necesitas ser capaz de invitar a usuarios para realizar esa acción.</string>
+    <string name="widget_integration_unable_to_create">El widget no ha podido ser creado.</string>
+    <string name="widget_integration_failed_to_send_request">La consulta no ha podido ser enviada.</string>
+    <string name="widget_integration_room_not_recognised">Esta sala no es conocida.</string>
+    <string name="widget_integration_positive_power_level">El nivel de poder tiene que ser un número entero positivo.</string>
+    <string name="widget_integration_must_be_in_room">No estás en esta sala.</string>
+    <string name="widget_integration_no_permission_in_room">No tienes suficientes permisos para realizar esa acción en esta sala.</string>
+    <string name="widget_integration_missing_room_id">A la petición le falta el ID de sala.</string>
+    <string name="widget_integration_missing_user_id">A la petición le falta el ID de usuario.</string>
+    <string name="widget_integration_room_not_visible">La sala %s no es visible.</string>
+    <string name="settings_labs_matrix_apps">Matrix Apps</string>
+    <string name="room_add_matrix_apps">Añadir Matrix apps</string>
+    <string name="add_matrix_apps_not_supported">No soportado en este dispositivo</string>
+    <string name="settings_labs_native_camera">Usar cámara nativa</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Has añadido un nuevo dispositivo \'%s\', que esta solicitando claves de encriptación.</string>
+    <string name="your_unverified_device_requesting">Tu dispositivo no validado \'%s\' está solicitando claves de encriptación.</string>
+    <string name="start_verification">Empezar verificación</string>
+    <string name="share_without_verifying">Compartir sin verificación</string>
+    <string name="ignore_request">Ignorar solicitud</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Aviso!</string>
+    <string name="conference_call_warning_message">Las llamadas de conferencia están en desarrollo y pueden no ser fiables.</string>
+
+    // slash commands
+    <string name="command_error">Error de comando</string>
+    <string name="unrecognized_command">Comando no reconocido: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Off</string>
+    <string name="notification_on">On</string>
+    <string name="notification_noisy">Alto</string>
+
+    <string name="encrypted_message">Mensaje encriptado</string>
+
+</resources>
