@@ -703,7 +703,7 @@ class VectorMessagesAdapterHelper {
         if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
             // A message is displayable as long as it has a body
             Message message = JsonUtils.toMessage(event.getContent());
-            return (message.body != null) && (!message.body.equals(""));
+            return !TextUtils.isEmpty(message.body) || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE);
         } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
                 || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)) {
             EventDisplay display = new RiotEventDisplay(context, event, roomState);
