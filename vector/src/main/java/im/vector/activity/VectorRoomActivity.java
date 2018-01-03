@@ -1057,7 +1057,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             private void startCall(boolean isVideo) {
                 if (CommonActivityUtils.checkPermissions(isVideo ? CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL : CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL,
                         VectorRoomActivity.this)) {
-                    startIpCall(isVideo);
+                    startIpCall(false, isVideo);
                 }
             }
 
@@ -1727,7 +1727,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 }
 
                 if (CommonActivityUtils.checkPermissions(requestCode, VectorRoomActivity.this)) {
-                    startIpCall(isVideoCall);
+                    startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
                 }
             }
         });
@@ -1794,10 +1794,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Start an IP call: audio call if aIsVideoCall is false or video call if aIsVideoCall
      * is true.
      *
+     * @param useJitsiCall true to use jitsi calls
      * @param aIsVideoCall true to video call, false to audio call
      */
-    private void startIpCall(final boolean aIsVideoCall) {
-        if ((mRoom.getActiveMembers().size() > 2) && PreferencesManager.useJitsiConfCall(this)) {
+    private void startIpCall(final boolean useJitsiCall, final boolean aIsVideoCall) {
+        if ((mRoom.getActiveMembers().size() > 2) && useJitsiCall) {
             startJitsiCall(aIsVideoCall);
             return;
         }
@@ -1858,7 +1859,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         CommonActivityUtils.displayUnknownDevicesDialog(mSession, VectorRoomActivity.this, (MXUsersDevicesMap<MXDeviceInfo>) cryptoError.mExceptionData, new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
                             @Override
                             public void onSendAnyway() {
-                                startIpCall(aIsVideoCall);
+                                startIpCall(useJitsiCall, aIsVideoCall);
                             }
                         });
 
@@ -2356,11 +2357,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
             if (CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
-                startIpCall(false);
+                startIpCall(PreferencesManager.useJitsiConfCall(this), false);
             }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
             if (CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
-                startIpCall(true);
+                startIpCall(		PreferencesManager.useJitsiConfCall(this), true);
             }
         } else {
             Log.w(LOG_TAG, "## onRequestPermissionsResult(): Unknown requestCode =" + aRequestCode);
