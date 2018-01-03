@@ -90,6 +90,47 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
         public void onJoinGroup(String groupId) {
             refresh(groupId);
         }
+
+
+        @Override
+        public void onGroupProfileUpdate(String groupId) {
+            if ((null != mGroup) && TextUtils.equals(mGroup.getGroupId(), groupId)) {
+                if (null != mPagerAdapter.getHomeFragment()) {
+                    mPagerAdapter.getHomeFragment().refreshViews();
+                }
+            }
+        }
+
+        @Override
+        public void onGroupRoomsListUpdate(String groupId) {
+            if ((null != mGroup) && TextUtils.equals(mGroup.getGroupId(), groupId)) {
+                if (null != mPagerAdapter.getRoomsFragment()) {
+                    mPagerAdapter.getRoomsFragment().refreshViews();
+                }
+
+                if (null != mPagerAdapter.getHomeFragment()) {
+                    mPagerAdapter.getHomeFragment().refreshViews();
+                }
+            }
+        }
+
+        @Override
+        public void onGroupUsersListUpdate(String groupId) {
+            if ((null != mGroup) && TextUtils.equals(mGroup.getGroupId(), groupId)) {
+                if (null != mPagerAdapter.getPeopleFragment()) {
+                    mPagerAdapter.getPeopleFragment().refreshViews();
+                }
+
+                if (null != mPagerAdapter.getHomeFragment()) {
+                    mPagerAdapter.getHomeFragment().refreshViews();
+                }
+            }
+        }
+
+        @Override
+        public void onGroupInvitedUsersListUpdate(String groupId) {
+            onGroupUsersListUpdate(groupId);
+        }
     };
 
     @Override
@@ -267,12 +308,6 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
             mGroupSyncInProgress.setVisibility(View.VISIBLE);
             mGroupsManager.refreshGroupData(mGroup, new ApiCallback<Void>() {
                 private void onDone() {
-                    GroupDetailsBaseFragment fragment = (GroupDetailsBaseFragment) mPagerAdapter.getItem(mPager.getCurrentItem());
-
-                    if (null != fragment) {
-                        fragment.refreshViews();
-                    }
-
                     if (null != mGroupSyncInProgress) {
                         mGroupSyncInProgress.setVisibility(View.GONE);
                     }

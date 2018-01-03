@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import im.vector.R;
+import im.vector.fragments.GroupDetailsBaseFragment;
 import im.vector.fragments.GroupDetailsHomeFragment;
 import im.vector.fragments.GroupDetailsPeopleFragment;
 import im.vector.fragments.GroupDetailsRoomsFragment;
@@ -34,9 +35,9 @@ import im.vector.fragments.GroupDetailsRoomsFragment;
 public class GroupDetailsFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final String LOG_TAG = GroupDetailsFragmentPagerAdapter.class.getSimpleName();
 
-    public static final int HOME_FRAGMENT_INDEX = 0;
-    public static final int PEOPLE_FRAGMENT_INDEX = 1;
-    public static final int ROOMS_FRAGMENT_INDEX = 2;
+    private static final int HOME_FRAGMENT_INDEX = 0;
+    private static final int PEOPLE_FRAGMENT_INDEX = 1;
+    private static final int ROOMS_FRAGMENT_INDEX = 2;
     private static final int FRAGMENTS_COUNT = 3;
 
     private final Context mContext;
@@ -106,5 +107,26 @@ public class GroupDetailsFragmentPagerAdapter extends FragmentPagerAdapter {
         }
 
         return super.getPageTitle(position);
+    }
+
+    /**
+     * @return the home fragment
+     */
+    public GroupDetailsBaseFragment getHomeFragment() {
+        return mHomeFragment;
+    }
+
+    /**
+     * @return the people fragment
+     */
+    public GroupDetailsBaseFragment getPeopleFragment() {
+        return mPeopleFragment;
+    }
+
+    /**
+     * @return the rooms fragment
+     */
+    public GroupDetailsBaseFragment getRoomsFragment() {
+        return mRoomsFragment;
     }
 }
