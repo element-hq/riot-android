@@ -606,6 +606,9 @@
     <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
     <string name="settings_phone_number_code">Code</string>
 
+
+    <string name="settings_flair">Flair</string>
+
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>
     <string name="media_saving_period_1_week">1 week</string>
