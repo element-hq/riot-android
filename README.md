@@ -81,6 +81,8 @@ Modify riot-android/vector/build.gradle
 In "productFlavors" section, duplicate "app" group if you plan to use GCM/FCM or "appfdroid" if don't.
 
 for example, with GCM, it would give
+
+```
     appmyriot {
         applicationId "im.myriot"
         // use the version name
@@ -91,6 +93,7 @@ for example, with GCM, it would give
         resValue "string", "short_flavor_description", "G"
         resValue "string", "flavor_description", "GooglePlay"
     }
+```
 
 - if you use GCM, duplicate appCompile at the end of this file and replace appCompile by appmyriotCompile.
 - if you don't, update the "if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid"))" to include your flavor.
