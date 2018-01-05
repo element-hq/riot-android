@@ -465,7 +465,7 @@
         <receiver android:name="im.vector.receiver.DismissNotificationReceiver"/>
 
         <receiver
-            android:name="im.vector.receiver.ReferrerReceiver"
+            android:name="im.vector.receiver.VectorReferrerReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

@@ -620,10 +620,22 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     /**
+     * The server URLs have been updated from a receiver
+     */
+    public void onServerUrlsUpdate() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+        mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url)));
+        mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_identity_server_url)));
+
+        mHomeserverConnectionConfig = null;
+        checkFlows();
+    }
+
+    /**
      * @return the home server Url according to custom HS checkbox
      */
     private String getHomeServerUrl() {
-        String url = getResources().getString(R.string.default_hs_server_url);
+        String url = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString(HOME_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url));
 
         if (mUseCustomHomeServersCheckbox.isChecked()) {
             url = mHomeServerText.getText().toString().trim();
@@ -640,7 +652,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @return the identity server URL according to custom HS checkbox
      */
     private String getIdentityServerUrl() {
-        String url = getResources().getString(R.string.default_identity_server_url);
+        String url = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url));
 
         if (mUseCustomHomeServersCheckbox.isChecked()) {
             url = mIdentityServerText.getText().toString().trim();
@@ -1858,7 +1870,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         threePidLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION_THREE_PID) ? View.VISIBLE : View.GONE);
 
         boolean isLoginMode = mMode == MODE_LOGIN;
-        boolean isForgetPasswordMode = (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION);
 
         mButtonsView.setVisibility(View.VISIBLE);
 

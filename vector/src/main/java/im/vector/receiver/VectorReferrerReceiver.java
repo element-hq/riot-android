@@ -30,12 +30,13 @@ import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
 
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.LoginActivity;
 import im.vector.util.PreferencesManager;
 
-public class ReferrerReceiver extends BroadcastReceiver {
-    private static final String LOG_TAG = ReferrerReceiver.class.getSimpleName();
+public class VectorReferrerReceiver extends BroadcastReceiver {
+    private static final String LOG_TAG = VectorReferrerReceiver.class.getSimpleName();
 
     private static final String INSTALL_REFERRER_ACTION = "com.android.vending.INSTALL_REFERRER";
     private static final String KEY_REFERRER = "referrer";
@@ -78,10 +79,12 @@ public class ReferrerReceiver extends BroadcastReceiver {
 
                     Log.d(LOG_TAG, "## onReceive() : utm_source " + utm_source + " -- utm_content " + utm_content);
 
-                    dummyUri = Uri.parse("https://dummy?" +  URLDecoder.decode(utm_content, "utf-8"));
+                    if (null != utm_content) {
+                        dummyUri = Uri.parse("https://dummy?" + URLDecoder.decode(utm_content, "utf-8"));
 
-                    hs = dummyUri.getQueryParameter(KEY_HS);
-                    is = dummyUri.getQueryParameter(KEY_IS);
+                        hs = dummyUri.getQueryParameter(KEY_HS);
+                        is = dummyUri.getQueryParameter(KEY_IS);
+                    }
                 }
             } catch (Throwable t) {
                 Log.e(LOG_TAG, "## onReceive() : failed " + t.getMessage());
@@ -91,7 +94,7 @@ public class ReferrerReceiver extends BroadcastReceiver {
             Log.d(LOG_TAG, "## onReceive() : IS " + is);
 
 
-            if (!TextUtils.isEmpty(hs) && !TextUtils.isEmpty(is)) {
+            if (!TextUtils.isEmpty(hs) || !TextUtils.isEmpty(is)) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                 SharedPreferences.Editor editor = preferences.edit();
 
@@ -104,6 +107,11 @@ public class ReferrerReceiver extends BroadcastReceiver {
                 }
 
                 editor.commit();
+
+                if ((null != VectorApp.getCurrentActivity()) && (VectorApp.getCurrentActivity() instanceof LoginActivity)) {
+                    Log.d(LOG_TAG, "## onReceive() : warn loginactivity");
+                    ((LoginActivity)VectorApp.getCurrentActivity()).onServerUrlsUpdate();
+                }
             }
         }
     }
