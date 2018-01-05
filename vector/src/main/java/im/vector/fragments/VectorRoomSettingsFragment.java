@@ -73,6 +73,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;;
@@ -124,6 +125,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private static final String PREF_KEY_BANNED_DIVIDER = "banned_divider";
     private static final String PREF_KEY_ENCRYPTION = "encryptionKey";
 
+    private static final String PREF_KEY_FLAIR = "flair";
+    private static final String PREF_KEY_FLAIR_DIVIDER = "flair_divider";
+
     private static final String ADDRESSES_PREFERENCE_KEY_BASE = "ADDRESSES_PREFERENCE_KEY_BASE";
     private static final String NO_LOCAL_ADDRESS_PREFERENCE_KEY = "NO_LOCAL_ADDRESS_PREFERENCE_KEY";
     private static final String ADD_ADDRESSES_PREFERENCE_KEY = "ADD_ADDRESSES_PREFERENCE_KEY";
@@ -147,6 +151,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     // banned members
     private PreferenceCategory mBannedMembersSettingsCategory;
     private PreferenceCategory mBannedMembersSettingsCategoryDivider;
+
+    // flair
+    private PreferenceCategory mFlairSettingsCategory;
+    private PreferenceCategory mFlairSettingsCategoryDivider;
 
     // UI elements
     private RoomAvatarPreference mRoomPhotoAvatar;
@@ -334,6 +342,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mAdvandceSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_ADVANCED);
         mBannedMembersSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_BANNED);
         mBannedMembersSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_BANNED_DIVIDER);
+        mFlairSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_FLAIR_DIVIDER);
+        mFlairSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_FLAIR);
 
         mRoomAccessRulesListPreference.setOnPreferenceWarningIconClickListener(new VectorListPreference.OnPreferenceWarningIconClickListener() {
             @Override
@@ -518,6 +528,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             updateRoomDirectoryVisibilityAsync();
 
             refreshAddresses();
+            refreshFlair();
             refreshBannedMembersList();
             refreshEndToEnd();
         }
@@ -1326,6 +1337,36 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                 mBannedMembersSettingsCategory.addPreference(preference);
             }
+        }
+    }
+
+    //================================================================================
+    // flair management
+    //================================================================================
+
+    /**
+     * Refresh the flair list
+     */
+    private void refreshFlair() {
+        List<String> groups = mRoom.getLiveState().getRelatedGroups();
+        Collections.sort(groups, String.CASE_INSENSITIVE_ORDER);
+
+        mFlairSettingsCategory.removeAll();
+
+        if (!groups.isEmpty()) {
+            for (String groupId : groups) {
+                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+                preference.setTitle(groupId);
+                preference.setKey(BANNED_PREFERENCE_KEY_BASE + groupId);
+
+                mFlairSettingsCategory.addPreference(preference);
+            }
+        } else {
+            VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+            preference.setTitle(getString(R.string.room_settings_no_flair));
+            preference.setKey(BANNED_PREFERENCE_KEY_BASE + "no_flair");
+
+            mFlairSettingsCategory.addPreference(preference);
         }
     }
 

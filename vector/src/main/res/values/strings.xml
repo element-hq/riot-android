@@ -673,6 +673,8 @@
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
     <string name="room_settings_addresses_add_new_address">New address (e.g #foo:matrix.org")</string>
 
+    <string name="room_settings_no_flair"> This room is not showing flair for any communities</string>
+
     <string name="room_settings_addresses_invalid_format_dialog_title">Invalid alias format</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' is not a valid format for an alias</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified. The default main address for this room will be picked randomly"</string>

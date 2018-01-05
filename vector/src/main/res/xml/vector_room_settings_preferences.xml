@@ -76,6 +76,15 @@
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory
+        android:key="flair_divider"
+        android:title="flair_divider"/>
+
+    <im.vector.preference.VectorPreferenceCategory
+        android:key="flair"
+        android:title="@string/settings_flair" >
+    </im.vector.preference.VectorPreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory
         android:key="banned_divider"
         android:title="banned_divider"/>
 
