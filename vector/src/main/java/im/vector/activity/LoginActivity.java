@@ -485,7 +485,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             @Override
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    onHomeServerUrlUpdate();
+                    onHomeServerUrlUpdate(true);
                     return true;
                 }
 
@@ -497,7 +497,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mHomeServerText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    onHomeServerUrlUpdate();
+                    onHomeServerUrlUpdate(true);
                 }
             }
         });
@@ -507,7 +507,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             @Override
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    onIdentityserverUrlUpdate();
+                    onIdentityserverUrlUpdate(true);
                     return true;
                 }
 
@@ -519,7 +519,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mIdentityServerText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    onIdentityserverUrlUpdate();
+                    onIdentityserverUrlUpdate(true);
                 }
             }
         });
@@ -542,8 +542,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         // reset the HS urls.
                         mHomeServerUrl = null;
                         mIdentityServerUrl = null;
-                        onIdentityserverUrlUpdate();
-                        onHomeServerUrlUpdate();
+                        onIdentityserverUrlUpdate(false);
+                        onHomeServerUrlUpdate(false);
                         refreshDisplay();
                     }
                 });
@@ -627,8 +627,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url)));
         mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_identity_server_url)));
 
-        mHomeserverConnectionConfig = null;
-        checkFlows();
+        if (!mUseCustomHomeServersCheckbox.isChecked()) {
+            mUseCustomHomeServersCheckbox.performClick();
+        }
     }
 
     /**
@@ -698,9 +699,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * Check if the home server url has been updated
      *
+     * @param checkFlowOnUpdate check the flow on IS update
      * @return true if the HS url has been updated
      */
-    private boolean onHomeServerUrlUpdate() {
+    private boolean onHomeServerUrlUpdate(boolean checkFlowOnUpdate) {
         if (!TextUtils.equals(mHomeServerUrl, getHomeServerUrl())) {
             mHomeServerUrl = getHomeServerUrl();
             mRegistrationResponse = null;
@@ -710,7 +712,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             // the account creation is not always supported so ensure that the dedicated button is always displayed.
             mRegisterButton.setVisibility(View.VISIBLE);
 
-            checkFlows();
+            if (checkFlowOnUpdate) {
+                checkFlows();
+            }
 
             return true;
         }
@@ -721,9 +725,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * Check if the identity server url has been updated
      *
+     * @param checkFlowOnUpdate check the flow on IS update
      * @return true if the IS url has been updated
      */
-    private boolean onIdentityserverUrlUpdate() {
+    private boolean onIdentityserverUrlUpdate(boolean checkFlowOnUpdate) {
         if (!TextUtils.equals(mIdentityServerUrl, getIdentityServerUrl())) {
             mIdentityServerUrl = getIdentityServerUrl();
             mRegistrationResponse = null;
@@ -733,7 +738,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             // the account creation is not always supported so ensure that the dedicated button is always displayed.
             mRegisterButton.setVisibility(View.VISIBLE);
 
-            checkFlows();
+            if (checkFlowOnUpdate) {
+                checkFlows();
+            }
 
             return true;
         }
@@ -1527,8 +1534,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * Dismiss the keyboard and save the updated values
      */
     private void onClick() {
-        onIdentityserverUrlUpdate();
-        onHomeServerUrlUpdate();
+        onIdentityserverUrlUpdate(false);
+        onHomeServerUrlUpdate(false);
+        checkFlows();
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mHomeServerText.getWindowToken(), 0);
@@ -1538,7 +1546,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * The user clicks on the login button
      */
     private void onLoginClick() {
-        if (onHomeServerUrlUpdate() || onIdentityserverUrlUpdate()) {
+        if (onHomeServerUrlUpdate(true) || onIdentityserverUrlUpdate(true)) {
             mIsPendingLogin = true;
             Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not loos the focus");
             return;

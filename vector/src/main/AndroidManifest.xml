@@ -103,7 +103,7 @@
             android:name="im.vector.activity.LoginActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/LoginAppTheme"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
