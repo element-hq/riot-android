@@ -464,6 +464,16 @@
 
         <receiver android:name="im.vector.receiver.DismissNotificationReceiver"/>
 
+        <receiver
+            android:name="im.vector.receiver.VectorReferrerReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+
         <!-- Shared items  -->
         <activity
             android:name=".activity.VectorSharedFilesActivity"
