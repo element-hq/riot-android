@@ -43,67 +43,74 @@ How to build JitsiMeet libs:
 Recompile the provided aar files until we have gradle 
 ======================================================
 
-- generate olm-sdk.aar
+generate olm-sdk.aar
+--------------------
 
-clone the repository http://git.matrix.org/git/olm.git/
-open the android project in /android
-build it
-copy  /android/olm-sdk/build/outputs/aarvector/libs/olm-sdk.aar to riot-android/vector/libs/.
+- clone the repository http://git.matrix.org/git/olm.git/
+- open the android project in /android
+- build it
+- copy  /android/olm-sdk/build/outputs/aarvector/libs/olm-sdk.aar to riot-android/vector/libs/.
 	
-- generate matrix-sdk.aar
+generate matrix-sdk.aar
+----------------------
 
-clone the repository https://github.com/matrix-org/matrix-android-sdk
-open the project with android studio
-build it
-copy /matrix-android-sdk/matrix-sdk/build/outputs/aar/matrix-sdk-debug-....aar to riot-android/vector/libs/matrix-sdk.aar
+- clone the repository https://github.com/matrix-org/matrix-android-sdk
+- open the project with android studio
+- build it
+- copy /matrix-android-sdk/matrix-sdk/build/outputs/aar/matrix-sdk-debug-....aar to riot-android/vector/libs/matrix-sdk.aar
    
-- generate the other aar files
+generate the other aar files
+----------------------------
 
-see the section "Jitsi integration"
+- see the section "Jitsi integration"
    
-- compile the matrix SDK with the Riot-android project
+compile the matrix SDK with the Riot-android project
+----------------------------------------------------
 
-in riot-android/settings.gradle, uncomment //include.. and //project..
-in riot-android/vector/build.gradle, comment compile(name: 'matrix-sdk', ext: 'aar') and uncomment compile project(':matrix-sdk')
+- in riot-android/settings.gradle, uncomment //include.. and //project..
+- in riot-android/vector/build.gradle, comment compile(name: 'matrix-sdk', ext: 'aar') and uncomment compile project(':matrix-sdk')
 
 Make your own flavour
 =====================
 
 Let says your application is named MyRiot : You have to create your own flavour.
 
-- Modify riot-android/vector/build.gradle
+Modify riot-android/vector/build.gradle
+---------------------------------------
 
 In "productFlavors" section, duplicate "app" group if you plan to use GCM/FCM or "appfdroid" if don't.
 
 for example, with GCM, it would give
-appmyriot {
-    applicationId "im.myriot"
-    // use the version name
-    versionCode rootProject.ext.versionCodeProp
-    versionName rootProject.ext.versionNameProp
-    resValue "string", "allow_gcm_use", "true"
-    resValue "string", "allow_ga_use", "true"
-    resValue "string", "short_flavor_description", "G"
-    resValue "string", "flavor_description", "GooglePlay"
-}
+    appmyriot {
+        applicationId "im.myriot"
+        // use the version name
+        versionCode rootProject.ext.versionCodeProp
+        versionName rootProject.ext.versionNameProp
+        resValue "string", "allow_gcm_use", "true"
+        resValue "string", "allow_ga_use", "true"
+        resValue "string", "short_flavor_description", "G"
+        resValue "string", "flavor_description", "GooglePlay"
+    }
 
-if you use GCM, duplicate appCompile at the end of this file and replace appCompile by appmyriotCompile.
-if you don't, update the "if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid"))" to include your flavor.
+- if you use GCM, duplicate appCompile at the end of this file and replace appCompile by appmyriotCompile.
+- if you don't, update the "if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid"))" to include your flavor.
 
-- Create your flavour directory
+Create your flavour directory
+-----------------------------
 
-Copy riot-android/vector/src/app or appfroid if you use GCM or you don’t.
-Rename it to appmyriot.
-If you use GCM, you will need to generate your own google-services.json.
+- Copy riot-android/vector/src/app or appfroid if you use GCM or you don’t.
+- Rename it to appmyriot.
+- If you use GCM, you will need to generate your own google-services.json.
 
-- Customise your flavour
+Customise your flavour
+----------------------
 
-Open riot-android/vector/src/appmyriot/AndroidManifest.xml
-Comment the provider section.
-Change the application name to myRiot with "android:label="myRiot""
-Any other field can be customised by adding the resources in this directory classpath.
-Open Android studio, select your flavour.
-Build and run the app : you made your first Riot app.
+- Open riot-android/vector/src/appmyriot/AndroidManifest.xml
+- Comment the provider section.
+- Change the application name to myRiot with "android:label="myRiot""
+- Any other field can be customised by adding the resources in this directory classpath.
+- Open Android studio, select your flavour.
+- Build and run the app : you made your first Riot app.
 
 You will need to manage your own provider because "im.vector" is already used (look at VectorContentProvider to manage it).
 
@@ -113,14 +120,14 @@ Customise your application settings with a custom google play link
 It is possible to set some default values to Riot with some extra parameters to the google play link.
 
 - Use the https://developers.google.com/analytics/devguides/collection/android/v4/campaigns URL generator (at the bottom)
+- Set "Campaign Source"
+- Set "Campaign Content" with the extra parameters (e.g. is=http://my__is.org&hs=http://my_hs.org)
+- Generate the customised link
 
-Set "Campaign Source"
-Set "Campaign Content" with the extra parameters (e.g. is=http://my__is.org&hs=http://my_hs.org)
-Generate the customised link
-
-- Supported extra parameters
-is : identidy server URL
-hs : home server URL
+Supported extra parameters
+-------------------------
+- is : identidy server URL
+- hs : home server URL
 
 FAQ
 ===
