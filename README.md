@@ -129,7 +129,7 @@ It is possible to set some default values to Riot with some extra parameters to 
 
 Supported extra parameters
 -------------------------
-- is : identidy server URL
+- is : identity server URL
 - hs : home server URL
 
 FAQ
