@@ -742,6 +742,11 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     @Override
+    public void addHomescreenShortcut(MXSession session, String roomId) {
+        RoomUtils.addHomescreenShortcut(getActivity(), session, roomId);
+    }
+
+    @Override
     public void onToggleRoomNotifications(MXSession session, String roomId) {
         BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
 

@@ -20,6 +20,10 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -53,6 +57,7 @@ import java.util.regex.Pattern;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterUtils;
 
 public class RoomUtils {
@@ -71,6 +76,8 @@ public class RoomUtils {
         void moveToLowPriority(MXSession session, String roomId);
 
         void onLeaveRoom(MXSession session, String roomId);
+
+        void addHomescreenShortcut(MXSession session, String roomId);
     }
 
     public interface HistoricalRoomActionListener {
@@ -462,6 +469,7 @@ public class RoomUtils {
 
         if (room.isLeft()) {
             popup.getMenu().setGroupVisible(R.id.active_room_actions, false);
+            popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, false);
             popup.getMenu().setGroupVisible(R.id.historical_room_actions, true);
 
             if (historicalRoomActionListener != null) {
@@ -477,6 +485,19 @@ public class RoomUtils {
             }
         } else {
             popup.getMenu().setGroupVisible(R.id.active_room_actions, true);
+
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, false);
+            } else {
+                ShortcutManager manager = context.getSystemService(ShortcutManager.class);
+
+                if(!manager.isRequestPinShortcutSupported()) {
+                    popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, false);
+                } else {
+                    popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, true);
+                }
+            }
+
             popup.getMenu().setGroupVisible(R.id.historical_room_actions, false);
 
             MenuItem item;
@@ -537,6 +558,10 @@ public class RoomUtils {
                                 moreActionListener.onToggleDirectChat(session, room.getRoomId());
                                 break;
                             }
+                            case R.id.ic_action_add_homescreen_shortcut: {
+                                moreActionListener.addHomescreenShortcut(session, room.getRoomId());
+                                break;
+                            }
                         }
                         return false;
                     }
@@ -589,6 +614,43 @@ public class RoomUtils {
                 })
                 .create()
                 .show();
+    }
+
+    public static void addHomescreenShortcut(final Context context, final MXSession session, final String roomId) {
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
+        }
+
+        ShortcutManager manager = context.getSystemService(ShortcutManager.class);
+
+        if(!manager.isRequestPinShortcutSupported()) {
+            return;
+        }
+
+        Room room = session.getDataHandler().getRoom(roomId);
+        if(null == room) {
+            return;
+        }
+
+        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+
+        Icon icon = Icon.createWithBitmap(VectorUtils.getAvatar(context, VectorUtils.getAvatarColor(roomId), roomName, true));
+
+
+        Intent intent = new Intent(context, VectorRoomActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+        ShortcutInfo info = new ShortcutInfo.Builder(context, roomId)
+                .setShortLabel(roomName)
+                .setIcon(icon)
+                .setIntent(intent)
+                .build();
+
+
+        manager.requestPinShortcut(info, null);
     }
 
     /**
