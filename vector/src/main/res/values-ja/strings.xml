@@ -599,7 +599,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="widget_integration_room_not_recognised">この部屋は承認されていません。</string>
     <string name="widget_integration_failed_to_send_request">リクエストの送信に失敗しました。</string>
     <string name="widget_integration_unable_to_create">ウィジェットを作成できません。</string>
-    <string name="widget_integration_need_to_be_able_to_invite">それを行うためにはユーザーを招待可能にする必要があります。</string>
+    <string name="widget_integration_need_to_be_able_to_invite">それを行うためにはユーザを招待可能にする必要があります。</string>
     <string name="event_formatter_widget_removed">%1$s は %2$s によって削除されました</string>
     <string name="widget_no_power_to_manage">この部屋のウィジェットを管理する権限が必要です</string>
     <string name="widget_creation_failure">ウィジェットの作成に失敗しました</string>
@@ -664,7 +664,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_participants_power_level_prompt">あなたと同じ権限をこのユーザーに与えるというこの変更は、やり直すことができません。
 よろしいですか？</string>
 
-    <string name="people_search_local_contacts">ローカルの連絡先</string>
+    <string name="people_search_local_contacts">端末の連絡先 (%d)</string>
     <string name="people_search_user_directory">ユーザディレクトリ</string>
     <string name="people_search_filter_text">Matrixユーザのみ</string>
 
@@ -682,7 +682,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_details_selected">選択済</string>
     <string name="malformed_id">不正な形式のIDです。メールアドレスまたは\'@localpart:domain\'のようなMatrix IDを入力してください</string>
     <string name="room_event_action_report_prompt_reason">このコンテンツを報告する理由</string>
-    <string name="room_event_action_report_prompt_ignore_user">このユーザによるすべてのメッセージを表示しませんか？</string>
+    <string name="room_event_action_report_prompt_ignore_user">このユーザによるすべてのメッセージを非表示にしますか？</string>
     <string name="room_event_action_cancel_upload">アップロードをキャンセルする</string>
     <string name="room_event_action_cancel_download">ダウンロードをキャンセルする</string>
 
@@ -698,11 +698,11 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_recents_invites">招待</string>
     <string name="room_recents_join_room_prompt">部屋のIDまたは部屋のエイリアスを入力してください</string>
 
-    <string name="directory_search_room_for">%2$sに%1$d個の部屋が見つかりました</string>
-    <string name="directory_search_rooms_for">%2$sに%1$s個の部屋が見つかりました</string>
+    <string name="directory_search_room_for">%2$sに%1$d部屋見つかりました</string>
+    <string name="directory_search_rooms_for">%2$sに%1$s部屋見つかりました</string>
     <string name="directory_searching_title">ディレクトリを検索中..</string>
 
-    <string name="room_sliding_menu_third_party_notices">サードパーティへの通知</string>
+    <string name="room_sliding_menu_third_party_notices">サードパーティのライセンスに関する通知</string>
     <string name="settings_summary_app_info_link">このアプリのシステムの情報を見る</string>
     <string name="settings_title_app_info_link">アプリの情報</string>
 
@@ -710,7 +710,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_containing_my_user_name">自分のユーザネームを含むメッセージ</string>
     <string name="settings_version">バージョン</string>
     <string name="settings_olm_version">olmのバージョン</string>
-    <string name="settings_third_party_notices">サードパーティへの通知</string>
+    <string name="settings_third_party_notices">サードパーティのライセンスに関する通知</string>
     <string name="settings_home_display">ホーム</string>
     <string name="settings_pin_missed_notifications">逃した通知がある部屋を固定する</string>
     <string name="settings_pin_unread_messages">未読のメッセージがある部屋を固定する</string>
@@ -750,7 +750,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encryption_information_sender_device_information">発信者装置の情報</string>
     <string name="encryption_information_name">名前</string>
     <string name="encryption_information_device_key">デバイスキー</string>
-    <string name="encryption_information_ed25519_fingerprint">Ed25519フィンガープリント</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 フィンガープリント</string>
 
     <string name="encryption_information_not_verified">未認証</string>
     <string name="encryption_information_blocked">ブラックリスト</string>
@@ -774,8 +774,8 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="room_unsent_messages_notification">メッセージが未送信です。今%1$sまたは%2$sですか？</string>
     <string name="room_unknown_devices_messages_notification">不明なデバイスが存在しているため、メッセージを送ることができませんでした。今%1$sまたは%2$sですか？</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">要求されたフィンガープリントキーEd25519</string>
-    <string name="settings_labs_create_conference_with_jitsi">jitsiを用いてビデオ会議を始める</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">要求されたフィンガープリントキー Ed25519</string>
+    <string name="settings_labs_create_conference_with_jitsi">jitsiを用いて会議通話を始める</string>
     <string name="active_widgets">%1$d個の接続中のウィジェット</string>
 
     // Widget Integration Manager
