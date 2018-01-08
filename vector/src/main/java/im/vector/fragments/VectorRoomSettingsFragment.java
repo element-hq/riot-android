@@ -134,6 +134,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     private static final String BANNED_PREFERENCE_KEY_BASE = "BANNED_PREFERENCE_KEY_BASE";
 
+    private static final String FLAIR_PREFERENCE_KEY_BASE = "FLAIR_PREFERENCE_KEY_BASE";
+
     private static final String UNKNOWN_VALUE = "UNKNOWN_VALUE";
 
     // business code
@@ -1344,29 +1346,144 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     // flair management
     //================================================================================
 
+    private final ApiCallback mFlairUpdatesCallback = new ApiCallback<Void>() {
+        @Override
+        public void onSuccess(Void info) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoadingView(false);
+                    refreshFlair();
+                }
+            });
+        }
+
+        /**
+         * Error management.
+         * @param errorMessage the error message
+         */
+        private void onError(final String errorMessage) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                    hideLoadingView(false);
+                    refreshFlair();
+                }
+            });
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onMatrixError(MatrixError e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+    };
+
+    /**
+     * Tells if the current user can updates the related group aka flairs
+     *
+     * @return true if the user is allowed.
+     */
+    private boolean canUpdateFlair() {
+        boolean canUpdateAliases = false;
+
+        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+
+        if (null != powerLevels) {
+            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+            canUpdateAliases = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_RELATED_GROUPS);
+        }
+
+        return canUpdateAliases;
+    }
+
     /**
      * Refresh the flair list
      */
     private void refreshFlair() {
-        List<String> groups = mRoom.getLiveState().getRelatedGroups();
+        final List<String> groups = mRoom.getLiveState().getRelatedGroups();
         Collections.sort(groups, String.CASE_INSENSITIVE_ORDER);
 
         mFlairSettingsCategory.removeAll();
 
         if (!groups.isEmpty()) {
-            for (String groupId : groups) {
+            for (final String groupId : groups) {
                 VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
                 preference.setTitle(groupId);
-                preference.setKey(BANNED_PREFERENCE_KEY_BASE + groupId);
+                preference.setKey(FLAIR_PREFERENCE_KEY_BASE + groupId);
 
+                preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                    @Override
+                    public boolean onPreferenceLongClick(Preference preference) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                displayLoadingView();
+                                mRoom.removeRelatedGroup(groupId, mFlairUpdatesCallback);
+                            }
+                        });
+
+                        return true;
+                    }
+                });
                 mFlairSettingsCategory.addPreference(preference);
             }
         } else {
             VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
             preference.setTitle(getString(R.string.room_settings_no_flair));
-            preference.setKey(BANNED_PREFERENCE_KEY_BASE + "no_flair");
+            preference.setKey(FLAIR_PREFERENCE_KEY_BASE + "no_flair");
 
             mFlairSettingsCategory.addPreference(preference);
+        }
+
+        if (canUpdateFlair()) {
+            // display the "add addresses" entry
+            EditTextPreference addAddressPreference = new EditTextPreference(getActivity());
+            addAddressPreference.setTitle(R.string.room_settings_add_new_group);
+            addAddressPreference.setDialogTitle(R.string.room_settings_add_new_group);
+            addAddressPreference.setKey(FLAIR_PREFERENCE_KEY_BASE + "__add");
+            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
+
+            addAddressPreference.setOnPreferenceChangeListener(
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            final String groupId = ((String) newValue).trim();
+
+                            // ignore empty alias
+                            if (!TextUtils.isEmpty(groupId)) {
+                                if (!MXSession.isGroupId(groupId)) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    builder.setTitle(R.string.room_settings_invalid_group_format_dialog_title);
+                                    builder.setMessage(getString(R.string.room_settings_invalid_group_format_dialog_body, groupId));
+                                    builder.setPositiveButton(R.string.ok, null);
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+                                } else if (!groups.contains(groupId)) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            displayLoadingView();
+                                            mRoom.addRelatedGroup(groupId, mFlairUpdatesCallback);
+                                        }
+                                    });
+                                }
+                            }
+                            return false;
+                        }
+                    });
+
+            mFlairSettingsCategory.addPreference(addAddressPreference);
         }
     }
 
