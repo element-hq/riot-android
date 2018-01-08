@@ -767,4 +767,24 @@
     <string name="share_without_verifying">不验证而分享</string>
     <string name="ignore_request">忽略请求</string>
 
+<string name="title_activity_bug_report">错误报告</string>
+
+    <string name="option_take_photo">拍照</string>
+    <string name="option_take_video">拍视频</string>
+
+    <string name="settings_labs_native_camera">使用本地相机</string>
+
+    // share keys
+    <string name="conference_call_warning_title">警告！</string>
+    <string name="conference_call_warning_message">会议通话正在开发中，可能不可靠。</string>
+
+    // slash commands
+    <string name="command_error">命令错误</string>
+    <string name="unrecognized_command">不可识别的命令：%s</string>
+
+    // notification statuses
+    <string name="notification_off">关闭</string>
+    <string name="notification_on">打开</string>
+    <string name="encrypted_message">加密的消息</string>
+
 </resources>
