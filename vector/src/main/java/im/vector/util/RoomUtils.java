@@ -23,6 +23,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -30,6 +32,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import org.matrix.androidsdk.MXSession;
@@ -45,6 +48,7 @@ import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -77,7 +81,7 @@ public class RoomUtils {
 
         void onLeaveRoom(MXSession session, String roomId);
 
-        void addHomescreenShortcut(MXSession session, String roomId);
+        void addHomeScreenShortcut(MXSession session, String roomId);
     }
 
     public interface HistoricalRoomActionListener {
@@ -486,12 +490,12 @@ public class RoomUtils {
         } else {
             popup.getMenu().setGroupVisible(R.id.active_room_actions, true);
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, false);
             } else {
                 ShortcutManager manager = context.getSystemService(ShortcutManager.class);
 
-                if(!manager.isRequestPinShortcutSupported()) {
+                if (!manager.isRequestPinShortcutSupported()) {
                     popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, false);
                 } else {
                     popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, true);
@@ -559,7 +563,7 @@ public class RoomUtils {
                                 break;
                             }
                             case R.id.ic_action_add_homescreen_shortcut: {
-                                moreActionListener.addHomescreenShortcut(session, room.getRoomId());
+                                moreActionListener.addHomeScreenShortcut(session, room.getRoomId());
                                 break;
                             }
                         }
@@ -616,27 +620,59 @@ public class RoomUtils {
                 .show();
     }
 
-    public static void addHomescreenShortcut(final Context context, final MXSession session, final String roomId) {
-
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+    /**
+     * Add a room shortcut to the home screen (Android >= O).
+     *
+     * @param context the context
+     * @param session the session
+     * @param roomId  the room Id
+     */
+    @SuppressLint("NewApi")
+    public static void addHomeScreenShortcut(final Context context, final MXSession session, final String roomId) {
+        // android >=  O only
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return;
         }
 
         ShortcutManager manager = context.getSystemService(ShortcutManager.class);
 
-        if(!manager.isRequestPinShortcutSupported()) {
+        if (!manager.isRequestPinShortcutSupported()) {
             return;
         }
 
         Room room = session.getDataHandler().getRoom(roomId);
-        if(null == room) {
+
+        if (null == room) {
             return;
         }
 
         String roomName = VectorUtils.getRoomDisplayName(context, session, room);
 
-        Icon icon = Icon.createWithBitmap(VectorUtils.getAvatar(context, VectorUtils.getAvatarColor(roomId), roomName, true));
+        Bitmap bitmap = null;
 
+        // try to retrieve the avatar from the medias cache
+        if (!TextUtils.isEmpty(room.getAvatarUrl())) {
+            int size = context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
+
+            // check if the thumbnail is already downloaded
+            File f = session.getMediasCache().thumbnailCacheFile(room.getAvatarUrl(), size);
+
+            if (null != f) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                try {
+                    bitmap = BitmapFactory.decodeFile(f.getPath(), options);
+                } catch (OutOfMemoryError oom) {
+                    Log.e(LOG_TAG, "decodeFile failed with an oom");
+                }
+            }
+        }
+
+        if (null == bitmap) {
+            bitmap = VectorUtils.getAvatar(context, VectorUtils.getAvatarColor(roomId), roomName, true);
+        }
+
+        Icon icon = Icon.createWithBitmap(bitmap);
 
         Intent intent = new Intent(context, VectorRoomActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

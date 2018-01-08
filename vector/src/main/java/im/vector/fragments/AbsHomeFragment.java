@@ -261,8 +261,8 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
     }
 
     @Override
-    public void addHomescreenShortcut(MXSession session, String roomId) {
-        RoomUtils.addHomescreenShortcut(getActivity(), session, roomId);
+    public void addHomeScreenShortcut(MXSession session, String roomId) {
+        RoomUtils.addHomeScreenShortcut(getActivity(), session, roomId);
     }
 
     /*

@@ -742,8 +742,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     @Override
-    public void addHomescreenShortcut(MXSession session, String roomId) {
-        RoomUtils.addHomescreenShortcut(getActivity(), session, roomId);
+    public void addHomeScreenShortcut(MXSession session, String roomId) {
+        RoomUtils.addHomeScreenShortcut(getActivity(), session, roomId);
     }
 
     @Override
