@@ -71,6 +71,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -97,6 +98,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     private static final String TAG_FRAGMENT_RECEIPTS_DIALOG = "TAG_FRAGMENT_RECEIPTS_DIALOG";
+    private static final String TAG_FRAGMENT_USER_GROUPS_DIALOG = "TAG_FRAGMENT_USER_GROUPS_DIALOG";
+
     private IListFragmentEventListener mHostActivityListener;
 
     // onMediaAction actions
@@ -1099,6 +1102,22 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             fragment.show(fm, TAG_FRAGMENT_RECEIPTS_DIALOG);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onMoreReadReceiptClick() failed " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void onGroupFlairClick(String userId, List<String> groupIds) {
+        try {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+
+            VectorUserGroupsDialogFragment fragment = (VectorUserGroupsDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_USER_GROUPS_DIALOG);
+            if (fragment != null) {
+                fragment.dismissAllowingStateLoss();
+            }
+            fragment = VectorUserGroupsDialogFragment.newInstance(mSession.getMyUserId(), userId, groupIds);
+            fragment.show(fm, TAG_FRAGMENT_USER_GROUPS_DIALOG);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onGroupFlairClick() failed " + e.getMessage());
         }
     }
 

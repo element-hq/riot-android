@@ -40,9 +40,14 @@ import com.google.gson.JsonObject;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
+import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.group.Group;
+import org.matrix.androidsdk.rest.model.group.GroupProfile;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -56,6 +61,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -83,8 +89,11 @@ class VectorMessagesAdapterHelper {
     private static final Pattern FENCED_CODE_BLOCK_PATTERN = Pattern.compile("(?m)(?<=^```)|(?=^```)");
 
     private IMessagesAdapterActionsListener mEventsListener;
-    private final MXSession mSession;
+
     private final Context mContext;
+    private final MXSession mSession;
+    private Room mRoom = null;
+
     private MatrixLinkMovementMethod mLinkMovementMethod;
 
     VectorMessagesAdapterHelper(Context context, MXSession session) {
@@ -136,12 +145,14 @@ class VectorMessagesAdapterHelper {
     public void setSenderValue(View convertView, MessageRow row, boolean isMergedView) {
         // manage sender text
         TextView senderTextView = convertView.findViewById(R.id.messagesAdapter_sender);
+        View groupFlairView = convertView.findViewById(R.id.messagesAdapter_flair_groups_list);
 
         if (null != senderTextView) {
             Event event = row.getEvent();
 
             if (isMergedView) {
                 senderTextView.setVisibility(View.GONE);
+                groupFlairView.setVisibility(View.GONE);
             } else {
                 String eventType = event.getType();
 
@@ -155,6 +166,7 @@ class VectorMessagesAdapterHelper {
                         Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType) ||
                         Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
                     senderTextView.setVisibility(View.GONE);
+                    groupFlairView.setVisibility(View.GONE);
                 } else {
                     senderTextView.setVisibility(View.VISIBLE);
                     senderTextView.setText(getUserDisplayName(event.getSender(), row.getRoomState()));
@@ -170,9 +182,146 @@ class VectorMessagesAdapterHelper {
                             }
                         }
                     });
+
+                    refreshGroupFlairView(groupFlairView, event);
                 }
             }
         }
+    }
+
+    /**
+     * Refresh the group flair view
+     * @param groupFlairView the flairs view
+     * @param event the event
+     */
+    private void refreshGroupFlairView(final View groupFlairView, final Event event) {
+        groupFlairView.setTag(event.getSender());
+        groupFlairView.setVisibility(View.GONE);
+
+        if (null == mRoom) {
+            mRoom = mSession.getDataHandler().getRoom(event.roomId);
+        }
+
+        // no related groups to this room
+        if (mRoom.getLiveState().getRelatedGroups().isEmpty()) {
+            return;
+        }
+
+        mSession.getGroupsManager().getUserPublicisedGroups(event.getSender(), false, new ApiCallback<Set<String>>() {
+            @Override
+            public void onSuccess(Set<String> groupIdsSet) {
+
+                if (!groupIdsSet.isEmpty()) {
+                    // keeps only the intersections
+                    groupIdsSet.retainAll(mRoom.getLiveState().getRelatedGroups());
+                }
+
+                if (TextUtils.equals((String)groupFlairView.getTag(), event.getSender())) {
+                    if (groupIdsSet.isEmpty()) {
+                        groupFlairView.setVisibility(View.GONE);
+                    } else {
+                        if (!mSession.isAlive()) {
+                            return;
+                        }
+
+                        groupFlairView.setVisibility(View.VISIBLE);
+
+                        ArrayList<ImageView> imageViews = new ArrayList<>();
+
+                        imageViews.add((ImageView)(groupFlairView.findViewById(R.id.message_avatar_group_1).findViewById(R.id.avatar_img)));
+                        imageViews.add((ImageView)(groupFlairView.findViewById(R.id.message_avatar_group_2).findViewById(R.id.avatar_img)));
+                        imageViews.add((ImageView)(groupFlairView.findViewById(R.id.message_avatar_group_3).findViewById(R.id.avatar_img)));
+
+                        TextView moreText = groupFlairView.findViewById(R.id.message_more_than_expected);
+
+                        final List<String> groupIds = new ArrayList<>(groupIdsSet);
+                        int index = 0;
+                        int bound = Math.min(groupIds.size(), imageViews.size());
+
+                        for (; index < bound; index++) {
+                            final String groupId = groupIds.get(index);
+                            final ImageView imageView = imageViews.get(index);
+
+                            imageView.setVisibility(View.VISIBLE);
+
+                            Group group = mSession.getGroupsManager().getGroup(groupId);
+
+                            if (null == group) {
+                                group = new Group(groupId);
+                            }
+                            VectorUtils.loadGroupAvatar(mContext, mSession, imageView, group);
+
+                            mSession.getGroupsManager().getGroupProfile(groupId, new ApiCallback<GroupProfile>() {
+                                private void refresh(GroupProfile profile) {
+                                    if (TextUtils.equals((String) groupFlairView.getTag(), event.getSender())) {
+                                        Group group = new Group(groupId);
+                                        group.setGroupProfile(profile);
+                                        VectorUtils.loadGroupAvatar(mContext, mSession, imageView, group);
+                                    }
+                                }
+
+                                @Override
+                                public void onSuccess(GroupProfile groupProfile) {
+                                    refresh(groupProfile);
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    refresh(null);
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    refresh(null);
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    refresh(null);
+                                }
+                            });
+                        }
+
+                        for (; index < imageViews.size(); index++) {
+                            imageViews.get(index).setVisibility(View.GONE);
+                        }
+
+                        moreText.setVisibility((groupIdsSet.size() <= imageViews.size()) ? View.GONE : View.VISIBLE);
+                        moreText.setText("+" + (groupIdsSet.size() - imageViews.size()));
+
+                        if (groupIdsSet.size() > 0) {
+                            groupFlairView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (null != mEventsListener) {
+                                        mEventsListener.onGroupFlairClick(event.getSender()
+                                                , groupIds);
+                                    }
+                                }
+                            });
+                        } else {
+                            groupFlairView.setOnClickListener(null);
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage());
+            }
+        });
     }
 
     /**
