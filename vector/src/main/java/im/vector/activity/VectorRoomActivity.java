@@ -1040,12 +1040,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                     displayWidget(widgets.get(n));
                                 }
                             })
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    displayWidget(widgets.get(0));
-                                }
-                            })
                             .setNegativeButton(R.string.cancel, null)
                             .show();
                 }

@@ -1170,12 +1170,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                             }
                         }
                     })
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            invitePeopleToNewRoom();
-                        }
-                    })
                     .setNegativeButton(R.string.cancel, null)
                     .show();
         }
