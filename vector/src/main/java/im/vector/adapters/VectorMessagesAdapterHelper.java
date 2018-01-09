@@ -716,10 +716,13 @@ class VectorMessagesAdapterHelper {
      * @return true if it contains code blocks
      */
     boolean containsFencedCodeBlocks(final Message message) {
+        if ((null == message.body) || !message.body.contains("```")) {
+            return false;
+        }
+
         final String[] blocks = getFencedCodeBlocks(message);
         return (blocks.length > 1);
     }
-
 
     private Map<String, String[]> mCodeBlocksMap = new HashMap<>();
 
