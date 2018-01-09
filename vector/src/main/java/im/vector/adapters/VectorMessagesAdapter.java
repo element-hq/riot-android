@@ -943,8 +943,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (Message.MSGTYPE_TEXT.equals(msgType)) {
                 if (containsOnlyEmojis(message.body)) {
                     viewType = ROW_TYPE_EMOJI;
-                } else if (PreferencesManager.isMarkdownEnabled(mContext)
-                        && mHelper.containsFencedCodeBlocks(message)) {
+                } else if (!TextUtils.isEmpty(message.formatted_body) && mHelper.containsFencedCodeBlocks(message)) {
                     viewType = ROW_TYPE_CODE;
                 } else {
                     viewType = ROW_TYPE_TEXT;
@@ -1133,6 +1132,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             boolean shouldHighlighted = (null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event);
 
             final List<TextView> textViews;
+
             if (ROW_TYPE_CODE == viewType) {
                 textViews = populateRowTypeCode(message, convertView, shouldHighlighted);
             } else {
@@ -1198,19 +1198,25 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                                                final View convertView,
                                                final boolean shouldHighlighted) {
         final List<TextView> textViews = new ArrayList<>();
-        final LinearLayout container = (LinearLayout) convertView.findViewById(R.id.messages_container);
+        final LinearLayout container = convertView.findViewById(R.id.messages_container);
+
+        // remove older blocks
         container.removeAllViews();
+
         final String[] blocks = mHelper.getFencedCodeBlocks(message);
         for (int i = 0; i < blocks.length; i++) {
+
             // Start of fenced block
             if (blocks[i].equals("```") && i <= blocks.length - 3 && blocks[i + 2].equals("```")) {
                 final SpannableString threeTickBlock = new SpannableString(blocks[i + 1]);
                 final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
                 container.addView(blockView);
-                final TextView tv = (TextView) blockView.findViewById(R.id.messagesAdapter_body);
+                final TextView tv = blockView.findViewById(R.id.messagesAdapter_body);
                 mHelper.highlightFencedCode(tv, threeTickBlock);
                 i += 2;
                 textViews.add(tv);
+
+                ((View)tv.getParent()).setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
             } else {
                 // Not a fenced block
                 final TextView tv = (TextView) mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
