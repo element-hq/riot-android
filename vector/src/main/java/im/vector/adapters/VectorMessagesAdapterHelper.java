@@ -196,28 +196,37 @@ class VectorMessagesAdapterHelper {
      * @param event          the event
      */
     private void refreshGroupFlairView(final View groupFlairView, final Event event) {
-        groupFlairView.setTag(event.getSender());
+        final String tag =  event.getSender() +  "__" +  event.eventId;
+
+        groupFlairView.setTag(tag);
         groupFlairView.setVisibility(View.GONE);
 
         if (null == mRoom) {
             mRoom = mSession.getDataHandler().getRoom(event.roomId);
         }
 
+        Log.d(LOG_TAG, "## refreshGroupFlairView () : eventId " + event.eventId + " from " + event.sender);
+
         // no related groups to this room
         if (mRoom.getLiveState().getRelatedGroups().isEmpty()) {
+            Log.d(LOG_TAG, "## refreshGroupFlairView () : no related group");
             return;
         }
 
         mSession.getGroupsManager().getUserPublicisedGroups(event.getSender(), false, new ApiCallback<Set<String>>() {
             @Override
             public void onSuccess(Set<String> groupIdsSet) {
+                Log.d(LOG_TAG, "## refreshGroupFlairView () : " + event.sender + " allows flair to " + groupIdsSet);
+                Log.d(LOG_TAG, "## refreshGroupFlairView () : room related groups " + mRoom.getLiveState().getRelatedGroups());
 
                 if (!groupIdsSet.isEmpty()) {
                     // keeps only the intersections
                     groupIdsSet.retainAll(mRoom.getLiveState().getRelatedGroups());
                 }
 
-                if (TextUtils.equals((String) groupFlairView.getTag(), event.getSender())) {
+                Log.d(LOG_TAG, "## refreshGroupFlairView () : group ids to display " + groupIdsSet);
+
+                if (TextUtils.equals((String) groupFlairView.getTag(), tag)) {
                     if (groupIdsSet.isEmpty()) {
                         groupFlairView.setVisibility(View.GONE);
                     } else {
@@ -252,32 +261,39 @@ class VectorMessagesAdapterHelper {
                             }
                             VectorUtils.loadGroupAvatar(mContext, mSession, imageView, group);
 
+                            Log.d(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId);
+
                             mSession.getGroupsManager().getGroupProfile(groupId, new ApiCallback<GroupProfile>() {
                                 private void refresh(GroupProfile profile) {
-                                    if (TextUtils.equals((String) groupFlairView.getTag(), event.getSender())) {
+                                    if (TextUtils.equals((String) groupFlairView.getTag(), tag)) {
                                         Group group = new Group(groupId);
                                         group.setGroupProfile(profile);
+                                        Log.d(LOG_TAG, "## refreshGroupFlairView () : refresh group avatar " + groupId);
                                         VectorUtils.loadGroupAvatar(mContext, mSession, imageView, group);
                                     }
                                 }
 
                                 @Override
                                 public void onSuccess(GroupProfile groupProfile) {
+                                    Log.d(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " succeeded");
                                     refresh(groupProfile);
                                 }
 
                                 @Override
                                 public void onNetworkError(Exception e) {
+                                    Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage());
                                     refresh(null);
                                 }
 
                                 @Override
                                 public void onMatrixError(MatrixError e) {
+                                    Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage());
                                     refresh(null);
                                 }
 
                                 @Override
                                 public void onUnexpectedError(Exception e) {
+                                    Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage());
                                     refresh(null);
                                 }
                             });
