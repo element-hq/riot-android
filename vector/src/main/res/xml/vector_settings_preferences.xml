@@ -115,6 +115,15 @@
 
     <im.vector.preference.VectorDividerCategory/>
 
+    <PreferenceCategory
+        android:key="SETTINGS_GROUPS_FLAIR_KEY"
+        android:title="@string/settings_flair" >
+
+
+    </PreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory/>
+
     <PreferenceCategory android:title="@string/settings_notifications">
 
         <im.vector.preference.VectorCustomActionEditTextPreference

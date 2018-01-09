@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -72,6 +73,8 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.group.Group;
+import org.matrix.androidsdk.rest.model.search.SearchGroup;
 import org.matrix.androidsdk.rest.model.sync.DeviceInfo;
 import org.matrix.androidsdk.rest.model.sync.DevicesListResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -86,12 +89,14 @@ import org.matrix.androidsdk.util.ResourceUtils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -107,6 +112,7 @@ import im.vector.preference.BingRulePreference;
 import im.vector.preference.ProgressBarPreference;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
+import im.vector.preference.VectorGroupPreference;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ThemeUtils;
@@ -198,6 +204,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private EditTextPreference mSyncRequestTimeoutPreference;
     private EditTextPreference mSyncRequestDelayPreference;
     private PreferenceCategory mLabsCategory;
+
+    private PreferenceCategory mGroupsFlairCategory;
 
     // static constructor
     public static VectorSettingsPreferencesFragment newInstance(String matrixId) {
@@ -513,7 +521,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         }
                     });
                 } else if (preference instanceof BingRulePreference) {
-                    final BingRulePreference bingRulePreference = (BingRulePreference)preference;
+                    final BingRulePreference bingRulePreference = (BingRulePreference) preference;
                     bingRulePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
@@ -613,6 +621,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         mCryptographyCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY);
         mCryptographyCategoryDivider = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY);
         mLabsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_LABS_PREFERENCE_KEY);
+        mGroupsFlairCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY);
 
         // preference to start the App info screen, to facilitate App permissions access
         Preference applicationInfoLInkPref = findPreference(APP_INFO_LINK_PREFERENCE_KEY);
@@ -756,6 +765,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         refreshPhoneNumbersList();
         refreshIgnoredUsersList();
         refreshDevicesList();
+        refreshGroupFlairsList();
     }
 
     @Override
@@ -921,11 +931,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             if (null != preference) {
                 if (preference instanceof BingRulePreference) {
-                    BingRulePreference bingRulePreference = (BingRulePreference)preference;
+                    BingRulePreference bingRulePreference = (BingRulePreference) preference;
                     bingRulePreference.setEnabled((null != rules) && isConnected);
                     bingRulePreference.setBingRule(mSession.getDataHandler().pushRules().findDefaultRule(mPushesRuleByResourceId.get(resourceText)));
                 } else {
-                    CheckBoxPreference switchPreference = (CheckBoxPreference)preference;
+                    CheckBoxPreference switchPreference = (CheckBoxPreference) preference;
                     if (resourceText.equals(PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)) {
                         switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
                     } else if (resourceText.equals(PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY)) {
@@ -1387,7 +1397,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             for (String resourceText : mPushesRuleByResourceId.keySet()) {
                 Preference preference = findPreference(resourceText);
 
-                if ((null != preference) &&  (preference instanceof CheckBoxPreference)) {
+                if ((null != preference) && (preference instanceof CheckBoxPreference)) {
                     String ruleId = mPushesRuleByResourceId.get(resourceText);
 
                     BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
@@ -1405,7 +1415,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             isEnabled = false;
                         } else if (1 == actions.size()) {
                             try {
-                                isEnabled = !TextUtils.equals((String)(actions.get(0)), BingRule.ACTION_DONT_NOTIFY);
+                                isEnabled = !TextUtils.equals((String) (actions.get(0)), BingRule.ACTION_DONT_NOTIFY);
                             } catch (Exception e) {
                                 Log.e(LOG_TAG, "## refreshPreferences failed " + e.getMessage());
                             }
@@ -2914,5 +2924,134 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
     }
 
+    //==============================================================================================================
+    // Group flairs management
+    //==============================================================================================================
 
+    /**
+     * Force the refresh of the devices list.<br>
+     * The devices list is the list of the devices where the user as looged in.
+     * It can be any mobile device, as any browser.
+     */
+    private void refreshGroupFlairsList() {
+        if (null != mSession) {
+            // display a spinner while refreshing
+            if (0 == mGroupsFlairCategory.getPreferenceCount()) {
+                ProgressBarPreference preference = new ProgressBarPreference(getActivity());
+                mGroupsFlairCategory.addPreference(preference);
+            }
+
+            mSession.getGroupsManager().getUserPublicisedGroups(mSession.getMyUserId(), true, new ApiCallback<Set<String>>() {
+                @Override
+                public void onSuccess(Set<String> publicisedGroups) {
+                    buildGroupsList(publicisedGroups);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    // NOP
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    // NOP
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    // NOP
+                }
+            });
+        }
+    }
+
+    // current publicised group list
+    private Set<String> mPublicisedGroups = null;
+
+    /**
+     * Build the groups list.
+     *
+     * @param publicisedGroups the publicised groups list.
+     */
+    private void buildGroupsList(final Set<String> publicisedGroups) {
+        boolean isNewList = true;
+
+        if ((null != mPublicisedGroups) && (mPublicisedGroups.size() == publicisedGroups.size())) {
+            isNewList = !mPublicisedGroups.containsAll(publicisedGroups);
+        }
+
+        if (isNewList) {
+            List<Group> joinedGroups = new ArrayList<>(mSession.getGroupsManager().getJoinedGroups());
+            Collections.sort(joinedGroups, Group.mGroupsComparator);
+
+            int prefIndex = 0;
+            mPublicisedGroups = publicisedGroups;
+
+            // clear everything
+            mGroupsFlairCategory.removeAll();
+
+            for (final Group group : joinedGroups) {
+                final VectorGroupPreference vectorGroupPreference = new VectorGroupPreference(getActivity());
+                vectorGroupPreference.setKey(DEVICES_PREFERENCE_KEY_BASE + prefIndex);
+                prefIndex++;
+
+                vectorGroupPreference.setGroup(group, mSession);
+                vectorGroupPreference.setTitle(group.getDisplayName());
+                vectorGroupPreference.setSummary(group.getGroupId());
+
+                vectorGroupPreference.setChecked(publicisedGroups.contains(group.getGroupId()));
+                mGroupsFlairCategory.addPreference(vectorGroupPreference);
+
+                vectorGroupPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
+                        if (newValueAsVoid instanceof Boolean) {
+                            final boolean newValue = (boolean) newValueAsVoid;
+                            boolean isFlaired = mPublicisedGroups.contains(group.getGroupId());
+
+                            if (newValue != isFlaired) {
+                                displayLoadingView();
+                                mSession.getGroupsManager().updateGroupPublicity(group.getGroupId(), newValue, new ApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        hideLoadingView();
+                                        if (newValue) {
+                                            mPublicisedGroups.add(group.getGroupId());
+                                        } else {
+                                            mPublicisedGroups.remove(group.getGroupId());
+                                        }
+                                    }
+
+                                    private void onError() {
+                                        hideLoadingView();
+                                        // restore default value
+                                        vectorGroupPreference.setChecked(publicisedGroups.contains(group.getGroupId()));
+                                    }
+
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onError();
+                                    }
+
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        onError();
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        onError();
+                                    }
+                                });
+                            }
+                        }
+                        return true;
+                    }
+                });
+
+            }
+
+            refreshCryptographyPreference(mMyDeviceInfo);
+        }
+    }
 }

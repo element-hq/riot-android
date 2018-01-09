@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/messagesAdapter_message_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:id="@+id/messagesAdapter_message_header">
-    
+    android:orientation="vertical">
+
     <View
         android:id="@+id/messagesAdapter_message_header_top_margin"
         android:layout_width="match_parent"
@@ -15,21 +15,21 @@
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:background="?attr/room_activity_divider_color">
+
         <TextView
             android:id="@+id/messagesAdapter_message_header_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
+            android:text="A message here"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold"
             android:textColor="?attr/riot_primary_text_color"
-            android:text = "A message here" />
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <View
         android:id="@+id/messagesAdapter_message_header_bottom_margin"
         android:layout_width="match_parent"
         android:layout_height="16dp" />
-
 </LinearLayout>
