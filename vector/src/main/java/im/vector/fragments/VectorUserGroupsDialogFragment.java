@@ -16,7 +16,6 @@
 
 package im.vector.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
@@ -24,7 +23,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
@@ -34,7 +32,6 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.VectorGroupDetailsActivity;
 import im.vector.adapters.VectorGroupsListAdapter;
 
 /**

@@ -191,8 +191,9 @@ class VectorMessagesAdapterHelper {
 
     /**
      * Refresh the group flair view
+     *
      * @param groupFlairView the flairs view
-     * @param event the event
+     * @param event          the event
      */
     private void refreshGroupFlairView(final View groupFlairView, final Event event) {
         groupFlairView.setTag(event.getSender());
@@ -216,7 +217,7 @@ class VectorMessagesAdapterHelper {
                     groupIdsSet.retainAll(mRoom.getLiveState().getRelatedGroups());
                 }
 
-                if (TextUtils.equals((String)groupFlairView.getTag(), event.getSender())) {
+                if (TextUtils.equals((String) groupFlairView.getTag(), event.getSender())) {
                     if (groupIdsSet.isEmpty()) {
                         groupFlairView.setVisibility(View.GONE);
                     } else {
@@ -228,9 +229,9 @@ class VectorMessagesAdapterHelper {
 
                         ArrayList<ImageView> imageViews = new ArrayList<>();
 
-                        imageViews.add((ImageView)(groupFlairView.findViewById(R.id.message_avatar_group_1).findViewById(R.id.avatar_img)));
-                        imageViews.add((ImageView)(groupFlairView.findViewById(R.id.message_avatar_group_2).findViewById(R.id.avatar_img)));
-                        imageViews.add((ImageView)(groupFlairView.findViewById(R.id.message_avatar_group_3).findViewById(R.id.avatar_img)));
+                        imageViews.add((ImageView) (groupFlairView.findViewById(R.id.message_avatar_group_1).findViewById(R.id.avatar_img)));
+                        imageViews.add((ImageView) (groupFlairView.findViewById(R.id.message_avatar_group_2).findViewById(R.id.avatar_img)));
+                        imageViews.add((ImageView) (groupFlairView.findViewById(R.id.message_avatar_group_3).findViewById(R.id.avatar_img)));
 
                         TextView moreText = groupFlairView.findViewById(R.id.message_more_than_expected);
 
