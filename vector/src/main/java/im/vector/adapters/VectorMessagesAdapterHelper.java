@@ -84,9 +84,9 @@ class VectorMessagesAdapterHelper {
     private static final String LOG_TAG = VectorMessagesAdapterHelper.class.getSimpleName();
 
     /**
-     * Enable multiline mode, split on ``` at start of line and capture delimiters
+     * Enable multiline mode, split on ```
      */
-    private static final Pattern FENCED_CODE_BLOCK_PATTERN = Pattern.compile("(?m)(?<=^```)|(?=^```)");
+    private static final Pattern FENCED_CODE_BLOCK_PATTERN = Pattern.compile("(?m)(?<=```)|(?=```)");
 
     private IMessagesAdapterActionsListener mEventsListener;
 
@@ -710,22 +710,45 @@ class VectorMessagesAdapterHelper {
     }
 
     /**
-     * Determine if the message contains any code blocks (issue 145).
+     * Determine if the message body contains any code blocks.
+     *
+     * @param message the message
+     * @return true if it contains code blocks
      */
-    public boolean containsFencedCodeBlocks(final Message message) {
+    boolean containsFencedCodeBlocks(final Message message) {
         final String[] blocks = getFencedCodeBlocks(message);
         return (blocks.length > 1);
     }
 
+
+    private Map<String, String[]> mCodeBlocksMap = new HashMap<>();
+
     /**
-     * Result includes the ``` delimiters as separate entries (issue 145).
+     * Split the message body with code blocks delimiters.
+     *
+     * @param message the message
+     * @return the split message body
      */
-    public String[] getFencedCodeBlocks(final Message message) {
-        return FENCED_CODE_BLOCK_PATTERN.split(message.body);
+    String[] getFencedCodeBlocks(final Message message) {
+        if (TextUtils.isEmpty(message.body)) {
+            return new String[0];
+        }
+
+        String[] codeBlocks = mCodeBlocksMap.get(message.body);
+
+        if (null == codeBlocks) {
+            codeBlocks = FENCED_CODE_BLOCK_PATTERN.split(message.body);
+            mCodeBlocksMap.put(message.body, codeBlocks);
+        }
+
+        return codeBlocks;
     }
 
     /**
-     * Issue 145
+     * Highlight fenced code
+     *
+     * @param textView the text view
+     * @param text     the text
      */
     void highlightFencedCode(final TextView textView, final Spannable text) {
         // sanity check
@@ -733,7 +756,7 @@ class VectorMessagesAdapterHelper {
             return;
         }
 
-        final int background = ThemeUtils.getColor(mContext, R.attr.fenced_code_block_background_color);
+        final int background = ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color);
         textView.setBackgroundColor(background);
         textView.setText(text);
 
