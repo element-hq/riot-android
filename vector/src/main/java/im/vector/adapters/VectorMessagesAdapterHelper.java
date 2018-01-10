@@ -84,9 +84,12 @@ class VectorMessagesAdapterHelper {
     private static final String LOG_TAG = VectorMessagesAdapterHelper.class.getSimpleName();
 
     /**
-     * Enable multiline mode, split on ```
+     * Enable multiline mode, split on <pre><code>...</code></pre> and retain those delimiters in
+     * the returned fenced block.
      */
-    private static final Pattern FENCED_CODE_BLOCK_PATTERN = Pattern.compile("(?m)(?<=```)|(?=```)");
+    public static final String START_FENCED_BLOCK = "<pre><code>";
+    public static final String END_FENCED_BLOCK = "</code></pre>";
+    private static final Pattern FENCED_CODE_BLOCK_PATTERN = Pattern.compile("(?m)(?=<pre><code>)|(?<=</code></pre>)");
 
     private IMessagesAdapterActionsListener mEventsListener;
 
@@ -732,12 +735,9 @@ class VectorMessagesAdapterHelper {
      * @return true if it contains code blocks
      */
     boolean containsFencedCodeBlocks(final Message message) {
-        if ((null == message.body) || !message.body.contains("```")) {
-            return false;
-        }
-
-        final String[] blocks = getFencedCodeBlocks(message);
-        return (blocks.length > 1);
+        return (null != message.formatted_body) &&
+                message.formatted_body.contains(START_FENCED_BLOCK) &&
+                message.formatted_body.contains(END_FENCED_BLOCK);
     }
 
     private Map<String, String[]> mCodeBlocksMap = new HashMap<>();
@@ -749,15 +749,15 @@ class VectorMessagesAdapterHelper {
      * @return the split message body
      */
     String[] getFencedCodeBlocks(final Message message) {
-        if (TextUtils.isEmpty(message.body)) {
+        if (TextUtils.isEmpty(message.formatted_body)) {
             return new String[0];
         }
 
-        String[] codeBlocks = mCodeBlocksMap.get(message.body);
+        String[] codeBlocks = mCodeBlocksMap.get(message.formatted_body);
 
         if (null == codeBlocks) {
-            codeBlocks = FENCED_CODE_BLOCK_PATTERN.split(message.body);
-            mCodeBlocksMap.put(message.body, codeBlocks);
+            codeBlocks = FENCED_CODE_BLOCK_PATTERN.split(message.formatted_body);
+            mCodeBlocksMap.put(message.formatted_body, codeBlocks);
         }
 
         return codeBlocks;
