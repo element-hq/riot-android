@@ -28,6 +28,9 @@ import org.matrix.androidsdk.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Markdown parser.
  * This class uses a webview.
@@ -113,6 +116,9 @@ public class VectorMarkdownParser extends WebView {
         mMarkDownWebAppInterface.initParams(markdownText, listener);
 
         try {
+            // the conversion starts
+            mMarkDownWebAppInterface.start();
+
             // call the javascript method
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                 loadUrl(String.format("javascript:convertToHtml('%s')", escapeText(markdownText)));
@@ -120,6 +126,7 @@ public class VectorMarkdownParser extends WebView {
                 evaluateJavascript(String.format("convertToHtml('%s')", escapeText(markdownText)), null);
             }
         } catch (Exception e) {
+            mMarkDownWebAppInterface.cancel();
             Log.e(LOG_TAG, "## markdownToHtml() : failed " + e.getMessage());
             listener.onMarkdownParsed(markdownText, text);
         }
@@ -152,6 +159,11 @@ public class VectorMarkdownParser extends WebView {
         private IVectorMarkdownParserListener mListener;
 
         /**
+         * Defines watchdog timer
+         */
+        private Timer mWatchdogTimer;
+
+        /**
          * Init the search params.
          *
          * @param textToParse the text to parse
@@ -160,6 +172,54 @@ public class VectorMarkdownParser extends WebView {
         public void initParams(String textToParse, IVectorMarkdownParserListener listener) {
             mTextToParse = textToParse;
             mListener = listener;
+        }
+
+        /**
+         * The parsing starts.
+         */
+        public void start() {
+            Log.d(LOG_TAG, "## start() : Markdown starts");
+
+            try {
+                // monitor the parsing as there is no way to detect if there was an error in the JS.
+                mWatchdogTimer = new Timer();
+                mWatchdogTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (null != mListener) {
+                            Log.d(LOG_TAG, "## start() : delay expires");
+
+                            try {
+                                mListener.onMarkdownParsed(mTextToParse, mTextToParse);
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## wOnParse() " + e.getMessage());
+                            }
+                        }
+                        done();
+                    }
+                }, 300);
+            } catch (Throwable e) {
+                Log.e(LOG_TAG, "## start() : failed to starts " + e.getMessage());
+            }
+        }
+
+        /**
+         * Cancel the markdown parser
+         */
+        public void cancel() {
+            Log.e(LOG_TAG, "## cancel()");
+            done();
+        }
+
+        /**
+         * The parsing is done
+         */
+        private void done() {
+            if (null != mWatchdogTimer) {
+                mWatchdogTimer.cancel();
+                mWatchdogTimer = null;
+            }
+            mListener = null;
         }
 
         @JavascriptInterface
@@ -179,11 +239,17 @@ public class VectorMarkdownParser extends WebView {
             }
 
             if (null != mListener) {
+                Log.d(LOG_TAG, "## wOnParse() : parse done");
+
                 try {
                     mListener.onMarkdownParsed(mTextToParse, HTMLText);
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## wOnParse() " + e.getMessage());
                 }
+
+                done();
+            } else {
+                Log.d(LOG_TAG, "## wOnParse() : parse required too much time");
             }
         }
     }
