@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
@@ -357,8 +358,19 @@ public class CallsManager {
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "## onIncomingCall () :" + aCall.getCallId());
+                    int currentCallState = TelephonyManager.CALL_STATE_IDLE;
 
-                    if (null != mActiveCall) {
+                    TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+                    if (null != telephonyManager) {
+                        currentCallState = telephonyManager.getCallState();
+                    }
+
+                    Log.d(LOG_TAG, "## onIncomingCall () : currentCallState(GSM) = " + currentCallState);
+
+                    if (currentCallState == TelephonyManager.CALL_STATE_OFFHOOK || currentCallState == TelephonyManager.CALL_STATE_RINGING) {
+                        Log.d(LOG_TAG, "## onIncomingCall () : rejected because GSM Call is in progress");
+                        aCall.hangup("busy");
+                    } else if (null != mActiveCall) {
                         Log.d(LOG_TAG, "## onIncomingCall () : rejected because " + mActiveCall + " is in progress");
                         aCall.hangup("busy");
                     } else {
