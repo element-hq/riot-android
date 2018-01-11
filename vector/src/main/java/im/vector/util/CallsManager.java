@@ -357,10 +357,11 @@ public class CallsManager {
             mUiHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    Context context = VectorApp.getInstance();
                     Log.d(LOG_TAG, "## onIncomingCall () :" + aCall.getCallId());
                     int currentCallState = TelephonyManager.CALL_STATE_IDLE;
 
-                    TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+                    TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
                     if (null != telephonyManager && telephonyManager.getSimState() == TelephonyManager.SIM_STATE_READY) {
                         currentCallState = telephonyManager.getCallState();
@@ -384,8 +385,6 @@ public class CallsManager {
                         // if the home activity does not exist : the application has been woken up by a notification)
                         if (null == homeActivity) {
                             Log.d(LOG_TAG, "onIncomingCall : the home activity does not exist -> launch it");
-
-                            Context context = VectorApp.getInstance();
 
                             // clear the activity stack to home activity
                             Intent intent = new Intent(context, VectorHomeActivity.class);
