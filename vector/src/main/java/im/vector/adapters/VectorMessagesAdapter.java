@@ -1209,12 +1209,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         for (final String block:blocks) {
             if (block.startsWith(START_FB) && block.endsWith(END_FB)) {
                 // Fenced block
-                final String stripped = block.substring(START_FB.length(), block.length()-END_FB.length());
-                final SpannableString threeTickBlock = new SpannableString(stripped);
+                final String minusTags = block.substring(START_FB.length(), block.length()-END_FB.length());
                 final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
                 container.addView(blockView);
                 final TextView tv = blockView.findViewById(R.id.messagesAdapter_body);
-                mHelper.highlightFencedCode(tv, threeTickBlock);
+                highlightPattern(tv, new SpannableString(minusTags),
+                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(minusTags) : null,
+                        mPattern, shouldHighlighted);
+
+                mHelper.highlightFencedCode(tv);
                 textViews.add(tv);
 
                 ((View)tv.getParent()).setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));

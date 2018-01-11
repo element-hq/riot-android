@@ -769,14 +769,13 @@ class VectorMessagesAdapterHelper {
      * @param textView the text view
      * @param text     the text
      */
-    void highlightFencedCode(final TextView textView, final Spannable text) {
+    void highlightFencedCode(final TextView textView) {
         // sanity check
         if (null == textView) {
             return;
         }
 
         textView.setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
-        textView.setText(text);
 
         if (null != mLinkMovementMethod) {
             textView.setMovementMethod(mLinkMovementMethod);
