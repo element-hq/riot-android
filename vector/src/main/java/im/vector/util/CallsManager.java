@@ -361,7 +361,8 @@ public class CallsManager {
                     int currentCallState = TelephonyManager.CALL_STATE_IDLE;
 
                     TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-                    if (null != telephonyManager) {
+
+                    if (null != telephonyManager && telephonyManager.getSimState() == TelephonyManager.SIM_STATE_READY) {
                         currentCallState = telephonyManager.getCallState();
                     }
 
