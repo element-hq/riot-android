@@ -1209,7 +1209,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         for (final String block:blocks) {
             if (block.startsWith(START_FB) && block.endsWith(END_FB)) {
                 // Fenced block
-                final String minusTags = block.substring(START_FB.length(), block.length()-END_FB.length());
+                final String minusTags = block
+                        .substring(START_FB.length(), block.length()-END_FB.length())
+                        .replace("\n","<br/>")
+                        .replace(" ", "&nbsp;");
                 final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
                 container.addView(blockView);
                 final TextView tv = blockView.findViewById(R.id.messagesAdapter_body);
