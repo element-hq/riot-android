@@ -1451,6 +1451,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void showMainLayout() {
         mMainLayout.setVisibility(View.VISIBLE);
         mProgressTextView.setVisibility(View.GONE);
+        mButtonsView.setVisibility(View.VISIBLE);
     }
 
     /**
