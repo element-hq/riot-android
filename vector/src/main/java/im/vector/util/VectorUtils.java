@@ -251,9 +251,9 @@ public class VectorUtils {
 
                     if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
 
-                        if (!TextUtils.isEmpty(member.getInviterId())) {
+                        if (!TextUtils.isEmpty(member.mSender)) {
                             // extract who invited us to the room
-                            displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.getInviterId()));
+                            displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.mSender));
                         } else {
                             displayName = context.getString(R.string.room_displayname_room_invite);
                         }

@@ -669,11 +669,15 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
     @Override
     public void onToggleDirectChat(String roomId, boolean isDirectChat) {
-
     }
 
     @Override
     public void onRoomLeft(String roomId) {
+    }
 
+    @Override
+    public void onRoomForgot(String roomId) {
+        // there is no sync event when a room is forgotten
+        refreshRooms();
     }
 }
