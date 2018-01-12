@@ -222,6 +222,22 @@ public class RegistrationManager {
     }
 
     /**
+     * @return true if there is a password flow.
+     */
+    private boolean isPasswordBasedFlowSupported() {
+        if ((null != mRegistrationResponse) && (null != mRegistrationResponse.flows)) {
+            for (LoginFlow flow : mRegistrationResponse.flows) {
+                if (TextUtils.equals(flow.type, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD) ||
+                        ((null != flow.stages) && flow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Make the registration request with params depending on singleton values
      *
      * @param context
@@ -264,10 +280,24 @@ public class RegistrationManager {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_DUMMY;
                 authParams = new HashMap<>();
                 authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_DUMMY);
-            } else {
+            } else if (isPasswordBasedFlowSupported()) {
+                // never has been tested
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD;
                 authParams = new HashMap<>();
                 authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
+                authParams.put(JSON_KEY_SESSION, mRegistrationResponse.session);
+
+                if (null != mUsername) {
+                    authParams.put("username", mUsername);
+                }
+
+                if (null != mPassword) {
+                    authParams.put("password", mPassword);
+                }
+            } else {
+                // others
+                registrationType = "";
+                authParams = new HashMap<>();
             }
 
             if (TextUtils.equals(registrationType, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)
