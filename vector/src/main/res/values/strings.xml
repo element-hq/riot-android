@@ -552,7 +552,7 @@
     <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
 
 
-    <string name="settings_disable_markdown">Disable markdown formatting</string>
+    <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
     <string name="settings_data_save_mode">Data save mode</string>
 
     <string name="devices_details_dialog_title">Device details</string>

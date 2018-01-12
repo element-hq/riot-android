@@ -1204,32 +1204,30 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         container.removeAllViews();
 
         final String[] blocks = mHelper.getFencedCodeBlocks(message);
-        for (int i = 0; i < blocks.length; i++) {
-
-            // Start of fenced block
-            if (blocks[i].equals("```") && i <= blocks.length - 3 && blocks[i + 2].equals("```")) {
-                final SpannableString threeTickBlock = new SpannableString(blocks[i + 1]);
+        final String START_FB = VectorMessagesAdapterHelper.START_FENCED_BLOCK;
+        final String END_FB = VectorMessagesAdapterHelper.END_FENCED_BLOCK;
+        for (final String block:blocks) {
+            if (block.startsWith(START_FB) && block.endsWith(END_FB)) {
+                // Fenced block
+                final String minusTags = block.substring(START_FB.length(), block.length()-END_FB.length());
                 final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
                 container.addView(blockView);
                 final TextView tv = blockView.findViewById(R.id.messagesAdapter_body);
-                mHelper.highlightFencedCode(tv, threeTickBlock);
-                i += 2;
+                highlightPattern(tv, new SpannableString(minusTags),
+                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(minusTags) : null,
+                        mPattern, shouldHighlighted);
+
+                mHelper.highlightFencedCode(tv);
                 textViews.add(tv);
 
                 ((View)tv.getParent()).setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
             } else {
                 // Not a fenced block
                 final TextView tv = (TextView) mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
-                final String ithBlock = blocks[i];
-                VectorApp.markdownToHtml(blocks[i],
-                        new VectorMarkdownParser.IVectorMarkdownParserListener() {
-                            @Override
-                            public void onMarkdownParsed(final String text, final String HTMLText) {
-                                highlightPattern(tv, new SpannableString(ithBlock),
-                                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(HTMLText) : null,
-                                        mPattern, shouldHighlighted);
-                            }
-                        });
+
+                highlightPattern(tv, new SpannableString(block),
+                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(block) : null,
+                        mPattern, shouldHighlighted);
 
                 container.addView(tv);
                 textViews.add(tv);
