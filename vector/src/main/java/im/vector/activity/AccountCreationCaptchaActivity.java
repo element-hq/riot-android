@@ -16,24 +16,32 @@
 
 package im.vector.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.util.Log;
 
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import im.vector.R;
+import im.vector.util.VectorUtils;
 
 import java.net.URLDecoder;
 import java.util.Formatter;
@@ -87,7 +95,8 @@ public class AccountCreationCaptchaActivity extends RiotBaseActivity {
         final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 
-        Intent intent = getIntent();
+        final View loadingView = findViewById(R.id.account_creation_webview_loading);
+        final Intent intent = getIntent();
 
         String homeServerUrl = "https://matrix.org/";
 
@@ -111,9 +120,14 @@ public class AccountCreationCaptchaActivity extends RiotBaseActivity {
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler,
-                                           SslError error) {
-                final SslErrorHandler fHander = handler;
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                loadingView.setVisibility(view.GONE);
+            }
+
+            @Override
+            public void onReceivedSslError(final WebView view, final SslErrorHandler handler, final SslError error) {
+                Log.e(LOG_TAG, "## onReceivedSslError() : " + error.getCertificate());
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(AccountCreationCaptchaActivity.this);
 
@@ -122,14 +136,16 @@ public class AccountCreationCaptchaActivity extends RiotBaseActivity {
                 builder.setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fHander.proceed();
+                        Log.d(LOG_TAG, "## onReceivedSslError() : the user trusted");
+                        handler.proceed();
                     }
                 });
 
                 builder.setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fHander.cancel();
+                        Log.d(LOG_TAG, "## onReceivedSslError() : the user did not trust");
+                        handler.cancel();
                     }
                 });
 
@@ -137,7 +153,8 @@ public class AccountCreationCaptchaActivity extends RiotBaseActivity {
                     @Override
                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                         if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                            fHander.cancel();
+                            handler.cancel();
+                            Log.d(LOG_TAG, "## onReceivedSslError() : the user dismisses the trust dialog.");
                             dialog.dismiss();
                             return true;
                         }
@@ -149,10 +166,11 @@ public class AccountCreationCaptchaActivity extends RiotBaseActivity {
                 dialog.show();
             }
 
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                super.onReceivedError(view, errorCode, description, failingUrl);
-
+            // common error message
+            private void onError(String errorMessage) {
+                Log.e(LOG_TAG, "## onError() : errorMessage");
+                Toast.makeText(AccountCreationCaptchaActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                
                 // on error case, close this activity
                 AccountCreationCaptchaActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -160,6 +178,24 @@ public class AccountCreationCaptchaActivity extends RiotBaseActivity {
                         AccountCreationCaptchaActivity.this.finish();
                     }
                 });
+            }
+
+            @Override
+            @SuppressLint("NewApi")
+            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                super.onReceivedHttpError(view, request, errorResponse);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    onError(errorResponse.getReasonPhrase());
+                } else {
+                    onError(errorResponse.toString());
+                }
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                onError(description);
             }
 
             @Override
