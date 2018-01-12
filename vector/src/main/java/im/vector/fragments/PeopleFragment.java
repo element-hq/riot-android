@@ -609,4 +609,9 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     public void onRoomLeft(String roomId) {
         mAdapter.removeDirectChat(roomId);
     }
+
+    @Override
+    public void onRoomForgot(String roomId) {
+        mAdapter.removeDirectChat(roomId);
+    }
 }

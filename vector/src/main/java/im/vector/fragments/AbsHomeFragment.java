@@ -32,6 +32,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
@@ -173,7 +174,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
     @Override
     public void onRejectInvitation(MXSession session, String roomId) {
         Log.i(LOG_TAG, "onRejectInvitation " + roomId);
-        mActivity.onRejectInvitation(session, roomId);
+        mActivity.onRejectInvitation(roomId, null);
     }
 
     @Override
@@ -251,10 +252,26 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (mActivity != null && !mActivity.isFinishing()) {
-                    mActivity.onRejectInvitation(session, roomId);
-                    if (mOnRoomChangedListener != null) {
-                        mOnRoomChangedListener.onRoomLeft(roomId);
-                    }
+                    mActivity.onRejectInvitation(roomId, new SimpleApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            if (mOnRoomChangedListener != null) {
+                                mOnRoomChangedListener.onRoomLeft(roomId);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onForgetRoom(final MXSession session, final String roomId) {
+        mActivity.onForgetRoom(roomId, new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                if (mOnRoomChangedListener != null) {
+                    mOnRoomChangedListener.onRoomForgot(roomId);
                 }
             }
         });
@@ -339,6 +356,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
 
     /**
      * Manage the fab actions
+     *
      * @return true if the fragment has a dedicated action.
      */
     public boolean onFabClick() {
@@ -476,5 +494,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
         void onToggleDirectChat(final String roomId, final boolean isDirectChat);
 
         void onRoomLeft(final String roomId);
+
+        void onRoomForgot(final String roomId);
     }
 }

@@ -26,6 +26,7 @@
             android:id="@+id/ic_action_select_remove"
             android:icon="@drawable/vector_leave_room_black"
             android:title="@string/room_settings_leave_conversation" />
+
     </group>
 
     <group android:id="@+id/add_shortcut_actions">

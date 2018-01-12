@@ -1479,50 +1479,84 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         CommonActivityUtils.previewRoom(this, roomPreviewData);
     }
 
-    public void onRejectInvitation(final MXSession session, final String roomId) {
-        Room room = session.getDataHandler().getRoom(roomId);
+    /**
+     * Create the room forget / leave callback
+     *
+     * @param roomId the room id
+     * @param onSuccessCallback the success callback
+     * @return the asynchronous callback
+     */
+    private ApiCallback<Void> getForgetLeaveCallback(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
+        return new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // clear any pending notification for this room
+                        EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
+                        stopWaitingView();
+
+                        if (null != onSuccessCallback) {
+                            onSuccessCallback.onSuccess(null);
+                        }
+                    }
+                });
+            }
+
+            private void onError(final String message) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        stopWaitingView();
+                        Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+        };
+    }
+
+    /**
+     * Trigger the room forget
+     * @param roomId the room id
+     * @param onSuccessCallback the success asynchronous callback
+     */
+    public void onForgetRoom(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
+        Room room = mSession.getDataHandler().getRoom(roomId);
 
         if (null != room) {
             showWaitingView();
+            room.forget(getForgetLeaveCallback(roomId, onSuccessCallback));
+        }
+    }
 
-            room.leave(new ApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // clear any pending notification for this room
-                            EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
-                            stopWaitingView();
-                        }
-                    });
-                }
+    /**
+     * Trigger the room leave / invitation reject.
+     *
+     * @param roomId the room id
+     * @param onSuccessCallback the success asynchronous callback
+     */
+    public void onRejectInvitation(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
+        Room room = mSession.getDataHandler().getRoom(roomId);
 
-                private void onError(final String message) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            stopWaitingView();
-                            Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onError(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onError(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onError(e.getLocalizedMessage());
-                }
-            });
+        if (null != room) {
+            showWaitingView();
+            room.leave(getForgetLeaveCallback(roomId, onSuccessCallback));
         }
     }
 

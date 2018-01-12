@@ -43,6 +43,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventDisplay;
@@ -80,6 +81,8 @@ public class RoomUtils {
         void moveToLowPriority(MXSession session, String roomId);
 
         void onLeaveRoom(MXSession session, String roomId);
+
+        void onForgetRoom(MXSession session, String roomId);
 
         void addHomeScreenShortcut(MXSession session, String roomId);
     }
@@ -528,6 +531,16 @@ public class RoomUtils {
                 item.setIcon(null);
             }
 
+            RoomMember member = room.getMember(session.getMyUserId());
+            final boolean isBannedKickedRoom = (null != member) && member.kickedOrBanned();
+
+            if (isBannedKickedRoom) {
+                item = popup.getMenu().findItem(R.id.ic_action_select_remove);
+
+                if (null != item) {
+                    item.setTitle(R.string.forget_room);
+                }
+            }
 
             if (moreActionListener != null) {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -555,7 +568,11 @@ public class RoomUtils {
                                 break;
                             }
                             case R.id.ic_action_select_remove: {
-                                moreActionListener.onLeaveRoom(session, room.getRoomId());
+                                if (isBannedKickedRoom) {
+                                    moreActionListener.onForgetRoom(session, room.getRoomId());
+                                } else {
+                                    moreActionListener.onLeaveRoom(session, room.getRoomId());
+                                }
                                 break;
                             }
                             case R.id.ic_action_select_direct_chat: {
