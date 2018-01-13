@@ -391,4 +391,19 @@ Er du sikker?</string>
     <string name="ssl_cert_not_trust">Dette kan betyde at nogen med onde hensigter opsnapper din trafik eller at din telefon ikke stoler på certifikatet som serveren sendte.</string>
     <string name="ssl_cert_new_account_expl">Hvis serveradministratoren har sagt det er forventeligt skal du sikre dig at fingeraftrykket forneden passer med det fingeraftryk de har oplyst.</string>
     <string name="ssl_unexpected_existing_expl">Certifikatet har ændret sig fra det din telefon stolede på. Dette er HØJST USÆDVANLIGT. Det anbefales at du IKKE ACCEPTERE dette nye certifikat.</string>
+    <string name="title_activity_bug_report">Nug rapport</string>
+
+    <string name="read_receipts_list">Kvitteringer for læsning</string>
+
+    <string name="ssl_expected_existing_expl">Certifikatet er ændret fra et tidligere betroet, til et der ikke er betroet. Serveren kan have fornyet sit certifikat. Kontakt server administratoren for det forventede fingeraftryk.</string>
+    <string name="ssl_only_accept">Accepter kun certifikatet hvis server administratoren har publiceret et fingeraftryk der matcher det ovenstående.</string>
+    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
+
+    <string name="room_details_title">Detaljer for rummet</string>
+    <string name="room_details_people">Personer</string>
+    <string name="room_details_files">Filer</string>
+    <string name="room_details_settings">Indstillinger</string>
+    <string name="room_details_selected">valgte</string>
+    <string name="malformed_id">Ugyldigt ID. Det skal være en e-mail adresse eller et Matrix ID som \'@lokaldel:domæne\'</string>
+    <string name="room_details_people_invited_group_name">INVITERET</string>
     </resources>
