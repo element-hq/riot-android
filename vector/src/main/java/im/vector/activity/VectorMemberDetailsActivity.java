@@ -377,21 +377,41 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         final ArrayList<String> idsList = new ArrayList<>();
 
+        String displayName = TextUtils.isEmpty(mRoomMember.displayname) ? mRoomMember.getUserId() : mRoomMember.displayname;
+
         switch (aActionType) {
             case ITEM_ACTION_DEVICES:
                 refreshDevicesListView();
                 break;
 
             case ITEM_ACTION_START_CHAT:
-                Log.d(LOG_TAG, "## performItemAction(): Start new room - start chat");
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                builder.setTitle(R.string.dialog_title_confirmation);
 
-                VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                builder.setMessage(getString(R.string.start_new_chat_prompt_msg, displayName));
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void run() {
-                        enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                        mSession.createDirectMessageRoom(mMemberId, mCreateDirectMessageCallBack);
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(LOG_TAG, "## performItemAction(): Start new room - start chat");
+
+                        VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                                mSession.createDirectMessageRoom(mMemberId, mCreateDirectMessageCallBack);
+                            }
+                        });
                     }
                 });
+
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // nothing to do
+                    }
+                });
+
+                builder.show();
                 break;
 
             case ITEM_ACTION_START_VIDEO_CALL:
@@ -591,8 +611,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 break;
             }
             case ITEM_ACTION_MENTION:
-                String displayName = TextUtils.isEmpty(mRoomMember.displayname) ? mRoomMember.getUserId() : mRoomMember.displayname;
-
                 // provide the mention name
                 Intent intent = new Intent();
                 intent.putExtra(RESULT_MENTION_ID, displayName);
