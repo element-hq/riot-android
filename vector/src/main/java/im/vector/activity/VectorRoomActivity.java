@@ -1748,9 +1748,35 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL;
                 }
 
-                if (CommonActivityUtils.checkPermissions(requestCode, VectorRoomActivity.this)) {
-                    startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+                final boolean finalIsVideoCall = isVideoCall;
+                final int finalRequestCode = requestCode;
+
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(VectorRoomActivity.this);
+                builder.setTitle(R.string.dialog_title_confirmation);
+
+                if (finalIsVideoCall) {
+                    builder.setMessage(getString(R.string.start_video_call_prompt_msg));
+                } else {
+                    builder.setMessage(getString(R.string.start_voice_call_prompt_msg));
                 }
+
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (CommonActivityUtils.checkPermissions(finalRequestCode, VectorRoomActivity.this)) {
+                            startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), finalIsVideoCall);
+                        }
+                    }
+                });
+
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // nothing to do
+                    }
+                });
+
+                builder.show();
             }
         });
 
