@@ -18,6 +18,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -409,7 +410,34 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View view) {
                     if (null != mActionListener) {
-                        mActionListener.performItemAction(currentItem.mActionType);
+                        if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType
+                                || VectorMemberDetailsActivity.ITEM_ACTION_BAN == currentItem.mActionType) {
+                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(view.getContext());
+                            builder.setTitle(R.string.dialog_title_confirmation);
+
+                            if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
+                                builder.setMessage(view.getContext().getString(R.string.room_participants_kick_prompt_msg));
+                            } else {
+                                builder.setMessage(view.getContext().getString(R.string.room_participants_ban_prompt_msg));
+                            }
+                            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mActionListener.performItemAction(currentItem.mActionType);
+                                }
+                            });
+
+                            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // nothing to do
+                                }
+                            });
+
+                            builder.show();
+                        } else {
+                            mActionListener.performItemAction(currentItem.mActionType);
+                        }
                     }
                 }
             });

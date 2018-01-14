@@ -85,7 +85,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private static final int ITEM_ACTION_INVITE = 0;
     private static final int ITEM_ACTION_LEAVE = 1;
     public static final int ITEM_ACTION_KICK = 2;
-    private static final int ITEM_ACTION_BAN = 3;
+    public static final int ITEM_ACTION_BAN = 3;
     private static final int ITEM_ACTION_UNBAN = 4;
     private static final int ITEM_ACTION_IGNORE = 5;
     private static final int ITEM_ACTION_UNIGNORE = 6;
