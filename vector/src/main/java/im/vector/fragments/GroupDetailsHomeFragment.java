@@ -16,16 +16,10 @@
 
 package im.vector.fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.v4.content.ContextCompat;
 
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -35,20 +29,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.rest.model.group.Group;
-import org.matrix.androidsdk.util.Log;
-
-import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
 
-public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment implements Html.ImageGetter {
+public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
     private static final String LOG_TAG = GroupDetailsHomeFragment.class.getSimpleName();
 
     @BindView(R.id.group_avatar)
@@ -78,11 +66,22 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment implement
     @BindView(R.id.no_html_text_view)
     TextView noLongDescriptionTextView;
 
+    private VectorImageGetter mImageGetter;
+
     /*
      * *********************************************************************************************
      * Fragment lifecycle
      * *********************************************************************************************
      */
+
+    @Override
+    public void onActivityCreated(final Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (null == mImageGetter) {
+            mImageGetter = new VectorImageGetter(mSession);
+        }
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
@@ -92,12 +91,21 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment implement
     @Override
     public void onPause() {
         super.onPause();
+        mImageGetter.setListener(null);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         refreshViews();
+
+        mImageGetter.setListener(new VectorImageGetter.OnImageDownloadListener() {
+            @Override
+            public void onImageDownloaded(String source) {
+                // invalidate the text
+                refreshLongDescription();
+            }
+        });
     }
 
     /*
@@ -151,75 +159,9 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment implement
         if (null != mGroupHtmlTextView) {
             Group group = mActivity.getGroup();
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(), Html.FROM_HTML_MODE_LEGACY, this, null));
+                mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(), Html.FROM_HTML_MODE_LEGACY, mImageGetter, null));
             } else {
-                mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(), this, null));
-            }
-        }
-    }
-
-    /*
-     * *********************************************************************************************
-     * Html.ImageGetter
-     * *********************************************************************************************
-     */
-
-    private static Drawable mPlaceHolder = null;
-    private static Map<String, Drawable> mBitmapCache = new HashMap<>();
-    private static Set<String> mPendingDownloads = new HashSet<>();
-
-    @Override
-    public Drawable getDrawable(String source) {
-        if (mBitmapCache.containsKey(source)) {
-            Log.d(LOG_TAG, "## getDrawable() : " + source + " already cached");
-            return mBitmapCache.get(source);
-        }
-
-        if (!mPendingDownloads.contains(source)) {
-            Log.d(LOG_TAG, "## getDrawable() : starts a task to download " + source);
-            new ImageDownloader().execute(source);
-            mPendingDownloads.add(source);
-        } else {
-            Log.d(LOG_TAG, "## getDrawable() : " + source + " is downloading");
-        }
-
-        if (null == mPlaceHolder) {
-            mPlaceHolder = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.filetype_image, null);
-            mPlaceHolder.setBounds(0, 0, mPlaceHolder.getIntrinsicWidth(), mPlaceHolder.getIntrinsicHeight());
-        }
-
-        return mPlaceHolder;
-    }
-
-    private class ImageDownloader extends AsyncTask<Object, Void, Bitmap> {
-        private String mSource;
-
-        @Override
-        protected Bitmap doInBackground(Object... params) {
-            mSource = (String) params[0];
-            Log.d(LOG_TAG, "## doInBackground() : " + mSource);
-            try {
-                return BitmapFactory.decodeStream(new URL(mSession.getContentManager().getDownloadableUrl(mSource)).openConnection().getInputStream());
-            } catch (Throwable t) {
-                Log.e(LOG_TAG, "## ImageDownloader() failed " + t.getMessage());
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            Log.d(LOG_TAG, "## doInBackground() : bitmap " + bitmap);
-
-            if (null != bitmap) {
-                Drawable drawable = new BitmapDrawable(mActivity.getResources(), bitmap);
-                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-
-                mPendingDownloads.remove(mSource);
-                mBitmapCache.put(mSource, drawable);
-
-                // invalidate the text
-                refreshLongDescription();
+                mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(), mImageGetter, null));
             }
         }
     }

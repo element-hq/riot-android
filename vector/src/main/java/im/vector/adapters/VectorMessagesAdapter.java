@@ -93,6 +93,7 @@ import im.vector.util.EventGroup;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
+import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.widgets.WidgetsManager;
 
@@ -2104,6 +2105,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     public void setReadMarkerListener(final ReadMarkerListener listener) {
         mReadMarkerListener = listener;
+    }
+
+    /**
+     * Set a image getter
+     *
+     * @param imageGetter the image getter
+     */
+    public void setImageGetter(VectorImageGetter imageGetter) {
+        mHelper.setImageGetter(imageGetter);
     }
 
     /**
