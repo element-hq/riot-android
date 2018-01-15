@@ -85,6 +85,7 @@ import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.ThemeUtils;
+import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
 import im.vector.widgets.WidgetsManager;
 
@@ -110,6 +111,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     private View mBackProgressView;
     private View mForwardProgressView;
     private View mMainProgressView;
+
+    private VectorImageGetter mVectorImageGetter;
 
     public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, String previewMode, int layoutResId) {
         VectorMessageListFragment f = new VectorMessageListFragment();
@@ -145,6 +148,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         if (null != mRoom) {
             ((VectorMessagesAdapter) mAdapter).mIsRoomEncrypted = mRoom.isEncrypted();
+        }
+
+        if (null != mSession) {
+            mVectorImageGetter = new VectorImageGetter(mSession);
+            ((VectorMessagesAdapter) mAdapter).setImageGetter(mVectorImageGetter);
         }
 
         mMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -203,6 +211,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             adapter.setVectorMessagesAdapterActionsListener(null);
             adapter.onPause();
         }
+
+        mVectorImageGetter.setListener(null);
     }
 
 
@@ -213,6 +223,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             VectorMessagesAdapter adapter = ((VectorMessagesAdapter) mAdapter);
             adapter.setVectorMessagesAdapterActionsListener(this);
         }
+
+        mVectorImageGetter.setListener(new VectorImageGetter.OnImageDownloadListener() {
+            @Override
+            public void onImageDownloaded(String source) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     /**

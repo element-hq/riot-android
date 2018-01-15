@@ -73,6 +73,7 @@ import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
+import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
 import im.vector.view.PillView;
 import im.vector.widgets.WidgetsManager;
@@ -99,6 +100,8 @@ class VectorMessagesAdapterHelper {
 
     private MatrixLinkMovementMethod mLinkMovementMethod;
 
+    private VectorImageGetter mImageGetter;
+
     VectorMessagesAdapterHelper(Context context, MXSession session) {
         mContext = context;
         mSession = session;
@@ -113,7 +116,6 @@ class VectorMessagesAdapterHelper {
         mEventsListener = listener;
     }
 
-
     /**
      * Define the links movement method
      *
@@ -121,6 +123,15 @@ class VectorMessagesAdapterHelper {
      */
     void setLinkMovementMethod(MatrixLinkMovementMethod method) {
         mLinkMovementMethod = method;
+    }
+
+    /**
+     * Set the image getter.
+     *
+     * @param imageGetter the image getter
+     */
+    void setImageGetter(VectorImageGetter imageGetter) {
+        mImageGetter = imageGetter;
     }
 
     /**
@@ -826,7 +837,7 @@ class VectorMessagesAdapterHelper {
 
             // the links are not yet supported by ConsoleHtmlTagHandler
             // the markdown tables are not properly supported
-            sequence = Html.fromHtml(htmlFormattedText, null, isCustomizable ? htmlTagHandler : null);
+            sequence = Html.fromHtml(htmlFormattedText, mImageGetter, isCustomizable ? htmlTagHandler : null);
 
             // sanity check
             if (!TextUtils.isEmpty(sequence)) {
