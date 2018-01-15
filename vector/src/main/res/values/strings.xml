@@ -152,6 +152,10 @@
     <string name="start_voice_call">Start Voice Call</string>
     <string name="start_video_call">Start Video Call</string>
 
+    <string name="start_new_chat_prompt_msg">Are you sure that you want to start a new chat with %s?</string>
+    <string name="start_voice_call_prompt_msg">Are you sure that you want to start a voice call?</string>
+    <string name="start_video_call_prompt_msg">Are you sure that you want to start a video call?</string>
+
     <string name="option_send_files">Send files</string>
     <string name="option_take_photo_video">Take photo or video</string>
     <string name="option_take_photo">Take photo</string>
@@ -369,6 +373,8 @@
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
+    <string name="room_participants_kick_prompt_msg">Are you sure that you want to kick this user from this chat?</string>
+    <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
