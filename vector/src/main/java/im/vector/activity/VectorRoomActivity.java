@@ -927,7 +927,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         manageRoomPreview();
         addRoomHeaderClickListeners();
 
-        RoomMember member = mRoom.getMember(mMyUserId);
+        RoomMember member = (null != mRoom) ? mRoom.getMember(mMyUserId) : null;
         boolean hasBeenKicked = (null != member) && member.kickedOrBanned();
 
         // in timeline mode (i.e search in the forward and backward room history)
