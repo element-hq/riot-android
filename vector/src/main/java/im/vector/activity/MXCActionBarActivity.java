@@ -23,15 +23,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-
-import java.util.ArrayList;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
@@ -41,28 +38,11 @@ import im.vector.VectorApp;
 /**
  * extends ActionBarActivity to manage the rageshake
  */
-public class MXCActionBarActivity extends AppCompatActivity {
-    private static final String LOG_TAG = "MXCActBarActivity";
-
-    public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";
+public class MXCActionBarActivity extends RiotAppCompatActivity {
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 
-    protected MXSession mSession = null;
-    protected Room mRoom = null;
-
-    private boolean hasCorruptedStore(Activity activity) {
-        boolean hasCorruptedStore = false;
-        ArrayList<MXSession> sessions = Matrix.getMXSessions(activity);
-
-        if (null != sessions) {
-            for (MXSession session : sessions) {
-                if (session.isAlive()) {
-                    hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
-                }
-            }
-        }
-        return hasCorruptedStore;
-    }
+    MXSession mSession = null;
+    Room mRoom = null;
 
     @Override
     public void onLowMemory() {
@@ -78,11 +58,12 @@ public class MXCActionBarActivity extends AppCompatActivity {
 
     /**
      * Return the used MXSession from an intent.
+     *
      * @param context the application context
-     * @param intent the intent
+     * @param intent  the intent
      * @return the MXSession if it exists.
      */
-    public static MXSession getSession(Context context, Intent intent) {
+    static MXSession getSession(Context context, Intent intent) {
         String matrixId = null;
 
         if (intent.hasExtra(EXTRA_MATRIX_ID)) {
@@ -127,7 +108,7 @@ public class MXCActionBarActivity extends AppCompatActivity {
         //
         // ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(...
         // ActivityCompat.startActivity(activity, new Intent(activity, DetailActivity.class),  options.toBundle());
-       if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
             this.overridePendingTransition(R.anim.anim_slide_nothing, R.anim.anim_slide_out_bottom);
         } else {
             // the animation is enabled in the theme
@@ -148,15 +129,18 @@ public class MXCActionBarActivity extends AppCompatActivity {
 
     /**
      * Dismiss any opened dialog.
+     *
      * @param activity the parent activity.
      */
-    public static void dismissDialogs(FragmentActivity activity) {
+    private static void dismissDialogs(FragmentActivity activity) {
         // close any opened dialog
         FragmentManager fm = activity.getSupportFragmentManager();
         java.util.List<android.support.v4.app.Fragment> fragments = fm.getFragments();
 
         if (null != fragments) {
             for (Fragment fragment : fragments) {
+                // VectorUnknownDevicesFragment must not be dismissed
+                // The user has to update the device statuses
                 if (fragment instanceof DialogFragment) {
                     ((DialogFragment) fragment).dismissAllowingStateLoss();
                 }
@@ -191,6 +175,7 @@ public class MXCActionBarActivity extends AppCompatActivity {
 
     /**
      * Dismiss the soft keyboard if one view in the activity has the focus.
+     *
      * @param activity the activity
      */
     public static void dismissKeyboard(Activity activity) {

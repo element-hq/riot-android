@@ -16,10 +16,10 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -32,8 +32,8 @@ import im.vector.Matrix;
 /**
  * JoinScreenActivity is a dummy activity to join / reject a room invitation
  */
-public class JoinScreenActivity extends Activity {
-    public static final String LOG_TAG = "JoinScreenActivity";
+public class JoinScreenActivity extends RiotBaseActivity {
+    private static final String LOG_TAG = JoinScreenActivity.class.getSimpleName();
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID";
@@ -46,6 +46,8 @@ public class JoinScreenActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // keep the theme ?
 
         Intent intent = getIntent();
 
@@ -63,7 +65,7 @@ public class JoinScreenActivity extends Activity {
         MXSession session = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
         Room room = session.getDataHandler().getRoom(roomId);
 
-        if ((null == session) || (null == room)) {
+        if ((null == session) || (null == room) || !session.isAlive()) {
             Log.e(LOG_TAG, "## onCreate() : undefined parameters");
             finish();
             return;

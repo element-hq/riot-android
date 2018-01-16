@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- header -->
+    <include
+        android:id="@+id/messagesAdapter_search_message_day_separator"
+        layout="@layout/vector_message_header" android:visibility="visible" />
+
+    <RelativeLayout
+        android:id="@+id/messagesAdapter_message_room_name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+
+        <TextView
+            android:id="@+id/messagesAdapter_message_room_name_textview"
+            android:fontFamily="sans-serif-medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:textSize="16sp"
+            android:layout_centerVertical="true"
+            android:textColor="?attr/search_mode_room_name_text_color"
+            android:text = "A room name here" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/messagesAdapter_top_margin_when_no_room_name"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"/>
+
+    <!-- body -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/adapter_item_vector_message_emoji"
+            android:id="@+id/messagesAdapter_search_body"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="18dp">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/messagesAdapter_search_separator_line"
+            android:background="?attr/list_divider_color"/>
+    </RelativeLayout>
+
+</LinearLayout>

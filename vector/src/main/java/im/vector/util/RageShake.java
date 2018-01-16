@@ -26,6 +26,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
+
 import org.matrix.androidsdk.util.Log;
 
 import im.vector.R;
@@ -35,16 +36,33 @@ import im.vector.VectorApp;
  * Manages the rage sakes
  */
 public class RageShake implements SensorEventListener {
-
-    private static final String LOG_TAG = "RageShake";
+    private static final String LOG_TAG = RageShake.class.getSimpleName();
 
     // the context
     private Context mContext;
 
+    // the sensor
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
+    private boolean mIsStarted;
+
     /**
      * Constructor
      */
-    public RageShake() {
+    public RageShake(Context context) {
+        mContext = context;
+
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+
+        if (null != mSensorManager) {
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }
+
+        if (null == mSensor) {
+            Log.e(LOG_TAG, "No accelerometer in this device. Cannot use rage shake.");
+            mSensorManager = null;
+        }
+
         // Samsung devices for some reason seem to be less sensitive than others so the threshold is being
         // lowered for them. A possible lead for a better formula is the fact that the sensitivity detected
         // with the calculated force below seems to relate to the sample rate: The higher the sample rate,
@@ -102,18 +120,33 @@ public class RageShake implements SensorEventListener {
     }
 
     /**
+     * Tells if the rage shake feature is supported
+     * @return true if it is used
+     */
+    private boolean useRageshake() {
+        return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), true);
+    }
+
+    /**
      * start the sensor detector
      */
-    public void start(Context context) {
-        mContext = context;
-
-        SensorManager sm = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-        Sensor s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if (s == null) {
-            Log.e(LOG_TAG, "No accelerometer in this device. Cannot use rage shake.");
-            return;
+    public void start() {
+        if ((null != mSensorManager) && useRageshake() && !VectorApp.isAppInBackground() && !mIsStarted) {
+            mIsStarted = true;
+            mLastUpdate = 0;
+            mLastShake = 0;
+            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
-        sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    /**
+     * Stop the sensor detector
+     */
+    public void stop() {
+        if (null != mSensorManager) {
+            mSensorManager.unregisterListener(this, mSensor);
+        }
+        mIsStarted = false;
     }
 
     @Override
@@ -136,12 +169,6 @@ public class RageShake implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // ignore the sensor events when the application is in background
-        if (VectorApp.isAppInBackground()) {
-            mLastUpdate = 0;
-            return;
-        }
-
         if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
             return;
         }
@@ -159,8 +186,7 @@ public class RageShake implements SensorEventListener {
             mLastX = x;
             mLastY = y;
             mLastZ = z;
-        }
-        else {
+        } else {
             long timeDiff = now - mLastUpdate;
 
             if (timeDiff > 0) {
@@ -170,15 +196,12 @@ public class RageShake implements SensorEventListener {
                         Log.d(LOG_TAG, "Shaking detected.");
                         mLastShakeTimestamp = System.currentTimeMillis();
 
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-                        if (preferences.getBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), true)) {
+                        if (useRageshake()) {
                             promptForReport();
                         }
-                    }
-                    else {
-                        Log.d(LOG_TAG, "Suppress shaking - not passed interval. Ms to go: "+(mTimeToNextShakeMs -
-                                (System.currentTimeMillis() - mLastShakeTimestamp))+" ms");
+                    } else {
+                        Log.d(LOG_TAG, "Suppress shaking - not passed interval. Ms to go: " + (mTimeToNextShakeMs -
+                                (System.currentTimeMillis() - mLastShakeTimestamp)) + " ms");
                     }
                     mLastShake = now;
                 }

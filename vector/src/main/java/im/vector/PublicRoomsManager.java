@@ -25,8 +25,8 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
-import org.matrix.androidsdk.rest.model.PublicRoomsResponse;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoomsResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.List;
  * Manage the public rooms
  */
 public class PublicRoomsManager {
-    private static final String LOG_TAG = "PublicRoomsManager";
+    private static final String LOG_TAG = PublicRoomsManager.class.getSimpleName();
 
     public static final int PUBLIC_ROOMS_LIMIT = 20;
 
@@ -121,7 +121,6 @@ public class PublicRoomsManager {
             return;
         }
 
-        //final String server, final String pattern, final String since, final ApiCallback<PublicRoomsResponse> callback
         mSession.getEventsApiClient().loadPublicRooms(mRequestServer, mThirdPartyInstanceId, mIncludeAllNetworks, mSearchedPattern, mForwardPaginationToken, PUBLIC_ROOMS_LIMIT, new ApiCallback<PublicRoomsResponse>() {
             @Override
             public void onSuccess(PublicRoomsResponse publicRoomsResponse) {
@@ -169,8 +168,17 @@ public class PublicRoomsManager {
                 if (TextUtils.equals(fToken, mRequestKey)) {
                     Log.d(LOG_TAG, "## launchPublicRoomsRequest() : MatrixError " + e.getLocalizedMessage());
 
-                    if (null != callback) {
-                        callback.onMatrixError(e);
+                    // mRequestServer == null means to search on its own home server
+                    // on some servers, it triggers an "internal server error"
+                    // so try with the server url
+                    if (MatrixError.UNKNOWN.equals(e.errcode) && (null == mRequestServer)) {
+                        mRequestServer = mSession.getHomeServerConfig().getHomeserverUri().getHost();
+                        Log.e(LOG_TAG, "## launchPublicRoomsRequest() : mRequestServer == null fails -> try " + mRequestServer);
+                        launchPublicRoomsRequest(callback);
+                    } else {
+                        if (null != callback) {
+                            callback.onMatrixError(e);
+                        }
                     }
                     mRequestKey = null;
                 } else {

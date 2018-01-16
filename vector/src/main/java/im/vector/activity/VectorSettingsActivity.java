@@ -1,12 +1,12 @@
-/* 
+/*
  * Copyright 2016 OpenMarket Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,14 +15,13 @@
  */
 package im.vector.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.MenuItem;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -33,9 +32,6 @@ import im.vector.util.VectorUtils;
  * Displays the client settings.
  */
 public class VectorSettingsActivity extends MXCActionBarActivity {
-    // session
-    private MXSession mSession;
-
     // the UI items
     private VectorSettingsPreferencesFragment mFragment;
 
@@ -43,14 +39,17 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        mSession = getSession(this, intent);
+        // required to have the right translated title
+        setTitle(R.string.title_activity_settings);
 
-        if (null == mSession) {
-            mSession = Matrix.getInstance(VectorSettingsActivity.this).getDefaultSession();
+        Intent intent = getIntent();
+        MXSession session = getSession(this, intent);
+
+        if (null == session) {
+            session = Matrix.getInstance(VectorSettingsActivity.this).getDefaultSession();
         }
 
-        if (mSession == null) {
+        if (session == null) {
             finish();
             return;
         }
@@ -58,8 +57,18 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
         setContentView(R.layout.activity_vector_settings);
 
         // display the fragment
-        mFragment = VectorSettingsPreferencesFragment.newInstance(mSession.getMyUserId());
+        mFragment = VectorSettingsPreferencesFragment.newInstance(session.getMyUserId());
         getFragmentManager().beginTransaction().replace(R.id.vector_settings_page, mFragment).commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -70,11 +79,11 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode,@NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
             boolean granted = false;
 
-            for(int i = 0; i < aGrantResults.length; i++) {
+            for (int i = 0; i < aGrantResults.length; i++) {
                 granted |= (PackageManager.PERMISSION_GRANTED == aGrantResults[i]);
             }
 

@@ -41,7 +41,6 @@ import im.vector.fragments.VectorSearchRoomsListFragment;
  * Unified search pager adapter
  */
 public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapter {
-    private static final String LOG_TAG = VectorUnifiedSearchFragmentPagerAdapter.class.getSimpleName();
 
     private final Context mContext;
     private final MXSession mSession;

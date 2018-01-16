@@ -25,55 +25,73 @@ import android.text.style.ClickableSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 
-import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
+import org.matrix.androidsdk.call.IMXCallsManagerListener;
+import org.matrix.androidsdk.call.MXCallsManagerListener;
 import org.matrix.androidsdk.util.Log;
+
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import im.vector.R;
+import im.vector.widgets.Widget;
+import im.vector.widgets.WidgetsManager;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
 
+import java.util.List;
+
 /**
  * This class displays if there is an ongoing conference call.
  */
 public class VectorOngoingConferenceCallView extends RelativeLayout {
-    private static final String LOG_TAG = "OngConferenceCallView";
+    private static final String LOG_TAG = VectorOngoingConferenceCallView.class.getSimpleName();
 
     // video / voice text click listener.
     public interface ICallClickListener {
         /**
          * The user clicks on the voice text.
+         *
+         * @param widget the active widget (if any)
          */
-        void onVoiceCallClick();
+        void onVoiceCallClick(Widget widget);
 
         /**
          * The user clicks on the video text.
+         *
+         * @param widget the active widget (if any)
          */
-        void onVideoCallClick();
+        void onVideoCallClick(Widget widget);
+
+        /**
+         * The user clicks on the close widget button.
+         *
+         * @param widget the widget
+         */
+        void onCloseWidgetClick(Widget widget);
+
+        /**
+         * Warn that the current active widget has been updated
+         */
+        void onActiveWidgetUpdate();
     }
 
     // call information
     private MXSession mSession;
     private Room mRoom;
 
+    // the linked widget
+    private Widget mActiveWidget;
+
+    // close widget icon
+    private View mCloseWidgetIcon;
+
     private ICallClickListener mCallClickListener;
 
-    private final MXCallsManager.MXCallsManagerListener mCallsListener = new MXCallsManager.MXCallsManagerListener() {
-        @Override
-        public void onIncomingCall(IMXCall call, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
-
-        }
-
-        @Override
-        public void onCallHangUp(IMXCall call) {
-
-        }
-
+    private final IMXCallsManagerListener mCallsListener = new MXCallsManagerListener() {
         @Override
         public void onVoipConferenceStarted(String roomId) {
             if ((null != mRoom) && TextUtils.equals(roomId, mRoom.getRoomId())) {
@@ -86,6 +104,16 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             if ((null != mRoom) && TextUtils.equals(roomId, mRoom.getRoomId())) {
                 refresh();
             }
+        }
+    };
+
+    /**
+     * Jitsi calls management
+     */
+    private final WidgetsManager.onWidgetUpdateListener mWidgetListener = new WidgetsManager.onWidgetUpdateListener() {
+        @Override
+        public void onWidgetUpdate(Widget widget) {
+            refresh();
         }
     };
 
@@ -113,13 +141,13 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     private void initView() {
         View.inflate(getContext(), R.layout.vector_ongoing_conference_call, this);
 
-        TextView textView = (TextView) findViewById(R.id.ongoing_conference_call_text_view);
+        TextView textView = findViewById(R.id.ongoing_conference_call_text_view);
         ClickableSpan voiceClickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
                 if (null != mCallClickListener) {
                     try {
-                        mCallClickListener.onVoiceCallClick();
+                        mCallClickListener.onVoiceCallClick(mActiveWidget);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## initView() : onVoiceCallClick failed " + e.getMessage());
                     }
@@ -132,7 +160,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             public void onClick(View textView) {
                 if (null != mCallClickListener) {
                     try {
-                        mCallClickListener.onVideoCallClick();
+                        mCallClickListener.onVideoCallClick(mActiveWidget);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## initView() : onVideoCallClick failed " + e.getMessage());
                     }
@@ -141,29 +169,52 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         };
 
         SpannableString ss = new SpannableString(textView.getText());
-        
+
         // "voice" and "video" texts are underlined
         // and clickable
         String voiceString = getContext().getString(R.string.ongoing_conference_call_voice);
         int pos = ss.toString().indexOf(voiceString);
 
-        ss.setSpan(voiceClickableSpan, pos, pos + voiceString.length() , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new UnderlineSpan(), pos, pos + voiceString.length(), 0);
+        if (pos >= 0) {
+            ss.setSpan(voiceClickableSpan, pos, pos + voiceString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new UnderlineSpan(), pos, pos + voiceString.length(), 0);
+        } else {
+            Log.e(LOG_TAG, "## initView() : cannot find " + voiceString + " in " + ss.toString());
+        }
 
         String videoString = getContext().getString(R.string.ongoing_conference_call_video);
         pos = ss.toString().indexOf(videoString);
 
-        ss.setSpan(videoClickableSpan, pos, pos + videoString.length() , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new UnderlineSpan(), pos, pos + videoString.length(), 0);
+        if (pos >= 0) {
+            ss.setSpan(videoClickableSpan, pos, pos + videoString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new UnderlineSpan(), pos, pos + videoString.length(), 0);
+        } else {
+            Log.e(LOG_TAG, "## initView() : cannot find " + videoString + " in " + ss.toString());
+        }
 
         textView.setText(ss);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        mCloseWidgetIcon = findViewById(R.id.close_widget_icon_container);
+        mCloseWidgetIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mCallClickListener) {
+                    try {
+                        mCallClickListener.onCloseWidgetClick(mActiveWidget);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## initView() : onCloseWidgetClick failed " + e.getMessage());
+                    }
+                }
+            }
+        });
     }
 
     /**
      * Define the room and the session.
+     *
      * @param session the session
-     * @param room the room
+     * @param room    the room
      */
     public void initRoomInfo(MXSession session, Room room) {
         mSession = session;
@@ -172,6 +223,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
 
     /**
      * Set a call click listener
+     *
      * @param callClickListener the new call listener
      */
     public void setCallClickListener(ICallClickListener callClickListener) {
@@ -183,8 +235,25 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      */
     public void refresh() {
         if ((null != mRoom) && (null != mSession)) {
+            List<Widget> mActiveWidgets = WidgetsManager.getSharedInstance().getActiveJitsiWidgets(mSession, mRoom);
+            Widget widget = mActiveWidgets.isEmpty() ? null : mActiveWidgets.get(0);
+
+            if (mActiveWidget != widget) {
+                mActiveWidget = widget;
+                if (null != mCallClickListener) {
+                    try {
+                        mCallClickListener.onActiveWidgetUpdate();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## refresh() : onActiveWidgetUpdate failed " + e.getMessage());
+                    }
+                }
+            }
+
             IMXCall call = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
-            setVisibility((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) ? View.VISIBLE : View.GONE);
+            setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || (null != mActiveWidget)) ? View.VISIBLE : View.GONE);
+
+            // show the close widget button if the user is allowed to do it
+            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom))) ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -197,6 +266,8 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.addListener(mCallsListener);
         }
+
+        WidgetsManager.addListener(mWidgetListener);
     }
 
     /**
@@ -206,5 +277,14 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.removeListener(mCallsListener);
         }
+
+        WidgetsManager.removeListener(mWidgetListener);
+    }
+
+    /**
+     * @return the current active widget
+     */
+    public Widget getActiveWidget() {
+        return mActiveWidget;
     }
 }

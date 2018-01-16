@@ -51,9 +51,9 @@ public class RecentMediaLayout extends RelativeLayout {
     private void init() {
         inflate(getContext(), R.layout.recent_media, this);
 
-        mThumbnailView = (ImageView)findViewById(R.id.media_thumbnail_view);
-        mTypeView = (ImageView)findViewById(R.id.media_type_view);
-        mGifLogoImageView = (ImageView)findViewById(R.id.media_gif_type_view);
+        mThumbnailView = findViewById(R.id.media_thumbnail_view);
+        mTypeView = findViewById(R.id.media_type_view);
+        mGifLogoImageView = findViewById(R.id.media_gif_type_view);
         mSelectedItemView = findViewById(R.id.media_selected_mask_view);
         mSelectedItemView.setVisibility(View.GONE);
     }
@@ -66,15 +66,8 @@ public class RecentMediaLayout extends RelativeLayout {
     }
 
     /**
-     * Mark the item as selected
-     * @param isSelected true if the layout must be displayed as selected.
-     */
-    public void setIsSelected(Boolean isSelected) {
-        mSelectedItemView.setVisibility(isSelected ? View.VISIBLE : View.GONE);
-    }
-
-    /**
      * Update the layout thumbnail.
+     *
      * @param thumbnail the thumbnail
      */
     public void setThumbnail(Bitmap thumbnail) {
@@ -95,6 +88,7 @@ public class RecentMediaLayout extends RelativeLayout {
 
     /**
      * Update the media type view
+     *
      * @param isVideo true to display the view type thumbnail
      */
     public void setIsVideo(boolean isVideo) {
@@ -107,19 +101,10 @@ public class RecentMediaLayout extends RelativeLayout {
 
     /**
      * Enable the display of the gif logo
+     *
      * @param aIsGifImage true to display the logo, false otherwise
-     * @return the value of aIsGifImage
      */
-    public boolean enableGifLogoImage(Boolean aIsGifImage) {
+    public void enableGifLogoImage(boolean aIsGifImage) {
         mGifLogoImageView.setVisibility(aIsGifImage ? View.VISIBLE : View.GONE);
-        return aIsGifImage;
-    }
-
-    /**
-     * Return the gif logo presence information.
-     * @return true if the logo gif is displayed, false otherwise
-     */
-    public boolean isGifImage() {
-        return (mGifLogoImageView.getVisibility()==View.VISIBLE)?true:false;
     }
 }

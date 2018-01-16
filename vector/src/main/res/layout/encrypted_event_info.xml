@@ -2,203 +2,203 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:text="@string/encryption_information_device_info"
             android:textSize="14sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_device_info"/>
+            android:textStyle="bold" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_user_id"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_user_id"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_info_user_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="an user id"/>
+            android:text="an user id"
+            android:textSize="12sp" />
 
         <TextView
-            android:layout_marginTop="5dp"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_curve25519_identity_key"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_curve25519_identity_key"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_info_curve25519_identity_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="a Curve25519 identity key"/>
+            android:text="a Curve25519 identity key"
+            android:textSize="12sp" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_claimed_ed25519_fingerprint_key"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_claimed_ed25519_fingerprint_key"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_info_claimed_ed25519_fingerprint_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="a Claimed Ed25519 fingerprint key"/>
+            android:text="a Claimed Ed25519 fingerprint key"
+            android:textSize="12sp" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_algorithm"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_algorithm"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_info_algorithm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="an algorithm"/>
+            android:text="an algorithm"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/encrypted_info_decryption_error_label"
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_decryption_error"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_decryption_error"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_info_decryption_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="an error"/>
+            android:text="an error"
+            android:textSize="12sp" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/encryption_information_session_id"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_session_id"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_info_session_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="a session id"/>
+            android:text="a session id"
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:text="@string/encryption_information_sender_device_information"
             android:textSize="14sp"
-            android:textStyle="bold"
-            android:text="@string/encryption_information_sender_device_information"/>
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/encrypted_info_no_device_information_layout"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:text="@string/encryption_information_unknown_device"
                 android:textSize="12sp"
-                android:textStyle="italic"
-                android:text="@string/encryption_information_unknown_device"/>
+                android:textStyle="italic" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/encrypted_info_sender_device_information_layout"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/encryption_information_name"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:text="@string/encryption_information_name"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/encrypted_info_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="a name"/>
+                android:text="a name"
+                android:textSize="12sp" />
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/encryption_information_device_id"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:text="@string/encryption_information_device_id"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/encrypted_info_device_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="a device id"/>
+                android:text="a device id"
+                android:textSize="12sp" />
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/encryption_information_verification"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:text="@string/encryption_information_verification"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/encrypted_info_verification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="a Verification"/>
+                android:text="a Verification"
+                android:textSize="12sp" />
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/encryption_information_ed25519_fingerprint"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:text="@string/encryption_information_ed25519_fingerprint"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/encrypted_ed25519_fingerprint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="a Ed25519 fingerprint"/>
+                android:text="a Ed25519 fingerprint"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 

@@ -17,7 +17,6 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +25,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 
+import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.util.Log;
 
 import android.view.View;
@@ -42,7 +42,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.message.Message;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -50,13 +50,13 @@ import im.vector.R;
 /**
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
  */
-public class LockScreenActivity extends Activity { // do NOT extend from UC*Activity, we do not want to login on this screen!
-    public static final String LOG_TAG = "LockScreenActivity";
+public class LockScreenActivity extends RiotBaseActivity { // do NOT extend from UC*Activity, we do not want to login on this screen!
+    private static final String LOG_TAG = LockScreenActivity.class.getSimpleName();
 
     public static final String EXTRA_SENDER_NAME = "extra_sender_name";
     public static final String EXTRA_MESSAGE_BODY = "extra_chat_body";
     public static final String EXTRA_ROOM_ID = "extra_room_id";
-    public static final String EXTRA_MATRIX_ID = "extra_matrix_id";
+    private static final String EXTRA_MATRIX_ID = "extra_matrix_id";
 
     private static LockScreenActivity mLockScreenActivity = null;
 
@@ -69,6 +69,8 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // keep theme ?
 
         // kill any running alert
         if (null != mLockScreenActivity) {
@@ -118,8 +120,8 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
         ((TextView) findViewById(R.id.lock_screen_sender)).setText(intent.getStringExtra(EXTRA_SENDER_NAME) + " : ");
         ((TextView) findViewById(R.id.lock_screen_body)).setText(intent.getStringExtra(EXTRA_MESSAGE_BODY));
         ((TextView) findViewById(R.id.lock_screen_room_name)).setText(room.getName(session.getCredentials().userId));
-        final ImageButton sendButton = (ImageButton) findViewById(R.id.lock_screen_sendbutton);
-        final EditText editText = (EditText) findViewById(R.id.lock_screen_edittext);
+        final ImageButton sendButton = findViewById(R.id.lock_screen_sendbutton);
+        final EditText editText = findViewById(R.id.lock_screen_edittext);
 
         // disable send button
         sendButton.setEnabled(false);
@@ -169,17 +171,25 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
 
                     @Override
                     public void onNetworkError(Exception e) {
-                        Log.d(LOG_TAG, "Send message : onNetworkError " + e.getLocalizedMessage());
+                        Log.d(LOG_TAG, "Send message : onNetworkError " + e.getMessage());
+                        CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
-                        Log.d(LOG_TAG, "Send message : onMatrixError " + e.getLocalizedMessage());
+                        Log.d(LOG_TAG, "Send message : onMatrixError " + e.getMessage());
+
+                        if (e instanceof MXCryptoError) {
+                            CommonActivityUtils.displayToast(LockScreenActivity.this, ((MXCryptoError) e).getDetailedErrorDescription());
+                        } else {
+                            CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
+                        }
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        Log.d(LOG_TAG, "Send message : onUnexpectedError " + e.getLocalizedMessage());
+                        Log.d(LOG_TAG, "Send message : onUnexpectedError " + e.getMessage());
+                        CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
                     }
                 });
 
@@ -192,7 +202,7 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
             }
         });
 
-        mMainLayout = (LinearLayout) findViewById(R.id.lock_main_layout);
+        mMainLayout = findViewById(R.id.lock_main_layout);
     }
 
     private void refreshMainLayout() {

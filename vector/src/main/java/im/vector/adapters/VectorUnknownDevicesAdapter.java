@@ -41,7 +41,7 @@ import im.vector.R;
  */
 public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
 
-    private static final String LOG_TAG = "VUnknownDevicesAdapter";
+    private static final String LOG_TAG = VectorUnknownDevicesAdapter.class.getSimpleName();
 
     // devices verification listener
     public interface IVerificationAdapterListener {
@@ -60,12 +60,10 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
         void OnBlockDeviceClick(MXDeviceInfo aDeviceInfo);
     }
 
-    // context
-    private Context mContext;
     // layout inflater
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
     // devices list
-    private List<Pair<String, List<MXDeviceInfo>>> mUnknownDevicesList;
+    private final List<Pair<String, List<MXDeviceInfo>>> mUnknownDevicesList;
     // listener
     private IVerificationAdapterListener mListener;
 
@@ -76,9 +74,7 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
      * @param unknownDevices the unknown devices list
      */
     public VectorUnknownDevicesAdapter(Context aContext, List<Pair<String, List<MXDeviceInfo>>> unknownDevices) {
-        // init internal fields
-        mContext = aContext;
-        mLayoutInflater = LayoutInflater.from(mContext);
+        mLayoutInflater = LayoutInflater.from(aContext);
         mUnknownDevicesList = (null == unknownDevices) ? new ArrayList<Pair<String, List<MXDeviceInfo>>>() : unknownDevices;
     }
 
@@ -152,13 +148,13 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
             convertView = this.mLayoutInflater.inflate(R.layout.adapter_item_vector_unknown_devices_header, null);
         }
 
-        TextView sectionNameTxtView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading);
+        TextView sectionNameTxtView = convertView.findViewById(R.id.heading);
 
         if (null != sectionNameTxtView) {
             sectionNameTxtView.setText(getGroupTitle(groupPosition));
         }
 
-        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+        ImageView imageView = convertView.findViewById(R.id.heading_image);
 
         if (isExpanded) {
             imageView.setImageResource(R.drawable.ic_material_expand_less_black);
@@ -182,11 +178,11 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
         final MXDeviceInfo deviceItem = mUnknownDevicesList.get(groupPosition).second.get(childPosition);
 
         // retrieve the ui items
-        final Button buttonVerify = (Button) convertView.findViewById(R.id.button_verify);
-        final Button buttonBlock = (Button) convertView.findViewById(R.id.button_block);
-        final TextView deviceNameTextView = (TextView) convertView.findViewById(R.id.device_name);
-        final TextView deviceIdTextView = (TextView) convertView.findViewById(R.id.device_id);
-        final ImageView e2eIconView = (ImageView) convertView.findViewById(R.id.device_e2e_icon);
+        final Button buttonVerify = convertView.findViewById(R.id.button_verify);
+        final Button buttonBlock = convertView.findViewById(R.id.button_block);
+        final TextView deviceNameTextView = convertView.findViewById(R.id.device_name);
+        final TextView deviceIdTextView = convertView.findViewById(R.id.device_id);
+        final ImageView e2eIconView = convertView.findViewById(R.id.device_e2e_icon);
 
         buttonVerify.setTransformationMethod(null);
         buttonBlock.setTransformationMethod(null);

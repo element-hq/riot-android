@@ -24,13 +24,16 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import im.vector.R;
-import im.vector.activity.VectorCallViewActivity;
-import im.vector.util.CallUtilities;
-import im.vector.util.VectorUtils;
 
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.IMXCallListener;
+import org.matrix.androidsdk.call.MXCallListener;
 import org.matrix.androidsdk.data.Room;
+
+import im.vector.R;
+import im.vector.util.CallUtilities;
+import im.vector.util.CallsManager;
+import im.vector.util.VectorUtils;
 
 /**
  * This class displays the pending call information.
@@ -48,14 +51,17 @@ public class VectorPendingCallView extends RelativeLayout {
     private Handler mUIHandler;
 
     // the UI items
+    private View mMainView;
     private TextView mCallDescriptionTextView;
     private TextView mCallStatusTextView;
 
-    /** set to true to hide the line displaying the call status **/
+    /**
+     * set to true to hide the line displaying the call status
+     **/
     private boolean mIsCallStatusHidden;
 
     // the call listener
-    private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
+    private final IMXCallListener mCallListener = new MXCallListener() {
         @Override
         public void onStateDidChange(String state) {
             refresh();
@@ -67,12 +73,8 @@ public class VectorPendingCallView extends RelativeLayout {
         }
 
         @Override
-        public void onViewLoading(View callView) {
+        public void onCallViewCreated(View callView) {
             refresh();
-        }
-
-        @Override
-        public void onViewReady() {
         }
 
         @Override
@@ -89,7 +91,6 @@ public class VectorPendingCallView extends RelativeLayout {
         public void onPreviewSizeChanged(int width, int height) {
         }
     };
-
 
     /**
      * constructors
@@ -116,10 +117,12 @@ public class VectorPendingCallView extends RelativeLayout {
         View.inflate(getContext(), R.layout.vector_pending_call_view, this);
 
         // retrieve the UI items
-        mCallDescriptionTextView = (TextView) findViewById(R.id.pending_call_room_name_textview);
+        mMainView = findViewById(R.id.main_view);
+
+        mCallDescriptionTextView = findViewById(R.id.pending_call_room_name_textview);
         mCallDescriptionTextView.setVisibility(View.GONE);
 
-        mCallStatusTextView = (TextView) findViewById(R.id.pending_call_status_textview);
+        mCallStatusTextView = findViewById(R.id.pending_call_status_textview);
         mCallStatusTextView.setVisibility(View.GONE);
 
         // UI handler
@@ -132,7 +135,7 @@ public class VectorPendingCallView extends RelativeLayout {
      * If there is none, this view is gone.
      */
     public void checkPendingCall() {
-        IMXCall call = VectorCallViewActivity.getActiveCall();
+        IMXCall call = CallsManager.getSharedInstance().getActiveCall();
 
         // no more call
         if (null == call) {
@@ -194,8 +197,7 @@ public class VectorPendingCallView extends RelativeLayout {
      * Terminates the refresh processes.
      */
     public void onCallTerminated() {
-        mCall = null;
-        setVisibility(View.GONE);
+        checkPendingCall();
     }
 
     /**
@@ -238,9 +240,19 @@ public class VectorPendingCallView extends RelativeLayout {
 
     /**
      * Enable/disable the display of the status active call.
+     *
      * @param aIsEnabled true to display the call status, false otherwise
      */
-    public void enableCallStatusDisplay(boolean aIsEnabled){
+    public void enableCallStatusDisplay(boolean aIsEnabled) {
         mIsCallStatusHidden = !aIsEnabled;
+    }
+
+    /**
+     * Update the background color of the call view
+     *
+     * @param primaryColor the primary color
+     */
+    public void updateBackgroundColor(int primaryColor) {
+        mMainView.setBackgroundColor(primaryColor);
     }
 }

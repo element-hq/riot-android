@@ -20,8 +20,8 @@
             <!-- texture view the height will be computed programmatically-->
             <RelativeLayout
                 android:id="@+id/medias_picker_camera_preview_layout"
-                android:layout_height="500dp"
                 android:layout_width="wrap_content"
+                android:layout_height="500dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true">
 
@@ -31,32 +31,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:visibility="visible"/>
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/medias_picker_texture_mask_view"
-                    android:background="@android:color/black"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@android:color/black" />
 
                 <!-- button to record a video -->
                 <im.vector.view.VideoRecordView
                     android:id="@+id/medias_record_animation"
-                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="26dp"
-                    android:layout_alignParentBottom="true"/>
+                    android:visibility="gone" />
 
                 <!-- button to take the picture -->
                 <ImageView
                     android:id="@+id/medias_picker_camera_button"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
+                    android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="30dp"
-                    android:layout_alignParentBottom="true"
                     android:src="@drawable/ic_take_picture_vector_green" />
 
                 <!-- toggle button to swap between front/rear camera-->
@@ -64,11 +64,11 @@
                     android:id="@+id/medias_picker_switch_camera"
                     android:layout_width="46dp"
                     android:layout_height="46dp"
-                    android:background="@drawable/vector_medias_picker_button_background"
-                    android:layout_alignRight="@+id/medias_picker_texture_view"
                     android:layout_alignParentTop="true"
+                    android:layout_alignRight="@+id/medias_picker_texture_view"
+                    android:layout_marginRight="12dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginRight="12dp">
+                    android:background="@drawable/vector_medias_picker_button_background">
 
                     <ImageView
                         android:layout_width="30dp"
@@ -82,10 +82,10 @@
                     android:id="@+id/medias_picker_exit"
                     android:layout_width="46dp"
                     android:layout_height="46dp"
-                    android:onClick="onExitButton"
-                    android:background="@drawable/vector_medias_picker_button_background"
+                    android:layout_marginLeft="12dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginLeft="12dp">
+                    android:background="@drawable/vector_medias_picker_button_background"
+                    android:onClick="onExitButton">
 
                     <ImageView
                         android:layout_width="22dp"
@@ -102,8 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
-                android:layout_gravity="center_horizontal">
-            </TableLayout>
+                android:layout_gravity="center_horizontal"></TableLayout>
 
         </RelativeLayout>
     </ScrollView>
@@ -111,10 +110,10 @@
     <!-- preview container: imageview + redo and cancel buttons -->
     <RelativeLayout
         android:id="@+id/medias_picker_preview_layout"
-        android:visibility="gone"
-        android:background="@android:color/black"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:visibility="gone">
 
         <!-- layout containing the attach/redo buttons associated with the android:scaleType="centerCrop"
 preview of the taken image -->
@@ -132,10 +131,10 @@ preview of the taken image -->
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="30"
-                android:textColor="@android:color/white"
                 android:gravity="center"
-                android:textSize="20dp"
-                android:text="@string/cancel"/>
+                android:text="@string/cancel"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
 
             <Space
                 android:layout_width="0dp"
@@ -150,10 +149,10 @@ preview of the taken image -->
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="30"
-                android:textColor="@android:color/white"
                 android:gravity="center"
-                android:textSize="20dp"
-                android:text="@string/ok" />
+                android:text="@string/ok"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
         </LinearLayout>
 
         <!-- image view used to display the image preview (from gallery or camera) -->
@@ -183,20 +182,20 @@ preview of the taken image -->
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/cancel_attach_picture_layout"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <VideoView
                 android:id="@+id/medias_picker_preview_video_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true" />
 
             <ImageView
                 android:id="@+id/medias_picker_preview_video_button"
-                android:layout_centerInParent="true"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/camera_play"/>
+                android:layout_centerInParent="true"
+                android:src="@drawable/camera_play" />
         </RelativeLayout>
 
     </RelativeLayout>
@@ -204,18 +203,18 @@ preview of the taken image -->
     <!-- progress bar -->
     <RelativeLayout
         android:id="@+id/medias_preview_progress_bar_layout"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <!-- downloading progress bar -->
         <ProgressBar
             android:id="@+id/medias_preview_progress_bar"
-            android:layout_height="40dp"
             android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:visibility="visible"
-            android:indeterminate="true" />
+            android:indeterminate="true"
+            android:visibility="visible" />
     </RelativeLayout>
 
 </FrameLayout>

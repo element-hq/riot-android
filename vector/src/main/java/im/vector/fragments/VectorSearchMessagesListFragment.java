@@ -23,13 +23,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.data.EventTimeline;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.model.Event;
@@ -43,20 +45,20 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
 
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
-    private static final String LOG_TAG = "VSearchMsgListFrag";
+    private static final String LOG_TAG = VectorSearchMessagesListFragment.class.getSimpleName();
 
     // parameters
-    protected String mPendingPattern;
-    protected String mSearchingPattern;
-    protected ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<>();
+    private String mSearchingPattern;
+    final ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<>();
 
-    protected View mProgressView = null;
+    private View mProgressView = null;
 
-    protected String mRoomId;
+    String mRoomId;
 
     /**
      * static constructor
-     * @param matrixId the session Id.
+     *
+     * @param matrixId    the session Id.
      * @param layoutResId the used layout.
      */
     public static VectorSearchMessagesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
@@ -85,7 +87,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     }
 
     @Override
-    public MessagesAdapter createMessagesAdapter() {
+    public AbstractMessagesAdapter createMessagesAdapter() {
         return new VectorSearchMessagesListAdapter(mSession, getActivity(), (null == mRoomId), getMXMediasCache());
     }
 
@@ -120,6 +122,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     /**
      * The user scrolls the list.
      * Apply an expected behaviour
+     *
      * @param event the scroll event
      */
     @Override
@@ -167,10 +170,11 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
     /**
      * Tell if the search is allowed for a dedicated pattern
+     *
      * @param pattern the searched pattern.
      * @return true if the search is allowed.
      */
-    protected boolean allowSearch(String pattern) {
+    boolean allowSearch(String pattern) {
         // ConsoleMessageListFragment displays the list of unfiltered messages when there is no pattern
         // in the search case, clear the list and hide it
         return !TextUtils.isEmpty(pattern);
@@ -189,6 +193,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
     /**
      * Update the searched pattern.
+     *
      * @param pattern the pattern to find out. null to disable the search mode
      */
     @Override
@@ -200,7 +205,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
         // wait that the fragment is displayed
         if (null == mMessageListView) {
-            mPendingPattern = pattern;
             return;
         }
 
@@ -328,6 +332,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
     /**
      * Called when a long click is performed on the message content
+     *
      * @param position the cell position
      * @return true if managed
      */
@@ -349,6 +354,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     }
 
     @Override
-    public void onReceiptEvent(List<String> senderIds){
+    public void onReceiptEvent(List<String> senderIds) {
     }
 }

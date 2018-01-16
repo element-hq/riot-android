@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 /**
  * Customize PreferenceCategory class to redefine some attributes.
- *
  */
 public class VectorPreferenceCategory extends PreferenceCategory {
 
@@ -45,9 +44,9 @@ public class VectorPreferenceCategory extends PreferenceCategory {
     @Override
     protected View onCreateView(ViewGroup parent) {
         View viewRetValue = super.onCreateView(parent);
-        TextView titleTextView = (TextView)viewRetValue.findViewById(android.R.id.title);
+        TextView titleTextView = viewRetValue.findViewById(android.R.id.title);
 
-        if(null != titleTextView) {
+        if (null != titleTextView) {
             titleTextView.setTypeface(null, Typeface.BOLD);
         }
 

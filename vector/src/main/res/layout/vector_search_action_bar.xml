@@ -9,16 +9,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:fontFamily="sans-serif-medium"
+        android:hint="@string/search_hint"
         android:imeOptions="actionSearch"
         android:inputType="text"
-        android:fontFamily="sans-serif-medium"
-        android:textSize="20sp"
-        android:focusable="true"
-        android:hint="@string/search_hint"
-        android:textColorHint="@color/vector_search_hint_color"
-        android:focusableInTouchMode="true"
-        android:singleLine="true"
-        android:background="@android:color/transparent"
-        android:textCursorDrawable="@drawable/searches_cursor_background"/>
+        android:maxLines="1"
+        android:textColor="?attr/default_text_dark_color"
+        android:textColorHint="?attr/default_text_hint_color"
+        android:textCursorDrawable="@drawable/searches_cursor_background"
+        android:textSize="20sp" />
 
 </RelativeLayout>

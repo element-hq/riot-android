@@ -9,53 +9,71 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/vector_33_black"/>
+        android:background="?attr/pending_outgoing_view_background_color" />
 
     <!-- call view -->
     <LinearLayout
         android:id="@+id/pending_call_main_view"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_width="match_parent"
         android:layout_height="72dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:orientation="horizontal">
 
         <!-- call icon -->
         <RelativeLayout
             android:id="@+id/call_icon_container"
-            android:layout_gravity="center_vertical"
             android:layout_width="40dp"
-            android:layout_height="40dp">
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical">
+
             <ImageView
                 android:id="@+id/call_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_alignParentLeft="true"
-                android:src="@drawable/ic_material_call_white"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_material_call_white" />
         </RelativeLayout>
 
         <!-- call description -->
         <LinearLayout
             android:id="@+id/call_info_container"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="4dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:paddingBottom="5dp">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="4dp">
 
             <TextView
                 android:id="@+id/ongoing_conference_call_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-bold"
-                android:textStyle="bold"
-                android:textSize="14sp"
+                android:text="@string/ongoing_conference_call"
                 android:textColor="@android:color/white"
-                android:text="@string/ongoing_conference_call"/>
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </LinearLayout>
+
+        <!-- call icon -->
+        <RelativeLayout
+            android:id="@+id/close_widget_icon_container"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/close_widget_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/vector_close_widget"
+                android:tint="@android:color/white" />
+        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

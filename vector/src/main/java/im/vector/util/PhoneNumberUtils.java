@@ -23,7 +23,6 @@ import android.support.v4.util.Pair;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
@@ -37,12 +36,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import im.vector.VectorApp;
+
 /**
  * This class contains the phone number toolbox
  */
 public class PhoneNumberUtils {
-
-    private static final String LOG_TAG = "PhoneNumberUtils";
+    private static final String LOG_TAG = PhoneNumberUtils.class.getSimpleName();
 
     // preference keys
     public static final String COUNTRY_CODE_PREF_KEY = "COUNTRY_CODE_PREF_KEY";
@@ -55,10 +55,21 @@ public class PhoneNumberUtils {
     private static List<CountryPhoneData> mCountryIndicatorList;
 
     /**
+     * The locale has been updated.
+     * The country code to string maps become invalid
+     */
+    public static void onLocaleUpdate() {
+        mCountryCodes = null;
+        mCountryIndicatorList = null;
+    }
+
+    /**
      * Build the country codes list
      */
     private static void buildCountryCodesList() {
         if (null == mCountryCodes) {
+            Locale applicationLocale = VectorApp.getApplicationLocale();
+
             // retrieve the ISO country code
             String[] isoCountryCodes = Locale.getISOCountries();
             List<Pair<String, String>> countryCodes = new ArrayList<>();
@@ -66,7 +77,7 @@ public class PhoneNumberUtils {
             // retrieve the human display name
             for (String countryCode : isoCountryCodes) {
                 Locale locale = new Locale("", countryCode);
-                countryCodes.add(new Pair<>(countryCode, locale.getDisplayCountry()));
+                countryCodes.add(new Pair<>(countryCode, locale.getDisplayCountry(applicationLocale)));
             }
 
             // sort by human display names
@@ -120,22 +131,6 @@ public class PhoneNumberUtils {
     }
 
     /**
-     * @return the country codes.
-     */
-    public static String[] getCountryCodes() {
-        buildCountryCodesList();
-        return mCountryCodes;
-    }
-
-    /**
-     * @return the human readable country codes.
-     */
-    public static String[] getHumanCountryCodes() {
-        buildCountryCodesList();
-        return mCountryNames;
-    }
-
-    /**
      * Provide a human readable name for a a country code.
      *
      * @param countryCode the country code
@@ -164,7 +159,7 @@ public class PhoneNumberUtils {
         if (!preferences.contains(COUNTRY_CODE_PREF_KEY) || TextUtils.isEmpty(preferences.getString(COUNTRY_CODE_PREF_KEY, ""))) {
             try {
                 TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                String countryCode = tm.getNetworkCountryIso().toUpperCase();
+                String countryCode = tm.getNetworkCountryIso().toUpperCase(VectorApp.getApplicationLocale());
                 if (TextUtils.isEmpty(countryCode)
                         && !TextUtils.isEmpty(Locale.getDefault().getCountry())
                         && PhoneNumberUtil.getInstance().getCountryCodeForRegion(Locale.getDefault().getCountry()) != 0) {
@@ -208,7 +203,7 @@ public class PhoneNumberUtils {
     /**
      * Phone numbers cache by text.
      */
-    static HashMap<String, Object> mPhoneNumberByText = new HashMap<>();
+    private static final HashMap<String, Object> mPhoneNumberByText = new HashMap<>();
 
     /**
      * Provide libphonenumber phonenumber from an unformatted one.
@@ -217,7 +212,7 @@ public class PhoneNumberUtils {
      * @param countryCode the cuntry code
      * @return the phone number
      */
-    public static Phonenumber.PhoneNumber getPhoneNumber(final String text, final String countryCode) {
+    private static Phonenumber.PhoneNumber getPhoneNumber(final String text, final String countryCode) {
         String key = getMapKey(text, countryCode);
         Phonenumber.PhoneNumber phoneNumber = null;
 
@@ -248,7 +243,7 @@ public class PhoneNumberUtils {
     /**
      * E164 phone number by unformatted phonenumber
      */
-    static HashMap<String, String> mE164PhoneNumberByText = new HashMap<>();
+    private static final HashMap<String, String> mE164PhoneNumberByText = new HashMap<>();
 
     /**
      * Convert an unformatted phone number to a E164 format one.
@@ -268,7 +263,7 @@ public class PhoneNumberUtils {
      * @param countryCode teh country code
      * @return the E164 phone number
      */
-    public static String getE164format(final String phoneNumber, final String countryCode) {
+    private static String getE164format(final String phoneNumber, final String countryCode) {
         if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(countryCode)) {
             return null;
         }
@@ -279,7 +274,10 @@ public class PhoneNumberUtils {
         if (null == e164Pn) {
             e164Pn = "";
             try {
-                e164Pn = PhoneNumberUtil.getInstance().format(getPhoneNumber(phoneNumber, countryCode), PhoneNumberUtil.PhoneNumberFormat.E164);
+                Phonenumber.PhoneNumber pn = getPhoneNumber(phoneNumber, countryCode);
+                if (null != pn) {
+                    e164Pn = PhoneNumberUtil.getInstance().format(pn, PhoneNumberUtil.PhoneNumberFormat.E164);
+                }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## getE164format() failed " + e.getMessage());
             }
@@ -297,6 +295,7 @@ public class PhoneNumberUtils {
 
     /**
      * Convert a @{@link com.google.i18n.phonenumbers.Phonenumber.PhoneNumber} to a string with E164 format.
+     *
      * @param phoneNumber
      * @return formatted screen
      */
@@ -306,45 +305,5 @@ public class PhoneNumberUtils {
             phoneNumberFormatted = PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.E164);
         }
         return phoneNumberFormatted;
-    }
-
-    /**
-     * Try to extract a phone number from the given String
-     *
-     * @param context context
-     * @param potentialPhoneNumber the potential phone number
-     * @return PhoneNumber object if valid phone number
-     */
-    public static Phonenumber.PhoneNumber extractPhoneNumber(final Context context, final String potentialPhoneNumber) {
-        Phonenumber.PhoneNumber phoneNumber = null;
-
-        if (android.util.Patterns.PHONE.matcher(potentialPhoneNumber).matches()) {
-            try {
-                if (potentialPhoneNumber.startsWith("+")) {
-                    phoneNumber = PhoneNumberUtil.getInstance().parse(potentialPhoneNumber, null);
-                } else {
-                    // Try with a "+" prefix
-                    phoneNumber = PhoneNumberUtil.getInstance().parse("+" + potentialPhoneNumber, null);
-                }
-            } catch (NumberParseException e) {
-                // Try with specifying the calling code
-                try {
-                    phoneNumber = PhoneNumberUtil.getInstance().parse(potentialPhoneNumber, PhoneNumberUtils.getCountryCode(context));
-                } catch (NumberParseException e1) {
-                    // Do nothing
-                }
-            } catch (Exception e) {
-                // Do nothing
-            }
-
-            // PhoneNumberUtils parse does its best to extract a phone number from the string.
-            // For example, parse(abc100) returns 100.
-            // So, we check if it is a valid phone number.
-            if ((null != phoneNumber) && !PhoneNumberUtil.getInstance().isValidNumber(phoneNumber)) {
-                phoneNumber = null;
-            }
-        }
-
-        return phoneNumber;
     }
 }

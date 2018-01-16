@@ -1,37 +1,56 @@
-package im.vector;
+/*
+ * Copyright 2015 OpenMarket Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
+package im.vector;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.View;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.ssl.Fingerprint;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class UnrecognizedCertHandler {
-    private static final String LOG_TAG = "UnrecognizedCertHandler";
+    private static final String LOG_TAG = UnrecognizedCertHandler.class.getSimpleName();
 
-    private static HashMap<String, HashSet<Fingerprint>> ignoredFingerprints = new HashMap<>();
-    private static HashSet<String> openDialogIds = new HashSet<>();
+    private static final HashMap<String, HashSet<Fingerprint>> ignoredFingerprints = new HashMap<>();
+    private static final HashSet<String> openDialogIds = new HashSet<>();
 
-    public static void show(final HomeserverConnectionConfig hsConfig, final Fingerprint unrecognizedFingerprint, boolean existing, final Callback callback) {
+    public static void show(final HomeServerConnectionConfig hsConfig, final Fingerprint unrecognizedFingerprint, boolean existing, final Callback callback) {
         final Activity activity = VectorApp.getCurrentActivity();
-        if (activity == null) return;
+
+        if (activity == null) {
+            return;
+        }
 
         final String dialogId;
         if (hsConfig.getCredentials() != null) {
             dialogId = hsConfig.getCredentials().userId;
         } else {
-            dialogId = hsConfig.getHomeserverUri().toString();
+            dialogId = hsConfig.getHomeserverUri().toString() + unrecognizedFingerprint.getBytesAsHexString();
         }
-
 
         if (openDialogIds.contains(dialogId)) {
             Log.i(LOG_TAG, "Not opening dialog " + dialogId + " as one is already open.");
@@ -52,15 +71,15 @@ public class UnrecognizedCertHandler {
 
         View layout = inflater.inflate(R.layout.ssl_fingerprint_prompt, null);
 
-        TextView sslFingerprintTitle = (TextView) layout.findViewById(R.id.ssl_fingerprint_title);
+        TextView sslFingerprintTitle = layout.findViewById(R.id.ssl_fingerprint_title);
         sslFingerprintTitle.setText(
-                String.format(activity.getString(R.string.ssl_fingerprint_hash), unrecognizedFingerprint.getType().toString())
+                String.format(VectorApp.getApplicationLocale(), activity.getString(R.string.ssl_fingerprint_hash), unrecognizedFingerprint.getType().toString())
         );
 
-        TextView sslFingerprint = (TextView) layout.findViewById(R.id.ssl_fingerprint);
+        TextView sslFingerprint = layout.findViewById(R.id.ssl_fingerprint);
         sslFingerprint.setText(unrecognizedFingerprint.getBytesAsHexString());
 
-        TextView sslUserId = (TextView) layout.findViewById(R.id.ssl_user_id);
+        TextView sslUserId = layout.findViewById(R.id.ssl_user_id);
         if (hsConfig.getCredentials() != null) {
             sslUserId.setText(
                     activity.getString(R.string.username) + ":  " + hsConfig.getCredentials().userId
@@ -71,7 +90,7 @@ public class UnrecognizedCertHandler {
             );
         }
 
-        TextView sslExpl = (TextView) layout.findViewById(R.id.ssl_explanation);
+        TextView sslExpl = layout.findViewById(R.id.ssl_explanation);
         if (existing) {
             if (hsConfig.getAllowedFingerprints().size() > 0) {
                 sslExpl.setText(activity.getString(R.string.ssl_expected_existing_expl));
@@ -152,7 +171,9 @@ public class UnrecognizedCertHandler {
 
     public interface Callback {
         void onAccept();
+
         void onIgnore();
+
         void onReject();
     }
 }

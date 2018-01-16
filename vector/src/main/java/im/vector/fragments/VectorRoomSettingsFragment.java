@@ -36,6 +36,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -64,6 +65,7 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -71,9 +73,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import im.vector.Matrix;
-import im.vector.R;
+import im.vector.R;;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
@@ -83,14 +86,14 @@ import im.vector.preference.RoomAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
-import im.vector.util.ResourceUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class VectorRoomSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     // internal constants values
-    private static final String LOG_TAG = "VectorRoomSetFragment";
+    private static final String LOG_TAG = VectorRoomSettingsFragment.class.getSimpleName();
     private static final boolean UPDATE_UI = true;
     private static final boolean DO_NOT_UPDATE_UI = false;
     private static final int REQ_CODE_UPDATE_ROOM_AVATAR = 0x10;
@@ -122,11 +125,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private static final String PREF_KEY_BANNED_DIVIDER = "banned_divider";
     private static final String PREF_KEY_ENCRYPTION = "encryptionKey";
 
+    private static final String PREF_KEY_FLAIR = "flair";
+    private static final String PREF_KEY_FLAIR_DIVIDER = "flair_divider";
+
     private static final String ADDRESSES_PREFERENCE_KEY_BASE = "ADDRESSES_PREFERENCE_KEY_BASE";
     private static final String NO_LOCAL_ADDRESS_PREFERENCE_KEY = "NO_LOCAL_ADDRESS_PREFERENCE_KEY";
     private static final String ADD_ADDRESSES_PREFERENCE_KEY = "ADD_ADDRESSES_PREFERENCE_KEY";
 
     private static final String BANNED_PREFERENCE_KEY_BASE = "BANNED_PREFERENCE_KEY_BASE";
+
+    private static final String FLAIR_PREFERENCE_KEY_BASE = "FLAIR_PREFERENCE_KEY_BASE";
 
     private static final String UNKNOWN_VALUE = "UNKNOWN_VALUE";
 
@@ -145,6 +153,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     // banned members
     private PreferenceCategory mBannedMembersSettingsCategory;
     private PreferenceCategory mBannedMembersSettingsCategoryDivider;
+
+    // flair
+    private PreferenceCategory mFlairSettingsCategory;
+    private PreferenceCategory mFlairSettingsCategoryDivider;
 
     // UI elements
     private RoomAvatarPreference mRoomPhotoAvatar;
@@ -233,8 +245,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                             || Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)
                             || Event.EVENT_TYPE_STATE_ROOM_JOIN_RULES.equals(eventType)    // room access rules
                             || Event.EVENT_TYPE_STATE_ROOM_GUEST_ACCESS.equals(eventType)  // room access rules
-                            )
-                    {
+                            ) {
                         Log.d(LOG_TAG, "## onLiveEvent() event = " + eventType);
                         updateUi();
                     }
@@ -282,7 +293,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     };
 
-    public static VectorRoomSettingsFragment newInstance(String aMatrixId,String aRoomId) {
+    public static VectorRoomSettingsFragment newInstance(String aMatrixId, String aRoomId) {
         VectorRoomSettingsFragment theFragment = new VectorRoomSettingsFragment();
         Bundle args = new Bundle();
         args.putString(EXTRA_MATRIX_ID, aMatrixId);
@@ -295,19 +306,18 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG,"## onCreate() IN");
+        Log.d(LOG_TAG, "## onCreate() IN");
 
         // retrieve fragment extras
         String matrixId = getArguments().getString(EXTRA_MATRIX_ID);
         String roomId = getArguments().getString(EXTRA_ROOM_ID);
 
-        if(TextUtils.isEmpty(matrixId) || TextUtils.isEmpty(roomId)){
+        if (TextUtils.isEmpty(matrixId) || TextUtils.isEmpty(roomId)) {
             Log.e(LOG_TAG, "## onCreate(): fragment extras (MatrixId or RoomId) are missing");
             getActivity().finish();
-        }
-        else {
+        } else {
             mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
-            if (null != mSession) {
+            if ((null != mSession) && mSession.isAlive()) {
                 mRoom = mSession.getDataHandler().getRoom(roomId);
                 mBingRulesManager = mSession.getDataHandler().getBingRulesManager();
             }
@@ -322,18 +332,20 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         addPreferencesFromResource(R.xml.vector_room_settings_preferences);
 
         // init preference fields
-        mRoomPhotoAvatar = (RoomAvatarPreference)findPreference(PREF_KEY_ROOM_PHOTO_AVATAR);
-        mRoomNameEditTxt = (EditTextPreference)findPreference(PREF_KEY_ROOM_NAME);
-        mRoomTopicEditTxt = (EditTextPreference)findPreference(PREF_KEY_ROOM_TOPIC);
-        mRoomDirectoryVisibilitySwitch = (CheckBoxPreference)findPreference(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH);
-        mRoomMuteNotificationsSwitch = (CheckBoxPreference)findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);
-        mRoomTagListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_TAG_LIST);
-        mRoomAccessRulesListPreference = (VectorListPreference)findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
-        mRoomHistoryReadabilityRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
-        mAddressesSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_ADDRESSES);
-        mAdvandceSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_ADVANCED);
-        mBannedMembersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_BANNED);
-        mBannedMembersSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_BANNED_DIVIDER);
+        mRoomPhotoAvatar = (RoomAvatarPreference) findPreference(PREF_KEY_ROOM_PHOTO_AVATAR);
+        mRoomNameEditTxt = (EditTextPreference) findPreference(PREF_KEY_ROOM_NAME);
+        mRoomTopicEditTxt = (EditTextPreference) findPreference(PREF_KEY_ROOM_TOPIC);
+        mRoomDirectoryVisibilitySwitch = (CheckBoxPreference) findPreference(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH);
+        mRoomMuteNotificationsSwitch = (CheckBoxPreference) findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);
+        mRoomTagListPreference = (ListPreference) findPreference(PREF_KEY_ROOM_TAG_LIST);
+        mRoomAccessRulesListPreference = (VectorListPreference) findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
+        mRoomHistoryReadabilityRulesListPreference = (ListPreference) findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
+        mAddressesSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_ADDRESSES);
+        mAdvandceSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_ADVANCED);
+        mBannedMembersSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_BANNED);
+        mBannedMembersSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_BANNED_DIVIDER);
+        mFlairSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_FLAIR_DIVIDER);
+        mFlairSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_FLAIR);
 
         mRoomAccessRulesListPreference.setOnPreferenceWarningIconClickListener(new VectorListPreference.OnPreferenceWarningIconClickListener() {
             @Override
@@ -343,7 +355,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         });
 
         // display the room Id.
-        EditTextPreference roomInternalIdPreference = (EditTextPreference)findPreference(PREF_KEY_ROOM_INTERNAL_ID);
+        EditTextPreference roomInternalIdPreference = (EditTextPreference) findPreference(PREF_KEY_ROOM_INTERNAL_ID);
         if (null != roomInternalIdPreference) {
             roomInternalIdPreference.setSummary(mRoom.getRoomId());
 
@@ -351,20 +363,20 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     VectorUtils.copyToClipboard(getActivity(), mRoom.getRoomId());
-                  return false;
+                    return false;
                 }
             });
         }
 
         // leave room
-        EditTextPreference leaveRoomPreference = (EditTextPreference)findPreference(PREF_KEY_ROOM_LEAVE);
+        EditTextPreference leaveRoomPreference = (EditTextPreference) findPreference(PREF_KEY_ROOM_LEAVE);
 
         if (null != leaveRoomPreference) {
             leaveRoomPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     // leave room
-                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                    new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.room_participants_leave_prompt_title)
                             .setMessage(getString(R.string.room_participants_leave_prompt_msg))
                             .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
@@ -457,13 +469,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             listView.setPadding(0, 0, 0, 0);
         }
 
+        // seems known issue that the preferences screen does not use the activity theme
+        view.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.riot_primary_background_color));
         return view;
     }
 
     /**
      * This method expects a view with the id "settings_loading_layout",
      * that is present in the parent activity layout.
-     * @param view fragment view
+     *
+     * @param view               fragment view
      * @param savedInstanceState bundle instance state
      */
     @Override
@@ -515,6 +530,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             updateRoomDirectoryVisibilityAsync();
 
             refreshAddresses();
+            refreshFlair();
             refreshBannedMembersList();
             refreshEndToEnd();
         }
@@ -522,6 +538,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     /**
      * Enable the preference listener according to the aIsListenerEnabled value.
+     *
      * @param aIsListenerEnabled true to enable the listener, false otherwise
      */
     private void enableSharedPreferenceListener(boolean aIsListenerEnabled) {
@@ -538,8 +555,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             } else {
                 prefMgr.unregisterOnSharedPreferenceChangeListener(this);
             }
-        } catch (Exception ex){
-            Log.e(LOG_TAG, "## enableSharedPreferenceListener(): Exception Msg="+ex.getMessage());
+        } catch (Exception ex) {
+            Log.e(LOG_TAG, "## enableSharedPreferenceListener(): Exception Msg=" + ex.getMessage());
         }
     }
 
@@ -548,7 +565,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * To prevent the preference change listener to be triggered, the listener
      * is removed when the preferences are updated.
      */
-    private void updateUi(){
+    private void updateUi() {
         // configure the preferences that are allowed to be modified by the user
         updatePreferenceAccessFromPowerLevel();
 
@@ -594,15 +611,15 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * must performed.
      */
     private void updateRoomDirectoryVisibilityAsync() {
-        if((null == mRoom) || (null == mRoomDirectoryVisibilitySwitch)) {
-            Log.w(LOG_TAG,"## updateRoomDirectoryVisibilityUi(): not processed due to invalid parameters");
+        if ((null == mRoom) || (null == mRoomDirectoryVisibilitySwitch)) {
+            Log.w(LOG_TAG, "## updateRoomDirectoryVisibilityUi(): not processed due to invalid parameters");
         } else {
             displayLoadingView();
 
             // server request: is the room listed in the room directory?
             mRoom.getDirectoryVisibility(mRoom.getRoomId(), new ApiCallback<String>() {
 
-                private void handleResponseOnUiThread(final String aVisibilityValue){
+                private void handleResponseOnUiThread(final String aVisibilityValue) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -628,19 +645,19 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.w(LOG_TAG, "## getDirectoryVisibility(): onNetworkError Msg="+e.getLocalizedMessage());
+                    Log.w(LOG_TAG, "## getDirectoryVisibility(): onNetworkError Msg=" + e.getLocalizedMessage());
                     handleResponseOnUiThread(null);
                 }
 
                 @Override
                 public void onMatrixError(MatrixError matrixError) {
-                    Log.w(LOG_TAG, "## getDirectoryVisibility(): onMatrixError Msg="+matrixError.getLocalizedMessage());
+                    Log.w(LOG_TAG, "## getDirectoryVisibility(): onMatrixError Msg=" + matrixError.getLocalizedMessage());
                     handleResponseOnUiThread(null);
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.w(LOG_TAG, "## getDirectoryVisibility(): onUnexpectedError Msg="+e.getLocalizedMessage());
+                    Log.w(LOG_TAG, "## getDirectoryVisibility(): onUnexpectedError Msg=" + e.getLocalizedMessage());
                     handleResponseOnUiThread(null);
                 }
             });
@@ -651,14 +668,14 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     /**
      * Display the access room warning.
      */
-    private void displayAccessRoomWarning () {
+    private void displayAccessRoomWarning() {
         Toast.makeText(getActivity(), R.string.room_settings_room_access_warning, Toast.LENGTH_SHORT).show();
     }
 
     /**
      * Enable / disable preferences according to the power levels.
      */
-    private void updatePreferenceAccessFromPowerLevel(){
+    private void updatePreferenceAccessFromPowerLevel() {
         boolean canUpdateAvatar = false;
         boolean canUpdateName = false;
         boolean canUpdateTopic = false;
@@ -667,7 +684,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // cannot refresh if there is no valid session / room
         if ((null != mRoom) && (null != mSession)) {
-            PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
+            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
             if (null != powerLevels) {
                 int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
@@ -676,41 +693,40 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 canUpdateTopic = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_TOPIC);
                 isAdmin = (powerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN);
             }
-        }
-        else {
+        } else {
             Log.w(LOG_TAG, "## updatePreferenceAccessFromPowerLevel(): session or room may be missing");
         }
 
-        if(null != mRoomPhotoAvatar)
+        if (null != mRoomPhotoAvatar)
             mRoomPhotoAvatar.setEnabled(canUpdateAvatar && isConnected);
 
 
-        if(null != mRoomNameEditTxt)
+        if (null != mRoomNameEditTxt)
             mRoomNameEditTxt.setEnabled(canUpdateName && isConnected);
 
-        if(null != mRoomTopicEditTxt)
+        if (null != mRoomTopicEditTxt)
             mRoomTopicEditTxt.setEnabled(canUpdateTopic && isConnected);
 
         // room present in the directory list: admin only
-        if(null != mRoomDirectoryVisibilitySwitch)
+        if (null != mRoomDirectoryVisibilitySwitch)
             mRoomDirectoryVisibilitySwitch.setEnabled(isAdmin && isConnected);
 
         // room notification mute setting: no power condition
-        if(null != mRoomMuteNotificationsSwitch)
+        if (null != mRoomMuteNotificationsSwitch)
             mRoomMuteNotificationsSwitch.setEnabled(isConnected);
 
         // room tagging: no power condition
-        if(null != mRoomTagListPreference)
+        if (null != mRoomTagListPreference)
             mRoomTagListPreference.setEnabled(isConnected);
 
         // room access rules: admin only
-        if(null != mRoomAccessRulesListPreference) {
+        if (null != mRoomAccessRulesListPreference) {
             mRoomAccessRulesListPreference.setEnabled(isAdmin && isConnected);
             mRoomAccessRulesListPreference.setWarningIconVisible((0 == mRoom.getAliases().size()) && !TextUtils.equals(RoomState.JOIN_RULE_INVITE, mRoom.getLiveState().join_rule));
         }
 
         // room read history: admin only
-        if(null != mRoomHistoryReadabilityRulesListPreference)
+        if (null != mRoomHistoryReadabilityRulesListPreference)
             mRoomHistoryReadabilityRulesListPreference.setEnabled(isAdmin && isConnected);
     }
 
@@ -724,32 +740,32 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         String summary;
         Resources resources;
 
-        if ((null == mSession) || (null == mRoom)){
+        if ((null == mSession) || (null == mRoom)) {
             Log.w(LOG_TAG, "## updatePreferenceUiValues(): session or room may be missing");
             return;
         }
 
-        if(null != mRoomPhotoAvatar){
+        if (null != mRoomPhotoAvatar) {
             mRoomPhotoAvatar.refreshAvatar();
         }
 
         // update the room name preference
-        if(null != mRoomNameEditTxt) {
+        if (null != mRoomNameEditTxt) {
             value = mRoom.getLiveState().name;
             mRoomNameEditTxt.setSummary(value);
             mRoomNameEditTxt.setText(value);
         }
 
         // update the room topic preference
-        if(null != mRoomTopicEditTxt) {
+        if (null != mRoomTopicEditTxt) {
             value = mRoom.getTopic();
             mRoomTopicEditTxt.setSummary(value);
             mRoomTopicEditTxt.setText(value);
         }
 
         // update the mute notifications preference
-        if(null != mRoomMuteNotificationsSwitch) {
-            boolean isChecked = mBingRulesManager.isRoomNotificationsDisabled(mRoom);
+        if (null != mRoomMuteNotificationsSwitch) {
+            boolean isChecked = mBingRulesManager.isRoomNotificationsDisabled(mRoom.getRoomId());
             mRoomMuteNotificationsSwitch.setChecked(isChecked);
         }
 
@@ -762,8 +778,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // check if fragment is added to its Activity before calling getResources().
         // getResources() may throw an exception ".. not attached to Activity"
-        if (!isAdded()){
-            Log.e(LOG_TAG,"## updatePreferenceUiValues(): fragment not added to Activity - isAdded()=false");
+        if (!isAdded()) {
+            Log.e(LOG_TAG, "## updatePreferenceUiValues(): fragment not added to Activity - isAdded()=false");
             return;
         } else {
             // in some weird cases, even if isAdded() = true, sometimes getResources() may fail,
@@ -771,25 +787,25 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             try {
                 resources = getResources();
             } catch (Exception ex) {
-                Log.e(LOG_TAG,"## updatePreferenceUiValues(): Exception in getResources() - Msg="+ex.getLocalizedMessage());
+                Log.e(LOG_TAG, "## updatePreferenceUiValues(): Exception in getResources() - Msg=" + ex.getLocalizedMessage());
                 return;
             }
         }
 
         // room guest access rules
-        if((null != mRoomAccessRulesListPreference)&& (null != resources)) {
+        if ((null != mRoomAccessRulesListPreference) && (null != resources)) {
             String joinRule = mRoom.getLiveState().join_rule;
             String guestAccessRule = mRoom.getLiveState().getGuestAccess();
 
-            if(RoomState.JOIN_RULE_INVITE.equals(joinRule)/* && RoomState.GUEST_ACCESS_CAN_JOIN.equals(guestAccessRule)*/) {
+            if (RoomState.JOIN_RULE_INVITE.equals(joinRule)/* && RoomState.GUEST_ACCESS_CAN_JOIN.equals(guestAccessRule)*/) {
                 // "Only people who have been invited" requires: {join_rule: "invite"} and {guest_access: "can_join"}
                 value = ACCESS_RULES_ONLY_PEOPLE_INVITED;
                 summary = resources.getString(R.string.room_settings_room_access_entry_only_invited);
-            } else if(RoomState.JOIN_RULE_PUBLIC.equals(joinRule) && RoomState.GUEST_ACCESS_FORBIDDEN.equals(guestAccessRule)) {
+            } else if (RoomState.JOIN_RULE_PUBLIC.equals(joinRule) && RoomState.GUEST_ACCESS_FORBIDDEN.equals(guestAccessRule)) {
                 // "Anyone who knows the room's link, apart from guests" requires: {join_rule: "public"} and {guest_access: "forbidden"}
                 value = ACCESS_RULES_ANYONE_WITH_LINK_APART_GUEST;
                 summary = resources.getString(R.string.room_settings_room_access_entry_anyone_with_link_apart_guest);
-            } else if(RoomState.JOIN_RULE_PUBLIC.equals(joinRule) && RoomState.GUEST_ACCESS_CAN_JOIN.equals(guestAccessRule)) {
+            } else if (RoomState.JOIN_RULE_PUBLIC.equals(joinRule) && RoomState.GUEST_ACCESS_CAN_JOIN.equals(guestAccessRule)) {
                 // "Anyone who knows the room's link, including guests" requires: {join_rule: "public"} and {guest_access: "can_join"}
                 value = ACCESS_RULES_ANYONE_WITH_LINK_INCLUDING_GUEST;
                 summary = resources.getString(R.string.room_settings_room_access_entry_anyone_with_link_including_guest);
@@ -797,10 +813,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 // unknown combination value
                 value = null;
                 summary = null;
-                Log.w(LOG_TAG, "## updatePreferenceUiValues(): unknown room access configuration joinRule=" + joinRule + " and guestAccessRule="+guestAccessRule);
+                Log.w(LOG_TAG, "## updatePreferenceUiValues(): unknown room access configuration joinRule=" + joinRule + " and guestAccessRule=" + guestAccessRule);
             }
 
-            if(null != value){
+            if (null != value) {
                 mRoomAccessRulesListPreference.setValue(value);
                 mRoomAccessRulesListPreference.setSummary(summary);
             } else {
@@ -810,9 +826,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // update the room tag preference
-        if(null != mRoomTagListPreference) {
+        if (null != mRoomTagListPreference) {
 
-            if(null != mRoom.getAccountData() && (null != resources)) {
+            if (null != mRoom.getAccountData() && (null != resources)) {
                 //Set<String> customTagList = mRoom.getAccountData().getKeys();
 
                 if (null != mRoom.getAccountData().roomTag(RoomTag.ROOM_TAG_FAVOURITE)) {
@@ -829,7 +845,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 } else {
                     // no tag associated to the room
                     value = resources.getString(R.string.room_settings_tag_pref_entry_value_none);
-                    summary = Html.fromHtml("<i>"+getResources().getString(R.string.room_settings_tag_pref_no_tag)+ "</i>").toString();
+                    summary = Html.fromHtml("<i>" + getResources().getString(R.string.room_settings_tag_pref_no_tag) + "</i>").toString();
                 }
 
                 mRoomTagListPreference.setValue(value);
@@ -842,7 +858,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             value = mRoom.getLiveState().getHistoryVisibility();
             summary = null;
 
-            if((null != value) && (null != resources)) {
+            if ((null != value) && (null != resources)) {
                 // get summary value
                 if (value.equals(resources.getString(R.string.room_settings_read_history_entry_value_anyone))) {
                     summary = resources.getString(R.string.room_settings_read_history_entry_anyone);
@@ -859,7 +875,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 }
             }
 
-            if(null != summary) {
+            if (null != summary) {
                 mRoomHistoryReadabilityRulesListPreference.setValue(value);
                 mRoomHistoryReadabilityRulesListPreference.setSummary(summary);
             } else {
@@ -870,52 +886,46 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     }
 
     // OnSharedPreferenceChangeListener implementation
+
     /**
      * Main entry point handler for any preference changes. For each setting a dedicated handler is
      * called to process the setting.
      *
      * @param aSharedPreferences preference instance
-     * @param aKey preference key as it is defined in the XML
+     * @param aKey               preference key as it is defined in the XML
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences aSharedPreferences, String aKey) {
 
-        if(mIsUiUpdateSkipped){
-            Log.d(LOG_TAG,"## onSharedPreferenceChanged(): Skipped");
+        if (mIsUiUpdateSkipped) {
+            Log.d(LOG_TAG, "## onSharedPreferenceChanged(): Skipped");
             return;
         }
 
         if (null == getActivity()) {
-            Log.d(LOG_TAG,"## onSharedPreferenceChanged(): no attached to an activity");
+            Log.d(LOG_TAG, "## onSharedPreferenceChanged(): no attached to an activity");
             return;
         }
 
         if (aKey.equals(PREF_KEY_ROOM_PHOTO_AVATAR)) {
             // unused flow: onSharedPreferenceChanged not triggered for room avatar photo
             onRoomAvatarPreferenceChanged();
-        }
-        else if(aKey.equals(PREF_KEY_ROOM_NAME)) {
+        } else if (aKey.equals(PREF_KEY_ROOM_NAME)) {
             onRoomNamePreferenceChanged();
-        }
-        else if(aKey.equals(PREF_KEY_ROOM_TOPIC)) {
+        } else if (aKey.equals(PREF_KEY_ROOM_TOPIC)) {
             onRoomTopicPreferenceChanged();
-        } else if(aKey.equals(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH)) {
+        } else if (aKey.equals(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH)) {
             onRoomMuteNotificationsPreferenceChanged();
-        }
-        else if(aKey.equals(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH)) {
+        } else if (aKey.equals(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH)) {
             onRoomDirectoryVisibilityPreferenceChanged(); // TBT
-        }
-        else if(aKey.equals(PREF_KEY_ROOM_TAG_LIST)) {
+        } else if (aKey.equals(PREF_KEY_ROOM_TAG_LIST)) {
             onRoomTagPreferenceChanged(); // TBT
-        }
-        else if(aKey.equals(PREF_KEY_ROOM_ACCESS_RULES_LIST)) {
+        } else if (aKey.equals(PREF_KEY_ROOM_ACCESS_RULES_LIST)) {
             onRoomAccessPreferenceChanged();
-        }
-        else if(aKey.equals(PREF_KEY_ROOM_HISTORY_READABILITY_LIST)) {
+        } else if (aKey.equals(PREF_KEY_ROOM_HISTORY_READABILITY_LIST)) {
             onRoomHistoryReadabilityPreferenceChanged(); // TBT
-        }
-        else {
-            Log.w(LOG_TAG,"## onSharedPreferenceChanged(): unknown aKey = "+ aKey);
+        } else {
+            Log.w(LOG_TAG, "## onSharedPreferenceChanged(): unknown aKey = " + aKey);
         }
     }
 
@@ -925,7 +935,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private void onRoomHistoryReadabilityPreferenceChanged() {
         // sanity check
         if ((null == mRoom) || (null == mRoomHistoryReadabilityRulesListPreference)) {
-            Log.w(LOG_TAG,"## onRoomHistoryReadabilityPreferenceChanged(): not processed due to invalid parameters");
+            Log.w(LOG_TAG, "## onRoomHistoryReadabilityPreferenceChanged(): not processed due to invalid parameters");
             return;
         }
 
@@ -933,24 +943,24 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         String previousValue = mRoom.getLiveState().history_visibility;
         String newValue = mRoomHistoryReadabilityRulesListPreference.getValue();
 
-        if(!TextUtils.equals(newValue, previousValue)) {
+        if (!TextUtils.equals(newValue, previousValue)) {
             String historyVisibility;
 
-            if(newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_anyone))) {
+            if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_anyone))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_WORLD_READABLE;
-            } else if(newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_option_time_shared))) {
+            } else if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_option_time_shared))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_SHARED;
-            } else if(newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_invited))) {
+            } else if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_invited))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_INVITED;
-            } else if(newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_joined))) {
+            } else if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_joined))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_JOINED;
             } else {
                 // unknown value
-                Log.w(LOG_TAG,"## onRoomHistoryReadabilityPreferenceChanged(): unknown value:"+newValue);
+                Log.w(LOG_TAG, "## onRoomHistoryReadabilityPreferenceChanged(): unknown value:" + newValue);
                 historyVisibility = null;
             }
 
-            if(null != historyVisibility) {
+            if (null != historyVisibility) {
                 displayLoadingView();
                 mRoom.updateHistoryVisibility(historyVisibility, mUpdateCallback);
             }
@@ -961,8 +971,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         boolean isSupportedTag = true;
 
         // sanity check
-        if((null == mRoom) || (null == mRoomTagListPreference)) {
-            Log.w(LOG_TAG,"## onRoomTagPreferenceChanged(): not processed due to invalid parameters");
+        if ((null == mRoom) || (null == mRoomTagListPreference)) {
+            Log.w(LOG_TAG, "## onRoomTagPreferenceChanged(): not processed due to invalid parameters");
         } else {
             String newTag = mRoomTagListPreference.getValue();
             String currentTag = null;
@@ -974,12 +984,12 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 currentTag = accountData.getKeys().iterator().next();
             }
 
-            if(!newTag.equals(currentTag)) {
-                if(newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_favourite))) {
+            if (!newTag.equals(currentTag)) {
+                if (newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_favourite))) {
                     newTag = RoomTag.ROOM_TAG_FAVOURITE;
-                } else if(newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_low_priority))) {
+                } else if (newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_low_priority))) {
                     newTag = RoomTag.ROOM_TAG_LOW_PRIORITY;
-                } else if(newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_none))) {
+                } else if (newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_none))) {
                     newTag = null;
                 } else {
                     // unknown tag.. very unlikely
@@ -988,7 +998,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 }
             }
 
-            if(isSupportedTag) {
+            if (isSupportedTag) {
                 displayLoadingView();
                 mRoom.replaceTag(currentTag, newTag, tagOrder, mUpdateCallback);
             }
@@ -997,8 +1007,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     private void onRoomAccessPreferenceChanged() {
 
-        if((null == mRoom) || (null == mRoomAccessRulesListPreference)) {
-            Log.w(LOG_TAG,"## onRoomAccessPreferenceChanged(): not processed due to invalid parameters");
+        if ((null == mRoom) || (null == mRoomAccessRulesListPreference)) {
+            Log.w(LOG_TAG, "## onRoomAccessPreferenceChanged(): not processed due to invalid parameters");
         } else {
             String joinRuleToApply = null;
             String guestAccessRuleToApply = null;
@@ -1008,37 +1018,37 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             String previousGuestAccessRule = mRoom.getLiveState().getGuestAccess();
             String newValue = mRoomAccessRulesListPreference.getValue();
 
-            if(ACCESS_RULES_ONLY_PEOPLE_INVITED.equals(newValue)) {
+            if (ACCESS_RULES_ONLY_PEOPLE_INVITED.equals(newValue)) {
                 // requires: {join_rule: "invite"} and {guest_access: "can_join"}
-                joinRuleToApply = !RoomState.JOIN_RULE_INVITE.equals(previousJoinRule)?RoomState.JOIN_RULE_INVITE:null;
-                guestAccessRuleToApply = !RoomState.GUEST_ACCESS_CAN_JOIN.equals(previousGuestAccessRule)?RoomState.GUEST_ACCESS_CAN_JOIN:null;
-            } else if(ACCESS_RULES_ANYONE_WITH_LINK_APART_GUEST.equals(newValue)) {
+                joinRuleToApply = !RoomState.JOIN_RULE_INVITE.equals(previousJoinRule) ? RoomState.JOIN_RULE_INVITE : null;
+                guestAccessRuleToApply = !RoomState.GUEST_ACCESS_CAN_JOIN.equals(previousGuestAccessRule) ? RoomState.GUEST_ACCESS_CAN_JOIN : null;
+            } else if (ACCESS_RULES_ANYONE_WITH_LINK_APART_GUEST.equals(newValue)) {
                 // requires: {join_rule: "public"} and {guest_access: "forbidden"}
-                joinRuleToApply = !RoomState.JOIN_RULE_PUBLIC.equals(previousJoinRule)?RoomState.JOIN_RULE_PUBLIC:null;
-                guestAccessRuleToApply = !RoomState.GUEST_ACCESS_FORBIDDEN.equals(previousGuestAccessRule)?RoomState.GUEST_ACCESS_FORBIDDEN:null;
+                joinRuleToApply = !RoomState.JOIN_RULE_PUBLIC.equals(previousJoinRule) ? RoomState.JOIN_RULE_PUBLIC : null;
+                guestAccessRuleToApply = !RoomState.GUEST_ACCESS_FORBIDDEN.equals(previousGuestAccessRule) ? RoomState.GUEST_ACCESS_FORBIDDEN : null;
 
                 if (0 == mRoom.getAliases().size()) {
                     displayAccessRoomWarning();
                 }
-            } else if(ACCESS_RULES_ANYONE_WITH_LINK_INCLUDING_GUEST.equals(newValue)) {
+            } else if (ACCESS_RULES_ANYONE_WITH_LINK_INCLUDING_GUEST.equals(newValue)) {
                 // requires: {join_rule: "public"} and {guest_access: "can_join"}
-                joinRuleToApply = !RoomState.JOIN_RULE_PUBLIC.equals(previousJoinRule)?RoomState.JOIN_RULE_PUBLIC:null;
-                guestAccessRuleToApply = !RoomState.GUEST_ACCESS_CAN_JOIN.equals(previousGuestAccessRule)?RoomState.GUEST_ACCESS_CAN_JOIN:null;
+                joinRuleToApply = !RoomState.JOIN_RULE_PUBLIC.equals(previousJoinRule) ? RoomState.JOIN_RULE_PUBLIC : null;
+                guestAccessRuleToApply = !RoomState.GUEST_ACCESS_CAN_JOIN.equals(previousGuestAccessRule) ? RoomState.GUEST_ACCESS_CAN_JOIN : null;
 
                 if (0 == mRoom.getAliases().size()) {
                     displayAccessRoomWarning();
                 }
             } else {
                 // unknown value
-                Log.d(LOG_TAG,"## onRoomAccessPreferenceChanged(): unknown selected value = "+newValue);
+                Log.d(LOG_TAG, "## onRoomAccessPreferenceChanged(): unknown selected value = " + newValue);
             }
 
-            if(null != joinRuleToApply) {
+            if (null != joinRuleToApply) {
                 displayLoadingView();
                 mRoom.updateJoinRules(joinRuleToApply, mUpdateCallback);
             }
 
-            if(null != guestAccessRuleToApply) {
+            if (null != guestAccessRuleToApply) {
                 displayLoadingView();
                 mRoom.updateGuestAccess(guestAccessRuleToApply, mUpdateCallback);
             }
@@ -1048,17 +1058,17 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private void onRoomDirectoryVisibilityPreferenceChanged() {
         String visibility;
 
-        if((null == mRoom) || (null == mRoomDirectoryVisibilitySwitch)) {
-            Log.w(LOG_TAG,"## onRoomDirectoryVisibilityPreferenceChanged(): not processed due to invalid parameters");
+        if ((null == mRoom) || (null == mRoomDirectoryVisibilitySwitch)) {
+            Log.w(LOG_TAG, "## onRoomDirectoryVisibilityPreferenceChanged(): not processed due to invalid parameters");
             visibility = null;
-        } else if(mRoomDirectoryVisibilitySwitch.isChecked()) {
+        } else if (mRoomDirectoryVisibilitySwitch.isChecked()) {
             visibility = RoomState.DIRECTORY_VISIBILITY_PUBLIC;
         } else {
             visibility = RoomState.DIRECTORY_VISIBILITY_PRIVATE;
         }
 
-        if(null != visibility) {
-            Log.d(LOG_TAG, "## onRoomDirectoryVisibilityPreferenceChanged(): directory visibility set to "+visibility);
+        if (null != visibility) {
+            Log.d(LOG_TAG, "## onRoomDirectoryVisibilityPreferenceChanged(): directory visibility set to " + visibility);
             displayLoadingView();
             mRoom.updateDirectoryVisibility(visibility, mUpdateCallback);
         }
@@ -1067,20 +1077,20 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     /**
      * Action when enabling / disabling the rooms notifications.
      */
-    private void onRoomMuteNotificationsPreferenceChanged(){
+    private void onRoomMuteNotificationsPreferenceChanged() {
         // sanity check
-        if((null == mRoom) || (null == mBingRulesManager) || (null == mRoomMuteNotificationsSwitch)){
+        if ((null == mRoom) || (null == mBingRulesManager) || (null == mRoomMuteNotificationsSwitch)) {
             return;
         }
 
         // get new and previous values
         boolean isNotificationsMuted = mRoomMuteNotificationsSwitch.isChecked();
-        boolean previousValue = mBingRulesManager.isRoomNotificationsDisabled(mRoom);
+        boolean previousValue = mBingRulesManager.isRoomNotificationsDisabled(mRoom.getRoomId());
 
         // update only, if values are different
-        if(isNotificationsMuted != previousValue) {
+        if (isNotificationsMuted != previousValue) {
             displayLoadingView();
-            mBingRulesManager.muteRoomNotifications(mRoom, isNotificationsMuted, new BingRulesManager.onBingRuleUpdateListener() {
+            mBingRulesManager.muteRoomNotifications(mRoom.getRoomId(), isNotificationsMuted, new BingRulesManager.onBingRuleUpdateListener() {
                 @Override
                 public void onBingRuleUpdateSuccess() {
                     Log.d(LOG_TAG, "##onRoomMuteNotificationsPreferenceChanged(): update succeed");
@@ -1099,9 +1109,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     /**
      * Action when updating the room name.
      */
-    private void onRoomNamePreferenceChanged(){
+    private void onRoomNamePreferenceChanged() {
         // sanity check
-        if((null == mRoom) || (null == mSession) || (null == mRoomNameEditTxt)){
+        if ((null == mRoom) || (null == mSession) || (null == mRoomNameEditTxt)) {
             return;
         }
 
@@ -1122,7 +1132,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     private void onRoomTopicPreferenceChanged() {
         // sanity check
-        if(null == mRoom){
+        if (null == mRoom) {
             return;
         }
 
@@ -1137,6 +1147,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
     }
+
     /**
      * Update the room avatar.
      * Start the camera activity to take the avatar picture.
@@ -1156,8 +1167,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * Process the result of the room avatar picture.
      *
      * @param aRequestCode request ID
-     * @param aResultCode request status code
-     * @param aData result data
+     * @param aResultCode  request status code
+     * @param aData        result data
      */
     @Override
     public void onActivityResult(int aRequestCode, int aResultCode, final Intent aData) {
@@ -1170,12 +1181,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     /**
      * Update the avatar from the data provided the medias picker.
+     *
      * @param aResultCode the result code.
-     * @param aData the provided data.
+     * @param aData       the provided data.
      */
     private void onActivityResultRoomAvatarUpdate(int aResultCode, final Intent aData) {
         // sanity check
-        if(null == mSession){
+        if (null == mSession) {
             return;
         }
 
@@ -1187,7 +1199,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                 // save the bitmap URL on the server
                 ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
-                if(null != resource) {
+                if (null != resource) {
                     mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
                         @Override
@@ -1223,7 +1235,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     private void displayLoadingView() {
         Activity parentActivity = getActivity();
-        if(null != parentActivity) {
+        if (null != parentActivity) {
             parentActivity.runOnUiThread(new Runnable() {
                 public void run() {
 
@@ -1231,7 +1243,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     //enablePreferenceWidgets(false);
 
                     // disable preference screen during server updates
-                    if(null != mParentFragmentContainerView)
+                    if (null != mParentFragmentContainerView)
                         mParentFragmentContainerView.setEnabled(false);
 
                     // display the loading progress bar screen
@@ -1248,11 +1260,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * update the UI if required.
      */
     private void hideLoadingView(boolean aIsUiRefreshRequired) {
-        getActivity().runOnUiThread(new Runnable(){
+        getActivity().runOnUiThread(new Runnable() {
             public void run() {
 
                 // enable preference screen after server updates finished
-                if(null != mParentFragmentContainerView)
+                if (null != mParentFragmentContainerView)
                     mParentFragmentContainerView.setEnabled(true);
 
                 // enable preference widgets
@@ -1264,7 +1276,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             }
         });
 
-        if(aIsUiRefreshRequired){
+        if (aIsUiRefreshRequired) {
             updateUiOnUiThread();
         }
     }
@@ -1291,7 +1303,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         Collections.sort(bannedMembers, new Comparator<RoomMember>() {
             @Override
             public int compare(RoomMember m1, RoomMember m2) {
-                return m1.getUserId().toLowerCase().compareTo(m2.getUserId().toLowerCase());
+                return m1.getUserId().toLowerCase(VectorApp.getApplicationLocale()).compareTo(m2.getUserId().toLowerCase(VectorApp.getApplicationLocale()));
             }
         });
 
@@ -1331,10 +1343,155 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     }
 
     //================================================================================
+    // flair management
+    //================================================================================
+
+    private final ApiCallback mFlairUpdatesCallback = new ApiCallback<Void>() {
+        @Override
+        public void onSuccess(Void info) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoadingView(false);
+                    refreshFlair();
+                }
+            });
+        }
+
+        /**
+         * Error management.
+         * @param errorMessage the error message
+         */
+        private void onError(final String errorMessage) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                    hideLoadingView(false);
+                    refreshFlair();
+                }
+            });
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onMatrixError(MatrixError e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+    };
+
+    /**
+     * Tells if the current user can updates the related group aka flairs
+     *
+     * @return true if the user is allowed.
+     */
+    private boolean canUpdateFlair() {
+        boolean canUpdateAliases = false;
+
+        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+
+        if (null != powerLevels) {
+            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+            canUpdateAliases = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_RELATED_GROUPS);
+        }
+
+        return canUpdateAliases;
+    }
+
+    /**
+     * Refresh the flair list
+     */
+    private void refreshFlair() {
+        final List<String> groups = mRoom.getLiveState().getRelatedGroups();
+        Collections.sort(groups, String.CASE_INSENSITIVE_ORDER);
+
+        mFlairSettingsCategory.removeAll();
+
+        if (!groups.isEmpty()) {
+            for (final String groupId : groups) {
+                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+                preference.setTitle(groupId);
+                preference.setKey(FLAIR_PREFERENCE_KEY_BASE + groupId);
+
+                preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                    @Override
+                    public boolean onPreferenceLongClick(Preference preference) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                displayLoadingView();
+                                mRoom.removeRelatedGroup(groupId, mFlairUpdatesCallback);
+                            }
+                        });
+
+                        return true;
+                    }
+                });
+                mFlairSettingsCategory.addPreference(preference);
+            }
+        } else {
+            VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+            preference.setTitle(getString(R.string.room_settings_no_flair));
+            preference.setKey(FLAIR_PREFERENCE_KEY_BASE + "no_flair");
+
+            mFlairSettingsCategory.addPreference(preference);
+        }
+
+        if (canUpdateFlair()) {
+            // display the "add addresses" entry
+            EditTextPreference addAddressPreference = new EditTextPreference(getActivity());
+            addAddressPreference.setTitle(R.string.room_settings_add_new_group);
+            addAddressPreference.setDialogTitle(R.string.room_settings_add_new_group);
+            addAddressPreference.setKey(FLAIR_PREFERENCE_KEY_BASE + "__add");
+            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
+
+            addAddressPreference.setOnPreferenceChangeListener(
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            final String groupId = ((String) newValue).trim();
+
+                            // ignore empty alias
+                            if (!TextUtils.isEmpty(groupId)) {
+                                if (!MXSession.isGroupId(groupId)) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    builder.setTitle(R.string.room_settings_invalid_group_format_dialog_title);
+                                    builder.setMessage(getString(R.string.room_settings_invalid_group_format_dialog_body, groupId));
+                                    builder.setPositiveButton(R.string.ok, null);
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+                                } else if (!groups.contains(groupId)) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            displayLoadingView();
+                                            mRoom.addRelatedGroup(groupId, mFlairUpdatesCallback);
+                                        }
+                                    });
+                                }
+                            }
+                            return false;
+                        }
+                    });
+
+            mFlairSettingsCategory.addPreference(addAddressPreference);
+        }
+    }
+
+    //================================================================================
     // Aliases management
     //================================================================================
 
-    private final ApiCallback mAliasUpdatesCallback =  new ApiCallback<Void>() {
+    private final ApiCallback mAliasUpdatesCallback = new ApiCallback<Void>() {
         @Override
         public void onSuccess(Void info) {
             getActivity().runOnUiThread(new Runnable() {
@@ -1379,7 +1536,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     /**
      * Manage the long click on an address.
-     * @param roomAlias the room alias.
+     *
+     * @param roomAlias  the room alias.
      * @param anchorView the popup menu anchor view.
      */
     @SuppressLint("NewApi")
@@ -1407,6 +1565,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         Menu menu = popup.getMenu();
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(context, R.attr.icon_tint_on_light_action_bar_color));
 
         String canonicalAlias = mRoom.getLiveState().alias;
         boolean canUpdateAliases = canUpdateAliases();
@@ -1441,7 +1600,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
-                } else  if (item.getItemId() == R.id.ic_action_vector_set_as_main_address) {
+                } else if (item.getItemId() == R.id.ic_action_vector_set_as_main_address) {
                     displayLoadingView();
                     mRoom.updateCanonicalAlias(roomAlias, mAliasUpdatesCallback);
                 } else if (item.getItemId() == R.id.ic_action_vector_delete_alias) {
@@ -1487,12 +1646,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     /**
      * Tells if the current user can updates the room aliases.
+     *
      * @return true if the user is allowed.
      */
     private boolean canUpdateAliases() {
         boolean canUpdateAliases = false;
 
-        PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
+        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
         if (null != powerLevels) {
             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
@@ -1506,7 +1666,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * Refresh the addresses section
      */
     private void refreshAddresses() {
-        final String localSuffix = ":" + mSession.getHomeserverConfig().getHomeserverUri().getHost();
+        final String localSuffix = ":" + mSession.getHomeServerConfig().getHomeserverUri().getHost();
         final String canonicalAlias = mRoom.getLiveState().alias;
         final ArrayList<String> aliases = new ArrayList<>(mRoom.getAliases());
 
@@ -1519,10 +1679,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             preference.setKey(NO_LOCAL_ADDRESS_PREFERENCE_KEY);
             mAddressesSettingsCategory.addPreference(preference);
         } else {
-            ArrayList<String> localAliases  = new ArrayList<>();
-            ArrayList<String> remoteAliases  = new ArrayList<>();
+            ArrayList<String> localAliases = new ArrayList<>();
+            ArrayList<String> remoteAliases = new ArrayList<>();
 
-            for(String alias : aliases) {
+            for (String alias : aliases) {
                 if (alias.endsWith(localSuffix)) {
                     localAliases.add(alias);
                 } else {
@@ -1546,7 +1706,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 final String fAlias = alias;
                 final AddressPreference fAddressPreference = preference;
 
-                preference.setOnPreferenceLongClickListener( new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
                     @Override
                     public boolean onPreferenceLongClick(Preference preference) {
                         onAddressLongClick(fAlias, fAddressPreference.getMainIconView());
@@ -1565,7 +1725,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             addAddressPreference.setTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setDialogTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setKey(ADD_ADDRESSES_PREFERENCE_KEY);
-            addAddressPreference.setIcon(R.drawable.ic_add_black);
+            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
 
             addAddressPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
@@ -1637,7 +1797,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     private void refreshEndToEnd() {
         // encrypt to unverified devices
-        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference)findPreference(getString(R.string.room_settings_never_send_to_unverified_devices_title));
+        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference) findPreference(getString(R.string.room_settings_never_send_to_unverified_devices_title));
+
+        // reported by GA
+        if (null == sendToUnverifiedDevicesPref) {
+            Log.e(LOG_TAG, "## refreshEndToEnd() : sendToUnverifiedDevicesPref is null");
+            return;
+        }
 
         // test if the crypto is
         if (null == mSession.getCrypto()) {
@@ -1661,7 +1827,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         }
                 );
 
-            }  else if (null != sendToUnverifiedDevicesPref) {
+            } else if (null != sendToUnverifiedDevicesPref) {
                 mAdvandceSettingsCategory.removePreference(sendToUnverifiedDevicesPref);
             }
 
@@ -1728,13 +1894,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 VectorCustomActionEditTextPreference isEncryptedPreference = new VectorCustomActionEditTextPreference(getActivity());
                 isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_disabled);
                 isEncryptedPreference.setKey(key);
-                isEncryptedPreference.setIcon(getResources().getDrawable(R.drawable.e2e_unencrypted));
+                isEncryptedPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color));
                 mAdvandceSettingsCategory.addPreference(isEncryptedPreference);
             } else if (mSession.isCryptoEnabled()) {
                 final VectorSwitchPreference encryptSwitchPreference = new VectorSwitchPreference(getActivity());
                 encryptSwitchPreference.setTitle(R.string.room_settings_addresses_e2e_encryption_warning);
                 encryptSwitchPreference.setKey(key);
-                encryptSwitchPreference.setIcon(getResources().getDrawable(R.drawable.e2e_unencrypted));
+                encryptSwitchPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color));
                 encryptSwitchPreference.setChecked(false);
                 mAdvandceSettingsCategory.addPreference(encryptSwitchPreference);
 
@@ -1744,7 +1910,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         boolean newValue = (boolean) newValueAsVoid;
 
                         if (newValue != mRoom.isEncrypted()) {
-                            new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                            new AlertDialog.Builder(getActivity())
                                     .setTitle(R.string.room_settings_addresses_e2e_prompt_title)
                                     .setMessage(R.string.room_settings_addresses_e2e_prompt_message)
                                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {

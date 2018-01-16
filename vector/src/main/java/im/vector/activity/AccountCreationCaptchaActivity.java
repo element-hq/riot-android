@@ -16,23 +16,32 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import im.vector.R;
+import im.vector.util.VectorUtils;
 
 import java.net.URLDecoder;
 import java.util.Formatter;
@@ -41,50 +50,53 @@ import java.util.HashMap;
 /**
  * AccountCreationCaptchaActivity displays a webview to check captchas.
  */
-public class AccountCreationCaptchaActivity extends Activity {
-    private static String LOG_TAG = "ACCCaptchaActivity";
+public class AccountCreationCaptchaActivity extends RiotBaseActivity {
+    private static final String LOG_TAG = AccountCreationCaptchaActivity.class.getSimpleName();
 
-    public static String EXTRA_HOME_SERVER_URL = "AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL";
-    public static String EXTRA_SITE_KEY = "AccountCreationCaptchaActivity.EXTRA_SITE_KEY";
+    public static final String EXTRA_HOME_SERVER_URL = "AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL";
+    public static final String EXTRA_SITE_KEY = "AccountCreationCaptchaActivity.EXTRA_SITE_KEY";
 
     private static final String mRecaptchaHTMLString = "<html> " +
-                        " <head> " +
-                         " <script type=\"text/javascript\"> " +
-                         " var verifyCallback = function(response) { " +
-                        // Generic method to make a bridge between JS and the UIWebView
-                        " var iframe = document.createElement('iframe'); " +
-                        " iframe.setAttribute('src', 'js:' + JSON.stringify({'action': 'verifyCallback', 'response': response})); " +
-                        " document.documentElement.appendChild(iframe); " +
-                        " iframe.parentNode.removeChild(iframe); " +
-                        " iframe = null; " +
-                        " }; " +
+            " <head> " +
+            " <script type=\"text/javascript\"> " +
+            " var verifyCallback = function(response) { " +
+            // Generic method to make a bridge between JS and the UIWebView
+            " var iframe = document.createElement('iframe'); " +
+            " iframe.setAttribute('src', 'js:' + JSON.stringify({'action': 'verifyCallback', 'response': response})); " +
+            " document.documentElement.appendChild(iframe); " +
+            " iframe.parentNode.removeChild(iframe); " +
+            " iframe = null; " +
+            " }; " +
 
-                        " var onloadCallback = function() { " +
+            " var onloadCallback = function() { " +
 
-                        " grecaptcha.render('recaptcha_widget', { " +
-                        " 'sitekey' : '%s', " +
-                        " 'callback': verifyCallback " +
-                        " }); " +
-                        " }; " +
-                        " </script> " +
-                        " </head> " +
-                        " <body> " +
-                        " <div id=\"recaptcha_widget\"></div> " +
-                        " <script src=\"https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit\" async defer> " +
-                        " </script> " +
-                        " </body> " +
-                        " </html> ";
+            " grecaptcha.render('recaptcha_widget', { " +
+            " 'sitekey' : '%s', " +
+            " 'callback': verifyCallback " +
+            " }); " +
+            " }; " +
+            " </script> " +
+            " </head> " +
+            " <body> " +
+            " <div id=\"recaptcha_widget\"></div> " +
+            " <script src=\"https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit\" async defer> " +
+            " </script> " +
+            " </body> " +
+            " </html> ";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // required to have the right translated title
+        setTitle(R.string.create_account);
         setContentView(R.layout.activity_vector_registration_captcha);
 
-        final WebView webView = (WebView) findViewById(R.id.account_creation_webview);
+        final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 
-        Intent intent = getIntent();
+        final View loadingView = findViewById(R.id.account_creation_webview_loading);
+        final Intent intent = getIntent();
 
         String homeServerUrl = "https://matrix.org/";
 
@@ -106,11 +118,16 @@ public class AccountCreationCaptchaActivity extends Activity {
         webView.loadDataWithBaseURL(homeServerUrl, html, mime, encoding, null);
         webView.requestLayout();
 
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler,
-                                           SslError error) {
-                final SslErrorHandler fHander = handler;
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                loadingView.setVisibility(view.GONE);
+            }
+
+            @Override
+            public void onReceivedSslError(final WebView view, final SslErrorHandler handler, final SslError error) {
+                Log.e(LOG_TAG, "## onReceivedSslError() : " + error.getCertificate());
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(AccountCreationCaptchaActivity.this);
 
@@ -119,14 +136,16 @@ public class AccountCreationCaptchaActivity extends Activity {
                 builder.setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fHander.proceed();
+                        Log.d(LOG_TAG, "## onReceivedSslError() : the user trusted");
+                        handler.proceed();
                     }
                 });
 
                 builder.setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fHander.cancel();
+                        Log.d(LOG_TAG, "## onReceivedSslError() : the user did not trust");
+                        handler.cancel();
                     }
                 });
 
@@ -134,7 +153,8 @@ public class AccountCreationCaptchaActivity extends Activity {
                     @Override
                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                         if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                            fHander.cancel();
+                            handler.cancel();
+                            Log.d(LOG_TAG, "## onReceivedSslError() : the user dismisses the trust dialog.");
                             dialog.dismiss();
                             return true;
                         }
@@ -146,10 +166,11 @@ public class AccountCreationCaptchaActivity extends Activity {
                 dialog.show();
             }
 
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                super.onReceivedError(view, errorCode, description, failingUrl);
-
+            // common error message
+            private void onError(String errorMessage) {
+                Log.e(LOG_TAG, "## onError() : errorMessage");
+                Toast.makeText(AccountCreationCaptchaActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                
                 // on error case, close this activity
                 AccountCreationCaptchaActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -160,15 +181,34 @@ public class AccountCreationCaptchaActivity extends Activity {
             }
 
             @Override
+            @SuppressLint("NewApi")
+            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                super.onReceivedHttpError(view, request, errorResponse);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    onError(errorResponse.getReasonPhrase());
+                } else {
+                    onError(errorResponse.toString());
+                }
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                onError(description);
+            }
+
+            @Override
             public boolean shouldOverrideUrlLoading(android.webkit.WebView view, java.lang.String url) {
-                if ((null != url) &&  url.startsWith("js:")) {
+                if ((null != url) && url.startsWith("js:")) {
                     String json = url.substring(3);
                     HashMap<String, String> parameters = null;
 
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8");
-                        parameters = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {}.getType());
+                        parameters = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+                        }.getType());
 
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage());

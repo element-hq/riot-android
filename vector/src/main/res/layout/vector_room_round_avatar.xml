@@ -6,15 +6,15 @@
 
     <ImageView
         android:id="@+id/avatar_img"
-        android:background="@color/vector_green_color"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        android:background="@color/riot_primary_background_color_light"
         android:adjustViewBounds="true"/>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/avatar_mask"/>
+        android:src="?avatar_mask" />
 
 </FrameLayout>

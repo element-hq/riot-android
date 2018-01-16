@@ -25,17 +25,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.rest.model.EncryptedFileInfo;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageMessage;
-import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.rest.model.VideoMessage;
+import org.matrix.androidsdk.rest.model.message.FileMessage;
+import org.matrix.androidsdk.rest.model.message.ImageMessage;
+import org.matrix.androidsdk.rest.model.message.Message;
+import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.R;
@@ -47,7 +46,7 @@ import im.vector.util.VectorUtils;
 public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
 
     // display the room name in the result view
-    private boolean mDisplayRoomName;
+    private final boolean mDisplayRoomName;
 
     public VectorSearchFilesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediasCache mediasCache) {
         super(session, context, mediasCache);
@@ -60,7 +59,6 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
     protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
         return false;
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -80,7 +78,7 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
         // common info
         String thumbUrl = null;
         Long mediaSize = null;
-        int avatarId = org.matrix.androidsdk.R.drawable.filetype_attachment;
+        int avatarId = R.drawable.filetype_attachment;
         EncryptedFileInfo encryptedFileInfo = null;
 
         if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
@@ -96,9 +94,9 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
             }
 
             if ("image/gif".equals(imageMessage.getMimeType())) {
-                avatarId = org.matrix.androidsdk.R.drawable.filetype_gif;
+                avatarId = R.drawable.filetype_gif;
             } else {
-                avatarId = org.matrix.androidsdk.R.drawable.filetype_image;
+                avatarId = R.drawable.filetype_image;
             }
 
             if (null != imageMessage.info) {
@@ -113,7 +111,7 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
                 mediaSize = videoMessage.info.size;
             }
 
-            avatarId = org.matrix.androidsdk.R.drawable.filetype_video;
+            avatarId = R.drawable.filetype_video;
 
             if (null != videoMessage.info) {
                 encryptedFileInfo = videoMessage.info.thumbnail_file;
@@ -126,11 +124,11 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
                 mediaSize = fileMessage.info.size;
             }
 
-            avatarId = Message.MSGTYPE_AUDIO.equals(message.msgtype) ? org.matrix.androidsdk.R.drawable.filetype_audio : org.matrix.androidsdk.R.drawable.filetype_attachment;
+            avatarId = Message.MSGTYPE_AUDIO.equals(message.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment;
         }
 
         // thumbnail
-        ImageView thumbnailView = (ImageView)convertView.findViewById(R.id.file_search_thumbnail);
+        ImageView thumbnailView = convertView.findViewById(R.id.file_search_thumbnail);
 
         // default avatar
         thumbnailView.setImageResource(avatarId);
@@ -139,18 +137,18 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
             // detect if the media is encrypted
             if (null == encryptedFileInfo) {
                 int size = getContext().getResources().getDimensionPixelSize(R.dimen.member_list_avatar_size);
-                mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), thumbnailView, thumbUrl, size);
+                mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeServerConfig(), thumbnailView, thumbUrl, size);
             } else {
-                mSession.getMediasCache().loadBitmap(mSession.getHomeserverConfig(), thumbnailView, thumbUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, encryptedFileInfo);
+                mSession.getMediasCache().loadBitmap(mSession.getHomeServerConfig(), thumbnailView, thumbUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, encryptedFileInfo);
             }
         }
 
         // filename
-        TextView filenameTextView = (TextView)convertView.findViewById(R.id.file_search_filename);
+        TextView filenameTextView = convertView.findViewById(R.id.file_search_filename);
         filenameTextView.setText(message.body);
 
         // room and date&time
-        TextView roomNameTextView = (TextView)convertView.findViewById(R.id.file_search_room_name);
+        TextView roomNameTextView = convertView.findViewById(R.id.file_search_room_name);
         String info = "";
         if (mDisplayRoomName) {
             Room room = mSession.getDataHandler().getStore().getRoom(event.roomId);
@@ -161,11 +159,11 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
             }
         }
 
-        info +=  AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
+        info += AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
         roomNameTextView.setText(info);
 
         // file size
-        TextView fileSizeTextView = (TextView)convertView.findViewById(R.id.search_file_size);
+        TextView fileSizeTextView = convertView.findViewById(R.id.search_file_size);
 
         if ((null != mediaSize) && (mediaSize > 1)) {
             fileSizeTextView.setText(Formatter.formatFileSize(mContext, mediaSize));

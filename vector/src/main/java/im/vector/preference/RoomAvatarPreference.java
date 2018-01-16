@@ -16,7 +16,7 @@
 
 package im.vector.preference;
 
-import android.content.Context;;
+import android.content.Context;
 import android.util.AttributeSet;
 
 import org.matrix.androidsdk.MXSession;
@@ -50,7 +50,7 @@ public class RoomAvatarPreference extends UserAvatarPreference {
 
     @Override
     public void refreshAvatar() {
-        if ((null !=  mAvatarView) && (null != mRoom)) {
+        if ((null != mAvatarView) && (null != mRoom)) {
             VectorUtils.loadRoomAvatar(mContext, mSession, mAvatarView, mRoom);
         }
     }

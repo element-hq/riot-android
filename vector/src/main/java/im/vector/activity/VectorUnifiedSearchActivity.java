@@ -40,18 +40,22 @@ import im.vector.contacts.ContactsManager;
 /**
  * Displays a generic activity search method
  */
-public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implements VectorBaseSearchActivity.IVectorSearchActivity  {
-    private static final String LOG_TAG = "VectorUniSrchActivity";
+public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implements VectorBaseSearchActivity.IVectorSearchActivity {
+    private static final String LOG_TAG = VectorUnifiedSearchActivity.class.getSimpleName();
 
     public static final String EXTRA_ROOM_ID = "VectorUnifiedSearchActivity.EXTRA_ROOM_ID";
+    public static final String EXTRA_TAB_INDEX = "VectorUnifiedSearchActivity.EXTRA_TAB_INDEX";
 
     // activity life cycle management:
     // - Bundle keys
     private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
     private static final String KEY_STATE_SEARCH_PATTERN = "SEARCH_PATTERN";
 
-    // search fragments
-    private MXSession mSession;
+    // item position when it is a search in no room
+    public static final int SEARCH_ROOMS_TAB_POSITION = 0;
+    public static final int SEARCH_MESSAGES_TAB_POSITION = 1;
+    public static final int SEARCH_PEOPLE_TAB_POSITION = 2;
+    public static final int SEARCH_FILES_TAB_POSITION = 3;
 
     // UI items
     private ImageView mBackgroundImageView;
@@ -69,6 +73,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_vector_unified_search);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
@@ -84,16 +89,16 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
         // the session should be passed in parameter
         // but the current design does not describe how the multi accounts will be managed.
-        mSession = Matrix.getInstance(this).getDefaultSession();
-        if (mSession == null) {
+        MXSession session = Matrix.getInstance(this).getDefaultSession();
+        if (session == null) {
             Log.e(LOG_TAG, "No MXSession.");
             finish();
             return;
         }
 
         // UI widgets binding & init fields
-        mBackgroundImageView = (ImageView)findViewById(R.id.search_background_imageview);
-        mNoResultsTxtView = (TextView)findViewById(R.id.search_no_result_textview);
+        mBackgroundImageView = findViewById(R.id.search_background_imageview);
+        mNoResultsTxtView = findViewById(R.id.search_no_result_textview);
         mWaitWhileSearchInProgressView = findViewById(R.id.search_in_progress_view);
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
 
@@ -101,40 +106,45 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             mRoomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
         }
 
-        mPagerAdapter = new VectorUnifiedSearchFragmentPagerAdapter(getSupportFragmentManager(), this, mSession, mRoomId);
+        mPagerAdapter = new VectorUnifiedSearchFragmentPagerAdapter(getSupportFragmentManager(), this, session, mRoomId);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        mViewPager = (ViewPager) findViewById(R.id.search_view_pager);
+        mViewPager = findViewById(R.id.search_view_pager);
         mViewPager.setAdapter(mPagerAdapter);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                   @Override
-                   public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                   }
+            }
 
-                   @Override
-                   public void onPageSelected(int position) {
-                       int permissions = mPagerAdapter.getPermissionsRequest(position);
+            @Override
+            public void onPageSelected(int position) {
+                int permissions = mPagerAdapter.getPermissionsRequest(position);
 
-                       if (0 != permissions) {
-                           // Check permission to access contacts
-                           CommonActivityUtils.checkPermissions(permissions, VectorUnifiedSearchActivity.this);
-                       }
-                       searchAccordingToSelectedTab();
-                   }
+                if (0 != permissions) {
+                    // Check permission to access contacts
+                    CommonActivityUtils.checkPermissions(permissions, VectorUnifiedSearchActivity.this);
+                }
+                searchAccordingToSelectedTab();
+            }
 
-                   @Override
-                   public void onPageScrollStateChanged(int state) {
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
-                   }
+            }
         });
 
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.search_filter_tabs);
+        TabLayout tabLayout = findViewById(R.id.search_filter_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        mPosition = (null != savedInstanceState)? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
+        // the tab i
+        if ((null != getIntent()) && getIntent().hasExtra(EXTRA_TAB_INDEX)) {
+            mPosition = getIntent().getIntExtra(EXTRA_TAB_INDEX, 0);
+        } else {
+            mPosition = (null != savedInstanceState) ? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
+        }
         mViewPager.setCurrentItem(mPosition);
 
         // restore the searched pattern
@@ -210,6 +220,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
      * - "waiting while searching" screen disabled
      * - background image visible
      * - no results message disabled
+     *
      * @param showBackgroundImage true to display it
      */
     private void resetUi(boolean showBackgroundImage) {
@@ -234,7 +245,8 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
     /**
      * The search is done.
-     * @param tabIndex the tab index
+     *
+     * @param tabIndex    the tab index
      * @param nbrMessages the number of found messages.
      */
     private void onSearchEnd(int tabIndex, int nbrMessages) {
@@ -261,7 +273,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
             if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
-				// trigger a contacts book refresh
+                // trigger a contacts book refresh
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
 
                 searchAccordingToSelectedTab();
@@ -283,7 +295,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         Log.d(LOG_TAG, "## onSaveInstanceState(): ");
 
         // save current tab
-        int currentIndex =  mViewPager.getCurrentItem();
+        int currentIndex = mViewPager.getCurrentItem();
         outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
 
         String searchPattern = mPatternToSearchEditText.getText().toString();

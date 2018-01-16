@@ -17,15 +17,15 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.ssl.Fingerprint;
@@ -45,8 +45,8 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
  * Dummy activity used to dispatch the vector URL links.
  */
 @SuppressLint("LongLogTag")
-public class VectorUniversalLinkActivity extends Activity {
-    private static final String LOG_TAG = "VectorUniversalLinkActivity";
+public class VectorUniversalLinkActivity extends RiotBaseActivity {
+    private static final String LOG_TAG = VectorUniversalLinkActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +77,19 @@ public class VectorUniversalLinkActivity extends Activity {
             } else {
                 intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
             }
-        } catch (Exception ex){
-            Log.e(LOG_TAG,"## onCreate(): Exception - Msg="+ex.getMessage());
+        } catch (Exception ex) {
+            Log.e(LOG_TAG, "## onCreate(): Exception - Msg=" + ex.getMessage());
         }
 
         if (null != intentAction) {
-            Intent myBroadcastIntent = new Intent(intentAction, getIntent().getData());
+            // since android O
+            // set the class to avoid having "Background execution not allowed"
+            Intent myBroadcastIntent = new Intent(this,
+                    TextUtils.equals(intentAction, VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK) ?
+                            VectorUniversalLinkReceiver.class : VectorRegistrationReceiver.class);
+
+            myBroadcastIntent.setAction(intentAction);
+            myBroadcastIntent.setData(getIntent().getData());
             sendBroadcast(myBroadcastIntent);
             finish();
         }
@@ -90,15 +97,16 @@ public class VectorUniversalLinkActivity extends Activity {
 
     /**
      * Email binding management
-     * @param uri the uri.
+     *
+     * @param uri        the uri.
      * @param aMapParams the parsed params
      */
     private void emailBinding(Uri uri, HashMap<String, String> aMapParams) {
-        Log.d(LOG_TAG,"## emailBinding()");
+        Log.d(LOG_TAG, "## emailBinding()");
 
         String ISUrl = uri.getScheme() + "://" + uri.getHost();
 
-        final HomeserverConnectionConfig homeServerConfig = new HomeserverConnectionConfig(Uri.parse(ISUrl), Uri.parse(ISUrl), null, new ArrayList<Fingerprint>(), false);
+        final HomeServerConnectionConfig homeServerConfig = new HomeServerConnectionConfig(Uri.parse(ISUrl), Uri.parse(ISUrl), null, new ArrayList<Fingerprint>(), false);
 
         String token = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_TOKEN);
         String clientSecret = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_CLIENT_SECRET);

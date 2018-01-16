@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resouces_language">el</string>
+    <string name="resouces_country">EL</string>
+
+
+    <string name="cancel">Ακύρωση</string>
+    <string name="action_close">Κλείσιμο</string>
+    <string name="room_settings_direct_chat">Απευθείας συνομιλία</string>
+    <string name="directory_title">Ευρετήριο</string>
+
+    <string name="settings_enable_all_notif">Ενεργοποίηση ειδοποιήσεων για τον λογαριασμό</string>
+    <string name="room_details_files">Αρχεία</string>
+    <string name="room_settings_forget">Παράλειψη</string>
+
+    <string name="send_bug_report_logs_description">Προκειμένου να διαγνωστούν προβλήματα, τα αρχεία καταγραφής από αυτόν τον πελάτη θα σταλούν με αυτήν την αναφορά σφάλματος. Αν προτιμάτε να στείλετε μόνο το παραπάνω κείμενο, απενεργοποιήστε:</string>
+    <string name="leave">Αποχώρηση</string>
+    <string name="settings_messages_sent_by_bot">Μηνύματα από bots</string>
+
+    <string name="permalink">Μόνιμος σύνδεσμος</string>
+    <string name="send_bug_report_description">Παρακαλούμε περιγράψτε το σφάλμα. Τι κάνατε; Τι περιμένατε να συμβεί; Τι έγινε τελικά ?</string>
+    <string name="quote">Παράθεση</string>
+    <string name="reject">Απόρριψη</string>
+
+    <string name="remove">Αφαίρεση</string>
+    <string name="resend">Αποστολή ξανά</string>
+    <string name="rooms_directory_header">Ευρετήριο</string>
+    <string name="send">Αποστολή</string>
+    <string name="send_bug_report_include_logs">Αποστολή πληροφοριών</string>
+    <string name="room_recents_start_chat">Έναρξη συνομιλίας</string>
+    <string name="directory_server_fail_to_retrieve_server">Ο διακομιστής είναι μη διαθέσιμος ή υπερφορτωμένος</string>
+    <string name="view_decrypted_source">Προβολή του αποκρυπτογραφημένου κώδικα</string>
+    <string name="view_source">Προβολή κώδικα</string>
+    <string name="today">Σήμερα</string>
+
+    <string name="yesterday">Χθές</string>
+    <string name="ok">Εντάξει</string>
+    <string name="dialog_title_warning">Προειδοποίηση</string>
+
+    <string name="_continue">Συνέχεια</string>
+
+    </resources>

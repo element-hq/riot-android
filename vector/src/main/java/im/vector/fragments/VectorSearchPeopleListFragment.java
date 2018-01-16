@@ -54,12 +54,6 @@ public class VectorSearchPeopleListFragment extends Fragment {
     private ExpandableListView mPeopleListView;
     private VectorParticipantsAdapter mAdapter;
 
-    // pending requests
-    // a request might be called whereas the fragment is not initialized
-    // wait the resume to perform the search
-    private String mPendingPattern;
-    private MatrixMessageListFragment.OnSearchResultListener mPendingSearchResultListener;
-
     // contacts manager listener
     // detect if a contact is a matrix user
     private final ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
@@ -151,7 +145,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
         String matrixId = args.getString(ARG_MATRIX_ID);
         mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
 
-        if (null == mSession) {
+        if ((null == mSession) || !mSession.isAlive()) {
             throw new RuntimeException("Must have valid default MXSession.");
         }
 
@@ -175,6 +169,15 @@ public class VectorSearchPeopleListFragment extends Fragment {
 
                     Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
                     startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, item.mUserId);
+
+                    if (!TextUtils.isEmpty(item.mAvatarUrl)) {
+                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_AVATAR_URL, item.mAvatarUrl);
+                    }
+
+                    if (!TextUtils.isEmpty(item.mDisplayName)) {
+                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_DISPLAY_NAME, item.mDisplayName);
+                    }
+
                     startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                     startActivity(startRoomInfoIntent);
                 }
@@ -201,8 +204,6 @@ public class VectorSearchPeopleListFragment extends Fragment {
      */
     public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
         if (null == mPeopleListView) {
-            mPendingPattern = pattern;
-            mPendingSearchResultListener = onSearchResultListener;
             return;
         }
 

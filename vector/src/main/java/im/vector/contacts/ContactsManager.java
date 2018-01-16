@@ -51,8 +51,8 @@ import im.vector.util.PhoneNumberUtils;
 /**
  * Manage the local contacts
  */
-public class ContactsManager implements SharedPreferences.OnSharedPreferenceChangeListener  {
-    private static final String LOG_TAG = "ContactsManager";
+public class ContactsManager implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final String LOG_TAG = ContactsManager.class.getSimpleName();
 
     /**
      * Contacts update listener
@@ -81,7 +81,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     private List<Contact> mContactsList = null;
 
     // the listeners
-    private ArrayList<ContactsManagerListener> mListeners = null;
+    private final List<ContactsManagerListener> mListeners = new ArrayList<>();
 
     // a contacts population is in progress
     private boolean mIsPopulating = false;
@@ -94,7 +94,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     private boolean mRetryPIDsRetrievalOnConnect = false;
 
     // the application context
-    private Context mContext;
+    private final Context mContext;
 
     /**
      * Network events listener
@@ -116,13 +116,11 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
          * @param mxid the mxid
          */
         private void onContactPresenceUpdate(Contact contact, Contact.MXID mxid) {
-            if (null != mListeners) {
-                for (ContactsManagerListener listener : mListeners) {
-                    try {
-                        listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getMessage());
-                    }
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getMessage());
                 }
             }
         }
@@ -131,13 +129,11 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
          * Warn that some PIDs have been retrieved from the contacts data.
          */
         private void onPIDsUpdate() {
-            if (null != mListeners) {
-                for (ContactsManagerListener listener : mListeners) {
-                    try {
-                        listener.onPIDsUpdate();
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onPIDsUpdate failed " + e.getMessage());
-                    }
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onPIDsUpdate();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onPIDsUpdate failed " + e.getMessage());
                 }
             }
         }
@@ -182,7 +178,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
             MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
 
-            if ((null != session) && (null != mContactsList)) {
+            if ((null != session) && session.isAlive() && (null != mContactsList)) {
                 for (final Contact contact : mContactsList) {
                     Set<String> medias = contact.getMatrixIdMediums();
 
@@ -240,7 +236,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     /**
      * Constructor
      */
-    public ContactsManager() {
+    private ContactsManager() {
         mContext = VectorApp.getInstance().getApplicationContext();
         PreferenceManager.getDefaultSharedPreferences(mContext).registerOnSharedPreferenceChangeListener(this);
     }
@@ -269,6 +265,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
     /**
      * Tell if the contacts snapshot list is ready
+     *
      * @return true if the contacts snapshot list is ready
      */
     public boolean didPopulateLocalContacts() {
@@ -291,7 +288,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * reset
      */
     public void reset() {
-        mListeners = null;
+        mListeners.clear();
         clearSnapshot();
     }
 
@@ -316,7 +313,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     private void onCountryCodeUpdate() {
         synchronized (LOG_TAG) {
             if (null != mContactsList) {
-                for(Contact contact : mContactsList) {
+                for (Contact contact : mContactsList) {
                     contact.onCountryCodeUpdate();
                 }
             }
@@ -347,11 +344,9 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @param listener the listener to add.
      */
     public void addListener(ContactsManagerListener listener) {
-        if (null == mListeners) {
-            mListeners = new ArrayList<>();
+        if (null != listener) {
+            mListeners.add(listener);
         }
-
-        mListeners.add(listener);
     }
 
     /**
@@ -360,7 +355,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @param listener the listener to remove.
      */
     public void removeListener(ContactsManagerListener listener) {
-        if (null != mListeners) {
+        if (null != listener) {
             mListeners.remove(listener);
         }
     }
@@ -424,6 +419,8 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
                 // test if the user allows to access to the contact
                 if (isContactBookAccessAllowed()) {
+                    Log.d(LOG_TAG, "## refreshLocalContactsSnapshot() starts");
+
                     // get the names
                     Cursor namesCur = null;
 
@@ -547,6 +544,8 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
                         emailsCur.close();
                     }
+                } else {
+                    Log.d(LOG_TAG, "## refreshLocalContactsSnapshot() : permission to read contacts is not granted");
                 }
 
                 synchronized (LOG_TAG) {
@@ -554,22 +553,23 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                     mIsPopulating = false;
                 }
 
-                if (0 != mContactsList.size()) {
-                    long delta = System.currentTimeMillis() - t0;
-
-                    VectorApp.sendGAStats(VectorApp.getInstance(),
-                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
-                            VectorApp.GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION,
-                            mContactsList.size() + " contacts in " + delta + " ms",
-                            delta
-                    );
+                // race condition reported by GA.
+                if (null == mContactsList) {
+                    Log.d(LOG_TAG, "## ## refreshLocalContactsSnapshot() : the contacts list has been cleared while processing it");
+                    mIsRetrievingPids = false;
+                    mArePidsRetrieved = false;
+                    return;
                 }
+
+                long delta = System.currentTimeMillis() - t0;
+
+                Log.d(LOG_TAG, "## refreshLocalContactsSnapshot(): retrieve " + mContactsList.size() + " contacts in " + delta + " ms");
 
                 // define the PIDs listener
                 PIDsRetriever.getInstance().setPIDsRetrieverListener(mPIDsRetrieverListener);
 
                 // trigger a PIDs retrieval
-                // add a network listener to ensure that the PIDS will be retreived asap a valid network will be found.
+                // add a network listener to ensure that the PIDS will be retrieved asap a valid network will be found.
                 MXSession defaultSession = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
                 if (null != defaultSession) {
                     defaultSession.getNetworkConnectivityReceiver().addEventListener(mNetworkConnectivityReceiver);
@@ -581,22 +581,20 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                     // the PIDs retrieval is done on demand.
                 }
 
-                if (null != mListeners) {
-                    Handler handler = new Handler(Looper.getMainLooper());
+                Handler handler = new Handler(Looper.getMainLooper());
 
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (ContactsManagerListener listener : mListeners) {
-                                try {
-                                    listener.onRefresh();
-                                } catch (Exception e) {
-                                    Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getMessage());
-                                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (ContactsManagerListener listener : mListeners) {
+                            try {
+                                listener.onRefresh();
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getMessage());
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         });
 
@@ -612,6 +610,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     /**
      * Tells if the contacts book access has been requested.
      * For android > M devices, it only tells if the permission has been granted.
+     *
      * @return true it was requested once
      */
     public boolean isContactBookAccessRequested() {
@@ -625,6 +624,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
     /**
      * Update the contacts book access.
+     *
      * @param isAllowed true to allowed the contacts book access.
      */
     public void setIsContactBookAccessAllowed(boolean isAllowed) {
@@ -640,6 +640,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
     /**
      * Tells if the contacts book access has been granted
+     *
      * @return true if it was granted.
      */
     public boolean isContactBookAccessAllowed() {

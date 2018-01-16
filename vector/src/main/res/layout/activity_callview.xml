@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@android:color/black"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
 
     <RelativeLayout
         android:id="@+id/call_layout"
@@ -11,16 +11,17 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:background="@android:color/white"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="?attr/riot_primary_background_color">
+
             <im.vector.view.VectorCircularImageView
                 android:id="@+id/call_other_member"
-                android:layout_height="100dp"
                 android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_centerInParent="true"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
         </RelativeLayout>
 
         <!-- container layout for the action buttons -->
@@ -28,31 +29,31 @@
             android:id="@+id/call_menu_buttons_layout_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_alignParentBottom="true"
-            android:background="@android:color/white">
+            android:background="@android:color/white"
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/room_chat_link"
                 android:layout_width="0dp"
-                android:layout_weight="14"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_material_message_grey"/>
+                android:layout_weight="14"
+                android:src="@drawable/ic_material_message_grey" />
 
             <ImageView
                 android:id="@+id/call_speaker_view"
                 android:layout_width="0dp"
-                android:layout_weight="14"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_material_speaker_phone_grey"/>
+                android:layout_weight="14"
+                android:src="@drawable/ic_material_speaker_phone_grey" />
 
             <ImageView
                 android:id="@+id/call_switch_camera_view"
                 android:layout_width="0dp"
-                android:layout_weight="14"
                 android:layout_height="24dp"
-                android:visibility="invisible"
-                android:src="@drawable/ic_material_switch_video_grey"/>
+                android:layout_weight="14"
+                android:src="@drawable/ic_material_switch_video_grey"
+                android:visibility="invisible" />
 
 
             <!-- Hang up button used when the call is established or
@@ -60,43 +61,67 @@
             <ImageView
                 android:id="@+id/hang_up_button"
                 android:layout_width="0dp"
-                android:layout_weight="16"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_material_call_end_black"/>
+                android:layout_weight="16"
+                android:src="@drawable/ic_material_call_end_black" />
 
             <!-- for further use: for now we cannot switch from audio to video -->
             <ImageView
                 android:id="@+id/start_video_call"
                 android:layout_width="0dp"
-                android:layout_weight="14"
                 android:layout_height="24dp"
-                android:visibility="invisible"
-                android:src="@drawable/ic_material_videocam_grey"/>
+                android:layout_weight="14"
+                android:src="@drawable/ic_material_videocam_grey"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/mute_local_camera"
                 android:layout_width="0dp"
-                android:layout_weight="14"
                 android:layout_height="24dp"
-                android:visibility="invisible"
-                android:src="@drawable/ic_material_videocam_off_grey"/>
+                android:layout_weight="14"
+                android:src="@drawable/ic_material_videocam_off_grey"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/mute_audio"
                 android:layout_width="0dp"
-                android:layout_weight="14"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_material_mic_off_grey"/>
-            </LinearLayout>
+                android:layout_weight="14"
+                android:src="@drawable/ic_material_mic_off_grey" />
+        </LinearLayout>
+
+        <!-- container layout for the action buttons -->
+        <LinearLayout
+            android:id="@+id/incoming_call_menu_buttons_layout_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/call_menu_buttons_layout_container"
+            android:background="@android:color/white"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/reject_incoming_call"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="50"
+                android:src="@drawable/voice_call_end_fushia"/>
+
+            <ImageView
+                android:id="@+id/accept_incoming_call"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="50"
+                android:src="@drawable/voice_call_start_green"/>
+
+        </LinearLayout>
 
         <im.vector.view.VectorPendingCallView
             android:id="@+id/header_pending_callview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:visibility="visible"
-            />
-
+            android:visibility="visible" />
     </RelativeLayout>
 
 </RelativeLayout>

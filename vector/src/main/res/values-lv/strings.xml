@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resouces_language">lv</string>
+    <string name="resouces_country">LV</string>
+
+    <string name="title_activity_home">Ziņas</string>
+    <string name="title_activity_room">Istaba</string>
+    <string name="title_activity_settings">Uzstādījumi</string>
+    <string name="title_activity_member_details">Biedra detalizēta informācija</string>
+    <string name="title_activity_historical">Vēsturisks</string>
+
+    <string name="ok">Labi</string>
+    <string name="cancel">Atcelt</string>
+    <string name="save">Saglabāt</string>
+    <string name="leave">Atstāt</string>
+    <string name="send">Nosūtīt</string>
+    <string name="copy">Kopēt</string>
+    <string name="resend">Sūtīt atkārtoti</string>
+    <string name="redact">Rediģēt</string>
+    <string name="quote">Citāts</string>
+    <string name="share">Dalīties</string>
+    <string name="later">Vēlāk</string>
+    <string name="forward">Pārsūtīt</string>
+    <string name="permalink">Iekšējā saite</string>
+    <string name="view_source">Skatīt avotu</string>
+    <string name="view_decrypted_source">Skatīt atšifrētu avotu</string>
+    <string name="delete">Dzēst</string>
+    <string name="rename">Pārdēvēt</string>
+    <string name="report_content">Ziņot par saturu</string>
+    <string name="active_call">Aktīvs zvans</string>
+    <string name="ongoing_conference_call">" Ienākošs konferences zvans. Pievienojies ar balss vai video iespēju."</string>
+    <string name="ongoing_conference_call_voice">balss</string>
+    <string name="ongoing_conference_call_video">video</string>
+    <string name="cannot_start_call">Nevarēja sākt zvanu. Lūdzu, pamēģini vēlāk</string>
+    <string name="missing_permissions_warning">Dēļ nepietiekamām atļaujām, dažas iespējas var nebūt pieejamas..</string>
+    <string name="missing_permissions_to_start_conf_call">Tev ir nepieciešams iegūt atļauju, lai varētu sākt konferenci šajā istabā</string>
+    <string name="missing_permissions_title_to_start_conf_call">Nav iespējams sākt zvanu</string>
+    <string name="device_information">Ierīces informācija</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konferences zvani netiek atbalstīti šifrētās istabās</string>
+    <string name="send_anyway">Nosūtīt jebkurā gadījumā</string>
+    <string name="or">vai</string>
+    <string name="and">un</string>
+    <string name="invite">Uzaicināt</string>
+
+    <string name="action_sign_out">Izrakstīties</string>
+    <string name="action_sign_out_confirmation">Drošības nolūkos, pierakstīšanās dzēsīs visas ierīce-ierīce šifrēšanas atslēgas, padarot iepriekšējo šifrēto čata ziņu vēsturi nelasāmu, ja Tu pierakstīsies atkārtoti. Izvēlies eksportēšanas iespēju, lai saglabātu atslēgu rezerves kopijas pirms izrakstīšanās.</string>
+    <string name="action_voice_call">Balss zvans</string>
+    <string name="action_video_call">Video zvans</string>
+    <string name="action_global_search">Globālā meklēšana</string>
+    <string name="action_mark_all_as_read">Atzīmēt visu, kā lasītu</string>
+    <string name="action_historical">Vēsturisks</string>
+    <string name="action_quick_reply">Ātrā atbilde</string>
+    <string name="action_open">Atvērt</string>
+    <string name="action_close">Aizvērt</string>
+    <string name="copied_to_clipboard">Nokopēts starpliktuvē</string>
+    <string name="disable">Atslēgt</string>
+
+    <string name="dialog_title_confirmation">Apstiprinājums</string>
+    <string name="dialog_title_warning">Brīdinājums</string>
+
+    <string name="bottom_action_home">Uz sākumu</string>
+    <string name="bottom_action_favourites">Favorīti</string>
+    <string name="bottom_action_people">Cilvēki</string>
+    <string name="bottom_action_rooms">Istabas</string>
+
+    <string name="home_filter_placeholder_home">Meklēt istabas</string>
+    <string name="home_filter_placeholder_favorites">Meklēt favorītus</string>
+    <string name="home_filter_placeholder_people">Meklēt cilvēkus</string>
+    <string name="home_filter_placeholder_rooms">Meklēt istabas</string>
+
+    <string name="invitations_header">Uzaicinājumi</string>
+    <string name="low_priority_header">Zema prioritāte</string>
+
+    <string name="direct_chats_header">Sarunas</string>
+    <string name="local_address_book_header">Vietējā adrešu grāmata</string>
+    <string name="matrix_only_filter">Vienīgi Matrix kontakti</string>
+    <string name="no_conversation_placeholder">Nav sarunu</string>
+    <string name="no_contact_access_placeholder">Tu neesi atļāvis/usi Riot piekļūt taviem vietējiem kontaktiem</string>
+    <string name="no_result_placeholder">Nav rezultātu</string>
+
+    <string name="rooms_header">Istabas</string>
+    <string name="rooms_directory_header">Istabu katalogs</string>
+    <string name="no_room_placeholder">Nav istabu</string>
+    <string name="no_public_room_placeholder">Nav pieejamu publisko istabu</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="zero">%d lietotājs</item>
+	<item quantity="one">%d lietotāji</item>
+	<item quantity="other">%d lietotāji</item>
+</plurals>
+
+    <string name="send_bug_report_include_logs">Nosūtīt logfailus</string>
+    <string name="send_bug_report_include_crash_logs">Nosūtīt sistēmas avārijas logfailus</string>
+    <string name="send_bug_report_include_screenshot">Nosūtīt ekrānattēlu</string>
+    <string name="send_bug_report">Paziņojums par kļūdu</string>
+    <string name="send_bug_report_description">Lūdzu apraksti kļūdu. Kāda darbība tika veikta? Kāds bija gaidāmais rezultāts? Kas tieši notika?</string>
+    <string name="send_bug_report_placeholder">Apraksti savu problēmu šeit</string>
+    <string name="send_bug_report_logs_description">Lai diagnosticētu problēmu, logfaili no šīs klienta programmas tiks nosūtīti kopā ar šo kļūdas paziņojumu. Ja vēlies nosūtīt vienīgi augstākminēto tekstu, lūdzu noņem:</string>
+    <string name="send_bug_report_alert_message">Jūs, šķiet, satricinājāt tālruni. Vai vēlaties iesniegt kļūdu ziņojumu?</string>
+    <string name="send_bug_report_app_crashed">Šī programma iepriekš \"salūza\". Vai vēlies iesniegt paziņojumu par kļūdu?</string>
+
+    <string name="send_bug_report_sent">Paziņojums par kļūdu tika veiksmīgi nosūtīts</string>
+    <string name="send_bug_report_failed">Paziņojumu par kļūdu neizdevās nosūtīt (%s)</string>
+    <string name="send_bug_report_progress">Progress (%s%%)</string>
+
+    <string name="send_files_in">Nosūtīt iekš</string>
+    <string name="read_receipt">Lasīt</string>
+
+    <string name="join_room">Pievienoties istabai</string>
+    <string name="username">Lietotājvārds</string>
+    <string name="create_account">Reģistrēties</string>
+    <string name="login">Pierakstīties</string>
+    <string name="logout">Izrakstīties</string>
+    <string name="hs_url">Servera URL adrese</string>
+    <string name="identity_url">Identifikācijas servera URL adrese</string>
+    <string name="user">lietotājs</string>
+    <string name="users">lietotāji</string>
+    <string name="search">Meklēt</string>
+
+    <string name="start_new_chat">Uzsākt jaunu čatu</string>
+    <string name="offline">Nav tiešsaistē</string>
+
+    <string name="user_directory_header">Lietotāju katalogs</string>
+    <string name="start_voice_call">Sākt balss zvanu</string>
+    <string name="start_video_call">Sākt video zvanu</string>
+
+    <string name="option_send_files">Sūtīt failus</string>
+    <string name="option_take_photo_video">Uzņemt foto vai video</string>
+
+    <string name="auth_login">Pierakstīties</string>
+    <string name="auth_register">Reģistrēties</string>
+    <string name="auth_submit">Iesniegt</string>
+    <string name="auth_skip">Izlaist</string>
+    <string name="auth_send_reset_email">Nosūtīt atiestatīšanas epastu</string>
+    <string name="auth_return_to_login">Atgriezties uz pierakstīšanās logu</string>
+    <string name="auth_user_id_placeholder">Epasts vai lietotājvārds</string>
+    <string name="auth_password_placeholder">Parole</string>
+    <string name="auth_new_password_placeholder">Jauna parole</string>
+    <string name="auth_user_name_placeholder">Lietotājvārds</string>
+    <string name="auth_add_email_message">Pievieno epasta adresi savam kontam, lai pārējiem dalībniekiem būtu iespējams Tevi atrast, kā arī lai Tev būtu iespēja mainīt paroli.</string>
+    <string name="auth_add_phone_message">Pievieno telefona numuru savam kontam, lai ļautu pārējiem dalībniekiem Tevi atrast.</string>
+    <string name="auth_add_email_phone_message">Pievieno savam kontam epasta adresi un/vai telefona numuru, lai ļautu pārējiem dalībniekiem Tevi atrast.
+
+Kā arī epasta adrese ļaus Tev atiestatīt paroli.</string>
+    </resources>

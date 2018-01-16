@@ -16,14 +16,15 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
@@ -43,22 +44,21 @@ import java.util.HashMap;
  * FallbackLoginActivity is the fallback login activity
  * i.e this activity is created when the client does not support the
  */
-public class FallbackLoginActivity extends Activity {
+public class FallbackLoginActivity extends RiotBaseActivity {
+    private static final String LOG_TAG = FallbackLoginActivity.class.getSimpleName();
 
-    private static final String LOG_TAG = "FallbackLoginAct";
+    public static final String EXTRA_HOME_SERVER_ID = "FallbackLoginActivity.EXTRA_HOME_SERVER_ID";
 
-
-    public static String EXTRA_HOME_SERVER_ID = "FallbackLoginActivity.EXTRA_HOME_SERVER_ID";
-
-    WebView mWebView = null;
+    private WebView mWebView = null;
     private String mHomeServerUrl = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle(R.string.login);
         setContentView(R.layout.activity_login_fallback);
-        mWebView = (WebView) findViewById(R.id.account_creation_webview);
+        mWebView = findViewById(R.id.account_creation_webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
 
 
@@ -105,7 +105,7 @@ public class FallbackLoginActivity extends Activity {
     private void launchWebView() {
         mWebView.loadUrl(mHomeServerUrl + "_matrix/static/client/login/");
 
-        mWebView.setWebViewClient(new WebViewClient(){
+        mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler,
                                            SslError error) {
@@ -176,14 +176,15 @@ public class FallbackLoginActivity extends Activity {
 
             @Override
             public boolean shouldOverrideUrlLoading(android.webkit.WebView view, java.lang.String url) {
-                if ((null != url) &&  url.startsWith("js:")) {
+                if ((null != url) && url.startsWith("js:")) {
                     String json = url.substring(3);
                     HashMap<String, Object> serverParams = null;
 
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8");
-                        serverParams = new Gson().fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
+                        serverParams = new Gson().fromJson(json, new TypeToken<HashMap<String, Object>>() {
+                        }.getType());
 
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage());
@@ -193,7 +194,7 @@ public class FallbackLoginActivity extends Activity {
                     if (null != serverParams) {
                         try {
                             String action = (String) serverParams.get("action");
-                            LinkedTreeMap<String, String> parameters = (LinkedTreeMap<String, String>)serverParams.get("homeServer");
+                            LinkedTreeMap<String, String> parameters = (LinkedTreeMap<String, String>) serverParams.get("homeServer");
 
                             if (TextUtils.equals("onLogin", action) && (null != parameters)) {
                                 final String userId = parameters.get("user_id");

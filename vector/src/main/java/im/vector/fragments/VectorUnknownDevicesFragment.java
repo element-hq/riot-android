@@ -18,31 +18,22 @@ package im.vector.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
-
+import android.support.v4.app.DialogFragment;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -101,16 +92,19 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
     private static List<Pair<String, List<MXDeviceInfo>>> getDevicesList() {
         List<Pair<String, List<MXDeviceInfo>>> res = new ArrayList<>();
 
-        List<String> userIds = mUnknownDevicesMap.getUserIds();
+        // sanity check
+        if (null != mUnknownDevicesMap) {
+            List<String> userIds = mUnknownDevicesMap.getUserIds();
 
-        for (String userId : userIds) {
-            List<MXDeviceInfo> deviceInfos = new ArrayList<>();
-            List<String> deviceIds = mUnknownDevicesMap.getUserDeviceIds(userId);
+            for (String userId : userIds) {
+                List<MXDeviceInfo> deviceInfos = new ArrayList<>();
+                List<String> deviceIds = mUnknownDevicesMap.getUserDeviceIds(userId);
 
-            for (String deviceId : deviceIds) {
-                deviceInfos.add(mUnknownDevicesMap.getObject(deviceId, userId));
+                for (String deviceId : deviceIds) {
+                    deviceInfos.add(mUnknownDevicesMap.getObject(deviceId, userId));
+                }
+                res.add(new Pair<>(userId, deviceInfos));
             }
-            res.add(new Pair<>(userId, deviceInfos));
         }
 
         return res;
@@ -123,7 +117,7 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View v = inflater.inflate(R.layout.dialog_unknown_devices, null);
-        mExpandableListView = (ExpandableListView) v.findViewById(R.id.unknown_devices_list_view);
+        mExpandableListView = v.findViewById(R.id.unknown_devices_list_view);
 
         mDevicesList = getDevicesList();
         final VectorUnknownDevicesAdapter adapter = new VectorUnknownDevicesAdapter(getContext(), mDevicesList);
@@ -231,6 +225,17 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
         return builder.create();
     }
 
+
+    @Override
+    public void dismissAllowingStateLoss() {
+        // reported by GA
+        if (null != getFragmentManager()) {
+            super.dismissAllowingStateLoss();
+        }
+        // Ensure that the map is released when the fragment is dismissed.
+        mUnknownDevicesMap = null;
+    }
+
     @Override
     public void onDismiss(DialogInterface dialog) {
         // whatever the user clicks
@@ -245,6 +250,9 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
      */
     private void setDevicesKnown(List<Pair<String, List<MXDeviceInfo>>> devicesList) {
         if (null != mUnknownDevicesMap) {
+            // release the static members list
+            mUnknownDevicesMap = null;
+
             List<MXDeviceInfo> dis = new ArrayList<>();
 
             for (Pair<String, List<MXDeviceInfo>> item : devicesList) {
@@ -257,8 +265,11 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                     if (mIsSendAnywayTapped && (null != mListener)) {
                         mListener.onSendAnyway();
                     }
-                    mUnknownDevicesMap = null;
                     mListener = null;
+                    // ensure that the fragment won't be displayed anymore
+                    if (isAdded() && isResumed()) {
+                        dismissAllowingStateLoss();
+                    }
                 }
 
                 @Override

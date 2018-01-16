@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:id="@+id/room_action_bar"
@@ -24,7 +25,7 @@
             android:layout_height="?attr/actionBarSize"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp"
-            android:background="@color/vector_green_color"
+            android:background="?attr/primary_color"
             style="@style/VectorToolbarStyle">
 
             <RelativeLayout
@@ -38,14 +39,24 @@
         </android.support.v7.widget.Toolbar>
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/room_sync_in_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:background="?attr/primary_color"
+        android:layout_below="@+id/room_action_bar"
+        android:indeterminate="true"/>
+
     <LinearLayout
         android:id="@+id/room_preview_info_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/room_background"
-        android:layout_below="@+id/room_action_bar">
-        
+        android:background="?attr/riot_primary_background_color"
+        android:layout_below="@+id/room_sync_in_progress">
+
         <View
             android:layout_width="match_parent"
             android:layout_height="16dp">
@@ -57,7 +68,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:text="A text here"
-            android:textColor="@color/vector_text_black_color"
+            android:textColor="?attr/riot_primary_text_color"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
 
@@ -116,18 +127,91 @@
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
+    <im.vector.view.ActiveWidgetsBanner
+        android:id="@+id/room_pending_widgets_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/room_ongoing_conference_call_view"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/jump_to_first_unread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/room_pending_widgets_view"
+        android:background="?attr/riot_primary_background_color"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/jump_to_first_unread_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/jump_to_unread" />
+
+        <TextView
+            android:id="@+id/jump_to_first_unread_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/close_jump_to_first_unread"
+            android:layout_toRightOf="@+id/jump_to_first_unread_icon"
+            android:gravity="center_vertical"
+            android:paddingBottom="12dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="12dp"
+            android:text="@string/room_jump_to_first_unread" />
+
+        <ImageView
+            android:id="@+id/close_jump_to_first_unread"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/jump_to_first_unread_label"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/jump_to_first_unread_label"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:src="@drawable/vector_leave_room_black"
+            android:tint="?attr/message_text_color" />
+
+        <ProgressBar
+            android:id="@+id/jump_to_read_spinner"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/jump_to_first_unread_label"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/jump_to_first_unread_label"
+            android:layout_margin="2dp"
+            android:indeterminate="true"
+            android:paddingRight="2dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/jump_to_first_unread_label"
+            android:background="?attr/room_activity_divider_color" />
+
+    </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/room_ongoing_conference_call_view">
+        android:layout_below="@+id/jump_to_first_unread">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/room_background"
+            android:background="?attr/riot_primary_background_color"
             android:paddingTop="0dp"
-            android:paddingBottom="0dp">
+            android:paddingBottom="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <ImageView
                 android:id="@+id/search_background_imageview"
@@ -184,27 +268,28 @@
 
                         <ImageView
                             android:id="@+id/room_encrypted_image_view"
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/e2e_verified"/>
+                            android:src="@drawable/e2e_verified"
+                            android:tint="?attr/default_icon_tint_color" />
 
                     </RelativeLayout>
 
-                    <EditText
+                    <im.vector.view.VectorAutoCompleteTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:inputType="textCapSentences|textMultiLine"
                         android:textSize="14sp"
+                        android:dropDownAnchor="@+id/room_sending_message_layout"
                         android:hint="@string/room_message_placeholder_not_encrypted"
                         android:id="@+id/editText_messageBox"
-                        android:layout_centerVertical="true"
-                        android:theme="@style/SearchesAppTheme"
+                        android:textColor="?attr/riot_primary_text_color"
                         android:background="@android:color/transparent"
                         android:textCursorDrawable="@drawable/searches_cursor_background"
-                        android:textColorHint="@color/vector_0_54_black_color"/>
+                        android:textColorHint="?attr/default_text_hint_color"/>
 
                     <View
                         android:id="@+id/room_button_margin_left"
@@ -271,7 +356,7 @@
                     android:layout_toRightOf="@id/room_self_avatar_container"
                     android:text="@string/room_do_not_have_permission_to_post"
                     android:textSize="14sp"
-                    android:textColor="@color/vector_text_black_color"
+                    android:textColor="?attr/riot_primary_text_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone" />
@@ -283,34 +368,35 @@
                 android:layout_height="1dp"
                 android:layout_alignParentLeft="true"
                 android:layout_above="@id/room_bottom_layout"
-                android:background="@color/vector_light_gray_color" />
+                android:background="?attr/room_activity_divider_color" />
 
             <RelativeLayout
                 android:id="@+id/room_notifications_area"
                 android:layout_width="match_parent"
-                android:minHeight="42dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_above="@id/bottom_separator"
+                android:layout_alignParentLeft="true"
+                android:minHeight="42dp"
                 android:visibility="invisible">
 
                 <ImageView
                     android:id="@+id/room_notification_icon"
-                    android:layout_marginLeft="25dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/vector_typing"/>
+                    android:layout_marginLeft="20dp"
+                    android:padding="5dp"
+                    android:src="@drawable/vector_typing" />
 
                 <TextView
                     android:id="@+id/room_notification_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="73dp"
+                    android:layout_marginLeft="68dp"
                     android:layout_marginRight="13dp"
-                    android:textColor="@color/vector_text_gray_color"
-                    android:text="a text here " />
+                    android:text="a text here "
+                    android:textColor="?attr/room_notification_text_color" />
 
             </RelativeLayout>
 
@@ -320,22 +406,20 @@
                 android:layout_marginLeft="13dp"
                 android:layout_height="1dp"
                 android:layout_above="@id/room_notifications_area"
-                android:background="@color/vector_light_gray_color" />
+                android:background="?attr/room_activity_divider_color" />
 
             <RelativeLayout
-                android:layout_alignParentTop="true"
-                android:layout_above="@id/room_notification_separator"
+                android:id="@+id/anchor_fragment_messages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/anchor_fragment_messages"
-                android:layout_centerHorizontal="true">
-            </RelativeLayout>
+                android:layout_above="@id/room_notification_separator"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
 
             <ProgressBar
                 android:id="@+id/loading_room_paginate_back_progress"
                 android:layout_height="40dp"
                 android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
                 android:visibility="gone"
                 android:indeterminate="true" />
 
@@ -356,7 +440,7 @@
         android:layout_alignParentLeft="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/chat_encoding_background"
+        android:background="?attr/waiting_background_color"
         android:visibility="gone">
         <ProgressBar
             android:id="@+id/medias_processing_progress"

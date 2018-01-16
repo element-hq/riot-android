@@ -17,9 +17,9 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -30,7 +30,7 @@ import im.vector.Matrix;
 /**
  * Dummy activity used to trigger the room activity in preview mode,
  * when the user press the "Open" button within the invitation notification.
- *
+ * <p>
  * The use of a dummy Activity is required to delay the build of the {@link RoomPreviewData}
  * after the user pressed the "Open" button on the notification.
  * <br/> Otherwise, {@link VectorRoomActivity#sRoomPreviewData}
@@ -38,25 +38,27 @@ import im.vector.Matrix;
  * currently displayed.
  */
 @SuppressLint("LongLogTag")
-public class VectorFakeRoomPreviewActivity extends Activity {
-    private static final String LOG_TAG = "VectorFakeRoomPreviewActivity";
+public class VectorFakeRoomPreviewActivity extends RiotBaseActivity {
+    private static final String LOG_TAG = VectorFakeRoomPreviewActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // keep theme ?
 
         Intent receivedIntent = getIntent();
         String matrixId;
         MXSession session;
 
         // check session validity
-        if(null == receivedIntent){
-            Log.w(LOG_TAG,"## onCreate(): Failure - received intent is null");
-        } else if(null == (matrixId=receivedIntent.getStringExtra(VectorRoomActivity.EXTRA_ROOM_ID))){
-            Log.w(LOG_TAG,"## onCreate(): Failure - matrix ID is null");
+        if (null == receivedIntent) {
+            Log.w(LOG_TAG, "## onCreate(): Failure - received intent is null");
+        } else if (null == (matrixId = receivedIntent.getStringExtra(VectorRoomActivity.EXTRA_ROOM_ID))) {
+            Log.w(LOG_TAG, "## onCreate(): Failure - matrix ID is null");
         } else {
             // get the session
-            if(null == (session = Matrix.getInstance(getApplicationContext()).getSession(matrixId))) {
+            if (null == (session = Matrix.getInstance(getApplicationContext()).getSession(matrixId))) {
                 session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
             }
 
@@ -74,7 +76,7 @@ public class VectorFakeRoomPreviewActivity extends Activity {
                 nextIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(nextIntent);
             } else {
-                Log.w(LOG_TAG,"## onCreate(): Failure - session is null");
+                Log.w(LOG_TAG, "## onCreate(): Failure - session is null");
             }
         }
         finish();

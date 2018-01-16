@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="resouces_language">英</string>
+    <string name="resouces_country">英國</string>
+
+    <string name="light_theme">淺色主題</string>
+    <string name="dark_theme">深色主題</string>
+    <string name="black_them">黑色主題</string>
+
+    <string name="notification_sync_in_progress">同步中</string>
+    <string name="notification_listen_for_events">聆聽事件</string>
+
+    <string name="title_activity_home">信息</string>
+    </resources>

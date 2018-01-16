@@ -17,17 +17,18 @@
 package im.vector;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
+import org.matrix.androidsdk.rest.client.ProfileRestClient;
 import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.RequestPhoneNumberValidationResponse;
-import org.matrix.androidsdk.rest.model.ThreePid;
+import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
@@ -54,10 +55,10 @@ public class RegistrationManager {
 
     private static volatile RegistrationManager sInstance;
 
-    private static String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
-    private static String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
+    private static final String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
+    private static final String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
 
-    private static String NEXTLINK_BASE_URL = "https://riot.im/app";
+    private static final String NEXTLINK_BASE_URL = "https://riot.im/app";
 
     // JSON keys used for registration request
     private static final String JSON_KEY_CLIENT_SECRET = "client_secret";
@@ -70,7 +71,7 @@ public class RegistrationManager {
     private static final String JSON_KEY_PUBLIC_KEY = "public_key";
 
     // List of stages supported by the app
-    private static List<String> VECTOR_SUPPORTED_STAGES = Arrays.asList(
+    private static final List<String> VECTOR_SUPPORTED_STAGES = Arrays.asList(
             LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD,
             LoginRestClient.LOGIN_FLOW_TYPE_DUMMY,
             LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY,
@@ -78,9 +79,10 @@ public class RegistrationManager {
             LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
 
     // Config
-    private HomeserverConnectionConfig mHsConfig;
+    private HomeServerConnectionConfig mHsConfig;
     private LoginRestClient mLoginRestClient;
     private ThirdPidRestClient mThirdPidRestClient;
+    private ProfileRestClient mProfileRestClient;
 
     // Flows
     private RegistrationFlowResponse mRegistrationResponse;
@@ -128,6 +130,7 @@ public class RegistrationManager {
         mHsConfig = null;
         mLoginRestClient = null;
         mThirdPidRestClient = null;
+        mProfileRestClient = null;
         mRegistrationResponse = null;
 
         mSupportedStages.clear();
@@ -149,10 +152,11 @@ public class RegistrationManager {
      *
      * @param hsConfig
      */
-    public void setHsConfig(final HomeserverConnectionConfig hsConfig) {
+    public void setHsConfig(final HomeServerConnectionConfig hsConfig) {
         mHsConfig = hsConfig;
         mLoginRestClient = null;
         mThirdPidRestClient = null;
+        mProfileRestClient = null;
     }
 
     /**
@@ -218,6 +222,22 @@ public class RegistrationManager {
     }
 
     /**
+     * @return true if there is a password flow.
+     */
+    private boolean isPasswordBasedFlowSupported() {
+        if ((null != mRegistrationResponse) && (null != mRegistrationResponse.flows)) {
+            for (LoginFlow flow : mRegistrationResponse.flows) {
+                if (TextUtils.equals(flow.type, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD) ||
+                        ((null != flow.stages) && flow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Make the registration request with params depending on singleton values
      *
      * @param context
@@ -241,6 +261,11 @@ public class RegistrationManager {
                                 listener.onWaitingEmailValidation();
                             }
                         }
+
+                        @Override
+                        public void onThreePidRequestFailed(@StringRes int errorMessageRes) {
+                            listener.onThreePidRequestFailed(context.getString(errorMessageRes));
+                        }
                     });
                     return;
                 } else {
@@ -255,10 +280,24 @@ public class RegistrationManager {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_DUMMY;
                 authParams = new HashMap<>();
                 authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_DUMMY);
-            } else {
+            } else if (isPasswordBasedFlowSupported()) {
+                // never has been tested
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD;
                 authParams = new HashMap<>();
                 authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
+                authParams.put(JSON_KEY_SESSION, mRegistrationResponse.session);
+
+                if (null != mUsername) {
+                    authParams.put("username", mUsername);
+                }
+
+                if (null != mPassword) {
+                    authParams.put("password", mPassword);
+                }
+            } else {
+                // others
+                registrationType = "";
+                authParams = new HashMap<>();
             }
 
             if (TextUtils.equals(registrationType, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)
@@ -298,7 +337,7 @@ public class RegistrationManager {
                 @Override
                 public void onRegistrationFailed(String message) {
                     if (TextUtils.equals(ERROR_MISSING_STAGE, message)
-                            && (mPhoneNumber == null || isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN))){
+                            && (mPhoneNumber == null || isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN))) {
                         if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                             attemptRegistration(context, listener);
                         } else {
@@ -396,7 +435,7 @@ public class RegistrationManager {
      * @param stage
      * @return true if completed
      */
-    public boolean isCompleted(final String stage) {
+    private boolean isCompleted(final String stage) {
         return mRegistrationResponse != null && mRegistrationResponse.completed != null && mRegistrationResponse.completed.contains(stage);
     }
 
@@ -416,7 +455,7 @@ public class RegistrationManager {
      * @param stage
      * @return true if required
      */
-    public boolean isRequired(final String stage) {
+    private boolean isRequired(final String stage) {
         return mRequiredStages.contains(stage);
     }
 
@@ -441,7 +480,7 @@ public class RegistrationManager {
     /**
      * @return true if captcha is mandatory for registration and not completed yet
      */
-    public boolean isCaptchaRequired() {
+    private boolean isCaptchaRequired() {
         return mRegistrationResponse != null
                 && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)
                 && (mRegistrationResponse.completed == null || !mRegistrationResponse.completed.contains(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA));
@@ -612,6 +651,18 @@ public class RegistrationManager {
     }
 
     /**
+     * Get a profile rest client
+     *
+     * @return third pid rest client
+     */
+    private ProfileRestClient getProfileRestClient() {
+        if (mProfileRestClient == null && mHsConfig != null) {
+            mProfileRestClient = new ProfileRestClient(mHsConfig);
+        }
+        return mProfileRestClient;
+    }
+
+    /**
      * Set the flow stages for the current home server
      *
      * @param registrationFlowResponse
@@ -751,7 +802,7 @@ public class RegistrationManager {
                     nextLink += "&hs_url=" + mHsConfig.getHomeserverUri().toString();
                     nextLink += "&is_url=" + mHsConfig.getIdentityServerUri().toString();
                     nextLink += "&session_id=" + mRegistrationResponse.session;
-                    pid.requestEmailValidationToken(getThirdPidRestClient(), nextLink, new ApiCallback<Void>() {
+                    pid.requestEmailValidationToken(getProfileRestClient(), nextLink, true, new ApiCallback<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             listener.onThreePidRequested(pid);
@@ -769,14 +820,18 @@ public class RegistrationManager {
 
                         @Override
                         public void onMatrixError(MatrixError e) {
-                            listener.onThreePidRequested(pid);
+                            if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
+                                listener.onThreePidRequestFailed(R.string.account_email_already_used_error);
+                            } else {
+                                listener.onThreePidRequested(pid);
+                            }
                         }
                     });
                     break;
                 case ThreePid.MEDIUM_MSISDN:
-                    pid.requestPhoneNumberValidationToken(getThirdPidRestClient(), null, new ApiCallback<RequestPhoneNumberValidationResponse>() {
+                    pid.requestPhoneNumberValidationToken(getProfileRestClient(), true, new ApiCallback<Void>() {
                         @Override
-                        public void onSuccess(RequestPhoneNumberValidationResponse response) {
+                        public void onSuccess(Void aVoid) {
                             mPhoneNumber = pid;
                             listener.onThreePidRequested(pid);
                         }
@@ -793,7 +848,11 @@ public class RegistrationManager {
 
                         @Override
                         public void onMatrixError(MatrixError e) {
-                            listener.onThreePidRequested(pid);
+                            if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
+                                listener.onThreePidRequestFailed(R.string.account_phone_number_already_used_error);
+                            } else {
+                                listener.onThreePidRequested(pid);
+                            }
                         }
                     });
                     break;
@@ -843,6 +902,7 @@ public class RegistrationManager {
      */
     private void register(final Context context, final RegistrationParams params, final InternalRegistrationListener listener) {
         if (getLoginRestClient() != null) {
+            params.initial_device_display_name = context.getString(R.string.login_mobile_device);
             mLoginRestClient.register(params, new SimpleApiCallback<Credentials>() {
                 @Override
                 public void onSuccess(Credentials credentials) {
@@ -858,12 +918,17 @@ public class RegistrationManager {
                             isDuplicated |= TextUtils.equals(credentials.userId, cred.userId) && TextUtils.equals(credentials.homeServer, cred.homeServer);
                         }
 
-                        if (!isDuplicated) {
-                            mHsConfig.setCredentials(credentials);
-                            MXSession session = Matrix.getInstance(context).createSession(mHsConfig);
-                            Matrix.getInstance(context).addSession(session);
+                        if (null == mHsConfig) {
+                            listener.onRegistrationFailed("null mHsConfig");
+                        } else {
+                            if (!isDuplicated) {
+                                mHsConfig.setCredentials(credentials);
+                                MXSession session = Matrix.getInstance(context).createSession(mHsConfig);
+                                Matrix.getInstance(context).addSession(session);
+                            }
+
+                            listener.onRegistrationSuccess();
                         }
-                        listener.onRegistrationSuccess();
                     }
                 }
 
@@ -945,6 +1010,8 @@ public class RegistrationManager {
 
     public interface ThreePidRequestListener {
         void onThreePidRequested(ThreePid pid);
+
+        void onThreePidRequestFailed(@StringRes int errorMessageRes);
     }
 
     public interface ThreePidValidationListener {
@@ -963,5 +1030,7 @@ public class RegistrationManager {
         void onWaitingEmailValidation();
 
         void onWaitingCaptcha();
+
+        void onThreePidRequestFailed(String message);
     }
 }

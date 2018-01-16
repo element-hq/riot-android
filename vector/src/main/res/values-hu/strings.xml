@@ -1,0 +1,787 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resouces_language">hu</string>
+    <string name="resouces_country">HU</string>
+
+    <string name="title_activity_home">Üzenetek</string>
+    <string name="title_activity_room">Szoba</string>
+    <string name="title_activity_settings">Beállítások</string>
+    <string name="title_activity_historical">Előzmény</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Mégse</string>
+    <string name="save">Mentés</string>
+    <string name="leave">Elhagy</string>
+    <string name="send">Küldés</string>
+    <string name="copy">Másolás</string>
+    <string name="resend">Újraküldés</string>
+    <string name="redact">Törlés</string>
+    <string name="quote">Idézés</string>
+    <string name="share">Megosztás</string>
+    <string name="later">Később</string>
+    <string name="permalink">Állandó hivatkozás</string>
+    <string name="view_source">Forrás megjelenítése</string>
+    <string name="view_decrypted_source">Visszafejtett forrás megjelenítése</string>
+    <string name="delete">Törlés</string>
+    <string name="rename">Átnevezés</string>
+    <string name="report_content">Tartalom bejelentése</string>
+    <string name="active_call">Aktív hívás</string>
+    <string name="ongoing_conference_call">" Folyamatban lévő konferenciahívás. Csatlakozás hanggal vagy videóval."</string>
+    <string name="ongoing_conference_call_voice">hang</string>
+    <string name="ongoing_conference_call_video">videó</string>
+    <string name="cannot_start_call">Nem sikerült hívást kezdeményezni, próbáld meg később</string>
+    <string name="missing_permissions_warning">Hiányzó engedélyek miatt egyes funkciók talán nem elérhetőek..</string>
+    <string name="missing_permissions_to_start_conf_call">A szobában konferencia kezdeményezéséhez meghívási jogra van szükséged.</string>
+    <string name="missing_permissions_title_to_start_conf_call">Nem sikerült hívást kezdeményezni</string>
+    <string name="device_information">Eszközinformáció</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Titkosított szobákban nem támogatott a konferenciahívás</string>
+    <string name="send_anyway">Küldés ennek ellenére</string>
+    <string name="or">vagy</string>
+    <string name="and">és</string>
+    <string name="invite">Meghívás</string>
+
+    <string name="action_sign_out">Kijelentkezés</string>
+    <string name="action_sign_out_confirmation">Biztonsági okból kijelentkezéskor törlődnek a végtől végig való titkosítás kulcsai, emiatt a következő bejelentkezéskor a korábban titkosított üzenetek olvashatatlanok lesznek.
+A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</string>
+    <string name="action_voice_call">Hanghívás</string>
+    <string name="action_video_call">Videóhívás</string>
+    <string name="action_global_search">Globális keresés</string>
+    <string name="action_mark_all_as_read">Mindent olvasottnak jelöl</string>
+    <string name="action_historical">Előzmény</string>
+    <string name="action_quick_reply">Gyors válasz</string>
+    <string name="action_open">Megnyit</string>
+    <string name="action_close">Bezár</string>
+    <string name="copied_to_clipboard">Vágólapra másolva</string>
+    <string name="dialog_title_confirmation">Megerősítés</string>
+    <string name="dialog_title_warning">Figyelmeztetés</string>
+
+    <string name="disable">Tiltás</string>
+
+    <string name="bottom_action_home">Kezdőképernyő</string>
+    <string name="bottom_action_favourites">Kedvencek</string>
+    <string name="bottom_action_people">Emberek</string>
+    <string name="bottom_action_rooms">Szobák</string>
+
+    <string name="home_filter_placeholder_home">Szoba keresése</string>
+    <string name="home_filter_placeholder_favorites">Kedvenc keresése</string>
+    <string name="home_filter_placeholder_people">Ember keresése</string>
+    <string name="home_filter_placeholder_rooms">Szoba keresése</string>
+
+    <string name="invitations_header">Meghívások</string>
+    <string name="low_priority_header">Alacsony prioritás</string>
+
+    <string name="direct_chats_header">Beszélgetések</string>
+    <string name="local_address_book_header">Helyi címjegyzék</string>
+    <string name="matrix_only_filter">Csak Matrix névjegyek</string>
+    <string name="no_conversation_placeholder">Nincs beszélgetés</string>
+    <string name="no_contact_access_placeholder">Nem adtál a Riotnak hozzáférést a helyi névjegyeidhez</string>
+    <string name="no_result_placeholder">Nincs találat</string>
+
+    <string name="rooms_header">Szobák</string>
+    <string name="rooms_directory_header">Szobalista</string>
+    <string name="no_room_placeholder">Nincs szoba</string>
+    <string name="no_public_room_placeholder">Nincs elérhető nyilvános szoba</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="one">1 felhasználó</item>
+	<item quantity="other">%d felhasználó</item>
+</plurals>
+
+    <string name="send_bug_report_include_logs">Naplófájl küldése</string>
+    <string name="send_bug_report_include_crash_logs">Hibanapló küldése</string>
+    <string name="send_bug_report_include_screenshot">Képernyőkép küldése</string>
+    <string name="send_bug_report">Hibajelentés</string>
+    <string name="send_bug_report_description">Kérünk, írd le a hibát! Mit csináltál? Mit vártál, hogy történni fog? Mi történt valójában?</string>
+    <string name="send_bug_report_placeholder">Írd le itt a problémádat</string>
+    <string name="send_bug_report_logs_description">A problémák kielemzése érdekében a naplók erről a kliensről a hibabejelentővel elküldésre kerülnek. Ha inkább csak a fenti szöveget szeretnéd elküldeni, szedd ki a pipát:</string>
+    <string name="send_bug_report_alert_message">Úgy tűnik, mintha mérgedben ráznád a telefont. Szeretnél hibajelentést beküldeni?</string>
+    <string name="send_bug_report_app_crashed">Az alkalmazás legutóbb összeomlott. Szeretnél hibajelentést beküldeni?</string>
+
+    <string name="send_bug_report_sent">A hibajelentés sikeresen elküldve</string>
+    <string name="send_bug_report_failed">A hibajelentést nem sikerült elküldeni (%s)</string>
+    <string name="send_bug_report_progress">Folyamat (%s%%)</string>
+
+    <string name="send_files_in">Küldés ide:</string>
+    <string name="read_receipt">Elolvasta</string>
+
+    <string name="join_room">Belépés a szobába</string>
+    <string name="username">Felhasználónév</string>
+    <string name="create_account">Regisztráció</string>
+    <string name="login">Bejelentkezés</string>
+    <string name="logout">Kijelentkezés</string>
+    <string name="hs_url">Saját szerver URL</string>
+    <string name="identity_url">Identitás szerver URL</string>
+    <string name="user">felhasználó</string>
+    <string name="users">felhasználók</string>
+    <string name="search">Keresés</string>
+
+    <string name="start_new_chat">Új csevegés indítása</string>
+    <string name="start_voice_call">Hanghívás indítása</string>
+    <string name="start_video_call">Videóhívás indítása</string>
+
+    <string name="option_send_files">Fájlküldés</string>
+    <string name="option_take_photo_video">Kép- vagy videókészítés</string>
+
+    <string name="auth_login">Bejelentkezés</string>
+    <string name="auth_register">Regisztráció</string>
+    <string name="auth_submit">Beküldés</string>
+    <string name="auth_skip">Kihagyás</string>
+    <string name="auth_send_reset_email">Visszaállító e-mail küldése</string>
+    <string name="auth_return_to_login">Vissza a bejelentkezéshez</string>
+    <string name="auth_user_id_placeholder">E-mail vagy felhasználónév</string>
+    <string name="auth_password_placeholder">Jelszó</string>
+    <string name="auth_new_password_placeholder">Új jelszó</string>
+    <string name="auth_user_name_placeholder">Felhasználónév</string>
+    <string name="auth_add_email_message">Adj meg egy e-mail címet a fiókodhoz, hogy mások megtalálhassanak és hogy visszaállíthasd a jelszavadat.</string>
+    <string name="auth_add_phone_message">Adj meg telefonszámot a fiókodhoz, hogy mások megtalálhassanak.</string>
+    <string name="auth_add_email_phone_message">Adj meg e-mail címet és/vagy telefonszámot a fiókodhoz, hogy mások megtalálhassanak.
+
+ Az e-mail címmel a jelszavadat is helyreállíthatod.</string>
+    <string name="auth_add_email_and_phone_message">Adj meg e-mail címet és telefonszámot a fiókodhoz, hogy mások megtalálhassanak.
+
+ Az e-mail címmel a jelszavadat is helyreállíthatod.</string>
+    <string name="auth_email_placeholder">E-mail cím</string>
+    <string name="auth_opt_email_placeholder">E-mail cím (nem kötelező)</string>
+    <string name="auth_phone_number_placeholder">Telefonszám</string>
+    <string name="auth_opt_phone_number_placeholder">Telefonszám (nem kötelező)</string>
+    <string name="auth_repeat_password_placeholder">Jelszó ismétlése</string>
+    <string name="auth_repeat_new_password_placeholder">Erősítsd meg az új jelszavadat</string>
+    <string name="auth_invalid_login_param">Hibás felhasználónév és/vagy jelszó</string>
+    <string name="auth_invalid_user_name">A felhasználónévben csak betűk, számok, pontok, kötőjelek és aláhúzásjelek lehetnek</string>
+    <string name="auth_invalid_password">A jelszó túl rövid (min. 6)</string>
+    <string name="auth_missing_password">Hiányzó jelszó</string>
+    <string name="auth_invalid_email">Ez nem tűnik érvényes e-mail címnek</string>
+    <string name="auth_invalid_phone">Ez nem tűnik érvényes telefonszámnak</string>
+    <string name="auth_email_already_defined">Ez az e-mail cím már használatban van.</string>
+    <string name="auth_missing_email">Hiányzó e-mail cím</string>
+    <string name="auth_missing_phone">Hiányzó telefonszám</string>
+    <string name="auth_missing_email_or_phone">Hiányzó e-mail cím vagy telefonszám</string>
+    <string name="auth_invalid_token">Érvénytelen kód</string>
+    <string name="auth_password_dont_match">A jelszók nem egyeznek</string>
+    <string name="auth_forgot_password">Elfelejtetted a jelszavad?</string>
+    <string name="auth_use_server_options">Személyre szabott szerver beállítások (haladó)</string>
+    <string name="auth_email_validation_message">A regisztráció folytatásához nézd meg az e-mailjeidet</string>
+    <string name="auth_threepid_warning_message">Nem támogatott a regisztráció e-mail címmel és telefonszámmal egyszerre, amíg az api el nem készül. Most csak a telefonszámot használjuk.
+
+Az e-mail címed a beállításoknál adhatod a profilodhoz.</string>
+    <string name="auth_recaptcha_message">A saját szerver szeretné ellenőrizni, hogy nem vagy robot</string>
+    <string name="auth_username_in_use">A felhasználónév foglalt</string>
+    <string name="auth_home_server">Saját szerver:</string>
+    <string name="auth_identity_server">Identitásszerver:</string>
+    <string name="auth_reset_password_next_step_button">Ellenőriztem az e-mail címemet</string>
+    <string name="auth_reset_password_message">A jelszavad visszaállításához add meg a fiókodhoz tartozó e-mail címet:</string>
+    <string name="auth_reset_password_missing_email">Meg kell adnod a fiókodhoz tartozó e-mail címet.</string>
+    <string name="auth_reset_password_missing_password">Meg kell adnod egy új jelszót.</string>
+    <string name="auth_reset_password_email_validation_message">Küldtünk egy e-mailt erre a címre: %s . A benne lévő link használata után kattints.</string>
+    <string name="auth_reset_password_error_unauthorized">Nem sikerült az e-mail címet ellenőrizni: rákattintottál az e-mailben található linkre?</string>
+    <string name="auth_reset_password_success_message">A jelszavad visszaállítottuk.
+
+Kiléptettünk az összes készülékedről, nem érkezik rájuk új értesítés. Az értesítések visszakapcsolásához minden készüléken lépj be újra.</string>
+
+    <string name="login_error_must_start_http">Az URL így kezdődjön: http[s]://</string>
+    <string name="login_error_network_error">Sikertelen bejelentkezés: Hálózati hiba</string>
+    <string name="login_error_unable_login">Sikertelen belépés</string>
+    <string name="login_error_registration_network_error">Sikertelen regisztráció: Hálózati hiba</string>
+    <string name="login_error_unable_register">Regisztráció sikertelen</string>
+    <string name="login_error_unable_register_mail_ownership">Regisztráció sikertelen: e-mail tulajdonjog hiba</string>
+    <string name="login_error_invalid_home_server">Adj meg érvényes URL-t</string>
+
+    <string name="login_error_forbidden">Helytelen felhasználónév/jelszó</string>
+    <string name="login_error_unknown_token">A megadott hozzáférési kódot nem sikerült felismerni</string>
+    <string name="login_error_bad_json">Hibás JSON</string>
+    <string name="login_error_not_json">Nem tartalmazott érvényes JSON-t</string>
+    <string name="login_error_limit_exceeded">Túl sok kérés érkezett</string>
+    <string name="login_error_user_in_use">Ez a felhasználónév már foglalt</string>
+    <string name="login_error_login_email_not_yet">Az e-mailban található linkre még nem lett kattintva</string>
+
+    <string name="e2e_need_log_in_again">Újra be kell jelentkeznie, hogy egy új végtől végig titkosító kulcsot generáljon ehhez az eszközhöz és beküldeni a nyilvános kulcsot a Saját Szervernek.
+Ez egy egyszeri dolog.
+Elnézést a kellemetlenségért.</string>
+
+    <string name="read_receipts_list">Fogadási lista elolvasása</string>
+
+    <string name="compression_options">"Küldési méret "</string>
+    <string name="compression_opt_list_original">Eredeti</string>
+    <string name="compression_opt_list_large">Nagy</string>
+    <string name="compression_opt_list_medium">Közepes</string>
+    <string name="compression_opt_list_small">Kicsi</string>
+
+    <string name="attachment_cancel_download">Megszakítod a letöltést?</string>
+    <string name="attachment_cancel_upload">Megszakítod a feltöltést?</string>
+    <string name="attachment_remaining_time_seconds">%d másodperc</string>
+    <string name="attachment_remaining_time_minutes">%1$d perc %2$d másodperc</string>
+
+    <string name="yesterday">Tegnap</string>
+    <string name="today">Ma</string>
+
+    <string name="room_info_room_name">Szobanév</string>
+    <string name="room_info_room_topic">Szoba témája</string>
+
+    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
+    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
+
+    <string name="call_connected">Vonalban</string>
+    <string name="call_connecting">Kapcsolódás…</string>
+    <string name="call_ended">Hívás vége</string>
+    <string name="call_ring">Hívás…</string>
+    <string name="incoming_call">Bejövő hívás</string>
+    <string name="incoming_video_call">Bejövő videóhívás</string>
+    <string name="incoming_voice_call">Bejövő hanghívás</string>
+    <string name="call_in_progress">Hívás folyamatban</string>
+
+    <string name="call_error_user_not_responding">A hívott fél nem vette fel.</string>
+    <string name="call_error_ice_failed">A médiacsatlakozás nem sikerült</string>
+    <string name="call_error_camera_init_failed">A kamerát nem lehet inicializálni</string>
+    <string name="call_error_answered_elsewhere">hívás felvéve máshol</string>
+    <string name="call_error_peer_hangup_elsewhere">hívás befejezve máshol</string>
+    <string name="call_error_peer_cancelled_call">hívás megszakítva</string>
+
+    <string name="action_accept">ELFOGADÁS</string>
+    <string name="action_ignore">ELUTASÍT</string>
+
+    <string name="media_picker_both_capture_title">Készíts képet vagy videót</string>
+    <string name="media_picker_cannot_record_video">Videórögzítés sikertelen</string>
+
+    <string name="permissions_rationale_popup_title">Információ</string>
+    <string name="permissions_rationale_msg_storage">A Riot-nak szüksége van a fotó és videó könyvtáradnak elérési engedélyéhez a csatolmányok küldéséhez.
+
+Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj fájlokat küldeni a telefonodról.</string>
+    <string name="permissions_rationale_msg_camera">Riot-nak engedély szükséges a kamerád eléréséhez, hogy tudj képeket készíteni és videó hívásokat.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni.</string>
+    <string name="permissions_rationale_msg_record_audio">A Riot-nak engedély szükséges a mikrofonod eléréséhez, hogy tudj hanghívást kezdeményezni.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">"A Riot-nak engedély szükséges a mikrofonod  és kamerád eléréséhez, hogy tudj videóhívást kezdeményezni.
+
+Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni."</string>
+    <string name="permissions_rationale_msg_contacts">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj Matrix felhasználókat találni e-mail és telefonszám alapján.
+
+Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj címjegyzék-kapcsolatok találni a Riot-tal.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj Matrix felhasználókat találni e-mail és telefonszám alapján.
+
+Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">Elnézést... A művelet nem lett végre hajtva hiányzó engedélyek miatt</string>
+
+    <string name="media_slider_saved">Mentve</string>
+    <string name="media_slider_saved_message">Mentés a letöltések közé</string>
+    <string name="yes">IGEN</string>
+    <string name="no">NEM</string>
+    <string name="_continue">Folytatás</string>
+
+    <string name="remove">Eltávolítás</string>
+    <string name="join">Csatlakozás</string>
+    <string name="preview">Előnézet</string>
+    <string name="reject">Elutasítás</string>
+
+    <string name="room_jump_to_first_unread">Ugrás az első olvasatlan üzenethez.</string>
+
+    <string name="room_preview_invitation_format">Meg lettél hívva, hogy csatlakozz ehhez a szobához %s által</string>
+    <string name="title_activity_member_details">Tag adatok</string>
+    <string name="forward">Továbbítás</string>
+    <string name="room_preview_unlinked_email_warning">Ez a meghívó erre a címre lett küldve: %s, ami nincs összekötve a felhasználóddal.
+Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az e-mail címet a felhasználódhoz.</string>
+    <string name="room_preview_try_join_an_unknown_room">"%s szobához próbálsz hozzáférni.  Szeretnél csatlakozni, hogy részt tudj venni a beszélgetésben?"</string>
+    <string name="room_preview_try_join_an_unknown_room_default">egy szoba</string>
+    <string name="room_preview_room_interactions_disabled">Ez egy előnézete a szobának. A szobai interakciók letiltásra kerültek.</string>
+
+    <string name="room_creation_title">Új csevegés</string>
+    <string name="room_creation_add_member">Új tag hozzáadása</string>
+    <string name="room_header_active_members">%1$d/%2$d aktív tag</string>
+    <string name="room_title_members">%1$d tag</string>
+    <string name="room_title_one_member">1 tag</string>
+    <string name="room_e2e_alert_title">Figyelem!</string>
+    <string name="room_e2e_alert_message">Végtől végig titkosítás még tesztelés alatt áll és lehet hogy nem megbízható.
+
+Még nem kéne megbíznod az adataid megtartásával.
+
+A készülékeid nem lesznek képesek visszafejteni a előzményeid azelőttről, hogy becsatlakoztál a szobába.
+
+A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titkosítás funkció még nem érhető el.</string>
+
+    <string name="format_time_s">mp</string>
+    <string name="format_time_m">p</string>
+    <string name="format_time_h">ó</string>
+    <string name="format_time_d">n</string>
+
+    <string name="room_participants_leave_prompt_title">Szoba elhagyása</string>
+    <string name="room_participants_leave_prompt_msg">Biztos el akarod hagyni a szobát?</string>
+    <string name="room_participants_remove_prompt_msg">Biztos el akarod távolítani %s -t a csevegésből?</string>
+    <string name="room_participants_create">Létrehozás</string>
+
+    <string name="room_participants_online">Online</string>
+    <string name="room_participants_offline">Offline</string>
+    <string name="room_participants_idle">Tétlen</string>
+    <string name="room_participants_now">most</string>
+    <string name="room_participants_ago">ezelőtt</string>
+
+    <string name="room_participants_header_admin_tools">ADMIN ESZKÖZÖK</string>
+    <string name="room_participants_header_call">HÍVÁS</string>
+    <string name="room_participants_header_direct_chats">KÖZVETLEN CSEVEGÉSEK</string>
+    <string name="room_participants_header_devices">KÉSZÜLÉKEK</string>
+
+    <string name="room_participants_action_invite">Meghívás</string>
+    <string name="room_participants_action_leave">Szoba elhagyása</string>
+    <string name="room_participants_action_remove">Eltávolítás ebből a szobából</string>
+    <string name="room_participants_action_ban">Tiltás</string>
+    <string name="room_participants_action_unban">Tiltás feloldása</string>
+    <string name="room_participants_action_set_default_power_level">Visszaállítás normál felhasználóra</string>
+    <string name="room_participants_action_set_moderator">Moderátorrá tevés</string>
+    <string name="room_participants_action_set_admin">Adminná tevés</string>
+    <string name="room_participants_action_ignore">Az összes üzenet elrejtése ettől a felhasználótól</string>
+    <string name="room_participants_action_unignore">Az összes üzenet megjelenítése ettől a felhasználótól</string>
+    <string name="room_participants_invite_search_another_user">Felhasználói azonosító, név vagy e-mail</string>
+    <string name="room_participants_action_mention">Megemlítés</string>
+    <string name="room_participants_action_devices_list">Eszközlista mutatása</string>
+    <string name="room_participants_power_level_prompt">Nem fogod tudni vissza vonni a változtatásokat mert az adott felhasználó ugyan azzal a jogosultság szinten fog állni mint te.
+Biztos vagy benne?</string>
+
+    <string name="room_participants_invite_prompt_msg">Biztos meg akarod hívni %s -t a csevegésbe?</string>
+
+    <string name="people_search_invite_by_id"><u>Meghívás azonosítóval</u></string>
+    <string name="people_search_local_contacts">HELYI NÉVJEGYEK (%d)</string>
+    <string name="people_search_filter_text">Csak Matrix felhasználók</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Felhasználó meghívása azonosítóval</string>
+    <string name="people_search_invite_by_id_dialog_description">Kérlek adj meg egy vagy több e-mail címet vagy Matrix azonosítót</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-mail vagy Matrix azonosító</string>
+
+    <string name="room_menu_search">Keresés</string>
+    <string name="room_one_user_is_typing">%s éppen ír…</string>
+    <string name="room_two_users_are_typing">%1$s és %2$s éppen írnak…</string>
+    <string name="room_many_users_are_typing">%1$s, %2$s és mások éppen írnak…</string>
+    <string name="room_message_placeholder_encrypted">Titkosított üzenet küldése…</string>
+    <string name="room_message_placeholder_not_encrypted">Üzenet küldése (nem titkosított)…</string>
+    <string name="room_offline_notification">Megszakadt a kapcsolat a szerverrel.</string>
+    <string name="room_unsent_messages_notification">Üzenetek nem kerültek elküldésre. %1$s vagy %2$s most?</string>
+    <string name="room_unknown_devices_messages_notification">Üzenetek nem kerültek elküldésre mert egy ismeretlen eszköz van jelen. %1$s vagy %2$s most?</string>
+    <string name="room_prompt_resend">Összes újraküldése</string>
+    <string name="room_prompt_cancel">Összes megszüntetése</string>
+    <string name="room_resend_unsent_messages">El nem küldött üzenetek újraküldése</string>
+    <string name="room_delete_unsent_messages">El nem küldött üzenetek törlése</string>
+    <string name="room_message_file_not_found">Fájl nem található</string>
+    <string name="room_do_not_have_permission_to_post">Nincs engedélyed hogy üzenetet hagyj ebbe a szobában</string>
+    <string name="room_new_message_notification">1 új üzenet</string>
+    <string name="room_new_messages_notification">%1$d új üzenet</string>
+
+    <string name="ssl_trust">Megbízom benne</string>
+    <string name="ssl_do_not_trust">Nem bízom meg benne</string>
+    <string name="ssl_logout_account">Kijelentkezés</string>
+    <string name="ssl_remain_offline">Mellőz</string>
+    <string name="ssl_fingerprint_hash">Ujjlenyomat (%s):</string>
+    <string name="ssl_could_not_verify">Nem sikerült a távoli szerver azonosságának ellenőrzése.</string>
+    <string name="ssl_cert_not_trust">Ez jelentheti azt is, hogy valaki rossz szándékkal lehallgatja a forgalmadat, vagy azt, hogy a telefonod nem bízik meg a távoli szervertől kapott tanúsítványban.</string>
+    <string name="ssl_cert_new_account_expl">Ha a szerver adminisztrátora szerint ez várható volt, akkor bizonyosodj meg róla, hogy az alábbi ujjlenyomat megegyezik a tőle kapottal.</string>
+    <string name="ssl_unexpected_existing_expl">A tanúsítvány eltér a telefonod által megbízottól. Ez RENDKÍVÜL SZOKATLAN. Erősen ajánlott, hogy NE FOGADD EL ezt az új tanúsítványt.</string>
+    <string name="ssl_expected_existing_expl">A tanúsítvány megváltozott megbízhatóról még nem megbízhatóra. A szerver lehet, hogy megváltoztatta tanúsítványát. Kérlek lépj kapcsolatba a szerver adminisztrátorral és egyeztesd az ujjlenyomatot.</string>
+    <string name="ssl_only_accept">CSAK AKKOR fogadd el a tanúsítványt ha a szerver adminisztrátor által megadott ujjlenyomat egyezik a fentebb láthatóval.</string>
+    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
+
+    <string name="room_details_title">Szoba adatai</string>
+    <string name="room_details_people">Résztvevők</string>
+    <string name="room_details_files">Fájlok</string>
+    <string name="room_details_settings">Beállítások</string>
+    <string name="room_details_selected">kiválaszott</string>
+    <string name="malformed_id">Nem megfelelő Azonosító. Egy Matrix Azonosítónak vagy egy E-mail-nek kéne lennie, mint például \'@localpart:domain\'</string>
+    <string name="room_details_people_invited_group_name">MEGHÍVOTT</string>
+    <string name="room_details_people_present_group_name">CSATLAKOZOTT</string>
+
+    <string name="room_event_action_report_prompt_reason">Ennek a tartalomnak jelentésének az oka</string>
+    <string name="room_event_action_report_prompt_ignore_user">El akarod rejteni az összes üzentet ettől a felhasználótól?</string>
+    <string name="room_event_action_cancel_upload">Feltöltés megszakítása</string>
+    <string name="room_event_action_cancel_download">Letöltés megszakítása</string>
+
+    <string name="room_displayname_invite_from">Meghívás %s -tól/-től</string>
+    <string name="room_displayname_room_invite">Meghívás szobába</string>
+    <string name="room_displayname_two_members">%1$s és %2$s</string>
+    <string name="room_displayname_more_than_two_members">"%1$s, %2$d  és mások"</string>
+    <string name="room_displayname_no_title">Üres szoba</string>
+
+    <string name="search_hint">Keresés</string>
+    <string name="search_members_hint">Szoba tagok szűrése</string>
+    <string name="search_no_results">Nincsenek találatok</string>
+    <string name="tab_title_search_rooms">SZOBÁK</string>
+    <string name="tab_title_search_messages">ÜZENETEK</string>
+    <string name="tab_title_search_people">EMBEREK</string>
+    <string name="tab_title_search_files">FÁJLOK</string>
+
+    <string name="room_recents_join">JOIN</string>
+    <string name="room_recents_directory">KÖNYVTÁR</string>
+    <string name="room_recents_favourites">KEDVENCEK</string>
+    <string name="room_recents_conversations">SZOBÁK</string>
+    <string name="room_recents_low_priority">ALACSONY PRIORITÁSÚ</string>
+    <string name="room_recents_invites">MEGHÍVÁSOK</string>
+    <string name="room_recents_start_chat">Csevegés kezdeményezése</string>
+    <string name="room_recents_create_room">Szoba létrehozása</string>
+    <string name="room_recents_join_room">Csatlakozás szobához</string>
+    <string name="room_recents_join_room_title">Csatlakozás egy szobához</string>
+    <string name="room_recents_join_room_prompt">Írja be a szoba azonosítóját vagy nevét</string>
+
+    <string name="directory_search_results_title">Könyvtár böngészése</string>
+    <string name="directory_search_room">%1$d szoba</string>
+    <string name="directory_search_rooms">%1$d szobák</string>
+    <string name="directory_search_room_for">%1$d szoba megtalálva %2$s -nak/-nek</string>
+    <string name="directory_search_rooms_for">%1$s szobák megtalálva %2$s -nak/-nek</string>
+    <string name="directory_searching_title">Könyvtárs keresése...</string>
+
+    <string name="room_settings_notifications">Üzenetek</string>
+    <string name="room_settings_favourite">Kedvencek</string>
+    <string name="room_settings_de_prioritize">Prioritás szint csökkentése</string>
+    <string name="room_settings_direct_chat">Közvetlen csevegés</string>
+    <string name="room_settings_leave_conversation">Beszélgetés elhagyása</string>
+    <string name="room_settings_forget">Elfelejtés</string>
+
+    <string name="room_sliding_menu_messages">Üzenetek</string>
+    <string name="room_sliding_menu_settings">Beállítások</string>
+    <string name="room_sliding_menu_version">"Verzió "</string>
+    <string name="room_sliding_menu_term_and_conditions">Felhasználási feltételek</string>
+    <string name="room_sliding_menu_third_party_notices">Harmadik fél közlemények</string>
+    <string name="room_sliding_menu_copyright">Szerzői jog</string>
+    <string name="room_sliding_menu_privacy_policy">Adatvédelmi irányelvek</string>
+
+    <string name="settings_profile_picture">Profil kép</string>
+    <string name="settings_display_name">Megjelenítendő név</string>
+    <string name="settings_email_address">E-mail</string>
+    <string name="settings_add_email_address">E-mail cím hozzáadása</string>
+    <string name="settings_phone_number">Telefon</string>
+    <string name="settings_add_phone_number">Telefonszám hozzáadása</string>
+    <string name="settings_summary_app_info_link">Alkalmazás rendszer információs képernyő</string>
+    <string name="settings_title_app_info_link">Alkalmazás infó</string>
+
+    <string name="settings_enable_all_notif">Értesítések engedélyezése ehhez a felhasználóhoz</string>
+    <string name="settings_enable_this_device">Értesítések engedélyezése ehhez a készülékhez</string>
+    <string name="settings_turn_screen_on">Kapcsolja be a képernyőt 3 másodpercre</string>
+
+    <string name="settings_messages_in_one_to_one">Üzenetek közvetlen (1-1) csevegéseknél</string>
+    <string name="settings_messages_in_group_chat">Üzenetek több résztvevős csevegéseknél</string>
+    <string name="settings_invited_to_room">Amikor meghívnak egy szobába</string>
+    <string name="settings_call_invitations">Hívásra kérelmezés</string>
+    <string name="settings_messages_sent_by_bot">Üzenetek robotoktól</string>
+
+    <string name="settings_background_sync">Háttérben történő szinkronizáció</string>
+    <string name="settings_enable_background_sync">Háttérben történő szinkronizáció engedélyezése</string>
+    <string name="settings_set_sync_timeout">Szinkronizáció kérelem időtúllépés</string>
+    <string name="settings_set_sync_delay">Késleltetés két szinkronizáció kérés között</string>
+    <string name="settings_second">másodperc</string>
+    <string name="settings_seconds">másodperc</string>
+
+    <string name="settings_version">Verzió</string>
+    <string name="settings_olm_version">olm verzió</string>
+    <string name="settings_app_term_conditions">Felhasználási feltételek</string>
+    <string name="settings_third_party_notices">Harmadik fél közlemények</string>
+    <string name="settings_copyright">Szerzői jog</string>
+    <string name="settings_privacy_policy">Adatvédelmi irányelvek</string>
+    <string name="settings_clear_cache">Cache ürítése</string>
+    <string name="settings_user_settings">Felhasználói beállítások</string>
+    <string name="settings_notifications">Értesítések</string>
+    <string name="settings_ignored_users">Mellőzött felhasználók</string>
+    <string name="settings_other">Más</string>
+    <string name="settings_advanced">Haladó</string>
+    <string name="settings_cryptography">Rejtjelezés</string>
+    <string name="settings_notifications_targets">Értesítés célok</string>
+    <string name="settings_contact">Helyi kapcsolatok</string>
+    <string name="settings_contacts_app_permission">Kapcsolatok engedély</string>
+    <string name="settings_contacts_phonebook_country">Telefonkönyv ország</string>
+    <string name="settings_home_display">Kezdőképernyő megjelenítés</string>
+    <string name="settings_pin_missed_notifications">Nem észrevett értesítésekkel rendelkező szobák kitűzése</string>
+    <string name="settings_pin_unread_messages">Nem olvasott üzenetekkel rendelkező szobák kitűzése</string>
+    <string name="settings_devices_list">Eszközök</string>
+    <string name="devices_details_dialog_title">Eszköz adatok</string>
+    <string name="devices_details_id_title">Azonosító</string>
+    <string name="devices_details_name_title">Név</string>
+    <string name="devices_details_device_name">Készülék Név</string>
+    <string name="devices_details_last_seen_title">Utoljára látott</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_details_time_format">HH:mm:ss</string>
+    <string name="devices_delete_dialog_text">Ez a művelet további hitelesítést igényel.
+A folytatáshoz, kérlek írd be a jelszavad.</string>
+    <string name="devices_delete_dialog_title">Azonosítás</string>
+    <string name="devices_delete_pswd">Jelszó:</string>
+    <string name="devices_delete_submit_button_label">Beküldés</string>
+
+    <string name="settings_logged_in">Bejelentkezve mint</string>
+    <string name="settings_home_server">Saját Szerver</string>
+    <string name="settings_identity_server">Identitás Szerver</string>
+
+    <string name="account_email_validation_title">Hitelesítés folyamatban</string>
+    <string name="account_email_validation_message">Kérlek ellenőrizd az e-mail-ed és kattints a linkre amit tartalmaz. Amikor kész, kattints a folytatásra.</string>
+    <string name="account_email_validation_error">E-mail cím hitelesítése sikertelen. Kérlek kattints az e-mail-ben található linkre. Amikor kész, kattints a folytatásra</string>
+
+    <string name="settings_change_password">Jelszó megváltoztatása</string>
+    <string name="settings_old_password">Régi jelszó</string>
+    <string name="settings_new_password">új jelszó</string>
+    <string name="settings_confirm_password">ellenőrizd a jelszavad</string>
+    <string name="settings_fail_to_update_password">Jelszó frissítése sikertelen</string>
+    <string name="settings_password_updated">A jelszavad sikeresen frissítésre került</string>
+    <string name="settings_unignore_user">Az összes üzenet mutatása %s -tól/-től?</string>
+
+    <string name="settings_delete_notification_targets_confirmation">Biztos vagy benne hogy el akarod távolítani ezt az értesítés célt?</string>
+
+    <string name="settings_delete_threepid_confirmation">Biztos vagy benne, hogy elakarod távolítani a %1$s %2$s?</string>
+
+    <string name="settings_select_country">Válassz országot</string>
+
+    <string name="settings_phone_number_country_label">Ország</string>
+    <string name="settings_phone_number_country_error">Kérlek válassz egy országot</string>
+    <string name="settings_phone_number_label">Telefonszám</string>
+    <string name="settings_phone_number_error">Nem érvényes telefonszám a kiválasztott országhoz</string>
+    <string name="settings_phone_number_verification">Telefon igazolása</string>
+    <string name="settings_phone_number_verification_instruction">Küldtünk egy SMS-t az aktiváló kóddal. Kérlek üsd be ezt a kódot az alábbi rublikába.</string>
+    <string name="settings_phone_number_verification_error_empty_code">Aktiváló kód beütése</string>
+    <string name="settings_phone_number_verification_error">Hiba a telefonszámod hitelesítése közben</string>
+    <string name="settings_phone_number_code">Kód</string>
+
+    <string name="room_settings_room_photo">Szoba fotó</string>
+    <string name="room_settings_room_name">Szoba név</string>
+    <string name="room_settings_topic">Téma</string>
+    <string name="room_settings_room_tag">Szoba címke</string>
+    <string name="room_settings_tag_pref_dialog_title">Címkék:</string>
+    <string name="room_settings_mute_notifs">Értesítések némítása</string>
+
+    <string name="room_settings_tag_pref_entry_favourite">Kedvencek</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Alacsony prioritású</string>
+    <string name="room_settings_tag_pref_entry_none">Semmi</string>
+    <string name="room_settings_tag_pref_no_tag">nem címkézett</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">kedvenc</string>
+    <string name="room_settings_tag_pref_entry_value_low_priority">alacsony</string>
+    <string name="room_settings_tag_pref_entry_value_none">semmi</string>
+
+    <string name="room_settings_category_access_visibility_title">Hozzáférés és láthatóság</string>
+    <string name="room_settings_directory_visibility">Listázza ezt a szobát a szobák könyvtárba</string>
+    <string name="room_settings_room_access_rules_pref_title">Szoba hozzáfárés</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Szoba előzmény olvashatósága</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Ki tud előzményt olvasni?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Ki tud hozzáférni a szobához?</string>
+
+    <string name="room_settings_read_history_entry_anyone">Bárki</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Csak tagok (ezen opció kiválasztása óta)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Csak tagok (meghívásuk óta)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Csak tagok (csatlakozásuk óta)</string>
+
+    <string name="room_settings_room_access_warning">Hogy linkelhess egy szobához, mindenféleképp névvel kell rendelkeznie.</string>
+    <string name="room_settings_room_access_entry_only_invited">Csak meghívott emberek</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Bárki aki tudja a szoba linkjét, a vendégeket leszámítva</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Bárki aki tudja a szoba linkjét, beleszámítva a vendékek</string>
+
+    <string name="room_settings_banned_users_title">Tiltott felhasználók</string>
+
+    <string name="room_settings_category_advanced_title">Haladó</string>
+    <string name="room_settings_room_internal_id">Ennek a szobának a belső azonosítója</string>
+    <string name="room_settings_addresses_pref_title">Címek</string>
+    <string name="room_settings_labs_pref_title">Laborok</string>
+    <string name="room_settings_labs_warning_message">Ezek kísérleti funkciók, ezek elromolhatnak nem számított módokon. Használd elővigyázatossággal.</string>
+    <string name="room_settings_labs_end_to_end">Végtől végig titkosítás</string>
+    <string name="room_settings_labs_end_to_end_is_active">Végtől végig titkosítás aktív</string>
+    <string name="room_settings_labs_end_to_end_warnings">Ki kell jelentkezned, hogy engedélyezhesd a titkosítást.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Csak ellenőrzött eszközök titkosítása</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Sose küldjön titkosított üzeneteket nem hitelesített készülékeknek ebben a szobában erről a készülékről.</string>
+
+    <string name="room_settings_addresses_no_local_addresses">Ennek a szobának nincs helyi címe</string>
+    <string name="room_settings_addresses_add_new_address">Új címek (pl.: #foo:matrix.org)</string>
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">Helytelen fedőnév formátum</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' nem egy helyes formátum egy fedőnévnek</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Nem lesz fő címed megadva. Az alapértelmezett fő cím ennek a szobának véletlenszerűen lesz kiválasztva</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Fő cím figyelmeztetések</string>
+
+    <string name="room_settings_set_main_address">Fő címnek állítás</string>
+    <string name="room_settings_unset_main_address">Kiszedés fő címek közül</string>
+    <string name="room_settings_copy_room_id">Szoba azonosító másolása</string>
+    <string name="room_settings_copy_room_address">Szoba cím másolása</string>
+
+    <string name="room_settings_addresses_e2e_enabled">Titkosítás engedélyezve van ebben a szobában.</string>
+    <string name="room_settings_addresses_e2e_disabled">Titkosítás ki van kapcsolva ebben a szobában.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Titkosítás bekapcsolása
+(figyelmeztetés: nem lehet többé kikapcsolni)</string>
+    <string name="room_settings_addresses_e2e_prompt_title">Figyelmeztetés!</string>
+    <string name="room_settings_addresses_e2e_prompt_message">Végtől végig titkosítás még tesztelés alatt áll és lehet hogy nem megbízható.
+
+Még nem kéne megbíznod az adataid megtartásával.
+
+A készülékeid nem lesznek képesek visszafejteni a előzményeid azelőttről, hogy becsatlakoztál a szobába.
+
+A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titkosítás funkció még nem érhető el.</string>
+
+    <string name="directory_title">Könyvtár</string>
+
+    <string name="failed_to_load_timeline_position">%s megpróbált betölteni egy adott időpontot ennek a szobának idővonalán de nem sikerült neki megtalálni.</string>
+    
+    <string name="encryption_information_title">Végtől végig titkosítás információ</string>
+
+    <string name="encryption_information_device_info">Esemény információ</string>
+    <string name="encryption_information_user_id">Felhasználó azonosító</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519 identitás kulcs</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Igényelt Ed25519 ujjlenyomat kulcs</string>
+    <string name="encryption_information_algorithm">Algoritmus</string>
+    <string name="encryption_information_session_id">Munkamenet azonosító</string>
+    <string name="encryption_information_decryption_error">Visszafejtés hiba</string>
+
+    <string name="encryption_information_sender_device_information">A küldő eszköz információi</string>
+    <string name="encryption_information_device_name">Eszköz információ</string>
+    <string name="encryption_information_name">Név</string>
+    <string name="encryption_information_device_id">Eszköz azonosító</string>
+    <string name="encryption_information_device_key">Eszköz kulcs</string>
+    <string name="encryption_information_verification">Hitelesítés</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 ujjlenyomat</string>
+
+    <string name="encryption_export_e2e_room_keys">E2E szoba kulcsok exportálása</string>
+    <string name="encryption_export_room_keys">Szoba kulcsok exportálása</string>
+    <string name="encryption_export_room_keys_summary">Exportáld a kulcsokat helyi fájlba</string>
+    <string name="encryption_export_export">Exportálás</string>
+    <string name="encryption_export_enter_passphrase">Írj be jelmondatot</string>
+    <string name="encryption_export_confirm_passphrase">Ellenőrizd a jelmondatot</string>
+    <string name="encryption_export_saved_as">A E2E szoba kulcsok el lettek mentve ide \'%s\'</string>
+
+    <string name="encryption_import_e2e_room_keys">E2E szoba kulcsok importálása</string>
+    <string name="encryption_import_room_keys">Szoba kulcsok importálása</string>
+    <string name="encryption_import_room_keys_summary">Kulcsok importálás helyi fájlból</string>
+    <string name="encryption_import_import">Importálás</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Csak hitelesített eszközökre titkosítás</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Sose küldj titkosított üzenetet nem hitelesített eszközökre erről az eszközről</string>
+
+    <string name="encryption_information_not_verified">NEM hitelesített</string>
+    <string name="encryption_information_verified">Hitelesített</string>
+    <string name="encryption_information_blocked">Feketelistázott</string>
+
+    <string name="encryption_information_unknown_device">ismeretlen eszköz</string>
+    <string name="encryption_information_none">semmi</string>
+
+    <string name="encryption_information_verify">Hitelesítés</string>
+    <string name="encryption_information_unverify">Hitelesítés visszavonása</string>
+    <string name="encryption_information_block">Feketelista</string>
+    <string name="encryption_information_unblock">Eltávolítás feketelistáról</string>
+
+    <string name="encryption_information_verify_device">Eszköz hitelesítése</string>
+    <string name="encryption_information_verify_device_warning">" Hogy ellenőrizni lehessen, hogy ez az eszköz megbízható, kérlek használj más kommunikáció módot a tulajdonossal (pl.: személyesen vagy telefonon keresztül) és kérdezd meg hogy a kulcs amit lát a Felhasználói Beállítások alatt megegyezik-e az alábbi kulccsal:"</string>
+    <string name="encryption_information_verify_device_warning2">Ha egyezik, nyomja meg a hitelesítés gombot. Ha nem, akkor valaki más elfogta ezt az eszközt és nagy valószínűséggel a blokkolás gombot kéne megnyomnia.
+
+A jövőben ez a hitelesítési mód kényelmesebbé lesz téve.</string>
+    <string name="encryption_information_verify_key_match">Hitelesítem, hogy a kulcsok egyeznek</string>
+
+    <string name="e2e_enabling_on_app_update">Mostantól a Riot támogatja a végtől végig titkosítást de előtte újra be kell jelentkezned, hogy bekapcsold.
+
+Ezt megteheted most vagy később az alkalmazás beállítások alatt.</string>
+
+    <string name="unknown_devices_alert_title">Szoba ismeretlen eszközöket tartalmaz</string>
+    <string name="unknown_devices_alert_message">Ez a szoba ismeretlen eszközöket tartalmaz.
+Ez azt jelenti, hogy nem biztos hogy az eszközök azé akinek mondja magát
+Mi azt ajánljuk, hogy menny végig a hitelesítési lépéseken az összes eszköznek a folytatás előtt, de újraküldheti az üzenetet hitelesítés nélkül ha inkább ezt választja.
+
+Ismeretlen eszközök:</string>
+
+    <string name="select_room_directory">Válassz egy szoba könyvtárat</string>
+    <string name="directory_server_fail_to_retrieve_server">A szerver lehet nem elérhető vagy túltöltött</string>
+    <string name="directory_server_type_homeserver">Írj be egy saját szervert hogy listázza belőle a nyilvános szobákat</string>
+    <string name="directory_server_placeholder">Saját szerver URL</string>
+    <string name="directory_server_all_rooms_on_server">Összes szoba a %s szerveren</string>
+    <string name="directory_server_native_rooms">Összes anyanyelvi %s szoba</string>
+
+    <string name="notification_unread_notified_messages">%d nem olvasott figyelmeztetés üzenet</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d nem olvasott figyelmeztetés üzenetek a %2$d szobákban</string>
+
+    <string name="historical_placeholder">Előzmények keresése</string>
+
+<string name="membership_changes">%d tagváltozás</string>
+
+    <string name="settings_user_interface">Felhasználói felület</string>
+    <string name="settings_interface_language">Felület nyelve</string>
+    <string name="settings_select_language">Válassz egy nyelvet</string>
+
+    <string name="account_email_already_used_error">Ez az e-mail cím már használatban van</string>
+    <string name="account_email_not_found_error">E-mail küldése sikertelen: Ez az e-mail cím nem található</string>
+    <string name="account_phone_number_already_used_error">Ez a telefonszám már használatban van</string>
+
+    <string name="settings_start_on_boot">Indítás rendszerinduláskor</string>
+    <string name="settings_clear_medias_cache">Média gyorsítótár törlése</string>
+    <string name="settings_keep_media">Média megtartása</string>
+
+    <string name="settings_dont_send_typings_notifs">Ne küldjön írás értesítést</string>
+    <string name="settings_always_show_timestamps">Üzenet időbélyeg folyamatos megjelenítése</string>
+    <string name="settings_disable_markdown">Markdown formázás kikapcsolása</string>
+
+    <string name="media_saving_period_3_days">3 nap</string>
+    <string name="media_saving_period_1_week">1 hét</string>
+    <string name="media_saving_period_1_month">1 hónap</string>
+    <string name="media_saving_period_forever">Örökké</string>
+
+    <string name="settings_hide_read_receipts">Olvasási visszajelzés elrejtése</string>
+    <string name="people_search_user_directory">FELHASZNÁLÓ JEGYZÉK (%S)</string>
+    <string name="settings_data_save_mode">Adattakarékos mód</string>
+
+    <string name="settings_theme">Téma</string>
+
+    <string name="font_size">Betűméret</string>
+    <string name="tiny">Apró</string>
+    <string name="small">Kicsi</string>
+    <string name="normal">Normál</string>
+    <string name="large">Nagy</string>
+    <string name="larger">Nagyobb</string>
+    <string name="largest">Legnagyobb</string>
+    <string name="huge">Óriási</string>
+<string name="offline">Offline</string>
+
+    <string name="user_directory_header">Felhasználójegyzék</string>
+    <string name="light_theme">Világos téma</string>
+    <string name="dark_theme">Sötét téma</string>
+    <string name="black_them">Fekete téma</string>
+
+    <string name="login_mobile_device">Mobil</string>
+
+    <string name="settings_notification_ringtone">Értesítési hang</string>
+    <string name="settings_12_24_timestamps">Időbélyegek mutatása 12 órás formátumban (pl.: 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Csatlakozás/kilépés üzenetek elrejtése (meghívások/kirúgások/letiltások nem érintettek)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Profilkép és megjelenő név változások elrejtése</string>
+
+    <string name="widget_no_power_to_manage">Engedélyre van szükséged a kisalkalmazások ebben a szobában való kezeléséhez</string>
+    <string name="widget_creation_failure">Kisalkalmazás létrehozása sikertelen</string>
+    <string name="event_formatter_widget_added">%1$s hozzá lett adva %2$s által</string>
+    <string name="event_formatter_widget_removed">%1$s eltávolításra került %2$s által</string>
+    <string name="settings_labs_create_conference_with_jitsi">Hozz létre konferencia hívást a jitsi segítségével</string>
+    <string name="widget_delete_message_confirmation">Biztos vagy benne hogy törölni akarod ezt a kisalkalmazást?</string>
+    <string name="active_widgets">%1$d aktív kisalkalmazások</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_need_to_be_able_to_invite">Képesnek kell lenned felhasználók meghívására ha ezt akarod csinálni.</string>
+    <string name="widget_integration_unable_to_create">Kisalkalmazás létrehozása sikertelen.</string>
+    <string name="widget_integration_failed_to_send_request">Felkérés elküldése sikertelen.</string>
+    <string name="widget_integration_room_not_recognised">Nem sikerült felismerni ezt a szobát.</string>
+    <string name="widget_integration_positive_power_level">Az erősségi szintnek egy pozitív egész számnak kell lennie.</string>
+    <string name="widget_integration_must_be_in_room">Nem vagy ebben a szobában.</string>
+    <string name="widget_integration_no_permission_in_room">Nincs engedélyed, hogy ezt csináld ebben a szobában.</string>
+    <string name="widget_integration_missing_room_id">Hiányzó szoba azonosító a kérésben.</string>
+    <string name="widget_integration_missing_user_id">Hiányzó felhasználó azonosító a kérésben.</string>
+    <string name="widget_integration_room_not_visible">%s szoba nem látható.</string>
+    <string name="settings_labs_matrix_apps">Matrix Alkalmazások</string>
+    <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
+    <string name="add_matrix_apps_not_supported">Nem támogatott ezen az eszközön</string>
+<string name="notification_listen_for_events">Események figyelése</string>
+
+    <string name="notification_sync_in_progress">Szinkronizálás</string>
+    <string name="call">Hívás</string>
+    <string name="settings_containing_my_display_name">Megjelenítendő nevemet tartalmazó üzenetek</string>
+    <string name="settings_containing_my_user_name">Felhasználónevemet tartalmazó üzenetek</string>
+    <string name="you_added_a_new_device">Hozzá adtál egy új eszközt \'%s\', mely titkosító kulcsot kér.</string>
+    <string name="your_unverified_device_requesting">Nem ellenőrzött eszközöd \'%s\' egy titkosító kulcsot kér.</string>
+    <string name="start_verification">Ellenőrzés elindítása</string>
+    <string name="share_without_verifying">Megosztás ellenőrzés nélkül</string>
+    <string name="ignore_request">Kérelem figyelmen kívül hagyása</string>
+
+<string name="notification_noisy_notifications">Hangos értesítések</string>
+    <string name="notification_silent_notifications">Csendes értesítések</string>
+
+    <string name="option_take_photo">Fényképezés</string>
+    <string name="option_take_video">Videófelvétel</string>
+
+    <string name="settings_analytics">Személytelen analitikai adatok</string>
+    <string name="settings_opt_out_of_analytics">Analitikai adatgyűjtés kikapcsolása</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot személytelenített analitikai adatokat gyűjt az alkalmazás fejlesztéséhez.</string>
+
+
+    <string name="settings_labs_native_camera">Beépített kamera használata</string>
+
+    // share keys
+    </resources>

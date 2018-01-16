@@ -16,7 +16,9 @@
 package im.vector;
 
 import android.app.Activity;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -26,15 +28,16 @@ import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 
+import java.util.Arrays;
+
 import im.vector.activity.CommonActivityUtils;
 import im.vector.store.LoginStorage;
 
 public class ErrorListener implements ApiFailureCallback {
+    private static final String LOG_TAG = ErrorListener.class.getSimpleName();
 
-    private static final String LOG_TAG = "ErrorListener";
-
-    private Activity mActivity;
-    private MXSession mSession;
+    private final Activity mActivity;
+    private final MXSession mSession;
 
     public ErrorListener(MXSession session, Activity activity) {
         mSession = session;
@@ -59,11 +62,11 @@ public class ErrorListener implements ApiFailureCallback {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    UnrecognizedCertHandler.show(mSession.getHomeserverConfig(), fingerprint, true, new UnrecognizedCertHandler.Callback() {
+                    UnrecognizedCertHandler.show(mSession.getHomeServerConfig(), fingerprint, true, new UnrecognizedCertHandler.Callback() {
                         @Override
                         public void onAccept() {
                             LoginStorage loginStorage = Matrix.getInstance(mActivity.getApplicationContext()).getLoginStorage();
-                            loginStorage.replaceCredentials(mSession.getHomeserverConfig());
+                            loginStorage.replaceCredentials(mSession.getHomeServerConfig());
                         }
 
                         @Override
@@ -73,12 +76,12 @@ public class ErrorListener implements ApiFailureCallback {
 
                         @Override
                         public void onReject() {
-                            CommonActivityUtils.logout(mActivity, mSession, true);
+                            Log.d(LOG_TAG, "Found fingerprint: reject fingerprint");
+                            CommonActivityUtils.logout(mActivity, Arrays.asList(mSession), true, null);
                         }
                     });
                 }
             });
-
         }
     }
 

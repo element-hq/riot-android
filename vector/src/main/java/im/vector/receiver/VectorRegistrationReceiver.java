@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
@@ -34,7 +35,7 @@ import im.vector.activity.LoginActivity;
 
 @SuppressLint("LongLogTag")
 public class VectorRegistrationReceiver extends BroadcastReceiver {
-    private static final String LOG_TAG = "VectorRegistrationReceiver";
+    private static final String LOG_TAG = VectorRegistrationReceiver.class.getSimpleName();
 
     public static final String BROADCAST_ACTION_REGISTRATION = "im.vector.receiver.BROADCAST_ACTION_REGISTRATION";
 
@@ -114,11 +115,11 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
             } else if (!SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION.equals(uri.getPath())) {
                 Log.e(LOG_TAG, "## parseUniversalLink : not supported");
             } else {
-                String uriFragment, host=uri.getHost();
-                Log.i(LOG_TAG,"## parseMailRegistrationLink(): host="+host);
+                String uriFragment, host = uri.getHost();
+                Log.i(LOG_TAG, "## parseMailRegistrationLink(): host=" + host);
 
                 if (!mSupportedHosts.contains(host)) {
-                    Log.e(LOG_TAG, "## parseUniversalLink : unsupported host ="+host);
+                    Log.e(LOG_TAG, "## parseUniversalLink : unsupported host =" + host);
                     return null;
                 }
 
@@ -126,30 +127,30 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
                 uriFragment = uri.getFragment();
                 String lastFrag = uri.getLastPathSegment();
                 String specPart = uri.getSchemeSpecificPart();
-                Log.i(LOG_TAG,"## parseMailRegistrationLink(): uriFragment="+uriFragment);
+                Log.i(LOG_TAG, "## parseMailRegistrationLink(): uriFragment=" + uriFragment);
                 Log.i(LOG_TAG, "## parseMailRegistrationLink(): getLastPathSegment()=" + lastFrag);
-                Log.i(LOG_TAG, "## parseMailRegistrationLink(): getSchemeSpecificPart()=" + specPart );
+                Log.i(LOG_TAG, "## parseMailRegistrationLink(): getSchemeSpecificPart()=" + specPart);
 
-                Uri nextLinkUri=null;
+                Uri nextLinkUri = null;
                 Set<String> names = uri.getQueryParameterNames();
                 for (String name : names) {
                     String value = uri.getQueryParameter(name);
 
-                    if(KEY_MAIL_VALIDATION_NEXT_LINK.equals(name)){
+                    if (KEY_MAIL_VALIDATION_NEXT_LINK.equals(name)) {
                         // remove "#" to allow query params parsing
-                        nextLinkUri = Uri.parse(value.replace("#/",""));
+                        nextLinkUri = Uri.parse(value.replace("#/", ""));
                     }
-                    
+
                     try {
                         value = URLDecoder.decode(value, "UTF-8");
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## parseUniversalLink : Exception - parse query params Msg="+e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "## parseUniversalLink : Exception - parse query params Msg=" + e.getLocalizedMessage());
                     }
                     mapParams.put(name, value);
                 }
 
                 // parse next link URI
-                if(null !=  nextLinkUri) {
+                if (null != nextLinkUri) {
 
                     String nextLinkHomeServer = nextLinkUri.getQueryParameter(KEY_MAIL_VALIDATION_HOME_SERVER_URL);
                     mapParams.put(KEY_MAIL_VALIDATION_HOME_SERVER_URL, nextLinkHomeServer);

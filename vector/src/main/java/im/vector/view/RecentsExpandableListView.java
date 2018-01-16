@@ -30,7 +30,8 @@ public class RecentsExpandableListView extends ExpandableListView {
     public interface DragAndDropEventsListener {
         /**
          * Provides the new y touch position and the related child view.
-         * @param y the touch y position.
+         *
+         * @param y             the touch y position.
          * @param groupPosition the child view group position
          * @param childPosition the child view child position
          */
@@ -43,6 +44,7 @@ public class RecentsExpandableListView extends ExpandableListView {
 
         /**
          * Called the list view is over scrolled
+         *
          * @param isTop set to true when the list is top over scrolled.
          */
         void onOverScrolled(boolean isTop);

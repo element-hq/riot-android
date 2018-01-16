@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/public_room_view"
+    android:layout_width="match_parent"
+    android:layout_height="74dp"
+    android:paddingRight="16dp">
+
+
+    <im.vector.view.VectorCircularImageView
+        android:id="@+id/public_room_avatar"
+        android:layout_width="@dimen/chat_avatar_size"
+        android:layout_height="@dimen/chat_avatar_size"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        tools:src="#22000000" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="6dp"
+        android:layout_toRightOf="@+id/public_room_avatar">
+
+        <TextView
+            android:id="@+id/public_room_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/public_room_members_count"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-regular"
+            android:maxLines="1"
+            android:textColor="?attr/riot_primary_text_color"
+            android:textSize="16sp"
+            tools:text="Room name a bit long to be displayed completely" />
+
+        <TextView
+            android:id="@+id/public_room_topic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/public_room_name"
+            android:layout_below="@+id/public_room_name"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?attr/default_text_light_color"
+            android:textSize="14sp"
+            tools:text="First message of the room is a bit too long to be displayed" />
+
+        <TextView
+            android:id="@+id/public_room_members_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/public_room_name"
+            android:layout_alignParentRight="true"
+            android:textColor="?attr/default_text_light_color"
+            android:textSize="12sp"
+            tools:text="14 Mar" />
+    </RelativeLayout>
+
+</RelativeLayout>

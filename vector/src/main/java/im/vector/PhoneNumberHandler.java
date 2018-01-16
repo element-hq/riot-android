@@ -46,13 +46,13 @@ public class PhoneNumberHandler implements TextWatcher, View.OnFocusChangeListen
     @interface DisplayMode {
     }
 
-    public static final int DISPLAY_COUNTRY_FULL_NAME = 0;
+    private static final int DISPLAY_COUNTRY_FULL_NAME = 0;
     public static final int DISPLAY_COUNTRY_ISO_CODE = 1;
 
     private EditText mPhoneNumberInput;
     private EditText mCountryCodeInput;
 
-    private int mDisplayMode;
+    private final int mDisplayMode;
 
     // Ex "FR"
     private String mCountryCode;
@@ -136,15 +136,6 @@ public class PhoneNumberHandler implements TextWatcher, View.OnFocusChangeListen
                 initPhoneWithPrefix();
             }
         }
-    }
-
-    /**
-     * Check whether the current phone number is a potential phone number
-     *
-     * @return true if potential phone number
-     */
-    public boolean isValidPhoneNumber() {
-        return mCurrentPhoneNumber != null && PhoneNumberUtil.getInstance().isPossibleNumber(mCurrentPhoneNumber);
     }
 
     /**

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/section_header"
+        style="@style/ListHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Header" />
+
+    <TextView
+        android:id="@+id/section_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/section_header"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:minWidth="25dp"
+        android:paddingBottom="3dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="3dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="12" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/section_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/section_header"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/section_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/section_header"
+        android:padding="16dp"
+        android:textColor="?attr/default_text_light_color"
+        android:textSize="14sp"
+        tools:text="No items" />
+</merge>

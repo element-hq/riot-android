@@ -27,6 +27,7 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,19 +37,19 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.rest.model.Event;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import im.vector.R;
+import im.vector.util.ThemeUtils;
 
 /**
  * This class defines a base class to manage search in action bar
  */
 public class VectorBaseSearchActivity extends MXCActionBarActivity {
+    private static final String LOG_TAG = VectorBaseSearchActivity.class.getSimpleName();
 
     public interface IVectorSearchActivity {
         void refreshSearch();
@@ -56,8 +57,8 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     private static final int SPEECH_REQUEST_CODE = 1234;
 
-    protected ActionBar mActionBar;
-    protected EditText mPatternToSearchEditText;
+    private ActionBar mActionBar;
+    EditText mPatternToSearchEditText;
 
     private MenuItem mMicroMenuItem;
     private MenuItem mClearEditTextMenuItem;
@@ -70,7 +71,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
         View actionBarView = customizeActionBar();
 
         // add the search logic based on the text search input listener
-        mPatternToSearchEditText = (EditText) actionBarView.findViewById(R.id.room_action_bar_edit_text);
+        mPatternToSearchEditText = actionBarView.findViewById(R.id.room_action_bar_edit_text);
         actionBarView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -86,27 +87,47 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
                 final String fPattern = mPatternToSearchEditText.getText().toString();
 
                 Timer timer = new Timer();
-                // wait a little delay before refreshing the results.
-                // it avoid UI lags when the user is typing.
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
-                                    VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            onPatternUpdate(true);
-                                        }
-                                    });
+
+                try {
+                    // wait a little delay before refreshing the results.
+                    // it avoid UI lags when the user is typing.
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
+                                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                onPatternUpdate(true);
+                                            }
+                                        });
+                                    }
                                 }
+                            });
+                        }
+                    }, 100);
+                } catch (Throwable throwable) {
+                    Log.e(LOG_TAG, "## failed to start the timer " + throwable.getMessage());
+
+                    VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
+                                VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        onPatternUpdate(true);
+                                    }
+                                });
                             }
-                        });
-                    }
-                }, 100);
+                        }
+                    });
+                }
             }
+
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
@@ -140,7 +161,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
     }
 
@@ -158,14 +179,16 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     /**
      * The search pattern has been updated.
+     *
      * @param isTypingUpdate true when the pattern has been updated while typing.
      */
-    protected void onPatternUpdate(boolean isTypingUpdate) {
+    void onPatternUpdate(boolean isTypingUpdate) {
         // do something here
     }
 
     /**
      * Add a custom action bar with a view
+     *
      * @return the action bar inflated view
      */
     private View customizeActionBar() {
@@ -174,7 +197,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         // add a custom action bar view containing an EditText to input the search text
         ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-        View actionBarLayout =  getLayoutInflater().inflate(R.layout.vector_search_action_bar, null);
+        View actionBarLayout = getLayoutInflater().inflate(R.layout.vector_search_action_bar, null);
         mActionBar.setCustomView(actionBarLayout, layout);
 
         return actionBarLayout;
@@ -189,6 +212,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_searches, menu);
+        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_light_action_bar_color));
 
         mMicroMenuItem = menu.findItem(R.id.ic_action_speak_to_search);
         mClearEditTextMenuItem = menu.findItem(R.id.ic_action_clear_search);
@@ -207,7 +231,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             startActivityForResult(intent, SPEECH_REQUEST_CODE);
 
-        } else if (id ==  R.id.ic_action_clear_search) {
+        } else if (id == R.id.ic_action_clear_search) {
             mPatternToSearchEditText.setText("");
             onPatternUpdate(false);
         }
@@ -219,8 +243,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
      * Handle the results from the voice recognition activity.
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == SPEECH_REQUEST_CODE) && (resultCode == RESULT_OK)) {
             final ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 

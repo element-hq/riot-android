@@ -19,18 +19,18 @@ package im.vector.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
-import org.matrix.androidsdk.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ import im.vector.fragments.VectorSearchRoomFilesListFragment;
  * - Settings tab: the settings of the room
  */
 public class VectorRoomDetailsActivity extends MXCActionBarActivity implements TabListener {
-    private static final String LOG_TAG = "VectorRoomDetailsAct";
+    private static final String LOG_TAG = VectorRoomDetailsActivity.class.getSimpleName();
 
     // exclude the room ID
     public static final String EXTRA_ROOM_ID = "VectorRoomDetailsActivity.EXTRA_ROOM_ID";
@@ -132,7 +132,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         // get current session
         mSession = Matrix.getInstance(getApplicationContext()).getSession(mMatrixId);
-        if (null == mSession) {
+
+        if ((null == mSession) || !mSession.isAlive()) {
             finish();
             return;
         }
@@ -193,6 +194,16 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -318,8 +329,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             tabIndexToRestore = PEOPLE_TAB_INDEX;
         }
 
-        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.vector_tabbar_background_color)));
-
         // set the tab to display & set current tab index
         mActionBar.setSelectedNavigationItem(tabIndexToRestore);
         mCurrentTabIndex = tabIndexToRestore;
@@ -342,7 +351,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         resetUi();
 
         if (fragmentTag.equals(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS)) {
-            mRoomDetailsMembersFragment = (VectorRoomDetailsMembersFragment)getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
+            mRoomDetailsMembersFragment = (VectorRoomDetailsMembersFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
             if (null == mRoomDetailsMembersFragment) {
                 mRoomDetailsMembersFragment = VectorRoomDetailsMembersFragment.newInstance();
                 ft.replace(R.id.room_details_fragment_container, mRoomDetailsMembersFragment, TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
@@ -357,20 +366,18 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 mIsContactsPermissionChecked = true;
                 CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS, this);
             }
-        }
-        else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
+        } else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
             int permissionToBeGranted = CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS;
             onTabSelectSettingsFragment();
 
             // remove camera permission request if the user has not enough power level
-            if(!CommonActivityUtils.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
+            if (!CommonActivityUtils.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                 permissionToBeGranted &= ~CommonActivityUtils.PERMISSION_CAMERA;
             }
             CommonActivityUtils.checkPermissions(permissionToBeGranted, this);
             mCurrentTabIndex = SETTINGS_TAB_INDEX;
-        }
-        else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
-            mSearchFilesFragment = (VectorSearchRoomFilesListFragment)getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);
+        } else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
+            mSearchFilesFragment = (VectorSearchRoomFilesListFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);
             if (null == mSearchFilesFragment) {
                 mSearchFilesFragment = VectorSearchRoomFilesListFragment.newInstance(mSession.getCredentials().userId, mRoomId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.room_details_fragment_container, mSearchFilesFragment, TAG_FRAGMENT_FILES_DETAILS);
@@ -382,8 +389,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
             mCurrentTabIndex = FILE_TAB_INDEX;
             startFileSearch();
-        }
-        else {
+        } else {
             Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
             mCurrentTabIndex = SETTINGS_TAB_INDEX;
             Log.w(LOG_TAG, "## onTabSelected() unknown tab selected!!");
@@ -418,7 +424,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     /**
      * The search is done.
-     * @param tabIndex the tab index
+     *
+     * @param tabIndex    the tab index
      * @param nbrMessages the number of found messages.
      */
     private void onSearchEnd(int tabIndex, int nbrMessages) {
@@ -450,18 +457,14 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             if (null != mRoomDetailsMembersFragment) {
                 ft.detach(mRoomDetailsMembersFragment);
             }
-        }
-        else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
+        } else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
             onTabUnselectedSettingsFragment();
-        }
-        else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
+        } else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
             if (null != mSearchFilesFragment) {
                 mSearchFilesFragment.cancelCatchingRequests();
                 ft.detach(mSearchFilesFragment);
             }
-        }
-
-        else {
+        } else {
             Log.w(LOG_TAG, "## onTabUnselected() unknown tab selected!!");
         }
     }
@@ -483,7 +486,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
      * Specific method to add the fragment, to avoid using the FragmentTransaction
      * that requires a Fragment based on the support V4.
      */
-    private void onTabSelectSettingsFragment(){
+    private void onTabSelectSettingsFragment() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -503,7 +506,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
      * Specific method to add the fragment, to avoid using the FragmentTransaction
      * that requires a Fragment based on the support V4.
      */
-    private void onTabUnselectedSettingsFragment(){
+    private void onTabUnselectedSettingsFragment() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

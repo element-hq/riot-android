@@ -1,83 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/riot_primary_background_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
     <RelativeLayout
         android:id="@+id/search_layout"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="42dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/clear_search_icon_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:src="@drawable/vector_clear_edittext_green"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
         <EditText
             android:id="@+id/search_value_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/clear_search_icon_image_view"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/clear_search_icon_image_view"
+            android:background="@android:color/transparent"
+            android:hint="@string/search_members_hint"
             android:imeOptions="actionSearch"
             android:inputType="text"
-            android:textColor="@color/vector_21_black"
-            android:textSize="16sp"
-            android:hint="@string/search_members_hint"
-            android:textColorHint="@color/vector_search_hint_color"
-            android:theme="@style/SearchesAppTheme"
-            android:background="@android:color/transparent"
+            android:maxLines="1"
+            android:textColor="?attr/default_text_dark_color"
+            android:textColorHint="?attr/default_text_hint_color"
             android:textCursorDrawable="@drawable/searches_cursor_background"
-            android:singleLine="true"/>
-
-
+            android:textSize="16sp"/>
     </RelativeLayout>
 
     <ExpandableListView
         android:id="@+id/room_details_members_exp_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/bright_foreground_material_light"
-        android:dividerHeight="1px"
-        android:layout_below="@id/search_layout"/>
+        android:layout_below="@id/search_layout"
+        android:background="?attr/riot_primary_background_color"
+        android:divider="?attr/list_divider_color"
+        android:dividerHeight="1px" />
 
     <TextView
         android:id="@+id/search_no_results_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/search_no_results"
-        android:textStyle="bold"
-        android:textSize="17sp"
         android:layout_below="@id/search_layout"
-        android:visibility="gone"
-        android:layout_marginLeft="5dp"/>
+        android:layout_marginLeft="5dp"
+        android:text="@string/search_no_results"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/add_participants_progress_view"
-        android:visibility="gone"
-        android:background="@color/vector_deemed_background_view_gray_color"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/waiting_background_color"
+        android:visibility="gone">
 
         <ProgressBar
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:indeterminate="true" />
     </RelativeLayout>
@@ -88,11 +84,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/floating_action_button_margin"
         android:layout_marginBottom="@dimen/floating_action_button_margin"
-        app:backgroundTint="@color/vector_fuchsia_color"
+        android:layout_marginRight="@dimen/floating_action_button_margin"
         android:src="@drawable/ic_add_white"
+        app:backgroundTint="@color/vector_fuchsia_color"
         app:borderWidth="0dp"
-        app:elevation="4dp"/>
+        app:elevation="4dp" />
 
 </RelativeLayout>

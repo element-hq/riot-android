@@ -15,9 +15,11 @@
         android:paddingTop="5dp"
         android:text="Room name"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?attr/riot_primary_text_color"
         android:textStyle="bold" />
 
     <View
+        android:id="@+id/lock_screen_separator"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/vector_green_color" />
@@ -31,6 +33,7 @@
         android:paddingTop="5dp"
         android:text="SENDER"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?attr/riot_primary_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -42,6 +45,7 @@
         android:paddingRight="5dp"
         android:text="A message body goes here"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?attr/message_text_color"
         android:textIsSelectable="false" />
 
     <LinearLayout
@@ -57,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_weight="1"
+            android:inputType="textCapSentences"
             android:hint="Type here..."
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -66,8 +71,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ic_material_send_green"
             android:textColor="@android:color/black" />
-
     </LinearLayout>
-
 
 </LinearLayout>

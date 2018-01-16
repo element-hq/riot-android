@@ -17,7 +17,6 @@
 
 package im.vector.adapters;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -28,8 +27,13 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import im.vector.VectorApp;
 import im.vector.contacts.Contact;
@@ -38,6 +42,9 @@ import im.vector.util.VectorUtils;
 
 // Class representing a room participant.
 public class ParticipantAdapterItem implements java.io.Serializable {
+
+    private static final Pattern FACEBOOK_EMAIL_ADDRESS = Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}\\@facebook.com");
+    private static final List<Pattern> mBlackedListEmails = Collections.singletonList(FACEBOOK_EMAIL_ADDRESS);
 
     // displayed info
     public String mDisplayName;
@@ -60,10 +67,6 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     private String mComparisonDisplayName;
     private static final String mTrimRegEx = "[_!~`@#$%^&*\\-+();:=\\{\\}\\[\\],.<>?]";
-
-    // auto reference fields to speed up search
-    public int mReferenceGroupPosition = -1;
-    public int mReferenceChildPosition = -1;
 
     /**
      * Constructor from a room member.
@@ -133,11 +136,11 @@ public class ParticipantAdapterItem implements java.io.Serializable {
      */
     private void initSearchByPatternFields() {
         if (!TextUtils.isEmpty(mDisplayName)) {
-            mLowerCaseDisplayName = mDisplayName.toLowerCase();
+            mLowerCaseDisplayName = mDisplayName.toLowerCase(VectorApp.getApplicationLocale());
         }
 
         if (!TextUtils.isEmpty(mUserId)) {
-            mLowerCaseMatrixId = mUserId.toLowerCase();
+            mLowerCaseMatrixId = mUserId.toLowerCase(VectorApp.getApplicationLocale());
         }
     }
 
@@ -163,7 +166,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     }
 
     // Comparator to order members alphabetically
-    public static Comparator<ParticipantAdapterItem> alphaComparator = new Comparator<ParticipantAdapterItem>() {
+    public static final Comparator<ParticipantAdapterItem> alphaComparator = new Comparator<ParticipantAdapterItem>() {
         @Override
         public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
             String lhs = part1.getComparisonDisplayName();
@@ -178,6 +181,115 @@ public class ParticipantAdapterItem implements java.io.Serializable {
             return String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs);
         }
     };
+
+    /**
+     * Get a comparator to sort items
+     *
+     * @param session
+     * @return
+     */
+    public static Comparator<ParticipantAdapterItem> getComparator(final MXSession session) {
+        final IMXStore fStore = session.getDataHandler().getStore();
+
+        return new Comparator<ParticipantAdapterItem>() {
+            /**
+             * Compare 2 string and returns sort order.
+             * @param s1 string 1.
+             * @param s2 string 2.
+             * @return the sort order.
+             */
+            private int alphaComparator(String s1, String s2) {
+                if (s1 == null) {
+                    return -1;
+                } else if (s2 == null) {
+                    return 1;
+                }
+
+                return String.CASE_INSENSITIVE_ORDER.compare(s1, s2);
+            }
+
+            // use a local users cache to avoid crashes while sorting
+            // eg the user presence is updated during the search
+            final Map<String, User> mUsersMap = new HashMap<>();
+            final HashSet<String> mUnknownUsers = new HashSet<>();
+
+            private User getUser(String userId) {
+                if (mUsersMap.containsKey(userId)) {
+                    return mUsersMap.get(userId);
+                }
+
+                if (mUnknownUsers.contains(userId)) {
+                    return null;
+                }
+
+                User user = fStore.getUser(userId);
+
+                if (null == user) {
+                    mUnknownUsers.add(userId);
+                } else {
+                    mUsersMap.put(userId, user);
+                }
+
+                return user;
+            }
+
+            @Override
+            public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
+                User userA = getUser(part1.mUserId);
+                User userB = getUser(part2.mUserId);
+
+                String userADisplayName = part1.getComparisonDisplayName();
+                String userBDisplayName = part2.getComparisonDisplayName();
+
+                boolean isUserA_Active = false;
+                boolean isUserB_Active = false;
+
+                if ((null != userA) && (null != userA.currently_active)) {
+                    isUserA_Active = userA.currently_active;
+                }
+
+                if ((null != userB) && (null != userB.currently_active)) {
+                    isUserB_Active = userB.currently_active;
+                }
+
+                if ((null == userA) && (null == userB)) {
+                    return alphaComparator(userADisplayName, userBDisplayName);
+                } else if ((null != userA) && (null == userB)) {
+                    return +1;
+                } else if ((null == userA) && (null != userB)) {
+                    return -1;
+                } else if (isUserA_Active && isUserB_Active) {
+                    return alphaComparator(userADisplayName, userBDisplayName);
+                }
+
+                if (isUserA_Active && !isUserB_Active) {
+                    return -1;
+                }
+                if (!isUserA_Active && isUserB_Active) {
+                    return +1;
+                }
+
+                // Finally, compare the timestamps
+                long lastActiveAgoA = (null != userA) ? userA.getAbsoluteLastActiveAgo() : 0;
+                long lastActiveAgoB = (null != userB) ? userB.getAbsoluteLastActiveAgo() : 0;
+
+                long diff = lastActiveAgoA - lastActiveAgoB;
+
+                if (diff == 0) {
+                    return alphaComparator(userADisplayName, userBDisplayName);
+                }
+
+                // if only one member has a lastActiveAgo, prefer it
+                if (0 == lastActiveAgoA) {
+                    return +1;
+                } else if (0 == lastActiveAgoB) {
+                    return -1;
+                }
+
+                return (diff > 0) ? +1 : -1;
+            }
+        };
+    }
 
     /**
      * Test if a room member fields contains a dedicated pattern.
@@ -240,7 +352,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
                 if (componentsArrays.length > 0) {
                     for (int i = 0; i < componentsArrays.length; i++) {
-                        mDisplayNameComponents.add(componentsArrays[i].trim().toLowerCase());
+                        mDisplayNameComponents.add(componentsArrays[i].trim().toLowerCase(VectorApp.getApplicationLocale()));
                     }
                 }
             }
@@ -252,7 +364,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
                 }
             }
         }
-        
+
         // test user id
         if (!TextUtils.isEmpty(mLowerCaseMatrixId) && mLowerCaseMatrixId.startsWith((prefix.startsWith("@") ? "" : "@") + prefix)) {
             return true;
@@ -334,7 +446,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
         // for the matrix users, append the matrix id to see the difference
         if (null == mContact) {
-            String lowerCaseDisplayname = displayname.toLowerCase();
+            String lowerCaseDisplayname = displayname.toLowerCase(VectorApp.getApplicationLocale());
 
             // detect if the username is used by several users
             int pos = -1;
@@ -363,6 +475,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Tries to retrieve the PIDs.
+     *
      * @return true if they are retrieved.
      */
     public boolean retrievePids() {
@@ -381,5 +494,21 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         }
 
         return isUpdated;
+    }
+
+    /**
+     * Tells if an email is black-listed
+     *
+     * @param email the email address to test.
+     * @return true if the email address is black-listed
+     */
+    public static boolean isBlackedListed(final String email) {
+        for (int i = 0; i < mBlackedListEmails.size(); i++) {
+            if (mBlackedListEmails.get(i).matcher(email).matches()) {
+                return true;
+            }
+        }
+
+        return !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }

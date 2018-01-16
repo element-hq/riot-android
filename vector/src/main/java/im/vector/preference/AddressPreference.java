@@ -27,36 +27,33 @@ import im.vector.R;
 public class AddressPreference extends VectorCustomActionEditTextPreference {
 
     // members
-    protected Context mContext;
-    protected ImageView mMainAddressIconView;
-    protected boolean mIsMainIconVisible = false;
+    private ImageView mMainAddressIconView;
+    private boolean mIsMainIconVisible = false;
 
     public AddressPreference(Context context) {
         super(context);
-        mContext = context;
     }
 
     public AddressPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
     }
 
     public AddressPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext = context;
     }
 
     @Override
     protected View onCreateView(ViewGroup parent) {
         setWidgetLayoutResource(R.layout.vector_settings_address_preference);
         View view = super.onCreateView(parent);
-        mMainAddressIconView = (ImageView)view.findViewById(R.id.main_address_icon_view);
+        mMainAddressIconView = view.findViewById(R.id.main_address_icon_view);
         mMainAddressIconView.setVisibility(mIsMainIconVisible ? View.VISIBLE : View.GONE);
         return view;
     }
 
     /**
      * Set the main address icon visibility.
+     *
      * @param isVisible true to display the main icon
      */
     public void setMainIconVisible(boolean isVisible) {

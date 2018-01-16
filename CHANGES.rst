@@ -1,3 +1,209 @@
+Changes in Riot 0.7.06 (2017-12-06)
+===================================================
+
+Features:
+ 
+ * Update the global notification rules UI to have tree states (off, on, noisy) instead of a toogle (on, off).
+ 
+Improvements:
+ 
+ * Move the bug report dialog to an activity.
+ * Remove Google Analytics.
+ 
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * Improve the notification management on android 8 devices when the application is in battery optimisation mode.
+ * Fix some invalid avatars while using the autocompletion text.
+ 
+Changes in Riot 0.7.05 (2017-11-28)
+===================================================
+
+Features:
+ 
+ * Add a settings to use the native camera application instead of the in-app one. 
+ * Add piwik.
+ * Display pills(without avatar) on room history.
+ 
+Improvements:
+ 
+ * Improve the notfications on android 8 devices.
+ 
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * Fix the notification sound management on Android 8 devices.
+ * #1700 : Jump to first unread message didn't jump anywhere, just stayed at the same position where it was before, although there are more unread messages
+ * #1772 : unrecognised / commands shouldn't be relayed to the room.
+ 
+
+Changes in Riot 0.7.04 (2017-11-15)
+===================================================
+
+Features:
+ 
+ * Add the e2e share keys.
+ 
+Improvements:
+ 
+ * Add external keyboard functionality (to send messages).
+ * Refactor the call UI : the incoming call screen is removed.
+ * Refactor the call management (and fix the audio path issues).
+ * Update the android tools to the latest ones.
+ * Add a dummy splash screen when a logout is in progress
+ 
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * Fix a battery draining issue after ending a video call.
+ * #119 : Notifications: implement @room notifications on mobile
+ * #208 : Attached image: `thumbnail_info` and `thumbnail_url` must be moved in `content.info` dictionary 
+ * #1296 : Application crashes while swiping medias
+ * #1684 : Camera viewfinder rotation is broken (regression).
+ * #1685 : app sends notifications even when i told it not to.
+ * #1715 : Eats battery after video call
+ * #1725 : app crashes while triggering a notification.
+ 
+Changes in Riot 0.7.03 (2017-10-05)
+===================================================
+
+Improvements:
+ * Reduce the initial sync times
+ * Manage voice Jitsi call
+ 
+Bugfixes:
+ * #1641 : Language selector should be localized
+ * #1643 : Put Riot service in the foreground until the initial sync is done
+ * #1644 : Pin rooms with missed notifs and unread msg by default on the home page
+
+Changes in Riot 0.7.02 (2017-10-03)
+===================================================
+
+Features:
+ * Add black theme.
+ * Add widgets management.
+ * Update the third party call lib.
+ * Add notification ringtone selection.
+ 
+Bugfixes:
+ * Fix many issues reported by Google analytics.
+ * #1574 : Rotating the device when uploading photos still has a small bug 
+ * #1579 : Unexpected behaviour while clicking in the settings entry (android 8)
+ * #1588 : i can not set profile picture when i click on profile picture it return to setting menu (android 8)
+ * #1592 : Client unable to connect on server after certificate update
+ * #1613 : Phone rings for ever 
+ * #1616 : Sometimes Riot notifications reappear after being dismissed without being read
+ * #1622 : picked up call but continued vibrating, connection couldn't be established
+ * #1623 : checkboxes are not properly managed in the settings screen (android 8)
+ * #1634 : sent message duplicated in ui including read receipts
+ 
+Changes in Riot 0.7.01 (2017-09-04)
+===================================================
+
+Features:
+ * Add dark theme.
+ * Add the 12/24 hours settings.
+ 
+Improvements:
+ * [Fdroid] Improve the sync when the application is backgrounded.
+ * Update the call notification priority to be displayed on the lock screen.
+ * Use the default incoming ring tone if the storage permission was not granted.
+ 
+Bugfixes:
+ * Fix many issues reported by Google analytics.
+ * Fix e2e export silent failure when the storage permission was not granted.
+ * Fix crashes when too many asynctasks were launched.
+ * Fix the notification sounds.
+ * Restore the video call video when the application is put in background and in foreground.
+ * Fix the audio call resuming	
+ * Fix the broken incoming video call	
+ * #1467 : Rotating the device while an image is uploading inserts the image twice.
+ * #1475 : messages composed with only one number are displayed as if they were emojis 
+ * #1503 : Do not enlarge non-emoji.
+ * #1510 : Rotating the device while the camera activity is running closes it 
+ * #1514 : 'Enable background sync' is viewable on fdroid build preference does not have an effect
+ * #1532 : [custom hs] high battery draining issue 
+ * #1537 : cannot update the profile image
+ * #1548 : Unable to decrypt: encryption not enabled 
+ * #1554 : Turn screen on for 3 seconds not working
+ 
+Changes in Riot 0.7.00 (2017-08-01)
+===================================================
+
+Features:
+ * Add member events merge.
+ * Add new UI settings (hide/show some UI items, change the text size).
+ * Add a beta data save mode.
+ * Add a medias timelife i.e the medias are kept in storage for a specfied period.
+ * Add new user search.
+ 
+Improvements:
+ * Add more languages.
+ * Reduce the storage use.
+  
+Bugfixes:
+ * Fix many crashes reported by rageshake or GA.
+ * #1455 : Click on a matrix id does not open the member details activity if it is not a known user.
+
+Changes in Riot 0.6.14 (2017-07-25)
+===================================================
+
+Bugfixes:
+ * Remove server catchup patch (i.e the sync requests were triggered until getting something). It used to drain battery on small accounts.
+ * Fix application resume edge cases (fdroid only)
+
+Changes in Riot 0.6.13 (2017-07-03)
+===================================================
+ 
+Features:
+ * Add new home UI
+ * Add the read markers management
+   
+Bugfixes:
+ * Fix many issues reported by GA.
+ * #1308 : E2E new devices dialog disappears if screen is turned off by timeout : it does not reappear at next sent event.
+ * #1330 : Using the name completion as the first item of the message should add a colon (:)
+ * #1331 : The Events service is not properly restarted in some race conditions
+ * #1340 : sync is stuck after the application has been killed in background
+ 
+Changes in Riot 0.6.12 (2017-06-12)
+=======================================================
+
+Bugfixes:
+ * #1302 : No room / few rooms are displayed an application update / first launch.
+
+Changes in Riot 0.6.11 (2017-06-08)
+===================================================
+  
+Bugfixes:
+ * #1291 : don't receive anymore notifications after updating to the 0.6.10 version
+ * #1292 : No more room after updating the application on 0.6.10 and killing it during the loading Unregisteer the GCM token before registrating the FCM one.
+
+Changes in Riot 0.6.10 (2017-05-30)
+===================================================
+ 
+Features:
+ * Add some lanagues supports
+ * Add auto-complete text editor.
+ * Use FCM instead of GCM.
+ 
+Improvements:
+ * Add a new notification design.
+ * Offer to send a bug report when the application crashes.
+ * Use the new bug report API.
+  
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * #1041 : matrix.to links are broken. 
+ * #1052 : People tab in room details: 'you' displayed instead of your displayname/matrix id.
+ * #1053 : 'I have verified my mail' button is missing
+ * #1077 : Highlight phone numbers, email addresses, etc.
+ * #1093 : Cannot decrypt attachments on Android 4.2.X
+ * #1118 : show syncing throbber in room view
+ * #1186 : Infinite back pagination whereas the app is in background
+ * Fix some cryptography issues.
+ 
 Changes in Riot 0.6.9 (2017-03-15)
 ===================================================
  

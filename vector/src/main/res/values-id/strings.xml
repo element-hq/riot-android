@@ -1,0 +1,288 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resouces_language">id</string>
+    <string name="resouces_country">ID</string>
+
+    <string name="title_activity_home">Pesan</string>
+    <string name="title_activity_room">Ruang</string>
+    <string name="title_activity_settings">Pengaturan</string>
+    <string name="title_activity_member_details">Detil Anggota</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Batal</string>
+    <string name="save">Simpan</string>
+    <string name="leave">Tinggalkan</string>
+    <string name="send">Kirim</string>
+    <string name="quote">Kutip</string>
+    <string name="share">Bagikan</string>
+    <string name="delete">Hapus</string>
+    <string name="rename">Ubah Nama</string>
+    <string name="report_content">Laporkan konten</string>
+    <string name="ongoing_conference_call_voice">suara</string>
+    <string name="device_information">Informasi Perangkat</string>
+    <string name="or">atau</string>
+    <string name="and">dan</string>
+    <string name="invite">Undang</string>
+    <string name="action_voice_call">Panggilan Suara</string>
+    <string name="action_video_call">Panggilan Video</string>
+    <string name="action_quick_reply">Balasan Cepat</string>
+    <string name="dialog_title_warning">Peringatan</string>
+
+    <string name="dialog_title_confirmation">Konfirmasi</string>
+    <string name="action_open">Buka</string>
+    <string name="action_close">Tutup</string>
+    <string name="disable">Nonaktifkan</string>
+
+    <string name="bottom_action_favourites">Favorit</string>
+    <string name="home_filter_placeholder_home">Cari ruang</string>
+    <string name="home_filter_placeholder_favorites">Cari favorit</string>
+    <string name="home_filter_placeholder_people">Cari orang</string>
+    <string name="home_filter_placeholder_rooms">Cari ruang</string>
+
+    <string name="user_directory_header">Direktori Pengguna</string>
+    <string name="no_result_placeholder">Tidak ada hasil</string>
+
+    <string name="no_public_room_placeholder">Ruang umum belum tersedia</string>
+    <string name="rooms_directory_header">Direktori ruang</string>
+    <string name="send_bug_report_include_logs">Kirim log</string>
+    <string name="send_bug_report_placeholder">Deskripsikan kendala Anda di sini</string>
+    <string name="send_bug_report_sent">Laporan bug telah berhasil dikirimkan</string>
+    <string name="read_receipt">Baca</string>
+
+    <string name="create_account">Daftar</string>
+    <string name="login">Masuk</string>
+    <string name="logout">Keluar</string>
+    <string name="hs_url">URL Server Mula</string>
+    <string name="search">Cari</string>
+
+    <string name="start_new_chat">Mulai Obrolan Baru</string>
+    <string name="option_take_photo_video">Ambil foto atau video</string>
+
+    <string name="auth_submit">Kirim</string>
+    <string name="auth_password_placeholder">Password</string>
+    <string name="auth_new_password_placeholder">Password Baru</string>
+    <string name="auth_send_reset_email">Kirim Email Atur Ulang</string>
+    <string name="auth_skip">Lewati</string>
+    <string name="auth_user_id_placeholder">Email atau nama pengguna</string>
+    <string name="auth_return_to_login">Kembali ke halaman masuk</string>
+    <string name="auth_user_name_placeholder">Nama pengguna</string>
+    <string name="auth_email_placeholder">Alamat email</string>
+    <string name="auth_opt_email_placeholder">Alamat Email (pilihan)</string>
+    <string name="auth_phone_number_placeholder">Nomor Telpon</string>
+    <string name="auth_opt_phone_number_placeholder">Nomor Telpon (piihan)</string>
+    <string name="auth_repeat_password_placeholder">Ulangi password</string>
+    <string name="auth_repeat_new_password_placeholder">Konfirmasi password baru</string>
+    <string name="copy">Gandakan</string>
+    <string name="resend">Kirim Ulang</string>
+    <string name="forward">Teruskan</string>
+    <string name="view_source">Tampilkan Sumber</string>
+    <string name="permalink">Buat Tautan</string>
+    <string name="view_decrypted_source">Tampilkan Sumber Terdekripsi</string>
+    <string name="active_call">Panggilan aktif</string>
+    <string name="ongoing_conference_call_video">video</string>
+    <string name="cannot_start_call">Tidak dapat memulai panggilan, coba lagi nanti</string>
+    <string name="missing_permissions_title_to_start_conf_call">Tidak dapat memulai panggilan</string>
+    <string name="action_sign_out">Keluar</string>
+    <string name="offline">Offline</string>
+
+    <string name="action_global_search">Pencarian global</string>
+    <string name="action_mark_all_as_read">Tandai semua sudah dibaca</string>
+    <string name="bottom_action_people">Orang</string>
+    <string name="bottom_action_rooms">Ruang</string>
+
+    <string name="invitations_header">Undangan</string>
+    <string name="direct_chats_header">Percakapan</string>
+    <string name="local_address_book_header">Buku alamat lokal</string>
+    <string name="low_priority_header">Prioritas rendah</string>
+
+    <string name="matrix_only_filter">Hanya kontak Matrix</string>
+    <string name="rooms_header">Ruang</string>
+    <string name="send_bug_report">Laporan Bug</string>
+    <string name="send_bug_report_app_crashed">Aplikasi gagal saat terakhir digunakan. Maukah Anda mengirim laporan kegagalan?</string>
+
+    <string name="join_room">Gabung di Ruang</string>
+    <string name="identity_url">URL Server Identity</string>
+    <string name="start_voice_call">Mulai Panggilan Suara</string>
+    <string name="auth_login">Masuk</string>
+    <string name="auth_register">Registrasi</string>
+    <string name="start_video_call">Mulai Panggilan Video</string>
+
+    <string name="users">pengguna</string>
+    <string name="user">pengguna</string>
+    <string name="option_send_files">Kirim file</string>
+    <string name="auth_invalid_password">Password terlalu pendek (min 6)</string>
+    <string name="auth_email_already_defined">Alamat email ini sudah terdefinisi.</string>
+    <string name="auth_forgot_password">Lupa password?</string>
+    <string name="auth_invalid_token">Token tidak berlaku</string>
+    <string name="auth_invalid_email">Sepertinya alamat email tidak benar</string>
+    <string name="auth_invalid_phone">Sepertinya nomor telpon tidak benar</string>
+    <string name="auth_password_dont_match">Password tidak cocok</string>
+    <string name="auth_recaptcha_message">Serve Home ingin memastikan bahwa Anda bukan robot</string>
+    <string name="auth_home_server">Server Home:</string>
+    <string name="auth_reset_password_next_step_button">Saya sudah verifikasi alamat email saya</string>
+    <string name="auth_reset_password_missing_password">Kata sandi baru perlu dimasukkan.</string>
+    <string name="login_error_must_start_http">URL diawali dengan http[s]://</string>
+    <string name="login_error_unable_login">Tidak bisa masuk</string>
+    <string name="login_error_unable_register">Tidak bisa registrasi</string>
+    <string name="login_error_invalid_home_server">Masukkan URL yang benar</string>
+
+    <string name="login_error_user_in_use">Nama pengguna sudah terpakai</string>
+    <string name="compression_opt_list_original">Asli</string>
+    <string name="compression_opt_list_large">Besar</string>
+    <string name="compression_opt_list_medium">Sedang</string>
+    <string name="compression_opt_list_small">Kecil</string>
+
+    <string name="yesterday">Kemarin</string>
+    <string name="attachment_cancel_download">Batalkan unduhan?</string>
+    <string name="attachment_cancel_upload">Batalkan unggahan?</string>
+    <string name="today">Hari ini</string>
+
+    <string name="room_info_room_name">Nama ruang</string>
+    <string name="call_connected">Panggilan terhubung</string>
+    <string name="call_connecting">Menyambungkan panggilan…</string>
+    <string name="call_ended">Panggilan diakhiri</string>
+    <string name="call_error_peer_cancelled_call">panggilan dibatalkan</string>
+
+    <string name="action_accept">TERIMA</string>
+    <string name="action_ignore">ABAIKAN</string>
+
+    <string name="permissions_rationale_popup_title">Informasi</string>
+    <string name="media_slider_saved">Tersimpan</string>
+    <string name="media_slider_saved_message">Simpan di downloads</string>
+    <string name="yes">YA</string>
+    <string name="no">TIDAK</string>
+    <string name="_continue">Lanjut</string>
+
+    <string name="remove">Hapus</string>
+    <string name="join">Gabung</string>
+    <string name="preview">Pratinjau</string>
+    <string name="reject">Tolak</string>
+
+    <string name="later">Nanti</string>
+    <string name="send_anyway">Kirim Saja</string>
+    <string name="no_contact_access_placeholder">Anda tidak mengizinkan Riot untuk mengakses kontak lokal</string>
+    <string name="send_bug_report_include_crash_logs">Kirim log gangguan</string>
+    <string name="huge">Raksasa</string>
+<string name="small">Kecil</string>
+    <string name="normal">Normal</string>
+    <string name="large">Besar</string>
+    <string name="larger">Lebih Besar</string>
+    <string name="largest">Terbesar</string>
+    <string name="font_size">Ukuran font</string>
+    <string name="tiny">Sangat Kecil</string>
+    <string name="notification_unread_notified_messages">%d notifikasi pesan belum dibaca</string>
+    <string name="directory_server_placeholder">URL server Home</string>
+    <string name="select_room_directory">Pilih direktori ruang</string>
+    <string name="unknown_devices_alert_title">Terdapat perangkat tidak diketahui di ruang</string>
+    <string name="encryption_information_verify_key_match">Saya verifikasi bahwa kuncinya sesuai</string>
+
+    <string name="encryption_information_unknown_device">perangkat tidak diketahui</string>
+    <string name="encryption_information_verified">Terverifikasi</string>
+    <string name="title_activity_historical">Jejak Percakapan</string>
+
+    <string name="redact">Sunting</string>
+    <string name="ongoing_conference_call">" Panggilan massal sedang berlangsung. Bergabunglah lewat suara atau video."</string>
+    <string name="missing_permissions_warning">Beberapa fitur tidak dapat digunakan karena aplikasi belum mendapat ijin..</string>
+    <string name="missing_permissions_to_start_conf_call">Anda membutuhkan ijin mengundang untuk memulai panggilan massal di ruang ini</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Panggilan massal tidak dapat diselenggarakan di ruang terenkripsi</string>
+    <string name="action_sign_out_confirmation">Demi keamanan, semua kunci enkripsi ujung-ke-ujung akan dihapus ketika Anda keluar yang berakibat pada sejarah percakapan terenkripsi tidak lagi dapat dibaca ketika Anda masuk kembali.
+Lakukan export agar tercadangkan sebelum Anda keluar.</string>
+    <string name="action_historical">Jejak Percakapan</string>
+    <string name="copied_to_clipboard">Gandakan ke clipboard</string>
+    <string name="bottom_action_home">Tampilan Awal</string>
+    <string name="no_conversation_placeholder">Belum ada percakapan</string>
+    <string name="no_room_placeholder">Belum ada ruang</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="other">%d pengguna</item>
+</plurals>
+
+    <string name="send_bug_report_include_screenshot">Kirim tampilan layar</string>
+    <string name="send_bug_report_description">Mohon uraikan bug tersebut. Apa yang Anda lakukan? Apa yang Anda harapkan terjadi? Apa yang sebenarnya terjadi?</string>
+    <string name="send_bug_report_logs_description">Log dari klien akan dikirim bersama laporan bug ini untuk mendalami kendala yang Anda temukan. Jika Anda hanya ingin mengirimkan tulisan di atas, silahkan hapus centang:</string>
+    <string name="send_bug_report_alert_message">Sepertinya Anda mengguncang telepon Anda akibat frustrasi. Maukah Anda mengirim laporan bug?</string>
+    <string name="send_bug_report_failed">Pengiriman laporan bug gagal (%s)</string>
+    <string name="send_bug_report_progress">Kemajuan (%s%%)</string>
+
+    <string name="send_files_in">Kirim ke</string>
+    <string name="username">Nama Pengguna</string>
+    <string name="auth_add_email_message">Tambahkan alamat email ke akun agar pengguna lain dapat menemukan Anda, dan kata sandi dapat disetel ulang.</string>
+    <string name="auth_add_phone_message">Tambahkan nomor telpon ke akun agar pengguna lain dapat menemukan Anda.</string>
+    <string name="auth_add_email_phone_message">Tambahkan alamat email dan/atau nomor telpon ke akun agar pengguna lain dapat menemukan Anda.
+
+Alamat email juga memungkinkan Anda menyetel ulang kata sandi.</string>
+    <string name="auth_add_email_and_phone_message">Tambahkan alamat email dan nomor telpon ke akun agar pengguna lain dapat menemukan Anda.
+
+Alamat email juga memungkinkan Anda menyetel ulang kata sandi Anda.</string>
+    <string name="auth_invalid_login_param">Nama pengguna dan/atau kata sandi salah</string>
+    <string name="auth_invalid_user_name">Nama pengguna hanya boleh memuat huruf, angka, titik, tanda hubung ( - ), dan garis bawah ( _ )</string>
+    <string name="auth_missing_password">Password belum dimasukkan</string>
+    <string name="auth_missing_email">Alamat email belum dimasukkan</string>
+    <string name="auth_missing_phone">Nomor telpon belum dimasukkan</string>
+    <string name="auth_missing_email_or_phone">Alamat email atau nomor telpon belum dimasukkan</string>
+    <string name="auth_use_server_options">Gunakan server lain (lanjutan)</string>
+    <string name="auth_email_validation_message">Silahkan periksa email Anda untuk melanjutkan pendaftaran</string>
+    <string name="auth_threepid_warning_message">Pendaftaran dengan email sekaligus nomor telpon belum didukung sampai API dihadirkan. Hanya nomor telpon yang akan digunakan.
+
+Anda dapat menambah email di profile Anda dalam pengaturan nantinya.</string>
+    <string name="auth_username_in_use">Nama pengguna yang terpakai</string>
+    <string name="auth_reset_password_message">Untuk menyetel ulang kata sandi Anda, silahkan masukkan alamat email yang tertaut ke akun Anda:</string>
+    <string name="auth_reset_password_missing_email">Anda perlu memasukkan alamat email yang tertaut pada akun.</string>
+    <string name="auth_reset_password_email_validation_message">Sebuah email telah dikirim ke %s. Setelah Anda mengikuti tautan yang termuat di dalamnya, silahkan klik di bawah.</string>
+    <string name="auth_reset_password_error_unauthorized">Verifikasi alamat email gagal: pastikan tautan yang termuat di email telah diklik</string>
+    <string name="auth_reset_password_success_message">Kata sandi Anda telah disetel ulang.
+
+Anda telah dikeluarkan dari semua perangkat dan tidak lagi menerima pemberitahuan dorongan. Untuk menerima kembali pemberitahuan, masuk kembali dengan tiap perangkat.</string>
+
+    <string name="login_error_network_error">Tidak dapat masuk: Gangguan jaringan</string>
+    <string name="login_error_registration_network_error">Tidak dapat mendaftar: Gangguan jaringan</string>
+    <string name="login_error_unable_register_mail_ownership">Tidak dapat mendaftar : gagal memastikan kepemilikan alamat email</string>
+    <string name="login_error_forbidden">Nama pengguna/kata sandi tidak tepat</string>
+    <string name="login_error_unknown_token">Rincian token akses tidak dikenal</string>
+    <string name="login_error_bad_json">JSON amburadul</string>
+    <string name="login_error_not_json">Tidak berisi JSON yang sah</string>
+    <string name="login_error_limit_exceeded">Pengajuan yang dikirimkan terlalu banyak</string>
+    <string name="login_error_login_email_not_yet">Tautan email masih belum diklik</string>
+
+    <string name="e2e_need_log_in_again">Anda perlu masuk kembali untuk menghasilkan kunci enkripsi ujung-ke-ujung untuk perangkat ini dan menyerahkan kunci umum ke server awal Anda.
+Proses ini hanya dilakukan sekali saja.
+Mohon maaf untuk ketidaknyamannya.</string>
+
+    <string name="read_receipts_list">Baca Daftar Penerimaan</string>
+
+    <string name="membership_changes">%d perubahan keanggotaan</string>
+
+    <string name="compression_options">"Kirim sebagai "</string>
+    <string name="attachment_remaining_time_seconds">%d d</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$dd</string>
+
+    <string name="room_info_room_topic">Topik ruang</string>
+
+    <string name="call_ring">Memanggil…</string>
+    <string name="incoming_call">Panggilan Masuk</string>
+    <string name="incoming_video_call">Panggilan Video Masuk</string>
+    <string name="incoming_voice_call">Panggilan Suara Masuk</string>
+    <string name="call_in_progress">Panggilan Sedang Berlangsung</string>
+
+    <string name="call_error_ice_failed">Hubungan Media Gagal</string>
+    <string name="auth_identity_server">Server Identitas</string>
+    <string name="settings_key_display_all_events">pengaturan_tombol_pertunjukan_semua_acara</string>
+    <string name="call_error_camera_init_failed">Kamera tidak bisa dibuka</string>
+    <string name="call_error_answered_elsewhere">panggilan gagal dijawab di tempat lain</string>
+    <string name="call_error_peer_hangup_elsewhere">panggilan telepon ditutup di suatu tempat</string>
+    <string name="media_picker_both_capture_title">Ambil sebuah gambar atau video</string>
+    <string name="media_picker_cannot_record_video">Tidak bisa merekam video</string>
+
+    <string name="permissions_rationale_msg_storage">Riot membutuhkan izin Anda untuk mengakses galeri foto dan video Anda untuk mengirim dan menyimpan lampiran.
+
+Harap berikan akses pada layar yang muncul berikutnya agar dapat mengirimkan data - data dari ponsel Anda.</string>
+    <string name="permissions_rationale_msg_camera">Riot membutuhkan izin Anda untuk mengakses kamera untuk mengambil gambar dan melakukan panggilan video.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+Harap berikan akses pada layar yang akan muncul agar dapat melakukan panggilan.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot membutuhkan izin Anda untuk mengakses microphone untuk melakukan panggilan audio.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Harap berikan akses pada layar yang akan muncul agar dapat melakukan panggilan.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot membutuhkan izin untuk mengakses kamera dan mikrofon Anda untuk melakukan panggilan video.
+
+Harap berikan akses pada layar yang akan muncul berikutnya untuk melakukan panggilan.</string>
+    </resources>

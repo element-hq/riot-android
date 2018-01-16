@@ -42,4 +42,10 @@
         android:alpha="0.2"
         android:layout_width="160dp"
         android:layout_height="160dp"/>
+
+    <ImageView
+        android:id="@+id/media_download_failed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@android:drawable/ic_menu_gallery"/>
 </RelativeLayout>

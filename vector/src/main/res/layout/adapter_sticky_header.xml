@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/section_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- textAllCaps="true" prevent spannable string -->
+    <TextView
+        android:id="@+id/section_title"
+        style="@style/ListHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false" />
+
+    <ProgressBar
+        android:id="@+id/section_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/section_title"
+        android:layout_alignTop="@+id/section_title"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="-16dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/section_title"
+        android:indeterminate="true" />
+</RelativeLayout>
+

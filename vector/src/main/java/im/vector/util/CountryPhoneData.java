@@ -19,13 +19,13 @@ package im.vector.util;
 public class CountryPhoneData {
 
     // The ISO country code (ex: FR)
-    private String mCountryCode;
+    private final String mCountryCode;
 
     // The country name
-    private String mCountryName;
+    private final String mCountryName;
 
     // The country calling code (ex: 33 for France)
-    private int mCallingCode;
+    private final int mCallingCode;
 
     CountryPhoneData(String countryCode, String countryName, int callingCode) {
         mCountryCode = countryCode;

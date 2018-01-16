@@ -24,3 +24,6 @@ Matthew Hodgson <matthew at matrix.org>
 
 Florent Violleau <floviolleau at gmail dot com>
  * General documentation improvements.
+
+Jay Kamat <jaygkamat at gmail dot com>
+ * Contribution on the dark theme.

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-
     <TextView
         android:id="@+id/messagesAdapter_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1970/01/01 00:00:00"
-        android:textColor="@color/vector_d8_gray"
+        android:textColor="?attr/default_text_light_color"
         android:textSize="12sp" />
 
     <ImageView

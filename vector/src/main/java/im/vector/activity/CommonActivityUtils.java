@@ -33,33 +33,42 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.AttrRes;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
@@ -76,6 +85,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -86,11 +96,11 @@ import im.vector.VectorApp;
 import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
-import im.vector.fragments.AccountsSelectionDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
-import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
+import im.vector.util.PreferencesManager;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -98,15 +108,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  * Contains useful functions which are called in multiple activities.
  */
 public class CommonActivityUtils {
-    private static final String LOG_TAG = "CommonActivityUtils";
-
-    /**
-     * Mime types
-     **/
-    public static final String MIME_TYPE_JPEG = "image/jpeg";
-    public static final String MIME_TYPE_JPG = "image/jpg";
-    public static final String MIME_TYPE_IMAGE_ALL = "image/*";
-    public static final String MIME_TYPE_ALL_CONTENT = "*/*";
+    private static final String LOG_TAG = CommonActivityUtils.class.getSimpleName();
 
     /**
      * Schemes
@@ -145,7 +147,7 @@ public class CommonActivityUtils {
     // Android M permission request code management
     private static final boolean PERMISSIONS_GRANTED = true;
     private static final boolean PERMISSIONS_DENIED = !PERMISSIONS_GRANTED;
-    public static final int PERMISSION_BYPASSED = 0x0;
+    private static final int PERMISSION_BYPASSED = 0x0;
     public static final int PERMISSION_CAMERA = 0x1;
     private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1 << 1;
     private static final int PERMISSION_RECORD_AUDIO = 0x1 << 2;
@@ -158,15 +160,49 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_ROOM_DETAILS = PERMISSION_CAMERA;
     public static final int REQUEST_CODE_PERMISSION_VIDEO_RECORDING = PERMISSION_CAMERA | PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
-    public static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
+    private static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
 
-    public static void logout(Context context, MXSession session, boolean clearCredentials) {
+    /**
+     * Logout a sessions list
+     *
+     * @param context          the context
+     * @param sessions         the sessions list
+     * @param clearCredentials true to clear the credentials
+     * @param callback         the asynchronous callback
+     */
+    public static void logout(Context context, List<MXSession> sessions, boolean clearCredentials, final SimpleApiCallback<Void> callback) {
+        logout(context, sessions.iterator(), clearCredentials, callback);
+    }
+
+    /**
+     * Internal method to logout a sessions list
+     *
+     * @param context          the context
+     * @param sessions         the sessions iterator
+     * @param clearCredentials true to clear the credentials
+     * @param callback         the asynchronous callback
+     */
+    private static void logout(final Context context, final Iterator<MXSession> sessions, final boolean clearCredentials, final SimpleApiCallback<Void> callback) {
+        if (!sessions.hasNext()) {
+            if (null != callback) {
+                callback.onSuccess(null);
+            }
+
+            return;
+        }
+
+        MXSession session = sessions.next();
+
         if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
-            ArrayList<String> matrixIds = new ArrayList<>();
-            matrixIds.add(session.getMyUserId());
-            eventStreamService.stopAccounts(matrixIds);
+
+            // reported by a rageshake
+            if (null != eventStreamService) {
+                ArrayList<String> matrixIds = new ArrayList<>();
+                matrixIds.add(session.getMyUserId());
+                eventStreamService.stopAccounts(matrixIds);
+            }
 
             // Publish to the server that we're now offline
             MyPresenceManager.getInstance(context, session).advertiseOffline();
@@ -179,7 +215,12 @@ public class CommonActivityUtils {
             Matrix.getInstance(context).getSharedGCMRegistrationManager().unregister(session, null);
 
             // clear credentials
-            Matrix.getInstance(context).clearSession(context, session, clearCredentials);
+            Matrix.getInstance(context).clearSession(context, session, clearCredentials, new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    logout(context, sessions, clearCredentials, callback);
+                }
+            });
         }
     }
 
@@ -309,7 +350,9 @@ public class CommonActivityUtils {
      * @param activity      the caller activity
      * @param goToLoginPage true to jump to the login page
      */
-    public static void logout(final Activity activity, boolean goToLoginPage) {
+    public static void logout(final Activity activity, final boolean goToLoginPage) {
+        Log.d(LOG_TAG, "## logout() : from " + activity + " goToLoginPage " + goToLoginPage);
+
         // if no activity is provided, use the application context instead.
         final Context context = (null == activity) ? VectorApp.getInstance().getApplicationContext() : activity;
 
@@ -331,55 +374,56 @@ public class CommonActivityUtils {
         }
 
         // clear the preferences
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, context.getResources().getString(R.string.default_hs_server_url));
-        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, context.getResources().getString(R.string.default_identity_server_url));
-        Boolean useGa = GAHelper.useGA(context);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.clear();
-        editor.putString(LoginActivity.HOME_SERVER_URL_PREF, homeServer);
-        editor.putString(LoginActivity.IDENTITY_SERVER_URL_PREF, identityServer);
-        editor.commit();
-
-        if (null != useGa) {
-            GAHelper.setUseGA(context, useGa);
-        }
+        PreferencesManager.clearPreferences(context);
 
         // reset the GCM
-        Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration(false);
+        Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
         // clear the preferences when the application goes to the login screen.
         if (goToLoginPage) {
+            // display a dummy activity until the logout is done
             Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
-        }
 
-        // clear credentials
-        Matrix.getInstance(context).clearSessions(context, true);
-
-        // ensure that corrupted values are cleared
-        Matrix.getInstance(context).getLoginStorage().clear();
-
-        // clear the tmp store list
-        Matrix.getInstance(context).clearTmpStoresList();
-
-        // reset the contacts
-        PIDsRetriever.getInstance().reset();
-        ContactsManager.getInstance().reset();
-
-        MXMediasCache.clearThumbnailsCache(context);
-
-        if (goToLoginPage) {
             if (null != activity) {
                 // go to login page
-                activity.startActivity(new Intent(activity, LoginActivity.class));
+                activity.startActivity(new Intent(activity, LoggingOutActivity.class));
                 activity.finish();
             } else {
-                Intent intent = new Intent(context, LoginActivity.class);
+                Intent intent = new Intent(context, LoggingOutActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(intent);
             }
         }
+
+        // clear credentials
+        Matrix.getInstance(context).clearSessions(context, true, new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                // ensure that corrupted values are cleared
+                Matrix.getInstance(context).getLoginStorage().clear();
+
+                // clear the tmp store list
+                Matrix.getInstance(context).clearTmpStoresList();
+
+                // reset the contacts
+                PIDsRetriever.getInstance().reset();
+                ContactsManager.getInstance().reset();
+
+                MXMediasCache.clearThumbnailsCache(context);
+
+                if (goToLoginPage) {
+                    Activity activeActivity = VectorApp.getCurrentActivity();
+                    if (null != activeActivity) {
+                        // go to login page
+                        activeActivity.startActivity(new Intent(activeActivity, LoginActivity.class));
+                        activeActivity.finish();
+                    } else {
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        context.startActivity(intent);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -512,28 +556,43 @@ public class CommonActivityUtils {
         // the events stream service is launched
         // either the application has never be launched
         // or the service has been killed on low memory
-        if (EventStreamService.getInstance() == null) {
+        if (EventStreamService.isStopped()) {
             ArrayList<String> matrixIds = new ArrayList<>();
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             if ((null != sessions) && (sessions.size() > 0)) {
-                Log.d(LOG_TAG, "restart EventStreamService");
+                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(context).getSharedGCMRegistrationManager();
+                Log.e(LOG_TAG, "## startEventStreamService() : restart EventStreamService");
 
                 for (MXSession session : sessions) {
-                    boolean isSessionReady = session.getDataHandler().getStore().isReady();
+                    // reported by GA
+                    if ((null != session.getDataHandler()) && (null != session.getDataHandler().getStore())) {
+                        boolean isSessionReady = session.getDataHandler().getStore().isReady();
 
-                    if (!isSessionReady) {
-                        session.getDataHandler().getStore().open();
+                        if (!isSessionReady) {
+                            Log.e(LOG_TAG, "## startEventStreamService() : the session " + session.getMyUserId() + " is not opened");
+                            session.getDataHandler().getStore().open();
+                        } else {
+                            // it seems that the crypto is not always restarted properly after a crash
+                            Log.e(LOG_TAG, "## startEventStreamService() : check if the crypto of the session " + session.getMyUserId());
+                            session.checkCrypto();
+                        }
+
+                        session.setSyncDelay(gcmRegistrationManager.isBackgroundSyncAllowed() ? gcmRegistrationManager.getBackgroundSyncDelay() : 0);
+                        session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+
+                        // session to activate
+                        matrixIds.add(session.getCredentials().userId);
                     }
-
-                    // session to activate
-                    matrixIds.add(session.getCredentials().userId);
                 }
 
-                Intent intent = new Intent(context, EventStreamService.class);
-                intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
-                intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
-                context.startService(intent);
+                // check size
+                if (matrixIds.size() > 0) {
+                    Intent intent = new Intent(context, EventStreamService.class);
+                    intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
+                    intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
+                    context.startService(intent);
+                }
             }
         }
     }
@@ -575,10 +634,11 @@ public class CommonActivityUtils {
      * explain why vector needs the corresponding permission.
      *
      * @param aPermissionsToBeGrantedBitMap the permissions bit map to be granted
-     * @param aCallingActivity              the calling Activity that is requesting the permissions
+     * @param aCallingActivity              the calling Activity that is requesting the permissions (or fragment parent)
+     * @param fragment                      the calling fragment that is requesting the permissions
      * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
      */
-    public static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Activity aCallingActivity) {
+    private static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Activity aCallingActivity, final Fragment fragment) {
         boolean isPermissionGranted = false;
 
         // sanity check
@@ -641,11 +701,10 @@ public class CommonActivityUtils {
             finalPermissionsListToBeGranted = permissionsListToBeGranted;
 
             // if some permissions were already denied: display a dialog to the user before asking again..
-            // if some permissions were already denied: display a dialog to the user before asking again..
-            if(!permissionListAlreadyDenied.isEmpty()) {
+            if (!permissionListAlreadyDenied.isEmpty()) {
                 if (null != resource) {
                     // add the user info text to be displayed to explain why the permission is required by the App
-                    if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL){
+                    if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
                         // Permission request for VOIP call
                         if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
                                 && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
@@ -693,16 +752,21 @@ public class CommonActivityUtils {
 
                 // display the dialog with the info text
                 AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
-                if(null != resource) {
-                    permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
+                if (null != resource) {
+                    permissionsInfoDialog.setTitle(R.string.permissions_rationale_popup_title);
                 }
 
                 permissionsInfoDialog.setMessage(explanationMessage);
-                permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                permissionsInfoDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
-                            ActivityCompat.requestPermissions(aCallingActivity, finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
+                            if (fragment != null) {
+                                fragment.requestPermissions(finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
+                            } else {
+                                ActivityCompat.requestPermissions(aCallingActivity,
+                                        finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
+                            }
                         }
                     }
                 });
@@ -737,7 +801,11 @@ public class CommonActivityUtils {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ContactsManager.getInstance().setIsContactBookAccessAllowed(true);
-                                ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                if (fragment != null) {
+                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                } else {
+                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                }
                             }
                         });
 
@@ -746,14 +814,22 @@ public class CommonActivityUtils {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ContactsManager.getInstance().setIsContactBookAccessAllowed(false);
-                                ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                if (fragment != null) {
+                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                } else {
+                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                }
                             }
                         });
 
                         permissionsInfoDialog.show();
 
                     } else {
-                        ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                        if (fragment != null) {
+                            fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                        } else {
+                            ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                        }
                     }
                 } else {
                     // permissions were granted, start now..
@@ -762,6 +838,27 @@ public class CommonActivityUtils {
             }
         }
         return isPermissionGranted;
+    }
+
+    /**
+     * See {@link #checkPermissions(int, Activity, Fragment)}
+     *
+     * @param aPermissionsToBeGrantedBitMap
+     * @param aCallingActivity
+     * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
+     */
+    public static boolean checkPermissions(final int aPermissionsToBeGrantedBitMap, final Activity aCallingActivity) {
+        return checkPermissions(aPermissionsToBeGrantedBitMap, aCallingActivity, null);
+    }
+
+    /**
+     * See {@link #checkPermissions(int, Activity, Fragment)}
+     *
+     * @param aPermissionsToBeGrantedBitMap
+     * @param fragment
+     */
+    public static void checkPermissions(final int aPermissionsToBeGrantedBitMap, final Fragment fragment) {
+        checkPermissions(aPermissionsToBeGrantedBitMap, fragment.getActivity(), fragment);
     }
 
     /**
@@ -1151,72 +1248,6 @@ public class CommonActivityUtils {
     }
 
     /**
-     * Return the 1:1 room with the most recent message, that the searched user and the current
-     * logged user have joined.
-     * Among the list of the 1:1 rooms, joined by the user, the room with the most recent
-     * posted message is chosen to be returned.
-     *
-     * @param aSession        session
-     * @param aSearchedUserId the searched user ID
-     * @return 1:1 room joined by the user with the most recent message, null otherwise
-     */
-    private static Room findLatestOneToOneRoom(final MXSession aSession, final String aSearchedUserId) {
-        long serverTimeStamp = 0, newServerTimeStamp;
-        RoomSummary summary;
-        Room mostRecentRoomRetValue = null;
-        IMXStore mStore = aSession.getDataHandler().getStore();
-
-        // get all the "one to one" rooms where the user has joined
-        ArrayList<Room> roomsFoundList = findOneToOneRoomList(aSession, aSearchedUserId);
-
-        // parse all the 1:1 rooms and take the one with the most recent message.
-        if (!roomsFoundList.isEmpty()) {
-            for (Room room : roomsFoundList) {
-
-                summary = mStore.getSummary(room.getRoomId());
-                try {
-                    // test on the most recent time stamp
-                    if ((null != summary) && ((newServerTimeStamp = summary.getLatestReceivedEvent().getOriginServerTs()) > serverTimeStamp)) {
-                        mostRecentRoomRetValue = room;
-                        serverTimeStamp = newServerTimeStamp;
-                    }
-                } catch (Exception ex) {
-                    Log.e(LOG_TAG, "## findLatestOneToOneRoom(): Exception Msg=" + ex.getMessage());
-                }
-            }
-        }
-
-        return mostRecentRoomRetValue;
-    }
-
-    /**
-     * Check if the room is a 1:1 room and if the searched user has joined this room.
-     * The user ID is searched in the room only if the room is a 1:1 room.
-     * This method is useful to check if we can create a new 1:1 room when it is
-     * asked from a already existing room (see {@link VectorMemberDetailsActivity#ITEM_ACTION_START_CHAT}).
-     *
-     * @param aRoom           room to be checked
-     * @param aSearchedUserId the user ID to be searched in the room
-     * @return true if the room is a 1:1 room where the user ID is present, false otherwise
-     */
-    public static boolean isOneToOneRoomJoinedByUserId(final Room aRoom, final String aSearchedUserId) {
-        boolean retVal = false;
-        List<RoomMember> memberList;
-
-        if ((null != aRoom) && (null != (memberList = (List<RoomMember>) aRoom.getJoinedMembers()))) {
-            if (CommonActivityUtils.ROOM_SIZE_ONE_TO_ONE == memberList.size()) {
-                for (RoomMember member : memberList) {
-                    if (member.getUserId().equals(aSearchedUserId)) {
-                        retVal = true;
-                    }
-                }
-            }
-        }
-
-        return retVal;
-    }
-
-    /**
      * Set a room as a direct chat room.<br>
      * In case of success the corresponding room is displayed.
      *
@@ -1274,28 +1305,7 @@ public class CommonActivityUtils {
         if (Matrix.getMXSessions(fromActivity).size() == 1) {
             sendFilesTo(fromActivity, intent, Matrix.getMXSession(fromActivity, null));
         } else if (fromActivity instanceof FragmentActivity) {
-            FragmentManager fm = ((FragmentActivity) fromActivity).getSupportFragmentManager();
-
-            AccountsSelectionDialogFragment fragment = (AccountsSelectionDialogFragment) fm.findFragmentByTag(MXCActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-            }
-
-            fragment = AccountsSelectionDialogFragment.newInstance(Matrix.getMXSessions(fromActivity));
-
-            fragment.setListener(new AccountsSelectionDialogFragment.AccountsListener() {
-                @Override
-                public void onSelected(final MXSession session) {
-                    fromActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            sendFilesTo(fromActivity, intent, session);
-                        }
-                    });
-                }
-            });
-
-            fragment.show(fm, MXCActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
+            // TBD
         }
     }
 
@@ -1308,7 +1318,7 @@ public class CommonActivityUtils {
      */
     private static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session) {
         // sanity check
-        if ((null == session) || !session.isAlive()) {
+        if ((null == session) || !session.isAlive() || fromActivity.isFinishing()) {
             return;
         }
 
@@ -1428,89 +1438,131 @@ public class CommonActivityUtils {
      * @param sourceFile     the file source path
      * @param dstDirPath     the dst path
      * @param outputFilename optional the output filename
-     * @return the downloads file path if the file exists or has been properly saved
+     * @param callback       the asynchronous callback
      */
-    private static String saveFileInto(File sourceFile, String dstDirPath, String outputFilename) {
+    private static void saveFileInto(final File sourceFile, final String dstDirPath, final String outputFilename, final ApiCallback<String> callback) {
         // sanity check
         if ((null == sourceFile) || (null == dstDirPath)) {
-            return null;
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != callback) {
+                        callback.onNetworkError(new Exception("Null parameters"));
+                    }
+                }
+            });
+            return;
         }
 
-        // defines another name for the external media
-        String dstFileName;
+        AsyncTask<Void, Void, Pair<String, Exception>> task = new AsyncTask<Void, Void, Pair<String, Exception>>() {
+            @Override
+            protected Pair<String, Exception> doInBackground(Void... params) {
+                Pair<String, Exception> result;
 
-        // build a filename is not provided
-        if (null == outputFilename) {
-            // extract the file extension from the uri
-            int dotPos = sourceFile.getName().lastIndexOf(".");
+                // defines another name for the external media
+                String dstFileName;
 
-            String fileExt = "";
-            if (dotPos > 0) {
-                fileExt = sourceFile.getName().substring(dotPos);
+                // build a filename is not provided
+                if (null == outputFilename) {
+                    // extract the file extension from the uri
+                    int dotPos = sourceFile.getName().lastIndexOf(".");
+
+                    String fileExt = "";
+                    if (dotPos > 0) {
+                        fileExt = sourceFile.getName().substring(dotPos);
+                    }
+
+                    dstFileName = "vector_" + System.currentTimeMillis() + fileExt;
+                } else {
+                    dstFileName = outputFilename;
+                }
+
+                File dstDir = Environment.getExternalStoragePublicDirectory(dstDirPath);
+                if (dstDir != null) {
+                    dstDir.mkdirs();
+                }
+
+                File dstFile = new File(dstDir, dstFileName);
+
+                // if the file already exists, append a marker
+                if (dstFile.exists()) {
+                    String baseFileName = dstFileName;
+                    String fileExt = "";
+
+                    int lastDotPos = dstFileName.lastIndexOf(".");
+
+                    if (lastDotPos > 0) {
+                        baseFileName = dstFileName.substring(0, lastDotPos);
+                        fileExt = dstFileName.substring(lastDotPos);
+                    }
+
+                    int counter = 1;
+
+                    while (dstFile.exists()) {
+                        dstFile = new File(dstDir, baseFileName + "(" + counter + ")" + fileExt);
+                        counter++;
+                    }
+                }
+
+                // Copy source file to destination
+                FileInputStream inputStream = null;
+                FileOutputStream outputStream = null;
+                try {
+                    dstFile.createNewFile();
+
+                    inputStream = new FileInputStream(sourceFile);
+                    outputStream = new FileOutputStream(dstFile);
+
+                    byte[] buffer = new byte[1024 * 10];
+                    int len;
+                    while ((len = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, len);
+                    }
+                    result = new Pair<>(dstFile.getAbsolutePath(), null);
+                } catch (Exception e) {
+                    result = new Pair<>(null, e);
+                } finally {
+                    // Close resources
+                    try {
+                        if (inputStream != null) inputStream.close();
+                        if (outputStream != null) outputStream.close();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## saveFileInto(): Exception Msg=" + e.getMessage());
+                        result = new Pair<>(null, e);
+                    }
+                }
+
+                return result;
             }
 
-            dstFileName = "vector_" + System.currentTimeMillis() + fileExt;
-        } else {
-            dstFileName = outputFilename;
-        }
-
-        File dstDir = Environment.getExternalStoragePublicDirectory(dstDirPath);
-        if (dstDir != null) {
-            dstDir.mkdirs();
-        }
-
-        File dstFile = new File(dstDir, dstFileName);
-
-        // if the file already exists, append a marker
-        if (dstFile.exists()) {
-            String baseFileName = dstFileName;
-            String fileExt = "";
-
-            int lastDotPos = dstFileName.lastIndexOf(".");
-
-            if (lastDotPos > 0) {
-                baseFileName = dstFileName.substring(0, lastDotPos);
-                fileExt = dstFileName.substring(lastDotPos);
+            @Override
+            protected void onPostExecute(Pair<String, Exception> result) {
+                if (null != callback) {
+                    if (null == result) {
+                        callback.onNetworkError(new Exception("Null parameters"));
+                    } else if (null != result.first) {
+                        callback.onSuccess(result.first);
+                    } else {
+                        callback.onNetworkError(result.second);
+                    }
+                }
             }
+        };
 
-            int counter = 1;
-
-            while (dstFile.exists()) {
-                dstFile = new File(dstDir, baseFileName + "(" + counter + ")" + fileExt);
-                counter++;
-            }
-        }
-
-        // Copy source file to destination
-        FileInputStream inputStream = null;
-        FileOutputStream outputStream = null;
         try {
-            dstFile.createNewFile();
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (final Exception e) {
+            Log.e(LOG_TAG, "## saveFileInto() failed " + e.getMessage());
+            task.cancel(true);
 
-            inputStream = new FileInputStream(sourceFile);
-            outputStream = new FileOutputStream(dstFile);
-
-            byte[] buffer = new byte[1024 * 10];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, len);
-            }
-        } catch (Exception e) {
-            dstFile = null;
-        } finally {
-            // Close resources
-            try {
-                if (inputStream != null) inputStream.close();
-                if (outputStream != null) outputStream.close();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## saveFileInto(): Exception Msg=" + e.getMessage());
-            }
-        }
-
-        if (null != dstFile) {
-            return dstFile.getAbsolutePath();
-        } else {
-            return null;
+            (new android.os.Handler(Looper.getMainLooper())).post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != callback) {
+                        callback.onUnexpectedError(e);
+                    }
+                }
+            });
         }
     }
 
@@ -1520,26 +1572,53 @@ public class CommonActivityUtils {
      * @param context  the context
      * @param srcFile  the source file.
      * @param filename the filename (optional)
-     * @return the downloads file path
+     * @param callback the asynchronous callback
      */
     @SuppressLint("NewApi")
-    public static String saveMediaIntoDownloads(Context context, File srcFile, String filename, String mimeType) {
-        String fullFilePath = saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename);
+    public static void saveMediaIntoDownloads(final Context context, final File srcFile, final String filename, final String mimeType, final SimpleApiCallback<String> callback) {
+        saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename, new ApiCallback<String>() {
+            @Override
+            public void onSuccess(String fullFilePath) {
+                if (null != fullFilePath) {
+                    DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            if (null != fullFilePath) {
-                DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                    try {
+                        File file = new File(fullFilePath);
+                        downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage());
+                    }
+                }
 
-                try {
-                    File file = new File(fullFilePath);
-                    downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage());
+                if (null != callback) {
+                    callback.onSuccess(fullFilePath);
                 }
             }
-        }
 
-        return fullFilePath;
+            @Override
+            public void onNetworkError(Exception e) {
+                Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                if (null != callback) {
+                    callback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                if (null != callback) {
+                    callback.onMatrixError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                if (null != callback) {
+                    callback.onUnexpectedError(e);
+                }
+            }
+        });
     }
 
     //==============================================================================================================
@@ -1571,49 +1650,6 @@ public class CommonActivityUtils {
      */
     public static void displayToast(Context aContext, CharSequence aTextToDisplay) {
         Toast.makeText(aContext, aTextToDisplay, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Display a snack.
-     *
-     * @param aTargetView    the parent view.
-     * @param aTextToDisplay the text to display.
-     */
-    public static void displaySnack(View aTargetView, CharSequence aTextToDisplay) {
-        Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
-    }
-
-    //==============================================================================================================
-    // call utils
-    //==============================================================================================================
-
-    /**
-     * Display a toast message according to the end call reason.
-     *
-     * @param aCallingActivity calling activity
-     * @param aCallEndReason   define the reason of the end call
-     */
-    public static void processEndCallInfo(Activity aCallingActivity, int aCallEndReason) {
-        if (null != aCallingActivity) {
-            if (IMXCall.END_CALL_REASON_UNDEFINED != aCallEndReason) {
-                switch (aCallEndReason) {
-                    case IMXCall.END_CALL_REASON_PEER_HANG_UP:
-                        if (aCallingActivity instanceof InComingCallActivity) {
-                            CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_cancelled_call));
-                        } else {
-                            // let VectorCallActivity manage its
-                        }
-                        break;
-
-                    case IMXCall.END_CALL_REASON_PEER_HANG_UP_ELSEWHERE:
-                        CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_hangup_elsewhere));
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
     }
 
     //==============================================================================================================
@@ -1671,13 +1707,6 @@ public class CommonActivityUtils {
     }
 
     /**
-     * @return the badge value
-     */
-    public static int getBadgeCount() {
-        return mBadgeValue;
-    }
-
-    /**
      * Refresh the badge count for specific configurations.<br>
      * The refresh is only effective if the device is:
      * <ul><li>offline</li><li>does not support GCM</li>
@@ -1717,7 +1746,7 @@ public class CommonActivityUtils {
      * @param aContext     App context
      * @param aDataHandler data handler instance
      */
-    public static void updateBadgeCount(Context aContext, MXDataHandler aDataHandler) {
+    private static void updateBadgeCount(Context aContext, MXDataHandler aDataHandler) {
         //sanity check
         if ((null == aContext) || (null == aDataHandler)) {
             Log.w(LOG_TAG, "## updateBadgeCount(): invalid input null values");
@@ -1727,13 +1756,8 @@ public class CommonActivityUtils {
             ArrayList<Room> roomCompleteList = new ArrayList<>(aDataHandler.getStore().getRooms());
             int unreadRoomsCount = 0;
 
-            // compute the number of rooms with unread notifications
-            // "invite to join a room" counts as a notification
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(aContext);
-            boolean isInvitedNotifEnabled = preferences.getBoolean(aContext.getResources().getString(R.string.settings_invited_to_room), false);
-
             for (Room room : roomCompleteList) {
-                if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
+                if (room.getNotificationCount() > 0) {
                     unreadRoomsCount++;
                 }
             }
@@ -1862,13 +1886,13 @@ public class CommonActivityUtils {
 
         TextView textView;
 
-        textView = (TextView) layout.findViewById(R.id.encrypted_device_info_device_name);
+        textView = layout.findViewById(R.id.encrypted_device_info_device_name);
         textView.setText(deviceInfo.displayName());
 
-        textView = (TextView) layout.findViewById(R.id.encrypted_device_info_device_id);
+        textView = layout.findViewById(R.id.encrypted_device_info_device_id);
         textView.setText(deviceInfo.deviceId);
 
-        textView = (TextView) layout.findViewById(R.id.encrypted_device_info_device_key);
+        textView = layout.findViewById(R.id.encrypted_device_info_device_key);
         textView.setText(deviceInfo.fingerprint());
 
         builder.setView(layout);
@@ -1884,6 +1908,9 @@ public class CommonActivityUtils {
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (null != callback) {
+                    callback.onSuccess(null);
+                }
             }
         });
 
@@ -1892,12 +1919,21 @@ public class CommonActivityUtils {
 
     /**
      * Export the e2e keys for a dedicated session.
-     * @param session the session
+     *
+     * @param session  the session
      * @param password the password
      * @param callback the asynchronous callback.
      */
-    public static void exportKeys(final MXSession session, final String password, final ApiCallback<String>callback) {
+    public static void exportKeys(final MXSession session, final String password, final ApiCallback<String> callback) {
         final Context appContext = VectorApp.getInstance();
+
+        if (null == session.getCrypto()) {
+            if (null != callback) {
+                callback.onMatrixError(new MatrixError("EMPTY", "No crypto"));
+            }
+
+            return;
+        }
 
         session.getCrypto().exportRoomKeys(password, new ApiCallback<byte[]>() {
             @Override
@@ -1907,11 +1943,35 @@ public class CommonActivityUtils {
                     String url = session.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
                     stream.close();
 
-                    String path = CommonActivityUtils.saveMediaIntoDownloads(appContext, new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain");
+                    CommonActivityUtils.saveMediaIntoDownloads(appContext, new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain", new SimpleApiCallback<String>() {
+                        @Override
+                        public void onSuccess(String path) {
+                            if (null != callback) {
+                                callback.onSuccess(path);
+                            }
+                        }
 
-                    if (null != callback) {
-                        callback.onSuccess(path);
-                    }
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            if (null != callback) {
+                                callback.onNetworkError(e);
+                            }
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            if (null != callback) {
+                                callback.onMatrixError(e);
+                            }
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            if (null != callback) {
+                                callback.onUnexpectedError(e);
+                            }
+                        }
+                    });
                 } catch (Exception e) {
                     if (null != callback) {
                         callback.onMatrixError(new MatrixError(null, e.getLocalizedMessage()));
@@ -1946,14 +2006,15 @@ public class CommonActivityUtils {
 
     /**
      * Display the unknown e2e devices
-     * @param session the session
-     * @param activity the calling activity
+     *
+     * @param session        the session
+     * @param activity       the calling activity
      * @param unknownDevices the unknown devices list
-     * @param listener optional listener to add an optional "Send anyway" button
+     * @param listener       optional listener to add an optional "Send anyway" button
      */
     public static void displayUnknownDevicesDialog(MXSession session, FragmentActivity activity, MXUsersDevicesMap<MXDeviceInfo> unknownDevices, VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
         // sanity checks
-        if ((null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
+        if (activity.isFinishing() || (null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
             return;
         }
 
@@ -1965,6 +2026,55 @@ public class CommonActivityUtils {
         }
 
         fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, listener);
-        fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+        try {
+            fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## displayUnknownDevicesDialog() failed : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Update the menu icons colors
+     *
+     * @param menu  the menu
+     * @param color the color
+     */
+    public static void tintMenuIcons(Menu menu, int color) {
+        for (int i = 0; i < menu.size(); ++i) {
+            MenuItem item = menu.getItem(i);
+            Drawable drawable = item.getIcon();
+            if (drawable != null) {
+                Drawable wrapped = DrawableCompat.wrap(drawable);
+                drawable.mutate();
+                DrawableCompat.setTint(wrapped, color);
+                item.setIcon(drawable);
+            }
+        }
+    }
+
+    /**
+     * Tint the drawable with a theme attribute
+     *
+     * @param context  the context
+     * @param drawable the drawable to tint
+     * @param attribute the theme color
+     * @return the tinted drawable
+     */
+    public static Drawable tintDrawable(Context context, Drawable drawable, @AttrRes int attribute) {
+        return tintDrawableWithColor(drawable, ThemeUtils.getColor(context, attribute));
+    }
+
+    /**
+     * Tint the drawable with a color integer
+     *
+     * @param drawable the drawable to tint
+     * @param color the color
+     * @return the tinted drawable
+     */
+    public static Drawable tintDrawableWithColor(Drawable drawable, @ColorInt int color) {
+        Drawable tinted = DrawableCompat.wrap(drawable);
+        drawable.mutate();
+        DrawableCompat.setTint(tinted, color);
+        return tinted;
     }
 }

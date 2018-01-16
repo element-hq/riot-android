@@ -1,9 +1,8 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     packagingOptions {
         exclude 'META-INF/LICENSE'
@@ -13,13 +12,28 @@ android {
     defaultConfig {
         applicationId "im.vector"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 26
         // use the version code
         versionCode rootProject.ext.versionCodeProp
         versionName rootProject.ext.versionNameProp
 
         // custom values
         resValue "string", "bug_report_url",  "https://riot.im/bugreports/submit"
+
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+
+        packagingOptions {
+            // The project react-native does not provide 64-bit binaries at the
+            // time of this writing. Unfortunately, packaging any 64-bit
+            // binaries into the .apk will crash the app at runtime on 64-bit
+            // platforms.
+            exclude "lib/x86_64/libjingle_peerconnection_so.so"
+            exclude "lib/arm64-v8a/libjingle_peerconnection_so.so"
+        }
+
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -31,18 +45,25 @@ android {
         }
     }
 
+    dexOptions {
+        jumboMode true
+        javaMaxHeapSize "2g"
+    }
+
     buildTypes {
         debug {
             resValue "string", "git_revision", "\"${gitRevision()}\""
-            resValue "string", "git_revision_unix_date", "\"${gitRevisionUnixDate()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+            resValue "string", "git_branch_name", "\"${gitBranchName()}\""
+            resValue "string", "build_number", rootProject.ext.buildNumberProp
             minifyEnabled false
         }
 
         release {
             resValue "string", "git_revision", "\"${gitRevision()}\""
-            resValue "string", "git_revision_unix_date", "\"${gitRevisionUnixDate()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+            resValue "string", "git_branch_name", "\"${gitBranchName()}\""
+            resValue "string", "build_number", rootProject.ext.buildNumberProp
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -61,7 +82,8 @@ android {
             versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "true"
             resValue "string", "allow_ga_use", "true"
-            resValue "string", "flavor_description", ""
+            resValue "string", "short_flavor_description", "G"
+            resValue "string", "flavor_description", "GooglePlay"
         }
 
         appfdroid {
@@ -71,12 +93,15 @@ android {
             versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "false"
             resValue "string", "allow_ga_use", "false"
+            resValue "string", "short_flavor_description", "F"
             resValue "string", "flavor_description", "FDroid"
         }
     }
 
     lintOptions {
         disable 'InvalidPackage'
+        disable 'MissingTranslation'
+        disable 'RestrictedApi'
     }
 
     repositories {
@@ -99,40 +124,74 @@ def gitRevision() {
     return cmd.execute().text.trim()
 }
 
-def gitRevisionUnixDate() {
-    def cmd = "git show -s --format=%ct HEAD^{commit}"
+def gitRevisionDate() {
+    def cmd = "git show -s --format=%ci HEAD^{commit}"
     return cmd.execute().text.trim()
 }
 
-def gitRevisionDate() {
-    def cmd = "git show -s --format=%ci HEAD^{commit}"
+def gitBranchName() {
+    def cmd = "git name-rev --name-only HEAD"
     return cmd.execute().text.trim()
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    compile 'com.android.support:multidex:1.0.0'
+
     compile 'me.leolin:ShortcutBadger:1.1.2@aar'
 
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:design:23.3.0'
-    compile 'com.android.support:cardview-v7:23.3.0'
-    compile 'com.android.support:recyclerview-v7:23.3.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     compile 'com.squareup.retrofit:retrofit:1.6.1'
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
-    compile 'io.pristine:libjingle:9690@aar'
 
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
 
     compile 'com.googlecode.libphonenumber:libphonenumber:8.0.1'
 
     /************* Matrix SDK management **************/
+    // update settings.gradle
     // use the matrix SDK as external lib
     compile(name: 'matrix-sdk', ext: 'aar')
+    // use the matrix SDK as a sub project
+    //compile project(':matrix-sdk')
     compile(name: 'olm-sdk', ext: 'aar')
+
+    /************* jitsi **************/
+    compile 'javax.inject:javax.inject:1'
+
+    compile 'com.facebook.fbui.textlayoutbuilder:textlayoutbuilder:1.0.0'
+    compile 'com.facebook.fresco:fresco:1.3.0'
+    compile 'com.facebook.fresco:imagepipeline-okhttp3:1.3.0'
+    compile 'com.facebook.soloader:soloader:0.1.0'
+    compile 'com.google.code.findbugs:jsr305:3.0.0'
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.6.0'
+    compile 'com.squareup.okio:okio:1.13.0'
+    compile 'org.webkit:android-jsc:r174650'
+
+
+    compile(name: 'jitsi-sdk', ext: 'aar')
+    compile(name: 'react-native-background-timer', ext: 'aar')
+    compile(name: 'react-native-fetch-blob', ext: 'aar')
+    compile(name: 'react-native-immersive', ext: 'aar')
+    compile(name: 'react-native-keep-awake', ext: 'aar')
+    compile(name: 'react-native-vector-icons', ext: 'aar')
+    compile(name: 'react-native-webrtc', ext: 'aar')
+    compile(name: 'react-native', ext: 'aar')
+    compile(name: 'react-native-locale-detector', ext: 'aar')
+
+
+    // another tracking than GA
+    compile 'org.piwik.sdk:piwik-sdk:2.0.0'
 
     // use the matrix SDK as a part of the project
     // you have to uncomment some lines in settings.gradle
@@ -141,9 +200,13 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
-    appCompile 'com.google.android.gms:play-services-gcm:8.1.0'
-    appCompile 'com.google.android.gms:play-services-analytics:8.1.0'
+    appCompile 'com.google.firebase:firebase-core:11.6.2'
+    appCompile 'com.google.firebase:firebase-messaging:11.6.2'
 
     // fdroid flavor only
 }
 
+
+if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid")) {
+    apply plugin: 'com.google.gms.google-services'
+}

@@ -1,0 +1,639 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resouces_language">ja</string>
+    <string name="resouces_country">JP</string>
+
+    <string name="title_activity_room">部屋</string>
+    <string name="title_activity_settings">設定</string>
+    <string name="title_activity_historical">履歴</string>
+
+    <string name="ok">ＯＫ</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
+    <string name="leave">退室</string>
+    <string name="send">送信</string>
+    <string name="copy">複写</string>
+    <string name="resend">再送信</string>
+    <string name="redact">削除</string>
+    <string name="share">共有</string>
+    <string name="delete">削除</string>
+    <string name="device_information">端末情報</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">暗号化された部屋での多人数通話はサポートされていません</string>
+    <string name="invite">招待</string>
+
+    <string name="action_mark_all_as_read">全ての発言を既読にする</string>
+    <string name="action_historical">履歴</string>
+    <string name="action_quick_reply">すぐに返信</string>
+    <string name="action_open">開く</string>
+    <string name="action_close">閉じる</string>
+    <string name="copied_to_clipboard">クリップボードへコピー</string>
+    <string name="dialog_title_warning">警告</string>
+
+    <string name="bottom_action_favourites">お気に入り</string>
+    <string name="bottom_action_people">対話</string>
+    <string name="bottom_action_rooms">部屋</string>
+
+    <string name="home_filter_placeholder_home">部屋を検索</string>
+    <string name="home_filter_placeholder_favorites">お気に入りを検索</string>
+    <string name="home_filter_placeholder_people">対話を検索</string>
+    <string name="home_filter_placeholder_rooms">部屋を検索</string>
+
+    <string name="invitations_header">招待中</string>
+    <string name="low_priority_header">低優先度</string>
+
+    <string name="direct_chats_header">会話</string>
+    <string name="no_public_room_placeholder">公開された部屋がありません</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="other">%d 名</item>
+</plurals>
+
+    <string name="send_bug_report">不具合報告</string>
+    <string name="send_bug_report_description">不具合の内容と状況の説明をお願い致します。あなたは何をしましたか？何が起こると思いますか？実際何が起こったのですか？</string>
+    <string name="send_bug_report_placeholder">ここに不具合内容を説明</string>
+    <string name="send_bug_report_include_screenshot">画面のスクリーンショット画像を送信</string>
+    <string name="send_bug_report_include_crash_logs">不具合発生時の動作記録を送信</string>
+    <string name="send_bug_report_include_logs">動作記録を送信</string>
+    <string name="send_bug_report_logs_description">開発者が問題を診断するために、このRiotの動作記録が不具合報告と一緒に送信されます。上記文章のみを送信したい場合は以下のチェックを解除してください：</string>
+    <string name="send_bug_report_alert_message">あなたは不満で端末を振っているようです。不具合を報告しますか？</string>
+    <string name="send_bug_report_app_crashed">前回アプリケーションは正常に停止しませんでした。クラッシュを報告しますか？</string>
+
+    <string name="send_bug_report_sent">不具合を報告しました</string>
+    <string name="send_bug_report_failed">不具合の報告の送信に失敗しました (%s)</string>
+    <string name="join_room">部屋へ参加</string>
+    <string name="missing_permissions_title_to_start_conf_call">通話が開始できません</string>
+    <string name="action_voice_call">音声通話</string>
+    <string name="action_video_call">映像付き通話</string>
+    <string name="action_global_search">全体検索</string>
+    <string name="local_address_book_header">端末の電話帳</string>
+    <string name="no_room_placeholder">部屋がありません</string>
+    <string name="search">検索</string>
+
+    <string name="option_send_files">ファイルを送信</string>
+    <string name="auth_return_to_login">ログイン画面へ戻る</string>
+    <string name="auth_phone_number_placeholder">電話番号</string>
+    <string name="auth_opt_phone_number_placeholder">電話番号 (任意で)</string>
+    <string name="auth_invalid_login_param">ユーザ名かパスワードが正しくありません</string>
+    <string name="auth_invalid_user_name">ユーザ名は半角英数字、ドット、ハイフン、アンダスコアのみで記して下さい</string>
+    <string name="auth_invalid_password">パスワードが短すぎます(最小6文字)</string>
+    <string name="auth_invalid_email">正しくない電子メールアドレスのようです</string>
+    <string name="auth_invalid_phone">正しくない電話番号のようです</string>
+    <string name="auth_email_already_defined">すでに登録されている電子メールアドレスです。</string>
+    <string name="auth_password_dont_match">パスワードが一致しません</string>
+    <string name="auth_forgot_password">パスワードを忘れた？</string>
+    <string name="auth_email_validation_message">登録を続行するには電子メールを確認して下さい</string>
+    <string name="login_error_must_start_http">URLはhttp://か、https://で始めて下さい</string>
+    <string name="login_error_network_error">ログインできません:通信エラー</string>
+    <string name="login_error_unable_login">ログインできません</string>
+    <string name="login_error_registration_network_error">登録できません:通信エラー</string>
+    <string name="login_error_unable_register">登録できません</string>
+    <string name="login_error_invalid_home_server">正しいURLを入力して下さい</string>
+
+    <string name="login_error_forbidden">ユーザ名かパスワードが正しくありません</string>
+    <string name="compression_opt_list_original">原寸</string>
+    <string name="compression_opt_list_large">大き目</string>
+    <string name="compression_opt_list_medium">中程度</string>
+    <string name="compression_opt_list_small">小さ目</string>
+
+    <string name="attachment_cancel_download">ダウンロードを停止しますか？</string>
+    <string name="attachment_cancel_upload">アップロードを停止しますか？</string>
+    <string name="attachment_remaining_time_seconds">%d秒</string>
+    <string name="attachment_remaining_time_minutes">%1$d分 %2$d秒</string>
+
+    <string name="yesterday">昨日</string>
+    <string name="today">今日</string>
+
+    <string name="room_info_room_name">部屋名</string>
+    <string name="call_ended">通話終了</string>
+    <string name="call_ring">呼出中…</string>
+    <string name="action_accept">許可</string>
+    <string name="action_ignore">拒否</string>
+
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="_continue">続ける</string>
+
+    <string name="room_jump_to_first_unread">最初の未読位置へ移動.</string>
+
+    <string name="room_e2e_alert_title">警告！</string>
+    <string name="format_time_s">秒</string>
+    <string name="format_time_m">分</string>
+    <string name="format_time_h">時間</string>
+    <string name="format_time_d">日</string>
+
+    <string name="room_participants_leave_prompt_title">部屋を退室</string>
+    <string name="room_participants_leave_prompt_msg">本当にこの部屋を退室しますか？</string>
+    <string name="room_participants_create">作成</string>
+
+    <string name="room_participants_online">接続中</string>
+    <string name="room_participants_offline">切断中</string>
+    <string name="room_participants_idle">待機中</string>
+    <string name="room_participants_action_invite">招待</string>
+    <string name="room_participants_action_leave">この部屋を退室する</string>
+    <string name="room_menu_search">検索</string>
+    <string name="room_one_user_is_typing">%sさんが文字入力中…</string>
+    <string name="room_two_users_are_typing">%1$sさんと %2$sさんが文字入力中…</string>
+    <string name="room_many_users_are_typing">%1$sさん、%2$sさん他が文字入力中…</string>
+    <string name="room_message_placeholder_encrypted">暗号文を送信…</string>
+    <string name="light_theme">明るいテーマ</string>
+    <string name="dark_theme">暗いテーマ</string>
+    <string name="black_them">黒いテーマ</string>
+
+    <string name="notification_sync_in_progress">同期中</string>
+    <string name="title_activity_home">メッセージ</string>
+    <string name="title_activity_member_details">メンバー詳細</string>
+    <string name="quote">引用</string>
+    <string name="later">後で</string>
+    <string name="forward">転送</string>
+    <string name="permalink">直リンク</string>
+    <string name="view_source">ソースコードを表示</string>
+    <string name="or">または</string>
+    <string name="dialog_title_confirmation">確認</string>
+    <string name="disable">無効にする</string>
+
+    <string name="send_bug_report_progress">送信中 (%s%%)</string>
+
+    <string name="login_error_user_in_use">このユーザ名はすでに使用されています</string>
+    <string name="remove">除去</string>
+    <string name="join">参加</string>
+    <string name="room_preview_invitation_format">あなたは %s さんに呼ばれてこの部屋へ参加しました</string>
+    <string name="room_creation_title">新しい対話</string>
+    <string name="room_creation_add_member">参加者を追加</string>
+    <string name="room_title_members">%1$d名</string>
+    <string name="room_title_one_member">1名</string>
+    <string name="room_participants_remove_prompt_msg">本当に%sさんを退室させますか?</string>
+    <string name="room_participants_now">現在</string>
+    <string name="room_participants_ago">前</string>
+
+    <string name="room_participants_header_devices">端末</string>
+
+    <string name="room_participants_action_set_default_power_level">権限を一般参加者へ変更</string>
+    <string name="room_participants_action_set_moderator">権限を司会者へ変更</string>
+    <string name="room_participants_action_set_admin">権限を管理者へ変更</string>
+    <string name="room_message_placeholder_not_encrypted">ここに送信文を入力 (暗号なし)…</string>
+    <string name="room_offline_notification">サーバとの接続が失われました.</string>
+    <string name="room_prompt_resend">全て再送信</string>
+    <string name="room_resend_unsent_messages">未送信の文を再送信</string>
+    <string name="room_delete_unsent_messages">未送信の文を削除</string>
+    <string name="room_message_file_not_found">ファイルが見つかりません</string>
+    <string name="room_do_not_have_permission_to_post">あなたはこの部屋で発言する権限がありません</string>
+    <string name="room_details_title">部屋の詳細</string>
+    <string name="room_details_people">参加者</string>
+    <string name="room_details_files">ファイル</string>
+    <string name="room_details_settings">設定</string>
+    <string name="room_settings_favourite">お気に入り</string>
+    <string name="room_settings_de_prioritize">低優先度</string>
+    <string name="room_settings_direct_chat">対話</string>
+    <string name="room_settings_forget">忘れる</string>
+
+    <string name="settings_profile_picture">自分のアイコン画像</string>
+    <string name="settings_display_name">表示名</string>
+    <string name="settings_email_address">電子メール</string>
+    <string name="settings_add_email_address">電子メールアドレスを追加</string>
+    <string name="settings_phone_number">電話番号</string>
+    <string name="settings_add_phone_number">電話番号を追加</string>
+    <string name="settings_notification_ringtone">通知音</string>
+    <string name="settings_enable_all_notif">このアカウントで通知を許可</string>
+    <string name="settings_enable_this_device">この端末で通知を許可</string>
+    <string name="settings_messages_in_one_to_one">1対1対話に発言されたとき</string>
+    <string name="settings_messages_in_group_chat">部屋で発言されたとき</string>
+    <string name="settings_invited_to_room">部屋へ招待されたとき</string>
+    <string name="settings_call_invitations">通話の呼出があったとき</string>
+    <string name="settings_messages_sent_by_bot">自動発言プログラム(Bot)が発言した時</string>
+
+    <string name="settings_start_on_boot">端末起動時に開始</string>
+    <string name="settings_background_sync">アプリを閉じているときの動作</string>
+    <string name="settings_second">秒</string>
+    <string name="settings_seconds">秒</string>
+
+    <string name="settings_enable_background_sync">アプリを閉じても新着を確認</string>
+    <string name="settings_set_sync_timeout">新着確認を失敗とするまでの時間</string>
+    <string name="settings_set_sync_delay">再度新着確認を送るまでの時間</string>
+    <string name="settings_clear_cache">一時保存を消去</string>
+    <string name="settings_clear_medias_cache">画像等の一時保存を消去</string>
+    <string name="settings_keep_media">画像等を一時保存する期間</string>
+
+    <string name="settings_user_settings">利用者設定</string>
+    <string name="settings_notifications">通知</string>
+    <string name="settings_ignored_users">無視する相手</string>
+    <string name="settings_other">その他</string>
+    <string name="settings_advanced">拡張設定</string>
+    <string name="settings_cryptography">暗号化</string>
+    <string name="settings_notifications_targets">通知対象</string>
+    <string name="settings_contact">端末の電話帳</string>
+    <string name="settings_contacts_app_permission">端末の電話帳の使用を許可</string>
+    <string name="settings_contacts_phonebook_country">電話帳の国番号</string>
+    <string name="settings_devices_list">端末</string>
+    <string name="settings_hide_read_receipts">既読通知を表示しない</string>
+    <string name="settings_dont_send_typings_notifs">発言入力中であることを公表しない</string>
+    <string name="settings_always_show_timestamps">発言時刻を常に表示</string>
+    <string name="settings_12_24_timestamps">発言時刻を12時間形式で表示 (例 午後2:30)</string>
+    <string name="settings_hide_join_leave_messages">参加や退室の文を表示しない(招待,強制退室,再入室禁止は表示)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">アイコン画像や表示名の変更を表示しない</string>
+
+    <string name="settings_disable_markdown">markdown書式表示を不許可</string>
+    <string name="devices_details_dialog_title">端末詳細</string>
+    <string name="devices_details_id_title">ID(端末固有番号)</string>
+    <string name="devices_details_name_title">端末名</string>
+    <string name="devices_details_device_name">端末名</string>
+    <string name="devices_details_last_seen_title">最終接続日</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_details_time_format">HH:mm:ss</string>
+    <string name="devices_delete_dialog_title">認証</string>
+    <string name="devices_delete_dialog_text">この操作を行うには追加の認証が必要です.
+続けるにはあなたのパスワードを入力して下さい.</string>
+    <string name="devices_delete_submit_button_label">受諾</string>
+
+    <string name="settings_logged_in">ログイン中のアカウント</string>
+    <string name="settings_select_language">言語選択</string>
+
+    <string name="settings_interface_language">操作に使用する言語</string>
+    <string name="settings_user_interface">端末操作表示</string>
+    <string name="account_email_validation_title">認証を確認中</string>
+    <string name="account_email_validation_message">電子メールを確認し, 本文中のURLを確認してください. 完了したらクリックして続けます.</string>
+    <string name="account_email_already_used_error">この電子メールアドレスは既に使われています</string>
+    <string name="settings_password_updated">あなたのパスワードは更新されました</string>
+    <string name="settings_select_country">国を選択</string>
+
+    <string name="settings_phone_number_country_label">国</string>
+    <string name="settings_phone_number_country_error">国を選択してください</string>
+    <string name="settings_phone_number_label">電話番号</string>
+    <string name="settings_phone_number_error">選択した国では、この電話番号は正しくありません</string>
+    <string name="settings_phone_number_verification">電話認証</string>
+    <string name="settings_phone_number_verification_instruction">SMSで認証番号を送りました. 以下にその番号を入力してください.</string>
+    <string name="settings_phone_number_verification_error_empty_code">認証番号を入力</string>
+    <string name="media_saving_period_3_days">3日</string>
+    <string name="media_saving_period_1_week">1週間</string>
+    <string name="media_saving_period_1_month">1ヵ月</string>
+    <string name="media_saving_period_forever">永久に</string>
+
+    <string name="room_settings_room_photo">部屋の画像アイコン</string>
+    <string name="room_settings_room_name">部屋名</string>
+    <string name="room_settings_topic">部屋の説明</string>
+    <string name="room_settings_room_tag">部屋の属性</string>
+    <string name="room_settings_tag_pref_dialog_title">部屋の属性:</string>
+    <string name="room_settings_mute_notifs">発言があっても通知しない</string>
+
+    <string name="room_settings_tag_pref_entry_favourite">お気に入り</string>
+    <string name="room_settings_tag_pref_entry_low_priority">低優先度</string>
+    <string name="room_settings_tag_pref_entry_none">なし</string>
+    <string name="room_settings_tag_pref_no_tag">属性指定なし</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">お気に入り</string>
+    <string name="room_settings_tag_pref_entry_value_low_priority">低</string>
+    <string name="room_settings_tag_pref_entry_value_none">なし</string>
+
+    <string name="room_settings_category_access_visibility_title">参加と可視範囲</string>
+    <string name="room_settings_directory_visibility">部屋一覧へ公開する</string>
+    <string name="room_settings_room_access_rules_pref_title">部屋への参加</string>
+    <string name="room_settings_room_read_history_rules_pref_title">部屋の発言履歴の可視範囲</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">部屋の発言履歴を読める人は?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">部屋へ参加できる人は?</string>
+
+    <string name="room_settings_read_history_entry_anyone">誰でも</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">参加者のみ (この設定を選択した時点から)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">参加者のみ (招待を送った時点から)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">参加者のみ (参加した時点から)</string>
+
+    <string name="room_settings_room_access_entry_only_invited">この部屋に招待された人のみ参加可能</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">誰でも部屋に参加できる (ゲストユーザは不可)</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">誰でも部屋に参加できる (ゲストユーザも許可)</string>
+
+    <string name="room_settings_banned_users_title">再入室禁止された参加者</string>
+
+    <string name="room_settings_category_advanced_title">拡張設定</string>
+    <string name="room_settings_room_internal_id">この部屋のサーバ内識別ID</string>
+    <string name="room_settings_labs_pref_title">実験的</string>
+    <string name="room_settings_labs_warning_message">これらは予期せぬ不具合が生じるかもしれない実験的機能です. 慎重に使用してください.</string>
+    <string name="room_settings_labs_end_to_end">End-to-End 暗号</string>
+    <string name="room_settings_labs_end_to_end_is_active">End-to-End 暗号を使用中</string>
+    <string name="room_settings_labs_end_to_end_warnings">暗号を有効にするためにはログアウトする必要があります.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">認証された端末のみで暗号化</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">この部屋では, この端末から認証されていない端末への暗号送信をしません.</string>
+
+    <string name="room_settings_addresses_add_new_address">"新しい住所表記 (記入例  #foo:matrix.org)"</string>
+
+    <string name="room_settings_addresses_no_local_addresses">この部屋はサーバ内住所表記がありません</string>
+    <string name="room_settings_addresses_pref_title">住所表記</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">住所表記が正しくありません</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' は正しくない形式の住所表記です</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">本住所表記が設定されていません. この部屋の本住所表記は無作為に設定選択されます</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">本住所表記の警告</string>
+
+    <string name="room_settings_set_main_address">本住所表記を設定</string>
+    <string name="room_settings_unset_main_address">本住所表記を設定解除</string>
+    <string name="room_settings_copy_room_id">部屋固有IDをコピー</string>
+    <string name="room_settings_copy_room_address">部屋の住所表記をコピー</string>
+
+    <string name="room_settings_addresses_e2e_prompt_title">警告!</string>
+    <string name="encryption_information_device_id">装置固有ID</string>
+    <string name="font_size">文字の大きさ</string>
+    <string name="tiny">細かく</string>
+    <string name="small">小さい</string>
+    <string name="normal">標準</string>
+    <string name="large">大きい</string>
+    <string name="larger">より大きく</string>
+    <string name="largest">もっと大きく</string>
+    <string name="huge">巨大</string>
+
+    <string name="notification_listen_for_events">発言更新を確認</string>
+
+    <string name="view_decrypted_source">暗号解除されたソースコードを表示</string>
+    <string name="rename">名前変更</string>
+    <string name="offline">切断中</string>
+
+    <string name="start_new_chat">対話を開始</string>
+    <string name="start_voice_call">音声通話を開始</string>
+    <string name="start_video_call">ビデオ通話を開始</string>
+
+    <string name="option_take_photo_video">写真または動画を撮影</string>
+
+    <string name="auth_send_reset_email">初期化メール送信</string>
+    <string name="permissions_rationale_msg_camera">写真撮影や映像付き通話には, Riotアプリに端末のカメラの使用を許可する必要がります.</string>
+    <string name="ongoing_conference_call">" 会議通話実施中. 音声か映像で参加してください."</string>
+    <string name="ongoing_conference_call_voice">音声</string>
+    <string name="ongoing_conference_call_video">映像</string>
+    <string name="cannot_start_call">通話を開始できませんでした, 後ほど試してください</string>
+    <string name="missing_permissions_warning">許可が無い為, 一部の機能が失われている可能性があります..</string>
+    <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するための招待権限が必要です</string>
+    <string name="send_anyway">とにかく送る</string>
+    <string name="and">と</string>
+    <string name="action_sign_out">通信完全切断</string>
+    <string name="action_sign_out_confirmation">セキュリティを確保するため、回線切断するとエンドツーエンド暗号鍵がすべて削除され、再度ログインすると暗号化された発言履歴が読み取れなくなります。
+切断する前に暗号鍵を端末の記憶装置へ出力し、保管をしてください。</string>
+    <string name="bottom_action_home">基本画面</string>
+    <string name="no_conversation_placeholder">会話なし</string>
+    <string name="no_contact_access_placeholder">端末の電話帳をRiotアプリが読み取ることは許可されていません</string>
+    <string name="no_result_placeholder">結果なし</string>
+
+    <string name="rooms_header">部屋</string>
+    <string name="rooms_directory_header">部屋一覧</string>
+    <string name="user_directory_header">利用者一覧</string>
+    <string name="send_files_in">送信する</string>
+    <string name="logout">ログアウト</string>
+    <string name="create_account">新規登録</string>
+    <string name="login">ログイン</string>
+    <string name="auth_register">新規登録</string>
+    <string name="auth_submit">送信</string>
+    <string name="auth_skip">飛ばす</string>
+    <string name="auth_user_id_placeholder">ユーザ名または電子メール</string>
+    <string name="auth_password_placeholder">パスワード</string>
+    <string name="auth_new_password_placeholder">新しいパスワード</string>
+    <string name="auth_user_name_placeholder">ユーザ名</string>
+    <string name="auth_add_email_message">電子メールアドレスを登録すると, 誰かがあなたを検索をしたり, パスワード紛失時に初期化のメールを送ることができます.</string>
+    <string name="auth_add_phone_message">電話番号を登録すると, 誰かがあなたを電話番号で検索できるようになります.</string>
+    <string name="auth_email_placeholder">電子メールアドレス</string>
+    <string name="auth_opt_email_placeholder">電子メールアドレス (任意で)</string>
+    <string name="auth_repeat_password_placeholder">パスワード再確認</string>
+    <string name="auth_repeat_new_password_placeholder">新しいパスワードを再確認</string>
+    <string name="auth_missing_password">パスワードが違います</string>
+    <string name="auth_add_email_phone_message">電子メールアドレスや電話番号を登録すると, それらを使用して誰かがあなたを検索できるようになります.
+
+電子メールアドレスは, パスワード紛失時に初期化の連絡をするためにも使用されます.</string>
+    <string name="auth_add_email_and_phone_message">電子メールアドレスや電話番号を登録すると, それらを使用して誰かがあなたを検索できるようになります.
+
+電子メールアドレスは, パスワード紛失時に初期化の連絡をするためにも使用されます.</string>
+    <string name="auth_missing_email">電子メールアドレスが違います</string>
+    <string name="auth_missing_phone">電話番号が違います</string>
+    <string name="auth_missing_email_or_phone">電子メールアドレスまたは電話番号が違います</string>
+    <string name="auth_use_server_options">接続先サーバを指定する(追加設定)</string>
+    <string name="auth_invalid_token">指定が正しくありません</string>
+    <string name="auth_threepid_warning_message">電子メールと電話番号の同時登録は, まだシステムが対応できません. 電話番号だけの登録は可能です.
+
+お手数おかけしますが, 後ほど個人情報設定から電子メールアドレスを登録してください.</string>
+    <string name="auth_recaptcha_message">接続先サーバ側かが、機械による自動登録ではなく、あなたが人間であることを確認したいとのことです</string>
+    <string name="auth_username_in_use">ユーザ名はすでに使用されています</string>
+    <string name="auth_home_server">接続先サーバ:</string>
+    <string name="auth_identity_server">認証サーバ:</string>
+    <string name="auth_reset_password_next_step_button">自分用電子メールアドレスで認証をします</string>
+    <string name="auth_reset_password_message">パスワードを初期化するには, アカウントに登録されている電子メールアドレスを入力してください:</string>
+    <string name="auth_reset_password_missing_email">あなたのアカウントに登録された電子メールアドレスの入力が必要です.</string>
+    <string name="auth_reset_password_missing_password">新しいパスワードの入力が必要です.</string>
+    <string name="auth_reset_password_email_validation_message">%s へ電子メールが送信されました. リンクをたどったら以下をクリックしてください.</string>
+    <string name="auth_reset_password_error_unauthorized">電子メールアドレスの確認に失敗しました: 電子メールのリンクをクリックしたことを確認してください</string>
+    <string name="auth_reset_password_success_message">あなたのパスワードは初期化されました.
+
+あなたはすべての端末から切断しており、プッシュ通知を受け取ることはありません。通知を再度有効にするには、各端末に再度ログインします。</string>
+
+    <string name="login_error_unable_register_mail_ownership">登録ができません : 電子メールがあなた個人のものであるか確認できません</string>
+    <string name="login_error_unknown_token">指定されたアクセストークンが認識されませんでした</string>
+    <string name="login_error_bad_json">不正な形式のJSON</string>
+    <string name="login_error_not_json">有効なJSONを含んでいませんでした</string>
+    <string name="login_error_limit_exceeded">ログイン要求が多すぎてサーバが対応できません</string>
+    <string name="login_error_login_email_not_yet">まだ電子メールのリンクがクリックされていません</string>
+
+    <string name="compression_options">"以下の容量で画像を送信 "</string>
+    <string name="e2e_need_log_in_again">この端末のエンドツーエンド暗号鍵を生成し、接続先サーバに公開鍵を送信するには、再度ログインする必要があります。
+一度回線を切断します。
+ご不便おかけしてすみません。</string>
+
+    <string name="room_info_room_topic">部屋の説明</string>
+
+    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
+    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
+
+    <string name="call_connected">通話が接続されました</string>
+    <string name="call_connecting">通話を接続中…</string>
+    <string name="incoming_call">通話着信中</string>
+    <string name="incoming_video_call">映像つき通話の着信中</string>
+    <string name="incoming_voice_call">音声通話の着信中</string>
+    <string name="call_in_progress">通話中</string>
+
+    <string name="call_error_ice_failed">映像の接続に失敗</string>
+    <string name="call_error_camera_init_failed">カメラを開始できません</string>
+    <string name="call_error_answered_elsewhere">他の端末で通話に応答しました</string>
+    <string name="call_error_peer_hangup_elsewhere">他の端末で通話を終了しました</string>
+    <string name="call_error_peer_cancelled_call">通話を中止しました</string>
+
+    <string name="media_picker_both_capture_title">写真または動画の撮影</string>
+    <string name="media_picker_cannot_record_video">動画を記録できません</string>
+
+    <string name="media_slider_saved">保存</string>
+    <string name="preview">試写</string>
+    <string name="reject">拒否</string>
+
+    <string name="room_header_active_members">全%2$d人中 %1$d人が回線接続</string>
+    <string name="room_participants_header_admin_tools">管理者権限操作</string>
+    <string name="room_participants_header_call">通話</string>
+    <string name="room_participants_header_direct_chats">対話</string>
+    <string name="room_participants_action_remove">部屋から退室させる</string>
+    <string name="room_participants_action_ban">再入室禁止</string>
+    <string name="room_participants_action_unban">再入室禁止解除</string>
+    <string name="room_participants_action_ignore">この参加者の発言を全て非表示にする</string>
+    <string name="room_participants_action_unignore">この参加者の発言を全て表示する</string>
+    <string name="room_participants_action_mention">指名して呼掛け</string>
+    <string name="room_participants_invite_search_another_user">ユーザID, 表示名, 電子メールアドレス</string>
+    <string name="room_participants_action_devices_list">接続端末一覧を表示</string>
+    <string name="room_participants_invite_prompt_msg">%sさんをこの部屋へ招待して本当によろしいですか？</string>
+
+    <string name="people_search_invite_by_id"><u>ユーザIDで招待</u></string>
+    <string name="people_search_invite_by_id_dialog_hint">電子メールまたはMatrixユーザID</string>
+
+    <string name="room_prompt_cancel">全て中止</string>
+    <string name="room_new_message_notification">1つの新しい発言があります</string>
+    <string name="room_new_messages_notification">%1$d 新しい発言があります</string>
+
+    <string name="ssl_logout_account">回線完全切断</string>
+    <string name="ssl_remain_offline">無視</string>
+    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
+
+    <string name="room_details_people_invited_group_name">招待中</string>
+    <string name="room_details_people_present_group_name">参加者</string>
+
+    <string name="search_members_hint">参加者を検索</string>
+    <string name="search_no_results">結果なし</string>
+    <string name="tab_title_search_people">参加者</string>
+    <string name="tab_title_search_files">ファイル</string>
+
+    <string name="tab_title_search_rooms">部屋</string>
+    <string name="room_recents_favourites">お気に入り</string>
+    <string name="room_recents_conversations">部屋</string>
+    <string name="room_recents_low_priority">低優先度</string>
+    <string name="room_recents_start_chat">対話を開始</string>
+    <string name="room_recents_create_room">部屋を作成</string>
+    <string name="room_recents_join_room">部屋へ参加</string>
+    <string name="room_recents_join_room_title">部屋へ参加</string>
+    <string name="room_recents_join">参加</string>
+    <string name="directory_search_results_title">部屋一覧を見る</string>
+    <string name="directory_search_room">%1$d 部屋</string>
+    <string name="directory_search_rooms">%1$d 部屋</string>
+    <string name="room_settings_notifications">発言通知</string>
+    <string name="room_settings_leave_conversation">退室</string>
+    <string name="room_sliding_menu_messages">会話</string>
+    <string name="room_sliding_menu_settings">設定</string>
+    <string name="room_sliding_menu_version">"Version "</string>
+    <string name="room_sliding_menu_term_and_conditions">利用規約</string>
+    <string name="room_sliding_menu_copyright">著作権</string>
+    <string name="room_sliding_menu_privacy_policy">個人情報保護方針</string>
+
+    <string name="settings_turn_screen_on">3秒間画面を表示する</string>
+
+    <string name="settings_app_term_conditions">利用規約</string>
+    <string name="settings_copyright">著作権</string>
+    <string name="settings_privacy_policy">個人情報保護方針</string>
+    <string name="devices_delete_pswd">パスワード:</string>
+    <string name="settings_home_server">接続先サーバ</string>
+    <string name="settings_identity_server">認証サーバ</string>
+
+    <string name="account_email_not_found_error">電子メールの送信に失敗しました: メールアドレスが見つかりません</string>
+    <string name="account_phone_number_already_used_error">この電話番号は既に使用されています</string>
+
+    <string name="settings_change_password">パスワード変更</string>
+    <string name="settings_old_password">今までのパスワード</string>
+    <string name="settings_new_password">新しいパスワード</string>
+    <string name="settings_confirm_password">パスワード確認</string>
+    <string name="settings_fail_to_update_password">パスワードの更新に失敗しました</string>
+    <string name="settings_unignore_user">%s さんからの発言を表示してよろしいですか？</string>
+
+    <string name="settings_phone_number_verification_error">電話番号の認証時にエラーが発生しました</string>
+    <string name="room_settings_room_access_warning">この部屋へのリンクを作成するには、部屋の住所表記が必要です。</string>
+    <string name="room_settings_addresses_e2e_enabled">この部屋は暗号化されています。</string>
+    <string name="room_settings_addresses_e2e_disabled">この部屋は暗号化されていません。</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">暗号化を開始
+(警告: 部屋の暗号を中止することはできません！)</string>
+    <string name="directory_title">部屋一覧</string>
+    <string name="settings_theme">外観</string>
+
+    <string name="encryption_information_title">End-to-end 暗号についての情報</string>
+
+    <string name="encryption_information_device_name">端末名</string>
+    <string name="encryption_export_e2e_room_keys">部屋のEnd-to-end暗号鍵を出力</string>
+    <string name="encryption_information_verified">認証</string>
+    <string name="historical_placeholder">履歴を検索</string>
+
+    <string name="widget_integration_must_be_in_room">あなたはこの部屋に参加していません。</string>
+    <string name="widget_integration_no_permission_in_room">あなたはこの部屋で権限がありません。</string>
+    <string name="widget_integration_room_not_visible">部屋 %s は、見ることができません。</string>
+    <string name="add_matrix_apps_not_supported">この端末では利用できません</string>
+<string name="username">ユーザ名</string>
+    <string name="hs_url">接続先サーバ URL</string>
+    <string name="identity_url">認証サーバ URL</string>
+    <string name="user">ユーザ</string>
+    <string name="users">ユーザ</string>
+    <string name="auth_login">ログイン</string>
+    <string name="login_mobile_device">携帯端末</string>
+
+    <string name="membership_changes">%d 権限を変更</string>
+
+    <string name="settings_labs_matrix_apps">Matrixアプリ</string>
+    <string name="room_add_matrix_apps">Matrixアプリを追加</string>
+    <string name="widget_integration_positive_power_level">権限の数値は正の整数で入力してください。</string>
+    <string name="active_call">通話開始</string>
+    <string name="matrix_only_filter">Matrixの連絡先のみ</string>
+    <string name="call_error_user_not_responding">通信先が通話の受取に失敗しました。</string>
+    <string name="permissions_rationale_popup_title">情報</string>
+    <string name="permissions_rationale_msg_storage">Riotは添付ファイルを送信および保存するために写真とビデオライブラリにアクセスするための許可が必要です。
+
+あなたの携帯端末からファイルを送信できるようにするには、次のポップアップでアクセスを許可してください。</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+通話をするには、次のポップアップでアクセスできるように設定してください。</string>
+    <string name="permissions_rationale_msg_record_audio">Riotアプリは、音声通話を実行するためにマイクへアクセスするための許可が必要です。</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+通話をするには、次のポップアップでアクセスできるようにしてください。</string>
+    <string name="permissions_rationale_msg_camera_and_audio">映像つき通話を行うには、カメラとマイクにアクセスするための権限がRiotアプリに必要です。
+
+通話をするには、次のポップアップでのアクセスを許可してください。</string>
+    <string name="permissions_rationale_msg_contacts">Matrixユーザが電子メールアドレスや電話番号を元に他のユーザを検索するためには、Riotアプリがあなたの端末内電話帳へアクセスする許可が必要です。
+
+Riotからあなた個人の電話帳への検索要求を許可する場合は、次のポップアップでアクセスを許可してください。</string>
+    <string name="permissions_msg_contacts_warning_other_androids">あなた個人の端末内の電話帳に登録されている電子メールアドレス、電話番号を元に、Riotの利用者を検索する場合は、アプリが端末内電話帳へアクセスする許可が必要です。
+
+Riotアプリがあなたの電話帳へアクセスすることを許可しますか？</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">申し訳ありません..権限がないために操作が実行されませんでした</string>
+
+    <string name="report_content">発言を通報する</string>
+    <string name="read_receipt">既読</string>
+
+    <string name="option_take_photo">写真を撮影</string>
+    <string name="option_take_video">動画を撮影</string>
+
+    <string name="ignore_request">要求を無視する</string>
+
+<string name="share_without_verifying">検証せずに共有する</string>
+    <string name="start_verification">検証を開始する</string>
+    <string name="widget_integration_missing_user_id">リクエストに user_id がありません。</string>
+    <string name="widget_integration_missing_room_id">リクエストに room_id がありません。</string>
+    <string name="widget_integration_room_not_recognised">この部屋は承認されていません。</string>
+    <string name="widget_integration_failed_to_send_request">リクエストの送信に失敗しました。</string>
+    <string name="widget_integration_unable_to_create">ウィジェットを作成できません。</string>
+    <string name="widget_integration_need_to_be_able_to_invite">それを行うためにはユーザーを招待可能にする必要があります。</string>
+    <string name="event_formatter_widget_removed">%1$s は %2$s によって削除されました</string>
+    <string name="widget_no_power_to_manage">この部屋のウィジェットを管理する権限が必要です</string>
+    <string name="widget_creation_failure">ウィジェットの作成に失敗しました</string>
+    <string name="event_formatter_widget_added">%1$s は %2$s によって追加されました</string>
+    <string name="widget_delete_message_confirmation">ウィジェットを削除してもよろしいですか？</string>
+    <string name="directory_server_fail_to_retrieve_server">サーバーが利用できないか、オーバーロードしている可能性があります</string>
+    <string name="unknown_devices_alert_message">この部屋は検証されていない不明なデバイスが含まれています。
+つまり、デバイスが主張するユーザーに属しているという保証はありません。
+続行する前に、各デバイスの検証プロセスを進めることをおすすめしますが、検証することなくメッセージを再送信することができます。
+
+不明なデバイス:</string>
+
+    <string name="unknown_devices_alert_title">部屋に不明なデバイスが含まれています</string>
+    <string name="e2e_enabling_on_app_update">Riotはエンドツーエンドの暗号化をサポートするようになりましたが、有効にするには再度ログインする必要があります。
+
+アプリケーションの設定から今すぐまたは後で行うことができます。</string>
+
+    <string name="encryption_information_verify_key_match">キーが一致していることを確認</string>
+
+    <string name="encryption_information_verify_device_warning2">一致する場合は、下の確認ボタンを押します。そうでない場合は、他の誰かがこのデバイスを盗聴しているので、代わりにブロックボタンを押すことをおすすめします。
+将来この検証プロセスはより洗練されたものになるでしょう。</string>
+    <string name="encryption_information_verify_device">デバイスの検証</string>
+    <string name="encryption_information_unknown_device">不明なデバイス</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">このデバイスから未認証のデバイスに暗号化されたメッセージを送信しない</string>
+
+    <string name="encryption_never_send_to_unverified_devices_title">認証済みデバイスに対してのみ暗号化</string>
+    <string name="encryption_import_import">インポート</string>
+    <string name="encryption_import_room_keys_summary">ローカルファイルからキーをインポート</string>
+    <string name="encryption_import_room_keys">ルームキーをインポート</string>
+    <string name="encryption_import_e2e_room_keys">部屋のエンドツーエンド暗号鍵をインポート</string>
+
+    <string name="encryption_export_confirm_passphrase">パスフレーズを確認</string>
+    <string name="encryption_export_enter_passphrase">パスフレーズを入力</string>
+    <string name="encryption_export_export">エクスポート</string>
+    <string name="encryption_export_room_keys_summary">暗号鍵をローカルファイルにエクスポートする</string>
+    <string name="encryption_export_room_keys">部屋の暗号鍵をエクスポート</string>
+    <string name="encryption_information_verification">検証</string>
+    <string name="call">通話</string>
+    </resources>

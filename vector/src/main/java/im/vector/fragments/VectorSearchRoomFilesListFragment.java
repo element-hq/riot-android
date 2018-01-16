@@ -28,7 +28,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.TokensChunkResponse;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
@@ -38,9 +38,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesListFragment {
+    private static final String LOG_TAG = VectorSearchRoomFilesListFragment.class.getSimpleName();
 
-    static final int MESSAGES_PAGINATION_LIMIT = 50;
-    static final String LOG_TAG = "SearchRoomFilesListFrag";
+    private static final int MESSAGES_PAGINATION_LIMIT = 50;
 
     // set to false when there is no more available message in the room history
     private boolean mCanPaginateBack = true;
@@ -85,9 +85,13 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         super.cancelCatchingRequests();
         mIsBackPaginating = false;
         mCanPaginateBack = true;
-        mRoom.cancelRemoteHistoryRequest();
-        mNextBatch = mRoom.getLiveState().getToken();
-        mSession.getDataHandler().resetReplayAttackCheckInTimeline(mTimeLineId);
+        if (null != mRoom) {
+            mRoom.cancelRemoteHistoryRequest();
+            mNextBatch = mRoom.getLiveState().getToken();
+        }
+        if (null != mSession) {
+            mSession.getDataHandler().resetReplayAttackCheckInTimeline(mTimeLineId);
+        }
     }
 
     @Override
@@ -361,7 +365,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                         // decrypt the encrypted events
                         if (mRoom.isEncrypted()) {
                             for (Event event : eventsChunk.chunk) {
-                                mSession.getCrypto().decryptEvent(event, mTimeLineId);
+                                mSession.getDataHandler().decryptEvent(event, mTimeLineId);
                             }
                         }
 

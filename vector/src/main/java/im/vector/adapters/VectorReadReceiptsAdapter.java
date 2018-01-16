@@ -35,6 +35,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
+
 import im.vector.R;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.util.VectorUtils;
@@ -44,14 +45,14 @@ import im.vector.util.VectorUtils;
  */
 public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
 
-    protected Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private int mLayoutResourceId;
-    private MXSession mSession;
-    private Room mRoom;
+    private final Context mContext;
+    private final LayoutInflater mLayoutInflater;
+    private final int mLayoutResourceId;
+    private final MXSession mSession;
+    private final Room mRoom;
     //private MXMediasCache mMediasCache;
 
-    public VectorReadReceiptsAdapter(Context context,int layoutResourceId, MXSession session,  Room room, MXMediasCache mediasCache) {
+    public VectorReadReceiptsAdapter(Context context, int layoutResourceId, MXSession session, Room room, MXMediasCache mediasCache) {
         super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
@@ -68,8 +69,8 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
         }
         ReceiptData receipt = getItem(position);
 
-        final TextView userNameTextView = (TextView) convertView.findViewById(R.id.accountAdapter_name);
-        final ImageView imageView = (ImageView) convertView.findViewById(R.id.avatar_img_vector);
+        final TextView userNameTextView = convertView.findViewById(R.id.accountAdapter_name);
+        final ImageView imageView = convertView.findViewById(R.id.avatar_img_vector);
 
         final RoomMember member = mRoom.getMember(receipt.userId);
 
@@ -82,7 +83,7 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
             VectorUtils.loadRoomMemberAvatar(mContext, mSession, imageView, member);
         }
 
-        TextView tsTextView = (TextView) convertView.findViewById(R.id.read_receipt_ts);
+        TextView tsTextView = convertView.findViewById(R.id.read_receipt_ts);
         final String ts = AdapterUtils.tsToString(mContext, receipt.originServerTs, false);
 
         SpannableStringBuilder body = new SpannableStringBuilder(mContext.getString(im.vector.R.string.read_receipt) + " : " + ts);
@@ -93,7 +94,7 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
             @Override
             public boolean onLongClick(View v) {
                 VectorUtils.copyToClipboard(mContext, userNameTextView.getText());
-               return true;
+                return true;
             }
         });
 

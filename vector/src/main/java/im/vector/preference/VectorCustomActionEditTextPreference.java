@@ -21,7 +21,9 @@ import android.graphics.Typeface;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.util.AttributeSet;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -30,7 +32,7 @@ import android.widget.TextView;
 // Android displays by an edit text dialog by default
 // With this class, a custom behaviour can be designed.
 public class VectorCustomActionEditTextPreference extends EditTextPreference {
-    private static final String LOG_TAG = "VEditTextPreference";
+    private static final String LOG_TAG = VectorCustomActionEditTextPreference.class.getSimpleName();
 
     /**
      * Interface definition for a callback to be invoked when a preference is
@@ -46,7 +48,7 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
         boolean onPreferenceLongClick(Preference preference);
     }
 
-    int mTypeface = Typeface.NORMAL;
+    private int mTypeface = Typeface.NORMAL;
 
     // long press listener
     private OnPreferenceLongClickListener mOnClickLongListener;
@@ -71,7 +73,37 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
     @Override
     protected View onCreateView(ViewGroup parent) {
         View view = super.onCreateView(parent);
+        addClickListeners(view);
+        return view;
+    }
 
+    @Override
+    protected void onBindView(View view) {
+        super.onBindView(view);
+        addClickListeners(view);
+
+        // display the title in multi-line to avoid ellipsing.
+        try {
+            TextView title = view.findViewById(android.R.id.title);
+            TextView summary = view.findViewById(android.R.id.summary);
+            if (title != null) {
+                title.setSingleLine(false);
+                title.setTypeface(null, mTypeface);
+            }
+
+            if (title != summary) {
+                summary.setTypeface(null, mTypeface);
+            }
+
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "onBindView " + e.getMessage());
+        }
+    }
+
+    /**
+     * @param view
+     */
+    private void addClickListeners(View view) {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -91,30 +123,6 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
                 }
             }
         });
-
-        return view;
-    }
-
-    @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
-
-        // display the title in multi-line to avoid ellipsing.
-        try {
-            TextView title = (TextView) view.findViewById(android.R.id.title);
-            TextView summary = (TextView) view.findViewById(android.R.id.summary);
-            if (title != null) {
-                title.setSingleLine(false);
-                title.setTypeface(null, mTypeface);
-            }
-
-            if (title != summary) {
-                summary.setTypeface(null, mTypeface);
-            }
-
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "onBindView " + e.getMessage());
-        }
     }
 
     /**
@@ -131,7 +139,7 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
      *
      * @return The callback to be invoked.
      */
-    public OnPreferenceLongClickListener getOnPreferenceLongClickListener() {
+    private OnPreferenceLongClickListener getOnPreferenceLongClickListener() {
         return mOnClickLongListener;
     }
 }
