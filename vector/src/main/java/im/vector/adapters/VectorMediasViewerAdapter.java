@@ -113,6 +113,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             final View view = (View) object;
             mLatestPrimaryView = view;
 
+            view.findViewById(R.id.media_download_failed).setVisibility(View.GONE);
+
             view.post(new Runnable() {
                 @Override
                 public void run() {
@@ -199,6 +201,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
         final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
+        final View downloadFailedView = view.findViewById(R.id.media_download_failed);
 
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         final String loadingUri = mediaInfo.mMediaUrl;
@@ -246,6 +249,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     if ((null != error) && error.isSupportedErrorCode()) {
                         Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
+
+                    downloadFailedView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -286,6 +291,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                                     }
                                 }
                             });
+                        } else {
+                            downloadFailedView.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -302,6 +309,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     private void downloadHighResPict(final View view, final int position) {
         final WebView webView = view.findViewById(R.id.media_slider_image_webview);
         final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
+        final View downloadFailedView = view.findViewById(R.id.media_download_failed);
+
         final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
         final String viewportContent = "width=640";
         final String loadingUri = imageInfo.mMediaUrl;
@@ -314,11 +323,17 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             pieFractionView.setFraction(mMediasCache.getProgressValueForDownloadId(downloadId));
             mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
                 @Override
-                public void onDownloadError(String downloadId, JsonElement jsonElement) {
-                    MatrixError error = JsonUtils.toMatrixError(jsonElement);
+                public void onDownloadError(String aDownloadId, JsonElement jsonElement) {
+                    if (aDownloadId.equals(downloadId)) {
+                        pieFractionView.setVisibility(View.GONE);
 
-                    if ((null != error) && error.isSupportedErrorCode()) {
-                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        MatrixError error = JsonUtils.toMatrixError(jsonElement);
+
+                        if (null != error) {
+                            Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                        downloadFailedView.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -355,6 +370,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                                     }
                                 }
                             });
+                        } else {
+                            downloadFailedView.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -374,6 +391,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         // hide the pie chart
         final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
         pieFractionView.setVisibility(View.GONE);
+
+        view.findViewById(R.id.media_download_failed).setVisibility(View.GONE);
 
         final WebView imageWebView = view.findViewById(R.id.media_slider_image_webview);
         final View videoLayout = view.findViewById(R.id.media_slider_videolayout);
@@ -532,7 +551,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
      *
      * @param pageView      the pageView
      * @param videoView     the video view
-     * @param videoFile      the video file
+     * @param videoFile     the video file
      * @param videoMimeType the video mime type
      */
     private void playVideo(View pageView, VideoView videoView, File videoFile, String videoMimeType) {
