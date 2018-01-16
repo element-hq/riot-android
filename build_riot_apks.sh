@@ -1,5 +1,4 @@
 #!/bin/bash
-
 rm *.apk
 ./gradlew clean 
 

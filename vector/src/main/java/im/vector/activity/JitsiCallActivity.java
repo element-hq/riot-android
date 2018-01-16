@@ -275,6 +275,11 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             public void onConferenceWillLeave(Map<String, Object> map) {
                 Log.d(LOG_TAG, "## onConferenceWillLeave() : " + map);
             }
+
+            @Override
+            public void onLoadConfigError(Map<String, Object> data) {
+                Log.d(LOG_TAG, "## onLoadConfigError() : " + data);
+            }
         });
     }
 
