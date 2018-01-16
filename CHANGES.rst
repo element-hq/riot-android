@@ -1,3 +1,15 @@
+Changes in Riot 0.7.09 (2017-01-16)
+===================================================
+  
+Improvements:
+
+  * Update to the latest JITSI libs
+  * Add some scripts to build the required libs.
+ 
+Bugfixes:
+ 
+  * #1859 : After a user redacted their own join event from HQ, Android DoSes us with /context requests.
+
 Changes in Riot 0.7.08 (2017-01-12)
 ===================================================
  
