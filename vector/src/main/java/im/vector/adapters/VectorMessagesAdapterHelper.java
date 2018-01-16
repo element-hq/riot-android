@@ -59,6 +59,7 @@ import org.matrix.androidsdk.view.HtmlTagHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -961,13 +962,12 @@ class VectorMessagesAdapterHelper {
         return res;
     }
 
-    private static final List<String> mAllowedHTMLTags = Arrays.asList(
+    private static final Set<String> mAllowedHTMLTags = new HashSet<>(Arrays.asList(
             "font", // custom to matrix for IRC-style font coloring
             "del", // for markdown
-            // deliberately no h1/h2 to stop people shouting.
-            "h3", "h4", "h5", "h6", "blockquote", "p", "a", "ul", "ol",
+            "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "p", "a", "ul", "ol", "sup", "sub",
             "nl", "li", "b", "i", "u", "strong", "em", "strike", "code", "hr", "br", "div",
-            "table", "thead", "caption", "tbody", "tr", "th", "td", "pre");
+            "table", "thead", "caption", "tbody", "tr", "th", "td", "pre", "span", "img"));
 
     private static final Pattern mHtmlPatter = Pattern.compile("<(\\w+)[^>]*>", Pattern.CASE_INSENSITIVE);
 
@@ -982,7 +982,7 @@ class VectorMessagesAdapterHelper {
         String html = htmlString;
         Matcher matcher = mHtmlPatter.matcher(htmlString);
 
-        ArrayList<String> tagsToRemove = new ArrayList<>();
+        HashSet<String> tagsToRemove = new HashSet<>();
 
         while (matcher.find()) {
 
@@ -990,11 +990,8 @@ class VectorMessagesAdapterHelper {
                 String tag = htmlString.substring(matcher.start(1), matcher.end(1));
 
                 // test if the tag is not allowed
-                if (mAllowedHTMLTags.indexOf(tag) < 0) {
-                    // add it once
-                    if (tagsToRemove.indexOf(tag) < 0) {
-                        tagsToRemove.add(tag);
-                    }
+                if (!mAllowedHTMLTags.contains(tag)) {
+                    tagsToRemove.add(tag);
                 }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "sanitiseHTML failed " + e.getLocalizedMessage());
@@ -1002,12 +999,16 @@ class VectorMessagesAdapterHelper {
         }
 
         // some tags to remove ?
-        if (tagsToRemove.size() > 0) {
+        if (!tagsToRemove.isEmpty()) {
             // append the tags to remove
-            String tagsToRemoveString = tagsToRemove.get(0);
+            String tagsToRemoveString = "";
 
-            for (int i = 1; i < tagsToRemove.size(); i++) {
-                tagsToRemoveString += "|" + tagsToRemove.get(i);
+            for(String tag : tagsToRemove) {
+                if (!tagsToRemoveString.isEmpty()) {
+                    tagsToRemoveString += "|";
+                }
+
+                tagsToRemoveString += tag;
             }
 
             html = html.replaceAll("<\\/?(" + tagsToRemoveString + ")[^>]*>", "");
