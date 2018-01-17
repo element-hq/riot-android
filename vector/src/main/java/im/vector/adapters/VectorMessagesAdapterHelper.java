@@ -168,6 +168,7 @@ class VectorMessagesAdapterHelper {
             if (isMergedView) {
                 senderTextView.setVisibility(View.GONE);
                 groupFlairView.setVisibility(View.GONE);
+                groupFlairView.setTag(null);
             } else {
                 String eventType = event.getType();
 
@@ -182,6 +183,7 @@ class VectorMessagesAdapterHelper {
                         Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
                     senderTextView.setVisibility(View.GONE);
                     groupFlairView.setVisibility(View.GONE);
+                    groupFlairView.setTag(null);
                 } else {
                     senderTextView.setVisibility(View.VISIBLE);
                     senderTextView.setText(getUserDisplayName(event.getSender(), row.getRoomState()));
