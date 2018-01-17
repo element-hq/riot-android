@@ -1307,6 +1307,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             switch (requestCode) {
                 case REQUEST_NOTIFICATION_RINGTONE: {
                     PreferencesManager.setNotificationRingTone(getActivity(), (Uri) data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI));
+
+                    // test if the selected ring tone can be played
+                    if (null == PreferencesManager.getNotificationRingToneName(getActivity())) {
+                        PreferencesManager.setNotificationRingTone(getActivity(), PreferencesManager.getNotificationRingTone(getActivity()));
+                    }
+
                     refreshNotificationRingTone();
                     break;
                 }
