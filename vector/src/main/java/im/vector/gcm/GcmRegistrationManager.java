@@ -20,13 +20,16 @@ package im.vector.gcm;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.client.PushersRestClient;
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -42,7 +45,9 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.util.PreferencesManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -136,6 +141,9 @@ public final class GcmRegistrationManager {
     //
     private boolean mLastBatteryOptimizationStatus;
 
+    // pusher rest client
+    private Map<String, PushersRestClient> mPushersRestClients = new HashMap<>();
+
     /**
      * Constructor
      *
@@ -175,6 +183,38 @@ public final class GcmRegistrationManager {
         mRegistrationState = getStoredRegistrationState();
         mLastBatteryOptimizationStatus = PreferencesManager.canStartBackgroundService(mContext);
         mRegistrationToken = getStoredRegistrationToken();
+    }
+
+
+    /**
+     * Retrieves the pushers rest client.
+     *
+     * @param session the session
+     * @return the pushers rest client.
+     */
+    private PushersRestClient getPushersRestClient(MXSession session) {
+        PushersRestClient pushersRestClient = mPushersRestClients.get(session.getMyUserId());
+
+        if (null == pushersRestClient) {
+            // pusher uses a custom server
+            if (!TextUtils.isEmpty(mContext.getString(R.string.push_server_url))) {
+                try {
+                    HomeServerConnectionConfig hsConfig = new HomeServerConnectionConfig(Uri.parse(mContext.getString(R.string.push_server_url)));
+                    hsConfig.setCredentials(session.getCredentials());
+                    pushersRestClient = new PushersRestClient(hsConfig);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## getPushersRestClient() failed " + e.getMessage());
+                }
+            }
+
+            if (null == pushersRestClient) {
+                pushersRestClient = session.getPushersRestClient();
+            }
+
+            mPushersRestClients.put(session.getMyUserId(), pushersRestClient);
+        }
+
+        return pushersRestClient;
     }
 
     /**
@@ -560,7 +600,7 @@ public final class GcmRegistrationManager {
 
         boolean eventIdOnlyPushes = isBackgroundSyncAllowed();
 
-        session.getPushersRestClient()
+        getPushersRestClient(session)
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
                         DEFAULT_PUSHER_URL, append, eventIdOnlyPushes, new ApiCallback<Void>() {
@@ -633,7 +673,7 @@ public final class GcmRegistrationManager {
      */
     public void refreshPushersList(List<MXSession> sessions, final ApiCallback<Void> callback) {
         if ((null != sessions) && (sessions.size() > 0)) {
-            sessions.get(0).getPushersRestClient().getPushers(new ApiCallback<PushersResponse>() {
+            getPushersRestClient(sessions.get(0)).getPushers(new ApiCallback<PushersResponse>() {
 
                 @Override
                 public void onSuccess(PushersResponse pushersResponse) {
@@ -880,9 +920,10 @@ public final class GcmRegistrationManager {
      * @param callback the asynchronous callback
      */
     public void unregister(final MXSession session, final Pusher pusher, final ApiCallback<Void> callback) {
-        session.getPushersRestClient().removeHttpPusher(pusher.pushkey, pusher.appId, pusher.profileTag, pusher.lang, pusher.appDisplayName, pusher.deviceDisplayName, pusher.data.get("url"), new ApiCallback<Void>() {
+        getPushersRestClient(session).removeHttpPusher(pusher.pushkey, pusher.appId, pusher.profileTag, pusher.lang, pusher.appDisplayName, pusher.deviceDisplayName, pusher.data.get("url"), new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
+                mPushersRestClients.remove(session.getMyUserId());
                 refreshPushersList(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), callback);
             }
 
@@ -896,6 +937,7 @@ public final class GcmRegistrationManager {
             @Override
             public void onMatrixError(MatrixError e) {
                 if (e.mStatus == 404) {
+                    mPushersRestClients.remove(session.getMyUserId());
                     // httpPusher is not available on server side anymore so assume the removal was successful
                     onSuccess(null);
                     return;
@@ -923,7 +965,7 @@ public final class GcmRegistrationManager {
     public void unregister(final MXSession session, final ThirdPartyRegistrationListener listener) {
         Log.d(LOG_TAG, "unregister " + session.getMyUserId());
 
-        session.getPushersRestClient()
+        getPushersRestClient(session)
                 .removeHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
                         DEFAULT_PUSHER_URL, new ApiCallback<Void>() {
