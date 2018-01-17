@@ -666,6 +666,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         final View inflatedView;
         int viewType = getItemViewType(position);
 
+        // when the user scrolls quickly
+        // it seems that the recycled view does not have the right layout.
+        // check it
+        if (null != convertView) {
+            if (viewType != (int)convertView.getTag()) {
+                Log.e(LOG_TAG, "## getView() : invalid view type : got " + convertView.getTag() + " instead of " + viewType);
+                convertView = null;
+            }
+        }
+
         switch (viewType) {
             case ROW_TYPE_EMOJI:
             case ROW_TYPE_CODE:
@@ -702,6 +712,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         if (null != inflatedView) {
             inflatedView.setBackgroundColor(Color.TRANSPARENT);
+            inflatedView.setTag(viewType);
         }
 
         displayE2eIcon(inflatedView, position);
