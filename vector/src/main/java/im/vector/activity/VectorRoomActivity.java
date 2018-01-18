@@ -34,6 +34,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
@@ -2458,11 +2459,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     public void insertUserDisplayNameInTextEditor(String text) {
         if (null != text) {
+            boolean vibrate = false;
+
             if (TextUtils.equals(mSession.getMyUser().displayname, text)) {
                 // current user
                 if (TextUtils.isEmpty(mEditText.getText())) {
                     mEditText.setText(String.format(VectorApp.getApplicationLocale(), "%s ", SlashComandsParser.CMD_EMOTE));
                     mEditText.setSelection(mEditText.getText().length());
+                    vibrate = true;
                 }
             } else {
                 // another user
@@ -2470,6 +2474,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     mEditText.append(sanitizeDisplayname(text) + ": ");
                 } else {
                     mEditText.getText().insert(mEditText.getSelectionStart(), sanitizeDisplayname(text) + " ");
+                }
+
+                vibrate = true;
+            }
+
+            if (vibrate) {
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                if ((null != v) && v.hasVibrator()) {
+                    v.vibrate(300);
                 }
             }
         }
