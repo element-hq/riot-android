@@ -1898,7 +1898,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         String text = null;
 
         if (null != contentView) {
-            if (ROW_TYPE_CODE == msgType) {
+            if ((ROW_TYPE_CODE == msgType) || (ROW_TYPE_TEXT == msgType)) {
                 final Message message = JsonUtils.toMessage(event.getContent());
                 text = message.body;
             } else {
