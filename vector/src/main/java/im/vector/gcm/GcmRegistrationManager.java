@@ -1170,7 +1170,7 @@ public final class GcmRegistrationManager {
      * @return the sync timeout in ms.
      */
     public int getBackgroundSyncTimeOut() {
-        return getGcmSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, 30000);
+        return getGcmSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, 6000);
     }
 
     /**
@@ -1188,10 +1188,10 @@ public final class GcmRegistrationManager {
      * @return the delay between two syncs in ms.
      */
     public int getBackgroundSyncDelay() {
-        // on fdroid version, the default sync delay is about 10 minutes
+        // on fdroid version, the default sync delay is about 1 minutes
         // set a large value because many users don't know it can be defined from the settings page
         if ((null == mRegistrationToken) && (null == getStoredRegistrationToken()) && !getGcmSharedPreferences().contains(PREFS_SYNC_DELAY)) {
-            return 10 * 60 * 1000;
+            return 60 * 1000;
         } else {
             int currentValue = 0;
             MXSession session = Matrix.getInstance(mContext).getDefaultSession();
