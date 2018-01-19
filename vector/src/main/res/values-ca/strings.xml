@@ -377,14 +377,14 @@
     <string name="room_participants_ban_prompt_msg">Esteu segur que voleu vetar aquest usuari en aquesta conversa?</string>
 
     <!-- invitation -->
-    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
+    <string name="people_search_invite_by_id"><u>Convida per ID</u></string>
     <string name="people_search_local_contacts">CONTACTES LOCALS (%d)</string>
-    <string name="people_search_user_directory">USER DIRECTORY (%s)</string>
+    <string name="people_search_user_directory">DIRECTORI D'USUARI (%s)</string>
     <string name="people_search_filter_text">Només usuaris de Matrix</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Convida un usuari per ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Entreu un o més correus electrònics o IDs de Matrix</string>
+    <string name="people_search_invite_by_id_dialog_hint">Correu electrònic o ID de Matrix</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Cerca</string>
