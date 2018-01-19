@@ -86,11 +86,11 @@
     <string name="bottom_action_rooms">Sales</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Search for rooms</string>
-    <string name="home_filter_placeholder_favorites">Search for favourites</string>
-    <string name="home_filter_placeholder_people">Search for people</string>
-    <string name="home_filter_placeholder_rooms">Search for rooms</string>
-    <string name="home_filter_placeholder_groups">Search for communities</string>
+    <string name="home_filter_placeholder_home">Cerca sales</string>
+    <string name="home_filter_placeholder_favorites">Cerca preferits</string>
+    <string name="home_filter_placeholder_people">Cerca persones</string>
+    <string name="home_filter_placeholder_rooms">Cerca sales</string>
+    <string name="home_filter_placeholder_groups">Cerca grups</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
