@@ -66,9 +66,9 @@
     <string name="action_sign_out_confirmation">Per motius de seguretat, en sortir s'eliminaran totes les claus d'encriptació d'extrem a extrem, amb això l'històric del xat encriptat quedarà il·legible si es torna a entrar. Seleccioneu l'acció d'exportar abans de sortir per tal de fer una còpia de seguretat.</string>
     <string name="action_voice_call">Trucada de veu</string>
     <string name="action_video_call">Vídeotrucada</string>
-    <string name="action_global_search">Global search</string>
+    <string name="action_global_search">Cerca global</string>
     <string name="action_mark_all_as_read">Marca-ho tot com a llegit</string>
-    <string name="action_historical">Historical</string>
+    <string name="action_historical">Històric</string>
     <string name="action_quick_reply">Resposta ràpida</string>
     <string name="action_open">Obre</string>
     <string name="action_close">Tanca</string>
