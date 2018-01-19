@@ -80,10 +80,10 @@
     <string name="dialog_title_warning">Avís</string>
 
     <!-- Bottom navigation buttons -->
-    <string name="bottom_action_home">Home</string>
-    <string name="bottom_action_favourites">Favourites</string>
-    <string name="bottom_action_people">People</string>
-    <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_home">Inici</string>
+    <string name="bottom_action_favourites">Preferits</string>
+    <string name="bottom_action_people">Persones</string>
+    <string name="bottom_action_rooms">Sales</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Search for rooms</string>
