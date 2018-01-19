@@ -22,9 +22,9 @@
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configuració</string>
     <string name="title_activity_member_details">Detalls dels participants</string>
-    <string name="title_activity_historical">Historical</string>
-    <string name="title_activity_bug_report">Bug report</string>
-    <string name="title_activity_group_details">Community details</string>
+    <string name="title_activity_historical">Històric</string>
+    <string name="title_activity_bug_report">Informe d'errors</string>
+    <string name="title_activity_group_details">Detalls del grup</string>
 
     <!-- button names -->
     <string name="ok">D\'acord</string>
