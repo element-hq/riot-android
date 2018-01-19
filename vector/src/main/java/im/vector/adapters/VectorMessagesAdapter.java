@@ -293,7 +293,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         // helpers
         mMediasHelper = new VectorMessagesAdapterMediasHelper(context, mSession, mMaxImageWidth, mMaxImageHeight, mNotSentMessageTextColor, mDefaultMessageTextColor);
-        mHelper = new VectorMessagesAdapterHelper(context, mSession);
+        mHelper = new VectorMessagesAdapterHelper(context, mSession, this);
 
         mLocale = VectorApp.getApplicationLocale();
 
