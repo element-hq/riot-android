@@ -478,7 +478,7 @@
     <string name="room_settings_de_prioritize">Treu prioritat</string>
     <string name="room_settings_direct_chat">Xat directe</string>
     <string name="room_settings_leave_conversation">Deixa la conversa</string>
-    <string name="room_settings_forget">Forget</string>
+    <string name="room_settings_forget">Oblida</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Missatges</string>
