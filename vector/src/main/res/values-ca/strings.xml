@@ -460,9 +460,9 @@
     <string name="room_recents_invites">CONVIDA</string>
     <string name="room_recents_start_chat">Inicia un xat</string>
     <string name="room_recents_create_room">Crea una sala</string>
-    <string name="room_recents_join_room">Join room</string>
-    <string name="room_recents_join_room_title">Join a room</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
+    <string name="room_recents_join_room">Uneix-te a la sala</string>
+    <string name="room_recents_join_room_title">Uneix-te a una sala</string>
+    <string name="room_recents_join_room_prompt">Escriviu un id de sala o un àlies de sala</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Navega pel directpri</string>
