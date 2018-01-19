@@ -360,8 +360,8 @@
     <string name="room_participants_action_invite">Convida</string>
     <string name="room_participants_action_leave">Deixa aquesta sala</string>
     <string name="room_participants_action_remove">Elimina d'aquesta sala</string>
-    <string name="room_participants_action_ban">Expulsa</string>
-    <string name="room_participants_action_unban">Reincorpora</string>
+    <string name="room_participants_action_ban">Veta</string>
+    <string name="room_participants_action_unban">Treu el vet</string>
     <string name="room_participants_action_set_default_power_level">Fes-lo usuari normal</string>
     <string name="room_participants_action_set_moderator">Fes-lo moderador</string>
     <string name="room_participants_action_set_admin">Fes-lo administrador</string>
@@ -661,7 +661,7 @@
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualsevol que conegui l\'enllaç de la sala, excepte els convidats, inclosos els convidats</string>
 
     <!-- Room settings: banned users -->
-    <string name="room_settings_banned_users_title">Usuaris expulsats</string>
+    <string name="room_settings_banned_users_title">Usuaris vetats</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Avançat</string>
