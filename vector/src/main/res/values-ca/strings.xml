@@ -290,7 +290,7 @@
     <string name="media_picker_cannot_record_video">No es poden gravar vídeos"</string>
 
     <!-- permissions Android M -->
-    <string name="permissions_rationale_popup_title">Información</string>
+    <string name="permissions_rationale_popup_title">Informació</string>
     <string name="permissions_rationale_msg_storage">Per poder enviar i desar adjunts, el Riot necessita permís d'accés a la galeria de fotos i vídeos.\n\nA la següent finestra emergent, doneu-li el permís d'accés i així podreu enviar fitxers des del telefon.</string>
     <string name="permissions_rationale_msg_camera">Per poder fer fotos i vídeotrucades, el Riot necessita permís d'accés a la càmera.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nA la següent finestra emergent, doneu permís d'accés per tal de poder fer la trucada.</string>
@@ -300,7 +300,7 @@
     <string name="permissions_rationale_msg_contacts">Per tal de trobar altres usuaris de Matrix a partir dels seus correus electrònics o dels seus números de telefon, el Riot necessita permís d'accés a l'agenda de contactes.\n\nA la següent finestra emergent, doneu permís d'accés per trobar amb quins contactes de la teva agenda pots contactar a partir de Riot.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Per tal de trobar altres usuaris de Matrix a partir dels seus correus electrònics o dels seus números de telefon, el Riot necessita permís d'accés a l'agenda de contactes.\n\nPermeteu que Riot accedeixi als vostres contactes?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">No s'ha relaitzat l'acció per falta de permisos</string>
+    <string name="permissions_action_not_performed_missing_permissions">No s'ha realitzat l'acció per falta de permisos</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Desat</string>
