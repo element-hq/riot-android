@@ -373,8 +373,8 @@
     <string name="room_participants_power_level_prompt">No podreu desfer aquest canvi ja que esteu donant a aquest usuari els mateixos permisos que teniu.\nN'esteu segur?</string>
 
     <string name="room_participants_invite_prompt_msg">"Esteu segur que voleu convidar a %s a aquest xat?"</string>
-    <string name="room_participants_kick_prompt_msg">Are you sure that you want to kick this user from this chat?</string>
-    <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
+    <string name="room_participants_kick_prompt_msg">Esteu segur que voleu fer fora aquest usuari de la conversa?</string>
+    <string name="room_participants_ban_prompt_msg">Esteu segur que voleu vetar aquest usuari en aquesta conversa?</string>
 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
