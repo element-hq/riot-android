@@ -41,7 +41,7 @@
     <string name="forward">Reenvia</string>
     <string name="permalink">Enllaç permanent</string>
     <string name="view_source">Mostra el codi</string>
-    <string name="view_decrypted_source">View Decrypted Source</string>
+    <string name="view_decrypted_source">Visualitza el codi font desencriptat</string>
     <string name="delete">Elimina</string>
     <string name="rename">Reanomena</string>
     <string name="report_content">Llista el contingut</string>
@@ -57,9 +57,9 @@
     <string name="room_no_conference_call_in_encrypted_rooms">No es poden fer conferències en sales encriptades</string>
     <string name="send_anyway">Envia igualment</string>
     <string name="or">o</string>
-    <string name="and">and</string>
-    <string name="invite">Invite</string>
-    <string name="offline">Offline</string>
+    <string name="and">i</string>
+    <string name="invite">Convida</string>
+    <string name="offline">Fora de línia</string>
 
     <!-- actions -->
     <string name="action_sign_out">Surt</string>
