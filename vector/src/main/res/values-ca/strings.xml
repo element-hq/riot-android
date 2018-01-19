@@ -218,11 +218,11 @@
     <string name="login_error_unable_register">No s'ha pogut fer el registre</string>
     <string name="login_error_unable_register_mail_ownership">No s'ha pogut fer el registre: s'ha produït una errada en la propietat del correu electrònic</string>
     <string name="login_error_invalid_home_server">Introduïu una URL vàlida</string>
-    <string name="login_mobile_device">Mobile</string>
+    <string name="login_mobile_device">Mòbil</string>
 
     <string name="login_error_forbidden">El nom d'usuari/contrasenya és invàlid</string>
     <string name="login_error_unknown_token">No s'ha reconegut el testimoni d'accés</string>
-    <string name="login_error_bad_json">JSON malformat</string>
+    <string name="login_error_bad_json">JSON mal format</string>
     <string name="login_error_not_json">No contenia un JSON vàlid</string>
     <string name="login_error_limit_exceeded">S'han enviat massa peticions</string>
     <string name="login_error_user_in_use">Aquest nom d'usuari ja està en ús</string>
