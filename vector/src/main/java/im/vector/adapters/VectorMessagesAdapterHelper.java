@@ -97,15 +97,18 @@ class VectorMessagesAdapterHelper {
 
     private final Context mContext;
     private final MXSession mSession;
+    private final VectorMessagesAdapter mAdapter;
     private Room mRoom = null;
 
     private MatrixLinkMovementMethod mLinkMovementMethod;
 
     private VectorImageGetter mImageGetter;
 
-    VectorMessagesAdapterHelper(Context context, MXSession session) {
+
+    VectorMessagesAdapterHelper(Context context, MXSession session, VectorMessagesAdapter adapter) {
         mContext = context;
         mSession = session;
+        mAdapter = adapter;
     }
 
     /**
@@ -695,7 +698,7 @@ class VectorMessagesAdapterHelper {
     }
 
     // cache the pills to avoid compute them again
-    Map<String, Drawable> mPillsCache = new HashMap<>();
+    private Map<String, Drawable> mPillsDrawableCache = new HashMap<>();
 
     /**
      * Trap the clicked URL.
@@ -712,17 +715,32 @@ class VectorMessagesAdapterHelper {
             int flags = strBuilder.getSpanFlags(span);
 
             if (PillView.isPillable(span.getURL())) {
-                String key = span.getURL() + " " + isHighlighted;
-                Drawable drawable = mPillsCache.get(key);
+                final String key = span.getURL() + " " + isHighlighted;
+                Drawable drawable = mPillsDrawableCache.get(key);
 
                 if (null == drawable) {
-                    PillView aView = new PillView(mContext);
-                    aView.setText(strBuilder.subSequence(start, end), span.getURL());
+                    final PillView aView = new PillView(mContext);
+                    aView.initData(strBuilder.subSequence(start, end), span.getURL(), mSession, new PillView.OnUpdateListener() {
+                        @Override
+                        public void onAvatarUpdate() {
+                            // force to compose
+                            aView.setBackgroundResource(android.R.color.transparent);
+
+                            // get a drawable from the view
+                            Drawable updatedDrawable = aView.getDrawable();
+                            mPillsDrawableCache.put(key, updatedDrawable);
+                            // should update only the current cell
+                            // but it might have been recycled
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
                     aView.setHighlighted(isHighlighted);
+                    mPillViews.add(aView);
                     drawable = aView.getDrawable();
                 }
+
                 if (null != drawable) {
-                    mPillsCache.put(key, drawable);
+                    mPillsDrawableCache.put(key, drawable);
                     ImageSpan imageSpan = new ImageSpan(drawable);
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
                     strBuilder.setSpan(imageSpan, start, end, flags);
