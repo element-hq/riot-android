@@ -116,19 +116,19 @@
     </plurals>
 
     <!-- Groups fragment -->
-    <string name="groups_invite_header">Invite</string>
-    <string name="groups_header">Communities</string>
-    <string name="no_group_placeholder">No groups</string>
+    <string name="groups_invite_header">Convida</string>
+    <string name="groups_header">Grups</string>
+    <string name="no_group_placeholder">Cap grup</string>
 
     <string name="send_bug_report_include_logs">Envia registres</string>
     <string name="send_bug_report_include_crash_logs">Envia registres de fallada</string>
-    <string name="send_bug_report_include_screenshot">Send screenshot</string>
+    <string name="send_bug_report_include_screenshot">Envia una captura de pantalla</string>
     <string name="send_bug_report">Informa d'un error</string>
     <string name="send_bug_report_description">Descriviu l'error. Què heu fet? Què esperàveu que passés? Què ha passat realment?</string>
     <string name="send_bug_report_placeholder">Descriviu el problema aquí</string>
     <string name="send_bug_report_logs_description">Els registres d'aquest client s'enviaran amb aquest informe d'error per tal de diagnosticar problemes. Desmarqueu si preferiu enviar només el text:</string>
     <string name="send_bug_report_alert_message">Sembla que esteu prou frustrat com per estar sacsejant el telèfon. Voleu enviar un informe d'error?</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_app_crashed">En l'última execució l'aplicació va fallar. Voleu enviar un informe d'error?</string>
 
     <string name="send_bug_report_sent">L'informe d'error s'ha enviat correctament</string>
     <string name="send_bug_report_failed">No s'ha pogut enviar l'informe d'error (%s)</string>
@@ -152,14 +152,14 @@
     <string name="start_voice_call">Inicia una trucada de veu</string>
     <string name="start_video_call">Inicia una vídeotrucada</string>
 
-    <string name="start_new_chat_prompt_msg">Are you sure that you want to start a new chat with %s?</string>
-    <string name="start_voice_call_prompt_msg">Are you sure that you want to start a voice call?</string>
-    <string name="start_video_call_prompt_msg">Are you sure that you want to start a video call?</string>
+    <string name="start_new_chat_prompt_msg">Esteu segur que voleu començar una conversa amb %s?</string>
+    <string name="start_voice_call_prompt_msg">Esteu segur que voleu començar una trucada de veu?</string>
+    <string name="start_video_call_prompt_msg">Esteu segur que voleu començar una trucada de vídeo?</string>
 
     <string name="option_send_files">Envia fitxers</string>
     <string name="option_take_photo_video">Fes una foto o un vídeo</string>
-    <string name="option_take_photo">Take photo</string>
-    <string name="option_take_video">Take video</string>
+    <string name="option_take_photo">Fes una foto</string>
+    <string name="option_take_video">Fes un vídeo</string>
 
     <!-- Authentication -->
     <string name="auth_login">Entra</string>
