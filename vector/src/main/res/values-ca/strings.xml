@@ -106,13 +106,13 @@
     <string name="no_result_placeholder">Cap resultat</string>
 
     <!-- Rooms fragment -->
-    <string name="rooms_header">Rooms</string>
-    <string name="rooms_directory_header">Room directory</string>
-    <string name="no_room_placeholder">No rooms</string>
-    <string name="no_public_room_placeholder">No public rooms available</string>
+    <string name="rooms_header">Sales</string>
+    <string name="rooms_directory_header">Directori de sales</string>
+    <string name="no_room_placeholder">Cap sala</string>
+    <string name="no_public_room_placeholder">Cap sala pública disponible</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 user</item>
-        <item quantity="other">%d users</item>
+        <item quantity="one">1 usuari</item>
+        <item quantity="other">%d usuaris</item>
     </plurals>
 
     <!-- Groups fragment -->
