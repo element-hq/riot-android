@@ -735,7 +735,6 @@ class VectorMessagesAdapterHelper {
                         }
                     });
                     aView.setHighlighted(isHighlighted);
-                    mPillViews.add(aView);
                     drawable = aView.getDrawable();
                 }
 
