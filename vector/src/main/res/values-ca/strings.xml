@@ -93,8 +93,8 @@
     <string name="home_filter_placeholder_groups">Cerca grups</string>
 
     <!-- Home fragment -->
-    <string name="invitations_header">Invites</string>
-    <string name="low_priority_header">Low priority</string>
+    <string name="invitations_header">Convida</string>
+    <string name="low_priority_header">Prioritat baixa</string>
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
