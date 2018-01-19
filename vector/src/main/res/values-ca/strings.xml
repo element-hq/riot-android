@@ -97,13 +97,13 @@
     <string name="low_priority_header">Prioritat baixa</string>
 
     <!-- People fragment -->
-    <string name="direct_chats_header">Conversations</string>
-    <string name="local_address_book_header">Local address book</string>
-    <string name="user_directory_header">User directory</string>
-    <string name="matrix_only_filter">Matrix contacts only</string>
-    <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
-    <string name="no_result_placeholder">No results</string>
+    <string name="direct_chats_header">Converses</string>
+    <string name="local_address_book_header">Llibreta d'adreces local</string>
+    <string name="user_directory_header">Directori de l'usuari</string>
+    <string name="matrix_only_filter">Només contactes de Matrix</string>
+    <string name="no_conversation_placeholder">Cap conversa</string>
+    <string name="no_contact_access_placeholder">No es va donar permís a Riot per accedir als contactes locals</string>
+    <string name="no_result_placeholder">Cap resultat</string>
 
     <!-- Rooms fragment -->
     <string name="rooms_header">Rooms</string>
