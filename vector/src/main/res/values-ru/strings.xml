@@ -807,7 +807,7 @@ Email также позволит вам при необходимости во�
     <string name="widget_integration_no_permission_in_room">У вас нет разрешений делать это в данной комнате.</string>
     <string name="widget_integration_missing_room_id">В запросе отсутствует room_id.</string>
     <string name="widget_integration_missing_user_id">В запросе отсутствует user_id.</string>
-    <string name="widget_integration_room_not_visible">Комната %s не отображается.</string>
+    <string name="widget_integration_room_not_visible">Комната %s невидима.</string>
     <string name="settings_labs_matrix_apps">Приложения Matrix</string>
     <string name="room_add_matrix_apps">Добавить приложения Matrix</string>
     <string name="login_mobile_device">Мобильный</string>
@@ -850,7 +850,7 @@ Email также позволит вам при необходимости во�
     // notification statuses
     <string name="notification_off">Выкл</string>
     <string name="notification_on">Вкл</string>
-    <string name="notification_noisy">Шумно</string>
+    <string name="notification_noisy">Громко</string>
 
     <string name="encrypted_message">Зашифрованное сообщение</string>
 
