@@ -34,7 +34,6 @@
             android:layout_toRightOf="@+id/url_preview_image_view"
             android:maxLines="2"
             android:text="a title"
-            android:autoLink="web"
             android:linksClickable="true"
             android:textSize="14sp" />
 
