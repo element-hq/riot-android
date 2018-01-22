@@ -2493,10 +2493,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 vibrate = true;
             }
 
-            if (vibrate) {
+            if (vibrate && PreferencesManager.vibrateWhenMentioning(this)) {
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 if ((null != v) && v.hasVibrator()) {
-                    v.vibrate(300);
+                    v.vibrate(100);
                 }
             }
         }

@@ -552,14 +552,14 @@
     <string name="settings_12_24_timestamps">Show timestamps in 12 hour format (e.g. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Hide join/leave messages (invites/kicks/bans unaffected)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
+    <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
+    <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
     <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
 
-
-    <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
     <string name="settings_data_save_mode">Data save mode</string>
 
     <string name="devices_details_dialog_title">Device details</string>
