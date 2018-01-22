@@ -1062,7 +1062,11 @@ class VectorMessagesAdapterHelper {
             Matcher matcher = android.util.Patterns.WEB_URL.matcher(text);
             while (matcher.find()) {
                 try {
-                    list.add(text.substring(matcher.start(0), matcher.end(0)));
+                    String value = text.substring(matcher.start(0), matcher.end(0));
+
+                    if (!list.contains(value)) {
+                        list.add(value);
+                    }
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## extractWebUrl() " + e.getMessage());
                 }
@@ -1074,17 +1078,12 @@ class VectorMessagesAdapterHelper {
         return list;
     }
 
-    void manageURLPreviews(final Message message, final View convertView) {
+    void manageURLPreviews(final Message message, final View convertView, final String id) {
         LinearLayout urlsPreviewLayout = convertView.findViewById(R.id.messagesAdapter_urls_preview_list);
 
         // sanity checks
         if (null == urlsPreviewLayout) {
             return;
-        }
-
-        // remove url previews
-        while (urlsPreviewLayout.getChildCount() > 0) {
-            urlsPreviewLayout.removeViewAt(0);
         }
 
         //
@@ -1099,6 +1098,23 @@ class VectorMessagesAdapterHelper {
             urlsPreviewLayout.setVisibility(View.GONE);
             return;
         }
+
+        // avoid removing items if they are displayed
+        if (TextUtils.equals((String)urlsPreviewLayout.getTag(), id)) {
+            // all the urls have been displayed
+            if (urlsPreviewLayout.getChildCount() == urls.size()) {
+                return;
+            }
+        }
+
+        urlsPreviewLayout.setTag(id);
+
+        // remove url previews
+        while (urlsPreviewLayout.getChildCount() > 0) {
+            urlsPreviewLayout.removeViewAt(0);
+        }
+        
+        urlsPreviewLayout.setVisibility(View.VISIBLE);
 
         for (final String url : urls) {
             final String key = url.hashCode() + "---";

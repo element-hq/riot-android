@@ -1187,7 +1187,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 addContentViewListeners(convertView, tv, position, viewType);
             }
 
-            mHelper.manageURLPreviews(message, convertView);
+            mHelper.manageURLPreviews(message, convertView, event.eventId);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage());
         }
@@ -1437,7 +1437,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             addContentViewListeners(convertView, emoteTextView, position, ROW_TYPE_EMOTE);
 
-            mHelper.manageURLPreviews(message, convertView);
+            mHelper.manageURLPreviews(message, convertView, event.eventId);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage());
         }

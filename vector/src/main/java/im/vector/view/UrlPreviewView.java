@@ -17,6 +17,7 @@ package im.vector.view;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.model.URLPreview;
 
 import im.vector.R;
+import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.PreferencesManager;
 
 /**
@@ -102,6 +104,8 @@ public class UrlPreviewView extends LinearLayout {
             } else {
                 mTitleTextView.setText(preview.getRequestedURL());
             }
+            mTitleTextView.setMovementMethod(LinkMovementMethod.getInstance());
+
             mDescriptionTextView.setText(preview.getDescription());
         }
     }
