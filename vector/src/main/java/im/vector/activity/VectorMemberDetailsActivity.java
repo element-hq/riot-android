@@ -377,7 +377,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         final ArrayList<String> idsList = new ArrayList<>();
 
-        String displayName = TextUtils.isEmpty(mRoomMember.displayname) ? mRoomMember.getUserId() : mRoomMember.displayname;
+        String displayName = (null == mRoomMember) ? mMemberId : (TextUtils.isEmpty(mRoomMember.displayname) ? mRoomMember.getUserId() : mRoomMember.displayname);
 
         switch (aActionType) {
             case ITEM_ACTION_DEVICES:
