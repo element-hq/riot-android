@@ -231,13 +231,13 @@
     <string name="people_search_local_contacts">المتراسلون المحليون (%d)</string>
     <string name="people_search_filter_text">مستخدمو «ماترِكس» فقط</string>
 
-    <string name="room_one_user_is_typing">‏⁨%1$s⁩ يكتب...</string>
-    <string name="room_message_placeholder_encrypted">أرسِل رسالة معمّاة...</string>
-    <string name="room_message_placeholder_not_encrypted">أرسِل رسالة (غير معمّاة)...</string>
+    <string name="room_one_user_is_typing">‏⁨%1$s⁩ يكتب…</string>
+    <string name="room_message_placeholder_encrypted">أرسِل رسالة معمّاة…</string>
+    <string name="room_message_placeholder_not_encrypted">أرسِل رسالة (غير معمّاة)…</string>
     <string name="room_offline_notification">فُقد التواصل مع الخادوم.</string>
-    <string name="room_unsent_messages_notification">"لم تُرسل الرسائل. "</string>
-    <string name="room_prompt_resend">أعِد إرسالها كلها</string>
-    <string name="room_prompt_cancel">ألغِها كلها</string>
+    <string name="room_unsent_messages_notification">لم تُرسل الرسائل. أ%1$s أم %2$s الآن؟</string>
+    <string name="room_prompt_resend">أُعيد إرسالها كلها</string>
+    <string name="room_prompt_cancel">أُلغيها كلها</string>
     <string name="room_resend_unsent_messages">أعِد إرسال الرسائل غير المرسلة</string>
     <string name="room_delete_unsent_messages">احذف الرسائل غير المرسلة</string>
     <string name="room_message_file_not_found">لم يُعثر على الملف</string>
@@ -388,4 +388,93 @@
 
     // share keys
     <string name="conference_call_warning_title">تحذير!</string>
+    <string name="resouces_country">العربية</string>
+
+    <string name="room_unknown_devices_messages_notification">لم تُرسل الرسائل بسبب وجود أجهزة مجهولة. أ%1$s أم %2$s الآن؟</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">ليس ’⁨%s⁩‘ تنسيقا صالحا لاختصار</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">لن يُحدّد عنوان رئيسي. سيُنتقى العنوان الرئيسي المبدئي لهذه الغرفة عشوائيا</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">تحذيرات بشأن العنوان الرئيسي</string>
+
+    <string name="room_settings_set_main_address">اضبطه كعنوان رئيسي</string>
+    <string name="room_settings_unset_main_address">ألغِ ضبطه كعنوان رئيسي</string>
+    <string name="room_settings_copy_room_id">انسخ معرّف الغرفة</string>
+    <string name="room_settings_copy_room_address">انسخ عنوان الغرفة</string>
+
+    <string name="room_settings_addresses_e2e_enabled">التعمية مفعّلة في هذه الغرفة.</string>
+    <string name="room_settings_addresses_e2e_disabled">التعمية معطّلة في هذه الغرفة.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">فعّل التعمية
+(احترس: لا يمكنك تعطيلها ثانيةً!)</string>
+    <string name="room_settings_addresses_e2e_prompt_title">تحذير!</string>
+    <string name="directory_title">الدليل</string>
+    <string name="settings_theme">السمة</string>
+
+    <string name="encryption_information_title">معلومات تعمية الطرفين</string>
+
+    <string name="encryption_information_device_info">معلومات الحدث</string>
+    <string name="encryption_information_user_id">معرّف المستخدم</string>
+    <string name="encryption_information_algorithm">الخوارزميّة</string>
+    <string name="encryption_information_session_id">معرّف الجلسة</string>
+    <string name="encryption_information_decryption_error">خطأ في فكّ التعمية</string>
+
+    <string name="encryption_information_sender_device_information">معلومات الجهاز المرسل</string>
+    <string name="encryption_information_device_name">اسم الجهاز</string>
+    <string name="encryption_information_name">الاسم</string>
+    <string name="encryption_information_device_id">معرّف الجهاز</string>
+    <string name="encryption_information_device_key">مفتاح الجهاز</string>
+    <string name="encryption_export_room_keys">صدّر مفاتيح الغرفة</string>
+    <string name="encryption_export_room_keys_summary">صدّر المفاتيح إلى ملف محلي</string>
+    <string name="encryption_export_enter_passphrase">أدخِل عبارة المرور</string>
+    <string name="encryption_export_confirm_passphrase">أكّد عبارة المرور</string>
+    <string name="encryption_export_saved_as">حُفظت مفاتيح الطرفين للغرفة في ’⁨%s⁩‘</string>
+
+    <string name="encryption_import_e2e_room_keys">استورد مفاتيح الطرفين لغرفة</string>
+    <string name="encryption_import_room_keys">استورد مفاتيح الغرفة</string>
+    <string name="encryption_import_room_keys_summary">استورد المفاتيح من ملف محلي</string>
+    <string name="encryption_information_unknown_device">جهاز مجهول</string>
+    <string name="encryption_information_block">امنع</string>
+    <string name="encryption_information_unblock">أزِل المنع</string>
+
+    <string name="encryption_information_verify_device">أكّد الجهاز</string>
+    <string name="directory_server_fail_to_retrieve_server">قد لا يكون الخادوم متوفّرا أو أنه مشغول</string>
+    <string name="directory_server_type_homeserver">اكتب خادوم منزل لسرد الغرف العمومية فيه</string>
+    <string name="directory_server_placeholder">مسار خادوم المنزل</string>
+    <string name="directory_server_all_rooms_on_server">كل الغرف في خادوم ⁨%s⁩</string>
+    <string name="directory_server_native_rooms">كل غرف ⁨%s⁩ الأصيلة</string>
+
+    <string name="font_size">حجم الخط</string>
+    <string name="tiny">ضئيل</string>
+    <string name="small">صغير</string>
+    <string name="normal">متوسط</string>
+    <string name="large">كبير</string>
+    <string name="larger">كبير جدا</string>
+    <string name="largest">ضخم</string>
+    <string name="huge">ضخم جدا</string>
+
+    <string name="widget_no_power_to_manage">تحتاج تصريحا لإدارة الودجات في هذه الغرفة</string>
+    <string name="widget_integration_missing_room_id">المعرّف room_id ناقص في الطلب.</string>
+    <string name="widget_integration_missing_user_id">المعرّف user_id ناقص في الطلب.</string>
+    <string name="widget_integration_room_not_visible">الغرفة ⁨%s⁩ غير ظاهرة.</string>
+    <string name="you_added_a_new_device">لقد أضفت جهازا جديدا ’⁨%s⁩‘ يطلب مفاتيح التعمية.</string>
+    <string name="ignore_request">تجاهل الطلب</string>
+
+    // conference call
+    <string name="command_error">خطأ في الأمر</string>
+    <string name="unrecognized_command">لم يُفهم الأمر: ⁨%s⁩</string>
+
+    // notification statuses
+    <string name="redact">هذّب</string>
+    <string name="missing_permissions_to_start_conf_call">تحتاج تصريح الدعوة لبدء اجتماع في هذه الغرفة</string>
+    <string name="or">أو</string>
+    <string name="action_quick_reply">ردّ سريع</string>
+    <string name="bottom_action_people">الأشخاص</string>
+    <string name="home_filter_placeholder_home">ابحث في الغرف</string>
+    <string name="home_filter_placeholder_favorites">ابحث في المفضّلة</string>
+    <string name="home_filter_placeholder_people">ابحث في الأشخاص</string>
+    <string name="home_filter_placeholder_rooms">ابحث في الغرف</string>
+
+    <string name="user_directory_header">دليل المستخدمين</string>
+    <string name="send_bug_report">بلاغ علة</string>
+    <string name="send_bug_report_alert_message">يبدو أنك تهزّ الهاتف وأنت مُحبط. أتريد إرسال بلاغ علة؟</string>
+    <string name="send_bug_report_progress">التقدم (%s٪)</string>
+
     </resources>
