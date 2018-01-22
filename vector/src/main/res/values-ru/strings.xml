@@ -810,7 +810,7 @@ Email также позволит вам при необходимости во�
     <string name="widget_integration_room_not_visible">Комната %s не отображается.</string>
     <string name="settings_labs_matrix_apps">Приложения Matrix</string>
     <string name="room_add_matrix_apps">Добавить приложения Matrix</string>
-    <string name="login_mobile_device">Mobile</string>
+    <string name="login_mobile_device">Мобильный</string>
 
     <string name="notification_sync_in_progress">Синхронизация</string>
     <string name="notification_listen_for_events">Мониторинг событий</string>
