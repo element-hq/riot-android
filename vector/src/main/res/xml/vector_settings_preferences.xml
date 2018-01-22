@@ -61,6 +61,11 @@
             android:dialogTitle="@string/font_size"/>
 
         <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_inline_url_preview"
+            android:defaultValue="true"
+            android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"/>
+
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_hide_read_receipts"
             android:key="SETTINGS_HIDE_READ_RECEIPTS_KEY"/>
 
