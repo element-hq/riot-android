@@ -55,6 +55,7 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.model.URLPreview;
 import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
@@ -79,6 +80,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1184,17 +1186,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             for (final TextView tv : textViews) {
                 addContentViewListeners(convertView, tv, position, viewType);
             }
+
+            mHelper.manageURLPreviews(message, convertView);
         } catch (Exception e) {
-            StackTraceElement[] callstacks = e.getStackTrace();
-
-            StringBuilder sb = new StringBuilder();
-            for (StackTraceElement element : callstacks) {
-                sb.append(element.toString());
-                sb.append("\n");
-            }
-
             Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage());
-            Log.e(LOG_TAG, "## getTextView() callstack \n" + sb.toString());
         }
 
         return convertView;
@@ -1441,6 +1436,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             this.manageSubView(position, convertView, textLayout, ROW_TYPE_EMOTE);
 
             addContentViewListeners(convertView, emoteTextView, position, ROW_TYPE_EMOTE);
+
+            mHelper.manageURLPreviews(message, convertView);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage());
         }

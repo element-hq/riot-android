@@ -124,6 +124,8 @@ public class PreferencesManager {
 
     private static final String SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY = "SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY";
 
+    private static final String SETTINGS_SHOW_URL_PREVIEW_KEY = "SETTINGS_SHOW_URL_PREVIEW_KEY";
+
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;
@@ -606,9 +608,19 @@ public class PreferencesManager {
      * Tells if Piwik can be used
      *
      * @param context the context
-     * @return null if not defined, true / false when defined
+     * @return true to use it
      */
-    public static Boolean trackWithPiwik(Context context) {
+    public static boolean trackWithPiwik(Context context) {
         return !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY, false);
+    }
+
+    /**
+     * Tells if the URLs must be previewed
+     *
+     * @param context the context
+     * @return
+     */
+    public static boolean showUrlPreview(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SHOW_URL_PREVIEW_KEY, true);
     }
 }
