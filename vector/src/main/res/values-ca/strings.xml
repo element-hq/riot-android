@@ -265,7 +265,7 @@
     <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
 
     <!-- call string -->
-    <string name="call">Call</string>
+    <string name="call">Truca</string>
     <string name="call_connected">Trucada establerta</string>
     <string name="call_connecting">Establint la trucada…</string>
     <string name="call_ended">Trucada finalitzada</string>
@@ -501,20 +501,20 @@
     <string name="settings_summary_app_info_link">Pantalla d'informació del sistema de l'aplicació</string>
     <string name="settings_title_app_info_link">Informació de l'aplicació</string>
 
-    <string name="settings_notification_ringtone">Notification sound</string>
+    <string name="settings_notification_ringtone">So de les notificación</string>
     <string name="settings_enable_all_notif">Habilita les notificacions d'aquest compte</string>
     <string name="settings_enable_this_device">Habilita les notificacions d'aquest dispositiu</string>
     <string name="settings_turn_screen_on">Encén la pantalla durant 3 segons</string>
 
     <string name="settings_containing_my_display_name">Missatges que contenen el meu nom</string>
-    <string name="settings_containing_my_user_name">Msgs containing my user name</string>
+    <string name="settings_containing_my_user_name">Missatges que contenen el meu nom d'usuari</string>
     <string name="settings_messages_in_one_to_one">Missatges en xats entre dos</string>
     <string name="settings_messages_in_group_chat">Missatges en xats de grup</string>
     <string name="settings_invited_to_room">Quan em convidin a una sala</string>
     <string name="settings_call_invitations">Invitacions de trucada</string>
     <string name="settings_messages_sent_by_bot">Missatges enviats per un bot</string>
 
-    <string name="settings_start_on_boot">Start on boot</string>
+    <string name="settings_start_on_boot">Inicia en encendre el dispositiu</string>
     <string name="settings_background_sync">Sincronització en segon pla</string>
     <string name="settings_enable_background_sync">Habilita la sincronització en segon pla</string>
     <string name="settings_set_sync_timeout">Temps màxim d'espera de la petició de sincronització</string>
@@ -529,8 +529,8 @@
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Política de privacitat</string>
     <string name="settings_clear_cache">Buida la memòria cau</string>
-    <string name="settings_clear_medias_cache">Clear media cache</string>
-    <string name="settings_keep_media">Keep media</string>
+    <string name="settings_clear_medias_cache">Esborra la memòria cau multimèdia</string>
+    <string name="settings_keep_media">Mante multimèdia</string>
 
     <string name="settings_user_settings">Configuració de l'usuari</string>
     <string name="settings_notifications">Notificacions</string>
@@ -542,26 +542,26 @@
     <string name="settings_contact">Contactes locals</string>
     <string name="settings_contacts_app_permission">Permís dels contactes</string>
     <string name="settings_contacts_phonebook_country">País de l'agenda de telèfons</string>
-    <string name="settings_home_display">Home display</string>
-    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
-    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
+    <string name="settings_home_display">Pantalla d'inici</string>
+    <string name="settings_pin_missed_notifications">Destaca les sales amb notificacions sense llegir</string>
+    <string name="settings_pin_unread_messages">Punxa les sales amb missatges sense llegir</string>
     <string name="settings_devices_list">Dispositius</string>
     <string name="settings_inline_url_preview">Enable inline URL previews by default</string>
-    <string name="settings_hide_read_receipts">Hide read receipts</string>
-    <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
-    <string name="settings_always_show_timestamps">Always show message timestamps</string>
-    <string name="settings_12_24_timestamps">Show timestamps in 12 hour format (e.g. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Hide join/leave messages (invites/kicks/bans unaffected)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
-    <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
+    <string name="settings_hide_read_receipts">Amaga les entrades llegides</string>
+    <string name="settings_dont_send_typings_notifs">No enviïs notificacions d'esciptura</string>
+    <string name="settings_always_show_timestamps">Mostra sempre l'hora dels missatges</string>
+    <string name="settings_12_24_timestamps">Mostra l'hora en el format de 12 hores (per exemple 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Amaga els missatges de entrada i sortida de participants</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Amaga les fotos de perfil i els canvis de nom visible</string>
+    <string name="settings_disable_markdown">Desactivar el Markdown quan s'enviï</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
 
     <!-- analytics -->
-    <string name="settings_analytics">Analytics</string>
+    <string name="settings_analytics">Analítiques</string>
     <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot recull analítiques anònimes per ajudar a millorar l'aplicació.</string>
 
-    <string name="settings_data_save_mode">Data save mode</string>
+    <string name="settings_data_save_mode">Mode de dades segures</string>
 
     <string name="devices_details_dialog_title">Detalls del dispositiu</string>
     <string name="devices_details_id_title">ID</string>
@@ -579,16 +579,16 @@
     <string name="settings_home_server">Servidor</string>
     <string name="settings_identity_server">Identitat del servidor</string>
 
-    <string name="settings_user_interface">User interface</string>
-    <string name="settings_interface_language">Interface Language</string>
-    <string name="settings_select_language">Choose a language</string>
+    <string name="settings_user_interface">Interfície d'usuari</string>
+    <string name="settings_interface_language">Idioma de la interfície</string>
+    <string name="settings_select_language">Tria un idioma</string>
 
     <string name="account_email_validation_title">Verificació pendent</string>
     <string name="account_email_validation_message">Mireu el correu electrònic feu clic en l'enllaç que s'ha enviat. Un cop fet això, feu clic per continuar.</string>
     <string name="account_email_validation_error">No ha estat possible verificar l'adreça de correu electrònic. Mireu el correu electrònic feu clic en l'enllaç que s'ha enviat. Un cop fet això, feu clic per continuar</string>
-    <string name="account_email_already_used_error">This email address is already in use</string>
-    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
-    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+    <string name="account_email_already_used_error">Aquest correu electrònic ja està en us</string>
+    <string name="account_email_not_found_error">No s'ha pogut enviar el missatge: no s'ha trobat el destinatari</string>
+    <string name="account_phone_number_already_used_error">Aquest número de telèfon ja està en us</string>
 
     <string name="settings_change_password">Canvia la contrasenya</string>
     <string name="settings_old_password">contrasenya antiga</string>
@@ -615,13 +615,13 @@
     <string name="settings_phone_number_code">Codi</string>
 
 
-    <string name="settings_flair">Flair</string>
+    <string name="settings_flair">Estil</string>
 
     <!-- medias saving settings -->
-    <string name="media_saving_period_3_days">3 days</string>
-    <string name="media_saving_period_1_week">1 week</string>
-    <string name="media_saving_period_1_month">1 month</string>
-    <string name="media_saving_period_forever">Forever</string>
+    <string name="media_saving_period_3_days">Tres dies</string>
+    <string name="media_saving_period_1_week">Una setmana</string>
+    <string name="media_saving_period_1_month">Un mes</string>
+    <string name="media_saving_period_forever">Per sempre</string>
 
     <!-- Room Settings -->
 
@@ -682,9 +682,9 @@
     <string name="room_settings_addresses_add_new_address">Adreça nova (per exemple #foo:matrix.org")</string>
 
     <string name="room_settings_no_flair"> This room is not showing flair for any communities</string>
-    <string name="room_settings_add_new_group">New community ID (e.g +foo:matrix.org")</string>
-    <string name="room_settings_invalid_group_format_dialog_title">Invalid community ID</string>
-    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' is not a valid community ID</string>
+    <string name="room_settings_add_new_group">Nova ID de comunitat (per exemple +foo:matrix.org")</string>
+    <string name="room_settings_invalid_group_format_dialog_title">l'ID de comunitat és invalid</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' no és una ID de comunitat vàlida</string>
 
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Format d'àlies invàlid</string>
@@ -705,7 +705,7 @@
 
     <!-- Directory -->
     <string name="directory_title">Directori</string>
-    <string name="settings_theme">Theme</string>
+    <string name="settings_theme">Tema</string>
 
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s ha intentat carregar un moment concret de la línia de temps d'aquesta sala però no l'ha trobat.</string>
@@ -768,114 +768,114 @@
     <string name="unknown_devices_alert_message">Aquesta sala conté dispositius desconeguts que no han estat verificats.\nAixò vol dir que no hi ha cap garantia que aquests dispositius siguin dels usuaris corresponents.\nEs recomana que feu el procés de verificació per a cada dispositiu abans de continuar, tot i que, si ho preferiu, podeu reenviar el missatge sense verificar.\n\nDispositius desconeguts:</string>
 
     <!-- directory activity  -->
-    <string name="select_room_directory">Select a room directory</string>
-    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
-    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
-    <string name="directory_server_placeholder">Homeserver URL</string>
-    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
-    <string name="directory_server_native_rooms">All native %s rooms</string>
+    <string name="select_room_directory">Escolliu un directori de sale</string>
+    <string name="directory_server_fail_to_retrieve_server">És possible que el servidor no estigui disponible o que estigui sobrecarregat</string>
+    <string name="directory_server_type_homeserver">Introdueix un servidor per veure les seves sales públiques</string>
+    <string name="directory_server_placeholder">URL del servidor</string>
+    <string name="directory_server_all_rooms_on_server">Totes les sales del servidor %s</string>
+    <string name="directory_server_native_rooms">Totes les sales natives de %s</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d unread notified messages</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
+    <string name="notification_unread_notified_messages">%d notificacions de missatges sense llegir</string>
+    <string name="notification_unread_notified_messages_in_room">%1$d notificacions sense llegir de missatges en %2$d sales"</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Search for historical</string>
+    <string name="historical_placeholder">Busca a l'històric</string>
 
     <!-- text size selection -->
-    <string name="font_size">Font size</string>
-    <string name="tiny">Tiny</string>
-    <string name="small">Small</string>
+    <string name="font_size">Mida de la font</string>
+    <string name="tiny">Molt petita</string>
+    <string name="small">Petita</string>
     <string name="normal">Normal</string>
-    <string name="large">Large</string>
-    <string name="larger">Larger</string>
-    <string name="largest">Largest</string>
-    <string name="huge">Huge</string>
+    <string name="large">Gran</string>
+    <string name="larger">Molt gran</string>
+    <string name="largest">Més gran</string>
+    <string name="huge">Enorme</string>
 
     <!-- Widget-->
-    <string name="widget_no_power_to_manage">You need permission to manage widgets in this room</string>
-    <string name="widget_creation_failure">Widget creation has failed</string>
-    <string name="event_formatter_widget_added">%1$s added by %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s removed by %2$s</string>
-    <string name="settings_labs_create_conference_with_jitsi">Create conference calls with jitsi</string>
-    <string name="widget_delete_message_confirmation">Are you sure you want to delete the widget?</string>
-    <string name="active_widgets">%1$d active widgets</string>
+    <string name="widget_no_power_to_manage">No teniu permisos per a gestionar ginys en aquesta sala</string>
+    <string name="widget_creation_failure">Ha fallat la creació del giny</string>
+    <string name="event_formatter_widget_added">%1$s afegit per %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s retirat per %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Fes conferències amb jitsi</string>
+    <string name="widget_delete_message_confirmation">Confirmeu que voleu esborrar el giny</string>
+    <string name="active_widgets">%1$d ginys actius</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">You need to be able to invite users to do that.</string>
-    <string name="widget_integration_unable_to_create">Unable to create widget.</string>
-    <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
-    <string name="widget_integration_room_not_recognised">This room is not recognised.</string>
-    <string name="widget_integration_positive_power_level">Power level must be positive integer.</string>
-    <string name="widget_integration_must_be_in_room">You are not in this room.</string>
-    <string name="widget_integration_no_permission_in_room">You do not have permission to do that in this room.</string>
-    <string name="widget_integration_missing_room_id">Missing room_id in request.</string>
-    <string name="widget_integration_missing_user_id">Missing user_id in request.</string>
-    <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
-    <string name="settings_labs_matrix_apps">Matrix Apps</string>
-    <string name="room_add_matrix_apps">Add Matrix apps</string>
-    <string name="add_matrix_apps_not_supported">Not supported on this device</string>
-    <string name="settings_labs_native_camera">Use native camera</string>
+    <string name="widget_integration_need_to_be_able_to_invite">Heu de poder convidar a altres usuaris per poder fer això.</string>
+    <string name="widget_integration_unable_to_create">No s'ha pogut crear el giny.</string>
+    <string name="widget_integration_failed_to_send_request">No s'ha pogut enviar la sol·licitud.</string>
+    <string name="widget_integration_room_not_recognised">Aquesta sala no és roconeguda.</string>
+    <string name="widget_integration_positive_power_level">El nivell de potència ha de ser un enter positiu.</string>
+    <string name="widget_integration_must_be_in_room">No us tobeu a aqueta sala.</string>
+    <string name="widget_integration_no_permission_in_room">No teniu el permis per fer això en aquesta sala.</string>
+    <string name="widget_integration_missing_room_id">Falta l'ID de la sala en la sol·licitud.</string>
+    <string name="widget_integration_missing_user_id">Falta l'ID d'usuari en la sol·licitud.</string>
+    <string name="widget_integration_room_not_visible">La sala %s no és visible.</string>
+    <string name="settings_labs_matrix_apps">Aplicacions de Matrix</string>
+    <string name="room_add_matrix_apps">Afegeix aplicacions de Matrix</string>
+    <string name="add_matrix_apps_not_supported">No recolzat en aquest dispositiu</string>
+    <string name="settings_labs_native_camera">Utilitza la càmera nativa</string>
 
     // share keys
-    <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
-    <string name="your_unverified_device_requesting">Your unverified device  \'%s\' is requesting encryption keys.</string>
-    <string name="start_verification">Start verification</string>
-    <string name="share_without_verifying">Share without verifying</string>
-    <string name="ignore_request">Ignore request</string>
+    <string name="you_added_a_new_device">El nou dispositiu \'%s\' que heu afegit, sol·licita les claus d'encriptació.</string>
+    <string name="your_unverified_device_requesting">El vostre dispositiu \'%s\' sense verificar, sol·licita les claus d'encriptació.</string>
+    <string name="start_verification">Inicia la verificació</string>
+    <string name="share_without_verifying">Comparteix sense verificar</string>
+    <string name="ignore_request">Ignora la sol·licitut</string>
 
     // conference call
-    <string name="conference_call_warning_title">Warning!</string>
-    <string name="conference_call_warning_message">Conference calling is in development and may not be reliable.</string>
+    <string name="conference_call_warning_title">Avís!</string>
+    <string name="conference_call_warning_message">Les trucades per a conferències estan en desenvolupament i poden no ser fiables.</string>
 
     // slash commands
-    <string name="command_error">Command error</string>
-    <string name="unrecognized_command">Unrecognized command: %s</string>
+    <string name="command_error">Error de comandament</string>
+    <string name="unrecognized_command">Ordre no reconegut: %s</string>
 
     // notification statuses
-    <string name="notification_off">Off</string>
-    <string name="notification_on">On</string>
-    <string name="notification_noisy">Noisy</string>
+    <string name="notification_off">Apagat</string>
+    <string name="notification_on">Encès</string>
+    <string name="notification_noisy">Sorrollós</string>
 
-    <string name="encrypted_message">Encrypted message</string>
+    <string name="encrypted_message">Missatge encriptat</string>
 
     // groups creation
-    <string name="create">Create</string>
-    <string name="create_community">Create Community</string>
-    <string name="community_name">Community name</string>
-    <string name="community_name_hint">Example</string>
-    <string name="community_id">Community Id</string>
-    <string name="community_id_hint">example</string>
-    <string name="group_id_cannot_be_empty">Community ID cannot be empty</string>
-    <string name="group_id_invalid_characters"> Community IDs may only contain characters a-z, 0-9, or \'=_-./\'</string>
+    <string name="create">Crea</string>
+    <string name="create_community">Crea una comunitat</string>
+    <string name="community_name">Nom de la comunitat</string>
+    <string name="community_name_hint">Exemple</string>
+    <string name="community_id">ID de la comunitat</string>
+    <string name="community_id_hint">exemple</string>
+    <string name="group_id_cannot_be_empty">L'ID de la comunitat no pot estar buida</string>
+    <string name="group_id_invalid_characters"> L'ID de la comunitat només pot contenir:  a-z, 0-9, o \'=_-./\'</string>
 
     // group details
-    <string name="group_details_home">Home</string>
-    <string name="group_details_people">People</string>
-    <string name="group_details_rooms">Rooms</string>
-    <string name="featured_rooms">Featured rooms</string>
-    <string name="featured_users">Featured users</string>
-    <string name="no_users_placeholder">No users</string>
+    <string name="group_details_home">Inici</string>
+    <string name="group_details_people">Usuaris</string>
+    <string name="group_details_rooms">Sales</string>
+    <string name="featured_rooms">Sales destacades</string>
+    <string name="featured_users">Usuaris destacats</string>
+    <string name="no_users_placeholder">Sense usuaris</string>
 
-    <string name="rooms">Rooms</string>
-    <string name="joined">Joined</string>
-    <string name="invited">Invited</string>
-    <string name="filter_group_members">Filter group members</string>
-    <string name="filter_group_rooms">Filter group rooms</string>
+    <string name="rooms">Sales</string>
+    <string name="joined">S'hi ha unit</string>
+    <string name="invited">Ha sigut convidat</string>
+    <string name="filter_group_members">Filtre de participants de grups</string>
+    <string name="filter_group_rooms">Filte de grups de sales</string>
 
-    <string name="group_one_member">1 member</string>
-    <string name="group_members">%d members</string>
+    <string name="group_one_member">1 membre</string>
+    <string name="group_members">%d membres</string>
 
-    <string name="group_one_room">1 room</string>
-    <string name="group_rooms">%d rooms</string>
-    <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
+    <string name="group_one_room">Una sala</string>
+    <string name="group_rooms">%d sales</string>
+    <string name="group_no_long_description">L'administrador de la comunitat no ha fet una descripció llarga per aquesta comunitat.</string>
 
-    <string name="one_new_message">1 new message</string>
-    <string name="new_messages">%d new messages</string>
+    <string name="one_new_message">Un nou missatge</string>
+    <string name="new_messages">%d nous missatges</string>
 
-    <string name="has_been_kicked">You have been kicked from %1$s by %2$s</string>
-    <string name="has_been_banned">You have been banned from %1$s by %2$s</string>
-    <string name="reason_colon">Reason: %1$s</string>
-    <string name="rejoin">Rejoin</string>
-    <string name="forget_room">Forget room</string>
+    <string name="has_been_kicked">%2$s l'ha fet fora de la sala %1$s</string>
+    <string name="has_been_banned">%2$s l'ha expulsat de la sala %1$s</string>
+    <string name="reason_colon">Raó: %1$s</string>
+    <string name="rejoin">Tornar-hi a entrar</string>
+    <string name="forget_room">Oblida la sala</string>
 </resources>
