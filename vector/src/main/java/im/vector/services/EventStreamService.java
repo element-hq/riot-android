@@ -70,9 +70,9 @@ import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.notifications.NotificationUtils;
 import im.vector.receiver.DismissNotificationReceiver;
 import im.vector.util.CallsManager;
-import im.vector.util.NotificationUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 

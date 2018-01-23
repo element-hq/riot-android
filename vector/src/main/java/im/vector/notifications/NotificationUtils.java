@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package im.vector.util;
+package im.vector.notifications;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -60,6 +60,9 @@ import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.receiver.DismissNotificationReceiver;
+import im.vector.util.PreferencesManager;
+import im.vector.util.RiotEventDisplay;
+import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.util.ArrayList;
