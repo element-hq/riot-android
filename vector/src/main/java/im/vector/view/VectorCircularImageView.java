@@ -91,6 +91,15 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
     private static Map<String, ArrayList<Pair<Object, VectorCircularImageView>>> mPendingConversion = new HashMap<>();
 
     /**
+     * Update the image drawable with the rounded bitmap.
+     *
+     * @param cachedDrawable the bitmap drawable.
+     */
+    protected void setCircularImageDrawable(final RoundedBitmapDrawable cachedDrawable) {
+        super.setImageDrawable(cachedDrawable);
+    }
+
+    /**
      * Update the bitmap.
      * The bitmap is first squared before adding corners
      *
@@ -108,7 +117,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
             // Create a RoundedBitmapDrawable might be slow
             RoundedBitmapDrawable cachedDrawable = mCache.get(key);
             if (null != cachedDrawable) {
-                super.setImageDrawable(cachedDrawable);
+                setCircularImageDrawable(cachedDrawable);
                 return;
             }
 
@@ -182,7 +191,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
                                 for (Pair<Object, VectorCircularImageView> pair : pairs) {
                                     // update only if the tag is the same
                                     if (pair.second.getTag() == pair.first) {
-                                        pair.second.setImageDrawable(drawable);
+                                        pair.second.setCircularImageDrawable(drawable);
                                     }
                                 }
                             }

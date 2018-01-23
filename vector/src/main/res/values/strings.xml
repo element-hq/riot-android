@@ -479,6 +479,7 @@
     <string name="room_settings_direct_chat">Direct Chat</string>
     <string name="room_settings_leave_conversation">Leave Conversation</string>
     <string name="room_settings_forget">Forget</string>
+    <string name="room_settings_add_homescreen_shortcut">Add Homescreen Shortcut</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>
@@ -545,20 +546,21 @@
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Devices</string>
+    <string name="settings_inline_url_preview">Enable inline URL previews by default</string>
     <string name="settings_hide_read_receipts">Hide read receipts</string>
     <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
     <string name="settings_always_show_timestamps">Always show message timestamps</string>
     <string name="settings_12_24_timestamps">Show timestamps in 12 hour format (e.g. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Hide join/leave messages (invites/kicks/bans unaffected)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
+    <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
+    <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
     <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
 
-
-    <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
     <string name="settings_data_save_mode">Data save mode</string>
 
     <string name="devices_details_dialog_title">Device details</string>

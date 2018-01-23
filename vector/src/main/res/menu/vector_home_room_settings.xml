@@ -32,7 +32,7 @@
     <group android:id="@+id/add_shortcut_actions">
         <item
             android:id="@+id/ic_action_add_homescreen_shortcut"
-            android:title="Add Homescreen Shortcut" />
+            android:title="@string/room_settings_add_homescreen_shortcut" />
     </group>
 
     <group android:id="@+id/historical_room_actions">

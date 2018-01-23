@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonNull;
@@ -46,6 +47,7 @@ import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.URLPreview;
 import org.matrix.androidsdk.rest.model.group.Group;
 import org.matrix.androidsdk.rest.model.group.GroupProfile;
 import org.matrix.androidsdk.rest.model.message.Message;
@@ -77,6 +79,7 @@ import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
 import im.vector.view.PillView;
+import im.vector.view.UrlPreviewView;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -97,15 +100,18 @@ class VectorMessagesAdapterHelper {
 
     private final Context mContext;
     private final MXSession mSession;
+    private final VectorMessagesAdapter mAdapter;
     private Room mRoom = null;
 
     private MatrixLinkMovementMethod mLinkMovementMethod;
 
     private VectorImageGetter mImageGetter;
 
-    VectorMessagesAdapterHelper(Context context, MXSession session) {
+
+    VectorMessagesAdapterHelper(Context context, MXSession session, VectorMessagesAdapter adapter) {
         mContext = context;
         mSession = session;
+        mAdapter = adapter;
     }
 
     /**
@@ -168,6 +174,7 @@ class VectorMessagesAdapterHelper {
             if (isMergedView) {
                 senderTextView.setVisibility(View.GONE);
                 groupFlairView.setVisibility(View.GONE);
+                groupFlairView.setTag(null);
             } else {
                 String eventType = event.getType();
 
@@ -182,6 +189,7 @@ class VectorMessagesAdapterHelper {
                         Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
                     senderTextView.setVisibility(View.GONE);
                     groupFlairView.setVisibility(View.GONE);
+                    groupFlairView.setTag(null);
                 } else {
                     senderTextView.setVisibility(View.VISIBLE);
                     senderTextView.setText(getUserDisplayName(event.getSender(), row.getRoomState()));
@@ -211,7 +219,7 @@ class VectorMessagesAdapterHelper {
      * @param event          the event
      */
     private void refreshGroupFlairView(final View groupFlairView, final Event event) {
-        final String tag =  event.getSender() +  "__" +  event.eventId;
+        final String tag = event.getSender() + "__" + event.eventId;
 
         groupFlairView.setTag(tag);
         groupFlairView.setVisibility(View.GONE);
@@ -693,7 +701,7 @@ class VectorMessagesAdapterHelper {
     }
 
     // cache the pills to avoid compute them again
-    Map<String, Drawable> mPillsCache = new HashMap<>();
+    private Map<String, Drawable> mPillsDrawableCache = new HashMap<>();
 
     /**
      * Trap the clicked URL.
@@ -710,17 +718,31 @@ class VectorMessagesAdapterHelper {
             int flags = strBuilder.getSpanFlags(span);
 
             if (PillView.isPillable(span.getURL())) {
-                String key = span.getURL() + " " + isHighlighted;
-                Drawable drawable = mPillsCache.get(key);
+                final String key = span.getURL() + " " + isHighlighted;
+                Drawable drawable = mPillsDrawableCache.get(key);
 
                 if (null == drawable) {
-                    PillView aView = new PillView(mContext);
-                    aView.setText(strBuilder.subSequence(start, end), span.getURL());
+                    final PillView aView = new PillView(mContext);
+                    aView.initData(strBuilder.subSequence(start, end), span.getURL(), mSession, new PillView.OnUpdateListener() {
+                        @Override
+                        public void onAvatarUpdate() {
+                            // force to compose
+                            aView.setBackgroundResource(android.R.color.transparent);
+
+                            // get a drawable from the view
+                            Drawable updatedDrawable = aView.getDrawable();
+                            mPillsDrawableCache.put(key, updatedDrawable);
+                            // should update only the current cell
+                            // but it might have been recycled
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
                     aView.setHighlighted(isHighlighted);
                     drawable = aView.getDrawable();
                 }
+
                 if (null != drawable) {
-                    mPillsCache.put(key, drawable);
+                    mPillsDrawableCache.put(key, drawable);
                     ImageSpan imageSpan = new ImageSpan(drawable);
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
                     strBuilder.setSpan(imageSpan, start, end, flags);
@@ -779,7 +801,6 @@ class VectorMessagesAdapterHelper {
      * Highlight fenced code
      *
      * @param textView the text view
-     * @param text     the text
      */
     void highlightFencedCode(final TextView textView) {
         // sanity check
@@ -1003,7 +1024,7 @@ class VectorMessagesAdapterHelper {
             // append the tags to remove
             String tagsToRemoveString = "";
 
-            for(String tag : tagsToRemove) {
+            for (String tag : tagsToRemove) {
                 if (!tagsToRemoveString.isEmpty()) {
                     tagsToRemoveString += "|";
                 }
@@ -1015,5 +1036,124 @@ class VectorMessagesAdapterHelper {
         }
 
         return html;
+    }
+
+    /*
+  * *********************************************************************************************
+  *  Url preview managements
+  * *********************************************************************************************
+  */
+    private final Map<String, List<String>> mExtractedUrls = new HashMap<>();
+    private final Map<String, URLPreview> mUrlsPreview = new HashMap<>();
+    private final Set<String> mPendingUrls = new HashSet<>();
+
+    /**
+     * Retrieves the webUrl extracted from a text
+     *
+     * @param text the text
+     * @return the web urls list
+     */
+    private List<String> extractWebUrl(String text) {
+        List<String> list = mExtractedUrls.get(text);
+
+        if (null == list) {
+            list = new ArrayList<>();
+
+            Matcher matcher = android.util.Patterns.WEB_URL.matcher(text);
+            while (matcher.find()) {
+                try {
+                    String value = text.substring(matcher.start(0), matcher.end(0));
+
+                    if (!list.contains(value)) {
+                        list.add(value);
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## extractWebUrl() " + e.getMessage());
+                }
+            }
+
+            mExtractedUrls.put(text, list);
+        }
+
+        return list;
+    }
+
+    void manageURLPreviews(final Message message, final View convertView, final String id) {
+        LinearLayout urlsPreviewLayout = convertView.findViewById(R.id.messagesAdapter_urls_preview_list);
+
+        // sanity checks
+        if (null == urlsPreviewLayout) {
+            return;
+        }
+
+        //
+        if (TextUtils.isEmpty(message.body)) {
+            urlsPreviewLayout.setVisibility(View.GONE);
+            return;
+        }
+
+        List<String> urls = extractWebUrl(message.body);
+
+        if (urls.isEmpty()) {
+            urlsPreviewLayout.setVisibility(View.GONE);
+            return;
+        }
+
+        // avoid removing items if they are displayed
+        if (TextUtils.equals((String)urlsPreviewLayout.getTag(), id)) {
+            // all the urls have been displayed
+            if (urlsPreviewLayout.getChildCount() == urls.size()) {
+                return;
+            }
+        }
+
+        urlsPreviewLayout.setTag(id);
+
+        // remove url previews
+        while (urlsPreviewLayout.getChildCount() > 0) {
+            urlsPreviewLayout.removeViewAt(0);
+        }
+        
+        urlsPreviewLayout.setVisibility(View.VISIBLE);
+
+        for (final String url : urls) {
+            final String key = url.hashCode() + "---";
+
+            if (mPendingUrls.contains(url)) {
+                // please wait
+            } else if (!mUrlsPreview.containsKey(key)) {
+                mPendingUrls.add(url);
+                mSession.getEventsApiClient().getURLPreview(url, System.currentTimeMillis(), new ApiCallback<URLPreview>() {
+                    @Override
+                    public void onSuccess(URLPreview urlPreview) {
+                        mPendingUrls.remove(url);
+
+                        if (!mUrlsPreview.containsKey(key)) {
+                            mUrlsPreview.put(key, urlPreview);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onSuccess(null);
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onSuccess(null);
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onSuccess(null);
+                    }
+                });
+            } else {
+                UrlPreviewView previewView = new UrlPreviewView(mContext);
+                previewView.setUrlPreview(mContext, mSession, mUrlsPreview.get(key));
+                urlsPreviewLayout.addView(previewView);
+            }
+        }
     }
 }

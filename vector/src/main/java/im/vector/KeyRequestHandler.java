@@ -319,7 +319,7 @@ public class KeyRequestHandler {
 
         // set dialog message
         alertDialogBuilder
-                .setCancelable(true)
+                .setCancelable(false)
                 .setNegativeButton(R.string.ignore_request, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

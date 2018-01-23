@@ -55,6 +55,7 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.model.URLPreview;
 import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
@@ -79,6 +80,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -293,7 +295,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         // helpers
         mMediasHelper = new VectorMessagesAdapterMediasHelper(context, mSession, mMaxImageWidth, mMaxImageHeight, mNotSentMessageTextColor, mDefaultMessageTextColor);
-        mHelper = new VectorMessagesAdapterHelper(context, mSession);
+        mHelper = new VectorMessagesAdapterHelper(context, mSession, this);
 
         mLocale = VectorApp.getApplicationLocale();
 
@@ -426,11 +428,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     @Override
     public void add(MessageRow row, boolean refresh) {
-        // ensure that notifyDataSetChanged is not called
-        // it seems that setNotifyOnChange is reinitialized to true;
-        setNotifyOnChange(false);
-
         if (isSupportedRow(row)) {
+            // ensure that notifyDataSetChanged is not called
+            // it seems that setNotifyOnChange is reinitialized to true;
+            setNotifyOnChange(false);
+
             if (mIsSearchMode) {
                 mLiveMessagesRowList.add(row);
             } else {
@@ -447,8 +449,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else {
                 setNotifyOnChange(true);
             }
-        } else {
-            setNotifyOnChange(true);
         }
     }
 
@@ -668,6 +668,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         final View inflatedView;
         int viewType = getItemViewType(position);
 
+        // when the user scrolls quickly
+        // it seems that the recycled view does not have the right layout.
+        // check it
+        if (null != convertView) {
+            if (viewType != (int)convertView.getTag()) {
+                Log.e(LOG_TAG, "## getView() : invalid view type : got " + convertView.getTag() + " instead of " + viewType);
+                convertView = null;
+            }
+        }
+
         switch (viewType) {
             case ROW_TYPE_EMOJI:
             case ROW_TYPE_CODE:
@@ -704,6 +714,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         if (null != inflatedView) {
             inflatedView.setBackgroundColor(Color.TRANSPARENT);
+            inflatedView.setTag(viewType);
         }
 
         displayE2eIcon(inflatedView, position);
@@ -1175,17 +1186,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             for (final TextView tv : textViews) {
                 addContentViewListeners(convertView, tv, position, viewType);
             }
+
+            mHelper.manageURLPreviews(message, convertView, event.eventId);
         } catch (Exception e) {
-            StackTraceElement[] callstacks = e.getStackTrace();
-
-            StringBuilder sb = new StringBuilder();
-            for (StackTraceElement element : callstacks) {
-                sb.append(element.toString());
-                sb.append("\n");
-            }
-
             Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage());
-            Log.e(LOG_TAG, "## getTextView() callstack \n" + sb.toString());
         }
 
         return convertView;
@@ -1207,12 +1211,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         final String[] blocks = mHelper.getFencedCodeBlocks(message);
         final String START_FB = VectorMessagesAdapterHelper.START_FENCED_BLOCK;
         final String END_FB = VectorMessagesAdapterHelper.END_FENCED_BLOCK;
-        for (final String block:blocks) {
+        for (final String block : blocks) {
             if (block.startsWith(START_FB) && block.endsWith(END_FB)) {
                 // Fenced block
                 final String minusTags = block
-                        .substring(START_FB.length(), block.length()-END_FB.length())
-                        .replace("\n","<br/>")
+                        .substring(START_FB.length(), block.length() - END_FB.length())
+                        .replace("\n", "<br/>")
                         .replace(" ", "&nbsp;");
                 final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
                 container.addView(blockView);
@@ -1224,7 +1228,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 mHelper.highlightFencedCode(tv);
                 textViews.add(tv);
 
-                ((View)tv.getParent()).setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
+                ((View) tv.getParent()).setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
             } else {
                 // Not a fenced block
                 final TextView tv = (TextView) mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
@@ -1432,6 +1436,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             this.manageSubView(position, convertView, textLayout, ROW_TYPE_EMOTE);
 
             addContentViewListeners(convertView, emoteTextView, position, ROW_TYPE_EMOTE);
+
+            mHelper.manageURLPreviews(message, convertView, event.eventId);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage());
         }
@@ -1638,51 +1644,56 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @return true if should be added
      */
     private boolean isSupportedRow(MessageRow row) {
+        Event event = row.getEvent();
+
+        // sanity checks
+        if ((null == event) || (null == event.eventId)) {
+            Log.e(LOG_TAG, "## isSupportedRow() : invalid row");
+            return false;
+        }
+
+        String eventId = event.eventId;
+        MessageRow currentRow = mEventRowMap.get(eventId);
+
+        if (null != currentRow) {
+            // waiting for echo
+            // the message is displayed as sent event if the echo has not been received
+            // it avoids displaying a pending message whereas the message has been sent
+            if (event.getAge() == Event.DUMMY_EVENT_AGE) {
+                currentRow.updateEvent(event);
+                Log.d(LOG_TAG, "## isSupportedRow() : update the timestamp of " + eventId);
+            } else {
+                Log.e(LOG_TAG, "## isSupportedRow() : the event " + eventId + " has already been received");
+            }
+            return false;
+        }
+
         boolean isSupported = VectorMessagesAdapterHelper.isDisplayableEvent(mContext, row);
 
-        if (isSupported) {
-            String eventId = row.getEvent().eventId;
+        if (isSupported && TextUtils.equals(event.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+            RoomMember roomMember = JsonUtils.toRoomMember(event.getContent());
+            String membership = roomMember.membership;
 
-            MessageRow currentRow = mEventRowMap.get(eventId);
-
-            // the row should be added only if the message has not been received
-            isSupported = (null == currentRow);
-
-            // check if the message is already received
-            if (null != currentRow) {
-                // waiting for echo
-                // the message is displayed as sent event if the echo has not been received
-                // it avoids displaying a pending message whereas the message has been sent
-                if (currentRow.getEvent().getAge() == Event.DUMMY_EVENT_AGE) {
-                    currentRow.updateEvent(row.getEvent());
-                }
+            if (PreferencesManager.hideJoinLeaveMessages(mContext)) {
+                isSupported = !TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE) && !TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN);
             }
 
-            if (TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-                RoomMember roomMember = JsonUtils.toRoomMember(row.getEvent().getContent());
-                String membership = roomMember.membership;
+            if (isSupported && PreferencesManager.hideAvatarDisplayNameChangeMessages(mContext) && TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN)) {
+                EventContent eventContent = JsonUtils.toEventContent(event.getContentAsJsonObject());
+                EventContent prevEventContent = event.getPrevContent();
 
-                if (PreferencesManager.hideJoinLeaveMessages(mContext)) {
-                    isSupported = !TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE) && !TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN);
+                String senderDisplayName = eventContent.displayname;
+                String prevUserDisplayName = null;
+                String avatar = eventContent.avatar_url;
+                String prevAvatar = null;
+
+                if ((null != prevEventContent)) {
+                    prevUserDisplayName = prevEventContent.displayname;
+                    prevAvatar = prevEventContent.avatar_url;
                 }
 
-                if (isSupported && PreferencesManager.hideAvatarDisplayNameChangeMessages(mContext) && TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN)) {
-                    EventContent eventContent = JsonUtils.toEventContent(row.getEvent().getContentAsJsonObject());
-                    EventContent prevEventContent = row.getEvent().getPrevContent();
-
-                    String senderDisplayName = eventContent.displayname;
-                    String prevUserDisplayName = null;
-                    String avatar = eventContent.avatar_url;
-                    String prevAvatar = null;
-
-                    if ((null != prevEventContent)) {
-                        prevUserDisplayName = prevEventContent.displayname;
-                        prevAvatar = prevEventContent.avatar_url;
-                    }
-
-                    // !Updated display name && same avatar
-                    isSupported = TextUtils.equals(prevUserDisplayName, senderDisplayName) && TextUtils.equals(avatar, prevAvatar);
-                }
+                // !Updated display name && same avatar
+                isSupported = TextUtils.equals(prevUserDisplayName, senderDisplayName) && TextUtils.equals(avatar, prevAvatar);
             }
         }
 
@@ -1884,7 +1895,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         String text = null;
 
         if (null != contentView) {
-            if (ROW_TYPE_CODE == msgType) {
+            if ((ROW_TYPE_CODE == msgType) || (ROW_TYPE_TEXT == msgType)) {
                 final Message message = JsonUtils.toMessage(event.getContent());
                 text = message.body;
             } else {
