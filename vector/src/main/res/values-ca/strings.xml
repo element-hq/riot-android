@@ -401,7 +401,7 @@
     <string name="room_resend_unsent_messages">Reenvia els missatges no enviats</string>
     <string name="room_delete_unsent_messages">Elimina els missatges no enviats</string>
     <string name="room_message_file_not_found">No s'ha trobat el fitxer</string>
-    <string name="room_do_not_have_permission_to_post">No teniu permís per escriure en aquesta sals</string>
+    <string name="room_do_not_have_permission_to_post">No teniu permís per escriure en aquesta sala</string>
     <string name="room_new_message_notification">1 missatge nou</string>
     <string name="room_new_messages_notification">%1$d missatges nous</string>
 
