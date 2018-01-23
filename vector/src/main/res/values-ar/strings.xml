@@ -477,4 +477,7 @@
     <string name="send_bug_report_alert_message">يبدو أنك تهزّ الهاتف وأنت مُحبط. أتريد إرسال بلاغ علة؟</string>
     <string name="send_bug_report_progress">التقدم (%s٪)</string>
 
+    <string name="permissions_rationale_msg_camera_explanation">
+
+رجاءً اسمح بالنفاذ في المنبثقة الآتية لتتمكن من إجراء محادثة.</string>
     </resources>
