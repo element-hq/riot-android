@@ -466,7 +466,7 @@ public class NotificationUtils {
                 }
             } else {
                 header = roomName + ": ";
-                text = context.getString(R.string.notification_unread_notified_messages, notifiedEvents.size());
+                text = context.getQuantityString(R.plurals.notification_unread_notified_messages, notifiedEvents.size(), notifiedEvents.size());
             }
 
             // ad the line if it makes sense
@@ -490,7 +490,10 @@ public class NotificationUtils {
         }
 
         inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name));
-        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages_in_room, sum, roomsCount));
+
+        String unreadStringMessages = context.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_msgs, sum, sum);
+        String unreadStringRooms = context.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms, roomsCount, roomsCount);
+        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages_in_room, unreadStringMessages, unreadStringRooms));
         builder.setStyle(inboxStyle);
 
         TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context);
