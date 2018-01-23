@@ -479,7 +479,7 @@
     <string name="room_settings_direct_chat">Xat directe</string>
     <string name="room_settings_leave_conversation">Deixa la conversa</string>
     <string name="room_settings_forget">Oblida</string>
-    <string name="room_settings_add_homescreen_shortcut">Add Homescreen Shortcut</string>
+    <string name="room_settings_add_homescreen_shortcut">Afegeix una drecera de la pantalla d'inici</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Missatges</string>
@@ -514,7 +514,7 @@
     <string name="settings_call_invitations">Invitacions de trucada</string>
     <string name="settings_messages_sent_by_bot">Missatges enviats per un bot</string>
 
-    <string name="settings_start_on_boot">Inicia en encendre el dispositiu</string>
+    <string name="settings_start_on_boot">Inicia en arrencar</string>
     <string name="settings_background_sync">Sincronització en segon pla</string>
     <string name="settings_enable_background_sync">Habilita la sincronització en segon pla</string>
     <string name="settings_set_sync_timeout">Temps màxim d'espera de la petició de sincronització</string>
@@ -528,9 +528,9 @@
     <string name="settings_third_party_notices">Avisos de terceres parts</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Política de privacitat</string>
-    <string name="settings_clear_cache">Buida la memòria cau</string>
+    <string name="settings_clear_cache">Esborra la memòria cau</string>
     <string name="settings_clear_medias_cache">Esborra la memòria cau multimèdia</string>
-    <string name="settings_keep_media">Mante multimèdia</string>
+    <string name="settings_keep_media">Manté els elements multimèdia</string>
 
     <string name="settings_user_settings">Configuració de l'usuari</string>
     <string name="settings_notifications">Notificacions</string>
@@ -544,24 +544,24 @@
     <string name="settings_contacts_phonebook_country">País de l'agenda de telèfons</string>
     <string name="settings_home_display">Pantalla d'inici</string>
     <string name="settings_pin_missed_notifications">Destaca les sales amb notificacions sense llegir</string>
-    <string name="settings_pin_unread_messages">Punxa les sales amb missatges sense llegir</string>
+    <string name="settings_pin_unread_messages">Destaca les sales amb missatges sense llegir</string>
     <string name="settings_devices_list">Dispositius</string>
-    <string name="settings_inline_url_preview">Enable inline URL previews by default</string>
+    <string name="settings_inline_url_preview">Habilita les previsualitzacions de les URL per defecte</string>
     <string name="settings_hide_read_receipts">Amaga les entrades llegides</string>
     <string name="settings_dont_send_typings_notifs">No enviïs notificacions d'esciptura</string>
     <string name="settings_always_show_timestamps">Mostra sempre l'hora dels missatges</string>
     <string name="settings_12_24_timestamps">Mostra l'hora en el format de 12 hores (per exemple 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Amaga els missatges de entrada i sortida de participants</string>
+    <string name="settings_hide_join_leave_messages">Amaga els missatges d'entrada i sortida de participants</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Amaga les fotos de perfil i els canvis de nom visible</string>
     <string name="settings_disable_markdown">Desactivar el Markdown quan s'enviï</string>
-    <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
+    <string name="settings_vibrate_on_mention">Vibra quan et mencionin</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analítiques</string>
-    <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
+    <string name="settings_opt_out_of_analytics">No acceptis analítiques</string>
     <string name="settings_opt_out_of_analytics_summary">Riot recull analítiques anònimes per ajudar a millorar l'aplicació.</string>
 
-    <string name="settings_data_save_mode">Mode de dades segures</string>
+    <string name="settings_data_save_mode">Mode de desament de dades</string>
 
     <string name="devices_details_dialog_title">Detalls del dispositiu</string>
     <string name="devices_details_id_title">ID</string>
@@ -606,7 +606,7 @@
 
     <string name="settings_phone_number_country_label">País</string>
     <string name="settings_phone_number_country_error">Escolliu un país</string>
-    <string name="settings_phone_number_label">Númeoro de telèfon</string>
+    <string name="settings_phone_number_label">Número de telèfon</string>
     <string name="settings_phone_number_error">El número de telèfon no és vàlid per al país escollit</string>
     <string name="settings_phone_number_verification">Verificació del telèfon</string>
     <string name="settings_phone_number_verification_instruction">"S'ha enviat un SMS amb un codi d'activació. Introduïu aquest a continuació."</string>
@@ -681,7 +681,7 @@
     <string name="room_settings_addresses_no_local_addresses">Aquesta sala no té adreces locals</string>
     <string name="room_settings_addresses_add_new_address">Adreça nova (per exemple #foo:matrix.org")</string>
 
-    <string name="room_settings_no_flair"> This room is not showing flair for any communities</string>
+    <string name="room_settings_no_flair"> Aquesta sala no pertany a cap comunitat</string>
     <string name="room_settings_add_new_group">Nova ID de comunitat (per exemple +foo:matrix.org")</string>
     <string name="room_settings_invalid_group_format_dialog_title">l'ID de comunitat és invalid</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' no és una ID de comunitat vàlida</string>
