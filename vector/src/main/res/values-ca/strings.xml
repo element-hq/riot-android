@@ -32,7 +32,7 @@
     <string name="save">Desa</string>
     <string name="leave">Surt de la sala</string>
     <string name="send">Envia</string>
-    <string name="copy">Copia</string>
+    <string name="copy">Còpia</string>
     <string name="resend">Reenvia</string>
     <string name="redact">Elimina</string>
     <string name="quote">Cita</string>
@@ -44,7 +44,7 @@
     <string name="view_decrypted_source">Visualitza el codi font desencriptat</string>
     <string name="delete">Elimina</string>
     <string name="rename">Reanomena</string>
-    <string name="report_content">Llista el contingut</string>
+    <string name="report_content">Mostra el contingut</string>
     <string name="active_call">Trucada activa</string>
     <string name="ongoing_conference_call"> Conferència en curs. Uneix-te per veu o vídeo.</string>
     <string name="ongoing_conference_call_voice">veu</string>
@@ -108,8 +108,8 @@
     <!-- Rooms fragment -->
     <string name="rooms_header">Sales</string>
     <string name="rooms_directory_header">Directori de sales</string>
-    <string name="no_room_placeholder">Cap sala</string>
-    <string name="no_public_room_placeholder">Cap sala pública disponible</string>
+    <string name="no_room_placeholder">No hi ha cap sala</string>
+    <string name="no_public_room_placeholder">No hi ha cap sala pública disponible</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">1 usuari</item>
         <item quantity="other">%d usuaris</item>
@@ -118,10 +118,10 @@
     <!-- Groups fragment -->
     <string name="groups_invite_header">Convida</string>
     <string name="groups_header">Grups</string>
-    <string name="no_group_placeholder">Cap grup</string>
+    <string name="no_group_placeholder">No hi ha cap grup</string>
 
-    <string name="send_bug_report_include_logs">Envia registres</string>
-    <string name="send_bug_report_include_crash_logs">Envia registres de fallada</string>
+    <string name="send_bug_report_include_logs">Envia els registres</string>
+    <string name="send_bug_report_include_crash_logs">Envia els registres de fallada</string>
     <string name="send_bug_report_include_screenshot">Envia una captura de pantalla</string>
     <string name="send_bug_report">Informa d'un error</string>
     <string name="send_bug_report_description">Descriviu l'error. Què heu fet? Què esperàveu que passés? Què ha passat realment?</string>
@@ -183,7 +183,7 @@
     <string name="auth_repeat_password_placeholder">Repetiu la contrasenya</string>
     <string name="auth_repeat_new_password_placeholder">Confirmeu la nova contrasenya</string>
     <string name="auth_invalid_login_param">El nom d'usuari i/o la contrasenya són incorrectes</string>
-    <string name="auth_invalid_user_name">Els noms d'usuari només poden contenir lletre, números, punts, guionets i subratllats</string>
+    <string name="auth_invalid_user_name">Els noms d'usuari només poden contenir lletres, números, punts, guionets i subratllats</string>
     <string name="auth_invalid_password">La contrasenya és massa curta (mín 6)</string>
     <string name="auth_missing_password">Falta la contrasenya</string>
     <string name="auth_invalid_email">"El correu electrònic no és vàlid"</string>
@@ -496,8 +496,8 @@
     <string name="settings_display_name">Nom a mostrar</string>
     <string name="settings_email_address">Correu electrònic</string>
     <string name="settings_add_email_address">Afegeix una adreça de correu electrònic</string>
-    <string name="settings_phone_number">Telefon</string>
-    <string name="settings_add_phone_number">Afegeix un número de telefon</string>
+    <string name="settings_phone_number">Telèfon</string>
+    <string name="settings_add_phone_number">Afegeix un número de telèfon</string>
     <string name="settings_summary_app_info_link">Pantalla d'informació del sistema de l'aplicació</string>
     <string name="settings_title_app_info_link">Informació de l'aplicació</string>
 
@@ -523,7 +523,7 @@
     <string name="settings_seconds">segons</string>
 
     <string name="settings_version">Versió</string>
-    <string name="settings_olm_version">Versió d'olm</string>
+    <string name="settings_olm_version">Versió d'OLM</string>
     <string name="settings_app_term_conditions">Termes i condicions</string>
     <string name="settings_third_party_notices">Avisos de terceres parts</string>
     <string name="settings_copyright">Copyright</string>
@@ -538,7 +538,7 @@
     <string name="settings_other">Altres</string>
     <string name="settings_advanced">Avançat</string>
     <string name="settings_cryptography">Criptografia</string>
-    <string name="settings_notifications_targets">Objectius de notificacions</string>
+    <string name="settings_notifications_targets">Objectius de les notificacions</string>
     <string name="settings_contact">Contactes locals</string>
     <string name="settings_contacts_app_permission">Permís dels contactes</string>
     <string name="settings_contacts_phonebook_country">País de l'agenda de telèfons</string>
@@ -606,12 +606,12 @@
 
     <string name="settings_phone_number_country_label">País</string>
     <string name="settings_phone_number_country_error">Escolliu un país</string>
-    <string name="settings_phone_number_label">Númeoro de telefon</string>
-    <string name="settings_phone_number_error">El número de telefon no és vàlid per al país escollit</string>
-    <string name="settings_phone_number_verification">Verificació del telefon</string>
+    <string name="settings_phone_number_label">Númeoro de telèfon</string>
+    <string name="settings_phone_number_error">El número de telèfon no és vàlid per al país escollit</string>
+    <string name="settings_phone_number_verification">Verificació del telèfon</string>
     <string name="settings_phone_number_verification_instruction">"S'ha enviat un SMS amb un codi d'activació. Introduïu aquest a continuació."</string>
     <string name="settings_phone_number_verification_error_empty_code">Introduïu un codi d'activació</string>
-    <string name="settings_phone_number_verification_error">S'ha produït un error mentre es validava el número de telefon</string>
+    <string name="settings_phone_number_verification_error">S'ha produït un error mentre es validava el número de telèfon</string>
     <string name="settings_phone_number_code">Codi</string>
 
 
@@ -644,7 +644,7 @@
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Accés i visibilitat</string>
-    <string name="room_settings_directory_visibility">Llista aquesta sala al directori de sales</string>
+    <string name="room_settings_directory_visibility">Mostra aquesta sala al directori de sales</string>
     <string name="room_settings_room_access_rules_pref_title">Accés a la sala</string>
     <string name="room_settings_room_read_history_rules_pref_title">Permisos de lectura de l'històric de la sala</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Qui pot llegir l'històric?</string>
@@ -660,7 +660,7 @@
     <string name="room_settings_room_access_warning">La sala ha de tenir una adreça per tal d'unir-s'hi.</string>
     <string name="room_settings_room_access_entry_only_invited">Només les persones convidades</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Qualsevol que conegui l\'enllaç de la sala, excepte els convidats</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualsevol que conegui l\'enllaç de la sala, excepte els convidats, inclosos els convidats</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualsevol que conegui l\'enllaç de la sala, inclosos els convidats</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Usuaris vetats</string>
