@@ -242,10 +242,6 @@ Disculpe por la inconveniencia.</string>
     <string name="room_info_room_name">Nombre de la Sala</string>
     <string name="room_info_room_topic">Tema de la Sala</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Llamada conectada</string>
     <string name="call_connecting">La llamada se esá conectando…</string>

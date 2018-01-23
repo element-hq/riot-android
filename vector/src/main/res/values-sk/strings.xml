@@ -230,9 +230,6 @@ Ospravedlňujeme sa za spôsobené ťažkosti.</string>
     <string name="room_info_room_name">Názov miestnosti</string>
     <string name="room_info_room_topic">Téma miestnosti</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call">Hovor</string>
     <string name="call_connected">Hovor spojený</string>
     <string name="call_connecting">Spojenie hovoru…</string>

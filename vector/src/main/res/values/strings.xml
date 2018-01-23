@@ -260,10 +260,6 @@
     <string name="room_info_room_name">Room name</string>
     <string name="room_info_room_topic">Room topic</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call">Call</string>
     <string name="call_connected">Call connected</string>

@@ -427,9 +427,6 @@
 
     <string name="room_info_room_topic">部屋の説明</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call_connected">通話が接続されました</string>
     <string name="call_connecting">通話を接続中…</string>
     <string name="incoming_call">通話着信中</string>

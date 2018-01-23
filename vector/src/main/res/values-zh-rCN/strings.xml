@@ -576,8 +576,6 @@
     <string name="read_receipts_list">阅读收据清单</string>
     <string name="membership_changes">%d 个成员身份改变了</string>
     <string name="compression_options">发送为</string>
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
     <string name="permissions_rationale_msg_contacts">Riot 需要访问您的通讯录联系人的权限，才能根据其电子邮件和电话号码查找其他 Matrix 用户。
 
 请在下一个弹出窗口中授权允许访问，以发现从 Riot 可访问的通讯录用户。</string>

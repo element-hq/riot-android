@@ -513,9 +513,6 @@ Veuillez nous excuser pour ce désagrément.</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="leave">Quitter</string>
     <string name="quote">Citer</string>
     <string name="call_error_user_not_responding">Le correspondant n\'a pas décroché.</string>

@@ -230,10 +230,6 @@
     <string name="room_info_room_name">Nome da sala</string>
     <string name="room_info_room_topic">Tópico da sala</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Chamada conectada</string>
     <string name="call_connecting">Conectando chamada…</string>
