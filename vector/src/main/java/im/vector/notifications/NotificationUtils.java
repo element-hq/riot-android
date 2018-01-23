@@ -330,59 +330,6 @@ public class NotificationUtils {
     }
 
     /**
-     * This class manages the notification display.
-     * It contains the message to display and its timestamp
-     */
-    static class NotificationDisplay {
-        final long mEventTs;
-        final SpannableString mMessage;
-
-        NotificationDisplay(long ts, SpannableString message) {
-            mEventTs = ts;
-            mMessage = message;
-        }
-    }
-
-    /**
-     * NotificationDisplay comparator
-     */
-    private static final Comparator<NotificationDisplay> mNotificationDisplaySort = new Comparator<NotificationDisplay>() {
-        @Override
-        public int compare(NotificationDisplay lhs, NotificationDisplay rhs) {
-            long t0 = lhs.mEventTs;
-            long t1 = rhs.mEventTs;
-
-            if (t0 > t1) {
-                return -1;
-            } else if (t0 < t1) {
-                return +1;
-            }
-            return 0;
-        }
-    };
-
-    /**
-     * Define a notified event
-     * i.e the matched bing rules
-     */
-    public static class NotifiedEvent {
-        public final BingRule mBingRule;
-        public final String mRoomId;
-        public final String mEventId;
-        public final long mOriginServerTs;
-
-        public NotifiedEvent(String roomId, String eventId, BingRule bingRule, long originServerTs) {
-            mRoomId = roomId;
-            mEventId = eventId;
-            mBingRule = bingRule;
-            mOriginServerTs = originServerTs;
-        }
-    }
-
-    // max number of lines to display the notification text styles
-    private static final int MAX_NUMBER_NOTIFICATION_LINES = 10;
-
-    /**
      * Add a text style to a notification when there are several notified rooms.
      *
      * @param context            the context
@@ -726,7 +673,7 @@ public class NotificationUtils {
 
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-            for (int i = 0; i < Math.min(MAX_NUMBER_NOTIFICATION_LINES, messagesStrings.size()); i++) {
+            for (int i = 0; i < Math.min(RoomsNotifications.MAX_NUMBER_NOTIFICATION_LINES, messagesStrings.size()); i++) {
                 inboxStyle.addLine(messagesStrings.get(i));
             }
 

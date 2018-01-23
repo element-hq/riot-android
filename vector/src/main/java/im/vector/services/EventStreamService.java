@@ -71,6 +71,7 @@ import im.vector.ViewedRoomTracker;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.notifications.NotificationUtils;
+import im.vector.notifications.NotifiedEvent;
 import im.vector.notifications.RoomsNotifications;
 import im.vector.receiver.DismissNotificationReceiver;
 import im.vector.util.CallsManager;
@@ -146,8 +147,8 @@ public class EventStreamService extends Service {
     /**
      * store the notifications description
      */
-    private final LinkedHashMap<String, NotificationUtils.NotifiedEvent> mPendingNotifications = new LinkedHashMap<>();
-    private Map<String, List<NotificationUtils.NotifiedEvent>> mNotifiedEventsByRoomId = null;
+    private final LinkedHashMap<String, NotifiedEvent> mPendingNotifications = new LinkedHashMap<>();
+    private Map<String, List<NotifiedEvent>> mNotifiedEventsByRoomId = null;
     private static HandlerThread mNotificationHandlerThread = null;
     private static android.os.Handler mNotificationsHandler = null;
 
@@ -1002,7 +1003,7 @@ public class EventStreamService extends Service {
             bingRule = mDefaultBingRule;
         }
 
-        mPendingNotifications.put(event.eventId, new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, bingRule, event.getOriginServerTs()));
+        mPendingNotifications.put(event.eventId, new NotifiedEvent(event.roomId, event.eventId, bingRule, event.getOriginServerTs()));
     }
 
     /**
@@ -1234,7 +1235,7 @@ public class EventStreamService extends Service {
 
         final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
-        NotificationUtils.NotifiedEvent eventToNotify = getEventToNotify();
+        NotifiedEvent eventToNotify = getEventToNotify();
         if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             mNotifiedEventsByRoomId = null;
             new Handler(getMainLooper()).post(new Runnable() {
@@ -1271,8 +1272,8 @@ public class EventStreamService extends Service {
 
                     // search the latest message to refresh the notification
                     for (String roomId : roomIds) {
-                        List<NotificationUtils.NotifiedEvent> events = mNotifiedEventsByRoomId.get(roomId);
-                        NotificationUtils.NotifiedEvent notifiedEvent = events.get(events.size() - 1);
+                        List<NotifiedEvent> events = mNotifiedEventsByRoomId.get(roomId);
+                        NotifiedEvent notifiedEvent = events.get(events.size() - 1);
 
                         Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
 
@@ -1287,8 +1288,8 @@ public class EventStreamService extends Service {
                     }
                 }
 
-                final NotificationUtils.NotifiedEvent fEventToNotify = eventToNotify;
-                final Map<String, List<NotificationUtils.NotifiedEvent>> fNotifiedEventsByRoomId = new HashMap<>(mNotifiedEventsByRoomId);
+                final NotifiedEvent fEventToNotify = eventToNotify;
+                final Map<String, List<NotifiedEvent>> fNotifiedEventsByRoomId = new HashMap<>(mNotifiedEventsByRoomId);
 
                 if (null != fEventToNotify) {
                     DismissNotificationReceiver.setLatestNotifiedMessageTs(this, fEventToNotify.mOriginServerTs);
@@ -1324,18 +1325,18 @@ public class EventStreamService extends Service {
      * Check if the current displayed notification must be cleared
      * because it doesn't make sense anymore.
      */
-    private NotificationUtils.NotifiedEvent getEventToNotify() {
+    private NotifiedEvent getEventToNotify() {
         if (mPendingNotifications.size() > 0) {
             // TODO add multi sessions
             MXSession session = Matrix.getInstance(getBaseContext()).getDefaultSession();
             IMXStore store = session.getDataHandler().getStore();
 
             // notified only the latest unread message
-            List<NotificationUtils.NotifiedEvent> eventsToNotify = new ArrayList<>(mPendingNotifications.values());
+            List<NotifiedEvent> eventsToNotify = new ArrayList<>(mPendingNotifications.values());
 
             Collections.reverse(eventsToNotify);
 
-            for (NotificationUtils.NotifiedEvent eventToNotify : eventsToNotify) {
+            for (NotifiedEvent eventToNotify : eventsToNotify) {
                 Room room = store.getRoom(eventToNotify.mRoomId);
 
                 // test if the message has not been read
@@ -1422,8 +1423,8 @@ public class EventStreamService extends Service {
                                         BingRule rule = session.fulfillRule(event);
 
                                         if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
-                                            List<NotificationUtils.NotifiedEvent> list = new ArrayList<>();
-                                            list.add(new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, rule, event.getOriginServerTs()));
+                                            List<NotifiedEvent> list = new ArrayList<>();
+                                            list.add(new NotifiedEvent(event.roomId, event.eventId, rule, event.getOriginServerTs()));
                                             mNotifiedEventsByRoomId.put(room.getRoomId(), list);
                                         }
                                     }
@@ -1438,14 +1439,14 @@ public class EventStreamService extends Service {
                         List<Event> unreadEvents = store.unreadEvents(room.getRoomId(), null);
 
                         if ((null != unreadEvents) && unreadEvents.size() > 0) {
-                            List<NotificationUtils.NotifiedEvent> list = new ArrayList<>();
+                            List<NotifiedEvent> list = new ArrayList<>();
 
                             for (Event event : unreadEvents) {
                                 if (event.getOriginServerTs() > minTs) {
                                     BingRule rule = session.fulfillRule(event);
 
                                     if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
-                                        list.add(new NotificationUtils.NotifiedEvent(event.roomId, event.eventId, rule, event.getOriginServerTs()));
+                                        list.add(new NotifiedEvent(event.roomId, event.eventId, rule, event.getOriginServerTs()));
                                         //Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
                                     }
                                 } else {
@@ -1480,20 +1481,20 @@ public class EventStreamService extends Service {
                         isUpdated = true;
                     } else {
                         // the messages are sorted from the oldest to the latest
-                        List<NotificationUtils.NotifiedEvent> events = mNotifiedEventsByRoomId.get(roomId);
+                        List<NotifiedEvent> events = mNotifiedEventsByRoomId.get(roomId);
 
                         // if the oldest event has been read
                         // something has been updated
-                        NotificationUtils.NotifiedEvent oldestEvent = events.get(0);
+                        NotifiedEvent oldestEvent = events.get(0);
 
                         if (room.isEventRead(oldestEvent.mEventId) || (oldestEvent.mOriginServerTs < minTs)) {
                             // if the latest message has been read
                             // we have to find out the unread messages
-                            NotificationUtils.NotifiedEvent latestEvent = events.get(events.size() - 1);
+                            NotifiedEvent latestEvent = events.get(events.size() - 1);
                             if (!room.isEventRead(latestEvent.mEventId) && latestEvent.mOriginServerTs > minTs) {
                                 // search for the read messages
                                 for (int i = 0; i < events.size(); ) {
-                                    NotificationUtils.NotifiedEvent event = events.get(i);
+                                    NotifiedEvent event = events.get(i);
 
                                     if (room.isEventRead(event.mEventId) || (event.mOriginServerTs <= minTs)) {
                                         // Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");

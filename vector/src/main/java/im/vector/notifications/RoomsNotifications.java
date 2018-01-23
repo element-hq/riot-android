@@ -52,7 +52,7 @@ public class RoomsNotifications implements Parcelable {
     private static final String LOG_TAG = RoomsNotifications.class.getSimpleName();
 
     // max number of lines to display the notification text styles
-    private static final int MAX_NUMBER_NOTIFICATION_LINES = 3;
+    static final int MAX_NUMBER_NOTIFICATION_LINES = 3;
 
     /****** Parcelable items ********/
     // the session id
@@ -95,10 +95,10 @@ public class RoomsNotifications implements Parcelable {
 
     /****** others items ********/
     // notified event
-    private NotificationUtils.NotifiedEvent mEventToNotify;
+    private NotifiedEvent mEventToNotify;
 
     // notified events by room id
-    private Map<String, List<NotificationUtils.NotifiedEvent>> mNotifiedEventsByRoomId;
+    private Map<String, List<NotifiedEvent>> mNotifiedEventsByRoomId;
 
     // notification details
     private Context mContext;
@@ -118,8 +118,8 @@ public class RoomsNotifications implements Parcelable {
      * @param anEventToNotify            the event to notify
      * @param someNotifiedEventsByRoomId the notified events
      */
-    public RoomsNotifications(NotificationUtils.NotifiedEvent anEventToNotify,
-                              Map<String, List<NotificationUtils.NotifiedEvent>> someNotifiedEventsByRoomId) {
+    public RoomsNotifications(NotifiedEvent anEventToNotify,
+                              Map<String, List<NotifiedEvent>> someNotifiedEventsByRoomId) {
         mContext = VectorApp.getInstance();
         mSession = Matrix.getInstance(mContext).getDefaultSession();
         IMXStore store = mSession.getDataHandler().getStore();
@@ -199,7 +199,7 @@ public class RoomsNotifications implements Parcelable {
         roomNotifications.mRoomId = mEvent.roomId;
         roomNotifications.mRoomName = mContentTitle;
 
-        List<NotificationUtils.NotifiedEvent> notifiedEvents = mNotifiedEventsByRoomId.get(roomNotifications.mRoomId);
+        List<NotifiedEvent> notifiedEvents = mNotifiedEventsByRoomId.get(roomNotifications.mRoomId);
         int unreadCount = notifiedEvents.size();
 
         // the messages are sorted from the oldest to the latest
@@ -212,7 +212,7 @@ public class RoomsNotifications implements Parcelable {
         SpannableString latestText = null;
         IMXStore store = mSession.getDataHandler().getStore();
 
-        for (NotificationUtils.NotifiedEvent notifiedEvent : notifiedEvents) {
+        for (NotifiedEvent notifiedEvent : notifiedEvents) {
             Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
             EventDisplay eventDisplay = new RiotEventDisplay(mContext, event, mRoom.getLiveState());
             eventDisplay.setPrependMessagesWithAuthor(true);
@@ -262,7 +262,7 @@ public class RoomsNotifications implements Parcelable {
             Room room = mSession.getDataHandler().getRoom(roomId);
             String roomName = getRoomName(mContext, mSession, room, null);
 
-            List<NotificationUtils.NotifiedEvent> notifiedEvents = mNotifiedEventsByRoomId.get(roomId);
+            List<NotifiedEvent> notifiedEvents = mNotifiedEventsByRoomId.get(roomId);
             Event latestEvent = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
 
             String text;
