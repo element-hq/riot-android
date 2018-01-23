@@ -21,15 +21,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.widget.ImageView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +43,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.LockScreenActivity;
 import im.vector.util.RiotEventDisplay;
+import im.vector.util.VectorUtils;
 
 /**
  * RoomsNotifications
@@ -48,7 +52,7 @@ public class RoomsNotifications implements Parcelable {
     private static final String LOG_TAG = RoomsNotifications.class.getSimpleName();
 
     // max number of lines to display the notification text styles
-    private static final int MAX_NUMBER_NOTIFICATION_LINES = 10;
+    private static final int MAX_NUMBER_NOTIFICATION_LINES = 3;
 
     /****** Parcelable items ********/
     // the session id
@@ -69,8 +73,8 @@ public class RoomsNotifications implements Parcelable {
     // true when the notified event is an invitation one
     boolean mIsInvitationEvent = false;
 
-    // the room avartar URL
-    String mRoomAvatarUrl = "";
+    // the room avatar
+    String mRoomAvatarPath = "";
 
     // notified message TS
     long mContentTs = -1;
@@ -81,6 +85,8 @@ public class RoomsNotifications implements Parcelable {
     // the context text
     String mContentText = "";
 
+    String mSenderName = "";
+
     // the notifications list
     List<RoomNotifications> mRoomNotifications = new ArrayList<>();
 
@@ -89,10 +95,10 @@ public class RoomsNotifications implements Parcelable {
 
     /****** others items ********/
     // notified event
-    NotificationUtils.NotifiedEvent mEventToNotify;
+    private NotificationUtils.NotifiedEvent mEventToNotify;
 
     // notified events by room id
-    Map<String, List<NotificationUtils.NotifiedEvent>> mNotifiedEventsByRoomId;
+    private Map<String, List<NotificationUtils.NotifiedEvent>> mNotifiedEventsByRoomId;
 
     // notification details
     private Context mContext;
@@ -121,6 +127,9 @@ public class RoomsNotifications implements Parcelable {
         mEventToNotify = anEventToNotify;
         mNotifiedEventsByRoomId = someNotifiedEventsByRoomId;
 
+        // the session id
+        mSessionId = mSession.getMyUserId();
+        mRoomId = anEventToNotify.mRoomId;
         mRoom = store.getRoom(mEventToNotify.mRoomId);
         mEvent = store.getEvent(mEventToNotify.mEventId, mEventToNotify.mRoomId);
 
@@ -151,14 +160,26 @@ public class RoomsNotifications implements Parcelable {
         // when the event is an invitation one
         // don't check if the sender ID is known because the members list are not yet downloaded
         if (!mIsInvitationEvent) {
-            mRoomAvatarUrl = mRoom.getAvatarUrl();
+            int size = mContext.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
+
+            File f = mSession.getMediasCache().thumbnailCacheFile(mRoom.getAvatarUrl(), size);
+
+            if (null != f) {
+                mRoomAvatarPath = f.getPath();
+            } else {
+                // prepare for the next time
+                mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeServerConfig(), new ImageView(mContext), mRoom.getAvatarUrl(), size);
+            }
         }
 
-        String roomName = NotificationUtils.getRoomName(mContext, mSession, mRoom, mEvent);
+        String roomName = getRoomName(mContext, mSession, mRoom, mEvent);
 
         mContentTs = mEvent.getOriginServerTs();
         mContentTitle = roomName;
         mContentText = body;
+
+        RoomMember member = mRoom.getMember(mEvent.getSender());
+        mSenderName = (null == member) ? mEvent.getSender() : member.getName();
 
         boolean singleRoom = (mNotifiedEventsByRoomId.size() == 1);
 
@@ -239,7 +260,7 @@ public class RoomsNotifications implements Parcelable {
 
         for (String roomId : mNotifiedEventsByRoomId.keySet()) {
             Room room = mSession.getDataHandler().getRoom(roomId);
-            String roomName = NotificationUtils.getRoomName(mContext, mSession, room, null);
+            String roomName = getRoomName(mContext, mSession, room, null);
 
             List<NotificationUtils.NotifiedEvent> notifiedEvents = mNotifiedEventsByRoomId.get(roomId);
             Event latestEvent = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
@@ -309,7 +330,7 @@ public class RoomsNotifications implements Parcelable {
             // if there is a valid latest message
             if ((null != latestEvent) && (null != room)) {
                 MXSession session = Matrix.getInstance(context).getDefaultSession();
-                String roomName = NotificationUtils.getRoomName(context, session, room, null);
+                String roomName = getRoomName(context, session, room, null);
 
                 EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
                 eventDisplay.setPrependMessagesWithAuthor(false);
@@ -339,12 +360,12 @@ public class RoomsNotifications implements Parcelable {
         out.writeString(mQuickReplyBody);
         out.writeString(mWearableMessage);
         out.writeInt(mIsInvitationEvent ? 1 : 0);
-        out.writeString(mRoomAvatarUrl);
+        out.writeString(mRoomAvatarPath);
         out.writeLong(mContentTs);
 
-        out.writeString(mRoomAvatarUrl);
         out.writeString(mContentTitle);
         out.writeString(mContentText);
+        out.writeString(mSenderName);
 
         RoomNotifications[] roomNotifications = new RoomNotifications[mRoomNotifications.size()];
         mRoomNotifications.toArray(roomNotifications);
@@ -368,12 +389,12 @@ public class RoomsNotifications implements Parcelable {
         mQuickReplyBody = in.readString();
         mWearableMessage = in.readString();
         mIsInvitationEvent = (1 == in.readInt()) ? true : false;
-        mRoomAvatarUrl = in.readString();
+        mRoomAvatarPath = in.readString();
         mContentTs = in.readLong();
 
-        mRoomAvatarUrl = in.readString();
         mContentTitle = in.readString();
         mContentText = in.readString();
+        mSenderName = in.readString();
 
         Object[] roomNotificationsAasVoid = in.readArray(RoomNotifications.class.getClassLoader());
         for (Object object : roomNotificationsAasVoid) {
@@ -412,7 +433,7 @@ public class RoomsNotifications implements Parcelable {
      * *********************************************************************************************
      * Serialisation
      * *********************************************************************************************
-    */
+     */
 
     /**
      * @return byte[] from the class
@@ -437,5 +458,42 @@ public class RoomsNotifications implements Parcelable {
 
         init(parcel);
         parcel.recycle();
+    }
+
+    /*
+     * *********************************************************************************************
+     * Serialisation
+     * *********************************************************************************************
+     */
+
+    /**
+     * Retrieve the room name.
+     *
+     * @param session the session
+     * @param room    the room
+     * @param event   the event
+     * @return the room name
+     */
+    public static String getRoomName(Context context, MXSession session, Room room, Event event) {
+        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+
+        // avoid displaying the room Id
+        // try to find the sender display name
+        if (TextUtils.equals(roomName, room.getRoomId())) {
+            roomName = room.getName(session.getMyUserId());
+
+            // avoid room Id as name
+            if (TextUtils.equals(roomName, room.getRoomId()) && (null != event)) {
+                User user = session.getDataHandler().getStore().getUser(event.sender);
+
+                if (null != user) {
+                    roomName = user.displayname;
+                } else {
+                    roomName = event.sender;
+                }
+            }
+        }
+
+        return roomName;
     }
 }

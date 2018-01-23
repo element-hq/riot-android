@@ -71,6 +71,7 @@ import im.vector.ViewedRoomTracker;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.notifications.NotificationUtils;
+import im.vector.notifications.RoomsNotifications;
 import im.vector.receiver.DismissNotificationReceiver;
 import im.vector.util.CallsManager;
 import im.vector.util.PreferencesManager;
@@ -1551,7 +1552,7 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "displayIncomingCallNotification : display the dedicated notification");
             Notification notification = NotificationUtils.buildIncomingCallNotification(
                     EventStreamService.this,
-                    NotificationUtils.getRoomName(getApplicationContext(), session, room, event),
+                    RoomsNotifications.getRoomName(getApplicationContext(), session, room, event),
                     session.getMyUserId(),
                     callId);
 
