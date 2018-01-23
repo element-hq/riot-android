@@ -16,12 +16,30 @@
 
 package im.vector.notifications;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.util.EventDisplay;
+import org.matrix.androidsdk.util.Log;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
+import im.vector.Matrix;
+import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.activity.LockScreenActivity;
+import im.vector.util.RiotEventDisplay;
 
 /**
  * RoomsNotifications
@@ -29,16 +47,282 @@ import java.util.List;
 public class RoomsNotifications implements Parcelable {
     private static final String LOG_TAG = RoomsNotifications.class.getSimpleName();
 
+    // max number of lines to display the notification text styles
+    private static final int MAX_NUMBER_NOTIFICATION_LINES = 10;
+
+    /****** Parcelable items ********/
     // the session id
-    public String mSessionId = "";
+    String mSessionId = "";
+
+    // the notified event room Id
+    String mRoomId = "";
+
+    // the notification summary
+    String mSummaryText = "";
+
+    // latest message with sender header
+    String mQuickReplyBody = "";
+
+    // wearable notification message
+    String mWearableMessage = "";
+
+    // true when the notified event is an invitation one
+    boolean mIsInvitationEvent = false;
+
+    // the room avartar URL
+    String mRoomAvatarUrl = "";
+
+    // notified message TS
+    long mContentTs = -1;
+
+    // content title
+    String mContentTitle = "";
+
+    // the context text
+    String mContentText = "";
 
     // the notifications list
-    public List<RoomNotifications> mRoomNotifications = new ArrayList<>();
+    List<RoomNotifications> mRoomNotifications = new ArrayList<>();
 
     // messages list
-    public List<CharSequence> mReversedMessagesList = new ArrayList<>();
+    List<CharSequence> mReversedMessagesList = new ArrayList<>();
 
+    /****** others items ********/
+    // notified event
+    NotificationUtils.NotifiedEvent mEventToNotify;
+
+    // notified events by room id
+    Map<String, List<NotificationUtils.NotifiedEvent>> mNotifiedEventsByRoomId;
+
+    // notification details
+    private Context mContext;
+    private MXSession mSession;
+    private Room mRoom;
+    private Event mEvent;
+
+    /**
+     * Empty constructor
+     */
     public RoomsNotifications() {
+    }
+
+    /**
+     * Constructor
+     *
+     * @param anEventToNotify            the event to notify
+     * @param someNotifiedEventsByRoomId the notified events
+     */
+    public RoomsNotifications(NotificationUtils.NotifiedEvent anEventToNotify,
+                              Map<String, List<NotificationUtils.NotifiedEvent>> someNotifiedEventsByRoomId) {
+        mContext = VectorApp.getInstance();
+        mSession = Matrix.getInstance(mContext).getDefaultSession();
+        IMXStore store = mSession.getDataHandler().getStore();
+
+        mEventToNotify = anEventToNotify;
+        mNotifiedEventsByRoomId = someNotifiedEventsByRoomId;
+
+        mRoom = store.getRoom(mEventToNotify.mRoomId);
+        mEvent = store.getEvent(mEventToNotify.mEventId, mEventToNotify.mRoomId);
+
+        // sanity check
+        if ((null == mRoom) || (null == mEvent)) {
+            if (null == mRoom) {
+                Log.e(LOG_TAG, "## RoomsNotifications() : null room " + mEventToNotify.mRoomId);
+            } else {
+                Log.e(LOG_TAG, "## RoomsNotifications() : null event " + mEventToNotify.mEventId + " " + mEventToNotify.mRoomId);
+            }
+            return;
+        }
+
+        mIsInvitationEvent = false;
+
+        EventDisplay eventDisplay = new RiotEventDisplay(mContext, mEvent, mRoom.getLiveState());
+        eventDisplay.setPrependMessagesWithAuthor(true);
+        CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+        String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
+
+        if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(mEvent.getType())) {
+            try {
+                mIsInvitationEvent = "invite".equals(mEvent.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "RoomsNotifications : invitation parsing failed");
+            }
+        }
+        // when the event is an invitation one
+        // don't check if the sender ID is known because the members list are not yet downloaded
+        if (!mIsInvitationEvent) {
+            mRoomAvatarUrl = mRoom.getAvatarUrl();
+        }
+
+        String roomName = NotificationUtils.getRoomName(mContext, mSession, mRoom, mEvent);
+
+        mContentTs = mEvent.getOriginServerTs();
+        mContentTitle = roomName;
+        mContentText = body;
+
+        boolean singleRoom = (mNotifiedEventsByRoomId.size() == 1);
+
+        if (singleRoom) {
+            initSingleRoom();
+        } else {
+            initMultiRooms();
+        }
+    }
+
+    /**
+     * Init for a single room notifications
+     */
+    private void initSingleRoom() {
+        RoomNotifications roomNotifications = new RoomNotifications();
+        mRoomNotifications.add(roomNotifications);
+        roomNotifications.mRoomId = mEvent.roomId;
+        roomNotifications.mRoomName = mContentTitle;
+
+        List<NotificationUtils.NotifiedEvent> notifiedEvents = mNotifiedEventsByRoomId.get(roomNotifications.mRoomId);
+        int unreadCount = notifiedEvents.size();
+
+        // the messages are sorted from the oldest to the latest
+        Collections.reverse(notifiedEvents);
+
+        if (notifiedEvents.size() > MAX_NUMBER_NOTIFICATION_LINES) {
+            notifiedEvents = notifiedEvents.subList(0, MAX_NUMBER_NOTIFICATION_LINES);
+        }
+
+        SpannableString latestText = null;
+        IMXStore store = mSession.getDataHandler().getStore();
+
+        for (NotificationUtils.NotifiedEvent notifiedEvent : notifiedEvents) {
+            Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
+            EventDisplay eventDisplay = new RiotEventDisplay(mContext, event, mRoom.getLiveState());
+            eventDisplay.setPrependMessagesWithAuthor(true);
+            CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+
+            if (!TextUtils.isEmpty(textualDisplay)) {
+                mReversedMessagesList.add(textualDisplay);
+            }
+        }
+
+        // adapt the notification display to the number of notified messages
+        if ((1 == notifiedEvents.size()) && (null != latestText)) {
+            roomNotifications.mMessagesSummary = latestText;
+        } else {
+            if (unreadCount > MAX_NUMBER_NOTIFICATION_LINES) {
+                mSummaryText = mContext.getString(R.string.notification_unread_notified_messages, unreadCount);
+            }
+        }
+
+        // do not offer to quick respond if the user did not dismiss the previous one
+        if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
+            if (!mIsInvitationEvent) {
+                Event event = store.getEvent(mEventToNotify.mEventId, mEventToNotify.mRoomId);
+                RoomMember member = mRoom.getMember(event.getSender());
+                roomNotifications.mSenderName = (null == member) ? event.getSender() : member.getName();
+
+                EventDisplay eventDisplay = new RiotEventDisplay(mContext, event, mRoom.getLiveState());
+                eventDisplay.setPrependMessagesWithAuthor(false);
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+                mQuickReplyBody = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
+            }
+        }
+
+        initWearableMessage(mContext, mRoom, store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomNotifications.mRoomId), mIsInvitationEvent);
+    }
+
+    /**
+     * Init for multi rooms notifications
+     */
+    private void initMultiRooms() {
+        IMXStore store = mSession.getDataHandler().getStore();
+
+        int sum = 0;
+        int roomsCount = 0;
+
+        for (String roomId : mNotifiedEventsByRoomId.keySet()) {
+            Room room = mSession.getDataHandler().getRoom(roomId);
+            String roomName = NotificationUtils.getRoomName(mContext, mSession, room, null);
+
+            List<NotificationUtils.NotifiedEvent> notifiedEvents = mNotifiedEventsByRoomId.get(roomId);
+            Event latestEvent = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
+
+            String text;
+            String header;
+
+            EventDisplay eventDisplay = new RiotEventDisplay(mContext, latestEvent, room.getLiveState());
+            eventDisplay.setPrependMessagesWithAuthor(false);
+
+            if (room.isInvited()) {
+                header = roomName + ": ";
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+                text = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
+            } else if (1 == notifiedEvents.size()) {
+                eventDisplay = new RiotEventDisplay(mContext, latestEvent, room.getLiveState());
+                eventDisplay.setPrependMessagesWithAuthor(false);
+
+                header = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
+
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+
+                // the event might have been redacted
+                if (!TextUtils.isEmpty(textualDisplay)) {
+                    text = textualDisplay.toString();
+                } else {
+                    text = "";
+                }
+            } else {
+                header = roomName + ": ";
+                text = mContext.getString(R.string.notification_unread_notified_messages, notifiedEvents.size());
+            }
+
+            // ad the line if it makes sense
+            if (!TextUtils.isEmpty(text)) {
+                RoomNotifications roomNotifications = new RoomNotifications();
+                mRoomNotifications.add(roomNotifications);
+
+                roomNotifications.mRoomId = roomId;
+                roomNotifications.mLatestEventTs = latestEvent.getOriginServerTs();
+                roomNotifications.mMessageHeader = header;
+                roomNotifications.mMessagesSummary = header + text;
+                sum += notifiedEvents.size();
+                roomsCount++;
+            }
+        }
+
+        Collections.sort(mRoomNotifications, RoomNotifications.mRoomNotificationsComparator);
+
+        if (mRoomNotifications.size() > MAX_NUMBER_NOTIFICATION_LINES) {
+            mRoomNotifications = mRoomNotifications.subList(0, MAX_NUMBER_NOTIFICATION_LINES);
+        }
+
+        mSummaryText = mContext.getString(R.string.notification_unread_notified_messages_in_room, sum, roomsCount);
+    }
+
+    /**
+     * Compute the wearable message
+     *
+     * @param context           the context
+     * @param room              the room
+     * @param latestEvent       the latest event
+     * @param isInvitationEvent true if it is an invitaion
+     */
+    private void initWearableMessage(Context context, Room room, Event latestEvent, boolean isInvitationEvent) {
+        if (!isInvitationEvent) {
+            // if there is a valid latest message
+            if ((null != latestEvent) && (null != room)) {
+                MXSession session = Matrix.getInstance(context).getDefaultSession();
+                String roomName = NotificationUtils.getRoomName(context, session, room, null);
+
+                EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
+                eventDisplay.setPrependMessagesWithAuthor(false);
+
+                mWearableMessage = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+
+                // the event might have been redacted
+                if (!TextUtils.isEmpty(textualDisplay)) {
+                    mWearableMessage += textualDisplay.toString();
+                }
+            }
+        }
     }
 
     /*
@@ -50,6 +334,17 @@ public class RoomsNotifications implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(mSessionId);
+        out.writeString(mRoomId);
+        out.writeString(mSummaryText);
+        out.writeString(mQuickReplyBody);
+        out.writeString(mWearableMessage);
+        out.writeInt(mIsInvitationEvent ? 1 : 0);
+        out.writeString(mRoomAvatarUrl);
+        out.writeLong(mContentTs);
+
+        out.writeString(mRoomAvatarUrl);
+        out.writeString(mContentTitle);
+        out.writeString(mContentText);
 
         RoomNotifications[] roomNotifications = new RoomNotifications[mRoomNotifications.size()];
         mRoomNotifications.toArray(roomNotifications);
@@ -66,8 +361,19 @@ public class RoomsNotifications implements Parcelable {
      *
      * @param in the parcel
      */
-    private RoomsNotifications(Parcel in) {
+    private void init(Parcel in) {
         mSessionId = in.readString();
+        mRoomId = in.readString();
+        mSummaryText = in.readString();
+        mQuickReplyBody = in.readString();
+        mWearableMessage = in.readString();
+        mIsInvitationEvent = (1 == in.readInt()) ? true : false;
+        mRoomAvatarUrl = in.readString();
+        mContentTs = in.readLong();
+
+        mRoomAvatarUrl = in.readString();
+        mContentTitle = in.readString();
+        mContentText = in.readString();
 
         Object[] roomNotificationsAasVoid = in.readArray(RoomNotifications.class.getClassLoader());
         for (Object object : roomNotificationsAasVoid) {
@@ -87,7 +393,9 @@ public class RoomsNotifications implements Parcelable {
      */
     public final static Parcelable.Creator<RoomsNotifications> CREATOR = new Parcelable.Creator<RoomsNotifications>() {
         public RoomsNotifications createFromParcel(Parcel p) {
-            return new RoomsNotifications(p);
+            RoomsNotifications res = new RoomsNotifications();
+            res.init(p);
+            return res;
         }
 
         public RoomsNotifications[] newArray(int size) {
@@ -127,11 +435,7 @@ public class RoomsNotifications implements Parcelable {
         parcel.unmarshall(bytes, 0, bytes.length);
         parcel.setDataPosition(0);
 
-        RoomsNotifications roomsNotifications = RoomsNotifications.CREATOR.createFromParcel(parcel);
-        mSessionId = roomsNotifications.mSessionId;
-        mRoomNotifications = roomsNotifications.mRoomNotifications;
-        mReversedMessagesList = roomsNotifications.mReversedMessagesList;
-
+        init(parcel);
         parcel.recycle();
     }
 }

@@ -20,24 +20,42 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import java.util.Comparator;
+
 /**
  * RoomNotifications
  */
 public class RoomNotifications implements Parcelable {
     private static final String LOG_TAG = RoomNotifications.class.getSimpleName();
 
-    public String mRoomId = "";
-    public String mRoomAlias = "";
-    public String mRoomName = "";
-    public String mMessageHeader = "";
-    public CharSequence mLatestMessage = "";
-    public long mEventTs = -1;
+    String mRoomId = "";
+    String mRoomName = "";
+    String mMessageHeader = "";
+    CharSequence mMessagesSummary = "";
+    long mLatestEventTs = -1;
 
-    public String mSenderName = "";
-    public boolean mIsInvited = false;
+    String mSenderName = "";
+    int mUnreadMessagesCount = -1;
 
-    public int mUnreadMessagesCount = -1;
+    /**
+     * NotificationDisplay comparator
+     */
+    static final Comparator<RoomNotifications> mRoomNotificationsComparator = new Comparator<RoomNotifications>() {
+        @Override
+        public int compare(RoomNotifications lhs, RoomNotifications rhs) {
+            long t0 = lhs.mLatestEventTs;
+            long t1 = rhs.mLatestEventTs;
 
+            if (t0 > t1) {
+                return -1;
+            } else if (t0 < t1) {
+                return +1;
+            }
+            return 0;
+        }
+    };
+
+    // empty constructor
     public RoomNotifications() {
     }
 
@@ -54,14 +72,12 @@ public class RoomNotifications implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(mRoomId);
-        out.writeString(mRoomAlias);
         out.writeString(mRoomName);
         out.writeString(mMessageHeader);
-        TextUtils.writeToParcel(mLatestMessage, out, 0);
-        out.writeLong(mEventTs);
+        TextUtils.writeToParcel(mMessagesSummary, out, 0);
+        out.writeLong(mLatestEventTs);
 
         out.writeString(mSenderName);
-        out.writeInt(mIsInvited ? 0 : 1);
         out.writeInt(mUnreadMessagesCount);
     }
 
@@ -72,13 +88,11 @@ public class RoomNotifications implements Parcelable {
      */
     private RoomNotifications(Parcel in) {
         mRoomId = in.readString();
-        mRoomAlias = in.readString();
         mRoomName = in.readString();
         mMessageHeader = in.readString();
-        mLatestMessage = TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(in);
-        mEventTs = in.readLong();
+        mMessagesSummary = TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(in);
+        mLatestEventTs = in.readLong();
         mSenderName = in.readString();
-        mIsInvited = (0 == in.readInt()) ? false : true;
         mUnreadMessagesCount = in.readInt();
     }
 
