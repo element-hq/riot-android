@@ -38,16 +38,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
-import android.widget.ImageView;
-
-import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.store.IMXStore;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
-import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
@@ -61,13 +52,7 @@ import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.receiver.DismissNotificationReceiver;
 import im.vector.util.PreferencesManager;
-import im.vector.util.RiotEventDisplay;
-import im.vector.util.VectorUtils;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -579,6 +564,30 @@ public class NotificationUtils {
     }
 
     /**
+     * Build a notification from the cached RoomsNotifications instance.
+     *
+     * @param context                the context
+     * @param isBackground           true if it is background notification
+     * @return the notification
+     */
+    public static Notification buildMessageNotification(Context context, boolean isBackground) {
+
+        Notification notification = null;
+        try {
+            RoomsNotifications roomsNotifications = RoomsNotifications.loadRoomsNotifications(context);
+
+            if (null != roomsNotifications) {
+                notification = buildMessageNotification(context, roomsNotifications, new BingRule(), isBackground);
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed " +  e.getMessage());
+        }
+
+        return notification;
+    }
+
+
+    /**
      * Build a notification
      *
      * @param context                the context
@@ -591,9 +600,35 @@ public class NotificationUtils {
                                                         Map<String, List<NotifiedEvent>> notifiedEventsByRoomId,
                                                         NotifiedEvent eventToNotify,
                                                         boolean isBackground) {
+
+        Notification notification = null;
         try {
             RoomsNotifications roomsNotifications = new RoomsNotifications(eventToNotify, notifiedEventsByRoomId);
+            notification = buildMessageNotification(context, roomsNotifications, eventToNotify.mBingRule, isBackground);
+            // cache the value
+            RoomsNotifications.saveRoomNotifications(context, roomsNotifications);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed " +  e.getMessage());
+        }
 
+        return notification;
+    }
+
+
+    /**
+     * Build a notification
+     *
+     * @param context                the context
+     * @param roomsNotifications the rooms notifications
+     * @param bingRule          the bing rule
+     * @param isBackground           true if it is background notification
+     * @return the notification
+     */
+    private static Notification buildMessageNotification(Context context,
+                                                        RoomsNotifications roomsNotifications,
+                                                        BingRule bingRule,
+                                                        boolean isBackground) {
+        try {
             Bitmap largeBitmap = null;
 
             // when the event is an invitation one
@@ -610,8 +645,6 @@ public class NotificationUtils {
                     }
                 }
             }
-
-            BingRule bingRule = eventToNotify.mBingRule;
 
             Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
 

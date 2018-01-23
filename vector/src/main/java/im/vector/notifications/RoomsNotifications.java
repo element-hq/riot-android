@@ -32,7 +32,11 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -435,10 +439,13 @@ public class RoomsNotifications implements Parcelable {
      * *********************************************************************************************
      */
 
+    private static final String ROOMS_NOTIFICATIONS_FILE_NAME = "ROOMS_NOTIFICATIONS_FILE_NAME";
+
+
     /**
      * @return byte[] from the class
      */
-    public byte[] marshall() {
+    private byte[] marshall() {
         Parcel parcel = Parcel.obtain();
         writeToParcel(parcel, 0);
         byte[] bytes = parcel.marshall();
@@ -451,7 +458,7 @@ public class RoomsNotifications implements Parcelable {
      *
      * @param bytes the bytes array
      */
-    public RoomsNotifications(byte[] bytes) {
+    private RoomsNotifications(byte[] bytes) {
         Parcel parcel = Parcel.obtain();
         parcel.unmarshall(bytes, 0, bytes.length);
         parcel.setDataPosition(0);
@@ -460,9 +467,113 @@ public class RoomsNotifications implements Parcelable {
         parcel.recycle();
     }
 
+    /**
+     * Delete the cached RoomNotifications
+     *
+     * @param context the context
+     */
+    public static void deleteCachedRoomNotifications(Context context) {
+        File file = new File(context.getApplicationContext().getCacheDir(), ROOMS_NOTIFICATIONS_FILE_NAME);
+
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    /**
+     * Save the roomsNotifications instance into the file system.
+     *
+     * @param context            the context
+     * @param roomsNotifications the roomsNotifications instance
+     */
+    public static void saveRoomNotifications(Context context, RoomsNotifications roomsNotifications) {
+        deleteCachedRoomNotifications(context);
+
+        ByteArrayInputStream fis = null;
+        FileOutputStream fos = null;
+
+        try {
+            fis = new ByteArrayInputStream(roomsNotifications.marshall());
+            fos = new FileOutputStream(new File(context.getApplicationContext().getCacheDir(), ROOMS_NOTIFICATIONS_FILE_NAME));
+
+            byte[] readData = new byte[1024];
+            int len;
+
+            while ((len = fis.read(readData, 0, 1024)) > 0) {
+                fos.write(readData, 0, len);
+            }
+        } catch (Throwable t) {
+            Log.e(LOG_TAG, "## saveRoomNotifications() failed " + t.getMessage());
+        }
+
+        try {
+            if (null != fis) {
+                fis.close();
+            }
+
+            if (null != fos) {
+                fos.close();
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## saveRoomNotifications() failed " + e.getMessage());
+        }
+    }
+
+    /**
+     * Load a saved RoomsNotifications from the file system
+     *
+     * @param context the context
+     * @return a RoomsNotifications instance if found
+     */
+    public static RoomsNotifications loadRoomsNotifications(Context context) {
+        File file = new File(context.getApplicationContext().getCacheDir(), ROOMS_NOTIFICATIONS_FILE_NAME);
+
+        // test if the file exits
+        if (!file.exists()) {
+            return null;
+        }
+
+        RoomsNotifications roomsNotifications = null;
+        FileInputStream fis = null;
+        ByteArrayOutputStream fos = null;
+
+        try {
+            fis = new FileInputStream(file);
+            fos = new ByteArrayOutputStream();
+
+
+            byte[] readData = new byte[1024];
+            int len;
+
+            while ((len = fis.read(readData, 0, 1024)) > 0) {
+                fos.write(readData, 0, len);
+            }
+
+            roomsNotifications = new RoomsNotifications(fos.toByteArray());
+        } catch (Throwable t) {
+            Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + t.getMessage());
+        }
+
+        try {
+            if (null != fis) {
+                fis.close();
+            }
+
+            if (null != fos) {
+                fos.close();
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + e.getMessage());
+        }
+
+        // the file moust be read once
+        deleteCachedRoomNotifications(context);
+        return roomsNotifications;
+    }
+
     /*
      * *********************************************************************************************
-     * Serialisation
+     * Utils
      * *********************************************************************************************
      */
 
