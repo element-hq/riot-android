@@ -1331,11 +1331,16 @@ public class EventStreamService extends Service {
 
                             // the notification cannot be built
                             if (null != notif) {
-                                if (mIsForeground) {
-                                    stopForeground(true);
-                                    mIsForeground = false;
+                                if (shouldDisplayListenForEventsNotification()) {
+                                    mIsForeground = true;
+                                    startForeground(NOTIFICATION_ID, notif);
+                                } else {
+                                    if (mIsForeground) {
+                                        stopForeground(true);
+                                        mIsForeground = false;
+                                    }
+                                    nm.notify(NOTIFICATION_ID, notif);
                                 }
-                                nm.notify(NOTIFICATION_ID, notif);
                                 mNotificationState = NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS;
                                 Log.d(LOG_TAG, "## refreshMessagesNotification() : display the notification");
                             } else {
