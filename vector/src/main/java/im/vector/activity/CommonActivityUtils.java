@@ -594,6 +594,10 @@ public class CommonActivityUtils {
                     context.startService(intent);
                 }
             }
+
+            if (null != EventStreamService.getInstance()) {
+                EventStreamService.getInstance().updateStatusNotification();
+            }
         }
     }
 
@@ -2055,8 +2059,8 @@ public class CommonActivityUtils {
     /**
      * Tint the drawable with a theme attribute
      *
-     * @param context  the context
-     * @param drawable the drawable to tint
+     * @param context   the context
+     * @param drawable  the drawable to tint
      * @param attribute the theme color
      * @return the tinted drawable
      */
@@ -2068,7 +2072,7 @@ public class CommonActivityUtils {
      * Tint the drawable with a color integer
      *
      * @param drawable the drawable to tint
-     * @param color the color
+     * @param color    the color
      * @return the tinted drawable
      */
     public static Drawable tintDrawableWithColor(Drawable drawable, @ColorInt int color) {

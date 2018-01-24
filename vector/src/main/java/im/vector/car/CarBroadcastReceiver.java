@@ -17,7 +17,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.message.Message;
 
 import im.vector.Matrix;
-import im.vector.util.NotificationUtils;
+import im.vector.notifications.NotificationUtils;
 
 public class CarBroadcastReceiver extends BroadcastReceiver {
 

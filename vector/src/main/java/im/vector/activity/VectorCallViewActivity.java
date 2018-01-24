@@ -63,7 +63,6 @@ import java.util.TimerTask;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.services.EventStreamService;
 import im.vector.util.CallsManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
@@ -466,11 +465,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                 }
             }
         } else {
-            Log.d(LOG_TAG, "## onCreate(): Hide the call notifications");
-            if (null != EventStreamService.getInstance()) {
-                EventStreamService.getInstance().hideCallNotifications();
-            }
-
             // create the callview asap
             this.runOnUiThread(new Runnable() {
                 @Override
@@ -677,7 +671,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
         mHeaderPendingCallView.checkPendingCall();
 
-        EventStreamService.getInstance().displayCallInProgressNotification(mCall.getSession(), mCall.getRoom(), mCall.getCallId());
         // compute video UI layout position after rotation & apply new position
         computeVideoUiLayout();
         if ((null != mCall) && mCall.isVideo() && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
@@ -1121,7 +1114,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                 if (mCall.isIncoming()) {
                     mCall.answer();
                     mIncomingCallTabbar.setVisibility(View.GONE);
-                }
+                 }
                 break;
             default:
                 // nothing to do..
