@@ -56,7 +56,7 @@ public class RoomsNotifications implements Parcelable {
     private static final String LOG_TAG = RoomsNotifications.class.getSimpleName();
 
     // max number of lines to display the notification text styles
-    static final int MAX_NUMBER_NOTIFICATION_LINES = 3;
+    static final int MAX_NUMBER_NOTIFICATION_LINES = 10;
 
     /****** Parcelable items ********/
     // the session id

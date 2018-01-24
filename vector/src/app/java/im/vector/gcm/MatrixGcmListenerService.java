@@ -33,7 +33,6 @@ import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.services.EventStreamService;
-import im.vector.util.PreferencesManager;
 
 /**
  * Class implementing GcmListenerService.
@@ -115,19 +114,11 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                 Log.d(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled");
                 return;
             }
-
-            boolean useBatteryOptim = !PreferencesManager.canStartBackgroundService(getApplicationContext()) && EventStreamService.isStopped();
-
-            if ((!gcmManager.isBackgroundSyncAllowed() || useBatteryOptim)
-                    && VectorApp.isAppInBackground()) {
+            if (!gcmManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
                 EventStreamService eventStreamService = EventStreamService.getInstance();
                 Event event = parseEvent(data);
 
-                if (!gcmManager.isBackgroundSyncAllowed()) {
-                    Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled with eventStreamService " + eventStreamService);
-                } else {
-                    Log.d(LOG_TAG, "## onMessageReceivedInternal() : use the battery optimisation with eventStreamService " + eventStreamService);
-                }
+                Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled with eventStreamService " + eventStreamService);
 
                 EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, data.get("room_name"), data.get("sender_display_name"), unreadCount);
                 return;
