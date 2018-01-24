@@ -489,6 +489,11 @@ public class RoomsNotifications implements Parcelable {
     public static void saveRoomNotifications(Context context, RoomsNotifications roomsNotifications) {
         deleteCachedRoomNotifications(context);
 
+        // no notified messages
+        if (roomsNotifications.mRoomNotifications.isEmpty()) {
+            return;
+        }
+
         ByteArrayInputStream fis = null;
         FileOutputStream fos = null;
 
@@ -566,8 +571,6 @@ public class RoomsNotifications implements Parcelable {
             Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + e.getMessage());
         }
 
-        // the file moust be read once
-        deleteCachedRoomNotifications(context);
         return roomsNotifications;
     }
 
