@@ -713,7 +713,7 @@
     <!-- encryption dialog -->
     <string name="encryption_information_title">Informació de l'encriptació d'extrem a extrem</string>
 
-    <string name="encryption_information_device_info">Informació d'events</string>
+    <string name="encryption_information_device_info">Informació d'esdeveniment</string>
     <string name="encryption_information_user_id">Id de l'usuari</string>
     <string name="encryption_information_curve25519_identity_key">Clau de la identitat Curve25519</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Empremta digital Ed25519 reclamada</string>
