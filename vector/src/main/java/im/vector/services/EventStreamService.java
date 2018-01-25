@@ -108,7 +108,7 @@ public class EventStreamService extends Service {
      */
     public static final String EXTRA_STREAM_ACTION = "EventStreamService.EXTRA_STREAM_ACTION";
     public static final String EXTRA_MATRIX_IDS = "EventStreamService.EXTRA_MATRIX_IDS";
-    private static final String EXTRA_AUTO_RESTART_ACTION = "EventStreamService.EXTRA_AUTO_RESTART_ACTION";
+    public static final String EXTRA_AUTO_RESTART_ACTION = "EventStreamService.EXTRA_AUTO_RESTART_ACTION";
 
     /**
      * Notification identifiers
@@ -471,22 +471,23 @@ public class EventStreamService extends Service {
     @Override
     public void onDestroy() {
         if (!mIsSelfDestroyed) {
-            Log.d(LOG_TAG, "## onDestroy() : restart it");
             setServiceState(StreamAction.STOP);
 
-            // stop the foreground service on devices which don't allow restart the background service
+            // stop the foreground service on devices which uses the battery optimisation
             // during the initial syncing
             // and if the GCM registration was done
-            if (!PreferencesManager.canStartBackgroundService(getApplicationContext()) &&
+            if (PreferencesManager.useBatteryOptimisation(getApplicationContext()) &&
+                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) &&
                     (mNotificationState == NotificationState.INITIAL_SYNCING)
                     && Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager().hasRegistrationToken()) {
                 stopForeground(true);
                 mIsForeground = false;
             }
 
+            Log.d(LOG_TAG, "## onDestroy() : restart it");
             autoRestart();
         } else {
-            Log.d(LOG_TAG, "## onDestroy()");
+            Log.d(LOG_TAG, "## onDestroy() : do nothing");
             stop();
             super.onDestroy();
         }
@@ -561,7 +562,7 @@ public class EventStreamService extends Service {
                         (new Handler(getMainLooper())).post(new Runnable() {
                             @Override
                             public void run() {
-                                updateStatusNotification();
+                                refreshStatusNotification();
                             }
                         });
                     }
@@ -672,7 +673,7 @@ public class EventStreamService extends Service {
             monitorSession(session);
         }
 
-        updateStatusNotification();
+        refreshStatusNotification();
 
         setServiceState(StreamAction.START);
     }
@@ -793,7 +794,7 @@ public class EventStreamService extends Service {
             }
         }
 
-        updateStatusNotification();
+        refreshStatusNotification();
     }
 
     /**
@@ -809,8 +810,8 @@ public class EventStreamService extends Service {
     /**
      * Manages the "listen for events" and "synchronising" notifications
      */
-    public void updateStatusNotification() {
-        Log.d(LOG_TAG, "## updateStatusNotification from state " + mNotificationState);
+    public void refreshStatusNotification() {
+        Log.d(LOG_TAG, "## refreshStatusNotification from state " + mNotificationState);
 
         MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
 
@@ -821,12 +822,22 @@ public class EventStreamService extends Service {
 
         // call in progress notifications
         if ((mNotificationState == NotificationState.INCOMING_CALL) || (mNotificationState == NotificationState.CALL_IN_PROGRESS)) {
-            Log.d(LOG_TAG, "## updateStatusNotification : does nothing as there is a pending call");
+            Log.d(LOG_TAG, "## refreshStatusNotification : does nothing as there is a pending call");
             return;
         }
 
         if (mNotificationState == NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS) {
-            Log.d(LOG_TAG, "## updateStatusNotification : displaying events notification");
+            if (PreferencesManager.useBatteryOptimisation(getApplicationContext()) &&
+                    ((mServiceState == StreamAction.CATCHUP) || isStopped()) && !mIsForeground) {
+                if (mServiceState == StreamAction.CATCHUP) {
+                    Log.d(LOG_TAG, "## refreshStatusNotification : events notif is displayed but the application is catchup up");
+                } else {
+                    Log.d(LOG_TAG, "## refreshStatusNotification : events notif is displayed but the service was stopped");
+                }
+                mNotificationState = NotificationState.NONE;
+            } else {
+                Log.d(LOG_TAG, "## refreshStatusNotification : displaying events notification");
+            }
             return;
         }
 
@@ -837,7 +848,7 @@ public class EventStreamService extends Service {
                 mNotificationState = NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS;
                 startForeground(NOTIFICATION_ID, notification);
                 mIsForeground = true;
-                Log.d(LOG_TAG, "## updateStatusNotification : restore the events notification");
+                Log.d(LOG_TAG, "## refreshStatusNotification : restore the events notification");
                 return;
             }
         }
@@ -847,10 +858,10 @@ public class EventStreamService extends Service {
             return;
         }
 
-        boolean isInitialSyncInProgress = !session.getDataHandler().isInitialSyncComplete();
+        boolean isInitialSyncInProgress = !session.getDataHandler().isInitialSyncComplete() || isStopped() || (mServiceState == StreamAction.CATCHUP);
 
         if (isInitialSyncInProgress) {
-            Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in foreground because of an initial sync " + mNotificationState);
+            Log.d(LOG_TAG, "## refreshStatusNotification : put the service in foreground because of an initial sync " + mNotificationState);
 
             if (mNotificationState != NotificationState.INITIAL_SYNCING) {
                 startForeground(NOTIFICATION_ID, buildForegroundServiceNotification(getString(R.string.notification_sync_in_progress)));
@@ -858,7 +869,7 @@ public class EventStreamService extends Service {
             }
             mIsForeground = true;
         } else if (shouldDisplayListenForEventsNotification()) {
-            Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in foreground because of GCM registration");
+            Log.d(LOG_TAG, "## refreshStatusNotification : put the service in foreground because of GCM registration");
 
             if (mNotificationState != NotificationState.LISTENING_FOR_EVENTS) {
                 startForeground(NOTIFICATION_ID, buildForegroundServiceNotification(getString(R.string.notification_listen_for_events)));
@@ -867,11 +878,12 @@ public class EventStreamService extends Service {
 
             mIsForeground = true;
         } else {
-            Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in background from state " + mNotificationState);
-
             if ((mNotificationState == NotificationState.LISTENING_FOR_EVENTS) || (mNotificationState == NotificationState.INITIAL_SYNCING)) {
+                Log.d(LOG_TAG, "## refreshStatusNotification : put the service in background from state " + mNotificationState);
                 stopForeground(true);
                 mNotificationState = NotificationState.NONE;
+            } else {
+                Log.d(LOG_TAG, "## refreshStatusNotification : nothing to do");
             }
             mIsForeground = false;
         }
@@ -1244,7 +1256,7 @@ public class EventStreamService extends Service {
 
             mNotificationState = NotificationState.NONE;
             RoomsNotifications.deleteCachedRoomNotifications(getApplicationContext());
-            updateStatusNotification();
+            refreshStatusNotification();
         }
     }
 
@@ -1644,7 +1656,7 @@ public class EventStreamService extends Service {
             stopForeground(true);
 
             mNotificationState = NotificationState.NONE;
-            updateStatusNotification();
+            refreshStatusNotification();
         }
     }
 }
