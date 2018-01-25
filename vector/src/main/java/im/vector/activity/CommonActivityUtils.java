@@ -481,15 +481,18 @@ public class CommonActivityUtils {
     private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
         Context appContext = context.getApplicationContext();
 
-        Log.d(LOG_TAG, "sendEventStreamAction " + action);
-
         if (!isUserLogout(appContext)) {
-            // Fix https://github.com/vector-im/vector-android/issues/230
-            // Only start the service if a session is in progress, otherwise
-            // starting the service is useless
-            Intent killStreamService = new Intent(appContext, EventStreamService.class);
-            killStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, action.ordinal());
-            appContext.startService(killStreamService);
+            Intent eventStreamService = new Intent(appContext, EventStreamService.class);
+
+            if ((action == EventStreamService.StreamAction.CATCHUP) && (EventStreamService.isStopped())) {
+                Log.d(LOG_TAG, "sendEventStreamAction : auto restart");
+                eventStreamService.putExtra(EventStreamService.EXTRA_AUTO_RESTART_ACTION, EventStreamService.EXTRA_AUTO_RESTART_ACTION);
+            } else {
+                Log.d(LOG_TAG, "sendEventStreamAction " + action);
+                eventStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, action.ordinal());
+            }
+
+            appContext.startService(eventStreamService);
         } else {
             Log.d(LOG_TAG, "## sendEventStreamAction(): \"" + action + "\" action not sent - user logged out");
         }
@@ -596,7 +599,7 @@ public class CommonActivityUtils {
             }
 
             if (null != EventStreamService.getInstance()) {
-                EventStreamService.getInstance().updateStatusNotification();
+                EventStreamService.getInstance().refreshStatusNotification();
             }
         }
     }

@@ -197,18 +197,18 @@ public class PreferencesManager {
     }
 
     /**
-     * Tells if a background service can be started.
+     * Tells if the battery optimisations are ignored for this application.
      *
      * @param context the context
-     * @return true if a background service can be started.
+     * @return true if the battery optimisations are ignored.
      */
     @SuppressLint("NewApi")
-    public static boolean canStartBackgroundService(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
+    public static boolean useBatteryOptimisation(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return !((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
         }
 
-        return true;
+        return false;
     }
 
     /**
