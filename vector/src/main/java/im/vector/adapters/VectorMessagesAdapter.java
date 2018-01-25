@@ -1836,6 +1836,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         contentView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
         contentView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
 
+        View urlsPreviewView =  contentView.findViewById(R.id.messagesAdapter_urls_preview_list);
+        if (null != urlsPreviewView) {
+            urlsPreviewView.setAlpha(alpha);
+        }
+
         TextView tsTextView = contentView.findViewById(R.id.messagesAdapter_timestamp);
         if (isInSelectionMode && isSelected) {
             tsTextView.setVisibility(View.VISIBLE);
