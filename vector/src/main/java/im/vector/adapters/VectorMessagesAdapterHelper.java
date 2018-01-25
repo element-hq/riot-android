@@ -1046,6 +1046,7 @@ class VectorMessagesAdapterHelper {
     private final Map<String, List<String>> mExtractedUrls = new HashMap<>();
     private final Map<String, URLPreview> mUrlsPreview = new HashMap<>();
     private final Set<String> mPendingUrls = new HashSet<>();
+    private final Set<String> mDismissedPreviews = new HashSet<>();
 
     /**
      * Retrieves the webUrl extracted from a text
@@ -1100,7 +1101,7 @@ class VectorMessagesAdapterHelper {
         }
 
         // avoid removing items if they are displayed
-        if (TextUtils.equals((String)urlsPreviewLayout.getTag(), id)) {
+        if (TextUtils.equals((String) urlsPreviewLayout.getTag(), id)) {
             // all the urls have been displayed
             if (urlsPreviewLayout.getChildCount() == urls.size()) {
                 return;
@@ -1113,23 +1114,26 @@ class VectorMessagesAdapterHelper {
         while (urlsPreviewLayout.getChildCount() > 0) {
             urlsPreviewLayout.removeViewAt(0);
         }
-        
+
         urlsPreviewLayout.setVisibility(View.VISIBLE);
 
         for (final String url : urls) {
-            final String key = url.hashCode() + "---";
+            final String downloadKey = url.hashCode() + "---";
+            String displayKey = url + "<----->" + id;
 
-            if (mPendingUrls.contains(url)) {
+            if (UrlPreviewView.didUrlPreviewDismiss(displayKey)) {
+                Log.d(LOG_TAG, "## manageURLPreviews() : " + displayKey + " has been dismissed");
+            } else if (mPendingUrls.contains(url)) {
                 // please wait
-            } else if (!mUrlsPreview.containsKey(key)) {
+            } else if (!mUrlsPreview.containsKey(downloadKey)) {
                 mPendingUrls.add(url);
                 mSession.getEventsApiClient().getURLPreview(url, System.currentTimeMillis(), new ApiCallback<URLPreview>() {
                     @Override
                     public void onSuccess(URLPreview urlPreview) {
                         mPendingUrls.remove(url);
 
-                        if (!mUrlsPreview.containsKey(key)) {
-                            mUrlsPreview.put(key, urlPreview);
+                        if (!mUrlsPreview.containsKey(downloadKey)) {
+                            mUrlsPreview.put(downloadKey, urlPreview);
                             mAdapter.notifyDataSetChanged();
                         }
                     }
@@ -1151,7 +1155,7 @@ class VectorMessagesAdapterHelper {
                 });
             } else {
                 UrlPreviewView previewView = new UrlPreviewView(mContext);
-                previewView.setUrlPreview(mContext, mSession, mUrlsPreview.get(key));
+                previewView.setUrlPreview(mContext, mSession, mUrlsPreview.get(downloadKey), displayKey);
                 urlsPreviewLayout.addView(previewView);
             }
         }
