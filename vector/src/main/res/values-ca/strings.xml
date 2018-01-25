@@ -1,43 +1,45 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources><string name="resouces_language"/>
-    <string name="light_theme">Tema clar</string>
-    <string name="dark_theme">Tema fosc</string>
-    <string name="black_them">Tema negre</string>
+    <string name="light_theme"/>
+    <string name="dark_theme"/>
+    <string name="black_them"/>
 
-    <string name="notification_sync_in_progress">S\'està sincronitzant</string>
-    <string name="notification_listen_for_events">S\'està escoltant esdeveniments</string>
-    <string name="notification_noisy_notifications">Notificacions sorolloses</string>
-    <string name="notification_silent_notifications">Notificacions silencioses</string>
+    <string name="notification_sync_in_progress"/>
+    <string name="notification_listen_for_events"/>
+    <string name="notification_noisy_notifications"/>
+    <string name="notification_silent_notifications"/>
 
-    <string name="title_activity_home">Missatges</string>
-    <string name="title_activity_room">Sala</string>
-    <string name="title_activity_settings">Configuració</string>
-    <string name="title_activity_member_details">Detalls dels participants</string>
-    <string name="title_activity_historical">Històric</string>
-    <string name="title_activity_bug_report">Informe d\'errors</string>
+    <string name="title_activity_home"/>
+    <string name="title_activity_room"/>
+    <string name="title_activity_settings"/>
+    <string name="title_activity_member_details"/>
+    <string name="title_activity_historical"/>
+    <string name="title_activity_bug_report"/>
 
-    <string name="ok">D\'acord</string>
-    <string name="cancel">Cancel·la</string>
-    <string name="save">Desa</string>
-    <string name="leave">Surt de la sala</string>
-    <string name="send">Envia</string>
-    <string name="copy">Còpia</string>
-    <string name="resend">Reenvia</string>
-    <string name="redact">Elimina</string>
-    <string name="quote">Cita</string>
-    <string name="share">Comparteix</string>
-    <string name="later">Més tard</string>
-    <string name="forward">Reenvia</string>
-    <string name="permalink">Enllaç permanent</string>
-    <string name="view_source">Mostra el codi</string>
-    <string name="view_decrypted_source">Visualitza el codi font desencriptat</string>
-    <string name="delete">Elimina</string>
-    <string name="rename">Reanomena</string>
-    <string name="report_content">Mostra el contingut</string>
-    <string name="active_call">Trucada activa</string>
-    <string name="ongoing_conference_call">" Conferència en curs. Uneix-te per veu o vídeo."</string>
-    <string name="ongoing_conference_call_voice">veu</string>
-    <string name="ongoing_conference_call_video">vídeo</string>
-    <string name="cannot_start_call">No sa pogut iniciar la trucada, prova-ho més tard</string>
-    <string name="missing_permissions_warning">És posiible que algunes funcions no apareguin per manca de permisos.</string>
-    </resources>
+    <string name="ok"/>
+    <string name="cancel"/>
+    <string name="save"/>
+    <string name="leave"/>
+    <string name="send"/>
+    <string name="copy"/>
+    <string name="resend"/>
+    <string name="redact"/>
+    <string name="quote"/>
+    <string name="share"/>
+    <string name="later"/>
+    <string name="forward"/>
+    <string name="permalink"/>
+    <string name="view_source"/>
+    <string name="view_decrypted_source"/>
+    <string name="delete"/>
+    <string name="rename"/>
+    <string name="report_content"/>
+    <string name="active_call"/>
+    <string name="ongoing_conference_call"/>
+    <string name="ongoing_conference_call_voice"/>
+    <string name="ongoing_conference_call_video"/>
+    <string name="cannot_start_call"/>
+    <string name="missing_permissions_warning"/>
+    <string name="encrypted_message"></string>
+
+</resources>
