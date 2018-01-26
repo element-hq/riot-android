@@ -29,6 +29,7 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -464,12 +465,14 @@ public class RoomUtils {
             return;
         }
 
+        Context popmenuContext = new ContextThemeWrapper(context, R.style.PopMenuStyle);
+
         final PopupMenu popup;
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            popup = new PopupMenu(context, actionView, Gravity.END);
+            popup = new PopupMenu(popmenuContext, actionView, Gravity.END);
         } else {
-            popup = new PopupMenu(context, actionView);
+            popup = new PopupMenu(popmenuContext, actionView);
         }
         popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
         CommonActivityUtils.tintMenuIcons(popup.getMenu(), ThemeUtils.getColor(context, R.attr.settings_icon_tint_color));

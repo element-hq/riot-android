@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/active_room_actions">
 
+    <group android:id="@+id/active_room_actions">
         <item
             android:id="@+id/ic_action_notifications_noisy"
             android:icon="@drawable/ic_material_done"
@@ -10,7 +10,7 @@
         <item
             android:id="@+id/ic_action_notifications_all_message"
             android:icon="@drawable/ic_material_done"
-            android:title="@string/room_settings_all_messages"/>
+            android:title="@string/room_settings_all_messages" />
 
         <item
             android:id="@+id/ic_action_notifications_mention_only"
@@ -20,7 +20,8 @@
         <item
             android:id="@+id/ic_action_notifications_mute"
             android:icon="@drawable/ic_material_done"
-            android:title="@string/room_settings_mute"/>
+            android:title="@string/room_settings_mute" />
+
 
         <item
             android:id="@+id/ic_action_select_fav"
