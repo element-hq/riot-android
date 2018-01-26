@@ -70,7 +70,7 @@ public class RoomUtils {
     private static final String LOG_TAG = RoomUtils.class.getSimpleName();
 
     public interface MoreActionListener {
-        void onToggleRoomNotifications(MXSession session, String roomId);
+        void onUpdateRoomNotificationsState(MXSession session, String roomId, BingRulesManager.RoomNotificationState state);
 
         void onToggleDirectChat(MXSession session, String roomId);
 
@@ -509,25 +509,40 @@ public class RoomUtils {
 
             MenuItem item;
 
-            final BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+            BingRulesManager.RoomNotificationState state = session.getDataHandler().getBingRulesManager().getRoomNotificationState(room.getRoomId());
 
-            if (bingRulesManager.isRoomNotificationsDisabled(room.getRoomId())) {
-                item = popup.getMenu().getItem(0);
+            if (BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY != state) {
+                item = popup.getMenu().findItem(R.id.ic_action_notifications_noisy);
+                item.setIcon(null);
+            }
+
+            if (BingRulesManager.RoomNotificationState.ALL_MESSAGES != state) {
+                item = popup.getMenu().findItem(R.id.ic_action_notifications_all_message);
+                item.setIcon(null);
+            }
+
+            if (BingRulesManager.RoomNotificationState.MENTIONS_ONLY != state) {
+                item = popup.getMenu().findItem(R.id.ic_action_notifications_mention_only);
+                item.setIcon(null);
+            }
+
+            if (BingRulesManager.RoomNotificationState.MUTE != state) {
+                item = popup.getMenu().findItem(R.id.ic_action_notifications_mute);
                 item.setIcon(null);
             }
 
             if (!isFavorite) {
-                item = popup.getMenu().getItem(1);
+                item = popup.getMenu().findItem(R.id.ic_action_select_fav);
                 item.setIcon(null);
             }
 
             if (!isLowPrior) {
-                item = popup.getMenu().getItem(2);
+                item = popup.getMenu().findItem(R.id.ic_action_select_deprioritize);
                 item.setIcon(null);
             }
 
-            if (session.getDirectChatRoomIdsList().indexOf(room.getRoomId()) < 0) {
-                item = popup.getMenu().getItem(3);
+            if (!session.getDirectChatRoomIdsList().contains(room.getRoomId())) {
+                item = popup.getMenu().findItem(R.id.ic_action_select_direct_chat);
                 item.setIcon(null);
             }
 
@@ -547,10 +562,22 @@ public class RoomUtils {
                     @Override
                     public boolean onMenuItemClick(final MenuItem item) {
                         switch (item.getItemId()) {
-                            case R.id.ic_action_select_notifications: {
-                                moreActionListener.onToggleRoomNotifications(session, room.getRoomId());
+                            case R.id.ic_action_notifications_noisy:
+                                moreActionListener.onUpdateRoomNotificationsState(session, room.getRoomId(), BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY);
                                 break;
-                            }
+
+                            case R.id.ic_action_notifications_all_message:
+                                moreActionListener.onUpdateRoomNotificationsState(session, room.getRoomId(), BingRulesManager.RoomNotificationState.ALL_MESSAGES);
+                                break;
+
+                            case R.id.ic_action_notifications_mention_only:
+                                moreActionListener.onUpdateRoomNotificationsState(session, room.getRoomId(), BingRulesManager.RoomNotificationState.MENTIONS_ONLY);
+                                break;
+
+                            case R.id.ic_action_notifications_mute:
+                                moreActionListener.onUpdateRoomNotificationsState(session, room.getRoomId(), BingRulesManager.RoomNotificationState.MUTE);
+                                break;
+
                             case R.id.ic_action_select_fav: {
                                 if (isFavorite) {
                                     moreActionListener.moveToConversations(session, room.getRoomId());
@@ -756,18 +783,6 @@ public class RoomUtils {
         if (null != room) {
             session.toggleDirectChatRoom(roomId, null, apiCallback);
         }
-    }
-
-    /**
-     * Enable or disable notifications for the given room
-     *
-     * @param session
-     * @param roomId
-     * @param listener
-     */
-    public static void toggleNotifications(final MXSession session, final String roomId, final BingRulesManager.onBingRuleUpdateListener listener) {
-        BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
-        bingRulesManager.muteRoomNotifications(roomId, !bingRulesManager.isRoomNotificationsDisabled(roomId), listener);
     }
 
     /**

@@ -1090,7 +1090,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // update only, if values are different
         if (isNotificationsMuted != previousValue) {
             displayLoadingView();
-            mBingRulesManager.muteRoomNotifications(mRoom.getRoomId(), isNotificationsMuted, new BingRulesManager.onBingRuleUpdateListener() {
+            mBingRulesManager.updateRoomNotificationState(mRoom.getRoomId(),
+                    isNotificationsMuted ? BingRulesManager.RoomNotificationState.MENTIONS_ONLY :  BingRulesManager.RoomNotificationState.ALL_MESSAGES,
+                    new BingRulesManager.onBingRuleUpdateListener() {
                 @Override
                 public void onBingRuleUpdateSuccess() {
                     Log.d(LOG_TAG, "##onRoomMuteNotificationsPreferenceChanged(): update succeed");

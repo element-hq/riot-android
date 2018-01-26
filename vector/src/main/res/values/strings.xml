@@ -474,6 +474,10 @@
 
     <!-- home room settings -->
     <string name="room_settings_notifications">Notifications</string>
+    <string name="room_settings_all_messages_noisy">All messages (noisy)</string>
+    <string name="room_settings_all_messages">All messages</string>
+    <string name="room_settings_mention_only">Mentions only</string>
+    <string name="room_settings_mute">Mute</string>
     <string name="room_settings_favourite">Favourite</string>
     <string name="room_settings_de_prioritize">De-prioritize</string>
     <string name="room_settings_direct_chat">Direct Chat</string>
