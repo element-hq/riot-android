@@ -162,6 +162,10 @@
         <item name="colorControlNormal">?attr/list_header_public_room_spinner_color</item>
     </style>
 
+    <style name="PopMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <!--  ************************  Light theme  **************************** -->
 
     <!-- no action bar window -->

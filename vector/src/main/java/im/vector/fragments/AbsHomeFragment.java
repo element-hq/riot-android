@@ -187,9 +187,9 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
     }
 
     @Override
-    public void onToggleRoomNotifications(MXSession session, String roomId) {
+    public void onUpdateRoomNotificationsState(MXSession session, String roomId, BingRulesManager.RoomNotificationState state) {
         mActivity.showWaitingView();
-        RoomUtils.toggleNotifications(session, roomId, new BingRulesManager.onBingRuleUpdateListener() {
+        session.getDataHandler().getBingRulesManager().updateRoomNotificationState(roomId, state, new BingRulesManager.onBingRuleUpdateListener() {
             @Override
             public void onBingRuleUpdateSuccess() {
                 onRequestDone(null);

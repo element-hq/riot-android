@@ -799,12 +799,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     @Override
-    public void onToggleRoomNotifications(MXSession session, String roomId) {
+    public void onUpdateRoomNotificationsState(MXSession session, String roomId, BingRulesManager.RoomNotificationState state) {
         BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
 
         showWaitingView();
 
-        bingRulesManager.muteRoomNotifications(roomId, !bingRulesManager.isRoomNotificationsDisabled(roomId), new BingRulesManager.onBingRuleUpdateListener() {
+        bingRulesManager.updateRoomNotificationState(roomId, state, new BingRulesManager.onBingRuleUpdateListener() {
             @Override
             public void onBingRuleUpdateSuccess() {
                 if (null != getActivity()) {
@@ -830,7 +830,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                             }
                     );
                 }
-
             }
         });
     }
