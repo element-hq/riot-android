@@ -1695,6 +1695,21 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                         break;
                     }
 
+                    case R.id.sliding_menu_exit : {
+                        if (null != EventStreamService.getInstance()) {
+                            EventStreamService.getInstance().stopNow();
+                        }
+                        VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                VectorHomeActivity.this.finish();
+                                System.exit(0);
+                            }
+                        });
+
+                        break;
+                    }
+
                     case R.id.sliding_menu_sign_out: {
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VectorHomeActivity.this);
                         alertDialogBuilder.setMessage(getString(R.string.action_sign_out_confirmation));

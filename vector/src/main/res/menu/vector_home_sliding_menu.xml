@@ -18,6 +18,11 @@
             android:title="@string/send_bug_report"/>
 
         <item
+            android:id="@+id/sliding_menu_exit"
+            android:icon="@drawable/ic_power_settings"
+            android:title="@string/action_exit"/>
+
+        <item
             android:id="@+id/sliding_menu_sign_out"
             android:icon="@drawable/ic_material_exit_to_app"
             android:title="@string/action_sign_out"/>

@@ -679,6 +679,15 @@ public class EventStreamService extends Service {
     }
 
     /**
+     * Stop the service without delay
+     */
+    public void stopNow() {
+        stop();
+        mIsSelfDestroyed = true;
+        stopSelf();
+    }
+
+    /**
      * internal stop.
      */
     private void stop() {
