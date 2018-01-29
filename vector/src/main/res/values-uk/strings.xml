@@ -557,9 +557,9 @@
 
     <string name="account_email_validation_title">Очікування Перевірки</string>
     <string name="account_email_validation_message">Перевірте ваш email та перейдіть за посиланням у листі. Після цього клацніть продовжити.</string>
-    <string name="account_email_validation_error">Не вдалося перевірити поштову адресу. Будь ласка, перевірте ваш email та перейдіть за посиланням у листі. Після цього клацніть продовжити.</string>
+    <string name="account_email_validation_error">Не вдалося перевірити поштову адресу. Будь ласка, перевірте ваш email та перейдіть за посиланням у листі. Після цього натисніть продовжити</string>
     <string name="account_email_already_used_error">Email адреса вже використовується</string>
-    <string name="account_email_not_found_error">Не вдалося надіслати email: адресу не знайдено.</string>
+    <string name="account_email_not_found_error">Не вдалося надіслати email: цю адресу не знайдено</string>
     <string name="account_phone_number_already_used_error">Цей номер вже використовується</string>
 
     <string name="settings_change_password">Змінити пароль</string>
