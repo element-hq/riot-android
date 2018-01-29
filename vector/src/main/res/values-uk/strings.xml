@@ -807,4 +807,17 @@
 
     <string name="encrypted_message">Закодоване повідомлення</string>
 
-</resources>
+<string name="settings_containing_my_user_name">Повідомлення, містить моє ім\'я користувача</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot збирає анонімну аналітику, щоб зробити додаток ще краще.</string>
+
+
+    <string name="you_added_a_new_device">Ви добавили новий пристрій \'%s\', який запитує ключі шифрування.</string>
+    <string name="your_unverified_device_requesting">Ваше неперевірений пристрій \'%s\' запитує ключі шифрування.</string>
+    <string name="share_without_verifying">Поділитись без перевірки</string>
+    <string name="conference_call_warning_message">Конференц-зв\'язок находиться в розробці і може бути не надійна.</string>
+
+    // slash commands
+    <string name="unrecognized_command">Нерозпізнана команда: %s</string>
+
+    // notification statuses
+    </resources>
