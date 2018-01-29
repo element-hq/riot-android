@@ -115,7 +115,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private static final String PREF_KEY_ROOM_TAG_LIST = "roomTagList";
     private static final String PREF_KEY_ROOM_ACCESS_RULES_LIST = "roomAccessRulesList";
     private static final String PREF_KEY_ROOM_HISTORY_READABILITY_LIST = "roomReadHistoryRulesList";
-    private static final String PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH = "muteNotificationsSwitch";
+    private static final String PREF_KEY_ROOM_NOTIFICATIONS_LIST = "roomNotificationPreference";
     private static final String PREF_KEY_ROOM_LEAVE = "roomLeave";
     private static final String PREF_KEY_ROOM_INTERNAL_ID = "roomInternalId";
     private static final String PREF_KEY_ADDRESSES = "addresses";
@@ -156,19 +156,18 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     // flair
     private PreferenceCategory mFlairSettingsCategory;
-    private PreferenceCategory mFlairSettingsCategoryDivider;
 
     // UI elements
     private RoomAvatarPreference mRoomPhotoAvatar;
     private EditTextPreference mRoomNameEditTxt;
     private EditTextPreference mRoomTopicEditTxt;
     private CheckBoxPreference mRoomDirectoryVisibilitySwitch;
-    private CheckBoxPreference mRoomMuteNotificationsSwitch;
     private ListPreference mRoomTagListPreference;
     private VectorListPreference mRoomAccessRulesListPreference;
     private ListPreference mRoomHistoryReadabilityRulesListPreference;
     private View mParentLoadingView;
     private View mParentFragmentContainerView;
+    private ListPreference mRoomNotificationsPreference;
 
     // disable some updates if there is
     private final IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
@@ -336,7 +335,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomNameEditTxt = (EditTextPreference) findPreference(PREF_KEY_ROOM_NAME);
         mRoomTopicEditTxt = (EditTextPreference) findPreference(PREF_KEY_ROOM_TOPIC);
         mRoomDirectoryVisibilitySwitch = (CheckBoxPreference) findPreference(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH);
-        mRoomMuteNotificationsSwitch = (CheckBoxPreference) findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);
         mRoomTagListPreference = (ListPreference) findPreference(PREF_KEY_ROOM_TAG_LIST);
         mRoomAccessRulesListPreference = (VectorListPreference) findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
         mRoomHistoryReadabilityRulesListPreference = (ListPreference) findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
@@ -344,8 +342,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mAdvandceSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_ADVANCED);
         mBannedMembersSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_BANNED);
         mBannedMembersSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_BANNED_DIVIDER);
-        mFlairSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_FLAIR_DIVIDER);
         mFlairSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_FLAIR);
+        mRoomNotificationsPreference = (ListPreference) getPreferenceManager().findPreference(PREF_KEY_ROOM_NOTIFICATIONS_LIST);
 
         mRoomAccessRulesListPreference.setOnPreferenceWarningIconClickListener(new VectorListPreference.OnPreferenceWarningIconClickListener() {
             @Override
@@ -711,10 +709,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         if (null != mRoomDirectoryVisibilitySwitch)
             mRoomDirectoryVisibilitySwitch.setEnabled(isAdmin && isConnected);
 
-        // room notification mute setting: no power condition
-        if (null != mRoomMuteNotificationsSwitch)
-            mRoomMuteNotificationsSwitch.setEnabled(isConnected);
-
         // room tagging: no power condition
         if (null != mRoomTagListPreference)
             mRoomTagListPreference.setEnabled(isConnected);
@@ -726,8 +720,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // room read history: admin only
-        if (null != mRoomHistoryReadabilityRulesListPreference)
+        if (null != mRoomHistoryReadabilityRulesListPreference) {
             mRoomHistoryReadabilityRulesListPreference.setEnabled(isAdmin && isConnected);
+        }
+
+        if (null != mRoomNotificationsPreference) {
+            mRoomNotificationsPreference.setEnabled(isConnected);
+        }
     }
 
 
@@ -761,12 +760,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             value = mRoom.getTopic();
             mRoomTopicEditTxt.setSummary(value);
             mRoomTopicEditTxt.setText(value);
-        }
-
-        // update the mute notifications preference
-        if (null != mRoomMuteNotificationsSwitch) {
-            boolean isChecked = mBingRulesManager.isRoomNotificationsDisabled(mRoom.getRoomId());
-            mRoomMuteNotificationsSwitch.setChecked(isChecked);
         }
 
         // update room directory visibility
@@ -823,6 +816,23 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 mRoomHistoryReadabilityRulesListPreference.setValue(UNKNOWN_VALUE);
                 mRoomHistoryReadabilityRulesListPreference.setSummary("");
             }
+        }
+
+        if (null != mRoomNotificationsPreference) {
+            BingRulesManager.RoomNotificationState state = mSession.getDataHandler().getBingRulesManager().getRoomNotificationState(mRoom.getRoomId());
+
+            if (state == BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY) {
+                value = getString(R.string.room_settings_all_messages_noisy);
+            } else if (state == BingRulesManager.RoomNotificationState.ALL_MESSAGES) {
+                value = getString(R.string.room_settings_all_messages);
+            } else if (state == BingRulesManager.RoomNotificationState.MENTIONS_ONLY) {
+                value = getString(R.string.room_settings_mention_only);
+            } else {
+                value = getString(R.string.room_settings_mute);
+            }
+
+            mRoomNotificationsPreference.setValue(value);
+            mRoomNotificationsPreference.setSummary(value);
         }
 
         // update the room tag preference
@@ -914,8 +924,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             onRoomNamePreferenceChanged();
         } else if (aKey.equals(PREF_KEY_ROOM_TOPIC)) {
             onRoomTopicPreferenceChanged();
-        } else if (aKey.equals(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH)) {
-            onRoomMuteNotificationsPreferenceChanged();
+        } else if (aKey.equals(PREF_KEY_ROOM_NOTIFICATIONS_LIST)) {
+            onRoomNotificationsPreferenceChanged();
         } else if (aKey.equals(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH)) {
             onRoomDirectoryVisibilityPreferenceChanged(); // TBT
         } else if (aKey.equals(PREF_KEY_ROOM_TAG_LIST)) {
@@ -1075,36 +1085,43 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     }
 
     /**
-     * Action when enabling / disabling the rooms notifications.
      */
-    private void onRoomMuteNotificationsPreferenceChanged() {
+    private void onRoomNotificationsPreferenceChanged() {
         // sanity check
-        if ((null == mRoom) || (null == mBingRulesManager) || (null == mRoomMuteNotificationsSwitch)) {
+        if ((null == mRoom) || (null == mBingRulesManager)) {
             return;
         }
 
-        // get new and previous values
-        boolean isNotificationsMuted = mRoomMuteNotificationsSwitch.isChecked();
-        boolean previousValue = mBingRulesManager.isRoomNotificationsDisabled(mRoom.getRoomId());
+        String value = mRoomNotificationsPreference.getValue();
+        BingRulesManager.RoomNotificationState updatedState;
+
+        if (TextUtils.equals(value, getString(R.string.room_settings_all_messages_noisy))) {
+            updatedState = BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY;
+        } else if (TextUtils.equals(value, getString(R.string.room_settings_all_messages))) {
+            updatedState = BingRulesManager.RoomNotificationState.ALL_MESSAGES;
+        } else if (TextUtils.equals(value, getString(R.string.room_settings_mention_only))) {
+            updatedState = BingRulesManager.RoomNotificationState.MENTIONS_ONLY;
+        } else {
+            updatedState = BingRulesManager.RoomNotificationState.MUTE;
+        }
 
         // update only, if values are different
-        if (isNotificationsMuted != previousValue) {
+        if (mBingRulesManager.getRoomNotificationState(mRoom.getRoomId()) != updatedState) {
             displayLoadingView();
-            mBingRulesManager.updateRoomNotificationState(mRoom.getRoomId(),
-                    isNotificationsMuted ? BingRulesManager.RoomNotificationState.MENTIONS_ONLY :  BingRulesManager.RoomNotificationState.ALL_MESSAGES,
+            mBingRulesManager.updateRoomNotificationState(mRoom.getRoomId(), updatedState,
                     new BingRulesManager.onBingRuleUpdateListener() {
-                @Override
-                public void onBingRuleUpdateSuccess() {
-                    Log.d(LOG_TAG, "##onRoomMuteNotificationsPreferenceChanged(): update succeed");
-                    hideLoadingView(UPDATE_UI);
-                }
+                        @Override
+                        public void onBingRuleUpdateSuccess() {
+                            Log.d(LOG_TAG, "##onRoomNotificationsPreferenceChanged(): update succeed");
+                            hideLoadingView(UPDATE_UI);
+                        }
 
-                @Override
-                public void onBingRuleUpdateFailure(String errorMessage) {
-                    Log.w(LOG_TAG, "##onRoomMuteNotificationsPreferenceChanged(): BingRuleUpdateFailure");
-                    hideLoadingView(DO_NOT_UPDATE_UI);
-                }
-            });
+                        @Override
+                        public void onBingRuleUpdateFailure(String errorMessage) {
+                            Log.w(LOG_TAG, "##onRoomNotificationsPreferenceChanged(): BingRuleUpdateFailure");
+                            hideLoadingView(DO_NOT_UPDATE_UI);
+                        }
+                    });
         }
     }
 
