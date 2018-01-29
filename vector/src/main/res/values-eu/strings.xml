@@ -195,7 +195,7 @@ Saiotik atera zaizu gailu guztietan eta ez dituzu jakinarazpenak jasoko. Jakinar
     <string name="login_error_user_in_use">Erabiltzaile-izen hau hartuta dago</string>
     <string name="login_error_login_email_not_yet">Oraindik erabili ez den e-maileko esteka</string>
 
-    <string name="read_receipts_list">Irakurri jasotzaileen zerrenda</string>
+    <string name="read_receipts_list">Irakurragirien zerrenda</string>
 
     <string name="membership_changes">%d kidetza aldaketa</string>
 
@@ -366,7 +366,7 @@ Ziur zaude?</string>
     <string name="room_resend_unsent_messages">Birbidali bidali gabeko mezuak</string>
     <string name="room_delete_unsent_messages">Ezabatu bidali gabeko mezuak</string>
     <string name="room_message_file_not_found">Ez da fitxategia aurkitu</string>
-    <string name="room_do_not_have_permission_to_post">Ez duzu gela honetan idazteko baimena</string>
+    <string name="room_do_not_have_permission_to_post">Ez duzu gela honetara mezuak bidaltzeko baimenik</string>
     <string name="room_new_message_notification">mezu berri 1</string>
     <string name="room_new_messages_notification">%1$d mezu berri</string>
 
@@ -438,13 +438,13 @@ Ziur zaude?</string>
 
     <string name="room_sliding_menu_messages">Mezuak</string>
     <string name="room_sliding_menu_settings">Ezarpenak</string>
-    <string name="room_sliding_menu_version">"Bertsioa "</string>
+    <string name="room_sliding_menu_version">"Bertsioa: "</string>
     <string name="room_sliding_menu_term_and_conditions">Termino eta baldintzak</string>
-    <string name="room_sliding_menu_copyright">Copyright</string>
+    <string name="room_sliding_menu_copyright">Copyright-a</string>
     <string name="room_sliding_menu_privacy_policy">Pribatutasun politika</string>
 
     <string name="settings_profile_picture">Profil-argazkia</string>
-    <string name="settings_display_name">Pantaila izena</string>
+    <string name="settings_display_name">Pantaila-izena</string>
     <string name="settings_email_address">E-mail</string>
     <string name="settings_add_email_address">Gehitu e-mail helbidea</string>
     <string name="settings_phone_number">Telefonoa</string>
@@ -470,10 +470,10 @@ Ziur zaude?</string>
     <string name="settings_second">segundo</string>
     <string name="settings_seconds">segundo</string>
 
-    <string name="settings_version">Bertsioa</string>
+    <string name="settings_version">Bertsioa:</string>
     <string name="settings_olm_version">olm bertsioa</string>
     <string name="settings_app_term_conditions">Termino eta baldintzak</string>
-    <string name="settings_copyright">Copyright</string>
+    <string name="settings_copyright">Copyright-a</string>
     <string name="settings_privacy_policy">Pribatutasun politika</string>
     <string name="settings_clear_cache">Garbitu cachea</string>
     <string name="settings_clear_medias_cache">Garbitu media cachea</string>
@@ -489,10 +489,10 @@ Ziur zaude?</string>
     <string name="settings_contacts_app_permission">Kontaktuen baimena</string>
     <string name="settings_contacts_phonebook_country">Telefono-liburuaren herrialdea</string>
     <string name="settings_home_display">Hasiera pantaila</string>
-    <string name="settings_pin_missed_notifications">Finkatu galdutako jakinarazpenak dituzten gelak</string>
+    <string name="settings_pin_missed_notifications">Finkatu ikusi gabeko jakinarazpenak dituzten gelak</string>
     <string name="settings_pin_unread_messages">Finkatu irakurri gabeko mezuak dituzten gelak</string>
     <string name="settings_devices_list">Gailuak</string>
-    <string name="settings_hide_read_receipts">Ezkutatu irakurtze-agiria</string>
+    <string name="settings_hide_read_receipts">Ezkutatu irakurragiriak</string>
     <string name="settings_dont_send_typings_notifs">Ez bidali idatzi bitarteko jakinarazpenak</string>
     <string name="settings_always_show_timestamps">Erakutsi beti mezuen denbora-zigilua</string>
     <string name="devices_details_dialog_title">Gailuaren xehetasunak</string>
@@ -542,8 +542,8 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="settings_key_display_all_events">ezarpen_gakoa_erakutsi_gertaera_guztiak</string>
     <string name="settings_key_use_rage_shake">ezarpen_gakoa_erabili_amorru_astintzea</string>
 
-    <string name="room_sliding_menu_third_party_notices">Hirugarrengoen jakinarazpenak</string>
-    <string name="settings_third_party_notices">Hirugarrengoen jakinarazpenak</string>
+    <string name="room_sliding_menu_third_party_notices">Hirugarrengoen adierazpenak</string>
+    <string name="settings_third_party_notices">Hirugarrengoen adierazpenak</string>
     <string name="settings_disable_markdown">Desgaitu markdown formatua</string>
 
     <string name="settings_phone_number_label">Telefono zenbakia</string>
@@ -581,10 +581,10 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Nork irakurri dezake historiala?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Nor sartu daiteke gelara?</string>
 
-    <string name="room_settings_read_history_entry_anyone">Edonor</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Kideak besterik ez (aukera hau hautatutako unetik)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Kideak besterik ez (gonbidatu zitzaienetik)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Kideak besterik ez (elkartu zirenetik)</string>
+    <string name="room_settings_read_history_entry_anyone">Edonork</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Kideek besterik ez (aukera hau hautatutako unetik)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Kideek besterik ez (gonbidatu zitzaienetik)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Kideek besterik ez (elkartu zirenetik)</string>
 
     <string name="room_settings_room_access_warning">Gelara estekatzeko honek helbide bat izan behar du.</string>
     <string name="room_settings_room_access_entry_only_invited">Gonbidatua izan den jendea besterik ez</string>
@@ -733,7 +733,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="login_mobile_device">Mugikorra</string>
 
     <string name="settings_notification_ringtone">Jakinarazpen-soinua</string>
-    <string name="settings_12_24_timestamps">Erakutsi denbora-markak 12 ordutako formatuan (adib 2:30pm)</string>
+    <string name="settings_12_24_timestamps">Erakutsi denbora-zigiluak 12 ordutako formatuan (adib 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Ezkutatu elkartu/utzi mezuak (gonbidatu/kanporatu/debekatu mezuei eraginik ez)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Ezkutatu abatarraren eta pantaila-izenen aldaketak</string>
 
@@ -793,7 +793,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 
     <string name="encrypted_message">Zifratutako mezua</string>
 
-<string name="title_activity_bug_report">Arazte txostena</string>
+<string name="title_activity_bug_report">Arazte-txostena</string>
 
     <string name="option_take_photo">Atera argazkia</string>
     <string name="option_take_video">Grabatu bideoa</string>
