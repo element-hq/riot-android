@@ -16,6 +16,7 @@
 
 package im.vector.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
@@ -84,5 +85,12 @@ public class VectorUserGroupsDialogFragment extends DialogFragment {
         listView.setAdapter(adapter);
 
         return v;
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog d = super.onCreateDialog(savedInstanceState);
+        d.setTitle(getString(R.string.groups_list));
+        return d;
     }
 }

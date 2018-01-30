@@ -235,6 +235,9 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
 
+    <!-- flairs list Screen -->
+    <string name="groups_list">Groups List</string>
+
     <!-- Mels -->
     <string name="membership_changes">%d membership changes</string>
 
