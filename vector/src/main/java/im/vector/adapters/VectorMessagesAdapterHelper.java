@@ -234,6 +234,7 @@ class VectorMessagesAdapterHelper {
         if (groupIdsSet.isEmpty()) {
             groupFlairView.setVisibility(View.GONE);
         } else {
+
             if (!mSession.isAlive()) {
                 return;
             }
@@ -348,15 +349,16 @@ class VectorMessagesAdapterHelper {
             mRoom = mSession.getDataHandler().getRoom(event.roomId);
         }
 
-        groupFlairView.setTag(tag);
-
-        Log.d(LOG_TAG, "## refreshGroupFlairView () : eventId " + event.eventId + " from " + event.sender);
-
         // no related groups to this room
         if (mRoom.getLiveState().getRelatedGroups().isEmpty()) {
             Log.d(LOG_TAG, "## refreshGroupFlairView () : no related group");
+            groupFlairView.setVisibility(View.GONE);
             return;
         }
+
+        groupFlairView.setTag(tag);
+
+        Log.d(LOG_TAG, "## refreshGroupFlairView () : eventId " + event.eventId + " from " + event.sender);
 
         // cached value first
         Set<String> userPublicisedGroups = mSession.getGroupsManager().getUserPublicisedGroups(event.getSender());
