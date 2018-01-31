@@ -95,6 +95,21 @@ Customise your flavour
 
 You will need to manage your own provider because "im.vector" is already used (look at VectorContentProvider to manage it).
 
+Customise your application settings with a custom google play link
+===================================================================
+
+It is possible to set some default values to Riot with some extra parameters to the google play link.
+
+- Use the https://developers.google.com/analytics/devguides/collection/android/v4/campaigns URL generator (at the bottom)
+
+Set "Campaign Source"
+Set "Campaign Content" with the extra parameters (e.g. is=http://my__is.org&hs=http://my_hs.org)
+Generate the customised link
+
+- Supported extra parameters
+is : identidy server URL
+hs : home server URL
+
 FAQ
 ===
 
