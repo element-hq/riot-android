@@ -2,25 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- define an empty title else lint fails -->
     <item
-        android:contentDescription="@string/bottom_action_home"
+        android:title="@string/bottom_action_home"
         android:id="@+id/bottom_action_home"
         android:enabled="true"
         android:icon="@drawable/ic_home_black_24dp" />
 
     <item
-        android:contentDescription="@string/bottom_action_favourites"
+        android:title="@string/bottom_action_favourites"
         android:id="@+id/bottom_action_favourites"
         android:enabled="true"
         android:icon="@drawable/ic_star_black_24dp" />
 
     <item
-        android:contentDescription="@string/bottom_action_people"
+        android:title="@string/bottom_action_people"
         android:id="@+id/bottom_action_people"
         android:enabled="true"
         android:icon="@drawable/ic_person_black_24dp" />
 
     <item
-        android:contentDescription="@string/bottom_action_rooms"
+        android:title="@string/bottom_action_rooms"
         android:id="@+id/bottom_action_rooms"
         android:enabled="true"
         android:icon="@drawable/ic_people_black_24dp"/>
