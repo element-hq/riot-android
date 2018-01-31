@@ -39,6 +39,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -113,6 +114,7 @@ import im.vector.preference.ProgressBarPreference;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorGroupPreference;
+import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ThemeUtils;
@@ -500,6 +502,50 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 onDisplayNameClick((null == newValue) ? null : ((String) newValue).trim());
+                return false;
+            }
+        });
+
+        final VectorSwitchPreference urlPreviewPreference = (VectorSwitchPreference)findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY);
+        urlPreviewPreference.setChecked(mSession.isURLPreviewEnabled());
+
+        urlPreviewPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                if ((null != newValue) && ((boolean)newValue != mSession.isURLPreviewEnabled())) {
+                    displayLoadingView();
+                    mSession.setURLPreviewStatus((boolean) newValue, new ApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            urlPreviewPreference.setChecked(mSession.isURLPreviewEnabled());
+                            hideLoadingView();
+                        }
+
+                        private void onError(String errorMessage) {
+                            if (null != getActivity()) {
+                                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                            onSuccess(null);
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+                    });
+                }
+
                 return false;
             }
         });
