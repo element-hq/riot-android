@@ -36,4 +36,8 @@
         <item>@string/dark_theme</item>
         <item>@string/black_them</item>
     </string-array>
+
+    <!-- Settings keys -->
+    <string name="settings_key_display_all_events" translatable="false">settings_key_display_all_events</string>
+    <string name="settings_key_use_rage_shake" translatable="false">settings_key_use_rage_shake</string>
 </resources>
