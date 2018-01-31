@@ -128,6 +128,10 @@ public class PreferencesManager {
 
     private static final String SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY";
 
+    private static final String SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY";
+
+    private static final String SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY";
+
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;
@@ -634,5 +638,38 @@ public class PreferencesManager {
      */
     public static boolean vibrateWhenMentioning(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_VIBRATE_ON_MENTION_KEY, false);
+    }
+
+    /**
+     * Tells if the rage shake is used.
+     *
+     * @param context the context
+     * @return true if the rage shake is used
+     */
+    public static boolean useRageshake(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true);
+    }
+
+    /**
+     * Update the rage shake  status.
+     *
+     * @param context   the context
+     * @param isEnabled true to enable the rage shake
+     */
+    public static void setUseRageshake(Context context, boolean isEnabled) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled);
+        editor.commit();
+    }
+
+    /**
+     * Tells if all the events must be displayed ie even the redacted events.
+     *
+     * @param context the context
+     * @return true to display all the events even the redacted ones.
+     */
+    public static boolean displayAllEvents(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISPLAY_ALL_EVENTS_KEY, false);
     }
 }

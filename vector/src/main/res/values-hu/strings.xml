@@ -218,9 +218,6 @@ Elnézést a kellemetlenségért.</string>
     <string name="room_info_room_name">Szobanév</string>
     <string name="room_info_room_topic">Szoba témája</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call_connected">Vonalban</string>
     <string name="call_connecting">Kapcsolódás…</string>
     <string name="call_ended">Hívás vége</string>

@@ -539,8 +539,6 @@ Jarraitzeko, idatzi zure pasahitza.</string>
 
     <string name="settings_phone_number_country_label">Herrialdea</string>
     <string name="settings_phone_number_country_error">Hautatu herrialde bat</string>
-    <string name="settings_key_display_all_events">ezarpen_gakoa_erakutsi_gertaera_guztiak</string>
-    <string name="settings_key_use_rage_shake">ezarpen_gakoa_erabili_amorru_astintzea</string>
 
     <string name="room_sliding_menu_third_party_notices">Hirugarrengoen jakinarazpenak</string>
     <string name="settings_third_party_notices">Hirugarrengoen jakinarazpenak</string>

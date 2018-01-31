@@ -83,6 +83,7 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.util.PreferencesManager;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
@@ -873,8 +874,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      */
     @Override
     public boolean isDisplayAllEvents() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        return preferences.getBoolean(getString(R.string.settings_key_display_all_events), false);
+        return  PreferencesManager.displayAllEvents(getActivity());
     }
 
     private void setViewVisibility(View view, int visibility) {

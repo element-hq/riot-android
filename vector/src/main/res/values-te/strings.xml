@@ -171,9 +171,6 @@
     <string name="room_info_room_name">గది పేరు</string>
     <string name="room_info_room_topic">గది అంశం</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call_connected">కాల్ కనెక్ట్ చేయబడింది</string>
     <string name="call_connecting">కాల్ అనుసంధానించబడుతున్నది…</string>
     <string name="call_ended">కాల్ ముగిసింది</string>

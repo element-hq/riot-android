@@ -264,7 +264,6 @@ Mohon maaf untuk ketidaknyamannya.</string>
 
     <string name="call_error_ice_failed">Hubungan Media Gagal</string>
     <string name="auth_identity_server">Server Identitas</string>
-    <string name="settings_key_display_all_events">pengaturan_tombol_pertunjukan_semua_acara</string>
     <string name="call_error_camera_init_failed">Kamera tidak bisa dibuka</string>
     <string name="call_error_answered_elsewhere">panggilan gagal dijawab di tempat lain</string>
     <string name="call_error_peer_hangup_elsewhere">panggilan telepon ditutup di suatu tempat</string>
