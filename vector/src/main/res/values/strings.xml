@@ -25,6 +25,9 @@
     <string name="title_activity_historical">Historical</string>
     <string name="title_activity_bug_report">Bug report</string>
 
+    <!-- splash screen accessibility -->
+    <string name="loading">Loading...</string>
+
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
