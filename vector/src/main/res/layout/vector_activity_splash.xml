@@ -12,6 +12,7 @@
         android:layout_centerInParent="true">
 
         <pl.droidsonroids.gif.GifImageView
+            android:contentDescription="@string/loading"
             android:id="@+id/animated_logo_image_view"
             android:layout_width="240dp"
             android:layout_height="240dp"
@@ -21,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ProgressBar
+                android:contentDescription="@string/loading"
                 android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
