@@ -279,11 +279,6 @@
     <string name="call_error_ice_failed">Media Connection Failed</string>
     <string name="call_error_camera_init_failed">Cannot initialize the camera</string>
     <string name="call_error_answered_elsewhere">call answered elsewhere</string>
-    <string name="call_error_peer_hangup_elsewhere">call hung up elsewhere</string>
-    <string name="call_error_peer_cancelled_call">call cancelled</string>
-
-    <string name="action_accept">ACCEPT</string>
-    <string name="action_ignore">IGNORE</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Take a picture or a video"</string>
@@ -473,7 +468,6 @@
     <string name="directory_searching_title">Searching directory..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notifications</string>
     <string name="room_settings_all_messages_noisy">All messages (noisy)</string>
     <string name="room_settings_all_messages">All messages</string>
     <string name="room_settings_mention_only">Mentions only</string>
@@ -635,7 +629,6 @@
     <string name="room_settings_topic">Topic</string>
     <string name="room_settings_room_tag">Room Tag</string>
     <string name="room_settings_tag_pref_dialog_title">Tagged as:</string>
-    <string name="room_settings_mute_notifs">Mute Notifications</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favourite</string>
@@ -807,10 +800,8 @@
     <string name="active_widgets">%1$d active widgets</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">You need to be able to invite users to do that.</string>
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
-    <string name="widget_integration_room_not_recognised">This room is not recognised.</string>
     <string name="widget_integration_positive_power_level">Power level must be positive integer.</string>
     <string name="widget_integration_must_be_in_room">You are not in this room.</string>
     <string name="widget_integration_no_permission_in_room">You do not have permission to do that in this room.</string>
@@ -819,7 +810,6 @@
     <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
-    <string name="add_matrix_apps_not_supported">Not supported on this device</string>
     <string name="settings_labs_native_camera">Use native camera</string>
 
     // share keys
@@ -851,15 +841,11 @@
     <string name="community_name_hint">Example</string>
     <string name="community_id">Community Id</string>
     <string name="community_id_hint">example</string>
-    <string name="group_id_cannot_be_empty">Community ID cannot be empty</string>
-    <string name="group_id_invalid_characters"> Community IDs may only contain characters a-z, 0-9, or \'=_-./\'</string>
 
     // group details
     <string name="group_details_home">Home</string>
     <string name="group_details_people">People</string>
     <string name="group_details_rooms">Rooms</string>
-    <string name="featured_rooms">Featured rooms</string>
-    <string name="featured_users">Featured users</string>
     <string name="no_users_placeholder">No users</string>
 
     <string name="rooms">Rooms</string>

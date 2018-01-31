@@ -174,11 +174,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="call_error_ice_failed">Échec de la connexion</string>
     <string name="call_error_camera_init_failed">Impossible d\'initialiser l\'appareil photo</string>
     <string name="call_error_answered_elsewhere">Appel répondu ailleurs</string>
-    <string name="call_error_peer_hangup_elsewhere">Appel raccroché ailleurs</string>
-    <string name="call_error_peer_cancelled_call">Appel annulé</string>
-
-    <string name="action_accept">ACCEPTER</string>
-    <string name="action_ignore">IGNORER</string>
 
     <string name="media_picker_cannot_record_video">Impossible d\'enregistrer une vidéo</string>
 
@@ -283,7 +278,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="directory_search_results_title">Parcourir le répertoire</string>
     <string name="directory_searching_title">Recherche dans le répertoire…</string>
 
-    <string name="room_settings_notifications">Notifications</string>
     <string name="room_settings_favourite">Favori</string>
     <string name="room_settings_de_prioritize">Passer en faible priorité</string>
     <string name="room_settings_direct_chat">Discussion directe</string>
@@ -373,7 +367,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_settings_room_name">Nom du salon</string>
     <string name="room_settings_topic">Sujet</string>
     <string name="room_settings_room_tag">Étiquette du salon</string>
-    <string name="room_settings_mute_notifs">Désactiver les notifications</string>
 
     <string name="room_settings_tag_pref_entry_favourite">Favori</string>
     <string name="room_settings_tag_pref_entry_low_priority">Priorité basse</string>
@@ -745,10 +738,8 @@ Appareils inconnus :</string>
     <string name="active_widgets">%1$d widgets actifs</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Vous devez avoir la permission d\'inviter des utilisateurs pour faire cela.</string>
     <string name="widget_integration_unable_to_create">Impossible de créer le widget.</string>
     <string name="widget_integration_failed_to_send_request">Échec de l\'envoi de la requête.</string>
-    <string name="widget_integration_room_not_recognised">Ce salon n\'est pas reconnu.</string>
     <string name="widget_integration_positive_power_level">Le rang doit être un entier positif.</string>
     <string name="widget_integration_must_be_in_room">Vous n\'êtes pas dans ce salon.</string>
     <string name="widget_integration_no_permission_in_room">Vous n\'avez pas la permission de faire cela dans ce salon.</string>
@@ -757,8 +748,7 @@ Appareils inconnus :</string>
     <string name="widget_integration_room_not_visible">Le salon %s n\'est pas visible.</string>
     <string name="settings_labs_matrix_apps">Applications Matrix</string>
     <string name="room_add_matrix_apps">Ajouter des applications Matrix</string>
-    <string name="add_matrix_apps_not_supported">Non pris en charge sur cet appareil</string>
-<string name="call">Appel</string>
+    <string name="call">Appel</string>
     <string name="settings_containing_my_display_name">Messages contenant mon nom affiché</string>
     <string name="settings_containing_my_user_name">Messages contenant mon nom d\'utilisateur</string>
     <string name="you_added_a_new_device">Vous avez ajouté un nouvel appareil \"%s\", qui demande les clés de chiffrement.</string>

@@ -13,8 +13,7 @@
         android:layout_width="14sp"
         android:layout_height="14sp"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="5dp"
-        android:layout_toLeftOf="@+id/pill_text_view" />
+        android:layout_marginLeft="5dp" />
 
     <TextView
         android:id="@+id/pill_text_view"

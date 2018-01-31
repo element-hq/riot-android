@@ -248,11 +248,6 @@ Disculpe por la inconveniencia.</string>
     <string name="call_error_ice_failed">Conexión de media falló</string>
     <string name="call_error_camera_init_failed">La cámara no se pudo encender</string>
     <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
-    <string name="call_error_peer_hangup_elsewhere">la llamada fue colgado en otra parte</string>
-    <string name="call_error_peer_cancelled_call">la llamada fue cancelada</string>
-
-    <string name="action_accept">ACEPTAR</string>
-    <string name="action_ignore">IGNORAR</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Tomar una foto o grabar un video"</string>
@@ -445,7 +440,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="directory_searching_title">Buscando directorio..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificaciones</string>
     <string name="room_settings_favourite">Destacar</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Chat Directo</string>
@@ -569,7 +563,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_settings_topic">Tema</string>
     <string name="room_settings_room_tag">Etiqueta de la Sala</string>
     <string name="room_settings_tag_pref_dialog_title">Etiquetado como:</string>
-    <string name="room_settings_mute_notifs">Callar Notificaciones</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Destacar</string>

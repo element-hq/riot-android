@@ -259,11 +259,6 @@
     <string name="call_error_ice_failed">Медіавиклик не вдався</string>
     <string name="call_error_camera_init_failed">Неможливо ініціювати камеру</string>
     <string name="call_error_answered_elsewhere">Дзвінок прийнято іншим пристроєм</string>
-    <string name="call_error_peer_hangup_elsewhere">Дзвінок відхилено іншим пристроєм</string>
-    <string name="call_error_peer_cancelled_call">виклик скасовано</string>
-
-    <string name="action_accept">ПРИЙНЯТИ</string>
-    <string name="action_ignore">ВІДХИЛИТИ</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Зняти світлину чи відео"</string>
@@ -451,7 +446,6 @@
     <string name="directory_searching_title">Пошук у каталозі...</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Сповіщення</string>
     <string name="room_settings_favourite">Обране</string>
     <string name="room_settings_de_prioritize">Не терміново</string>
     <string name="room_settings_direct_chat">Прямий Чат</string>
@@ -603,7 +597,6 @@
     <string name="room_settings_topic">Тема</string>
     <string name="room_settings_room_tag">Мітка кімнати</string>
     <string name="room_settings_tag_pref_dialog_title">Позначено як:</string>
-    <string name="room_settings_mute_notifs">Вимкнути сповіщення</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Улюблені</string>
@@ -767,10 +760,8 @@
     <string name="active_widgets">Активних віджетів: %1$d</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Для цього вам треба мати змогу запрошувати користувачів.</string>
     <string name="widget_integration_unable_to_create">Не вдалося створити віджет.</string>
     <string name="widget_integration_failed_to_send_request">Не вдалося надіслати запит.</string>
-    <string name="widget_integration_room_not_recognised">Кімнату не розпізнано.</string>
     <string name="widget_integration_positive_power_level">Рівень доступу має бути більше 0.</string>
     <string name="widget_integration_must_be_in_room">Ви не перебуваєте в цій кімнаті.</string>
     <string name="widget_integration_no_permission_in_room">Ви не маєте дозволу на виконання даної дії у цій кімнаті.</string>
@@ -780,7 +771,6 @@
     <string name="settings_labs_matrix_apps">Застосунки Matrix</string>
 
     <string name="room_add_matrix_apps">Додати застосунки Matrix</string>
-    <string name="add_matrix_apps_not_supported">Не підтримується цим пристроєм</string>
     <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
 
     // share keys

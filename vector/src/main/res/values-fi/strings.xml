@@ -253,11 +253,7 @@
     <string name="call_error_ice_failed">Mediayhteys epäonnistui</string>
     <string name="call_error_camera_init_failed">Kameran alustus epäonnistui</string>
     <string name="call_error_answered_elsewhere">puheluun vastattiin muualta</string>
-    <string name="call_error_peer_hangup_elsewhere">puhelu lopetettiin muualla</string>
-    <string name="call_error_peer_cancelled_call">puhelu peruttiin</string>
 
-    <string name="action_accept">VASTAA</string>
-    <string name="action_ignore">JÄTÄ HUOMIOTTA</string>
     <!-- ??? this entire section -->
 
     <!-- medias picker string -->
@@ -448,7 +444,6 @@
     <string name="directory_searching_title">Haetaan luettelosta..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Ilmoitukset</string>
     <string name="room_settings_favourite">Suosikki</string>
     <string name="room_settings_de_prioritize">Matala tärkeys</string>
     <string name="room_settings_direct_chat">Yksityiskeskustelu</string>
@@ -572,7 +567,6 @@
     <string name="room_settings_topic">Aihe</string>
     <string name="room_settings_room_tag">Huoneen luokittelu</string>
     <string name="room_settings_tag_pref_dialog_title">Luokiteltu:</string>
-    <string name="room_settings_mute_notifs">Mykistä ilmoitukset</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Suosikki</string>

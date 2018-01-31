@@ -250,11 +250,6 @@ Email также позволит вам при необходимости во�
     <string name="call_error_ice_failed">Медиавызов не удался</string>
     <string name="call_error_camera_init_failed">Невозможно инициализировать камеру</string>
     <string name="call_error_answered_elsewhere">Звонок принят на другом устройстве</string>
-    <string name="call_error_peer_hangup_elsewhere">Звонок сброшен на другом устройстве</string>
-    <string name="call_error_peer_cancelled_call">звонок отменен</string>
-    
-    <string name="action_accept">ПРИНЯТЬ</string>
-    <string name="action_ignore">ОТКЛОНИТЬ</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Снять фото или видео"</string>
@@ -453,7 +448,6 @@ Email также позволит вам при необходимости во�
     <string name="directory_searching_title">Поиск в каталоге..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Уведомления</string>
     <string name="room_settings_favourite">Избранное</string>
     <string name="room_settings_de_prioritize">Не срочно</string>
     <string name="room_settings_direct_chat">Прямой чат</string>
@@ -578,8 +572,7 @@ Email также позволит вам при необходимости во�
     <string name="room_settings_topic">Тема</string>
     <string name="room_settings_room_tag">Метки комнаты</string>
     <string name="room_settings_tag_pref_dialog_title">Отмечено как:</string>
-    <string name="room_settings_mute_notifs">Не беспокоить</string>
-    
+
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Избранное</string>
     <string name="room_settings_tag_pref_entry_low_priority">Не срочно</string>
@@ -780,8 +773,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_12_24_timestamps">Показывать временные метки в 12-часовом формате (например 2:30pm)</string>
     <string name="event_formatter_widget_added">%1$s добавлен %2$s</string>
     <string name="event_formatter_widget_removed">%1$s удален %2$s</string>
-    <string name="add_matrix_apps_not_supported">Не поддерживается на этом устройстве</string>
-<string name="settings_hide_join_leave_messages">Скрывать сообщения присоединился/покинул (не затрагивает приглашение/кик/бан)</string>
+    <string name="settings_hide_join_leave_messages">Скрывать сообщения присоединился/покинул (не затрагивает приглашение/кик/бан)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Скрывать изменения аватара и отображаемого имени</string>
 
     <string name="widget_no_power_to_manage">Вам нужно разрешение на управление виджетами в этой комнате</string>
@@ -791,10 +783,8 @@ Email также позволит вам при необходимости во�
     <string name="active_widgets">активных виджетов: %1$d</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Для этого вы должны иметь возможность приглашать пользователей.</string>
     <string name="widget_integration_unable_to_create">Не удалось создать виджет.</string>
     <string name="widget_integration_failed_to_send_request">Не удалось отправить запрос.</string>
-    <string name="widget_integration_room_not_recognised">Данная комната не распознана.</string>
     <string name="widget_integration_positive_power_level">Уровень доступа должен быть числом больше 0.</string>
     <string name="widget_integration_must_be_in_room">Вы не состоите в этой комнате.</string>
     <string name="widget_integration_no_permission_in_room">У вас нет разрешений делать это в данной комнате.</string>

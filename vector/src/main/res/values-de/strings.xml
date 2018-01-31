@@ -250,11 +250,6 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="call_error_ice_failed">Medien-Verbindung fehlgeschlagen</string>
     <string name="call_error_camera_init_failed">Kann Kamera nicht initialisieren</string>
     <string name="call_error_answered_elsewhere">Anruf woanders entgegengenommen</string>
-    <string name="call_error_peer_hangup_elsewhere">Anruf woanders aufgelegt</string>
-    <string name="call_error_peer_cancelled_call">Anruf abgebrochen</string>
-
-    <string name="action_accept">Akzeptieren</string>
-    <string name="action_ignore">Ignorieren</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Foto oder Video aufnehmen</string>
@@ -453,7 +448,6 @@ Bist du sicher?</string>
     <string name="directory_searching_title">Verzeichnis wird durchsucht..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Benachrichtigungen</string>
     <string name="room_settings_favourite">Favorit</string>
     <string name="room_settings_de_prioritize">Niedrige Priorität</string>
     <string name="room_settings_direct_chat">Direkter Chat</string>
@@ -576,7 +570,6 @@ Bist du sicher?</string>
     <string name="room_settings_topic">Thema</string>
     <string name="room_settings_room_tag">Raum-Markierung</string>
     <string name="room_settings_tag_pref_dialog_title">Markiert als:</string>
-    <string name="room_settings_mute_notifs">Benachrichtigungen stummschalten</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favorit</string>
@@ -782,9 +775,7 @@ Unbekannte Geräte:</string>
     <string name="active_widgets">%1$d aktive Widgets</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Du benötigst die Berechtigung, Benutzer einzuladen, um diese Aktion ausführen zu können.</string>
     <string name="widget_integration_unable_to_create">Widget konnte nicht erstellt werden.</string>
-    <string name="widget_integration_room_not_recognised">Dieser Raum wurde nicht erkannt.</string>
     <string name="widget_integration_positive_power_level">Berechtigungslevel muss eine positive ganze Zahl sein.</string>
     <string name="widget_integration_must_be_in_room">Du bist nicht Mitglied in diesem Raum.</string>
     <string name="widget_integration_no_permission_in_room">Du hast keine Berechtigung, diese Aktion in diesem Raum auszuführen.</string>
@@ -792,8 +783,7 @@ Unbekannte Geräte:</string>
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
     <string name="settings_labs_matrix_apps">Matrix-Apps</string>
     <string name="room_add_matrix_apps">Matrix-Apps hinzufügen</string>
-    <string name="add_matrix_apps_not_supported">Wird auf diesem Gerät nicht unterstützt</string>
-<string name="settings_notification_ringtone">Benachrichtigungston</string>
+    <string name="settings_notification_ringtone">Benachrichtigungston</string>
     <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
     <string name="widget_integration_missing_user_id">Anfrage enthält keine user_id.</string>
     <string name="light_theme">Helles Thema</string>

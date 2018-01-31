@@ -245,11 +245,6 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="call_error_ice_failed">Media verbinding is mislukt</string>
     <string name="call_error_camera_init_failed">Kan de camera niet initialiseren</string>
     <string name="call_error_answered_elsewhere">oproep ergens anders opgenomen</string>
-    <string name="call_error_peer_hangup_elsewhere">De oproep is ergens anders opgehangen</string>
-    <string name="call_error_peer_cancelled_call">de oproep is geannuleerd</string>
-
-    <string name="action_accept">ACCEPTEREN</string>
-    <string name="action_ignore">NEGEREN</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Een afbeelding of video maken"</string>
@@ -438,7 +433,6 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="directory_searching_title">Adresboek doorzoeken..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificaties</string>
     <string name="room_settings_favourite">Favoriet</string>
     <string name="room_settings_de_prioritize">De-prioriteren</string>
     <string name="room_settings_direct_chat">Privé chat</string>
@@ -563,7 +557,6 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="room_settings_topic">Onderwerp</string>
     <string name="room_settings_room_tag">Ruimte label</string>
     <string name="room_settings_tag_pref_dialog_title">Gelabeld als:</string>
-    <string name="room_settings_mute_notifs">Notificaties dempen</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favoriet</string>
@@ -764,10 +757,8 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="active_widgets">%1$d actieve widgets</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Je moet gebruikers kunnen uitnodigen om dat te kunnen doen.</string>
     <string name="widget_integration_unable_to_create">Niet mogelijk om de widget te maken.</string>
     <string name="widget_integration_failed_to_send_request">Niet gelukt om een verzoek te verzenden.</string>
-    <string name="widget_integration_room_not_recognised">Deze ruimte wordt niet herkend.</string>
     <string name="widget_integration_positive_power_level">Het machtsniveau moet een positief en heel getal zijn.</string>
     <string name="widget_integration_must_be_in_room">Je zit niet in deze ruimte.</string>
     <string name="widget_integration_no_permission_in_room">Je hebt niet de permissie om dat in deze ruimte te doen.</string>
@@ -776,5 +767,4 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="widget_integration_room_not_visible">Ruimte %s is niet zichtbaar.</string>
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Matrix Apps toevoegen</string>
-    <string name="add_matrix_apps_not_supported">Niet ondersteund op dit apparaat</string>
 </resources>

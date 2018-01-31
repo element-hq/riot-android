@@ -275,11 +275,6 @@
     <string name="call_error_ice_failed">Ha fallat la connexió de mitjans</string>
     <string name="call_error_camera_init_failed">No es pot iniciar la càmera</string>
     <string name="call_error_answered_elsewhere">s\'ha contestat la trucada des d\'un altre lloc</string>
-    <string name="call_error_peer_hangup_elsewhere">s\'ha penjat la trucada des d\'un altre lloc</string>
-    <string name="call_error_peer_cancelled_call">trucada cancel·lada</string>
-
-    <string name="action_accept">ACCEPTA</string>
-    <string name="action_ignore">IGNORA</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Fes una foto o un vídeo"</string>
@@ -469,7 +464,6 @@
     <string name="directory_searching_title">Cercant al directori..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificacions</string>
     <string name="room_settings_favourite">Preferit</string>
     <string name="room_settings_de_prioritize">Treu prioritat</string>
     <string name="room_settings_direct_chat">Xat directe</string>
@@ -627,7 +621,6 @@
     <string name="room_settings_topic">Tema</string>
     <string name="room_settings_room_tag">Etiqueta de la sala</string>
     <string name="room_settings_tag_pref_dialog_title">Etiquetat com a:</string>
-    <string name="room_settings_mute_notifs">Silencia les notificacions</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Preferit</string>
@@ -798,10 +791,8 @@
     <string name="active_widgets">%1$d ginys actius</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Heu de poder convidar a altres usuaris per poder fer això.</string>
     <string name="widget_integration_unable_to_create">No s\'ha pogut crear el giny.</string>
     <string name="widget_integration_failed_to_send_request">No s\'ha pogut enviar la sol·licitud.</string>
-    <string name="widget_integration_room_not_recognised">Aquesta sala no és roconeguda.</string>
     <string name="widget_integration_positive_power_level">El nivell de potència ha de ser un enter positiu.</string>
     <string name="widget_integration_must_be_in_room">No us tobeu a aqueta sala.</string>
     <string name="widget_integration_no_permission_in_room">No teniu el permis per fer això en aquesta sala.</string>
@@ -810,7 +801,6 @@
     <string name="widget_integration_room_not_visible">La sala %s no és visible.</string>
     <string name="settings_labs_matrix_apps">Aplicacions de Matrix</string>
     <string name="room_add_matrix_apps">Afegeix aplicacions de Matrix</string>
-    <string name="add_matrix_apps_not_supported">No recolzat en aquest dispositiu</string>
     <string name="settings_labs_native_camera">Utilitza la càmera nativa</string>
 
     // share keys
@@ -842,15 +832,11 @@
     <string name="community_name_hint">Exemple</string>
     <string name="community_id">ID de la comunitat</string>
     <string name="community_id_hint">exemple</string>
-    <string name="group_id_cannot_be_empty">L\'ID de la comunitat no pot estar buida</string>
-    <string name="group_id_invalid_characters"> L\'ID de la comunitat només pot contenir:  a-z, 0-9, o \'=_-./\'</string>
 
     // group details
     <string name="group_details_home">Inici</string>
     <string name="group_details_people">Usuaris</string>
     <string name="group_details_rooms">Sales</string>
-    <string name="featured_rooms">Sales destacades</string>
-    <string name="featured_users">Usuaris destacats</string>
     <string name="no_users_placeholder">Sense usuaris</string>
 
     <string name="rooms">Sales</string>
