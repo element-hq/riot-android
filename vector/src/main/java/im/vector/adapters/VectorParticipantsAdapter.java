@@ -434,14 +434,15 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
                         mIsOfflineContactsSearch = false;
                         mKnownContactsLimited = (null != searchUsersResponse.limited) ? searchUsersResponse.limited : false;
-                        onKnownContactsSearchEnd(participantItemList, theFirstEntry, false, searchListener);
+
+                        searchAccountKnownContacts(theFirstEntry, participantItemList, false, searchListener);
                     }
                 }
 
                 private void onError() {
                     if (TextUtils.equals(fPattern, mPattern)) {
                         mIsOfflineContactsSearch = true;
-                        searchAccountKnownContacts(theFirstEntry, searchListener);
+                        searchAccountKnownContacts(theFirstEntry, new ArrayList<ParticipantAdapterItem>(), true, searchListener);
                     }
                 }
 
@@ -461,19 +462,19 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 }
             });
         } else {
-            searchAccountKnownContacts(theFirstEntry, searchListener);
+            searchAccountKnownContacts(theFirstEntry, new ArrayList<ParticipantAdapterItem>(), true, searchListener);
         }
     }
 
     /**
      * Search the known contacts from the account known users list.
      *
-     * @param theFirstEntry  the adapter first entry
-     * @param searchListener the listener
+     * @param theFirstEntry        the adapter first entry
+     * @param participantItemList  the participants initial list
+     * @param sortRoomContactsList true to sort the room contacts list
+     * @param searchListener       the listener
      */
-    private void searchAccountKnownContacts(final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
-        List<ParticipantAdapterItem> participantItemList = new ArrayList<>();
-
+    private void searchAccountKnownContacts(final ParticipantAdapterItem theFirstEntry, final List<ParticipantAdapterItem> participantItemList, final boolean sortRoomContactsList, final OnParticipantsSearchListener searchListener) {
         // the list is not anymore limited
         mKnownContactsLimited = false;
 
@@ -491,7 +492,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                searchAccountKnownContacts(theFirstEntry, searchListener);
+                                searchAccountKnownContacts(theFirstEntry, participantItemList, sortRoomContactsList, searchListener);
                             }
                         });
                     }
@@ -571,7 +572,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             }
         }
 
-        onKnownContactsSearchEnd(participantItemList, theFirstEntry, true, searchListener);
+        onKnownContactsSearchEnd(participantItemList, theFirstEntry, sortRoomContactsList, searchListener);
     }
 
     /**
