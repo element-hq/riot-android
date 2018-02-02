@@ -41,6 +41,7 @@
 
     <ProgressBar
         android:id="@+id/room_sync_in_progress"
+        android:contentDescription="@string/room_sync_in_progress"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -167,6 +168,7 @@
 
         <ImageView
             android:id="@+id/close_jump_to_first_unread"
+            android:contentDescription="@string/action_close"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignBottom="@+id/jump_to_first_unread_label"
@@ -178,6 +180,7 @@
             android:tint="?attr/message_text_color" />
 
         <ProgressBar
+            android:contentDescription="@string/loading"
             android:id="@+id/jump_to_read_spinner"
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
@@ -315,30 +318,30 @@
                         android:id="@+id/room_start_call_layout"
                         android:layout_width="37dp"
                         android:layout_height="match_parent"
-                        android:visibility="gone"
-                        android:contentDescription="@string/call_connecting">
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/room_start_call_image_view"
                             android:layout_width="24dp"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/voice_call_start_green"/>
+                            android:src="@drawable/voice_call_start_green"
+                            android:contentDescription="@string/call_connecting"/>
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:id="@+id/room_end_call_layout"
                         android:layout_width="37dp"
                         android:layout_height="match_parent"
-                        android:visibility="gone"
-                        android:contentDescription="@string/call_ended">
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/room_end_call_image_view"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/voice_call_end_fushia"/>
+                            android:src="@drawable/voice_call_end_fushia"
+                            android:contentDescription="@string/call_ended"/>
                     </RelativeLayout>
 
                     <View
@@ -396,7 +399,8 @@
                     android:layout_marginLeft="68dp"
                     android:layout_marginRight="13dp"
                     android:text="a text here "
-                    android:textColor="?attr/room_notification_text_color" />
+                    android:textColor="?attr/room_notification_text_color"
+                    android:accessibilityLiveRegion="polite" />
 
             </RelativeLayout>
 
@@ -418,6 +422,7 @@
 
             <ProgressBar
                 android:id="@+id/loading_room_paginate_back_progress"
+                android:contentDescription="@string/loading"
                 android:layout_height="40dp"
                 android:layout_width="match_parent"
                 android:visibility="gone"
@@ -425,6 +430,7 @@
 
             <ProgressBar
                 android:id="@+id/loading_room_paginate_forward_progress"
+                android:contentDescription="@string/loading"
                 android:layout_height="40dp"
                 android:layout_width="match_parent"
                 android:layout_alignParentLeft="true"
@@ -444,6 +450,7 @@
         android:visibility="gone">
         <ProgressBar
             android:id="@+id/medias_processing_progress"
+            android:contentDescription="@string/loading"
             android:layout_height="40dp"
             android:layout_width="40dp"
             android:layout_centerHorizontal="true"

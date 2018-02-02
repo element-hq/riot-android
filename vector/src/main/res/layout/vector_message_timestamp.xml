@@ -17,6 +17,7 @@
     <View
         android:id="@+id/messagesAdapter_action_anchor"
         android:layout_width="1dp"
-        android:layout_height="1dp" />
+        android:layout_height="1dp"
+        android:contentDescription="@string/actions" />
 </merge>
 
