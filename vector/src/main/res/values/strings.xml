@@ -63,6 +63,7 @@
 
     <!-- actions -->
     <string name="action_exit">Exit</string>
+    <string name="actions">Actions</string>
     <string name="action_sign_out">Sign out</string>
     <string name="action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
     <string name="action_voice_call">Voice Call</string>
@@ -311,6 +312,9 @@
     <string name="reject">Reject</string>
 
     <!-- Room -->
+    <string name="list_members">List members</string>
+    <string name="open_chat_header">Open header</string>
+    <string name="room_sync_in_progress">Syncing...</string>
     <string name="room_jump_to_first_unread">Jump to first unread message.</string>
 
     <!-- Room Preview -->
@@ -869,4 +873,10 @@
     <string name="reason_colon">Reason: %1$s</string>
     <string name="rejoin">Rejoin</string>
     <string name="forget_room">Forget room</string>
+
+    <!-- Miscelaneous image descriptions for accessibility -->
+    <string name="receipt_avatar">Receipt avatar</string>
+    <string name="notice_avatar">Notice avatar</string>
+    <string name="avatar">Avatar</string>
+
 </resources>
