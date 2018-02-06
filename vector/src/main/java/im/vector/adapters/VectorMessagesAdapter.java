@@ -1369,6 +1369,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             // the patch apply the alpha to the text color but it does not work for the hyperlinks.
             noticeTextView.setAlpha(1.0f);
             noticeTextView.setTextColor(getNoticeTextColor());
+
+            Message message = JsonUtils.toMessage(msg.getContent());
+            mHelper.manageURLPreviews(message, convertView, msg.eventId);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getNoticeRoomMemberView() failed : " + e.getMessage());
         }
