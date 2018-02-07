@@ -787,4 +787,32 @@ Appareils inconnus :</string>
 
     <string name="encrypted_message">Message chiffré</string>
 
-</resources>
+<string name="loading">Chargement…</string>
+
+    <string name="title_activity_group_details">Détails de la communauté</string>
+
+    <string name="bottom_action_groups">Communautés</string>
+
+    <string name="home_filter_placeholder_groups">Rechercher des communautés</string>
+
+    <string name="groups_invite_header">Inviter</string>
+    <string name="groups_header">Communautés</string>
+    <string name="no_group_placeholder">Aucun groupe</string>
+
+    <string name="start_new_chat_prompt_msg">Voulez-vous vraiment engager une nouvelle discussion avec %s?</string>
+    <string name="start_voice_call_prompt_msg">Voulez-vous vraiment engager un nouvel appel vocal ?</string>
+    <string name="start_video_call_prompt_msg">Voulez-vous vraiment engager un nouvel appel vidéo ?</string>
+
+    <string name="groups_list">Liste des Groupes</string>
+
+    <string name="room_participants_kick_prompt_msg">Voulez-vous vraiment exclure cet utilisateur de la discussion ?</string>
+    <string name="room_participants_ban_prompt_msg">Voulez-vous vraiment bannir cet utilisateur de la discussion ?</string>
+
+    <string name="action_exit">Quitter</string>
+    <string name="room_settings_all_messages_noisy">Tous les messages (bruyant)</string>
+    <string name="room_settings_all_messages">Tous les messages</string>
+    <string name="room_settings_mention_only">Mentions uniquement</string>
+    <string name="room_settings_mute">Silencieux</string>
+    <string name="room_settings_add_homescreen_shortcut">Ajouter un raccourci sur l\'écran d\'acceuil</string>
+
+    </resources>
