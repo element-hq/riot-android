@@ -859,4 +859,6 @@ Appareils inconnus :</string>
     <string name="reason_colon">Motif : %1$s</string>
     <string name="rejoin">Rejoindre</string>
     <string name="forget_room">Oublier le salon</string>
-</resources>
+<string name="settings_flair">Badge</string>
+
+    </resources>
