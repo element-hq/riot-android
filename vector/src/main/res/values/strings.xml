@@ -88,6 +88,7 @@
     <string name="bottom_action_favourites">Favourites</string>
     <string name="bottom_action_people">People</string>
     <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_groups">Communities</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Search for rooms</string>
