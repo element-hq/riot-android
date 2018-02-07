@@ -733,7 +733,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="settings_hide_read_receipts">Ocultar los marcadores de lectura</string>
     <string name="settings_dont_send_typings_notifs">No enviar notificaciones de estar escribiendo</string>
     <string name="settings_always_show_timestamps">Siempre mostrar la marca de tiempo de los mensajes</string>
-    <string name="settings_disable_markdown">Deshabilitar el formateo en markdown</string>
+    <string name="settings_disable_markdown">Deshabilitar el formateo en markdown cuando se envía</string>
 
     <string name="media_saving_period_3_days">3 días</string>
     <string name="media_saving_period_1_week">1 semana</string>
@@ -828,4 +828,41 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <string name="encrypted_message">Mensaje encriptado</string>
 
-</resources>
+<string name="title_activity_group_details">Detalles de la comunidad</string>
+
+    <string name="loading">Cargando...</string>
+
+    <string name="action_exit">Salir</string>
+    <string name="bottom_action_groups">Comunidades</string>
+
+    <string name="home_filter_placeholder_groups">Buscar comunidades</string>
+
+    <string name="groups_invite_header">Invitar</string>
+    <string name="groups_header">Comunidades</string>
+    <string name="no_group_placeholder">No hay grupos</string>
+
+    <string name="start_new_chat_prompt_msg">Está seguro que quiere empezar una nueva conversación con %s?</string>
+    <string name="start_voice_call_prompt_msg">Está seguro que quiere empezar una llamada de voz?</string>
+    <string name="start_video_call_prompt_msg">Està seguro que quiere empezar una llamada de vídeo?</string>
+
+    <string name="groups_list">Lista de grupos</string>
+
+    <string name="room_participants_kick_prompt_msg">Está seguro que quiere echar este usuario de la conversación?</string>
+    <string name="room_participants_ban_prompt_msg">Está seguro que quiere vetar este usuario de esta convesación?</string>
+
+    <string name="room_settings_all_messages_noisy">Todos los mensajes (ruidoso)</string>
+    <string name="room_settings_all_messages">Todos los mensajes</string>
+    <string name="room_settings_mention_only">Solo citas</string>
+    <string name="room_settings_mute">Silenciar</string>
+    <string name="room_settings_add_homescreen_shortcut">Añadir un atajo en la pantalla de inicio</string>
+
+    <string name="settings_inline_url_preview">Habilita las previsualizaciones de las URL por defecto</string>
+    <string name="settings_vibrate_on_mention">Vibrar cuando te citen</string>
+
+    <string name="settings_flair">Talento</string>
+
+    <string name="room_settings_room_notifications_title">Notificaciones</string>
+    <string name="room_settings_no_flair">" Esta sala no pertenece a ninguna comunidad"</string>
+    <string name="room_settings_add_new_group">Nueva ID de la comunidad (por ejemplo +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">El ID de la comunidad es inválido</string>
+    </resources>
