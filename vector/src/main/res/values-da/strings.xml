@@ -233,9 +233,6 @@ Beklager ulejligheden.</string>
     <string name="room_info_room_name">Rum navn</string>
     <string name="room_info_room_topic">Rum emne</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call">Opkald</string>
     <string name="call_connected">Opkald forbundet</string>
     <string name="call_connecting">Opkald forbinder…</string>
@@ -250,11 +247,6 @@ Beklager ulejligheden.</string>
     <string name="call_error_ice_failed">Medie Forbindelse Mislykkedes</string>
     <string name="call_error_camera_init_failed">Kan ikke starte kameraet</string>
     <string name="call_error_answered_elsewhere">opkald besvaret et andet sted</string>
-    <string name="call_error_peer_hangup_elsewhere">opkald afsluttet et andet sted</string>
-    <string name="call_error_peer_cancelled_call">opkald afbrudt</string>
-
-    <string name="action_accept">ACCEPTER</string>
-    <string name="action_ignore">IGNORÉR</string>
 
     <string name="media_picker_both_capture_title">Tag et billede eller optag en video</string>
     <string name="media_picker_cannot_record_video">Kan ikke optage video</string>

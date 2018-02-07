@@ -43,7 +43,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 

@@ -140,10 +140,6 @@
     <string name="call_connected">Panggilan terhubung</string>
     <string name="call_connecting">Menyambungkan panggilan…</string>
     <string name="call_ended">Panggilan diakhiri</string>
-    <string name="call_error_peer_cancelled_call">panggilan dibatalkan</string>
-
-    <string name="action_accept">TERIMA</string>
-    <string name="action_ignore">ABAIKAN</string>
 
     <string name="permissions_rationale_popup_title">Informasi</string>
     <string name="media_slider_saved">Tersimpan</string>
@@ -264,10 +260,8 @@ Mohon maaf untuk ketidaknyamannya.</string>
 
     <string name="call_error_ice_failed">Hubungan Media Gagal</string>
     <string name="auth_identity_server">Server Identitas</string>
-    <string name="settings_key_display_all_events">pengaturan_tombol_pertunjukan_semua_acara</string>
     <string name="call_error_camera_init_failed">Kamera tidak bisa dibuka</string>
     <string name="call_error_answered_elsewhere">panggilan gagal dijawab di tempat lain</string>
-    <string name="call_error_peer_hangup_elsewhere">panggilan telepon ditutup di suatu tempat</string>
     <string name="media_picker_both_capture_title">Ambil sebuah gambar atau video</string>
     <string name="media_picker_cannot_record_video">Tidak bisa merekam video</string>
 

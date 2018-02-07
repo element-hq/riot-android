@@ -30,8 +30,6 @@ import android.view.inputmethod.InputMethodManager;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 
-import java.util.ArrayList;
-
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;

@@ -742,12 +742,69 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     @Override
-    public void onToggleRoomNotifications(MXSession session, String roomId) {
+    public void onForgetRoom(final MXSession session, final String roomId) {
+        Room room = session.getDataHandler().getRoom(roomId);
+
+        if (null != room) {
+            showWaitingView();
+
+            room.forget(new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // clear any pending notification for this room
+                                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
+                                hideWaitingView();
+                            }
+                        });
+                    }
+                }
+
+                private void onError(final String message) {
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideWaitingView();
+                                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void addHomeScreenShortcut(MXSession session, String roomId) {
+        RoomUtils.addHomeScreenShortcut(getActivity(), session, roomId);
+    }
+
+    @Override
+    public void onUpdateRoomNotificationsState(MXSession session, String roomId, BingRulesManager.RoomNotificationState state) {
         BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
 
         showWaitingView();
 
-        bingRulesManager.muteRoomNotifications(roomId, !bingRulesManager.isRoomNotificationsDisabled(roomId), new BingRulesManager.onBingRuleUpdateListener() {
+        bingRulesManager.updateRoomNotificationState(roomId, state, new BingRulesManager.onBingRuleUpdateListener() {
             @Override
             public void onBingRuleUpdateSuccess() {
                 if (null != getActivity()) {
@@ -773,7 +830,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                             }
                     );
                 }
-
             }
         });
     }

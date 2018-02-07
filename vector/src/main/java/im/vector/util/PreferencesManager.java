@@ -18,7 +18,6 @@ package im.vector.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.RingtoneManager;
@@ -110,7 +109,6 @@ public class PreferencesManager {
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     private static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
     private static final String SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY = "SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY";
-    public static final String SETTINGS_ANALYTICS_PREFERENCE_KEY = "SETTINGS_ANALYTICS_PREFERENCE_KEY";
 
     public static final String SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY";
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
@@ -122,9 +120,17 @@ public class PreferencesManager {
     private static final String SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY";
     public static final String SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY";
 
+    public static final String SETTINGS_GROUPS_FLAIR_KEY = "SETTINGS_GROUPS_FLAIR_KEY";
+
     private static final String SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY = "SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY";
 
-    private static final String REQUEST_DISABLE_OPTIMISATION_KEY = "REQUEST_DISABLE_OPTIMISATION_KEY";
+    public static final String SETTINGS_SHOW_URL_PREVIEW_KEY = "SETTINGS_SHOW_URL_PREVIEW_KEY";
+
+    private static final String SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY";
+
+    private static final String SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY";
+
+    private static final String SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY";
 
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
@@ -195,28 +201,18 @@ public class PreferencesManager {
     }
 
     /**
-     * Tells if there was a request to disable the battery optimisation on some android >= M devices.
+     * Tells if the battery optimisations are ignored for this application.
      *
      * @param context the context
-     * @return true if there was a request
-     */
-    public static boolean didRequestDisableBackgroundOptimisation(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(REQUEST_DISABLE_OPTIMISATION_KEY, false);
-    }
-    
-    /**
-     * Tells if a background service can be started.
-     *
-     * @param context the context
-     * @return true if a background service can be started.
+     * @return true if the battery optimisations are ignored.
      */
     @SuppressLint("NewApi")
-    public static boolean canStartBackgroundService(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
+    public static boolean useBatteryOptimisation(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return !((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -618,9 +614,52 @@ public class PreferencesManager {
      * Tells if Piwik can be used
      *
      * @param context the context
-     * @return null if not defined, true / false when defined
+     * @return true to use it
      */
-    public static Boolean trackWithPiwik(Context context) {
+    public static boolean trackWithPiwik(Context context) {
         return !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY, false);
+    }
+
+    /**
+     * Tells if the phone must vibrate when mentioning
+     *
+     * @param context the context
+     * @return true
+     */
+    public static boolean vibrateWhenMentioning(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_VIBRATE_ON_MENTION_KEY, false);
+    }
+
+    /**
+     * Tells if the rage shake is used.
+     *
+     * @param context the context
+     * @return true if the rage shake is used
+     */
+    public static boolean useRageshake(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true);
+    }
+
+    /**
+     * Update the rage shake  status.
+     *
+     * @param context   the context
+     * @param isEnabled true to enable the rage shake
+     */
+    public static void setUseRageshake(Context context, boolean isEnabled) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled);
+        editor.commit();
+    }
+
+    /**
+     * Tells if all the events must be displayed ie even the redacted events.
+     *
+     * @param context the context
+     * @return true to display all the events even the redacted ones.
+     */
+    public static boolean displayAllEvents(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISPLAY_ALL_EVENTS_KEY, false);
     }
 }

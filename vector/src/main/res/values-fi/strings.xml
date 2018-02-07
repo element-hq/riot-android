@@ -240,10 +240,6 @@ Valitse \"vie\" varmuuskopioidaksesi avaimet ennen uloskirjautumista.</string>
     <string name="room_info_room_name">Huoneen nimi</string>
     <string name="room_info_room_topic">Huoneen aihe</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Yhdistetty</string>
     <string name="call_connecting">Yhdistetään…</string>
@@ -258,11 +254,7 @@ Valitse \"vie\" varmuuskopioidaksesi avaimet ennen uloskirjautumista.</string>
     <string name="call_error_ice_failed">Mediayhteys epäonnistui</string>
     <string name="call_error_camera_init_failed">Kameran alustus epäonnistui</string>
     <string name="call_error_answered_elsewhere">puheluun vastattiin muualta</string>
-    <string name="call_error_peer_hangup_elsewhere">puhelu lopetettiin muualla</string>
-    <string name="call_error_peer_cancelled_call">puhelu peruttiin</string>
 
-    <string name="action_accept">VASTAA</string>
-    <string name="action_ignore">JÄTÄ HUOMIOTTA</string>
     <!-- ??? this entire section -->
 
     <!-- medias picker string -->
@@ -459,7 +451,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="directory_searching_title">Haetaan luettelosta..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Ilmoitukset</string>
     <string name="room_settings_favourite">Suosikki</string>
     <string name="room_settings_de_prioritize">Matala tärkeys</string>
     <string name="room_settings_direct_chat">Yksityiskeskustelu</string>

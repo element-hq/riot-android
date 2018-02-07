@@ -29,7 +29,7 @@ import im.vector.R;
 import im.vector.util.VectorUtils;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 
 /**
  * An adapter which can display m.room.member content.

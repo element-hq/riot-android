@@ -73,9 +73,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import im.vector.Matrix;
-import im.vector.R;
+import im.vector.R;;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
@@ -114,7 +115,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private static final String PREF_KEY_ROOM_TAG_LIST = "roomTagList";
     private static final String PREF_KEY_ROOM_ACCESS_RULES_LIST = "roomAccessRulesList";
     private static final String PREF_KEY_ROOM_HISTORY_READABILITY_LIST = "roomReadHistoryRulesList";
-    private static final String PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH = "muteNotificationsSwitch";
+    private static final String PREF_KEY_ROOM_NOTIFICATIONS_LIST = "roomNotificationPreference";
     private static final String PREF_KEY_ROOM_LEAVE = "roomLeave";
     private static final String PREF_KEY_ROOM_INTERNAL_ID = "roomInternalId";
     private static final String PREF_KEY_ADDRESSES = "addresses";
@@ -124,11 +125,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private static final String PREF_KEY_BANNED_DIVIDER = "banned_divider";
     private static final String PREF_KEY_ENCRYPTION = "encryptionKey";
 
+    private static final String PREF_KEY_FLAIR = "flair";
+    private static final String PREF_KEY_FLAIR_DIVIDER = "flair_divider";
+
     private static final String ADDRESSES_PREFERENCE_KEY_BASE = "ADDRESSES_PREFERENCE_KEY_BASE";
     private static final String NO_LOCAL_ADDRESS_PREFERENCE_KEY = "NO_LOCAL_ADDRESS_PREFERENCE_KEY";
     private static final String ADD_ADDRESSES_PREFERENCE_KEY = "ADD_ADDRESSES_PREFERENCE_KEY";
 
     private static final String BANNED_PREFERENCE_KEY_BASE = "BANNED_PREFERENCE_KEY_BASE";
+
+    private static final String FLAIR_PREFERENCE_KEY_BASE = "FLAIR_PREFERENCE_KEY_BASE";
 
     private static final String UNKNOWN_VALUE = "UNKNOWN_VALUE";
 
@@ -148,17 +154,20 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private PreferenceCategory mBannedMembersSettingsCategory;
     private PreferenceCategory mBannedMembersSettingsCategoryDivider;
 
+    // flair
+    private PreferenceCategory mFlairSettingsCategory;
+
     // UI elements
     private RoomAvatarPreference mRoomPhotoAvatar;
     private EditTextPreference mRoomNameEditTxt;
     private EditTextPreference mRoomTopicEditTxt;
     private CheckBoxPreference mRoomDirectoryVisibilitySwitch;
-    private CheckBoxPreference mRoomMuteNotificationsSwitch;
     private ListPreference mRoomTagListPreference;
     private VectorListPreference mRoomAccessRulesListPreference;
     private ListPreference mRoomHistoryReadabilityRulesListPreference;
     private View mParentLoadingView;
     private View mParentFragmentContainerView;
+    private ListPreference mRoomNotificationsPreference;
 
     // disable some updates if there is
     private final IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
@@ -326,7 +335,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomNameEditTxt = (EditTextPreference) findPreference(PREF_KEY_ROOM_NAME);
         mRoomTopicEditTxt = (EditTextPreference) findPreference(PREF_KEY_ROOM_TOPIC);
         mRoomDirectoryVisibilitySwitch = (CheckBoxPreference) findPreference(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH);
-        mRoomMuteNotificationsSwitch = (CheckBoxPreference) findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);
         mRoomTagListPreference = (ListPreference) findPreference(PREF_KEY_ROOM_TAG_LIST);
         mRoomAccessRulesListPreference = (VectorListPreference) findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
         mRoomHistoryReadabilityRulesListPreference = (ListPreference) findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
@@ -334,6 +342,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mAdvandceSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_ADVANCED);
         mBannedMembersSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_BANNED);
         mBannedMembersSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_BANNED_DIVIDER);
+        mFlairSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_FLAIR);
+        mRoomNotificationsPreference = (ListPreference) getPreferenceManager().findPreference(PREF_KEY_ROOM_NOTIFICATIONS_LIST);
 
         mRoomAccessRulesListPreference.setOnPreferenceWarningIconClickListener(new VectorListPreference.OnPreferenceWarningIconClickListener() {
             @Override
@@ -518,6 +528,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             updateRoomDirectoryVisibilityAsync();
 
             refreshAddresses();
+            refreshFlair();
             refreshBannedMembersList();
             refreshEndToEnd();
         }
@@ -698,10 +709,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         if (null != mRoomDirectoryVisibilitySwitch)
             mRoomDirectoryVisibilitySwitch.setEnabled(isAdmin && isConnected);
 
-        // room notification mute setting: no power condition
-        if (null != mRoomMuteNotificationsSwitch)
-            mRoomMuteNotificationsSwitch.setEnabled(isConnected);
-
         // room tagging: no power condition
         if (null != mRoomTagListPreference)
             mRoomTagListPreference.setEnabled(isConnected);
@@ -713,8 +720,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // room read history: admin only
-        if (null != mRoomHistoryReadabilityRulesListPreference)
+        if (null != mRoomHistoryReadabilityRulesListPreference) {
             mRoomHistoryReadabilityRulesListPreference.setEnabled(isAdmin && isConnected);
+        }
+
+        if (null != mRoomNotificationsPreference) {
+            mRoomNotificationsPreference.setEnabled(isConnected);
+        }
     }
 
 
@@ -748,12 +760,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             value = mRoom.getTopic();
             mRoomTopicEditTxt.setSummary(value);
             mRoomTopicEditTxt.setText(value);
-        }
-
-        // update the mute notifications preference
-        if (null != mRoomMuteNotificationsSwitch) {
-            boolean isChecked = mBingRulesManager.isRoomNotificationsDisabled(mRoom.getRoomId());
-            mRoomMuteNotificationsSwitch.setChecked(isChecked);
         }
 
         // update room directory visibility
@@ -810,6 +816,23 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 mRoomHistoryReadabilityRulesListPreference.setValue(UNKNOWN_VALUE);
                 mRoomHistoryReadabilityRulesListPreference.setSummary("");
             }
+        }
+
+        if (null != mRoomNotificationsPreference) {
+            BingRulesManager.RoomNotificationState state = mSession.getDataHandler().getBingRulesManager().getRoomNotificationState(mRoom.getRoomId());
+
+            if (state == BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY) {
+                value = getString(R.string.room_settings_all_messages_noisy);
+            } else if (state == BingRulesManager.RoomNotificationState.ALL_MESSAGES) {
+                value = getString(R.string.room_settings_all_messages);
+            } else if (state == BingRulesManager.RoomNotificationState.MENTIONS_ONLY) {
+                value = getString(R.string.room_settings_mention_only);
+            } else {
+                value = getString(R.string.room_settings_mute);
+            }
+
+            mRoomNotificationsPreference.setValue(value);
+            mRoomNotificationsPreference.setSummary(value);
         }
 
         // update the room tag preference
@@ -901,8 +924,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             onRoomNamePreferenceChanged();
         } else if (aKey.equals(PREF_KEY_ROOM_TOPIC)) {
             onRoomTopicPreferenceChanged();
-        } else if (aKey.equals(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH)) {
-            onRoomMuteNotificationsPreferenceChanged();
+        } else if (aKey.equals(PREF_KEY_ROOM_NOTIFICATIONS_LIST)) {
+            onRoomNotificationsPreferenceChanged();
         } else if (aKey.equals(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH)) {
             onRoomDirectoryVisibilityPreferenceChanged(); // TBT
         } else if (aKey.equals(PREF_KEY_ROOM_TAG_LIST)) {
@@ -1062,34 +1085,43 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     }
 
     /**
-     * Action when enabling / disabling the rooms notifications.
      */
-    private void onRoomMuteNotificationsPreferenceChanged() {
+    private void onRoomNotificationsPreferenceChanged() {
         // sanity check
-        if ((null == mRoom) || (null == mBingRulesManager) || (null == mRoomMuteNotificationsSwitch)) {
+        if ((null == mRoom) || (null == mBingRulesManager)) {
             return;
         }
 
-        // get new and previous values
-        boolean isNotificationsMuted = mRoomMuteNotificationsSwitch.isChecked();
-        boolean previousValue = mBingRulesManager.isRoomNotificationsDisabled(mRoom.getRoomId());
+        String value = mRoomNotificationsPreference.getValue();
+        BingRulesManager.RoomNotificationState updatedState;
+
+        if (TextUtils.equals(value, getString(R.string.room_settings_all_messages_noisy))) {
+            updatedState = BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY;
+        } else if (TextUtils.equals(value, getString(R.string.room_settings_all_messages))) {
+            updatedState = BingRulesManager.RoomNotificationState.ALL_MESSAGES;
+        } else if (TextUtils.equals(value, getString(R.string.room_settings_mention_only))) {
+            updatedState = BingRulesManager.RoomNotificationState.MENTIONS_ONLY;
+        } else {
+            updatedState = BingRulesManager.RoomNotificationState.MUTE;
+        }
 
         // update only, if values are different
-        if (isNotificationsMuted != previousValue) {
+        if (mBingRulesManager.getRoomNotificationState(mRoom.getRoomId()) != updatedState) {
             displayLoadingView();
-            mBingRulesManager.muteRoomNotifications(mRoom.getRoomId(), isNotificationsMuted, new BingRulesManager.onBingRuleUpdateListener() {
-                @Override
-                public void onBingRuleUpdateSuccess() {
-                    Log.d(LOG_TAG, "##onRoomMuteNotificationsPreferenceChanged(): update succeed");
-                    hideLoadingView(UPDATE_UI);
-                }
+            mBingRulesManager.updateRoomNotificationState(mRoom.getRoomId(), updatedState,
+                    new BingRulesManager.onBingRuleUpdateListener() {
+                        @Override
+                        public void onBingRuleUpdateSuccess() {
+                            Log.d(LOG_TAG, "##onRoomNotificationsPreferenceChanged(): update succeed");
+                            hideLoadingView(UPDATE_UI);
+                        }
 
-                @Override
-                public void onBingRuleUpdateFailure(String errorMessage) {
-                    Log.w(LOG_TAG, "##onRoomMuteNotificationsPreferenceChanged(): BingRuleUpdateFailure");
-                    hideLoadingView(DO_NOT_UPDATE_UI);
-                }
-            });
+                        @Override
+                        public void onBingRuleUpdateFailure(String errorMessage) {
+                            Log.w(LOG_TAG, "##onRoomNotificationsPreferenceChanged(): BingRuleUpdateFailure");
+                            hideLoadingView(DO_NOT_UPDATE_UI);
+                        }
+                    });
         }
     }
 
@@ -1290,7 +1322,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         Collections.sort(bannedMembers, new Comparator<RoomMember>() {
             @Override
             public int compare(RoomMember m1, RoomMember m2) {
-                return m1.getUserId().toLowerCase().compareTo(m2.getUserId().toLowerCase());
+                return m1.getUserId().toLowerCase(VectorApp.getApplicationLocale()).compareTo(m2.getUserId().toLowerCase(VectorApp.getApplicationLocale()));
             }
         });
 
@@ -1326,6 +1358,151 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                 mBannedMembersSettingsCategory.addPreference(preference);
             }
+        }
+    }
+
+    //================================================================================
+    // flair management
+    //================================================================================
+
+    private final ApiCallback mFlairUpdatesCallback = new ApiCallback<Void>() {
+        @Override
+        public void onSuccess(Void info) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoadingView(false);
+                    refreshFlair();
+                }
+            });
+        }
+
+        /**
+         * Error management.
+         * @param errorMessage the error message
+         */
+        private void onError(final String errorMessage) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                    hideLoadingView(false);
+                    refreshFlair();
+                }
+            });
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onMatrixError(MatrixError e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+    };
+
+    /**
+     * Tells if the current user can updates the related group aka flairs
+     *
+     * @return true if the user is allowed.
+     */
+    private boolean canUpdateFlair() {
+        boolean canUpdateAliases = false;
+
+        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+
+        if (null != powerLevels) {
+            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+            canUpdateAliases = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_RELATED_GROUPS);
+        }
+
+        return canUpdateAliases;
+    }
+
+    /**
+     * Refresh the flair list
+     */
+    private void refreshFlair() {
+        final List<String> groups = mRoom.getLiveState().getRelatedGroups();
+        Collections.sort(groups, String.CASE_INSENSITIVE_ORDER);
+
+        mFlairSettingsCategory.removeAll();
+
+        if (!groups.isEmpty()) {
+            for (final String groupId : groups) {
+                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+                preference.setTitle(groupId);
+                preference.setKey(FLAIR_PREFERENCE_KEY_BASE + groupId);
+
+                preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                    @Override
+                    public boolean onPreferenceLongClick(Preference preference) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                displayLoadingView();
+                                mRoom.removeRelatedGroup(groupId, mFlairUpdatesCallback);
+                            }
+                        });
+
+                        return true;
+                    }
+                });
+                mFlairSettingsCategory.addPreference(preference);
+            }
+        } else {
+            VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+            preference.setTitle(getString(R.string.room_settings_no_flair));
+            preference.setKey(FLAIR_PREFERENCE_KEY_BASE + "no_flair");
+
+            mFlairSettingsCategory.addPreference(preference);
+        }
+
+        if (canUpdateFlair()) {
+            // display the "add addresses" entry
+            EditTextPreference addAddressPreference = new EditTextPreference(getActivity());
+            addAddressPreference.setTitle(R.string.room_settings_add_new_group);
+            addAddressPreference.setDialogTitle(R.string.room_settings_add_new_group);
+            addAddressPreference.setKey(FLAIR_PREFERENCE_KEY_BASE + "__add");
+            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
+
+            addAddressPreference.setOnPreferenceChangeListener(
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            final String groupId = ((String) newValue).trim();
+
+                            // ignore empty alias
+                            if (!TextUtils.isEmpty(groupId)) {
+                                if (!MXSession.isGroupId(groupId)) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    builder.setTitle(R.string.room_settings_invalid_group_format_dialog_title);
+                                    builder.setMessage(getString(R.string.room_settings_invalid_group_format_dialog_body, groupId));
+                                    builder.setPositiveButton(R.string.ok, null);
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+                                } else if (!groups.contains(groupId)) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            displayLoadingView();
+                                            mRoom.addRelatedGroup(groupId, mFlairUpdatesCallback);
+                                        }
+                                    });
+                                }
+                            }
+                            return false;
+                        }
+                    });
+
+            mFlairSettingsCategory.addPreference(addAddressPreference);
         }
     }
 

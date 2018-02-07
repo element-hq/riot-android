@@ -60,7 +60,6 @@
                 android:id="@+id/messagesAdapter_merge_summary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:text="A message here"
                 android:textIsSelectable="false"
                 android:textSize="14sp" />

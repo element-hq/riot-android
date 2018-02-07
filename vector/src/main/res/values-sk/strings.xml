@@ -230,9 +230,6 @@ Ospravedlňujeme sa za spôsobené ťažkosti.</string>
     <string name="room_info_room_name">Názov miestnosti</string>
     <string name="room_info_room_topic">Téma miestnosti</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call">Hovor</string>
     <string name="call_connected">Hovor spojený</string>
     <string name="call_connecting">Spojenie hovoru…</string>
@@ -247,11 +244,6 @@ Ospravedlňujeme sa za spôsobené ťažkosti.</string>
     <string name="call_error_ice_failed">Zlyhalo spojenie médií</string>
     <string name="call_error_camera_init_failed">Nie je možné spustiť kameru</string>
     <string name="call_error_answered_elsewhere">Hovor bol prijatý na inom zariadení</string>
-    <string name="call_error_peer_hangup_elsewhere">Hovor bol ukončený na inom zariadení</string>
-    <string name="call_error_peer_cancelled_call">Hovor bol zrušený</string>
-
-    <string name="action_accept">PRIJAŤ</string>
-    <string name="action_ignore">IGNOROVAŤ</string>
 
     <string name="media_picker_both_capture_title">Odfotiť obrázok alebo video</string>
     <string name="media_picker_cannot_record_video">Nie je možné nahrať video</string>
@@ -440,7 +432,6 @@ Ste si istí?</string>
     <string name="directory_search_rooms_for">Nájdených %1$s miestností pre %2$s</string>
     <string name="directory_searching_title">Vyhľadávanie v adresáry..</string>
 
-    <string name="room_settings_notifications">Oznámenia</string>
     <string name="room_settings_favourite">Do obľúbených</string>
     <string name="room_settings_de_prioritize">Nízka priorita</string>
     <string name="room_settings_direct_chat">Priama konverzácia</string>
@@ -581,7 +572,6 @@ Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
     <string name="room_settings_topic">Téma</string>
     <string name="room_settings_room_tag">Značka miestnosti</string>
     <string name="room_settings_tag_pref_dialog_title">Označená ako:</string>
-    <string name="room_settings_mute_notifs">Potlačiť oznámenia</string>
 
     <string name="room_settings_tag_pref_entry_favourite">Obľúbená</string>
     <string name="room_settings_tag_pref_entry_low_priority">Nízka priorita</string>
@@ -747,10 +737,8 @@ Neznáme zariadenia:</string>
     <string name="active_widgets">%1$d aktívne widgety</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Na uskutočnenie tejto akcie by ste mali byť schopní pozývať používateľov.</string>
     <string name="widget_integration_unable_to_create">Nie je možné vytvoriť widget.</string>
     <string name="widget_integration_failed_to_send_request">Nepodarilo sa odoslať požiadavku.</string>
-    <string name="widget_integration_room_not_recognised">Nie je možné rozpoznať takúto miestnosť.</string>
     <string name="widget_integration_positive_power_level">Úroveň moci musí byť kladné celé číslo.</string>
     <string name="widget_integration_must_be_in_room">Nenachádzate sa v tejto miestnosti.</string>
     <string name="widget_integration_no_permission_in_room">V tejto miestnosti nemáte oprávnenie na vykonanie takejto akcie.</string>
@@ -759,7 +747,6 @@ Neznáme zariadenia:</string>
     <string name="widget_integration_room_not_visible">Miestnosť %s nie je viditeľná.</string>
     <string name="settings_labs_matrix_apps">Matrix Aplikácie</string>
     <string name="room_add_matrix_apps">Pridať Matrix aplikácie</string>
-    <string name="add_matrix_apps_not_supported">Nepodporované na tomto zariadení</string>
 
     // share keys
     <string name="you_added_a_new_device">Pridali ste nové zariadenie nazvané \'%s\', ktoré žiada o šifrovacie kľúče.</string>

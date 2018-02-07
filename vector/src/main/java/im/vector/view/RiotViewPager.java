@@ -18,8 +18,9 @@ package im.vector.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
+
+import org.matrix.androidsdk.util.Log;
 
 /**
  * Patch the issue "https://code.google.com/p/android/issues/detail?id=66620"

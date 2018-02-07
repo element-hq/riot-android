@@ -37,7 +37,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.RoomThirdPartyInvite;
+import org.matrix.androidsdk.rest.model.pid.RoomThirdPartyInvite;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
@@ -48,6 +48,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -208,7 +209,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         } else {
             // new pattern different from previous one?
             if (!aPattern.trim().equals(mSearchPattern) || aIsRefreshForced) {
-                mSearchPattern = aPattern.trim().toLowerCase();
+                mSearchPattern = aPattern.trim().toLowerCase(VectorApp.getApplicationLocale());
                 updateRoomMembersDataModel(searchListener);
             } else {
                 // search pattern is identical, notify listener and exit

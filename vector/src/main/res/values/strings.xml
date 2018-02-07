@@ -24,6 +24,7 @@
     <string name="title_activity_member_details">Member Details</string>
     <string name="title_activity_historical">Historical</string>
     <string name="title_activity_bug_report">Bug report</string>
+    <string name="title_activity_group_details">Community details</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -61,6 +62,7 @@
     <string name="offline">Offline</string>
 
     <!-- actions -->
+    <string name="action_exit">Exit</string>
     <string name="action_sign_out">Sign out</string>
     <string name="action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
     <string name="action_voice_call">Voice Call</string>
@@ -89,6 +91,7 @@
     <string name="home_filter_placeholder_favorites">Search for favourites</string>
     <string name="home_filter_placeholder_people">Search for people</string>
     <string name="home_filter_placeholder_rooms">Search for rooms</string>
+    <string name="home_filter_placeholder_groups">Search for communities</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -112,6 +115,11 @@
         <item quantity="one">1 user</item>
         <item quantity="other">%d users</item>
     </plurals>
+
+    <!-- Groups fragment -->
+    <string name="groups_invite_header">Invite</string>
+    <string name="groups_header">Communities</string>
+    <string name="no_group_placeholder">No groups</string>
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
@@ -144,6 +152,10 @@
     <string name="start_new_chat">Start New Chat</string>
     <string name="start_voice_call">Start Voice Call</string>
     <string name="start_video_call">Start Video Call</string>
+
+    <string name="start_new_chat_prompt_msg">Are you sure that you want to start a new chat with %s?</string>
+    <string name="start_voice_call_prompt_msg">Are you sure that you want to start a voice call?</string>
+    <string name="start_video_call_prompt_msg">Are you sure that you want to start a video call?</string>
 
     <string name="option_send_files">Send files</string>
     <string name="option_take_photo_video">Take photo or video</string>
@@ -223,6 +235,9 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
 
+    <!-- flairs list Screen -->
+    <string name="groups_list">Groups List</string>
+
     <!-- Mels -->
     <string name="membership_changes">%d membership changes</string>
 
@@ -249,10 +264,6 @@
     <string name="room_info_room_name">Room name</string>
     <string name="room_info_room_topic">Room topic</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call">Call</string>
     <string name="call_connected">Call connected</string>
@@ -268,11 +279,6 @@
     <string name="call_error_ice_failed">Media Connection Failed</string>
     <string name="call_error_camera_init_failed">Cannot initialize the camera</string>
     <string name="call_error_answered_elsewhere">call answered elsewhere</string>
-    <string name="call_error_peer_hangup_elsewhere">call hung up elsewhere</string>
-    <string name="call_error_peer_cancelled_call">call cancelled</string>
-
-    <string name="action_accept">ACCEPT</string>
-    <string name="action_ignore">IGNORE</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Take a picture or a video"</string>
@@ -287,7 +293,7 @@
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
     <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
 
@@ -362,6 +368,8 @@
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
+    <string name="room_participants_kick_prompt_msg">Are you sure that you want to kick this user from this chat?</string>
+    <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
@@ -460,12 +468,16 @@
     <string name="directory_searching_title">Searching directory..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notifications</string>
+    <string name="room_settings_all_messages_noisy">All messages (noisy)</string>
+    <string name="room_settings_all_messages">All messages</string>
+    <string name="room_settings_mention_only">Mentions only</string>
+    <string name="room_settings_mute">Mute</string>
     <string name="room_settings_favourite">Favourite</string>
     <string name="room_settings_de_prioritize">De-prioritize</string>
     <string name="room_settings_direct_chat">Direct Chat</string>
     <string name="room_settings_leave_conversation">Leave Conversation</string>
     <string name="room_settings_forget">Forget</string>
+    <string name="room_settings_add_homescreen_shortcut">Add Homescreen Shortcut</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>
@@ -532,20 +544,21 @@
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Devices</string>
+    <string name="settings_inline_url_preview">Enable inline URL previews by default</string>
     <string name="settings_hide_read_receipts">Hide read receipts</string>
     <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
     <string name="settings_always_show_timestamps">Always show message timestamps</string>
     <string name="settings_12_24_timestamps">Show timestamps in 12 hour format (e.g. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Hide join/leave messages (invites/kicks/bans unaffected)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
+    <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
+    <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
     <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
 
-
-    <string name="settings_disable_markdown">Disable markdown formatting</string>
     <string name="settings_data_save_mode">Data save mode</string>
 
     <string name="devices_details_dialog_title">Device details</string>
@@ -599,6 +612,9 @@
     <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
     <string name="settings_phone_number_code">Code</string>
 
+
+    <string name="settings_flair">Flair</string>
+
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>
     <string name="media_saving_period_1_week">1 week</string>
@@ -613,7 +629,6 @@
     <string name="room_settings_topic">Topic</string>
     <string name="room_settings_room_tag">Room Tag</string>
     <string name="room_settings_tag_pref_dialog_title">Tagged as:</string>
-    <string name="room_settings_mute_notifs">Mute Notifications</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favourite</string>
@@ -627,6 +642,7 @@
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Access and visibility</string>
     <string name="room_settings_directory_visibility">List this room in room directory</string>
+    <string name="room_settings_room_notifications_title">Notifications</string>
     <string name="room_settings_room_access_rules_pref_title">Room Access</string>
     <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
@@ -662,6 +678,12 @@
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
     <string name="room_settings_addresses_add_new_address">New address (e.g #foo:matrix.org")</string>
+
+    <string name="room_settings_no_flair"> This room is not showing flair for any communities</string>
+    <string name="room_settings_add_new_group">New community ID (e.g +foo:matrix.org")</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Invalid community ID</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' is not a valid community ID</string>
+
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Invalid alias format</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' is not a valid format for an alias</string>
@@ -778,10 +800,8 @@
     <string name="active_widgets">%1$d active widgets</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">You need to be able to invite users to do that.</string>
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
-    <string name="widget_integration_room_not_recognised">This room is not recognised.</string>
     <string name="widget_integration_positive_power_level">Power level must be positive integer.</string>
     <string name="widget_integration_must_be_in_room">You are not in this room.</string>
     <string name="widget_integration_no_permission_in_room">You do not have permission to do that in this room.</string>
@@ -790,7 +810,6 @@
     <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
-    <string name="add_matrix_apps_not_supported">Not supported on this device</string>
     <string name="settings_labs_native_camera">Use native camera</string>
 
     // share keys
@@ -815,4 +834,39 @@
 
     <string name="encrypted_message">Encrypted message</string>
 
+    // groups creation
+    <string name="create">Create</string>
+    <string name="create_community">Create Community</string>
+    <string name="community_name">Community name</string>
+    <string name="community_name_hint">Example</string>
+    <string name="community_id">Community Id</string>
+    <string name="community_id_hint">example</string>
+
+    // group details
+    <string name="group_details_home">Home</string>
+    <string name="group_details_people">People</string>
+    <string name="group_details_rooms">Rooms</string>
+    <string name="no_users_placeholder">No users</string>
+
+    <string name="rooms">Rooms</string>
+    <string name="joined">Joined</string>
+    <string name="invited">Invited</string>
+    <string name="filter_group_members">Filter group members</string>
+    <string name="filter_group_rooms">Filter group rooms</string>
+
+    <string name="group_one_member">1 member</string>
+    <string name="group_members">%d members</string>
+
+    <string name="group_one_room">1 room</string>
+    <string name="group_rooms">%d rooms</string>
+    <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
+
+    <string name="one_new_message">1 new message</string>
+    <string name="new_messages">%d new messages</string>
+
+    <string name="has_been_kicked">You have been kicked from %1$s by %2$s</string>
+    <string name="has_been_banned">You have been banned from %1$s by %2$s</string>
+    <string name="reason_colon">Reason: %1$s</string>
+    <string name="rejoin">Rejoin</string>
+    <string name="forget_room">Forget room</string>
 </resources>

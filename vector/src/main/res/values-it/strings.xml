@@ -234,10 +234,6 @@
     <string name="room_info_room_name">Nome stanza</string>
     <string name="room_info_room_topic">Argomento stanza</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">mostra_tutti_gli_eventi</string>
-    <string name="settings_key_use_rage_shake">usa_squotimento_furioso</string>
-
     <!-- call string -->
     <string name="call_connected">Chiamata connessa</string>
     <string name="call_connecting">Chiamata in connessione…</string>
@@ -252,11 +248,6 @@
     <string name="call_error_ice_failed">Connessione al supporto media fallita</string>
     <string name="call_error_camera_init_failed">Impossibile avviare la fotocamera</string>
     <string name="call_error_answered_elsewhere">chiamata risulta risposta altrove</string>
-    <string name="call_error_peer_hangup_elsewhere">chiamata risulta agganciata altrove</string>
-    <string name="call_error_peer_cancelled_call">chiamata annullata</string>
-
-    <string name="action_accept">ACCETTA</string>
-    <string name="action_ignore">IGNORA</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Fai una foto o un video</string>
@@ -444,7 +435,6 @@
     <string name="directory_searching_title">Ricerca in corso..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notifiche</string>
     <string name="room_settings_favourite">Preferito</string>
     <string name="room_settings_de_prioritize">Bassa priorità</string>
     <string name="room_settings_direct_chat">Chat diretta</string>
@@ -584,7 +574,6 @@
     <string name="room_settings_topic">Argomento</string>
     <string name="room_settings_room_tag">Tag stanza</string>
     <string name="room_settings_tag_pref_dialog_title">Taggata come:</string>
-    <string name="room_settings_mute_notifs">Silenzia notifiche</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Preferito</string>
@@ -753,10 +742,8 @@
     <string name="active_widgets">%1$d widget attivi</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Devi avere i permessi di invitare utenti per effettuare questa azione.</string>
     <string name="widget_integration_unable_to_create">Impossibile creare il widget.</string>
     <string name="widget_integration_failed_to_send_request">Invio della richiesta fallito.</string>
-    <string name="widget_integration_room_not_recognised">Stanza non riconosciuta.</string>
     <string name="widget_integration_must_be_in_room">Non sei in questa stanza.</string>
     <string name="widget_integration_no_permission_in_room">Non hai i permessi per eseguire l\'azione in questa stanza.</string>
     <string name="widget_integration_missing_room_id">room_id mancante nella richiesta.</string>

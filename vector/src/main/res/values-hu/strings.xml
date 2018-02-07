@@ -218,9 +218,6 @@ Elnézést a kellemetlenségért.</string>
     <string name="room_info_room_name">Szobanév</string>
     <string name="room_info_room_topic">Szoba témája</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call_connected">Vonalban</string>
     <string name="call_connecting">Kapcsolódás…</string>
     <string name="call_ended">Hívás vége</string>
@@ -234,11 +231,6 @@ Elnézést a kellemetlenségért.</string>
     <string name="call_error_ice_failed">A médiacsatlakozás nem sikerült</string>
     <string name="call_error_camera_init_failed">A kamerát nem lehet inicializálni</string>
     <string name="call_error_answered_elsewhere">hívás felvéve máshol</string>
-    <string name="call_error_peer_hangup_elsewhere">hívás befejezve máshol</string>
-    <string name="call_error_peer_cancelled_call">hívás megszakítva</string>
-
-    <string name="action_accept">ELFOGADÁS</string>
-    <string name="action_ignore">ELUTASÍT</string>
 
     <string name="media_picker_both_capture_title">Készíts képet vagy videót</string>
     <string name="media_picker_cannot_record_video">Videórögzítés sikertelen</string>
@@ -428,7 +420,6 @@ Biztos vagy benne?</string>
     <string name="directory_search_rooms_for">%2$s kulcsszóra %1$d szobatalálat</string>
     <string name="directory_searching_title">Könyvtár keresése...</string>
 
-    <string name="room_settings_notifications">Értesítések</string>
     <string name="room_settings_favourite">Kedvenc</string>
     <string name="room_settings_de_prioritize">Prioritás csökkentése</string>
     <string name="room_settings_direct_chat">Közvetlen csevegés</string>
@@ -540,7 +531,6 @@ A folytatáshoz írd be a jelszavad.</string>
     <string name="room_settings_topic">Téma</string>
     <string name="room_settings_room_tag">Szoba címke</string>
     <string name="room_settings_tag_pref_dialog_title">Címkék:</string>
-    <string name="room_settings_mute_notifs">Értesítések némítása</string>
 
     <string name="room_settings_tag_pref_entry_favourite">Kedvencek</string>
     <string name="room_settings_tag_pref_entry_low_priority">Alacsony prioritású</string>
@@ -745,10 +735,8 @@ Ismeretlen eszközök:</string>
     <string name="active_widgets">%1$d aktív kisalkalmazások</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Képesnek kell lenned felhasználók meghívására ha ezt akarod csinálni.</string>
     <string name="widget_integration_unable_to_create">Kisalkalmazás létrehozása sikertelen.</string>
     <string name="widget_integration_failed_to_send_request">Felkérés elküldése sikertelen.</string>
-    <string name="widget_integration_room_not_recognised">Nem sikerült felismerni ezt a szobát.</string>
     <string name="widget_integration_positive_power_level">Az erősségi szintnek egy pozitív egész számnak kell lennie.</string>
     <string name="widget_integration_must_be_in_room">Nem vagy ebben a szobában.</string>
     <string name="widget_integration_no_permission_in_room">Nincs engedélyed, hogy ezt csináld ebben a szobában.</string>
@@ -757,8 +745,7 @@ Ismeretlen eszközök:</string>
     <string name="widget_integration_room_not_visible">%s szoba nem látható.</string>
     <string name="settings_labs_matrix_apps">Matrix Alkalmazások</string>
     <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
-    <string name="add_matrix_apps_not_supported">Nem támogatott ezen az eszközön</string>
-<string name="notification_listen_for_events">Események figyelése</string>
+    <string name="notification_listen_for_events">Események figyelése</string>
 
     <string name="notification_sync_in_progress">Szinkronizálás</string>
     <string name="call">Hívás</string>

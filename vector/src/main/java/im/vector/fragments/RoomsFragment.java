@@ -41,7 +41,7 @@ import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.client.EventsRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ import im.vector.view.SectionView;
 import im.vector.view.SimpleDividerItemDecoration;
 
 public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.OnRoomChangedListener {
-    private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
+    private static final String LOG_TAG = RoomsFragment.class.getSimpleName();
 
     // activity result codes
     private static final int DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE = 314;
@@ -669,11 +669,15 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
     @Override
     public void onToggleDirectChat(String roomId, boolean isDirectChat) {
-
     }
 
     @Override
     public void onRoomLeft(String roomId) {
+    }
 
+    @Override
+    public void onRoomForgot(String roomId) {
+        // there is no sync event when a room is forgotten
+        refreshRooms();
     }
 }

@@ -16,6 +16,8 @@
     <color name="tab_people_secondary">#D97051</color>
     <color name="tab_rooms">@color/vector_green_color</color>
     <color name="tab_rooms_secondary">#5EA584</color>
+    <color name="tab_groups">#a6d0e5</color>
+    <color name="tab_groups_secondary">#81bddb</color>
 
     <!-- color of the direct chat avatar ring -->
     <color name="direct_chat_ring_color">#8076cfa6</color>
@@ -46,10 +48,8 @@
     <color name="default_text_hint_color_light">#903C3C3C</color>
     <color name="default_text_light_color_light">#8E000000</color>
     <color name="default_button_light_text_light">#FF747474</color>
-    <color name="default_text_dark_color_light">#FF212121</color>
     <color name="riot_primary_text_color_dark">#dddddd</color>
     <color name="default_text_hint_color_dark">#CCDDDDDD</color>
     <color name="default_text_light_color_dark">#A4A4A4</color>
     <color name="default_button_light_text_dark">#FF747474</color>
-    <color name="default_text_dark_color_dark">#DEDEDE</color>
 </resources>

@@ -51,7 +51,7 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.view.HomeSectionView;
 
-public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
+public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener, AbsHomeFragment.OnRoomChangedListener {
     private static final String LOG_TAG = HomeFragment.class.getSimpleName();
 
     @BindView(R.id.nested_scrollview)
@@ -107,6 +107,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_home_secondary);
 
         initViews();
+
+        mOnRoomChangedListener = this;
 
         // Eventually restore the pattern of adapter after orientation change
         for (HomeSectionView homeSectionView : mHomeSectionViews) {
@@ -171,33 +173,33 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         mInvitationsSection.setTitle(R.string.invitations_header);
         mInvitationsSection.setHideIfEmpty(true);
         mInvitationsSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
-        mInvitationsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false),
+        mInvitationsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false),
                 R.layout.adapter_item_room_invite, false, this, this, null);
 
         // Favourites
         mFavouritesSection.setTitle(R.string.bottom_action_favourites);
         mFavouritesSection.setHideIfEmpty(true);
         mFavouritesSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
-        mFavouritesSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+        mFavouritesSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // People
         mDirectChatsSection.setTitle(R.string.bottom_action_people);
         mDirectChatsSection.setPlaceholders(getString(R.string.no_conversation_placeholder), getString(R.string.no_result_placeholder));
-        mDirectChatsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+        mDirectChatsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // Rooms
         mRoomsSection.setTitle(R.string.bottom_action_rooms);
         mRoomsSection.setPlaceholders(getString(R.string.no_room_placeholder), getString(R.string.no_result_placeholder));
-        mRoomsSection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+        mRoomsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // Low priority
         mLowPrioritySection.setTitle(R.string.low_priority_header);
         mLowPrioritySection.setHideIfEmpty(true);
         mLowPrioritySection.setPlaceholders(null, getString(R.string.no_result_placeholder));
-        mLowPrioritySection.setupRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+        mLowPrioritySection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         mHomeSectionViews = Arrays.asList(mInvitationsSection, mFavouritesSection, mDirectChatsSection, mRoomsSection, mLowPrioritySection);
@@ -352,4 +354,24 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         RoomUtils.displayPopupMenu(getActivity(), mSession, room, v, isFavorite, isLowPriority, this);
     }
 
+
+    /*
+     * *********************************************************************************************
+     * Listeners
+     * *********************************************************************************************
+     */
+
+    @Override
+    public void onToggleDirectChat(String roomId, boolean isDirectChat) {
+    }
+
+    @Override
+    public void onRoomLeft(String roomId) {
+    }
+
+    @Override
+    public void onRoomForgot(String roomId) {
+        // there is no sync event when a room is forgotten
+        initData();
+    }
 }

@@ -245,10 +245,6 @@
     <string name="room_info_room_name">Назва кімнати</string>
     <string name="room_info_room_topic">Тема кімнати</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Виклик з\'єднано</string>
     <string name="call_connecting">Встановлюється з\'єднання…</string>
@@ -263,11 +259,6 @@
     <string name="call_error_ice_failed">Медіавиклик не вдався</string>
     <string name="call_error_camera_init_failed">Неможливо ініціювати камеру</string>
     <string name="call_error_answered_elsewhere">Дзвінок прийнято іншим пристроєм</string>
-    <string name="call_error_peer_hangup_elsewhere">Дзвінок відхилено іншим пристроєм</string>
-    <string name="call_error_peer_cancelled_call">виклик скасовано</string>
-
-    <string name="action_accept">ПРИЙНЯТИ</string>
-    <string name="action_ignore">ВІДХИЛИТИ</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Зняти світлину чи відео"</string>
@@ -455,7 +446,6 @@
     <string name="directory_searching_title">Пошук у каталозі...</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Сповіщення</string>
     <string name="room_settings_favourite">Обране</string>
     <string name="room_settings_de_prioritize">Не терміново</string>
     <string name="room_settings_direct_chat">Прямий Чат</string>
@@ -487,6 +477,8 @@
     <string name="settings_enable_this_device">Увімкнути сповіщення для цього пристрою</string>
     <string name="settings_turn_screen_on">Увімкнути екран на 3 секунди</string>
 
+    <string name="settings_containing_my_display_name">Повідомлення, що містять моє показуване ім\'я</string>
+    <string name="settings_containing_my_user_name">Повідомлення, що містять моє ім\'я користувача</string>
     <string name="settings_messages_in_one_to_one">В особистих чатах</string>
     <string name="settings_messages_in_group_chat">У групових чатах</string>
     <string name="settings_invited_to_room">Запрошення до кімнат</string>
@@ -509,7 +501,7 @@
     <string name="settings_privacy_policy">Політика конфіденційності</string>
     <string name="settings_clear_cache">Очистити кеш</string>
     <string name="settings_clear_medias_cache">Очистити медіа кеш</string>
-    <string name="settings_keep_media">Зберегти медіа</string>
+    <string name="settings_keep_media">Зберігати медіа</string>
 
     <string name="settings_user_settings">Налаштування користувача</string>
     <string name="settings_notifications">Сповіщення</string>
@@ -531,6 +523,11 @@
     <string name="settings_12_24_timestamps">Показувати час надсилання в 12 годинному форматі (e.g. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Приховати сповіщення про вступ/вихід з кімнат (не діє на запрошення/кіки/бани)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Приховати аватари та показувати зміну імен</string>
+
+    <!-- analytics -->
+    <string name="settings_analytics">Телеметрія</string>
+    <string name="settings_opt_out_of_analytics">Вимкнути телеметрію</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot збирає анонімну статистику задля покращення застосунку.</string>
 
     <string name="settings_disable_markdown">Вимкнути розмітку Markdown</string>
     <string name="settings_data_save_mode">Режим економії трафіку</string>
@@ -600,7 +597,6 @@
     <string name="room_settings_topic">Тема</string>
     <string name="room_settings_room_tag">Мітка кімнати</string>
     <string name="room_settings_tag_pref_dialog_title">Позначено як:</string>
-    <string name="room_settings_mute_notifs">Вимкнути сповіщення</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Улюблені</string>
@@ -764,10 +760,8 @@
     <string name="active_widgets">Активних віджетів: %1$d</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Для цього вам треба мати змогу запрошувати користувачів.</string>
     <string name="widget_integration_unable_to_create">Не вдалося створити віджет.</string>
     <string name="widget_integration_failed_to_send_request">Не вдалося надіслати запит.</string>
-    <string name="widget_integration_room_not_recognised">Кімнату не розпізнано.</string>
     <string name="widget_integration_positive_power_level">Рівень доступу має бути більше 0.</string>
     <string name="widget_integration_must_be_in_room">Ви не перебуваєте в цій кімнаті.</string>
     <string name="widget_integration_no_permission_in_room">Ви не маєте дозволу на виконання даної дії у цій кімнаті.</string>
@@ -819,5 +813,22 @@
     // slash commands
     <string name="unrecognized_command">Нерозпізнана команда: %s</string>
 
-    // notification statuses
-    </resources>
+    <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Щойно доданий вами пристрій \'%s\' править ключі шифрування.</string>
+    <string name="your_unverified_device_requesting">Ваш неперевірений пристрій  \'%s\' править ключі шифрування.</string>
+    <string name="start_verification">Почати перевірку</string>
+    <string name="share_without_verifying">Поділитись без перевірки</string>
+    <string name="ignore_request">Ігнорувати запит</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Попередження!</string>
+    <string name="conference_call_warning_message">Конференц дзвінки у розробці та можуть бути ненадійними.</string>
+
+    // slash commands
+    <string name="command_error">Помилка виконання команди</string>
+    <string name="unrecognized_command">Команду %s не розпізнано</string>
+
+
+</resources>

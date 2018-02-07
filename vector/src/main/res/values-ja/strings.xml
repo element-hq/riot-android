@@ -105,8 +105,6 @@
     <string name="room_info_room_name">部屋名</string>
     <string name="call_ended">通話終了</string>
     <string name="call_ring">呼出中…</string>
-    <string name="action_accept">許可</string>
-    <string name="action_ignore">拒否</string>
 
     <string name="yes">はい</string>
     <string name="no">いいえ</string>
@@ -271,7 +269,6 @@
     <string name="room_settings_topic">部屋の説明</string>
     <string name="room_settings_room_tag">部屋の属性</string>
     <string name="room_settings_tag_pref_dialog_title">部屋の属性:</string>
-    <string name="room_settings_mute_notifs">発言があっても通知しない</string>
 
     <string name="room_settings_tag_pref_entry_favourite">お気に入り</string>
     <string name="room_settings_tag_pref_entry_low_priority">低優先度</string>
@@ -427,9 +424,6 @@
 
     <string name="room_info_room_topic">部屋の説明</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call_connected">通話が接続されました</string>
     <string name="call_connecting">通話を接続中…</string>
     <string name="incoming_call">通話着信中</string>
@@ -440,8 +434,6 @@
     <string name="call_error_ice_failed">映像の接続に失敗</string>
     <string name="call_error_camera_init_failed">カメラを開始できません</string>
     <string name="call_error_answered_elsewhere">他の端末で通話に応答しました</string>
-    <string name="call_error_peer_hangup_elsewhere">他の端末で通話を終了しました</string>
-    <string name="call_error_peer_cancelled_call">通話を中止しました</string>
 
     <string name="media_picker_both_capture_title">写真または動画の撮影</string>
     <string name="media_picker_cannot_record_video">動画を記録できません</string>
@@ -495,7 +487,6 @@
     <string name="directory_search_results_title">部屋一覧を見る</string>
     <string name="directory_search_room">%1$d 部屋</string>
     <string name="directory_search_rooms">%1$d 部屋</string>
-    <string name="room_settings_notifications">発言通知</string>
     <string name="room_settings_leave_conversation">退室</string>
     <string name="room_sliding_menu_messages">会話</string>
     <string name="room_sliding_menu_settings">設定</string>
@@ -542,8 +533,7 @@
     <string name="widget_integration_must_be_in_room">あなたはこの部屋に参加していません。</string>
     <string name="widget_integration_no_permission_in_room">あなたはこの部屋で権限がありません。</string>
     <string name="widget_integration_room_not_visible">部屋 %s は、見ることができません。</string>
-    <string name="add_matrix_apps_not_supported">この端末では利用できません</string>
-<string name="username">ユーザ名</string>
+    <string name="username">ユーザ名</string>
     <string name="hs_url">接続先サーバ URL</string>
     <string name="identity_url">認証サーバ URL</string>
     <string name="user">ユーザ</string>
@@ -592,14 +582,10 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
 <string name="share_without_verifying">検証せずに共有する</string>
     <string name="start_verification">検証を開始する</string>
-    <string name="your_unverified_device_requesting">未確認のデバイス \'％s\' が暗号化キーを要求しています。</string>
-    <string name="you_added_a_new_device">暗号化キーを要求している新しいデバイス \'％s\' を追加しました。</string>
     <string name="widget_integration_missing_user_id">リクエストに user_id がありません。</string>
     <string name="widget_integration_missing_room_id">リクエストに room_id がありません。</string>
-    <string name="widget_integration_room_not_recognised">この部屋は承認されていません。</string>
     <string name="widget_integration_failed_to_send_request">リクエストの送信に失敗しました。</string>
     <string name="widget_integration_unable_to_create">ウィジェットを作成できません。</string>
-    <string name="widget_integration_need_to_be_able_to_invite">それを行うためにはユーザを招待可能にする必要があります。</string>
     <string name="event_formatter_widget_removed">%1$s は %2$s によって削除されました</string>
     <string name="widget_no_power_to_manage">この部屋のウィジェットを管理する権限が必要です</string>
     <string name="widget_creation_failure">ウィジェットの作成に失敗しました</string>
@@ -630,7 +616,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encryption_import_room_keys_summary">ローカルファイルからキーをインポート</string>
     <string name="encryption_import_room_keys">ルームキーをインポート</string>
     <string name="encryption_import_e2e_room_keys">部屋のエンドツーエンド暗号鍵をインポート</string>
-    <string name="encryption_export_saved_as">部屋のエンドツーエンド暗号鍵は \'％s\' に保存されました</string>
 
     <string name="encryption_export_confirm_passphrase">パスフレーズを確認</string>
     <string name="encryption_export_enter_passphrase">パスフレーズを入力</string>

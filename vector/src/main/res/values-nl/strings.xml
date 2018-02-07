@@ -231,10 +231,6 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="room_info_room_name">Ruimtenaam</string>
     <string name="room_info_room_topic">Ruimte onderwerp</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Oproep verbonden</string>
     <string name="call_connecting">Oproep is aan het verbinden…</string>
@@ -249,28 +245,23 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="call_error_ice_failed">Media verbinding is mislukt</string>
     <string name="call_error_camera_init_failed">Kan de camera niet initialiseren</string>
     <string name="call_error_answered_elsewhere">oproep ergens anders opgenomen</string>
-    <string name="call_error_peer_hangup_elsewhere">De oproep is ergens anders opgehangen</string>
-    <string name="call_error_peer_cancelled_call">de oproep is geannuleerd</string>
-
-    <string name="action_accept">ACCEPTEREN</string>
-    <string name="action_ignore">NEGEREN</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Een afbeelding of video maken"</string>
     <string name="media_picker_cannot_record_video">Kan geen video opnemen"</string>
 
     <!-- permissions Android M -->
-    <string name="permissions_rationale_popup_title">%s permissies</string>
-    <string name="permissions_rationale_msg_storage">%s heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.
+    <string name="permissions_rationale_popup_title">Informatie</string>
+    <string name="permissions_rationale_msg_storage">Riot heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.
 
 Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.</string>
-    <string name="permissions_rationale_msg_camera">%s heeft toegang nodig tot je camera om afbeeldingen en video oproepen te maken..</string>
+    <string name="permissions_rationale_msg_camera">Riot heeft toegang nodig tot je camera om afbeeldingen en video oproepen te maken..</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de camera om een oproep te maken.</string>
-    <string name="permissions_rationale_msg_record_audio">%s heeft toegang nodig tot je microfoon om spraakoproepen te maken.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot heeft toegang nodig tot je microfoon om spraakoproepen te maken.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de microfoon om een oproep te maken.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot heeft permissie nodig om je camera en microfoon te gebruiken voor videogesprekken.\n\nGeef toegang op de volgende pop-ups om een oproep te maken.</string>
     <string name="permissions_rationale_msg_contacts">Je adresboek e-mails worden geupload om matrix IDs te zoeken.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Je adresboek e-mails zijn geupload voor het zoeken van matix IDs.\nGeef je %s toegang tot je contacten ?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Je adresboek e-mails zijn geupload voor het zoeken van matix IDs.\nGeef je Riot toegang tot je contacten ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry.. De actie is niet ondernomen door missende permissies</string>
 
@@ -442,7 +433,6 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="directory_searching_title">Adresboek doorzoeken..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificaties</string>
     <string name="room_settings_favourite">Favoriet</string>
     <string name="room_settings_de_prioritize">De-prioriteren</string>
     <string name="room_settings_direct_chat">Privé chat</string>
@@ -567,7 +557,6 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="room_settings_topic">Onderwerp</string>
     <string name="room_settings_room_tag">Ruimte label</string>
     <string name="room_settings_tag_pref_dialog_title">Gelabeld als:</string>
-    <string name="room_settings_mute_notifs">Notificaties dempen</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favoriet</string>
@@ -768,10 +757,8 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="active_widgets">%1$d actieve widgets</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Je moet gebruikers kunnen uitnodigen om dat te kunnen doen.</string>
     <string name="widget_integration_unable_to_create">Niet mogelijk om de widget te maken.</string>
     <string name="widget_integration_failed_to_send_request">Niet gelukt om een verzoek te verzenden.</string>
-    <string name="widget_integration_room_not_recognised">Deze ruimte wordt niet herkend.</string>
     <string name="widget_integration_positive_power_level">Het machtsniveau moet een positief en heel getal zijn.</string>
     <string name="widget_integration_must_be_in_room">Je zit niet in deze ruimte.</string>
     <string name="widget_integration_no_permission_in_room">Je hebt niet de permissie om dat in deze ruimte te doen.</string>

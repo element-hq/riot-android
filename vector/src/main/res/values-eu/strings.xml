@@ -229,11 +229,6 @@ Saiotik atera zaizu gailu guztietan eta ez dituzu jakinarazpenak jasoko. Jakinar
     <string name="call_error_ice_failed">Media konexioak huts egin du</string>
     <string name="call_error_camera_init_failed">Ezin izan da kamera hasieratu</string>
     <string name="call_error_answered_elsewhere">deia beste nonbait erantzun da</string>
-    <string name="call_error_peer_hangup_elsewhere">deia beste nonbait amaitu da</string>
-    <string name="call_error_peer_cancelled_call">deia utzita</string>
-
-    <string name="action_accept">ONARTU</string>
-    <string name="action_ignore">EZIKUSI</string>
 
     <string name="media_picker_both_capture_title">Atera argazkia edo bideoa</string>
     <string name="media_picker_cannot_record_video">Ezin izan da bideoa grabatu</string>
@@ -429,7 +424,6 @@ Ziur zaude?</string>
     <string name="directory_search_rooms_for">%1$s gela aurkitu dira %2$s bilaketarako</string>
     <string name="directory_searching_title">Direktorioa bilatzen..</string>
 
-    <string name="room_settings_notifications">Jakinarazpenak</string>
     <string name="room_settings_favourite">Gogokoa</string>
     <string name="room_settings_de_prioritize">Jaitsi lehentasuna</string>
     <string name="room_settings_direct_chat">Txat zuzena</string>
@@ -539,8 +533,6 @@ Jarraitzeko, idatzi zure pasahitza.</string>
 
     <string name="settings_phone_number_country_label">Herrialdea</string>
     <string name="settings_phone_number_country_error">Hautatu herrialde bat</string>
-    <string name="settings_key_display_all_events">ezarpen_gakoa_erakutsi_gertaera_guztiak</string>
-    <string name="settings_key_use_rage_shake">ezarpen_gakoa_erabili_amorru_astintzea</string>
 
     <string name="room_sliding_menu_third_party_notices">Hirugarrengoen adierazpenak</string>
     <string name="settings_third_party_notices">Hirugarrengoen adierazpenak</string>
@@ -564,7 +556,6 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="room_settings_topic">Mintzagaia</string>
     <string name="room_settings_room_tag">Gelaren etiketa</string>
     <string name="room_settings_tag_pref_dialog_title">Honela etiketatua:</string>
-    <string name="room_settings_mute_notifs">Mututu jakinarazpenak</string>
 
     <string name="room_settings_tag_pref_entry_favourite">Gogokoa</string>
     <string name="room_settings_tag_pref_entry_low_priority">Lehentasun baxua</string>
@@ -746,10 +737,8 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="active_widgets">%1$d trepeta aktibo</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Erabiltzaileak gonbidatzeko baimena behar duzu hori egin ahal izateko.</string>
     <string name="widget_integration_unable_to_create">Ezin izan da trepeta sortu.</string>
     <string name="widget_integration_failed_to_send_request">Eskariaren bidalketak huts egin du.</string>
-    <string name="widget_integration_room_not_recognised">Ez da gela hau ezagutzen.</string>
     <string name="widget_integration_positive_power_level">Botere maila osoko zenbaki positibo bat izan behar da.</string>
     <string name="widget_integration_must_be_in_room">Ez zaude gela honetan.</string>
     <string name="widget_integration_no_permission_in_room">Ez duzu gela honetan hori egiteko baimenik.</string>
@@ -799,4 +788,4 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="option_take_video">Grabatu bideoa</string>
 
     <string name="call">Deia</string>
-    </resources>
+</resources>

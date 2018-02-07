@@ -44,13 +44,14 @@ import android.util.Pair;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 import org.piwik.sdk.Piwik;
+import org.piwik.sdk.QueryParams;
+import org.piwik.sdk.TrackMe;
 import org.piwik.sdk.Tracker;
 import org.piwik.sdk.TrackerConfig;
+import org.piwik.sdk.extra.CustomVariables;
 import org.piwik.sdk.extra.TrackHelper;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +77,6 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
-import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
@@ -101,7 +101,7 @@ public class VectorApp extends MultiDexApplication {
     /**
      * Rage shake detection to send a bug report.
      */
-    private static final RageShake mRageShake = new RageShake();
+    private RageShake mRageShake;
 
     /**
      * Delay to detect if the application is in background.
@@ -218,8 +218,6 @@ public class VectorApp extends MultiDexApplication {
         } catch (Exception e) {
         }
 
-
-
         mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
 
         org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
@@ -236,7 +234,7 @@ public class VectorApp extends MultiDexApplication {
         Log.d(LOG_TAG, "----------------------------------------------------------------");
         Log.d(LOG_TAG, "----------------------------------------------------------------\n\n\n\n");
 
-        mRageShake.start(this);
+        mRageShake = new RageShake(this);
 
         // init the REST client
         MXSession.initUserAgent(getApplicationContext());
@@ -411,6 +409,8 @@ public class VectorApp extends MultiDexApplication {
 
         MyPresenceManager.advertiseAllUnavailable();
 
+        mRageShake.stop();
+
         onAppPause();
     }
 
@@ -541,6 +541,7 @@ public class VectorApp extends MultiDexApplication {
         }
 
         MyPresenceManager.advertiseAllOnline();
+        mRageShake.start();
 
         mIsCallingInBackground = false;
         mIsInBackground = false;
@@ -1186,6 +1187,19 @@ public class VectorApp extends MultiDexApplication {
     private Tracker mPiwikTracker;
 
     /**
+     * Set the visit variable
+     * @param trackMe
+     * @param id
+     * @param name
+     * @param value
+     */
+    private static final void visitVariables(TrackMe trackMe, int id, String name, String value) {
+        CustomVariables customVariables = new CustomVariables(trackMe.get(QueryParams.VISIT_SCOPE_CUSTOM_VARIABLES));
+        customVariables.put(id, name, value);
+        trackMe.set(QueryParams.VISIT_SCOPE_CUSTOM_VARIABLES, customVariables.toString());
+    }
+
+    /**
      * @return the piwik instance
      */
     private Tracker getPiwikTracker() {
@@ -1196,8 +1210,19 @@ public class VectorApp extends MultiDexApplication {
                 // the app might be killed in background
                 mPiwikTracker.setDispatchInterval(30 * 1000);
 
-                // TODO define an identifier
-                //mPiwikTracker.setUserId()
+                //
+                TrackMe trackMe = mPiwikTracker.getDefaultTrackMe();
+
+                visitVariables(trackMe, 1, "App Platform", "Android Platform");
+                visitVariables(trackMe, 2, "App Version", SHORT_VERSION);
+                visitVariables(trackMe, 4, "Chosen Language", getApplicationLocale().toString());
+
+                if (null != Matrix.getInstance(this).getDefaultSession()) {
+                    MXSession session = Matrix.getInstance(this).getDefaultSession();
+
+                    visitVariables(trackMe, 7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
+                    visitVariables(trackMe, 8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
+                }
             } catch (Throwable t) {
                 Log.e(LOG_TAG, "## getPiwikTracker() : newTracker failed " + t.getMessage());
             }
@@ -1206,16 +1231,38 @@ public class VectorApp extends MultiDexApplication {
         return mPiwikTracker;
     }
 
+
+    /**
+     * Add the stats variables to the piwik screen.
+     *
+     * @return the piwik screen
+     */
+    private TrackHelper.Screen addCustomVariables(TrackHelper.Screen screen) {
+        screen.variable(1, "App Platform", "Android Platform");
+        screen.variable(2, "App Version", SHORT_VERSION);
+        screen.variable(4, "Chosen Language", getApplicationLocale().toString());
+
+        if (null != Matrix.getInstance(this).getDefaultSession()) {
+            MXSession session = Matrix.getInstance(this).getDefaultSession();
+
+            screen.variable(7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
+            screen.variable(8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
+        }
+
+        return screen;
+    }
+
     /**
      * A new activity has been resumed
      * @param activity the new activity
      */
     private void onNewScreen(Activity activity) {
-       if (PreferencesManager.trackWithPiwik(this)) {
+        if (PreferencesManager.trackWithPiwik(this)) {
             Tracker tracker = getPiwikTracker();
             if (null != tracker) {
                 try {
-                    TrackHelper.track().screen("/android/" +   Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/"+ activity.getClass().getName().replace(".", "/")).with(tracker);
+                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" +   Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/"+ activity.getClass().getName().replace(".", "/"));
+                    addCustomVariables(screen).with(tracker);
                 } catch (Throwable t) {
                     Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());
                 }

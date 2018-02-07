@@ -23,7 +23,6 @@ import android.support.v4.util.Pair;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
@@ -160,7 +159,7 @@ public class PhoneNumberUtils {
         if (!preferences.contains(COUNTRY_CODE_PREF_KEY) || TextUtils.isEmpty(preferences.getString(COUNTRY_CODE_PREF_KEY, ""))) {
             try {
                 TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                String countryCode = tm.getNetworkCountryIso().toUpperCase();
+                String countryCode = tm.getNetworkCountryIso().toUpperCase(VectorApp.getApplicationLocale());
                 if (TextUtils.isEmpty(countryCode)
                         && !TextUtils.isEmpty(Locale.getDefault().getCountry())
                         && PhoneNumberUtil.getInstance().getCountryCodeForRegion(Locale.getDefault().getCountry()) != 0) {

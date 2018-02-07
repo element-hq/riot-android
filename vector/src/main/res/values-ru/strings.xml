@@ -239,10 +239,6 @@ Email также позволит вам при необходимости во�
     <string name="room_info_room_name">Название Комнаты</string>
     <string name="room_info_room_topic">Тема комнаты</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Вызов соеденен</string>
     <string name="call_connecting">Устанавливается соединение…</string>
@@ -257,30 +253,25 @@ Email также позволит вам при необходимости во�
     <string name="call_error_ice_failed">Медиавызов не удался</string>
     <string name="call_error_camera_init_failed">Невозможно инициализировать камеру</string>
     <string name="call_error_answered_elsewhere">Звонок принят на другом устройстве</string>
-    <string name="call_error_peer_hangup_elsewhere">Звонок сброшен на другом устройстве</string>
-    <string name="call_error_peer_cancelled_call">звонок отменен</string>
-    
-    <string name="action_accept">ПРИНЯТЬ</string>
-    <string name="action_ignore">ОТКЛОНИТЬ</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Снять фото или видео"</string>
     <string name="media_picker_cannot_record_video">Не удалось записать видео"</string>
     
     <!-- permissions Android M -->
-    <string name="permissions_rationale_popup_title">%s Информация</string>
-    <string name="permissions_rationale_msg_storage">%s необходимы разрешения на доступ к вашим фото и видео для сохранения и отправки сложений.\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность отправлять файлы.</string>
-    <string name="permissions_rationale_msg_camera">%s необходимы разрешения на доступ к вашей камере, чтобы делать фото и совершать видеозвонки.</string>
+    <string name="permissions_rationale_popup_title">Riot Информация</string>
+    <string name="permissions_rationale_msg_storage">Riot необходимы разрешения на доступ к вашим фото и видео для сохранения и отправки сложений.\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность отправлять файлы.</string>
+    <string name="permissions_rationale_msg_camera">Riot необходимы разрешения на доступ к вашей камере, чтобы делать фото и совершать видеозвонки.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность совершать звонки.</string>
-    <string name="permissions_rationale_msg_record_audio">%s необходимы разрешения на доступ к микрофону, чтобы выполнять звонки.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot необходимы разрешения на доступ к микрофону, чтобы выполнять звонки.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность совершать звонки.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">%s необходимы разрешения на доступ к камере и микрофону для видеовызовов.
+    <string name="permissions_rationale_msg_camera_and_audio">Riot необходимы разрешения на доступ к камере и микрофону для видеовызовов.
 
 Пожалуйста дайте разрешение в следующем окне для звонка.</string>
-    <string name="permissions_rationale_msg_contacts">%s необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
+    <string name="permissions_rationale_msg_contacts">Riot необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
 
 Пожалуйста разрешите доступ в следующем окне, чтобы Ваши контакты были доступны в приложении.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">%s необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
+    <string name="permissions_msg_contacts_warning_other_androids">Riot необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
 
 Разрешить Riot доступ к контактам?</string>
     
@@ -460,7 +451,6 @@ Email также позволит вам при необходимости во�
     <string name="directory_searching_title">Поиск в каталоге..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Уведомления</string>
     <string name="room_settings_favourite">Избранное</string>
     <string name="room_settings_de_prioritize">Уменьшить приоритет</string>
     <string name="room_settings_direct_chat">Прямой чат</string>
@@ -585,8 +575,7 @@ Email также позволит вам при необходимости во�
     <string name="room_settings_topic">Тема</string>
     <string name="room_settings_room_tag">Метки комнаты</string>
     <string name="room_settings_tag_pref_dialog_title">Отмечено как:</string>
-    <string name="room_settings_mute_notifs">Не беспокоить</string>
-    
+
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Избранное</string>
     <string name="room_settings_tag_pref_entry_low_priority">Низкий приоритет</string>
@@ -787,8 +776,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_12_24_timestamps">Показывать временные метки в 12-часовом формате (например 2:30pm)</string>
     <string name="event_formatter_widget_added">%1$s добавлен %2$s</string>
     <string name="event_formatter_widget_removed">%1$s удален %2$s</string>
-    <string name="add_matrix_apps_not_supported">Не поддерживается на этом устройстве</string>
-<string name="settings_hide_join_leave_messages">Скрывать сообщения присоединился/покинул (не затрагивает приглашение/кик/бан)</string>
+    <string name="settings_hide_join_leave_messages">Скрывать сообщения присоединился/покинул (не затрагивает приглашение/кик/бан)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Скрывать изменения аватара и отображаемого имени</string>
 
     <string name="widget_no_power_to_manage">Вам нужно разрешение на управление виджетами в этой комнате</string>
@@ -798,10 +786,8 @@ Email также позволит вам при необходимости во�
     <string name="active_widgets">активных виджетов: %1$d</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Для этого вы должны иметь возможность приглашать пользователей.</string>
     <string name="widget_integration_unable_to_create">Не удалось создать виджет.</string>
     <string name="widget_integration_failed_to_send_request">Не удалось отправить запрос.</string>
-    <string name="widget_integration_room_not_recognised">Данная комната не распознана.</string>
     <string name="widget_integration_positive_power_level">Уровень доступа должен быть числом больше 0.</string>
     <string name="widget_integration_must_be_in_room">Вы не состоите в этой комнате.</string>
     <string name="widget_integration_no_permission_in_room">У вас нет разрешений делать это в данной комнате.</string>
