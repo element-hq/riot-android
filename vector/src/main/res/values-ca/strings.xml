@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
@@ -380,8 +380,8 @@
     <!--  Chat -->
     <string name="room_menu_search">Cerca</string>
     <string name="room_one_user_is_typing">%s està escrivint…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s estan escrivint…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; altres estan escrivint…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s estan escrivint…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; altres estan escrivint…</string>
     <string name="room_message_placeholder_encrypted">Envia un missatge xifrat…</string>
     <string name="room_message_placeholder_not_encrypted">Envia un missatge (desxifrat)…</string>
     <string name="room_offline_notification">La connexió amb el servidor s\'ha perdut.</string>
@@ -860,4 +860,13 @@
     <string name="reason_colon">Raó: %1$s</string>
     <string name="rejoin">Tornar-hi a entrar</string>
     <string name="forget_room">Oblida la sala</string>
-</resources>
+<string name="loading">Carregant...</string>
+
+    <string name="action_exit">Surt</string>
+    <string name="bottom_action_groups">Comunitats</string>
+
+    <string name="groups_list">Llista de grups</string>
+
+    <string name="room_settings_all_messages_noisy">Tots els missatges (sorollós)</string>
+    <string name="room_settings_all_messages">Tots els missatges</string>
+    </resources>
