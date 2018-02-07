@@ -794,10 +794,8 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="active_widgets">%1$d widget activos</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Necesitas ser capaz de invitar a usuarios para realizar esa acción.</string>
     <string name="widget_integration_unable_to_create">El widget no ha podido ser creado.</string>
     <string name="widget_integration_failed_to_send_request">La consulta no ha podido ser enviada.</string>
-    <string name="widget_integration_room_not_recognised">Esta sala no es conocida.</string>
     <string name="widget_integration_positive_power_level">El nivel de poder tiene que ser un número entero positivo.</string>
     <string name="widget_integration_must_be_in_room">No estás en esta sala.</string>
     <string name="widget_integration_no_permission_in_room">No tienes suficientes permisos para realizar esa acción en esta sala.</string>
@@ -806,7 +804,6 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="widget_integration_room_not_visible">La sala %s no es visible.</string>
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Añadir Matrix apps</string>
-    <string name="add_matrix_apps_not_supported">No soportado en este dispositivo</string>
     <string name="settings_labs_native_camera">Usar cámara nativa</string>
 
     // share keys

@@ -747,8 +747,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="widget_integration_room_not_visible">%s gela ez dago ikusgai.</string>
     <string name="settings_labs_matrix_apps">Matrix aplikazioak</string>
     <string name="room_add_matrix_apps">Gehitu Matrix aplikazioak</string>
-    <string name="add_matrix_apps_not_supported">Ez da gailu honetan onartzen</string>
-<string name="notification_noisy_notifications">Jakinarazpen zaratatsuak</string>
+    <string name="notification_noisy_notifications">Jakinarazpen zaratatsuak</string>
     <string name="notification_silent_notifications">Jakinarazpen isilak</string>
 
     <string name="settings_containing_my_display_name">Nire pantaila-izena duten mezuak</string>

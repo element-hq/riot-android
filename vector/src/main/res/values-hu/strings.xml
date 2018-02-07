@@ -417,7 +417,7 @@ Biztos vagy benne?</string>
     <string name="directory_search_room">%1$d szoba</string>
     <string name="directory_search_rooms">%1$d szoba</string>
     <string name="directory_search_room_for">%2$s kulcsszóra %1$d szobatalálat</string>
-    <string name="directory_search_rooms_for">%2$s kulcsszóra %1$d szobatalálat</string>
+    <string name="directory_search_rooms_for">%2$s kulcsszóra %1$s szobatalálat</string>
     <string name="directory_searching_title">Könyvtár keresése...</string>
 
     <string name="room_settings_favourite">Kedvenc</string>
@@ -599,7 +599,7 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
     <string name="directory_title">Könyvtár</string>
 
     <string name="failed_to_load_timeline_position">%s megpróbált betölteni egy adott időpontot ennek a szobának idővonalán de nem sikerült neki megtalálni.</string>
-    
+
     <string name="encryption_information_title">Végtől végig titkosítás információ</string>
 
     <string name="encryption_information_device_info">Esemény információ</string>

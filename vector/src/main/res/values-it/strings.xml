@@ -524,7 +524,7 @@
     <string name="settings_logged_in">Connesso come</string>
     <string name="settings_home_server">Server home</string>
     <string name="settings_identity_server">Server identità</string>
-    
+
     <string name="settings_user_interface">Interfaccia utente</string>
     <string name="settings_interface_language">Lingua interfaccia</string>
     <string name="settings_select_language">Scegli una lingua</string>
@@ -749,8 +749,7 @@
     <string name="widget_integration_missing_room_id">room_id mancante nella richiesta.</string>
     <string name="widget_integration_missing_user_id">user_id mancante nella richiesta.</string>
     <string name="room_add_matrix_apps">Aggiungi una Matrix app</string>
-    <string name="add_matrix_apps_not_supported">Non supportato su questo dispositivo</string>
-<string name="option_take_photo">Scatta una foto</string>
+    <string name="option_take_photo">Scatta una foto</string>
     <string name="option_take_video">Registra un video</string>
 
     <string name="settings_containing_my_display_name">Messaggi che contengono il mio nome</string>
