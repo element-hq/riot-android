@@ -749,4 +749,23 @@
     <string name="widget_integration_missing_room_id">room_id mancante nella richiesta.</string>
     <string name="widget_integration_missing_user_id">user_id mancante nella richiesta.</string>
     <string name="room_add_matrix_apps">Aggiungi una Matrix app</string>
+    <string name="add_matrix_apps_not_supported">Non supportato su questo dispositivo</string>
+<string name="option_take_photo">Scatta una foto</string>
+    <string name="option_take_video">Registra un video</string>
+
+    <string name="settings_containing_my_display_name">Messaggi che contengono il mio nome</string>
+    <string name="settings_containing_my_user_name">Messaggi che contengono il mio user name</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Non mostrare i cambiamenti di nome e avatar</string>
+
+    <string name="notification_silent_notifications">Notifiche Silenziose</string>
+
+    <string name="notification_noisy_notifications">Notifiche Audio</string>
+    <string name="notification_listen_for_events">In Ascolto su Eventi</string>
+    <string name="title_activity_bug_report">Rapporto Bug</string>
+
+    <string name="login_mobile_device">Cellulare</string>
+
+    <string name="call">Chiama</string>
+    <string name="encrypted_message">Cifra messaggio</string>
+
 </resources>

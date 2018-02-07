@@ -818,4 +818,20 @@ Unbekannte Geräte:</string>
 
 <string name="settings_analytics">Anonymisierte Analysedaten</string>
     <string name="settings_opt_out_of_analytics">Zustimmung zur Übermittlung von anonymisierten Analysedaten verweigern</string>
-    </resources>
+    <string name="title_activity_bug_report">Fehlerbericht</string>
+
+    <string name="conference_call_warning_title">Warnung!</string>
+    <string name="conference_call_warning_message">Konferenzgespräche werden noch entwickelt und sind vielleicht nicht zuverlässig.</string>
+
+    // slash commands
+    <string name="command_error">Befehlsfehler</string>
+    <string name="unrecognized_command">Unbekanntes Kommando: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Aus</string>
+    <string name="notification_on">An</string>
+    <string name="notification_noisy">Laut</string>
+
+    <string name="encrypted_message">Verschlüsselte Nachricht</string>
+
+</resources>
