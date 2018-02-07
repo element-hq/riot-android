@@ -176,8 +176,6 @@
     <string name="call_in_progress">المكالمة جارية</string>
 
     <string name="call_error_camera_init_failed">تعذّر تمهيد الكمرة</string>
-    <string name="action_accept">اقبل</string>
-    <string name="action_ignore">تجاهل</string>
 
     <string name="media_picker_both_capture_title">خُذ صورة أو ڤديو</string>
     <string name="media_picker_cannot_record_video">تعذّر تسجيل الڤديو</string>
@@ -276,7 +274,6 @@
 
     <string name="directory_searching_title">يبحث في الدليل..</string>
 
-    <string name="room_settings_notifications">الإخطارات</string>
     <string name="room_settings_leave_conversation">اترك المحادثة</string>
     <string name="room_settings_forget">انسَ</string>
 
@@ -362,7 +359,6 @@
     <string name="room_settings_room_photo">صورة الغرفة</string>
     <string name="room_settings_room_name">اسم الغرفة</string>
     <string name="room_settings_topic">الموضوع</string>
-    <string name="room_settings_mute_notifs">اكتم الإخطارات</string>
 
     <string name="room_settings_room_read_history_rules_pref_title">إمكانيّة قراءة تأريخ الغرفة</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">من يمكنه قراءة التأريخ؟</string>

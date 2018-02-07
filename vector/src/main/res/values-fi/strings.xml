@@ -574,7 +574,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_settings_topic">Aihe</string>
     <string name="room_settings_room_tag">Huoneen luokittelu</string>
     <string name="room_settings_tag_pref_dialog_title">Luokiteltu:</string>
-    <string name="room_settings_mute_notifs">Piilota ilmoitukset</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Suosikki</string>
@@ -797,10 +796,8 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="active_widgets">%1$d aktiivista pienoissovellusta</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Sinulla tarvitsee olla oikeus kutsua käyttäjiä.</string>
     <string name="widget_integration_unable_to_create">Pienoissovellusta ei voitu luoda.</string>
     <string name="widget_integration_failed_to_send_request">Pyynnön lähetys epäonnistui.</string>
-    <string name="widget_integration_room_not_recognised">Huonetta ei voida tunnistaa.</string>
     <string name="widget_integration_positive_power_level">Oikeustason täytyy olla positiivinen luku.</string>
     <string name="widget_integration_must_be_in_room">Et ole tässä huoneessa.</string>
     <string name="widget_integration_no_permission_in_room">Sinulla ei ole oikeutta suorittaa toimintoa tässä huoneessa.</string>
@@ -809,7 +806,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="widget_integration_room_not_visible">Huone %s ei ole näkyvillä.</string>
     <string name="settings_labs_matrix_apps">Matrix Sovellukset</string>
     <string name="room_add_matrix_apps">Lisää Matrix sovellus</string>
-    <string name="add_matrix_apps_not_supported">Ei tuettu tällä laitteella</string>
     <string name="settings_labs_native_camera">Käytä alkuperäistä kamerasovellusta</string>
 
     // share keys

@@ -111,7 +111,7 @@ Odaberite eksport kako biste napravili rezervu prije odjavljivanja.</string>
     <string name="send_bug_report_app_crashed">Aplikacija se srušila posljednji put. Želite li poslati izvještaj o rušenju?</string>
 
     <string name="send_bug_report_sent">Izvješće o greški je uspješno poslano</string>
-    <string name="send_bug_report_failed">Izvještaj o greški nije uspješno poslan (% s)</string>
+    <string name="send_bug_report_failed">Izvještaj o greški nije uspješno poslan (%s)</string>
     <string name="send_bug_report_progress">Napredak (%s%%)</string>
 
     <string name="send_files_in">Poslane informacije</string>
@@ -187,7 +187,7 @@ Možete dodati vašu email adresu na svoj profil u postavkama.</string>
     <string name="auth_reset_password_message">Da bi resetovali lozinku, unesite email adresu koja je povezana sa vašim računom:</string>
     <string name="auth_reset_password_missing_email">Email adresa povezana sa vašim računom mora biti unešena.</string>
     <string name="auth_reset_password_missing_password">Nova lozinka mora biti unešena.</string>
-    <string name="auth_reset_password_email_validation_message">Email je poslan na %. Nakon što slijedite link koji sadrži, kliknite ispod.</string>
+    <string name="auth_reset_password_email_validation_message">Email je poslan na %s. Nakon što slijedite link koji sadrži, kliknite ispod.</string>
     <string name="auth_reset_password_error_unauthorized">Neuspješna verifikacija email adrese: provjerite da li ste kliknuli link u emailu</string>
     <string name="auth_reset_password_success_message">Vaša lozinka je resetovana.
 
@@ -232,9 +232,6 @@ Oprostite na neugodnosti.</string>
     <string name="room_info_room_name">Ime sobe</string>
     <string name="room_info_room_topic">Tema sobe</string>
 
-    <string name="settings_key_display_all_events">postavke_ključ_prikazuje_sve_događaje</string>
-    <string name="settings_key_use_rage_shake">postavke_ključ_koristi_nagle_promjene</string>
-
     <string name="call">Poziv</string>
     <string name="call_connected">Poziv uspostavljen</string>
     <string name="call_connecting">Poziv se uspostavlja…</string>
@@ -249,11 +246,6 @@ Oprostite na neugodnosti.</string>
     <string name="call_error_ice_failed">Medijska veza nije uspjela</string>
     <string name="call_error_camera_init_failed">Kamera se ne moze inicijalizirati</string>
     <string name="call_error_answered_elsewhere">poziv je odgovoren na drugom mjestu</string>
-    <string name="call_error_peer_hangup_elsewhere">poziv je prekinut na drugom mjestu</string>
-    <string name="call_error_peer_cancelled_call">poziv prekinut</string>
-
-    <string name="action_accept">PRIHVATI</string>
-    <string name="action_ignore">IGNORIŠI</string>
 
     <string name="media_picker_both_capture_title">Snimi fotografiju ili video</string>
     <string name="media_picker_cannot_record_video">Nije moguće snimiti video</string>
@@ -295,17 +287,17 @@ Dopustite pristup sljedećem skočnom prozoru da biste otkrili kontakte koji kor
 
     <string name="room_jump_to_first_unread">Idi na prvu nepročitanu poruku.</string>
 
-    <string name="room_preview_invitation_format">Pozvani ste da se pridružite u ovu sobu</string>
+    <string name="room_preview_invitation_format">Pozvani ste da %s se pridružite u ovu sobu</string>
     <string name="room_preview_unlinked_email_warning">Ova je pozivnica poslana na%, koja nije povezana s ovim računom.
 Možda se želite prijaviti s nekim drugim računom ili dodati ovu poruku email adresu svom računu.</string>
-    <string name="room_preview_try_join_an_unknown_room">Pokušavate pristupiti usluzi%. Želite li se pridružiti kako biste sudjelovali u razgovoru?</string>
+    <string name="room_preview_try_join_an_unknown_room">Pokušavate pristupiti usluzi %s. Želite li se pridružiti kako biste sudjelovali u razgovoru?</string>
     <string name="room_preview_try_join_an_unknown_room_default">soba</string>
     <string name="room_preview_room_interactions_disabled">Ovo je pregled ove sobe. Razgovori u sobi su onemoguceni.</string>
 
     <string name="room_creation_title">Novi Razgovor</string>
     <string name="room_creation_add_member">Dodaj člana</string>
-    <string name="room_header_active_members">%1/%2 aktivni članovi</string>
-    <string name="room_title_members">%1 članovi</string>
+    <string name="room_header_active_members">%1$d/%2$d aktivni članovi</string>
+    <string name="room_title_members">%1$d članovi</string>
     <string name="room_title_one_member">1 član</string>
     <string name="room_e2e_alert_title">Upozorenje!</string>
     <string name="room_e2e_alert_message">End-to-end šifriranje je u beta verziji i možda nije pouzdano.
@@ -356,7 +348,7 @@ Da li ste sigurani?</string>
 
     <string name="people_search_invite_by_id"><u>Pozovi preko ID-a</u></string>
     <string name="people_search_local_contacts">LOKALNI KONTAKTI (%d)</string>
-    <string name="people_search_user_directory">KORISNIČKI IMENIK(%)</string>
+    <string name="people_search_user_directory">KORISNIČKI IMENIK (%s)</string>
     <string name="people_search_filter_text">Samo Matrix korisnici</string>
 
     <string name="people_search_invite_by_id_dialog_title">Pozovi korisnika preko ID-a</string>
@@ -371,7 +363,7 @@ Da li ste sigurani?</string>
     <string name="room_message_placeholder_not_encrypted">Pošalji kao poruku (nešifrirana)…</string>
     <string name="room_offline_notification">Konekcija na server je prekinuta.</string>
     <string name="room_unsent_messages_notification">Poruke nisu poslane. %1$s or %2$s sada?</string>
-    <string name="room_unknown_devices_messages_notification">Poruke se ne šalju zbog nepoznatih uređaja. Sada je% 1$s ili % 2$s?</string>
+    <string name="room_unknown_devices_messages_notification">Poruke se ne šalju zbog nepoznatih uređaja. Sada je %1$s ili %2$s?</string>
     <string name="room_prompt_resend">Pošalji sve ponovo</string>
     <string name="room_prompt_cancel">poništi sve</string>
     <string name="room_resend_unsent_messages">Ponovo pošalji sve neposlane poruke</string>
@@ -408,7 +400,7 @@ Da li ste sigurani?</string>
     <string name="room_event_action_cancel_upload">Otkaži Prijenos</string>
     <string name="room_event_action_cancel_download">Otkaži Preuzimanje</string>
 
-    <string name="room_displayname_invite_from">Pozovite iz% s</string>
+    <string name="room_displayname_invite_from">Pozovite iz %s</string>
     <string name="room_displayname_room_invite">Poziv u Sobu</string>
     <string name="room_displayname_two_members">%1$s i %2$s</string>
     <string name="room_displayname_more_than_two_members">%1$s i %2$d ostali</string>
@@ -441,7 +433,6 @@ Da li ste sigurani?</string>
     <string name="directory_search_rooms_for">%1$s soba pronađena za %2$s</string>
     <string name="directory_searching_title">Traži direktorij..</string>
 
-    <string name="room_settings_notifications">postavke sobe</string>
     <string name="room_settings_favourite">Favorit</string>
     <string name="room_settings_de_prioritize">De-prioritiziraj</string>
     <string name="room_settings_direct_chat">Direktni Razgovor</string>

@@ -650,7 +650,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 よろしいですか？</string>
 
     <string name="people_search_local_contacts">端末の連絡先 (%d)</string>
-    <string name="people_search_user_directory">ユーザディレクトリ</string>
+    <string name="people_search_user_directory">ユーザディレクトリ (%s)</string>
     <string name="people_search_filter_text">Matrixユーザのみ</string>
 
     <string name="people_search_invite_by_id_dialog_title">ユーザIDで招待する</string>
@@ -673,7 +673,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="room_displayname_invite_from">%sさんからの招待</string>
     <string name="room_displayname_room_invite">部屋への招待</string>
-    <string name="room_displayname_two_members">%s$sと%s$s</string>
+    <string name="room_displayname_two_members">%1$sと%2$s</string>
     <string name="room_displayname_more_than_two_members">%1$sと%2$d他</string>
     <string name="room_displayname_no_title">空の部屋</string>
 
@@ -772,7 +772,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     // slash commands
     <string name="command_error">コマンドエラー</string>
-    <string name="unrecognized_command">認識されないコマンド:</string>
+    <string name="unrecognized_command">認識されないコマンド: %s</string>
 
     // notification statuses
     <string name="notification_off">切</string>

@@ -48,7 +48,7 @@
 
     <!-- actions -->
     <string name="action_sign_out">Uitloggen</string>
-    <string name="action_sign_out_confirmation">Voor veiligheidsredenen zal het uitloggen alle eind-tot-eind versleutelingssleutels verwijderen. Dit zal ervoor zorgen dat gespreksgeschiedenis onleesbaar is als je weer terug in logt. 
+    <string name="action_sign_out_confirmation">Voor veiligheidsredenen zal het uitloggen alle eind-tot-eind versleutelingssleutels verwijderen. Dit zal ervoor zorgen dat gespreksgeschiedenis onleesbaar is als je weer terug in logt.
 Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt.</string>
     <string name="action_voice_call">Spraakoproep</string>
     <string name="action_video_call">Videogesprek</string>
@@ -767,8 +767,7 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="widget_integration_room_not_visible">Ruimte %s is niet zichtbaar.</string>
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Matrix Apps toevoegen</string>
-    <string name="add_matrix_apps_not_supported">Niet ondersteund op dit apparaat</string>
-<string name="notification_noisy_notifications">Geluidgevende notificaties</string>
+    <string name="notification_noisy_notifications">Geluidgevende notificaties</string>
     <string name="notification_silent_notifications">Stille notificaties</string>
 
     <string name="title_activity_bug_report">Foutmelding</string>

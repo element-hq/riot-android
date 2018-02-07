@@ -771,8 +771,7 @@
     <string name="settings_labs_matrix_apps">Застосунки Matrix</string>
 
     <string name="room_add_matrix_apps">Додати застосунки Matrix</string>
-    <string name="add_matrix_apps_not_supported">Не підтримується цим пристроєм</string>
-<string name="notification_noisy_notifications">Гучне повідомлення</string>
+    <string name="notification_noisy_notifications">Гучне повідомлення</string>
     <string name="notification_silent_notifications">Тихе повідомлення</string>
 
     <string name="title_activity_bug_report">Відгук про помилку</string>
@@ -781,37 +780,16 @@
     <string name="option_take_video">Записати відео</string>
 
     <string name="call">Виклик</string>
-    <string name="settings_analytics">Аналітика</string>
-    <string name="settings_opt_out_of_analytics">Відмова від аналітики</string>
+
     <string name="settings_theme">Тема</string>
-
-    <string name="settings_labs_native_camera">Використовувати вбудовану камеру</string>
-
-    // share keys
-    <string name="start_verification">Почати перевірку</string>
-    <string name="settings_containing_my_display_name">Повідомлення, з моїм ім\'ям</string>
-    <string name="ignore_request">Ігнорувати запит</string>
 
     // conference call
     <string name="conference_call_warning_title">Увага!</string>
-    <string name="command_error">Помилка команди</string>
     <string name="notification_off">Викл</string>
     <string name="notification_on">Вкл</string>
     <string name="notification_noisy">Гучно</string>
 
     <string name="encrypted_message">Закодоване повідомлення</string>
-
-<string name="settings_containing_my_user_name">Повідомлення, містить моє ім\'я користувача</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot збирає анонімну аналітику, щоб зробити додаток ще краще.</string>
-
-
-    <string name="you_added_a_new_device">Ви добавили новий пристрій \'%s\', який запитує ключі шифрування.</string>
-    <string name="your_unverified_device_requesting">Ваше неперевірений пристрій \'%s\' запитує ключі шифрування.</string>
-    <string name="share_without_verifying">Поділитись без перевірки</string>
-    <string name="conference_call_warning_message">Конференц-зв\'язок находиться в розробці і може бути не надійна.</string>
-
-    // slash commands
-    <string name="unrecognized_command">Нерозпізнана команда: %s</string>
 
     <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
 
@@ -822,13 +800,8 @@
     <string name="share_without_verifying">Поділитись без перевірки</string>
     <string name="ignore_request">Ігнорувати запит</string>
 
-    // conference call
-    <string name="conference_call_warning_title">Попередження!</string>
-    <string name="conference_call_warning_message">Конференц дзвінки у розробці та можуть бути ненадійними.</string>
-
     // slash commands
     <string name="command_error">Помилка виконання команди</string>
     <string name="unrecognized_command">Команду %s не розпізнано</string>
-
 
 </resources>
