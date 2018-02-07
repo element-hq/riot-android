@@ -856,7 +856,7 @@ Ismeretlen eszközök:</string>
     <string name="reason_colon">Ok: %1$s</string>
     <string name="rejoin">Újracsatlakozás</string>
     <string name="forget_room">Szoba elfelejtése</string>
-<string name="settings_inline_url_preview">Linkek előnézete alapértelmezettként</string>
+<string name="settings_inline_url_preview">"Üzenetekben URL előnézet engedélyezése alapbeállításként "</string>
     <string name="settings_flair">Kitűző</string>
 
     <string name="room_settings_no_flair">" A szoba nem mutatja  a közösségek kitűzőit"</string>
