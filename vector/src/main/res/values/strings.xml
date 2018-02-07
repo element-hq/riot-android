@@ -26,6 +26,9 @@
     <string name="title_activity_bug_report">Bug report</string>
     <string name="title_activity_group_details">Community details</string>
 
+    <!-- splash screen accessibility -->
+    <string name="loading">Loading...</string>
+
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -85,6 +88,7 @@
     <string name="bottom_action_favourites">Favourites</string>
     <string name="bottom_action_people">People</string>
     <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_groups">Communities</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Search for rooms</string>
