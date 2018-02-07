@@ -870,4 +870,6 @@
     <string name="room_settings_all_messages_noisy">Tots els missatges (sorollós)</string>
     <string name="room_settings_all_messages">Tots els missatges</string>
     <string name="room_settings_mention_only">Només citacions</string>
+    <string name="room_settings_mute">Silencia</string>
+    <string name="room_settings_room_notifications_title">Notificacions</string>
     </resources>
