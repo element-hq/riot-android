@@ -61,8 +61,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="bottom_action_people">Personnes</string>
     <string name="bottom_action_rooms">Salons</string>
 
-    <string name="home_filter_placeholder_home">Rechercher des salons</string>
-    <string name="home_filter_placeholder_favorites">Rechercher des favoris</string>
+    <string name="home_filter_placeholder_home">Rechercher dans ces salons</string>
+    <string name="home_filter_placeholder_favorites">Rechercher dans les favoris</string>
     <string name="home_filter_placeholder_people">Rechercher des personnes</string>
     <string name="home_filter_placeholder_rooms">Rechercher des salons</string>
 
@@ -223,8 +223,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_participants_action_devices_list">Afficher la liste des appareils</string>
     <string name="people_search_local_contacts">CONTACTS LOCAUX (%d)</string>
     <string name="people_search_filter_text">Utilisateurs Matrix uniquement</string>
-    <string name="people_search_invite_by_id_dialog_title">Inviter un utilisateur par identifiant</string>
-    <string name="people_search_invite_by_id_dialog_hint">E-mail ou ID Matrix</string>
+    <string name="people_search_invite_by_id_dialog_title">Inviter un utilisateur par son identifiant Matrix</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-mail ou identifiant Matrix</string>
 
     <string name="room_menu_search">Rechercher</string>
     <string name="room_message_placeholder_encrypted">Envoyer un message chiffré…</string>
@@ -383,7 +383,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="room_settings_banned_users_title">Utilisateurs bannis</string>
 
-    <string name="room_settings_category_advanced_title">Avancée</string>
+    <string name="room_settings_category_advanced_title">Avancé</string>
     <string name="room_settings_room_internal_id">L\'identifiant interne de ce salon</string>
     <string name="room_settings_addresses_pref_title">Adresses</string>
     <string name="room_settings_labs_pref_title">Expérimental</string>
@@ -697,7 +697,7 @@ Appareils inconnus :</string>
     <string name="settings_hide_read_receipts">Masquer les accusés de lecture</string>
     <string name="settings_dont_send_typings_notifs">Ne pas envoyer de notification d\'écriture</string>
     <string name="settings_always_show_timestamps">Toujours afficher l\'heure des messages</string>
-    <string name="settings_disable_markdown">Désactiver le formatage Markdown</string>
+    <string name="settings_disable_markdown">Désactiver le formatage Markdown lors de l\'envoi des messages</string>
     <string name="settings_data_save_mode">Mode économie de données</string>
 
     <string name="media_saving_period_3_days">3 jours</string>
@@ -793,13 +793,13 @@ Appareils inconnus :</string>
 
     <string name="bottom_action_groups">Communautés</string>
 
-    <string name="home_filter_placeholder_groups">Rechercher des communautés</string>
+    <string name="home_filter_placeholder_groups">Rechercher dans ces communautés</string>
 
     <string name="groups_invite_header">Inviter</string>
     <string name="groups_header">Communautés</string>
     <string name="no_group_placeholder">Aucun groupe</string>
 
-    <string name="start_new_chat_prompt_msg">Voulez-vous vraiment engager une nouvelle discussion avec %s?</string>
+    <string name="start_new_chat_prompt_msg">Voulez-vous vraiment engager une nouvelle discussion avec %s ?</string>
     <string name="start_voice_call_prompt_msg">Voulez-vous vraiment engager un nouvel appel vocal ?</string>
     <string name="start_video_call_prompt_msg">Voulez-vous vraiment engager un nouvel appel vidéo ?</string>
 
@@ -815,4 +815,48 @@ Appareils inconnus :</string>
     <string name="room_settings_mute">Silencieux</string>
     <string name="room_settings_add_homescreen_shortcut">Ajouter un raccourci sur l\'écran d\'acceuil</string>
 
-    </resources>
+    <string name="settings_inline_url_preview">Aperçu intégré des URL</string>
+    <string name="settings_vibrate_on_mention">Vibrer lorsque l\'on mentionne quelqu\'un</string>
+
+    <string name="room_settings_room_notifications_title">Notifications</string>
+    <string name="room_settings_no_flair">" Ce salon n\'a de vignettes pour aucune communauté"</string>
+    <string name="room_settings_add_new_group">Nouvel identifiant de communauté (ex. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Identifiant de communauté invalide</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' n\'est pas un identifiant de communauté valide</string>
+
+
+    <string name="create">Créer</string>
+    <string name="create_community">Créer une communauté</string>
+    <string name="community_name">Nom de la communauté</string>
+    <string name="community_name_hint">Exemple</string>
+    <string name="community_id">Identifiant de communauté</string>
+    <string name="community_id_hint">Exemple</string>
+
+    // group details
+    <string name="group_details_home">Acceuil</string>
+    <string name="group_details_people">Personnes</string>
+    <string name="group_details_rooms">Salons</string>
+    <string name="no_users_placeholder">Pas d\'utilisateurs</string>
+
+    <string name="rooms">Salons</string>
+    <string name="joined">Rejoint</string>
+    <string name="invited">Invité</string>
+    <string name="filter_group_members">Filtrer les membres du groupe</string>
+    <string name="filter_group_rooms">Filtrer les salons du groupe</string>
+
+    <string name="group_one_member">Un membre</string>
+    <string name="group_members">%d membres</string>
+
+    <string name="group_one_room">Un salon</string>
+    <string name="group_rooms">%d salons</string>
+    <string name="group_no_long_description">L\'administrateur de cette communauté n\'a pas encore fourni de description.</string>
+
+    <string name="one_new_message">Un nouveau message</string>
+    <string name="new_messages">%d nouveaux messages</string>
+
+    <string name="has_been_kicked">%2$s vous a exclu de %1$s</string>
+    <string name="has_been_banned">%2$s vous a banni de %1$s</string>
+    <string name="reason_colon">Motif : %1$s</string>
+    <string name="rejoin">Rejoindre</string>
+    <string name="forget_room">Oublier le salon</string>
+</resources>
