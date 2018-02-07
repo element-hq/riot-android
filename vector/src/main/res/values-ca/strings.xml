@@ -24,7 +24,7 @@
     <string name="title_activity_member_details">Detalls dels participants</string>
     <string name="title_activity_historical">Històric</string>
     <string name="title_activity_bug_report">Informe d\'errors</string>
-    <string name="title_activity_group_details">Detalls del grup</string>
+    <string name="title_activity_group_details">Detalls de la comunitat</string>
 
     <!-- button names -->
     <string name="ok">D\'acord</string>
