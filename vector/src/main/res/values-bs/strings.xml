@@ -304,7 +304,7 @@ Možda se želite prijaviti s nekim drugim računom ili dodati ovu poruku email 
 
     <string name="room_creation_title">Novi Razgovor</string>
     <string name="room_creation_add_member">Dodaj člana</string>
-    <string name="room_header_active_members">%1/%2 aktivni članovi</string>
+    <string name="room_header_active_members">%1$d/%2$d aktivni članovi</string>
     <string name="room_title_members">%1 članovi</string>
     <string name="room_title_one_member">1 član</string>
     <string name="room_e2e_alert_title">Upozorenje!</string>
@@ -371,7 +371,7 @@ Da li ste sigurani?</string>
     <string name="room_message_placeholder_not_encrypted">Pošalji kao poruku (nešifrirana)…</string>
     <string name="room_offline_notification">Konekcija na server je prekinuta.</string>
     <string name="room_unsent_messages_notification">Poruke nisu poslane. %1$s or %2$s sada?</string>
-    <string name="room_unknown_devices_messages_notification">Poruke se ne šalju zbog nepoznatih uređaja. Sada je% 1$s ili % 2$s?</string>
+    <string name="room_unknown_devices_messages_notification">Poruke se ne šalju zbog nepoznatih uređaja. Sada je %1$s ili %2$s?</string>
     <string name="room_prompt_resend">Pošalji sve ponovo</string>
     <string name="room_prompt_cancel">poništi sve</string>
     <string name="room_resend_unsent_messages">Ponovo pošalji sve neposlane poruke</string>
