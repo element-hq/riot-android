@@ -859,6 +859,6 @@ Ismeretlen eszközök:</string>
 <string name="settings_inline_url_preview">"Üzenetekben URL előnézet engedélyezése alapbeállításként "</string>
     <string name="settings_flair">Kitűző</string>
 
-    <string name="room_settings_no_flair">" A szoba nem mutatja  a közösségek kitűzőit"</string>
+    <string name="room_settings_no_flair">" Ez a szoba nem mutatja  a közösségek kitűzőit"</string>
     <string name="group_details_home">Kezdőlap</string>
     </resources>
