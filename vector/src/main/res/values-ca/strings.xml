@@ -50,7 +50,7 @@
     <string name="ongoing_conference_call_voice">veu</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">La trucada no es pot iniciar, prova-ho més tard</string>
-    <string name="missing_permissions_warning">Pot ser que algunes funcions no apareguin per manca de permisos</string>
+    <string name="missing_permissions_warning">Pot ser que algunes funcions no apareguin per manca de permisos...</string>
     <string name="missing_permissions_to_start_conf_call">Es necessiten permisos per convidar a iniciar una conferència en aquesta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">No es pot iniciar la trucada</string>
     <string name="device_information">Informació del dispositiu</string>
@@ -90,7 +90,7 @@
     <string name="home_filter_placeholder_favorites">Cerca preferits</string>
     <string name="home_filter_placeholder_people">Cerca persones</string>
     <string name="home_filter_placeholder_rooms">Cerca sales</string>
-    <string name="home_filter_placeholder_groups">Cerca grups</string>
+    <string name="home_filter_placeholder_groups">Cerca comunitats</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Convida</string>
@@ -117,7 +117,7 @@
 
     <!-- Groups fragment -->
     <string name="groups_invite_header">Convida</string>
-    <string name="groups_header">Grups</string>
+    <string name="groups_header">Comunitats</string>
     <string name="no_group_placeholder">No hi ha cap grup</string>
 
     <string name="send_bug_report_include_logs">Envia els registres</string>
@@ -787,7 +787,7 @@
     <string name="event_formatter_widget_added">%1$s afegit per %2$s</string>
     <string name="event_formatter_widget_removed">%1$s retirat per %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Fes conferències amb jitsi</string>
-    <string name="widget_delete_message_confirmation">Confirmeu que voleu esborrar el giny</string>
+    <string name="widget_delete_message_confirmation">Confirmeu que voleu esborrar el giny?</string>
     <string name="active_widgets">%1$d ginys actius</string>
 
     // Widget Integration Manager
