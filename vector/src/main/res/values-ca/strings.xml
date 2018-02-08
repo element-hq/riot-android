@@ -872,4 +872,6 @@
     <string name="room_settings_mention_only">Només citacions</string>
     <string name="room_settings_mute">Silencia</string>
     <string name="room_settings_room_notifications_title">Notificacions</string>
+    <string name="send_bug_report_rage_shake">Sacsejar amb ràbia per informar d\'un error</string>
+
     </resources>
