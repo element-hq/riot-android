@@ -102,6 +102,7 @@ android {
         disable 'InvalidPackage'
         disable 'MissingTranslation'
         disable 'RestrictedApi'
+        disable 'ImpliedQuantity'
     }
 
     repositories {
