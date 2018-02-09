@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">ru</string>
-    <string name="resouces_country">US</string>
+    <string name="resouces_country">RU</string>
     
     <!-- titles -->
     <string name="title_activity_home">Сообщения</string>
@@ -66,7 +66,7 @@
     <string name="dialog_title_warning">Предупреждение</string>
 
     <!-- Bottom navigation buttons -->
-    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_home">Начало</string>
     <string name="bottom_action_favourites">Избранные</string>
     <string name="bottom_action_people">Люди</string>
     <string name="bottom_action_rooms">Комнаты</string>
@@ -114,7 +114,7 @@
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
     <string name="send_bug_report_app_crashed">В прошлый раз приложение некорректно завершило работу. Хотите отправить отчет о сбое?</string>
     
-    <string name="send_files_in">Предать в</string>
+    <string name="send_files_in">Отправить в</string>
     <string name="read_receipt">Прочитан</string>
 
     <string name="join_room">Войти в Комнату</string>
@@ -742,7 +742,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_hide_read_receipts">Скрыть отметки о прочтении</string>
     <string name="settings_dont_send_typings_notifs">Не оповещать, когда я печатаю</string>
     <string name="settings_always_show_timestamps">Всегда показывать временные метки сообщений</string>
-    <string name="settings_disable_markdown">Отключить Markdown-форматирование</string>
+    <string name="settings_disable_markdown">Отключить Markdown-форматирование при отправке</string>
 
     <string name="media_saving_period_3_days">3 дня</string>
     <string name="media_saving_period_1_week">1 неделя</string>
@@ -840,4 +840,75 @@ Email также позволит вам при необходимости во�
 
     <string name="encrypted_message">Зашифрованное сообщение</string>
 
+<string name="title_activity_group_details">Сведения о сообществе</string>
+
+    <string name="loading">Загрузка...</string>
+
+    <string name="action_exit">Выход</string>
+    <string name="bottom_action_groups">Сообщества</string>
+
+    <string name="home_filter_placeholder_groups">Поиск сообществ</string>
+
+    <string name="groups_invite_header">Пригласить</string>
+    <string name="groups_header">Сообщества</string>
+    <string name="no_group_placeholder">Нет групп</string>
+
+    <string name="start_new_chat_prompt_msg">Вы действительно хотите начать новый чат с %s?</string>
+    <string name="start_voice_call_prompt_msg">Вы уверены, что хотите начать голосовой вызов?</string>
+    <string name="start_video_call_prompt_msg">Вы уверены, что хотите начать видеовызов?</string>
+
+    <string name="groups_list">Список групп</string>
+
+    <string name="room_participants_kick_prompt_msg">Вы действительно хотите выгнать этого пользователя из этого чата?</string>
+    <string name="room_participants_ban_prompt_msg">Вы уверены, что хотите забанить этого пользователя в этом чате?</string>
+
+    <string name="room_settings_all_messages_noisy">Все сообщения (громко)</string>
+    <string name="room_settings_all_messages">Все сообщения</string>
+    <string name="room_settings_mention_only">Только упоминания</string>
+    <string name="room_settings_mute">Без звука</string>
+    <string name="room_settings_add_homescreen_shortcut">Добавить ярлык на главный экран</string>
+
+    <string name="settings_inline_url_preview">Включить предпросмотр URL-адресов по умолчанию</string>
+    <string name="settings_vibrate_on_mention">Вибрация при упоминании</string>
+
+    <string name="room_settings_room_notifications_title">Уведомления</string>
+    <string name="room_settings_add_new_group">Новый ID сообщества (например +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Недопустимый ID сообщества</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' недействительный ID сообщества</string>
+
+
+    <string name="create">Создать</string>
+    <string name="create_community">Создать сообщество</string>
+    <string name="community_name">Имя сообщества</string>
+    <string name="community_name_hint">Пример</string>
+    <string name="community_id">ID сообщества</string>
+    <string name="community_id_hint">пример</string>
+
+    // group details
+    <string name="group_details_home">Начало</string>
+    <string name="group_details_people">Люди</string>
+    <string name="group_details_rooms">Комнаты</string>
+    <string name="no_users_placeholder">Нет пользователей</string>
+
+    <string name="rooms">Комнаты</string>
+    <string name="joined">Присоединился</string>
+    <string name="invited">Приглашен</string>
+    <string name="filter_group_members">Фильтр участников группы</string>
+    <string name="filter_group_rooms">Фильтр комнат группы</string>
+
+    <string name="group_one_member">1 участник</string>
+    <string name="group_members">%d участников</string>
+
+    <string name="group_one_room">1 комната</string>
+    <string name="group_rooms">%d комнат</string>
+    <string name="group_no_long_description">Администратор сообщества не предоставил подробного описания этого сообщества.</string>
+
+    <string name="one_new_message">1 новое сообщение</string>
+    <string name="new_messages">%d новых сообщений</string>
+
+    <string name="has_been_kicked">Вас выгнал %2$s из %1$s</string>
+    <string name="has_been_banned">Вас забанил %2$s в %1$s</string>
+    <string name="reason_colon">Причина: %1$s</string>
+    <string name="rejoin">Присоединиться снова</string>
+    <string name="forget_room">Забыть комнату</string>
 </resources>

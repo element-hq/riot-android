@@ -691,7 +691,7 @@ Ismeretlen eszközök:</string>
 
     <string name="settings_dont_send_typings_notifs">Ne küldjön írásértesítést</string>
     <string name="settings_always_show_timestamps">Mindig jelenítse meg az üzenetek időbélyegét</string>
-    <string name="settings_disable_markdown">Markdown formázás kikapcsolása</string>
+    <string name="settings_disable_markdown">Markdown formázás kikapcsolása üzenet küldésekor</string>
 
     <string name="media_saving_period_3_days">3 nap</string>
     <string name="media_saving_period_1_week">1 hét</string>
@@ -787,4 +787,78 @@ Ismeretlen eszközök:</string>
 
     <string name="encrypted_message">Titkosított üzenet</string>
 
-</resources>
+<string name="title_activity_group_details">A közösség adatai</string>
+
+    <string name="loading">Betöltés...</string>
+
+    <string name="action_exit">Kilépés</string>
+    <string name="bottom_action_groups">Közösségek</string>
+
+    <string name="home_filter_placeholder_groups">Közösségek keresése</string>
+
+    <string name="groups_invite_header">Meghív</string>
+    <string name="groups_header">Közösségek</string>
+    <string name="no_group_placeholder">Nincsenek csoportok</string>
+
+    <string name="start_new_chat_prompt_msg">Biztos, hogy új beszélgetést akarsz kezdeni vele: %s?</string>
+    <string name="start_voice_call_prompt_msg">Biztos, hogy hanghívást akarsz kezdeményezni?</string>
+    <string name="start_video_call_prompt_msg">Biztos, hogy videóhívást akarsz kezdeményezni?</string>
+
+    <string name="groups_list">Csoportok listája</string>
+
+    <string name="room_participants_kick_prompt_msg">Biztos, hogy ki akarod rúgni ezt az illetőt ebből a beszélgetésből?</string>
+    <string name="room_participants_ban_prompt_msg">Biztos, hogy ki akarod tiltani ezt az illetőt ebből a beszélgetésből?</string>
+
+    <string name="room_settings_all_messages_noisy">Összes üzenet (hangos)</string>
+    <string name="room_settings_all_messages">Összes üzenet</string>
+    <string name="room_settings_mention_only">Csak megemlítések</string>
+    <string name="room_settings_mute">Némítás</string>
+    <string name="room_settings_add_homescreen_shortcut">Kezdőképernyő parancsikon hozzáadása</string>
+
+    <string name="settings_vibrate_on_mention">Rezegés megemlítéskor</string>
+
+    <string name="room_settings_room_notifications_title">Értesítések</string>
+    <string name="room_settings_add_new_group">Új közösség azonosító (pl.: +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Érvénytelen közösség azonosító</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' nem egy érvényes közösség azonosító</string>
+
+
+    <string name="create">Létrehoz</string>
+    <string name="create_community">Közösség létrehozása</string>
+    <string name="community_name">Közösség neve</string>
+    <string name="community_name_hint">Példa</string>
+    <string name="community_id">Közösség azonosító</string>
+    <string name="community_id_hint">példa</string>
+
+    // group details
+    <string name="group_details_rooms">Szobák</string>
+    <string name="group_details_people">Emberek</string>
+    <string name="no_users_placeholder">Nincsenek felhasználók</string>
+
+    <string name="rooms">Szobák</string>
+    <string name="joined">Csatlakozott</string>
+    <string name="invited">Meghívott</string>
+    <string name="filter_group_members">Csoport tagjai szűrése</string>
+    <string name="filter_group_rooms">Csoport szobái szűrése</string>
+
+    <string name="group_one_member">1 tag</string>
+    <string name="group_members">%d felhasználó</string>
+
+    <string name="group_one_room">1 szoba</string>
+    <string name="group_rooms">%d szoba</string>
+    <string name="group_no_long_description">A közösség adminisztrátora nem adott meg hosszú leírást ehhez a közösséghez.</string>
+
+    <string name="one_new_message">1 új üzenet</string>
+    <string name="new_messages">%d új üzenet</string>
+
+    <string name="has_been_kicked">Ki lettél rúgva innen: %1$s, %2$s által</string>
+    <string name="has_been_banned">Ki lettél tiltva innen: %1$s, %2$s által</string>
+    <string name="reason_colon">Ok: %1$s</string>
+    <string name="rejoin">Újracsatlakozás</string>
+    <string name="forget_room">Szoba elfelejtése</string>
+<string name="settings_inline_url_preview">"Üzenetekben URL előnézet engedélyezése alapbeállításként "</string>
+    <string name="settings_flair">Kitűző</string>
+
+    <string name="room_settings_no_flair">" Ez a szoba nem mutatja  a közösségek kitűzőit"</string>
+    <string name="group_details_home">Kezdőlap</string>
+    </resources>
