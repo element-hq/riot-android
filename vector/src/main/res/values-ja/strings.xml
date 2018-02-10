@@ -781,4 +781,5 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="encrypted_message">暗号化されたメッセージ</string>
 
-</resources>
+<string name="action_exit">退出</string>
+    </resources>
