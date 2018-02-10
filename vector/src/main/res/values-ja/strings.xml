@@ -349,8 +349,8 @@
     <string name="ongoing_conference_call_voice">音声</string>
     <string name="ongoing_conference_call_video">映像</string>
     <string name="cannot_start_call">通話を開始できませんでした。後ほど試してください。</string>
-    <string name="missing_permissions_warning">許可が無い為, 一部の機能が失われている可能性があります..</string>
-    <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するための招待権限が必要です</string>
+    <string name="missing_permissions_warning">許可が無い為、一部の機能が失われている可能性があります。</string>
+    <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するための招待権限が必要です。</string>
     <string name="send_anyway">とにかく送る</string>
     <string name="and">と</string>
     <string name="action_sign_out">ログアウト</string>
