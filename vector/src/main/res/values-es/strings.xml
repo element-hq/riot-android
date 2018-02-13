@@ -270,7 +270,9 @@ Disculpe por la inconveniencia.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot necesita tu permiso para usar su cámara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
     <string name="permissions_rationale_msg_contacts">Riot necesita tu permiso para leer tus contactos y directorio para encontrar a otros usuarios por sus correos electrónicos y números telefónicos.\n\nPor favor permite el acceso en el siguiente mensaje para encontrar usuarios de Riot en su directorio.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.\n\n¿Permitir el acceso a Riot para leer tus contactos ?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
+
+¿Permitir el acceso a Riot para leer tus contactos ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Perdon.. Operación no realizada, debido a permisos faltantes</string>
 
@@ -865,4 +867,41 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="room_settings_no_flair">" Esta sala no pertenece a ninguna comunidad"</string>
     <string name="room_settings_add_new_group">Nueva ID de la comunidad (por ejemplo +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">El ID de la comunidad es inválido</string>
+    <string name="forget_room">Olvidar sala</string>
+<string name="rejoin">Volver a entrar</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'℅s\' no es un ID de comunidad válido</string>
+
+
+    <string name="create">Crear</string>
+    <string name="create_community">Crear una comunidad</string>
+    <string name="community_name">Nombre de la comunidad</string>
+    <string name="community_name_hint">Ejemplo</string>
+    <string name="community_id">ID de la comunidad</string>
+    <string name="community_id_hint">ejemplo</string>
+
+    // group details
+    <string name="group_details_home">Inicio</string>
+    <string name="group_details_people">Usuarios</string>
+    <string name="group_details_rooms">Salas</string>
+    <string name="no_users_placeholder">Sin usuarios</string>
+
+    <string name="rooms">Salas</string>
+    <string name="joined">Se ha unido</string>
+    <string name="invited">Ha sido invitado</string>
+    <string name="filter_group_members">Filtro de miembros del grupo</string>
+    <string name="filter_group_rooms">Filtro de salas del grupo</string>
+
+    <string name="group_one_member">1 miembro</string>
+    <string name="group_members">%d miembros</string>
+
+    <string name="group_one_room">1 sala</string>
+    <string name="group_rooms">%d salas</string>
+    <string name="one_new_message">1 nuevo mensaje</string>
+    <string name="new_messages">%d nuevos mensajes</string>
+
+    <string name="has_been_kicked">Ha sido echado de la sala %1$s por %2$s</string>
+    <string name="has_been_banned">Ha sido vetado en %1$s por %2$s</string>
+    <string name="reason_colon">Razon: %1$s</string>
+    <string name="group_no_long_description">El administrador de la comunidad no ha redactado una descripción larga para esta comunidad.</string>
+
     </resources>
