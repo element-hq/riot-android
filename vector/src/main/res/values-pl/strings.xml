@@ -212,8 +212,6 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
 
     <string name="call_error_ice_failed">Połączenie multimedialne nie powiodło się</string>
     <string name="call_error_camera_init_failed">Nie udało się zainicjalizować aparatu</string>
-    <string name="action_accept">AKCEPTUJ</string>
-    <string name="action_ignore">IGNORUJ</string>
 
     <string name="media_picker_both_capture_title">Zrób zdjęcie lub nagraj film</string>
     <string name="media_picker_cannot_record_video">Nie można nagrać filmu</string>
@@ -365,7 +363,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="directory_search_rooms_for">Znaleziono %1$s pokoje dla wyniku %2$s</string>
     <string name="directory_searching_title">Wyszukiwanie katalogu…</string>
 
-    <string name="room_settings_notifications">Powiadomienia</string>
     <string name="room_settings_favourite">Dodaj do ulubionych</string>
     <string name="room_settings_de_prioritize">Usuń z priorytetyzowanych</string>
     <string name="room_settings_direct_chat">Rozmawiaj bezpośrednio</string>
@@ -475,7 +472,6 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="room_settings_room_name">Nazwa pokoju</string>
     <string name="room_settings_topic">Temat</string>
     <string name="room_settings_room_tag">Tag pokoju</string>
-    <string name="room_settings_mute_notifs">Wycisz powiadomienia</string>
 
     <string name="room_settings_tag_pref_entry_favourite">Ulubione</string>
     <string name="room_settings_tag_pref_entry_low_priority">Niski priorytet</string>

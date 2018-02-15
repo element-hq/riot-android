@@ -171,9 +171,6 @@
     <string name="room_info_room_name">గది పేరు</string>
     <string name="room_info_room_topic">గది అంశం</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call_connected">కాల్ కనెక్ట్ చేయబడింది</string>
     <string name="call_connecting">కాల్ అనుసంధానించబడుతున్నది…</string>
     <string name="call_ended">కాల్ ముగిసింది</string>
@@ -184,10 +181,6 @@
     <string name="call_in_progress">కాల్ పురోగతిలో వుంది</string>
 
     <string name="call_error_ice_failed">మీడియా కనెక్షన్ విఫలమైంది</string>
-    <string name="call_error_peer_cancelled_call">కాల్ రద్దు చేయబడింది</string>
-
-    <string name="action_accept">అంగీకరించు</string>
-    <string name="action_ignore">విస్మరించు</string>
 
     <string name="media_picker_both_capture_title">చిత్రాన్ని లేదా వీడియోని తీసుకోండి</string>
     <string name="media_picker_cannot_record_video">వీడియో రికార్డ్ చేయలేరు</string>
@@ -334,7 +327,6 @@
     <string name="directory_search_rooms_for">%2$s కోసం %1$s గది కనుగొనబడింది</string>
     <string name="directory_searching_title">డైరెక్టరీని వెతుకుతున్నాం..</string>
 
-    <string name="room_settings_notifications">ప్రకటనలు</string>
     <string name="room_settings_direct_chat">ప్రత్యక్ష చాట్</string>
     <string name="room_settings_leave_conversation">సంభాషణను వదిలివేయండి</string>
     <string name="room_settings_forget">మర్చిపో</string>
@@ -428,7 +420,6 @@
     <string name="room_settings_topic">విషయము</string>
     <string name="room_settings_room_tag">రూమ్ ట్యాగ్</string>
     <string name="room_settings_tag_pref_dialog_title">గా ట్యాగ్:</string>
-    <string name="room_settings_mute_notifs">నోటిఫికేషన్లను మ్యూట్ చేయండి</string>
 
     <string name="room_settings_tag_pref_entry_low_priority">తక్కువ ప్రాధాన్యత</string>
     <string name="room_settings_tag_pref_entry_none">ఎవరు కాదు</string>
@@ -502,7 +493,6 @@
     <string name="action_global_search">విశ్వాన్వేషణ</string>
     <string name="call_error_user_not_responding">అటు వైపు ఎవరు కాల్ ఎత్తలేదు</string>
     <string name="call_error_answered_elsewhere">కాల్ ఎక్కడో ఎత్తారు</string>
-    <string name="call_error_peer_hangup_elsewhere">కాల్ ఎక్కడో ఆపేశారు</string>
     <string name="action_voice_call">వాయిస్ కాల్</string>
     <string name="auth_invalid_password">గుప్తపదం చానా చిన్నది (కనీసం 6)</string>
     <string name="encryption_export_enter_passphrase">గుప్తపదం ఇవ్వండి</string>

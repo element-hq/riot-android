@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package im.vector.util;
+package im.vector.notifications;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -38,16 +38,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
-import android.widget.ImageView;
-
-import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.store.IMXStore;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
-import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
@@ -60,11 +51,8 @@ import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.receiver.DismissNotificationReceiver;
+import im.vector.util.PreferencesManager;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -81,37 +69,6 @@ public class NotificationUtils {
     public static final String ACTION_MESSAGE_HEARD = "ACTION_MESSAGE_HEARD";
     public static final String ACTION_MESSAGE_REPLY = "ACTION_MESSAGE_REPLY";
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
-
-    /**
-     * Retrieve the room name.
-     *
-     * @param session the session
-     * @param room    the room
-     * @param event   the event
-     * @return the room name
-     */
-    public static String getRoomName(Context context, MXSession session, Room room, Event event) {
-        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
-
-        // avoid displaying the room Id
-        // try to find the sender display name
-        if (TextUtils.equals(roomName, room.getRoomId())) {
-            roomName = room.getName(session.getMyUserId());
-
-            // avoid room Id as name
-            if (TextUtils.equals(roomName, room.getRoomId()) && (null != event)) {
-                User user = session.getDataHandler().getStore().getUser(event.sender);
-
-                if (null != user) {
-                    roomName = user.displayname;
-                } else {
-                    roomName = event.sender;
-                }
-            }
-        }
-
-        return roomName;
-    }
 
     // on devices >= android O, we need to define a channel for each notifications
     public static final String LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID";
@@ -358,158 +315,40 @@ public class NotificationUtils {
     }
 
     /**
-     * This class manages the notification display.
-     * It contains the message to display and its timestamp
-     */
-    static class NotificationDisplay {
-        final long mEventTs;
-        final SpannableString mMessage;
-
-        NotificationDisplay(long ts, SpannableString message) {
-            mEventTs = ts;
-            mMessage = message;
-        }
-    }
-
-    /**
-     * NotificationDisplay comparator
-     */
-    private static final Comparator<NotificationDisplay> mNotificationDisplaySort = new Comparator<NotificationDisplay>() {
-        @Override
-        public int compare(NotificationDisplay lhs, NotificationDisplay rhs) {
-            long t0 = lhs.mEventTs;
-            long t1 = rhs.mEventTs;
-
-            if (t0 > t1) {
-                return -1;
-            } else if (t0 < t1) {
-                return +1;
-            }
-            return 0;
-        }
-    };
-
-    /**
-     * Define a notified event
-     * i.e the matched bing rules
-     */
-    public static class NotifiedEvent {
-        public final BingRule mBingRule;
-        public final String mRoomId;
-        public final String mEventId;
-        public final long mOriginServerTs;
-
-        public NotifiedEvent(String roomId, String eventId, BingRule bingRule, long originServerTs) {
-            mRoomId = roomId;
-            mEventId = eventId;
-            mBingRule = bingRule;
-            mOriginServerTs = originServerTs;
-        }
-    }
-
-    // max number of lines to display the notification text styles
-    private static final int MAX_NUMBER_NOTIFICATION_LINES = 10;
-
-    /**
      * Add a text style to a notification when there are several notified rooms.
      *
-     * @param context                the context
-     * @param builder                the notification builder
-     * @param notifiedEventsByRoomId the notified events by room ids
+     * @param context            the context
+     * @param builder            the notification builder
+     * @param roomsNotifications the rooms notifications
      */
     private static void addTextStyleWithSeveralRooms(Context context,
                                                      NotificationCompat.Builder builder,
-                                                     NotifiedEvent eventToNotify,
-                                                     boolean isInvitationEvent,
-                                                     Map<String, List<NotifiedEvent>> notifiedEventsByRoomId) {
-        // TODO manage multi accounts
-        MXSession session = Matrix.getInstance(context).getDefaultSession();
-        IMXStore store = session.getDataHandler().getStore();
+                                                     RoomsNotifications roomsNotifications) {
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-        int sum = 0;
-        int roomsCount = 0;
 
-
-        List<NotificationDisplay> notificationsList = new ArrayList<>();
-
-        for (String roomId : notifiedEventsByRoomId.keySet()) {
-            Room room = session.getDataHandler().getRoom(roomId);
-            String roomName = getRoomName(context, session, room, null);
-
-            List<NotifiedEvent> notifiedEvents = notifiedEventsByRoomId.get(roomId);
-            Event latestEvent = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
-
-            String text;
-            String header;
-
-            EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
-            eventDisplay.setPrependMessagesWithAuthor(false);
-
-            if (room.isInvited()) {
-                header = roomName + ": ";
-                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
-                text = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
-            } else if (1 == notifiedEvents.size()) {
-                eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
-                eventDisplay.setPrependMessagesWithAuthor(false);
-
-                header = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
-
-                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
-
-                // the event might have been redacted
-                if (!TextUtils.isEmpty(textualDisplay)) {
-                    text = textualDisplay.toString();
-                } else {
-                    text = "";
-                }
-            } else {
-                header = roomName + ": ";
-                text = context.getString(R.string.notification_unread_notified_messages, notifiedEvents.size());
-            }
-
-            // ad the line if it makes sense
-            if (!TextUtils.isEmpty(text)) {
-                SpannableString notifiedLine = new SpannableString(header + text);
-                notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                notificationsList.add(new NotificationDisplay(latestEvent.getOriginServerTs(), notifiedLine));
-                sum += notifiedEvents.size();
-                roomsCount++;
-            }
-        }
-
-        Collections.sort(notificationsList, mNotificationDisplaySort);
-
-        if (notificationsList.size() > MAX_NUMBER_NOTIFICATION_LINES) {
-            notificationsList = notificationsList.subList(0, MAX_NUMBER_NOTIFICATION_LINES);
-        }
-
-        for (NotificationDisplay notificationDisplay : notificationsList) {
-            inboxStyle.addLine(notificationDisplay.mMessage);
+        for (RoomNotifications roomNotifications : roomsNotifications.mRoomNotifications) {
+            SpannableString notifiedLine = new SpannableString(roomNotifications.mMessagesSummary);
+            notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, roomNotifications.mMessageHeader.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            inboxStyle.addLine(notifiedLine);
         }
 
         inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name));
-        inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages_in_room, sum, roomsCount));
+        inboxStyle.setSummaryText(roomsNotifications.mSummaryText);
         builder.setStyle(inboxStyle);
 
         TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context);
         Intent roomIntentTap;
-        // sanity check
-        if ((null == eventToNotify) || TextUtils.isEmpty(eventToNotify.mRoomId)) {
-            // Build the pending intent for when the notification is clicked
-            roomIntentTap = new Intent(context, VectorHomeActivity.class);
-        } else {
-            // add the home page the activity stack
-            stackBuilderTap.addNextIntentWithParentStack(new Intent(context, VectorHomeActivity.class));
 
-            if (isInvitationEvent) {
-                // for invitation the room preview must be displayed
-                roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(session.getMyUserId(), eventToNotify.mRoomId, context, VectorFakeRoomPreviewActivity.class);
-            } else {
-                roomIntentTap = new Intent(context, VectorRoomActivity.class);
-                roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, eventToNotify.mRoomId);
-            }
+        // add the home page the activity stack
+        stackBuilderTap.addNextIntentWithParentStack(new Intent(context, VectorHomeActivity.class));
+
+        if (roomsNotifications.mIsInvitationEvent) {
+            // for invitation the room preview must be displayed
+            roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId, roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity.class);
+        } else {
+            roomIntentTap = new Intent(context, VectorRoomActivity.class);
+            roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId);
         }
 
         // the action must be unique else the parameters are ignored
@@ -530,54 +369,6 @@ public class NotificationUtils {
                     context.getString(R.string.bottom_action_home),
                     viewAllTask.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
         }
-
-        // wearable
-        try {
-            long ts = 0;
-            Event latestEvent = null;
-
-            // search the oldest message
-            for (String roomId : notifiedEventsByRoomId.keySet()) {
-                List<NotifiedEvent> notifiedEvents = notifiedEventsByRoomId.get(roomId);
-                Event event = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
-
-                if ((null != event) && (event.getOriginServerTs() > ts)) {
-                    ts = event.getOriginServerTs();
-                    latestEvent = event;
-                }
-            }
-
-            // if there is a valid latest message
-            if (null != latestEvent) {
-                Room room = store.getRoom(latestEvent.roomId);
-
-                if (null != room) {
-                    EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
-                    eventDisplay.setPrependMessagesWithAuthor(false);
-                    String roomName = getRoomName(context, session, room, null);
-
-                    String message = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
-
-                    CharSequence textualDisplay = eventDisplay.getTextualDisplay();
-
-                    // the event might have been redacted
-                    if (!TextUtils.isEmpty(textualDisplay)) {
-                        message += textualDisplay.toString();
-                    }
-
-                    NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
-                    NotificationCompat.Action action =
-                            new NotificationCompat.Action.Builder(R.drawable.message_notification_transparent,
-                                    message,
-                                    stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-                                    .build();
-                    wearableExtender.addAction(action);
-                    builder.extend(wearableExtender);
-                }
-            }
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.getMessage());
-        }
     }
 
     /**
@@ -595,91 +386,53 @@ public class NotificationUtils {
      * - "Room Name : XX unread messages" if there are many unread messages
      * - 'Room Name : Sender   - Message body" if there is only one unread message.
      *
-     * @param context                the context
-     * @param builder                the notification builder
-     * @param eventToNotify          the latest notified event
-     * @param isInvitationEvent      true if the notified event is an invitation
-     * @param notifiedEventsByRoomId the notified events by room ids
+     * @param context            the context
+     * @param builder            the notification builder
+     * @param roomsNotifications the rooms notifications
      */
     private static void addTextStyle(Context context,
                                      NotificationCompat.Builder builder,
-                                     NotifiedEvent eventToNotify,
-                                     boolean isInvitationEvent,
-                                     Map<String, List<NotifiedEvent>> notifiedEventsByRoomId) {
+                                     RoomsNotifications roomsNotifications) {
 
         // nothing to do
-        if (0 == notifiedEventsByRoomId.size()) {
+        if (0 == roomsNotifications.mRoomNotifications.size()) {
             return;
         }
 
         // when there are several rooms, the text style is not the same
-        if (notifiedEventsByRoomId.size() > 1) {
-            addTextStyleWithSeveralRooms(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId);
+        if (roomsNotifications.mRoomNotifications.size() > 1) {
+            addTextStyleWithSeveralRooms(context, builder, roomsNotifications);
             return;
         }
 
-        // TODO manage multi accounts
-        MXSession session = Matrix.getInstance(context).getDefaultSession();
-        IMXStore store = session.getDataHandler().getStore();
+        SpannableString latestText = null;
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-        String roomId = notifiedEventsByRoomId.keySet().iterator().next();
-
-        Room room = session.getDataHandler().getRoom(roomId);
-        String roomName = getRoomName(context, session, room, null);
-
-        List<NotifiedEvent> notifiedEvents = notifiedEventsByRoomId.get(roomId);
-        int unreadCount = notifiedEvents.size();
-
-        // the messages are sorted from the oldest to the latest
-        Collections.reverse(notifiedEvents);
-
-        if (notifiedEvents.size() > MAX_NUMBER_NOTIFICATION_LINES) {
-            notifiedEvents = notifiedEvents.subList(0, MAX_NUMBER_NOTIFICATION_LINES);
+        for (CharSequence sequence : roomsNotifications.mReversedMessagesList) {
+            inboxStyle.addLine(latestText = new SpannableString(sequence));
         }
 
-        SpannableString latestText = null;
-
-        for (NotifiedEvent notifiedEvent : notifiedEvents) {
-            Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
-            EventDisplay eventDisplay = new RiotEventDisplay(context, event, room.getLiveState());
-            eventDisplay.setPrependMessagesWithAuthor(true);
-            CharSequence textualDisplay = eventDisplay.getTextualDisplay();
-
-            if (!TextUtils.isEmpty(textualDisplay)) {
-                inboxStyle.addLine(latestText = new SpannableString(textualDisplay));
-            }
-        }
-        inboxStyle.setBigContentTitle(roomName);
+        inboxStyle.setBigContentTitle(roomsNotifications.mContentTitle);
 
         // adapt the notification display to the number of notified messages
-        if ((1 == notifiedEvents.size()) && (null != latestText)) {
+        if ((1 == roomsNotifications.mReversedMessagesList.size()) && (null != latestText)) {
             builder.setStyle(new NotificationCompat.BigTextStyle().bigText(latestText));
         } else {
-            if (unreadCount > MAX_NUMBER_NOTIFICATION_LINES) {
-                inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages, unreadCount));
+            if (!TextUtils.isEmpty(roomsNotifications.mSummaryText)) {
+                inboxStyle.setSummaryText(roomsNotifications.mSummaryText);
             }
-
             builder.setStyle(inboxStyle);
         }
 
         // do not offer to quick respond if the user did not dismiss the previous one
         if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
-            if (!isInvitationEvent) {
-                Event event = store.getEvent(eventToNotify.mEventId, eventToNotify.mRoomId);
-                RoomMember member = room.getMember(event.getSender());
+            if (!roomsNotifications.mIsInvitationEvent) {
 
                 // offer to type a quick answer (i.e. without launching the application)
                 Intent quickReplyIntent = new Intent(context, LockScreenActivity.class);
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomId);
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, (null == member) ? event.getSender() : member.getName());
-
-                EventDisplay eventDisplay = new RiotEventDisplay(context, event, room.getLiveState());
-                eventDisplay.setPrependMessagesWithAuthor(false);
-                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
-                String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
-
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, body);
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId);
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, roomsNotifications.mSenderName);
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, roomsNotifications.mQuickReplyBody);
 
                 // the action must be unique else the parameters are ignored
                 quickReplyIntent.setAction(QUICK_LAUNCH_ACTION + ((int) (System.currentTimeMillis())));
@@ -692,8 +445,8 @@ public class NotificationUtils {
                 {
                     // offer to type a quick reject button
                     Intent leaveIntent = new Intent(context, JoinScreenActivity.class);
-                    leaveIntent.putExtra(JoinScreenActivity.EXTRA_ROOM_ID, roomId);
-                    leaveIntent.putExtra(JoinScreenActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+                    leaveIntent.putExtra(JoinScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId);
+                    leaveIntent.putExtra(JoinScreenActivity.EXTRA_MATRIX_ID, roomsNotifications.mSessionId);
                     leaveIntent.putExtra(JoinScreenActivity.EXTRA_REJECT, true);
 
                     // the action must be unique else the parameters are ignored
@@ -708,8 +461,8 @@ public class NotificationUtils {
                 {
                     // offer to type a quick accept button
                     Intent acceptIntent = new Intent(context, JoinScreenActivity.class);
-                    acceptIntent.putExtra(JoinScreenActivity.EXTRA_ROOM_ID, roomId);
-                    acceptIntent.putExtra(JoinScreenActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+                    acceptIntent.putExtra(JoinScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId);
+                    acceptIntent.putExtra(JoinScreenActivity.EXTRA_MATRIX_ID, roomsNotifications.mSessionId);
                     acceptIntent.putExtra(JoinScreenActivity.EXTRA_JOIN, true);
 
                     // the action must be unique else the parameters are ignored
@@ -725,12 +478,12 @@ public class NotificationUtils {
             // Build the pending intent for when the notification is clicked
             Intent roomIntentTap;
 
-            if (isInvitationEvent) {
+            if (roomsNotifications.mIsInvitationEvent) {
                 // for invitation the room preview must be displayed
-                roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(session.getMyUserId(), roomId, context, VectorFakeRoomPreviewActivity.class);
+                roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId, roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity.class);
             } else {
                 roomIntentTap = new Intent(context, VectorRoomActivity.class);
-                roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId);
             }
             // the action must be unique else the parameters are ignored
             roomIntentTap.setAction(TAP_TO_VIEW_ACTION + ((int) (System.currentTimeMillis())));
@@ -748,33 +501,16 @@ public class NotificationUtils {
                     stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
 
             // wearable
-            if (!isInvitationEvent) {
+            if (!roomsNotifications.mIsInvitationEvent) {
                 try {
-                    Event latestEvent = store.getEvent(notifiedEvents.get(notifiedEvents.size() - 1).mEventId, roomId);
-
-                    // if there is a valid latest message
-                    if (null != latestEvent) {
-                        EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
-                        eventDisplay.setPrependMessagesWithAuthor(false);
-
-                        String message = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
-
-                        CharSequence textualDisplay = eventDisplay.getTextualDisplay();
-
-                        // the event might have been redacted
-                        if (!TextUtils.isEmpty(textualDisplay)) {
-                            message += textualDisplay.toString();
-                        }
-
-                        NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
-                        NotificationCompat.Action action =
-                                new NotificationCompat.Action.Builder(R.drawable.message_notification_transparent,
-                                        message,
-                                        stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-                                        .build();
-                        wearableExtender.addAction(action);
-                        builder.extend(wearableExtender);
-                    }
+                    NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender();
+                    NotificationCompat.Action action =
+                            new NotificationCompat.Action.Builder(R.drawable.message_notification_transparent,
+                                    roomsNotifications.mWearableMessage,
+                                    stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+                                    .build();
+                    wearableExtender.addAction(action);
+                    builder.extend(wearableExtender);
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.getMessage());
                 }
@@ -828,6 +564,30 @@ public class NotificationUtils {
     }
 
     /**
+     * Build a notification from the cached RoomsNotifications instance.
+     *
+     * @param context                the context
+     * @param isBackground           true if it is background notification
+     * @return the notification
+     */
+    public static Notification buildMessageNotification(Context context, boolean isBackground) {
+
+        Notification notification = null;
+        try {
+            RoomsNotifications roomsNotifications = RoomsNotifications.loadRoomsNotifications(context);
+
+            if (null != roomsNotifications) {
+                notification = buildMessageNotification(context, roomsNotifications, new BingRule(), isBackground);
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed " +  e.getMessage());
+        }
+
+        return notification;
+    }
+
+
+    /**
      * Build a notification
      *
      * @param context                the context
@@ -840,81 +600,60 @@ public class NotificationUtils {
                                                         Map<String, List<NotifiedEvent>> notifiedEventsByRoomId,
                                                         NotifiedEvent eventToNotify,
                                                         boolean isBackground) {
+
+        Notification notification = null;
         try {
-            // TODO manage multi accounts
-            MXSession session = Matrix.getInstance(context).getDefaultSession();
-            IMXStore store = session.getDataHandler().getStore();
+            RoomsNotifications roomsNotifications = new RoomsNotifications(eventToNotify, notifiedEventsByRoomId);
+            notification = buildMessageNotification(context, roomsNotifications, eventToNotify.mBingRule, isBackground);
+            // cache the value
+            RoomsNotifications.saveRoomNotifications(context, roomsNotifications);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed " +  e.getMessage());
+        }
 
-            if (null == store) {
-                Log.e(LOG_TAG, "## buildMessageNotification() : null store");
-                return null;
-            }
+        return notification;
+    }
 
-            Room room = store.getRoom(eventToNotify.mRoomId);
-            Event event = store.getEvent(eventToNotify.mEventId, eventToNotify.mRoomId);
 
-            // sanity check
-            if ((null == room) || (null == event)) {
-                if (null == room) {
-                    Log.e(LOG_TAG, "## buildMessageNotification() : null room " + eventToNotify.mRoomId);
-                } else {
-                    Log.e(LOG_TAG, "## buildMessageNotification() : null event " + eventToNotify.mEventId + " " + eventToNotify.mRoomId);
-                }
-                return null;
-            }
-
-            BingRule bingRule = eventToNotify.mBingRule;
-
-            boolean isInvitationEvent = false;
-
-            EventDisplay eventDisplay = new RiotEventDisplay(context, event, room.getLiveState());
-            eventDisplay.setPrependMessagesWithAuthor(true);
-            CharSequence textualDisplay = eventDisplay.getTextualDisplay();
-            String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
-
-            if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
-                try {
-                    isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "prepareNotification : invitation parsing failed");
-                }
-            }
-
+    /**
+     * Build a notification
+     *
+     * @param context                the context
+     * @param roomsNotifications the rooms notifications
+     * @param bingRule          the bing rule
+     * @param isBackground           true if it is background notification
+     * @return the notification
+     */
+    private static Notification buildMessageNotification(Context context,
+                                                        RoomsNotifications roomsNotifications,
+                                                        BingRule bingRule,
+                                                        boolean isBackground) {
+        try {
             Bitmap largeBitmap = null;
 
             // when the event is an invitation one
             // don't check if the sender ID is known because the members list are not yet downloaded
-            if (!isInvitationEvent) {
+            if (!roomsNotifications.mIsInvitationEvent) {
                 // is there any avatar url
-                if (!TextUtils.isEmpty(room.getAvatarUrl())) {
-                    int size = context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
-
-                    // check if the thumbnail is already downloaded
-                    File f = session.getMediasCache().thumbnailCacheFile(room.getAvatarUrl(), size);
-
-                    if (null != f) {
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                        try {
-                            largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
-                        } catch (OutOfMemoryError oom) {
-                            Log.e(LOG_TAG, "decodeFile failed with an oom");
-                        }
-                    } else {
-                        session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), new ImageView(context), room.getAvatarUrl(), size);
+                if (!TextUtils.isEmpty(roomsNotifications.mRoomAvatarPath)) {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    try {
+                        largeBitmap = BitmapFactory.decodeFile(roomsNotifications.mRoomAvatarPath, options);
+                    } catch (OutOfMemoryError oom) {
+                        Log.e(LOG_TAG, "decodeFile failed with an oom");
                     }
                 }
             }
 
             Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
 
-            String roomName = getRoomName(context, session, room, event);
-
             addNotificationChannels(context);
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID);
-            builder.setWhen(event.getOriginServerTs());
-            builder.setContentTitle(roomName);
-            builder.setContentText(body);
+            builder.setWhen(roomsNotifications.mContentTs);
+            builder.setContentTitle(roomsNotifications.mContentTitle);
+            builder.setContentText(roomsNotifications.mContentText);
 
             builder.setGroup(context.getString(R.string.riot_app_name));
             builder.setGroupSummary(true);
@@ -922,14 +661,14 @@ public class NotificationUtils {
             builder.setDeleteIntent(PendingIntent.getBroadcast(context.getApplicationContext(), 0, new Intent(context.getApplicationContext(), DismissNotificationReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
             try {
-                addTextStyle(context, builder, eventToNotify, isInvitationEvent, notifiedEventsByRoomId);
+                addTextStyle(context, builder, roomsNotifications);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.getMessage());
             }
 
             // only one room : display the large bitmap (it should be the room avatar
             // several rooms : display the Riot avatar
-            if (notifiedEventsByRoomId.keySet().size() == 1) {
+            if (roomsNotifications.mRoomNotifications.size() == 1) {
                 if (null != largeBitmap) {
                     largeBitmap = NotificationUtils.createSquareBitmap(largeBitmap);
                     builder.setLargeIcon(largeBitmap);
@@ -967,7 +706,7 @@ public class NotificationUtils {
 
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-            for (int i = 0; i < Math.min(MAX_NUMBER_NOTIFICATION_LINES, messagesStrings.size()); i++) {
+            for (int i = 0; i < Math.min(RoomsNotifications.MAX_NUMBER_NOTIFICATION_LINES, messagesStrings.size()); i++) {
                 inboxStyle.addLine(messagesStrings.get(i));
             }
 

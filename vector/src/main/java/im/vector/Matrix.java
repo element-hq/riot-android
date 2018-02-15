@@ -28,6 +28,7 @@ import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation;
 import org.matrix.androidsdk.crypto.MXCrypto;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.BingRulesManager;
@@ -49,7 +50,6 @@ import org.matrix.androidsdk.rest.model.login.Credentials;
 
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
-import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
@@ -592,11 +592,16 @@ public class Matrix {
         final MXSession session = new MXSession(hsConfig, new MXDataHandler(store, credentials), mAppContext);
 
         session.getDataHandler().setRequestNetworkErrorListener(new MXDataHandler.RequestNetworkErrorListener() {
+
             @Override
-            public void onTokenCorrupted() {
-                if (null != VectorApp.getCurrentActivity()) {
-                    Log.e(LOG_TAG, "## createSession() : onTokenCorrupted");
-                    CommonActivityUtils.logout(VectorApp.getCurrentActivity());
+            public void onConfigurationError(String matrixErrorCode) {
+                Log.e(LOG_TAG, "## createSession() : onConfigurationError " + matrixErrorCode);
+
+                if (TextUtils.equals(matrixErrorCode, MatrixError.UNKNOWN_TOKEN)) {
+                    if (null != VectorApp.getCurrentActivity()) {
+                        Log.e(LOG_TAG, "## createSession() : onTokenCorrupted");
+                        CommonActivityUtils.logout(VectorApp.getCurrentActivity());
+                    }
                 }
             }
 

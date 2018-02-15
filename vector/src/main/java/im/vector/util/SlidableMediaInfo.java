@@ -15,7 +15,7 @@
  */
 package im.vector.util;
 
-import org.matrix.androidsdk.rest.model.EncryptedFileInfo;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 
 import java.io.Serializable;
 

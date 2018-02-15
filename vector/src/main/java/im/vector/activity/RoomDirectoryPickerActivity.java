@@ -38,8 +38,8 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.ThirdPartyProtocol;
-import org.matrix.androidsdk.rest.model.ThirdPartyProtocolInstance;
+import org.matrix.androidsdk.rest.model.pid.ThirdPartyProtocol;
+import org.matrix.androidsdk.rest.model.pid.ThirdPartyProtocolInstance;
 
 import java.util.ArrayList;
 import java.util.Arrays;

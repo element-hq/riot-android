@@ -234,10 +234,6 @@
     <string name="room_info_room_name">Nome stanza</string>
     <string name="room_info_room_topic">Argomento stanza</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">mostra_tutti_gli_eventi</string>
-    <string name="settings_key_use_rage_shake">usa_squotimento_furioso</string>
-
     <!-- call string -->
     <string name="call_connected">Chiamata connessa</string>
     <string name="call_connecting">Chiamata in connessione…</string>
@@ -252,11 +248,6 @@
     <string name="call_error_ice_failed">Connessione al supporto media fallita</string>
     <string name="call_error_camera_init_failed">Impossibile avviare la fotocamera</string>
     <string name="call_error_answered_elsewhere">chiamata risulta risposta altrove</string>
-    <string name="call_error_peer_hangup_elsewhere">chiamata risulta agganciata altrove</string>
-    <string name="call_error_peer_cancelled_call">chiamata annullata</string>
-
-    <string name="action_accept">ACCETTA</string>
-    <string name="action_ignore">IGNORA</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Fai una foto o un video</string>
@@ -444,7 +435,6 @@
     <string name="directory_searching_title">Ricerca in corso..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notifiche</string>
     <string name="room_settings_favourite">Preferito</string>
     <string name="room_settings_de_prioritize">Bassa priorità</string>
     <string name="room_settings_direct_chat">Chat diretta</string>
@@ -534,7 +524,7 @@
     <string name="settings_logged_in">Connesso come</string>
     <string name="settings_home_server">Server home</string>
     <string name="settings_identity_server">Server identità</string>
-    
+
     <string name="settings_user_interface">Interfaccia utente</string>
     <string name="settings_interface_language">Lingua interfaccia</string>
     <string name="settings_select_language">Scegli una lingua</string>
@@ -584,7 +574,6 @@
     <string name="room_settings_topic">Argomento</string>
     <string name="room_settings_room_tag">Tag stanza</string>
     <string name="room_settings_tag_pref_dialog_title">Taggata come:</string>
-    <string name="room_settings_mute_notifs">Silenzia notifiche</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Preferito</string>
@@ -753,14 +742,29 @@
     <string name="active_widgets">%1$d widget attivi</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Devi avere i permessi di invitare utenti per effettuare questa azione.</string>
     <string name="widget_integration_unable_to_create">Impossibile creare il widget.</string>
     <string name="widget_integration_failed_to_send_request">Invio della richiesta fallito.</string>
-    <string name="widget_integration_room_not_recognised">Stanza non riconosciuta.</string>
     <string name="widget_integration_must_be_in_room">Non sei in questa stanza.</string>
     <string name="widget_integration_no_permission_in_room">Non hai i permessi per eseguire l\'azione in questa stanza.</string>
     <string name="widget_integration_missing_room_id">room_id mancante nella richiesta.</string>
     <string name="widget_integration_missing_user_id">user_id mancante nella richiesta.</string>
     <string name="room_add_matrix_apps">Aggiungi una Matrix app</string>
-    <string name="add_matrix_apps_not_supported">Non supportato su questo dispositivo</string>
+    <string name="option_take_photo">Scatta una foto</string>
+    <string name="option_take_video">Registra un video</string>
+
+    <string name="settings_containing_my_display_name">Messaggi che contengono il mio nome</string>
+    <string name="settings_containing_my_user_name">Messaggi che contengono il mio user name</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Non mostrare i cambiamenti di nome e avatar</string>
+
+    <string name="notification_silent_notifications">Notifiche Silenziose</string>
+
+    <string name="notification_noisy_notifications">Notifiche Audio</string>
+    <string name="notification_listen_for_events">In Ascolto su Eventi</string>
+    <string name="title_activity_bug_report">Rapporto Bug</string>
+
+    <string name="login_mobile_device">Cellulare</string>
+
+    <string name="call">Chiama</string>
+    <string name="encrypted_message">Cifra messaggio</string>
+
 </resources>

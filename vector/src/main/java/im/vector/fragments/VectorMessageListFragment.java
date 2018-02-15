@@ -54,23 +54,22 @@ import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.EncryptedEventContent;
-import org.matrix.androidsdk.rest.model.EncryptedFileInfo;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageMessage;
+import org.matrix.androidsdk.rest.model.message.FileMessage;
+import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.rest.model.VideoMessage;
+import org.matrix.androidsdk.rest.model.message.Message;
+import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -84,8 +83,10 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.util.PreferencesManager;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.ThemeUtils;
+import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
 import im.vector.widgets.WidgetsManager;
 
@@ -97,6 +98,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     private static final String TAG_FRAGMENT_RECEIPTS_DIALOG = "TAG_FRAGMENT_RECEIPTS_DIALOG";
+    private static final String TAG_FRAGMENT_USER_GROUPS_DIALOG = "TAG_FRAGMENT_USER_GROUPS_DIALOG";
+
     private IListFragmentEventListener mHostActivityListener;
 
     // onMediaAction actions
@@ -109,6 +112,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     private View mBackProgressView;
     private View mForwardProgressView;
     private View mMainProgressView;
+
+    private VectorImageGetter mVectorImageGetter;
 
     public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, String previewMode, int layoutResId) {
         VectorMessageListFragment f = new VectorMessageListFragment();
@@ -144,6 +149,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         if (null != mRoom) {
             ((VectorMessagesAdapter) mAdapter).mIsRoomEncrypted = mRoom.isEncrypted();
+        }
+
+        if (null != mSession) {
+            mVectorImageGetter = new VectorImageGetter(mSession);
+            ((VectorMessagesAdapter) mAdapter).setImageGetter(mVectorImageGetter);
         }
 
         mMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -202,6 +212,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             adapter.setVectorMessagesAdapterActionsListener(null);
             adapter.onPause();
         }
+
+        mVectorImageGetter.setListener(null);
     }
 
 
@@ -212,6 +224,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             VectorMessagesAdapter adapter = ((VectorMessagesAdapter) mAdapter);
             adapter.setVectorMessagesAdapterActionsListener(this);
         }
+
+        mVectorImageGetter.setListener(new VectorImageGetter.OnImageDownloadListener() {
+            @Override
+            public void onImageDownloaded(String source) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     /**
@@ -757,64 +776,65 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      */
     void onMediaAction(final int menuAction, final String mediaUrl, final String mediaMimeType, final String filename, final EncryptedFileInfo encryptedFileInfo) {
         MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
-        File file = mediasCache.mediaCacheFile(mediaUrl, mediaMimeType);
-
         // check if the media has already been downloaded
-        if (null != file) {
-            // download
-            if ((menuAction == ACTION_VECTOR_SAVE) || (menuAction == ACTION_VECTOR_OPEN)) {
-                CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, filename, mediaMimeType, new SimpleApiCallback<String>() {
-                    @Override
-                    public void onSuccess(String savedMediaPath) {
-                        if (null != savedMediaPath) {
-                            if (menuAction == ACTION_VECTOR_SAVE) {
-                                Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+        if (mediasCache.isMediaCached(mediaUrl, mediaMimeType)) {
+            mediasCache.createTmpMediaFile(mediaUrl, mediaMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
+                @Override
+                public void onSuccess(File file) {
+                    // sanity check
+                    if (null == file) {
+                        return;
+                    }
+
+                    if ((menuAction == ACTION_VECTOR_SAVE) || (menuAction == ACTION_VECTOR_OPEN)) {
+                        CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, filename, mediaMimeType, new SimpleApiCallback<String>() {
+                            @Override
+                            public void onSuccess(String savedMediaPath) {
+                                if (null != savedMediaPath) {
+                                    if (menuAction == ACTION_VECTOR_SAVE) {
+                                        Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        if (null != filename) {
+                            File dstFile = new File(file.getParent(), filename);
+
+                            if (dstFile.exists()) {
+                                dstFile.delete();
+                            }
+
+                            file.renameTo(dstFile);
+                            file = dstFile;
+                        }
+
+                        // shared / forward
+                        Uri mediaUri = null;
+                        try {
+                            mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), file.getAbsolutePath());
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getMessage());
+                        }
+
+
+                        if (null != mediaUri) {
+                            final Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.setType(mediaMimeType);
+                            sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
+
+                            if (menuAction == ACTION_VECTOR_FORWARD) {
+                                CommonActivityUtils.sendFilesTo(getActivity(), sendIntent);
                             } else {
-                                CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                                startActivity(sendIntent);
                             }
                         }
                     }
-                });
-            } else {
-                // shared / forward
-                Uri mediaUri = null;
-
-                File renamedFile = file;
-
-                if (!TextUtils.isEmpty(filename)) {
-                    try {
-                        InputStream fin = new FileInputStream(file);
-                        String tmpUrl = mediasCache.saveMedia(fin, filename, mediaMimeType);
-
-                        if (null != tmpUrl) {
-                            renamedFile = mediasCache.mediaCacheFile(tmpUrl, mediaMimeType);
-                        }
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onMediaAction shared / forward failed : " + e.getLocalizedMessage());
-                    }
                 }
-
-                if (null != renamedFile) {
-                    try {
-                        mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), renamedFile.getAbsolutePath());
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getLocalizedMessage());
-                    }
-                }
-
-                if (null != mediaUri) {
-                    final Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.setType(mediaMimeType);
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
-
-                    if (menuAction == ACTION_VECTOR_FORWARD) {
-                        CommonActivityUtils.sendFilesTo(getActivity(), sendIntent);
-                    } else {
-                        startActivity(sendIntent);
-                    }
-                }
-            }
+            });
         } else {
             // else download it
             final String downloadId = mediasCache.downloadMedia(getActivity().getApplicationContext(), mSession.getHomeServerConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
@@ -854,8 +874,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      */
     @Override
     public boolean isDisplayAllEvents() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        return preferences.getBoolean(getString(R.string.settings_key_display_all_events), false);
+        return  PreferencesManager.displayAllEvents(getActivity());
     }
 
     private void setViewVisibility(View view, int visibility) {
@@ -1102,6 +1121,22 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     @Override
+    public void onGroupFlairClick(String userId, List<String> groupIds) {
+        try {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+
+            VectorUserGroupsDialogFragment fragment = (VectorUserGroupsDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_USER_GROUPS_DIALOG);
+            if (fragment != null) {
+                fragment.dismissAllowingStateLoss();
+            }
+            fragment = VectorUserGroupsDialogFragment.newInstance(mSession.getMyUserId(), userId, groupIds);
+            fragment.show(fm, TAG_FRAGMENT_USER_GROUPS_DIALOG);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onGroupFlairClick() failed " + e.getMessage());
+        }
+    }
+
+    @Override
     public void onURLClick(Uri uri) {
         try {
             if (null != uri) {
@@ -1168,6 +1203,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     public void onMessageIdClick(String messageId) {
         try {
             onURLClick(Uri.parse(VectorUtils.getPermalink(mRoom.getRoomId(), messageId)));
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void onGroupIdClick(String groupId) {
+        try {
+            onURLClick(Uri.parse(VectorUtils.getPermalink(groupId, null)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage());
         }

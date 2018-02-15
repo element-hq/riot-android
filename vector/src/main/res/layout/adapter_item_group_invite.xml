@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/invite_view"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:paddingRight="16dp">
+
+    <RelativeLayout
+        android:id="@+id/group_desc"
+        android:layout_width="match_parent"
+        android:layout_height="74dp">
+
+        <im.vector.view.VectorCircularImageView
+            android:id="@+id/room_avatar"
+            android:layout_width="@dimen/chat_avatar_size"
+            android:layout_height="@dimen/chat_avatar_size"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            tools:src="#22000000" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="6dp"
+            android:layout_toRightOf="@+id/room_avatar">
+
+            <TextView
+                android:id="@+id/group_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/group_members_count"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-regular"
+                android:maxLines="1"
+                android:textColor="?attr/riot_primary_text_color"
+                android:textSize="16sp"
+                tools:text="Room name a bit long to be displayed completely" />
+
+            <TextView
+                android:id="@+id/group_topic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/group_name"
+                android:layout_below="@+id/group_name"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?attr/default_text_light_color"
+                android:textSize="14sp"
+                tools:text="First message of the room is a bit too long to be displayed" />
+
+            <!-- unread count badge -->
+            <TextView
+                android:id="@+id/group_members_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/group_name"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="6dp"
+                android:gravity="center"
+                android:minWidth="25dp"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                tools:background="#AAff00ff"
+                tools:text="12" />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/group_desc"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/group_invite_reject_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/vector_green_color"
+            android:fontFamily="sans-serif-medium"
+            android:minWidth="100dp"
+            android:text="@string/reject"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/group_invite_join_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:background="@color/vector_green_color"
+            android:fontFamily="sans-serif-medium"
+            android:minWidth="100dp"
+            android:text="@string/join"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+</RelativeLayout>

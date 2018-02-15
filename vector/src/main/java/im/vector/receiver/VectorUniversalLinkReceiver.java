@@ -46,6 +46,7 @@ import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.LoginActivity;
+import im.vector.activity.VectorGroupDetailsActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
@@ -81,6 +82,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     // index of each item in path
     public static final String ULINK_ROOM_ID_OR_ALIAS_KEY = "ULINK_ROOM_ID_OR_ALIAS_KEY";
     public static final String ULINK_MATRIX_USER_ID_KEY = "ULINK_MATRIX_USER_ID_KEY";
+    public static final String ULINK_GROUP_ID_KEY = "ULINK_GROUP_ID_KEY";
     private static final String ULINK_EVENT_ID_KEY = "ULINK_EVENT_ID_KEY";
     /*public static final String ULINK_EMAIL_ID_KEY = "email";
     public static final String ULINK_SIGN_URL_KEY = "signurl";
@@ -181,6 +183,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                             manageRoomOnActivity(aContext);
                         } else if (mParameters.containsKey(ULINK_MATRIX_USER_ID_KEY)) {
                             manageMemberDetailsActivity(aContext);
+                        } else if (mParameters.containsKey(ULINK_GROUP_ID_KEY)) {
+                            manageGroupDetailsActivity(aContext);
                         } else {
                             Log.e(LOG_TAG, "## onReceive() : nothing to do");
                         }
@@ -254,6 +258,32 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             }
         }
     }
+
+    /**
+     * Start the universal link management when the login process is done.
+     * If there is no active activity, launch the home activity
+     *
+     * @param aContext the context.
+     */
+    private void manageGroupDetailsActivity(final Context aContext) {
+        Log.d(LOG_TAG, "## manageMemberDetailsActivity() : open the group" + mParameters.get(ULINK_GROUP_ID_KEY));
+
+        final Activity currentActivity = VectorApp.getCurrentActivity();
+
+        if (null != currentActivity) {
+            Intent startRoomInfoIntent = new Intent(currentActivity, VectorGroupDetailsActivity.class);
+            startRoomInfoIntent.putExtra(VectorGroupDetailsActivity.EXTRA_GROUP_ID, mParameters.get(ULINK_GROUP_ID_KEY));
+            startRoomInfoIntent.putExtra(VectorGroupDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            currentActivity.startActivity(startRoomInfoIntent);
+        } else {
+            // clear the activity stack to home activity
+            Intent intent = new Intent(aContext, VectorHomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(VectorHomeActivity.EXTRA_GROUP_ID, mParameters.get(ULINK_GROUP_ID_KEY));
+            aContext.startActivity(intent);
+        }
+    }
+
 
     /**
      * Manage the room presence.
@@ -430,6 +460,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 map.put(ULINK_MATRIX_USER_ID_KEY, firstParam);
             } else if (MXSession.isRoomAlias(firstParam) || MXSession.isRoomId(firstParam)) {
                 map.put(ULINK_ROOM_ID_OR_ALIAS_KEY, firstParam);
+            } else if (MXSession.isGroupId(firstParam)) {
+                map.put(ULINK_GROUP_ID_KEY, firstParam);
             }
 
             // room id only ?

@@ -17,7 +17,6 @@
 package im.vector.util;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.util.Log;
