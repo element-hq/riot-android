@@ -247,7 +247,7 @@
     <string name="settings_interface_language">操作に使用する言語</string>
     <string name="settings_user_interface">端末操作表示</string>
     <string name="account_email_validation_title">認証を確認中</string>
-    <string name="account_email_validation_message">電子メールを確認し, 本文中のURLを確認してください. 完了したらクリックして続けます.</string>
+    <string name="account_email_validation_message">電子メールを確認し, 本文中のURLを確認してください。 完了したら「続ける」をクリックしてください。</string>
     <string name="account_email_already_used_error">この電子メールアドレスは既に使われています</string>
     <string name="settings_password_updated">あなたのパスワードは更新されました</string>
     <string name="settings_select_country">国を選択</string>
@@ -349,8 +349,8 @@
     <string name="ongoing_conference_call_voice">音声</string>
     <string name="ongoing_conference_call_video">映像</string>
     <string name="cannot_start_call">通話を開始できませんでした。後ほど試してください。</string>
-    <string name="missing_permissions_warning">許可が無い為, 一部の機能が失われている可能性があります..</string>
-    <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するための招待権限が必要です</string>
+    <string name="missing_permissions_warning">許可が無い為、一部の機能が失われている可能性があります。</string>
+    <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するための招待権限が必要です。</string>
     <string name="send_anyway">とにかく送る</string>
     <string name="and">と</string>
     <string name="action_sign_out">ログアウト</string>
@@ -463,7 +463,7 @@
     <string name="room_new_message_notification">1つの新しい発言があります</string>
     <string name="room_new_messages_notification">%1$d 新しい発言があります</string>
 
-    <string name="ssl_logout_account">回線完全切断</string>
+    <string name="ssl_logout_account">ログアウト</string>
     <string name="ssl_remain_offline">無視</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
@@ -781,4 +781,5 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="encrypted_message">暗号化されたメッセージ</string>
 
-</resources>
+<string name="action_exit">退出</string>
+    </resources>
