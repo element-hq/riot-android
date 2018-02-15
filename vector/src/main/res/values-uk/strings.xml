@@ -21,7 +21,7 @@
     <string name="title_activity_settings">Налаштування</string>
     <string name="title_activity_member_details">Інформація про учасника</string>
     <string name="title_activity_historical">Історія</string>
-    <string name="title_activity_bug_report">Звіт про помику</string>
+    <string name="title_activity_bug_report">Відгук про помилкуF</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -774,8 +774,6 @@
     <string name="room_add_matrix_apps">Додати застосунки Matrix</string>
     <string name="notification_noisy_notifications">Гучне повідомлення</string>
     <string name="notification_silent_notifications">Тихе повідомлення</string>
-
-    <string name="title_activity_bug_report">Відгук про помилку</string>
 
     <string name="option_take_photo">Зробити фото</string>
     <string name="option_take_video">Записати відео</string>

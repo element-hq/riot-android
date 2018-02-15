@@ -867,7 +867,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="room_settings_invalid_group_format_dialog_title">El ID de la comunidad es inválido</string>
     <string name="forget_room">Olvidar sala</string>
 <string name="rejoin">Volver a entrar</string>
-    <string name="room_settings_invalid_group_format_dialog_body">\'℅s\' no es un ID de comunidad válido</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' no es un ID de comunidad válido</string>
 
 
     <string name="create">Crear</string>
