@@ -333,7 +333,7 @@ public class WidgetsManager {
             widgetSessionId = widgetSessionId.substring(0, 7);
         }
         String roomId = room.getRoomId();
-        String confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase();
+        String confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorApp.getApplicationLocale());
 
         // TODO: This url may come from scalar API
         // Note: this url can be used as is inside a web container (like iframe for Riot-web)

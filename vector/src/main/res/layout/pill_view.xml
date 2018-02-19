@@ -8,13 +8,20 @@
     android:layout_marginRight="3dp"
     android:orientation="horizontal">
 
+    <im.vector.view.PillImageView
+        android:id="@+id/pill_avatar_view"
+        android:layout_width="14sp"
+        android:layout_height="14sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp" />
+
     <TextView
         android:id="@+id/pill_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:text="A text"
         android:textSize="14sp" />
-
 </LinearLayout>

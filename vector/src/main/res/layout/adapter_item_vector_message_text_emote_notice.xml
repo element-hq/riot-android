@@ -112,4 +112,11 @@
 
     <include layout="@layout/message_read_marker" />
 
+    <LinearLayout
+        android:id="@+id/messagesAdapter_urls_preview_list"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+    </LinearLayout>
+
 </LinearLayout>

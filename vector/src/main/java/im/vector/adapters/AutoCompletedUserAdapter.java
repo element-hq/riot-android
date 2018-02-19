@@ -27,6 +27,7 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
@@ -179,18 +180,18 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
                 mIsSearchingMatrixId = true;
             } else {
                 newValues = new ArrayList<>();
-                String prefixString = prefix.toString().toLowerCase();
+                String prefixString = prefix.toString().toLowerCase(VectorApp.getApplicationLocale());
                 mIsSearchingMatrixId = prefixString.startsWith("@");
 
                 if (mIsSearchingMatrixId) {
                     for (User user : mUsersList) {
-                        if ((null != user.user_id) && user.user_id.toLowerCase().startsWith(prefixString)) {
+                        if ((null != user.user_id) && user.user_id.toLowerCase(VectorApp.getApplicationLocale()).startsWith(prefixString)) {
                             newValues.add(user);
                         }
                     }
                 } else {
                     for (User user : mUsersList) {
-                        if ((null != user.displayname) && user.displayname.toLowerCase().startsWith(prefixString)) {
+                        if ((null != user.displayname) && user.displayname.toLowerCase(VectorApp.getApplicationLocale()).startsWith(prefixString)) {
                             newValues.add(user);
                         }
                     }

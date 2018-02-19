@@ -230,10 +230,6 @@
     <string name="room_info_room_name">Nome da sala</string>
     <string name="room_info_room_topic">Tópico da sala</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Chamada conectada</string>
     <string name="call_connecting">Conectando chamada…</string>
@@ -248,11 +244,6 @@
     <string name="call_error_ice_failed">A conexão à mídia falhou</string>
     <string name="call_error_camera_init_failed">Não consigo inicializar a câmera</string>
     <string name="call_error_answered_elsewhere">chamada respondida em outro lugar</string>
-    <string name="call_error_peer_hangup_elsewhere">chamada terminada em outro lugar</string>
-    <string name="call_error_peer_cancelled_call">chamada cancelada</string>
-
-    <string name="action_accept">ACEITAR</string>
-    <string name="action_ignore">IGNORAR</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Tomar uma foto ou um vídeo"</string>
@@ -439,7 +430,6 @@
     <string name="directory_searching_title">Buscando no diretório...</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificações</string>
     <string name="room_settings_favourite">Favoritar</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Conversa direta</string>
@@ -563,7 +553,6 @@
     <string name="room_settings_topic">Tópico</string>
     <string name="room_settings_room_tag">Etiqueta da sala</string>
     <string name="room_settings_tag_pref_dialog_title">Etiquetada como:</string>
-    <string name="room_settings_mute_notifs">Silenciar notificações desta sala</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favoritar</string>

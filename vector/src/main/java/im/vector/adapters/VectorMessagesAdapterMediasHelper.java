@@ -37,17 +37,20 @@ import org.matrix.androidsdk.listeners.IMXMediaDownloadListener;
 import org.matrix.androidsdk.listeners.IMXMediaUploadListener;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
-import org.matrix.androidsdk.rest.model.EncryptedFileInfo;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageInfo;
-import org.matrix.androidsdk.rest.model.ImageMessage;
+import org.matrix.androidsdk.rest.model.message.FileMessage;
+import org.matrix.androidsdk.rest.model.message.ImageInfo;
+import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.rest.model.VideoInfo;
-import org.matrix.androidsdk.rest.model.VideoMessage;
+import org.matrix.androidsdk.rest.model.message.Message;
+import org.matrix.androidsdk.rest.model.message.VideoInfo;
+import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import im.vector.R;
 import im.vector.listeners.IMessagesAdapterActionsListener;
@@ -168,6 +171,10 @@ class VectorMessagesAdapterMediasHelper {
         refreshUploadViews(event, uploadStats, uploadProgressLayout);
     }
 
+    // the image / video bitmaps are set to null if the matching URL is not the same
+    // to avoid flickering
+    private Map<String, String> mUrlByBitmapIndex = new HashMap<>();
+
     /**
      * Manage the image/video download.
      *
@@ -240,8 +247,13 @@ class VectorMessagesAdapterMediasHelper {
 
         ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
 
-        // reset the bitmap
-        imageView.setImageBitmap(null);
+        // reset the bitmap if the url is not the same than before
+        if ((null == thumbUrl) || !TextUtils.equals(imageView.hashCode() + "", mUrlByBitmapIndex.get(thumbUrl))) {
+            imageView.setImageBitmap(null);
+            if (null != thumbUrl) {
+                mUrlByBitmapIndex.put(thumbUrl, imageView.hashCode() + "");
+            }
+        }
 
         RelativeLayout informationLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
         final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) informationLayout.getLayoutParams();
@@ -397,12 +409,13 @@ class VectorMessagesAdapterMediasHelper {
 
         String uploadingUrl;
         final boolean isUploadingThumbnail;
+        boolean isUploadingContent = false;
 
         if (isVideoMessage) {
-            uploadingUrl = ((VideoMessage) message).info.thumbnail_url;
+            uploadingUrl = ((VideoMessage) message).getThumbnailUrl();
             isUploadingThumbnail = ((VideoMessage) message).isThumbnailLocalContent();
         } else {
-            uploadingUrl = ((ImageMessage) message).info.thumbnailUrl;
+            uploadingUrl = ((ImageMessage) message).getThumbnailUrl();
             isUploadingThumbnail = ((ImageMessage) message).isThumbnailLocalContent();
         }
 
@@ -412,10 +425,14 @@ class VectorMessagesAdapterMediasHelper {
             progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);
         } else {
             if (isVideoMessage) {
-                uploadingUrl = ((VideoMessage) message).url;
+                uploadingUrl = ((VideoMessage) message).getUrl();
+                isUploadingContent = ((VideoMessage) message).isLocalContent();
+
             } else {
-                uploadingUrl = ((ImageMessage) message).url;
+                uploadingUrl = ((ImageMessage) message).getUrl();
+                isUploadingContent = ((ImageMessage) message).isLocalContent();
             }
+
             progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);
         }
 
@@ -478,11 +495,12 @@ class VectorMessagesAdapterMediasHelper {
         uploadSpinner.setVisibility(((progress < 0) && event.isSending()) ? View.VISIBLE : View.GONE);
         refreshUploadViews(event, mSession.getMediasCache().getStatsForUploadId(uploadingUrl), uploadProgressLayout);
 
-        if (!isUploadingThumbnail) {
+        if (isUploadingContent) {
             progress = 10 + (progress * 90 / 100);
-        } else {
+        } else if (isUploadingThumbnail) {
             progress = (progress * 10 / 100);
         }
+
         updateUploadProgress(uploadProgressLayout, progress);
         uploadProgressLayout.setVisibility(((progress >= 0) && event.isSending()) ? View.VISIBLE : View.GONE);
     }

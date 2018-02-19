@@ -241,10 +241,6 @@ Pedimos desculpa pela inconveniência.</string>
     <string name="room_info_room_name">Nome da sala</string>
     <string name="room_info_room_topic">Tópico da sala</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Chamada conectada</string>
     <string name="call_connecting">A estabelecer a chamada…</string>
@@ -259,11 +255,6 @@ Pedimos desculpa pela inconveniência.</string>
     <string name="call_error_ice_failed">A conexão à mídia falhou</string>
     <string name="call_error_camera_init_failed">Não foi possível iniciar a câmara</string>
     <string name="call_error_answered_elsewhere">chamada respondida noutro sítio</string>
-    <string name="call_error_peer_hangup_elsewhere">chamada terminada noutro sítio</string>
-    <string name="call_error_peer_cancelled_call">chamada cancelada</string>
-
-    <string name="action_accept">ACEITAR</string>
-    <string name="action_ignore">IGNORAR</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Tirar fotografia ou gravar um vídeo</string>
@@ -470,7 +461,6 @@ Tem a certeza?</string>
     <string name="directory_searching_title">A pesquisar o diretório...</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificações</string>
     <string name="room_settings_favourite">Adicionar aos favoritos</string>
     <string name="room_settings_de_prioritize">Baixa prioridade</string>
     <string name="room_settings_direct_chat">Conversa direta</string>
@@ -595,7 +585,6 @@ Para continuar, insira a sua palavra-passe.</string>
     <string name="room_settings_topic">Tópico</string>
     <string name="room_settings_room_tag">Etiqueta da sala</string>
     <string name="room_settings_tag_pref_dialog_title">Etiquetada como:</string>
-    <string name="room_settings_mute_notifs">Silenciar notificações</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Adicionar aos favoritos</string>
@@ -808,10 +797,8 @@ Dispositivos desconhecidos:</string>
     <string name="active_widgets">Widgets ativos: %1$d</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Tem que poder convidar utilizadores para fazer isso.</string>
     <string name="widget_integration_unable_to_create">Não foi possível criar o widget.</string>
     <string name="widget_integration_failed_to_send_request">O envio do pedido falhou.</string>
-    <string name="widget_integration_room_not_recognised">Esta sala não é reconhecida.</string>
     <string name="widget_integration_positive_power_level">Nível de utilizador tem que ser um inteiro positivo.</string>
     <string name="widget_integration_must_be_in_room">Não se encontra nesta sala.</string>
     <string name="widget_integration_no_permission_in_room">Não tem permissão para fazer isso nesta sala.</string>
@@ -820,8 +807,7 @@ Dispositivos desconhecidos:</string>
     <string name="widget_integration_room_not_visible">Sala %s não se encontra visível.</string>
     <string name="settings_labs_matrix_apps">Apps Matrix</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
-    <string name="add_matrix_apps_not_supported">Não é suportado neste dispositivo</string>
-<string name="notification_sync_in_progress">A sincronizar</string>
+    <string name="notification_sync_in_progress">A sincronizar</string>
     <string name="notification_listen_for_events">À escuta de eventos</string>
 
     </resources>

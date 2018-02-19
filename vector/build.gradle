@@ -102,6 +102,7 @@ android {
         disable 'InvalidPackage'
         disable 'MissingTranslation'
         disable 'RestrictedApi'
+        disable 'ImpliedQuantity'
     }
 
     repositories {
@@ -188,6 +189,7 @@ dependencies {
     compile(name: 'react-native-webrtc', ext: 'aar')
     compile(name: 'react-native', ext: 'aar')
     compile(name: 'react-native-locale-detector', ext: 'aar')
+
 
     // another tracking than GA
     compile 'org.piwik.sdk:piwik-sdk:2.0.0'

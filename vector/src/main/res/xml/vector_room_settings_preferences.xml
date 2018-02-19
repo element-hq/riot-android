@@ -6,33 +6,35 @@
     <!-- this section has no title in purpose -->
     <im.vector.preference.RoomAvatarPreference
         android:key="roomPhotoAvatar"
-        android:title="@string/room_settings_room_photo"/>
+        android:title="@string/room_settings_room_photo" />
 
     <EditTextPreference
-        android:key="roomNameEditText"
         android:focusable="true"
+        android:key="roomNameEditText"
         android:title="@string/room_settings_room_name" />
 
     <EditTextPreference
-        android:key="roomTopicEditText"
         android:focusable="true"
-        android:title="@string/room_settings_topic"/>
+        android:key="roomTopicEditText"
+        android:title="@string/room_settings_topic" />
 
     <ListPreference
-        android:key="roomTagList"
-        android:title="@string/room_settings_room_tag"
         android:dialogTitle="@string/room_settings_tag_pref_dialog_title"
         android:entries="@array/tag_entries"
-        android:entryValues="@array/tag_values" />
+        android:entryValues="@array/tag_values"
+        android:key="roomTagList"
+        android:title="@string/room_settings_room_tag" />
 
-    <!-- mute/un mute room notifications-->
-    <im.vector.preference.VectorSwitchPreference
-        android:key="muteNotificationsSwitch"
-        android:title="@string/room_settings_mute_notifs" />
+    <!-- the notification rule selection -->
+    <ListPreference
+        android:entries="@array/notification_values"
+        android:entryValues="@array/notification_values"
+        android:key="roomNotificationPreference"
+        android:title="@string/room_settings_room_notifications_title" />
 
     <im.vector.preference.VectorCustomActionEditTextPreference
-        android:title="@string/leave"
-        android:key="roomLeave"/>
+        android:key="roomLeave"
+        android:title="@string/leave" />
 
     <im.vector.preference.VectorDividerCategory />
 
@@ -52,19 +54,19 @@
 
         <!-- room access rules (Who can access?) -->
         <im.vector.preference.VectorListPreference
-            android:key="roomAccessRulesList"
-            android:title="@string/room_settings_room_access_rules_pref_title"
             android:dialogTitle="@string/room_settings_room_access_rules_pref_dialog_title"
             android:entries="@array/room_access_rules_entries"
-            android:entryValues="@array/room_access_rules_values" />
+            android:entryValues="@array/room_access_rules_values"
+            android:key="roomAccessRulesList"
+            android:title="@string/room_settings_room_access_rules_pref_title" />
 
         <!-- room read history (Who can read history?) -->
         <ListPreference
-            android:key="roomReadHistoryRulesList"
-            android:title="@string/room_settings_room_read_history_rules_pref_title"
             android:dialogTitle="@string/room_settings_room_read_history_rules_pref_dialog_title"
             android:entries="@array/room_read_history_rules_entries"
-            android:entryValues="@array/room_read_history_rules_values" />
+            android:entryValues="@array/room_read_history_rules_values"
+            android:key="roomReadHistoryRulesList"
+            android:title="@string/room_settings_room_read_history_rules_pref_title" />
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
@@ -76,13 +78,20 @@
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory
+        android:key="flair_divider"
+        android:title="flair_divider" />
+
+    <im.vector.preference.VectorPreferenceCategory
+        android:key="flair"
+        android:title="@string/settings_flair"></im.vector.preference.VectorPreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory
         android:key="banned_divider"
-        android:title="banned_divider"/>
+        android:title="banned_divider" />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="banned"
-        android:title="@string/room_settings_banned_users_title" >
-    </im.vector.preference.VectorPreferenceCategory>
+        android:title="@string/room_settings_banned_users_title"></im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
 
@@ -91,13 +100,13 @@
         android:title="@string/room_settings_category_advanced_title">
 
         <im.vector.preference.VectorCustomActionEditTextPreference
-            android:title="@string/room_settings_room_internal_id"
-            android:key="roomInternalId"/>
+            android:key="roomInternalId"
+            android:title="@string/room_settings_room_internal_id" />
 
         <im.vector.preference.VectorSwitchPreference
-            android:title="@string/room_settings_never_send_to_unverified_devices_title"
+            android:key="@string/room_settings_never_send_to_unverified_devices_title"
             android:summary="@string/room_settings_never_send_to_unverified_devices_summary"
-            android:key="@string/room_settings_never_send_to_unverified_devices_title"/>
+            android:title="@string/room_settings_never_send_to_unverified_devices_title" />
 
     </im.vector.preference.VectorPreferenceCategory>
 

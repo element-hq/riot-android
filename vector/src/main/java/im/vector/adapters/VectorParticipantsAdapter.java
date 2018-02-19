@@ -40,7 +40,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.Search.SearchUsersResponse;
+import org.matrix.androidsdk.rest.model.search.SearchUsersResponse;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
@@ -55,6 +55,7 @@ import java.util.Set;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
@@ -182,7 +183,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         if (null == pattern) {
             pattern = "";
         } else {
-            pattern = pattern.toLowerCase().trim().toLowerCase();
+            pattern = pattern.toLowerCase().trim().toLowerCase(VectorApp.getApplicationLocale());
         }
 
         if (!pattern.equals(mPattern) || TextUtils.isEmpty(mPattern)) {
@@ -306,7 +307,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 iterator.remove();
             } else if (!TextUtils.isEmpty(item.mDisplayName)) {
                 // Add to the display names list
-                displayNamesList.add(item.mDisplayName.toLowerCase());
+                displayNamesList.add(item.mDisplayName.toLowerCase(VectorApp.getApplicationLocale()));
             }
         }
 
@@ -433,14 +434,15 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
                         mIsOfflineContactsSearch = false;
                         mKnownContactsLimited = (null != searchUsersResponse.limited) ? searchUsersResponse.limited : false;
-                        onKnownContactsSearchEnd(participantItemList, theFirstEntry, searchListener);
+
+                        searchAccountKnownContacts(theFirstEntry, participantItemList, false, searchListener);
                     }
                 }
 
                 private void onError() {
                     if (TextUtils.equals(fPattern, mPattern)) {
                         mIsOfflineContactsSearch = true;
-                        searchAccountKnownContacts(theFirstEntry, searchListener);
+                        searchAccountKnownContacts(theFirstEntry, new ArrayList<ParticipantAdapterItem>(), true, searchListener);
                     }
                 }
 
@@ -460,19 +462,19 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 }
             });
         } else {
-            searchAccountKnownContacts(theFirstEntry, searchListener);
+            searchAccountKnownContacts(theFirstEntry, new ArrayList<ParticipantAdapterItem>(), true, searchListener);
         }
     }
 
     /**
      * Search the known contacts from the account known users list.
      *
-     * @param theFirstEntry  the adapter first entry
-     * @param searchListener the listener
+     * @param theFirstEntry        the adapter first entry
+     * @param participantItemList  the participants initial list
+     * @param sortRoomContactsList true to sort the room contacts list
+     * @param searchListener       the listener
      */
-    private void searchAccountKnownContacts(final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
-        List<ParticipantAdapterItem> participantItemList = new ArrayList<>();
-
+    private void searchAccountKnownContacts(final ParticipantAdapterItem theFirstEntry, final List<ParticipantAdapterItem> participantItemList, final boolean sortRoomContactsList, final OnParticipantsSearchListener searchListener) {
         // the list is not anymore limited
         mKnownContactsLimited = false;
 
@@ -490,7 +492,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                searchAccountKnownContacts(theFirstEntry, searchListener);
+                                searchAccountKnownContacts(theFirstEntry, participantItemList, sortRoomContactsList, searchListener);
                             }
                         });
                     }
@@ -570,7 +572,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             }
         }
 
-        onKnownContactsSearchEnd(participantItemList, theFirstEntry, searchListener);
+        onKnownContactsSearchEnd(participantItemList, theFirstEntry, sortRoomContactsList, searchListener);
     }
 
     /**
@@ -579,9 +581,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      *
      * @param participantItemList the known contacts list
      * @param theFirstEntry       the adapter first entry
+     * @param sort                true to sort participantItemList
      * @param searchListener      the search listener
      */
-    private void onKnownContactsSearchEnd(List<ParticipantAdapterItem> participantItemList, final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
+    private void onKnownContactsSearchEnd(List<ParticipantAdapterItem> participantItemList, final ParticipantAdapterItem theFirstEntry, final boolean sort, final OnParticipantsSearchListener searchListener) {
         // ensure that the PIDs have been retrieved
         // it might have failed
         ContactsManager.getInstance().retrievePids();
@@ -655,7 +658,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         if (!TextUtils.isEmpty(mPattern)) {
-            if (roomContactsList.size() > 0) {
+            if ((roomContactsList.size() > 0) && sort) {
                 Collections.sort(roomContactsList, mSortMethod);
             }
             mParticipantsListsList.add(roomContactsList);

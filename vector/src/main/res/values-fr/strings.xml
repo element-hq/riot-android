@@ -29,10 +29,10 @@
     <string name="ongoing_conference_call">" Téléconférence en cours. La rejoindre en vocal ou en vidéo."</string>
     <string name="ongoing_conference_call_voice">vocal</string>
     <string name="ongoing_conference_call_video">vidéo</string>
-    <string name="cannot_start_call">Impossible de démarrer l\'appel, réessayez plus tard</string>
+    <string name="cannot_start_call">Impossible d\'initier l\'appel, réessayez plus tard</string>
     <string name="missing_permissions_warning">En raison de permissions manquantes, certaines fonctionnalités peuvent être absentes...</string>
-    <string name="missing_permissions_to_start_conf_call">Vous avez besoin de la permission d\'invitation pour démarrer une téléconférence dans ce salon</string>
-    <string name="missing_permissions_title_to_start_conf_call">Impossible de démarrer l\'appel</string>
+    <string name="missing_permissions_to_start_conf_call">Vous avez besoin de la permission d\'invitation pour initier une téléconférence dans ce salon</string>
+    <string name="missing_permissions_title_to_start_conf_call">Impossible d\'initier l\'appel</string>
     <string name="device_information">Informations sur l\'appareil</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Les téléconférences ne sont pas prises en charge dans les salons chiffrés</string>
     <string name="or">ou</string>
@@ -58,12 +58,12 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="bottom_action_home">Accueil</string>
     <string name="bottom_action_favourites">Favoris</string>
-    <string name="bottom_action_people">Personnes</string>
+    <string name="bottom_action_people">Participants</string>
     <string name="bottom_action_rooms">Salons</string>
 
-    <string name="home_filter_placeholder_home">Rechercher des salons</string>
-    <string name="home_filter_placeholder_favorites">Rechercher des favoris</string>
-    <string name="home_filter_placeholder_people">Rechercher des personnes</string>
+    <string name="home_filter_placeholder_home">Rechercher dans ces salons</string>
+    <string name="home_filter_placeholder_favorites">Rechercher dans les favoris</string>
+    <string name="home_filter_placeholder_people">Rechercher dans les participants</string>
     <string name="home_filter_placeholder_rooms">Rechercher des salons</string>
 
     <string name="invitations_header">Invitations</string>
@@ -174,11 +174,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="call_error_ice_failed">Échec de la connexion</string>
     <string name="call_error_camera_init_failed">Impossible d\'initialiser l\'appareil photo</string>
     <string name="call_error_answered_elsewhere">Appel répondu ailleurs</string>
-    <string name="call_error_peer_hangup_elsewhere">Appel raccroché ailleurs</string>
-    <string name="call_error_peer_cancelled_call">Appel annulé</string>
-
-    <string name="action_accept">ACCEPTER</string>
-    <string name="action_ignore">IGNORER</string>
 
     <string name="media_picker_cannot_record_video">Impossible d\'enregistrer une vidéo</string>
 
@@ -228,8 +223,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_participants_action_devices_list">Afficher la liste des appareils</string>
     <string name="people_search_local_contacts">CONTACTS LOCAUX (%d)</string>
     <string name="people_search_filter_text">Utilisateurs Matrix uniquement</string>
-    <string name="people_search_invite_by_id_dialog_title">Inviter un utilisateur par identifiant</string>
-    <string name="people_search_invite_by_id_dialog_hint">E-mail ou ID Matrix</string>
+    <string name="people_search_invite_by_id_dialog_title">Inviter un utilisateur par son identifiant Matrix</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-mail ou identifiant Matrix</string>
 
     <string name="room_menu_search">Rechercher</string>
     <string name="room_message_placeholder_encrypted">Envoyer un message chiffré…</string>
@@ -246,8 +241,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="ssl_remain_offline">Ignorer</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
-    <string name="room_details_title">Détails du salon</string>
-    <string name="room_details_people">Personnes</string>
+    <string name="room_details_title">Information sur le salon</string>
+    <string name="room_details_people">Participants</string>
     <string name="room_details_files">Fichiers</string>
     <string name="room_details_settings">Paramètres</string>
     <string name="room_details_selected">choisi</string>
@@ -267,7 +262,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="search_no_results">Aucun résultat</string>
     <string name="tab_title_search_rooms">SALONS</string>
     <string name="tab_title_search_messages">MESSAGES</string>
-    <string name="tab_title_search_people">PERSONNES</string>
+    <string name="tab_title_search_people">PARTICIPANTS</string>
     <string name="tab_title_search_files">FICHIERS</string>
 
     <string name="room_recents_join">REJOINDRE</string>
@@ -283,12 +278,11 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="directory_search_results_title">Parcourir le répertoire</string>
     <string name="directory_searching_title">Recherche dans le répertoire…</string>
 
-    <string name="room_settings_notifications">Notifications</string>
     <string name="room_settings_favourite">Favori</string>
     <string name="room_settings_de_prioritize">Passer en faible priorité</string>
     <string name="room_settings_direct_chat">Discussion directe</string>
     <string name="room_settings_leave_conversation">Quitter la discussion</string>
-    <string name="room_settings_forget">Oublier</string>
+    <string name="room_settings_forget">Abandonner</string>
 
     <string name="room_sliding_menu_messages">Messages</string>
     <string name="room_sliding_menu_settings">Paramètres</string>
@@ -304,7 +298,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="settings_add_email_address">Ajouter une adresse e-mail</string>
     <string name="settings_phone_number">Téléphone</string>
     <string name="settings_add_phone_number">Ajouter un numéro de téléphone</string>
-    <string name="settings_summary_app_info_link">Écran d\'information sur le système d\'application</string>
+    <string name="settings_summary_app_info_link">Information sur l\'application</string>
     <string name="settings_title_app_info_link">Informations sur l\'application</string>
 
     <string name="settings_enable_all_notif">Activer les notifications pour ce compte</string>
@@ -335,7 +329,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="settings_cryptography">Chiffrement</string>
     <string name="settings_notifications_targets">Cibles de notification</string>
     <string name="settings_contact">Contacts locaux</string>
-    <string name="settings_contacts_app_permission">Autorisation sur les contacts</string>
+    <string name="settings_contacts_app_permission">Autoriser l\'accès aux contacts locaux</string>
     <string name="settings_contacts_phonebook_country">Pays pour le répertoire téléphonique</string>
     <string name="settings_home_display">Page d\'accueil</string>
     <string name="settings_pin_missed_notifications">Épingler les salons avec des notifications manquées</string>
@@ -373,7 +367,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_settings_room_name">Nom du salon</string>
     <string name="room_settings_topic">Sujet</string>
     <string name="room_settings_room_tag">Étiquette du salon</string>
-    <string name="room_settings_mute_notifs">Désactiver les notifications</string>
 
     <string name="room_settings_tag_pref_entry_favourite">Favori</string>
     <string name="room_settings_tag_pref_entry_low_priority">Priorité basse</string>
@@ -390,7 +383,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="room_settings_banned_users_title">Utilisateurs bannis</string>
 
-    <string name="room_settings_category_advanced_title">Avancée</string>
+    <string name="room_settings_category_advanced_title">Avancé</string>
     <string name="room_settings_room_internal_id">L\'identifiant interne de ce salon</string>
     <string name="room_settings_addresses_pref_title">Adresses</string>
     <string name="room_settings_labs_pref_title">Expérimental</string>
@@ -467,7 +460,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="send_bug_report_alert_message">Vous semblez secouer le téléphone avec frustration. Souhaitez-vous soumettre un rapport d\'erreur ?</string>
     <string name="send_bug_report_app_crashed">L\'application s\'est arrêtée anormalement la dernière fois. Souhaitez-vous soumettre un rapport d’erreur ?</string>
 
-    <string name="send_bug_report_sent">Le rapport d\'erreur a été envoyé avec succès</string>
+    <string name="send_bug_report_sent">Le rapport d\'erreur a bien été envoyé</string>
     <string name="send_bug_report_failed">L\'envoi du rapport d\'erreur a échoué (%s)</string>
     <string name="auth_add_email_message">Ajoutez une adresse e-mail à votre compte pour permettre aux utilisateurs de vous retrouver et pour pouvoir réinitialiser votre mot de passe.</string>
     <string name="auth_add_phone_message">Ajoutez un numéro de téléphone à votre compte pour permettre aux utilisateurs de vous retrouver.</string>
@@ -512,9 +505,6 @@ Veuillez nous excuser pour ce désagrément.</string>
     <string name="attachment_cancel_upload">Annuler l\'envoi ?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
-
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
 
     <string name="leave">Quitter</string>
     <string name="quote">Citer</string>
@@ -595,7 +585,7 @@ En êtes-vous sûr(e) ?</string>
     <string name="malformed_id">Identifiant au mauvais format. Une adresse e-mail ou un identifiant Matrix au format \"@utilisateur:domaine\" est attendu</string>
     <string name="room_event_action_report_prompt_ignore_user">Voulez-vous cacher tous les messages de cet utilisateur ?</string>
     <string name="room_displayname_two_members">%1$s et %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s, %2$d et d\'autres</string>
+    <string name="room_displayname_more_than_two_members">%1$s et %2$d autres</string>
     <string name="room_recents_join_room_prompt">Saisissez un identifiant ou un alias de salon</string>
 
     <string name="directory_search_room">%1$d salon</string>
@@ -691,7 +681,7 @@ Appareils inconnus :</string>
     <string name="settings_select_language">Choisissez une langue</string>
 
     <string name="account_email_already_used_error">Cette adresse e-mail est déjà utilisée</string>
-    <string name="account_email_not_found_error">Impossible d\'envoyer l\'e-mail : cette adresse e-mail n\'a pas pu être trouvée</string>
+    <string name="account_email_not_found_error">Impossible d\'envoyer l\'e-mail : adresse non trouvée</string>
     <string name="account_phone_number_already_used_error">Ce numéro de téléphone est déjà utilisé</string>
 
     <string name="offline">Hors ligne</string>
@@ -707,7 +697,7 @@ Appareils inconnus :</string>
     <string name="settings_hide_read_receipts">Masquer les accusés de lecture</string>
     <string name="settings_dont_send_typings_notifs">Ne pas envoyer de notification d\'écriture</string>
     <string name="settings_always_show_timestamps">Toujours afficher l\'heure des messages</string>
-    <string name="settings_disable_markdown">Désactiver le formatage Markdown</string>
+    <string name="settings_disable_markdown">Désactiver le formatage Markdown lors de l\'envoi des messages</string>
     <string name="settings_data_save_mode">Mode économie de données</string>
 
     <string name="media_saving_period_3_days">3 jours</string>
@@ -729,7 +719,7 @@ Appareils inconnus :</string>
     <string name="dark_theme">Thème sombre</string>
     <string name="black_them">Thème noir</string>
 
-    <string name="notification_sync_in_progress">Synchronisation en cours</string>
+    <string name="notification_sync_in_progress">Synchronisation</string>
     <string name="notification_listen_for_events">Écoute d\'évènements</string>
 
     <string name="login_mobile_device">Portable</string>
@@ -748,10 +738,8 @@ Appareils inconnus :</string>
     <string name="active_widgets">%1$d widgets actifs</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Vous devez avoir la permission d\'inviter des utilisateurs pour faire cela.</string>
     <string name="widget_integration_unable_to_create">Impossible de créer le widget.</string>
     <string name="widget_integration_failed_to_send_request">Échec de l\'envoi de la requête.</string>
-    <string name="widget_integration_room_not_recognised">Ce salon n\'est pas reconnu.</string>
     <string name="widget_integration_positive_power_level">Le rang doit être un entier positif.</string>
     <string name="widget_integration_must_be_in_room">Vous n\'êtes pas dans ce salon.</string>
     <string name="widget_integration_no_permission_in_room">Vous n\'avez pas la permission de faire cela dans ce salon.</string>
@@ -760,8 +748,7 @@ Appareils inconnus :</string>
     <string name="widget_integration_room_not_visible">Le salon %s n\'est pas visible.</string>
     <string name="settings_labs_matrix_apps">Applications Matrix</string>
     <string name="room_add_matrix_apps">Ajouter des applications Matrix</string>
-    <string name="add_matrix_apps_not_supported">Non pris en charge sur cet appareil</string>
-<string name="call">Appel</string>
+    <string name="call">Appel</string>
     <string name="settings_containing_my_display_name">Messages contenant mon nom affiché</string>
     <string name="settings_containing_my_user_name">Messages contenant mon nom d\'utilisateur</string>
     <string name="you_added_a_new_device">Vous avez ajouté un nouvel appareil \"%s\", qui demande les clés de chiffrement.</string>
@@ -770,7 +757,7 @@ Appareils inconnus :</string>
     <string name="share_without_verifying">Partager sans vérifier</string>
     <string name="ignore_request">Ignorer la demande</string>
 
-<string name="notification_noisy_notifications">Notifications bruyantes</string>
+<string name="notification_noisy_notifications">Notifications sonores</string>
     <string name="notification_silent_notifications">Notifications silencieuses</string>
 
     <string name="option_take_photo">Prendre une photo</string>
@@ -784,4 +771,94 @@ Appareils inconnus :</string>
     <string name="settings_labs_native_camera">Utiliser la caméra native</string>
 
     // share keys
+    <string name="title_activity_bug_report">Rapport d\'erreur</string>
+
+    <string name="conference_call_warning_title">Attention !</string>
+    <string name="conference_call_warning_message">L\'appel en téléconférence est en cours de développement et peut ne pas être fiable.</string>
+
+    // slash commands
+    <string name="command_error">Erreur de commande</string>
+    <string name="unrecognized_command">Commande non reconnue : %s</string>
+
+    // notification statuses
+    <string name="notification_off">Désactivé</string>
+    <string name="notification_on">Activé</string>
+    <string name="notification_noisy">Notification sonore</string>
+
+    <string name="encrypted_message">Message chiffré</string>
+
+<string name="loading">Chargement…</string>
+
+    <string name="title_activity_group_details">Informations sur la communauté</string>
+
+    <string name="bottom_action_groups">Communautés</string>
+
+    <string name="home_filter_placeholder_groups">Rechercher dans ces communautés</string>
+
+    <string name="groups_invite_header">Inviter</string>
+    <string name="groups_header">Communautés</string>
+    <string name="no_group_placeholder">Aucun groupe</string>
+
+    <string name="start_new_chat_prompt_msg">Voulez-vous vraiment engager une nouvelle discussion avec %s ?</string>
+    <string name="start_voice_call_prompt_msg">Voulez-vous vraiment engager un nouvel appel vocal ?</string>
+    <string name="start_video_call_prompt_msg">Voulez-vous vraiment engager un nouvel appel vidéo ?</string>
+
+    <string name="groups_list">Liste des Groupes</string>
+
+    <string name="room_participants_kick_prompt_msg">Voulez-vous vraiment exclure cet utilisateur de la discussion ?</string>
+    <string name="room_participants_ban_prompt_msg">Voulez-vous vraiment bannir cet utilisateur de la discussion ?</string>
+
+    <string name="action_exit">Quitter</string>
+    <string name="room_settings_all_messages_noisy">Notification sonore pour chaque message</string>
+    <string name="room_settings_all_messages">Notification pour chaque message</string>
+    <string name="room_settings_mention_only">Notifier uniquement lorsque mon nom est mentionné</string>
+    <string name="room_settings_mute">Pas de notification</string>
+    <string name="room_settings_add_homescreen_shortcut">Ajouter un raccourci sur l\'écran d\'acceuil</string>
+
+    <string name="settings_inline_url_preview">Aperçu intégré des URL</string>
+    <string name="settings_vibrate_on_mention">Vibrer lorsque l\'on mentionne quelqu\'un</string>
+
+    <string name="room_settings_room_notifications_title">Notifications</string>
+    <string name="room_settings_no_flair">" Ce salon n\'a de vignettes pour aucune communauté"</string>
+    <string name="room_settings_add_new_group">Nouvel identifiant de communauté (ex. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Identifiant de communauté invalide</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' n\'est pas un identifiant de communauté valide</string>
+
+
+    <string name="create">Créer</string>
+    <string name="create_community">Créer une communauté</string>
+    <string name="community_name">Nom de la communauté</string>
+    <string name="community_name_hint">Exemple</string>
+    <string name="community_id">Identifiant de communauté</string>
+    <string name="community_id_hint">Exemple</string>
+
+    // group details
+    <string name="group_details_home">Acceuil</string>
+    <string name="group_details_people">Personnes</string>
+    <string name="group_details_rooms">Salons</string>
+    <string name="no_users_placeholder">Pas d\'utilisateurs</string>
+
+    <string name="rooms">Salons</string>
+    <string name="joined">Rejoint</string>
+    <string name="invited">Invité</string>
+    <string name="filter_group_members">Filtrer les membres du groupe</string>
+    <string name="filter_group_rooms">Filtrer les salons du groupe</string>
+
+    <string name="group_one_member">Un membre</string>
+    <string name="group_members">%d membres</string>
+
+    <string name="group_one_room">Un salon</string>
+    <string name="group_rooms">%d salons</string>
+    <string name="group_no_long_description">L\'administrateur de cette communauté n\'a pas encore fourni de description.</string>
+
+    <string name="one_new_message">Un nouveau message</string>
+    <string name="new_messages">%d nouveaux messages</string>
+
+    <string name="has_been_kicked">%2$s vous a exclu de %1$s</string>
+    <string name="has_been_banned">%2$s vous a banni de %1$s</string>
+    <string name="reason_colon">Motif : %1$s</string>
+    <string name="rejoin">Rejoindre</string>
+    <string name="forget_room">Abandonner le salon</string>
+<string name="settings_flair">Badge</string>
+
     </resources>

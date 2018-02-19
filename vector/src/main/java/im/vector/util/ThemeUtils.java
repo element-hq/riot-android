@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -47,6 +48,7 @@ import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorCallViewActivity;
+import im.vector.activity.VectorGroupDetailsActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.VectorMediasViewerActivity;
@@ -178,6 +180,8 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Dark);
             } else if (activity instanceof LockScreenActivity) {
                 activity.setTheme(R.style.Vector_Lock_Dark);
+            } else if (activity instanceof VectorGroupDetailsActivity) {
+                activity.setTheme(R.style.AppTheme_Dark);
             }
         }
 
@@ -234,6 +238,8 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Black);
             } else if (activity instanceof LockScreenActivity) {
                 activity.setTheme(R.style.Vector_Lock_Black);
+            } else if (activity instanceof VectorGroupDetailsActivity) {
+                activity.setTheme(R.style.AppTheme_Black);
             }
         }
 
@@ -245,6 +251,34 @@ public class ThemeUtils {
         }
 
         mColorByAttr.clear();
+    }
+
+    /**
+     * Set the TabLayout colors.
+     * It seems that there is no proper way to manage it with the manifest file.
+     *
+     * @param activity the activity
+     * @param layout   the layout
+     */
+    public static void setTabLayoutTheme(Activity activity, TabLayout layout) {
+
+        if (activity instanceof VectorGroupDetailsActivity) {
+            int textColor;
+            int underlineColor;
+            int backgroundColor;
+
+            if (TextUtils.equals(getApplicationTheme(activity), THEME_LIGHT_VALUE)) {
+                underlineColor = textColor = ContextCompat.getColor(activity, android.R.color.white);
+                backgroundColor = ContextCompat.getColor(activity, R.color.tab_groups);
+            } else {
+                underlineColor = textColor = ContextCompat.getColor(activity, R.color.tab_groups);
+                backgroundColor = getColor(activity, R.attr.primary_color);
+            }
+
+            layout.setTabTextColors(textColor, textColor);
+            layout.setSelectedTabIndicatorColor(underlineColor);
+            layout.setBackgroundColor(backgroundColor);
+        }
     }
 
     /**

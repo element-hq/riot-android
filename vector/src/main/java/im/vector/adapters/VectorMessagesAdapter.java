@@ -44,6 +44,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -54,12 +55,13 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.rest.model.EncryptedEventContent;
+import org.matrix.androidsdk.rest.model.URLPreview;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageMessage;
-import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.message.FileMessage;
+import org.matrix.androidsdk.rest.model.message.ImageMessage;
+import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.EventDisplay;
@@ -78,6 +80,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -92,6 +95,8 @@ import im.vector.util.EventGroup;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
+import im.vector.util.VectorImageGetter;
+import im.vector.util.VectorMarkdownParser;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -142,7 +147,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_HIDDEN = 7;
     static final int ROW_TYPE_ROOM_MEMBER = 8;
     static final int ROW_TYPE_EMOJI = 9;
-    static final int NUM_ROW_TYPES = 10;
+    static final int ROW_TYPE_CODE = 10;
+    static final int NUM_ROW_TYPES = 11;
 
     final Context mContext;
     private final HashMap<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
@@ -212,6 +218,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_message_merge,
                 R.layout.adapter_item_vector_message_emoji,
+                R.layout.adapter_item_vector_message_code,
                 mediasCache);
     }
 
@@ -240,6 +247,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                           int videoResLayoutId,
                           int mergeResLayoutId,
                           int emojiResLayoutId,
+                          int codeResLayoutId,
                           MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
@@ -253,6 +261,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_MERGE, mergeResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, R.layout.adapter_item_vector_hidden_message);
         mRowTypeToLayoutId.put(ROW_TYPE_EMOJI, emojiResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_CODE, codeResLayoutId);
 
         mMediasCache = mediasCache;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -286,7 +295,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         // helpers
         mMediasHelper = new VectorMessagesAdapterMediasHelper(context, mSession, mMaxImageWidth, mMaxImageHeight, mNotSentMessageTextColor, mDefaultMessageTextColor);
-        mHelper = new VectorMessagesAdapterHelper(context, mSession);
+        mHelper = new VectorMessagesAdapterHelper(context, mSession, this);
 
         mLocale = VectorApp.getApplicationLocale();
 
@@ -311,13 +320,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     @SuppressWarnings("deprecation")
     private void getScreenSize(Point size) {
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            display.getSize(size);
-        } else {
-            size.set(display.getWidth(), display.getHeight());
-        }
+        wm.getDefaultDisplay().getSize(size);
     }
 
     /**
@@ -425,11 +428,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     @Override
     public void add(MessageRow row, boolean refresh) {
-        // ensure that notifyDataSetChanged is not called
-        // it seems that setNotifyOnChange is reinitialized to true;
-        setNotifyOnChange(false);
-
         if (isSupportedRow(row)) {
+            // ensure that notifyDataSetChanged is not called
+            // it seems that setNotifyOnChange is reinitialized to true;
+            setNotifyOnChange(false);
+
             if (mIsSearchMode) {
                 mLiveMessagesRowList.add(row);
             } else {
@@ -446,8 +449,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else {
                 setNotifyOnChange(true);
             }
-        } else {
-            setNotifyOnChange(true);
         }
     }
 
@@ -667,8 +668,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         final View inflatedView;
         int viewType = getItemViewType(position);
 
+        // when the user scrolls quickly
+        // it seems that the recycled view does not have the right layout.
+        // check it
+        if (null != convertView) {
+            if (viewType != (int)convertView.getTag()) {
+                Log.e(LOG_TAG, "## getView() : invalid view type : got " + convertView.getTag() + " instead of " + viewType);
+                convertView = null;
+            }
+        }
+
         switch (viewType) {
             case ROW_TYPE_EMOJI:
+            case ROW_TYPE_CODE:
             case ROW_TYPE_TEXT:
                 inflatedView = getTextView(viewType, position, convertView, parent);
                 break;
@@ -702,6 +714,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         if (null != inflatedView) {
             inflatedView.setBackgroundColor(Color.TRANSPARENT);
+            inflatedView.setTag(viewType);
         }
 
         displayE2eIcon(inflatedView, position);
@@ -942,6 +955,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (Message.MSGTYPE_TEXT.equals(msgType)) {
                 if (containsOnlyEmojis(message.body)) {
                     viewType = ROW_TYPE_EMOJI;
+                } else if (!TextUtils.isEmpty(message.formatted_body) && mHelper.containsFencedCodeBlocks(message)) {
+                    viewType = ROW_TYPE_CODE;
                 } else {
                     viewType = ROW_TYPE_TEXT;
                 }
@@ -1090,7 +1105,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         // selection mode
-        manageSelectionMode(convertView, event);
+        manageSelectionMode(convertView, event, msgType);
 
         // read marker
         setReadMarker(convertView, row, isMergedView, avatarLayoutView, bodyLayoutView);
@@ -1125,17 +1140,29 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             CharSequence textualDisplay = display.getTextualDisplay();
 
             SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
-            final TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
-
-            // cannot refresh it
-            if (null == bodyTextView) {
-                Log.e(LOG_TAG, "getTextView : invalid layout");
-                return convertView;
-            }
 
             boolean shouldHighlighted = (null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event);
 
-            highlightPattern(bodyTextView, body, TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null, mPattern, shouldHighlighted);
+            final List<TextView> textViews;
+
+            if (ROW_TYPE_CODE == viewType) {
+                textViews = populateRowTypeCode(message, convertView, shouldHighlighted);
+            } else {
+                final TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
+
+                // cannot refresh it
+                if (null == bodyTextView) {
+                    Log.e(LOG_TAG, "getTextView : invalid layout");
+                    return convertView;
+                }
+
+                highlightPattern(bodyTextView, body,
+                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null,
+                        mPattern, shouldHighlighted);
+
+                textViews = new ArrayList<>();
+                textViews.add(bodyTextView);
+            }
 
             int textColor;
 
@@ -1149,17 +1176,73 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
             }
 
-            bodyTextView.setTextColor(textColor);
+            for (final TextView tv : textViews) {
+                tv.setTextColor(textColor);
+            }
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
-            this.manageSubView(position, convertView, textLayout, ROW_TYPE_TEXT);
+            this.manageSubView(position, convertView, textLayout, viewType);
 
-            addContentViewListeners(convertView, bodyTextView, position);
+            for (final TextView tv : textViews) {
+                addContentViewListeners(convertView, tv, position, viewType);
+            }
+
+            mHelper.manageURLPreviews(message, convertView, event.eventId);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage());
         }
 
         return convertView;
+    }
+
+    /**
+     * For ROW_TYPE_CODE message which may contain mixture of
+     * fenced and inline code blocks and non-code (issue 145)
+     */
+    private List<TextView> populateRowTypeCode(final Message message,
+                                               final View convertView,
+                                               final boolean shouldHighlighted) {
+        final List<TextView> textViews = new ArrayList<>();
+        final LinearLayout container = convertView.findViewById(R.id.messages_container);
+
+        // remove older blocks
+        container.removeAllViews();
+
+        final String[] blocks = mHelper.getFencedCodeBlocks(message);
+        final String START_FB = VectorMessagesAdapterHelper.START_FENCED_BLOCK;
+        final String END_FB = VectorMessagesAdapterHelper.END_FENCED_BLOCK;
+        for (final String block : blocks) {
+            if (block.startsWith(START_FB) && block.endsWith(END_FB)) {
+                // Fenced block
+                final String minusTags = block
+                        .substring(START_FB.length(), block.length() - END_FB.length())
+                        .replace("\n", "<br/>")
+                        .replace(" ", "&nbsp;");
+                final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
+                container.addView(blockView);
+                final TextView tv = blockView.findViewById(R.id.messagesAdapter_body);
+                highlightPattern(tv, new SpannableString(minusTags),
+                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(minusTags) : null,
+                        mPattern, shouldHighlighted);
+
+                mHelper.highlightFencedCode(tv);
+                textViews.add(tv);
+
+                ((View) tv.getParent()).setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
+            } else {
+                // Not a fenced block
+                final TextView tv = (TextView) mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
+
+                highlightPattern(tv, new SpannableString(block),
+                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(block) : null,
+                        mPattern, shouldHighlighted);
+
+                container.addView(tv);
+                textViews.add(tv);
+            }
+        }
+
+        return textViews;
     }
 
     /**
@@ -1226,7 +1309,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             this.manageSubView(position, convertView, imageLayout, type);
 
             ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
-            addContentViewListeners(convertView, imageView, position);
+            addContentViewListeners(convertView, imageView, position, type);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage());
         }
@@ -1275,7 +1358,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
             this.manageSubView(position, convertView, textLayout, viewType);
 
-            addContentViewListeners(convertView, noticeTextView, position);
+            addContentViewListeners(convertView, noticeTextView, position, viewType);
 
             // android seems having a big issue when the text is too long and an alpha !=1 is applied:
             // ---> the text is not displayed.
@@ -1286,6 +1369,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             // the patch apply the alpha to the text color but it does not work for the hyperlinks.
             noticeTextView.setAlpha(1.0f);
             noticeTextView.setTextColor(getNoticeTextColor());
+
+            Message message = JsonUtils.toMessage(msg.getContent());
+            mHelper.manageURLPreviews(message, convertView, msg.eventId);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getNoticeRoomMemberView() failed : " + e.getMessage());
         }
@@ -1352,7 +1438,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
             this.manageSubView(position, convertView, textLayout, ROW_TYPE_EMOTE);
 
-            addContentViewListeners(convertView, emoteTextView, position);
+            addContentViewListeners(convertView, emoteTextView, position, ROW_TYPE_EMOTE);
+
+            mHelper.manageURLPreviews(message, convertView, event.eventId);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage());
         }
@@ -1403,7 +1491,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             View fileLayout = convertView.findViewById(R.id.messagesAdapter_file_layout);
             this.manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);
 
-            addContentViewListeners(convertView, fileTextView, position);
+            addContentViewListeners(convertView, fileTextView, position, ROW_TYPE_FILE);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage());
         }
@@ -1559,51 +1647,56 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @return true if should be added
      */
     private boolean isSupportedRow(MessageRow row) {
+        Event event = row.getEvent();
+
+        // sanity checks
+        if ((null == event) || (null == event.eventId)) {
+            Log.e(LOG_TAG, "## isSupportedRow() : invalid row");
+            return false;
+        }
+
+        String eventId = event.eventId;
+        MessageRow currentRow = mEventRowMap.get(eventId);
+
+        if (null != currentRow) {
+            // waiting for echo
+            // the message is displayed as sent event if the echo has not been received
+            // it avoids displaying a pending message whereas the message has been sent
+            if (event.getAge() == Event.DUMMY_EVENT_AGE) {
+                currentRow.updateEvent(event);
+                Log.d(LOG_TAG, "## isSupportedRow() : update the timestamp of " + eventId);
+            } else {
+                Log.e(LOG_TAG, "## isSupportedRow() : the event " + eventId + " has already been received");
+            }
+            return false;
+        }
+
         boolean isSupported = VectorMessagesAdapterHelper.isDisplayableEvent(mContext, row);
 
-        if (isSupported) {
-            String eventId = row.getEvent().eventId;
+        if (isSupported && TextUtils.equals(event.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+            RoomMember roomMember = JsonUtils.toRoomMember(event.getContent());
+            String membership = roomMember.membership;
 
-            MessageRow currentRow = mEventRowMap.get(eventId);
-
-            // the row should be added only if the message has not been received
-            isSupported = (null == currentRow);
-
-            // check if the message is already received
-            if (null != currentRow) {
-                // waiting for echo
-                // the message is displayed as sent event if the echo has not been received
-                // it avoids displaying a pending message whereas the message has been sent
-                if (currentRow.getEvent().getAge() == Event.DUMMY_EVENT_AGE) {
-                    currentRow.updateEvent(row.getEvent());
-                }
+            if (PreferencesManager.hideJoinLeaveMessages(mContext)) {
+                isSupported = !TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE) && !TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN);
             }
 
-            if (TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-                RoomMember roomMember = JsonUtils.toRoomMember(row.getEvent().getContent());
-                String membership = roomMember.membership;
+            if (isSupported && PreferencesManager.hideAvatarDisplayNameChangeMessages(mContext) && TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN)) {
+                EventContent eventContent = JsonUtils.toEventContent(event.getContentAsJsonObject());
+                EventContent prevEventContent = event.getPrevContent();
 
-                if (PreferencesManager.hideJoinLeaveMessages(mContext)) {
-                    isSupported = !TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE) && !TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN);
+                String senderDisplayName = eventContent.displayname;
+                String prevUserDisplayName = null;
+                String avatar = eventContent.avatar_url;
+                String prevAvatar = null;
+
+                if ((null != prevEventContent)) {
+                    prevUserDisplayName = prevEventContent.displayname;
+                    prevAvatar = prevEventContent.avatar_url;
                 }
 
-                if (isSupported && PreferencesManager.hideAvatarDisplayNameChangeMessages(mContext) && TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN)) {
-                    EventContent eventContent = JsonUtils.toEventContent(row.getEvent().getContentAsJsonObject());
-                    EventContent prevEventContent = row.getEvent().getPrevContent();
-
-                    String senderDisplayName = eventContent.displayname;
-                    String prevUserDisplayName = null;
-                    String avatar = eventContent.avatar_url;
-                    String prevAvatar = null;
-
-                    if ((null != prevEventContent)) {
-                        prevUserDisplayName = prevEventContent.displayname;
-                        prevAvatar = prevEventContent.avatar_url;
-                    }
-
-                    // !Updated display name && same avatar
-                    isSupported = TextUtils.equals(prevUserDisplayName, senderDisplayName) && TextUtils.equals(avatar, prevAvatar);
-                }
+                // !Updated display name && same avatar
+                isSupported = TextUtils.equals(prevUserDisplayName, senderDisplayName) && TextUtils.equals(avatar, prevAvatar);
             }
         }
 
@@ -1731,7 +1824,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param contentView the cell view.
      * @param event       the linked event
      */
-    private void manageSelectionMode(final View contentView, final Event event) {
+    private void manageSelectionMode(final View contentView, final Event event, final int msgType) {
         final String eventId = event.eventId;
 
         boolean isInSelectionMode = (null != mSelectedEventId);
@@ -1746,6 +1839,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         contentView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
         contentView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
 
+        View urlsPreviewView =  contentView.findViewById(R.id.messagesAdapter_urls_preview_list);
+        if (null != urlsPreviewView) {
+            urlsPreviewView.setAlpha(alpha);
+        }
+
         TextView tsTextView = contentView.findViewById(R.id.messagesAdapter_timestamp);
         if (isInSelectionMode && isSelected) {
             tsTextView.setVisibility(View.VISIBLE);
@@ -1756,7 +1854,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 @Override
                 public void onClick(View v) {
                     if (TextUtils.equals(eventId, mSelectedEventId)) {
-                        onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+                        onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                     } else {
                         onEventTap(eventId);
                     }
@@ -1767,7 +1865,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 @Override
                 public boolean onLongClick(View v) {
                     if (!mIsSearchMode) {
-                        onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+                        onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                         mSelectedEventId = eventId;
                         notifyDataSetChanged();
                         return true;
@@ -1801,14 +1899,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param contentView the cell view
      * @return the displayed text.
      */
-    private String getEventText(View contentView) {
+    private String getEventText(View contentView, Event event, int msgType) {
         String text = null;
 
         if (null != contentView) {
-            TextView bodyTextView = contentView.findViewById(R.id.messagesAdapter_body);
+            if ((ROW_TYPE_CODE == msgType) || (ROW_TYPE_TEXT == msgType)) {
+                final Message message = JsonUtils.toMessage(event.getContent());
+                text = message.body;
+            } else {
+                TextView bodyTextView = contentView.findViewById(R.id.messagesAdapter_body);
 
-            if (null != bodyTextView) {
-                text = bodyTextView.getText().toString();
+                if (null != bodyTextView) {
+                    text = bodyTextView.getText().toString();
+                }
             }
         }
 
@@ -1822,7 +1925,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param contentView the main message view
      * @param position    the item position
      */
-    private void addContentViewListeners(final View convertView, final View contentView, final int position) {
+    private void addContentViewListeners(final View convertView, final View contentView, final int position, final int msgType) {
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1844,7 +1947,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     Event event = row.getEvent();
 
                     if (!mIsSearchMode) {
-                        onMessageClick(event, getEventText(contentView), convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                        onMessageClick(event, getEventText(contentView, event, msgType), convertView.findViewById(R.id.messagesAdapter_action_anchor));
                         mSelectedEventId = event.eventId;
                         notifyDataSetChanged();
                         return true;
@@ -2021,6 +2124,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     public void setReadMarkerListener(final ReadMarkerListener listener) {
         mReadMarkerListener = listener;
+    }
+
+    /**
+     * Set a image getter
+     *
+     * @param imageGetter the image getter
+     */
+    public void setImageGetter(VectorImageGetter imageGetter) {
+        mHelper.setImageGetter(imageGetter);
     }
 
     /**
@@ -2267,7 +2379,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
 
                 // share / forward the message
-                menu.findItem(R.id.ic_action_vector_share).setVisible(true);
+                menu.findItem(R.id.ic_action_vector_share).setVisible(!mIsRoomEncrypted);
                 menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
 
                 // save the media in the downloads directory

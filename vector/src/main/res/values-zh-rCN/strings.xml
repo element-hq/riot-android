@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">zh</string>
-    <string name="resouces_country">CN</string>
+    <string name="resouces_country">UKS</string>
 
     <string name="resend">重新发送</string>
     <string name="quote">引用</string>
@@ -155,7 +155,6 @@
     <string name="room_recents_start_chat">开始聊天</string>
     <string name="room_recents_create_room">创建聊天室</string>
 
-    <string name="room_settings_notifications">通知</string>
     <string name="room_settings_direct_chat">私聊</string>
     <string name="room_sliding_menu_messages">消息</string>
     <string name="room_sliding_menu_settings">设置</string>
@@ -450,11 +449,6 @@
     <string name="call_error_ice_failed">媒体连接失败</string>
     <string name="call_error_camera_init_failed">无法初始化相机</string>
     <string name="call_error_answered_elsewhere">另一端已接听通话</string>
-    <string name="call_error_peer_hangup_elsewhere">另一端挂起通话</string>
-    <string name="call_error_peer_cancelled_call">呼叫被取消</string>
-
-    <string name="action_accept">接受</string>
-    <string name="action_ignore">忽略</string>
 
     <string name="permissions_rationale_popup_title">信息</string>
     <string name="permissions_rationale_msg_camera_explanation">
@@ -524,7 +518,6 @@
     <string name="room_settings_room_photo">聊天室图片</string>
     <string name="room_settings_room_tag">聊天室标签</string>
     <string name="room_settings_tag_pref_dialog_title">标签为：</string>
-    <string name="room_settings_mute_notifs">静默通知</string>
 
     <string name="room_settings_tag_pref_entry_favourite">收藏夹</string>
     <string name="room_settings_tag_pref_entry_low_priority">低优先级</string>
@@ -576,8 +569,6 @@
     <string name="read_receipts_list">阅读收据清单</string>
     <string name="membership_changes">%d 个成员身份改变了</string>
     <string name="compression_options">发送为</string>
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
     <string name="permissions_rationale_msg_contacts">Riot 需要访问您的通讯录联系人的权限，才能根据其电子邮件和电话号码查找其他 Matrix 用户。
 
 请在下一个弹出窗口中授权允许访问，以发现从 Riot 可访问的通讯录用户。</string>
@@ -742,10 +733,8 @@
     <string name="active_widgets">%1$d 个活跃的小部件</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">你需要能够邀请用户来做那件事。</string>
     <string name="widget_integration_unable_to_create">无法创建小部件。</string>
     <string name="widget_integration_failed_to_send_request">发送请求失败。</string>
-    <string name="widget_integration_room_not_recognised">这个房间未被识别。</string>
     <string name="widget_integration_positive_power_level">特权级别必须是正整数。</string>
     <string name="widget_integration_must_be_in_room">你不在这个聊天室。</string>
     <string name="widget_integration_no_permission_in_room">你没有权限在这个聊天室里面做那件事。</string>
@@ -754,8 +743,7 @@
     <string name="widget_integration_room_not_visible">聊天室 %s 不可见。</string>
     <string name="settings_labs_matrix_apps">Matrix 应用</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
-    <string name="add_matrix_apps_not_supported">在这个设备上不支持</string>
-<string name="notification_sync_in_progress">同步中</string>
+    <string name="notification_sync_in_progress">同步中</string>
     <string name="notification_listen_for_events">聆听事件</string>
 
     <string name="call">通话</string>
@@ -767,4 +755,34 @@
     <string name="share_without_verifying">不验证而分享</string>
     <string name="ignore_request">忽略请求</string>
 
-</resources>
+<string name="title_activity_bug_report">错误报告</string>
+
+    <string name="option_take_photo">拍照</string>
+    <string name="option_take_video">拍视频</string>
+
+    <string name="settings_labs_native_camera">使用本地相机</string>
+
+    // share keys
+    <string name="conference_call_warning_title">警告！</string>
+    <string name="conference_call_warning_message">会议通话正在开发中，可能不可靠。</string>
+
+    // slash commands
+    <string name="command_error">命令错误</string>
+    <string name="unrecognized_command">不可识别的命令：%s</string>
+
+    // notification statuses
+    <string name="notification_off">关闭</string>
+    <string name="notification_on">打开</string>
+    <string name="encrypted_message">加密的消息</string>
+
+<string name="notification_noisy_notifications">吵闹的通知</string>
+    <string name="notification_silent_notifications">静默通知</string>
+
+    <string name="settings_analytics">统计</string>
+    <string name="settings_opt_out_of_analytics">不再统计</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot 会收集匿名统计数据来帮助我们改进程序。</string>
+
+
+    <string name="notification_noisy">吵闹的</string>
+
+    </resources>

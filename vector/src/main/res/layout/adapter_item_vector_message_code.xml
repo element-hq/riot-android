@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/vector_message_header"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/messagesAdapter_body_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/messagesAdapter_roundAvatar"
+            layout="@layout/vector_room_round_avatar" />
+
+        <View
+            android:id="@+id/messagesAdapter_highlight_message_marker"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#f00" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/message_timestamp_layout"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/vector_message_sender" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/message_timestamp_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/vector_message_timestamp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:id="@+id/messagesAdapter_body_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingRight="4dp">
+
+                    <!-- the body is here -->
+                    <RelativeLayout
+                        android:id="@+id/messagesAdapter_text_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left">
+
+                        <ImageView
+                            android:id="@+id/message_adapter_e2e_icon"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/e2e_verified" />
+
+                        <LinearLayout
+                            android:id="@+id/messages_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_gravity="left"
+                            android:layout_marginLeft="4dp"
+                            android:layout_toRightOf="@id/message_adapter_e2e_icon"
+                            />
+                    </RelativeLayout>
+
+                </FrameLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/messagesAdapter_avatars_list"
+        layout="@layout/vector_message_receipts_list" />
+
+    <include layout="@layout/message_separator" />
+
+    <include layout="@layout/message_read_marker" />
+
+</LinearLayout>

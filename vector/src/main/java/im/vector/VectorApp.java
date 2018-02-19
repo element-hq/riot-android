@@ -52,8 +52,6 @@ import org.piwik.sdk.extra.CustomVariables;
 import org.piwik.sdk.extra.TrackHelper;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,7 +77,6 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
-import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
@@ -104,7 +101,7 @@ public class VectorApp extends MultiDexApplication {
     /**
      * Rage shake detection to send a bug report.
      */
-    private static final RageShake mRageShake = new RageShake();
+    private RageShake mRageShake;
 
     /**
      * Delay to detect if the application is in background.
@@ -221,8 +218,6 @@ public class VectorApp extends MultiDexApplication {
         } catch (Exception e) {
         }
 
-
-
         mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
 
         org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
@@ -239,7 +234,7 @@ public class VectorApp extends MultiDexApplication {
         Log.d(LOG_TAG, "----------------------------------------------------------------");
         Log.d(LOG_TAG, "----------------------------------------------------------------\n\n\n\n");
 
-        mRageShake.start(this);
+        mRageShake = new RageShake(this);
 
         // init the REST client
         MXSession.initUserAgent(getApplicationContext());
@@ -414,6 +409,8 @@ public class VectorApp extends MultiDexApplication {
 
         MyPresenceManager.advertiseAllUnavailable();
 
+        mRageShake.stop();
+
         onAppPause();
     }
 
@@ -544,6 +541,7 @@ public class VectorApp extends MultiDexApplication {
         }
 
         MyPresenceManager.advertiseAllOnline();
+        mRageShake.start();
 
         mIsCallingInBackground = false;
         mIsInBackground = false;

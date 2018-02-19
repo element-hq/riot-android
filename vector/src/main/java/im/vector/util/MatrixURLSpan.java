@@ -130,6 +130,10 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
                 if (null != mActionsListener) {
                     mActionsListener.onMessageIdClick(mURL);
                 }
+            } else if (mPattern == MXSession.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER) {
+                if (null != mActionsListener) {
+                    mActionsListener.onGroupIdClick(mURL);
+                }
             } else {
                 Uri uri = Uri.parse(getURL());
 
@@ -156,7 +160,8 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
             MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER,
             MXSession.PATTERN_CONTAIN_MATRIX_ALIAS,
             MXSession.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER,
-            MXSession.PATTERN_CONTAIN_MATRIX_MESSAGE_IDENTIFIER
+            MXSession.PATTERN_CONTAIN_MATRIX_MESSAGE_IDENTIFIER,
+            MXSession.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
     );
 
     /**
