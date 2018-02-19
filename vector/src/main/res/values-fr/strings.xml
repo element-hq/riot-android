@@ -861,4 +861,6 @@ Appareils inconnus :</string>
     <string name="forget_room">Abandonner le salon</string>
 <string name="settings_flair">Badge</string>
 
+    <string name="send_bug_report_rage_shake">Secouer avec frustration pour signaler un bug</string>
+
     </resources>
