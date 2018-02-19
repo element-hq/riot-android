@@ -128,7 +128,7 @@ public class PreferencesManager {
 
     private static final String SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY";
 
-    private static final String SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY";
+    public static final String SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY";
 
     private static final String SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY";
 
@@ -166,7 +166,9 @@ public class PreferencesManager {
             SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY,
             SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY,
             SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
-            SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY
+            SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
+
+            SETTINGS_USE_RAGE_SHAKE_KEY
     );
 
     /**
@@ -524,6 +526,7 @@ public class PreferencesManager {
             editor.commit();
         }
 
+
         if (!preferences.contains(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY)) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, true);
@@ -619,6 +622,7 @@ public class PreferencesManager {
     public static boolean trackWithPiwik(Context context) {
         return !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY, false);
     }
+
 
     /**
      * Tells if the phone must vibrate when mentioning
