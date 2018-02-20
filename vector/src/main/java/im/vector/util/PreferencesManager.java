@@ -526,7 +526,6 @@ public class PreferencesManager {
             editor.commit();
         }
 
-
         if (!preferences.contains(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY)) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, true);
@@ -622,7 +621,6 @@ public class PreferencesManager {
     public static boolean trackWithPiwik(Context context) {
         return !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY, false);
     }
-
 
     /**
      * Tells if the phone must vibrate when mentioning
