@@ -208,7 +208,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private EditTextPreference mSyncRequestDelayPreference;
     private PreferenceCategory mLabsCategory;
 
-
     private PreferenceCategory mGroupsFlairCategory;
 
     // static constructor
@@ -811,12 +810,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
         final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
 
-        if(mIsUsedRageShake){
+        if(mIsUsedRageShake) {
             useRageShakeModePref.setChecked(true);
         } else {
             useBackgroundSyncPref.setChecked(false);
         }
-
+        
         useRageShakeModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -828,7 +827,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 return true;
             }
         });
-
 
         addButtons();
         refreshPushersList();
