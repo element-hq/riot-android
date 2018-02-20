@@ -117,6 +117,7 @@ import im.vector.preference.VectorGroupPreference;
 import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
+import im.vector.util.RageShake;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -799,6 +800,27 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 List<MXSession> sessions = Matrix.getMXSessions(getActivity());
                 for (MXSession session : sessions) {
                     session.setUseDataSaveMode((boolean) newValue);
+                }
+
+                return true;
+            }
+        });
+
+        final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
+        final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
+
+        if(mIsUsedRageShake) {
+            useRageShakeModePref.setChecked(true);
+        } else {
+            useBackgroundSyncPref.setChecked(false);
+        }
+        
+        useRageShakeModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                List<MXSession> sessions = Matrix.getMXSessions(getActivity());
+                for (MXSession session : sessions){
+                    session.setUseRageShakeMode((boolean) newValue);
                 }
 
                 return true;
