@@ -177,6 +177,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             refreshDisplay();
         }
     };
+
     private View mLoadingView;
     // cryptography
     private DeviceInfo mMyDeviceInfo;
@@ -209,7 +210,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private PreferenceCategory mLabsCategory;
     private PreferenceCategory mGroupsFlairCategory;
     // tell if the rageshake mode is enabled
-    public boolean mUseRageShakeMode;
+    private boolean mIsUsedRageShake;
 
     // static constructor
     public static VectorSettingsPreferencesFragment newInstance(String matrixId) {
@@ -810,7 +811,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // Rageshake Managment
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
-        final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
+        mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
 
         if(mIsUsedRageShake) {
             useRageShakeModePref.setChecked(true);
@@ -822,9 +823,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                setUseRageShakeMode((boolean) newValue);
+                PreferencesManager.setUseRageshake(appContext, (boolean) newValue);
 
-                return mUseRageShakeMode;
+                return true;
             }
         });
 
@@ -835,15 +836,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         refreshIgnoredUsersList();
         refreshDevicesList();
         refreshGroupFlairsList();
-    }
-
-    /**
-     * Update the rageshake mode
-     *
-     * @param enabled true to enable the rageshake mode
-     */
-    public void setUseRageShakeMode(boolean enabled) {
-        mUseRageShakeMode = enabled;
     }
 
     @Override
