@@ -207,8 +207,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private EditTextPreference mSyncRequestTimeoutPreference;
     private EditTextPreference mSyncRequestDelayPreference;
     private PreferenceCategory mLabsCategory;
-
     private PreferenceCategory mGroupsFlairCategory;
+    // tell if the rageshake mode is enabled
+    public boolean mUseRageShakeMode;
 
     // static constructor
     public static VectorSettingsPreferencesFragment newInstance(String matrixId) {
@@ -793,6 +794,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
+        // SaveMode Managment
         final CheckBoxPreference dataSaveModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY);
         dataSaveModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -806,6 +808,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
+        // Rageshake Managment
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
         final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
 
@@ -814,16 +817,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         } else {
             useBackgroundSyncPref.setChecked(false);
         }
-        
+
         useRageShakeModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                List<MXSession> sessions = Matrix.getMXSessions(getActivity());
-                for (MXSession session : sessions){
-                    session.setUseRageShakeMode((boolean) newValue);
-                }
 
-                return true;
+                setUseRageShakeMode((boolean) newValue);
+
+                return mUseRageShakeMode;
             }
         });
 
@@ -834,6 +835,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         refreshIgnoredUsersList();
         refreshDevicesList();
         refreshGroupFlairsList();
+    }
+
+    /**
+     * Update the rageshake mode
+     *
+     * @param enabled true to enable the rageshake mode
+     */
+    public void setUseRageShakeMode(boolean enabled) {
+        mUseRageShakeMode = enabled;
     }
 
     @Override
