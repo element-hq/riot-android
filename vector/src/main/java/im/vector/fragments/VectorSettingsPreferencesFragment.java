@@ -209,8 +209,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private EditTextPreference mSyncRequestDelayPreference;
     private PreferenceCategory mLabsCategory;
     private PreferenceCategory mGroupsFlairCategory;
-    // tell if the rageshake mode is enabled
-    private boolean mIsUsedRageShake;
 
     // static constructor
     public static VectorSettingsPreferencesFragment newInstance(String matrixId) {
@@ -811,7 +809,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // Rageshake Managment
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
-        mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
+        final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
 
         if(mIsUsedRageShake) {
             useRageShakeModePref.setChecked(true);
