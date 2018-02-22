@@ -177,6 +177,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             refreshDisplay();
         }
     };
+
     private View mLoadingView;
     // cryptography
     private DeviceInfo mMyDeviceInfo;
@@ -207,7 +208,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private EditTextPreference mSyncRequestTimeoutPreference;
     private EditTextPreference mSyncRequestDelayPreference;
     private PreferenceCategory mLabsCategory;
-
     private PreferenceCategory mGroupsFlairCategory;
 
     // static constructor
@@ -793,6 +793,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
+        // SaveMode Managment
         final CheckBoxPreference dataSaveModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY);
         dataSaveModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -806,6 +807,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
+        // Rageshake Managment
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
         final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
 
@@ -814,14 +816,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         } else {
             useBackgroundSyncPref.setChecked(false);
         }
-        
+
         useRageShakeModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                List<MXSession> sessions = Matrix.getMXSessions(getActivity());
-                for (MXSession session : sessions){
-                    session.setUseRageShakeMode((boolean) newValue);
-                }
+
+                PreferencesManager.setUseRageshake(appContext, (boolean) newValue);
 
                 return true;
             }
