@@ -903,7 +903,7 @@ public class RegistrationManager {
     private void register(final Context context, final RegistrationParams params, final InternalRegistrationListener listener) {
         if (getLoginRestClient() != null) {
             params.initial_device_display_name = context.getString(R.string.login_mobile_device);
-            mLoginRestClient.register(params, new SimpleApiCallback<Credentials>() {
+            mLoginRestClient.register(params, new UnrecognizedCertApiCallback<Credentials>(mHsConfig) {
                 @Override
                 public void onSuccess(Credentials credentials) {
                     if (TextUtils.isEmpty(credentials.userId)) {
@@ -933,35 +933,12 @@ public class RegistrationManager {
                 }
 
                 @Override
-                public void onNetworkError(final Exception e) {
-                    UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
-                    if (unrecCertEx != null) {
-                        final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-                        Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
-
-                        UnrecognizedCertHandler.show(mHsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
-                            @Override
-                            public void onAccept() {
-                                register(context, params, listener);
-                            }
-
-                            @Override
-                            public void onIgnore() {
-                                listener.onRegistrationFailed(e.getLocalizedMessage());
-                            }
-
-                            @Override
-                            public void onReject() {
-                                listener.onRegistrationFailed(e.getLocalizedMessage());
-                            }
-                        });
-                    } else {
-                        listener.onRegistrationFailed(e.getLocalizedMessage());
-                    }
+                public void onAcceptedCert() {
+                    register(context, params, listener);
                 }
 
                 @Override
-                public void onUnexpectedError(Exception e) {
+                public void onTLSOrNetworkError(final Exception e) {
                     listener.onRegistrationFailed(e.getLocalizedMessage());
                 }
 
