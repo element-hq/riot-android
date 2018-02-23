@@ -266,6 +266,13 @@ public class EventStreamService extends Service {
                     setServiceState(StreamAction.PAUSE);
                 }
             }
+
+            // dismiss the initial sync notification
+            // it seems there are some race conditions with onInitialSyncComplete
+            if (mNotificationState == NotificationState.INITIAL_SYNCING) {
+                Log.d(LOG_TAG, "onLiveEventsChunkProcessed : end of init sync");
+                refreshStatusNotification();
+            }
         }
     };
 
