@@ -861,10 +861,10 @@ public class EventStreamService extends Service {
         if (mNotificationState == NotificationState.NONE) {
             Notification notification = NotificationUtils.buildMessageNotification(getApplicationContext(), true);
 
-            final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
             if (null != notification) {
                 mNotificationState = NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS;
-                nm.notify(NOTIFICATION_ID, notification);
+                startForeground(NOTIFICATION_ID_PERSISTENT, notification);
+                mIsForeground = true;
                 Log.d(LOG_TAG, "## refreshStatusNotification : restore the events notification");
                 return;
             }
@@ -1361,6 +1361,13 @@ public class EventStreamService extends Service {
                             // the notification cannot be built
                             if (null != notif) {
                                 nm.notify(NOTIFICATION_ID, notif);
+
+                                // Clear listening notifications when using GCM
+                                if (!shouldDisplayListenForEventsNotification() && mIsForeground) {
+                                    stopForeground(true);
+                                    mIsForeground = false;
+                                }
+
                                 mNotificationState = NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS;
                                 Log.d(LOG_TAG, "## refreshMessagesNotification() : display the notification");
                             } else {
@@ -1597,7 +1604,6 @@ public class EventStreamService extends Service {
      */
     public void displayIncomingCallNotification(MXSession session, Room room, Event event, String callId, BingRule bingRule) {
         Log.d(LOG_TAG, "displayIncomingCallNotification : " + callId + " in " + room.getRoomId());
-        final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
         // the incoming call in progress is already displayed
         if (!TextUtils.isEmpty(mIncomingCallId)) {
@@ -1614,8 +1620,8 @@ public class EventStreamService extends Service {
                     session.getMyUserId(),
                     callId);
 
-            notification.flags |= Notification.FLAG_NO_CLEAR;
-            nm.notify(NOTIFICATION_ID, notification);
+            startForeground(NOTIFICATION_ID_PERSISTENT, notification);
+            mIsForeground = true;
 
             mNotificationState = NotificationState.INCOMING_CALL;
 
@@ -1640,11 +1646,10 @@ public class EventStreamService extends Service {
      * @param callId  the callId
      */
     public void displayCallInProgressNotification(MXSession session, Room room, String callId) {
-        final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
         if (null != callId) {
             Notification notification = NotificationUtils.buildPendingCallNotification(getApplicationContext(), room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
-            notification.flags |= Notification.FLAG_NO_CLEAR;
-            nm.notify(NOTIFICATION_ID, notification);
+            startForeground(NOTIFICATION_ID_PERSISTENT, notification);
+            mIsForeground = true;
             mNotificationState = NotificationState.CALL_IN_PROGRESS;
             mCallIdInProgress = callId;
         }
@@ -1663,8 +1668,9 @@ public class EventStreamService extends Service {
             } else {
                 mIncomingCallId = null;
             }
-            nm.cancel(NOTIFICATION_ID);
+            nm.cancel(NOTIFICATION_ID_PERSISTENT);
             stopForeground(true);
+            mIsForeground = false;
 
             mNotificationState = NotificationState.NONE;
             refreshStatusNotification();
