@@ -861,4 +861,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 <string name="settings_flair">Ikurra</string>
 
     <string name="room_settings_no_flair">" Gela honek ez ditu komunitateetako ikurrak erakusten"</string>
+    <string name="send_bug_report_rage_shake">Astindu amorruz akatsaren berri emateko</string>
+
     </resources>
