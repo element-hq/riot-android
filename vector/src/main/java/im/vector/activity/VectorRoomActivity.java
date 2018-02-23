@@ -2285,7 +2285,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         values.put(MediaStore.Images.Media.TITLE, CAMERA_VALUE_TITLE + formatter.format(date));
         // The Galaxy S not only requires the name of the file to output the image to, but will also not
         // set the mime type of the picture it just took (!!!). We assume that the Galaxy S takes image/jpegs
-        // so the attachment uploader doesn't fremakeLinkClickableak out about there being no mimetype in the content database.
+        // so the attachment uploader doesn't freak out about there being no mimetype in the content database.
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
         Uri dummyUri = null;
         try {
@@ -3030,8 +3030,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      *
      * @param strBuilder    the input string
      * @param span          the URL
+     * @param value         roomAlias, roomId, groupId, eventId, etc.
      */
-    public void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final String roomAlias) {
+    public void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final String value) {
         int start = strBuilder.getSpanStart(span);
         int end = strBuilder.getSpanEnd(span);
 
@@ -3041,7 +3042,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             ClickableSpan clickable = new ClickableSpan() {
                 public void onClick(View view) {
                     if (null != mVectorMessageListFragment) {
-                        mVectorMessageListFragment.onURLClick(Uri.parse(VectorUtils.getPermalink(roomAlias, null)));
+                        mVectorMessageListFragment.onURLClick(Uri.parse(VectorUtils.getPermalink(value, null)));
                     }
                 }
             };
