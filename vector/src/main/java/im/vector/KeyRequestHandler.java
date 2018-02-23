@@ -17,7 +17,6 @@
 
 package im.vector;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -109,7 +108,7 @@ public class KeyRequestHandler {
 
         requests.add(keyRequest);
 
-        if (null != mCurrentUser) {
+        if (null != mAlertDialog) {
             // ignore for now
             Log.d(LOG_TAG, "## handleKeyRequest() : Key request, but we already have a dialog open");
             return;
@@ -240,7 +239,7 @@ public class KeyRequestHandler {
      */
     private void initKeyShareDialog() {
         if (null == VectorApp.getCurrentActivity()) {
-            // wait that an activity is ready
+            // wait until an activity is ready
             mCurrentUser = null;
             mCurrentDevice = null;
             return;

@@ -42,11 +42,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -115,6 +117,7 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.notifications.NotificationUtils;
 import im.vector.services.EventStreamService;
 import im.vector.util.CallsManager;
+import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.SlashComandsParser;
@@ -422,32 +425,34 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 @Override
                 public void run() {
                     String eventType = event.getType();
+                    Log.d(LOG_TAG, "Received event type: " + eventType);
 
-                    // The various events that could possibly change the room title
-                    if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
-                            || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(eventType)
-                            || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)) {
-                        setTitle();
-                        updateRoomHeaderMembersStatus();
-                        updateRoomHeaderAvatar();
-                    } else if (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)) {
-                        checkSendEventStatus();
-                    } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)) {
-                        Log.d(LOG_TAG, "Updating room topic.");
-                        RoomState roomState = JsonUtils.toRoomState(event.getContent());
-                        setTopic(roomState.topic);
-                    } else if (Event.EVENT_TYPE_TYPING.equals(eventType)) {
-                        Log.d(LOG_TAG, "on room typing");
-                        onRoomTypings();
-                    }
-                    // header room specific
-                    else if (Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType)) {
-                        Log.d(LOG_TAG, "Event room avatar");
-                        updateRoomHeaderAvatar();
-                    } else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
-                        boolean canSendEncryptedEvent = mRoom.isEncrypted() && mSession.isCryptoEnabled();
-                        mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.e2e_verified : R.drawable.e2e_unencrypted);
-                        mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
+                    switch(eventType) {
+                        case Event.EVENT_TYPE_STATE_ROOM_NAME:
+                        case Event.EVENT_TYPE_STATE_ROOM_ALIASES:
+                        case Event.EVENT_TYPE_STATE_ROOM_MEMBER:
+                            setTitle();
+                            updateRoomHeaderMembersStatus();
+                            updateRoomHeaderAvatar();
+                            break;
+                        case Event.EVENT_TYPE_STATE_ROOM_TOPIC:
+                            RoomState roomState = JsonUtils.toRoomState(event.getContent());
+                            setTopic(roomState.topic);
+                            break;
+                        case Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS:
+                            checkSendEventStatus();
+                            break;
+                        case Event.EVENT_TYPE_TYPING:
+                            onRoomTypings();
+                            break;
+                        case Event.EVENT_TYPE_STATE_ROOM_AVATAR:
+                            updateRoomHeaderAvatar();
+                            break;
+                        case Event.EVENT_TYPE_MESSAGE_ENCRYPTION:
+                            boolean canSendEncryptedEvent = mRoom.isEncrypted() && mSession.isCryptoEnabled();
+                            mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.e2e_verified : R.drawable.e2e_unencrypted);
+                            mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
+                            break;
                     }
 
                     if (!VectorApp.isAppInBackground()) {
@@ -1377,50 +1382,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if ((requestCode == REQUEST_FILES_REQUEST_CODE) || (requestCode == TAKE_IMAGE_REQUEST_CODE)) {
-                sendMediasIntent(data);
-            } else if (requestCode == GET_MENTION_REQUEST_CODE) {
-                insertUserDisplayNameInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
-            } else if (requestCode == REQUEST_ROOM_AVATAR_CODE) {
-                onActivityResultRoomAvatarUpdate(data);
-            } else if (requestCode == INVITE_USER_REQUEST_CODE) {
-                final List<String> userIds = (List<String>) data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_OUT_SELECTED_USER_IDS);
-
-                if ((null != userIds) && (userIds.size() > 0)) {
-                    setProgressVisibility(View.VISIBLE);
-
-                    mRoom.invite(userIds, new ApiCallback<Void>() {
-
-                        private void onDone(String errorMessage) {
-                            if (!TextUtils.isEmpty(errorMessage)) {
-                                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
-                            }
-                            setProgressVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onSuccess(Void info) {
-                            onDone(null);
-                        }
-
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            onDone(e.getMessage());
-                        }
-
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            onDone(e.getMessage());
-                        }
-
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            onDone(e.getMessage());
-                        }
-                    });
-                }
-            } else if (requestCode == UNREAD_PREVIEW_REQUEST_CODE) {
-                mVectorMessageListFragment.scrollToBottom(0);
+            switch(requestCode) {
+                case REQUEST_FILES_REQUEST_CODE:
+                case TAKE_IMAGE_REQUEST_CODE:
+                    sendMediasIntent(data);
+                    break;
+                case GET_MENTION_REQUEST_CODE:
+                    insertUserDisplayNameInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
+                    break;
+                case REQUEST_ROOM_AVATAR_CODE:
+                    onActivityResultRoomAvatarUpdate(data);
+                    break;
+                case INVITE_USER_REQUEST_CODE:
+                    onActivityResultRoomInvite(data);
+                    break;
+                case UNREAD_PREVIEW_REQUEST_CODE:
+                    mVectorMessageListFragment.scrollToBottom(0);
+                    break;
             }
         }
     }
@@ -2465,7 +2443,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mEditText.getText().insert(mEditText.getSelectionStart(), text + " ");
         }
     }
-    
+
     /**
      * Insert an user displayname  in the message editor.
      *
@@ -3006,10 +2984,50 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mActionBarHeaderRoomTopic.setVisibility(View.GONE);
             } else {
                 mActionBarHeaderRoomTopic.setVisibility(View.VISIBLE);
-                mActionBarHeaderRoomTopic.setText(value);
+
+                SpannableStringBuilder strBuilder = new SpannableStringBuilder(value);
+                MatrixURLSpan.refreshMatrixSpans(strBuilder, mVectorMessageListFragment);
+                mActionBarHeaderRoomTopic.setText(strBuilder);
+
+                URLSpan[] urls = strBuilder.getSpans(0, value.length(), URLSpan.class);
+
+                if ((null != urls) && (urls.length > 0)) {
+                    for (URLSpan span : urls) {
+                        makeLinkClickable(strBuilder, span, value);
+                    }
+                }
             }
         }
     }
+
+    /**
+     * Trap the clicked URL.
+     *
+     * @param strBuilder    the input string
+     * @param span          the URL
+     * @param value         roomAlias, roomId, groupId, eventId, etc.
+     */
+    public void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final String value) {
+        int start = strBuilder.getSpanStart(span);
+        int end = strBuilder.getSpanEnd(span);
+
+        if (start >= 0 && end >= 0) {
+            int flags = strBuilder.getSpanFlags(span);
+
+            ClickableSpan clickable = new ClickableSpan() {
+                public void onClick(View view) {
+                    if (null != mVectorMessageListFragment) {
+                        mVectorMessageListFragment.onURLClick(Uri.parse(VectorUtils.getPermalink(value, null)));
+                    }
+                }
+            };
+
+            strBuilder.setSpan(clickable, start, end, flags);
+            strBuilder.removeSpan(span);
+        }
+    }
+
+
 
     /**
      * Tell if the user can send a message in this room.
@@ -3525,6 +3543,49 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     //================================================================================
     // Room header clicks management.
     //================================================================================
+
+    /**
+     * Invite a user from the data provided by the invite activity.
+     *
+     * @param aData the provider date
+     */
+    private void onActivityResultRoomInvite(final Intent aData) {
+        final List<String> userIds = (List<String>) aData.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_OUT_SELECTED_USER_IDS);
+
+        if ((null != userIds) && (userIds.size() > 0)) {
+            setProgressVisibility(View.VISIBLE);
+
+            mRoom.invite(userIds, new ApiCallback<Void>() {
+
+                private void onDone(String errorMessage) {
+                    if (!TextUtils.isEmpty(errorMessage)) {
+                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                    }
+                    setProgressVisibility(View.GONE);
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone(null);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone(e.getMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone(e.getMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone(e.getMessage());
+                }
+            });
+        }
+    }
 
     /**
      * Update the avatar from the data provided the medias picker.

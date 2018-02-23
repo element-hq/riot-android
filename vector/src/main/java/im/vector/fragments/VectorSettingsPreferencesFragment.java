@@ -117,6 +117,7 @@ import im.vector.preference.VectorGroupPreference;
 import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
+import im.vector.util.RageShake;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -176,6 +177,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             refreshDisplay();
         }
     };
+
     private View mLoadingView;
     // cryptography
     private DeviceInfo mMyDeviceInfo;
@@ -206,7 +208,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private EditTextPreference mSyncRequestTimeoutPreference;
     private EditTextPreference mSyncRequestDelayPreference;
     private PreferenceCategory mLabsCategory;
-
     private PreferenceCategory mGroupsFlairCategory;
 
     // static constructor
@@ -792,6 +793,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
+        // SaveMode Managment
         final CheckBoxPreference dataSaveModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY);
         dataSaveModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -800,6 +802,26 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 for (MXSession session : sessions) {
                     session.setUseDataSaveMode((boolean) newValue);
                 }
+
+                return true;
+            }
+        });
+
+        // Rageshake Managment
+        final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
+        final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
+
+        if(mIsUsedRageShake) {
+            useRageShakeModePref.setChecked(true);
+        } else {
+            useBackgroundSyncPref.setChecked(false);
+        }
+
+        useRageShakeModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                PreferencesManager.setUseRageshake(appContext, (boolean) newValue);
 
                 return true;
             }
