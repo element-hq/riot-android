@@ -42,11 +42,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -115,6 +117,7 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.notifications.NotificationUtils;
 import im.vector.services.EventStreamService;
 import im.vector.util.CallsManager;
+import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.SlashComandsParser;
@@ -2440,7 +2443,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mEditText.getText().insert(mEditText.getSelectionStart(), text + " ");
         }
     }
-    
+
     /**
      * Insert an user displayname  in the message editor.
      *
@@ -2981,10 +2984,50 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mActionBarHeaderRoomTopic.setVisibility(View.GONE);
             } else {
                 mActionBarHeaderRoomTopic.setVisibility(View.VISIBLE);
-                mActionBarHeaderRoomTopic.setText(value);
+
+                SpannableStringBuilder strBuilder = new SpannableStringBuilder(value);
+                MatrixURLSpan.refreshMatrixSpans(strBuilder, mVectorMessageListFragment);
+                mActionBarHeaderRoomTopic.setText(strBuilder);
+
+                URLSpan[] urls = strBuilder.getSpans(0, value.length(), URLSpan.class);
+
+                if ((null != urls) && (urls.length > 0)) {
+                    for (URLSpan span : urls) {
+                        makeLinkClickable(strBuilder, span, value);
+                    }
+                }
             }
         }
     }
+
+    /**
+     * Trap the clicked URL.
+     *
+     * @param strBuilder    the input string
+     * @param span          the URL
+     * @param value         roomAlias, roomId, groupId, eventId, etc.
+     */
+    public void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final String value) {
+        int start = strBuilder.getSpanStart(span);
+        int end = strBuilder.getSpanEnd(span);
+
+        if (start >= 0 && end >= 0) {
+            int flags = strBuilder.getSpanFlags(span);
+
+            ClickableSpan clickable = new ClickableSpan() {
+                public void onClick(View view) {
+                    if (null != mVectorMessageListFragment) {
+                        mVectorMessageListFragment.onURLClick(Uri.parse(VectorUtils.getPermalink(value, null)));
+                    }
+                }
+            };
+
+            strBuilder.setSpan(clickable, start, end, flags);
+            strBuilder.removeSpan(span);
+        }
+    }
+
+
 
     /**
      * Tell if the user can send a message in this room.
