@@ -782,4 +782,35 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encrypted_message">暗号化されたメッセージ</string>
 
 <string name="action_exit">退出</string>
+    <string name="title_activity_group_details">コミュニティの詳細</string>
+
+    <string name="loading">読み込み中...</string>
+
+    <string name="bottom_action_groups">コミュニティ</string>
+
+    <string name="home_filter_placeholder_groups">コミュニティを探す</string>
+
+    <string name="groups_invite_header">招待</string>
+    <string name="groups_header">コミュニティ</string>
+    <string name="no_group_placeholder">グループがありません</string>
+
+    <string name="start_new_chat_prompt_msg">%sと新しい対話を開始して本当によろしいですか？</string>
+    <string name="start_voice_call_prompt_msg">音声通話を開始して本当によろしいですか？</string>
+    <string name="start_video_call_prompt_msg">ビデオ通話を開始して本当によろしいですか？</string>
+
+    <string name="groups_list">グループリスト</string>
+
+    <string name="room_participants_kick_prompt_msg">このユーザをこの対話から除外して本当によろしいですか？</string>
+    <string name="room_participants_ban_prompt_msg">このユーザが対話に参加するのを禁止して本当によろしいですか？</string>
+
+    <string name="room_settings_all_messages_noisy">すべてのメッセージ (大音量)</string>
+    <string name="room_settings_all_messages">すべてのメッセージ</string>
+    <string name="room_settings_mute">ミュート</string>
+    <string name="room_settings_add_homescreen_shortcut">ホーム画面へのショートカットを作成</string>
+
+    <string name="settings_inline_url_preview">デフォルトでURLのプレビューを表示</string>
+    <string name="room_settings_room_notifications_title">通知</string>
+    <string name="room_settings_no_flair">" この部屋はどのコミュニティにも属していません"</string>
+    <string name="settings_flair">所属するコミュニティ</string>
+
     </resources>
