@@ -633,10 +633,10 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="media_slider_saved_message">ダウンロードファイルに保存する</string>
     <string name="room_preview_unlinked_email_warning">この招待は%sさんに送られましたが、このアカウントには関連づけられていません。
-他のアカウントでログインするか、このメールをあなたのアカウントに加えることができます。</string>
+他のアカウントでログインするか、このメールアドレスをこのアカウントに追加できます。</string>
     <string name="room_preview_try_join_an_unknown_room">あなたは%sにアクセスしようとしています。話し合いに参加しますか？</string>
     <string name="room_preview_try_join_an_unknown_room_default">部屋</string>
-    <string name="room_preview_room_interactions_disabled">これはこの部屋のプレビューです。部屋間の相互作用は無効です。</string>
+    <string name="room_preview_room_interactions_disabled">これは部屋のプレビューです。部屋でのやりとりはできません。</string>
 
     <string name="room_e2e_alert_message">エンドツーエンド暗号化はベータ版であり、確実でない可能性があります。
 
@@ -646,7 +646,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
 暗号化未対応のクライアントでは、暗号化されたメッセージを見れない可能性があります。</string>
 
-    <string name="room_participants_power_level_prompt">あなたと同じ権限をこのユーザーに与えるというこの変更は、やり直すことができません。
+    <string name="room_participants_power_level_prompt">このユーザーにあなたと同じ権限を与える変更は取り消せません。
 よろしいですか？</string>
 
     <string name="people_search_local_contacts">端末の連絡先 (%d)</string>
