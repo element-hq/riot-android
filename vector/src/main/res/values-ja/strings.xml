@@ -696,7 +696,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_version">バージョン</string>
     <string name="settings_olm_version">olmのバージョン</string>
     <string name="settings_third_party_notices">サードパーティのライセンスに関する通知</string>
-    <string name="settings_home_display">ホーム</string>
+    <string name="settings_home_display">ホーム画面</string>
     <string name="settings_pin_missed_notifications">逃した通知がある部屋を固定する</string>
     <string name="settings_pin_unread_messages">未読のメッセージがある部屋を固定する</string>
     <string name="settings_analytics">分析</string>
@@ -813,4 +813,46 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_settings_no_flair">" この部屋はどのコミュニティにも属していません"</string>
     <string name="settings_flair">所属するコミュニティ</string>
 
+    <string name="room_settings_add_new_group">新しいコミュニティID (記入例 +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">無効なコミュニティID</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' は有効なコミュニティIDではありません</string>
+
+
+    <string name="encryption_export_saved_as">部屋のエンドツーエンド暗号鍵は \'%s\' に保存されました</string>
+
+    <string name="you_added_a_new_device">暗号鍵を要求している新しい端末 \'%s\' を追加しました。</string>
+    <string name="your_unverified_device_requesting">未確認の端末 \'%s\' が暗号鍵を要求しています。</string>
+    <string name="create">作成</string>
+    <string name="create_community">コミュニティを作成</string>
+    <string name="community_name">コミュニティの名前</string>
+    <string name="community_name_hint">例</string>
+    <string name="community_id">コミュニティID</string>
+    <string name="community_id_hint">例</string>
+
+    // group details
+    <string name="group_details_home">ホーム</string>
+    <string name="group_details_people">参加者</string>
+    <string name="group_details_rooms">部屋</string>
+    <string name="no_users_placeholder">ユーザがいません</string>
+
+    <string name="rooms">部屋</string>
+    <string name="joined">参加済</string>
+    <string name="invited">招待済</string>
+    <string name="filter_group_members">グループの参加者をフィルタリングする</string>
+    <string name="filter_group_rooms">グループの部屋をフィルタリングする</string>
+
+    <string name="group_one_member">1名</string>
+    <string name="group_members">%d名</string>
+
+    <string name="group_one_room">1部屋</string>
+    <string name="group_rooms">%d部屋</string>
+    <string name="group_no_long_description">管理者はこのコミュニティの詳細を規定していません。</string>
+
+    <string name="one_new_message">1つの新しいメッセージ</string>
+    <string name="new_messages">%d個の新しいメッセージ</string>
+
+    <string name="has_been_kicked">あなたは%2$sによって%1$sから除外されました。</string>
+    <string name="has_been_banned">あなたは%2$sによって%1$sへの入室を禁止されました</string>
+    <string name="reason_colon">理由: %1$s</string>
+    <string name="rejoin">再参加</string>
     </resources>
