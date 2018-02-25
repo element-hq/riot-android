@@ -659,9 +659,9 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="ssl_do_not_trust">信用しない</string>
     <string name="ssl_fingerprint_hash">フィンガープリント (%s):</string>
     <string name="ssl_could_not_verify">リモートサーバの身元を確認できませんでした。</string>
-    <string name="ssl_cert_not_trust">誰かが不当にあなたの通信を傍受しているか、リモートサーバによる証明書をあなたの電話が信頼していない可能性があります。</string>
-    <string name="ssl_cert_new_account_expl">サーバの管理者が、これは予想されたことであると言っていたならば、以下のフィンガープリントが管理者によるフィンガープリントと一致していることを確認してください。</string>
-    <string name="ssl_unexpected_existing_expl">証明書はあなたの電話に信頼されていたものから変更されています。これはかなり異常な事態です。この新しい証明書を承認しないことが推奨されます。</string>
+    <string name="ssl_cert_not_trust">誰かが不当にあなたの通信を傍受しているか、リモートサーバの証明書をあなたの電話が信用していない可能性があります。</string>
+    <string name="ssl_cert_new_account_expl">サーバの管理者が、これは想定されていることであると言っているのであれば、以下のフィンガープリントが管理者によるフィンガープリントと一致していることを確認してください。</string>
+    <string name="ssl_unexpected_existing_expl">証明書はあなたの電話に信頼されていたものから変更されています。これはきわめて異常な事態です。この新しい証明書は承認しないことを強く推奨します。</string>
     <string name="ssl_expected_existing_expl">証明書は以前信頼されていたものから信頼されていないものへと変更されています。サーバがその証明書を更新した可能性があります。予測されるフィンガープリントを取得するために、サーバの管理者に連絡してください。</string>
     <string name="ssl_only_accept">サーバの管理者が上のフィンガープリントと一致するものを発行した場合に限り、証明書を承認してください。</string>
     <string name="room_details_selected">選択済</string>
