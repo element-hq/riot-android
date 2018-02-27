@@ -870,7 +870,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="room_settings_room_notifications_title">Ilmoitukset</string>
     <string name="room_settings_add_new_group">Uusi ID tunnus (esim. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Virheellinen ID</string>
-    <string name="room_settings_invalid_group_format_dialog_body">\'%\' ei ole sallittu ID</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ei ole sallittu ID</string>
 
 
     <string name="create">Luo</string>
