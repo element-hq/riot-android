@@ -911,4 +911,6 @@ Email также позволит вам при необходимости во�
     <string name="reason_colon">Причина: %1$s</string>
     <string name="rejoin">Присоединиться снова</string>
     <string name="forget_room">Забыть комнату</string>
-</resources>
+<string name="send_bug_report_rage_shake">Встряхните устройство, чтобы сообщить об ошибке</string>
+
+    </resources>
