@@ -270,9 +270,7 @@ Disculpe por la inconveniencia.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot necesita tu permiso para usar su cámara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
     <string name="permissions_rationale_msg_contacts">Riot necesita tu permiso para leer tus contactos y directorio para encontrar a otros usuarios por sus correos electrónicos y números telefónicos.\n\nPor favor permite el acceso en el siguiente mensaje para encontrar usuarios de Riot en su directorio.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot necesita tu permiso para leer los contactos de tu agenda para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
-
-¿Permitir el acceso a Riot para leer tus contactos?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.\n\n¿Permitir el acceso a Riot para leer tus contactos ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Perdon.. Operación no realizada, debido a permisos faltantes</string>
 
@@ -869,7 +867,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="room_settings_invalid_group_format_dialog_title">El ID de la comunidad es inválido</string>
     <string name="forget_room">Olvidar sala</string>
 <string name="rejoin">Volver a entrar</string>
-    <string name="room_settings_invalid_group_format_dialog_body">\'℅s\' no es un ID de comunidad válido</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' no es un ID de comunidad válido</string>
 
 
     <string name="create">Crear</string>

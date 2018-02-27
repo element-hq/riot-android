@@ -1,3 +1,12 @@
+Changes in Riot 0.8.1 (2018-02-15)
+===================================================
+ 
+Improvements:
+ * Update matrix-sdk.aar lib (v0.9.0).
+ 
+Bug Fix:
+ * URL Preview: We should have it for m.notice too (PR 1975).
+
 Changes in Riot 0.8.00-beta (2018-02-02)
 ===================================================
 

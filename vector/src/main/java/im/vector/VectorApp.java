@@ -1270,6 +1270,7 @@ public class VectorApp extends MultiDexApplication {
         }
     }
 
+
     /**
      * The application is paused.
      */

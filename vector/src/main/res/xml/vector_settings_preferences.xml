@@ -347,6 +347,12 @@
             android:key="SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY"
             android:summary="@string/settings_opt_out_of_analytics_summary"
             android:title="@string/settings_opt_out_of_analytics" />
+
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_USE_RAGE_SHAKE_KEY"
+            android:title="@string/send_bug_report_rage_shake" />
+
+
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
