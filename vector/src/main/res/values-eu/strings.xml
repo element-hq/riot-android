@@ -649,15 +649,15 @@ Jarraitzeko, idatzi zure pasahitza.</string>
 
     <string name="encryption_information_not_verified">EZ egiaztatuta</string>
     <string name="encryption_information_verified">Egiaztatuta</string>
-    <string name="encryption_information_blocked">Zerrenda beltzean</string>
+    <string name="encryption_information_blocked">Blokeatuta</string>
 
     <string name="encryption_information_unknown_device">gailu ezezaguna</string>
     <string name="encryption_information_none">bat ere ez</string>
 
     <string name="encryption_information_verify">Egiaztatu</string>
     <string name="encryption_information_unverify">Kendu egiaztaketa</string>
-    <string name="encryption_information_block">Sartu zerrenda beltzean</string>
-    <string name="encryption_information_unblock">Atera zerrenda beltzean</string>
+    <string name="encryption_information_block">Blokeatu</string>
+    <string name="encryption_information_unblock">Desblokeatu</string>
 
     <string name="encryption_information_verify_device">Egiaztatu gailua</string>
     <string name="encryption_information_verify_device_warning">" Gailu hau fidagarria dela egiaztatzeko, kontaktatu bere jabea beste medio bat erabiliz (adib. aurrez aurre edo telefonoz deituz) eta galdetu beraien erabiltzaile-ezarpenetan bere gailurako ikusten duen gakoa hemen beheko bera den:"</string>
