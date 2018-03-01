@@ -908,4 +908,6 @@ Unbekannte Geräte:</string>
 
     <string name="settings_flair">Flair</string>
 
+    <string name="send_bug_report_rage_shake">Schüttele um einen Fehler zu melden</string>
+
     </resources>
