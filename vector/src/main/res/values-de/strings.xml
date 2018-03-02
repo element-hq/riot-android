@@ -896,4 +896,61 @@ Unbekannte Geräte:</string>
 
     <string name="send_bug_report_rage_shake">Schüttele um einen Fehler zu melden</string>
 
+    <string name="actions">Aktionen</string>
+    <string name="list_members">Mitglieder auflisten</string>
+    <string name="room_sync_in_progress">Synchronisiere...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 aktives Mitglied</item>
+	<item quantity="other">%d aktive Mitglieder</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 Mitglied</item>
+	<item quantity="other">%d Mitglieder</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 neue Nachricht</item>
+	<item quantity="other">%d neue Nachrichten</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s und %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 andere(r)</item>
+	<item quantity="other">%d andere</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 Raum</item>
+	<item quantity="other">%d Räume</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s Raum gefunden für %2$s</item>
+	<item quantity="other">%1$s Räume gefunden für %2$s</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 ungelesene Nachricht</item>
+	<item quantity="other">%d ungelesene Nachrichten</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 ungelesene benachrichtige Nachricht</item>
+	<item quantity="other">%d ungelesene benachrichte Nachrichten</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 Raum</item>
+	<item quantity="other">%d Räume</item>
+</plurals>
+    <plurals name="active_widgets">
+	<item quantity="one">1 aktives Widget</item>
+	<item quantity="other">%d aktive Widgets</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="avatar">Profilbild</string>
+
+<plurals name="membership_changes">
+	<item quantity="one">1 Mitgliederänderung</item>
+	<item quantity="other">%d Mitgliederänderungen</item>
+</plurals>
+
+    <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
+
     </resources>
