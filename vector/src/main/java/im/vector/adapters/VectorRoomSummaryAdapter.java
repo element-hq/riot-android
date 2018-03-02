@@ -311,7 +311,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // Retrieve lists of room IDs(strings) according to their tags
             final List<String> favouriteRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
-            mDirectChatRoomIdsList = mMxSession.getDirectChatRoomIdsList();
+            mDirectChatRoomIdsList = mMxSession.getDataHandler().getDirectChatRoomIdsList();
 
             // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
             ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
