@@ -3098,7 +3098,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         } else if (null != sRoomPreviewData) {
                             text = getResources().getQuantityString(R.plurals.room_title_members, joinedMembersCount, joinedMembersCount);
                         } else {
-                            text = getQuantityString(R.plurals.room_header_active_members, joinedMembersCount, joinedMembersCount, activeMembersCount);
+                            text = activeMembersCount + "/" +
+                                    getResources().getQuantityString(R.plurals.room_header_active_members_count, joinedMembersCount, joinedMembersCount);
                         }
 
                         if (!TextUtils.isEmpty(text)) {

@@ -335,9 +335,9 @@
     <!-- Chat creation -->
     <string name="room_creation_title">New Chat</string>
     <string name="room_creation_add_member">Add member</string>
-    <plurals name="room_header_active_members">
-        <item quantity="one">%2$d/1 active members</item>
-        <item quantity="other">%2$d/%d active members</item>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">1 active members</item>
+        <item quantity="other">%d active members</item>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 member</item>
@@ -455,10 +455,13 @@
     <string name="room_displayname_invite_from">Invite from %s</string>
     <string name="room_displayname_room_invite">Room Invite</string>
     <string name="room_displayname_two_members">%1$s and %2$s</string>
-    <plurals name="room_displayname_more_than_two_members">
-        <item quantity="one">%2$s and 1 other</item>
-        <item quantity="other">%2$s and %d others</item>
+
+    <string name="room_displayname_many_members">%1$s and %2$s</string>
+    <plurals name="others">
+        <item quantity="one">1 other</item>
+        <item quantity="other">%d others</item>
     </plurals>
+
     <string name="room_displayname_no_title">Empty room</string>
 
     <!-- Search -->

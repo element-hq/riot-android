@@ -214,9 +214,6 @@ Valitse \"vie\" varmuuskopioidaksesi avaimet ennen uloskirjautumista.</string>
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lukukuittaukset</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d jäsenyysmuutosta</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -305,8 +302,6 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <!-- Chat creation -->
     <string name="room_creation_title">Uusi keskustelu</string>
     <string name="room_creation_add_member">Lisää jäsen</string>
-    <string name="room_header_active_members">%1$d/%2$d aktiivista jäsentä</string>
-    <string name="room_title_members">%1$d jäsentä</string>
     <string name="room_title_one_member">1 jäsen</string>
     <string name="room_e2e_alert_title">Varoitus!</string>
     <string name="room_e2e_alert_message">Salaus on testikäytössä, eikä välttämättä toimi luotettavasti.
@@ -383,7 +378,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_message_file_not_found">Tiedostoa ei löydy</string>
     <string name="room_do_not_have_permission_to_post">Et saa lähettää viestejä tähän huoneeseen</string>
     <string name="room_new_message_notification">1 uusi viesti</string>
-    <string name="room_new_messages_notification">%1$d uutta viestiä</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Luota</string>
@@ -421,7 +415,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_displayname_invite_from">Kutsu käyttäjältä %s</string> <!-- Grammar problem -->
     <string name="room_displayname_room_invite">Huonekutsu</string>
     <string name="room_displayname_two_members">%1$s ja %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s ja %2$d muuta</string>
     <string name="room_displayname_no_title">Tyhjä huone</string>
 
     <!-- Search -->
@@ -449,9 +442,7 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <!-- Directory -->
     <string name="directory_search_results_title">Selaa hakemistoa</string>
     <string name="directory_search_room">%1$d huone</string>
-    <string name="directory_search_rooms">%1$d huonetta</string>
     <string name="directory_search_room_for">%1$d huone löydetty hakusanalla "%2$s"</string>
-    <string name="directory_search_rooms_for">%1$s huonetta löydetty hakusanalla "%2$s"</string>
     <string name="directory_searching_title">Haetaan luettelosta..</string>
 
     <!-- home room settings -->
@@ -723,10 +714,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="directory_server_all_rooms_on_server">Kaikki huoneet palvelimella %s</string>
     <string name="directory_server_native_rooms">Kaikki alkuperäiset %s huoneet</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d lukematonta ilmoitettua viestiä</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread messages in %2$d rooms"</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Etsi historiasta</string>
 <string name="user_directory_header">Käyttäjähakemisto</string>
@@ -797,7 +784,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="event_formatter_widget_removed">%1$s poistettiin %2$s toimesta</string>
     <string name="settings_labs_create_conference_with_jitsi">Luo konferenssipuhelu jitsin avulla</string>
     <string name="widget_delete_message_confirmation">Haluatko varmasti poistaa pienoissovelluksen?</string>
-    <string name="active_widgets">%1$d aktiivista pienoissovellusta</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">Pienoissovellusta ei voitu luoda.</string>

@@ -232,7 +232,7 @@ public class RoomsNotifications implements Parcelable {
             roomNotifications.mMessagesSummary = latestText;
         } else {
             if (unreadCount > MAX_NUMBER_NOTIFICATION_LINES) {
-                mSummaryText = mContext.getString(R.string.notification_unread_notified_messages, unreadCount);
+                mSummaryText = mContext.getResources().getQuantityString(R.plurals.notification_unread_notified_messages, unreadCount, unreadCount);
             }
         }
 
@@ -295,7 +295,7 @@ public class RoomsNotifications implements Parcelable {
                 }
             } else {
                 header = roomName + ": ";
-                text = mContext.getString(R.string.notification_unread_notified_messages, notifiedEvents.size());
+                text = mContext.getResources().getQuantityString(R.plurals.notification_unread_notified_messages, notifiedEvents.size(), notifiedEvents.size());
             }
 
             // ad the line if it makes sense
@@ -318,7 +318,9 @@ public class RoomsNotifications implements Parcelable {
             mRoomNotifications = mRoomNotifications.subList(0, MAX_NUMBER_NOTIFICATION_LINES);
         }
 
-        mSummaryText = mContext.getString(R.string.notification_unread_notified_messages_in_room, sum, roomsCount);
+        mSummaryText = mContext.getString(R.string.notification_unread_notified_messages_in_room,
+                mContext.getResources().getQuantityString(R.plurals.notification_unread_notified_messages_in_room_msgs, sum, sum),
+                mContext.getResources().getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms, roomsCount, roomsCount));
     }
 
     /**

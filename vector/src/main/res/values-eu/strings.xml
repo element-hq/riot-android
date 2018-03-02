@@ -197,8 +197,6 @@ Saiotik atera zaizu gailu guztietan eta ez dituzu jakinarazpenak jasoko. Jakinar
 
     <string name="read_receipts_list">Irakurragirien zerrenda</string>
 
-    <string name="membership_changes">%d kidetza aldaketa</string>
-
     <string name="compression_options">"Bidali honela "</string>
     <string name="compression_opt_list_original">Jatorrizkoa</string>
     <string name="compression_opt_list_large">Handia</string>
@@ -283,8 +281,6 @@ Beste kontu batekin hasi dezakezu saioa, edo e-mail hau kontu honetara gehitu.</
 
     <string name="room_creation_title">Txat berria</string>
     <string name="room_creation_add_member">Gehitu kidea</string>
-    <string name="room_header_active_members">%1$d/%2$d kide aktibo</string>
-    <string name="room_title_members">%1$d kide</string>
     <string name="room_title_one_member">kide 1</string>
     <string name="room_e2e_alert_title">Abisua!</string>
     <string name="room_e2e_alert_message">Muturretik muturrera zifratzea beta egoeran dago eta agian ez dabil behar bezala.
@@ -363,7 +359,6 @@ Ziur zaude?</string>
     <string name="room_message_file_not_found">Ez da fitxategia aurkitu</string>
     <string name="room_do_not_have_permission_to_post">Ez duzu gela honetara mezuak bidaltzeko baimenik</string>
     <string name="room_new_message_notification">mezu berri 1</string>
-    <string name="room_new_messages_notification">%1$d mezu berri</string>
 
     <string name="ssl_trust">Fidatu</string>
     <string name="ssl_do_not_trust">Ez fidatu</string>
@@ -394,7 +389,6 @@ Ziur zaude?</string>
     <string name="room_displayname_invite_from">%s gelarako gonbidapena</string>
     <string name="room_displayname_room_invite">Gela gonbidapena</string>
     <string name="room_displayname_two_members">%1$s eta %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s eta beste %2$d</string>
     <string name="room_displayname_no_title">Gela hutsa</string>
 
     <string name="search_hint">Bilatu</string>
@@ -419,9 +413,7 @@ Ziur zaude?</string>
 
     <string name="directory_search_results_title">Arakatu direktorioa</string>
     <string name="directory_search_room">gela %1$d</string>
-    <string name="directory_search_rooms">%1$d gela</string>
     <string name="directory_search_room_for">gela %1$d aurkitu da %2$s bilaketarako</string>
-    <string name="directory_search_rooms_for">%1$s gela aurkitu dira %2$s bilaketarako</string>
     <string name="directory_searching_title">Direktorioa bilatzen..</string>
 
     <string name="room_settings_favourite">Gogokoa</string>
@@ -683,9 +675,6 @@ Gailu ezezagunak:</string>
     <string name="directory_server_all_rooms_on_server">%s zerbitzariko gela guztiak</string>
     <string name="directory_server_native_rooms">%s zerbitzariko gela natibo guztiak</string>
 
-    <string name="notification_unread_notified_messages">Irakurri gabeko %d mezu-jakinarazpen</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d irakurri gabeko eta jakinaraziko mezu %2$d gelatan</string>
-
     <string name="historical_placeholder">Bilatu historiala</string>
 
 <string name="room_settings_addresses_e2e_prompt_message">Muturretik muturrera zifratzea beta egoeran dago eta agian ez dabil behar bezala.
@@ -734,7 +723,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="event_formatter_widget_removed">%1$s kendu du %2$s erabiltzaileak</string>
     <string name="settings_labs_create_conference_with_jitsi">Sortu konferentzia deiak jitsi bidez</string>
     <string name="widget_delete_message_confirmation">Ziur trepeta ezabatu nahi duzula?</string>
-    <string name="active_widgets">%1$d trepeta aktibo</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">Ezin izan da trepeta sortu.</string>

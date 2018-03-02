@@ -220,9 +220,6 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Перегляд списку вступників</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -304,8 +301,6 @@
     <!-- Chat creation -->
     <string name="room_creation_title">Новий Чат</string>
     <string name="room_creation_add_member">Додати учасника</string>
-    <string name="room_header_active_members">%1$d/%2$d активних користувачів</string>
-    <string name="room_title_members">%1$d учасників</string>
     <string name="room_title_one_member">1 учасник</string>
     <string name="room_e2e_alert_title">Увага!</string>
     <string name="room_e2e_alert_message">Скрізне шифрування досі на стадії beta-тестування та може бути ненадійним.</string>
@@ -377,7 +372,6 @@
     <string name="room_message_file_not_found">Файл не знайдено</string>
     <string name="room_do_not_have_permission_to_post">Ви не маєте права писати повідомлення в цій кімнаті</string>
     <string name="room_new_message_notification">1 нове повідомлення</string>
-    <string name="room_new_messages_notification">%1$d нових повідомлень</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Довіряти</string>
@@ -413,7 +407,6 @@
     <string name="room_displayname_invite_from">Запрошення від %s</string>
     <string name="room_displayname_room_invite">Запрошення до кімнати</string>
     <string name="room_displayname_two_members">%1$s і %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s та %2$d інші</string>
     <string name="room_displayname_no_title">Порожня кімната</string>
 
     <!-- Search -->
@@ -441,9 +434,7 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Огляд каталогу</string>
     <string name="directory_search_room">%1$d кімната</string>
-    <string name="directory_search_rooms">%1$d кімнати</string>
     <string name="directory_search_room_for">%1$d кімната знайдена для %2$s</string>
-    <string name="directory_search_rooms_for">%1$s кімнат знайдено для %2$s</string>
     <string name="directory_searching_title">Пошук у каталозі...</string>
 
     <!-- home room settings -->
@@ -734,10 +725,6 @@
     <string name="directory_server_all_rooms_on_server">Всі кімнати на сервері %s</string>
     <string name="directory_server_native_rooms">Всі місцеві кімнати %s</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d непрочитаних повідомлень</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d непрочитаних повідомлень у %2$d кімнатах"</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Пошук в історії</string>
 
@@ -758,7 +745,6 @@
     <string name="event_formatter_widget_removed">%1$s видалено %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Здійснювати конференц дзвінки через Jitsi</string>
     <string name="widget_delete_message_confirmation">Справді бажаєте видалити віджет?</string>
-    <string name="active_widgets">Активних віджетів: %1$d</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">Не вдалося створити віджет.</string>

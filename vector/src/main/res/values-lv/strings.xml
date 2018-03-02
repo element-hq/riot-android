@@ -238,8 +238,6 @@ Tu esi izrakstīts no visām ierīcēm un vairāk nesaņemsi \"push\" paziņojum
 
     <string name="groups_list">Grupu saraksts</string>
 
-    <string name="membership_changes">%d izmaiņas biedru skaitā</string>
-
     <string name="compression_options">"Nosūtīt kā "</string>
     <string name="compression_opt_list_original">Oriģināls</string>
     <string name="compression_opt_list_large">Liels</string>
@@ -321,8 +319,6 @@ Tu vari pierakstīties ar citu kontu vai arī pievienot šo epastu šim kontam.<
 
     <string name="room_creation_title">Jauns čats</string>
     <string name="room_creation_add_member">Pievienots dalībnieku</string>
-    <string name="room_header_active_members">%1$d/%2$d aktīvi dalībnieki</string>
-    <string name="room_title_members">%1$d dalībnieki</string>
     <string name="room_title_one_member">1 dalībnieks</string>
     <string name="room_e2e_alert_title">Uzmanību!</string>
     <string name="room_e2e_alert_message">\"End-to-end\" šifrēšana ir beta stadijā un var nestrādāt stabili.
@@ -399,7 +395,6 @@ Vai vēlies turpināt?</string>
     <string name="room_message_file_not_found">Fails nav atrasts</string>
     <string name="room_do_not_have_permission_to_post">Tev nav tiesību rakstīt ziņas šajā istabā</string>
     <string name="room_new_message_notification">1 jauna ziņa</string>
-    <string name="room_new_messages_notification">%1$d jaunas ziņas</string>
 
     <string name="ssl_trust">Uzticēties</string>
     <string name="ssl_do_not_trust">Neuzticēties</string>
@@ -431,7 +426,6 @@ Vai vēlies turpināt?</string>
     <string name="room_displayname_invite_from">Uzaicinājums no %s</string>
     <string name="room_displayname_room_invite">Uzaicinājums uz istabu</string>
     <string name="room_displayname_two_members">%1$s un %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s un %2$d citi</string>
     <string name="room_displayname_no_title">Tukša istaba</string>
 
     <string name="search_hint">Meklēšana</string>
@@ -456,9 +450,7 @@ Vai vēlies turpināt?</string>
 
     <string name="directory_search_results_title">Skatīt katalogu</string>
     <string name="directory_search_room">%1$d istaba</string>
-    <string name="directory_search_rooms">%1$d istabas</string>
     <string name="directory_search_room_for">%1$d istaba atrasta priekš %2$s</string>
-    <string name="directory_search_rooms_for">%1$s istabas atrastas priekš %2$s</string>
     <string name="directory_searching_title">Meklēju katalogā...</string>
 
     <string name="room_settings_all_messages_noisy">Visas ziņas (ar skaņu)</string>

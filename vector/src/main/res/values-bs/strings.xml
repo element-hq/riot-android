@@ -216,8 +216,6 @@ Oprostite na neugodnosti.</string>
 
     <string name="read_receipts_list">Čitajte Listu Primalaca</string>
 
-    <string name="membership_changes">% promjene članstva</string>
-
     <string name="compression_options">"Pošalji kao "</string>
     <string name="compression_opt_list_original">Orginal</string>
     <string name="compression_opt_list_large">Veliko</string>
@@ -296,8 +294,6 @@ Možda se želite prijaviti s nekim drugim računom ili dodati ovu poruku email 
 
     <string name="room_creation_title">Novi Razgovor</string>
     <string name="room_creation_add_member">Dodaj člana</string>
-    <string name="room_header_active_members">%1$d/%2$d aktivni članovi</string>
-    <string name="room_title_members">%1$d članovi</string>
     <string name="room_title_one_member">1 član</string>
     <string name="room_e2e_alert_title">Upozorenje!</string>
     <string name="room_e2e_alert_message">End-to-end šifriranje je u beta verziji i možda nije pouzdano.
@@ -371,7 +367,6 @@ Da li ste sigurani?</string>
     <string name="room_message_file_not_found">Datoteka nije pronađena</string>
     <string name="room_do_not_have_permission_to_post">Nemate dopuštenje da komunicirate u ovoj sobi</string>
     <string name="room_new_message_notification">1 nova poruka</string>
-    <string name="room_new_messages_notification">%1$d novih poruka</string>
 
     <string name="ssl_trust">Povjerenje</string>
     <string name="ssl_do_not_trust">Ne vjerujte</string>
@@ -403,7 +398,6 @@ Da li ste sigurani?</string>
     <string name="room_displayname_invite_from">Pozovite iz %s</string>
     <string name="room_displayname_room_invite">Poziv u Sobu</string>
     <string name="room_displayname_two_members">%1$s i %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s i %2$d ostali</string>
     <string name="room_displayname_no_title">Prazna soba</string>
 
     <string name="search_hint">Pretraga</string>
@@ -428,9 +422,7 @@ Da li ste sigurani?</string>
 
     <string name="directory_search_results_title">Pretražite imenik</string>
     <string name="directory_search_room">%1$d soba</string>
-    <string name="directory_search_rooms">%1$d sobe</string>
     <string name="directory_search_room_for">%1$d soba nađena za %2$s</string>
-    <string name="directory_search_rooms_for">%1$s soba pronađena za %2$s</string>
     <string name="directory_searching_title">Traži direktorij..</string>
 
     <string name="room_settings_favourite">Favorit</string>

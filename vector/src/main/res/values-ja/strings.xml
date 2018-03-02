@@ -156,7 +156,6 @@
     <string name="room_preview_invitation_format">あなたは %s さんに呼ばれてこの部屋へ参加しました</string>
     <string name="room_creation_title">新しい対話</string>
     <string name="room_creation_add_member">参加者を追加</string>
-    <string name="room_title_members">%1$d名</string>
     <string name="room_title_one_member">1名</string>
     <string name="room_participants_remove_prompt_msg">本当に%sさんを退室させますか?</string>
     <string name="room_participants_now">現在</string>
@@ -442,7 +441,6 @@
     <string name="preview">試写</string>
     <string name="reject">拒否</string>
 
-    <string name="room_header_active_members">全%2$d人中 %1$d人が回線接続中</string>
     <string name="room_participants_header_admin_tools">管理者権限操作</string>
     <string name="room_participants_header_call">通話</string>
     <string name="room_participants_header_direct_chats">対話</string>
@@ -461,7 +459,6 @@
 
     <string name="room_prompt_cancel">全て中止</string>
     <string name="room_new_message_notification">1つの新しい発言があります</string>
-    <string name="room_new_messages_notification">%1$d 新しい発言があります</string>
 
     <string name="ssl_logout_account">ログアウト</string>
     <string name="ssl_remain_offline">無視</string>
@@ -486,7 +483,6 @@
     <string name="room_recents_join">参加</string>
     <string name="directory_search_results_title">部屋一覧を見る</string>
     <string name="directory_search_room">%1$d 部屋</string>
-    <string name="directory_search_rooms">%1$d 部屋</string>
     <string name="room_settings_leave_conversation">退室</string>
     <string name="room_sliding_menu_messages">会話</string>
     <string name="room_sliding_menu_settings">設定</string>
@@ -540,8 +536,6 @@
     <string name="users">ユーザ</string>
     <string name="auth_login">ログイン</string>
     <string name="login_mobile_device">携帯端末</string>
-
-    <string name="membership_changes">%d 権限を変更</string>
 
     <string name="settings_labs_matrix_apps">Matrixアプリ</string>
     <string name="room_add_matrix_apps">Matrixアプリを追加</string>
@@ -674,7 +668,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_displayname_invite_from">%sさんからの招待</string>
     <string name="room_displayname_room_invite">部屋への招待</string>
     <string name="room_displayname_two_members">%1$sと%2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$sと%2$d他</string>
     <string name="room_displayname_no_title">空の部屋</string>
 
     <string name="search_hint">検索</string>
@@ -684,7 +677,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_recents_join_room_prompt">部屋のIDまたは部屋のエイリアスを入力してください</string>
 
     <string name="directory_search_room_for">%2$sに%1$d部屋見つかりました</string>
-    <string name="directory_search_rooms_for">%2$sに%1$s部屋見つかりました</string>
     <string name="directory_searching_title">ディレクトリを検索中..</string>
 
     <string name="room_sliding_menu_third_party_notices">サードパーティのライセンスに関する通知</string>
@@ -754,14 +746,10 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="directory_server_all_rooms_on_server">%sサーバ上のすべての部屋</string>
     <string name="directory_server_native_rooms">すべてのローカルの%s部屋</string>
 
-    <string name="notification_unread_notified_messages">%d件の未読の通知されたメッセージ</string>
-    <string name="notification_unread_notified_messages_in_room">%2$d部屋に%1$d件の未読の通知されたメッセージ</string>
-
     <string name="room_unsent_messages_notification">メッセージが未送信です。今%1$sまたは%2$sですか？</string>
     <string name="room_unknown_devices_messages_notification">不明なデバイスが存在しているため、メッセージを送ることができませんでした。今%1$sまたは%2$sですか？</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">要求されたフィンガープリントキー Ed25519</string>
     <string name="settings_labs_create_conference_with_jitsi">jitsiを用いて会議通話を始める</string>
-    <string name="active_widgets">%1$d個の接続中のウィジェット</string>
 
     // Widget Integration Manager
     <string name="settings_labs_native_camera">端末のカメラを使う</string>

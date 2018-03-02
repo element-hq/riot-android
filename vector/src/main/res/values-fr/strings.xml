@@ -542,8 +542,6 @@ Vous pouvez vous identifier avec un compte différent ou ajouter cette adresse e
     <string name="room_preview_try_join_an_unknown_room">Vous essayez d\'accéder à %s. Souhaitez-vous rejoindre le salon pour participer à la discussion ?</string>
     <string name="room_preview_room_interactions_disabled">Ceci est un aperçu du salon. Vous ne pouvez pas interagir.</string>
 
-    <string name="room_header_active_members">%1$d/%2$d membres actifs</string>
-    <string name="room_title_members">%1$d membres</string>
     <string name="room_e2e_alert_message">Le chiffrement de bout en bout est en version bêta et peut ne pas être fiable.
 
 Il ne doit pas être considéré comme fiable pour sécuriser des données.
@@ -573,7 +571,6 @@ En êtes-vous sûr(e) ?</string>
     <string name="room_unsent_messages_notification">Messages non envoyés. %1$s ou %2$s maintenant ?</string>
     <string name="room_unknown_devices_messages_notification">Messages non envoyés car des appareils inconnus sont présents. %1$s ou %2$s maintenant ?</string>
     <string name="room_do_not_have_permission_to_post">Vous n\'avez pas le droit de poster dans ce salon</string>
-    <string name="room_new_messages_notification">%1$d nouveaux messages</string>
 
     <string name="ssl_fingerprint_hash">Empreinte (%s) :</string>
     <string name="ssl_could_not_verify">Impossible de vérifier l\'identité du serveur distant.</string>
@@ -585,13 +582,10 @@ En êtes-vous sûr(e) ?</string>
     <string name="malformed_id">Identifiant au mauvais format. Une adresse e-mail ou un identifiant Matrix au format \"@utilisateur:domaine\" est attendu</string>
     <string name="room_event_action_report_prompt_ignore_user">Voulez-vous cacher tous les messages de cet utilisateur ?</string>
     <string name="room_displayname_two_members">%1$s et %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s et %2$d autres</string>
     <string name="room_recents_join_room_prompt">Saisissez un identifiant ou un alias de salon</string>
 
     <string name="directory_search_room">%1$d salon</string>
-    <string name="directory_search_rooms">%1$d salons</string>
     <string name="directory_search_room_for">%1$d salon trouvé pour %2$s</string>
-    <string name="directory_search_rooms_for">%1$s salons trouvés pour %2$s</string>
     <string name="settings_turn_screen_on">Allumer l\'écran pendant 3 secondes</string>
 
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
@@ -673,8 +667,6 @@ Appareils inconnus :</string>
 
     <string name="directory_server_fail_to_retrieve_server">Le serveur est peut-être indisponible ou surchargé</string>
     <string name="directory_server_type_homeserver">Saisir un serveur d\'accueil pour lister ses salons publics</string>
-    <string name="notification_unread_notified_messages">%d messages notifiés non lus</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d messages notifiés non lus dans %2$d salons</string>
 
     <string name="settings_user_interface">Interface utilisateur</string>
     <string name="settings_interface_language">Langue de l\'interface</string>
@@ -687,7 +679,6 @@ Appareils inconnus :</string>
     <string name="offline">Hors ligne</string>
 
     <string name="user_directory_header">Répertoire utilisateur</string>
-    <string name="membership_changes">%d changements de statut</string>
 
     <string name="people_search_user_directory">RÉPERTOIRE UTILISATEUR (%s)</string>
     <string name="settings_start_on_boot">Lancer au démarrage</string>
@@ -735,7 +726,6 @@ Appareils inconnus :</string>
     <string name="event_formatter_widget_removed">%1$s supprimé par %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Créer des appels en téléconférence avec jitsi</string>
     <string name="widget_delete_message_confirmation">Voulez-vous vraiment supprimer ce widget ?</string>
-    <string name="active_widgets">%1$d widgets actifs</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">Impossible de créer le widget.</string>

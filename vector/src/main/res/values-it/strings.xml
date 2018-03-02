@@ -208,9 +208,6 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Elenco ricevute lette</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d cambiamenti di appartenenza</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -292,8 +289,6 @@
     <!-- Chat creation -->
     <string name="room_creation_title">Nuova chat</string>
     <string name="room_creation_add_member">Aggiungi membro</string>
-    <string name="room_header_active_members">%1$d/%2$d membri attivi</string>
-    <string name="room_title_members">%1$d membri</string>
     <string name="room_title_one_member">1 membro</string>
     <string name="room_e2e_alert_title">Attenzione!</string>
     <string name="room_e2e_alert_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.\n\nNon dovresti ancora fidarti di essa per proteggere i tuoi dati.\n\nI dispositivi non saranno in grado di decriptare la cronologia prima che entrino nella stanza.\n\nI messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
@@ -365,7 +360,6 @@
     <string name="room_message_file_not_found">File non trovato</string>
     <string name="room_do_not_have_permission_to_post">Non hai il permesso di pubblicare in questa stanza</string>
     <string name="room_new_message_notification">1 nuovo messaggio</string>
-    <string name="room_new_messages_notification">%1$d nuovi messaggi</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Fidati</string>
@@ -401,7 +395,6 @@
     <string name="room_displayname_invite_from">Invito da %s</string>
     <string name="room_displayname_room_invite">Invito nella stanza</string>
     <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s e %2$d altri</string>
     <string name="room_displayname_no_title">Stanza vuota</string>
 
     <!-- Search -->
@@ -429,9 +422,7 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Esplora elenco</string>
     <string name="directory_search_room">%1$d stanza</string>
-    <string name="directory_search_rooms">%1$d stanze</string>
     <string name="directory_search_room_for">%1$d stanza trovata per %2$s</string>
-    <string name="directory_search_rooms_for">%1$s stanze trovate per %2$s</string>
     <string name="directory_searching_title">Ricerca in corso..</string>
 
     <!-- home room settings -->
@@ -711,10 +702,6 @@
     <string name="directory_server_all_rooms_on_server">Tutte le stanze sul server home %s</string>
     <string name="directory_server_native_rooms">Tutte le stanze native %s</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d messaggi notificati non letti</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d messaggi notificati non letti in %2$d stanze"</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Cerca nello storico</string>
 
@@ -739,7 +726,6 @@
     <string name="event_formatter_widget_removed">%1$s rimosso da %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Crea una videoconferenza con jitsi</string>
     <string name="widget_delete_message_confirmation">Sei sicuro di voler eliminare questo widget?</string>
-    <string name="active_widgets">%1$d widget attivi</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">Impossibile creare il widget.</string>

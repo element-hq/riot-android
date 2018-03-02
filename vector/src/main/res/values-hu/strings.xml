@@ -283,8 +283,6 @@ Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az e-
 
     <string name="room_creation_title">Új csevegés</string>
     <string name="room_creation_add_member">Új tag hozzáadása</string>
-    <string name="room_header_active_members">%1$d/%2$d aktív tag</string>
-    <string name="room_title_members">%1$d tag</string>
     <string name="room_title_one_member">1 tag</string>
     <string name="room_e2e_alert_title">Figyelem!</string>
     <string name="room_e2e_alert_message">Végtől végig titkosítás még tesztelés alatt áll és lehet hogy nem megbízható.
@@ -358,7 +356,6 @@ Biztos vagy benne?</string>
     <string name="room_message_file_not_found">Fájl nem található</string>
     <string name="room_do_not_have_permission_to_post">Nincs engedélyed hogy üzenetet hagyj ebbe a szobában</string>
     <string name="room_new_message_notification">1 új üzenet</string>
-    <string name="room_new_messages_notification">%1$d új üzenet</string>
 
     <string name="ssl_trust">Megbízom benne</string>
     <string name="ssl_do_not_trust">Nem bízom meg benne</string>
@@ -390,7 +387,6 @@ Biztos vagy benne?</string>
     <string name="room_displayname_invite_from">%s meghívott</string>
     <string name="room_displayname_room_invite">Meghívó egy szobába</string>
     <string name="room_displayname_two_members">%1$s és %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s és még %2$d tag</string>
     <string name="room_displayname_no_title">Üres szoba</string>
 
     <string name="search_hint">Keresés</string>
@@ -415,9 +411,7 @@ Biztos vagy benne?</string>
 
     <string name="directory_search_results_title">Könyvtár böngészése</string>
     <string name="directory_search_room">%1$d szoba</string>
-    <string name="directory_search_rooms">%1$d szoba</string>
     <string name="directory_search_room_for">%2$s kulcsszóra %1$d szobatalálat</string>
-    <string name="directory_search_rooms_for">%2$s kulcsszóra %1$s szobatalálat</string>
     <string name="directory_searching_title">Könyvtár keresése...</string>
 
     <string name="room_settings_favourite">Kedvenc</string>
@@ -670,12 +664,7 @@ Ismeretlen eszközök:</string>
     <string name="directory_server_all_rooms_on_server">Összes szoba a %s szerveren</string>
     <string name="directory_server_native_rooms">Összes anyanyelvi %s szoba</string>
 
-    <string name="notification_unread_notified_messages">%d olvasatlan figyelmeztetés üzenet</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d olvasatlan figyelmeztetés üzenet %2$d szobában</string>
-
     <string name="historical_placeholder">Előzmények keresése</string>
-
-<string name="membership_changes">%d tagváltozás</string>
 
     <string name="settings_user_interface">Felhasználói felület</string>
     <string name="settings_interface_language">Felület nyelve</string>
@@ -732,7 +721,6 @@ Ismeretlen eszközök:</string>
     <string name="event_formatter_widget_removed">%1$s eltávolításra került %2$s által</string>
     <string name="settings_labs_create_conference_with_jitsi">Hozz létre konferencia hívást a jitsi segítségével</string>
     <string name="widget_delete_message_confirmation">Biztos vagy benne hogy törölni akarod ezt a kisalkalmazást?</string>
-    <string name="active_widgets">%1$d aktív kisalkalmazások</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">Kisalkalmazás létrehozása sikertelen.</string>
