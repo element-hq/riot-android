@@ -245,7 +245,10 @@
     <string name="groups_list">Groups List</string>
 
     <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
+    <plurals name="membership_changes">
+        <item quantity="one">1 membership change</item>
+        <item quantity="other">%d membership changes</item>
+    </plurals>
 
     <!-- accounts list Screen -->
 
@@ -332,8 +335,14 @@
     <!-- Chat creation -->
     <string name="room_creation_title">New Chat</string>
     <string name="room_creation_add_member">Add member</string>
-    <string name="room_header_active_members">%1$d/%2$d active members</string>
-    <string name="room_title_members">%1$d members</string>
+    <plurals name="room_header_active_members">
+        <item quantity="one">%2$d/1 active members</item>
+        <item quantity="other">%2$d/%d active members</item>
+    </plurals>
+    <plurals name="room_title_members">
+        <item quantity="one">1 member</item>
+        <item quantity="other">%d members</item>
+    </plurals>
     <string name="room_title_one_member">1 member</string>
     <string name="room_e2e_alert_title">Warning!</string>
     <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
@@ -407,7 +416,10 @@
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
     <string name="room_new_message_notification">1 new message</string>
-    <string name="room_new_messages_notification">%1$d new messages</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">1 new message</item>
+        <item quantity="other">%d new messages</item>
+    </plurals>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Trust</string>
@@ -443,7 +455,10 @@
     <string name="room_displayname_invite_from">Invite from %s</string>
     <string name="room_displayname_room_invite">Room Invite</string>
     <string name="room_displayname_two_members">%1$s and %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s and %2$d others</string>
+    <plurals name="room_displayname_more_than_two_members">
+        <item quantity="one">%2$s and 1 other</item>
+        <item quantity="other">%2$s and %d others</item>
+    </plurals>
     <string name="room_displayname_no_title">Empty room</string>
 
     <!-- Search -->
@@ -471,9 +486,15 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
     <string name="directory_search_room">%1$d room</string>
-    <string name="directory_search_rooms">%1$d rooms</string>
+    <plurals name="directory_search_rooms">
+        <item quantity="one">1 room</item>
+        <item quantity="other">%d rooms</item>
+    </plurals>
     <string name="directory_search_room_for">%1$d room found for %2$s</string>
-    <string name="directory_search_rooms_for">%1$s rooms found for %2$s</string>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">%1$s room found for %2$s</item>
+        <item quantity="other">%1$s rooms found for %2$s</item>
+    </plurals>
     <string name="directory_searching_title">Searching directory..</string>
 
     <!-- home room settings -->
@@ -783,8 +804,19 @@
     <string name="directory_server_native_rooms">All native %s rooms</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d unread notified messages</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
+    <plurals name="notification_unread_notified_messages">
+        <item quantity="one">1 unread notified message</item>
+        <item quantity="other">%d unread notified messages</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+        <item quantity="one">1 unread notified message</item>
+        <item quantity="other">%d unread notified messages</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+        <item quantity="one">1 room</item>
+        <item quantity="other">%d rooms</item>
+    </plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
@@ -806,7 +838,10 @@
     <string name="event_formatter_widget_removed">%1$s removed by %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Create conference calls with jitsi</string>
     <string name="widget_delete_message_confirmation">Are you sure you want to delete the widget?</string>
-    <string name="active_widgets">%1$d active widgets</string>
+    <plurals name="active_widgets">
+        <item quantity="one">1 active widget</item>
+        <item quantity="other">%d active widgets</item>
+    </plurals>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
