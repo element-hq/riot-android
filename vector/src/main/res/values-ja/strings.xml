@@ -247,7 +247,7 @@
     <string name="settings_interface_language">操作に使用する言語</string>
     <string name="settings_user_interface">端末操作表示</string>
     <string name="account_email_validation_title">認証を確認中</string>
-    <string name="account_email_validation_message">電子メールを確認し, 本文中のURLを確認してください。 完了したら「続ける」をクリックしてください。</string>
+    <string name="account_email_validation_message">電子メールを確認して、本文中のURLをクリックしてください。 完了したら「続ける」をクリックしてください。</string>
     <string name="account_email_already_used_error">この電子メールアドレスは既に使われています</string>
     <string name="settings_password_updated">あなたのパスワードは更新されました</string>
     <string name="settings_select_country">国を選択</string>
@@ -323,12 +323,12 @@
     <string name="room_settings_addresses_e2e_prompt_title">警告!</string>
     <string name="encryption_information_device_id">装置固有ID</string>
     <string name="font_size">文字の大きさ</string>
-    <string name="tiny">細かく</string>
+    <string name="tiny">とても小さい</string>
     <string name="small">小さい</string>
     <string name="normal">標準</string>
     <string name="large">大きい</string>
-    <string name="larger">より大きく</string>
-    <string name="largest">もっと大きく</string>
+    <string name="larger">より大きい</string>
+    <string name="largest">とても大きい</string>
     <string name="huge">巨大</string>
 
     <string name="notification_listen_for_events">発言更新を確認</string>
@@ -349,8 +349,8 @@
     <string name="ongoing_conference_call_voice">音声</string>
     <string name="ongoing_conference_call_video">映像</string>
     <string name="cannot_start_call">通話を開始できませんでした。後ほど試してください。</string>
-    <string name="missing_permissions_warning">許可が無い為、一部の機能が失われている可能性があります。</string>
-    <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するための招待権限が必要です。</string>
+    <string name="missing_permissions_warning">権限が無いため、一部の機能が利用できない可能性があります。</string>
+    <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するためには招待権限が必要です</string>
     <string name="send_anyway">とにかく送る</string>
     <string name="and">と</string>
     <string name="action_sign_out">ログアウト</string>
@@ -633,10 +633,10 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="media_slider_saved_message">ダウンロードファイルに保存する</string>
     <string name="room_preview_unlinked_email_warning">この招待は%sさんに送られましたが、このアカウントには関連づけられていません。
-他のアカウントでログインするか、このメールをあなたのアカウントに加えることができます。</string>
+他のアカウントでログインするか、このメールアドレスをこのアカウントに追加できます。</string>
     <string name="room_preview_try_join_an_unknown_room">あなたは%sにアクセスしようとしています。話し合いに参加しますか？</string>
     <string name="room_preview_try_join_an_unknown_room_default">部屋</string>
-    <string name="room_preview_room_interactions_disabled">これはこの部屋のプレビューです。部屋間の相互作用は無効です。</string>
+    <string name="room_preview_room_interactions_disabled">これは部屋のプレビューです。部屋でのやりとりはできません。</string>
 
     <string name="room_e2e_alert_message">エンドツーエンド暗号化はベータ版であり、確実でない可能性があります。
 
@@ -646,7 +646,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
 暗号化未対応のクライアントでは、暗号化されたメッセージを見れない可能性があります。</string>
 
-    <string name="room_participants_power_level_prompt">あなたと同じ権限をこのユーザーに与えるというこの変更は、やり直すことができません。
+    <string name="room_participants_power_level_prompt">このユーザーにあなたと同じ権限を与える変更は取り消せません。
 よろしいですか？</string>
 
     <string name="people_search_local_contacts">端末の連絡先 (%d)</string>
@@ -659,9 +659,9 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="ssl_do_not_trust">信用しない</string>
     <string name="ssl_fingerprint_hash">フィンガープリント (%s):</string>
     <string name="ssl_could_not_verify">リモートサーバの身元を確認できませんでした。</string>
-    <string name="ssl_cert_not_trust">誰かが不当にあなたの通信を傍受しているか、リモートサーバによる証明書をあなたの電話が信頼していない可能性があります。</string>
-    <string name="ssl_cert_new_account_expl">サーバの管理者が、これは予想されたことであると言っていたならば、以下のフィンガープリントが管理者によるフィンガープリントと一致していることを確認してください。</string>
-    <string name="ssl_unexpected_existing_expl">証明書はあなたの電話に信頼されていたものから変更されています。これはかなり異常な事態です。この新しい証明書を承認しないことが推奨されます。</string>
+    <string name="ssl_cert_not_trust">誰かが不当にあなたの通信を傍受しているか、リモートサーバの証明書をあなたの電話が信用していない可能性があります。</string>
+    <string name="ssl_cert_new_account_expl">サーバの管理者が、これは想定されていることであると言っているのであれば、以下のフィンガープリントが管理者によるフィンガープリントと一致していることを確認してください。</string>
+    <string name="ssl_unexpected_existing_expl">証明書はあなたの電話に信頼されていたものから変更されています。これはきわめて異常な事態です。この新しい証明書は承認しないことを強く推奨します。</string>
     <string name="ssl_expected_existing_expl">証明書は以前信頼されていたものから信頼されていないものへと変更されています。サーバがその証明書を更新した可能性があります。予測されるフィンガープリントを取得するために、サーバの管理者に連絡してください。</string>
     <string name="ssl_only_accept">サーバの管理者が上のフィンガープリントと一致するものを発行した場合に限り、証明書を承認してください。</string>
     <string name="room_details_selected">選択済</string>
@@ -696,7 +696,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_version">バージョン</string>
     <string name="settings_olm_version">olmのバージョン</string>
     <string name="settings_third_party_notices">サードパーティのライセンスに関する通知</string>
-    <string name="settings_home_display">ホーム</string>
+    <string name="settings_home_display">ホーム画面</string>
     <string name="settings_pin_missed_notifications">逃した通知がある部屋を固定する</string>
     <string name="settings_pin_unread_messages">未読のメッセージがある部屋を固定する</string>
     <string name="settings_analytics">分析</string>
@@ -782,4 +782,77 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encrypted_message">暗号化されたメッセージ</string>
 
 <string name="action_exit">退出</string>
+    <string name="title_activity_group_details">コミュニティの詳細</string>
+
+    <string name="loading">読み込み中...</string>
+
+    <string name="bottom_action_groups">コミュニティ</string>
+
+    <string name="home_filter_placeholder_groups">コミュニティを探す</string>
+
+    <string name="groups_invite_header">招待</string>
+    <string name="groups_header">コミュニティ</string>
+    <string name="no_group_placeholder">グループがありません</string>
+
+    <string name="start_new_chat_prompt_msg">%sと新しい対話を開始して本当によろしいですか？</string>
+    <string name="start_voice_call_prompt_msg">音声通話を開始して本当によろしいですか？</string>
+    <string name="start_video_call_prompt_msg">ビデオ通話を開始して本当によろしいですか？</string>
+
+    <string name="groups_list">グループリスト</string>
+
+    <string name="room_participants_kick_prompt_msg">このユーザをこの対話から除外して本当によろしいですか？</string>
+    <string name="room_participants_ban_prompt_msg">このユーザが対話に参加するのを禁止して本当によろしいですか？</string>
+
+    <string name="room_settings_all_messages_noisy">すべてのメッセージ (大音量)</string>
+    <string name="room_settings_all_messages">すべてのメッセージ</string>
+    <string name="room_settings_mute">ミュート</string>
+    <string name="room_settings_add_homescreen_shortcut">ホーム画面へのショートカットを作成</string>
+
+    <string name="settings_inline_url_preview">デフォルトでURLのプレビューを表示</string>
+    <string name="room_settings_room_notifications_title">通知</string>
+    <string name="room_settings_no_flair">" この部屋はどのコミュニティにも属していません"</string>
+    <string name="settings_flair">所属するコミュニティ</string>
+
+    <string name="room_settings_add_new_group">新しいコミュニティID (記入例 +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">無効なコミュニティID</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' は有効なコミュニティIDではありません</string>
+
+
+    <string name="encryption_export_saved_as">部屋のエンドツーエンド暗号鍵は \'%s\' に保存されました</string>
+
+    <string name="you_added_a_new_device">暗号鍵を要求している新しい端末 \'%s\' を追加しました。</string>
+    <string name="your_unverified_device_requesting">未確認の端末 \'%s\' が暗号鍵を要求しています。</string>
+    <string name="create">作成</string>
+    <string name="create_community">コミュニティを作成</string>
+    <string name="community_name">コミュニティの名前</string>
+    <string name="community_name_hint">例</string>
+    <string name="community_id">コミュニティID</string>
+    <string name="community_id_hint">例</string>
+
+    // group details
+    <string name="group_details_home">ホーム</string>
+    <string name="group_details_people">参加者</string>
+    <string name="group_details_rooms">部屋</string>
+    <string name="no_users_placeholder">ユーザがいません</string>
+
+    <string name="rooms">部屋</string>
+    <string name="joined">参加済</string>
+    <string name="invited">招待済</string>
+    <string name="filter_group_members">グループの参加者をフィルタリングする</string>
+    <string name="filter_group_rooms">グループの部屋をフィルタリングする</string>
+
+    <string name="group_one_member">1名</string>
+    <string name="group_members">%d名</string>
+
+    <string name="group_one_room">1部屋</string>
+    <string name="group_rooms">%d部屋</string>
+    <string name="group_no_long_description">管理者はこのコミュニティの詳細を規定していません。</string>
+
+    <string name="one_new_message">1つの新しいメッセージ</string>
+    <string name="new_messages">%d個の新しいメッセージ</string>
+
+    <string name="has_been_kicked">あなたは%2$sによって%1$sから除外されました</string>
+    <string name="has_been_banned">あなたは%2$sによって%1$sへの入室を禁止されました</string>
+    <string name="reason_colon">理由: %1$s</string>
+    <string name="rejoin">再参加</string>
     </resources>

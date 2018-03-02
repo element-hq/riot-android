@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">zh</string>
-    <string name="resouces_country">UKS</string>
+    <string name="resouces_country">US</string>
 
     <string name="resend">重新发送</string>
     <string name="quote">引用</string>
@@ -158,7 +158,7 @@
     <string name="room_settings_direct_chat">私聊</string>
     <string name="room_sliding_menu_messages">消息</string>
     <string name="room_sliding_menu_settings">设置</string>
-    <string name="room_sliding_menu_version">版本</string>
+    <string name="room_sliding_menu_version">"版本 "</string>
     <string name="settings_email_address">电子邮箱</string>
     <string name="settings_add_email_address">添加邮件地址</string>
     <string name="settings_add_phone_number">添加电话号码</string>
@@ -568,7 +568,7 @@
 请谅解由此造成的不便。</string>
     <string name="read_receipts_list">阅读收据清单</string>
     <string name="membership_changes">%d 个成员身份改变了</string>
-    <string name="compression_options">发送为</string>
+    <string name="compression_options">"发送为 "</string>
     <string name="permissions_rationale_msg_contacts">Riot 需要访问您的通讯录联系人的权限，才能根据其电子邮件和电话号码查找其他 Matrix 用户。
 
 请在下一个弹出窗口中授权允许访问，以发现从 Riot 可访问的通讯录用户。</string>
@@ -609,7 +609,7 @@
     <string name="room_settings_labs_end_to_end_is_active">端对端加密已激活</string>
     <string name="failed_to_load_timeline_position">%s 正在尝试在这个聊天室的时间轴上加载一个特定的点，但无法找到它.</string>
     <string name="encryption_information_name">名称</string>
-    <string name="encryption_information_verify_device_warning">要验证此设备是否可信任，请使用其他方式（例如亲自或打电话）联系其所有者，并询问他们在其设备的用户设置中看到的密钥是否与以下密钥相匹配：</string>
+    <string name="encryption_information_verify_device_warning">" 要验证此设备是否可信任，请使用其他方式（例如亲自或打电话）联系其所有者，并询问他们在其设备的用户设置中看到的密钥是否与以下密钥相匹配："</string>
     <string name="encryption_information_verify_device_warning2">如果匹配，请按下面的验证按钮。如果没有，那么其他人正在拦截此设备，而您可能想要按阻止按钮。\n在将来，此验证过程将会更加复杂。</string>
     <string name="unknown_devices_alert_message">这个聊天室包含未经验证的未知设备。
 这意味着设备不能保证属于他们声称的用户。
@@ -695,7 +695,7 @@
     <string name="settings_hide_read_receipts">隐藏到达</string>
     <string name="settings_dont_send_typings_notifs">不发送打字通知</string>
     <string name="settings_always_show_timestamps">总是显示消息时间戳</string>
-    <string name="settings_disable_markdown">禁用markdown格式化</string>
+    <string name="settings_disable_markdown">发送时禁用 markdown 格式化</string>
     <string name="settings_data_save_mode">数据保存模式</string>
 
     <string name="media_saving_period_3_days">3天</string>
@@ -744,7 +744,7 @@
     <string name="settings_labs_matrix_apps">Matrix 应用</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
     <string name="notification_sync_in_progress">同步中</string>
-    <string name="notification_listen_for_events">聆听事件</string>
+    <string name="notification_listen_for_events">监听事件</string>
 
     <string name="call">通话</string>
     <string name="settings_containing_my_display_name">包含我昵称的消息</string>
@@ -785,4 +785,30 @@
 
     <string name="notification_noisy">吵闹的</string>
 
-    </resources>
+    <string name="loading">正在加载...</string>
+
+    <string name="action_exit">退出</string>
+    <string name="groups_invite_header">邀请</string>
+    <string name="start_new_chat_prompt_msg">你确定要和 %s 开始一个新的聊天吗？</string>
+    <string name="start_voice_call_prompt_msg">你确定要开始一个音频通话吗？</string>
+    <string name="start_video_call_prompt_msg">你确定要开始一个视频通话吗？</string>
+
+    <string name="room_participants_kick_prompt_msg">你确定要把这个用户从这个聊天中移除吗？</string>
+    <string name="room_participants_ban_prompt_msg">你确定要把这个用户从这个聊天中封禁吗？</string>
+
+    <string name="room_settings_all_messages">全部消息</string>
+    <string name="room_settings_mention_only">只限提及</string>
+    <string name="room_settings_mute">静音</string>
+    <string name="room_settings_add_homescreen_shortcut">添加主屏幕快捷方式</string>
+
+    <string name="settings_inline_url_preview">默认启用内联 URL 预览</string>
+    <string name="settings_vibrate_on_mention">提及时震动</string>
+
+    <string name="room_settings_room_notifications_title">通知</string>
+    <string name="create">创建</string>
+    <string name="community_name_hint">例子</string>
+    <string name="new_messages">%d 条新消息</string>
+
+    <string name="rejoin">重新加入</string>
+    <string name="forget_room">忘记聊天室</string>
+</resources>
