@@ -284,7 +284,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             Log.e(LOG_TAG, "## initDirectChatsData() : null session");
         }
 
-        final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
+        final List<String> directChatIds = mSession.getDataHandler().getDirectChatRoomIdsList();
         final MXDataHandler dataHandler = mSession.getDataHandler();
         final IMXStore store = dataHandler.getStore();
 

@@ -204,9 +204,6 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Ler lista de recipientes</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -290,8 +287,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <!-- Chat creation -->
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Adicionar uma pessoa</string>
-    <string name="room_header_active_members">%1$d/%2$d integrantes ativos</string>
-    <string name="room_title_members">%1$d integrantes</string>
     <string name="room_title_one_member">1 integrante</string>
     <string name="room_e2e_alert_title">Atenção!</string>
     <string name="room_e2e_alert_message">Criptografia ponta-a-ponta está em estágio beta de desenvolvimento e portanto pode ainda não ser confiável.\n\nVocê não deve depositar toda sua confiança nela para preservar seus dados.\n\nDispositivos ainda não podem decriptografar as mensagens anteriores ao momento em que você passou a fazer parte da sala.\n\nMensagens criptografadas não serão visíveis em clientes que não implementaram criptografia.</string>
@@ -362,7 +357,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_message_file_not_found">Arquivo não encontrado</string>
     <string name="room_do_not_have_permission_to_post">Você não tem permissão para enviar mensagens nesta sala</string>
     <string name="room_new_message_notification">1 mensagem nova</string>
-    <string name="room_new_messages_notification">%1$d mensagens novas</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -398,7 +392,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_displayname_invite_from">Convite de %s</string>
     <string name="room_displayname_room_invite">Convite para sala</string>
     <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s e %2$d outros</string>
     <string name="room_displayname_no_title">Sala vazia</string>
 
     <!-- Search -->
@@ -426,9 +419,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar no diretório</string>
     <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_rooms">%1$d salas</string>
     <string name="directory_search_room_for">%1$d sala encontrada para %2$s</string>
-    <string name="directory_search_rooms_for">%1$s salas encontradas para %2$s</string>
     <string name="directory_searching_title">Buscando no diretório...</string>
 
     <!-- home room settings -->
@@ -692,10 +683,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d unread notified messages</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
 <string name="offline">Desconectada(o)</string>
@@ -803,7 +790,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="event_formatter_widget_removed">%1$s removida/o por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com jitsi</string>
     <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget?</string>
-    <string name="active_widgets">%1$d widgets ativos</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">Impossível criar o widget.</string>

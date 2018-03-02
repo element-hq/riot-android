@@ -275,7 +275,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
             return;
         }
         final Collection<Room> roomCollection = mSession.getDataHandler().getStore().getRooms();
-        final List<String> directChatIds = mSession.getDirectChatRoomIdsList();
+        final List<String> directChatIds = mSession.getDataHandler().getDirectChatRoomIdsList();
 
         for (Room room : roomCollection) {
             if (!room.isConferenceUserRoom() && !room.isInvited() && !room.isDirectChatInvitation()) {

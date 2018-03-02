@@ -205,9 +205,6 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Gelezen berichten</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -291,8 +288,6 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <!-- Chat creation -->
     <string name="room_creation_title">Nieuwe Chat</string>
     <string name="room_creation_add_member">Deelnemer toevoegen</string>
-    <string name="room_header_active_members">%1$d/%2$d actieve deelnemers</string>
-    <string name="room_title_members">%1$d deelnemers</string>
     <string name="room_title_one_member">1 deelnemer</string>
     <string name="room_e2e_alert_title">Waarschuwing!</string>
     <string name="room_e2e_alert_message">Eind-tot-eind versleuteling is nog in beta en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden ontsleutelen.\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
@@ -363,7 +358,6 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="room_message_file_not_found">Bestand niet gevonden</string>
     <string name="room_do_not_have_permission_to_post">Je hebt niet de permissie om dit naar deze ruimte te sturen</string>
     <string name="room_new_message_notification">1 nieuw bericht</string>
-    <string name="room_new_messages_notification">%1$d nieuwe berichten</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrouwen</string>
@@ -399,7 +393,6 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="room_displayname_invite_from">Uitnodiging van %s</string>
     <string name="room_displayname_room_invite">Ruimte uitnodiging</string>
     <string name="room_displayname_two_members">%1$s en %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s en %2$d anderen</string>
     <string name="room_displayname_no_title">Lege ruimte</string>
 
     <!-- Search -->
@@ -427,9 +420,7 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <!-- Directory -->
     <string name="directory_search_results_title">Adresboek doorbladeren</string>
     <string name="directory_search_room">%1$d ruimte</string>
-    <string name="directory_search_rooms">%1$d ruimtes</string>
     <string name="directory_search_room_for">%1$d ruimte gevonden voor %2$s</string>
-    <string name="directory_search_rooms_for">%1$s ruimtes gevonden voor %2$s</string>
     <string name="directory_searching_title">Adresboek doorzoeken..</string>
 
     <!-- home room settings -->
@@ -695,10 +686,6 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="directory_server_all_rooms_on_server">Alle ruimtes op %s server</string>
     <string name="directory_server_native_rooms">Alle lokale %s ruimtes</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d berichten waarin vermeld</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d ongelezen berichten in %2$d ruimtes</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Zoek voor historisch</string>
 <string name="offline">Offline</string>
@@ -754,7 +741,6 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="event_formatter_widget_removed">%1$s is verwijderd door %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Maak vergadergesprekken met jitsi</string>
     <string name="widget_delete_message_confirmation">Weet je zeker dat je deze widget wilt verwijderen?</string>
-    <string name="active_widgets">%1$d actieve widgets</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">Niet mogelijk om de widget te maken.</string>

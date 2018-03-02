@@ -165,7 +165,6 @@
     <string name="largest">Terbesar</string>
     <string name="font_size">Ukuran font</string>
     <string name="tiny">Sangat Kecil</string>
-    <string name="notification_unread_notified_messages">%d notifikasi pesan belum dibaca</string>
     <string name="directory_server_placeholder">URL server Home</string>
     <string name="select_room_directory">Pilih direktori ruang</string>
     <string name="unknown_devices_alert_title">Terdapat perangkat tidak diketahui di ruang</string>
@@ -243,8 +242,6 @@ Proses ini hanya dilakukan sekali saja.
 Mohon maaf untuk ketidaknyamannya.</string>
 
     <string name="read_receipts_list">Baca Daftar Penerimaan</string>
-
-    <string name="membership_changes">%d perubahan keanggotaan</string>
 
     <string name="compression_options">"Kirim sebagai "</string>
     <string name="attachment_remaining_time_seconds">%d d</string>

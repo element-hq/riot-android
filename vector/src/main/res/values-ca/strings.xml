@@ -234,9 +234,6 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Llegit per</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d canvis de membres</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -319,8 +316,6 @@
     <!-- Chat creation -->
     <string name="room_creation_title">Xat nou</string>
     <string name="room_creation_add_member">Afegeix un participant</string>
-    <string name="room_header_active_members">%1$d/%2$d participants actius</string>
-    <string name="room_title_members">%1$d participants</string>
     <string name="room_title_one_member">1 participant</string>
     <string name="room_e2e_alert_title">Avís</string>
     <string name="room_e2e_alert_message">El xifrat d\'extrem a extrem està en beta i no és del tot fiable.\n\nNo s\'hi ha de confiar per a dades segures.\n\nEls dispositius encara no poden desxifrar l\'històric de tot allò que ha passat abans d\'unir-te a una sala.\n\nEls missatges xifrats no són visibles per aquells clients que no implementen xifratge.</string>
@@ -394,7 +389,6 @@
     <string name="room_message_file_not_found">No s\'ha trobat el fitxer</string>
     <string name="room_do_not_have_permission_to_post">No teniu permís per escriure en aquesta sala</string>
     <string name="room_new_message_notification">1 missatge nou</string>
-    <string name="room_new_messages_notification">%1$d missatges nous</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confia</string>
@@ -430,7 +424,6 @@
     <string name="room_displayname_invite_from">Convideu des de %s</string>
     <string name="room_displayname_room_invite">Convideu a la sala</string>
     <string name="room_displayname_two_members">%1$s i %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s i %2$d més</string>
     <string name="room_displayname_no_title">Sala buida</string>
 
     <!-- Search -->
@@ -458,9 +451,7 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Navega pel directpri</string>
     <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_rooms">%1$d sales</string>
     <string name="directory_search_room_for">%1$d sala trobada per %2$s</string>
-    <string name="directory_search_rooms_for">%1$s sales trobades per %2$s</string>
     <string name="directory_searching_title">Cercant al directori..</string>
 
     <!-- home room settings -->
@@ -764,10 +755,6 @@
     <string name="directory_server_all_rooms_on_server">Totes les sales del servidor %s</string>
     <string name="directory_server_native_rooms">Totes les sales natives de %s</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d notificacions de missatges sense llegir</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d notificacions sense llegir de missatges en %2$d sales"</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Busca a l\'històric</string>
 
@@ -788,7 +775,6 @@
     <string name="event_formatter_widget_removed">%1$s retirat per %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Fes conferències amb jitsi</string>
     <string name="widget_delete_message_confirmation">Confirmeu que voleu esborrar el giny?</string>
-    <string name="active_widgets">%1$d ginys actius</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">No s\'ha pogut crear el giny.</string>

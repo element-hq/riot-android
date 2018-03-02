@@ -182,8 +182,6 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
 
     <string name="read_receipts_list">Przeczytaj listę odbiorców</string>
 
-    <string name="membership_changes">%d zmian w członkostwie</string>
-
     <string name="compression_options">"Wyślij jako "</string>
     <string name="compression_opt_list_original">Oryginalny</string>
     <string name="compression_opt_list_large">Duży</string>
@@ -244,8 +242,6 @@ Przyznaj dostęp w następnym oknie.</string>
 
     <string name="room_creation_title">Nowa rozmowa</string>
     <string name="room_creation_add_member">Dodaj członka</string>
-    <string name="room_header_active_members">%1$d/%2$d aktywnych członków</string>
-    <string name="room_title_members">%1$d członków</string>
     <string name="room_title_one_member">1 członek</string>
     <string name="room_e2e_alert_title">Ostrzeżenie!</string>
     <string name="format_time_s">sek.</string>
@@ -307,7 +303,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_message_file_not_found">Nie znaleziono pliku</string>
     <string name="room_do_not_have_permission_to_post">Nie masz uprawnień, aby pisać w tym pokoju</string>
     <string name="room_new_message_notification">1 nowa wiadomość</string>
-    <string name="room_new_messages_notification">%1$d nowe wiadomości</string>
 
     <string name="ssl_trust">Ufaj</string>
     <string name="ssl_do_not_trust">Nie ufaj</string>
@@ -333,7 +328,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_displayname_invite_from">Zaproszenie od %s</string>
     <string name="room_displayname_room_invite">Zaproszenie do pokoju</string>
     <string name="room_displayname_two_members">%1$s i %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s i %2$d innych</string>
     <string name="room_displayname_no_title">Pusty pokój</string>
 
     <string name="search_hint">Szukaj</string>
@@ -358,9 +352,7 @@ Przyznaj dostęp w następnym oknie.</string>
 
     <string name="directory_search_results_title">Przeglądaj katalog</string>
     <string name="directory_search_room">%1$d pokój</string>
-    <string name="directory_search_rooms">%1$d pokoje</string>
     <string name="directory_search_room_for">Znaleziono %1$d pokój dla wyniku %2$s</string>
-    <string name="directory_search_rooms_for">Znaleziono %1$s pokoje dla wyniku %2$s</string>
     <string name="directory_searching_title">Wyszukiwanie katalogu…</string>
 
     <string name="room_settings_favourite">Dodaj do ulubionych</string>

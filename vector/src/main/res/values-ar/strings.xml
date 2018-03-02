@@ -199,7 +199,6 @@
 
     <string name="room_creation_title">دردشة جديدة</string>
     <string name="room_creation_add_member">أضِف عضوا</string>
-    <string name="room_header_active_members">%1$d/%2$d عضو نشط</string>
     <string name="room_e2e_alert_title">تحذير!</string>
     <string name="format_time_s">ثا</string>
     <string name="format_time_m">دق</string>

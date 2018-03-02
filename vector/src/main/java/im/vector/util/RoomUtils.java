@@ -544,7 +544,7 @@ public class RoomUtils {
                 item.setIcon(null);
             }
 
-            if (!session.getDirectChatRoomIdsList().contains(room.getRoomId())) {
+            if (!room.isDirect()) {
                 item = popup.getMenu().findItem(R.id.ic_action_select_direct_chat);
                 item.setIcon(null);
             }

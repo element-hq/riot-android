@@ -279,6 +279,6 @@ public class EventGroup extends Event {
     }
 
     public java.lang.String toString(Context context) {
-        return context.getString(R.string.membership_changes, mRowsMap.size());
+        return context.getResources().getQuantityString(R.plurals.membership_changes, mRowsMap.size(), mRowsMap.size());
     }
 }

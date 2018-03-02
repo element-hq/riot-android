@@ -711,7 +711,8 @@ public class NotificationUtils {
             }
 
             inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name));
-            inboxStyle.setSummaryText(context.getString(R.string.notification_unread_notified_messages, messagesStrings.size()));
+            inboxStyle.setSummaryText(
+                    context.getResources().getQuantityString(R.plurals.notification_unread_notified_messages, messagesStrings.size(), messagesStrings.size()));
             builder.setStyle(inboxStyle);
 
             // open the home activity

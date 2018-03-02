@@ -210,9 +210,6 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lesebestätigungsliste</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d Änderungen der Mitgliedschaft</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -305,8 +302,6 @@ Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adr
     <!-- Chat creation -->
     <string name="room_creation_title">Neuer Chat</string>
     <string name="room_creation_add_member">Mitglied hinzufügen</string>
-    <string name="room_header_active_members">%1$d/%2$d aktive Mitglieder</string>
-    <string name="room_title_members">%1$d Mitglieder</string>
     <string name="room_title_one_member">1 Mitglied</string>
     <string name="room_e2e_alert_title">Achtung!</string>
     <string name="room_e2e_alert_message">Ende-zu-Ende-Verschlüsselung ist im Beta-Stadium und funktioniert möglicherweise nicht zuverlässig.\n\nDu solltest noch nicht darauf vertrauen, dass deine Daten richtig abgesichert werden.\n\nGeräte sind noch nicht in der Lage, den Chatverlauf vor dem Hinzufügen des Geräts zu entschlüsseln.\n\nVerschlüsselte Nachrichten werden auf Geräten, die die Verschlüsselung noch nicht implementiert haben, nicht sichtbar sein.</string>
@@ -378,7 +373,6 @@ Bist du sicher?</string>
     <string name="room_message_file_not_found">Datei nicht gefunden</string>
     <string name="room_do_not_have_permission_to_post">Du bist nicht berechtigt, in diesen Raum zu schreiben</string>
     <string name="room_new_message_notification">1 neue Nachricht</string>
-    <string name="room_new_messages_notification">%1$d neue Nachrichten</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrauen</string>
@@ -414,7 +408,6 @@ Bist du sicher?</string>
     <string name="room_displayname_invite_from">Einladung von %s</string>
     <string name="room_displayname_room_invite">Raumeinladung</string>
     <string name="room_displayname_two_members">%1$s und %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s und %2$d andere</string>
     <string name="room_displayname_no_title">Leerer Raum</string>
 
     <!-- Search -->
@@ -442,9 +435,7 @@ Bist du sicher?</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Verzeichnis durchsuchen</string>
     <string name="directory_search_room">%1$d Raum</string>
-    <string name="directory_search_rooms">%1$d Räume</string>
     <string name="directory_search_room_for">%1$d Raum gefunden für %2$s</string>
-    <string name="directory_search_rooms_for">%1$s Räume gefunden für %2$s</string>
     <string name="directory_searching_title">Verzeichnis wird durchsucht..</string>
 
     <!-- home room settings -->
@@ -721,10 +712,6 @@ Unbekannte Geräte:</string>
     <string name="directory_server_all_rooms_on_server">Alle Räume auf dem %s-Server</string>
     <string name="directory_server_native_rooms">Alle nativen %s-Räume</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d ungelesene Benachrichtigungen</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d ungelesene Benachrichtigungen in %2$d Räumen</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Suche nach historischen</string>
 
@@ -772,7 +759,6 @@ Unbekannte Geräte:</string>
     <string name="event_formatter_widget_removed">%1$s entfernt von %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi aufbauen</string>
     <string name="widget_delete_message_confirmation">Soll das Widget wirklich gelöscht werden?</string>
-    <string name="active_widgets">%1$d aktive Widgets</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">Widget konnte nicht erstellt werden.</string>
