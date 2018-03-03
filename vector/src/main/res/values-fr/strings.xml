@@ -7,7 +7,7 @@
 
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_settings">Paramètres</string>
-    <string name="title_activity_member_details">Détails des membres</string>
+    <string name="title_activity_member_details">Informations sur ce participant</string>
     <string name="title_activity_historical">Historique</string>
 
     <string name="ok">OK</string>
@@ -852,5 +852,20 @@ Appareils inconnus :</string>
 <string name="settings_flair">Badge</string>
 
     <string name="send_bug_report_rage_shake">Secouer avec frustration pour signaler un bug</string>
+
+    <string name="actions">Actions</string>
+    <string name="room_sync_in_progress">Synchronisation…</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">Un membre actif</item>
+	<item quantity="other">%d membres actifs</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">Un membre</item>
+	<item quantity="other">%d membres</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">Un nouveau message</item>
+	<item quantity="other">%d nouveaux messages</item>
+</plurals>
 
     </resources>
