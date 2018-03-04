@@ -792,6 +792,10 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="notification_noisy">Luidruchtig</string>
 
     <string name="encrypted_message">Versleuteld bericht</string>
+    <string name="notification_area_hide">Verberg notificatie gebied</string>
+    <string name="notification_area_hide_always">Altijd</string>
+    <string name="notification_area_hide_never">Nooit</string>
+    <string name="notification_area_hide_when_empty">Wanneer leeg</string>
 
 <string name="title_activity_group_details">Gemeenschap details</string>
 

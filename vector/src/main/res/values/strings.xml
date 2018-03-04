@@ -921,4 +921,9 @@
     <string name="notice_avatar">Notice avatar</string>
     <string name="avatar">Avatar</string>
 
+    <string name="notification_area_hide">Hide notification area</string>
+    <string name="notification_area_hide_never">Never</string>
+    <string name="notification_area_hide_always">Always</string>
+    <string name="notification_area_hide_when_empty">When empty</string>
+
 </resources>

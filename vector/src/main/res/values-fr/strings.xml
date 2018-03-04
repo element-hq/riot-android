@@ -40,7 +40,7 @@
     <string name="invite">Inviter</string>
 
     <string name="action_sign_out">Se déconnecter</string>
-    <string name="action_sign_out_confirmation">Pour des raisons de sécurité, la déconnexion supprimera toutes les clés de chiffrement de bout en bout, rendant l\'historique des discussions chiffrées inaccessible lorsque vous vous reconnecterez. 
+    <string name="action_sign_out_confirmation">Pour des raisons de sécurité, la déconnexion supprimera toutes les clés de chiffrement de bout en bout, rendant l\'historique des discussions chiffrées inaccessible lorsque vous vous reconnecterez.
 Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="action_voice_call">Appel vocal</string>
     <string name="action_video_call">Appel vidéo</string>
@@ -661,7 +661,7 @@ Vous pouvez le faire maintenant ou plus tard à partir des paramètres de l\'app
     <string name="unknown_devices_alert_title">Le salon contient des appareils inconnus</string>
     <string name="unknown_devices_alert_message">Ce salon contient des appareils inconnus, qui n\'ont pas été vérifiés.
 Cela signifie qu\'il n\'y a aucune garantie que les appareils appartiennent aux utilisateurs qu\'ils prétendent.
-Nous vous recommandons d\'effectuer le processus de vérification pour chaque appareil avant de continuer, mais vous pouvez renvoyer le message sans vérifier si vous préférez. 
+Nous vous recommandons d\'effectuer le processus de vérification pour chaque appareil avant de continuer, mais vous pouvez renvoyer le message sans vérifier si vous préférez.
 
 Appareils inconnus :</string>
 
@@ -847,6 +847,10 @@ Appareils inconnus :</string>
     <string name="rejoin">Rejoindre</string>
     <string name="forget_room">Abandonner le salon</string>
 <string name="settings_flair">Badge</string>
+    <string name="notification_area_hide">Masquer la zone de notification</string>
+    <string name="notification_area_hide_always">Toujours</string>
+    <string name="notification_area_hide_never">Jamais</string>
+    <string name="notification_area_hide_when_empty">Quand vide</string>
 
     <string name="send_bug_report_rage_shake">Secouer avec frustration pour signaler un bug</string>
 

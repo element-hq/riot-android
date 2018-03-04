@@ -393,4 +393,8 @@ Er du sikker?</string>
     <string name="room_details_selected">valgte</string>
     <string name="malformed_id">Ugyldigt ID. Det skal være en e-mail adresse eller et Matrix ID som \'@lokaldel:domæne\'</string>
     <string name="room_details_people_invited_group_name">INVITERET</string>
-    </resources>
+    <string name="notification_area_hide">Skjul anmeldelsesområde</string>
+    <string name="notification_area_hide_always">Altid</string>
+    <string name="notification_area_hide_never">Aldrig</string>
+    <string name="notification_area_hide_when_empty">Når det er tomt</string>
+</resources>

@@ -558,4 +558,8 @@ Da biste nastavili, unesite lozinku.</string>
     <string name="settings_phone_number_country_error">Izaberite zemlju</string>
     <string name="settings_phone_number_label">Broj telefona</string>
     <string name="settings_phone_number_error">Nevažeći broj telefona za izabranu zemlju</string>
-    </resources>
+    <string name="notification_area_hide">Sakrij oblast za obaveštenja</string>
+    <string name="notification_area_hide_always">Uvek</string>
+    <string name="notification_area_hide_never">Nikada</string>
+    <string name="notification_area_hide_when_empty">Kada je prazno</string>
+</resources>

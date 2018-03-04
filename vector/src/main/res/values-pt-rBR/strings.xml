@@ -858,4 +858,8 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Entrar novamente</string>
     <string name="forget_room">Esquecer a sala</string>
+    <string name="notification_area_hide">Esconder a área de notificação</string>
+    <string name="notification_area_hide_always">Sempre</string>
+    <string name="notification_area_hide_never">Nunca</string>
+    <string name="notification_area_hide_when_empty">Quando vazio</string>
 </resources>

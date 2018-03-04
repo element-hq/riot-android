@@ -806,4 +806,8 @@
     <string name="rejoin">重新加入</string>
     <string name="forget_room">忘记聊天室</string>
 <string name="room_settings_all_messages_noisy">所有消息（通知并振铃）</string>
-    </resources>
+    <string name="notification_area_hide">隱藏通知區域</string>
+    <string name="notification_area_hide_always">總是</string>
+    <string name="notification_area_hide_never">決不</string>
+    <string name="notification_area_hide_when_empty">空時</string>
+</resources>

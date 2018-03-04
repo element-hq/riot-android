@@ -637,7 +637,7 @@ Para continuar, insira a sua palavra-passe.</string>
 
     <string name="room_settings_addresses_e2e_enabled">Criptografia está ativada nesta sala.</string>
     <string name="room_settings_addresses_e2e_disabled">Criptografia está desativada nesta sala.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Ativar criptografia 
+    <string name="room_settings_addresses_e2e_encryption_warning">Ativar criptografia
 (atenção: não é possível desativar novamente!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Atenção!</string>
     <string name="room_settings_addresses_e2e_prompt_message">A criptografia ponta-a-ponta está em beta e pode não ser fiável.
@@ -795,5 +795,9 @@ Dispositivos desconhecidos:</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
     <string name="notification_sync_in_progress">A sincronizar</string>
     <string name="notification_listen_for_events">À escuta de eventos</string>
+    <string name="notification_area_hide">Esconder a área de notificação</string>
+    <string name="notification_area_hide_always">Sempre</string>
+    <string name="notification_area_hide_never">Nunca</string>
+    <string name="notification_area_hide_when_empty">Quando vazio</string>
 
-    </resources>
+</resources>

@@ -857,6 +857,10 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
 	<item quantity="one">1 widget attivo</item>
 	<item quantity="other">%d widget attivi</item>
 </plurals>
+    <string name="notification_area_hide">Nascondi area di notifica</string>
+    <string name="notification_area_hide_always">Sempre</string>
+    <string name="notification_area_hide_never">Mai</string>
+    <string name="notification_area_hide_when_empty">Quando vuoto</string>
 
     // Widget Integration Manager
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
