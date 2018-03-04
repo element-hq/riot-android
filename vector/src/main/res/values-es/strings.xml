@@ -887,5 +887,9 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="has_been_banned">Ha sido vetado en %1$s por %2$s</string>
     <string name="reason_colon">Razon: %1$s</string>
     <string name="group_no_long_description">El administrador de la comunidad no ha redactado una descripción larga para esta comunidad.</string>
+    <string name="notification_area_hide">Ocultar el área de notificación</string>
+    <string name="notification_area_hide_always">Siempre</string>
+    <string name="notification_area_hide_never">Nunca</string>
+    <string name="notification_area_hide_when_empty">Cuando está vacío</string>
 
-    </resources>
+</resources>

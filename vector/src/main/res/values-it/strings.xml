@@ -752,5 +752,9 @@
 
     <string name="call">Chiama</string>
     <string name="encrypted_message">Cifra messaggio</string>
+    <string name="notification_area_hide">Nascondi area di notifica</string>
+    <string name="notification_area_hide_always">Sempre</string>
+    <string name="notification_area_hide_never">Mai</string>
+    <string name="notification_area_hide_when_empty">Quando vuoto</string>
 
 </resources>

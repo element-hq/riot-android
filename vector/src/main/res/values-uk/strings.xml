@@ -788,5 +788,9 @@
     // slash commands
     <string name="command_error">Помилка виконання команди</string>
     <string name="unrecognized_command">Команду %s не розпізнано</string>
+    <string name="notification_area_hide">Сховати область сповіщень</string>
+    <string name="notification_area_hide_always">Завжди</string>
+    <string name="notification_area_hide_never">Ніколи</string>
+    <string name="notification_area_hide_when_empty">Коли порожній</string>
 
 </resources>

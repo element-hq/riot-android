@@ -10,4 +10,8 @@
     <string name="notification_listen_for_events">聆聽事件</string>
 
     <string name="title_activity_home">信息</string>
-    </resources>
+    <string name="notification_area_hide">隱藏通知區域</string>
+    <string name="notification_area_hide_always">總是</string>
+    <string name="notification_area_hide_never">決不</string>
+    <string name="notification_area_hide_when_empty">空時</string>
+</resources>

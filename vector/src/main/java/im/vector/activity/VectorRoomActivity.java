@@ -65,6 +65,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import im.vector.util.NotificationAreaUtils;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallListener;
@@ -2548,6 +2549,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
+        // check, if the notification area is hidden don't update it.
+        if (NotificationAreaUtils.always(this)) {
+            mNotificationsArea.setVisibility(View.GONE);
+            findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
+            return;
+        }
+
         int iconId = -1;
         @ColorInt int textColor = -1;
         boolean isAreaVisible = false;
@@ -2665,11 +2673,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         }
 
+        boolean showSeparator = true;
         if (mIsUnreadPreviewMode) {
             mNotificationsArea.setVisibility(View.VISIBLE);
         } else if (TextUtils.isEmpty(mEventId)) {
-            mNotificationsArea.setVisibility(isAreaVisible ? View.VISIBLE : View.INVISIBLE);
+            int visibility;
+            if (isAreaVisible) {
+                visibility = View.VISIBLE;
+            } else {
+                showSeparator = NotificationAreaUtils.invisibleOrGone(this);
+                visibility = showSeparator ? View.INVISIBLE : View.GONE;
+            }
+            mNotificationsArea.setVisibility(visibility);
         }
+        findViewById(R.id.room_notification_separator).setVisibility(showSeparator ? View.VISIBLE : View.GONE);
 
         if (-1 != iconId) {
             mNotificationIconImageView.setImageResource(iconId);

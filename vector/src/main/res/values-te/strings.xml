@@ -549,5 +549,9 @@
 \nతెలియని పరికరాలు:</string>
 
     <string name="directory_server_type_homeserver">బహిరంగ గదులు నుండి జాబితా చేయడానికి ఒక ఇంటి సేవికను టైప్ చేయండి</string>
+    <string name="notification_area_hide">నోటిఫికేషన్ ప్రాంతం దాచండి</string>
+    <string name="notification_area_hide_always">ఎల్లప్పుడూ</string>
+    <string name="notification_area_hide_never">నెవర్</string>
+    <string name="notification_area_hide_when_empty">ఖాళీగా ఉన్నప్పుడు</string>
 
 </resources>

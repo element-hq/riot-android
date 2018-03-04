@@ -858,4 +858,8 @@
     <string name="room_settings_mention_only">Només citacions</string>
     <string name="room_settings_mute">Silencia</string>
     <string name="room_settings_room_notifications_title">Notificacions</string>
-    </resources>
+    <string name="notification_area_hide">Amaga la zona de notificacions</string>
+    <string name="notification_area_hide_always">Amaga la zona de notificacions</string>
+    <string name="notification_area_hide_never">Mai</string>
+    <string name="notification_area_hide_when_empty">Quan estigui buit</string>
+</resources>

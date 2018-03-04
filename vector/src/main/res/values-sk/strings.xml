@@ -618,7 +618,7 @@ Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
 
     <string name="room_settings_addresses_e2e_enabled">V tejto miestnosti je povolené šifrovanie.</string>
     <string name="room_settings_addresses_e2e_disabled">V tejto miestnosti nie je povolené šifrovanie.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Povoliť šifrovanie 
+    <string name="room_settings_addresses_e2e_encryption_warning">Povoliť šifrovanie
 (Pozor: Nie je viac možné zakázať!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Pozor!</string>
     <string name="room_settings_addresses_e2e_prompt_message">E2E šifrovanie je v štádiu beta a nemusí byť úplne spoľahlivé.
@@ -847,4 +847,8 @@ Neznáme zariadenia:</string>
     <string name="reason_colon">Dôvod: %1$s</string>
     <string name="rejoin">Vstúpiť znovu</string>
     <string name="forget_room">Zabudnúť miestnosť</string>
+    <string name="notification_area_hide">Skryť oblasť oznámení</string>
+    <string name="notification_area_hide_always">Vždy</string>
+    <string name="notification_area_hide_never">nikdy</string>
+    <string name="notification_area_hide_when_empty">Keď je prázdny</string>
 </resources>

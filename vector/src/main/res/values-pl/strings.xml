@@ -494,7 +494,7 @@ Wprowadź hasło, aby kontynuować.</string>
 
     <string name="room_settings_addresses_e2e_enabled">Szyfrowanie jest włączone w tym pokoju.</string>
     <string name="room_settings_addresses_e2e_disabled">Szyfrowanie jest wyłączone w tym pokoju.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Włącz szyfrowanie 
+    <string name="room_settings_addresses_e2e_encryption_warning">Włącz szyfrowanie
 (ostrzeżenie: nie może zostać wyłączone!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Ostrzeżenie!</string>
     <string name="directory_title">Katalog</string>
@@ -541,4 +541,8 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="larger">Wielki</string>
     <string name="largest">Ogromny</string>
     <string name="huge">P O T Ę Ż N Y</string>
+    <string name="notification_area_hide">Ukryj obszar powiadomień</string>
+    <string name="notification_area_hide_always">Zawsze</string>
+    <string name="notification_area_hide_never">Nigdy</string>
+    <string name="notification_area_hide_when_empty">Kiedy jest pusty</string>
 </resources>

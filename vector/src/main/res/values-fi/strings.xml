@@ -894,4 +894,8 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="rejoin">Liity uudelleen</string>
     <string name="forget_room">Unohda huone</string>
 <string name="room_settings_no_flair">" Tälle huoneelle ei näytetä tyyliä millekään yhteisölle"</string>
-    </resources>
+    <string name="notification_area_hide">Piilota ilmoitusalue</string>
+    <string name="notification_area_hide_always">Aina</string>
+    <string name="notification_area_hide_never">Ei koskaan</string>
+    <string name="notification_area_hide_when_empty">Kun tyhjä</string>
+</resources>

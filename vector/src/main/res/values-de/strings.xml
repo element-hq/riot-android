@@ -893,5 +893,9 @@ Unbekannte Geräte:</string>
 <string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
 
     <string name="settings_flair">Flair</string>
+    <string name="notification_area_hide">Infobereich ausblenden</string>
+    <string name="notification_area_hide_always">Immer</string>
+    <string name="notification_area_hide_never">noch nie</string>
+    <string name="notification_area_hide_when_empty">Wenn leer</string>
 
-    </resources>
+</resources>

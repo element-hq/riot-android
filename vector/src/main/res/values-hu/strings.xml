@@ -849,4 +849,8 @@ Ismeretlen eszközök:</string>
 
     <string name="room_settings_no_flair">" Ez a szoba nem mutatja  a közösségek kitűzőit"</string>
     <string name="group_details_home">Kezdőlap</string>
-    </resources>
+    <string name="notification_area_hide">Az értesítési terület elrejtése</string>
+    <string name="notification_area_hide_always">Mindig</string>
+    <string name="notification_area_hide_never">Soha</string>
+    <string name="notification_area_hide_when_empty">Üresen</string>
+</resources>
