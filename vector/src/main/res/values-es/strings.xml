@@ -888,4 +888,6 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="reason_colon">Razon: %1$s</string>
     <string name="group_no_long_description">El administrador de la comunidad no ha redactado una descripción larga para esta comunidad.</string>
 
+    <string name="send_bug_report_rage_shake">Agitar con rabia para informar de un error</string>
+
     </resources>
