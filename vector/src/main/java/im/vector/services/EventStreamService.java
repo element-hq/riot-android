@@ -1360,12 +1360,18 @@ public class EventStreamService extends Service {
 
                             // the notification cannot be built
                             if (null != notif) {
-                                nm.notify(NOTIFICATION_ID, notif);
-
-                                // Clear listening notifications when using GCM
-                                if (!shouldDisplayListenForEventsNotification() && mIsForeground) {
-                                    stopForeground(true);
-                                    mIsForeground = false;
+                                // If we are not on fdroid and we fail google play registration, use hacked 'foreground' notifications
+                                if (shouldDisplayListenForEventsNotification() && mGcmRegistrationManager.useGCM()) {
+                                    mIsForeground = true;
+                                    startForeground(NOTIFICATION_ID, notif);
+                                } else {
+                                    // If we are not on fdroid and we got GCM, clear foreground notifications
+                                    if (mIsForeground && mGcmRegistrationManager.useGCM()) {
+                                        stopForeground(true);
+                                        mIsForeground = false;
+                                    }
+                                    // Notify normally if on fdroid or GCM registration passed
+                                    nm.notify(NOTIFICATION_ID, notif);
                                 }
 
                                 mNotificationState = NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS;
