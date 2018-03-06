@@ -4,7 +4,7 @@ This document aims to describe how Riot-Android displays notifications to the en
 
 Riot Android code can manage notifications in two modes:
 
-- GCM
+## GCM
 
 Based on Google Cloud Messaging, the user's homeserver notifies [sygnal](https://github.com/matrix-org/sygnal), the matrix push server, that notifies GCM that notifies the Android matrix client app.
 
@@ -34,7 +34,7 @@ Homeserver ----> Sygnal ----> GCM ----> Riot
 
 
 
-- Fallback mode
+## Fallback mode
 
 When the device fails to register on GCM or when GCM is disabled in the application build (F-Droid), the app needs to fetch data in background so that it can display notifications to the end user when required.
 This mode requires that the user enables [background sync](#background-synchronisation--enable-background-sync) setting is enabled. Else, the application cannot detect events to notify.
@@ -62,7 +62,7 @@ Disable notifications locally. The push server will continue to send notificatio
 
 The behavior of this setting is not the same in GCM and in fallback mode.
 
-- GCM
+### GCM
 This setting will configure Sygnal to send more or less data through GCM.
 If enabled, the push server sends a GCM notification to the app containing the room id and the event id.
 The app needs then to do a background synchronisation with the server to retrieve data. Rhe app will build the notification from this data.
@@ -79,7 +79,7 @@ PRO: network and battery efficient.
 CON: contents of events in non encrypted room go through GCM. 
 
 
-- Fallback mode
+### Fallback mode
 
 This mode requires this setting to enables to generate notifications.
 
