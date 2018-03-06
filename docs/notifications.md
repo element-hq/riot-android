@@ -15,7 +15,7 @@ Then, according to the [background sync](#background-synchronisation--enable-bac
 
   - Background sync enabled
 
-GCM only wakes up the app. The app syncs with the user's homeserver to get message content to display in the notification.
+GCM only wakes up the app. The app syncs with the user's homeserver to get the message content to display in the notification.
 
 ```
 Homeserver ----> Sygnal ----> GCM ----> Riot
@@ -27,9 +27,12 @@ Homeserver ----> Sygnal ----> GCM ----> Riot
  
   - Background sync disabled
 
+The app displays a notification with the data provided with the GCM payload.
+Check [background sync disabled](#background-sync-disabled) for more information about the data in the GCM payload in this configuration.
+
 ```
 Homeserver ----> Sygnal ----> GCM ----> Riot
-                                        Display notification                               
+                                        Display notification
 ```
 
 
@@ -67,6 +70,7 @@ The behavior of this setting is not the same in GCM and in fallback mode.
 ### GCM
 This setting will configure Sygnal to send more or less data through GCM.
 
+#### background sync enabled
 If enabled, the push server sends a GCM notification to the app containing the room id and the event id.
 The app needs then to do a background synchronisation with the server to retrieve data. The app will build the notification from this data.
 
@@ -74,7 +78,7 @@ The app needs then to do a background synchronisation with the server to retriev
 
 <ins>CON:</ins> Use more network and battery. Notifications take more time to appear.
 
-
+#### background sync disabled
 If disabled, the push server sends a GCM notification to the app containing the room id, the event id and the **event content** so that the application can display a notification directly from GCM data.
 
 <ins>PRO</ins>: network and battery efficient.
@@ -111,9 +115,3 @@ Android added limitations on the way app can run in background:
 
 ## How it is solved in Riot
 Double notifications!
-
-# Permissions
-
-- Android settings > Riot >  ...> run at startup
-
-Is there a permission to run in bg or is it this one ^?
