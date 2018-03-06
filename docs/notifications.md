@@ -37,7 +37,7 @@ Homeserver ----> Sygnal ----> GCM ----> Riot
 ## Fallback mode
 
 When the device fails to register on GCM or when GCM is disabled in the application build (F-Droid), the app needs to fetch data in background so that it can display notifications to the end user when required.
-This mode requires that the user enables [background sync](#background-synchronisation--enable-background-sync) setting is enabled. Else, the application cannot detect events to notify.
+This mode requires that the user enables the [background sync](#background-synchronisation--enable-background-sync) setting. Else, the application cannot detect events to notify.
 
 
 ```
@@ -46,6 +46,8 @@ This mode requires that the user enables [background sync](#background-synchroni
                                                         <---- 
                                        Display notification
 ```
+
+The inverval between periodic syncs with the homeserver is 66 seconds by default. It can be tuned thanks to [Delay between two sync requests](#background-synchronisation--enable-background-sync) and [Sync request timeout](#background-synchronisation--enable-background-sync) settings.
 
 
 # Application Settings
@@ -65,7 +67,7 @@ The behavior of this setting is not the same in GCM and in fallback mode.
 ### GCM
 This setting will configure Sygnal to send more or less data through GCM.
 If enabled, the push server sends a GCM notification to the app containing the room id and the event id.
-The app needs then to do a background synchronisation with the server to retrieve data. Rhe app will build the notification from this data.
+The app needs then to do a background synchronisation with the server to retrieve data. The app will build the notification from this data.
 
 PRO: Only meta data goes through GCM. The app decrypts messages in e2e rooms
 
@@ -81,23 +83,28 @@ CON: contents of events in non encrypted room go through GCM.
 
 ### Fallback mode
 
-This mode requires this setting to enables to generate notifications.
+This mode requires this setting enabled to generate notifications.
 
 
+## Background synchronisation > Start on boot (only in fallback mode)
 
-## LABS > Data save mode
+Allow the application to start the fallback background process when the device boots.
 
-**TODO**: What is it. Does it impact notifications?
+## Background synchronisation > Delay between two sync requests (only in fallback mode)
 
+The interval in seconds between two background syncs with the homeserver in fallback mode. Default is 60s.
+
+## Background synchronisation > Sync request timeout (only in fallback mode)
+
+The time given to the homeserver to answer to a fallback background sync. Default is 6s.
 
 
 ---
 WIP
 ---
 
-
 # Android 8
-Android added limitations on the way app can run in background
+Android added limitations on the way app can run in background:
 
 *To improve the user experience, Android 8.0 (API level 26) imposes limitations on what apps can do while running in the background* (https://developer.android.com/about/versions/oreo/background.html)
 
