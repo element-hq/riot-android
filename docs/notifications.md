@@ -47,7 +47,7 @@ This mode requires that the user enables the [background sync](#background-synch
                                        Display notification
 ```
 
-The inverval between periodic syncs with the homeserver is 66 seconds by default. It can be tuned thanks to [Delay between two sync requests](#background-synchronisation--enable-background-sync) and [Sync request timeout](#background-synchronisation--enable-background-sync) settings.
+The inverval between periodic syncs with the homeserver is 66 seconds by default. It can be tuned thanks to [Delay between two sync requests](#background-synchronisation--delay-between-two-sync-requests-only-in-fallback-mode) and [Sync request timeout](#background-synchronisation--sync-request-timeout-only-in-fallback-mode) settings.
 
 
 # Application Settings
@@ -69,16 +69,16 @@ This setting will configure Sygnal to send more or less data through GCM.
 If enabled, the push server sends a GCM notification to the app containing the room id and the event id.
 The app needs then to do a background synchronisation with the server to retrieve data. The app will build the notification from this data.
 
-PRO: Only meta data goes through GCM. The app decrypts messages in e2e rooms
+<ins>PRO</ins>: Only meta data goes through GCM. The app decrypts messages in e2e rooms
 
-CON: Use more network and battery. Notifications take more time to appear.
+<ins>CON:</ins> Use more network and battery. Notifications take more time to appear.
 
 
 If disabled, the push server sends a GCM notification to the app containing the room id, the event id and the **event content** so that the application can display a notification directly from GCM data.
 
-PRO: network and battery efficient.
+<ins>PRO</ins>: network and battery efficient.
 
-CON: contents of events in non encrypted room go through GCM. 
+<ins>CON</ins>: contents of events in non encrypted room go through GCM. 
 
 
 ### Fallback mode
