@@ -65,16 +65,16 @@ Disable notifications locally. The push server will continue to send notificatio
 
 ## Background synchronisation > Enable background sync
 
-The behavior of this setting is not the same in GCM and in fallback mode.
+This setting allows the app to do background syncs with the server. The way it affects the notifications management behavior is not the same in GCM and in fallback mode.
 
 ### GCM
 This setting will configure Sygnal to send more or less data through GCM.
 
 #### background sync enabled
 If enabled, the push server sends a GCM notification to the app containing the room id and the event id.
-The app needs then to do a background synchronisation with the server to retrieve data. The app will build the notification from this data.
+The app then does a background synchronisation with the homeserver to retrieve data. The app will build the notification from this data.
 
-<ins>PRO</ins>: Only meta data goes through GCM. The app decrypts messages in e2e rooms
+<ins>PRO</ins>: Only meta data goes through GCM. The app decrypts messages in e2e rooms.
 
 <ins>CON:</ins> Use more network and battery. Notifications take more time to appear.
 
@@ -88,7 +88,7 @@ If disabled, the push server sends a GCM notification to the app containing the 
 
 ### Fallback mode
 
-This mode requires this setting enabled to generate notifications.
+This mode requires this setting enabled so that the application can do background syncs with the homeserver to detect events to notify to end user.
 
 
 ## Background synchronisation > Start on boot (only in fallback mode)
@@ -104,14 +104,20 @@ The interval in seconds between two background syncs with the homeserver in fall
 The time given to the homeserver to answer to a fallback background sync. Default is 6s.
 
 
+# Background tasks in Android 8
+
+Android 8 added limitations on the way app can run in background: *To improve the user experience, Android 8.0 (API level 26) imposes limitations on what apps can do while running in the background* (https://developer.android.com/about/versions/oreo/background.html).
+
+On an Android 8 device, that gives only 15s to run in backgroumd.
+
+This impacts the background behavior of the app:
+
+- in GCM mode, the background synchronisation to fetch data to fill the notification can be interupted.
+- in fallback mode, the loop of background syncs can be broken. The user receive no more notifications.
+
+
 ---
 WIP
----
-
-# Android 8
-Android added limitations on the way app can run in background:
-
-*To improve the user experience, Android 8.0 (API level 26) imposes limitations on what apps can do while running in the background* (https://developer.android.com/about/versions/oreo/background.html)
 
 ## How it is solved in Riot
 Double notifications!
