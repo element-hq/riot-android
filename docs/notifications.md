@@ -66,6 +66,7 @@ The behavior of this setting is not the same in GCM and in fallback mode.
 
 ### GCM
 This setting will configure Sygnal to send more or less data through GCM.
+
 If enabled, the push server sends a GCM notification to the app containing the room id and the event id.
 The app needs then to do a background synchronisation with the server to retrieve data. The app will build the notification from this data.
 
