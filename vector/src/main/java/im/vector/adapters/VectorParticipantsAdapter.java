@@ -885,7 +885,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (parent instanceof ExpandableListView) {
-                        if (isExpanded) {
+                        if (((ExpandableListView) parent).isGroupExpanded(groupPosition)) {
                             ((ExpandableListView) parent).collapseGroup(groupPosition);
                         } else {
                             ((ExpandableListView) parent).expandGroup(groupPosition);
