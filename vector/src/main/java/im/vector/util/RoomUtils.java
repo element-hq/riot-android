@@ -789,28 +789,6 @@ public class RoomUtils {
     }
 
     /**
-     * Get whether the room of the given is a direct chat
-     *
-     * @param roomId
-     * @return true if direct chat
-     */
-    public static boolean isDirectChat(final MXSession session, final String roomId) {
-        final IMXStore store = session.getDataHandler().getStore();
-        final Map<String, List<String>> directChatRoomsDict;
-
-        if (store.getDirectChatRoomsDict() != null) {
-            directChatRoomsDict = new HashMap<>(store.getDirectChatRoomsDict());
-
-            if (directChatRoomsDict.containsKey(session.getMyUserId())) {
-                List<String> roomIdsList = new ArrayList<>(directChatRoomsDict.get(session.getMyUserId()));
-                return roomIdsList.contains(roomId);
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Create a list of rooms by filtering the given list with the given pattern
      *
      * @param roomsToFilter

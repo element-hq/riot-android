@@ -66,6 +66,8 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
 
     String mCurrentFilter;
 
+    Room mRoom;
+
     MXSession mSession;
 
     OnRoomChangedListener mOnRoomChangedListener;
@@ -210,7 +212,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
             public void onSuccess(Void info) {
                 onRequestDone(null);
                 if (mOnRoomChangedListener != null) {
-                    mOnRoomChangedListener.onToggleDirectChat(roomId, RoomUtils.isDirectChat(mSession, roomId));
+                    mOnRoomChangedListener.onToggleDirectChat(roomId, mSession.getDataHandler().getDirectChatRoomIdsList().contains(roomId));
                 }
             }
 
