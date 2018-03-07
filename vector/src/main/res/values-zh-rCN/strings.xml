@@ -765,7 +765,7 @@
     <string name="notification_on">打开</string>
     <string name="encrypted_message">加密的消息</string>
 
-<string name="notification_noisy_notifications">吵闹的通知</string>
+<string name="notification_noisy_notifications">通知并振铃</string>
     <string name="notification_silent_notifications">静默通知</string>
 
     <string name="settings_analytics">统计</string>
