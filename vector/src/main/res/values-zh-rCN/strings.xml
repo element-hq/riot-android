@@ -476,7 +476,7 @@
     <string name="room_participants_power_level_prompt">你将不能撤销这个修改，因为你正在让这个用户有和你相同的特权级别。
 你确定吗？</string>
 
-    <string name="ssl_cert_not_trust">这可能意味着有人正恶意地拦截你的流量，或者你的电话不信任远程服务器提供的证书。</string>
+    <string name="ssl_cert_not_trust">这可能意味着有人正恶意地拦截你的流量，或者你的手机不信任远程服务器提供的证书。</string>
     <string name="ssl_cert_new_account_expl">如果服务器管理员说这是预料之中的，请确保以下的指纹和他们提供的指纹匹配。</string>
     <string name="room_event_action_report_prompt_reason">报告这个内容的原因</string>
     <string name="room_recents_directory">目录</string>
@@ -559,7 +559,7 @@
     <string name="e2e_need_log_in_again">您需要重新登录才能为此设备生成端对端加密密钥，并将公钥提交给您的主服务器。
 这只会关闭一次。
 请谅解由此造成的不便。</string>
-    <string name="read_receipts_list">阅读收据清单</string>
+    <string name="read_receipts_list">已读标签清单</string>
     <string name="compression_options">"发送为 "</string>
     <string name="permissions_rationale_msg_contacts">Riot 需要访问您的通讯录联系人的权限，才能根据其电子邮件和电话号码查找其他 Matrix 用户。
 
@@ -573,9 +573,9 @@
     <string name="room_participants_ago">以前</string>
 
     <string name="people_search_filter_text">仅限 Matrix 用户</string>
-    <string name="ssl_unexpected_existing_expl">证书已从您的手机信任的证书中更改。这是非常不寻常的。建议您不要接受此新证书。</string>
+    <string name="ssl_unexpected_existing_expl">您的手机曾信任的证书已被更改。这*非常反常*。建议您*不要接受*此新证书。</string>
     <string name="ssl_expected_existing_expl">证书已从以前受信任的一个更改为不受信任的证书。服务器可能已更新其证书。联系服务器管理员以获取预期的指纹。</string>
-    <string name="ssl_only_accept">如果服务器管理员已经发布了与上述相匹配的指纹，则只接受该证书。</string>
+    <string name="ssl_only_accept">仅在服务器管理员已经发布了与上述相匹配指纹的情况下接受该证书。</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
     <string name="room_details_people">联系人</string>
     <string name="malformed_id">格式不正确的 ID。应该是一个电子邮件地址或 Matrix ID，如”@localpart:domain“</string>
@@ -683,11 +683,11 @@
     <string name="settings_clear_medias_cache">清空缓存的媒体文件</string>
     <string name="settings_keep_media">保存媒体文件</string>
 
-    <string name="settings_hide_read_receipts">隐藏到达</string>
+    <string name="settings_hide_read_receipts">隐藏已读标签</string>
     <string name="settings_dont_send_typings_notifs">不发送打字通知</string>
     <string name="settings_always_show_timestamps">总是显示消息时间戳</string>
     <string name="settings_disable_markdown">发送时禁用 markdown 格式化</string>
-    <string name="settings_data_save_mode">数据保存模式</string>
+    <string name="settings_data_save_mode">数据节省模式</string>
 
     <string name="media_saving_period_3_days">3天</string>
     <string name="media_saving_period_1_week">1周</string>
@@ -773,7 +773,7 @@
     <string name="settings_opt_out_of_analytics_summary">Riot 会收集匿名统计数据来帮助我们改进程序。</string>
 
 
-    <string name="notification_noisy">吵闹的</string>
+    <string name="notification_noisy">通知并振铃</string>
 
     <string name="loading">正在加载...</string>
 
@@ -791,7 +791,7 @@
     <string name="room_settings_mute">静音</string>
     <string name="room_settings_add_homescreen_shortcut">添加主屏幕快捷方式</string>
 
-    <string name="settings_inline_url_preview">默认启用内联 URL 预览</string>
+    <string name="settings_inline_url_preview">默认启用文内 URL 预览</string>
     <string name="settings_vibrate_on_mention">提及时震动</string>
 
     <string name="room_settings_room_notifications_title">通知</string>
@@ -801,4 +801,5 @@
 
     <string name="rejoin">重新加入</string>
     <string name="forget_room">忘记聊天室</string>
-</resources>
+<string name="room_settings_all_messages_noisy">所有消息（通知并振铃）</string>
+    </resources>
