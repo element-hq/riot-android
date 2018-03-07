@@ -28,7 +28,7 @@ Homeserver ----> Sygnal ----> GCM ----> Riot
   - Background sync disabled
 
 The app displays a notification with the data provided with the GCM payload.
-Check [background sync disabled](#background-sync-disabled) for more information about the data in the GCM payload in this configuration.
+Check the [background sync disabled](#background-sync-disabled) section for more details about data going through the GCM infrastructure in this configuration.
 
 ```
 Homeserver ----> Sygnal ----> GCM ----> Riot
@@ -116,8 +116,25 @@ This impacts the background behavior of the app:
 - in fallback mode, the loop of background syncs can be broken. The user receive no more notifications.
 
 
----
-WIP
-
 ## How it is solved in Riot
-Double notifications!
+
+The way to solve it consists in displaying a persistent notification ([Notification.FLAG_NO_CLEAR](https://developer.android.com/reference/android/app/Notification.html#FLAG_NO_CLEAR)) when the application is doing background tasks.
+
+This notification is persistent meaning that the user cannot remove it while it is displayed.
+
+### GCM mode
+
+In GCM mode, when [background sync](#background-synchronisation--enable-background-sync) is enabled, while the app syncs in background, it needs to display a persistent notification. The displayed message is then `Synchronising`.
+
+Once the sync is complete, the notification is removed and a normal, removable, notification showing messages is displayed.
+
+### Fallback mode
+
+In fallback mode, the application needs to run permanently in background to manage notifications. That means it must display a persistent notification forever. The displayed message is then `Listen for events`.
+
+In order to display true messages notifications, the application can:
+
+ - display a new normal (ie, removable) notification with those messages. But that creates a second notification and a second Riot icon in the Android notifications status bar.
+ - replace the persistent `Listen for events` notification by a new persistent notification showing new messages. There is only one Riot notification but this one is unswipable. The notifications for new messages will be reset only when the user opens the app.
+ 
+ Riot, as of time of writing, uses the 2nd approach.
