@@ -28,7 +28,7 @@
     <string name="ongoing_conference_call_voice">głos</string>
     <string name="ongoing_conference_call_video">obraz</string>
     <string name="cannot_start_call">Nie można rozpocząć połączenia, spróbuj ponownie później</string>
-    <string name="missing_permissions_warning">Ze względu na brak pewnych uprawnień, niektóre funkcje mogą nie działać…</string>
+    <string name="missing_permissions_warning">Ze względu na brak pewnych uprawnień, niektóre funkcje mogą nie działać..</string>
     <string name="missing_permissions_to_start_conf_call">Musisz być uprawniony, aby rozpocząć połączenie grupowe</string>
     <string name="missing_permissions_title_to_start_conf_call">Nie można rozpocząć połączenia</string>
     <string name="device_information">Informacje o urządzeniu</string>
@@ -353,7 +353,7 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="directory_search_results_title">Przeglądaj katalog</string>
     <string name="directory_search_room">%1$d pokój</string>
     <string name="directory_search_room_for">Znaleziono %1$d pokój dla wyniku %2$s</string>
-    <string name="directory_searching_title">Wyszukiwanie katalogu…</string>
+    <string name="directory_searching_title">Wyszukiwanie katalogu..</string>
 
     <string name="room_settings_favourite">Dodaj do ulubionych</string>
     <string name="room_settings_de_prioritize">Usuń z priorytetyzowanych</string>

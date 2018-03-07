@@ -508,7 +508,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <string name="account_email_validation_title">Verificação pendente</string>
     <string name="account_email_validation_message">Por favor verifique o seu email e clique no link que está lá. Feito isso, clique em continuar.</string>
-    <string name="account_email_validation_error">Não consegui averiguar o seu endereço de email. Favor verificar seu email e clicar no link que ele contém. Quando tiver feito isso, clique em continuar.</string>
+    <string name="account_email_validation_error">Não consegui averiguar o seu endereço de email. Favor verificar seu email e clicar no link que ele contém. Quando tiver feito isso, clique em continuar</string>
 
     <string name="account_email_already_used_error">This email address is already in use</string>
     <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
