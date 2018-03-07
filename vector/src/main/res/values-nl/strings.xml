@@ -793,4 +793,18 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
 
     <string name="encrypted_message">Versleuteld bericht</string>
 
-</resources>
+<string name="title_activity_group_details">Gemeenschap details</string>
+
+    <string name="loading">Laden...</string>
+
+    <string name="action_exit">Afsluiten</string>
+    <string name="actions">Acties</string>
+    <string name="bottom_action_groups">Gemeenschappen</string>
+
+    <string name="home_filter_placeholder_groups">Zoeken voor gemeenschappen</string>
+
+    <string name="groups_invite_header">Uitnodigen</string>
+    <string name="groups_header">Gemeenschappen</string>
+    <string name="no_group_placeholder">Geen groepen</string>
+
+    </resources>
