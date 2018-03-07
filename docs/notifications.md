@@ -112,7 +112,7 @@ On an Android 8 device, that gives only 15s to run in backgroumd.
 
 This impacts the background behavior of the app:
 
-- in GCM mode, the background synchronisation to fetch data to fill the notification can be interupted.
+- in GCM mode, the background synchronisation to fetch data to fill the notification can be interrupted.
 - in fallback mode, the loop of background syncs can be broken. The user receive no more notifications.
 
 
