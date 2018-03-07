@@ -22,8 +22,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;

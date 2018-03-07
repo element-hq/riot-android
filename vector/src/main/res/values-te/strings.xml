@@ -171,9 +171,6 @@
     <string name="room_info_room_name">గది పేరు</string>
     <string name="room_info_room_topic">గది అంశం</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call_connected">కాల్ కనెక్ట్ చేయబడింది</string>
     <string name="call_connecting">కాల్ అనుసంధానించబడుతున్నది…</string>
     <string name="call_ended">కాల్ ముగిసింది</string>
@@ -184,10 +181,6 @@
     <string name="call_in_progress">కాల్ పురోగతిలో వుంది</string>
 
     <string name="call_error_ice_failed">మీడియా కనెక్షన్ విఫలమైంది</string>
-    <string name="call_error_peer_cancelled_call">కాల్ రద్దు చేయబడింది</string>
-
-    <string name="action_accept">అంగీకరించు</string>
-    <string name="action_ignore">విస్మరించు</string>
 
     <string name="media_picker_both_capture_title">చిత్రాన్ని లేదా వీడియోని తీసుకోండి</string>
     <string name="media_picker_cannot_record_video">వీడియో రికార్డ్ చేయలేరు</string>
@@ -214,8 +207,6 @@
     <string name="room_preview_try_join_an_unknown_room_default">ఓ గది</string>
     <string name="room_creation_title">కొత్త మాటామంతి</string>
     <string name="room_creation_add_member">సభ్యుని జోడించు</string>
-    <string name="room_header_active_members">%1$d/%2$d క్రియాశీల సభ్యులు</string>
-    <string name="room_title_members">%1$d సభ్యులు</string>
     <string name="room_title_one_member">1 సభ్యుడు</string>
     <string name="room_e2e_alert_title">హెచ్చరిక!</string>
     <string name="format_time_s">s</string>
@@ -279,7 +270,6 @@
     <string name="room_message_file_not_found">దస్త్రం కనుగొనబడలేదు</string>
     <string name="room_do_not_have_permission_to_post">మీకు ఈ గదికి పోస్ట్ చేయడానికి అనుమతి లేదు</string>
     <string name="room_new_message_notification">1 కొత్త సందేశం</string>
-    <string name="room_new_messages_notification">%1$d కొత్త సందేశాలు</string>
 
     <string name="ssl_trust">నమ్మకం</string>
     <string name="ssl_do_not_trust">నమ్మకండి</string>
@@ -305,7 +295,6 @@
     <string name="room_displayname_invite_from">%s నుండి ఆహ్వానించు</string>
     <string name="room_displayname_two_members">%1$s మరియు %2$s</string>
     <string name="room_displayname_room_invite">గదికి ఆహ్వానం</string>
-    <string name="room_displayname_more_than_two_members">%1$s మరియు %2$d మంది ఇతరులు</string>
     <string name="room_displayname_no_title">ఖాళీ గది</string>
 
     <string name="search_hint">వెతుకు</string>
@@ -329,12 +318,9 @@
 
     <string name="directory_search_results_title">డైరెక్టరీలో విహరించండి</string>
     <string name="directory_search_room">%1$d గది</string>
-    <string name="directory_search_rooms">%1$d గదులు</string>
     <string name="directory_search_room_for">%2$s కోసం %1$d గది కనుగొనబడింది</string>
-    <string name="directory_search_rooms_for">%2$s కోసం %1$s గది కనుగొనబడింది</string>
     <string name="directory_searching_title">డైరెక్టరీని వెతుకుతున్నాం..</string>
 
-    <string name="room_settings_notifications">ప్రకటనలు</string>
     <string name="room_settings_direct_chat">ప్రత్యక్ష చాట్</string>
     <string name="room_settings_leave_conversation">సంభాషణను వదిలివేయండి</string>
     <string name="room_settings_forget">మర్చిపో</string>
@@ -428,7 +414,6 @@
     <string name="room_settings_topic">విషయము</string>
     <string name="room_settings_room_tag">రూమ్ ట్యాగ్</string>
     <string name="room_settings_tag_pref_dialog_title">గా ట్యాగ్:</string>
-    <string name="room_settings_mute_notifs">నోటిఫికేషన్లను మ్యూట్ చేయండి</string>
 
     <string name="room_settings_tag_pref_entry_low_priority">తక్కువ ప్రాధాన్యత</string>
     <string name="room_settings_tag_pref_entry_none">ఎవరు కాదు</string>
@@ -502,7 +487,6 @@
     <string name="action_global_search">విశ్వాన్వేషణ</string>
     <string name="call_error_user_not_responding">అటు వైపు ఎవరు కాల్ ఎత్తలేదు</string>
     <string name="call_error_answered_elsewhere">కాల్ ఎక్కడో ఎత్తారు</string>
-    <string name="call_error_peer_hangup_elsewhere">కాల్ ఎక్కడో ఆపేశారు</string>
     <string name="action_voice_call">వాయిస్ కాల్</string>
     <string name="auth_invalid_password">గుప్తపదం చానా చిన్నది (కనీసం 6)</string>
     <string name="encryption_export_enter_passphrase">గుప్తపదం ఇవ్వండి</string>
@@ -565,7 +549,5 @@
 \nతెలియని పరికరాలు:</string>
 
     <string name="directory_server_type_homeserver">బహిరంగ గదులు నుండి జాబితా చేయడానికి ఒక ఇంటి సేవికను టైప్ చేయండి</string>
-    <string name="notification_unread_notified_messages">%d ప్రకటనలు</string>
-    <string name="notification_unread_notified_messages_in_room">%2$d గదులు లో %1$d చదవని నోటిఫైడ్ సందేశాలు ఉనాయి</string>
 
 </resources>

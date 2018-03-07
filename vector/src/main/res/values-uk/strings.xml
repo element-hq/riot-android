@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
-    <string name="resouces_language">uk</string>
-    <string name="resouces_country">UK</string>
+    <string name="resouces_language">en</string>
+    <string name="resouces_country">US</string>
 
     <!-- theme -->
     <string name="light_theme">Світла Тема</string>
@@ -21,6 +21,7 @@
     <string name="title_activity_settings">Налаштування</string>
     <string name="title_activity_member_details">Інформація про учасника</string>
     <string name="title_activity_historical">Історія</string>
+    <string name="title_activity_bug_report">Відгук про помилкуF</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -219,9 +220,6 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Перегляд списку вступників</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -245,10 +243,6 @@
     <string name="room_info_room_name">Назва кімнати</string>
     <string name="room_info_room_topic">Тема кімнати</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Виклик з\'єднано</string>
     <string name="call_connecting">Встановлюється з\'єднання…</string>
@@ -263,11 +257,6 @@
     <string name="call_error_ice_failed">Медіавиклик не вдався</string>
     <string name="call_error_camera_init_failed">Неможливо ініціювати камеру</string>
     <string name="call_error_answered_elsewhere">Дзвінок прийнято іншим пристроєм</string>
-    <string name="call_error_peer_hangup_elsewhere">Дзвінок відхилено іншим пристроєм</string>
-    <string name="call_error_peer_cancelled_call">виклик скасовано</string>
-
-    <string name="action_accept">ПРИЙНЯТИ</string>
-    <string name="action_ignore">ВІДХИЛИТИ</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Зняти світлину чи відео"</string>
@@ -312,8 +301,6 @@
     <!-- Chat creation -->
     <string name="room_creation_title">Новий Чат</string>
     <string name="room_creation_add_member">Додати учасника</string>
-    <string name="room_header_active_members">%1$d/%2$d активних користувачів</string>
-    <string name="room_title_members">%1$d учасників</string>
     <string name="room_title_one_member">1 учасник</string>
     <string name="room_e2e_alert_title">Увага!</string>
     <string name="room_e2e_alert_message">Скрізне шифрування досі на стадії beta-тестування та може бути ненадійним.</string>
@@ -371,8 +358,8 @@
     <!--  Chat -->
     <string name="room_menu_search">Пошук</string>
     <string name="room_one_user_is_typing">%s друкує…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s друкують…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; та інші друкують…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s друкують…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; та інші друкують…</string>
     <string name="room_message_placeholder_encrypted">Надіслати шифроване повідомлення…</string>
     <string name="room_message_placeholder_not_encrypted">Надіслати повідомлення (нешифроване)…</string>
     <string name="room_offline_notification">Зв\'язок із сервером втрачено.</string>
@@ -385,7 +372,6 @@
     <string name="room_message_file_not_found">Файл не знайдено</string>
     <string name="room_do_not_have_permission_to_post">Ви не маєте права писати повідомлення в цій кімнаті</string>
     <string name="room_new_message_notification">1 нове повідомлення</string>
-    <string name="room_new_messages_notification">%1$d нових повідомлень</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Довіряти</string>
@@ -421,7 +407,6 @@
     <string name="room_displayname_invite_from">Запрошення від %s</string>
     <string name="room_displayname_room_invite">Запрошення до кімнати</string>
     <string name="room_displayname_two_members">%1$s і %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s та %2$d інші</string>
     <string name="room_displayname_no_title">Порожня кімната</string>
 
     <!-- Search -->
@@ -449,13 +434,10 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Огляд каталогу</string>
     <string name="directory_search_room">%1$d кімната</string>
-    <string name="directory_search_rooms">%1$d кімнати</string>
     <string name="directory_search_room_for">%1$d кімната знайдена для %2$s</string>
-    <string name="directory_search_rooms_for">%1$s кімнат знайдено для %2$s</string>
     <string name="directory_searching_title">Пошук у каталозі...</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Сповіщення</string>
     <string name="room_settings_favourite">Обране</string>
     <string name="room_settings_de_prioritize">Не терміново</string>
     <string name="room_settings_direct_chat">Прямий Чат</string>
@@ -564,9 +546,9 @@
 
     <string name="account_email_validation_title">Очікування Перевірки</string>
     <string name="account_email_validation_message">Перевірте ваш email та перейдіть за посиланням у листі. Після цього клацніть продовжити.</string>
-    <string name="account_email_validation_error">Не вдалося перевірити поштову адресу. Будь ласка, перевірте ваш email та перейдіть за посиланням у листі. Після цього клацніть продовжити.</string>
+    <string name="account_email_validation_error">Не вдалося перевірити поштову адресу. Будь ласка, перевірте ваш email та перейдіть за посиланням у листі. Після цього натисніть продовжити</string>
     <string name="account_email_already_used_error">Email адреса вже використовується</string>
-    <string name="account_email_not_found_error">Не вдалося надіслати email: адресу не знайдено.</string>
+    <string name="account_email_not_found_error">Не вдалося надіслати email: цю адресу не знайдено</string>
     <string name="account_phone_number_already_used_error">Цей номер вже використовується</string>
 
     <string name="settings_change_password">Змінити пароль</string>
@@ -607,7 +589,6 @@
     <string name="room_settings_topic">Тема</string>
     <string name="room_settings_room_tag">Мітка кімнати</string>
     <string name="room_settings_tag_pref_dialog_title">Позначено як:</string>
-    <string name="room_settings_mute_notifs">Вимкнути сповіщення</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Улюблені</string>
@@ -744,10 +725,6 @@
     <string name="directory_server_all_rooms_on_server">Всі кімнати на сервері %s</string>
     <string name="directory_server_native_rooms">Всі місцеві кімнати %s</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d непрочитаних повідомлень</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d непрочитаних повідомлень у %2$d кімнатах"</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Пошук в історії</string>
 
@@ -768,13 +745,10 @@
     <string name="event_formatter_widget_removed">%1$s видалено %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Здійснювати конференц дзвінки через Jitsi</string>
     <string name="widget_delete_message_confirmation">Справді бажаєте видалити віджет?</string>
-    <string name="active_widgets">Активних віджетів: %1$d</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Для цього вам треба мати змогу запрошувати користувачів.</string>
     <string name="widget_integration_unable_to_create">Не вдалося створити віджет.</string>
     <string name="widget_integration_failed_to_send_request">Не вдалося надіслати запит.</string>
-    <string name="widget_integration_room_not_recognised">Кімнату не розпізнано.</string>
     <string name="widget_integration_positive_power_level">Рівень доступу має бути більше 0.</string>
     <string name="widget_integration_must_be_in_room">Ви не перебуваєте в цій кімнаті.</string>
     <string name="widget_integration_no_permission_in_room">Ви не маєте дозволу на виконання даної дії у цій кімнаті.</string>
@@ -784,7 +758,24 @@
     <string name="settings_labs_matrix_apps">Застосунки Matrix</string>
 
     <string name="room_add_matrix_apps">Додати застосунки Matrix</string>
-    <string name="add_matrix_apps_not_supported">Не підтримується цим пристроєм</string>
+    <string name="notification_noisy_notifications">Гучне повідомлення</string>
+    <string name="notification_silent_notifications">Тихе повідомлення</string>
+
+    <string name="option_take_photo">Зробити фото</string>
+    <string name="option_take_video">Записати відео</string>
+
+    <string name="call">Виклик</string>
+
+    <string name="settings_theme">Тема</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Увага!</string>
+    <string name="notification_off">Викл</string>
+    <string name="notification_on">Вкл</string>
+    <string name="notification_noisy">Гучно</string>
+
+    <string name="encrypted_message">Закодоване повідомлення</string>
+
     <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
 
     // share keys
@@ -794,13 +785,8 @@
     <string name="share_without_verifying">Поділитись без перевірки</string>
     <string name="ignore_request">Ігнорувати запит</string>
 
-    // conference call
-    <string name="conference_call_warning_title">Попередження!</string>
-    <string name="conference_call_warning_message">Конференц дзвінки у розробці та можуть бути ненадійними.</string>
-
     // slash commands
     <string name="command_error">Помилка виконання команди</string>
     <string name="unrecognized_command">Команду %s не розпізнано</string>
-
 
 </resources>

@@ -215,9 +215,6 @@ Pedimos desculpa pela inconveniência.</string>
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Ler lista de recibos de leitura</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d mudanças de estado</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -241,10 +238,6 @@ Pedimos desculpa pela inconveniência.</string>
     <string name="room_info_room_name">Nome da sala</string>
     <string name="room_info_room_topic">Tópico da sala</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Chamada conectada</string>
     <string name="call_connecting">A estabelecer a chamada…</string>
@@ -259,11 +252,6 @@ Pedimos desculpa pela inconveniência.</string>
     <string name="call_error_ice_failed">A conexão à mídia falhou</string>
     <string name="call_error_camera_init_failed">Não foi possível iniciar a câmara</string>
     <string name="call_error_answered_elsewhere">chamada respondida noutro sítio</string>
-    <string name="call_error_peer_hangup_elsewhere">chamada terminada noutro sítio</string>
-    <string name="call_error_peer_cancelled_call">chamada cancelada</string>
-
-    <string name="action_accept">ACEITAR</string>
-    <string name="action_ignore">IGNORAR</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Tirar fotografia ou gravar um vídeo</string>
@@ -321,8 +309,6 @@ Pode querer iniciar sessão com uma conta diferente, ou adicionar este email à 
     <!-- Chat creation -->
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Adicionar membro</string>
-    <string name="room_header_active_members">%1$d/%2$d membros ativos</string>
-    <string name="room_title_members">%1$d membros</string>
     <string name="room_title_one_member">1 membro</string>
     <string name="room_e2e_alert_title">Atenção!</string>
     <string name="room_e2e_alert_message">Criptografia ponta-a-ponta está em beta e pode ainda não ser fiável.
@@ -400,7 +386,6 @@ Tem a certeza?</string>
     <string name="room_message_file_not_found">Ficheiro não encontrado</string>
     <string name="room_do_not_have_permission_to_post">Não tem permissão para enviar mensagens nesta sala</string>
     <string name="room_new_message_notification">1 mensagem nova</string>
-    <string name="room_new_messages_notification">%1$d mensagens novas</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -436,7 +421,6 @@ Tem a certeza?</string>
     <string name="room_displayname_invite_from">Convite de %s</string>
     <string name="room_displayname_room_invite">Convite para sala</string>
     <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s e %2$d outros</string>
     <string name="room_displayname_no_title">Sala vazia</string>
 
     <!-- Search -->
@@ -464,13 +448,10 @@ Tem a certeza?</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Navegar diretório</string>
     <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_rooms">%1$d salas</string>
     <string name="directory_search_room_for">%1$d sala encontrada para %2$s</string>
-    <string name="directory_search_rooms_for">%1$s salas encontradas para %2$s</string>
     <string name="directory_searching_title">A pesquisar o diretório...</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificações</string>
     <string name="room_settings_favourite">Adicionar aos favoritos</string>
     <string name="room_settings_de_prioritize">Baixa prioridade</string>
     <string name="room_settings_direct_chat">Conversa direta</string>
@@ -595,7 +576,6 @@ Para continuar, insira a sua palavra-passe.</string>
     <string name="room_settings_topic">Tópico</string>
     <string name="room_settings_room_tag">Etiqueta da sala</string>
     <string name="room_settings_tag_pref_dialog_title">Etiquetada como:</string>
-    <string name="room_settings_mute_notifs">Silenciar notificações</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Adicionar aos favoritos</string>
@@ -749,10 +729,6 @@ Dispositivos desconhecidos:</string>
     <string name="directory_server_all_rooms_on_server">Todas as salas no servidor %s</string>
     <string name="directory_server_native_rooms">Todas as nativas de %s</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d mensagens notificadas não lidas</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d mensagens não lidas em %2$d salas</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Procurar histórico</string>
 <string name="settings_keep_media">Manter ficheiros multimédia</string>
@@ -805,13 +781,10 @@ Dispositivos desconhecidos:</string>
     <string name="event_formatter_widget_removed">%1$s removido por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com o jitsi</string>
     <string name="widget_delete_message_confirmation">Tem a certeza que quer remover o widget?</string>
-    <string name="active_widgets">Widgets ativos: %1$d</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Tem que poder convidar utilizadores para fazer isso.</string>
     <string name="widget_integration_unable_to_create">Não foi possível criar o widget.</string>
     <string name="widget_integration_failed_to_send_request">O envio do pedido falhou.</string>
-    <string name="widget_integration_room_not_recognised">Esta sala não é reconhecida.</string>
     <string name="widget_integration_positive_power_level">Nível de utilizador tem que ser um inteiro positivo.</string>
     <string name="widget_integration_must_be_in_room">Não se encontra nesta sala.</string>
     <string name="widget_integration_no_permission_in_room">Não tem permissão para fazer isso nesta sala.</string>
@@ -820,8 +793,7 @@ Dispositivos desconhecidos:</string>
     <string name="widget_integration_room_not_visible">Sala %s não se encontra visível.</string>
     <string name="settings_labs_matrix_apps">Apps Matrix</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
-    <string name="add_matrix_apps_not_supported">Não é suportado neste dispositivo</string>
-<string name="notification_sync_in_progress">A sincronizar</string>
+    <string name="notification_sync_in_progress">A sincronizar</string>
     <string name="notification_listen_for_events">À escuta de eventos</string>
 
     </resources>

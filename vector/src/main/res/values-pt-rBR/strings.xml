@@ -204,9 +204,6 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Ler lista de recipientes</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -230,10 +227,6 @@
     <string name="room_info_room_name">Nome da sala</string>
     <string name="room_info_room_topic">Tópico da sala</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Chamada conectada</string>
     <string name="call_connecting">Conectando chamada…</string>
@@ -248,11 +241,6 @@
     <string name="call_error_ice_failed">A conexão à mídia falhou</string>
     <string name="call_error_camera_init_failed">Não consigo inicializar a câmera</string>
     <string name="call_error_answered_elsewhere">chamada respondida em outro lugar</string>
-    <string name="call_error_peer_hangup_elsewhere">chamada terminada em outro lugar</string>
-    <string name="call_error_peer_cancelled_call">chamada cancelada</string>
-
-    <string name="action_accept">ACEITAR</string>
-    <string name="action_ignore">IGNORAR</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Tomar uma foto ou um vídeo"</string>
@@ -267,7 +255,9 @@
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPor favor, permita acesso na próxima tela para poder fazer a chamada.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot necessita permissão para acessar sua câmera e seu microfone para realizar chamadas de vídeo.\n\nPor favor, permita acesso na próxima tela para poder fazer a chamada.</string>
     <string name="permissions_rationale_msg_contacts">Riot necessita permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus emails e números de telefone.\n\nPor favor, permita acesso na próxima tela para poder encontrar usuários na sua agenda que podem ser contactados pelo Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot necessita permissão para acessar os seus contatos para poder encontrar usuários na sua agenda a partir de seus emails e números de telefone.\n\nVocê autoriza o Riot a acessar seus contatos?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot necessita sua permissão para acessar os seus contatos para poder encontrar usuários na sua agenda a partir de seus emails e números de telefone.
+
+Você autoriza o Riot a acessar seus contatos?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Desculpe... A ação não foi realizada, por falta de permissão</string>
 
@@ -297,8 +287,6 @@
     <!-- Chat creation -->
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Adicionar uma pessoa</string>
-    <string name="room_header_active_members">%1$d/%2$d integrantes ativos</string>
-    <string name="room_title_members">%1$d integrantes</string>
     <string name="room_title_one_member">1 integrante</string>
     <string name="room_e2e_alert_title">Atenção!</string>
     <string name="room_e2e_alert_message">Criptografia ponta-a-ponta está em estágio beta de desenvolvimento e portanto pode ainda não ser confiável.\n\nVocê não deve depositar toda sua confiança nela para preservar seus dados.\n\nDispositivos ainda não podem decriptografar as mensagens anteriores ao momento em que você passou a fazer parte da sala.\n\nMensagens criptografadas não serão visíveis em clientes que não implementaram criptografia.</string>
@@ -369,7 +357,6 @@
     <string name="room_message_file_not_found">Arquivo não encontrado</string>
     <string name="room_do_not_have_permission_to_post">Você não tem permissão para enviar mensagens nesta sala</string>
     <string name="room_new_message_notification">1 mensagem nova</string>
-    <string name="room_new_messages_notification">%1$d mensagens novas</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -405,7 +392,6 @@
     <string name="room_displayname_invite_from">Convite de %s</string>
     <string name="room_displayname_room_invite">Convite para sala</string>
     <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s e %2$d outros</string>
     <string name="room_displayname_no_title">Sala vazia</string>
 
     <!-- Search -->
@@ -433,13 +419,10 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar no diretório</string>
     <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_rooms">%1$d salas</string>
     <string name="directory_search_room_for">%1$d sala encontrada para %2$s</string>
-    <string name="directory_search_rooms_for">%1$s salas encontradas para %2$s</string>
     <string name="directory_searching_title">Buscando no diretório...</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificações</string>
     <string name="room_settings_favourite">Favoritar</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Conversa direta</string>
@@ -525,7 +508,7 @@
 
     <string name="account_email_validation_title">Verificação pendente</string>
     <string name="account_email_validation_message">Por favor verifique o seu email e clique no link que está lá. Feito isso, clique em continuar.</string>
-    <string name="account_email_validation_error">Não consegui averiguar o seu endereço de email. Favor verificar seu email e clicar no link que ele contém. Quando tiver feito isso, clique em continuar.</string>
+    <string name="account_email_validation_error">Não consegui averiguar o seu endereço de email. Favor verificar seu email e clicar no link que ele contém. Quando tiver feito isso, clique em continuar</string>
 
     <string name="account_email_already_used_error">This email address is already in use</string>
     <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
@@ -563,7 +546,6 @@
     <string name="room_settings_topic">Tópico</string>
     <string name="room_settings_room_tag">Etiqueta da sala</string>
     <string name="room_settings_tag_pref_dialog_title">Etiquetada como:</string>
-    <string name="room_settings_mute_notifs">Silenciar notificações desta sala</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favoritar</string>
@@ -701,10 +683,6 @@
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d unread notified messages</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
 <string name="offline">Desconectada(o)</string>
@@ -718,7 +696,7 @@
     <string name="settings_hide_read_receipts">Ocultar recibos de leitura</string>
     <string name="settings_dont_send_typings_notifs">Não enviar notificações de digitação</string>
     <string name="settings_always_show_timestamps">Sempre mostrar a hora das mensagens</string>
-    <string name="settings_disable_markdown">Desabilitar formatação Markdown</string>
+    <string name="settings_disable_markdown">Desabilitar formatação Markdown quando estiver enviando</string>
     <string name="settings_data_save_mode">Modo de economia de dados</string>
 
     <string name="settings_user_interface">Interface de usuária(o)</string>
@@ -740,4 +718,147 @@
     <string name="larger">Maior</string>
     <string name="largest">Ainda maior</string>
     <string name="huge">Gigantesco</string>
+<string name="light_theme">Tema claro</string>
+    <string name="dark_theme">Tema escuro</string>
+    <string name="black_them">Tema preto</string>
+
+    <string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="notification_listen_for_events">Escutando eventos</string>
+    <string name="notification_noisy_notifications">Notificações ruidosas</string>
+    <string name="notification_silent_notifications">Notificações silenciosas</string>
+
+    <string name="title_activity_bug_report">Relatório de erros</string>
+    <string name="title_activity_group_details">Detalhes da comunidade</string>
+
+    <string name="loading">Carregando...</string>
+
+    <string name="action_exit">Sair</string>
+    <string name="bottom_action_groups">Comunidades</string>
+
+    <string name="home_filter_placeholder_groups">Buscar comunidades</string>
+
+    <string name="groups_invite_header">Convidar</string>
+    <string name="groups_header">Comunidades</string>
+    <string name="no_group_placeholder">Não há grupos</string>
+
+    <string name="start_new_chat_prompt_msg">Você tem certeza que quer começar uma conversa com %s?</string>
+    <string name="start_voice_call_prompt_msg">Você tem certeza que quer iniciar uma chamada de voz?</string>
+    <string name="start_video_call_prompt_msg">Você tem certeza que quer iniciar uma chamada de vídeo?</string>
+
+    <string name="option_take_photo">Tirar foto</string>
+    <string name="option_take_video">Gravar vídeo</string>
+
+    <string name="login_mobile_device">Celular</string>
+
+    <string name="groups_list">Lista dos grupos</string>
+
+    <string name="call">Chamada</string>
+    <string name="room_participants_kick_prompt_msg">Tem certeza que quer excluir esta pessoa da conversa?</string>
+    <string name="room_participants_ban_prompt_msg">Tem certeza que quer banir esta pessoa da conversa?</string>
+
+    <string name="room_settings_all_messages_noisy">Notificação sonora para cada mensagem</string>
+    <string name="room_settings_all_messages">Notificação para cada mensagem</string>
+    <string name="room_settings_mention_only">Apenas quando mencionado</string>
+    <string name="room_settings_mute">Silenciar</string>
+    <string name="room_settings_add_homescreen_shortcut">Adicionar atalho na tela inicial</string>
+
+    <string name="settings_notification_ringtone">Som de notificação</string>
+    <string name="settings_containing_my_display_name">Mensagens que contenham o meu nome público</string>
+    <string name="settings_containing_my_user_name">Mensagens que contenha o meu nome de usuário</string>
+    <string name="settings_inline_url_preview">Habilitar visualização resumida dos links por padrão</string>
+    <string name="settings_12_24_timestamps">Utilizar o formato de 12 horas (p.ex: 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Ocultar mensagens de entrada e de saída de pessoas (convites, expulsões e banimentos não são afetados)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Ocultar mensagens de alteração de avatar e de nome público</string>
+    <string name="settings_vibrate_on_mention">Vibrar quando mencionado</string>
+
+    <string name="settings_analytics">Estatísticas de uso</string>
+    <string name="settings_opt_out_of_analytics">Não enviar dados estatísticos de uso</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot coleta dados anônimos para podermos melhorar o aplicativo.</string>
+
+    <string name="settings_flair">Flair</string>
+
+    <string name="room_settings_room_notifications_title">Notificações</string>
+    <string name="room_settings_no_flair">" Esta sala não está mostrando Flairs para nenhuma comunidade"</string>
+    <string name="room_settings_add_new_group">Nova ID da comunidade (p.ex: +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">ID de comunidade inválido</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' não é um ID de comunidade válido</string>
+
+
+    <string name="widget_no_power_to_manage">Você necessita ter permissões para poder gerenciar os widgets desta sala</string>
+    <string name="widget_creation_failure">A criação do widget falhou</string>
+    <string name="event_formatter_widget_added">%1$s adicionada/o por %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s removida/o por %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com jitsi</string>
+    <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget?</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_unable_to_create">Impossível criar o widget.</string>
+    <string name="widget_integration_failed_to_send_request">O envio do pedido falhou.</string>
+    <string name="widget_integration_positive_power_level">O nível de permissões tem que ser um número inteiro positivo.</string>
+    <string name="widget_integration_must_be_in_room">Você não está nesta sala.</string>
+    <string name="widget_integration_no_permission_in_room">Você não tem permissões para fazer isso nesta sala.</string>
+    <string name="widget_integration_missing_room_id">O pedido veio sem o room_id.</string>
+    <string name="widget_integration_missing_user_id">O pedido veio sem o user_id.</string>
+    <string name="widget_integration_room_not_visible">A sala %s não está visível.</string>
+    <string name="settings_labs_matrix_apps">Aplicativos Matrix</string>
+    <string name="room_add_matrix_apps">Adicionar aplicativos Matrix</string>
+    <string name="settings_labs_native_camera">Usar a câmera nativa</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Você adicionou um novo dispositivo \'%s\', que está solicitando as chaves de criptografia.</string>
+    <string name="your_unverified_device_requesting">Seu dispositivo não-verificado \'%s\' está solicitando as chaves de criptografia.</string>
+    <string name="start_verification">Iniciar a verificação</string>
+    <string name="share_without_verifying">Compartilhar sem verificar</string>
+    <string name="ignore_request">Ignorar a solicitação</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Atenção!</string>
+    <string name="conference_call_warning_message">Chamadas de conferência estão em desenvolvimento e portanto podem não ser confiáveis.</string>
+
+    // slash commands
+    <string name="command_error">Erro de comando</string>
+    <string name="unrecognized_command">Comando desconhecido: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Desativado</string>
+    <string name="notification_on">Ativado</string>
+    <string name="notification_noisy">Alto</string>
+
+    <string name="encrypted_message">Mensagem criptografada</string>
+
+    // groups creation
+    <string name="create">Criar</string>
+    <string name="create_community">Criar comunidade</string>
+    <string name="community_name">Nome da comunidade</string>
+    <string name="community_name_hint">Exemplo</string>
+    <string name="community_id">ID da comunidade</string>
+    <string name="community_id_hint">exemplo</string>
+
+    // group details
+    <string name="group_details_home">Início</string>
+    <string name="group_details_people">Pessoas</string>
+    <string name="group_details_rooms">Salas</string>
+    <string name="no_users_placeholder">Sem ninguém</string>
+
+    <string name="rooms">Salas</string>
+    <string name="joined">Em que entrou</string>
+    <string name="invited">em que foi convidada/o</string>
+    <string name="filter_group_members">Filtrar integrantes do grupo</string>
+    <string name="filter_group_rooms">Filtrar salas de grupo</string>
+
+    <string name="group_one_member">1 integrante</string>
+    <string name="group_members">%d integrantes</string>
+
+    <string name="group_one_room">1 sala</string>
+    <string name="group_rooms">%d salas</string>
+    <string name="group_no_long_description">O(A) administrador(a) desta comunidade não definiu uma descrição longa da mesma.</string>
+
+    <string name="one_new_message">1 nova mensagem</string>
+    <string name="new_messages">%d novas mensagens</string>
+
+    <string name="has_been_kicked">Você foi excluída/o da sala %1$s por %2$s</string>
+    <string name="has_been_banned">Você foi banida/o da sala %1$s por %2$s</string>
+    <string name="reason_colon">Motivo: %1$s</string>
+    <string name="rejoin">Entrar novamente</string>
+    <string name="forget_room">Esquecer a sala</string>
 </resources>

@@ -80,7 +80,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
                 final RoomInvitationViewHolder invitationViewHolder = (RoomInvitationViewHolder) viewHolder;
                 invitationViewHolder.populateViews(mContext, mSession, room, mRoomInvitationListener, mMoreActionListener);
             } else {
-                viewHolder.populateViews(mContext, mSession, room, mSession.getDirectChatRoomIdsList().contains(room.getRoomId()), false, mMoreActionListener);
+                viewHolder.populateViews(mContext, mSession, room, room.isDirect(), false, mMoreActionListener);
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

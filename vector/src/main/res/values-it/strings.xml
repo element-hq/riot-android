@@ -208,9 +208,6 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Elenco ricevute lette</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d cambiamenti di appartenenza</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -234,10 +231,6 @@
     <string name="room_info_room_name">Nome stanza</string>
     <string name="room_info_room_topic">Argomento stanza</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">mostra_tutti_gli_eventi</string>
-    <string name="settings_key_use_rage_shake">usa_squotimento_furioso</string>
-
     <!-- call string -->
     <string name="call_connected">Chiamata connessa</string>
     <string name="call_connecting">Chiamata in connessione…</string>
@@ -252,11 +245,6 @@
     <string name="call_error_ice_failed">Connessione al supporto media fallita</string>
     <string name="call_error_camera_init_failed">Impossibile avviare la fotocamera</string>
     <string name="call_error_answered_elsewhere">chiamata risulta risposta altrove</string>
-    <string name="call_error_peer_hangup_elsewhere">chiamata risulta agganciata altrove</string>
-    <string name="call_error_peer_cancelled_call">chiamata annullata</string>
-
-    <string name="action_accept">ACCETTA</string>
-    <string name="action_ignore">IGNORA</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Fai una foto o un video</string>
@@ -301,8 +289,6 @@
     <!-- Chat creation -->
     <string name="room_creation_title">Nuova chat</string>
     <string name="room_creation_add_member">Aggiungi membro</string>
-    <string name="room_header_active_members">%1$d/%2$d membri attivi</string>
-    <string name="room_title_members">%1$d membri</string>
     <string name="room_title_one_member">1 membro</string>
     <string name="room_e2e_alert_title">Attenzione!</string>
     <string name="room_e2e_alert_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.\n\nNon dovresti ancora fidarti di essa per proteggere i tuoi dati.\n\nI dispositivi non saranno in grado di decriptare la cronologia prima che entrino nella stanza.\n\nI messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
@@ -374,7 +360,6 @@
     <string name="room_message_file_not_found">File non trovato</string>
     <string name="room_do_not_have_permission_to_post">Non hai il permesso di pubblicare in questa stanza</string>
     <string name="room_new_message_notification">1 nuovo messaggio</string>
-    <string name="room_new_messages_notification">%1$d nuovi messaggi</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Fidati</string>
@@ -410,7 +395,6 @@
     <string name="room_displayname_invite_from">Invito da %s</string>
     <string name="room_displayname_room_invite">Invito nella stanza</string>
     <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s e %2$d altri</string>
     <string name="room_displayname_no_title">Stanza vuota</string>
 
     <!-- Search -->
@@ -438,13 +422,10 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Esplora elenco</string>
     <string name="directory_search_room">%1$d stanza</string>
-    <string name="directory_search_rooms">%1$d stanze</string>
     <string name="directory_search_room_for">%1$d stanza trovata per %2$s</string>
-    <string name="directory_search_rooms_for">%1$s stanze trovate per %2$s</string>
     <string name="directory_searching_title">Ricerca in corso..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notifiche</string>
     <string name="room_settings_favourite">Preferito</string>
     <string name="room_settings_de_prioritize">Bassa priorità</string>
     <string name="room_settings_direct_chat">Chat diretta</string>
@@ -534,7 +515,7 @@
     <string name="settings_logged_in">Connesso come</string>
     <string name="settings_home_server">Server home</string>
     <string name="settings_identity_server">Server identità</string>
-    
+
     <string name="settings_user_interface">Interfaccia utente</string>
     <string name="settings_interface_language">Lingua interfaccia</string>
     <string name="settings_select_language">Scegli una lingua</string>
@@ -584,7 +565,6 @@
     <string name="room_settings_topic">Argomento</string>
     <string name="room_settings_room_tag">Tag stanza</string>
     <string name="room_settings_tag_pref_dialog_title">Taggata come:</string>
-    <string name="room_settings_mute_notifs">Silenzia notifiche</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Preferito</string>
@@ -722,10 +702,6 @@
     <string name="directory_server_all_rooms_on_server">Tutte le stanze sul server home %s</string>
     <string name="directory_server_native_rooms">Tutte le stanze native %s</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d messaggi notificati non letti</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d messaggi notificati non letti in %2$d stanze"</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Cerca nello storico</string>
 
@@ -750,17 +726,31 @@
     <string name="event_formatter_widget_removed">%1$s rimosso da %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Crea una videoconferenza con jitsi</string>
     <string name="widget_delete_message_confirmation">Sei sicuro di voler eliminare questo widget?</string>
-    <string name="active_widgets">%1$d widget attivi</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Devi avere i permessi di invitare utenti per effettuare questa azione.</string>
     <string name="widget_integration_unable_to_create">Impossibile creare il widget.</string>
     <string name="widget_integration_failed_to_send_request">Invio della richiesta fallito.</string>
-    <string name="widget_integration_room_not_recognised">Stanza non riconosciuta.</string>
     <string name="widget_integration_must_be_in_room">Non sei in questa stanza.</string>
     <string name="widget_integration_no_permission_in_room">Non hai i permessi per eseguire l\'azione in questa stanza.</string>
     <string name="widget_integration_missing_room_id">room_id mancante nella richiesta.</string>
     <string name="widget_integration_missing_user_id">user_id mancante nella richiesta.</string>
     <string name="room_add_matrix_apps">Aggiungi una Matrix app</string>
-    <string name="add_matrix_apps_not_supported">Non supportato su questo dispositivo</string>
+    <string name="option_take_photo">Scatta una foto</string>
+    <string name="option_take_video">Registra un video</string>
+
+    <string name="settings_containing_my_display_name">Messaggi che contengono il mio nome</string>
+    <string name="settings_containing_my_user_name">Messaggi che contengono il mio user name</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Non mostrare i cambiamenti di nome e avatar</string>
+
+    <string name="notification_silent_notifications">Notifiche Silenziose</string>
+
+    <string name="notification_noisy_notifications">Notifiche Audio</string>
+    <string name="notification_listen_for_events">In Ascolto su Eventi</string>
+    <string name="title_activity_bug_report">Rapporto Bug</string>
+
+    <string name="login_mobile_device">Cellulare</string>
+
+    <string name="call">Chiama</string>
+    <string name="encrypted_message">Cifra messaggio</string>
+
 </resources>

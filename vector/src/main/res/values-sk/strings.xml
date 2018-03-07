@@ -104,7 +104,7 @@
     <string name="send_bug_report_description">Prosím, Napíšte text hlásenia. Čo ste práve robili? Čo ste očakávali? Čo sa v skutočnosti udialo?</string>
     <string name="send_bug_report_placeholder">Tu popíšte váš problém</string>
     <string name="send_bug_report_logs_description">S cieľom lepšej diagnostiky problému sa spolu s vašim hlásením odošlú záznami o činnosti programu Riot. Ak si želáte odoslať len text hlásenia, odškrtnite niektoré z nasledujúcich polí:</string>
-    <string name="send_bug_report_alert_message">Zdá sa, že v zlosti triasiete zariadením. Chceli by ste odoslať hlásenie o chybe?</string>
+    <string name="send_bug_report_alert_message">Zdá sa, že v zlosti trasiete zariadením. Chceli by ste odoslať hlásenie o chybe?</string>
     <string name="send_bug_report_app_crashed">Posledné spustenie aplikácie skončilo pádom. Chceli by ste odoslať hlásenie o chybe?</string>
 
     <string name="send_bug_report_sent">Hlásenie o chybe bolo úspešne odoslané</string>
@@ -211,8 +211,6 @@ Ospravedlňujeme sa za spôsobené ťažkosti.</string>
 
     <string name="read_receipts_list">Zoznam potvrdení o prečítaní</string>
 
-    <string name="membership_changes">%d zmeny členstva</string>
-
     <string name="compression_options">"Odoslať ako "</string>
     <string name="compression_opt_list_original">Pôvodný</string>
     <string name="compression_opt_list_large">Veľký</string>
@@ -230,9 +228,6 @@ Ospravedlňujeme sa za spôsobené ťažkosti.</string>
     <string name="room_info_room_name">Názov miestnosti</string>
     <string name="room_info_room_topic">Téma miestnosti</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call">Hovor</string>
     <string name="call_connected">Hovor spojený</string>
     <string name="call_connecting">Spojenie hovoru…</string>
@@ -247,11 +242,6 @@ Ospravedlňujeme sa za spôsobené ťažkosti.</string>
     <string name="call_error_ice_failed">Zlyhalo spojenie médií</string>
     <string name="call_error_camera_init_failed">Nie je možné spustiť kameru</string>
     <string name="call_error_answered_elsewhere">Hovor bol prijatý na inom zariadení</string>
-    <string name="call_error_peer_hangup_elsewhere">Hovor bol ukončený na inom zariadení</string>
-    <string name="call_error_peer_cancelled_call">Hovor bol zrušený</string>
-
-    <string name="action_accept">PRIJAŤ</string>
-    <string name="action_ignore">IGNOROVAŤ</string>
 
     <string name="media_picker_both_capture_title">Odfotiť obrázok alebo video</string>
     <string name="media_picker_cannot_record_video">Nie je možné nahrať video</string>
@@ -302,8 +292,6 @@ Môžete sa prihlásiť k inému účtu, alebo pridať emailovú adresu do práv
 
     <string name="room_creation_title">Nová konverzácia</string>
     <string name="room_creation_add_member">Pridať člena</string>
-    <string name="room_header_active_members">%1$d/%2$d aktívnych členov</string>
-    <string name="room_title_members">%1$d členov</string>
     <string name="room_title_one_member">1 člen</string>
     <string name="room_e2e_alert_title">Pozor!</string>
     <string name="room_e2e_alert_message">E2E šifrovanie je v štádiu beta a nemusí byť úplne spoľahlivé.
@@ -378,7 +366,6 @@ Ste si istí?</string>
     <string name="room_message_file_not_found">Súbor nenájdený</string>
     <string name="room_do_not_have_permission_to_post">Nemáte udelené právo posielať do tejto miestnosti</string>
     <string name="room_new_message_notification">1 nová správa</string>
-    <string name="room_new_messages_notification">%1$d nových správ</string>
 
     <string name="ssl_trust">Dôverovať</string>
     <string name="ssl_do_not_trust">Nedôverovať</string>
@@ -410,7 +397,6 @@ Ste si istí?</string>
     <string name="room_displayname_invite_from">Pozvanie od %s</string>
     <string name="room_displayname_room_invite">Pozvanie do miestnosti</string>
     <string name="room_displayname_two_members">%1$s a %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s a %2$d ďalší</string>
     <string name="room_displayname_no_title">Prázdna miestnosť</string>
 
     <string name="search_hint">Hľadať</string>
@@ -435,12 +421,9 @@ Ste si istí?</string>
 
     <string name="directory_search_results_title">Prezrieť adresár</string>
     <string name="directory_search_room">%1$d miestnosť</string>
-    <string name="directory_search_rooms">%1$d miestností</string>
     <string name="directory_search_room_for">Nájdená %1$d room pre %2$s</string>
-    <string name="directory_search_rooms_for">Nájdených %1$s miestností pre %2$s</string>
     <string name="directory_searching_title">Vyhľadávanie v adresáry..</string>
 
-    <string name="room_settings_notifications">Oznámenia</string>
     <string name="room_settings_favourite">Do obľúbených</string>
     <string name="room_settings_de_prioritize">Nízka priorita</string>
     <string name="room_settings_direct_chat">Priama konverzácia</string>
@@ -516,7 +499,7 @@ Ste si istí?</string>
     <string name="settings_hide_join_leave_messages">Skryť správy o vstupe a opustení miestnosti (netýka sa pozvaní/vykopnutí/zákazov vstupu)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Skryť zmeny zobrazovaného mena a avatara</string>
 
-    <string name="settings_disable_markdown">Zakázať formátovanie textu Markdown</string>
+    <string name="settings_disable_markdown">Pri odosielaní zakázať formátovanie textu Markdown</string>
     <string name="settings_data_save_mode">Režim šetrenia údajov</string>
 
     <string name="devices_details_dialog_title">Podrobnosti o zariadení</string>
@@ -581,7 +564,6 @@ Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
     <string name="room_settings_topic">Téma</string>
     <string name="room_settings_room_tag">Značka miestnosti</string>
     <string name="room_settings_tag_pref_dialog_title">Označená ako:</string>
-    <string name="room_settings_mute_notifs">Potlačiť oznámenia</string>
 
     <string name="room_settings_tag_pref_entry_favourite">Obľúbená</string>
     <string name="room_settings_tag_pref_entry_low_priority">Nízka priorita</string>
@@ -724,9 +706,6 @@ Neznáme zariadenia:</string>
     <string name="directory_server_all_rooms_on_server">Všetky miestnosti na servery %s</string>
     <string name="directory_server_native_rooms">Všetky pôvodné Matrix miestnosti na servery %s</string>
 
-    <string name="notification_unread_notified_messages">%d neprečítaných oznámených správ</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d neprečítaných oznámených správ v %2$d miestnostiach</string>
-
     <string name="historical_placeholder">Hľadať historické</string>
 
     <string name="font_size">Veľkosť písma</string>
@@ -744,13 +723,10 @@ Neznáme zariadenia:</string>
     <string name="event_formatter_widget_removed">%2$s odstránil widget %1$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenčné hovory uskutočňovať použitím jitsi</string>
     <string name="widget_delete_message_confirmation">Ste si istí, že chcete odstrániť widget?</string>
-    <string name="active_widgets">%1$d aktívne widgety</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Na uskutočnenie tejto akcie by ste mali byť schopní pozývať používateľov.</string>
     <string name="widget_integration_unable_to_create">Nie je možné vytvoriť widget.</string>
     <string name="widget_integration_failed_to_send_request">Nepodarilo sa odoslať požiadavku.</string>
-    <string name="widget_integration_room_not_recognised">Nie je možné rozpoznať takúto miestnosť.</string>
     <string name="widget_integration_positive_power_level">Úroveň moci musí byť kladné celé číslo.</string>
     <string name="widget_integration_must_be_in_room">Nenachádzate sa v tejto miestnosti.</string>
     <string name="widget_integration_no_permission_in_room">V tejto miestnosti nemáte oprávnenie na vykonanie takejto akcie.</string>
@@ -759,7 +735,6 @@ Neznáme zariadenia:</string>
     <string name="widget_integration_room_not_visible">Miestnosť %s nie je viditeľná.</string>
     <string name="settings_labs_matrix_apps">Matrix Aplikácie</string>
     <string name="room_add_matrix_apps">Pridať Matrix aplikácie</string>
-    <string name="add_matrix_apps_not_supported">Nepodporované na tomto zariadení</string>
 
     // share keys
     <string name="you_added_a_new_device">Pridali ste nové zariadenie nazvané \'%s\', ktoré žiada o šifrovacie kľúče.</string>
@@ -768,4 +743,108 @@ Neznáme zariadenia:</string>
     <string name="share_without_verifying">Zdieľať bez overenia</string>
     <string name="ignore_request">Ignorovať žiadosť</string>
 
+<string name="notification_noisy_notifications">Hlučné oznámenia</string>
+    <string name="notification_silent_notifications">Tiché oznámenia</string>
+
+    <string name="title_activity_bug_report">Hlásenie o chybe</string>
+
+    <string name="option_take_photo">Poslať fotku</string>
+    <string name="option_take_video">Poslať video</string>
+
+    <string name="settings_analytics">Štatistika</string>
+    <string name="settings_opt_out_of_analytics">Odhlásiť sa zo zasielania štatistiky</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot zbiera anonymné štatistiky, ktoré nám umožňujú aplikáciu ďalej vylepšovať.</string>
+
+
+    <string name="settings_labs_native_camera">Používať vstavaný fotoaparát a kameru</string>
+
+    // share keys
+    <string name="conference_call_warning_title">Upozornenie!</string>
+    <string name="conference_call_warning_message">Konferenčné hovory sú stále vo vývoji a nemusia byť úplne spoľahlivé.</string>
+
+    // slash commands
+    <string name="command_error">Chybný príkaz</string>
+    <string name="unrecognized_command">Nerozpoznaný príkaz: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Vypnuté</string>
+    <string name="notification_on">Zapnuté</string>
+    <string name="notification_noisy">Hlučné</string>
+
+    <string name="encrypted_message">Šifrovaná správa</string>
+
+<string name="title_activity_group_details">Podrobnosti o komunite</string>
+
+    <string name="loading">Načítavanie...</string>
+
+    <string name="action_exit">Ukončiť</string>
+    <string name="bottom_action_groups">Komunity</string>
+
+    <string name="home_filter_placeholder_groups">Hľadať komunity</string>
+
+    <string name="groups_invite_header">Pozvanie</string>
+    <string name="groups_header">Komunity</string>
+    <string name="no_group_placeholder">Žiadne komunity</string>
+
+    <string name="start_new_chat_prompt_msg">Ste si istí, že chcete začať novú konverzáciu s %s?</string>
+    <string name="start_voice_call_prompt_msg">Ste si istý, že chcete začať hlasový hovor?</string>
+    <string name="start_video_call_prompt_msg">Ste si istí, že chcete začať video hovor?</string>
+
+    <string name="groups_list">Zoznam komunít</string>
+
+    <string name="room_participants_kick_prompt_msg">Ste si istí, že chcete tohoto používateľa vykopnúť z tejto miestnosti?</string>
+    <string name="room_participants_ban_prompt_msg">Ste si istí, že chcete tomuto používateľovi zakázať vstúpiť do tejto miestnosti?</string>
+
+    <string name="room_settings_all_messages_noisy">Všetky správy (hlučné)</string>
+    <string name="room_settings_all_messages">Všetky správy</string>
+    <string name="room_settings_mention_only">Len zmienky</string>
+    <string name="room_settings_mute">Umlčať</string>
+    <string name="room_settings_add_homescreen_shortcut">Pridať odkaz na domovskú obrazovku</string>
+
+    <string name="settings_inline_url_preview">Predvolene povoliť náhľady URL adries</string>
+    <string name="settings_vibrate_on_mention">Vybrovať keď spomeniete iného používateľa</string>
+
+    <string name="settings_flair">Príslušnosť ku komunitám</string>
+
+    <string name="room_settings_room_notifications_title">Oznámenia</string>
+    <string name="room_settings_no_flair">" V tejto miestnosti nie je zobrazená príslušnosť k žiadnym komunitám"</string>
+    <string name="room_settings_add_new_group">Nové ID komunity (napr. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Nesprávne ID komunity</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' nie je platným ID komunity</string>
+
+
+    <string name="create">Vytvoriť</string>
+    <string name="create_community">Vytvoriť komunitu</string>
+    <string name="community_name">Názov komunity</string>
+    <string name="community_name_hint">Príklad</string>
+    <string name="community_id">ID komunity</string>
+    <string name="community_id_hint">príklad</string>
+
+    // group details
+    <string name="group_details_home">Domov</string>
+    <string name="group_details_people">Ľudia</string>
+    <string name="group_details_rooms">Miestnosti</string>
+    <string name="no_users_placeholder">Žiadni používatelia</string>
+
+    <string name="rooms">Miestnosti</string>
+    <string name="joined">Už ste vstúpili</string>
+    <string name="invited">Ste pozvaní</string>
+    <string name="filter_group_members">Filtrovať členov komunity</string>
+    <string name="filter_group_rooms">Filtrovať miestnosti v komunite</string>
+
+    <string name="group_one_member">1 člen</string>
+    <string name="group_members">%d členov</string>
+
+    <string name="group_one_room">1 miestnosť</string>
+    <string name="group_rooms">%d miestností</string>
+    <string name="group_no_long_description">Správca nenastavil dlhý popis tejto komunity.</string>
+
+    <string name="one_new_message">1 nová správa</string>
+    <string name="new_messages">%d nových správ</string>
+
+    <string name="has_been_kicked">Používateľ %2$s vás vykopol z miestnosti %1$s</string>
+    <string name="has_been_banned">Používateľ %2$s vám zakázal vstúpiť do miestnosti %1$s</string>
+    <string name="reason_colon">Dôvod: %1$s</string>
+    <string name="rejoin">Vstúpiť znovu</string>
+    <string name="forget_room">Zabudnúť miestnosť</string>
 </resources>

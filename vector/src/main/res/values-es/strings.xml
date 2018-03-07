@@ -27,7 +27,7 @@
     <string name="forward">Enviar</string>
     <string name="permalink">Enlace permanente</string>
     <string name="view_source">Ver fuente</string>
-    <string name="view_decrypted_source">Mostrar fuente descifrada</string>
+    <string name="view_decrypted_source">Mostrar fuente desencriptada</string>
     <string name="delete">Borrar</string>
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
@@ -53,7 +53,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Vídeo</string>
     <string name="action_global_search">Búsqueda global</string>
-    <string name="action_mark_all_as_read">Marcar todos como visto</string>
+    <string name="action_mark_all_as_read">Marcar todo como visto</string>
     <string name="action_historical">Histórico</string>
     <string name="action_quick_reply">Respuesta rápida</string>
     <string name="action_open">Abrir</string>
@@ -151,7 +151,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
 El correo electrónico te permitirá restablecer tu contraseña.</string>
     <string name="auth_add_email_and_phone_message">Añadir un correo electrónico y un número de teléfono a tu cuenta para que otros te descubran.
 
-El correo electrónico te permitira reiniciar tu contraseña.</string>
+El correo electrónico te permitirá reiniciar tu contraseña.</string>
     <string name="auth_email_placeholder">Correo electrónico</string>
     <string name="auth_opt_email_placeholder">Correo electrónico (opcional)</string>
     <string name="auth_phone_number_placeholder">Número de teléfono</string>
@@ -173,7 +173,7 @@ El correo electrónico te permitira reiniciar tu contraseña.</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="auth_use_server_options">¿Usar opciones de servidor propietarias? (avanzado)</string>
     <string name="auth_email_validation_message">Consulte su correo electrónico para poder continuar con la inscripción</string>
-    <string name="auth_threepid_warning_message">La inscripción con correo electrónico y número de teléfono no está implementada hasta que exista el API. Solamente se tomará en cuenta el número de teléfono.
+    <string name="auth_threepid_warning_message">La inscripción con correo electrónico y número de teléfono no está implementada hasta que exista la API. Solamente se tomará en cuenta el número de teléfono.
 
 Podrá añadir su correo electrónico a su cuenta en las configuraciones.</string>
     <string name="auth_recaptcha_message">Este servidor quiere verificar que no seas robot</string>
@@ -182,7 +182,7 @@ Podrá añadir su correo electrónico a su cuenta en las configuraciones.</strin
     <string name="auth_identity_server">Servidor de Identidad:</string>
     <string name="auth_reset_password_next_step_button">Verifiqué mi correo electrónico</string>
     <string name="auth_reset_password_message">Para restablecer su contraseña, introduzca el correo electrónico de esta cuenta:</string>
-    <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requrido.</string>
+    <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requerido.</string>
     <string name="auth_reset_password_missing_password">Una contraseña nueva es requerida.</string>
     <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez que sigas el enlace, seleccione abajo.</string>
     <string name="auth_reset_password_error_unauthorized">Verificación de correo electrónico falló: asegúrese que siguió el enlace</string>
@@ -215,9 +215,6 @@ Disculpe por la inconveniencia.</string>
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d cambios de membresía</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -242,10 +239,6 @@ Disculpe por la inconveniencia.</string>
     <string name="room_info_room_name">Nombre de la Sala</string>
     <string name="room_info_room_topic">Tema de la Sala</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Llamada conectada</string>
     <string name="call_connecting">La llamada se esá conectando…</string>
@@ -260,11 +253,6 @@ Disculpe por la inconveniencia.</string>
     <string name="call_error_ice_failed">Conexión de media falló</string>
     <string name="call_error_camera_init_failed">La cámara no se pudo encender</string>
     <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
-    <string name="call_error_peer_hangup_elsewhere">la llamada fue colgado en otra parte</string>
-    <string name="call_error_peer_cancelled_call">la llamada fue cancelada</string>
-
-    <string name="action_accept">ACEPTAR</string>
-    <string name="action_ignore">IGNORAR</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Tomar una foto o grabar un video"</string>
@@ -309,8 +297,6 @@ Disculpe por la inconveniencia.</string>
     <!-- Chat creation -->
     <string name="room_creation_title">Chat Nuevo</string>
     <string name="room_creation_add_member">Añadir miembro</string>
-    <string name="room_header_active_members">%1$d/%2$d miembros activos</string>
-    <string name="room_title_members">%1$d miembros</string>
     <string name="room_title_one_member">1 miembro</string>
     <string name="room_e2e_alert_title">¡Aviso!</string>
     <string name="room_e2e_alert_message">El cifrado de extremo-a-extremo está en beta y puede ser poco fiable.
@@ -350,7 +336,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_participants_action_ban">Prohibir</string>
     <string name="room_participants_action_unban">Desprohibir</string>
     <string name="room_participants_action_set_default_power_level">Reestablecer como usuario normal</string>
-    <string name="room_participants_action_set_moderator">Hacerlo moderador</string>
+    <string name="room_participants_action_set_moderator">Hacer moderador</string>
     <string name="room_participants_action_set_admin">Hacerlo administrador</string>
     <string name="room_participants_action_ignore">Ocultar todos los mensajes de este usuario</string>
     <string name="room_participants_action_unignore">Mostrar todos los mensajes de este usuario</string>
@@ -387,7 +373,6 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_message_file_not_found">No se pudo encontrar el archivo</string>
     <string name="room_do_not_have_permission_to_post">No tienes permiso para enviar en esta sala</string>
     <string name="room_new_message_notification">1 mensaje nuevo</string>
-    <string name="room_new_messages_notification">%1$d mensajes nuevos</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -423,7 +408,6 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_displayname_invite_from">Invitar de %s</string>
     <string name="room_displayname_room_invite">Invitacion de Sala</string>
     <string name="room_displayname_two_members">%1$s y %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s y %2$d otros</string>
     <string name="room_displayname_no_title">Sala vacía</string>
 
     <!-- Search -->
@@ -451,13 +435,10 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar directorio</string>
     <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_rooms">%1$d salas</string>
     <string name="directory_search_room_for">%1$d sala encontrada por %2$s</string>
-    <string name="directory_search_rooms_for">%1$s salas encontradas por %2$s</string>
     <string name="directory_searching_title">Buscando directorio..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificaciones</string>
     <string name="room_settings_favourite">Destacar</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Chat Directo</string>
@@ -568,7 +549,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="settings_phone_number_label">Número de teléfono</string>
     <string name="settings_phone_number_error">Número de teléfono inválido por el país escojido</string>
     <string name="settings_phone_number_verification">Verficación de número telefónico</string>
-    <string name="settings_phone_number_verification_instruction">"Enviamos un SMS con un código de activación. Por favor escribe ese código abajo."</string>
+    <string name="settings_phone_number_verification_instruction">Hemos enviado un SMS con un código de activación. Por favor escribe ese código abajo.</string>
     <string name="settings_phone_number_verification_error_empty_code">Escribe un código de activación</string>
     <string name="settings_phone_number_verification_error">Error en la validación de tu número telefónico</string>
     <string name="settings_phone_number_code">Código</string>
@@ -581,7 +562,6 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_settings_topic">Tema</string>
     <string name="room_settings_room_tag">Etiqueta de la Sala</string>
     <string name="room_settings_tag_pref_dialog_title">Etiquetado como:</string>
-    <string name="room_settings_mute_notifs">Callar Notificaciones</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Destacar</string>
@@ -691,7 +671,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="encryption_import_room_keys">Importar claves de salas</string>
     <string name="encryption_import_room_keys_summary">Importar las claves de un archivo local</string>
     <string name="encryption_import_import">Importar</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Cifrar a dispositivos verificados solamente</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Encriptar a dispositivos verificados solamente</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nunca enviar mensajes cifrados a dispositivos no verificados de este dispositivo</string>
 
     <string name="encryption_information_not_verified">NO Verificado</string>
@@ -727,10 +707,6 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="directory_server_all_rooms_on_server">Todas las salas en el servidor %s</string>
     <string name="directory_server_native_rooms">Todas las salas nativas de %s</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d mensajes notificados sin leer</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d mensajes notificados sin leer en %2$d salas</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Buscar en el historial</string>
 <string name="settings_user_interface">Interfaz de usuario</string>
@@ -744,7 +720,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="settings_hide_read_receipts">Ocultar los marcadores de lectura</string>
     <string name="settings_dont_send_typings_notifs">No enviar notificaciones de estar escribiendo</string>
     <string name="settings_always_show_timestamps">Siempre mostrar la marca de tiempo de los mensajes</string>
-    <string name="settings_disable_markdown">Deshabilitar el formateo en markdown</string>
+    <string name="settings_disable_markdown">Deshabilitar el formateo en markdown cuando se envía</string>
 
     <string name="media_saving_period_3_days">3 días</string>
     <string name="media_saving_period_1_week">1 semana</string>
@@ -767,4 +743,151 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="huge">Grandísimo</string>
 <string name="user_directory_header">directorio del usuario</string>
     <string name="people_search_user_directory">DIRECTORIO DEL USUARIO (%s)</string>
+    <string name="light_theme">Tema claro</string>
+    <string name="dark_theme">Tema oscuro</string>
+    <string name="black_them">Tema negro</string>
+
+    <string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="notification_listen_for_events">Escuchando por eventos</string>
+    <string name="notification_noisy_notifications">Notificaciones ruidosas</string>
+    <string name="notification_silent_notifications">Notificaciones silenciosas</string>
+
+    <string name="title_activity_bug_report">Informe de error</string>
+
+    <string name="option_take_photo">Tomar foto</string>
+    <string name="option_take_video">Tomar video</string>
+
+    <string name="login_mobile_device">Móvil</string>
+
+    <string name="call">LLamar</string>
+    <string name="settings_notification_ringtone">Sonido de notificación</string>
+    <string name="settings_containing_my_display_name">Mensajes que contengan mi nombre público</string>
+    <string name="settings_containing_my_user_name">Mensajes que contengan mi nombre de usuario</string>
+    <string name="settings_12_24_timestamps">Mostrar la hora en formato de 12 horas (ej: 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Esconder mensajes de unirse/partir (invitaciones/kicks/baneos no son afectados)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Esconder cambios de avatar y nombres públicos</string>
+
+    <string name="settings_analytics">Análisis anónimo de uso</string>
+    <string name="settings_opt_out_of_analytics">Darse de baja del análisis anónimo de uso</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot recolecta datos de uso anónimamente para ayudar a mejorar la aplicación.</string>
+
+
+    <string name="widget_no_power_to_manage">Necesitas permisos para administrar los widgets de esta sala</string>
+    <string name="widget_creation_failure">La creación del widget ha fallado</string>
+    <string name="event_formatter_widget_added">%1$s añadido por %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s removido por %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Crear llamada de conferencia con jitsi</string>
+    <string name="widget_delete_message_confirmation">¿Estás seguro de querer eliminar el widget?</string>
+
+    // Widget Integration Manager
+    <string name="widget_integration_unable_to_create">El widget no ha podido ser creado.</string>
+    <string name="widget_integration_failed_to_send_request">La consulta no ha podido ser enviada.</string>
+    <string name="widget_integration_positive_power_level">El nivel de poder tiene que ser un número entero positivo.</string>
+    <string name="widget_integration_must_be_in_room">No estás en esta sala.</string>
+    <string name="widget_integration_no_permission_in_room">No tienes suficientes permisos para realizar esa acción en esta sala.</string>
+    <string name="widget_integration_missing_room_id">A la petición le falta el ID de sala.</string>
+    <string name="widget_integration_missing_user_id">A la petición le falta el ID de usuario.</string>
+    <string name="widget_integration_room_not_visible">La sala %s no es visible.</string>
+    <string name="settings_labs_matrix_apps">Matrix Apps</string>
+    <string name="room_add_matrix_apps">Añadir Matrix apps</string>
+    <string name="settings_labs_native_camera">Usar cámara nativa</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Has añadido un nuevo dispositivo \'%s\', que esta solicitando claves de encriptación.</string>
+    <string name="your_unverified_device_requesting">Tu dispositivo no validado \'%s\' está solicitando claves de encriptación.</string>
+    <string name="start_verification">Empezar verificación</string>
+    <string name="share_without_verifying">Compartir sin verificación</string>
+    <string name="ignore_request">Ignorar solicitud</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Aviso!</string>
+    <string name="conference_call_warning_message">Las llamadas de conferencia están en desarrollo y pueden no ser fiables.</string>
+
+    // slash commands
+    <string name="command_error">Error de comando</string>
+    <string name="unrecognized_command">Comando no reconocido: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Off</string>
+    <string name="notification_on">On</string>
+    <string name="notification_noisy">Alto</string>
+
+    <string name="encrypted_message">Mensaje encriptado</string>
+
+<string name="title_activity_group_details">Detalles de la comunidad</string>
+
+    <string name="loading">Cargando...</string>
+
+    <string name="action_exit">Salir</string>
+    <string name="bottom_action_groups">Comunidades</string>
+
+    <string name="home_filter_placeholder_groups">Buscar comunidades</string>
+
+    <string name="groups_invite_header">Invitar</string>
+    <string name="groups_header">Comunidades</string>
+    <string name="no_group_placeholder">No hay grupos</string>
+
+    <string name="start_new_chat_prompt_msg">Está seguro que quiere empezar una nueva conversación con %s?</string>
+    <string name="start_voice_call_prompt_msg">Está seguro que quiere empezar una llamada de voz?</string>
+    <string name="start_video_call_prompt_msg">Està seguro que quiere empezar una llamada de vídeo?</string>
+
+    <string name="groups_list">Lista de grupos</string>
+
+    <string name="room_participants_kick_prompt_msg">Está seguro que quiere echar este usuario de la conversación?</string>
+    <string name="room_participants_ban_prompt_msg">Está seguro que quiere vetar este usuario de esta convesación?</string>
+
+    <string name="room_settings_all_messages_noisy">Todos los mensajes (ruidoso)</string>
+    <string name="room_settings_all_messages">Todos los mensajes</string>
+    <string name="room_settings_mention_only">Solo citas</string>
+    <string name="room_settings_mute">Silenciar</string>
+    <string name="room_settings_add_homescreen_shortcut">Añadir un atajo en la pantalla de inicio</string>
+
+    <string name="settings_inline_url_preview">Habilita las previsualizaciones de las URL por defecto</string>
+    <string name="settings_vibrate_on_mention">Vibrar cuando te citen</string>
+
+    <string name="settings_flair">Talento</string>
+
+    <string name="room_settings_room_notifications_title">Notificaciones</string>
+    <string name="room_settings_no_flair">" Esta sala no pertenece a ninguna comunidad"</string>
+    <string name="room_settings_add_new_group">Nueva ID de la comunidad (por ejemplo +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">El ID de la comunidad es inválido</string>
+    <string name="forget_room">Olvidar sala</string>
+<string name="rejoin">Volver a entrar</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' no es un ID de comunidad válido</string>
+
+
+    <string name="create">Crear</string>
+    <string name="create_community">Crear una comunidad</string>
+    <string name="community_name">Nombre de la comunidad</string>
+    <string name="community_name_hint">Ejemplo</string>
+    <string name="community_id">ID de la comunidad</string>
+    <string name="community_id_hint">ejemplo</string>
+
+    // group details
+    <string name="group_details_home">Inicio</string>
+    <string name="group_details_people">Usuarios</string>
+    <string name="group_details_rooms">Salas</string>
+    <string name="no_users_placeholder">Sin usuarios</string>
+
+    <string name="rooms">Salas</string>
+    <string name="joined">Se ha unido</string>
+    <string name="invited">Ha sido invitado</string>
+    <string name="filter_group_members">Filtro de miembros del grupo</string>
+    <string name="filter_group_rooms">Filtro de salas del grupo</string>
+
+    <string name="group_one_member">1 miembro</string>
+    <string name="group_members">%d miembros</string>
+
+    <string name="group_one_room">1 sala</string>
+    <string name="group_rooms">%d salas</string>
+    <string name="one_new_message">1 nuevo mensaje</string>
+    <string name="new_messages">%d nuevos mensajes</string>
+
+    <string name="has_been_kicked">Ha sido echado de la sala %1$s por %2$s</string>
+    <string name="has_been_banned">Ha sido vetado en %1$s por %2$s</string>
+    <string name="reason_colon">Razon: %1$s</string>
+    <string name="group_no_long_description">El administrador de la comunidad no ha redactado una descripción larga para esta comunidad.</string>
+
+    <string name="send_bug_report_rage_shake">Agitar con rabia para informar de un error</string>
+
     </resources>

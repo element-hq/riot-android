@@ -97,12 +97,7 @@ public class RageShake implements SensorEventListener {
                     .setNeutralButton(R.string.disable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), false);
-                            editor.commit();
-
+                            PreferencesManager.setUseRageshake(mContext, false);
                             dialog.dismiss();
                         }
                     })
@@ -119,19 +114,12 @@ public class RageShake implements SensorEventListener {
         }
     }
 
-    /**
-     * Tells if the rage shake feature is supported
-     * @return true if it is used
-     */
-    private boolean useRageshake() {
-        return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), true);
-    }
 
     /**
      * start the sensor detector
      */
     public void start() {
-        if ((null != mSensorManager) && useRageshake() && !VectorApp.isAppInBackground() && !mIsStarted) {
+        if ((null != mSensorManager) && PreferencesManager.useRageshake(mContext) && !VectorApp.isAppInBackground() && !mIsStarted) {
             mIsStarted = true;
             mLastUpdate = 0;
             mLastShake = 0;
@@ -196,7 +184,7 @@ public class RageShake implements SensorEventListener {
                         Log.d(LOG_TAG, "Shaking detected.");
                         mLastShakeTimestamp = System.currentTimeMillis();
 
-                        if (useRageshake()) {
+                        if (PreferencesManager.useRageshake(mContext)) {
                             promptForReport();
                         }
                     } else {

@@ -210,13 +210,10 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lesebestätigungsliste</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d Änderungen der Mitgliedschaft</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
-    <string name="compression_options">Sende als </string>
+    <string name="compression_options">"Sende als "</string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Groß</string>
     <string name="compression_opt_list_medium">Mittel</string>
@@ -236,10 +233,6 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="room_info_room_name">Raumname</string>
     <string name="room_info_room_topic">Raum-Thema</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Anruf verbunden</string>
     <string name="call_connecting">Verbindungsaufbau…</string>
@@ -254,11 +247,6 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="call_error_ice_failed">Medien-Verbindung fehlgeschlagen</string>
     <string name="call_error_camera_init_failed">Kann Kamera nicht initialisieren</string>
     <string name="call_error_answered_elsewhere">Anruf woanders entgegengenommen</string>
-    <string name="call_error_peer_hangup_elsewhere">Anruf woanders aufgelegt</string>
-    <string name="call_error_peer_cancelled_call">Anruf abgebrochen</string>
-
-    <string name="action_accept">Akzeptieren</string>
-    <string name="action_ignore">Ignorieren</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Foto oder Video aufnehmen</string>
@@ -314,8 +302,6 @@ Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adr
     <!-- Chat creation -->
     <string name="room_creation_title">Neuer Chat</string>
     <string name="room_creation_add_member">Mitglied hinzufügen</string>
-    <string name="room_header_active_members">%1$d/%2$d aktive Mitglieder</string>
-    <string name="room_title_members">%1$d Mitglieder</string>
     <string name="room_title_one_member">1 Mitglied</string>
     <string name="room_e2e_alert_title">Achtung!</string>
     <string name="room_e2e_alert_message">Ende-zu-Ende-Verschlüsselung ist im Beta-Stadium und funktioniert möglicherweise nicht zuverlässig.\n\nDu solltest noch nicht darauf vertrauen, dass deine Daten richtig abgesichert werden.\n\nGeräte sind noch nicht in der Lage, den Chatverlauf vor dem Hinzufügen des Geräts zu entschlüsseln.\n\nVerschlüsselte Nachrichten werden auf Geräten, die die Verschlüsselung noch nicht implementiert haben, nicht sichtbar sein.</string>
@@ -387,7 +373,6 @@ Bist du sicher?</string>
     <string name="room_message_file_not_found">Datei nicht gefunden</string>
     <string name="room_do_not_have_permission_to_post">Du bist nicht berechtigt, in diesen Raum zu schreiben</string>
     <string name="room_new_message_notification">1 neue Nachricht</string>
-    <string name="room_new_messages_notification">%1$d neue Nachrichten</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrauen</string>
@@ -423,7 +408,6 @@ Bist du sicher?</string>
     <string name="room_displayname_invite_from">Einladung von %s</string>
     <string name="room_displayname_room_invite">Raumeinladung</string>
     <string name="room_displayname_two_members">%1$s und %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s und %2$d andere</string>
     <string name="room_displayname_no_title">Leerer Raum</string>
 
     <!-- Search -->
@@ -451,13 +435,10 @@ Bist du sicher?</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Verzeichnis durchsuchen</string>
     <string name="directory_search_room">%1$d Raum</string>
-    <string name="directory_search_rooms">%1$d Räume</string>
     <string name="directory_search_room_for">%1$d Raum gefunden für %2$s</string>
-    <string name="directory_search_rooms_for">%1$s Räume gefunden für %2$s</string>
     <string name="directory_searching_title">Verzeichnis wird durchsucht..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Benachrichtigungen</string>
     <string name="room_settings_favourite">Favorit</string>
     <string name="room_settings_de_prioritize">Niedrige Priorität</string>
     <string name="room_settings_direct_chat">Direkter Chat</string>
@@ -580,7 +561,6 @@ Bist du sicher?</string>
     <string name="room_settings_topic">Thema</string>
     <string name="room_settings_room_tag">Raum-Markierung</string>
     <string name="room_settings_tag_pref_dialog_title">Markiert als:</string>
-    <string name="room_settings_mute_notifs">Benachrichtigungen stummschalten</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favorit</string>
@@ -732,10 +712,6 @@ Unbekannte Geräte:</string>
     <string name="directory_server_all_rooms_on_server">Alle Räume auf dem %s-Server</string>
     <string name="directory_server_native_rooms">Alle nativen %s-Räume</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d ungelesene Benachrichtigungen</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d ungelesene Benachrichtigungen in %2$d Räumen</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Suche nach historischen</string>
 
@@ -750,7 +726,7 @@ Unbekannte Geräte:</string>
     <string name="settings_hide_read_receipts">Lesebestätigungen verbergen</string>
     <string name="settings_dont_send_typings_notifs">Sende nicht, dass ich tippe</string>
     <string name="settings_always_show_timestamps">Nachrichten-Zeitstempel immer anzeigen</string>
-    <string name="settings_disable_markdown">Markdown-Formatierung deaktivieren</string>
+    <string name="settings_disable_markdown">Markdown-Formatierung beim Senden deaktivieren</string>
 
     <string name="media_saving_period_3_days">3 Tage</string>
     <string name="media_saving_period_1_week">1 Woche</string>
@@ -783,12 +759,9 @@ Unbekannte Geräte:</string>
     <string name="event_formatter_widget_removed">%1$s entfernt von %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi aufbauen</string>
     <string name="widget_delete_message_confirmation">Soll das Widget wirklich gelöscht werden?</string>
-    <string name="active_widgets">%1$d aktive Widgets</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Du benötigst die Berechtigung, Benutzer einzuladen, um diese Aktion ausführen zu können.</string>
     <string name="widget_integration_unable_to_create">Widget konnte nicht erstellt werden.</string>
-    <string name="widget_integration_room_not_recognised">Dieser Raum wurde nicht erkannt.</string>
     <string name="widget_integration_positive_power_level">Berechtigungslevel muss eine positive ganze Zahl sein.</string>
     <string name="widget_integration_must_be_in_room">Du bist nicht Mitglied in diesem Raum.</string>
     <string name="widget_integration_no_permission_in_room">Du hast keine Berechtigung, diese Aktion in diesem Raum auszuführen.</string>
@@ -796,8 +769,7 @@ Unbekannte Geräte:</string>
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
     <string name="settings_labs_matrix_apps">Matrix-Apps</string>
     <string name="room_add_matrix_apps">Matrix-Apps hinzufügen</string>
-    <string name="add_matrix_apps_not_supported">Wird auf diesem Gerät nicht unterstützt</string>
-<string name="settings_notification_ringtone">Benachrichtigungston</string>
+    <string name="settings_notification_ringtone">Benachrichtigungston</string>
     <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
     <string name="widget_integration_missing_user_id">Anfrage enthält keine user_id.</string>
     <string name="light_theme">Helles Thema</string>
@@ -807,7 +779,7 @@ Unbekannte Geräte:</string>
     <string name="login_mobile_device">Mobilgerät</string>
 
     <string name="notification_sync_in_progress">Synchronisiere</string>
-    <string name="notification_listen_for_events">Nach Ereignissen lauschen</string>
+    <string name="notification_listen_for_events">Auf Ereignisse lauschen</string>
 
     <string name="settings_containing_my_display_name">Nachrichten, die meinen Anzeigenamen enthalten</string>
     <string name="settings_containing_my_user_name">Nachrichten, die meinen Benutzernamen enthalten</string>
@@ -832,4 +804,156 @@ Unbekannte Geräte:</string>
 
 <string name="settings_analytics">Anonymisierte Analysedaten</string>
     <string name="settings_opt_out_of_analytics">Zustimmung zur Übermittlung von anonymisierten Analysedaten verweigern</string>
+    <string name="title_activity_bug_report">Fehlerbericht</string>
+
+    <string name="conference_call_warning_title">Warnung!</string>
+    <string name="conference_call_warning_message">Konferenzgespräche werden noch entwickelt und sind vielleicht nicht zuverlässig.</string>
+
+    // slash commands
+    <string name="command_error">Befehlsfehler</string>
+    <string name="unrecognized_command">Unbekanntes Kommando: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Aus</string>
+    <string name="notification_on">An</string>
+    <string name="notification_noisy">Laut</string>
+
+    <string name="encrypted_message">Verschlüsselte Nachricht</string>
+
+<string name="title_activity_group_details">Community-Details</string>
+
+    <string name="loading">Lädt...</string>
+
+    <string name="action_exit">Schließen</string>
+    <string name="bottom_action_groups">Communities</string>
+
+    <string name="home_filter_placeholder_groups">Nach Communities suchen</string>
+
+    <string name="groups_invite_header">Einladen</string>
+    <string name="groups_header">Communities</string>
+    <string name="no_group_placeholder">Keine Gruppen</string>
+
+    <string name="start_new_chat_prompt_msg">Bist du sicher, dass du einen neuen Chat mit %s starten möchtest?</string>
+    <string name="start_voice_call_prompt_msg">Bist du sicher, dass du einen Sprachanruf starten möchtest?</string>
+    <string name="start_video_call_prompt_msg">Bist du sicher, dass du einen Videoanruf starten möchtest?</string>
+
+    <string name="groups_list">Gruppenliste</string>
+
+    <string name="room_participants_kick_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat kicken möchtest?</string>
+    <string name="room_participants_ban_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat verbannen möchtest?</string>
+
+    <string name="room_settings_all_messages_noisy">Alle Nachrichten (laut)</string>
+    <string name="room_settings_all_messages">Alle Nachrichten</string>
+    <string name="room_settings_mention_only">Nur Erwähnungen</string>
+    <string name="room_settings_mute">Stumm</string>
+    <string name="settings_inline_url_preview">Aktiviere URL-Vorschau im Chat standardmäßig</string>
+    <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen</string>
+
+    <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
+    <string name="room_settings_no_flair">" Dieser Raum zeigt keine Flairs für irgendeine Community"</string>
+    <string name="room_settings_add_new_group">Neue Community-ID (z.B. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Ungültige Community-ID</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ist keine valide Community-ID</string>
+
+
+    <string name="create">Erstellen</string>
+    <string name="create_community">Erstelle Community</string>
+    <string name="community_name">Community-Name</string>
+    <string name="community_name_hint">Beispiel</string>
+    <string name="community_id">Community-ID</string>
+    <string name="community_id_hint">Beispiel</string>
+
+    // group details
+    <string name="group_details_home">Startseite</string>
+    <string name="group_details_people">Personen</string>
+    <string name="group_details_rooms">Räume</string>
+    <string name="no_users_placeholder">Keine Benutzer</string>
+
+    <string name="rooms">Räume</string>
+    <string name="joined">Beigetreten</string>
+    <string name="invited">Eingeladen</string>
+    <string name="filter_group_members">Filter Gruppen-Mitglieder</string>
+    <string name="filter_group_rooms">Filter Gruppen-Räume</string>
+
+    <string name="group_one_member">1 Mitglied</string>
+    <string name="group_members">%d Mitglieder</string>
+
+    <string name="group_one_room">1 Raum</string>
+    <string name="group_rooms">%d Räume</string>
+    <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
+
+    <string name="one_new_message">1 neue Nachricht</string>
+    <string name="new_messages">%d neue Nachrichten</string>
+
+    <string name="has_been_kicked">Du wurdest von %2$s aus %1$s gekickt</string>
+    <string name="has_been_banned">Du wurdest von %2$s aus %1$s verbannt</string>
+    <string name="reason_colon">Grund: %1$s</string>
+    <string name="rejoin">Erneut beitreten</string>
+    <string name="forget_room">Raum vergessen</string>
+<string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
+
+    <string name="settings_flair">Flair</string>
+
+    <string name="send_bug_report_rage_shake">Schüttele um einen Fehler zu melden</string>
+
+    <string name="actions">Aktionen</string>
+    <string name="list_members">Mitglieder auflisten</string>
+    <string name="room_sync_in_progress">Synchronisiere...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 aktives Mitglied</item>
+	<item quantity="other">%d aktive Mitglieder</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 Mitglied</item>
+	<item quantity="other">%d Mitglieder</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 neue Nachricht</item>
+	<item quantity="other">%d neue Nachrichten</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s und %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 andere(r)</item>
+	<item quantity="other">%d andere</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 Raum</item>
+	<item quantity="other">%d Räume</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s Raum gefunden für %2$s</item>
+	<item quantity="other">%1$s Räume gefunden für %2$s</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 ungelesene Nachricht</item>
+	<item quantity="other">%d ungelesene Nachrichten</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 ungelesene benachrichtige Nachricht</item>
+	<item quantity="other">%d ungelesene benachrichte Nachrichten</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 Raum</item>
+	<item quantity="other">%d Räume</item>
+</plurals>
+    <plurals name="active_widgets">
+	<item quantity="one">1 aktives Widget</item>
+	<item quantity="other">%d aktive Widgets</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="avatar">Profilbild</string>
+
+<plurals name="membership_changes">
+	<item quantity="one">1 Mitgliederänderung</item>
+	<item quantity="other">%d Mitgliederänderungen</item>
+</plurals>
+
+    <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
+
+    <string name="open_chat_header">Öffne Chat-Kopf</string>
+    <string name="receipt_avatar">Lesebestätigungs-Profilbild</string>
+    <string name="notice_avatar">Notiz-Avatar</string>
     </resources>

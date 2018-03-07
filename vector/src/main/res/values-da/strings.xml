@@ -214,8 +214,6 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
 Dette skal kun gøres én gang.
 Beklager ulejligheden.</string>
 
-    <string name="membership_changes">%medlemsskabsændringer</string>
-
     <string name="compression_options">"Send som "</string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Stor</string>
@@ -233,9 +231,6 @@ Beklager ulejligheden.</string>
     <string name="room_info_room_name">Rum navn</string>
     <string name="room_info_room_topic">Rum emne</string>
 
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <string name="call">Opkald</string>
     <string name="call_connected">Opkald forbundet</string>
     <string name="call_connecting">Opkald forbinder…</string>
@@ -250,11 +245,6 @@ Beklager ulejligheden.</string>
     <string name="call_error_ice_failed">Medie Forbindelse Mislykkedes</string>
     <string name="call_error_camera_init_failed">Kan ikke starte kameraet</string>
     <string name="call_error_answered_elsewhere">opkald besvaret et andet sted</string>
-    <string name="call_error_peer_hangup_elsewhere">opkald afsluttet et andet sted</string>
-    <string name="call_error_peer_cancelled_call">opkald afbrudt</string>
-
-    <string name="action_accept">ACCEPTER</string>
-    <string name="action_ignore">IGNORÉR</string>
 
     <string name="media_picker_both_capture_title">Tag et billede eller optag en video</string>
     <string name="media_picker_cannot_record_video">Kan ikke optage video</string>
@@ -304,8 +294,6 @@ Det kan være du vil logge ind med en anden konto eller tilføje denne email til
 
     <string name="room_creation_title">Ny chat</string>
     <string name="room_creation_add_member">Tilføj medlem</string>
-    <string name="room_header_active_members">%1$d/%2$d aktive medlemmer</string>
-    <string name="room_title_members">%1$d medlemmer</string>
     <string name="room_title_one_member">1 medlem</string>
     <string name="room_e2e_alert_title">Advarsel!</string>
     <string name="room_e2e_alert_message">Ende-til-ende kryptering er i beta og kan være upålideligt.
@@ -380,7 +368,6 @@ Er du sikker?</string>
     <string name="room_message_file_not_found">Fil ikke fundet</string>
     <string name="room_do_not_have_permission_to_post">Du har ikke tilladelse til at skrive i dette rum</string>
     <string name="room_new_message_notification">1 ny besked</string>
-    <string name="room_new_messages_notification">%1$d nye beskeder</string>
 
     <string name="ssl_trust">Stol på</string>
     <string name="ssl_do_not_trust">Stol ikke på</string>
@@ -391,4 +378,19 @@ Er du sikker?</string>
     <string name="ssl_cert_not_trust">Dette kan betyde at nogen med onde hensigter opsnapper din trafik eller at din telefon ikke stoler på certifikatet som serveren sendte.</string>
     <string name="ssl_cert_new_account_expl">Hvis serveradministratoren har sagt det er forventeligt skal du sikre dig at fingeraftrykket forneden passer med det fingeraftryk de har oplyst.</string>
     <string name="ssl_unexpected_existing_expl">Certifikatet har ændret sig fra det din telefon stolede på. Dette er HØJST USÆDVANLIGT. Det anbefales at du IKKE ACCEPTERE dette nye certifikat.</string>
+    <string name="title_activity_bug_report">Nug rapport</string>
+
+    <string name="read_receipts_list">Kvitteringer for læsning</string>
+
+    <string name="ssl_expected_existing_expl">Certifikatet er ændret fra et tidligere betroet, til et der ikke er betroet. Serveren kan have fornyet sit certifikat. Kontakt server administratoren for det forventede fingeraftryk.</string>
+    <string name="ssl_only_accept">Accepter kun certifikatet hvis server administratoren har publiceret et fingeraftryk der matcher det ovenstående.</string>
+    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
+
+    <string name="room_details_title">Detaljer for rummet</string>
+    <string name="room_details_people">Personer</string>
+    <string name="room_details_files">Filer</string>
+    <string name="room_details_settings">Indstillinger</string>
+    <string name="room_details_selected">valgte</string>
+    <string name="malformed_id">Ugyldigt ID. Det skal være en e-mail adresse eller et Matrix ID som \'@lokaldel:domæne\'</string>
+    <string name="room_details_people_invited_group_name">INVITERET</string>
     </resources>

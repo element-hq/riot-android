@@ -128,7 +128,7 @@ public class UrlPreviewView extends LinearLayout {
     public void setUrlPreview(Context context, MXSession session, URLPreview preview, String uid) {
         Log.d(LOG_TAG, "## setUrlPreview " + this);
 
-        if ((null == preview) || mIsDismissed || didUrlPreviewDismiss(uid) || !PreferencesManager.showUrlPreview(context)) {
+        if ((null == preview) || mIsDismissed || didUrlPreviewDismiss(uid) || !session.isURLPreviewEnabled()) {
             setVisibility(View.GONE);
         } else {
             setVisibility(View.VISIBLE);

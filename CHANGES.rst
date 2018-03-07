@@ -1,3 +1,67 @@
+Changes in Riot 0.8.1 (2018-02-15)
+===================================================
+ 
+Improvements:
+ * Update matrix-sdk.aar lib (v0.9.0).
+ 
+Bug Fix:
+ * URL Preview: We should have it for m.notice too (PR 1975).
+
+Changes in Riot 0.8.00-beta (2018-02-02)
+===================================================
+
+Features:
+
+  * Add a new tab to list the user's communities (vector-im/riot-meta/#114).
+  * Add new screens to display the community details, edition is not supported yet (vector-im/riot-meta/#115, vector-im/riot-meta/#116, vector-im/riot-meta/#117).
+  * Room Settings: handle the related communities in order to show flair for them.
+  * User Settings: Let the user enable his community flair in rooms configured to show it.
+  * Add the url preview feature (PR #1929).
+  
+Improvements:
+
+  * Support the 4 states for the room notification level (all messages (noisy), all messages, mention only, mute).
+  * Add the avatar to the pills displayed in room history (PR #1917).
+  * Set the push server URLs as a resource string (PR #1908).
+  * Improve duplicate events detection (#1907).
+  * Vibrate when long pressing on an user name / avatar to copy his/her name in the edit text.
+  * Improve the notifications management.
+ 
+Bugfixes:
+ 
+  * #1903: Weird room layout.
+  * #1896: Copy source code of a message.
+  * #1821, #1850: Improve the text sharing.
+  * #1920: Phone vibrates when mentioning someone.
+
+Changes in Riot 0.7.09 (2018-01-16)
+===================================================
+  
+Improvements:
+
+  * Update to the latest JITSI libs
+  * Add some scripts to build the required libs.
+ 
+Bugfixes:
+ 
+  * #1859 : After a user redacted their own join event from HQ, Android DoSes us with /context requests.
+
+Changes in Riot 0.7.08 (2018-01-12)
+===================================================
+ 
+Bugfixes:
+
+ * Fix the account creation
+
+Changes in Riot 0.7.07 (2018-01-03)
+===================================================
+ 
+Bugfixes:
+
+ * Improve piwik management.
+ * fix #1802 : Expected status header not present (until we update OkHttp to 3.X)
+ * fix widget management
+ 
 Changes in Riot 0.7.06 (2017-12-06)
 ===================================================
 

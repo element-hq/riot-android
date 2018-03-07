@@ -39,6 +39,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -113,8 +114,10 @@ import im.vector.preference.ProgressBarPreference;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorGroupPreference;
+import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
+import im.vector.util.RageShake;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -174,6 +177,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             refreshDisplay();
         }
     };
+
     private View mLoadingView;
     // cryptography
     private DeviceInfo mMyDeviceInfo;
@@ -204,7 +208,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private EditTextPreference mSyncRequestTimeoutPreference;
     private EditTextPreference mSyncRequestDelayPreference;
     private PreferenceCategory mLabsCategory;
-
     private PreferenceCategory mGroupsFlairCategory;
 
     // static constructor
@@ -504,6 +507,50 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
+        final VectorSwitchPreference urlPreviewPreference = (VectorSwitchPreference)findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY);
+        urlPreviewPreference.setChecked(mSession.isURLPreviewEnabled());
+
+        urlPreviewPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                if ((null != newValue) && ((boolean)newValue != mSession.isURLPreviewEnabled())) {
+                    displayLoadingView();
+                    mSession.setURLPreviewStatus((boolean) newValue, new ApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            urlPreviewPreference.setChecked(mSession.isURLPreviewEnabled());
+                            hideLoadingView();
+                        }
+
+                        private void onError(String errorMessage) {
+                            if (null != getActivity()) {
+                                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                            onSuccess(null);
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+                    });
+                }
+
+                return false;
+            }
+        });
+
         // push rules
         for (String resourceText : mPushesRuleByResourceId.keySet()) {
             final Preference preference = findPreference(resourceText);
@@ -746,6 +793,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
+        // SaveMode Managment
         final CheckBoxPreference dataSaveModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY);
         dataSaveModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -754,6 +802,26 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 for (MXSession session : sessions) {
                     session.setUseDataSaveMode((boolean) newValue);
                 }
+
+                return true;
+            }
+        });
+
+        // Rageshake Managment
+        final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
+        final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
+
+        if(mIsUsedRageShake) {
+            useRageShakeModePref.setChecked(true);
+        } else {
+            useBackgroundSyncPref.setChecked(false);
+        }
+
+        useRageShakeModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                PreferencesManager.setUseRageshake(appContext, (boolean) newValue);
 
                 return true;
             }

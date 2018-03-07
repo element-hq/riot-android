@@ -36,6 +36,7 @@
 
     <ImageView
         android:id="@+id/open_chat_header_arrow"
+        android:contentDescription="@string/open_chat_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

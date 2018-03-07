@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="resouces_language">eu</string>
-    <string name="resouces_country">EB</string>
+    <string name="resouces_country">ES</string>
 
     <string name="title_activity_home">Mezuak</string>
     <string name="title_activity_room">Gela</string>
@@ -195,9 +195,7 @@ Saiotik atera zaizu gailu guztietan eta ez dituzu jakinarazpenak jasoko. Jakinar
     <string name="login_error_user_in_use">Erabiltzaile-izen hau hartuta dago</string>
     <string name="login_error_login_email_not_yet">Oraindik erabili ez den e-maileko esteka</string>
 
-    <string name="read_receipts_list">Irakurri jasotzaileen zerrenda</string>
-
-    <string name="membership_changes">%d kidetza aldaketak</string>
+    <string name="read_receipts_list">Irakurragirien zerrenda</string>
 
     <string name="compression_options">"Bidali honela "</string>
     <string name="compression_opt_list_original">Jatorrizkoa</string>
@@ -214,7 +212,7 @@ Saiotik atera zaizu gailu guztietan eta ez dituzu jakinarazpenak jasoko. Jakinar
     <string name="today">Gaur</string>
 
     <string name="room_info_room_name">Gelaren izena</string>
-    <string name="room_info_room_topic">Gelaren gaia</string>
+    <string name="room_info_room_topic">Gelaren mintzagaia</string>
 
     <string name="call_connected">Deia konektatuta</string>
     <string name="call_connecting">Deia konektatzen…</string>
@@ -229,11 +227,6 @@ Saiotik atera zaizu gailu guztietan eta ez dituzu jakinarazpenak jasoko. Jakinar
     <string name="call_error_ice_failed">Media konexioak huts egin du</string>
     <string name="call_error_camera_init_failed">Ezin izan da kamera hasieratu</string>
     <string name="call_error_answered_elsewhere">deia beste nonbait erantzun da</string>
-    <string name="call_error_peer_hangup_elsewhere">deia beste nonbait amaitu da</string>
-    <string name="call_error_peer_cancelled_call">deia utzita</string>
-
-    <string name="action_accept">ONARTU</string>
-    <string name="action_ignore">EZIKUSI</string>
 
     <string name="media_picker_both_capture_title">Atera argazkia edo bideoa</string>
     <string name="media_picker_cannot_record_video">Ezin izan da bideoa grabatu</string>
@@ -282,14 +275,12 @@ Baimendu Riotek zure kontaktuak atzitzea?</string>
 
     <string name="room_preview_unlinked_email_warning">Zure gonbidapena bidali da %s helbidera, hau ez dago kontu honetara lotuta.
 Beste kontu batekin hasi dezakezu saioa, edo e-mail hau kontu honetara gehitu.</string>
-    <string name="room_preview_try_join_an_unknown_room">%s atzitzen saiatzen ari zara. Elkartu nahi duzu elkarrizketan parte hartzeko?</string>
+    <string name="room_preview_try_join_an_unknown_room">%s taldera sartzen saiatzen ari zara. Elkartu taldera elkarrizketan parte hartzeko?</string>
     <string name="room_preview_try_join_an_unknown_room_default">gela bat</string>
     <string name="room_preview_room_interactions_disabled">Hau gelaren aurrebista bat da. Gelako elkarrekintzak desgaituta daude.</string>
 
     <string name="room_creation_title">Txat berria</string>
     <string name="room_creation_add_member">Gehitu kidea</string>
-    <string name="room_header_active_members">%1$d/%2$d kide aktibo</string>
-    <string name="room_title_members">%1$d kide</string>
     <string name="room_title_one_member">kide 1</string>
     <string name="room_e2e_alert_title">Abisua!</string>
     <string name="room_e2e_alert_message">Muturretik muturrera zifratzea beta egoeran dago eta agian ez dabil behar bezala.
@@ -366,9 +357,8 @@ Ziur zaude?</string>
     <string name="room_resend_unsent_messages">Birbidali bidali gabeko mezuak</string>
     <string name="room_delete_unsent_messages">Ezabatu bidali gabeko mezuak</string>
     <string name="room_message_file_not_found">Ez da fitxategia aurkitu</string>
-    <string name="room_do_not_have_permission_to_post">Ez duzu gela honetan idazteko baimena</string>
+    <string name="room_do_not_have_permission_to_post">Ez duzu gela honetara mezuak bidaltzeko baimenik</string>
     <string name="room_new_message_notification">mezu berri 1</string>
-    <string name="room_new_messages_notification">%1$d mezu berri</string>
 
     <string name="ssl_trust">Fidatu</string>
     <string name="ssl_do_not_trust">Ez fidatu</string>
@@ -399,7 +389,6 @@ Ziur zaude?</string>
     <string name="room_displayname_invite_from">%s gelarako gonbidapena</string>
     <string name="room_displayname_room_invite">Gela gonbidapena</string>
     <string name="room_displayname_two_members">%1$s eta %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s eta beste %2$d</string>
     <string name="room_displayname_no_title">Gela hutsa</string>
 
     <string name="search_hint">Bilatu</string>
@@ -424,12 +413,9 @@ Ziur zaude?</string>
 
     <string name="directory_search_results_title">Arakatu direktorioa</string>
     <string name="directory_search_room">gela %1$d</string>
-    <string name="directory_search_rooms">%1$d gela</string>
     <string name="directory_search_room_for">gela %1$d aurkitu da %2$s bilaketarako</string>
-    <string name="directory_search_rooms_for">%1$s gela aurkitu dira %2$s bilaketarako</string>
     <string name="directory_searching_title">Direktorioa bilatzen..</string>
 
-    <string name="room_settings_notifications">Jakinarazpenak</string>
     <string name="room_settings_favourite">Gogokoa</string>
     <string name="room_settings_de_prioritize">Jaitsi lehentasuna</string>
     <string name="room_settings_direct_chat">Txat zuzena</string>
@@ -438,13 +424,13 @@ Ziur zaude?</string>
 
     <string name="room_sliding_menu_messages">Mezuak</string>
     <string name="room_sliding_menu_settings">Ezarpenak</string>
-    <string name="room_sliding_menu_version">"Bertsioa "</string>
+    <string name="room_sliding_menu_version">"Bertsioa: "</string>
     <string name="room_sliding_menu_term_and_conditions">Termino eta baldintzak</string>
-    <string name="room_sliding_menu_copyright">Copyright</string>
+    <string name="room_sliding_menu_copyright">Copyright-a</string>
     <string name="room_sliding_menu_privacy_policy">Pribatutasun politika</string>
 
     <string name="settings_profile_picture">Profil-argazkia</string>
-    <string name="settings_display_name">Pantaila izena</string>
+    <string name="settings_display_name">Pantaila-izena</string>
     <string name="settings_email_address">E-mail</string>
     <string name="settings_add_email_address">Gehitu e-mail helbidea</string>
     <string name="settings_phone_number">Telefonoa</string>
@@ -470,10 +456,10 @@ Ziur zaude?</string>
     <string name="settings_second">segundo</string>
     <string name="settings_seconds">segundo</string>
 
-    <string name="settings_version">Bertsioa</string>
+    <string name="settings_version">Bertsioa:</string>
     <string name="settings_olm_version">olm bertsioa</string>
     <string name="settings_app_term_conditions">Termino eta baldintzak</string>
-    <string name="settings_copyright">Copyright</string>
+    <string name="settings_copyright">Copyright-a</string>
     <string name="settings_privacy_policy">Pribatutasun politika</string>
     <string name="settings_clear_cache">Garbitu cachea</string>
     <string name="settings_clear_medias_cache">Garbitu media cachea</string>
@@ -489,10 +475,10 @@ Ziur zaude?</string>
     <string name="settings_contacts_app_permission">Kontaktuen baimena</string>
     <string name="settings_contacts_phonebook_country">Telefono-liburuaren herrialdea</string>
     <string name="settings_home_display">Hasiera pantaila</string>
-    <string name="settings_pin_missed_notifications">Finkatu galdutako jakinarazpenak dituzten gelak</string>
+    <string name="settings_pin_missed_notifications">Finkatu ikusi gabeko jakinarazpenak dituzten gelak</string>
     <string name="settings_pin_unread_messages">Finkatu irakurri gabeko mezuak dituzten gelak</string>
     <string name="settings_devices_list">Gailuak</string>
-    <string name="settings_hide_read_receipts">Ezkutatu irakurtze-agiria</string>
+    <string name="settings_hide_read_receipts">Ezkutatu irakurragiriak</string>
     <string name="settings_dont_send_typings_notifs">Ez bidali idatzi bitarteko jakinarazpenak</string>
     <string name="settings_always_show_timestamps">Erakutsi beti mezuen denbora-zigilua</string>
     <string name="devices_details_dialog_title">Gailuaren xehetasunak</string>
@@ -539,12 +525,10 @@ Jarraitzeko, idatzi zure pasahitza.</string>
 
     <string name="settings_phone_number_country_label">Herrialdea</string>
     <string name="settings_phone_number_country_error">Hautatu herrialde bat</string>
-    <string name="settings_key_display_all_events">ezarpen_gakoa_erakutsi_gertaera_guztiak</string>
-    <string name="settings_key_use_rage_shake">ezarpen_gakoa_erabili_amorru_astintzea</string>
 
-    <string name="room_sliding_menu_third_party_notices">Hirugarrengoen jakinarazpenak</string>
-    <string name="settings_third_party_notices">Hirugarrengoen jakinarazpenak</string>
-    <string name="settings_disable_markdown">Desgaitu markdown formatua</string>
+    <string name="room_sliding_menu_third_party_notices">Hirugarrengoen adierazpenak</string>
+    <string name="settings_third_party_notices">Hirugarrengoen adierazpenak</string>
+    <string name="settings_disable_markdown">Desgaitu markdown formatua bidaltzean</string>
 
     <string name="settings_phone_number_label">Telefono zenbakia</string>
     <string name="settings_phone_number_error">Telefono zenbaki baliogabea hautatutako herrialdean</string>
@@ -561,10 +545,9 @@ Jarraitzeko, idatzi zure pasahitza.</string>
 
     <string name="room_settings_room_photo">Gelaren argazkia</string>
     <string name="room_settings_room_name">Gelaren izena</string>
-    <string name="room_settings_topic">Gaia</string>
+    <string name="room_settings_topic">Mintzagaia</string>
     <string name="room_settings_room_tag">Gelaren etiketa</string>
     <string name="room_settings_tag_pref_dialog_title">Honela etiketatua:</string>
-    <string name="room_settings_mute_notifs">Mututu jakinarazpenak</string>
 
     <string name="room_settings_tag_pref_entry_favourite">Gogokoa</string>
     <string name="room_settings_tag_pref_entry_low_priority">Lehentasun baxua</string>
@@ -581,10 +564,10 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Nork irakurri dezake historiala?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Nor sartu daiteke gelara?</string>
 
-    <string name="room_settings_read_history_entry_anyone">Edonor</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Kideak besterik ez (aukera hau hautatutako unetik)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Kideak besterik ez (gonbidatu zitzaienetik)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Kideak besterik ez (elkartu zirenetik)</string>
+    <string name="room_settings_read_history_entry_anyone">Edonork</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Kideek besterik ez (aukera hau hautatutako unetik)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Kideek besterik ez (gonbidatu zitzaienetik)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Kideek besterik ez (elkartu zirenetik)</string>
 
     <string name="room_settings_room_access_warning">Gelara estekatzeko honek helbide bat izan behar du.</string>
     <string name="room_settings_room_access_entry_only_invited">Gonbidatua izan den jendea besterik ez</string>
@@ -658,15 +641,15 @@ Jarraitzeko, idatzi zure pasahitza.</string>
 
     <string name="encryption_information_not_verified">EZ egiaztatuta</string>
     <string name="encryption_information_verified">Egiaztatuta</string>
-    <string name="encryption_information_blocked">Zerrenda beltzean</string>
+    <string name="encryption_information_blocked">Blokeatuta</string>
 
     <string name="encryption_information_unknown_device">gailu ezezaguna</string>
     <string name="encryption_information_none">bat ere ez</string>
 
     <string name="encryption_information_verify">Egiaztatu</string>
     <string name="encryption_information_unverify">Kendu egiaztaketa</string>
-    <string name="encryption_information_block">Sartu zerrenda beltzean</string>
-    <string name="encryption_information_unblock">Atera zerrenda beltzean</string>
+    <string name="encryption_information_block">Blokeatu</string>
+    <string name="encryption_information_unblock">Desblokeatu</string>
 
     <string name="encryption_information_verify_device">Egiaztatu gailua</string>
     <string name="encryption_information_verify_device_warning">" Gailu hau fidagarria dela egiaztatzeko, kontaktatu bere jabea beste medio bat erabiliz (adib. aurrez aurre edo telefonoz deituz) eta galdetu beraien erabiltzaile-ezarpenetan bere gailurako ikusten duen gakoa hemen beheko bera den:"</string>
@@ -691,9 +674,6 @@ Gailu ezezagunak:</string>
     <string name="directory_server_placeholder">Hasiera zerbitzariaren URLa</string>
     <string name="directory_server_all_rooms_on_server">%s zerbitzariko gela guztiak</string>
     <string name="directory_server_native_rooms">%s zerbitzariko gela natibo guztiak</string>
-
-    <string name="notification_unread_notified_messages">Irakurri gabeko %d mezu-jakinarazpen</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d irakurri gabeko eta jakinaraziko mezu %2$d gelatan</string>
 
     <string name="historical_placeholder">Bilatu historiala</string>
 
@@ -723,9 +703,9 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="larger">Oso handia</string>
     <string name="largest">Handiena</string>
     <string name="huge">Erraldoia</string>
-<string name="light_theme">Gai argia</string>
-    <string name="dark_theme">Gai iluna</string>
-    <string name="black_them">Gai beltza</string>
+<string name="light_theme">Itxura argia</string>
+    <string name="dark_theme">Itxura iluna</string>
+    <string name="black_them">Itxura beltza</string>
 
     <string name="notification_sync_in_progress">Sinkronizatzen</string>
     <string name="notification_listen_for_events">Entzun gertaerak</string>
@@ -733,7 +713,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="login_mobile_device">Mugikorra</string>
 
     <string name="settings_notification_ringtone">Jakinarazpen-soinua</string>
-    <string name="settings_12_24_timestamps">Erakutsi denbora-markak 12 ordutako formatuan (adib 2:30pm)</string>
+    <string name="settings_12_24_timestamps">Erakutsi denbora-zigiluak 12 ordutako formatuan (adib 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Ezkutatu elkartu/utzi mezuak (gonbidatu/kanporatu/debekatu mezuei eraginik ez)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Ezkutatu abatarraren eta pantaila-izenen aldaketak</string>
 
@@ -743,13 +723,10 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="event_formatter_widget_removed">%1$s kendu du %2$s erabiltzaileak</string>
     <string name="settings_labs_create_conference_with_jitsi">Sortu konferentzia deiak jitsi bidez</string>
     <string name="widget_delete_message_confirmation">Ziur trepeta ezabatu nahi duzula?</string>
-    <string name="active_widgets">%1$d trepeta aktibo</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Erabiltzaileak gonbidatzeko baimena behar duzu hori egin ahal izateko.</string>
     <string name="widget_integration_unable_to_create">Ezin izan da trepeta sortu.</string>
     <string name="widget_integration_failed_to_send_request">Eskariaren bidalketak huts egin du.</string>
-    <string name="widget_integration_room_not_recognised">Ez da gela hau ezagutzen.</string>
     <string name="widget_integration_positive_power_level">Botere maila osoko zenbaki positibo bat izan behar da.</string>
     <string name="widget_integration_must_be_in_room">Ez zaude gela honetan.</string>
     <string name="widget_integration_no_permission_in_room">Ez duzu gela honetan hori egiteko baimenik.</string>
@@ -758,5 +735,120 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="widget_integration_room_not_visible">%s gela ez dago ikusgai.</string>
     <string name="settings_labs_matrix_apps">Matrix aplikazioak</string>
     <string name="room_add_matrix_apps">Gehitu Matrix aplikazioak</string>
-    <string name="add_matrix_apps_not_supported">Ez da gailu honetan onartzen</string>
-</resources>
+    <string name="notification_noisy_notifications">Jakinarazpen zaratatsuak</string>
+    <string name="notification_silent_notifications">Jakinarazpen isilak</string>
+
+    <string name="settings_containing_my_display_name">Nire pantaila-izena duten mezuak</string>
+    <string name="settings_containing_my_user_name">Nire erabiltzaile izena duten mezuak</string>
+    <string name="settings_analytics">Analitikak</string>
+    <string name="settings_opt_out_of_analytics">Ez hartu parte analitiketan</string>
+    <string name="settings_opt_out_of_analytics_summary">Riotek analitika anonimoak biltzen ditu aplikazioa hobetzeko.</string>
+
+
+    <string name="settings_labs_native_camera">Erabili kamera natiboa</string>
+
+    // share keys
+    <string name="you_added_a_new_device">\'%s\' gailu berria gehitu duzu, eta zifratze-gakoak eskatzen ari da.</string>
+    <string name="your_unverified_device_requesting">Egiaztatu gabeko zure \'%s\' gailua zifratze-gakoak eskatzen ari da.</string>
+    <string name="start_verification">Hasi egiaztaketa</string>
+    <string name="share_without_verifying">Partekatu egiaztatu gabe</string>
+    <string name="ignore_request">Ezikusi eskaria</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Abisua!</string>
+    <string name="conference_call_warning_message">Konferentzia deiak garapenean daude eta agian ez dabiltza behar bezala.</string>
+
+    // slash commands
+    <string name="command_error">Komandoaren errorea</string>
+    <string name="unrecognized_command">Komando ezezaguna: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Ez</string>
+    <string name="notification_on">Bai</string>
+    <string name="notification_noisy">Zaratatsua</string>
+
+    <string name="encrypted_message">Zifratutako mezua</string>
+
+<string name="title_activity_bug_report">Arazte-txostena</string>
+
+    <string name="option_take_photo">Atera argazkia</string>
+    <string name="option_take_video">Grabatu bideoa</string>
+
+    <string name="call">Deia</string>
+<string name="title_activity_group_details">Komunitatearen xehetasunak</string>
+
+    <string name="loading">Kargatzen...</string>
+
+    <string name="action_exit">Irten</string>
+    <string name="bottom_action_groups">Komunitateak</string>
+
+    <string name="home_filter_placeholder_groups">Bilatu komunitateak</string>
+
+    <string name="groups_invite_header">Gonbidatu</string>
+    <string name="groups_header">Komunitateak</string>
+    <string name="no_group_placeholder">Talderik ez</string>
+
+    <string name="start_new_chat_prompt_msg">Ziur txat berria hasi nahi duzula %s erabiltzailearekin?</string>
+    <string name="start_voice_call_prompt_msg">Ziur ahots-dei bat hasi nahi duzula?</string>
+    <string name="start_video_call_prompt_msg">Ziur bideo-dei bat hasi nahi duzula?</string>
+
+    <string name="groups_list">Taldeen zerrenda</string>
+
+    <string name="room_participants_kick_prompt_msg">Ziur erabiltzaile hau txat honetatik kanporatu nahi duzula?</string>
+    <string name="room_participants_ban_prompt_msg">Ziur erabiltzaile hau txat honetan debekatu nahi duzula?</string>
+
+    <string name="room_settings_all_messages_noisy">Mezu guztiak (zaratatsua)</string>
+    <string name="room_settings_all_messages">Mezu guztiak</string>
+    <string name="room_settings_mention_only">Aipamenak bakarrik</string>
+    <string name="room_settings_mute">Mututu</string>
+    <string name="room_settings_add_homescreen_shortcut">Gehitu hasiera pantailako laster-bidea</string>
+
+    <string name="settings_inline_url_preview">Gaitu URL-en aurrebistak lehenetsita</string>
+    <string name="settings_vibrate_on_mention">Bibratu aipatzean</string>
+
+    <string name="room_settings_room_notifications_title">Jakinarazpenak</string>
+    <string name="room_settings_add_new_group">Komunitatearen ID berria (adib. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Komunitatearen ID baliogabea</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ez da baliozko komunitate ID bat</string>
+
+
+    <string name="create">Sortu</string>
+    <string name="create_community">Sortu komunitatea</string>
+    <string name="community_name">Komunitatearen izena</string>
+    <string name="community_name_hint">Adibidea</string>
+    <string name="community_id">Komunitatearen IDa</string>
+    <string name="community_id_hint">adibidea</string>
+
+    // group details
+    <string name="group_details_home">Hasiera</string>
+    <string name="group_details_people">Jendea</string>
+    <string name="group_details_rooms">Gelak</string>
+    <string name="no_users_placeholder">Erabiltzailerik ez</string>
+
+    <string name="rooms">Gelak</string>
+    <string name="joined">Elkartuta</string>
+    <string name="invited">Gonbidatuta</string>
+    <string name="filter_group_members">Iragazi taldeko kideak</string>
+    <string name="filter_group_rooms">Iragazi taldeko gelak</string>
+
+    <string name="group_one_member">kide 1</string>
+    <string name="group_members">%d kide</string>
+
+    <string name="group_one_room">gela 1</string>
+    <string name="group_rooms">%d gela</string>
+    <string name="group_no_long_description">Komunitatearen administratzaileak ez du deskripzio luzerik eman komunitate honentzat.</string>
+
+    <string name="one_new_message">mezu berri 1</string>
+    <string name="new_messages">%d mezu berri</string>
+
+    <string name="has_been_kicked">%1$s gelatik kanporatu zaitu %2$s erabiltzaileak</string>
+    <string name="has_been_banned">%1$s gelatik debekatu zaitu %2$s erabiltzaileak</string>
+    <string name="reason_colon">Arrazoia: %1$s</string>
+    <string name="rejoin">Berriro elkartu</string>
+    <string name="forget_room">Ahaztu gela</string>
+<string name="settings_flair">Ikurra</string>
+
+    <string name="room_settings_no_flair">" Gela honek ez ditu komunitateetako ikurrak erakusten"</string>
+    <string name="send_bug_report_rage_shake">Astindu amorruz akatsaren berri emateko</string>
+
+    </resources>

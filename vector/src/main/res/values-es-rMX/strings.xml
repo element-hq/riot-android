@@ -207,9 +207,6 @@ Disculpe por la inconveniencia.</string>
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -234,10 +231,6 @@ Disculpe por la inconveniencia.</string>
     <string name="room_info_room_name">Nombre de la Sala</string>
     <string name="room_info_room_topic">Tema de la Sala</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Llamada conectada</string>
     <string name="call_connecting">La llamada se esá conectando…</string>
@@ -252,11 +245,6 @@ Disculpe por la inconveniencia.</string>
     <string name="call_error_ice_failed">Conexión de media falló</string>
     <string name="call_error_camera_init_failed">La cámara no se pudo encender</string>
     <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
-    <string name="call_error_peer_hangup_elsewhere">la llamada fue colgado en otra parte</string>
-    <string name="call_error_peer_cancelled_call">la llamada fue cancelada</string>
-
-    <string name="action_accept">ACEPTAR</string>
-    <string name="action_ignore">IGNORAR</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Tomar una foto o grabar un video"</string>
@@ -301,8 +289,6 @@ Disculpe por la inconveniencia.</string>
     <!-- Chat creation -->
     <string name="room_creation_title">Chat Nuevo</string>
     <string name="room_creation_add_member">Añadir miembro</string>
-    <string name="room_header_active_members">%1$d/%2$d miembros activos</string>
-    <string name="room_title_members">%1$d miembros</string>
     <string name="room_title_one_member">1 miembro</string>
     <string name="room_e2e_alert_title">¡Aviso!</string>
     <string name="room_e2e_alert_message">El cifrado de extremo-a-extremo esta en beta y puede ser poco fiable.
@@ -379,7 +365,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_message_file_not_found">No se pudo encontrar el archivo</string>
     <string name="room_do_not_have_permission_to_post">No tienes permiso para enviar en esta sala</string>
     <string name="room_new_message_notification">1 mensaje nuevo</string>
-    <string name="room_new_messages_notification">%1$d mensajes nuevos</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -415,7 +400,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_displayname_invite_from">Invitar de %s</string>
     <string name="room_displayname_room_invite">Invitacion de Sala</string>
     <string name="room_displayname_two_members">%1$s y %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s y %2$d otros</string>
     <string name="room_displayname_no_title">Sala vacía</string>
 
     <!-- Search -->
@@ -443,13 +427,10 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar directorio</string>
     <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_rooms">%1$d salas</string>
     <string name="directory_search_room_for">%1$d sala encontrada por %2$s</string>
-    <string name="directory_search_rooms_for">%1$s salas encontradas por %2$s</string>
     <string name="directory_searching_title">Buscando directorio..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificaciones</string>
     <string name="room_settings_favourite">Destacar</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Chat Directo</string>
@@ -573,7 +554,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_settings_topic">Tema</string>
     <string name="room_settings_room_tag">Etiqueta de la Sala</string>
     <string name="room_settings_tag_pref_dialog_title">Etiquetado como:</string>
-    <string name="room_settings_mute_notifs">Callar Notificaciones</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Destacar</string>
@@ -717,10 +697,6 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="directory_server_placeholder">Homeserver URL</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
-
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d mensajes no leídos</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d mensajes no leídos en %2$d salas"</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>

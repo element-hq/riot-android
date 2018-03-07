@@ -380,6 +380,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     } else if (MXSession.isRoomAlias(roomIdOrAlias)) {
                         Log.d(LOG_TAG, "Has a valid universal link of the room Alias " + roomIdOrAlias);
 
+                        showWaitingView();
+
                         // it is a room alias
                         // convert the room alias to room Id
                         mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new SimpleApiCallback<String>() {
@@ -496,13 +498,14 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         // jump to an external link
         if (null != mUniversalLinkToOpen) {
             intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniversalLinkToOpen);
-            this.runOnUiThread(new Runnable() {
+
+            new Handler(getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     processIntentUniversalLink();
                     mUniversalLinkToOpen = null;
                 }
-            });
+            }, 100);
         }
 
         if (mSession.isAlive()) {
@@ -2073,7 +2076,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     filteredRoomIdsSet.add(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_people) {
-                filteredRoomIdsSet.addAll(mSession.getDirectChatRoomIdsList());
+                filteredRoomIdsSet.addAll(mSession.getDataHandler().getDirectChatRoomIdsList());
                 // Add direct chat invitations
                 for (Room room : roomSummaryByRoom.keySet()) {
                     if (room.isDirectChatInvitation() && !room.isConferenceUserRoom()) {
@@ -2087,7 +2090,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     filteredRoomIdsSet.remove(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_rooms) {
-                HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());
+                HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());
                 HashSet<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
 
                 directChatRoomIds.addAll(directChatInvitations);
