@@ -868,4 +868,41 @@ Appareils inconnus :</string>
 	<item quantity="other">%d nouveaux messages</item>
 </plurals>
 
-    </resources>
+    <string name="room_displayname_many_members">%1$s et %2$s</string>
+    <plurals name="others">
+	<item quantity="one">Un autre</item>
+	<item quantity="other">%d autres</item>
+</plurals>
+
+    <string name="list_members">Liste les membres</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">Un salon</item>
+	<item quantity="other">%d salons</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s salon trouvé pour %2$s</item>
+	<item quantity="other">%1$s salons trouvés pour %2$s</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">Un message notifié non lu</item>
+	<item quantity="other">%d messages notifiés non lus</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">Un message notifié non lu</item>
+	<item quantity="other">%d messages notifiés non lus</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">Un salon</item>
+	<item quantity="other">%d salons</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s dans %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">Un gadget actif</item>
+	<item quantity="other">%d gadgets actifs</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="avatar">Avatar</string>
+
+</resources>

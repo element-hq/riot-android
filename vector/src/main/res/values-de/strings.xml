@@ -953,4 +953,7 @@ Unbekannte Geräte:</string>
 
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
+    <string name="open_chat_header">Öffne Chat-Kopf</string>
+    <string name="receipt_avatar">Lesebestätigungs-Profilbild</string>
+    <string name="notice_avatar">Notiz-Avatar</string>
     </resources>

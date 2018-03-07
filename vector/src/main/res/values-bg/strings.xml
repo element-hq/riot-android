@@ -196,4 +196,132 @@
     <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да изпратите съобщение за грешка?</string>
     <string name="send_bug_report_rage_shake">Силно разклащане на телефона за изпращане на грешка</string>
 
+    <string name="send_bug_report_sent">Съобщението за грешка беше успешно изпратено</string>
+    <string name="send_bug_report_failed">Неуспешно изпращане на съобщението за грешка (%s)</string>
+    <string name="read_receipt">Прочетено</string>
+
+    <string name="join_room">Присъедини се към стая</string>
+    <string name="username">Потребителско име</string>
+    <string name="create_account">Регистрация</string>
+    <string name="login">Вход</string>
+    <string name="logout">Изход</string>
+    <string name="hs_url">URL на Home сървър</string>
+    <string name="identity_url">URL на сървър за самоличност</string>
+    <string name="user">потребител</string>
+    <string name="users">потребители</string>
+    <string name="search">Търсене</string>
+
+    <string name="start_new_chat">Започни нов чат</string>
+    <string name="start_voice_call">Започни гласов разговор</string>
+    <string name="start_video_call">Започни видео разговор</string>
+
+    <string name="start_new_chat_prompt_msg">Сигурни ли сте, че искате да започнете нов чат с %s?</string>
+    <string name="start_voice_call_prompt_msg">Сигурни ли сте, че искате да започнете гласов разговор?</string>
+    <string name="start_video_call_prompt_msg">Сигурни ли сте, че искате да започнете видео разговор?</string>
+
+    <string name="option_send_files">Изпрати файлове</string>
+    <string name="option_take_photo_video">Направи снимка или видео</string>
+    <string name="option_take_photo">Направи снимка</string>
+    <string name="option_take_video">Направи видео</string>
+
+    <string name="auth_login">Влез</string>
+    <string name="auth_register">Регистрация</string>
+    <string name="auth_submit">Изпрати</string>
+    <string name="auth_skip">Пропусни</string>
+    <string name="auth_password_placeholder">Парола</string>
+    <string name="auth_new_password_placeholder">Нова парола</string>
+    <string name="auth_user_name_placeholder">Потребителско име</string>
+    <string name="auth_add_email_message">Добавете имейл адрес в профила си, за да позволите на потребители да ви откриват и да можете да възстановявате Вашата парола.</string>
+    <string name="auth_add_phone_message">Добавете телефонен номер в профила си, за да позволите на потребители да ви откриват.</string>
+    <string name="auth_add_email_phone_message">Добавете имейл адрес и/или телефонен номер в профила си, за да позволите на потребители да ви откриват.
+
+Имейл адресът също Ви позволява да възстановите Вашата парола.</string>
+    <string name="auth_add_email_and_phone_message">Добавете имейл адрес и телефонен номер в профила си, за да позволите на потребители да Ви откриват.
+
+Имейл адресът също Ви позволява да възстановявате Вашата парола.</string>
+    <string name="auth_email_placeholder">Имейл адрес</string>
+    <string name="auth_opt_email_placeholder">Имейл адрес (по избор)</string>
+    <string name="auth_phone_number_placeholder">Телефонен номер</string>
+    <string name="auth_opt_phone_number_placeholder">Телефонен номер (по избор)</string>
+    <string name="auth_repeat_password_placeholder">Повтори парола</string>
+    <string name="auth_repeat_new_password_placeholder">Потвърди новата парола</string>
+    <string name="auth_invalid_login_param">Неправилно потребителско име и/или парола</string>
+    <string name="auth_invalid_user_name">Потребителските имена могат да съдържат само букви, цифри, точки, тирета и долни черти</string>
+    <string name="auth_invalid_password">Паролата е твърде къса (мин. 6 символа)</string>
+    <string name="auth_missing_password">Липсва парола</string>
+    <string name="auth_invalid_email">Това не изглежда да е валиден имейл адрес</string>
+    <string name="auth_invalid_phone">Това не изглежда да е валиден телефонен номер</string>
+    <string name="auth_email_already_defined">Този имейл адрес е вече използван.</string>
+    <string name="auth_missing_email">Липсва имейл адрес</string>
+    <string name="auth_missing_phone">Липсва телефонен номер</string>
+    <string name="auth_missing_email_or_phone">Липсва имейл адрес или телефонен номер</string>
+    <string name="auth_invalid_token">Невалиден token</string>
+    <string name="auth_password_dont_match">Паролите не съвпадат</string>
+    <string name="auth_forgot_password">Забравена парола?</string>
+    <string name="auth_use_server_options">Използване на потребителски опции за сървър (разширени)</string>
+    <string name="auth_email_validation_message">Моля, проверете имейла си, за да продължите регистрацията</string>
+    <string name="auth_recaptcha_message">Този Home сървър би искал да се увери, че не сте робот</string>
+    <string name="auth_username_in_use">Потребителското име е вече заето</string>
+    <string name="auth_home_server">Home сървър:</string>
+    <string name="auth_identity_server">Сървър за самоличност:</string>
+    <string name="auth_reset_password_next_step_button">Потвърдих имейл адреса си</string>
+    <string name="auth_reset_password_message">За да възстановите Вашата парола, въведете имейл адреса, свързан с профила Ви:</string>
+    <string name="auth_reset_password_missing_email">Имейл адресът, свързан с профила Ви, трябва да бъде въведен.</string>
+    <string name="auth_reset_password_missing_password">Трябва да бъде въведена нова парола.</string>
+    <string name="auth_reset_password_email_validation_message">Имейл беше изпратен на %@. След като проследите връзката, която съдържа, натиснете по-долу.</string>
+    <string name="auth_reset_password_error_unauthorized">Неуспешно потвърждаване на имейл адреса: уверете се, че сте кликнали върху връзката в имейла</string>
+    <string name="auth_reset_password_success_message">Вашата парола беше възстановена.
+
+Вие сте излязли от профила си от всички устройства и вече няма да получавате известия. За да включите известията отново, влезте в профила си от всички устройства.</string>
+
+    <string name="login_error_must_start_http">URL адресът трябва да започва с http[s]://</string>
+    <string name="login_error_network_error">Неуспешно влизане в профила: Грешка в мрежата</string>
+    <string name="login_error_unable_login">Неуспешно влизане в профила</string>
+    <string name="send_bug_report_progress">Напредък (%s%%)</string>
+
+    <string name="send_files_in">Изпрати в</string>
+    <string name="auth_user_id_placeholder">Имейл или потребителско име</string>
+    <string name="auth_send_reset_email">Изпрати имейл за възстановяване</string>
+    <string name="auth_return_to_login">Връщане към страницата за влизане в профила</string>
+    <string name="auth_threepid_warning_message">Регистрация с имейл и телефонен номер наведнъж не се поддържа в момента. Само телефонен номер се взима под внимание.
+
+Можете да добавите имейл към профила си в настройките.</string>
+    <string name="login_error_registration_network_error">Неуспешна регистрация: Грешка в мрежата</string>
+    <string name="login_error_unable_register">Неуспешна регистрация</string>
+    <string name="login_error_unable_register_mail_ownership">Неуспешна регистрация: неуспешно потвърждаване на имейла</string>
+    <string name="login_error_invalid_home_server">Въведете валиден URL адрес</string>
+    <string name="login_mobile_device">Мобилно устройство</string>
+
+    <string name="login_error_forbidden">Невалидно потребителско име/парола</string>
+    <string name="login_error_unknown_token">Не е разпознат указаният token за достъп</string>
+    <string name="login_error_bad_json">Грешно формиран JSON</string>
+    <string name="login_error_not_json">Не съдържаше валиден JSON</string>
+    <string name="login_error_limit_exceeded">Бяха изпратени твърде много заявки</string>
+    <string name="login_error_user_in_use">Това потребителско име е вече заето</string>
+    <string name="login_error_login_email_not_yet">Все още не сте кликнали върху връзката в имейла</string>
+
+    <string name="e2e_need_log_in_again">Трябва да влезете обратно в профила си, за да се създадат ключове за шифроване от край до край за това устройство и да се изпрати публичния ключ към Home сървъра.
+Това е еднократно.
+Извинете за неудобството.</string>
+
+    <string name="read_receipts_list">Списък с потвърждения за прочитане</string>
+
+    <string name="groups_list">Списък с групи</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">1 промяна в членството</item>
+	<item quantity="other">%d промени в членствата</item>
+</plurals>
+
+    <string name="copied_to_clipboard"/>
+    <string name="call"/>
+    <string name="call_connected"/>
+    <string name="call_error_user_not_responding">Отсрещната страна не успя да отговори на повикването.</string>
+    <string name="call_error_ice_failed">Неуспешна връзка с медийното устройство</string>
+    <string name="settings_clear_medias_cache">Изтрий кеша за медия</string>
+    <string name="settings_keep_media">Запази медия</string>
+
+    <string name="call_error_camera_init_failed">Неуспешно подготвяне на камерата</string>
+    <string name="call_error_answered_elsewhere">на повикването е отговорено другаде</string>
+
     </resources>
