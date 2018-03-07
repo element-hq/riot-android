@@ -803,7 +803,7 @@ Appareils inconnus :</string>
     <string name="room_settings_all_messages">Notification pour chaque message</string>
     <string name="room_settings_mention_only">Notifier uniquement lorsque mon nom est mentionné</string>
     <string name="room_settings_mute">Pas de notification</string>
-    <string name="room_settings_add_homescreen_shortcut">Ajouter un raccourci sur l\'écran d\'acceuil</string>
+    <string name="room_settings_add_homescreen_shortcut">Ajouter un raccourci sur l\'écran d\'accueil</string>
 
     <string name="settings_inline_url_preview">Aperçu intégré des URL</string>
     <string name="settings_vibrate_on_mention">Vibrer lorsque l\'on mentionne quelqu\'un</string>
@@ -823,7 +823,7 @@ Appareils inconnus :</string>
     <string name="community_id_hint">Exemple</string>
 
     // group details
-    <string name="group_details_home">Acceuil</string>
+    <string name="group_details_home">Accueil</string>
     <string name="group_details_people">Personnes</string>
     <string name="group_details_rooms">Salons</string>
     <string name="no_users_placeholder">Pas d\'utilisateurs</string>
