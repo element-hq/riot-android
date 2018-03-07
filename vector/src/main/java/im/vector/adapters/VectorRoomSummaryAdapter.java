@@ -714,8 +714,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 if (!TextUtils.isEmpty(mSearchedPattern)) {
                     if (null == mMatchedPublicRoomsCount) {
                         roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
-                    } else if (mMatchedPublicRoomsCount < 2) {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room_for, mMatchedPublicRoomsCount, mSearchedPattern));
                     } else {
                         String value = mMatchedPublicRoomsCount.toString();
 
@@ -723,7 +721,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                             value = "> " + PublicRoomsManager.PUBLIC_ROOMS_LIMIT;
                         }
 
-                        roomMsgTxtView.setText(mContext.getResources().getQuantityString(R.plurals.directory_search_rooms_for, PublicRoomsManager.PUBLIC_ROOMS_LIMIT, value, mSearchedPattern));
+                        roomMsgTxtView.setText(mContext.getResources().getQuantityString(R.plurals.directory_search_rooms_for, mMatchedPublicRoomsCount, value, mSearchedPattern));
                     }
                 } else {
                     if (null == mPublicRoomsCount) {
