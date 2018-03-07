@@ -126,7 +126,7 @@ This notification is persistent meaning that the user cannot remove it while it 
 
 In GCM mode, when [background sync](#background-synchronisation--enable-background-sync) is enabled, while the app syncs in background, it needs to display a persistent notification. The displayed message is then `Synchronising`.
 
-Once the sync is complete, the notification is removed and a normal, removable, notification showing messages is displayed.
+Once the sync is complete, the notification is removed and a normal (ie, removable) notification showing messages is displayed.
 
 ### Fallback mode
 
