@@ -324,4 +324,5 @@
     <string name="call_error_camera_init_failed">Неуспешно подготвяне на камерата</string>
     <string name="call_error_answered_elsewhere">на повикването е отговорено другаде</string>
 
+    <string name="media_picker_both_capture_title">Направи снимка или видео</string>
     </resources>
