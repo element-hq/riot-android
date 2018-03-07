@@ -325,4 +325,6 @@
     <string name="call_error_answered_elsewhere">на повикването е отговорено другаде</string>
 
     <string name="media_picker_both_capture_title">Направи снимка или видео</string>
+    <string name="media_picker_cannot_record_video">Неуспешно заснемане на видео</string>
+
     </resources>
