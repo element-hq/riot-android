@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.support.v4.content.res.ResourcesCompat;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.util.ContentManager;
 import org.matrix.androidsdk.util.Log;
 
 import android.text.Html;
@@ -87,21 +88,27 @@ public class VectorImageGetter implements Html.ImageGetter {
 
     @Override
     public Drawable getDrawable(String source) {
-        if (mBitmapCache.containsKey(source)) {
-            Log.d(LOG_TAG, "## getDrawable() : " + source + " already cached");
-            return mBitmapCache.get(source);
-        }
 
-        if (!mPendingDownloads.contains(source)) {
-            Log.d(LOG_TAG, "## getDrawable() : starts a task to download " + source);
-            try {
-                new ImageDownloaderTask().execute(source);
-                mPendingDownloads.add(source);
-            } catch (Throwable t) {
-                Log.e(LOG_TAG, "## getDrawable() failed " + t.getMessage());
+        // allow only url which starts with mxc://
+        if ((null != source) && source.toLowerCase().startsWith(ContentManager.MATRIX_CONTENT_URI_SCHEME)) {
+            if (mBitmapCache.containsKey(source)) {
+                Log.d(LOG_TAG, "## getDrawable() : " + source + " already cached");
+                return mBitmapCache.get(source);
             }
-        } else {
-            Log.d(LOG_TAG, "## getDrawable() : " + source + " is downloading");
+
+            if (!mPendingDownloads.contains(source)) {
+                Log.d(LOG_TAG, "## getDrawable() : starts a task to download " + source);
+                try {
+                    new ImageDownloaderTask().execute(source);
+                    mPendingDownloads.add(source);
+                } catch (Throwable t) {
+                    Log.e(LOG_TAG, "## getDrawable() failed " + t.getMessage());
+                }
+            } else {
+                Log.d(LOG_TAG, "## getDrawable() : " + source + " is downloading");
+            }
+
+
         }
 
         if (null == mPlaceHolder) {
