@@ -323,6 +323,11 @@
             android:key="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
             android:title="@string/settings_enable_background_sync" />
 
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_ENABLE_CONTENT_SENDING_PREFERENCE_KEY"
+            android:summary="@string/settings_enable_content_sending_summary"
+            android:title="@string/settings_enable_content_sending" />
+
         <EditTextPreference
             android:focusable="true"
             android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
