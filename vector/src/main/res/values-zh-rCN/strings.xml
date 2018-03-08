@@ -11,7 +11,7 @@
     <string name="forward">转发</string>
     <string name="action_voice_call">音频通话</string>
     <string name="action_video_call">视频通话</string>
-    <string name="action_mark_all_as_read">将所有标记为已读</string>
+    <string name="action_mark_all_as_read">将所有消息标记为已读</string>
     <string name="action_quick_reply">快速回复</string>
     <string name="copied_to_clipboard">复制到剪贴板</string>
     <string name="send_bug_report_include_logs">发送日志</string>
@@ -33,7 +33,7 @@
     <string name="room_info_room_topic">聊天室主题</string>
 
     <string name="call_ended">通话结束</string>
-    <string name="media_picker_both_capture_title">拍照片或视频</string>
+    <string name="media_picker_both_capture_title">拍照或录视频</string>
     <string name="media_picker_cannot_record_video">无法录制视频</string>
 
     <string name="media_slider_saved">已保存</string>
@@ -105,7 +105,7 @@
     <string name="auth_missing_password">缺少密码</string>
     <string name="auth_invalid_email">这看起来不是一个合法的电子邮件地址</string>
     <string name="auth_invalid_phone">这看起来不是一个合法的电话号码</string>
-    <string name="auth_email_already_defined">这个邮箱地址已经被定义。</string>
+    <string name="auth_email_already_defined">这个邮箱地址已经被占用。</string>
     <string name="auth_missing_email">缺少电子邮件地址</string>
     <string name="auth_missing_phone">缺少电话号码</string>
     <string name="auth_missing_email_or_phone">缺少电子邮件地址或电话号码</string>
@@ -200,7 +200,7 @@
     <string name="missing_permissions_title_to_start_conf_call">无法开始通话</string>
     <string name="device_information">设备信息</string>
     <string name="room_no_conference_call_in_encrypted_rooms">会议通话在加密的聊天室中不被支持</string>
-    <string name="action_sign_out_confirmation">为了安全，登出会删掉任意端对端加密密钥，导致在你登录回来之后，之前的加密的聊天历史无法阅读。
+    <string name="action_sign_out_confirmation">为了安全，登出会删掉所有端对端加密密钥，使你在登录回来之后无法阅读之前的加密的聊天记录。
 在登出之前，请选择导出来备份它们。</string>
     <string name="action_open">打开</string>
     <string name="action_close">关闭</string>
@@ -231,15 +231,15 @@
     <string name="auth_reset_password_error_unauthorized">邮箱验证失败：请确保你已点击邮件中的链接</string>
     <string name="auth_reset_password_success_message">你的密码已被重置。
 
-你已经从所有设备登出并且不再接受推送通知。要重新启用通知，请重新在每个设备上登录。</string>
+你已经从所有设备登出且不再接受推送通知。要重新启用通知，请在每个设备上重新登录。</string>
 
     <string name="compression_opt_list_original">原始</string>
     <string name="attachment_remaining_time_seconds">%d 秒</string>
     <string name="call_connected">通话已连接</string>
     <string name="call_connecting">通话正在连接…</string>
-    <string name="permissions_rationale_msg_storage">Riot 需要访问你的图片和视频库的权限以发送和保存附件。
+    <string name="permissions_rationale_msg_storage">Riot 需要授权访问你的图片和视频库以发送和保存附件。
 
-请在接下来的弹出窗口中授权允许访问，以便能从你的手机发送文件。</string>
+请在接下来的弹出窗口中授权允许访问，以从你的手机发送文件。</string>
     <string name="permissions_rationale_msg_camera">Rio t需要访问你相机的权限来拍照和进行视频通话。</string>
     <string name="permissions_rationale_msg_record_audio">Riot 需要访问你麦克风的权限来进行音频通话。</string>
     <string name="room_preview_try_join_an_unknown_room">你正在尝试访问 %s。你要加入以参与讨论吗？</string>
@@ -352,9 +352,9 @@
     <string name="room_settings_room_access_rules_pref_dialog_title">谁可以访问这个聊天室？</string>
 
     <string name="room_settings_read_history_entry_anyone">任何人</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">只有成员（从选择这个选项的时间开始）</string>
-    <string name="room_settings_read_history_entry_members_only_invited">只有成员（从他们被邀请开始）</string>
-    <string name="room_settings_read_history_entry_members_only_joined">只有成员（从他们加入开始）</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">仅成员（从选中此选项之时起）</string>
+    <string name="room_settings_read_history_entry_members_only_invited">仅成员（从其被邀请起）</string>
+    <string name="room_settings_read_history_entry_members_only_joined">仅成员（从其加入起）</string>
 
     <string name="room_settings_room_access_entry_only_invited">只有被邀请的人</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">除游客之外任何知道这个聊天室链接的人</string>
@@ -365,18 +365,18 @@
     <string name="room_settings_category_advanced_title">高级</string>
     <string name="room_settings_room_internal_id">聊天室的内部 ID</string>
     <string name="room_settings_addresses_pref_title">地址</string>
-    <string name="room_settings_labs_warning_message">这些是可能以意外的方式坏掉的实验性的特性。请谨慎使用。</string>
+    <string name="room_settings_labs_warning_message">这些是可能意外出错的实验特性。请谨慎使用。</string>
     <string name="room_settings_labs_end_to_end">端对端加密</string>
-    <string name="room_settings_labs_end_to_end_warnings">你需要登出来启用加密。</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">在这个聊天室永不从这个设备发送加密消息到未验证的设备。</string>
+    <string name="room_settings_labs_end_to_end_warnings">你需要登出以启用加密。</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">在该聊天室永不从此设备发送加密消息到未验证的设备。</string>
 
     <string name="room_settings_addresses_no_local_addresses">这个聊天室没有本地地址</string>
     <string name="room_settings_addresses_add_new_address">新地址（如 #foo:matrix.org）</string>
 
     <string name="room_settings_addresses_invalid_format_dialog_title">别名格式无效</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">”%s“ 不是有效的别名格式</string>
-    <string name="room_settings_addresses_e2e_enabled">加密在这个聊天室已启用。</string>
-    <string name="room_settings_addresses_e2e_disabled">加密在这个聊天室已禁用。</string>
+    <string name="room_settings_addresses_e2e_enabled">这个聊天室已启用加密。</string>
+    <string name="room_settings_addresses_e2e_disabled">这个聊天室已禁用加密。</string>
     <string name="room_settings_addresses_e2e_encryption_warning">启用加密
 （警告：无法再禁用！）</string>
     <string name="room_settings_addresses_e2e_prompt_title">警告！</string>
@@ -413,7 +413,7 @@
     <string name="rename">重命名</string>
     <string name="report_content">报告内容</string>
     <string name="active_call">激活的通话</string>
-    <string name="ongoing_conference_call">" 正在进行的会议通话。以语音或视频的形式加入。"</string>
+    <string name="ongoing_conference_call">" 有会议通话正在进行。以语音或视频的形式加入。"</string>
     <string name="ongoing_conference_call_voice">语音</string>
     <string name="missing_permissions_to_start_conf_call">在这个聊天室里你需要权限来邀请开始一个会议</string>
     <string name="send_anyway">总是发送</string>
@@ -421,13 +421,13 @@
     <string name="send_bug_report_logs_description">为了诊断问题，这个客户端的日志会随这个 bug 报告发送。如果你只想发送上面的文字，请取消选择：</string>
     <string name="send_bug_report_sent">bug 报告已经成功发送</string>
     <string name="send_bug_report_failed">bug 报告发送失败（%s）</string>
-    <string name="read_receipt">阅读</string>
+    <string name="read_receipt">已读标签</string>
 
     <string name="auth_invalid_token">无效令牌</string>
-    <string name="auth_threepid_warning_message">API 存在之前同时用电子邮箱和手机号注册还不被支持。只有电话号码会被考虑。
+    <string name="auth_threepid_warning_message">API 存在之前不支持同时用电子邮箱和手机号注册。仅电话号码会被考虑。
 
 你可以在设置中把你的电子邮箱加入到你的简介中。</string>
-    <string name="auth_username_in_use">用户名已经占用</string>
+    <string name="auth_username_in_use">用户名已被占用</string>
     <string name="login_error_unable_register_mail_ownership">无法注册：电子邮箱所有权失败</string>
     <string name="login_error_unknown_token">无法识别指定的访问令牌</string>
     <string name="login_error_bad_json">有缺陷的 JSON</string>
@@ -436,9 +436,9 @@
     <string name="attachment_remaining_time_minutes">%1$d分 %2$d秒</string>
 
     <string name="call_ring">正在呼叫…</string>
-    <string name="incoming_call">传入的通话</string>
-    <string name="incoming_video_call">传入的视频通话</string>
-    <string name="incoming_voice_call">传入的语音通话</string>
+    <string name="incoming_call">呼入通话</string>
+    <string name="incoming_video_call">呼入视频通话</string>
+    <string name="incoming_voice_call">呼入语音通话</string>
     <string name="call_in_progress">呼叫进行中</string>
 
     <string name="call_error_user_not_responding">远端接听失败。</string>
@@ -453,7 +453,7 @@
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 请在之后的弹出窗口授权允许访问，以便进行通话。</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot 需要访问你相机和麦克风的权限来进行视频通话。
+    <string name="permissions_rationale_msg_camera_and_audio">Riot 需要授权访问你相机和麦克风以进行视频通话。
 
 请在之后的弹出窗口中授权允许访问，以便进行通话。</string>
     <string name="permissions_action_not_performed_missing_permissions">对不起…因为缺少权限，操作已取消</string>
@@ -462,7 +462,7 @@
     <string name="remove">移除</string>
     <string name="room_preview_unlinked_email_warning">此邀请已发送至 %s，但没和这个账户关联。
 你可能希望用一个不同的账户登录，或者把这个电子邮箱加入到这个账户。</string>
-    <string name="room_preview_room_interactions_disabled">这是此聊天室的一个预览。聊天室交互已禁用。</string>
+    <string name="room_preview_room_interactions_disabled">这是此聊天室的预览。聊天室交互已禁用。</string>
 
     <string name="room_e2e_alert_message">端对端加密依然在测试阶段，可能不可靠。
 
@@ -477,7 +477,8 @@
 你确定吗？</string>
 
     <string name="ssl_cert_not_trust">这可能意味着有人正恶意地拦截你的流量，或者你的手机不信任远程服务器提供的证书。</string>
-    <string name="ssl_cert_new_account_expl">如果服务器管理员说这是预料之中的，请确保以下的指纹和他们提供的指纹匹配。</string>
+
+    <string name="ssl_cert_new_account_expl">如果服务器管理员说此非意外，请确保以下的指纹和他们提供的相匹配。</string>
     <string name="room_event_action_report_prompt_reason">报告这个内容的原因</string>
     <string name="room_recents_directory">目录</string>
     <string name="room_recents_invites">邀请</string>
@@ -530,15 +531,15 @@
     <string name="room_settings_copy_room_id">复制聊天室 ID</string>
     <string name="room_settings_copy_room_address">复制聊天室地址</string>
 
-    <string name="room_settings_addresses_e2e_prompt_message">端对端加密依然在测试阶段，可能不可靠。
+    <string name="room_settings_addresses_e2e_prompt_message">端对端加密仍在测试中，可能不可靠。
 
-你不应该相信它来保护你的数据。
+你不应相信它能保护你的数据。
 
 将无法解密设备加入聊天室之前的历史记录。
 
-一旦加密对一个聊天室启用了，它不能再关闭（对于现在来说）。
+目前一旦启用了一个聊天室的加密，便无法再关闭。
 
-加密消息对还没有实现加密的客户端将会不可见。</string>
+加密消息将对还没有实现加密的客户端不可见。</string>
 
     <string name="encryption_information_claimed_ed25519_fingerprint_key">声称的 Ed25519 指纹密钥</string>
     <string name="encryption_information_blocked">已列入黑名单</string>
@@ -550,7 +551,7 @@
 
     <string name="e2e_enabling_on_app_update">Riot 现在支持端对端加密，但你需要再次登录来启用它。
 
-你可以现在或稍后从应用设置中做这件事。</string>
+你可以现在或稍后从应用设置中启用。</string>
 
     <string name="ok">确认</string>
     <string name="redact">撤回</string>
@@ -568,11 +569,12 @@
 
 允许 Riot 访问您的联系人？</string>
 
-    <string name="room_participants_idle">闲</string>
+    <string name="room_participants_idle">闲置</string>
     <string name="room_participants_now">现在</string>
     <string name="room_participants_ago">以前</string>
 
     <string name="people_search_filter_text">仅限 Matrix 用户</string>
+
     <string name="ssl_unexpected_existing_expl">您的手机曾信任的证书已被更改。这*非常反常*。建议您*不要接受*此新证书。</string>
     <string name="ssl_expected_existing_expl">证书已从以前受信任的一个更改为不受信任的证书。服务器可能已更新其证书。联系服务器管理员以获取预期的指纹。</string>
     <string name="ssl_only_accept">仅在服务器管理员已经发布了与上述相匹配指纹的情况下接受该证书。</string>
@@ -632,7 +634,7 @@
     <string name="matrix_only_filter">只有 Matrix 联系人</string>
     <string name="no_conversation_placeholder">没有对话</string>
     <string name="no_result_placeholder">没有结果</string>
-    <string name="no_contact_access_placeholder">您没有允许 Riot 访问本地联系人的权限</string>
+    <string name="no_contact_access_placeholder">您没有授予 Riot 访问本地联系人的权限</string>
 
     <!-- Rooms fragment -->
     <string name="rooms_header">聊天室</string>
@@ -783,13 +785,15 @@
     <string name="start_voice_call_prompt_msg">你确定要开始一个音频通话吗？</string>
     <string name="start_video_call_prompt_msg">你确定要开始一个视频通话吗？</string>
 
-    <string name="room_participants_kick_prompt_msg">你确定要把这个用户从这个聊天中移除吗？</string>
-    <string name="room_participants_ban_prompt_msg">你确定要把这个用户从这个聊天中封禁吗？</string>
+    <string name="room_participants_kick_prompt_msg">你确定要将这个用户踢出这个聊天吗？</string>
+    <string name="room_participants_ban_prompt_msg">你确定要在这个聊天中封禁这个用户吗？</string>
 
-    <string name="room_settings_all_messages">全部消息</string>
+    <string name="room_settings_all_messages_noisy">所有消息（提醒并振铃）</string>
+    <string name="room_settings_all_messages">所有消息</string>
     <string name="room_settings_mention_only">只限提及</string>
-    <string name="room_settings_mute">静音</string>
+    <string name="room_settings_mute">从不提醒</string>
     <string name="room_settings_add_homescreen_shortcut">添加主屏幕快捷方式</string>
+
 
     <string name="settings_inline_url_preview">默认启用文内 URL 预览</string>
     <string name="settings_vibrate_on_mention">提及他人时震动</string>
