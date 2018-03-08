@@ -98,8 +98,8 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                     roomId = data.get("room_id");
                 }
 
-                if (data.containsKey("id")) {
-                    eventId = data.get("id");
+                if (data.containsKey("event_id")) {
+                    eventId = data.get("event_id");
                 }
             }
 
@@ -178,6 +178,5 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                 onMessageReceivedInternal(data);
             }
         });
-        onMessageReceivedInternal(data);
     }
 }
