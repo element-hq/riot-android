@@ -699,7 +699,7 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="settings_hide_read_receipts">Leesbewijzen verbergen</string>
     <string name="settings_dont_send_typings_notifs">Geen typ notificaties versturen</string>
     <string name="settings_always_show_timestamps">Altijd tijden van berichten weergeven</string>
-    <string name="settings_disable_markdown">Tekst formattering uitzetten</string>
+    <string name="settings_disable_markdown">Tekst formattering uitzetten wanneer je berichten verstuurd</string>
     <string name="settings_data_save_mode">Data bespaarmodus</string>
 
     <string name="settings_user_interface">Gebruikersinterface</string>
@@ -807,4 +807,87 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="groups_header">Gemeenschappen</string>
     <string name="no_group_placeholder">Geen groepen</string>
 
+    <string name="send_bug_report_rage_shake">Schudden om een fout te rapporteren</string>
+
+    <string name="start_new_chat_prompt_msg">Weet je zeker dat je een nieuwe chat met %s wilt starten?</string>
+    <string name="start_voice_call_prompt_msg">Weet je zeker dat je een spraakoproep wilt starten?</string>
+    <string name="start_video_call_prompt_msg">Weet je zeker dat je een videogesprek wilt starten?</string>
+
+    <string name="groups_list">Groepenlijst</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">1 lidmaatschap verandering</item>
+	<item quantity="other">%d lidmaatschap veranderingen</item>
+</plurals>
+
+    <string name="list_members">Ledenlijst</string>
+    <string name="open_chat_header">Opschrift openen</string>
+    <string name="room_sync_in_progress">Synchroniseren...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 actief lid</item>
+	<item quantity="other">%d actieve leden</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 lid</item>
+	<item quantity="other">%d leden</item>
+</plurals>
+    <string name="room_participants_kick_prompt_msg">Weet je zeker dat je deze gebruiker uit het gesprek wilt verwijderen?</string>
+    <string name="room_participants_ban_prompt_msg">Weet je zeker dat je deze gebruiker uit dit gesprek wilt verbannen?</string>
+
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 nieuw bericht</item>
+	<item quantity="other">%d nieuwe berichten</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s en %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 andere</item>
+	<item quantity="other">%d anderen</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 ruimte</item>
+	<item quantity="other">%d ruimtes</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s ruimte gevonden voor %2$s</item>
+	<item quantity="other">%1$s ruimtes gevonden voor %2$s</item>
+</plurals>
+    <string name="room_settings_all_messages_noisy">Alle berichten (luid)</string>
+    <string name="room_settings_all_messages">Alle berichten</string>
+    <string name="room_settings_mention_only">Alleen vermeldingen</string>
+    <string name="room_settings_mute">Dempen</string>
+    <string name="room_settings_add_homescreen_shortcut">Thuisscherm snelkoppeling toevoegen</string>
+
+    <string name="settings_inline_url_preview">Inline URL voorvertoning standaard aanzetten</string>
+    <string name="settings_vibrate_on_mention">Trillen bij vermeldingen</string>
+
+    <string name="settings_flair">Badge</string>
+
+    <string name="room_settings_room_notifications_title">Notificaties</string>
+    <string name="room_settings_no_flair">" Deze ruimte geeft geen badges voor gemeenschappen weer"</string>
+    <string name="room_settings_add_new_group">Nieuw gemeenschaps-ID (bv. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Ongeldig gemeenschaps-ID</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' is niet een geldig gemeenschaps-ID</string>
+
+
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 ongelezen vermeld bericht</item>
+	<item quantity="other">%d ongelezen vermelde berichten</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 ruimte</item>
+	<item quantity="other">%d ruimtes</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">1 actieve widget</item>
+	<item quantity="other">%d actieve widgets</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="create">Creëer</string>
+    <string name="create_community">Gemeenschap Aanmaken</string>
+    <string name="community_name">Gemeenschapsnaam</string>
     </resources>
