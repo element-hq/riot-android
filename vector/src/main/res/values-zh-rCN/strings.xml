@@ -792,7 +792,7 @@
     <string name="room_settings_add_homescreen_shortcut">添加主屏幕快捷方式</string>
 
     <string name="settings_inline_url_preview">默认启用文内 URL 预览</string>
-    <string name="settings_vibrate_on_mention">提及时震动</string>
+    <string name="settings_vibrate_on_mention">提及他人时震动</string>
 
     <string name="room_settings_room_notifications_title">通知</string>
     <string name="create">创建</string>

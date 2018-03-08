@@ -268,7 +268,7 @@
     <string name="auth_reset_password_message">За да възстановите Вашата парола, въведете имейл адреса, свързан с профила Ви:</string>
     <string name="auth_reset_password_missing_email">Имейл адресът, свързан с профила Ви, трябва да бъде въведен.</string>
     <string name="auth_reset_password_missing_password">Трябва да бъде въведена нова парола.</string>
-    <string name="auth_reset_password_email_validation_message">Имейл беше изпратен на %%@. След като проследите връзката, която съдържа, натиснете по-долу.</string>
+    <string name="auth_reset_password_email_validation_message">Имейл беше изпратен на %%\\@. След като проследите връзката, която съдържа, натиснете по-долу.</string>
     <string name="auth_reset_password_error_unauthorized">Неуспешно потвърждаване на имейл адреса: уверете се, че сте кликнали върху връзката в имейла</string>
     <string name="auth_reset_password_success_message">Вашата парола беше възстановена.
 
