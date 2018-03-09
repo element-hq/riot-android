@@ -490,4 +490,91 @@
     <string name="settings_hide_join_leave_messages">Скриване на съобщения за присъединяване/напускане (не засяга покани/изгонвания/блокирания)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Скриване на информацията за промените на аватара и името</string>
     <string name="settings_disable_markdown">Изключи markdown при изпращане</string>
+    <string name="settings_analytics">Статистика</string>
+    <string name="settings_opt_out_of_analytics">Отказване от събиране на статистически данни</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot събира анонимни статистики, за да ни позволи да подобрим приложението.</string>
+
+    <string name="devices_details_dialog_title">Информация за устройството</string>
+    <string name="devices_details_id_title">ID</string>
+    <string name="devices_details_name_title">Име</string>
+    <string name="devices_details_device_name">Име на устройството</string>
+    <string name="devices_details_last_seen_title">Последно видян</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_details_time_format">HH:mm:ss</string>
+    <string name="devices_delete_dialog_text">Тази операция изискра допълнителна автентикация.
+За да продължите, моля, въведете Вашата парола.</string>
+    <string name="devices_delete_dialog_title">Автентикация</string>
+    <string name="devices_delete_pswd">Парола:</string>
+    <string name="devices_delete_submit_button_label">Изпрати</string>
+
+    <string name="settings_logged_in">Влезли сте като</string>
+    <string name="settings_home_server">Home сървър</string>
+    <string name="settings_identity_server">Сървър за самоличност</string>
+
+    <string name="settings_user_interface">Потребителски интерфейс</string>
+    <string name="settings_interface_language">Език на интерфейса</string>
+    <string name="settings_select_language">Избор на език</string>
+
+    <string name="account_email_validation_title">Очакване на потвърждение</string>
+    <string name="account_email_validation_message">Моля, проверете своя имейл адрес и натиснете връзката, която той съдържа. След като направите това, натиснете продължи.</string>
+    <string name="account_email_validation_error">Неуспешно потвърждение на имейл адрес. Моля, проверете своя имейл адрес и натиснете връзката, която той съдържа. След като направите това, натиснете продължи</string>
+    <string name="account_email_already_used_error">Този имейл адрес е вече зает</string>
+    <string name="account_email_not_found_error">Неуспешно изпращане на имейл: Този имейл адрес не беше открит</string>
+    <string name="account_phone_number_already_used_error">Този телефонен номер е вече зает</string>
+
+    <string name="settings_change_password">Смяна на парола</string>
+    <string name="settings_old_password">стара парола</string>
+    <string name="settings_new_password">нова парола</string>
+    <string name="settings_confirm_password">потвърди парола</string>
+    <string name="settings_fail_to_update_password">Неуспешно обновяване на парола</string>
+    <string name="settings_password_updated">Вашата парола беше обновена</string>
+    <string name="settings_unignore_user">Покажи всички съобщения от %s?</string>
+
+    <string name="settings_delete_threepid_confirmation">Сигурни ли сте, че искате да премахнете %1$s %2$s?</string>
+
+    <string name="settings_select_country">Избор на държава</string>
+
+    <string name="settings_phone_number_country_label">Държава</string>
+    <string name="settings_phone_number_country_error">Моля, изберете държава</string>
+    <string name="settings_phone_number_label">Телефонен номер</string>
+    <string name="settings_phone_number_error">Невалиден телефонен номер за избраната държава</string>
+    <string name="settings_phone_number_verification_instruction">Изпратихме Ви SMS с код за активиране. Моля, въведете този код по-долу.</string>
+    <string name="settings_phone_number_verification_error_empty_code">Въведете код за активаране</string>
+    <string name="settings_phone_number_verification_error">Грешка по време на проверката на телефонния Ви номер</string>
+    <string name="settings_phone_number_code">Код</string>
+
+
+    <string name="settings_flair">Значка</string>
+
+    <string name="media_saving_period_3_days">3 дни</string>
+    <string name="media_saving_period_1_week">1 седмица</string>
+    <string name="media_saving_period_1_month">1 месец</string>
+    <string name="media_saving_period_forever">Постоянно</string>
+
+    <string name="room_settings_room_photo">Снимка на стаята</string>
+    <string name="room_settings_room_name">Име на стаята</string>
+    <string name="room_settings_topic">Тема</string>
+    <string name="room_settings_room_tag">Етикет на стаята</string>
+    <string name="room_settings_tag_pref_dialog_title">Етикет:</string>
+
+    <string name="room_settings_tag_pref_entry_favourite">Любим</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Нисък приоритет</string>
+    <string name="room_settings_tag_pref_entry_none">няма</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">любим</string>
+    <string name="room_settings_tag_pref_entry_value_low_priority">нисък</string>
+    <string name="room_settings_tag_pref_entry_value_none">няма</string>
+
+    <string name="room_settings_category_access_visibility_title">Достъп и видимост</string>
+    <string name="room_settings_directory_visibility">Включване в директорията със стаи</string>
+    <string name="room_settings_room_notifications_title">Известия</string>
+    <string name="room_settings_room_access_rules_pref_title">Достъп до стая</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Кой може да чете историята?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Кой има достъп до тази стая?</string>
+
+    <string name="room_settings_read_history_entry_anyone">Всеки</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Само членове (от момента на избиране на тази опция)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Само членове (от момента, в който те са поканени)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Само членове (от момента, в който са се присъединили)</string>
+
+    <string name="room_settings_room_access_warning">За да дадете линк към стаята, тя трябва да има адрес.</string>
     </resources>
