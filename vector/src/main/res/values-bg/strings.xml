@@ -577,4 +577,14 @@
     <string name="room_settings_read_history_entry_members_only_joined">Само членове (от момента, в който са се присъединили)</string>
 
     <string name="room_settings_room_access_warning">За да дадете линк към стаята, тя трябва да има адрес.</string>
+    <string name="room_settings_room_access_entry_only_invited">Само хора, които са били поканени</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Всеки, който знае адреса на стаята (освен гости)</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Всеки, който знае адреса на стаята (включително гости)</string>
+
+    <string name="room_settings_banned_users_title">Блокирани потребители</string>
+
+    <string name="room_settings_category_advanced_title">Разширени</string>
+    <string name="room_settings_addresses_pref_title">Адреси</string>
+    <string name="room_settings_labs_pref_title">Експерименти</string>
+    <string name="room_settings_labs_warning_message">Това са експериментални функции , които могат да се счупят по неочаквани начини. Внимавайте при използване.</string>
     </resources>
