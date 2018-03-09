@@ -120,6 +120,7 @@ import im.vector.util.CallsManager;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
+import im.vector.util.RoomUtils;
 import im.vector.util.SlashComandsParser;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorMarkdownParser;
@@ -3521,7 +3522,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 String participantUserId;
 
                 // test if room is already seen as "direct message"
-                if (mSession.getDataHandler().getDirectChatRoomIdsList().indexOf(sRoomPreviewData.getRoomId()) < 0) {
+                if (!RoomUtils.isDirectChat(mSession, sRoomPreviewData.getRoomId())) {
                     for (RoomMember member : members) {
                         // search for the second participant
                         if (!member.getUserId().equals(myUserId)) {

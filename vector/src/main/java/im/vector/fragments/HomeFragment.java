@@ -275,7 +275,6 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
             return;
         }
         final Collection<Room> roomCollection = mSession.getDataHandler().getStore().getRooms();
-        final List<String> directChatIds = mSession.getDataHandler().getDirectChatRoomIdsList();
 
         for (Room room : roomCollection) {
             if (!room.isConferenceUserRoom() && !room.isInvited() && !room.isDirectChatInvitation()) {
@@ -294,7 +293,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
                         favourites.add(room);
                     } else if (tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
                         lowPriorities.add(room);
-                    } else if (directChatIds.contains(room.getRoomId())) {
+                    } else if (RoomUtils.isDirectChat(mSession, room.getRoomId())) {
                         directChats.add(room);
                     } else {
                         otherRooms.add(room);

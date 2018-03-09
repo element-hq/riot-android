@@ -171,10 +171,12 @@ class VectorMessagesAdapterHelper {
         if (null != senderTextView) {
             Event event = row.getEvent();
 
+            // Hide the group flair by default
+            groupFlairView.setVisibility(View.GONE);
+            groupFlairView.setTag(null);
+
             if (isMergedView) {
                 senderTextView.setVisibility(View.GONE);
-                groupFlairView.setVisibility(View.GONE);
-                groupFlairView.setTag(null);
             } else {
                 String eventType = event.getType();
 
@@ -188,8 +190,6 @@ class VectorMessagesAdapterHelper {
                         Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType) ||
                         Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
                     senderTextView.setVisibility(View.GONE);
-                    groupFlairView.setVisibility(View.GONE);
-                    groupFlairView.setTag(null);
                 } else {
                     senderTextView.setVisibility(View.VISIBLE);
                     senderTextView.setText(getUserDisplayName(event.getSender(), row.getRoomState()));
