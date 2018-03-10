@@ -17,6 +17,7 @@
 
 package im.vector.gcm;
 
+import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -33,6 +34,7 @@ import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.services.EventStreamService;
+import im.vector.util.VectorUtils;
 
 /**
  * Class implementing GcmListenerService.
@@ -118,9 +120,21 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                 EventStreamService eventStreamService = EventStreamService.getInstance();
                 Event event = parseEvent(data);
 
+                String room_name = data.get("room_name");
+                if ((null == room_name) && (null != roomId)) {
+                    MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
+
+                    if ((null != session) && session.getDataHandler().getStore().isReady()) {
+                        Room room = session.getDataHandler().getStore().getRoom(roomId);
+                        if (null != room) {
+                            room_name = VectorUtils.getRoomDisplayName(MatrixGcmListenerService.this, session, room);
+                        }
+                    }
+                }
+
                 Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled with eventStreamService " + eventStreamService);
 
-                EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, data.get("room_name"), data.get("sender_display_name"), unreadCount);
+                EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, room_name, data.get("sender_display_name"), unreadCount);
                 return;
             }
 

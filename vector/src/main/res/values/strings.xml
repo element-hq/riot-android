@@ -910,9 +910,6 @@
     <string name="group_rooms">%d rooms</string>
     <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
 
-    <string name="one_new_message">1 new message</string>
-    <string name="new_messages">%d new messages</string>
-
     <string name="has_been_kicked">You have been kicked from %1$s by %2$s</string>
     <string name="has_been_banned">You have been banned from %1$s by %2$s</string>
     <string name="reason_colon">Reason: %1$s</string>

@@ -164,6 +164,8 @@ public class EventStreamService extends Service {
     // get the text to display when the background sync is disabled
     private static final List<CharSequence> mBackgroundNotificationStrings = new ArrayList<>();
     private static final Set<String> mBackgroundNotificationEventIds = new HashSet<>();
+    private static String mLastBackgroundNotificationRoomId = null;
+    private static int mLastBackgroundNotificationUnreadCount = 0;
 
     /**
      * call in progress (foreground notification)
@@ -1210,20 +1212,29 @@ public class EventStreamService extends Service {
 
         if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
             mBackgroundNotificationEventIds.add(event.eventId);
-            String header = "";
+            String header = (TextUtils.isEmpty(roomName) ? event.roomId : roomName) + ": ";
+            String sender_name = (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName);
             String text;
 
-            if (null == event.content) {
-                if (1 == mBackgroundNotificationEventIds.size()) {
-                    text = context.getString(R.string.one_new_message);
-                } else {
-                    text = context.getString(R.string.new_messages, mBackgroundNotificationEventIds.size());
-                }
-                mBackgroundNotificationStrings.clear();
-            } else {
-                header = (TextUtils.isEmpty(roomName) ? event.roomId : roomName) + ": " +
-                        (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName) + " ";
+            if (!TextUtils.isEmpty(sender_name) && !sender_name.equalsIgnoreCase(roomName)) {
+                header += sender_name + " ";
+            }
 
+            if (null == event.content) {
+                if (null != event.roomId) {
+                    // Check whether the previous notification (if any) was from the same room
+                    if (null != mLastBackgroundNotificationRoomId && mLastBackgroundNotificationRoomId.equals(event.roomId)) {
+                        // Remove the last notified line to update it
+                        mBackgroundNotificationStrings.remove(0);
+                    } else {
+                        // Reset the current count
+                        mLastBackgroundNotificationUnreadCount = 0;
+                        mLastBackgroundNotificationRoomId = event.roomId;
+                    }
+                }
+                mLastBackgroundNotificationUnreadCount++;
+                text = context.getResources().getQuantityString(R.plurals.room_new_messages_notification, mLastBackgroundNotificationUnreadCount, mLastBackgroundNotificationUnreadCount);
+            } else {
                 if (event.isEncrypted()) {
                     text = context.getString(R.string.encrypted_message);
                 } else {
@@ -1250,6 +1261,8 @@ public class EventStreamService extends Service {
             }
         } else if (0 == unreadMessagesCount) {
             mBackgroundNotificationStrings.clear();
+            mLastBackgroundNotificationUnreadCount = 0;
+            mLastBackgroundNotificationRoomId = null;
             nm.cancel(NOTIFICATION_ID);
             mNotificationState = NotificationState.NONE;
         }
@@ -1283,6 +1296,8 @@ public class EventStreamService extends Service {
     private void refreshMessagesNotification() {
         // disabled background sync management
         mBackgroundNotificationStrings.clear();
+        mLastBackgroundNotificationUnreadCount = 0;
+        mLastBackgroundNotificationRoomId = null;
         mBackgroundNotificationEventIds.clear();
 
         final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);

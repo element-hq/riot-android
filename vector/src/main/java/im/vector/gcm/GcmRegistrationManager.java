@@ -1165,7 +1165,7 @@ public final class GcmRegistrationManager {
      * @return true if the non encrypted content may be sent through Google services servers
      */
     public boolean isContentSendingAllowed() {
-        return getGcmSharedPreferences().getBoolean(PREFS_ALLOW_SENDING_CONTENT_TO_GCM, false);
+        return getGcmSharedPreferences().getBoolean(PREFS_ALLOW_SENDING_CONTENT_TO_GCM, true);
     }
 
     /**

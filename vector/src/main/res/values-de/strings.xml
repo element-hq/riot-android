@@ -882,9 +882,6 @@ Unbekannte Geräte:</string>
     <string name="group_rooms">%d Räume</string>
     <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
 
-    <string name="one_new_message">1 neue Nachricht</string>
-    <string name="new_messages">%d neue Nachrichten</string>
-
     <string name="has_been_kicked">Du wurdest von %2$s aus %1$s gekickt</string>
     <string name="has_been_banned">Du wurdest von %2$s aus %1$s verbannt</string>
     <string name="reason_colon">Grund: %1$s</string>

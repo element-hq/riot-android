@@ -880,8 +880,6 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <string name="group_one_room">1 sala</string>
     <string name="group_rooms">%d salas</string>
-    <string name="one_new_message">1 nuevo mensaje</string>
-    <string name="new_messages">%d nuevos mensajes</string>
 
     <string name="has_been_kicked">Ha sido echado de la sala %1$s por %2$s</string>
     <string name="has_been_banned">Ha sido vetado en %1$s por %2$s</string>
