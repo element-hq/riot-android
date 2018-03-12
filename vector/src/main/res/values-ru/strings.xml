@@ -890,9 +890,6 @@ Email также позволит вам при необходимости во�
     <string name="group_rooms">%d комнат</string>
     <string name="group_no_long_description">Администратор сообщества не предоставил подробного описания этого сообщества.</string>
 
-    <string name="one_new_message">1 новое сообщение</string>
-    <string name="new_messages">%d новых сообщений</string>
-
     <string name="has_been_kicked">Вас выгнал %2$s из %1$s</string>
     <string name="has_been_banned">Вас забанил %2$s в %1$s</string>
     <string name="reason_colon">Причина: %1$s</string>

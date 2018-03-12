@@ -836,9 +836,6 @@ Ismeretlen eszközök:</string>
     <string name="group_rooms">%d szoba</string>
     <string name="group_no_long_description">A közösség adminisztrátora nem adott meg hosszú leírást ehhez a közösséghez.</string>
 
-    <string name="one_new_message">1 új üzenet</string>
-    <string name="new_messages">%d új üzenet</string>
-
     <string name="has_been_kicked">Ki lettél rúgva innen: %1$s, %2$s által</string>
     <string name="has_been_banned">Ki lettél tiltva innen: %1$s, %2$s által</string>
     <string name="reason_colon">Ok: %1$s</string>

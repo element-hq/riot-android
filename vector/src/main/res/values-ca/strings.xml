@@ -838,9 +838,6 @@
     <string name="group_rooms">%d sales</string>
     <string name="group_no_long_description">L\'administrador de la comunitat no ha fet una descripció llarga per aquesta comunitat.</string>
 
-    <string name="one_new_message">Un nou missatge</string>
-    <string name="new_messages">%d nous missatges</string>
-
     <string name="has_been_kicked">%2$s l\'ha fet fora de la sala %1$s</string>
     <string name="has_been_banned">%2$s l\'ha expulsat de la sala %1$s</string>
     <string name="reason_colon">Raó: %1$s</string>

@@ -853,9 +853,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="group_rooms">%d salas</string>
     <string name="group_no_long_description">O(A) administrador(a) desta comunidade não definiu uma descrição longa da mesma.</string>
 
-    <string name="one_new_message">1 nova mensagem</string>
-    <string name="new_messages">%d novas mensagens</string>
-
     <string name="has_been_kicked">Você foi excluída/o da sala %1$s por %2$s</string>
     <string name="has_been_banned">Você foi banida/o da sala %1$s por %2$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
