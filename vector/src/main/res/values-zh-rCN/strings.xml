@@ -797,7 +797,11 @@
     <string name="room_settings_room_notifications_title">通知</string>
     <string name="create">创建</string>
     <string name="community_name_hint">例子</string>
-    <string name="new_messages">%d 条新消息</string>
+
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">1 条新消息</item>
+        <item quantity="other">%d 条新消息</item>
+    </plurals>
 
     <string name="rejoin">重新加入</string>
     <string name="forget_room">忘记聊天室</string>
