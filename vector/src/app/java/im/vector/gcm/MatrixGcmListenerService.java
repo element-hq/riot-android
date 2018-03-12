@@ -120,21 +120,21 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                 EventStreamService eventStreamService = EventStreamService.getInstance();
                 Event event = parseEvent(data);
 
-                String room_name = data.get("room_name");
-                if ((null == room_name) && (null != roomId)) {
+                String roomName = data.get("room_name");
+                if ((null == roomName) && (null != roomId)) {
                     MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
 
                     if ((null != session) && session.getDataHandler().getStore().isReady()) {
                         Room room = session.getDataHandler().getStore().getRoom(roomId);
                         if (null != room) {
-                            room_name = VectorUtils.getRoomDisplayName(MatrixGcmListenerService.this, session, room);
+                            roomName = VectorUtils.getRoomDisplayName(MatrixGcmListenerService.this, session, room);
                         }
                     }
                 }
 
                 Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled with eventStreamService " + eventStreamService);
 
-                EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, room_name, data.get("sender_display_name"), unreadCount);
+                EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, roomName, data.get("sender_display_name"), unreadCount);
                 return;
             }
 

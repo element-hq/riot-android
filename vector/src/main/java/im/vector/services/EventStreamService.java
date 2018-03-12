@@ -1212,29 +1212,36 @@ public class EventStreamService extends Service {
 
         if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
             mBackgroundNotificationEventIds.add(event.eventId);
-            String header = (TextUtils.isEmpty(roomName) ? event.roomId : roomName) + ": ";
-            String sender_name = (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName);
+            String header = (TextUtils.isEmpty(roomName) ? "" : roomName + ": ");
             String text;
 
-            if (!TextUtils.isEmpty(sender_name) && !sender_name.equalsIgnoreCase(roomName)) {
-                header += sender_name + " ";
-            }
-
             if (null == event.content) {
-                if (null != event.roomId) {
+                // Check whether the room id is available and a room name has been retrieved
+                if (null != event.roomId && !TextUtils.isEmpty(header)) {
                     // Check whether the previous notification (if any) was from the same room
                     if (null != mLastBackgroundNotificationRoomId && mLastBackgroundNotificationRoomId.equals(event.roomId)) {
-                        // Remove the last notified line to update it
+                        // Remove the last notified line to replace it
                         mBackgroundNotificationStrings.remove(0);
                     } else {
                         // Reset the current count
                         mLastBackgroundNotificationUnreadCount = 0;
                         mLastBackgroundNotificationRoomId = event.roomId;
                     }
+                    mLastBackgroundNotificationUnreadCount++;
+                } else {
+                    // Reset the current notification string, only one notification will be displayed.
+                    mBackgroundNotificationStrings.clear();
+                    // Reset the unread count by considering the size of the event ids array.
+                    mLastBackgroundNotificationUnreadCount = mBackgroundNotificationEventIds.size();
                 }
-                mLastBackgroundNotificationUnreadCount++;
                 text = context.getResources().getQuantityString(R.plurals.room_new_messages_notification, mLastBackgroundNotificationUnreadCount, mLastBackgroundNotificationUnreadCount);
             } else {
+                // Add the potential sender name in the header
+                String senderName = (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName);
+                if (!TextUtils.isEmpty(senderName) && !senderName.equalsIgnoreCase(roomName)) {
+                    header += senderName + " ";
+                }
+
                 if (event.isEncrypted()) {
                     text = context.getString(R.string.encrypted_message);
                 } else {
