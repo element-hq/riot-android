@@ -810,4 +810,6 @@
     <string name="settings_home_display">Начало</string>
     <string name="settings_vibrate_on_mention">Вибрация при споменаване</string>
 
+    <string name="settings_data_save_mode">Режим запазване на данни</string>
+
     </resources>
