@@ -802,4 +802,9 @@
     <string name="settings_turn_screen_on">Включи екрана за 3 секунди</string>
 
     <string name="settings_start_on_boot">Пускане при включване на телефона</string>
+    <string name="settings_background_sync">Фонова синхронизация</string>
+    <string name="settings_enable_background_sync">Включване на фонова синхронизация</string>
+    <string name="settings_set_sync_timeout">Времето за синхронизация изтече</string>
+    <string name="settings_set_sync_delay">Забавяне между две заявки за синхронизация</string>
+    <string name="settings_contacts_app_permission">Разрешение за достъп до контакти</string>
     </resources>
