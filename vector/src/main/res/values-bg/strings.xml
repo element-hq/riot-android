@@ -798,4 +798,8 @@
     <string name="settings_summary_app_info_link">Екран с информация за системата на приложението</string>
     <string name="settings_title_app_info_link">Информация за приложението</string>
 
+    <string name="settings_notification_ringtone">Звук на известията</string>
+    <string name="settings_turn_screen_on">Включи екрана за 3 секунди</string>
+
+    <string name="settings_start_on_boot">Пускане при включване на телефона</string>
     </resources>
