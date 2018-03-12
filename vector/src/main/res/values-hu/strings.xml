@@ -908,4 +908,6 @@ Ismeretlen eszközök:</string>
 
 <string name="receipt_avatar">Visszaigazolási avatar</string>
     <string name="notice_avatar">Észlelés avatar</string>
+    <string name="settings_enable_content_sending">Részletes értesítések megtartása</string>
+    <string name="settings_enable_content_sending_summary">Kapcsold be ezt a lehetőséget ha a részletes értesítésekhez a háttér szinkronizáció ki van kapcsolva. Ehhez az üzenetet titkosítatlanul kell küldeni a Google szolgáltatás szerverein keresztül</string>
     </resources>
