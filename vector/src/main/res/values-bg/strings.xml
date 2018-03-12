@@ -313,9 +313,9 @@
 	<item quantity="other">%d промени в членствата</item>
 </plurals>
 
-    <string name="copied_to_clipboard"/>
-    <string name="call"/>
-    <string name="call_connected"/>
+    <string name="copied_to_clipboard">Копирано в клипборд</string>
+    <string name="call">Повикване</string>
+    <string name="call_connected">Свързано повикване</string>
     <string name="call_error_user_not_responding">Отсрещната страна не успя да отговори на повикването.</string>
     <string name="call_error_ice_failed">Неуспешна връзка с медийното устройство</string>
     <string name="settings_clear_medias_cache">Изчисти кеша за медия</string>
@@ -587,4 +587,215 @@
     <string name="room_settings_addresses_pref_title">Адреси</string>
     <string name="room_settings_labs_pref_title">Експерименти</string>
     <string name="room_settings_labs_warning_message">Това са експериментални функции , които могат да се счупят по неочаквани начини. Внимавайте при използване.</string>
+    <string name="room_settings_labs_end_to_end">Шифроване от край до край</string>
+    <string name="room_settings_labs_end_to_end_is_active">Шифроване от край до край е включено</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Шифроване само за потвърдени устройства</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Никога не изпращай шифровани съобщения от това устройство в тази стая до непотвърдени устройства.</string>
+
+    <string name="room_settings_addresses_no_local_addresses">Тази стая няма локални адреси</string>
+    <string name="room_settings_addresses_add_new_address">Нов адрес (напр. #foo:matrix.org)</string>
+
+    <string name="room_settings_no_flair">" Тази стая не показва значка за нито една общност"</string>
+    <string name="room_settings_add_new_group">Нов ID на общност (напр. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Невалиден ID на общност</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' е невалиден ID на общност</string>
+
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">Невалиден формат на псевдонима</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' не е валиден формат на псевдоним</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Няма зададен основен адрес. Адресът по подразбиране за тази стая ще бъде избран на случаен принцип</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Предупреждение за основен адрес</string>
+
+    <string name="room_settings_set_main_address">Задай като основен адрес</string>
+    <string name="room_settings_unset_main_address">Премахни задаването като основен адрес</string>
+    <string name="room_settings_copy_room_id">Копирай ID на стаята</string>
+    <string name="room_settings_copy_room_address">Копирай адреса на стаята</string>
+
+    <string name="room_settings_addresses_e2e_enabled">Шифроването е включено в тази стая.</string>
+    <string name="room_settings_addresses_e2e_disabled">Шифроването е изключено в тази стая.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Включване на шифроване 
+(не може да се изключи в последствие!)</string>
+    <string name="room_settings_addresses_e2e_prompt_title">Внимание!</string>
+    <string name="room_settings_addresses_e2e_prompt_message">Шифроване от край до край е експериментално и може да не е надеждно.
+
+Все още не трябва да се доверявате на това, че ще защити Вашите данни.
+
+Устройства все още не могат да разшифроват история от преди присъединяването към стая.
+
+Веднъж включено, шифроването в стаята не може да бъде изключено (за сега).
+
+Шифровани съобщения не са видими за клиенти, които все още не поддържат шифроване.</string>
+
+    <string name="directory_title">Директория</string>
+    <string name="settings_theme">Тема</string>
+
+    <string name="failed_to_load_timeline_position">%s се опита да зареди конкретна точка в хронологията на тази стая, но не я намери.</string>
+
+    <string name="encryption_information_title">Информация за шифроване от край до край</string>
+
+    <string name="encryption_information_device_info">Информация за събитие</string>
+    <string name="encryption_information_user_id">ID на потребител</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519 ключ за самоличност</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Заявен ключов отпечатък Ed25519</string>
+    <string name="encryption_information_algorithm">Алгоритъм</string>
+    <string name="encryption_information_session_id">ID на сесия</string>
+    <string name="encryption_information_decryption_error">Грешка при разшифроване</string>
+
+    <string name="encryption_information_sender_device_information">Информация за устройството на подателя</string>
+    <string name="encryption_information_device_name">Име на устройство</string>
+    <string name="encryption_information_name">Име</string>
+    <string name="encryption_information_device_id">ID на устройство</string>
+    <string name="encryption_information_device_key">Ключ на устройство</string>
+    <string name="encryption_information_verification">Потвърждение</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечатък</string>
+
+    <string name="encryption_export_e2e_room_keys">Експортирай E2E ключове за стая</string>
+    <string name="encryption_export_room_keys">Експортиране на ключове за стая</string>
+    <string name="encryption_export_room_keys_summary">Експортирай ключовете в локален файл</string>
+    <string name="encryption_export_export">Експортирай</string>
+    <string name="encryption_export_enter_passphrase">Въведи парола</string>
+    <string name="encryption_export_confirm_passphrase">Потвърди парола</string>
+    <string name="encryption_export_saved_as">E2E ключовете бяха запазени в \'%s\'</string>
+
+    <string name="encryption_import_e2e_room_keys">Импортирай E2E ключове за стая</string>
+    <string name="encryption_import_room_keys">Импортиране на ключове за стая</string>
+    <string name="encryption_import_room_keys_summary">Импортирай ключовете в локален файл</string>
+    <string name="encryption_import_import">Импортирай</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Шифроване само за потвърдени устройства</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Никога не изпращай шифровани съобщения от това устройство до непотвърдени устройства</string>
+
+    <string name="encryption_information_not_verified">НЕ е потвърдено</string>
+    <string name="encryption_information_verified">Потвърдено</string>
+    <string name="encryption_information_blocked">В черния списък</string>
+
+    <string name="encryption_information_unknown_device">неизвестно устройство</string>
+    <string name="encryption_information_none">няма</string>
+
+    <string name="encryption_information_verify">Потвърди</string>
+    <string name="encryption_information_unverify">Махни потвържд.</string>
+    <string name="encryption_information_block">Блокирай</string>
+    <string name="encryption_information_unblock">Отблокирай</string>
+
+    <string name="encryption_information_verify_device">Потвърди устройството</string>
+    <string name="encryption_information_verify_device_warning">" За да потвърдите, че на това устройство може да се вярва, моля свържете се със собственика му по друг начин (напр. на живо или чрез телефонен разговор) и го попитайте дали ключът, който той вижда в неговите настройки на потребителя за това устройство, съвпада с ключа по-долу:"</string>
+    <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу. Ако не, то тогава някой друг имитира това устройство и вероятно искате вместо това да натиснете бутона за черен списък.
+В бъдеще този процес на потвърждение ще бъде по-лесен.</string>
+    <string name="encryption_information_verify_key_match">Потвърждавам, че ключовете съвпадат</string>
+
+    <string name="e2e_enabling_on_app_update">Riot поддържа шифроване от край до край, но за да го включите трябва да влезете в профила си отново.
+
+Може да го направите сега или по-късно от настройките на приложението.</string>
+
+    <string name="unknown_devices_alert_title">Стаята съдържа непознати устройства</string>
+    <string name="unknown_devices_alert_message">Тази стая съдържа непознати устройства, който не са били потвърдени.
+Това означава, че няма гаранция, че устройствата принадлежат на потребителите, на който се твърди, че принадлежат.
+Препоръчваме Ви да минете през процеса за потвърждение за всяко устройство, за да потвърдите, че принадлежат на легитимен собственик. Ако предпочитате, можете да изпратите съобщението без потвърждение.
+
+Непознати устройства:</string>
+
+    <string name="directory_server_fail_to_retrieve_server">Сървърът може би е недостъпен или претоварен</string>
+    <string name="directory_server_type_homeserver">Въведете Home сървър, от който да се покажат публични стаи</string>
+    <string name="directory_server_placeholder">Адрес на Home сървър</string>
+    <string name="directory_server_all_rooms_on_server">Всички стаи на сървър %s</string>
+    <string name="directory_server_native_rooms">Всички изцяло %s стаи</string>
+
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 стая</item>
+	<item quantity="other">%d стаи</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
+
+    <string name="widget_no_power_to_manage">Трябва Ви разрешение, за да управлявате приспособленията в тази стая</string>
+    <string name="widget_creation_failure">Създаване на приспособлението беше неуспешно</string>
+    <string name="event_formatter_widget_added">%1$s добавено от %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s премахнато от %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Създаване на групови разговори с jitsi</string>
+    <string name="widget_delete_message_confirmation">Сигурни ли сте, че искате да изтриете приспособлението?</string>
+    <plurals name="active_widgets">
+	<item quantity="one">1 активно приспособление</item>
+	<item quantity="other">%d активни приспособления</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="widget_integration_unable_to_create">Неуспешно създаване на приспособление.</string>
+    <string name="widget_integration_failed_to_send_request">Неуспешно изпращане на заявката.</string>
+    <string name="widget_integration_positive_power_level">Нивото на достъп трябва да бъде позитивно число.</string>
+    <string name="widget_integration_must_be_in_room">Не сте в тази стая.</string>
+    <string name="widget_integration_no_permission_in_room">Нямате достъп да направите това в тази стая.</string>
+    <string name="widget_integration_missing_room_id">Липсва room_id в заявката.</string>
+    <string name="widget_integration_missing_user_id">Липсва user_id в заявката.</string>
+    <string name="widget_integration_room_not_visible">Стая %s не е видима.</string>
+    <string name="settings_labs_matrix_apps">Matrix приложения</string>
+    <string name="room_add_matrix_apps">Добави Matrix приложения</string>
+    <string name="permissions_rationale_msg_storage">Riot иска разрешение за достъп до Вашата галерия със снимки и видеа, за да изпраща и запазва прикачени файлове.
+
+Моля, разрешете достъпа от следващия прозорец, който се покаже, за да можете да изпращате файлове от телефона си.</string>
+    <string name="permissions_rationale_msg_camera">Riot иска разшерение за достъп до Вашата камера, за да направи снимки или да осъществи видео разговори.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot иска разшерение за достъп до Вашия микрофон, за да се извърши звуков разговор.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot иска разшерение за достъп до микрофона и камерата Ви, за да извърши видео разговор.
+
+Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
+    <string name="permissions_rationale_msg_contacts">Riot иска разшерение за достъп до контактите Ви, за да намери други Matrix потребители по имейл или телефонен номер.
+
+Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да намирате потребители на Riot от Вашите контакти.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot иска разшерение за достъп до контактите Ви, за да намери други Matrix потребители по имейл или телефонен номер.
+
+Позволяване на достъп до контактите Ви?</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">Извинете.. Операцията не е извършена поради липсващи разрешения за достъп</string>
+
+    <string name="media_slider_saved">Запазено</string>
+    <string name="media_slider_saved_message">Запазено в изтеглените файлове</string>
+    <string name="yes">ДА</string>
+    <string name="no">НЕ</string>
+    <string name="_continue">Продължи</string>
+
+    <string name="remove">Премахни</string>
+    <string name="join">Влез</string>
+    <string name="preview">Прегледай</string>
+    <string name="reject">Откажи</string>
+
+    <string name="rejoin">Повторно присъединяване</string>
+    <string name="forget_room">Забрави стаята</string>
+
+    <string name="avatar">Профилна снимка</string>
+
+<string name="list_members">Списък с членове</string>
+    <string name="room_jump_to_first_unread">Отиди до първото непрочетено съобщение.</string>
+
+    <string name="room_preview_invitation_format">Вие сте поканен да се присъедините към тази стая от %s</string>
+    <string name="room_preview_unlinked_email_warning">Поканата беше изпратена на %s, който не е свързан с този профил.
+Може да искате да влезете с друг профил или да добавите имейл адреса в този.</string>
+    <string name="room_preview_try_join_an_unknown_room">Опитвате се да влезете в %s. Желаете ли да се присъедините, за да участвате в дискусията?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">стая</string>
+    <string name="room_preview_room_interactions_disabled">Това е преглед на стаята. Интеракции в нея са изключени.</string>
+
+    <string name="room_creation_title">Нов чат</string>
+    <string name="room_creation_add_member">Добави член</string>
+    <string name="room_participants_leave_prompt_title">Напускане на стая</string>
+    <string name="room_participants_remove_prompt_msg">Сигурни ли сте, че искате да премахнете %s от този чат?</string>
+    <string name="room_participants_create">Създай</string>
+
+    <string name="room_participants_header_call">ПОВИКВАНЕ</string>
+    <string name="room_participants_action_invite">Покани</string>
+    <string name="room_participants_action_leave">Напусни тази стая</string>
+    <string name="room_participants_action_remove">Премахни от тази стая</string>
+    <string name="people_search_invite_by_id"><u>Покани по ID</u></string>
+    <string name="people_search_invite_by_id_dialog_title">Покани потребител по ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Моля, въведете един или повече имейл адреси или Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Имейл или Matrix ID</string>
+
+    <string name="room_menu_search">Търсене</string>
+    <string name="room_details_people_present_group_name">УЧАСТНИЦИ</string>
+
+    <string name="room_sync_in_progress">Синхронизиране...</string>
+    <string name="settings_summary_app_info_link">Екран с информация за системата на приложението</string>
+    <string name="settings_title_app_info_link">Информация за приложението</string>
+
     </resources>
