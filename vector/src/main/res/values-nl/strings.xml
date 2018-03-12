@@ -890,4 +890,44 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="create">Creëer</string>
     <string name="create_community">Gemeenschap Aanmaken</string>
     <string name="community_name">Gemeenschapsnaam</string>
+    <string name="community_name_hint">Voorbeeld</string>
+    <string name="community_id">Gemeenschaps-ID</string>
+    <string name="community_id_hint">voorbeeld</string>
+
+    // group details
+    <string name="group_details_home">Home</string>
+    <string name="group_details_people">Personen</string>
+    <string name="group_details_rooms">Ruimtes</string>
+    <string name="no_users_placeholder">Geen gebruikers</string>
+
+    <string name="rooms">Ruimtes</string>
+    <string name="joined">Toegetreden</string>
+    <string name="invited">Uitgenodigd</string>
+    <string name="filter_group_members">Groepsleden filteren</string>
+    <string name="filter_group_rooms">Groepsruimtes filteren</string>
+
+    <string name="group_one_member">1 lid</string>
+    <string name="group_members">%d leden</string>
+
+    <string name="group_one_room">1 ruimte</string>
+    <string name="group_rooms">%d ruimtes</string>
+    <string name="group_no_long_description">De gemeenschapsadministrator heeft geen lange beschrijving gegeven voor deze gemeenschap.</string>
+
+    <string name="one_new_message">1 nieuw bericht</string>
+    <string name="new_messages">%d nieuwe berichten</string>
+
+    <string name="has_been_kicked">Je bent uit %1$s gezet door %2$s</string>
+    <string name="has_been_banned">Je bent verbannen van %1$s door %2$s</string>
+    <string name="reason_colon">Reden: %1$s</string>
+    <string name="rejoin">Opnieuw toetreden</string>
+    <string name="forget_room">Ruimte vergeten</string>
+
+    <string name="receipt_avatar">Ontvangst-avatar</string>
+    <string name="avatar">Avatar</string>
+
+<plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 ongelezen vermeld bericht</item>
+	<item quantity="other">%d ongelezen vermelde berichten</item>
+</plurals>
+    <string name="notice_avatar">Vermeldingsavatar</string>
     </resources>
