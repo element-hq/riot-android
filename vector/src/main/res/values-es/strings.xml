@@ -918,4 +918,16 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 	<item quantity="one">1 sala</item>
 	<item quantity="other">%d salas</item>
 </plurals>
+    <plurals name="membership_changes">
+	<item quantity="one">1 cambio de miembros</item>
+	<item quantity="other">%d cambios de miembros</item>
+</plurals>
+
+    <string name="open_chat_header">Abrir cabecera</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 miembro activo</item>
+	<item quantity="other">%d miembros activos</item>
+</plurals>
+    <string name="settings_enable_content_sending">Mantener las notificaciones detalladas</string>
+    <string name="settings_enable_content_sending_summary">Encender esta opción cuando la sincronización en segundo plano está desactivada para mostrar notificaciones detalladas. Esto requiere enviar el contenido de mensajes no cifrados a través de servidores de servicios de Google</string>
     </resources>
