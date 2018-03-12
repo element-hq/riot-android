@@ -807,4 +807,5 @@
     <string name="settings_set_sync_timeout">Времето за синхронизация изтече</string>
     <string name="settings_set_sync_delay">Забавяне между две заявки за синхронизация</string>
     <string name="settings_contacts_app_permission">Разрешение за достъп до контакти</string>
+    <string name="settings_home_display">Начало</string>
     </resources>
