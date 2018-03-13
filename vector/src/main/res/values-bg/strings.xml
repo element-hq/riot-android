@@ -255,7 +255,7 @@
     <string name="auth_missing_email">Липсва имейл адрес</string>
     <string name="auth_missing_phone">Липсва телефонен номер</string>
     <string name="auth_missing_email_or_phone">Липсва имейл адрес или телефонен номер</string>
-    <string name="auth_invalid_token">Невалиден token</string>
+    <string name="auth_invalid_token">Невалиден тоукън</string>
     <string name="auth_password_dont_match">Паролите не съвпадат</string>
     <string name="auth_forgot_password">Забравена парола?</string>
     <string name="auth_use_server_options">Използване на потребителски опции за сървър (разширени)</string>
@@ -293,7 +293,7 @@
     <string name="login_mobile_device">Мобилно устройство</string>
 
     <string name="login_error_forbidden">Невалидно потребителско име/парола</string>
-    <string name="login_error_unknown_token">Не е разпознат указаният token за достъп</string>
+    <string name="login_error_unknown_token">Не е разпознат указаният тоукън за достъп</string>
     <string name="login_error_bad_json">Грешно формиран JSON</string>
     <string name="login_error_not_json">Не съдържаше валиден JSON</string>
     <string name="login_error_limit_exceeded">Бяха изпратени твърде много заявки</string>
@@ -330,7 +330,7 @@
     <string name="permissions_rationale_popup_title">Информация</string>
     <string name="room_participants_action_ignore">Скрий всички съобщения от този потребител</string>
     <string name="room_participants_action_unignore">Покажи всички съобщения от този потребител</string>
-    <string name="room_participants_invite_search_another_user">Потребителско ID, име или имейл</string>
+    <string name="room_participants_invite_search_another_user">Потребителски ID, име или имейл</string>
     <string name="room_participants_action_mention">Спомени</string>
     <string name="room_participants_action_devices_list">Покажи списъка с устройства</string>
     <string name="room_participants_invite_prompt_msg">Сигурни ли сте, че искате да поканите %s в този чат?</string>
@@ -539,7 +539,7 @@
     <string name="settings_phone_number_label">Телефонен номер</string>
     <string name="settings_phone_number_error">Невалиден телефонен номер за избраната държава</string>
     <string name="settings_phone_number_verification_instruction">Изпратихме Ви SMS с код за активиране. Моля, въведете този код по-долу.</string>
-    <string name="settings_phone_number_verification_error_empty_code">Въведете код за активаране</string>
+    <string name="settings_phone_number_verification_error_empty_code">Въведете код за активиране</string>
     <string name="settings_phone_number_verification_error">Грешка по време на проверката на телефонния Ви номер</string>
     <string name="settings_phone_number_code">Код</string>
 
@@ -751,7 +751,7 @@
     <string name="permissions_action_not_performed_missing_permissions">Извинете.. Операцията не е извършена поради липсващи разрешения за достъп</string>
 
     <string name="media_slider_saved">Запазено</string>
-    <string name="media_slider_saved_message">Запазено в изтеглените файлове</string>
+    <string name="media_slider_saved_message">Запазено в изтеглени файлове</string>
     <string name="yes">ДА</string>
     <string name="no">НЕ</string>
     <string name="_continue">Продължи</string>
@@ -812,4 +812,87 @@
 
     <string name="settings_data_save_mode">Режим запазване на данни</string>
 
+    <string name="settings_delete_notification_targets_confirmation">Сигурни ли сте, че искате да премахнете това устройство, получаващо известия?</string>
+
+    <string name="settings_phone_number_verification">Потвърждение на номер</string>
+    <string name="room_settings_tag_pref_no_tag">без етикет</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Достъп до историята на стаята</string>
+    <string name="room_settings_room_internal_id">Вътрешен ID на стаята</string>
+    <string name="room_settings_labs_end_to_end_warnings">Трябва да излезете от профила си, за да можете да включите шифроването.</string>
+    <string name="select_room_directory">Избиране на директория със стаи</string>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 непрочетено съобщение</item>
+	<item quantity="other">%d непрочетени съобщения</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 непрочетено съобщение</item>
+	<item quantity="other">%d непрочетени съобщения</item>
+</plurals>
+    <string name="historical_placeholder">Търсене за архив</string>
+
+    <string name="font_size">Размер на шрифта</string>
+    <string name="tiny">Ситен</string>
+    <string name="small">Малък</string>
+    <string name="normal">Нормален</string>
+    <string name="large">Голям</string>
+    <string name="larger">По-голям</string>
+    <string name="largest">Най-голям</string>
+    <string name="huge">Огромен</string>
+
+    <string name="settings_labs_native_camera">Използване на камерата на телефона</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Добавихте ново устройство \'%s\', което изисква ключове за шифроване.</string>
+    <string name="your_unverified_device_requesting">Вашето непотвърдено устройство \'%s\' изисква ключове за шифроване.</string>
+    <string name="start_verification">Започни потвърждението</string>
+    <string name="share_without_verifying">Сподели без потвърждение</string>
+    <string name="ignore_request">Игнорирай поканата</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Внимание!</string>
+    <string name="conference_call_warning_message">Груповите разговори са в процес на разработка и не са надеждни.</string>
+
+    // slash commands
+    <string name="command_error">Грешка в командата</string>
+    <string name="unrecognized_command">Неразпозната команда: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Изключено</string>
+    <string name="notification_on">Включено</string>
+    <string name="notification_noisy">Шумно</string>
+
+    <string name="create">Създай</string>
+    <string name="create_community">Създай общност</string>
+    <string name="community_name">Име на общност</string>
+    <string name="community_name_hint">Пример</string>
+    <string name="community_id">ID на общност</string>
+    <string name="community_id_hint">пример</string>
+
+    // group details
+    <string name="group_details_home">Начало</string>
+    <string name="group_details_people">Хора</string>
+    <string name="group_details_rooms">Стаи</string>
+    <string name="no_users_placeholder">Няма потребители</string>
+
+    <string name="rooms">Стаи</string>
+    <string name="joined">Участници</string>
+    <string name="invited">Поканени</string>
+    <string name="filter_group_members">Филтриране на членовете</string>
+    <string name="filter_group_rooms">Филтриране на стаите</string>
+
+    <string name="group_one_member">1 член</string>
+    <string name="group_members">%d членове</string>
+
+    <string name="group_one_room">1 стая</string>
+    <string name="group_rooms">%d стаи</string>
+    <string name="group_no_long_description">Администраторът на общността не е предоставил дълго описание за тази общност.</string>
+
+    <string name="has_been_kicked">Бяхте изгонен от %1$s от %2$s</string>
+    <string name="has_been_banned">Бяхте блокиран от %1$s от %2$s</string>
+    <string name="reason_colon">Причина: %1$s</string>
+    <string name="receipt_avatar">Профилна снимка</string>
+    <string name="notice_avatar">Профилна снимка</string>
+    <string name="open_chat_header">Отвори заглавие</string>
+    <string name="settings_enable_content_sending">Остави детайлирани известия</string>
+    <string name="settings_enable_content_sending_summary">Включи тази опция, когато фоновата синхронизация е изключвена за показване на детайлирани известия. Това изисква изпращането на съдържанието на нешифровани съобщения през сървъри за Google услуги</string>
     </resources>
