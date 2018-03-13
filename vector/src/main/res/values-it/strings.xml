@@ -753,4 +753,66 @@
     <string name="call">Chiama</string>
     <string name="encrypted_message">Cifra messaggio</string>
 
-</resources>
+<string name="title_activity_group_details">Dettagli della comunità</string>
+
+    <string name="loading">Caricamento...</string>
+
+    <string name="action_exit">Esci</string>
+    <string name="actions">Azioni</string>
+    <string name="bottom_action_groups">Comunità</string>
+
+    <string name="home_filter_placeholder_groups">Cerca delle comunità</string>
+
+    <string name="groups_invite_header">Invita</string>
+    <string name="groups_header">Comunità</string>
+    <string name="no_group_placeholder">Nessun gruppo</string>
+
+    <string name="send_bug_report_rage_shake">Agita con rabbia per segnalare un errore</string>
+
+    <string name="start_new_chat_prompt_msg">Sei sicuro di volere iniziare una nuova conversazione con %s?</string>
+    <string name="start_voice_call_prompt_msg">Sei sicuro di volere iniziare una chiamata vocale?</string>
+    <string name="start_video_call_prompt_msg">Sei sicuro di volere iniziare una chiamata video?</string>
+
+    <string name="groups_list">Elenco gruppi</string>
+
+    <string name="list_members">Elenca i membri</string>
+    <string name="open_chat_header">Apri intestazione</string>
+    <string name="room_sync_in_progress">Sincronizzazione...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 membro attivo</item>
+	<item quantity="other">%d membri attivi</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 membro</item>
+	<item quantity="other">%d membri</item>
+</plurals>
+    <string name="room_participants_kick_prompt_msg">Sei sicuro di volere cacciare fuori questo utente dalla chat?</string>
+    <string name="room_participants_ban_prompt_msg">Sei sicuro di volere bandire questo utente dalla chat?</string>
+
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 messaggio nuovo</item>
+	<item quantity="other">%d messaggi nuovi</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s e %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 altro</item>
+	<item quantity="other">%d altri</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 stanza</item>
+	<item quantity="other">%d stanze</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s stanza trovata per %2$s</item>
+	<item quantity="other">%1$s stanze trovate per %2$s</item>
+</plurals>
+    <string name="room_settings_all_messages_noisy">Tutti i messaggi (rumoroso)</string>
+    <string name="room_settings_all_messages">Tutti i messaggi</string>
+    <string name="room_settings_mention_only">Solo le citazioni</string>
+    <string name="room_settings_mute">Silenzioso</string>
+    <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia schermata iniziale</string>
+
+    <string name="settings_enable_content_sending">Mantieni notifiche dettagliate</string>
+    </resources>
