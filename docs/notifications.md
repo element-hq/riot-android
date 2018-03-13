@@ -80,11 +80,11 @@ The app then does a background synchronisation with the homeserver to retrieve d
 
 #### background sync disabled
 If disabled, the push server sends a GCM notification to the app containing metadata about the message (room id, event id).
-If the [Keep detailed notifications](#background-synchronisation--delay-between-two-sync-requests-only-in-fallback-mode) setting is enabled, the **event content** is also sent through GCM so that the application can display a full detailed notification directly from GCM data.
+If the [Keep detailed notifications](#background-synchronisation--keep-detailed-notifications-only-in-gcm) setting is enabled, the **event content** is also sent through GCM so that the application can display a full detailed notification directly from GCM data.
 
 <ins>PRO</ins>: network and battery efficient.
 
-<ins>CON</ins>: contents of events in non encrypted room go through GCM if [Keep detailed notifications](#background-synchronisation--delay-between-two-sync-requests-only-in-fallback-mode) is enabled. Else, the displayed notification is poor (ex: "RoomA: 1 message").
+<ins>CON</ins>: contents of events in non encrypted room go through GCM if [Keep detailed notifications](#background-synchronisation--keep-detailed-notifications-only-in-gcm) is enabled. Else, the displayed notification is limited (ex: "RoomA: 1 message").
 
 
 ### Fallback mode
@@ -94,7 +94,7 @@ This mode requires this setting enabled so that the application can do backgroun
 
 ## Background synchronisation > Keep detailed notifications (only in GCM)
 
-When enabled, the homeserver sends the event content to GCM so that the application can displayed a full detailed notification about an event.
+When enabled, the homeserver sends the event content to GCM so that the application can display a full detailed notification about an event.
 
 ## Background synchronisation > Start on boot (only in fallback mode)
 
