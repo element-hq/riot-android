@@ -84,7 +84,7 @@ If the [Keep detailed notifications](#background-synchronisation--keep-detailed-
 
 <ins>PRO</ins>: network and battery efficient.
 
-<ins>CON</ins>: contents of events in non encrypted room go through GCM if [Keep detailed notifications](#background-synchronisation--keep-detailed-notifications-only-in-gcm) is enabled. Else, the displayed notification is limited (ex: "RoomA: 1 message").
+<ins>CON</ins>: contents of events in non encrypted room go through GCM if [Keep detailed notifications](#background-synchronisation--keep-detailed-notifications-only-in-gcm) is enabled. Else, the displayed notification is limited (ex: "RoomA: 1 new message").
 
 
 ### Fallback mode
