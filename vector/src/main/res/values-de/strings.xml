@@ -953,4 +953,6 @@ Unbekannte Geräte:</string>
     <string name="open_chat_header">Öffne Chat-Kopf</string>
     <string name="receipt_avatar">Lesebestätigungs-Profilbild</string>
     <string name="notice_avatar">Notiz-Avatar</string>
+    <string name="settings_enable_content_sending">Behalte detailierte Benachrichtigungen</string>
+    <string name="settings_enable_content_sending_summary">Aktiviere diese Option, wenn die Hintergrundsynchronisierung für detaillierte Benachrichtigungen deaktiviert wurde. Dies führt dazu, dass unverschlüsselter Nachrichten-Inhalt durch Google-Server geleitet wird</string>
     </resources>

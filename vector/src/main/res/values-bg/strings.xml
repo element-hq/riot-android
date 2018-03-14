@@ -828,7 +828,7 @@
 	<item quantity="one">1 непрочетено съобщение</item>
 	<item quantity="other">%d непрочетени съобщения</item>
 </plurals>
-    <string name="historical_placeholder">Търсене за архив</string>
+    <string name="historical_placeholder">Търсене в архив</string>
 
     <string name="font_size">Размер на шрифта</string>
     <string name="tiny">Ситен</string>
