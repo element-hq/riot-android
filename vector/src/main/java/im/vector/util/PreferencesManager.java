@@ -389,19 +389,6 @@ public class PreferencesManager {
     }
 
     /**
-     * Update the matrix apps  status.
-     *
-     * @param context   the context
-     * @param isEnabled true to enable the matrix apps usage
-     */
-    public static void setUseMatrixApps(Context context, boolean isEnabled) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, isEnabled);
-        editor.commit();
-    }
-
-    /**
      * Tells if the application is started on boot
      *
      * @param context the context

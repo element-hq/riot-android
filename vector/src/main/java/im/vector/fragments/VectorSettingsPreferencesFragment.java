@@ -845,21 +845,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
-        // Matrix Apps Managment (Widgets)
-        final CheckBoxPreference useMatrixAppsModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY);
-        final boolean mIsUsedMatrixApps = PreferencesManager.useMatrixApps(appContext);
-
-        useMatrixAppsModePref.setChecked(mIsUsedMatrixApps);
-
-        useMatrixAppsModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                PreferencesManager.setUseMatrixApps(appContext, (boolean) newValue);
-
-                return true;
-            }
-        });
 
         // Rageshake Managment
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
