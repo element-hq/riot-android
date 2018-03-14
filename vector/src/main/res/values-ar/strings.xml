@@ -479,4 +479,59 @@
     <string name="notification_area_hide_never">أبدا</string>
     <string name="notification_area_hide_when_empty">عندما تكون فارغة</string>
     <string name="notification_area_hide">إخفاء منطقة الإعلام</string>
-</resources>
+
+  <string name="loading">يحمّل…</string>
+
+    <plurals name="room_header_active_members_count">
+	<item quantity="zero">لا أعضاء نشطين</item>
+	<item quantity="one">عضو واحد نشط</item>
+	<item quantity="two">عضوان نشطان</item>
+	<item quantity="few">%d أعضاء نشطين</item>
+	<item quantity="many">%d عضوا نشطا</item>
+	<item quantity="other">%d عضو نشط</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="zero">لا أعضاء</item>
+	<item quantity="one">عضو واحد</item>
+	<item quantity="two">عضوان</item>
+	<item quantity="few">%d أعضاء</item>
+	<item quantity="many">%d عضوا</item>
+	<item quantity="other">%d عضو</item>
+</plurals>
+    <string name="room_two_users_are_typing">‏⁨%1$s⁩ و ⁨%2$s⁩ يكتبون…</string>
+    <string name="room_many_users_are_typing">‏⁨%1$s⁩ و ⁨%2$s⁩ وغيرهم يكتبون…</string>
+    <string name="room_new_message_notification">رسالة واحدة جديدة</string>
+    <plurals name="room_new_messages_notification">
+	<item quantity="zero">لا رسائل جديدة</item>
+	<item quantity="one">رسالة واحدة جديدة</item>
+	<item quantity="two">رسالتان جديدتان</item>
+	<item quantity="few">%d رسائل جديدة</item>
+	<item quantity="many">%d رسالة جديدة</item>
+	<item quantity="other">%d رسالة جديدة</item>
+</plurals>
+
+    <string name="room_displayname_two_members">‏⁨%1$s⁩ و ⁨%2$s⁩</string>
+
+    <string name="room_displayname_many_members">‏⁨%1$s⁩ و ⁨%2$s⁩</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="zero">لا غرف</item>
+	<item quantity="one">غرفة واحدة</item>
+	<item quantity="two">غرفتان</item>
+	<item quantity="few">%d غرف</item>
+	<item quantity="many">%d غرفة</item>
+	<item quantity="other">%d غرفة</item>
+</plurals>
+    <string name="devices_details_time_format">HH:mm:ss</string>
+    <string name="action_historical">القديمة</string>
+    <string name="bottom_action_groups">المجتمعات</string>
+
+    <string name="home_filter_placeholder_groups">ابحث عن مجتمعات</string>
+
+    <string name="low_priority_header"/>
+
+    <string name="groups_header">المجتمعات</string>
+    <string name="no_group_placeholder">لا مجموعات</string>
+
+    <string name="send_bug_report_rage_shake"></string>
+
+    </resources>

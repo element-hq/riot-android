@@ -836,9 +836,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="group_rooms">%d部屋</string>
     <string name="group_no_long_description">管理者はこのコミュニティの詳細を規定していません。</string>
 
-    <string name="one_new_message">1つの新しいメッセージ</string>
-    <string name="new_messages">%d個の新しいメッセージ</string>
-
     <string name="has_been_kicked">あなたは%2$sによって%1$sから除外されました</string>
     <string name="has_been_banned">あなたは%2$sによって%1$sへの入室を禁止されました</string>
     <string name="reason_colon">理由: %1$s</string>

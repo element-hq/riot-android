@@ -508,7 +508,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <string name="account_email_validation_title">Verificação pendente</string>
     <string name="account_email_validation_message">Por favor verifique o seu email e clique no link que está lá. Feito isso, clique em continuar.</string>
-    <string name="account_email_validation_error">Não consegui averiguar o seu endereço de email. Favor verificar seu email e clicar no link que ele contém. Quando tiver feito isso, clique em continuar.</string>
+    <string name="account_email_validation_error">Não consegui averiguar o seu endereço de email. Favor verificar seu email e clicar no link que ele contém. Quando tiver feito isso, clique em continuar</string>
 
     <string name="account_email_already_used_error">This email address is already in use</string>
     <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
@@ -852,9 +852,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="group_one_room">1 sala</string>
     <string name="group_rooms">%d salas</string>
     <string name="group_no_long_description">O(A) administrador(a) desta comunidade não definiu uma descrição longa da mesma.</string>
-
-    <string name="one_new_message">1 nova mensagem</string>
-    <string name="new_messages">%d novas mensagens</string>
 
     <string name="has_been_kicked">Você foi excluída/o da sala %1$s por %2$s</string>
     <string name="has_been_banned">Você foi banida/o da sala %1$s por %2$s</string>

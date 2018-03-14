@@ -880,8 +880,6 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <string name="group_one_room">1 sala</string>
     <string name="group_rooms">%d salas</string>
-    <string name="one_new_message">1 nuevo mensaje</string>
-    <string name="new_messages">%d nuevos mensajes</string>
 
     <string name="has_been_kicked">Ha sido echado de la sala %1$s por %2$s</string>
     <string name="has_been_banned">Ha sido vetado en %1$s por %2$s</string>
@@ -892,4 +890,48 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="notification_area_hide_never">Nunca</string>
     <string name="notification_area_hide_when_empty">Cuando está vacío</string>
 
-</resources>
+    <string name="send_bug_report_rage_shake">Agitar con rabia para informar de un error</string>
+
+    <string name="actions">Acciones</string>
+    <string name="list_members">Lista de miembros</string>
+    <string name="room_sync_in_progress">Sincronizando...</string>
+    <plurals name="room_title_members">
+	<item quantity="one">1 miembro</item>
+	<item quantity="other">%d miembros</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 mensaje nuevo</item>
+	<item quantity="other">%d mensajes nuevos</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s y %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 otro</item>
+	<item quantity="other">%d otros</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d salas</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s sala encontrada para %2$s</item>
+	<item quantity="other">%1$s salas encontradas para %2$s</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d salas</item>
+</plurals>
+    <plurals name="membership_changes">
+	<item quantity="one">1 cambio de miembros</item>
+	<item quantity="other">%d cambios de miembros</item>
+</plurals>
+
+    <string name="open_chat_header">Abrir cabecera</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 miembro activo</item>
+	<item quantity="other">%d miembros activos</item>
+</plurals>
+    <string name="settings_enable_content_sending">Mantener las notificaciones detalladas</string>
+    <string name="settings_enable_content_sending_summary">Encender esta opción cuando la sincronización en segundo plano está desactivada para mostrar notificaciones detalladas. Esto requiere enviar el contenido de mensajes no cifrados a través de servidores de servicios de Google</string>
+    </resources>

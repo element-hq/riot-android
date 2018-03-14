@@ -62,6 +62,7 @@ public final class GcmRegistrationManager {
     private static final String PREFS_ALLOW_NOTIFICATIONS = "GcmRegistrationManager.PREFS_ALLOW_NOTIFICATIONS";
     private static final String PREFS_TURN_SCREEN_ON = "GcmRegistrationManager.PREFS_TURN_SCREEN_ON";
     private static final String PREFS_ALLOW_BACKGROUND_SYNC = "GcmRegistrationManager.PREFS_ALLOW_BACKGROUND_SYNC";
+    private static final String PREFS_ALLOW_SENDING_CONTENT_TO_GCM = "GcmRegistrationManager.PREFS_ALLOW_SENDING_CONTENT_TO_GCM";
 
     private static final String PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM = "PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM";
     private static final String PREFS_PUSHER_REGISTRATION_TOKEN_KEY = "PREFS_PUSHER_REGISTRATION_TOKEN_KEY";
@@ -592,7 +593,7 @@ public final class GcmRegistrationManager {
 
         Log.d(LOG_TAG, "registerToThirdPartyServer of " + session.getMyUserId());
 
-        boolean eventIdOnlyPushes = isBackgroundSyncAllowed();
+        boolean eventIdOnlyPushes = (isBackgroundSyncAllowed() ? true : !isContentSendingAllowed());
 
         getPushersRestClient(session)
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
@@ -1158,6 +1159,26 @@ public final class GcmRegistrationManager {
 
         // when GCM is disabled, enable / disable the "Listen for events" notifications
         CommonActivityUtils.onGcmUpdate(mContext);
+    }
+
+    /**
+     * @return true if the non encrypted content may be sent through Google services servers
+     */
+    public boolean isContentSendingAllowed() {
+        return getGcmSharedPreferences().getBoolean(PREFS_ALLOW_SENDING_CONTENT_TO_GCM, true);
+    }
+
+    /**
+     * Allow or not to send unencrypted content through Google services servers
+     *
+     * @param isAllowed true to allow the content sending.
+     */
+    public void setContentSendingAllowed(boolean isAllowed) {
+        if (!getGcmSharedPreferences().edit()
+                .putBoolean(PREFS_ALLOW_SENDING_CONTENT_TO_GCM, isAllowed)
+                .commit()) {
+            Log.e(LOG_TAG, "## setContentSendingAllowed() : commit failed");
+        }
     }
 
     /**

@@ -1,2 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="light_theme">Světlý motiv</string>
+    <string name="black_them">Černý motiv</string>
+
+    <string name="dark_theme">Tmavý motiv</string>
+    <string name="title_activity_home">Zprávy</string>
+    <string name="title_activity_room">Místnost</string>
+    <string name="title_activity_settings">Nastavení</string>
+    <string name="ok">OK</string>
+    <string name="save">Uložit</string>
+    <string name="loading">Načítání...</string>
+
+    <string name="cancel">Zrušit</string>
+    <string name="send">Odeslat</string>
+    <string name="leave">Opustit</string>
+    <string name="share">Sdílet</string>
+    <string name="copy">Kopírovat</string>
+    <string name="forward">Předat</string>
+    <string name="view_source">Zobrazit zdroj</string>
+    <string name="delete">Odstranit</string>
+    <string name="rename">Přejmenovat</string>
+    <string name="ongoing_conference_call_voice">hlas</string>
+    <string name="ongoing_conference_call_video">video</string>
+    <string name="or">nebo</string>
+    <string name="and">a</string>
+    <string name="invite">Pozvat</string>
+    <string name="offline">Offline</string>
+
+    <string name="resouces_language">en</string>
+    <string name="resouces_country">US</string>
+
+    <string name="forget_room">Zapomenout místnost</string>
+</resources>

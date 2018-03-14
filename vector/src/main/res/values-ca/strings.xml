@@ -838,9 +838,6 @@
     <string name="group_rooms">%d sales</string>
     <string name="group_no_long_description">L\'administrador de la comunitat no ha fet una descripció llarga per aquesta comunitat.</string>
 
-    <string name="one_new_message">Un nou missatge</string>
-    <string name="new_messages">%d nous missatges</string>
-
     <string name="has_been_kicked">%2$s l\'ha fet fora de la sala %1$s</string>
     <string name="has_been_banned">%2$s l\'ha expulsat de la sala %1$s</string>
     <string name="reason_colon">Raó: %1$s</string>
@@ -862,4 +859,46 @@
     <string name="notification_area_hide_always">Amaga la zona de notificacions</string>
     <string name="notification_area_hide_never">Mai</string>
     <string name="notification_area_hide_when_empty">Quan estigui buit</string>
-</resources>
+    <string name="send_bug_report_rage_shake">Sacsejar amb ràbia per informar d\'un error</string>
+
+    <string name="actions">Accions</string>
+    <string name="list_members">Llista de membres</string>
+    <string name="room_sync_in_progress">Sincronitzant...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 membre actiu</item>
+	<item quantity="other">%d membres actius</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 membre</item>
+	<item quantity="other">%d membres</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 nou missatge</item>
+	<item quantity="other">%d nous missarges</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s i %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 altre</item>
+	<item quantity="other">%d altres</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d sales</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s sala trobada per %2$s</item>
+	<item quantity="other">%1$s sales trobades per %2$s</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d sales</item>
+</plurals>
+    <string name="open_chat_header"/>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one"/>
+	<item quantity="other"/>
+</plurals>
+    </resources>
+

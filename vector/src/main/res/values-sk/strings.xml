@@ -839,9 +839,6 @@ Neznáme zariadenia:</string>
     <string name="group_rooms">%d miestností</string>
     <string name="group_no_long_description">Správca nenastavil dlhý popis tejto komunity.</string>
 
-    <string name="one_new_message">1 nová správa</string>
-    <string name="new_messages">%d nových správ</string>
-
     <string name="has_been_kicked">Používateľ %2$s vás vykopol z miestnosti %1$s</string>
     <string name="has_been_banned">Používateľ %2$s vám zakázal vstúpiť do miestnosti %1$s</string>
     <string name="reason_colon">Dôvod: %1$s</string>

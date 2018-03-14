@@ -890,9 +890,6 @@ Email также позволит вам при необходимости во�
     <string name="group_rooms">%d комнат</string>
     <string name="group_no_long_description">Администратор сообщества не предоставил подробного описания этого сообщества.</string>
 
-    <string name="one_new_message">1 новое сообщение</string>
-    <string name="new_messages">%d новых сообщений</string>
-
     <string name="has_been_kicked">Вас выгнал %2$s из %1$s</string>
     <string name="has_been_banned">Вас забанил %2$s в %1$s</string>
     <string name="reason_colon">Причина: %1$s</string>
@@ -902,4 +899,88 @@ Email также позволит вам при необходимости во�
     <string name="notification_area_hide_always">Всегда</string>
     <string name="notification_area_hide_never">Никогда</string>
     <string name="notification_area_hide_when_empty">Когда пустой</string>
-</resources>
+<string name="send_bug_report_rage_shake">Встряхните устройство, чтобы сообщить об ошибке</string>
+
+    <string name="actions">Действия</string>
+    <string name="list_members">Список участников</string>
+    <string name="open_chat_header">Открыть заголовок</string>
+    <string name="room_sync_in_progress">Синхронизация...</string>
+    <string name="room_displayname_many_members">%1$s и %2$s</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 комната</item>
+	<item quantity="few">%d комнаты</item>
+	<item quantity="many">%d комнат</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 комната</item>
+	<item quantity="few">%d комнаты</item>
+	<item quantity="many">%d комнат</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">1 активный виджет</item>
+	<item quantity="few">%d активных виджета</item>
+	<item quantity="many">%d активных виджетов</item>
+	<item quantity="other"/>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="avatar">Аватар</string>
+
+<plurals name="room_header_active_members_count">
+	<item quantity="one">1 активный участник</item>
+	<item quantity="few">%d активных участника</item>
+	<item quantity="many">%d активных участников</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 участник</item>
+	<item quantity="few">%d участника</item>
+	<item quantity="many">%d участников</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 новое сообщение</item>
+	<item quantity="few">%d новых сообщения</item>
+	<item quantity="many">%d новых сообщений</item>
+	<item quantity="other"/>
+</plurals>
+
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s комната найдена для %2$s</item>
+	<item quantity="few">%1$s комнаты найдено для %2$s</item>
+	<item quantity="many">%1$s комнат найдено для %2$s</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="membership_changes">
+	<item quantity="one">1 изменение членства</item>
+	<item quantity="few">%d изменения членства</item>
+	<item quantity="many">%d изменений членства</item>
+	<item quantity="other"/>
+</plurals>
+
+    <plurals name="others">
+	<item quantity="one">1 другой</item>
+	<item quantity="few">%d другие</item>
+	<item quantity="many">%d других</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="settings_enable_content_sending">Сохранять подробные уведомления</string>
+    <string name="settings_enable_content_sending_summary">Включите эту опцию при отключенной фоновой синхронизации для отображения подробных уведомлений. Для этого требуется отправлять нешифрованный контент через серверы служб Google</string>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 непрочитанное уведомление</item>
+	<item quantity="few">%d непрочитанных уведомления</item>
+	<item quantity="many">%d непрочитанных уведомлений</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 непрочитанное уведомление</item>
+	<item quantity="few">%d непрочитанных уведомления</item>
+	<item quantity="many">%d непрочитанных уведомлений</item>
+	<item quantity="other"></item>
+</plurals>
+    </resources>

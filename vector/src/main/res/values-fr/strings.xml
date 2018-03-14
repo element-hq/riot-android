@@ -7,7 +7,7 @@
 
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_settings">Paramètres</string>
-    <string name="title_activity_member_details">Détails des membres</string>
+    <string name="title_activity_member_details">Informations sur ce participant</string>
     <string name="title_activity_historical">Historique</string>
 
     <string name="ok">OK</string>
@@ -803,7 +803,7 @@ Appareils inconnus :</string>
     <string name="room_settings_all_messages">Notification pour chaque message</string>
     <string name="room_settings_mention_only">Notifier uniquement lorsque mon nom est mentionné</string>
     <string name="room_settings_mute">Pas de notification</string>
-    <string name="room_settings_add_homescreen_shortcut">Ajouter un raccourci sur l\'écran d\'acceuil</string>
+    <string name="room_settings_add_homescreen_shortcut">Ajouter un raccourci sur l\'écran d\'accueil</string>
 
     <string name="settings_inline_url_preview">Aperçu intégré des URL</string>
     <string name="settings_vibrate_on_mention">Vibrer lorsque l\'on mentionne quelqu\'un</string>
@@ -823,7 +823,7 @@ Appareils inconnus :</string>
     <string name="community_id_hint">Exemple</string>
 
     // group details
-    <string name="group_details_home">Acceuil</string>
+    <string name="group_details_home">Accueil</string>
     <string name="group_details_people">Personnes</string>
     <string name="group_details_rooms">Salons</string>
     <string name="no_users_placeholder">Pas d\'utilisateurs</string>
@@ -841,9 +841,6 @@ Appareils inconnus :</string>
     <string name="group_rooms">%d salons</string>
     <string name="group_no_long_description">L\'administrateur de cette communauté n\'a pas encore fourni de description.</string>
 
-    <string name="one_new_message">Un nouveau message</string>
-    <string name="new_messages">%d nouveaux messages</string>
-
     <string name="has_been_kicked">%2$s vous a exclu de %1$s</string>
     <string name="has_been_banned">%2$s vous a banni de %1$s</string>
     <string name="reason_colon">Motif : %1$s</string>
@@ -854,5 +851,59 @@ Appareils inconnus :</string>
     <string name="notification_area_hide_always">Toujours</string>
     <string name="notification_area_hide_never">Jamais</string>
     <string name="notification_area_hide_when_empty">Quand vide</string>
+
+    <string name="send_bug_report_rage_shake">Secouer avec frustration pour signaler un bug</string>
+
+    <string name="actions">Actions</string>
+    <string name="room_sync_in_progress">Synchronisation…</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">Un membre actif</item>
+	<item quantity="other">%d membres actifs</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">Un membre</item>
+	<item quantity="other">%d membres</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">Un nouveau message</item>
+	<item quantity="other">%d nouveaux messages</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s et %2$s</string>
+    <plurals name="others">
+	<item quantity="one">Un autre</item>
+	<item quantity="other">%d autres</item>
+</plurals>
+
+    <string name="list_members">Liste les membres</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">Un salon</item>
+	<item quantity="other">%d salons</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s salon trouvé pour %2$s</item>
+	<item quantity="other">%1$s salons trouvés pour %2$s</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">Un message notifié non lu</item>
+	<item quantity="other">%d messages notifiés non lus</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">Un message notifié non lu</item>
+	<item quantity="other">%d messages notifiés non lus</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">Un salon</item>
+	<item quantity="other">%d salons</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s dans %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">Un gadget actif</item>
+	<item quantity="other">%d gadgets actifs</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="avatar">Avatar</string>
 
 </resources>

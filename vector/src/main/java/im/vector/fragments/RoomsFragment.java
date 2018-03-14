@@ -58,6 +58,7 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
 import im.vector.util.RoomDirectoryData;
+import im.vector.util.RoomUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SectionView;
 import im.vector.view.SimpleDividerItemDecoration;
@@ -267,7 +268,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
         // update/retrieve the complete summary list
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
-        HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());
         HashSet<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
 
         mRooms.clear();
@@ -280,7 +280,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 // test
                 if ((null != room) && // if the room still exists
                         !room.isConferenceUserRoom() && // not a VOIP conference room
-                        !directChatRoomIds.contains(room.getRoomId()) &&
+                        !RoomUtils.isDirectChat(mSession, room.getRoomId()) &&
                         !lowPriorityRoomIds.contains(room.getRoomId())) {
                     mRooms.add(room);
                 }

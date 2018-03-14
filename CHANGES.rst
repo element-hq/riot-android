@@ -1,3 +1,24 @@
+Changes in Riot 0.8.2 (2018-03-14)
+===================================================
+ 
+Improvements:
+ * Update matrix-sdk.aar lib (v0.9.1).
+ * User Settings: Add a setting to Re-enable rageshake (#1971).
+ * User Settings: Add a setting "Keep detailed notifications" in Google Play build (#2051).
+ * Docs: Create a doc for notifications to answer to #2044.
+ * Room prewiew: Make room aliases in topic clickable (#1985).
+ * Code: Tidy codebase, thanks to @kaiyou (PR #1784).
+ * Label bunches of actionable room items for screen readers, thanks to @ndarilek  (PR #1976).
+ 
+Bug Fix:
+ * Notifications: Complaints that the "Synchronizing" notification appears too often (#2012).
+ * Notifications Privacy: Riot should never pass events content to GCM (#2051).
+ * File uploads with file name containing a path (matrix-org/matrix-android-sdk#228), thanks to @christarazi (PR #2019).
+ * Fix some plural messages (#1922), thanks to @SafaAlfulaij (PR #1934).
+ 
+Translations:
+  * Bulgarian, added thanks to @rbozhkova.
+
 Changes in Riot 0.8.1 (2018-02-15)
 ===================================================
  

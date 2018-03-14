@@ -198,6 +198,40 @@
 
     </PreferenceCategory>
 
+    <im.vector.preference.VectorDividerCategory />
+
+    <PreferenceCategory
+        android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
+        android:title="@string/settings_background_sync">
+
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
+            android:title="@string/settings_start_on_boot" />
+
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
+            android:title="@string/settings_enable_background_sync" />
+
+        <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_ENABLE_CONTENT_SENDING_PREFERENCE_KEY"
+            android:summary="@string/settings_enable_content_sending_summary"
+            android:title="@string/settings_enable_content_sending" />
+
+        <EditTextPreference
+            android:focusable="true"
+            android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_timeout" />
+
+        <EditTextPreference
+            android:focusable="true"
+            android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_delay" />
+
+    </PreferenceCategory>
+
     <im.vector.preference.VectorDividerCategory
         android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY"
         android:title="notifications_targets_divider" />
@@ -314,34 +348,6 @@
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:summary="1.2.3"
             android:title="@string/settings_identity_server" />
-    </PreferenceCategory>
-
-    <im.vector.preference.VectorDividerCategory />
-
-    <PreferenceCategory
-        android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
-        android:title="@string/settings_background_sync">
-
-        <im.vector.preference.VectorSwitchPreference
-            android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
-            android:title="@string/settings_start_on_boot" />
-
-        <im.vector.preference.VectorSwitchPreference
-            android:key="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
-            android:title="@string/settings_enable_background_sync" />
-
-        <EditTextPreference
-            android:focusable="true"
-            android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
-            android:numeric="integer"
-            android:title="@string/settings_set_sync_timeout" />
-
-        <EditTextPreference
-            android:focusable="true"
-            android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
-            android:numeric="integer"
-            android:title="@string/settings_set_sync_delay" />
-
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />

@@ -836,9 +836,6 @@ Ismeretlen eszközök:</string>
     <string name="group_rooms">%d szoba</string>
     <string name="group_no_long_description">A közösség adminisztrátora nem adott meg hosszú leírást ehhez a közösséghez.</string>
 
-    <string name="one_new_message">1 új üzenet</string>
-    <string name="new_messages">%d új üzenet</string>
-
     <string name="has_been_kicked">Ki lettél rúgva innen: %1$s, %2$s által</string>
     <string name="has_been_banned">Ki lettél tiltva innen: %1$s, %2$s által</string>
     <string name="reason_colon">Ok: %1$s</string>
@@ -853,4 +850,68 @@ Ismeretlen eszközök:</string>
     <string name="notification_area_hide_always">Mindig</string>
     <string name="notification_area_hide_never">Soha</string>
     <string name="notification_area_hide_when_empty">Üresen</string>
-</resources>
+    <string name="actions">Műveletek</string>
+    <string name="send_bug_report_rage_shake">Rázd meg ha hibát szeretnél bejelenteni</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">1 tagság változás</item>
+	<item quantity="other">%d tagság változás</item>
+</plurals>
+
+    <string name="list_members">Tagok listázása</string>
+    <string name="open_chat_header">Fejléc megnyitása</string>
+    <string name="room_sync_in_progress">Szinkronizálás...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 aktív tag</item>
+	<item quantity="other">%d aktív tag</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 tag</item>
+	<item quantity="other">%d tag</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 új üzenet</item>
+	<item quantity="other">%d új üzenet</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s és %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 másik</item>
+	<item quantity="other">%d másik</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 szoba</item>
+	<item quantity="other">%d szoba</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s szoba találat ehhez: %2$s</item>
+	<item quantity="other">%1$s szoba találat ehhez: %2$s</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 olvasatlan üzenet</item>
+	<item quantity="other">%d olvasatlan üzenet</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 olvasatlan üzenet értesítéssel</item>
+	<item quantity="other">%d olvasatlan üzenet értesítéssel</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 szoba</item>
+	<item quantity="other">%d szoba</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s itt: %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">1 aktív kisalkalmazás</item>
+	<item quantity="other">%d aktív kisalkalmazás</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="avatar">Avatar</string>
+
+<string name="receipt_avatar">Visszaigazolási avatar</string>
+    <string name="notice_avatar">Észlelés avatar</string>
+    <string name="settings_enable_content_sending">Részletes értesítések megtartása</string>
+    <string name="settings_enable_content_sending_summary">Kapcsold be ezt a lehetőséget ha a részletes értesítésekhez a háttér szinkronizáció ki van kapcsolva. Ehhez az üzenetet titkosítatlanul kell küldeni a Google szolgáltatás szerverein keresztül</string>
+    </resources>

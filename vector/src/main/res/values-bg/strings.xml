@@ -1,2 +1,898 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="encrypted_message">Шифровано съобщение</string>
+
+    // groups creation
+    <string name="resouces_language">bg</string>
+    <string name="resouces_country">BG</string>
+
+    <string name="light_theme">Светла тема</string>
+    <string name="dark_theme">Тъмна тема</string>
+    <string name="black_them">Черна тема</string>
+
+    <string name="notification_sync_in_progress">Синхронизиране</string>
+    <string name="title_activity_home">Съобщения</string>
+    <string name="title_activity_room">Стая</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
+
+    <string name="format_time_s">сек</string>
+    <string name="format_time_m">мин</string>
+    <string name="format_time_h">ч</string>
+    <string name="format_time_d">д</string>
+
+    <string name="compression_options">"Изпратете с размер "</string>
+    <string name="compression_opt_list_original">Оригинален</string>
+    <string name="compression_opt_list_large">Голям</string>
+    <string name="compression_opt_list_medium">Среден</string>
+    <string name="compression_opt_list_small">Малък</string>
+
+    <string name="attachment_cancel_download">Отказване на свалянето?</string>
+    <string name="attachment_cancel_upload">Отказване на качването?</string>
+    <string name="attachment_remaining_time_seconds">%d сек</string>
+    <string name="attachment_remaining_time_minutes">%1$dмин %2$dсек</string>
+
+    <string name="yesterday">Вчера</string>
+    <string name="today">Днес</string>
+
+    <string name="room_info_room_name">Име на стая</string>
+    <string name="room_info_room_topic">Тема на стая</string>
+
+    <string name="incoming_call">Входящо повикване</string>
+    <string name="incoming_video_call">Входящо видео повикване</string>
+    <string name="incoming_voice_call">Входящо гласово повикване</string>
+    <string name="call_in_progress">В момента тече разговор</string>
+
+    <string name="call_connecting">Свързване…</string>
+    <string name="call_ended">Разговорът приключи</string>
+    <string name="call_ring">Позвъняване…</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 активен член</item>
+	<item quantity="other">%d активни членове</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 член</item>
+	<item quantity="other">%d членове</item>
+</plurals>
+    <string name="room_title_one_member">1 член</string>
+    <string name="room_e2e_alert_title">Внимание!</string>
+    <string name="room_e2e_alert_message">Шифроване от край до край е в бета версия и може да не е надеждно.
+
+Все още не трябва да се доверявате на това, че ще защити Вашите данни.
+
+Устройства все още не могат да разшифроват история от преди присъединяването към стая.
+
+Шифровани съобщения не са видими за клиенти, които все още не поддържат шифроване.</string>
+
+    <string name="room_participants_leave_prompt_msg">Сигурни ли сте, че искате да напуснете стаята?</string>
+    <string name="room_participants_online">Онлайн</string>
+    <string name="room_participants_offline">Офлайн</string>
+    <string name="room_participants_idle">Неактивен</string>
+    <string name="room_participants_now">сега</string>
+    <string name="room_participants_ago">по-рано</string>
+
+    <string name="room_participants_header_admin_tools">ИНСТРУМЕНТИ НА АДМИНИСТРАТОРА</string>
+    <string name="room_participants_header_direct_chats">ДИРЕКТНИ ЧАТОВЕ</string>
+    <string name="room_participants_header_devices">УСТРОЙСТВА</string>
+
+    <string name="room_participants_action_ban">Блокирай</string>
+    <string name="room_participants_action_unban">Отблокирай</string>
+    <string name="room_participants_action_set_default_power_level">Възвърни към нормален потребител</string>
+    <string name="room_participants_action_set_moderator">Направи модератор</string>
+    <string name="room_participants_action_set_admin">Направи администратор</string>
+    <string name="room_participants_power_level_prompt">Няма да можете да възвърнете тази промяна, тъй като повишавате този потребител до същото ниво на достъп като Вашето.
+Сигурни ли сте?</string>
+
+    <string name="people_search_local_contacts">ЛОКАЛНИ КОНТАКТИ (%d)</string>
+    <string name="people_search_user_directory">ДИРЕКТОРИЯ С ПОТРЕБИТЕЛИ (%s)</string>
+    <string name="room_one_user_is_typing">%s пише…</string>
+    <string name="room_two_users_are_typing">%1$s и %2$s пишат…</string>
+    <string name="title_activity_historical">Архив</string>
+    <string name="title_activity_bug_report">Съобщаване за грешка</string>
+    <string name="title_activity_group_details">Информация за общността</string>
+
+    <string name="loading">Зареждане...</string>
+
+    <string name="ok">ОК</string>
+    <string name="cancel">Откажи</string>
+    <string name="save">Запази</string>
+    <string name="leave">Напусни</string>
+    <string name="send">Изпрати</string>
+    <string name="copy">Копирай</string>
+    <string name="resend">Изпрати отново</string>
+    <string name="redact">Изтрий</string>
+    <string name="quote">Цитирай</string>
+    <string name="share">Сподели</string>
+    <string name="later">По-късно</string>
+    <string name="forward">Препрати</string>
+    <string name="permalink">Permalink</string>
+    <string name="view_source">Прегледай източника</string>
+    <string name="delete">Изтрий</string>
+    <string name="rename">Преименувай</string>
+    <string name="report_content">Докладвай съдържанието</string>
+    <string name="active_call">Активен разговор</string>
+    <string name="ongoing_conference_call_voice">гласов</string>
+    <string name="ongoing_conference_call_video">видео</string>
+    <string name="notification_listen_for_events">Следете за събития</string>
+    <string name="notification_noisy_notifications">Известия със звук</string>
+    <string name="notification_silent_notifications">Известия без звук</string>
+
+    <string name="title_activity_member_details">Информация</string>
+    <string name="view_decrypted_source">Прегледай шифрования източник</string>
+    <string name="ongoing_conference_call">" Текущ групов разговор. Присъедини се с глас или видео."</string>
+    <string name="cannot_start_call">Неуспешно започване на разговора. Моля, опитайте по-късно</string>
+    <string name="missing_permissions_warning">Поради липсващи разрешения, някои функции може да липсват...</string>
+    <string name="missing_permissions_to_start_conf_call">Трябва да имате разрешение за изпращане на покани, за да може да започнете групов разговор в тази стая</string>
+    <string name="missing_permissions_title_to_start_conf_call">Неуспешно започване на разговор</string>
+    <string name="device_information">Информация за устройство</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Групови разговори не се поддържат в шифровани стаи</string>
+    <string name="send_anyway">Изпрати въпреки това</string>
+    <string name="or">или</string>
+    <string name="and">и</string>
+    <string name="invite">Покани</string>
+    <string name="offline">Офлайн</string>
+
+    <string name="action_exit">Излез</string>
+    <string name="actions">Действия</string>
+    <string name="action_sign_out">Изход</string>
+    <string name="action_sign_out_confirmation">За сигурност, излизането ще изтрие ключовете за шифроване от край до край и ако влезете отново в профила си, ще направи преднишната шифрована история на чата нечетима.
+Експортирайте Вашите ключове, преди да излезете от профила.</string>
+    <string name="action_voice_call">Гласов разговор</string>
+    <string name="action_video_call">Видео разговор</string>
+    <string name="action_global_search">Глобално търсене</string>
+    <string name="action_mark_all_as_read">Маркирай всички като прочетени</string>
+    <string name="action_historical">Архив</string>
+    <string name="action_quick_reply">Отговори</string>
+    <string name="action_open">Отвори</string>
+    <string name="action_close">Затвори</string>
+    <string name="disable">Изключи</string>
+
+    <string name="dialog_title_confirmation">Потвърждение</string>
+    <string name="dialog_title_warning">Внимание</string>
+
+    <string name="bottom_action_home">Начало</string>
+    <string name="bottom_action_favourites">Любими</string>
+    <string name="bottom_action_people">Хора</string>
+    <string name="bottom_action_rooms">Стаи</string>
+    <string name="bottom_action_groups">Общности</string>
+
+    <string name="home_filter_placeholder_home">Търси стаи</string>
+    <string name="home_filter_placeholder_favorites">Търси любими</string>
+    <string name="home_filter_placeholder_people">Търси хора</string>
+    <string name="home_filter_placeholder_rooms">Търси стаи</string>
+    <string name="home_filter_placeholder_groups">Търси общности</string>
+
+    <string name="invitations_header">Покани</string>
+    <string name="low_priority_header">Нисък приоритет</string>
+
+    <string name="direct_chats_header">Разговори</string>
+    <string name="local_address_book_header">Локални контакти</string>
+    <string name="user_directory_header">Директория с потребители</string>
+    <string name="matrix_only_filter">Само потребители на Matrix</string>
+    <string name="no_conversation_placeholder">Няма разговори</string>
+    <string name="no_contact_access_placeholder">Не сте позволили достъп на Riot до локалните Ви контакти</string>
+    <string name="no_result_placeholder">Няма резултати</string>
+
+    <string name="rooms_header">Стаи</string>
+    <string name="rooms_directory_header">Директория със стаи</string>
+    <string name="no_room_placeholder">Няма стаи</string>
+    <string name="no_public_room_placeholder">Няма налични публични стаи</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="one">1 потребител</item>
+	<item quantity="other">%d потребители</item>
+</plurals>
+
+    <string name="groups_invite_header">Покани</string>
+    <string name="groups_header">Общности</string>
+    <string name="no_group_placeholder">Няма групи</string>
+
+    <string name="send_bug_report_include_logs">Изпращане на логове</string>
+    <string name="send_bug_report_include_crash_logs">Изпращане на</string>
+    <string name="send_bug_report_include_screenshot">Изпращане на снимка на екрана</string>
+    <string name="send_bug_report">Съобщение за грешка</string>
+    <string name="send_bug_report_description">Моля, опишете грешката. Какво направихте? Какво очаквахте да стане? Какво стана всъщност?</string>
+    <string name="send_bug_report_placeholder">Опишете своя проблем тук</string>
+    <string name="send_bug_report_logs_description">За да се диагностицират проблемите, логовете от този клиент ще бъдат изпратени с този доклад за грешки. Ако предпочитате да изпратите само текста по-горе, моля, премахнете отметката:</string>
+    <string name="send_bug_report_alert_message">Изглежда, че разклащате телефона, което ни кара да мислим, че не сте доволни от Riot. Искате ли да изпратите съобщение за грешка?</string>
+    <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да изпратите съобщение за грешка?</string>
+    <string name="send_bug_report_rage_shake">Силно разклащане на телефона за изпращане на грешка</string>
+
+    <string name="send_bug_report_sent">Съобщението за грешка беше успешно изпратено</string>
+    <string name="send_bug_report_failed">Неуспешно изпращане на съобщението за грешка (%s)</string>
+    <string name="read_receipt">Прочетено</string>
+
+    <string name="join_room">Присъедини се към стая</string>
+    <string name="username">Потребителско име</string>
+    <string name="create_account">Регистрация</string>
+    <string name="login">Вход</string>
+    <string name="logout">Изход</string>
+    <string name="hs_url">URL на Home сървър</string>
+    <string name="identity_url">URL на сървър за самоличност</string>
+    <string name="user">потребител</string>
+    <string name="users">потребители</string>
+    <string name="search">Търсене</string>
+
+    <string name="start_new_chat">Започни нов чат</string>
+    <string name="start_voice_call">Започни гласов разговор</string>
+    <string name="start_video_call">Започни видео разговор</string>
+
+    <string name="start_new_chat_prompt_msg">Сигурни ли сте, че искате да започнете нов чат с %s?</string>
+    <string name="start_voice_call_prompt_msg">Сигурни ли сте, че искате да започнете гласов разговор?</string>
+    <string name="start_video_call_prompt_msg">Сигурни ли сте, че искате да започнете видео разговор?</string>
+
+    <string name="option_send_files">Изпрати файлове</string>
+    <string name="option_take_photo_video">Направи снимка или видео</string>
+    <string name="option_take_photo">Направи снимка</string>
+    <string name="option_take_video">Направи видео</string>
+
+    <string name="auth_login">Влез</string>
+    <string name="auth_register">Регистрация</string>
+    <string name="auth_submit">Изпрати</string>
+    <string name="auth_skip">Пропусни</string>
+    <string name="auth_password_placeholder">Парола</string>
+    <string name="auth_new_password_placeholder">Нова парола</string>
+    <string name="auth_user_name_placeholder">Потребителско име</string>
+    <string name="auth_add_email_message">Добавете имейл адрес в профила си, за да позволите на потребители да ви откриват и да можете да възстановявате Вашата парола.</string>
+    <string name="auth_add_phone_message">Добавете телефонен номер в профила си, за да позволите на потребители да ви откриват.</string>
+    <string name="auth_add_email_phone_message">Добавете имейл адрес и/или телефонен номер в профила си, за да позволите на потребители да ви откриват.
+
+Имейл адресът също Ви позволява да възстановите Вашата парола.</string>
+    <string name="auth_add_email_and_phone_message">Добавете имейл адрес и телефонен номер в профила си, за да позволите на потребители да Ви откриват.
+
+Имейл адресът също Ви позволява да възстановявате Вашата парола.</string>
+    <string name="auth_email_placeholder">Имейл адрес</string>
+    <string name="auth_opt_email_placeholder">Имейл адрес (по избор)</string>
+    <string name="auth_phone_number_placeholder">Телефонен номер</string>
+    <string name="auth_opt_phone_number_placeholder">Телефонен номер (по избор)</string>
+    <string name="auth_repeat_password_placeholder">Повтори парола</string>
+    <string name="auth_repeat_new_password_placeholder">Потвърди новата парола</string>
+    <string name="auth_invalid_login_param">Неправилно потребителско име и/или парола</string>
+    <string name="auth_invalid_user_name">Потребителските имена могат да съдържат само букви, цифри, точки, тирета и долни черти</string>
+    <string name="auth_invalid_password">Паролата е твърде къса (мин. 6 символа)</string>
+    <string name="auth_missing_password">Липсва парола</string>
+    <string name="auth_invalid_email">Това не изглежда да е валиден имейл адрес</string>
+    <string name="auth_invalid_phone">Това не изглежда да е валиден телефонен номер</string>
+    <string name="auth_email_already_defined">Този имейл адрес е вече използван.</string>
+    <string name="auth_missing_email">Липсва имейл адрес</string>
+    <string name="auth_missing_phone">Липсва телефонен номер</string>
+    <string name="auth_missing_email_or_phone">Липсва имейл адрес или телефонен номер</string>
+    <string name="auth_invalid_token">Невалиден тоукън</string>
+    <string name="auth_password_dont_match">Паролите не съвпадат</string>
+    <string name="auth_forgot_password">Забравена парола?</string>
+    <string name="auth_use_server_options">Използване на потребителски опции за сървър (разширени)</string>
+    <string name="auth_email_validation_message">Моля, проверете имейла си, за да продължите регистрацията</string>
+    <string name="auth_recaptcha_message">Този Home сървър би искал да се увери, че не сте робот</string>
+    <string name="auth_username_in_use">Потребителското име е вече заето</string>
+    <string name="auth_home_server">Home сървър:</string>
+    <string name="auth_identity_server">Сървър за самоличност:</string>
+    <string name="auth_reset_password_next_step_button">Потвърдих имейл адреса си</string>
+    <string name="auth_reset_password_message">За да възстановите Вашата парола, въведете имейл адреса, свързан с профила Ви:</string>
+    <string name="auth_reset_password_missing_email">Имейл адресът, свързан с профила Ви, трябва да бъде въведен.</string>
+    <string name="auth_reset_password_missing_password">Трябва да бъде въведена нова парола.</string>
+    <string name="auth_reset_password_email_validation_message">Имейл беше изпратен на %s. След като проследите връзката, която съдържа, натиснете по-долу.</string>
+    <string name="auth_reset_password_error_unauthorized">Неуспешно потвърждаване на имейл адреса: уверете се, че сте кликнали върху връзката в имейла</string>
+    <string name="auth_reset_password_success_message">Вашата парола беше възстановена.
+
+Вие сте излязли от профила си от всички устройства и вече няма да получавате известия. За да включите известията отново, влезте в профила си от всички устройства.</string>
+
+    <string name="login_error_must_start_http">URL адресът трябва да започва с http[s]://</string>
+    <string name="login_error_network_error">Неуспешно влизане в профила: Грешка в мрежата</string>
+    <string name="login_error_unable_login">Неуспешно влизане в профила</string>
+    <string name="send_bug_report_progress">Напредък (%s%%)</string>
+
+    <string name="send_files_in">Изпрати в</string>
+    <string name="auth_user_id_placeholder">Имейл или потребителско име</string>
+    <string name="auth_send_reset_email">Изпрати имейл за възстановяване</string>
+    <string name="auth_return_to_login">Връщане към страницата за влизане в профила</string>
+    <string name="auth_threepid_warning_message">Регистрация с имейл и телефонен номер наведнъж не се поддържа в момента. Само телефонен номер се взима под внимание.
+
+Можете да добавите имейл към профила си в настройките.</string>
+    <string name="login_error_registration_network_error">Неуспешна регистрация: Грешка в мрежата</string>
+    <string name="login_error_unable_register">Неуспешна регистрация</string>
+    <string name="login_error_unable_register_mail_ownership">Неуспешна регистрация: неуспешно потвърждаване на имейла</string>
+    <string name="login_error_invalid_home_server">Въведете валиден URL адрес</string>
+    <string name="login_mobile_device">Мобилно устройство</string>
+
+    <string name="login_error_forbidden">Невалидно потребителско име/парола</string>
+    <string name="login_error_unknown_token">Не е разпознат указаният тоукън за достъп</string>
+    <string name="login_error_bad_json">Грешно формиран JSON</string>
+    <string name="login_error_not_json">Не съдържаше валиден JSON</string>
+    <string name="login_error_limit_exceeded">Бяха изпратени твърде много заявки</string>
+    <string name="login_error_user_in_use">Това потребителско име е вече заето</string>
+    <string name="login_error_login_email_not_yet">Все още не сте кликнали върху връзката в имейла</string>
+
+    <string name="e2e_need_log_in_again">Трябва да влезете обратно в профила си, за да се създадат ключове за шифроване от край до край за това устройство и да се изпрати публичния ключ към Home сървъра.
+Това е еднократно.
+Извинете за неудобството.</string>
+
+    <string name="read_receipts_list">Списък с потвърждения за прочитане</string>
+
+    <string name="groups_list">Списък с групи</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">1 промяна в членството</item>
+	<item quantity="other">%d промени в членствата</item>
+</plurals>
+
+    <string name="copied_to_clipboard">Копирано в клипборд</string>
+    <string name="call">Повикване</string>
+    <string name="call_connected">Свързано повикване</string>
+    <string name="call_error_user_not_responding">Отсрещната страна не успя да отговори на повикването.</string>
+    <string name="call_error_ice_failed">Неуспешна връзка с медийното устройство</string>
+    <string name="settings_clear_medias_cache">Изчисти кеша за медия</string>
+    <string name="settings_keep_media">Запази медия</string>
+
+    <string name="call_error_camera_init_failed">Неуспешно подготвяне на камерата</string>
+    <string name="call_error_answered_elsewhere">на повикването е отговорено другаде</string>
+
+    <string name="media_picker_both_capture_title">Направи снимка или видео</string>
+    <string name="media_picker_cannot_record_video">Неуспешно заснемане на видео</string>
+
+    <string name="permissions_rationale_popup_title">Информация</string>
+    <string name="room_participants_action_ignore">Скрий всички съобщения от този потребител</string>
+    <string name="room_participants_action_unignore">Покажи всички съобщения от този потребител</string>
+    <string name="room_participants_invite_search_another_user">Потребителски ID, име или имейл</string>
+    <string name="room_participants_action_mention">Спомени</string>
+    <string name="room_participants_action_devices_list">Покажи списъка с устройства</string>
+    <string name="room_participants_invite_prompt_msg">Сигурни ли сте, че искате да поканите %s в този чат?</string>
+    <string name="room_participants_kick_prompt_msg">Сигурни ли сте, че искате да изгоните този потребител от чата?</string>
+    <string name="room_participants_ban_prompt_msg">Сигурни ли сте, че искате да блокирате този потребител в чата?</string>
+
+    <string name="people_search_filter_text">Само потребители на Matrix</string>
+
+    <string name="room_many_users_are_typing">%1$s, %2$s и други пишат…</string>
+    <string name="room_message_placeholder_encrypted">Изпрати шифровано съобщение…</string>
+    <string name="room_message_placeholder_not_encrypted">Изпрати съобщение (нешифровано)…</string>
+    <string name="room_offline_notification">Връзката със сървъра е изгубена.</string>
+    <string name="room_unsent_messages_notification">Съобщенията не са изпратени. %1$s или %2$s?</string>
+    <string name="room_unknown_devices_messages_notification">Съобщението не е изпратено поради наличието на непознати устройства. %1$s или %2$s?</string>
+    <string name="room_prompt_resend">Изпрати всички отново</string>
+    <string name="room_prompt_cancel">откажи всички</string>
+    <string name="room_resend_unsent_messages">Изпрати отново неизпратените съобщения</string>
+    <string name="room_delete_unsent_messages">Изтрий неизпратените съобщения</string>
+    <string name="room_message_file_not_found">Файлът не е намерен</string>
+    <string name="room_do_not_have_permission_to_post">Нямате разрешение да публикувате в тази стая</string>
+    <string name="room_new_message_notification">1 ново съобщение</string>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 ново съобщение</item>
+	<item quantity="other">%d нови съобщения</item>
+</plurals>
+
+    <string name="ssl_fingerprint_hash">Отпечатък (%s):</string>
+    <string name="ssl_logout_account">Излез</string>
+    <string name="ssl_remain_offline">Игнорирай</string>
+    <string name="ssl_could_not_verify">Неуспешно потвърждаване на самоличността на отдалечения сървър.</string>
+    <string name="ssl_cert_not_trust">Това може да означава, че някой злонамерено прихваща Вашата връзка, или че телефонът Ви не се доверява на сертификата, предоставен от отдалечения сървър.</string>
+    <string name="ssl_cert_new_account_expl">Ако администраторът на сървъра е обявил, че това е нормално, уверете се, че отпечатъкът по-долу съвпада с този, предоставен от него.</string>
+    <string name="ssl_unexpected_existing_expl">Сертификатът е различен от този, на който телефонът Ви се доверява. Това е МНОГО НЕОБИЧАЙНО. Препоръчваме да НЕ ПРИЕМАТЕ този нов серфитикат.</string>
+    <string name="ssl_expected_existing_expl">Сертификатът се промени от такъв, който е бил доверен, на такъв който вече не е. Сървърът може да е подновил своя сертификат. Свържете се с администратора за правилния отпечатък.</string>
+    <string name="ssl_only_accept">Приемайте сертификата САМО ако администратора на сървъра е публикувал отпечатък, който съвпада с този по-горе.</string>
+    <string name="ssl_trust">Довери се</string>
+    <string name="ssl_do_not_trust">Не се доверявай</string>
+    <string name="room_details_title">Информация</string>
+    <string name="room_details_people">Хора</string>
+    <string name="room_details_files">Файлове</string>
+    <string name="room_details_settings">Настройки</string>
+    <string name="room_details_selected">избран</string>
+    <string name="malformed_id">Грешно формиранo ID. Трябва да бъде имейл адрес или Matrix ID, например \'@localpart:domain\'</string>
+    <string name="room_details_people_invited_group_name">ПОКАНЕНИ</string>
+    <string name="room_event_action_report_prompt_reason">Причина за докладване на това съдържание</string>
+    <string name="room_event_action_report_prompt_ignore_user">Искате ли да скриете всички съобщения от този потребител?</string>
+    <string name="room_event_action_cancel_download">Откажи изтеглянето</string>
+
+    <string name="room_event_action_cancel_upload">Откажи качването</string>
+    <string name="room_displayname_invite_from">Покана от %s</string>
+    <string name="room_displayname_room_invite">Покана за стая</string>
+    <string name="room_displayname_two_members">%1$s и %2$s</string>
+
+    <string name="room_displayname_many_members">%1$s и %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 друг</item>
+	<item quantity="other">%d други</item>
+</plurals>
+
+    <string name="room_displayname_no_title">Празна стая</string>
+
+    <string name="search_hint">Търси</string>
+    <string name="search_members_hint">Филтриране на членовете</string>
+    <string name="search_no_results">Няма резултати</string>
+    <string name="tab_title_search_rooms">СТАИ</string>
+    <string name="tab_title_search_messages">СЪОБЩЕНИЯ</string>
+    <string name="tab_title_search_people">ХОРА</string>
+    <string name="tab_title_search_files">ФАЙЛОВЕ</string>
+
+    <string name="room_recents_join">ВЛЕЗ</string>
+    <string name="room_recents_directory">ДИРЕКТОРИЯ</string>
+    <string name="room_recents_favourites">ЛЮБИМИ</string>
+    <string name="room_recents_conversations">СТАИ</string>
+    <string name="room_recents_low_priority">НИСЪК ПРИОРИТЕТ</string>
+    <string name="room_recents_invites">ПОКАНИ</string>
+    <string name="room_recents_start_chat">Започни чат</string>
+    <string name="room_recents_create_room">Създай стая</string>
+    <string name="room_recents_join_room">Присъедини се към стая</string>
+    <string name="room_recents_join_room_title">Присъединяване към стая</string>
+    <string name="room_recents_join_room_prompt">Напишете ID или псевдоним на стая</string>
+
+    <string name="directory_search_results_title">Прегледай директорията</string>
+    <string name="directory_search_room">%1$d стая</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 стая</item>
+	<item quantity="other">%d стаи</item>
+</plurals>
+    <string name="directory_search_room_for">%1$d стаи намерени за %2$s</string>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s стая намерена за %2$s</item>
+	<item quantity="other">%1$s стаи намерени за %2$s</item>
+</plurals>
+    <string name="directory_searching_title">Търсене в директорията..</string>
+
+    <string name="room_settings_all_messages_noisy">Всички съобщения (шумно)</string>
+    <string name="room_settings_all_messages">Всички съобщения</string>
+    <string name="room_settings_mention_only">Само при споменаване</string>
+    <string name="room_settings_mute">Заглуши</string>
+    <string name="room_settings_favourite">Любим</string>
+    <string name="room_settings_de_prioritize">Нисък приоритет</string>
+    <string name="room_settings_direct_chat">Директен чат</string>
+    <string name="room_settings_leave_conversation">Напусни разговора</string>
+    <string name="room_settings_forget">Забрави</string>
+    <string name="room_settings_add_homescreen_shortcut">Добави пряк път на екрана</string>
+
+    <string name="room_sliding_menu_messages">Съобщения</string>
+    <string name="room_sliding_menu_settings">Настройки</string>
+    <string name="room_sliding_menu_version">"Версия "</string>
+    <string name="room_sliding_menu_term_and_conditions">Правила и условия</string>
+    <string name="room_sliding_menu_third_party_notices">Други известия</string>
+    <string name="room_sliding_menu_copyright">Лиценз</string>
+    <string name="room_sliding_menu_privacy_policy">Правила за поверителност</string>
+
+    <string name="settings_profile_picture">Профилна снимка</string>
+    <string name="settings_display_name">Име/псевдоним</string>
+    <string name="settings_email_address">Имейл</string>
+    <string name="settings_add_email_address">Добави имейл адрес</string>
+    <string name="settings_phone_number">Телефон</string>
+    <string name="settings_add_phone_number">Добави телефонен номер</string>
+    <string name="settings_enable_all_notif">Включване на известия за този профил</string>
+    <string name="settings_enable_this_device">Включване на известия за това устройство</string>
+    <string name="settings_containing_my_display_name">Съобщения, съдържащи моя псевдоним</string>
+    <string name="settings_containing_my_user_name">Съобщения, съдържащи моето потребителско име</string>
+    <string name="settings_messages_in_one_to_one">Съобщения в индивидуални чатове</string>
+    <string name="settings_messages_in_group_chat">Съобщения в групови чатове</string>
+    <string name="settings_invited_to_room">Когато ме поканят в стая</string>
+    <string name="settings_call_invitations">Покани за разговор</string>
+    <string name="settings_messages_sent_by_bot">Съобщения изпратени от бот</string>
+
+    <string name="settings_second">секунда</string>
+    <string name="settings_seconds">секунди</string>
+
+    <string name="settings_version">Версия</string>
+    <string name="settings_olm_version">Olm версия</string>
+    <string name="settings_app_term_conditions">Правила и условия</string>
+    <string name="settings_third_party_notices">Други известия</string>
+    <string name="settings_copyright">Лиценз</string>
+    <string name="settings_privacy_policy">Правила за поверителност</string>
+    <string name="settings_clear_cache">Изчисти кеша</string>
+    <string name="settings_user_settings">Настройки на потребителя</string>
+    <string name="settings_notifications">Известия</string>
+    <string name="settings_ignored_users">Игнорирани потребители</string>
+    <string name="settings_other">Други</string>
+    <string name="settings_advanced">Разширени</string>
+    <string name="settings_cryptography">Криптография</string>
+    <string name="settings_notifications_targets">Устройства, получаващи известия</string>
+    <string name="settings_contact">Локални контакти</string>
+    <string name="settings_contacts_phonebook_country">Държава на телефонния указател</string>
+    <string name="settings_pin_missed_notifications">Закачане на стаи с пропуснати известия</string>
+    <string name="settings_pin_unread_messages">Закачане на стаи с непрочетени съобщения</string>
+    <string name="settings_devices_list">Устройства</string>
+    <string name="settings_inline_url_preview">Включване по подразбиране на URL прегледи</string>
+    <string name="settings_hide_read_receipts">Скриване на потвържденията за прочитане на съобщение</string>
+    <string name="settings_dont_send_typings_notifs">Не показвай на другите, че в момента пиша</string>
+    <string name="settings_always_show_timestamps">Винаги показвай часа на съобщението</string>
+    <string name="settings_12_24_timestamps">Показване на времето в 12-часов формат (напр. 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Скриване на съобщения за присъединяване/напускане (не засяга покани/изгонвания/блокирания)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Скриване на информацията за промените на аватара и името</string>
+    <string name="settings_disable_markdown">Изключи markdown при изпращане</string>
+    <string name="settings_analytics">Статистика</string>
+    <string name="settings_opt_out_of_analytics">Отказване от събиране на статистически данни</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot събира анонимни статистики, за да ни позволи да подобрим приложението.</string>
+
+    <string name="devices_details_dialog_title">Информация за устройството</string>
+    <string name="devices_details_id_title">ID</string>
+    <string name="devices_details_name_title">Име</string>
+    <string name="devices_details_device_name">Име на устройството</string>
+    <string name="devices_details_last_seen_title">Последно видян</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_details_time_format">HH:mm:ss</string>
+    <string name="devices_delete_dialog_text">Тази операция изискра допълнителна автентикация.
+За да продължите, моля, въведете Вашата парола.</string>
+    <string name="devices_delete_dialog_title">Автентикация</string>
+    <string name="devices_delete_pswd">Парола:</string>
+    <string name="devices_delete_submit_button_label">Изпрати</string>
+
+    <string name="settings_logged_in">Влезли сте като</string>
+    <string name="settings_home_server">Home сървър</string>
+    <string name="settings_identity_server">Сървър за самоличност</string>
+
+    <string name="settings_user_interface">Потребителски интерфейс</string>
+    <string name="settings_interface_language">Език на интерфейса</string>
+    <string name="settings_select_language">Избор на език</string>
+
+    <string name="account_email_validation_title">Очакване на потвърждение</string>
+    <string name="account_email_validation_message">Моля, проверете своя имейл адрес и натиснете връзката, която той съдържа. След като направите това, натиснете продължи.</string>
+    <string name="account_email_validation_error">Неуспешно потвърждение на имейл адрес. Моля, проверете своя имейл адрес и натиснете връзката, която той съдържа. След като направите това, натиснете продължи</string>
+    <string name="account_email_already_used_error">Този имейл адрес е вече зает</string>
+    <string name="account_email_not_found_error">Неуспешно изпращане на имейл: Този имейл адрес не беше открит</string>
+    <string name="account_phone_number_already_used_error">Този телефонен номер е вече зает</string>
+
+    <string name="settings_change_password">Смяна на парола</string>
+    <string name="settings_old_password">стара парола</string>
+    <string name="settings_new_password">нова парола</string>
+    <string name="settings_confirm_password">потвърди парола</string>
+    <string name="settings_fail_to_update_password">Неуспешно обновяване на парола</string>
+    <string name="settings_password_updated">Вашата парола беше обновена</string>
+    <string name="settings_unignore_user">Покажи всички съобщения от %s?</string>
+
+    <string name="settings_delete_threepid_confirmation">Сигурни ли сте, че искате да премахнете %1$s %2$s?</string>
+
+    <string name="settings_select_country">Избор на държава</string>
+
+    <string name="settings_phone_number_country_label">Държава</string>
+    <string name="settings_phone_number_country_error">Моля, изберете държава</string>
+    <string name="settings_phone_number_label">Телефонен номер</string>
+    <string name="settings_phone_number_error">Невалиден телефонен номер за избраната държава</string>
+    <string name="settings_phone_number_verification_instruction">Изпратихме Ви SMS с код за активиране. Моля, въведете този код по-долу.</string>
+    <string name="settings_phone_number_verification_error_empty_code">Въведете код за активиране</string>
+    <string name="settings_phone_number_verification_error">Грешка по време на проверката на телефонния Ви номер</string>
+    <string name="settings_phone_number_code">Код</string>
+
+
+    <string name="settings_flair">Значка</string>
+
+    <string name="media_saving_period_3_days">3 дни</string>
+    <string name="media_saving_period_1_week">1 седмица</string>
+    <string name="media_saving_period_1_month">1 месец</string>
+    <string name="media_saving_period_forever">Постоянно</string>
+
+    <string name="room_settings_room_photo">Снимка на стаята</string>
+    <string name="room_settings_room_name">Име на стаята</string>
+    <string name="room_settings_topic">Тема</string>
+    <string name="room_settings_room_tag">Етикет на стаята</string>
+    <string name="room_settings_tag_pref_dialog_title">Етикет:</string>
+
+    <string name="room_settings_tag_pref_entry_favourite">Любим</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Нисък приоритет</string>
+    <string name="room_settings_tag_pref_entry_none">няма</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">любим</string>
+    <string name="room_settings_tag_pref_entry_value_low_priority">нисък</string>
+    <string name="room_settings_tag_pref_entry_value_none">няма</string>
+
+    <string name="room_settings_category_access_visibility_title">Достъп и видимост</string>
+    <string name="room_settings_directory_visibility">Включване в директорията със стаи</string>
+    <string name="room_settings_room_notifications_title">Известия</string>
+    <string name="room_settings_room_access_rules_pref_title">Достъп до стая</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Кой може да чете историята?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Кой има достъп до тази стая?</string>
+
+    <string name="room_settings_read_history_entry_anyone">Всеки</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Само членове (от момента на избиране на тази опция)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Само членове (от момента, в който те са поканени)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Само членове (от момента, в който са се присъединили)</string>
+
+    <string name="room_settings_room_access_warning">За да дадете линк към стаята, тя трябва да има адрес.</string>
+    <string name="room_settings_room_access_entry_only_invited">Само хора, които са били поканени</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Всеки, който знае адреса на стаята (освен гости)</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Всеки, който знае адреса на стаята (включително гости)</string>
+
+    <string name="room_settings_banned_users_title">Блокирани потребители</string>
+
+    <string name="room_settings_category_advanced_title">Разширени</string>
+    <string name="room_settings_addresses_pref_title">Адреси</string>
+    <string name="room_settings_labs_pref_title">Експерименти</string>
+    <string name="room_settings_labs_warning_message">Това са експериментални функции , които могат да се счупят по неочаквани начини. Внимавайте при използване.</string>
+    <string name="room_settings_labs_end_to_end">Шифроване от край до край</string>
+    <string name="room_settings_labs_end_to_end_is_active">Шифроване от край до край е включено</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Шифроване само за потвърдени устройства</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Никога не изпращай шифровани съобщения от това устройство в тази стая до непотвърдени устройства.</string>
+
+    <string name="room_settings_addresses_no_local_addresses">Тази стая няма локални адреси</string>
+    <string name="room_settings_addresses_add_new_address">Нов адрес (напр. #foo:matrix.org)</string>
+
+    <string name="room_settings_no_flair">" Тази стая не показва значка за нито една общност"</string>
+    <string name="room_settings_add_new_group">Нов ID на общност (напр. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Невалиден ID на общност</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' е невалиден ID на общност</string>
+
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">Невалиден формат на псевдонима</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' не е валиден формат на псевдоним</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Няма зададен основен адрес. Адресът по подразбиране за тази стая ще бъде избран на случаен принцип</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Предупреждение за основен адрес</string>
+
+    <string name="room_settings_set_main_address">Задай като основен адрес</string>
+    <string name="room_settings_unset_main_address">Премахни задаването като основен адрес</string>
+    <string name="room_settings_copy_room_id">Копирай ID на стаята</string>
+    <string name="room_settings_copy_room_address">Копирай адреса на стаята</string>
+
+    <string name="room_settings_addresses_e2e_enabled">Шифроването е включено в тази стая.</string>
+    <string name="room_settings_addresses_e2e_disabled">Шифроването е изключено в тази стая.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Включване на шифроване 
+(не може да се изключи в последствие!)</string>
+    <string name="room_settings_addresses_e2e_prompt_title">Внимание!</string>
+    <string name="room_settings_addresses_e2e_prompt_message">Шифроване от край до край е експериментално и може да не е надеждно.
+
+Все още не трябва да се доверявате на това, че ще защити Вашите данни.
+
+Устройства все още не могат да разшифроват история от преди присъединяването към стая.
+
+Веднъж включено, шифроването в стаята не може да бъде изключено (за сега).
+
+Шифровани съобщения не са видими за клиенти, които все още не поддържат шифроване.</string>
+
+    <string name="directory_title">Директория</string>
+    <string name="settings_theme">Тема</string>
+
+    <string name="failed_to_load_timeline_position">%s се опита да зареди конкретна точка в хронологията на тази стая, но не я намери.</string>
+
+    <string name="encryption_information_title">Информация за шифроване от край до край</string>
+
+    <string name="encryption_information_device_info">Информация за събитие</string>
+    <string name="encryption_information_user_id">ID на потребител</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519 ключ за самоличност</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Заявен ключов отпечатък Ed25519</string>
+    <string name="encryption_information_algorithm">Алгоритъм</string>
+    <string name="encryption_information_session_id">ID на сесия</string>
+    <string name="encryption_information_decryption_error">Грешка при разшифроване</string>
+
+    <string name="encryption_information_sender_device_information">Информация за устройството на подателя</string>
+    <string name="encryption_information_device_name">Име на устройство</string>
+    <string name="encryption_information_name">Име</string>
+    <string name="encryption_information_device_id">ID на устройство</string>
+    <string name="encryption_information_device_key">Ключ на устройство</string>
+    <string name="encryption_information_verification">Потвърждение</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечатък</string>
+
+    <string name="encryption_export_e2e_room_keys">Експортирай E2E ключове за стая</string>
+    <string name="encryption_export_room_keys">Експортиране на ключове за стая</string>
+    <string name="encryption_export_room_keys_summary">Експортирай ключовете в локален файл</string>
+    <string name="encryption_export_export">Експортирай</string>
+    <string name="encryption_export_enter_passphrase">Въведи парола</string>
+    <string name="encryption_export_confirm_passphrase">Потвърди парола</string>
+    <string name="encryption_export_saved_as">E2E ключовете бяха запазени в \'%s\'</string>
+
+    <string name="encryption_import_e2e_room_keys">Импортирай E2E ключове за стая</string>
+    <string name="encryption_import_room_keys">Импортиране на ключове за стая</string>
+    <string name="encryption_import_room_keys_summary">Импортирай ключовете в локален файл</string>
+    <string name="encryption_import_import">Импортирай</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Шифроване само за потвърдени устройства</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Никога не изпращай шифровани съобщения от това устройство до непотвърдени устройства</string>
+
+    <string name="encryption_information_not_verified">НЕ е потвърдено</string>
+    <string name="encryption_information_verified">Потвърдено</string>
+    <string name="encryption_information_blocked">В черния списък</string>
+
+    <string name="encryption_information_unknown_device">неизвестно устройство</string>
+    <string name="encryption_information_none">няма</string>
+
+    <string name="encryption_information_verify">Потвърди</string>
+    <string name="encryption_information_unverify">Махни потвържд.</string>
+    <string name="encryption_information_block">Блокирай</string>
+    <string name="encryption_information_unblock">Отблокирай</string>
+
+    <string name="encryption_information_verify_device">Потвърди устройството</string>
+    <string name="encryption_information_verify_device_warning">" За да потвърдите, че на това устройство може да се вярва, моля свържете се със собственика му по друг начин (напр. на живо или чрез телефонен разговор) и го попитайте дали ключът, който той вижда в неговите настройки на потребителя за това устройство, съвпада с ключа по-долу:"</string>
+    <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу. Ако не, то тогава някой друг имитира това устройство и вероятно искате вместо това да натиснете бутона за черен списък.
+В бъдеще този процес на потвърждение ще бъде по-лесен.</string>
+    <string name="encryption_information_verify_key_match">Потвърждавам, че ключовете съвпадат</string>
+
+    <string name="e2e_enabling_on_app_update">Riot поддържа шифроване от край до край, но за да го включите трябва да влезете в профила си отново.
+
+Може да го направите сега или по-късно от настройките на приложението.</string>
+
+    <string name="unknown_devices_alert_title">Стаята съдържа непознати устройства</string>
+    <string name="unknown_devices_alert_message">Тази стая съдържа непознати устройства, който не са били потвърдени.
+Това означава, че няма гаранция, че устройствата принадлежат на потребителите, на който се твърди, че принадлежат.
+Препоръчваме Ви да минете през процеса за потвърждение за всяко устройство, за да потвърдите, че принадлежат на легитимен собственик. Ако предпочитате, можете да изпратите съобщението без потвърждение.
+
+Непознати устройства:</string>
+
+    <string name="directory_server_fail_to_retrieve_server">Сървърът може би е недостъпен или претоварен</string>
+    <string name="directory_server_type_homeserver">Въведете Home сървър, от който да се покажат публични стаи</string>
+    <string name="directory_server_placeholder">Адрес на Home сървър</string>
+    <string name="directory_server_all_rooms_on_server">Всички стаи на сървър %s</string>
+    <string name="directory_server_native_rooms">Всички изцяло %s стаи</string>
+
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 стая</item>
+	<item quantity="other">%d стаи</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
+
+    <string name="widget_no_power_to_manage">Трябва Ви разрешение, за да управлявате приспособленията в тази стая</string>
+    <string name="widget_creation_failure">Създаване на приспособлението беше неуспешно</string>
+    <string name="event_formatter_widget_added">%1$s добавено от %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s премахнато от %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Създаване на групови разговори с jitsi</string>
+    <string name="widget_delete_message_confirmation">Сигурни ли сте, че искате да изтриете приспособлението?</string>
+    <plurals name="active_widgets">
+	<item quantity="one">1 активно приспособление</item>
+	<item quantity="other">%d активни приспособления</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="widget_integration_unable_to_create">Неуспешно създаване на приспособление.</string>
+    <string name="widget_integration_failed_to_send_request">Неуспешно изпращане на заявката.</string>
+    <string name="widget_integration_positive_power_level">Нивото на достъп трябва да бъде позитивно число.</string>
+    <string name="widget_integration_must_be_in_room">Не сте в тази стая.</string>
+    <string name="widget_integration_no_permission_in_room">Нямате достъп да направите това в тази стая.</string>
+    <string name="widget_integration_missing_room_id">Липсва room_id в заявката.</string>
+    <string name="widget_integration_missing_user_id">Липсва user_id в заявката.</string>
+    <string name="widget_integration_room_not_visible">Стая %s не е видима.</string>
+    <string name="settings_labs_matrix_apps">Matrix приложения</string>
+    <string name="room_add_matrix_apps">Добави Matrix приложения</string>
+    <string name="permissions_rationale_msg_storage">Riot иска разрешение за достъп до Вашата галерия със снимки и видеа, за да изпраща и запазва прикачени файлове.
+
+Моля, разрешете достъпа от следващия прозорец, който се покаже, за да можете да изпращате файлове от телефона си.</string>
+    <string name="permissions_rationale_msg_camera">Riot иска разшерение за достъп до Вашата камера, за да направи снимки или да осъществи видео разговори.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot иска разшерение за достъп до Вашия микрофон, за да се извърши звуков разговор.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot иска разшерение за достъп до микрофона и камерата Ви, за да извърши видео разговор.
+
+Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
+    <string name="permissions_rationale_msg_contacts">Riot иска разшерение за достъп до контактите Ви, за да намери други Matrix потребители по имейл или телефонен номер.
+
+Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да намирате потребители на Riot от Вашите контакти.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot иска разшерение за достъп до контактите Ви, за да намери други Matrix потребители по имейл или телефонен номер.
+
+Позволяване на достъп до контактите Ви?</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">Извинете.. Операцията не е извършена поради липсващи разрешения за достъп</string>
+
+    <string name="media_slider_saved">Запазено</string>
+    <string name="media_slider_saved_message">Запазено в изтеглени файлове</string>
+    <string name="yes">ДА</string>
+    <string name="no">НЕ</string>
+    <string name="_continue">Продължи</string>
+
+    <string name="remove">Премахни</string>
+    <string name="join">Влез</string>
+    <string name="preview">Прегледай</string>
+    <string name="reject">Откажи</string>
+
+    <string name="rejoin">Повторно присъединяване</string>
+    <string name="forget_room">Забрави стаята</string>
+
+    <string name="avatar">Профилна снимка</string>
+
+<string name="list_members">Списък с членове</string>
+    <string name="room_jump_to_first_unread">Отиди до първото непрочетено съобщение.</string>
+
+    <string name="room_preview_invitation_format">Вие сте поканен да се присъедините към тази стая от %s</string>
+    <string name="room_preview_unlinked_email_warning">Поканата беше изпратена на %s, който не е свързан с този профил.
+Може да искате да влезете с друг профил или да добавите имейл адреса в този.</string>
+    <string name="room_preview_try_join_an_unknown_room">Опитвате се да влезете в %s. Желаете ли да се присъедините, за да участвате в дискусията?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">стая</string>
+    <string name="room_preview_room_interactions_disabled">Това е преглед на стаята. Интеракции в нея са изключени.</string>
+
+    <string name="room_creation_title">Нов чат</string>
+    <string name="room_creation_add_member">Добави член</string>
+    <string name="room_participants_leave_prompt_title">Напускане на стая</string>
+    <string name="room_participants_remove_prompt_msg">Сигурни ли сте, че искате да премахнете %s от този чат?</string>
+    <string name="room_participants_create">Създай</string>
+
+    <string name="room_participants_header_call">ПОВИКВАНЕ</string>
+    <string name="room_participants_action_invite">Покани</string>
+    <string name="room_participants_action_leave">Напусни тази стая</string>
+    <string name="room_participants_action_remove">Премахни от тази стая</string>
+    <string name="people_search_invite_by_id"><u>Покани по ID</u></string>
+    <string name="people_search_invite_by_id_dialog_title">Покани потребител по ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Моля, въведете един или повече имейл адреси или Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">Имейл или Matrix ID</string>
+
+    <string name="room_menu_search">Търсене</string>
+    <string name="room_details_people_present_group_name">УЧАСТНИЦИ</string>
+
+    <string name="room_sync_in_progress">Синхронизиране...</string>
+    <string name="settings_summary_app_info_link">Екран с информация за системата на приложението</string>
+    <string name="settings_title_app_info_link">Информация за приложението</string>
+
+    <string name="settings_notification_ringtone">Звук на известията</string>
+    <string name="settings_turn_screen_on">Включи екрана за 3 секунди</string>
+
+    <string name="settings_start_on_boot">Пускане при включване на телефона</string>
+    <string name="settings_background_sync">Фонова синхронизация</string>
+    <string name="settings_enable_background_sync">Включване на фонова синхронизация</string>
+    <string name="settings_set_sync_timeout">Времето за синхронизация изтече</string>
+    <string name="settings_set_sync_delay">Забавяне между две заявки за синхронизация</string>
+    <string name="settings_contacts_app_permission">Разрешение за достъп до контакти</string>
+    <string name="settings_home_display">Начало</string>
+    <string name="settings_vibrate_on_mention">Вибрация при споменаване</string>
+
+    <string name="settings_data_save_mode">Режим запазване на данни</string>
+
+    <string name="settings_delete_notification_targets_confirmation">Сигурни ли сте, че искате да премахнете това устройство, получаващо известия?</string>
+
+    <string name="settings_phone_number_verification">Потвърждение на номер</string>
+    <string name="room_settings_tag_pref_no_tag">без етикет</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Достъп до историята на стаята</string>
+    <string name="room_settings_room_internal_id">Вътрешен ID на стаята</string>
+    <string name="room_settings_labs_end_to_end_warnings">Трябва да излезете от профила си, за да можете да включите шифроването.</string>
+    <string name="select_room_directory">Избиране на директория със стаи</string>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 непрочетено съобщение</item>
+	<item quantity="other">%d непрочетени съобщения</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 непрочетено съобщение</item>
+	<item quantity="other">%d непрочетени съобщения</item>
+</plurals>
+    <string name="historical_placeholder">Търсене за архив</string>
+
+    <string name="font_size">Размер на шрифта</string>
+    <string name="tiny">Ситен</string>
+    <string name="small">Малък</string>
+    <string name="normal">Нормален</string>
+    <string name="large">Голям</string>
+    <string name="larger">По-голям</string>
+    <string name="largest">Най-голям</string>
+    <string name="huge">Огромен</string>
+
+    <string name="settings_labs_native_camera">Използване на камерата на телефона</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Добавихте ново устройство \'%s\', което изисква ключове за шифроване.</string>
+    <string name="your_unverified_device_requesting">Вашето непотвърдено устройство \'%s\' изисква ключове за шифроване.</string>
+    <string name="start_verification">Започни потвърждението</string>
+    <string name="share_without_verifying">Сподели без потвърждение</string>
+    <string name="ignore_request">Игнорирай поканата</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Внимание!</string>
+    <string name="conference_call_warning_message">Груповите разговори са в процес на разработка и не са надеждни.</string>
+
+    // slash commands
+    <string name="command_error">Грешка в командата</string>
+    <string name="unrecognized_command">Неразпозната команда: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Изключено</string>
+    <string name="notification_on">Включено</string>
+    <string name="notification_noisy">Шумно</string>
+
+    <string name="create">Създай</string>
+    <string name="create_community">Създай общност</string>
+    <string name="community_name">Име на общност</string>
+    <string name="community_name_hint">Пример</string>
+    <string name="community_id">ID на общност</string>
+    <string name="community_id_hint">пример</string>
+
+    // group details
+    <string name="group_details_home">Начало</string>
+    <string name="group_details_people">Хора</string>
+    <string name="group_details_rooms">Стаи</string>
+    <string name="no_users_placeholder">Няма потребители</string>
+
+    <string name="rooms">Стаи</string>
+    <string name="joined">Участници</string>
+    <string name="invited">Поканени</string>
+    <string name="filter_group_members">Филтриране на членовете</string>
+    <string name="filter_group_rooms">Филтриране на стаите</string>
+
+    <string name="group_one_member">1 член</string>
+    <string name="group_members">%d членове</string>
+
+    <string name="group_one_room">1 стая</string>
+    <string name="group_rooms">%d стаи</string>
+    <string name="group_no_long_description">Администраторът на общността не е предоставил дълго описание за тази общност.</string>
+
+    <string name="has_been_kicked">Бяхте изгонен от %1$s от %2$s</string>
+    <string name="has_been_banned">Бяхте блокиран от %1$s от %2$s</string>
+    <string name="reason_colon">Причина: %1$s</string>
+    <string name="receipt_avatar">Профилна снимка</string>
+    <string name="notice_avatar">Профилна снимка</string>
+    <string name="open_chat_header">Отвори заглавие</string>
+    <string name="settings_enable_content_sending">Остави детайлирани известия</string>
+    <string name="settings_enable_content_sending_summary">Включи тази опция, когато фоновата синхронизация е изключвена за показване на детайлирани известия. Това изисква изпращането на съдържанието на нешифровани съобщения през сървъри за Google услуги</string>
+    </resources>

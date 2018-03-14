@@ -885,9 +885,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="group_rooms">%d huonetta</string>
     <string name="group_no_long_description">Yhteisön pääkäyttäjä ei ole antanut pitkää kuvausta yhteisölle.</string>
 
-    <string name="one_new_message">1 uusi viesti</string>
-    <string name="new_messages">%d uutta viestiä</string>
-
     <string name="has_been_kicked">Sinut poistettiin %1$s käyttäjän %2$s toimesta</string>
     <string name="has_been_banned">Sinut estettiin %1$s käyttäjän %2$s toimesta</string>
     <string name="reason_colon">Syy: %1$s</string>

@@ -838,9 +838,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="group_rooms">%d gela</string>
     <string name="group_no_long_description">Komunitatearen administratzaileak ez du deskripzio luzerik eman komunitate honentzat.</string>
 
-    <string name="one_new_message">mezu berri 1</string>
-    <string name="new_messages">%d mezu berri</string>
-
     <string name="has_been_kicked">%1$s gelatik kanporatu zaitu %2$s erabiltzaileak</string>
     <string name="has_been_banned">%1$s gelatik debekatu zaitu %2$s erabiltzaileak</string>
     <string name="reason_colon">Arrazoia: %1$s</string>
@@ -853,4 +850,68 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="notification_area_hide_always">Beti</string>
     <string name="notification_area_hide_never">Inoiz ez</string>
     <string name="notification_area_hide_when_empty">Noiz hutsik dago</string>
-</resources>
+    <string name="send_bug_report_rage_shake">Astindu amorruz akatsaren berri emateko</string>
+
+    <string name="actions">Ekintzak</string>
+    <plurals name="membership_changes">
+	<item quantity="one">Kidetza aldaketa bat</item>
+	<item quantity="other">%d kidetza aldaketa</item>
+</plurals>
+
+    <string name="list_members">Zerrendatu kideak</string>
+    <string name="open_chat_header">Ireki goiburua</string>
+    <string name="room_sync_in_progress">Sinkronizatzen...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">Kide aktibo 1</item>
+	<item quantity="other">%d kide aktibo</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">Kide 1</item>
+	<item quantity="other">%d kide</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">Mezu berri 1</item>
+	<item quantity="other">%d mezu berri</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s eta %2$s</string>
+    <plurals name="others">
+	<item quantity="one">Beste bat</item>
+	<item quantity="other">Beste %d</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">Gela bat</item>
+	<item quantity="other">%d gela</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">Gela %1$s aurkitu da %2$s bilatuz</item>
+	<item quantity="other">%1$s gela aurkitu dira %2$s bilatuz</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">Irakurri gabeko jakinaraziko mezu bat</item>
+	<item quantity="other">%d irakurri gabeko jakinaraziko mezu</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">Irakurri gabeko jakinaraziko mezu bat</item>
+	<item quantity="other">%d irakurri gabeko jakinaraziko mezu</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">Gela 1</item>
+	<item quantity="other">%d gela</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s : %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">Trepeta aktibo bat</item>
+	<item quantity="other">%d trepeta aktibo</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="receipt_avatar">Hartzailearen abatarra</string>
+    <string name="notice_avatar">Jakinarazpen abatarra</string>
+    <string name="avatar">Abatarra</string>
+
+<string name="settings_enable_content_sending">Mantendu jakinarazpen xehatuak</string>
+    <string name="settings_enable_content_sending_summary">"Gaitu aukera hau bigarren planoko sinkronizazioa desgaituta dagoenean jakinarazpen xehatuak bistaratzeko. Honek zifratu gabeko mezuaren edukia Google zerbitzarien bidez igortzea  eskatzen du"</string>
+    </resources>
