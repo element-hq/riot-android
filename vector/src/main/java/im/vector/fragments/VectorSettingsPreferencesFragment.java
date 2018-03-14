@@ -849,11 +849,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
         final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
 
-        if(mIsUsedRageShake) {
-            useRageShakeModePref.setChecked(true);
-        } else {
-            useBackgroundSyncPref.setChecked(false);
-        }
+        useRageShakeModePref.setChecked(mIsUsedRageShake);
 
         useRageShakeModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
