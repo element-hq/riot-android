@@ -252,14 +252,18 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informazione</string>
-    <string name="permissions_rationale_msg_storage">Riot necessita dell\'autorizzazione per accedere alla tua galleria di foto e video per inviare e salvare allegati.\n\nPer favore abilita l\'accesso sulla prossima finestrella così da poter inviare file dal tuo telefono.</string>
-    <string name="permissions_rationale_msg_camera">Riot necessita dell\'autorizzazione per usare la fotocamera per scattare foto e fare video chiamate.</string>
+    <string name="permissions_rationale_msg_storage">Riot ha bisogno dell\'autorizzazione di accesso alla tua galleria di foto e video per inviare e salvare allegati.
+
+Per favore consenti l\'accesso nella prossima finestra così da poter inviare file dal tuo telefono.</string>
+    <string name="permissions_rationale_msg_camera">Riot ha bisogno dell\'autorizzazione di accesso alla fotocamera per scattare foto e fare video chiamate.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di effettuare la chiamata.</string>
     <string name="permissions_rationale_msg_record_audio">Riot necessita dell\'autorizzazione per usare il microfono per eseguire audio chiamate.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di effettuare la chiamata.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot necessita dell\'autorizzazione per usare la fotocamera ed il microfono per eseguire video chiamate.\n\nPer favore abilita il permesso sulla prossima finestrella al fine di effettuare la chiamata.</string>
     <string name="permissions_rationale_msg_contacts">Riot necessita dell\'autorizzazione per accedere alla tua rubrica dei contatti per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di scoprire quali contatti in rubrica sono raggiungibili su Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot necessita dell\'autorizzazione per accedere alla tua rubrica dei contatti per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.\n\nPermetti a Riot di accedere ai tuoi contatti?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot ha bisogno dell\'autorizzazione di accesso alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
+
+Permetti a Riot di accedere ai tuoi contatti?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Spiacenti… azione non eseguita a causa di mancate autorizzazioni</string>
 
@@ -347,7 +351,7 @@
     <string name="room_menu_search">Cerca</string>
     <string name="room_one_user_is_typing">%s sta scrivendo…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s stanno scrivendo…</string>
-    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; altri stanno scrivendo…</string>
+    <string name="room_many_users_are_typing">%1$s , %2$s e altri stanno scrivendo…</string>
     <string name="room_message_placeholder_encrypted">Messaggio criptato…</string>
     <string name="room_message_placeholder_not_encrypted">Messaggio non criptato…</string>
     <string name="room_offline_notification">La connessione al server è stata persa.</string>
@@ -488,7 +492,7 @@
     <string name="settings_cryptography">Crittografia</string>
     <string name="settings_notifications_targets">Target delle notifiche</string>
     <string name="settings_contact">Contatti locali</string>
-    <string name="settings_contacts_app_permission">Consenti accesso alla rubrica</string>
+    <string name="settings_contacts_app_permission">Autorizzazione contatti</string>
     <string name="settings_contacts_phonebook_country">Nazione rubrica telefonica</string>
     <string name="settings_home_display">Pagina home</string>
     <string name="settings_pin_missed_notifications">Segna le stanze con notifiche perse</string>
@@ -497,7 +501,7 @@
     <string name="settings_hide_read_receipts">Nascondi conferme di lettura</string>
     <string name="settings_dont_send_typings_notifs">Non inviare notifica di scrittura in corso</string>
     <string name="settings_always_show_timestamps">Mostra sempre data e orario dei messaggi</string>
-    <string name="settings_disable_markdown">Disabilita la formattazione markdown</string>
+    <string name="settings_disable_markdown">Disattiva la formattazione markdown quando si invia</string>
     <string name="settings_data_save_mode">Modalità salvataggio dati</string>
 
     <string name="devices_details_dialog_title">Dettagli dispositivo</string>
@@ -815,4 +819,101 @@
     <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia schermata iniziale</string>
 
     <string name="settings_enable_content_sending">Mantieni notifiche dettagliate</string>
+    <string name="settings_enable_content_sending_summary">Attiva questa opzione per mostrare notifiche dettagliate quando la sincronizzazione in background è disabilitata. Ciò richiede l\'invio di messaggi non cifrati attraverso i server dei servizi di Google</string>
+    <string name="settings_inline_url_preview">Attiva le anteprime URL in modo predefinito</string>
+    <string name="settings_hide_join_leave_messages">Nascondi i messaggi di entrata/uscita (inviti/kick/ban esclusi)</string>
+    <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
+
+    <string name="settings_analytics">Analitiche</string>
+    <string name="settings_opt_out_of_analytics">Rifiuta le analitiche</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot raccoglie statistiche d\'uso anonime per consentirci di migliorare l\'applicazione.</string>
+
+    <string name="room_settings_room_notifications_title">Notifiche</string>
+    <string name="room_settings_add_new_group">Nuovo ID della comunità (es. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">ID comunità non valido</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' non è un ID comunità valido</string>
+
+
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 messaggio notificato non letto</item>
+	<item quantity="other">%d messaggi notificati non letti</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 messaggio notificato non letto</item>
+	<item quantity="other">%d messaggi notificati non letti</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 stanza</item>
+	<item quantity="other">%d stanze</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
+
+    <string name="widget_creation_failure">Creazione del widget fallita</string>
+    <plurals name="active_widgets">
+	<item quantity="one">1 widget attivo</item>
+	<item quantity="other">%d widget attivi</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
+    <string name="settings_labs_matrix_apps">Apps di Matrix</string>
+    <string name="settings_labs_native_camera">Usa fotocamera nativa</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Hai aggiunto un nuovo dispositivo \'%s\', che sta richiedendo chiavi di cifratura.</string>
+    <string name="your_unverified_device_requesting">Il dispositivo non verificato \'%s\' sta richiedendo chiavi di cifratura.</string>
+    <string name="start_verification">Inizia la verifica</string>
+    <string name="share_without_verifying">Condividi senza verificare</string>
+    <string name="ignore_request">Ignora la richiesta</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Attenzione!</string>
+    <string name="conference_call_warning_message">Le chiamate in conferenza sono in sviluppo e potrebbero essere inaffidabili.</string>
+
+    // slash commands
+    <string name="command_error">Errore di comando</string>
+    <string name="unrecognized_command">Comando non riconosciuto: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Off</string>
+    <string name="notification_on">On</string>
+    <string name="notification_noisy">Rumoroso</string>
+
+    <string name="create">Crea</string>
+    <string name="create_community">Crea una comunità</string>
+    <string name="community_name">Nome della comunità</string>
+    <string name="community_name_hint">Esempio</string>
+    <string name="community_id">ID della comunità</string>
+    <string name="community_id_hint">esempio</string>
+
+    // group details
+    <string name="group_details_home">Inizio</string>
+    <string name="group_details_people">Persone</string>
+    <string name="group_details_rooms">Stanze</string>
+    <string name="no_users_placeholder">Nessun utente</string>
+
+    <string name="rooms">Stanze</string>
+    <string name="joined">Si è unito</string>
+    <string name="invited">Invitato</string>
+    <string name="filter_group_members">Filtra i membri del gruppo</string>
+    <string name="filter_group_rooms">Filtra le stanze del gruppo</string>
+
+    <string name="group_one_member">1 membro</string>
+    <string name="group_members">%d membri</string>
+
+    <string name="group_one_room">1 stanza</string>
+    <string name="group_rooms">%d stanze</string>
+    <string name="group_no_long_description">L\'admin della comunità non ha fornito una descrizione estesa per questa comunità.</string>
+
+    <string name="has_been_kicked">Sei stato cacciato via da %1$s da %2$s</string>
+    <string name="has_been_banned">Sei stato bandito da %1$s da %2$s</string>
+    <string name="reason_colon">Motivo: %1$s</string>
+    <string name="rejoin">Rientra</string>
+    <string name="forget_room">Dimentica la stanza</string>
+
+    <string name="avatar">Avatar</string>
+
+<string name="settings_flair">Predisposizione</string>
+
+    <string name="room_settings_no_flair">" Questa stanza non mostra predisposizione per alcuna comunità"</string>
     </resources>
