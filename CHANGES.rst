@@ -15,6 +15,9 @@ Bug Fix:
  * Notifications Privacy: Riot should never pass events content to GCM (#2051).
  * File uploads with file name containing a path (matrix-org/matrix-android-sdk#228), thanks to @christarazi (PR #2019).
  * Fix some plural messages (#1922), thanks to @SafaAlfulaij (PR #1934).
+ 
+Translations:
+  * Bulgarian, added thanks to @rbozhkova.
 
 Changes in Riot 0.8.1 (2018-02-15)
 ===================================================

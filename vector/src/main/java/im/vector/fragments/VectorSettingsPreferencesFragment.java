@@ -661,8 +661,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                         Matrix.getInstance(VectorSettingsPreferencesFragment.this.getActivity()).getSharedGCMRegistrationManager().forceSessionsRegistration(listener);
 
-                        // Display the content sending option only when the background sync is disabled.
-                        if (newValue) {
+                        // Display the content sending option only when the background sync is disabled whereas the GCM is supported.
+                        if (newValue || !gcmMgr.hasRegistrationToken()) {
                             mBackgroundSyncCategory.removePreference(allowContentSendingPref);
                         } else {
                             mBackgroundSyncCategory.addPreference(allowContentSendingPref);
@@ -693,8 +693,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     }
                 });
 
-                // Hide this pref if the background sync is allowed
-                if (gcmMgr.isBackgroundSyncAllowed()) {
+                // Hide this pref if the background sync is allowed, or if the GCM is not supported
+                if (gcmMgr.isBackgroundSyncAllowed() || !gcmMgr.hasRegistrationToken()) {
                     mBackgroundSyncCategory.removePreference(allowContentSendingPref);
                 }
             }
@@ -849,11 +849,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
         final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
 
-        if(mIsUsedRageShake) {
-            useRageShakeModePref.setChecked(true);
-        } else {
-            useBackgroundSyncPref.setChecked(false);
-        }
+        useRageShakeModePref.setChecked(mIsUsedRageShake);
 
         useRageShakeModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
