@@ -822,4 +822,6 @@
 
     <string name="settings_analytics">Analitiche</string>
     <string name="settings_opt_out_of_analytics">Rifiuta le analitiche</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot raccoglie dati di profilatura per permetterci di migliorare l\'applicazione</string>
+
     </resources>
