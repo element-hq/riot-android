@@ -262,7 +262,9 @@ Per favore consenti l\'accesso nella prossima finestra così da poter inviare fi
     <string name="permissions_rationale_msg_camera_and_audio">Riot ha bisogno dell\'autorizzazione di accesso alla fotocamera ed al microfono per eseguire chiamate video.
 
 Per favore consenti l\'accesso nella prossima finestra per potere effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_contacts">Riot necessita dell\'autorizzazione per accedere alla tua rubrica dei contatti per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di scoprire quali contatti in rubrica sono raggiungibili su Riot.</string>
+    <string name="permissions_rationale_msg_contacts">Riot ha bisogno dell\'autorizzazione di accesso alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
+
+Per favore consenti l\'accesso nella prossima finestra in modo da scoprire i contatti in rubrica raggiungibili da Riot.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot ha bisogno dell\'autorizzazione di accesso alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
 
 Permetti a Riot di accedere ai tuoi contatti?</string>
@@ -727,7 +729,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="notification_sync_in_progress">Sincronizzazione</string>
     <string name="settings_notification_ringtone">Suono di notifica</string>
     <string name="settings_12_24_timestamps">Mostra gli orari in formato 12 ore (es. 2:30pm)</string>
-    <string name="widget_no_power_to_manage">Necessiti dei permessi per gestire i widget in questa stanza</string>
+    <string name="widget_no_power_to_manage">Hai bisogno dei permessi per gestire i widget in questa stanza</string>
     <string name="event_formatter_widget_added">%1$s aggiunto da %2$s</string>
     <string name="event_formatter_widget_removed">%1$s rimosso da %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Crea una videoconferenza con jitsi</string>
@@ -757,7 +759,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="login_mobile_device">Cellulare</string>
 
     <string name="call">Chiama</string>
-    <string name="encrypted_message">Cifra messaggio</string>
+    <string name="encrypted_message">Messaggio criptato</string>
 
 <string name="title_activity_group_details">Dettagli della comunità</string>
 
