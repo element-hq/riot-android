@@ -844,8 +844,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 return true;
             }
         });
-
-
+        
         // Rageshake Managment
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
         final boolean mIsUsedRageShake = PreferencesManager.useRageshake(appContext);
