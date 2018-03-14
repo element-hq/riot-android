@@ -116,7 +116,7 @@ public class PreferencesManager {
     public static final String SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY";
 
     private static final String SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY = "SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY";
-    private static final String SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY = "SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY";
+    public static final String SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY = "SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY";
 
     private static final String SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY";
     public static final String SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY";
@@ -385,7 +385,20 @@ public class PreferencesManager {
      * @return true if the matrix apps are supported.
      */
     public static boolean useMatrixApps(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, true);
+    }
+
+    /**
+     * Update the matrix apps  status.
+     *
+     * @param context   the context
+     * @param isEnabled true to enable the matrix apps usage
+     */
+    public static void setUseMatrixApps(Context context, boolean isEnabled) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, isEnabled);
+        editor.commit();
     }
 
     /**
@@ -524,6 +537,12 @@ public class PreferencesManager {
         if (!preferences.contains(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY)) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY, true);
+            editor.commit();
+        }
+
+        if (!preferences.contains(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY)) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, true);
             editor.commit();
         }
 
