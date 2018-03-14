@@ -257,7 +257,7 @@
 Per favore consenti l\'accesso nella prossima finestra così da poter inviare file dal tuo telefono.</string>
     <string name="permissions_rationale_msg_camera">Riot ha bisogno dell\'autorizzazione di accesso alla fotocamera per scattare foto e fare video chiamate.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot necessita dell\'autorizzazione per usare il microfono per eseguire audio chiamate.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot ha bisogno dell\'autorizzazione di accesso al microfono per eseguire chiamate audio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di effettuare la chiamata.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot necessita dell\'autorizzazione per usare la fotocamera ed il microfono per eseguire video chiamate.\n\nPer favore abilita il permesso sulla prossima finestrella al fine di effettuare la chiamata.</string>
     <string name="permissions_rationale_msg_contacts">Riot necessita dell\'autorizzazione per accedere alla tua rubrica dei contatti per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di scoprire quali contatti in rubrica sono raggiungibili su Riot.</string>
