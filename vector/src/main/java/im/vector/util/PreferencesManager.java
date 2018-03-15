@@ -385,7 +385,7 @@ public class PreferencesManager {
      * @return true if the matrix apps are supported.
      */
     public static boolean useMatrixApps(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, true);
     }
 
     /**
@@ -524,6 +524,12 @@ public class PreferencesManager {
         if (!preferences.contains(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY)) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY, true);
+            editor.commit();
+        }
+
+        if (!preferences.contains(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY)) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, true);
             editor.commit();
         }
 
