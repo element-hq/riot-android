@@ -522,11 +522,83 @@
 
     <string name="home_filter_placeholder_groups">ابحث عن مجتمعات</string>
 
-    <string name="low_priority_header"/>
+    <string name="low_priority_header">أولوية منخفضة</string>
 
     <string name="groups_header">المجتمعات</string>
     <string name="no_group_placeholder">لا مجموعات</string>
 
-    <string name="send_bug_report_rage_shake"></string>
+    <string name="send_bug_report_rage_shake"/>
 
+    <string name="notification_noisy_notifications">الإخطارات المزعجة</string>
+    <string name="notification_silent_notifications">الإخطارات الصامتة</string>
+
+    <string name="title_activity_group_details">تفاصيل المجتمع</string>
+
+    <string name="later">لاحقا</string>
+    <string name="action_exit">اخرج</string>
+    <string name="read_receipt">قُرأت</string>
+
+    <string name="hs_url">عنوان خادوم المنزل</string>
+    <string name="identity_url">عنوان خادوم التعريف</string>
+    <string name="search">ابحث</string>
+
+    <string name="start_new_chat_prompt_msg">أمتأكد من بدء دردشة جديدة مع ⁨%s⁩؟</string>
+    <string name="start_voice_call_prompt_msg">أمتأكد من بدء محادثة صوتية؟</string>
+    <string name="start_video_call_prompt_msg">أمتأكد من بدء محادثة صورية؟</string>
+
+    <string name="auth_add_email_phone_message">أضِف عنوان بريد إلكتروني و/أو رقم هاتف لحسابك ليستطيع الناس استكشافك.
+
+ستقدر أيضا على تصفير كلمة السر عبر البريد الإلكتروني.</string>
+    <string name="auth_add_email_and_phone_message">أضِف عنوان بريد إلكتروني ورقم هاتف لحسابك ليستطيع الناس استكشافك.
+
+ستقدر أيضا على تصفير كلمة السر عبر البريد الإلكتروني.</string>
+    <string name="auth_email_already_defined">عنوان البريد مُعرّف بالفعل.</string>
+    <string name="auth_invalid_token">الأمارة غير صالحة</string>
+    <string name="auth_threepid_warning_message">التسجيل عبر البريد ورقم الهاتف معا ليس مدعوما إلى حين توفر واجهة API لذلك. سيُستخدم رقم الهاتف فقط دون البريد.
+
+يمكنك إضافة عنوان البريد في ملفك الشخصي في الإعدادات.</string>
+    <string name="auth_recaptcha_message">يريد خادوم المنزل هذا التأكد من أنك لست أحد الآليين</string>
+    <string name="auth_home_server">خادوم المنزل:</string>
+    <string name="auth_identity_server">خادوم التعريف:</string>
+    <string name="auth_reset_password_email_validation_message">أُرسل بريد إلى %s. ما إن تبعت الرابط فيه، انقر أدناه.</string>
+    <string name="login_error_must_start_http">يجب أن يبد العنوان بِ‍ ⁨http[s]://⁩</string>
+    <string name="login_error_unknown_token">تعذر التعرف على أمارة الوصول المحددة</string>
+    <string name="login_error_bad_json">JSON‏ معطوب</string>
+    <string name="groups_list">قائمة المجموعات</string>
+
+    <plurals name="membership_changes">
+	<item quantity="zero">لا تغييرات ملكية</item>
+	<item quantity="one">تغيير واحد على الملكية</item>
+	<item quantity="two">تغييران على الملكية</item>
+	<item quantity="few">%d تغييرات على الملكية</item>
+	<item quantity="many">%d تغييرا على الملكية</item>
+	<item quantity="other">%d تغيير على الملكية</item>
+</plurals>
+
+    <string name="compression_options">"أرسِل كَ‍ "</string>
+    <string name="call_error_ice_failed">فشل اتصال الوسائط</string>
+    <string name="call_error_answered_elsewhere">رُدّ على المكالة في مكان آخر</string>
+
+    <string name="permissions_rationale_msg_storage">يحتاج Riot تصريحا منك للوصول إلى مكتبتي الصور والفديو لإرسال المرفقات وحفظها.
+
+رجاءً اسمح بالوصول في المنبثقة التالية لتقدر على إرسال الملفات من هاتفك.</string>
+    <string name="permissions_rationale_msg_camera">يحتاج Riot تصريحا منك للوصول إلى الكمرة لأخذ الصور وللمكالمات الصورية.</string>
+    <string name="permissions_rationale_msg_record_audio">يحتاج Riot تصريحا منك للوصول إلى المِكرفون لإجراء المكالمات الصوتية.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+رجاءً اسمح بالنفاذ في المنبثقة الآتية لتتمكن من إجراء محادثة.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">يحتاج Riot تصريحا منك للوصول إلى الكمرة والمِكرفون لإجراء المكالمات الصورية.
+
+رجاءً اسمح بالوصول في المنبثقة التالية لتقدر على إرسال إجراء المكالمات الصورية.</string>
+    <string name="permissions_rationale_msg_contacts">يحتاج Riot تصريحا منك للوصول إلى دفتر العناوين للعثور على مستخدمي ماترِكس الآخرين وذلك حسب البريد الإلكتروني ورقم الهاتف.
+
+رجاءً اسمح بالوصول في المنبثقة التالية لتستكشف مستخدميك في دفتر العناوين من Riot.</string>
+    <string name="media_slider_saved">حُفظت</string>
+    <string name="preview">عايِن</string>
+    <string name="room_sync_in_progress">يُزامن...</string>
+    <string name="room_preview_unlinked_email_warning">أُرسلت الدعوة إلى ⁨%s⁩ غير المرتبط بهذا الحساب.
+لربما عليك الولوج بحساب آخر، أو إضافة هذا البريد إلى حسابك هذا.</string>
+    <string name="room_preview_try_join_an_unknown_room">تحاول الوصول إلى ⁨%s⁩. أتريد الانضمام للمشاركة في النقاش؟</string>
+    <string name="room_preview_try_join_an_unknown_room_default">إحدى الغرف</string>
+    <string name="room_title_one_member">عضو واحد</string>
     </resources>
