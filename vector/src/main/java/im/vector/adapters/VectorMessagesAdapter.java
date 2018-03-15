@@ -724,7 +724,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-        // the event with invalid timestamp must be pushed at the end of the history
+        // undelivered events must be pushed at the end of the history
         this.setNotifyOnChange(false);
         List<MessageRow> undeliverableEvents = new ArrayList<>();
 
