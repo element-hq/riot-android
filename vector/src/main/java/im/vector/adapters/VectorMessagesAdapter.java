@@ -732,7 +732,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             MessageRow row = getItem(i);
             Event event = row.getEvent();
 
-            if ((null != event) && (!event.isValidOriginServerTs() || event.isUnkownDevice())) {
+            if ((null != event) && (event.isUndeliverable() || event.isUnkownDevice())) {
                 undeliverableEvents.add(row);
                 remove(row);
                 i--;
