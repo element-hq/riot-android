@@ -111,8 +111,8 @@
     <string name="auth_password_placeholder">كلمة السر</string>
     <string name="auth_new_password_placeholder">كلمة السر الجديدة</string>
     <string name="auth_user_name_placeholder">اسم المستخدم</string>
-    <string name="auth_add_email_message">أضِف عنوان بريد إلكتروني إلى حسابك ليمكن</string>
-    <string name="auth_add_phone_message">أضِف رقم هات ل</string>
+    <string name="auth_add_email_message">أضِف عنوان بريد إلكتروني إلى حسابك لتمكين المُستخدمِين مِن العثور عليك و لكي تتمكن مِن إعادة تعيين كلمتك السرية أيضا.</string>
+    <string name="auth_add_phone_message">أضِف رقم هاتف إلى حسابك لتمكين المستخدِمين الآخرين مِن العثور عليك بسهولة.</string>
     <string name="auth_email_placeholder">عنوان البريد الإلكتروني</string>
     <string name="auth_opt_email_placeholder">عنوان البريد الإلكتروني (اختياري)</string>
     <string name="auth_phone_number_placeholder">رقم الهاتف</string>
@@ -137,9 +137,7 @@
     <string name="auth_reset_password_missing_email">يجب إدخال عنوان البريد الإلكتروني المرتبط بحسابك.</string>
     <string name="auth_reset_password_missing_password">يجب إدخال كلمة سر جديدة.</string>
     <string name="auth_reset_password_error_unauthorized">فشل التحقق من عنوان البريد: تحقق من نقر الرابط في البريد</string>
-    <string name="auth_reset_password_success_message">صُفّرت كلمة السر.
-
-لقد أخرجناك من كل الأجهزة ولم تعد تستقبل</string>
+    <string name="auth_reset_password_success_message"/>
 
     <string name="login_error_network_error">تعذّر الولوج: خطأ في الشبكة</string>
     <string name="login_error_unable_login">تعذّر الولوج</string>
@@ -156,12 +154,12 @@
     <string name="login_error_login_email_not_yet">لم يُنقر بعد على الرابط في البريد</string>
 
     <string name="e2e_need_log_in_again">عليك الولوج ثانيةً لتوليد مفاتيح تعمية الطرفين لهذا الجهاز وإرسال المفتاح العمومي إلى خادوم المنزل.
-</string>
+نرجو المعذرة.</string>
 
     <string name="attachment_cancel_download">أأُلغي التنزيل؟</string>
     <string name="attachment_cancel_upload">أأُلغي الرفع؟</string>
     <string name="attachment_remaining_time_seconds">%d ثا</string>
-    <string name="attachment_remaining_time_minutes">%1$dدق %2$dثا</string>
+    <string name="attachment_remaining_time_minutes">%1$dد %2$dثا</string>
 
     <string name="yesterday">الأمس</string>
     <string name="today">اليوم</string>
@@ -181,7 +179,7 @@
     <string name="media_picker_cannot_record_video">تعذّر تسجيل الڤديو</string>
 
     <string name="permissions_rationale_popup_title">معلومات</string>
-    <string name="permissions_action_not_performed_missing_permissions">نأسف، لم يجر</string>
+    <string name="permissions_action_not_performed_missing_permissions"/>
 
     <string name="media_slider_saved_message">احفظ في التنزيلات</string>
     <string name="yes">نعم</string>
@@ -238,7 +236,7 @@
     <string name="room_resend_unsent_messages">أعِد إرسال الرسائل غير المرسلة</string>
     <string name="room_delete_unsent_messages">احذف الرسائل غير المرسلة</string>
     <string name="room_message_file_not_found">لم يُعثر على الملف</string>
-    <string name="room_do_not_have_permission_to_post">"لا تصريح لديك "</string>
+    <string name="room_do_not_have_permission_to_post">لا تصريح لديك للنشر في هذه الغرفة</string>
     <string name="ssl_logout_account">اخرج</string>
     <string name="ssl_fingerprint_hash">البصمة (⁨%s⁩):</string>
     <string name="ssl_could_not_verify">تعذّر التحقق من معرّف الخادوم البعيد.</string>
@@ -311,14 +309,14 @@
     <string name="settings_contacts_app_permission">تصاريح المتراسلون</string>
     <string name="settings_contacts_phonebook_country">دولة دفتر العناوين</string>
     <string name="settings_devices_list">الأجهزة</string>
-    <string name="settings_hide_read_receipts">"أخفِ "</string>
+    <string name="settings_hide_read_receipts">إخفِ إشعارات القراءة</string>
     <string name="settings_dont_send_typings_notifs">لا تُرسل إخطارات الكتابة</string>
     <string name="settings_always_show_timestamps">اعرض أختام الرسائل الزمنية دائما</string>
     <string name="settings_12_24_timestamps">اعرض الأختام الزمنية بنسق ١٢ ساعة (مثلا ٢:٣٠م)</string>
     <string name="settings_hide_join_leave_messages">أخفِ رسائل الانضمام/الخروج (الدعوات والطرد والمنع لا يتأثر)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">اعرض تغييرات الصور وأسماء العرض</string>
 
-    <string name="settings_disable_markdown">عطّل تنسيق ”ماركداون“</string>
+    <string name="settings_disable_markdown">عطّل تنسيق ماركداون عند الإرسال</string>
     <string name="settings_data_save_mode">وضع حفظ البيانات</string>
 
     <string name="devices_details_dialog_title">تفاصيل الجهاز</string>
@@ -507,7 +505,7 @@
 
     <string name="room_displayname_two_members">‏⁨%1$s⁩ و ⁨%2$s⁩</string>
 
-    <string name="room_displayname_many_members">‏⁨%1$s⁩ و ⁨%2$s⁩</string>
+    <string name="room_displayname_many_members">%1$s و %2$s</string>
     <plurals name="directory_search_rooms">
 	<item quantity="zero">لا غرف</item>
 	<item quantity="one">غرفة واحدة</item>
