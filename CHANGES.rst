@@ -1,3 +1,14 @@
+Changes in Riot 0.8.3 (2018-03-16)
+===================================================
+
+Improvements: 
+ * Login screen : open keyboard form email.
+ * Matrix Apps: Enable them by default (#2022).
+ 
+Bug Fix:
+ * User Settings: background sync setting stays disabled (#2075).
+ * Room: Events with unexpected timestamps get stuck at the bottom of the history (#2081).
+
 Changes in Riot 0.8.2 (2018-03-14)
 ===================================================
  
