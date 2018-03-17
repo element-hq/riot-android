@@ -475,7 +475,12 @@
     <string name="permissions_rationale_msg_camera_explanation">
 
 رجاءً اسمح بالنفاذ في المنبثقة الآتية لتتمكن من إجراء محادثة.</string>
-    <string name="loading">يحمّل…</string>
+    <string name="notification_area_hide_always">دائما</string>
+    <string name="notification_area_hide_never">أبدا</string>
+    <string name="notification_area_hide_when_empty">عندما تكون فارغة</string>
+    <string name="notification_area_hide">إخفاء منطقة الإعلام</string>
+
+  <string name="loading">يحمّل…</string>
 
     <plurals name="room_header_active_members_count">
 	<item quantity="zero">لا أعضاء نشطين</item>

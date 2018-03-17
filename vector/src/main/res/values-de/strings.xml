@@ -960,3 +960,4 @@ Unbekannte Geräte:</string>
     <string name="settings_enable_content_sending">Behalte detailierte Benachrichtigungen</string>
     <string name="settings_enable_content_sending_summary">Aktiviere diese Option, wenn die Hintergrundsynchronisierung für detaillierte Benachrichtigungen deaktiviert wurde. Dies führt dazu, dass unverschlüsselter Nachrichten-Inhalt durch Google-Server geleitet wird</string>
     </resources>
+
