@@ -653,8 +653,8 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="room_settings_no_flair">" Šī istaba nerāda gaidas nevienā kopienā"</string>
     <string name="room_settings_add_new_group">Kopienas jaunais ID (piem. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Nederīgs kopienas ID</string>
-    <string name="notification_area_hide">Paslēpt paziņojumu apgabalu</string>
-    <string name="notification_area_hide_always">Vienmēr</string>
-    <string name="notification_area_hide_never">Nekad</string>
-    <string name="notification_area_hide_when_empty">Kad tukšs</string>
+    <string name="notification_area_show">Parādīt paziņojumu apgabalu</string>
+    <string name="notification_area_show_always">Vienmēr</string>
+    <string name="notification_area_show_only_errors">Tikai kļūdas</string>
+    <string name="notification_area_show_messages_and_errors">Ziņas un kļūdas</string>
 </resources>

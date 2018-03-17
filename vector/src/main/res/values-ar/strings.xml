@@ -529,8 +529,8 @@
 
     <string name="send_bug_report_rage_shake"></string>
 
-    <string name="notification_area_hide_always">دائما</string>
-    <string name="notification_area_hide_never">أبدا</string>
-    <string name="notification_area_hide_when_empty">عندما تكون فارغة</string>
-    <string name="notification_area_hide">إخفاء منطقة الإعلام</string>
+    <string name="notification_area_show_always">دائما</string>
+    <string name="notification_area_show_only_errors">الأخطاء فقط</string>
+    <string name="notification_area_show_messages_and_errors">الرسائل والأخطاء</string>
+    <string name="notification_area_show">إظهار منطقة الإعلام</string>
 </resources>

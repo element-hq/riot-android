@@ -276,8 +276,8 @@ Harap berikan akses pada layar yang akan muncul agar dapat melakukan panggilan.<
     <string name="permissions_rationale_msg_camera_and_audio">Riot membutuhkan izin untuk mengakses kamera dan mikrofon Anda untuk melakukan panggilan video.
 
 Harap berikan akses pada layar yang akan muncul berikutnya untuk melakukan panggilan.</string>
-    <string name="notification_area_hide">Sembunyikan area notifikasi</string>
-    <string name="notification_area_hide_always">Selalu</string>
-    <string name="notification_area_hide_never">Tak pernah</string>
-    <string name="notification_area_hide_when_empty">Kapan kosong</string>
+    <string name="notification_area_show">Tampilkan area notifikasi</string>
+    <string name="notification_area_show_always">Selalu</string>
+    <string name="notification_area_show_only_errors">Hanya kesalahan</string>
+    <string name="notification_area_show_messages_and_errors">Pesan dan kesalahan</string>
 </resources>

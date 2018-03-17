@@ -541,8 +541,8 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="larger">Wielki</string>
     <string name="largest">Ogromny</string>
     <string name="huge">P O T Ę Ż N Y</string>
-    <string name="notification_area_hide">Ukryj obszar powiadomień</string>
-    <string name="notification_area_hide_always">Zawsze</string>
-    <string name="notification_area_hide_never">Nigdy</string>
-    <string name="notification_area_hide_when_empty">Kiedy jest pusty</string>
+    <string name="notification_area_show">Pokaż obszar powiadomień</string>
+    <string name="notification_area_show_always">Zawsze</string>
+    <string name="notification_area_show_only_errors">Tylko błędy</string>
+    <string name="notification_area_show_messages_and_errors">Wiadomości i błędy</string>
 </resources>

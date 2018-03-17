@@ -700,8 +700,8 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
-    <string name="notification_area_hide">Ocultar el área de notificación</string>
-    <string name="notification_area_hide_always">Siempre</string>
-    <string name="notification_area_hide_never">Nunca</string>
-    <string name="notification_area_hide_when_empty">Cuando está vacío</string>
+    <string name="notification_area_show">Mostrar área de notificación</string>
+    <string name="notification_area_show_always">Siempre</string>
+    <string name="notification_area_show_only_errors">Solo errores</string>
+    <string name="notification_area_show_messages_and_errors">Mensajes y errores</string>
 </resources>

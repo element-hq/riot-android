@@ -98,11 +98,11 @@
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"/>
 
         <ListPreference
-            android:entries="@array/notification_area_hide_description"
-            android:entryValues="@array/notification_area_hide_codes"
-            android:key="NOTIFICATION_AREA_HIDE_KEY"
+            android:entries="@array/notification_area_show_description"
+            android:entryValues="@array/notification_area_show_codes"
+            android:key="NOTIFICATION_AREA_SHOW_KEY"
             android:summary="%s"
-            android:title="@string/notification_area_hide" />
+            android:title="@string/notification_area_show" />
 
         <ListPreference
             android:entries="@array/theme_description"

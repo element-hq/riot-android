@@ -910,8 +910,8 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 
 <string name="settings_enable_content_sending">Mantendu jakinarazpen xehatuak</string>
     <string name="settings_enable_content_sending_summary">"Gaitu aukera hau bigarren planoko sinkronizazioa desgaituta dagoenean jakinarazpen xehatuak bistaratzeko. Honek zifratu gabeko mezuaren edukia Google zerbitzarien bidez igortzea  eskatzen du"</string>
-    <string name="notification_area_hide">Ezkutatu jakinarazpen gunea</string>
-    <string name="notification_area_hide_always">Beti</string>
-    <string name="notification_area_hide_never">Inoiz ez</string>
-    <string name="notification_area_hide_when_empty">Noiz hutsik dago</string>
+    <string name="notification_area_show">Erakutsi jakinarazpenaren eremua</string>
+    <string name="notification_area_show_always">Beti</string>
+    <string name="notification_area_show_only_errors">Akatsak bakarrik</string>
+    <string name="notification_area_show_messages_and_errors">Mezuak eta akatsak</string>
 </resources>
