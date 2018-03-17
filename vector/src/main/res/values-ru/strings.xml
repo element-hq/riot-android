@@ -895,10 +895,6 @@ Email также позволит вам при необходимости во�
     <string name="reason_colon">Причина: %1$s</string>
     <string name="rejoin">Присоединиться снова</string>
     <string name="forget_room">Забыть комнату</string>
-    <string name="notification_area_hide">Спрятать область уведомлений</string>
-    <string name="notification_area_hide_always">Всегда</string>
-    <string name="notification_area_hide_never">Никогда</string>
-    <string name="notification_area_hide_when_empty">Когда пустой</string>
 <string name="send_bug_report_rage_shake">Встряхните устройство, чтобы сообщить об ошибке</string>
 
     <string name="actions">Действия</string>
@@ -983,8 +979,8 @@ Email также позволит вам при необходимости во�
 	<item quantity="many">%d непрочитанных уведомлений</item>
 	<item quantity="other"></item>
 </plurals>
-    <string name="notification_area_hide">Спрятать область уведомлений</string>
-    <string name="notification_area_hide_always">Всегда</string>
-    <string name="notification_area_hide_never">Никогда</string>
-    <string name="notification_area_hide_when_empty">Когда пустой</string>
+    <string name="notification_area_show">Показать область уведомлений</string>
+    <string name="notification_area_show_always">Всегда</string>
+    <string name="notification_area_show_only_errors">Только ошибки</string>
+    <string name="notification_area_show_messages_and_errors">Сообщения и ошибки</string>
 </resources>

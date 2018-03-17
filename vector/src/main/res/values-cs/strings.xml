@@ -30,4 +30,9 @@
     <string name="resouces_country">US</string>
 
     <string name="forget_room">Zapomenout místnost</string>
+
+    <string name="notification_area_show">Zobrazit oblast oznámení</string>
+    <string name="notification_area_show_always">Vždy</string>
+    <string name="notification_area_show_only_errors">Pouze chyby</string>
+    <string name="notification_area_show_messages_and_errors">Zprávy a chyby</string>
 </resources>

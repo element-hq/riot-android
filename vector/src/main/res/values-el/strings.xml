@@ -40,9 +40,9 @@
     <string name="dialog_title_warning">Προειδοποίηση</string>
 
     <string name="_continue">Συνέχεια</string>
-    <string name="notification_area_hide">Απόκρυψη περιοχής ειδοποιήσεων</string>
-    <string name="notification_area_hide_always">Πάντα</string>
-    <string name="notification_area_hide_never">Ποτέ</string>
-    <string name="notification_area_hide_when_empty">Όταν είναι κενό</string>
+    <string name="notification_area_show">Εμφάνιση περιοχής ειδοποίησης</string>
+    <string name="notification_area_show_always">Πάντα</string>
+    <string name="notification_area_show_only_errors">Μόνο σφάλματα</string>
+    <string name="notification_area_show_messages_and_errors">Μηνύματα και σφάλματα</string>
 
 </resources>

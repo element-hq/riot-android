@@ -844,8 +844,8 @@ Neznáme zariadenia:</string>
     <string name="reason_colon">Dôvod: %1$s</string>
     <string name="rejoin">Vstúpiť znovu</string>
     <string name="forget_room">Zabudnúť miestnosť</string>
-    <string name="notification_area_hide">Skryť oblasť oznámení</string>
-    <string name="notification_area_hide_always">Vždy</string>
-    <string name="notification_area_hide_never">nikdy</string>
-    <string name="notification_area_hide_when_empty">Keď je prázdny</string>
+    <string name="notification_area_show">Zobraziť oblasť oznámení</string>
+    <string name="notification_area_show_always">Vždy</string>
+    <string name="notification_area_show_only_errors">Len chyby</string>
+    <string name="notification_area_show_messages_and_errors">Správy a chyby</string>
 </resources>

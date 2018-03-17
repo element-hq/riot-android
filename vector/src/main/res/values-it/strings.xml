@@ -759,10 +759,6 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="login_mobile_device">Cellulare</string>
 
     <string name="call">Chiama</string>
-    <string name="notification_area_hide">Nascondi area di notifica</string>
-    <string name="notification_area_hide_always">Sempre</string>
-    <string name="notification_area_hide_never">Mai</string>
-    <string name="notification_area_hide_when_empty">Quando vuoto</string>
     <string name="encrypted_message">Messaggio criptato</string>
 
 <string name="title_activity_group_details">Dettagli della comunità</string>
@@ -861,10 +857,10 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
 	<item quantity="one">1 widget attivo</item>
 	<item quantity="other">%d widget attivi</item>
 </plurals>
-    <string name="notification_area_hide">Nascondi area di notifica</string>
-    <string name="notification_area_hide_always">Sempre</string>
-    <string name="notification_area_hide_never">Mai</string>
-    <string name="notification_area_hide_when_empty">Quando vuoto</string>
+    <string name="notification_area_show">Mostra area di notifica</string>
+    <string name="notification_area_show_always">Sempre</string>
+    <string name="notification_area_show_only_errors">Solo errori</string>
+    <string name="notification_area_show_messages_and_errors">Messaggi ed errori</string>
 
     // Widget Integration Manager
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>

@@ -613,7 +613,7 @@
 
     <string name="room_settings_addresses_e2e_enabled">Шифроването е включено в тази стая.</string>
     <string name="room_settings_addresses_e2e_disabled">Шифроването е изключено в тази стая.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Включване на шифроване 
+    <string name="room_settings_addresses_e2e_encryption_warning">Включване на шифроване
 (не може да се изключи в последствие!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Внимание!</string>
     <string name="room_settings_addresses_e2e_prompt_message">Шифроване от край до край е експериментално и може да не е надеждно.
@@ -895,4 +895,10 @@
     <string name="open_chat_header">Отвори заглавие</string>
     <string name="settings_enable_content_sending">Остави детайлирани известия</string>
     <string name="settings_enable_content_sending_summary">Включи тази опция, когато фоновата синхронизация е изключвена за показване на детайлирани известия. Това изисква изпращането на съдържанието на нешифровани съобщения през сървъри за Google услуги</string>
+
+    <string name="notification_area_show_always">Винаги</string>
+    <string name="notification_area_show_only_errors">Само грешки</string>
+    <string name="notification_area_show_messages_and_errors">Съобщения и грешки</string>
+    <string name="notification_area_show">Показване на областта за уведомяване</string>
+
     </resources>

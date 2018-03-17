@@ -37,15 +37,15 @@
         <item>@string/black_them</item>
     </string-array>
 
-    <string-array name="notification_area_hide_codes">
-        <item>never</item>
-        <item>when_empty</item>
+    <string-array name="notification_area_show_codes">
+        <item>only_errors</item>
+        <item>messages_and_errors</item>
         <item>always</item>
     </string-array>
 
-    <string-array name="notification_area_hide_description">
-        <item>@string/notification_area_hide_never</item>
-        <item>@string/notification_area_hide_when_empty</item>
-        <item>@string/notification_area_hide_always</item>
+    <string-array name="notification_area_show_description">
+        <item>@string/notification_area_show_only_errors</item>
+        <item>@string/notification_area_show_messages_and_errors</item>
+        <item>@string/notification_area_show_always</item>
     </string-array>
 </resources>

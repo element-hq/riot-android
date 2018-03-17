@@ -795,9 +795,9 @@ Dispositivos desconhecidos:</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
     <string name="notification_sync_in_progress">A sincronizar</string>
     <string name="notification_listen_for_events">À escuta de eventos</string>
-    <string name="notification_area_hide">Esconder a área de notificação</string>
-    <string name="notification_area_hide_always">Sempre</string>
-    <string name="notification_area_hide_never">Nunca</string>
-    <string name="notification_area_hide_when_empty">Quando vazio</string>
+    <string name="notification_area_show">Mostrar área de notificação</string>
+    <string name="notification_area_show_always">Sempre</string>
+    <string name="notification_area_show_only_errors">Apenas erros</string>
+    <string name="notification_area_show_messages_and_errors">Mensagens e erros</string>
 
 </resources>

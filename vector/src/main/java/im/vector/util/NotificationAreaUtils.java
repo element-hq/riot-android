@@ -12,14 +12,13 @@ public class NotificationAreaUtils {
     /**
      * Preference key.
      */
-    public static final String NOTIFICATION_AREA_HIDE_KEY = "NOTIFICATION_AREA_HIDE_KEY";
+    public static final String NOTIFICATION_AREA_SHOW_KEY = "NOTIFICATION_AREA_SHOW_KEY";
 
     /**
      * Notification area hide preference values.
      */
+    private static final String ONLY_ERRORS = "only_errors";
     private static final String ALWAYS = "always";
-    private static final String NEVER = "never";
-    private static final String WHEN_EMPTY = "when_empty";
 
     /**
      * Check is notification area always hide.
@@ -29,10 +28,10 @@ public class NotificationAreaUtils {
      * @param context the context
      * @return {@code true} if always hide, else {@code false}
      */
-    public static boolean always(Context context) {
+    public static boolean onlyErrors(Context context) {
         setDefault(context);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        return sp.getString(NOTIFICATION_AREA_HIDE_KEY, NEVER).equals(ALWAYS);
+        return ONLY_ERRORS.equals(sp.getString(NOTIFICATION_AREA_SHOW_KEY, ALWAYS));
     }
 
     /**
@@ -44,16 +43,7 @@ public class NotificationAreaUtils {
     public static boolean invisibleOrGone(Context context) {
         setDefault(context);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        String hideValue = sp.getString(NOTIFICATION_AREA_HIDE_KEY, NEVER);
-
-        switch (hideValue) {
-            case NEVER:
-                return true;
-            case WHEN_EMPTY:
-                return false;
-            default:
-                return true;
-        }
+        return ALWAYS.equals(sp.getString(NOTIFICATION_AREA_SHOW_KEY, ALWAYS));
     }
 
     /**
@@ -63,9 +53,9 @@ public class NotificationAreaUtils {
      */
     protected static void setDefault(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        if (!sp.contains(NOTIFICATION_AREA_HIDE_KEY)) {
+        if (!sp.contains(NOTIFICATION_AREA_SHOW_KEY)) {
             SharedPreferences.Editor editor = sp.edit();
-            editor.putString(NOTIFICATION_AREA_HIDE_KEY, NEVER);
+            editor.putString(NOTIFICATION_AREA_SHOW_KEY, ALWAYS);
             editor.commit();
         }
     }

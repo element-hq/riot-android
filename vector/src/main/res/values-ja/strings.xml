@@ -840,8 +840,8 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="has_been_banned">あなたは%2$sによって%1$sへの入室を禁止されました</string>
     <string name="reason_colon">理由: %1$s</string>
     <string name="rejoin">再参加</string>
-    <string name="notification_area_hide">通知領域を非表示</string>
-    <string name="notification_area_hide_always">常に</string>
-    <string name="notification_area_hide_never">絶対に</string>
-    <string name="notification_area_hide_when_empty">空の場合</string>
+    <string name="notification_area_show">通知領域を表示する</string>
+    <string name="notification_area_show_always">常に</string>
+    <string name="notification_area_show_only_errors">エラーのみ</string>
+    <string name="notification_area_show_messages_and_errors">メッセージとエラー</string>
 </resources>

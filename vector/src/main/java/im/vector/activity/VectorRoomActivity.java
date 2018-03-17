@@ -97,7 +97,6 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.ResourceUtils;
-import org.matrix.androidsdk.view.AutoScrollDownListView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -2550,13 +2549,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
-        // check, if the notification area is hidden don't update it.
-        if (NotificationAreaUtils.always(this)) {
-            mNotificationsArea.setVisibility(View.GONE);
-            findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
-            return;
-        }
-
         int iconId = -1;
         @ColorInt int textColor = -1;
         boolean isAreaVisible = false;
@@ -2675,19 +2667,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         boolean showSeparator = true;
+        int visibility = -1;
         if (mIsUnreadPreviewMode) {
             mNotificationsArea.setVisibility(View.VISIBLE);
         } else if (TextUtils.isEmpty(mEventId)) {
-            int visibility;
             if (isAreaVisible) {
                 visibility = View.VISIBLE;
             } else {
                 showSeparator = NotificationAreaUtils.invisibleOrGone(this);
                 visibility = showSeparator ? View.INVISIBLE : View.GONE;
             }
-            mNotificationsArea.setVisibility(visibility);
         }
-        findViewById(R.id.room_notification_separator).setVisibility(showSeparator ? View.VISIBLE : View.GONE);
 
         if (-1 != iconId) {
             mNotificationIconImageView.setImageResource(iconId);
@@ -2711,6 +2701,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         if (null != mUseMatrixAppsMenuItem) {
             mUseMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData) && PreferencesManager.useMatrixApps(this));
+        }
+
+        if (NotificationAreaUtils.onlyErrors(this)) {
+            int view = R.drawable.error == iconId ? View.VISIBLE : View.GONE;
+            mNotificationsArea.setVisibility(view);
+            findViewById(R.id.room_notification_separator).setVisibility(view);
+        } else {
+            if (visibility != -1) {
+                mNotificationsArea.setVisibility(visibility);
+            }
+            findViewById(R.id.room_notification_separator).setVisibility(showSeparator ? View.VISIBLE : View.GONE);
         }
     }
 

@@ -21,8 +21,8 @@
     <string name="auth_password_placeholder">รหัสผ่าน</string>
     <string name="auth_new_password_placeholder">รหัสผ่านใหม่</string>
     <string name="permalink">ลิงก์ถาวร</string>
-    <string name="notification_area_hide">ซ่อนพื้นที่แจ้งเตือน</string>
-    <string name="notification_area_hide_always">เสมอ</string>
-    <string name="notification_area_hide_never">ไม่เคย</string>
-    <string name="notification_area_hide_when_empty">เมื่อว่างเปล่า</string>
+    <string name="notification_area_show">แสดงพื้นที่แจ้งเตือน</string>
+    <string name="notification_area_show_always">เสมอ</string>
+    <string name="notification_area_show_only_errors">ข้อผิดพลาดเท่านั้น</string>
+    <string name="notification_area_show_messages_and_errors">ข้อความและข้อผิดพลาด</string>
 </resources>
