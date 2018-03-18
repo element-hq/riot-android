@@ -858,4 +858,35 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Entrar novamente</string>
     <string name="forget_room">Esquecer a sala</string>
-</resources>
+<string name="actions">Ações</string>
+    <string name="open_chat_header">Abrir cabeçalho</string>
+    <string name="room_sync_in_progress">Sincronizando...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 membro ativo</item>
+	<item quantity="other">%d membros ativos</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 membro</item>
+	<item quantity="other">%d membros</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 nova mensagem</item>
+	<item quantity="other">%d novas mensagens</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s e %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 outro/a</item>
+	<item quantity="other">%d outros/as</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d salas</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s sala encontrada para %2$s</item>
+	<item quantity="other">%1$s salas encontradas para %2$s</item>
+</plurals>
+    <string name="settings_enable_content_sending">Manter notificações detalhadas</string>
+    </resources>
