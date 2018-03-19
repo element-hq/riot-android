@@ -201,8 +201,8 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
-    appCompile 'com.google.firebase:firebase-core:11.6.2'
-    appCompile 'com.google.firebase:firebase-messaging:11.6.2'
+    appCompile 'com.google.firebase:firebase-core:11.8.0'
+    appCompile 'com.google.firebase:firebase-messaging:11.8.0'
 
     // fdroid flavor only
 }
