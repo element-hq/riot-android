@@ -154,7 +154,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
                 mPhoneNumberCodeLayout.setErrorEnabled(true);
                 mPhoneNumberCodeLayout.setError(getString(R.string.settings_phone_number_verification_error_empty_code));
             } else {
-                mLoadingView.setVisibility(View.VISIBLE);
+                showWaitingView(mLoadingView);
                 mSession.getThirdPidRestClient()
                         .submitValidationToken(mThreePid.medium, mPhoneNumberCode.getText().toString(), mThreePid.clientSecret, mThreePid.sid, new ApiCallback<Boolean>() {
                             @Override
@@ -218,7 +218,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
 
     private void onSubmitCodeError(final String errorMessage) {
         mIsSubmittingToken = false;
-        mLoadingView.setVisibility(View.GONE);
+        stopWaitingView(mLoadingView);
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 

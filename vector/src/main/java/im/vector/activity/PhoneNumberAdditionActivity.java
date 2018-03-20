@@ -263,7 +263,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
         if (!mIsSubmittingPhone) {
             mIsSubmittingPhone = true;
 
-            mLoadingView.setVisibility(View.VISIBLE);
+            showWaitingView(mLoadingView);
 
             final String e164phone = PhoneNumberUtils.getE164format(phoneNumber);
             // Extract from phone number object instead of using mCurrentRegionCode just in case
@@ -273,7 +273,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
             mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    mLoadingView.setVisibility(View.GONE);
+                    stopWaitingView(mLoadingView);
                     Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
                             mSession.getCredentials().userId, pid);
                     startActivityForResult(intent, REQUEST_VERIFICATION);
@@ -310,7 +310,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
      */
     private void onSubmitPhoneError(final String errorMessage) {
         mIsSubmittingPhone = false;
-        mLoadingView.setVisibility(View.GONE);
+        stopWaitingView(mLoadingView);
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 

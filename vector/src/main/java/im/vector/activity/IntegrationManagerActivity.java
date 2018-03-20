@@ -138,13 +138,13 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
         mWidgetId = intent.getStringExtra(EXTRA_WIDGET_ID);
         mScreenId = intent.getStringExtra(EXTRA_SCREEN_ID);
 
-        mProgressLayout.setVisibility(View.VISIBLE);
+        showWaitingView(mProgressLayout);
 
         WidgetsManager.getSharedInstance().getScalarToken(this, mSession, new ApiCallback<String>() {
             @Override
             public void onSuccess(String scalarToken) {
                 mScalarToken = scalarToken;
-                mProgressLayout.setVisibility(View.GONE);
+                stopWaitingView(mProgressLayout);
                 launchUrl();
             }
 

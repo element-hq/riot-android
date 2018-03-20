@@ -173,7 +173,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProgressLayout.setVisibility(View.VISIBLE);
+                showWaitingView(mProgressLayout);
                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
@@ -181,7 +181,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                     }
 
                     private void onError(String errorMessage) {
-                        mProgressLayout.setVisibility(View.GONE);
+                        stopWaitingView(mProgressLayout);
                         CommonActivityUtils.displayToast(JitsiCallActivity.this, errorMessage);
                     }
 
@@ -266,7 +266,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                 JitsiCallActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mProgressLayout.setVisibility(View.GONE);
+                        stopWaitingView(mProgressLayout);
                     }
                 });
             }

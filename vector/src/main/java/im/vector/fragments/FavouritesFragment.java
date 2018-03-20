@@ -75,7 +75,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onRoomTagEvent(String roomId) {
-            if (mActivity.isWaitingViewVisible()) {
+            if (mActivity.isWaitingViewVisible(mActivity.mWaitingView)) {
                 onRoomTagUpdated(null);
             }
         }
@@ -188,7 +188,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
         super.onSummariesUpdate();
 
         if (isResumed()) {
-            if (!mActivity.isWaitingViewVisible()) {
+            if (!mActivity.isWaitingViewVisible(mActivity.mWaitingView)) {
                 refreshFavorites();
             }
         }
@@ -313,7 +313,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
                     Double tagOrder = mSession.tagOrderToBeAtIndex(mToPosition, mFromPosition, RoomTag.ROOM_TAG_FAVOURITE);
 
                     // show a spinner
-                    mActivity.showWaitingView();
+                    mActivity.showWaitingView(mActivity.mWaitingView);
 
                     RoomUtils.updateRoomTag(mSession, mRoomId, tagOrder, RoomTag.ROOM_TAG_FAVOURITE, new ApiCallback<Void>() {
                         @Override
@@ -352,7 +352,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
      * @param errorMessage the error message if any.
      */
     private void onRoomTagUpdated(String errorMessage) {
-        mActivity.stopWaitingView();
+        mActivity.stopWaitingView(mActivity.mWaitingView);
 
         refreshFavorites();
         mFavoritesAdapter.notifyDataSetChanged();

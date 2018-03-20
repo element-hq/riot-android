@@ -188,7 +188,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
 
     @Override
     public void onUpdateRoomNotificationsState(MXSession session, String roomId, BingRulesManager.RoomNotificationState state) {
-        mActivity.showWaitingView();
+        mActivity.showWaitingView(mActivity.mWaitingView);
         session.getDataHandler().getBingRulesManager().updateRoomNotificationState(roomId, state, new BingRulesManager.onBingRuleUpdateListener() {
             @Override
             public void onBingRuleUpdateSuccess() {
@@ -204,7 +204,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
 
     @Override
     public void onToggleDirectChat(MXSession session, final String roomId) {
-        mActivity.showWaitingView();
+        mActivity.showWaitingView(mActivity.mWaitingView);
         RoomUtils.toggleDirectChat(session, roomId, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
@@ -377,7 +377,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
      * @param newTag
      */
     private void updateTag(final String roomId, Double newTagOrder, final String newTag) {
-        mActivity.showWaitingView();
+        mActivity.showWaitingView(mActivity.mWaitingView);
         RoomUtils.updateRoomTag(mSession, roomId, newTagOrder, newTag, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
@@ -411,7 +411,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mActivity.stopWaitingView();
+                    mActivity.stopWaitingView(mActivity.mWaitingView);
                     if (!TextUtils.isEmpty(errorMessage)) {
                         Toast.makeText(mActivity, errorMessage, Toast.LENGTH_SHORT).show();
                     }
@@ -424,14 +424,14 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
      * Mark all the fragment rooms as read
      */
     private void onMarkAllAsRead() {
-        mActivity.showWaitingView();
+        mActivity.showWaitingView(mActivity.mWaitingView);
 
         mSession.markRoomsAsRead(getRooms(), new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 // check if the activity is still attached
                 if ((null != mActivity) && !mActivity.isFinishing()) {
-                    mActivity.stopWaitingView();
+                    mActivity.stopWaitingView(mActivity.mWaitingView);
                     mActivity.refreshUnreadBadges();
 
                     // if the fragment is still the active one
