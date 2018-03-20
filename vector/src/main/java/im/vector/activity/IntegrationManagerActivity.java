@@ -74,7 +74,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
     private static final String EXTRA_SCREEN_ID = "EXTRA_SCREEN_ID";
 
     @BindView(R.id.integration_progress_layout)
-    View mProgressLayout;
+    View mProgressLayout = waitingView;
 
     @BindView(R.id.integration_webview)
     WebView mWebView;
@@ -138,13 +138,13 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
         mWidgetId = intent.getStringExtra(EXTRA_WIDGET_ID);
         mScreenId = intent.getStringExtra(EXTRA_SCREEN_ID);
 
-        showWaitingView(mProgressLayout);
+        showWaitingView();
 
         WidgetsManager.getSharedInstance().getScalarToken(this, mSession, new ApiCallback<String>() {
             @Override
             public void onSuccess(String scalarToken) {
                 mScalarToken = scalarToken;
-                stopWaitingView(mProgressLayout);
+                stopWaitingView();
                 launchUrl();
             }
 

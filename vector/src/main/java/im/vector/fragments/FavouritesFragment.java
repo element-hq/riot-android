@@ -313,7 +313,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
                     Double tagOrder = mSession.tagOrderToBeAtIndex(mToPosition, mFromPosition, RoomTag.ROOM_TAG_FAVOURITE);
 
                     // show a spinner
-                    mActivity.showWaitingView(mActivity.mWaitingView);
+                    mActivity.showWaitingView();
 
                     RoomUtils.updateRoomTag(mSession, mRoomId, tagOrder, RoomTag.ROOM_TAG_FAVOURITE, new ApiCallback<Void>() {
                         @Override
@@ -352,7 +352,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
      * @param errorMessage the error message if any.
      */
     private void onRoomTagUpdated(String errorMessage) {
-        mActivity.stopWaitingView(mActivity.mWaitingView);
+        mActivity.stopWaitingView();
 
         refreshFavorites();
         mFavoritesAdapter.notifyDataSetChanged();

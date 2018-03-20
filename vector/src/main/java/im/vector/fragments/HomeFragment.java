@@ -115,7 +115,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
             homeSectionView.setCurrentFilter(mCurrentFilter);
         }
 
-        mActivity.showWaitingView(mActivity.mWaitingView);
+        mActivity.showWaitingView();
     }
 
     @Override
@@ -312,7 +312,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         sortAndDisplay(lowPriorities, notificationComparator, mLowPrioritySection);
         sortAndDisplay(otherRooms, notificationComparator, mRoomsSection);
 
-        mActivity.stopWaitingView(mActivity.mWaitingView);
+        mActivity.stopWaitingView();
 
         mInvitationsSection.setRooms(mActivity.getRoomInvitations());
     }

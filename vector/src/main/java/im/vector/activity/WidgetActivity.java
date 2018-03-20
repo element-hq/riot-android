@@ -79,7 +79,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
     TextView mWidgetTypeTextView;
 
     @BindView(R.id.widget_progress_layout)
-    View mProgressLayout;
+    View mProgressLayout = waitingView;
 
     /**
      * Widget events listener
@@ -149,7 +149,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                showWaitingView(mProgressLayout);
+                                showWaitingView();
                                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
@@ -157,7 +157,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
                                     }
 
                                     private void onError(String errorMessage) {
-                                        stopWaitingView(mProgressLayout);
+                                        stopWaitingView();
                                         CommonActivityUtils.displayToast(WidgetActivity.this, errorMessage);
                                     }
 
@@ -258,11 +258,11 @@ public class WidgetActivity extends RiotAppCompatActivity {
             cookieManager.setAcceptThirdPartyCookies(mWidgetWebView, true);
         }
 
-        showWaitingView(mProgressLayout);
+        showWaitingView();
         WidgetsManager.getFormattedWidgetUrl(this, mWidget, new ApiCallback<String>() {
             @Override
             public void onSuccess(String url) {
-                stopWaitingView(mProgressLayout);
+                stopWaitingView();
                 mWidgetWebView.loadUrl(url);
             }
 

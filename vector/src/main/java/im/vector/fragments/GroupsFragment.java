@@ -213,14 +213,14 @@ public class GroupsFragment extends AbsHomeFragment {
         }, new AbsAdapter.GroupInvitationListener() {
             @Override
             public void onJoinGroup(MXSession session, String groupId) {
-                mActivity.showWaitingView(mActivity.mWaitingView);
+                mActivity.showWaitingView();
                 mGroupsManager.joinGroup(groupId, new ApiCallback<Void>() {
 
                     private void onDone(String errorMessage) {
                         if ((null != errorMessage) && (null != getActivity())) {
                             Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                         }
-                        mActivity.stopWaitingView(mActivity.mWaitingView);
+                        mActivity.stopWaitingView();
                     }
 
                     @Override
@@ -293,14 +293,14 @@ public class GroupsFragment extends AbsHomeFragment {
      * @param groupId the group Id
      */
     private void leaveOrReject(String groupId) {
-        mActivity.showWaitingView(mActivity.mWaitingView);
+        mActivity.showWaitingView();
         mGroupsManager.leaveGroup(groupId, new ApiCallback<Void>() {
 
             private void onDone(String errorMessage) {
                 if ((null != errorMessage) && (null != getActivity())) {
                     Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
-                mActivity.stopWaitingView(mActivity.mWaitingView);
+                mActivity.stopWaitingView();
             }
 
             @Override
@@ -395,7 +395,7 @@ public class GroupsFragment extends AbsHomeFragment {
                         String localPart = idEditText.getText().toString().trim();
                         String groupName = nameEditText.getText().toString().trim();
 
-                        mActivity.showWaitingView(mActivity.mWaitingView);
+                        mActivity.showWaitingView();
 
                         mGroupsManager.createGroup(localPart, groupName, new ApiCallback<String>() {
                             private void onDone(String errorMessage) {
@@ -404,7 +404,7 @@ public class GroupsFragment extends AbsHomeFragment {
                                         Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
                                     }
 
-                                    mActivity.stopWaitingView(mActivity.mWaitingView);
+                                    mActivity.stopWaitingView();
 
                                     refreshGroups();
                                 }

@@ -183,7 +183,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private String mGroupIdToOpen = null;
 
     @BindView(R.id.listView_spinner_views)
-    public View mWaitingView;
+    public View mWaitingView = waitingView;
 
     @BindView(R.id.floating_action_button)
     FloatingActionButton mFloatingActionButton;
@@ -223,7 +223,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private final BroadcastReceiver mBrdRcvStopWaitingView = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            stopWaitingView(mWaitingView);
+            stopWaitingView();
         }
     };
 
@@ -330,9 +330,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             // the activity could be started with a spinner
             // because there is a pending action (like universalLink processing)
             if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, WAITING_VIEW_STOP)) {
-                showWaitingView(mWaitingView);
+                showWaitingView();
             } else {
-                stopWaitingView(mWaitingView);
+                stopWaitingView();
             }
             intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
 
@@ -380,7 +380,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     } else if (MXSession.isRoomAlias(roomIdOrAlias)) {
                         Log.d(LOG_TAG, "Has a valid universal link of the room Alias " + roomIdOrAlias);
 
-                        showWaitingView(mWaitingView);
+                        showWaitingView();
 
                         // it is a room alias
                         // convert the room alias to room Id
@@ -655,7 +655,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         super.onPause();
 
         // Unregister Broadcast receiver
-        stopWaitingView(mWaitingView);
+        stopWaitingView();
         try {
             unregisterReceiver(mBrdRcvStopWaitingView);
         } catch (Exception e) {
@@ -722,9 +722,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         // start waiting view
         if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
-            showWaitingView(mWaitingView);
+            showWaitingView();
         } else {
-            stopWaitingView(mWaitingView);
+            stopWaitingView();
         }
         intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
 
@@ -833,7 +833,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         }
 
         // clear waiting view
-        stopWaitingView(mWaitingView);
+        stopWaitingView();
 
         mCurrentMenuId = item.getItemId();
 
@@ -1112,7 +1112,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
                     sendBroadcast(myBroadcastIntent);
 
-                    showWaitingView(mWaitingView);
+                    showWaitingView();
 
                     // use only once, remove since it has been used
                     intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
@@ -1232,14 +1232,14 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * Create a room and open the dedicated activity
      */
     private void createRoom() {
-        showWaitingView(mWaitingView);
+        showWaitingView();
         mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
             @Override
             public void onSuccess(final String roomId) {
                 mWaitingView.post(new Runnable() {
                     @Override
                     public void run() {
-                        stopWaitingView(mWaitingView);
+                        stopWaitingView();
 
                         HashMap<String, Object> params = new HashMap<>();
                         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
@@ -1257,7 +1257,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                         if (null != message) {
                             Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
                         }
-                        stopWaitingView(mWaitingView);
+                        stopWaitingView();
                     }
                 });
             }
@@ -1298,14 +1298,14 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 .setPositiveButton(R.string.join,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                showWaitingView(mWaitingView);
+                                showWaitingView();
 
                                 String text = textInput.getText().toString().trim();
 
                                 mSession.joinRoom(text, new ApiCallback<String>() {
                                     @Override
                                     public void onSuccess(String roomId) {
-                                        stopWaitingView(mWaitingView);
+                                        stopWaitingView();
 
                                         HashMap<String, Object> params = new HashMap<>();
                                         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
@@ -1320,7 +1320,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                                 if (null != message) {
                                                     Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
                                                 }
-                                                stopWaitingView(mWaitingView);
+                                                stopWaitingView();
                                             }
                                         });
                                     }
@@ -1471,7 +1471,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     public void run() {
                         // clear any pending notification for this room
                         EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
-                        stopWaitingView(mWaitingView);
+                        stopWaitingView();
 
                         if (null != onSuccessCallback) {
                             onSuccessCallback.onSuccess(null);
@@ -1484,7 +1484,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        stopWaitingView(mWaitingView);
+                        stopWaitingView();
                         Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
                     }
                 });
@@ -1516,7 +1516,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         Room room = mSession.getDataHandler().getRoom(roomId);
 
         if (null != room) {
-            showWaitingView(mWaitingView);
+            showWaitingView();
             room.forget(getForgetLeaveCallback(roomId, onSuccessCallback));
         }
     }
@@ -1531,7 +1531,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         Room room = mSession.getDataHandler().getRoom(roomId);
 
         if (null != room) {
-            showWaitingView(mWaitingView);
+            showWaitingView();
             room.leave(getForgetLeaveCallback(roomId, onSuccessCallback));
         }
     }
@@ -1581,11 +1581,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitingView(mWaitingView);
+                showWaitingView();
 
                 CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new ApiCallback<String>() {
                     private void onDone(String message) {
-                        stopWaitingView(mWaitingView);
+                        stopWaitingView();
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VectorHomeActivity.this);
                         alertDialogBuilder.setMessage(message);
 
@@ -1595,7 +1595,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                 .setPositiveButton(R.string.action_sign_out,
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
-                                                VectorHomeActivity.this.showWaitingView(mWaitingView);
+                                                VectorHomeActivity.this.showWaitingView();
                                                 CommonActivityUtils.logout(VectorHomeActivity.this);
                                             }
                                         })
@@ -1696,7 +1696,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                 .setPositiveButton(R.string.action_sign_out,
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
-                                                VectorHomeActivity.this.showWaitingView(mWaitingView);
+                                                VectorHomeActivity.this.showWaitingView();
                                                 CommonActivityUtils.logout(VectorHomeActivity.this);
                                             }
                                         })

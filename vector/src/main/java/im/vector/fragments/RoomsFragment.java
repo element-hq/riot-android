@@ -334,12 +334,12 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                     CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
                 }
             } else {
-                mActivity.showWaitingView(mActivity.mWaitingView);
+                mActivity.showWaitingView();
 
                 roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                     private void onDone() {
                         if (null != mActivity) {
-                            mActivity.stopWaitingView(mActivity.mWaitingView);
+                            mActivity.stopWaitingView();
                             CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                         }
                     }

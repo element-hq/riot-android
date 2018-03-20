@@ -78,7 +78,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
     Toolbar mToolbar;
 
     @BindView(R.id.historical_waiting_view)
-    View mWaitingView;
+    View mWaitingView = waitingView;
 
     // historical adapter
     private HomeRoomAdapter mHistoricalAdapter;
@@ -208,7 +208,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
 
         if (!dataHandler.areLeftRoomsSynced()) {
             mHistoricalAdapter.setRooms(new ArrayList<Room>());
-            showWaitingView(mWaitingView);
+            showWaitingView();
             dataHandler.retrieveLeftRooms(new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
@@ -244,7 +244,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
      * Init history rooms data
      */
     private void initHistoricalRoomsData() {
-        stopWaitingView(mWaitingView);
+        stopWaitingView();
         final List<Room> historicalRooms = new ArrayList<>(mSession.getDataHandler().getLeftRooms());
         for (Iterator<Room> iterator = historicalRooms.iterator(); iterator.hasNext(); ) {
             final Room room = iterator.next();
@@ -344,7 +344,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    stopWaitingView(mWaitingView);
+                    stopWaitingView();
                     if (!TextUtils.isEmpty(errorMessage)) {
                         Toast.makeText(HistoricalRoomsActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
@@ -355,7 +355,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
 
     @Override
     public void onSelectRoom(Room room, int position) {
-        showWaitingView(mWaitingView);
+        showWaitingView();
         CommonActivityUtils.previewRoom(this, mSession, room.getRoomId(), "", new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
@@ -391,7 +391,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
 
     @Override
     public void onForgotRoom(Room room) {
-        showWaitingView(mWaitingView);
+        showWaitingView();
 
         room.forget(new ApiCallback<Void>() {
             @Override

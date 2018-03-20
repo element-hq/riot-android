@@ -94,7 +94,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
     View mConnectingTextView;
 
     @BindView(R.id.jitsi_progress_layout)
-    View mProgressLayout;
+    View mProgressLayout = waitingView;
 
     /**
      * Widget events listener
@@ -173,7 +173,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitingView(mProgressLayout);
+                showWaitingView();
                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
@@ -181,7 +181,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                     }
 
                     private void onError(String errorMessage) {
-                        stopWaitingView(mProgressLayout);
+                        stopWaitingView();
                         CommonActivityUtils.displayToast(JitsiCallActivity.this, errorMessage);
                     }
 
@@ -266,7 +266,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                 JitsiCallActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        stopWaitingView(mProgressLayout);
+                        stopWaitingView();
                     }
                 });
             }
