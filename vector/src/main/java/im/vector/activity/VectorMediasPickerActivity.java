@@ -156,7 +156,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     // recents medias list
-    private final ArrayList<MediaStoreMedia> mMediaStoreMediasList = new ArrayList<>();
+    private final List<MediaStoreMedia> mMediaStoreMediasList = new ArrayList<>();
 
     //
     private MediaStoreMedia mSelectedGalleryImage;
@@ -1815,7 +1815,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @return the medias list
      */
     private List<MediaStoreMedia> listLatestMedias() {
-        ArrayList<MediaStoreMedia> mediasList = new ArrayList<>();
+        List<MediaStoreMedia> mediasList = new ArrayList<>();
 
         // images
         String[] imagesProjection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images.ImageColumns.MIME_TYPE};

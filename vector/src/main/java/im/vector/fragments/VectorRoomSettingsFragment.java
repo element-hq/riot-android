@@ -1310,7 +1310,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * Refresh the banned users list.
      */
     private void refreshBannedMembersList() {
-        ArrayList<RoomMember> bannedMembers = new ArrayList<>();
+        List<RoomMember> bannedMembers = new ArrayList<>();
         Collection<RoomMember> members = mRoom.getMembers();
 
         if (null != members) {
@@ -1686,7 +1686,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private void refreshAddresses() {
         final String localSuffix = ":" + mSession.getHomeServerConfig().getHomeserverUri().getHost();
         final String canonicalAlias = mRoom.getLiveState().alias;
-        final ArrayList<String> aliases = new ArrayList<>(mRoom.getAliases());
+        final List<String> aliases = new ArrayList<>(mRoom.getAliases());
 
         // remove the displayed preferences
         mAddressesSettingsCategory.removeAll();
@@ -1697,8 +1697,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             preference.setKey(NO_LOCAL_ADDRESS_PREFERENCE_KEY);
             mAddressesSettingsCategory.addPreference(preference);
         } else {
-            ArrayList<String> localAliases = new ArrayList<>();
-            ArrayList<String> remoteAliases = new ArrayList<>();
+            List<String> localAliases = new ArrayList<>();
+            List<String> remoteAliases = new ArrayList<>();
 
             for (String alias : aliases) {
                 if (alias.endsWith(localSuffix)) {

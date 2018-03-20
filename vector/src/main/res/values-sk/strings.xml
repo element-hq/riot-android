@@ -724,7 +724,7 @@ Neznáme zariadenia:</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenčné hovory uskutočňovať použitím jitsi</string>
     <string name="widget_delete_message_confirmation">Ste si istí, že chcete odstrániť widget?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Nie je možné vytvoriť widget.</string>
     <string name="widget_integration_failed_to_send_request">Nepodarilo sa odoslať požiadavku.</string>
     <string name="widget_integration_positive_power_level">Úroveň moci musí byť kladné celé číslo.</string>
@@ -736,7 +736,7 @@ Neznáme zariadenia:</string>
     <string name="settings_labs_matrix_apps">Matrix Aplikácie</string>
     <string name="room_add_matrix_apps">Pridať Matrix aplikácie</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">Pridali ste nové zariadenie nazvané \'%s\', ktoré žiada o šifrovacie kľúče.</string>
     <string name="your_unverified_device_requesting">Vaše neoverené zariadenie nazvané \'%s\' žiada o šifrovacie kľúče.</string>
     <string name="start_verification">Spustiť overenie</string>
@@ -758,15 +758,15 @@ Neznáme zariadenia:</string>
 
     <string name="settings_labs_native_camera">Používať vstavaný fotoaparát a kameru</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="conference_call_warning_title">Upozornenie!</string>
     <string name="conference_call_warning_message">Konferenčné hovory sú stále vo vývoji a nemusia byť úplne spoľahlivé.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Chybný príkaz</string>
     <string name="unrecognized_command">Nerozpoznaný príkaz: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Vypnuté</string>
     <string name="notification_on">Zapnuté</string>
     <string name="notification_noisy">Hlučné</string>
@@ -820,7 +820,7 @@ Neznáme zariadenia:</string>
     <string name="community_id">ID komunity</string>
     <string name="community_id_hint">príklad</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Domov</string>
     <string name="group_details_people">Ľudia</string>
     <string name="group_details_rooms">Miestnosti</string>
@@ -923,7 +923,7 @@ Neznáme zariadenia:</string>
 	<item quantity="other"/>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Potvrdenie o prečítaní</string>
     <string name="notice_avatar">Obrázok oznámenia</string>
     <string name="avatar">Obrázok</string>

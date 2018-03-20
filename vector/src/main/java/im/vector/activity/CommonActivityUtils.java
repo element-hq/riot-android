@@ -176,7 +176,7 @@ public class CommonActivityUtils {
 
             // reported by a rageshake
             if (null != eventStreamService) {
-                ArrayList<String> matrixIds = new ArrayList<>();
+                List<String> matrixIds = new ArrayList<>();
                 matrixIds.add(session.getMyUserId());
                 eventStreamService.stopAccounts(matrixIds);
             }
@@ -585,7 +585,7 @@ public class CommonActivityUtils {
         // either the application has never be launched
         // or the service has been killed on low memory
         if (EventStreamService.isStopped()) {
-            ArrayList<String> matrixIds = new ArrayList<>();
+            List<String> matrixIds = new ArrayList<>();
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             if ((null != sessions) && (sessions.size() > 0)) {
@@ -1080,7 +1080,7 @@ public class CommonActivityUtils {
                 previewRoom(fromActivity, roomPreviewData);
             } else {
                 Log.d(LOG_TAG, "previewRoom : open the room");
-                HashMap<String, Object> params = new HashMap<>();
+                Map<String, Object> params = new HashMap<>();
                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
                 CommonActivityUtils.goToRoomPage(fromActivity, session, params);
@@ -1228,8 +1228,8 @@ public class CommonActivityUtils {
      * @param aSearchedUserId the searched user ID
      * @return an array containing the found rooms
      */
-    private static ArrayList<Room> findOneToOneRoomList(final MXSession aSession, final String aSearchedUserId) {
-        ArrayList<Room> listRetValue = new ArrayList<>();
+    private static List<Room> findOneToOneRoomList(final MXSession aSession, final String aSearchedUserId) {
+        List<Room> listRetValue = new ArrayList<>();
         List<RoomMember> roomMembersList;
         String userId0, userId1;
 
@@ -1333,7 +1333,7 @@ public class CommonActivityUtils {
             return;
         }
 
-        ArrayList<RoomSummary> mergedSummaries = new ArrayList<>(session.getDataHandler().getStore().getSummaries());
+        List<RoomSummary> mergedSummaries = new ArrayList<>(session.getDataHandler().getStore().getSummaries());
 
         // keep only the joined room
         for (int index = 0; index < mergedSummaries.size(); index++) {
@@ -1367,7 +1367,7 @@ public class CommonActivityUtils {
         VectorRoomsSelectionAdapter adapter = new VectorRoomsSelectionAdapter(fromActivity, R.layout.adapter_item_vector_recent_room, session);
         adapter.addAll(mergedSummaries);
 
-        final ArrayList<RoomSummary> fMergedSummaries = mergedSummaries;
+        final List<RoomSummary> fMergedSummaries = mergedSummaries;
 
         new AlertDialog.Builder(fromActivity)
                 .setTitle(R.string.send_files_in)
@@ -1389,7 +1389,7 @@ public class CommonActivityUtils {
                                     public void run() {
                                         RoomSummary summary = fMergedSummaries.get(which);
 
-                                        HashMap<String, Object> params = new HashMap<>();
+                                        Map<String, Object> params = new HashMap<>();
                                         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
                                         params.put(VectorRoomActivity.EXTRA_ROOM_ID, summary.getRoomId());
                                         params.put(VectorRoomActivity.EXTRA_ROOM_INTENT, intent);
@@ -1702,7 +1702,7 @@ public class CommonActivityUtils {
         } else if (null == aDataHandler.getStore()) {
             Log.w(LOG_TAG, "## updateBadgeCount(): invalid store instance");
         } else {
-            ArrayList<Room> roomCompleteList = new ArrayList<>(aDataHandler.getStore().getRooms());
+            List<Room> roomCompleteList = new ArrayList<>(aDataHandler.getStore().getRooms());
             int unreadRoomsCount = 0;
 
             for (Room room : roomCompleteList) {

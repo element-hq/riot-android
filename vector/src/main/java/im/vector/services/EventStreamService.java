@@ -141,12 +141,12 @@ public class EventStreamService extends Service {
     /**
      * Managed sessions
      */
-    private ArrayList<MXSession> mSessions;
+    private List<MXSession> mSessions;
 
     /**
      * Session identifiers
      */
-    private ArrayList<String> mMatrixIds;
+    private List<String> mMatrixIds;
 
     /**
      * The current state.

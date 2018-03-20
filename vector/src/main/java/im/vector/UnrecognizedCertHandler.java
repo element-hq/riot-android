@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +21,25 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-
-import org.matrix.androidsdk.ssl.CertUtil;
-import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
-import org.matrix.androidsdk.util.Log;
-
 import android.view.View;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
+import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
+import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class UnrecognizedCertHandler {
     private static final String LOG_TAG = UnrecognizedCertHandler.class.getSimpleName();
 
-    private static final HashMap<String, HashSet<Fingerprint>> ignoredFingerprints = new HashMap<>();
-    private static final HashSet<String> openDialogIds = new HashSet<>();
+    private static final Map<String, Set<Fingerprint>> ignoredFingerprints = new HashMap<>();
+    private static final Set<String> openDialogIds = new HashSet<>();
 
     /**
      * Handle a network exception and display a dialog box if it's a certificate exception
@@ -85,7 +86,7 @@ public class UnrecognizedCertHandler {
         }
 
         if (hsConfig.getCredentials() != null) {
-            HashSet<Fingerprint> f = ignoredFingerprints.get(hsConfig.getCredentials().userId);
+            Set<Fingerprint> f = ignoredFingerprints.get(hsConfig.getCredentials().userId);
             if (f != null && f.contains(unrecognizedFingerprint)) {
                 callback.onIgnore();
                 return;
@@ -142,7 +143,7 @@ public class UnrecognizedCertHandler {
             builder.setNegativeButton(R.string.ssl_remain_offline, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     if (hsConfig.getCredentials() != null) {
-                        HashSet<Fingerprint> f = ignoredFingerprints.get(hsConfig.getCredentials().userId);
+                        Set<Fingerprint> f = ignoredFingerprints.get(hsConfig.getCredentials().userId);
                         if (f == null) {
                             f = new HashSet<>();
                             ignoredFingerprints.put(hsConfig.getCredentials().userId, f);

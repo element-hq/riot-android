@@ -47,6 +47,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -116,11 +118,11 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     private final int mGroupLayoutResourceId;
 
     private boolean mIsMultiSelectionMode;
-    private ArrayList<String> mSelectedUserIds = new ArrayList<>();
+    private List<String> mSelectedUserIds = new ArrayList<>();
 
-    private ArrayList<ArrayList<ParticipantAdapterItem>> mRoomMembersListByGroupPosition;
+    private List<List<ParticipantAdapterItem>> mRoomMembersListByGroupPosition;
 
-    private ArrayList<String> mDisplayNamesList = new ArrayList<>();
+    private List<String> mDisplayNamesList = new ArrayList<>();
 
     private int mGroupIndexInvitedMembers = -1;  // "Invited" index
     private int mGroupIndexPresentMembers = -1; // "Favourites" index
@@ -249,7 +251,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     /**
      * @return the list of selected user ids
      */
-    public ArrayList<String> getSelectedUserIds() {
+    public List<String> getSelectedUserIds() {
         return mSelectedUserIds;
     }
 
@@ -306,13 +308,13 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 ParticipantAdapterItem participantItem;
 
                 final boolean isSearchEnabled = isSearchModeEnabled();
-                final ArrayList<ParticipantAdapterItem> presentMembersList = new ArrayList<>();
-                final ArrayList<ArrayList<ParticipantAdapterItem>> roomMembersListByGroupPosition = new ArrayList<>();
-                final ArrayList<String> displayNamesList = new ArrayList<>();
+                final List<ParticipantAdapterItem> presentMembersList = new ArrayList<>();
+                final List<List<ParticipantAdapterItem>> roomMembersListByGroupPosition = new ArrayList<>();
+                final List<String> displayNamesList = new ArrayList<>();
 
                 // retrieve the room members
-                final ArrayList<ParticipantAdapterItem> actualParticipants = new ArrayList<>();
-                final ArrayList<ParticipantAdapterItem> invitedMembers = new ArrayList<>();
+                final List<ParticipantAdapterItem> actualParticipants = new ArrayList<>();
+                final List<ParticipantAdapterItem> invitedMembers = new ArrayList<>();
 
                 Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
                 String myUserId = mSession.getMyUserId();
@@ -363,7 +365,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
                 // Comparator to order members alphabetically
                 final Comparator<ParticipantAdapterItem> comparator = new Comparator<ParticipantAdapterItem>() {
-                    private final HashMap<String, User> usersMap = new HashMap<>();
+                    private final Map<String, User> usersMap = new HashMap<>();
 
                     /**
                      * Get an user snapshot from an user id.
@@ -539,8 +541,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     /**
      * @return the participant User Ids except oneself.
      */
-    public ArrayList<String> getUserIdsList() {
-        ArrayList<String> idsListRetValue = new ArrayList<>();
+    public List<String> getUserIdsList() {
+        List<String> idsListRetValue = new ArrayList<>();
 
         if (mGroupIndexPresentMembers >= 0) {
             int listSize = mRoomMembersListByGroupPosition.get(mGroupIndexPresentMembers).size();

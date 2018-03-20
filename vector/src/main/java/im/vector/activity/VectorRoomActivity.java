@@ -20,6 +20,7 @@ package im.vector.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -109,6 +110,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.core.widget.ToastKt;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -205,6 +207,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final int REQUEST_ROOM_AVATAR_CODE = 3;
     private static final int INVITE_USER_REQUEST_CODE = 4;
     public static final int UNREAD_PREVIEW_REQUEST_CODE = 5;
+    private static final int RECORD_AUDIO_REQUEST_CODE = 6;
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
     private String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
@@ -412,7 +415,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         @Override
         public void onRoomKick(String roomId) {
-            HashMap<String, Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
 
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -421,7 +424,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Intent intent = new Intent(VectorRoomActivity.this, VectorHomeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
             startActivity(intent);
         }
 
@@ -722,36 +725,37 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         fragment.dismissAllowingStateLoss();
                     }
 
-                    final Integer[] messages;
-                    final Integer[] icons;
+                    List<Integer> messagesList = new ArrayList<>();
+                    List<Integer> iconsList = new ArrayList<>();
 
-                    if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
-                        messages = new Integer[]{
-                                R.string.option_send_files,
-                                R.string.option_send_sticker,
-                                R.string.option_take_photo,
-                                R.string.option_take_video,
-                        };
+                    // Send file
+                    messagesList.add(R.string.option_send_files);
+                    iconsList.add(R.drawable.ic_material_file);
 
-                        icons = new Integer[]{
-                                R.drawable.ic_material_file,
-                                R.drawable.ic_send_sticker,
-                                R.drawable.ic_material_camera,
-                                R.drawable.ic_material_videocam,
-                        };
-                    } else {
-                        messages = new Integer[]{
-                                R.string.option_send_files,
-                                R.string.option_send_sticker,
-                                R.string.option_take_photo_video,
-                        };
-
-                        icons = new Integer[]{
-                                R.drawable.ic_material_file,
-                                R.drawable.ic_send_sticker,
-                                R.drawable.ic_material_camera,
-                        };
+                    // Send voice
+                    if (PreferencesManager.isSendVoiceFeatureEnabled(VectorRoomActivity.this)) {
+                        messagesList.add(R.string.option_send_voice);
+                        iconsList.add(R.drawable.vector_micro_green);
                     }
+
+                    // Send sticker
+                    messagesList.add(R.string.option_send_sticker);
+                    iconsList.add(R.drawable.ic_send_sticker);
+
+                    // Camera
+                    if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
+                        messagesList.add(R.string.option_take_photo);
+                        iconsList.add(R.drawable.ic_material_camera);
+
+                        messagesList.add(R.string.option_take_video);
+                        iconsList.add(R.drawable.ic_material_videocam);
+                    } else {
+                        messagesList.add(R.string.option_take_photo_video);
+                        iconsList.add(R.drawable.ic_material_camera);
+                    }
+
+                    final Integer[] messages = messagesList.toArray(new Integer[0]);
+                    final Integer[] icons = iconsList.toArray(new Integer[0]);
 
                     fragment = IconAndTextDialogFragment.newInstance(icons, messages,
                             ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
@@ -763,6 +767,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                             if (selectedVal == R.string.option_send_files) {
                                 launchFileSelectionIntent();
+                            } else if (selectedVal == R.string.option_send_voice) {
+                                launchAudioRecorderIntent();
                             } else if (selectedVal == R.string.option_send_sticker) {
                                 startStickerPickerActivity();
                             } else if (selectedVal == R.string.option_take_photo_video) {
@@ -1407,6 +1413,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             switch (requestCode) {
                 case REQUEST_FILES_REQUEST_CODE:
                 case TAKE_IMAGE_REQUEST_CODE:
+                case RECORD_AUDIO_REQUEST_CODE:
                     sendMediasIntent(data);
                     break;
                 case RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE:
@@ -2025,7 +2032,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             return;
         }
 
-        ArrayList<RoomMediaMessage> sharedDataItems = new ArrayList<>();
+        List<RoomMediaMessage> sharedDataItems = new ArrayList<>();
 
         if (null != intent) {
             sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent, RoomMediaMessage.class.getClassLoader()));
@@ -2261,9 +2268,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
 
     /**
+     * Launch audio recorder intent
+     */
+    private void launchAudioRecorderIntent() {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        Intent recordSoundIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+
+        // Create chooser
+        Intent chooserIntent = Intent.createChooser(recordSoundIntent, getString(R.string.go_on_with));
+        try {
+            startActivityForResult(chooserIntent, RECORD_AUDIO_REQUEST_CODE);
+        } catch (ActivityNotFoundException anfe) {
+            ToastKt.toast(this, R.string.error_no_external_application_found, Toast.LENGTH_SHORT);
+        }
+    }
+
+    /**
      * Launch the files selection intent
      */
-    @SuppressLint("NewApi")
     private void launchFileSelectionIntent() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
@@ -2831,7 +2854,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             String myUserId = mSession.getMyUserId();
 
             // get the room member names
-            ArrayList<String> names = new ArrayList<>();
+            List<String> names = new ArrayList<>();
 
             for (int i = 0; i < typingUsers.size(); i++) {
                 RoomMember member = mRoom.getMember(typingUsers.get(i));
@@ -3319,7 +3342,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         public void onSuccess(String roomId) {
                             hideWaitingView();
 
-                            HashMap<String, Object> params = new HashMap<>();
+                            Map<String, Object> params = new HashMap<>();
 
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -3328,7 +3351,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             Intent intent = new Intent(VectorRoomActivity.this, VectorHomeActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+                            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
                             startActivity(intent);
                         }
 
@@ -3586,7 +3609,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void onJoined() {
         if (null != sRoomPreviewData) {
-            HashMap<String, Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
 
             processDirectMessageRoom();
 
@@ -3601,7 +3624,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Intent intent = new Intent(VectorRoomActivity.this, VectorHomeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
             startActivity(intent);
 
             sRoomPreviewData = null;

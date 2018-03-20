@@ -107,10 +107,10 @@ public final class GcmRegistrationManager {
     private String mPusherLang = null;
 
     // the session registration listener
-    private final ArrayList<ThirdPartyRegistrationListener> mThirdPartyRegistrationListeners = new ArrayList<>();
+    private final List<ThirdPartyRegistrationListener> mThirdPartyRegistrationListeners = new ArrayList<>();
 
     // the pushers list
-    public ArrayList<Pusher> mPushersList = new ArrayList<>();
+    public List<Pusher> mPushersList = new ArrayList<>();
 
     /**
      * Registration steps

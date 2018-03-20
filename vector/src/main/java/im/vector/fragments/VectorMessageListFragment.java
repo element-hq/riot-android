@@ -69,6 +69,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -759,10 +760,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
 
-                                                ArrayList<String> userIdsList = new ArrayList<>();
+                                                List<String> userIdsList = new ArrayList<>();
                                                 userIdsList.add(event.sender);
 
-                                                mSession.ignoreUsers(userIdsList, new SimpleApiCallback<Void>() {
+                                                // TODO Remove cast when SDK accept a List
+                                                mSession.ignoreUsers((ArrayList) userIdsList, new SimpleApiCallback<Void>() {
                                                     @Override
                                                     public void onSuccess(Void info) {
                                                     }
@@ -951,8 +953,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     /**
      * @return the image and video messages list
      */
-    ArrayList<SlidableMediaInfo> listSlidableMessages() {
-        ArrayList<SlidableMediaInfo> res = new ArrayList<>();
+    List<SlidableMediaInfo> listSlidableMessages() {
+        List<SlidableMediaInfo> res = new ArrayList<>();
 
         for (int position = 0; position < mAdapter.getCount(); position++) {
             MessageRow row = mAdapter.getItem(position);
@@ -995,7 +997,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param mediaMessage      the imageMessage
      * @return the imageMessage position. -1 if not found.
      */
-    int getMediaMessagePosition(ArrayList<SlidableMediaInfo> mediaMessagesList, Message mediaMessage) {
+    int getMediaMessagePosition(List<SlidableMediaInfo> mediaMessagesList, Message mediaMessage) {
         String url = null;
 
         if (mediaMessage instanceof ImageMessage) {
@@ -1049,7 +1051,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
             // video and images are displayed inside a medias slider.
             if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || (Message.MSGTYPE_VIDEO.equals(message.msgtype))) {
-                ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
+                List<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
                 int listPosition = getMediaMessagePosition(mediaMessagesList, message);
 
                 if (listPosition >= 0) {
@@ -1058,7 +1060,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                     viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, mAdapter.getMaxThumbnailWidth());
                     viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, mAdapter.getMaxThumbnailHeight());
-                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, mediaMessagesList);
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, (ArrayList) mediaMessagesList);
                     viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
 
                     getActivity().startActivity(viewImageIntent);
@@ -1174,7 +1176,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     public void onURLClick(Uri uri) {
         try {
             if (null != uri) {
-                HashMap<String, String> universalParams = VectorUniversalLinkReceiver.parseUniversalLink(uri);
+                Map<String, String> universalParams = VectorUniversalLinkReceiver.parseUniversalLink(uri);
 
                 if (null != universalParams) {
                     // open the member sheet from the current activity
@@ -1280,7 +1282,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
     }
 
-    private final HashMap<String, Boolean> mHighlightStatusByEventId = new HashMap<>();
+    private final Map<String, Boolean> mHighlightStatusByEventId = new HashMap<>();
 
     @Override
     public boolean shouldHighlightEvent(Event event) {

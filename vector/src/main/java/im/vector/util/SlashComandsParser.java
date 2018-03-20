@@ -32,6 +32,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -203,7 +204,7 @@ public class SlashComandsParser {
                         @Override
                         public void onSuccess(String roomId) {
                             if (null != roomId) {
-                                HashMap<String, Object> params = new HashMap<>();
+                                Map<String, Object> params = new HashMap<>();
                                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
                                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 

@@ -40,7 +40,6 @@ import android.widget.TextView;
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -259,7 +258,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == SPEECH_REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            final ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            final List<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
             // one matched items
             if (matches.size() == 1) {

@@ -772,7 +772,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_labs_create_conference_with_jitsi">Осуществлять конференц звонки через Jitsi</string>
     <string name="widget_delete_message_confirmation">Вы уверены, что хотите удалить виджет?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Не удалось создать виджет.</string>
     <string name="widget_integration_failed_to_send_request">Не удалось отправить запрос.</string>
     <string name="widget_integration_positive_power_level">Уровень доступа должен быть числом больше 0.</string>
@@ -810,17 +810,17 @@ Email также позволит вам при необходимости во�
 
     <string name="settings_labs_native_camera">Использовать встроенную камеру</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="title_activity_bug_report">Отчет об ошибке</string>
 
     <string name="conference_call_warning_title">Внимание!</string>
     <string name="conference_call_warning_message">Конференц-связь находится в разработке и может быть ненадежной.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Ошибка команды</string>
     <string name="unrecognized_command">Нераспознанная команда: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Выкл</string>
     <string name="notification_on">Вкл</string>
     <string name="notification_noisy">Громко</string>
@@ -871,7 +871,7 @@ Email также позволит вам при необходимости во�
     <string name="community_id">ID сообщества</string>
     <string name="community_id_hint">пример</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Начало</string>
     <string name="group_details_people">Люди</string>
     <string name="group_details_rooms">Комнаты</string>
@@ -923,7 +923,7 @@ Email также позволит вам при необходимости во�
 	<item quantity="other"/>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="avatar">Аватар</string>
 
 <plurals name="room_header_active_members_count">

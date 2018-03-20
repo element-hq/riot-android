@@ -748,7 +748,7 @@
     <string name="settings_labs_create_conference_with_jitsi">Здійснювати конференц дзвінки через Jitsi</string>
     <string name="widget_delete_message_confirmation">Справді бажаєте видалити віджет?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Не вдалося створити віджет.</string>
     <string name="widget_integration_failed_to_send_request">Не вдалося надіслати запит.</string>
     <string name="widget_integration_positive_power_level">Рівень доступу має бути більше 0.</string>
@@ -770,7 +770,7 @@
 
     <string name="settings_theme">Тема</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Увага!</string>
     <string name="notification_off">Викл</string>
     <string name="notification_on">Вкл</string>
@@ -780,14 +780,14 @@
 
     <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">Щойно доданий вами пристрій \'%s\' править ключі шифрування.</string>
     <string name="your_unverified_device_requesting">Ваш неперевірений пристрій  \'%s\' править ключі шифрування.</string>
     <string name="start_verification">Почати перевірку</string>
     <string name="share_without_verifying">Поділитись без перевірки</string>
     <string name="ignore_request">Ігнорувати запит</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Помилка виконання команди</string>
     <string name="unrecognized_command">Команду %s не розпізнано</string>
 

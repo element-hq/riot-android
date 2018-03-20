@@ -42,4 +42,6 @@
 
     <string name="plus_sign" translatable="false">+</string>
 
+    <string name="password_hint" translatable="false">********</string>
+
 </resources>

@@ -758,7 +758,7 @@ Sicuro di procedere?</string>
     <string name="settings_labs_create_conference_with_jitsi">Crea una videoconferenza con jitsi</string>
     <string name="widget_delete_message_confirmation">Sei sicuro di voler eliminare questo widget?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossibile creare il widget.</string>
     <string name="widget_integration_failed_to_send_request">Invio della richiesta fallito.</string>
     <string name="widget_integration_must_be_in_room">Non sei in questa stanza.</string>
@@ -879,27 +879,27 @@ Sicuro di procedere?</string>
 	<item quantity="other">%d widget attivi</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
     <string name="settings_labs_matrix_apps">Apps di Matrix</string>
     <string name="settings_labs_native_camera">Usa fotocamera nativa</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">Hai aggiunto un nuovo dispositivo \'%s\', che sta richiedendo chiavi di cifratura.</string>
     <string name="your_unverified_device_requesting">Il dispositivo non verificato \'%s\' sta richiedendo chiavi di cifratura.</string>
     <string name="start_verification">Inizia la verifica</string>
     <string name="share_without_verifying">Condividi senza verificare</string>
     <string name="ignore_request">Ignora la richiesta</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Attenzione!</string>
     <string name="conference_call_warning_message">Le chiamate in conferenza sono in sviluppo e potrebbero essere inaffidabili.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Errore di comando</string>
     <string name="unrecognized_command">Comando non riconosciuto: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Off</string>
     <string name="notification_on">On</string>
     <string name="notification_noisy">Rumoroso</string>
@@ -911,9 +911,8 @@ Sicuro di procedere?</string>
     <string name="community_id">ID della comunità</string>
     <string name="community_id_hint">esempio</string>
 
-    // group details
-    <string name="group_details_home">Home</string>
-    <string name="group_details_people">Persone</string>
+    <!-- group details -->
+    <string name="group_details_home">Inizio</string>
     <string name="group_details_rooms">Stanze</string>
     <string name="no_users_placeholder">Nessun utente</string>
 

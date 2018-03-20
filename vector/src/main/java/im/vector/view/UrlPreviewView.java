@@ -31,6 +31,7 @@ import org.matrix.androidsdk.rest.model.URLPreview;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -53,7 +54,7 @@ public class UrlPreviewView extends LinearLayout {
     private String mUID = null;
 
     // save
-    private static HashSet<String> mDismissedUrlsPreviews = null;
+    private static Set<String> mDismissedUrlsPreviews = null;
 
     private static final String DISMISSED_URL_PREVIEWS_PREF_KEY = "DISMISSED_URL_PREVIEWS_PREF_KEY";
 

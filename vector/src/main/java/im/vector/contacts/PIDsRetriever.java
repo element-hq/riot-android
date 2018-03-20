@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +22,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.util.Log;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.pid.ThreePid;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -72,7 +72,7 @@ public class PIDsRetriever {
     }
 
     // MatrixID <-> medium
-    private final HashMap<String, Contact.MXID> mMatrixIdsByMedium = new HashMap<>();
+    private final Map<String, Contact.MXID> mMatrixIdsByMedium = new HashMap<>();
 
     // listeners list
     private PIDsRetrieverListener mListener = null;

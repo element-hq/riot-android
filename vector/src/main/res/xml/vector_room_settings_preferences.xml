@@ -77,21 +77,17 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorDividerCategory
-        android:key="flair_divider"
-        android:title="flair_divider" />
+    <im.vector.preference.VectorDividerCategory android:key="flair_divider" />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="flair"
-        android:title="@string/settings_flair"></im.vector.preference.VectorPreferenceCategory>
+        android:title="@string/settings_flair" />
 
-    <im.vector.preference.VectorDividerCategory
-        android:key="banned_divider"
-        android:title="banned_divider" />
+    <im.vector.preference.VectorDividerCategory android:key="banned_divider" />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="banned"
-        android:title="@string/room_settings_banned_users_title"></im.vector.preference.VectorPreferenceCategory>
+        android:title="@string/room_settings_banned_users_title" />
 
     <im.vector.preference.VectorDividerCategory />
 

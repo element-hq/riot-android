@@ -71,6 +71,7 @@ import org.matrix.androidsdk.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -237,13 +238,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private HomeServerConnectionConfig mHomeserverConnectionConfig;
 
     // next link parameters
-    private HashMap<String, String> mEmailValidationExtraParams;
+    private Map<String, String> mEmailValidationExtraParams;
 
     // the next link parameters were not managed
     private boolean mIsMailValidationPending;
 
     // use to reset the password when the user click on the email validation
-    private HashMap<String, String> mForgotPid = null;
+    private Map<String, String> mForgotPid = null;
 
     // network state notification
     private final BroadcastReceiver mNetworkReceiver = new BroadcastReceiver() {
@@ -1211,7 +1212,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      *
      * @param aMapParams map containing the parameters
      */
-    private void startEmailOwnershipValidation(HashMap<String, String> aMapParams) {
+    private void startEmailOwnershipValidation(Map<String, String> aMapParams) {
         Log.d(LOG_TAG, "## startEmailOwnershipValidation(): IN aMapParams=" + aMapParams);
 
         if (null != aMapParams) {
@@ -1636,7 +1637,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             return;
         }
 
-        if (!identityUrlString.startsWith("http")) {
+        if (!identityUrlString.startsWith("http") && !TextUtils.isEmpty(identityUrlString)) {
             Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -2063,9 +2064,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
 
             String identityServerUrlString = getIdentityServerUrl();
-
-            if (TextUtils.isEmpty(identityServerUrlString)
-                    || !identityServerUrlString.startsWith("http")
+            if ((!TextUtils.isEmpty(identityServerUrlString) && !identityServerUrlString.startsWith("http"))
                     || TextUtils.equals(identityServerUrlString, "http://")
                     || TextUtils.equals(identityServerUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();

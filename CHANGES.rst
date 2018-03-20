@@ -3,6 +3,8 @@ Changes in Riot 0.8.11 (2018-XX-XX)
 
 Features:
  - Re-request keys manually for encrypted events (#2319)
+ - Add option to send voice message to a room, using a third application to record message.
+   To enable in the Labs settings (PR #1762)
 
 Improvements:
  - Add spacing to device keys (#2314)

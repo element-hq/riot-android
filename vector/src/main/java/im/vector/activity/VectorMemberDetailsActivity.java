@@ -57,6 +57,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -114,7 +115,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private RoomMember mRoomMember; // room member corresponding to mMemberId
     private MXSession mSession;
     private User mUser;
-    //private ArrayList<MemberDetailsAdapter.AdapterMemberActionItems> mActionItemsArrayList;
+    //private List<MemberDetailsAdapter.AdapterMemberActionItems> mActionItemsArrayList;
     private VectorMemberDetailsAdapter mListViewAdapter;
     private VectorMemberDetailsDevicesAdapter mDevicesListViewAdapter;
 
@@ -140,7 +141,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private final ApiCallback<String> mCreateDirectMessageCallBack = new ApiCallback<String>() {
         @Override
         public void onSuccess(String roomId) {
-            HashMap<String, Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
             params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
@@ -370,7 +371,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                HashMap<String, Object> params = new HashMap<>();
+                Map<String, Object> params = new HashMap<>();
                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, aRoom.getRoomId());
 
@@ -387,7 +388,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             return;
         }
 
-        final ArrayList<String> idsList = new ArrayList<>();
+        final List<String> idsList = new ArrayList<>();
 
         String displayName = (null == mRoomMember) ?
                 mMemberId : (TextUtils.isEmpty(mRoomMember.displayname) ? mRoomMember.getUserId() : mRoomMember.displayname);
@@ -515,7 +516,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
                                         if (0 != idsList.size()) {
                                             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                            mSession.ignoreUsers(idsList, new ApiCallback<Void>() {
+                                            // TODO Remove cast
+                                            mSession.ignoreUsers((ArrayList) idsList, new ApiCallback<Void>() {
                                                 @Override
                                                 public void onSuccess(Void info) {
                                                     // do not hide the progress bar to warn the user that something is pending
@@ -570,7 +572,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
                                         if (0 != idsList.size()) {
                                             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                            mSession.unIgnoreUsers(idsList, new ApiCallback<Void>() {
+                                            // TODO Remove cast when SDK will accept List
+                                            mSession.unIgnoreUsers((ArrayList) idsList, new ApiCallback<Void>() {
                                                 @Override
                                                 public void onSuccess(Void info) {
                                                     // do not hide the progress bar to warn the user that something is pending
@@ -718,8 +721,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             // check the member whose details are displayed, is present in the query response
             if (aDevicesInfoMap.getMap().containsKey(mMemberId)) {
-                HashMap<String, MXDeviceInfo> memberDevicesInfo = new HashMap<>(aDevicesInfoMap.getMap().get(mMemberId));
-                ArrayList<MXDeviceInfo> deviceInfoList = new ArrayList<>(memberDevicesInfo.values());
+                Map<String, MXDeviceInfo> memberDevicesInfo = new HashMap<>(aDevicesInfoMap.getMap().get(mMemberId));
+                List<MXDeviceInfo> deviceInfoList = new ArrayList<>(memberDevicesInfo.values());
 
                 mDevicesListViewAdapter.addAll(deviceInfoList);
             } else {
@@ -806,8 +809,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     /**
      * @return the list of supported actions (ITEM_ACTION_XX)
      */
-    private ArrayList<Integer> supportedActionsList() {
-        ArrayList<Integer> supportedActions = new ArrayList<>();
+    private List<Integer> supportedActionsList() {
+        List<Integer> supportedActions = new ArrayList<>();
 
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "supportedActionsList : the session is not anymore valid");
@@ -979,7 +982,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             List<VectorMemberDetailsAdapter.AdapterMemberActionItems> directMessagesActions = new ArrayList<>();
             List<VectorMemberDetailsAdapter.AdapterMemberActionItems> devicesActions = new ArrayList<>();
 
-            ArrayList<Integer> supportedActionsList = supportedActionsList();
+            List<Integer> supportedActionsList = supportedActionsList();
 
             if (supportedActionsList.indexOf(ITEM_ACTION_START_VOICE_CALL) >= 0) {
                 imageResource = R.drawable.voice_call_black;
