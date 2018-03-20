@@ -889,4 +889,37 @@ Você autoriza o Riot a acessar seus contatos?</string>
 	<item quantity="other">%1$s salas encontradas para %2$s</item>
 </plurals>
     <string name="settings_enable_content_sending">Manter notificações detalhadas</string>
-    </resources>
+    <string name="send_bug_report_rage_shake">Balance fortemente o celular para informar um erro</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">1 alteração de status de participação</item>
+	<item quantity="other">%s alterações de status de participação</item>
+</plurals>
+
+    <string name="list_members">Lista de integrantes</string>
+    <string name="settings_enable_content_sending_summary">Ative esta opção para ver notificações detalhadas quando a sincronização em segundo plano não estiver habilitada. Isso requer que mensagens não criptografadas sejam enviadas por servidores da Google</string>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 mensagem notificada não lida</item>
+	<item quantity="other">%d mensagens notificadas não lidas</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 mensagem notificada não lida</item>
+	<item quantity="other">%d mensagens notificadas não lidas</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d salas</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s em %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">1 widget ativo</item>
+	<item quantity="other">%d widgets ativos</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="receipt_avatar">Imagem de recebimento</string>
+    <string name="notice_avatar">Imagem de notificação</string>
+    <string name="avatar">Imagem de perfil</string>
+
+</resources>
