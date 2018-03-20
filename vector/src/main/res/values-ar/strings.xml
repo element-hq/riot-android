@@ -898,4 +898,8 @@
     <string name="community_id_hint">مثال</string>
 
     // group details
+    <string name="title_activity_room">الغرفة</string>
+    <string name="and">و</string>
+    <string name="groups_invite_header">دعوة</string>
+    <string name="send_files_in">إرسل إلى</string>
     </resources>
