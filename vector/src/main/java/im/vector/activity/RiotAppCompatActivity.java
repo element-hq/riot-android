@@ -58,7 +58,7 @@ public class RiotAppCompatActivity extends AppCompatActivity {
      *
      * @return true if the waiting view is displayed
      */
-    public boolean isWaitingViewVisible(View loadingView) {
-        return (null != loadingView) && (View.VISIBLE == loadingView.getVisibility());
+    public boolean isWaitingViewVisible() {
+        return (null != waitingView) && (View.VISIBLE == waitingView.getVisibility());
     }
 }

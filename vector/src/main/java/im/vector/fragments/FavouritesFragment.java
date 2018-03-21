@@ -75,7 +75,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onRoomTagEvent(String roomId) {
-            if (mActivity.isWaitingViewVisible(mActivity.mWaitingView)) {
+            if (mActivity.isWaitingViewVisible()) {
                 onRoomTagUpdated(null);
             }
         }
@@ -188,7 +188,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
         super.onSummariesUpdate();
 
         if (isResumed()) {
-            if (!mActivity.isWaitingViewVisible(mActivity.mWaitingView)) {
+            if (!mActivity.isWaitingViewVisible()) {
                 refreshFavorites();
             }
         }

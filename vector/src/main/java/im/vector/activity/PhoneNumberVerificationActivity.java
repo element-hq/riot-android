@@ -52,7 +52,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
 
     private TextInputEditText mPhoneNumberCode;
     private TextInputLayout mPhoneNumberCodeLayout;
-    private View mLoadingView = waitingView;
+    private View waitingView;
 
     private MXSession mSession;
     private ThreePid mThreePid;
@@ -95,7 +95,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
 
         mPhoneNumberCode = findViewById(R.id.phone_number_code_value);
         mPhoneNumberCodeLayout = findViewById(R.id.phone_number_code);
-        mLoadingView = findViewById(R.id.loading_view);
+        waitingView = findViewById(R.id.loading_view);
 
         final Intent intent = getIntent();
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));

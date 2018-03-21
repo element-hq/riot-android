@@ -61,7 +61,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     private TextInputLayout mCountryLayout;
     private TextInputEditText mPhoneNumber;
     private TextInputLayout mPhoneNumberLayout;
-    private View mLoadingView = waitingView;
+    private View waitingView;
 
     private MXSession mSession;
 
@@ -110,7 +110,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
         mCountryLayout = findViewById(R.id.phone_number_country);
         mPhoneNumber = findViewById(R.id.phone_number_value);
         mPhoneNumberLayout = findViewById(R.id.phone_number);
-        mLoadingView = findViewById(R.id.loading_view);
+        waitingView = findViewById(R.id.loading_view);
 
         final Intent intent = getIntent();
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));

@@ -78,7 +78,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
     Toolbar mToolbar;
 
     @BindView(R.id.historical_waiting_view)
-    View mWaitingView = waitingView;
+    View waitingView;
 
     // historical adapter
     private HomeRoomAdapter mHistoricalAdapter;

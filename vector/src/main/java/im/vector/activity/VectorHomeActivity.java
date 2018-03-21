@@ -183,7 +183,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private String mGroupIdToOpen = null;
 
     @BindView(R.id.listView_spinner_views)
-    public View mWaitingView = waitingView;
+    public View waitingView;
 
     @BindView(R.id.floating_action_button)
     FloatingActionButton mFloatingActionButton;
@@ -1130,7 +1130,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     private void onFloatingButtonClick() {
         // ignore any action if there is a pending one
-        if (!isWaitingViewVisible(mWaitingView)) {
+        if (!isWaitingViewVisible()) {
             CharSequence items[] = new CharSequence[]{getString(R.string.room_recents_start_chat), getString(R.string.room_recents_create_room), getString(R.string.room_recents_join_room)};
             mFabDialog = new AlertDialog.Builder(this)
                     .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
@@ -1236,7 +1236,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
             @Override
             public void onSuccess(final String roomId) {
-                mWaitingView.post(new Runnable() {
+                waitingView.post(new Runnable() {
                     @Override
                     public void run() {
                         stopWaitingView();
@@ -1251,7 +1251,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             }
 
             private void onError(final String message) {
-                mWaitingView.post(new Runnable() {
+                waitingView.post(new Runnable() {
                     @Override
                     public void run() {
                         if (null != message) {
@@ -1314,7 +1314,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                     }
 
                                     private void onError(final String message) {
-                                        mWaitingView.post(new Runnable() {
+                                        waitingView.post(new Runnable() {
                                             @Override
                                             public void run() {
                                                 if (null != message) {

@@ -74,7 +74,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
     private static final String EXTRA_SCREEN_ID = "EXTRA_SCREEN_ID";
 
     @BindView(R.id.integration_progress_layout)
-    View mProgressLayout = waitingView;
+    View waitingView;
 
     @BindView(R.id.integration_webview)
     WebView mWebView;

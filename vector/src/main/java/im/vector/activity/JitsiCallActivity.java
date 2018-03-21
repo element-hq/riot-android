@@ -94,7 +94,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
     View mConnectingTextView;
 
     @BindView(R.id.jitsi_progress_layout)
-    View mProgressLayout = waitingView;
+    View waitingView;
 
     /**
      * Widget events listener

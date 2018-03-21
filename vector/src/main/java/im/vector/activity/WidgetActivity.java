@@ -79,7 +79,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
     TextView mWidgetTypeTextView;
 
     @BindView(R.id.widget_progress_layout)
-    View mProgressLayout = waitingView;
+    View waitingView;
 
     /**
      * Widget events listener

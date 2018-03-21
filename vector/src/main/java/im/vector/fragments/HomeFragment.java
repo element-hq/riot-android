@@ -245,7 +245,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         super.onSummariesUpdate();
 
         if (isResumed()) {
-            if (!mActivity.isWaitingViewVisible(mActivity.mWaitingView)) {
+            if (!mActivity.isWaitingViewVisible()) {
                 initData();
             }
         }
