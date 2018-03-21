@@ -183,7 +183,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private String mGroupIdToOpen = null;
 
     @BindView(R.id.listView_spinner_views)
-    View mWaitingView;
+    View waitingView;
 
     @BindView(R.id.floating_action_button)
     FloatingActionButton mFloatingActionButton;
@@ -952,33 +952,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     }
 
     /**
-     * SHow teh waiting view
-     */
-    public void showWaitingView() {
-        if (null != mWaitingView) {
-            mWaitingView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
-     * Hide the waiting view
-     */
-    public void stopWaitingView() {
-        if (null != mWaitingView) {
-            mWaitingView.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Tells if the waiting view is currently displayed
-     *
-     * @return true if the waiting view is displayed
-     */
-    public boolean isWaitingViewVisible() {
-        return (null != mWaitingView) && (View.VISIBLE == mWaitingView.getVisibility());
-    }
-
-    /**
      * Hide the keyboard
      */
     private void hideKeyboard() {
@@ -1263,7 +1236,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
             @Override
             public void onSuccess(final String roomId) {
-                mWaitingView.post(new Runnable() {
+                waitingView.post(new Runnable() {
                     @Override
                     public void run() {
                         stopWaitingView();
@@ -1278,7 +1251,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             }
 
             private void onError(final String message) {
-                mWaitingView.post(new Runnable() {
+                waitingView.post(new Runnable() {
                     @Override
                     public void run() {
                         if (null != message) {
@@ -1341,7 +1314,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                     }
 
                                     private void onError(final String message) {
-                                        mWaitingView.post(new Runnable() {
+                                        waitingView.post(new Runnable() {
                                             @Override
                                             public void run() {
                                                 if (null != message) {

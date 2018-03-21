@@ -65,7 +65,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     private RoomDirectoryAdapter mRoomDirectoryAdapter;
 
     @BindView(R.id.room_directory_loading)
-    View mLoadingView;
+    View waitingView;
 
      /*
      * *********************************************************************************************
@@ -149,11 +149,11 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
      * Refresh the directory servers list.
      */
     private void refreshDirectoryServersList() {
-        mLoadingView.setVisibility(View.VISIBLE);
+       showWaitingView();
 
         mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
             private void onDone(List<RoomDirectoryData> list) {
-                mLoadingView.setVisibility(View.GONE);
+                stopWaitingView();
                 String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
                 String userHSUrl = mSession.getHomeServerConfig().getHomeserverUri().getHost();
 
@@ -229,7 +229,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
                 final String serverUrl = editText.getText().toString().trim();
 
                 if (!TextUtils.isEmpty(serverUrl)) {
-                    mLoadingView.setVisibility(View.VISIBLE);
+                    showWaitingView();
                     mSession.getEventsApiClient().getPublicRoomsCount(serverUrl, new ApiCallback<Integer>() {
                         @Override
                         public void onSuccess(Integer count) {
@@ -241,7 +241,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
                         private void onError(String error) {
                             Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
-                            mLoadingView.setVisibility(View.GONE);
+                            stopWaitingView();
                             Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
                         }
 
