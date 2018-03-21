@@ -910,4 +910,5 @@ Appareils inconnus :</string>
     <string name="open_chat_header">Développer l\'entête</string>
     <string name="settings_enable_content_sending">Afficher quand même les notifications détaillées</string>
     <string name="settings_enable_content_sending_summary">Lorsque la synchronisation en arrière-plan n\'est pas active, activez cette option pour continuer à recevoir les notifications détaillées, lesquelles requièrent d\'envoyer des données non-cryptées via les serveurs de Google</string>
+    <string name="receipt_avatar">Réception de l\'avatar</string>
     </resources>
