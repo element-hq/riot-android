@@ -52,7 +52,6 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
 
     private TextInputEditText mPhoneNumberCode;
     private TextInputLayout mPhoneNumberCodeLayout;
-    private View waitingView;
 
     private MXSession mSession;
     private ThreePid mThreePid;

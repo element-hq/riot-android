@@ -61,8 +61,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     private TextInputLayout mCountryLayout;
     private TextInputEditText mPhoneNumber;
     private TextInputLayout mPhoneNumberLayout;
-    private View waitingView;
-
+    
     private MXSession mSession;
 
     // Ex "FR"

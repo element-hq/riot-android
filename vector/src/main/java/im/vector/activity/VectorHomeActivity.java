@@ -183,7 +183,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private String mGroupIdToOpen = null;
 
     @BindView(R.id.listView_spinner_views)
-    public View waitingView;
+    View waitingView;
 
     @BindView(R.id.floating_action_button)
     FloatingActionButton mFloatingActionButton;
