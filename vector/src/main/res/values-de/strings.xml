@@ -32,7 +32,7 @@
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
     <string name="active_call">Aktives Gespräch</string>
-    <string name="ongoing_conference_call">" Konferenzgespräch läuft. Per Sprach-Chat oder per Video-Chat beitreten."</string>
+    <string name="ongoing_conference_call">" Konferenzgespräch läuft. Per Sprache oder Video beitreten."</string>
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
