@@ -520,30 +520,6 @@ public class PreferencesManager {
             editor.remove("MARKDOWN_PREFERENCE_KEY");
             editor.commit();
         }
-
-        if (!preferences.contains(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY)) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY, true);
-            editor.commit();
-        }
-
-        if (!preferences.contains(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY)) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, true);
-            editor.commit();
-        }
-
-        if (!preferences.contains(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY)) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, true);
-            editor.commit();
-        }
-
-        if (!preferences.contains(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY)) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, true);
-            editor.commit();
-        }
     }
 
     /**
@@ -606,7 +582,7 @@ public class PreferencesManager {
      * @return true to move the missed notifications to the left side
      */
     public static boolean pinMissedNotifications(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, true);
     }
 
     /**
@@ -616,7 +592,7 @@ public class PreferencesManager {
      * @return true to move the unread room to the left side
      */
     public static boolean pinUnreadMessages(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, true);
     }
 
     /**
