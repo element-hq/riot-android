@@ -541,4 +541,30 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="larger">Wielki</string>
     <string name="largest">Ogromny</string>
     <string name="huge">P O T Ę Ż N Y</string>
-</resources>
+<string name="light_theme">Jasny motyw</string>
+    <string name="dark_theme">Ciemny Motyw</string>
+    <string name="black_them">Czarny Motyw</string>
+
+    <string name="call">Zadzwoń</string>
+    <string name="avatar">Awatar</string>
+
+<string name="reason_colon">Powód: %1$s</string>
+    <string name="has_been_banned">Zostałeś zbanowany z %1$s przez %2$s</string>
+    <string name="has_been_kicked">Zostałeś wyrzucony z %1$s przez %2$s</string>
+    <string name="group_rooms">%d pokojów</string>
+    <string name="group_one_room">1 pokój</string>
+    <string name="group_details_rooms">Pokoje</string>
+    <string name="joined">Dołączył</string>
+    <string name="group_details_people">Ludzie</string>
+    <string name="community_name_hint">Przykład</string>
+    <string name="community_id_hint">przykład</string>
+
+    // group details
+    <string name="encrypted_message">Wiadomość zaszyfrowana</string>
+
+    // groups creation
+    <string name="create">Utwórz</string>
+    <string name="notification_on">On</string>
+    <string name="notification_off">Off</string>
+    <string name="conference_call_warning_title">Uwaga!</string>
+    </resources>
