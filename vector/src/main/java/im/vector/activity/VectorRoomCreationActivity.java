@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +64,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
     // UI items
     private VectorRoomCreationAdapter mAdapter;
-    private View mSpinnerView;
 
     // the search is displayed at first call
     private boolean mIsFirstResume = true;
@@ -82,13 +82,13 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         }
 
         private void onError(final String message) {
-            mSpinnerView.post(new Runnable() {
+            waitingView.post(new Runnable() {
                 @Override
                 public void run() {
                     if (null != message) {
                         Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
                     }
-                    mSpinnerView.setVisibility(View.GONE);
+                    stopWaitingView();
                 }
             });
         }
@@ -135,7 +135,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         }
 
         // get the UI items
-        mSpinnerView = findViewById(R.id.room_creation_spinner_views);
+        waitingView = findViewById(R.id.room_creation_spinner_views);
         ListView membersListView = findViewById(R.id.room_creation_members_list_view);
         mAdapter = new VectorRoomCreationAdapter(this, R.layout.adapter_item_vector_creation_add_member, R.layout.adapter_item_vector_add_participants, mSession);
 
@@ -300,7 +300,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                     CommonActivityUtils.goToRoomPage(this, mSession, params);
                 } else {
                     // direct message flow
-                    mSpinnerView.setVisibility(View.VISIBLE);
+                    showWaitingView();
                     mSession.createDirectMessageRoom(mParticipants.get(0).mUserId, mCreateDirectMessageCallBack);
                 }
             }
@@ -365,7 +365,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
      * @param participants the list of participant
      */
     private void createRoom(final List<ParticipantAdapterItem> participants) {
-        mSpinnerView.setVisibility(View.VISIBLE);
+        showWaitingView();
 
         CreateRoomParams params = new CreateRoomParams();
 
@@ -393,13 +393,13 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             }
 
             private void onError(final String message) {
-                mSpinnerView.post(new Runnable() {
+                waitingView.post(new Runnable() {
                     @Override
                     public void run() {
                         if (null != message) {
                             Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
                         }
-                        mSpinnerView.setVisibility(View.GONE);
+                        stopWaitingView();
                     }
                 });
             }

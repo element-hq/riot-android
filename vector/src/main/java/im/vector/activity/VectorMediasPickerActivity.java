@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -841,8 +842,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param aOrigin          CAMERA or GALLERY
      */
     private void displayImagePreview(final Bitmap bitmap, final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin) {
-        final RelativeLayout progressBar = findViewById(R.id.medias_preview_progress_bar_layout);
-        progressBar.setVisibility(View.VISIBLE);
+        waitingView = findViewById(R.id.medias_preview_progress_bar_layout);
+        showWaitingView();
         mTakeImageView.setEnabled(false);
 
         Bitmap newBitmap = bitmap;
@@ -940,7 +941,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         mTakeImageView.setEnabled(true);
         updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, aOrigin);
-        progressBar.setVisibility(View.GONE);
+        stopWaitingView();
     }
 
     /**

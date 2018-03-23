@@ -1,5 +1,6 @@
 /* 
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,7 +156,7 @@ public class VectorRoomMediasSender {
                 public void run() {
                     mVectorMessageListFragment.scrollToBottom();
                     mVectorRoomActivity.cancelSelectionMode();
-                    mVectorRoomActivity.setProgressVisibility(View.GONE);
+                    mVectorRoomActivity.stopWaitingView();
                 }
             });
 
@@ -164,7 +165,7 @@ public class VectorRoomMediasSender {
 
         // display a spinner
         mVectorRoomActivity.cancelSelectionMode();
-        mVectorRoomActivity.setProgressVisibility(View.VISIBLE);
+        mVectorRoomActivity.showWaitingView();
 
         Log.d(LOG_TAG, "sendMedias : " + mSharedDataItems.size() + " items to send");
 
@@ -754,7 +755,7 @@ public class VectorRoomMediasSender {
                             mVectorRoomActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mVectorRoomActivity.setProgressVisibility(View.VISIBLE);
+                                    mVectorRoomActivity.showWaitingView();
 
                                     Thread thread = new Thread(new Runnable() {
                                         @Override
