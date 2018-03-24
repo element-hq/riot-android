@@ -586,7 +586,7 @@
     <string name="room_settings_category_advanced_title">Разширени</string>
     <string name="room_settings_addresses_pref_title">Адреси</string>
     <string name="room_settings_labs_pref_title">Експерименти</string>
-    <string name="room_settings_labs_warning_message">Това са експериментални функции , които могат да се счупят по неочаквани начини. Внимавайте при използване.</string>
+    <string name="room_settings_labs_warning_message">Това са експериментални функции, които могат да се счупят по неочаквани начини. Внимавайте при използване.</string>
     <string name="room_settings_labs_end_to_end">Шифроване от край до край</string>
     <string name="room_settings_labs_end_to_end_is_active">Шифроване от край до край е включено</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Шифроване само за потвърдени устройства</string>
