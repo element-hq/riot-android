@@ -164,8 +164,8 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="auth_reset_password_next_step_button">Zweryfikowałem adres e-mail</string>
     <string name="auth_reset_password_message">Aby przywrócić hasło, wprowadź adres e-mail powiązany z kontem:</string>
     <string name="auth_reset_password_missing_email">Musi zostać wprowadzony e-mail powiązany z kontem.</string>
-    <string name="auth_reset_password_missing_password">Nowe hasło musi zostać wprowadzone.</string>
-    <string name="auth_reset_password_email_validation_message">Wiadomość została wysłana na adres %s. Po wejściu w znajdujący się tam link, naciśnij poniżej.</string>
+    <string name="auth_reset_password_missing_password">Należy wprowadzić nowe hasło.</string>
+    <string name="auth_reset_password_email_validation_message">Wysłano email na adres %s. Po otwarciu znajdującego się tam linku, naciśnij poniżej.</string>
     <string name="auth_reset_password_error_unauthorized">Nie udało się zweryfikować adresu e-mail: upewnij się, że kliknąłeś w odnośnik z wiadomości</string>
     <string name="login_error_must_start_http">URL musi zaczynać się od http[s]://</string>
     <string name="login_error_network_error">Nie udało się połączyć: Błąd sieci</string>
@@ -567,4 +567,39 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="notification_on">On</string>
     <string name="notification_off">Off</string>
     <string name="conference_call_warning_title">Uwaga!</string>
+    <string name="notification_sync_in_progress">W trakcie synchronizacji</string>
+    <string name="notification_listen_for_events">Nasłuchuj zdarzeń</string>
+    <string name="notification_noisy_notifications">Głośne powiadomienia</string>
+    <string name="notification_silent_notifications">Ciche powiadomienia</string>
+
+    <string name="title_activity_bug_report">Zgłoś błąd</string>
+    <string name="title_activity_group_details">Informacje o społeczności</string>
+
+    <string name="loading">Wczytywanie...</string>
+
+    <string name="action_exit">Opuść</string>
+    <string name="actions">Czynności</string>
+    <string name="bottom_action_groups">Społeczności</string>
+
+    <string name="home_filter_placeholder_groups">Odszukaj społeczności</string>
+
+    <string name="groups_invite_header">Zaproś</string>
+    <string name="groups_header">Społeczności</string>
+    <string name="no_group_placeholder">Brak grup</string>
+
+    <string name="send_bug_report_rage_shake">Potrząśnij wściekle, aby zgłosić błąd</string>
+
+    <string name="start_new_chat_prompt_msg">Czy jesteś pewien, że chcesz rozpocząć nową rozmowę z %s?</string>
+    <string name="start_voice_call_prompt_msg">Czy jesteś pewien, że chcesz rozpocząć rozmowę głosową?</string>
+    <string name="start_video_call_prompt_msg">Czy jesteś pewien, że chcesz rozpocząć wideorozmowę?</string>
+
+    <string name="option_take_photo">Zrób zdjęcie</string>
+    <string name="option_take_video">Nagraj film</string>
+
+    <string name="auth_add_email_phone_message">Dodaj adres email i/lub nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
+
+Adres email pozwoli ci również zresetować hasło.</string>
+    <string name="auth_add_email_and_phone_message">Dodaj adres email i nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
+
+Adres email pozwoli ci również zresetować hasło.</string>
     </resources>
