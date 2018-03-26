@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +81,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     // UI items
     private View mLoadOldestContentView;
-    private View mWaitWhileSearchInProgressView;
 
     private String mRoomId;
     private String mMatrixId;
@@ -145,7 +145,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         setContentView(R.layout.activity_vector_room_details);
 
         // UI widgets binding & init fields
-        mWaitWhileSearchInProgressView = findViewById(R.id.settings_loading_layout);
+        waitingView = findViewById(R.id.settings_loading_layout);
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
 
         // tab creation and restore tabs UI context
@@ -269,8 +269,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
      */
     private void resetUi() {
         // stop "wait while searching" screen
-        if (null != mWaitWhileSearchInProgressView) {
-            mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+        if (null != waitingView) {
+            stopWaitingView();
         }
 
         if (null != mLoadOldestContentView) {
@@ -407,7 +407,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
      */
     private void startFileSearch() {
         if (mCurrentTabIndex == FILE_TAB_INDEX) {
-            mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+            showWaitingView();
             mSearchFilesFragment.startFilesSearch(new MatrixMessageListFragment.OnSearchResultListener() {
                 @Override
                 public void onSearchSucceed(int nbrMessages) {
@@ -432,7 +432,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         if (mCurrentTabIndex == tabIndex) {
             Log.d(LOG_TAG, "## onSearchEnd() nbrMsg=" + nbrMessages);
             // stop "wait while searching" screen
-            mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+            stopWaitingView();
         }
     }
 
