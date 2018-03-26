@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -388,7 +389,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         // bind UI widgets
-        mLoginMaskView = findViewById(R.id.flow_ui_mask_login);
+        waitingView = findViewById(R.id.flow_ui_mask_login);
 
         // login
         mLoginEmailTextView = findViewById(R.id.login_user_name);

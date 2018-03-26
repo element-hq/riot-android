@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +62,6 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private ImageView mBackgroundImageView;
     private TextView mNoResultsTxtView;
     private View mLoadOldestContentView;
-    private View mWaitWhileSearchInProgressView;
 
     private String mRoomId;
 
@@ -99,7 +99,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         // UI widgets binding & init fields
         mBackgroundImageView = findViewById(R.id.search_background_imageview);
         mNoResultsTxtView = findViewById(R.id.search_no_result_textview);
-        mWaitWhileSearchInProgressView = findViewById(R.id.search_in_progress_view);
+        waitingView = findViewById(R.id.search_in_progress_view);
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
 
         if (null != getIntent()) {
@@ -187,7 +187,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         });
 
         if (isRemoteSearching) {
-            mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+            showWaitingView();
         }
     }
 
@@ -225,8 +225,8 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
      */
     private void resetUi(boolean showBackgroundImage) {
         // stop "wait while searching" screen
-        if (null != mWaitWhileSearchInProgressView) {
-            mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+        if (null != waitingView) {
+            stopWaitingView();
         }
 
         // display the background
@@ -253,7 +253,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         if (mViewPager.getCurrentItem() == tabIndex) {
             Log.d(LOG_TAG, "## onSearchEnd() nbrMsg=" + nbrMessages);
             // stop "wait while searching" screen
-            mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+            stopWaitingView();
 
             // display the background view if there is no pending such
             mBackgroundImageView.setVisibility(!mPagerAdapter.isSearchInPeoplesFragment(tabIndex)
