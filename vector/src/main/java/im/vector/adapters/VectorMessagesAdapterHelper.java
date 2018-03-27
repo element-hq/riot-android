@@ -58,6 +58,7 @@ import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.view.HtmlTagHandler;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -759,23 +760,27 @@ class VectorMessagesAdapterHelper {
                 Drawable drawable = mPillsDrawableCache.get(key);
 
                 if (null == drawable) {
-                    final PillView aView = new PillView(mContext);
-                    aView.initData(strBuilder.subSequence(start, end), span.getURL(), mSession, new PillView.OnUpdateListener() {
+                    PillView pillView = new PillView(mContext);
+                    pillView.setBackgroundResource(android.R.color.transparent);
+                    // Define a weak reference of the view because of the cross reference in the OnUpdateListener.
+                    final WeakReference<PillView> weakView = new WeakReference<>(pillView);
+
+                    pillView.initData(strBuilder.subSequence(start, end), span.getURL(), mSession, new PillView.OnUpdateListener() {
                         @Override
                         public void onAvatarUpdate() {
-                            // force to compose
-                            aView.setBackgroundResource(android.R.color.transparent);
-
-                            // get a drawable from the view
-                            Drawable updatedDrawable = aView.getDrawable(true);
-                            mPillsDrawableCache.put(key, updatedDrawable);
-                            // should update only the current cell
-                            // but it might have been recycled
-                            mAdapter.notifyDataSetChanged();
+                            if ((null != weakView) && (null != weakView.get())) {
+                                PillView pillView = weakView.get();
+                                // get a drawable from the view (force to compose)
+                                Drawable updatedDrawable = pillView.getDrawable(true);
+                                mPillsDrawableCache.put(key, updatedDrawable);
+                                // should update only the current cell
+                                // but it might have been recycled
+                                mAdapter.notifyDataSetChanged();
+                            }
                         }
                     });
-                    aView.setHighlighted(isHighlighted);
-                    drawable = aView.getDrawable(false);
+                    pillView.setHighlighted(isHighlighted);
+                    drawable = pillView.getDrawable(false);
                 }
 
                 if (null != drawable) {
