@@ -346,10 +346,20 @@ class VectorMessagesAdapterHelper {
         final String tag = event.getSender() + "__" + event.eventId;
 
         if (null == mRoom) {
-            mRoom = mSession.getDataHandler().getRoom(event.roomId);
+            // The flair handling required the room state. So we retrieve the current room (if any).
+            // Do not create it if it is not available. For example the room is not available during a room preview.
+            // Indeed the room is then stored in memory, and we could not reach it from here for the moment.
+            // TODO render the flair in the room preview history.
+            mRoom = mSession.getDataHandler().getRoom(event.roomId, false);
+
+            if (null == mRoom) {
+                Log.d(LOG_TAG, "## refreshGroupFlairView () : the room is not available");
+                groupFlairView.setVisibility(View.GONE);
+                return;
+            }
         }
 
-        // no related groups to this room
+        // Check whether there are some related groups to this room
         if (mRoom.getLiveState().getRelatedGroups().isEmpty()) {
             Log.d(LOG_TAG, "## refreshGroupFlairView () : no related group");
             groupFlairView.setVisibility(View.GONE);
@@ -757,7 +767,7 @@ class VectorMessagesAdapterHelper {
                             aView.setBackgroundResource(android.R.color.transparent);
 
                             // get a drawable from the view
-                            Drawable updatedDrawable = aView.getDrawable();
+                            Drawable updatedDrawable = aView.getDrawable(true);
                             mPillsDrawableCache.put(key, updatedDrawable);
                             // should update only the current cell
                             // but it might have been recycled
@@ -765,7 +775,7 @@ class VectorMessagesAdapterHelper {
                         }
                     });
                     aView.setHighlighted(isHighlighted);
-                    drawable = aView.getDrawable();
+                    drawable = aView.getDrawable(false);
                 }
 
                 if (null != drawable) {
