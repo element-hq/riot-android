@@ -50,6 +50,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -472,6 +473,20 @@ public class VectorUtils {
     public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         if (null != room) {
             VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayName(context, session, room));
+        }
+    }
+
+    /**
+     * Set the room avatar in an imageView by consider the room preview data.
+     *
+     * @param context   the context
+     * @param session   the session
+     * @param imageView the image view
+     * @param roomPreviewData the room preview
+     */
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, RoomPreviewData roomPreviewData) {
+        if (null != roomPreviewData) {
+            VectorUtils.loadUserAvatar(context, session, imageView, roomPreviewData.getRoomAvatarUrl(), roomPreviewData.getRoomId(), roomPreviewData.getRoomName());
         }
     }
 
