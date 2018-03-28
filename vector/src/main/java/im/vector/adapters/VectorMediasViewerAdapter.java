@@ -30,6 +30,7 @@ import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.util.Log;
 
@@ -174,8 +175,14 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 imageInfo.mMimeType = "image/jpeg";
             }
             downloadHighResPict(view, position);
-        } else {
+
+        // video
+        } else if (imageInfo.mMessageType.equals(Message.MSGTYPE_VIDEO)) {
             downloadVideo(view, position);
+
+        // sticker
+        } else {
+            downloadHighResPict(view, position);
         }
     }
 
@@ -424,7 +431,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         String mediaUrl = mediaInfo.mMediaUrl;
 
-        if (mediaInfo.mMessageType.equals(Message.MSGTYPE_IMAGE)) {
+        if (mediaInfo.mMessageType.equals(Message.MSGTYPE_IMAGE) || mediaInfo.mEventType.equals(Event.EVENT_TYPE_STICKER)) {
             imageWebView.setVisibility(View.VISIBLE);
             imageWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             imageWebView.getSettings().setJavaScriptEnabled(true);

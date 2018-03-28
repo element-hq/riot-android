@@ -29,6 +29,8 @@ public class SlidableMediaInfo implements Serializable {
     public String mMimeType;
     public EncryptedFileInfo mEncryptedFileInfo;
 
+    public String mEventType;
+
     // exif infos
     public int mRotationAngle = 0;
     public int mOrientation = 0;

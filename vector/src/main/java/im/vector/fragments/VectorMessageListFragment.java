@@ -59,6 +59,7 @@ import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
 import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.message.Message;
+import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
@@ -927,10 +928,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         for (int position = 0; position < mAdapter.getCount(); position++) {
             MessageRow row = mAdapter.getItem(position);
             Message message = JsonUtils.toMessage(row.getEvent().getContent());
+            String eventType = row.getEvent().getType();
 
             if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
-                ImageMessage imageMessage = (ImageMessage) message;
 
+                ImageMessage imageMessage = (ImageMessage) message;
                 SlidableMediaInfo info = new SlidableMediaInfo();
                 info.mMessageType = Message.MSGTYPE_IMAGE;
                 info.mFileName = imageMessage.body;
@@ -940,15 +942,30 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 info.mMimeType = imageMessage.getMimeType();
                 info.mEncryptedFileInfo = imageMessage.file;
                 res.add(info);
+
             } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
-                SlidableMediaInfo info = new SlidableMediaInfo();
+
                 VideoMessage videoMessage = (VideoMessage) message;
+                SlidableMediaInfo info = new SlidableMediaInfo();
                 info.mMessageType = Message.MSGTYPE_VIDEO;
                 info.mFileName = videoMessage.body;
                 info.mMediaUrl = videoMessage.getUrl();
                 info.mThumbnailUrl = (null != videoMessage.info) ? videoMessage.info.thumbnail_url : null;
                 info.mMimeType = videoMessage.getMimeType();
                 info.mEncryptedFileInfo = videoMessage.file;
+                res.add(info);
+
+            } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
+
+                StickerMessage stickerMessage = (StickerMessage) message;
+                SlidableMediaInfo info = new SlidableMediaInfo();
+                info.mMessageType = null;
+                info.mFileName = stickerMessage.body;
+                info.mMediaUrl = stickerMessage.getUrl();
+                info.mRotationAngle = stickerMessage.getRotation();
+                info.mOrientation = stickerMessage.getOrientation();
+                info.mMimeType = stickerMessage.getMimeType();
+                info.mEncryptedFileInfo = stickerMessage.file;
                 res.add(info);
             }
         }
@@ -1014,9 +1031,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
 
             Message message = JsonUtils.toMessage(event.getContent());
+            StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
 
             // video and images are displayed inside a medias slider.
-            if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || (Message.MSGTYPE_VIDEO.equals(message.msgtype))) {
+            if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || (Message.MSGTYPE_VIDEO.equals(message.msgtype)) || (Event.EVENT_TYPE_STICKER.equals(event.getType()))) {
                 ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
                 int listPosition = getMediaMessagePosition(mediaMessagesList, message);
 
