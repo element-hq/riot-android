@@ -198,7 +198,7 @@ class VectorMessagesAdapterMediasHelper {
         int thumbWidth = -1;
         int thumbHeight = -1;
 
-        Log.e(LOG_TAG, "################### managePendingImageVideoDownload : " + event.eventId);
+        Log.e(LOG_TAG, "#managePendingStickerDownload : " + event.eventId);
 
         EncryptedFileInfo encryptedFileInfo = null;
 
@@ -221,6 +221,8 @@ class VectorMessagesAdapterMediasHelper {
             rotationAngle = stickerMessage.getRotation();
 
             StickerInfo stickerInfo = stickerMessage.info;
+
+            Log.e(LOG_TAG, "#managePendingStickerDownload : EventId = " +  event.eventId + " - StickerInfo =  " + stickerInfo);
 
             if (null != stickerInfo) {
                 if ((null != stickerInfo.w) && (null != stickerInfo.h)) {
@@ -496,7 +498,7 @@ class VectorMessagesAdapterMediasHelper {
         int thumbWidth = -1;
         int thumbHeight = -1;
 
-        Log.e(LOG_TAG, "################### managePendingImageVideoDownload : " + event.eventId);
+        Log.e(LOG_TAG, "#managePendingImageVideoDownload : EnventId =  " + event.eventId);
 
         EncryptedFileInfo encryptedFileInfo = null;
 
@@ -521,6 +523,8 @@ class VectorMessagesAdapterMediasHelper {
             rotationAngle = imageMessage.getRotation();
 
             ImageInfo imageInfo = imageMessage.info;
+
+            Log.e(LOG_TAG, "#managePendingImageVideoDownload EventId = " + event.eventId + " - ImageInfo =  " + imageInfo);
 
             if (null != imageInfo) {
                 if ((null != imageInfo.w) && (null != imageInfo.h)) {
@@ -573,6 +577,7 @@ class VectorMessagesAdapterMediasHelper {
                 downloadId = mMediasCache.downloadIdFromUrl(((VideoMessage) message).getUrl());
             } else if (message instanceof ImageMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
+                Log.e(LOG_TAG, "#managePendingImageVideoDownload EventId = " + event.eventId + " - ImageUrl =  " + ((ImageMessage) message).getUrl());
             }
         }
 

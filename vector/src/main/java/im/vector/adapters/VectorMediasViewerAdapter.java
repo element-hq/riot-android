@@ -431,7 +431,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         String mediaUrl = mediaInfo.mMediaUrl;
 
-        if (mediaInfo.mMessageType.equals(Message.MSGTYPE_IMAGE) || mediaInfo.mEventType.equals(Event.EVENT_TYPE_STICKER)) {
+        if (mediaInfo.mMessageType.equals(Message.MSGTYPE_IMAGE)) {
             imageWebView.setVisibility(View.VISIBLE);
             imageWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             imageWebView.getSettings().setJavaScriptEnabled(true);
