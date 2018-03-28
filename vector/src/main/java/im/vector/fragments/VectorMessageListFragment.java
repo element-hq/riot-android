@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1031,10 +1032,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
 
             Message message = JsonUtils.toMessage(event.getContent());
-            StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
 
             // video and images are displayed inside a medias slider.
-            if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || (Message.MSGTYPE_VIDEO.equals(message.msgtype)) || (Event.EVENT_TYPE_STICKER.equals(event.getType()))) {
+            if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || (Message.MSGTYPE_VIDEO.equals(message.msgtype))) {
                 ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
                 int listPosition = getMediaMessagePosition(mediaMessagesList, message);
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +18,8 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.ExifInterface;
-import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -54,7 +52,6 @@ import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -198,7 +195,7 @@ class VectorMessagesAdapterMediasHelper {
         int thumbWidth = -1;
         int thumbHeight = -1;
 
-        Log.e(LOG_TAG, "#managePendingStickerDownload : " + event.eventId);
+        Log.e(LOG_TAG, "## managePendingStickerDownload : " + event.eventId);
 
         EncryptedFileInfo encryptedFileInfo = null;
 
@@ -222,8 +219,6 @@ class VectorMessagesAdapterMediasHelper {
 
             StickerInfo stickerInfo = stickerMessage.info;
 
-            Log.e(LOG_TAG, "#managePendingStickerDownload : EventId = " +  event.eventId + " - StickerInfo =  " + stickerInfo);
-
             if (null != stickerInfo) {
                 if ((null != stickerInfo.w) && (null != stickerInfo.h)) {
                     thumbWidth = stickerInfo.w;
@@ -246,7 +241,6 @@ class VectorMessagesAdapterMediasHelper {
             }
         }
 
-
         RelativeLayout informationLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
         final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) informationLayout.getLayoutParams();
 
@@ -255,8 +249,8 @@ class VectorMessagesAdapterMediasHelper {
 
         // test if the media is downloading the thumbnail is not downloading
         if (null == downloadId) {
-                downloadId = mMediasCache.downloadIdFromUrl(stickerMessage.getUrl());
-            }
+            downloadId = mMediasCache.downloadIdFromUrl(stickerMessage.getUrl());
+        }
 
         final View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
 
@@ -367,8 +361,8 @@ class VectorMessagesAdapterMediasHelper {
     /**
      * Manage the sticker upload
      *
-     * @param convertView the base view
-     * @param event       the sticker event
+     * @param convertView        the base view
+     * @param event              the sticker event
      * @param stickerMessage     the sticker message
      */
     void managePendingStickerUpload(final View convertView, final Event event, StickerMessage stickerMessage) {
@@ -498,8 +492,6 @@ class VectorMessagesAdapterMediasHelper {
         int thumbWidth = -1;
         int thumbHeight = -1;
 
-        Log.e(LOG_TAG, "#managePendingImageVideoDownload : EnventId =  " + event.eventId);
-
         EncryptedFileInfo encryptedFileInfo = null;
 
         // retrieve the common items
@@ -523,8 +515,6 @@ class VectorMessagesAdapterMediasHelper {
             rotationAngle = imageMessage.getRotation();
 
             ImageInfo imageInfo = imageMessage.info;
-
-            Log.e(LOG_TAG, "#managePendingImageVideoDownload EventId = " + event.eventId + " - ImageInfo =  " + imageInfo);
 
             if (null != imageInfo) {
                 if ((null != imageInfo.w) && (null != imageInfo.h)) {
@@ -569,7 +559,7 @@ class VectorMessagesAdapterMediasHelper {
         final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) informationLayout.getLayoutParams();
 
         // the thumbnails are always pre - rotated
-        String downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(), imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle, ExifInterface.ORIENTATION_UNDEFINED, "image/png", encryptedFileInfo);
+        String downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(), imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle, ExifInterface.ORIENTATION_UNDEFINED, "image/jpeg", encryptedFileInfo);
 
         // test if the media is downloading the thumbnail is not downloading
         if (null == downloadId) {
@@ -577,7 +567,6 @@ class VectorMessagesAdapterMediasHelper {
                 downloadId = mMediasCache.downloadIdFromUrl(((VideoMessage) message).getUrl());
             } else if (message instanceof ImageMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
-                Log.e(LOG_TAG, "#managePendingImageVideoDownload EventId = " + event.eventId + " - ImageUrl =  " + ((ImageMessage) message).getUrl());
             }
         }
 
@@ -718,8 +707,8 @@ class VectorMessagesAdapterMediasHelper {
             return;
         }
 
-        String uploadingUrl = "";
-        boolean isUploadingThumbnail = false;
+        String uploadingUrl;
+        final boolean isUploadingThumbnail;
         boolean isUploadingContent = false;
 
         if (isVideoMessage) {
@@ -749,7 +738,6 @@ class VectorMessagesAdapterMediasHelper {
 
         if (progress >= 0) {
             uploadProgressLayout.setTag(uploadingUrl);
-            final boolean finalIsUploadingThumbnail = isUploadingThumbnail;
             mSession.getMediasCache().addUploadListener(uploadingUrl, new MXMediaUploadListener() {
                 @Override
                 public void onUploadProgress(String uploadId, UploadStats uploadStats) {
@@ -758,7 +746,7 @@ class VectorMessagesAdapterMediasHelper {
 
                         int progress;
 
-                        if (!finalIsUploadingThumbnail) {
+                        if (!isUploadingThumbnail) {
                             progress = 10 + (uploadStats.mProgress * 90 / 100);
                         } else {
                             progress = (uploadStats.mProgress * 10 / 100);
@@ -1117,5 +1105,4 @@ class VectorMessagesAdapterMediasHelper {
     private static String formatUploadStats(Context context, IMXMediaUploadListener.UploadStats stats) {
         return formatStats(context, stats.mUploadedSize, stats.mFileSize, stats.mEstimatedRemainingTime);
     }
-
 }

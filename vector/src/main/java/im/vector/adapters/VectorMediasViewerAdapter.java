@@ -177,12 +177,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             downloadHighResPict(view, position);
 
         // video
-        } else if (imageInfo.mMessageType.equals(Message.MSGTYPE_VIDEO)) {
+        } else  {
             downloadVideo(view, position);
-
-        // sticker
-        } else {
-            downloadHighResPict(view, position);
         }
     }
 

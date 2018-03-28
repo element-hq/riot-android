@@ -235,8 +235,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param roomMemberResLayoutId   the room member message layout.
      * @param emoteRestLayoutId       the emote message layout
      * @param fileResLayoutId         the file message layout
-     * @param videoResLayoutId        the merge message layout
-     * @param mergeResLayoutId        the video message layout
+     * @param mergeResLayoutId        the merge message layout
+     * @param videoResLayoutId        the video message layout
      * @param emojiResLayoutId        the emoji message layout
      * @param codeResLayoutId         the code message layout
      * @param stickerResLayoutId      the sticker message layout
@@ -266,8 +266,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_ROOM_MEMBER, roomMemberResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_EMOTE, emoteRestLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_FILE, fileResLayoutId);
-        mRowTypeToLayoutId.put(ROW_TYPE_VIDEO, videoResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_MERGE, mergeResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_VIDEO, videoResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_EMOJI, emojiResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_CODE, codeResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_STICKER, stickerResLayoutId);
@@ -405,10 +405,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             if (row.getEvent().eventId != null) {
-                if(row.getEvent().eventId.contains("170081445036IPMCN") || row.getEvent().eventId.contains("1041445934mbUfF")) {
-                    Log.e(LOG_TAG, "---------- addToFront --------- EventId = " + row.getEvent().eventId);
-                }
-
                 mEventRowMap.put(row.getEvent().eventId, row);
             }
         }
@@ -468,10 +464,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     @Override
     public MessageRow getMessageRow(String eventId) {
         if (null != eventId) {
-            if(eventId.contains("170081445036IPMCN") || eventId.contains("1041445934mbUfF")) {
-                Log.e(LOG_TAG, "---------- getMessageRow --------- EventId = " + eventId);
-            }
-
             return mEventRowMap.get(eventId);
         } else {
             return null;
@@ -666,7 +658,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         // GA Crash : it seems that some invalid indexes are required
         if (position >= getCount()) {
             Log.e(LOG_TAG, "## getView() : invalid index " + position + " >= " + getCount());
@@ -704,8 +695,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 break;
             case ROW_TYPE_IMAGE:
             case ROW_TYPE_VIDEO:
-                inflatedView = getImageVideoView(viewType, position, convertView, parent);
-                break;
             case ROW_TYPE_STICKER:
                 inflatedView = getImageVideoView(viewType, position, convertView, parent);
                 break;
@@ -944,8 +933,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private int getItemViewType(Event event) {
         String eventId = event.eventId;
         String eventType = event.getType();
-
-        Log.e(LOG_TAG, "########### getItemViewType : " + eventId);
 
         if ((null != eventId) && mHiddenEventIds.contains(eventId)) {
             return ROW_TYPE_HIDDEN;
@@ -1288,10 +1275,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             MessageRow row = getItem(position);
             Event event = row.getEvent();
 
-            Log.e(LOG_TAG, "################### getImageVideoView : " + event.eventId);
-
             Message message = new Message();
             StickerMessage stickerMessage = new StickerMessage();
+
             int waterMarkResourceId = -1;
 
             if (type == ROW_TYPE_IMAGE) {
@@ -1315,7 +1301,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 if ("image/gif".equals(stickerMessage.getMimeType())) {
                     waterMarkResourceId = R.drawable.filetype_gif;
                 }
-
             }
 
             // display a type watermark
@@ -1336,19 +1321,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             if (type == ROW_TYPE_IMAGE || type == ROW_TYPE_VIDEO) {
+
                 // download management
                 mMediasHelper.managePendingImageVideoDownload(convertView, event, message, position);
-
                 // upload management
                 mMediasHelper.managePendingImageVideoUpload(convertView, event, message);
+
             } else if (type == ROW_TYPE_STICKER) {
+
                 // download management
                 mMediasHelper.managePendingStickerDownload(convertView, event, stickerMessage, position);
-
                 // upload management
                 mMediasHelper.managePendingStickerUpload(convertView, event, stickerMessage);
             }
-
 
             // dimmed when the message is not sent
             View imageLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
