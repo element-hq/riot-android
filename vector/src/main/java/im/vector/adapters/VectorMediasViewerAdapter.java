@@ -175,7 +175,6 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 imageInfo.mMimeType = "image/jpeg";
             }
             downloadHighResPict(view, position);
-
         // video
         } else  {
             downloadVideo(view, position);

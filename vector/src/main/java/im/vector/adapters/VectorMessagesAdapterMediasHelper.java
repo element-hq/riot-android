@@ -245,37 +245,6 @@ class VectorMessagesAdapterMediasHelper {
                     thumbHeight = videoMessage.info.thumbnail_info.h;
                 }
             }
-        } else if (message instanceof StickerMessage) {
-            StickerMessage stickerMessage = (StickerMessage) message;
-            stickerMessage.checkMediaUrls();
-
-            // Backwards compatibility with events from before Synapse 0.6.0
-            if (stickerMessage.getThumbnailUrl() != null) {
-                thumbUrl = stickerMessage.getThumbnailUrl();
-
-                if (null != stickerMessage.info) {
-                    encryptedFileInfo = stickerMessage.info.thumbnail_file;
-                }
-
-            } else if (stickerMessage.getUrl() != null) {
-                thumbUrl = stickerMessage.getUrl();
-                encryptedFileInfo = stickerMessage.file;
-            }
-
-            rotationAngle = stickerMessage.getRotation();
-
-            ImageInfo imageInfo = stickerMessage.info;
-
-            if (null != imageInfo) {
-                if ((null != imageInfo.w) && (null != imageInfo.h)) {
-                    thumbWidth = imageInfo.w;
-                    thumbHeight = imageInfo.h;
-                }
-
-                if (null != imageInfo.orientation) {
-                    orientation = imageInfo.orientation;
-                }
-            }
         }
 
         ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
@@ -300,8 +269,6 @@ class VectorMessagesAdapterMediasHelper {
                 downloadId = mMediasCache.downloadIdFromUrl(((VideoMessage) message).getUrl());
             } else if (message instanceof ImageMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
-            } else if (message instanceof StickerMessage) {
-                downloadId = mMediasCache.downloadIdFromUrl(((StickerMessage) message).getUrl());
             }
         }
 
@@ -462,13 +429,9 @@ class VectorMessagesAdapterMediasHelper {
             if (message instanceof VideoMessage) {
                 uploadingUrl = ((VideoMessage) message).getUrl();
                 isUploadingContent = ((VideoMessage) message).isLocalContent();
-
             } else if (message instanceof ImageMessage){
                 uploadingUrl = ((ImageMessage) message).getUrl();
                 isUploadingContent = ((ImageMessage) message).isLocalContent();
-            } else if (message instanceof StickerMessage) {
-                uploadingUrl = ((StickerMessage) message).getUrl();
-                isUploadingContent = ((StickerMessage) message).isLocalContent();
             }
 
             progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);

@@ -1274,9 +1274,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         try {
             MessageRow row = getItem(position);
             Event event = row.getEvent();
-
-            Message message = new Message();
-            //StickerMessage stickerMessage;
+            Message message = null;
 
             int waterMarkResourceId = -1;
 
@@ -1297,7 +1295,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else if (type == ROW_TYPE_STICKER) {
 
                 StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
-
                 if ("image/gif".equals(stickerMessage.getMimeType())) {
                     waterMarkResourceId = R.drawable.filetype_gif;
                 }
@@ -1321,10 +1318,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 imageTypeView.setVisibility(View.GONE);
             }
 
-            // download management
-            mMediasHelper.managePendingImageVideoDownload(convertView, event, message, position);
-            // upload management
-            mMediasHelper.managePendingImageVideoUpload(convertView, event, message);
+
+            if (null != message) {
+                // download management
+                mMediasHelper.managePendingImageVideoDownload(convertView, event, message, position);
+                // upload management
+                mMediasHelper.managePendingImageVideoUpload(convertView, event, message);
+            }
 
             // dimmed when the message is not sent
             View imageLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
