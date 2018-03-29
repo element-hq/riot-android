@@ -30,6 +30,7 @@ import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.util.Log;
 
@@ -174,7 +175,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 imageInfo.mMimeType = "image/jpeg";
             }
             downloadHighResPict(view, position);
-        } else {
+        // video
+        } else  {
             downloadVideo(view, position);
         }
     }
