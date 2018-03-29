@@ -601,6 +601,38 @@ class VectorMessagesAdapterHelper {
     }
 
     /**
+     * Hide the sticker description view
+     *
+     * @param convertView base view
+     */
+    void hideStickerDescription(View convertView) {
+        View stickerDescription = convertView.findViewById(R.id.message_adapter_sticker_layout);
+
+        if (null != stickerDescription) {
+            stickerDescription.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Show the sticker description view
+     *
+     * @param view base view
+     * @param stickerMessage the sticker message
+     */
+    void showStickerDescription(View view, StickerMessage stickerMessage) {
+        View stickerDescriptionLayout = view.findViewById(R.id.message_adapter_sticker_layout);
+        ImageView stickerTriangle = view.findViewById(R.id.message_adapter_sticker_triangle);
+        TextView stickerDescription = view.findViewById(R.id.message_adapter_sticker_description);
+
+        if (null != stickerDescriptionLayout && null != stickerTriangle && null != stickerDescription) {
+            stickerDescriptionLayout.setVisibility(View.VISIBLE);
+            stickerTriangle.setVisibility(View.VISIBLE);
+            stickerDescription.setVisibility(View.VISIBLE);
+            stickerDescription.setText(stickerMessage.body);
+        }
+    }
+
+    /**
      * Hide the read receipts view
      *
      * @param convertView base view

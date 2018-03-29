@@ -1032,7 +1032,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         convertView.setClickable(true);
 
-        // click on the avatar opens the details page
+        // click on the message row select it
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1042,7 +1042,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
         });
 
-        // click on the avatar opens the details page
+        // long click on the message row display the message options menu
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -1320,8 +1320,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
 
             if (null != message) {
+                mHelper.hideStickerDescription(convertView);
+
                 // download management
                 mMediasHelper.managePendingImageVideoDownload(convertView, event, message, position);
+
                 // upload management
                 mMediasHelper.managePendingImageVideoUpload(convertView, event, message);
             }
@@ -1871,6 +1874,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         TextView tsTextView = contentView.findViewById(R.id.messagesAdapter_timestamp);
         if (isInSelectionMode && isSelected) {
             tsTextView.setVisibility(View.VISIBLE);
+        }
+
+        StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
+        if (Event.EVENT_TYPE_STICKER.equals(event.getType())) {
+            if (null != stickerMessage && isInSelectionMode && isSelected) {
+                mHelper.showStickerDescription(contentView, stickerMessage);
+            }
         }
 
         if (!(event instanceof EventGroup)) {
