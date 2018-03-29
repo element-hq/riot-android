@@ -45,7 +45,6 @@ import org.matrix.androidsdk.rest.model.message.ImageInfo;
 import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.message.Message;
-import org.matrix.androidsdk.rest.model.message.StickerInfo;
 import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.rest.model.message.VideoInfo;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
@@ -179,303 +178,6 @@ class VectorMessagesAdapterMediasHelper {
     private Map<String, String> mUrlByBitmapIndex = new HashMap<>();
 
     /**
-     * Manage the sticker download.
-     *
-     * @param convertView       the parent view.
-     * @param event             the event
-     * @param stickerMessage    the sticker message
-     * @param position          the stickerMessage position
-     */
-    void managePendingStickerDownload(final View convertView, final Event event, final StickerMessage stickerMessage, final int position) {
-        int maxImageWidth = mMaxImageWidth;
-        int maxImageHeight = mMaxImageHeight;
-        int rotationAngle = 0;
-        int orientation = ExifInterface.ORIENTATION_NORMAL;
-        String thumbUrl = null;
-        int thumbWidth = -1;
-        int thumbHeight = -1;
-
-        Log.e(LOG_TAG, "## managePendingStickerDownload : " + event.eventId);
-
-        EncryptedFileInfo encryptedFileInfo = null;
-
-        if(Event.EVENT_TYPE_STICKER.equals(event.getType())) {
-            stickerMessage.checkMediaUrls();
-
-            // Backwards compatibility with events from before Synapse 0.6.0
-            if (stickerMessage.getThumbnailUrl() != null) {
-                thumbUrl = stickerMessage.getThumbnailUrl();
-
-                if (null != stickerMessage.info) {
-                    encryptedFileInfo = stickerMessage.info.thumbnail_file;
-                }
-
-            } else if (stickerMessage.getUrl() != null) {
-                thumbUrl = stickerMessage.getUrl();
-                encryptedFileInfo = stickerMessage.file;
-            }
-
-            rotationAngle = stickerMessage.getRotation();
-
-            StickerInfo stickerInfo = stickerMessage.info;
-
-            if (null != stickerInfo) {
-                if ((null != stickerInfo.w) && (null != stickerInfo.h)) {
-                    thumbWidth = stickerInfo.w;
-                    thumbHeight = stickerInfo.h;
-                }
-
-                if (null != stickerInfo.orientation) {
-                    orientation = stickerInfo.orientation;
-                }
-            }
-        }
-
-        ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
-
-        // reset the bitmap if the url is not the same than before
-        if ((null == thumbUrl) || !TextUtils.equals(imageView.hashCode() + "", mUrlByBitmapIndex.get(thumbUrl))) {
-            imageView.setImageBitmap(null);
-            if (null != thumbUrl) {
-                mUrlByBitmapIndex.put(thumbUrl, imageView.hashCode() + "");
-            }
-        }
-
-        RelativeLayout informationLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
-        final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) informationLayout.getLayoutParams();
-
-        // the thumbnails are always pre - rotated
-        String downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(), imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle, ExifInterface.ORIENTATION_UNDEFINED, "image/png", encryptedFileInfo);
-
-        // test if the media is downloading the thumbnail is not downloading
-        if (null == downloadId) {
-            downloadId = mMediasCache.downloadIdFromUrl(stickerMessage.getUrl());
-        }
-
-        final View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
-
-        if (null == downloadProgressLayout) {
-            return;
-        }
-
-        // the tag is used to detect if the progress value is linked to this layout
-        downloadProgressLayout.setTag(downloadId);
-
-        int frameHeight = -1;
-        int frameWidth = -1;
-
-        // if the image size is known
-        // compute the expected thumbnail height
-        if ((thumbWidth > 0) && (thumbHeight > 0)) {
-
-            // swap width and height if the image is side oriented
-            if ((rotationAngle == 90) || (rotationAngle == 270)) {
-                int tmp = thumbWidth;
-                thumbWidth = thumbHeight;
-                thumbHeight = tmp;
-            } else if ((orientation == ExifInterface.ORIENTATION_ROTATE_90) || (orientation == ExifInterface.ORIENTATION_ROTATE_270)) {
-                int tmp = thumbWidth;
-                thumbWidth = thumbHeight;
-                thumbHeight = tmp;
-            }
-
-            frameHeight = Math.min(maxImageWidth * thumbHeight / thumbWidth, maxImageHeight);
-            frameWidth = frameHeight * thumbWidth / thumbHeight;
-        }
-
-        // ensure that some values are properly initialized
-        if (frameHeight < 0) {
-            frameHeight = mMaxImageHeight;
-        }
-
-        if (frameWidth < 0) {
-            frameWidth = mMaxImageWidth;
-        }
-
-        // apply it the layout
-        // it avoid row jumping when the image is downloaded
-        layoutParams.height = frameHeight;
-        layoutParams.width = frameWidth;
-
-        // no download in progress
-        if (null != downloadId) {
-            downloadProgressLayout.setVisibility(View.VISIBLE);
-
-            mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
-                @Override
-                public void onDownloadCancel(String downloadId) {
-                    if (TextUtils.equals(downloadId, (String) downloadProgressLayout.getTag())) {
-                        downloadProgressLayout.setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onDownloadError(String downloadId, JsonElement jsonElement) {
-                    if (TextUtils.equals(downloadId, (String) downloadProgressLayout.getTag())) {
-                        MatrixError error = null;
-
-                        try {
-                            error = JsonUtils.toMatrixError(jsonElement);
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "Cannot cast to Matrix error " + e.getLocalizedMessage());
-                        }
-
-                        downloadProgressLayout.setVisibility(View.GONE);
-
-                        if ((null != error) && error.isSupportedErrorCode()) {
-                            Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        } else if (null != jsonElement) {
-                            Toast.makeText(mContext, jsonElement.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
-
-                @Override
-                public void onDownloadProgress(String aDownloadId, DownloadStats stats) {
-                    if (TextUtils.equals(aDownloadId, (String) downloadProgressLayout.getTag())) {
-                        refreshDownloadViews(event, stats, downloadProgressLayout);
-                    }
-                }
-
-                @Override
-                public void onDownloadComplete(String aDownloadId) {
-                    if (TextUtils.equals(aDownloadId, (String) downloadProgressLayout.getTag())) {
-                        downloadProgressLayout.setVisibility(View.GONE);
-
-                        if (null != mVectorMessagesAdapterEventsListener) {
-                            mVectorMessagesAdapterEventsListener.onMediaDownloaded(position);
-                        }
-                    }
-                }
-            });
-
-            refreshDownloadViews(event, mMediasCache.getStatsForDownloadId(downloadId), downloadProgressLayout);
-        } else {
-            downloadProgressLayout.setVisibility(View.GONE);
-        }
-
-        imageView.setBackgroundColor(Color.TRANSPARENT);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-    }
-
-    /**
-     * Manage the sticker upload
-     *
-     * @param convertView        the base view
-     * @param event              the sticker event
-     * @param stickerMessage     the sticker message
-     */
-    void managePendingStickerUpload(final View convertView, final Event event, StickerMessage stickerMessage) {
-        final View uploadProgressLayout = convertView.findViewById(R.id.content_upload_progress_layout);
-        final ProgressBar uploadSpinner = convertView.findViewById(R.id.upload_event_spinner);
-
-        // the dedicated UI items are not found
-        if ((null == uploadProgressLayout) || (null == uploadSpinner)) {
-            return;
-        }
-
-        // refresh the progress only if it is the expected URL
-        uploadProgressLayout.setTag(null);
-
-        boolean hasContentInfo = (null != stickerMessage.info);
-
-        // not the sender ?
-        if (!mSession.getMyUserId().equals(event.getSender()) || event.isUndeliverable() || !hasContentInfo) {
-            uploadProgressLayout.setVisibility(View.GONE);
-            uploadSpinner.setVisibility(View.GONE);
-            showUploadFailure(convertView, VectorMessagesAdapter.ROW_TYPE_STICKER, event.isUndeliverable());
-            return;
-        }
-
-        String uploadingUrl = "";
-        boolean isUploadingThumbnail = false;
-        boolean isUploadingContent = false;
-
-        uploadingUrl = stickerMessage.getThumbnailUrl();
-        isUploadingThumbnail = stickerMessage.isThumbnailLocalContent();
-
-        int progress;
-
-        if (isUploadingThumbnail) {
-            progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);
-        } else {
-            uploadingUrl = stickerMessage.getUrl();
-            isUploadingContent = stickerMessage.isLocalContent();
-        }
-
-        progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);
-
-        if (progress >= 0) {
-            uploadProgressLayout.setTag(uploadingUrl);
-            final boolean finalIsUploadingThumbnail = isUploadingThumbnail;
-            mSession.getMediasCache().addUploadListener(uploadingUrl, new MXMediaUploadListener() {
-                @Override
-                public void onUploadProgress(String uploadId, UploadStats uploadStats) {
-                    if (TextUtils.equals((String) uploadProgressLayout.getTag(), uploadId)) {
-                        refreshUploadViews(event, uploadStats, uploadProgressLayout);
-
-                        int progress;
-
-                        if (!finalIsUploadingThumbnail) {
-                            progress = 10 + (uploadStats.mProgress * 90 / 100);
-                        } else {
-                            progress = (uploadStats.mProgress * 10 / 100);
-                        }
-
-                        updateUploadProgress(uploadProgressLayout, progress);
-                    }
-                }
-
-                private void onUploadStop(String message) {
-                    if (!TextUtils.isEmpty(message)) {
-                        Toast.makeText(mContext,
-                                message,
-                                Toast.LENGTH_LONG).show();
-                    }
-
-                    showUploadFailure(convertView, VectorMessagesAdapter.ROW_TYPE_STICKER, true);
-                    uploadProgressLayout.setVisibility(View.GONE);
-                    uploadSpinner.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onUploadCancel(String uploadId) {
-                    if (TextUtils.equals((String) uploadProgressLayout.getTag(), uploadId)) {
-                        onUploadStop(null);
-                    }
-                }
-
-                @Override
-                public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
-                    if (TextUtils.equals((String) uploadProgressLayout.getTag(), uploadId)) {
-                        onUploadStop(serverErrorMessage);
-                    }
-                }
-
-                @Override
-                public void onUploadComplete(final String uploadId, final String contentUri) {
-                    if (TextUtils.equals((String) uploadProgressLayout.getTag(), uploadId)) {
-                        uploadSpinner.setVisibility(View.GONE);
-                    }
-                }
-            });
-        }
-
-        showUploadFailure(convertView, VectorMessagesAdapter.ROW_TYPE_STICKER, false);
-        uploadSpinner.setVisibility(((progress < 0) && event.isSending()) ? View.VISIBLE : View.GONE);
-        refreshUploadViews(event, mSession.getMediasCache().getStatsForUploadId(uploadingUrl), uploadProgressLayout);
-
-        if (isUploadingContent) {
-            progress = 10 + (progress * 90 / 100);
-        } else if (isUploadingThumbnail) {
-            progress = (progress * 10 / 100);
-        }
-
-        updateUploadProgress(uploadProgressLayout, progress);
-        uploadProgressLayout.setVisibility(((progress >= 0) && event.isSending()) ? View.VISIBLE : View.GONE);
-    }
-
-    /**
      * Manage the image/video download.
      *
      * @param convertView the parent view.
@@ -526,7 +228,7 @@ class VectorMessagesAdapterMediasHelper {
                     orientation = imageInfo.orientation;
                 }
             }
-        } else { // video
+        } else if (message instanceof VideoMessage){ // video
             VideoMessage videoMessage = (VideoMessage) message;
             videoMessage.checkMediaUrls();
 
@@ -541,6 +243,37 @@ class VectorMessagesAdapterMediasHelper {
                 if ((null != videoMessage.info.thumbnail_info) && (null != videoMessage.info.thumbnail_info.w) && (null != videoMessage.info.thumbnail_info.h)) {
                     thumbWidth = videoMessage.info.thumbnail_info.w;
                     thumbHeight = videoMessage.info.thumbnail_info.h;
+                }
+            }
+        } else if (message instanceof StickerMessage) {
+            StickerMessage stickerMessage = (StickerMessage) message;
+            stickerMessage.checkMediaUrls();
+
+            // Backwards compatibility with events from before Synapse 0.6.0
+            if (stickerMessage.getThumbnailUrl() != null) {
+                thumbUrl = stickerMessage.getThumbnailUrl();
+
+                if (null != stickerMessage.info) {
+                    encryptedFileInfo = stickerMessage.info.thumbnail_file;
+                }
+
+            } else if (stickerMessage.getUrl() != null) {
+                thumbUrl = stickerMessage.getUrl();
+                encryptedFileInfo = stickerMessage.file;
+            }
+
+            rotationAngle = stickerMessage.getRotation();
+
+            ImageInfo imageInfo = stickerMessage.info;
+
+            if (null != imageInfo) {
+                if ((null != imageInfo.w) && (null != imageInfo.h)) {
+                    thumbWidth = imageInfo.w;
+                    thumbHeight = imageInfo.h;
+                }
+
+                if (null != imageInfo.orientation) {
+                    orientation = imageInfo.orientation;
                 }
             }
         }
@@ -567,6 +300,8 @@ class VectorMessagesAdapterMediasHelper {
                 downloadId = mMediasCache.downloadIdFromUrl(((VideoMessage) message).getUrl());
             } else if (message instanceof ImageMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
+            } else if (message instanceof StickerMessage) {
+                downloadId = mMediasCache.downloadIdFromUrl(((StickerMessage) message).getUrl());
             }
         }
 
@@ -724,13 +459,16 @@ class VectorMessagesAdapterMediasHelper {
         if (isUploadingThumbnail) {
             progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);
         } else {
-            if (isVideoMessage) {
+            if (message instanceof VideoMessage) {
                 uploadingUrl = ((VideoMessage) message).getUrl();
                 isUploadingContent = ((VideoMessage) message).isLocalContent();
 
-            } else {
+            } else if (message instanceof ImageMessage){
                 uploadingUrl = ((ImageMessage) message).getUrl();
                 isUploadingContent = ((ImageMessage) message).isLocalContent();
+            } else if (message instanceof StickerMessage) {
+                uploadingUrl = ((StickerMessage) message).getUrl();
+                isUploadingContent = ((StickerMessage) message).isLocalContent();
             }
 
             progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);

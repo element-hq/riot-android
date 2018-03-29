@@ -942,7 +942,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType)) {
             return ROW_TYPE_TEXT;
         }
-        
+
         if (event instanceof EventGroup) {
             return ROW_TYPE_MERGE;
         }
@@ -1276,12 +1276,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Event event = row.getEvent();
 
             Message message = new Message();
-            StickerMessage stickerMessage = new StickerMessage();
+            //StickerMessage stickerMessage;
 
             int waterMarkResourceId = -1;
 
             if (type == ROW_TYPE_IMAGE) {
-                
+
                 ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
 
                 if ("image/gif".equals(imageMessage.getMimeType())) {
@@ -1290,17 +1290,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 message = imageMessage;
 
             } else if (type == ROW_TYPE_VIDEO) {
-                
+
                 message = JsonUtils.toVideoMessage(event.getContent());
                 waterMarkResourceId = R.drawable.filetype_video;
-                
+
             } else if (type == ROW_TYPE_STICKER) {
-                
-                stickerMessage = JsonUtils.toStickerMessage(event.getContent());
+
+                StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
 
                 if ("image/gif".equals(stickerMessage.getMimeType())) {
                     waterMarkResourceId = R.drawable.filetype_gif;
                 }
+                message = stickerMessage;
             }
 
             // display a type watermark
@@ -1320,20 +1321,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 imageTypeView.setVisibility(View.GONE);
             }
 
-            if (type == ROW_TYPE_IMAGE || type == ROW_TYPE_VIDEO) {
-
-                // download management
-                mMediasHelper.managePendingImageVideoDownload(convertView, event, message, position);
-                // upload management
-                mMediasHelper.managePendingImageVideoUpload(convertView, event, message);
-
-            } else if (type == ROW_TYPE_STICKER) {
-
-                // download management
-                mMediasHelper.managePendingStickerDownload(convertView, event, stickerMessage, position);
-                // upload management
-                mMediasHelper.managePendingStickerUpload(convertView, event, stickerMessage);
-            }
+            // download management
+            mMediasHelper.managePendingImageVideoDownload(convertView, event, message, position);
+            // upload management
+            mMediasHelper.managePendingImageVideoUpload(convertView, event, message);
 
             // dimmed when the message is not sent
             View imageLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
