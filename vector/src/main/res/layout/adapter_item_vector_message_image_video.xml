@@ -127,7 +127,8 @@
                     android:layout_height="80dp"
                     android:orientation="vertical"
                     android:layout_alignLeft="@+id/messages_adapter_image_layout"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/message_adapter_sticker_triangle"

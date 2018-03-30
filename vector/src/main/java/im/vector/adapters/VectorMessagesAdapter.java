@@ -1318,7 +1318,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 imageTypeView.setVisibility(View.GONE);
             }
 
-
             if (null != message) {
                 mHelper.hideStickerDescription(convertView);
 
@@ -1876,8 +1875,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             tsTextView.setVisibility(View.VISIBLE);
         }
 
-        StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
+        // Show the description of the sticker only on message row click
         if (Event.EVENT_TYPE_STICKER.equals(event.getType())) {
+            StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
             if (null != stickerMessage && isInSelectionMode && isSelected) {
                 mHelper.showStickerDescription(contentView, stickerMessage);
             }
