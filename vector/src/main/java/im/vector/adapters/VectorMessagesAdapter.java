@@ -2425,6 +2425,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()));
             }
 
+            if (Event.EVENT_TYPE_STICKER.equals((event.getType()))) {
+                menu.findItem(R.id.ic_action_vector_redact_message).setVisible(true);
+                menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
+            }
+
         }
 
         // e2e
