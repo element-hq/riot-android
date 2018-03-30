@@ -389,7 +389,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         // bind UI widgets
-        waitingView = findViewById(R.id.flow_ui_mask_login);
+        mLoginMaskView = findViewById(R.id.flow_ui_mask_login);
 
         // login
         mLoginEmailTextView = findViewById(R.id.login_user_name);
