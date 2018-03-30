@@ -1,3 +1,10 @@
+Changes in Riot 0.8.4 (2018-03-30)
+===================================================
+
+Improvements: 
+ * Update matrix-sdk.aar lib (v0.9.2).
+ * Make state event redaction handling gentler with homeserver (#2117).
+
 Changes in Riot 0.8.3 (2018-03-16)
 ===================================================
 
