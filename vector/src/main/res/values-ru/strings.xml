@@ -980,5 +980,5 @@ Email также позволит вам при необходимости во�
 	<item quantity="other"/>
 </plurals>
     <string name="receipt_avatar">Получить аватар</string>
-    <string name="notice_avatar">Аватар-заметка</string>
+    <string name="notice_avatar">Заметка аватара</string>
     </resources>
