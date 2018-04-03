@@ -981,4 +981,7 @@ Email также позволит вам при необходимости во�
 </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
+    <string name="settings_flair">Настроение</string>
+
+    <string name="room_settings_no_flair">" Эта комната не показывает настроение какоголибо сообщества"</string>
     </resources>
