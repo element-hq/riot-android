@@ -11,4 +11,17 @@
 
     <string name="title_activity_home">信息</string>
     <string name="title_activity_room">聊天室</string>
+    <string name="title_activity_settings">設置</string>
+    <string name="title_activity_member_details">成員詳情</string>
+    <string name="title_activity_bug_report">反饋 Bug</string>
+    <string name="cancel">取消</string>
+    <string name="ok">確定</string>
+    <string name="leave">離開</string>
+    <string name="save">儲存</string>
+    <string name="loading">載入中...</string>
+
+    <string name="send">發送</string>
+    <string name="resend">重新發送</string>
+    <string name="share">分享</string>
+    <string name="view_source">查看源代碼</string>
     </resources>
