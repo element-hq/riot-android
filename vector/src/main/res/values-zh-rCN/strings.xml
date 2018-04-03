@@ -806,4 +806,6 @@
     <string name="rejoin">重新加入</string>
     <string name="forget_room">忘记聊天室</string>
 <string name="room_settings_all_messages_noisy">所有消息（通知并振铃）</string>
+    <string name="title_activity_group_details">社区细节</string>
+
     </resources>
