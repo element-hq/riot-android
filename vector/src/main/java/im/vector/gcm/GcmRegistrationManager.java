@@ -139,6 +139,9 @@ public final class GcmRegistrationManager {
     // 3 states : null not initialized (retrieved by flavor)
     private static Boolean mUseGCM;
 
+    //
+    private boolean mLastBatteryOptimizationStatus;
+
     // pusher rest client
     private Map<String, PushersRestClient> mPushersRestClients = new HashMap<>();
 
@@ -179,6 +182,7 @@ public final class GcmRegistrationManager {
         });
 
         mRegistrationState = getStoredRegistrationState();
+        mLastBatteryOptimizationStatus = PreferencesManager.isIgnoringBatteryOptimizations(mContext);
         mRegistrationToken = getStoredRegistrationToken();
     }
 
@@ -532,7 +536,8 @@ public final class GcmRegistrationManager {
      * @return true if the registration was done with event Id only
      */
     public void onAppResume() {
-        if (mRegistrationState == RegistrationState.SERVER_REGISTERED) {
+        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) &&
+                (mLastBatteryOptimizationStatus != PreferencesManager.isIgnoringBatteryOptimizations(mContext))) {
             Log.d(LOG_TAG, "## onAppResume() : force the GCM registration");
 
             forceSessionsRegistration(new ThirdPartyRegistrationListener() {
@@ -593,7 +598,10 @@ public final class GcmRegistrationManager {
 
         Log.d(LOG_TAG, "registerToThirdPartyServer of " + session.getMyUserId());
 
-        boolean eventIdOnlyPushes = (isBackgroundSyncAllowed() ? true : !isContentSendingAllowed());
+        // send only the event id but not the event content if:
+        // - the user let the app run in background to fetch the event content from the homeserver
+        // - or, if the app cannot run in background, the user does not want to send event content to GCM
+        boolean eventIdOnlyPushes = isBackgroundSyncAllowed() || !isContentSendingAllowed();
 
         getPushersRestClient(session)
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
@@ -1130,9 +1138,13 @@ public final class GcmRegistrationManager {
     }
 
     /**
+     * @TODO
+     *
      * @return true if the background sync is allowed
      */
     public boolean isBackgroundSyncAllowed() {
+        // @TODO: This setting must linked to the Android 6 permission to run in background
+        // ie, no permission, no background sync
         return getGcmSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
     }
 

@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -117,6 +118,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
+import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -579,6 +581,31 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         displayCryptoCorruption();
 
         addBadgeEventsListener();
+
+        ignoreBatteryOptimizationsIfNeeded();
+    }
+
+    /**
+     * Make sure the app has permissions to run in background.
+     * This is linked to the "Ignore Battery Optimizations" android setting.
+     */
+    private void ignoreBatteryOptimizationsIfNeeded() {
+        // @TODO: ask it only at the first start (like Riot-iOS)
+
+        // if required by his device android version, the user must allow the app to ignore battery
+        // optimizations so that the app can sync in background
+        if (!PreferencesManager.isIgnoringBatteryOptimizations(this)
+                && !PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
+
+            // @TODO: Display a popup why the user wants to allow the app to run in background
+            // and to make the app ignore battery optimizations
+
+            PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this, true);
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            startActivity(intent);
+        }
     }
 
     @Override
