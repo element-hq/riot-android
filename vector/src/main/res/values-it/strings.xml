@@ -923,4 +923,9 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="widget_integration_positive_power_level">Il livello di poteri deve essere un intero positivo.</string>
     <string name="notice_avatar">Avatar notifica</string>
     <string name="receipt_avatar">Avatar ricevuta</string>
+    <plurals name="membership_changes">
+	<item quantity="one">1 cambio tra i membri</item>
+	<item quantity="other">%d cambi tra i membri</item>
+</plurals>
+
     </resources>
