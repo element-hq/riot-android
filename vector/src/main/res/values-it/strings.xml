@@ -711,7 +711,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="directory_server_native_rooms">Tutte le stanze native %s</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Cerca nello storico</string>
+    <string name="historical_placeholder">Cerca nella cronologia</string>
 
     <!-- text size selection -->
     <string name="font_size">Grandezza font</string>
