@@ -95,7 +95,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="send_bug_report_description">Opisz błąd. Co zrobiłeś? Co powinno się wydarzyć? Co się stało?</string>
     <string name="send_bug_report_placeholder">Opisz swój problem tutaj</string>
     <string name="send_bug_report_logs_description">By zdiagnozować problemy, raporty z tego klienta zostaną wysłane wraz z tym raportem o błędach. Jeśli wolisz wysłać tylko powyższy tekst, odznacz to pole:</string>
-    <string name="send_bug_report_alert_message">Wygląda na to, że potrząsasz telefonem ze zdenerwowania. Czy chcesz zglsoic błąd?</string>
+    <string name="send_bug_report_alert_message">Wygląda na to, że potrząsasz telefonem ze zdenerwowania. Czy chcesz zgłosić błąd?</string>
     <string name="send_bug_report_app_crashed">Aplikacja nie została poprawnie zamknięta za ostatnim razem. Czy chcesz zgłosić raport o nieoczekiwanym zamknięciu?</string>
 
     <string name="send_bug_report_sent">Pomyślnie zgłoszono błąd</string>
