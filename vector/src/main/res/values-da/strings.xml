@@ -132,42 +132,42 @@ Vælg eksportér for at backe dem op inden du logger ud.</string>
     <string name="option_take_photo_video">Tag billede eller video</string>
 
     <string name="auth_login">Log ind</string>
-    <string name="auth_register">Registrér</string>
+    <string name="auth_register">Registrer</string>
     <string name="auth_submit">Send</string>
     <string name="auth_skip">Spring over</string>
-    <string name="auth_send_reset_email">Send Gendannelses Email</string>
-    <string name="auth_return_to_login">Vend tilbage til log-ind-skærmen</string>
+    <string name="auth_send_reset_email">Send email til gendannelse</string>
+    <string name="auth_return_to_login">Vend tilbage til log ind-skærmen</string>
     <string name="auth_user_id_placeholder">Email eller brugernavn</string>
-    <string name="auth_password_placeholder">Password</string>
-    <string name="auth_new_password_placeholder">Nyt password</string>
+    <string name="auth_password_placeholder">Adgangskode</string>
+    <string name="auth_new_password_placeholder">Ny adgangskode</string>
     <string name="auth_user_name_placeholder">Brugernavn</string>
-    <string name="auth_add_email_message">Tilføj en mailadresse til din konto for at lade brugere opdage dig og for at gendanne dit password.</string>
-    <string name="auth_add_phone_message">Tilføj et telefonnummer til din konto for at lade andre brugere opdage dig.</string>
-    <string name="auth_add_email_phone_message">Tilføj en emailadresse og/eller et telefonnummer til din konto for at lade andre brugere opdage dig.
+    <string name="auth_add_email_message">Tilføj en mailadresse til din konto for at lade brugere finde dig og for at gendanne dit password.</string>
+    <string name="auth_add_phone_message">Tilføj et telefonnummer til din konto for at brugere kan finde dig.</string>
+    <string name="auth_add_email_phone_message">Tilføj en emailadresse og/eller et telefonnummer til din konto for at andre brugere kan finde dig.
 
-En emailadresse vil også lade dig gendanne dit password.</string>
-    <string name="auth_add_email_and_phone_message">Tilføj en emailadresse og et telefonnummer til din konto for at lade andre brugere opdage dig.
+En emailadresse vil også give dig mulighed for at nulstille din adgangskode.</string>
+    <string name="auth_add_email_and_phone_message">Tilføj en emailadresse og et telefonnummer til din konto for at andre brugere kan finde dig.
 
-En emailadresse vil også lade dig gendanne dit password.</string>
+En emailadresse vil også give dig mulighed for at nulstille dit password.</string>
     <string name="auth_email_placeholder">Emailadresse</string>
     <string name="auth_opt_email_placeholder">Emailadresse (valgfri)</string>
     <string name="auth_phone_number_placeholder">Telefonnummer</string>
     <string name="auth_opt_phone_number_placeholder">Telefonnummer (valgfrit)</string>
-    <string name="auth_repeat_password_placeholder">Gentag Password</string>
-    <string name="auth_repeat_new_password_placeholder">Bekræft dit nye password</string>
-    <string name="auth_invalid_login_param">Forkert brugernavn og/eller password</string>
-    <string name="auth_invalid_user_name">Brugernavne må kun indeholde bogstaver, numre, punktummer, bindestrege og underscores</string>
-    <string name="auth_invalid_password">Password for kort (min 6)</string>
-    <string name="auth_missing_password">Manglende password</string>
+    <string name="auth_repeat_password_placeholder">Gentag adgangskode</string>
+    <string name="auth_repeat_new_password_placeholder">Bekræft din nye adgangskode</string>
+    <string name="auth_invalid_login_param">Forkert brugernavn og/eller adgangskode</string>
+    <string name="auth_invalid_user_name">Brugernavne må kun indeholde bogstaver, tal, punktummer, bindestreger og underscores</string>
+    <string name="auth_invalid_password">Adgangskode for kort (min. 6)</string>
+    <string name="auth_missing_password">Manglende adgangskode</string>
     <string name="auth_invalid_email">Dette ligner ikke en gyldig emailadresse</string>
     <string name="auth_invalid_phone">Dette ligner ikke et gyldigt telefonnummer</string>
     <string name="auth_email_already_defined">Den emailadresse er allerede i brug.</string>
     <string name="auth_missing_email">Manglende emailadresse</string>
     <string name="auth_missing_phone">Manglende telefonnummer</string>
     <string name="auth_missing_email_or_phone">Manglende emailadresse eller telefonnummer</string>
-    <string name="auth_invalid_token">Ugyldig token</string>
-    <string name="auth_password_dont_match">Passwordsne passer ikke</string>
-    <string name="auth_forgot_password">Glemt password?</string>
+    <string name="auth_invalid_token">Ugyldigt token</string>
+    <string name="auth_password_dont_match">Adgangskoderne er ikke ens</string>
+    <string name="auth_forgot_password">Glemt adgangskode?</string>
     <string name="auth_use_server_options">Anvend brugerdefinerede server indstillinger (avanceret)</string>
     <string name="auth_email_validation_message">Tjek venligst din email for at fortsætte registreringen</string>
     <string name="auth_threepid_warning_message">Registrering med email og telefonnummer på samme tid er ikke understøttet før API\'en eksisterer. Kun telefonnummeret bliver taget med.
@@ -207,7 +207,7 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
     <string name="notification_noisy_notifications">Larmende notifikationer</string>
     <string name="notification_silent_notifications">Stille notifikationer</string>
 
-    <string name="option_take_photo">Tag billed</string>
+    <string name="option_take_photo">Tag billede</string>
     <string name="option_take_video">Optag video</string>
 
     <string name="e2e_need_log_in_again">Du skal logge ind igen for at generere end-to-end krypteringsnøgler for denne enhed og sende public keyen til din homeserver.
@@ -393,4 +393,150 @@ Er du sikker?</string>
     <string name="room_details_selected">valgte</string>
     <string name="malformed_id">Ugyldigt ID. Det skal være en e-mail adresse eller et Matrix ID som \'@lokaldel:domæne\'</string>
     <string name="room_details_people_invited_group_name">INVITERET</string>
+    <string name="title_activity_group_details">Detaljer om community</string>
+
+    <string name="loading">Loader...</string>
+
+    <string name="action_exit">Afslut</string>
+    <string name="actions">Handlinger</string>
+    <string name="bottom_action_groups">Communities</string>
+
+    <string name="home_filter_placeholder_groups">Søg efter communities</string>
+
+    <string name="groups_header">Communities</string>
+    <string name="no_group_placeholder">Ingen grupper</string>
+
+    <string name="start_new_chat_prompt_msg">Er du sikker på, at du ønsker at starte en ny chat med %s?</string>
+    <string name="start_voice_call_prompt_msg">Er du sikker på, at du ønsker at starte et opkald?</string>
+    <string name="start_video_call_prompt_msg">Er du sikker på, at du ønsker at du ønsker at starte et videoopkald?</string>
+
+    <string name="groups_invite_header">Inviter</string>
+    <string name="groups_list">Liste over grupper</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">1 medlemsændring</item>
+	<item quantity="other">%d medlemsændringer</item>
+</plurals>
+
+    <string name="list_members">Medlemsoversigt</string>
+    <string name="room_sync_in_progress">Synkroniserer...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 aktivt medlem</item>
+	<item quantity="other">%d aktive medlemmer</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 medlem</item>
+	<item quantity="other">%d medlemmer</item>
+</plurals>
+    <string name="room_participants_kick_prompt_msg">Er du sikker på, at du ønsker at fjerne denne bruger fra denne chat?</string>
+    <string name="room_participants_ban_prompt_msg">Er du sikker på, at du ønsker at blokere denne bruger fra denne chat?</string>
+
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 ny meddelelse</item>
+	<item quantity="other">%d nye meddelelser</item>
+</plurals>
+
+    <string name="room_event_action_report_prompt_reason">Årsag til rapportering</string>
+    <string name="room_event_action_report_prompt_ignore_user">Ønsker du at skjule alle meddelelser fra denne bruger?</string>
+    <string name="room_event_action_cancel_upload">Annuller upload</string>
+    <string name="room_event_action_cancel_download">Annuller download</string>
+
+    <string name="room_displayname_invite_from">Invitation fra %s</string>
+    <string name="room_displayname_room_invite">Invitation til rum</string>
+    <string name="room_displayname_two_members">%1$s og %2$s</string>
+
+    <string name="room_displayname_many_members">%1$s og %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 anden</item>
+	<item quantity="other">%d andre</item>
+</plurals>
+
+    <string name="room_displayname_no_title">Tomt rum</string>
+
+    <string name="search_hint">Søg</string>
+    <string name="search_members_hint">Filtrer medlemmer i rum</string>
+    <string name="search_no_results">Ingen resultater</string>
+    <string name="tab_title_search_rooms">RUM</string>
+    <string name="tab_title_search_messages">MEDDELELSER</string>
+    <string name="tab_title_search_people">FOLK</string>
+    <string name="tab_title_search_files">FILER</string>
+
+    <string name="room_recents_directory">OVERSIGT</string>
+    <string name="room_recents_favourites">FAVORITTER</string>
+    <string name="room_recents_conversations">RUM</string>
+    <string name="room_recents_low_priority">LAV PRIORITET</string>
+    <string name="room_recents_invites">INVITATIONER</string>
+    <string name="room_recents_start_chat">Start chat</string>
+    <string name="room_recents_create_room">Opret rum</string>
+    <string name="room_recents_join_room_prompt">Indtast ID eller alias på et rum</string>
+
+    <string name="directory_search_results_title">Gennemse oversigt</string>
+    <string name="directory_search_room">%1$d rum</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 rum</item>
+	<item quantity="other">%d rum</item>
+</plurals>
+    <string name="directory_search_room_for">%1$d rum fundet for %2$s</string>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s rum fundet for %2$s</item>
+	<item quantity="other">%1$s rum fundet for %2$s</item>
+</plurals>
+    <string name="directory_searching_title">Søger i liste...</string>
+
+    <string name="room_settings_all_messages_noisy">Alle meddelelser (højlydt)</string>
+    <string name="room_settings_all_messages">Alle meddelelser</string>
+    <string name="room_settings_favourite">Favorit</string>
+    <string name="room_settings_de_prioritize">Nedprioriter</string>
+    <string name="room_settings_direct_chat">Direkte chat</string>
+    <string name="room_settings_leave_conversation">Forlad samtale</string>
+    <string name="room_settings_forget">Glem</string>
+    <string name="room_settings_add_homescreen_shortcut">Opret genvej på startskærm</string>
+
+    <string name="room_sliding_menu_messages">Meddelelser</string>
+    <string name="room_sliding_menu_settings">Indstillinger</string>
+    <string name="room_sliding_menu_version">"Version "</string>
+    <string name="room_sliding_menu_term_and_conditions">Anvendelsesbetingelser</string>
+    <string name="room_sliding_menu_third_party_notices">Beskeder fra tredjepart</string>
+    <string name="room_sliding_menu_copyright">Copyright</string>
+    <string name="room_sliding_menu_privacy_policy">Privacy-politik</string>
+
+    <string name="settings_profile_picture">Profilbillede</string>
+    <string name="settings_display_name">Navn til visning</string>
+    <string name="settings_email_address">Email</string>
+    <string name="settings_add_email_address">Tilføj emailadresse</string>
+    <string name="settings_phone_number">Telefon</string>
+    <string name="settings_add_phone_number">Tilføj telefonnummer</string>
+    <string name="settings_turn_screen_on">Tænd skærmen 3 sekunder</string>
+
+    <string name="settings_containing_my_display_name">Meddelelser med mit navn</string>
+    <string name="settings_containing_my_user_name">Meddelelser med mit brugernavn</string>
+    <string name="settings_messages_in_one_to_one">Meddelelser i direkte chats</string>
+    <string name="settings_messages_in_group_chat">Meddelelser i gruppechats</string>
+    <string name="settings_invited_to_room">Når jeg bliver inviteret til et rum</string>
+    <string name="settings_call_invitations">Invitation til opkald</string>
+    <string name="settings_messages_sent_by_bot">Meddelelser sendt af bot</string>
+
+    <string name="settings_start_on_boot">Start ved opstart</string>
+    <string name="settings_background_sync">Synkronisering i baggrunden</string>
+    <string name="settings_enable_background_sync">Aktiver baggrundssynkronisering</string>
+    <string name="settings_set_sync_timeout">Timeout for synkroniseringskald</string>
+    <string name="settings_set_sync_delay">Pause mellem to synkroniseringskald</string>
+    <string name="settings_second">sekund</string>
+    <string name="settings_seconds">sekunder</string>
+
+    <string name="settings_version">Version</string>
+    <string name="settings_app_term_conditions">Anvendelsesbetingelser</string>
+    <string name="settings_third_party_notices">Meddelelser fra tredjepart</string>
+    <string name="settings_copyright">Copyright</string>
+    <string name="settings_privacy_policy">Privacy-politik</string>
+    <string name="settings_clear_cache">Ryd cache</string>
+    <string name="settings_clear_medias_cache">Ryd mediecache</string>
+    <string name="settings_keep_media">Beholde mediefiler</string>
+
+    <string name="settings_user_settings">Brugerindstillinger</string>
+    <string name="settings_ignored_users">Ignorerede brugere</string>
+    <string name="settings_other">Andet</string>
+    <string name="settings_advanced">Avanceret</string>
+    <string name="settings_cryptography">Kryptografi</string>
+    <string name="settings_contact">Lokale kontakter</string>
     </resources>
