@@ -133,14 +133,14 @@ public class EventStreamService extends Service {
     public enum ForegroundNotificationState {
         // the foreground notification is not displayed
         NONE,
-        // initial sync or the app is resuming in progress
-        // if started, we want the application completes its first sync after startup even in background
+        // initial sync in progress or the app is resuming
+        // once started, we want the application completes its first sync even if it is background meanwhile
         INITIAL_SYNCING,
         // fdroid mode or GCM registration failed
-        // put this service in foreground to keep it in life
+        // put this service in foreground to keep the app in life
         LISTENING_FOR_EVENTS,
         // there is a pending incoming call
-        // we need to continue to sync in background to keep the call signaling up
+        // continue to sync in background to keep the call signaling up
         INCOMING_CALL,
         // a call is in progress
         // same requirement as INCOMING_CALL
@@ -846,8 +846,8 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * Manages the "listen for events" and "synchronising" notifications
-     * @TODO: Refine comments. It does more than that.
+     * Manages the sticky foreground notification.
+     * It display the background state of the app ("Listen for events", "synchronising", ...)
      */
     public void refreshStatusNotification() {
         Log.d(LOG_TAG, "## refreshStatusNotification from state " + mForegroundNotificationState);
@@ -1256,8 +1256,7 @@ public class EventStreamService extends Service {
                     nm.notify(NOTIF_ID_MESSAGES, notification);
                 }
                 else {
-                   // TODO: Really?
-                   dismissMessagesNotification(nm);
+                    Log.e(LOG_TAG, "## onStaticNotifiedEvent() : cannot create a new notification");
                 }
             }
         } else if (0 == unreadMessagesCount) {
@@ -1274,6 +1273,7 @@ public class EventStreamService extends Service {
      * @param messages the messages list
      * @param rule     the bing rule to use
      */
+    // TODO: Not used?
     private void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
         NotificationUtils.addNotificationChannels(this);
         final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
