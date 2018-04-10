@@ -242,7 +242,8 @@ public class PreferencesManager {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
         }
-        // do not ask before Android M, the setting did not exist
+
+        // no issue before Android M, battery optimisations did not exist
         return true;
     }
 

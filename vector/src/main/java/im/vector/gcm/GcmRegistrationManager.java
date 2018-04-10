@@ -1138,27 +1138,27 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * @TODO
+     * Tell if the application can run in background.
+     * It depends on the app settings and the "isIgnoringBatteryOptimizations" permission.
      *
      * @return true if the background sync is allowed
      */
     public boolean isBackgroundSyncAllowed() {
-        // @TODO: This setting must linked to the Android 6 permission to run in background
-        // ie, no permission, no background sync
+        // First check if the application has the "run in background" permission
+        // No permission, no background sync
+        if (!PreferencesManager.isIgnoringBatteryOptimizations(mContext))
+        {
+            return false;
+        }
+
+        // Then, this depends on the user setting
         return getGcmSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
     }
 
     /**
-     * Tell if the application can be restarted in background
-     *
-     * @return true if the application can be restarted in background
-     */
-    public boolean canStartAppInBackground() {
-        return isBackgroundSyncAllowed() || (null != getStoredRegistrationToken());
-    }
-
-    /**
-     * Allow the background sync
+     * Allow the background sync.
+     * Background sync (isBackgroundSyncAllowed) is really enabled if the "isIgnoringBatteryOptimizations"
+     * permission has been granted.
      *
      * @param isAllowed true to allow the background sync.
      */
@@ -1171,6 +1171,15 @@ public final class GcmRegistrationManager {
 
         // when GCM is disabled, enable / disable the "Listen for events" notifications
         CommonActivityUtils.onGcmUpdate(mContext);
+    }
+
+    /**
+     * Tell if the application can be restarted in background
+     *
+     * @return true if the application can be restarted in background
+     */
+    public boolean canStartAppInBackground() {
+        return isBackgroundSyncAllowed() || (null != getStoredRegistrationToken());
     }
 
     /**
