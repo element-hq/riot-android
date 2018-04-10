@@ -139,9 +139,6 @@ public final class GcmRegistrationManager {
     // 3 states : null not initialized (retrieved by flavor)
     private static Boolean mUseGCM;
 
-    //
-    private boolean mLastBatteryOptimizationStatus;
-
     // pusher rest client
     private Map<String, PushersRestClient> mPushersRestClients = new HashMap<>();
 
@@ -182,7 +179,6 @@ public final class GcmRegistrationManager {
         });
 
         mRegistrationState = getStoredRegistrationState();
-        mLastBatteryOptimizationStatus = PreferencesManager.isIgnoringBatteryOptimizations(mContext);
         mRegistrationToken = getStoredRegistrationToken();
     }
 
@@ -536,8 +532,7 @@ public final class GcmRegistrationManager {
      * @return true if the registration was done with event Id only
      */
     public void onAppResume() {
-        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) &&
-                (mLastBatteryOptimizationStatus != PreferencesManager.isIgnoringBatteryOptimizations(mContext))) {
+        if (mRegistrationState == RegistrationState.SERVER_REGISTERED) {
             Log.d(LOG_TAG, "## onAppResume() : force the GCM registration");
 
             forceSessionsRegistration(new ThirdPartyRegistrationListener() {
