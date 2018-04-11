@@ -600,7 +600,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         if (!gcmMgr.useGCM()) {
             // f-droid does not need the permission.
-            // It is still using the "Listen for events" notification
+            // It is still using the technique of sticky "Listen for events" notification
             return;
         }
 
@@ -623,14 +623,15 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
                     Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
 
+                    // this is the normal policy on our "Notification Privacy" setting page:
                     // use GCM, share only meta data with it. Then, background sync to fetch message content
                     gcmMgr.setContentSendingAllowed(false);
                     gcmMgr.setBackgroundSyncAllowed(true);
                     gcmMgr.forceSessionsRegistration(null);
 
-                    // display the system permission grant dialog
-                    // if already granted, the system will show not show this dialog.
-                    // note: If the user finally does not grant the permission, gcmMgr.isBackgroundSyncAllowed()
+                    // display the system dialog for granting the IgnoreBatteryOptimizations permission.
+                    // If already granted, the system will not show it.
+                    // Note: If the user finally does not grant the permission, gcmMgr.isBackgroundSyncAllowed()
                     // will return false and low detail notifications will be displayed.
                     Intent intent = new Intent();
                     intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);

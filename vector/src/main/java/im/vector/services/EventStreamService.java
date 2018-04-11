@@ -841,7 +841,7 @@ public class EventStreamService extends Service {
 
     /**
      * Manages the sticky foreground notification.
-     * It display the background state of the app ("Listen for events", "synchronising", ...)
+     * It displays the background state of the app ("Listen for events", "synchronising", ...)
      */
     public void refreshForegroundNotification() {
         Log.d(LOG_TAG, "## refreshForegroundNotification from state " + mForegroundNotificationState);

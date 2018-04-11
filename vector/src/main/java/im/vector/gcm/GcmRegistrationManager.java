@@ -1134,19 +1134,19 @@ public final class GcmRegistrationManager {
 
     /**
      * Tell if the application can run in background.
-     * It depends on the app settings and the "isIgnoringBatteryOptimizations" permission.
+     * It depends on the app settings and the `IgnoringBatteryOptimizations` permission.
      *
      * @return true if the background sync is allowed
      */
     public boolean isBackgroundSyncAllowed() {
-        // First check if the application has the "run in background" permission
+        // first check if the application has the "run in background" permission.
         // No permission, no background sync
         if (!PreferencesManager.isIgnoringBatteryOptimizations(mContext))
         {
             return false;
         }
 
-        // Then, this depends on the user setting
+        // then, this depends on the user setting
         return getGcmSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
     }
 
