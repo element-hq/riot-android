@@ -106,6 +106,7 @@ import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.CountryPickerActivity;
 import im.vector.activity.LanguagePickerActivity;
+import im.vector.activity.NotificationPrivacyActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
@@ -145,6 +146,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static final int REQUEST_PHONEBOOK_COUNTRY = 789;
     private static final int REQUEST_LOCALE = 777;
     private static final int REQUEST_NOTIFICATION_RINGTONE = 888;
+    private static final int REQUEST_NOTIFICATION_PRIVACY = 999;
 
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
@@ -551,6 +553,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 return false;
             }
         });
+
+
+        // notifiaction privacy
+        setNotificationPricacyPreferences();
+
+
 
         // push rules
         for (String resourceText : mPushesRuleByResourceId.keySet()) {
@@ -1217,6 +1225,18 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     }
                 });
 
+            }
+        });
+    }
+
+    private void setNotificationPricacyPreferences() {
+        Preference selectedNotificationPrivacyPreference = findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
+
+        selectedNotificationPrivacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(NotificationPrivacyActivity.getIntent(getActivity()));
+                return true;
             }
         });
     }
