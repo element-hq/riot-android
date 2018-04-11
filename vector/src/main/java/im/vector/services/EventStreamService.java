@@ -1250,30 +1250,22 @@ public class EventStreamService extends Service {
                 notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 mBackgroundNotificationStrings.add(0, notifiedLine);
-                Notification notification = NotificationUtils.buildMessagesListNotification(context, mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
-
-                if (null != notification) {
-                    nm.notify(NOTIF_ID_MESSAGES, notification);
-                }
-                else {
-                    Log.e(LOG_TAG, "## onStaticNotifiedEvent() : cannot create a new notification");
-                }
+                getInstance().displayMessagesNotification(mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
             }
         } else if (0 == unreadMessagesCount) {
             mBackgroundNotificationStrings.clear();
             mLastBackgroundNotificationUnreadCount = 0;
             mLastBackgroundNotificationRoomId = null;
-            dismissMessagesNotification(nm);
+            getInstance().displayMessagesNotification(null, null);
         }
     }
 
     /**
      * Display a list of messages in the messages notification.
      *
-     * @param messages the messages list
+     * @param messages the messages list, null will hide the messages notification.
      * @param rule     the bing rule to use
      */
-    // TODO: Not used?
     private void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
         NotificationUtils.addNotificationChannels(this);
         final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
@@ -1303,15 +1295,6 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * Dismiss the messages notifications.
-     *
-     * @param nm the notifications manager
-     */
-    static private void dismissMessagesNotification(NotificationManagerCompat nm) {
-        nm.cancel(NOTIF_ID_MESSAGES);
-    }
-
-    /**
      * Refresh the messages notification.
      * Must always be called in getNotificationsHandler() thread.
      */
@@ -1330,7 +1313,7 @@ public class EventStreamService extends Service {
             new Handler(getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    dismissMessagesNotification(nm);
+                    displayMessagesNotification(null, null);
                 }
             });
         } else if (refreshNotifiedMessagesList()) {
@@ -1339,7 +1322,7 @@ public class EventStreamService extends Service {
                 new Handler(getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        dismissMessagesNotification(nm);
+                        displayMessagesNotification(null, null);
                     }
                 });
             } else {
@@ -1398,11 +1381,11 @@ public class EventStreamService extends Service {
                             if (null != notif) {
                                 nm.notify(NOTIF_ID_MESSAGES, notif);
                             } else {
-                                nm.cancel(NOTIF_ID_MESSAGES);
+                                displayMessagesNotification(null, null);
                             }
                         } else {
                             Log.e(LOG_TAG, "## refreshMessagesNotification() : mNotifiedEventsByRoomId is empty");
-                            dismissMessagesNotification(nm);
+                            displayMessagesNotification(null, null);
                         }
                     }
                 });
