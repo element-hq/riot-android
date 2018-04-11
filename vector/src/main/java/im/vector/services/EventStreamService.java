@@ -1291,6 +1291,7 @@ public class EventStreamService extends Service {
                 @Override
                 public void run() {
                     nm.cancel(NOTIF_ID_MESSAGES);
+                    RoomsNotifications.deleteCachedRoomNotifications(VectorApp.getInstance());
                 }
             });
         } else {
