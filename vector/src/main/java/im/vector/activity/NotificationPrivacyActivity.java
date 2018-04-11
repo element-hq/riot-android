@@ -18,13 +18,22 @@ package im.vector.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import im.vector.R;
 
 public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
+
+    @BindView(R.id.tv_apps_needs_permission)
+    TextView tvNeedPermission;
+
 
 
     /*
@@ -49,9 +58,9 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setTitle(R.string.settings_notification_privacy);
         setContentView(R.layout.activity_notification_privacy);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -60,6 +69,12 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            tvNeedPermission.setVisibility(View.VISIBLE);
+        } else{
+            tvNeedPermission.setVisibility(View.GONE);
         }
     }
 }
