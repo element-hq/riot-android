@@ -957,6 +957,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             // refresh anything else
             refreshPreferences();
+            refreshNotificationPrivacy();
             refreshDisplay();
             refreshBackgroundSyncPrefs();
         }
@@ -1444,6 +1445,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     refreshNotificationRingTone();
                     break;
                 }
+                case REQUEST_NOTIFICATION_PRIVACY:
+                    refreshNotificationPrivacy();
+                    // TODO handle and display result of radio button selection
+                    break;
                 case REQUEST_E2E_FILE_REQUEST_CODE:
                     importKeys(data);
                     break;
