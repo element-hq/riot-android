@@ -59,8 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="3dp"
-                    android:allowUndo="true"/>
+                    android:layout_marginLeft="3dp" />
 
                 <TextView
                     android:id="@+id/tv_normal_notification_privacy"
@@ -150,8 +149,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/tv_apps_no_permission"
                     android:layout_marginLeft="3dp"
-                    android:layout_marginTop="15dp"
-                    android:allowUndo="true"/>
+                    android:layout_marginTop="15dp" />
 
                 <TextView
                     android:id="@+id/tv_notification_low_detail"
@@ -202,8 +200,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/tv_message_not_shown"
                     android:layout_marginLeft="3dp"
-                    android:layout_marginTop="15dp"
-                    android:allowUndo="true"/>
+                    android:layout_marginTop="15dp" />
 
                 <TextView
                     android:id="@+id/tv_notification_reduce_privacy"

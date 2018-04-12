@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -40,7 +39,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -76,7 +74,6 @@ import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.group.Group;
-import org.matrix.androidsdk.rest.model.search.SearchGroup;
 import org.matrix.androidsdk.rest.model.sync.DeviceInfo;
 import org.matrix.androidsdk.rest.model.sync.DevicesListResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -291,6 +288,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
         refreshNotificationRingTone();
+
+        EditTextPreference notificationPrivacyPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
+        notificationPrivacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                // TODO use startActivityForResult to get the notification privacy preference key selected
+                startActivity(NotificationPrivacyActivity.getIntent(getActivity()));
+                return true;
+            }
+        });
+        refreshNotificationPrivacy();
 
         // application version
         VectorCustomActionEditTextPreference versionTextPreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY);
@@ -553,12 +561,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 return false;
             }
         });
-
-
-        // notifiaction privacy
-        setNotificationPricacyPreferences();
-
-
 
         // push rules
         for (String resourceText : mPushesRuleByResourceId.keySet()) {
@@ -1229,18 +1231,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         });
     }
 
-    private void setNotificationPricacyPreferences() {
-        Preference selectedNotificationPrivacyPreference = findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
-
-        selectedNotificationPrivacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(NotificationPrivacyActivity.getIntent(getActivity()));
-                return true;
-            }
-        });
-    }
-
     /**
      * Update a push rule.
      */
@@ -1420,6 +1410,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private void refreshNotificationRingTone() {
         EditTextPreference notificationRingTonePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
         notificationRingTonePreference.setSummary(PreferencesManager.getNotificationRingToneName(getActivity()));
+    }
+
+    private void refreshNotificationPrivacy() {
+        EditTextPreference notificationPrivacyPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
+        // TODO set the right notification privacy preference name
+        notificationPrivacyPreference.setSummary("Normal");
     }
 
     @Override
