@@ -1,6 +1,7 @@
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
