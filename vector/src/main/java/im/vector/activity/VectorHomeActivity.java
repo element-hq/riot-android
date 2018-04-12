@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -114,10 +115,12 @@ import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
+import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
+import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -580,6 +583,77 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         displayCryptoCorruption();
 
         addBadgeEventsListener();
+
+        checkNotificationPrivacySetting();
+    }
+
+    /**
+     * Ask the user to choose a notification privacy policy.
+     */
+    private void checkNotificationPrivacySetting() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            // The "Run in background" permission exists from android 6
+            return;
+        }
+
+        final GcmRegistrationManager gcmMgr = Matrix.getInstance(VectorHomeActivity.this).getSharedGCMRegistrationManager();
+
+        if (!gcmMgr.useGCM()) {
+            // f-droid does not need the permission.
+            // It is still using the technique of sticky "Listen for events" notification
+            return;
+        }
+
+        // ask user what notification privacy they want. Ask it once
+        if (!PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
+            PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this, true);
+
+            // by default, use GCM and low detail notifications
+            gcmMgr.setContentSendingAllowed(false);
+            gcmMgr.setBackgroundSyncAllowed(false);
+            gcmMgr.forceSessionsRegistration(null);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.startup_notification_privacy_title);
+            builder.setMessage(R.string.startup_notification_privacy_message);
+
+            builder.setPositiveButton(R.string.startup_notification_privacy_button_grant, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
+
+                    // this is the normal policy on our "Notification Privacy" setting page:
+                    // use GCM, share only meta data with it. Then, background sync to fetch message content
+                    gcmMgr.setContentSendingAllowed(false);
+                    gcmMgr.setBackgroundSyncAllowed(true);
+                    gcmMgr.forceSessionsRegistration(null);
+
+                    // display the system dialog for granting the IgnoreBatteryOptimizations permission.
+                    // If already granted, the system will not show it.
+                    // Note: If the user finally does not grant the permission, gcmMgr.isBackgroundSyncAllowed()
+                    // will return false and low detail notifications will be displayed.
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                }
+            });
+
+            builder.setNegativeButton(R.string.startup_notification_privacy_button_other, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Log.d(LOG_TAG, "checkNotificationPrivacySetting: user opens notification policy setting screen");
+
+                    // @TODO: Audrey: Open the notification policy setting screen
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     @Override

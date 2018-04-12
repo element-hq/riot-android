@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,6 +135,8 @@ public class PreferencesManager {
 
     private static final String SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY";
 
+    private static final String DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY = "DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY";
+
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
     private static final int MEDIA_SAVING_1_MONTH = 2;
@@ -205,18 +208,45 @@ public class PreferencesManager {
     }
 
     /**
-     * Tells if the battery optimisations are ignored for this application.
+     * Tells if we have already asked the user to disable battery optimisations on android >= M devices.
      *
      * @param context the context
-     * @return true if the battery optimisations are ignored.
+     * @return true if it was already requested
+     */
+    public static boolean didAskUserToIgnoreBatteryOptimizations(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, false);
+    }
+
+    /**
+     * Mark as requested the question to disable battery optimisations.
+     *
+     * @param context the context
+     */
+    public static void setDidAskUserToIgnoreBatteryOptimizations(Context context, boolean asked) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, asked);
+        editor.commit();
+    }
+
+    /**
+     * Tells if the application ignores battery optimizations.
+     *
+     * Ignoring them allows the app to run in background to make background sync with the homeserver.
+     * This user option appears on Android M but Android O enforces its usage and kills apps not
+     * authorised by the user to run in background.
+     *
+     * @param context the context
+     * @return true if battery optimisations are ignored
      */
     @SuppressLint("NewApi")
-    public static boolean useBatteryOptimisation(Context context) {
+    public static boolean isIgnoringBatteryOptimizations(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return !((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
+            return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
         }
 
-        return false;
+        // no issue before Android M, battery optimisations did not exist
+        return true;
     }
 
     /**

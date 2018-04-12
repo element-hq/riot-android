@@ -602,6 +602,12 @@
     <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
 
+    <!-- startup -->
+    <string name="startup_notification_privacy_title">Notification Privacy</string>
+    <string name="startup_notification_privacy_message">Riot can run in the background to manage your notifications securely and privately (this might affect battery usage).</string>
+    <string name="startup_notification_privacy_button_grant">Grant permission</string>
+    <string name="startup_notification_privacy_button_other">Choose another option</string>
+
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
