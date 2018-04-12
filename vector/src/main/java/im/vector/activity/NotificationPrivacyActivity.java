@@ -16,7 +16,6 @@
 
 package im.vector.activity;
 
-import android.app.assist.AssistStructure;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -35,7 +34,6 @@ import im.vector.R;
 public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
 
     private static final String LOG_TAG = NotificationPrivacyActivity.class.getSimpleName();
-    public static AssistStructure.ViewNode radioButtonPrivacyNormal;
 
     @BindView(R.id.tv_apps_needs_permission)
     TextView tvNeedPermission;

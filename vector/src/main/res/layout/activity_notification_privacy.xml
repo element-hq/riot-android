@@ -44,7 +44,9 @@
                     android:layout_alignTop="@+id/iv_warning_notification_privacy"
                     android:text="@string/settings_notification_privacy_warning"
                     android:textSize="13sp"
-                    android:layout_marginLeft="40dp"/>
+                    android:textColor="@color/default_text_light_color_dark"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="1dp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -67,10 +69,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="@string/normal"
-                    android:textSize="18sp"
-                    android:layout_marginTop="3dp"
+                    android:textSize="20sp"
+                    android:layout_marginTop="2dp"
                     android:layout_marginLeft="40dp"
-                    android:textColor="@color/primary_color_dark"/>
+                    android:textStyle="italic"/>
 
                 <TextView
                     android:id="@+id/tv_apps_needs_permission"
@@ -129,9 +131,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="@string/settings_notification_privacy_power_saving"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:layout_marginLeft="40dp"
-                    android:textColor="@color/primary_color_dark" />
+                    android:textStyle="italic" />
 
                 <TextView
                     android:id="@+id/tv_apps_no_permission"
@@ -160,10 +162,10 @@
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/tv_apps_no_permission"
                     android:text="@string/settings_notification_privacy_low_detail"
-                    android:layout_marginTop="18dp"
-                    android:textSize="18sp"
+                    android:layout_marginTop="17dp"
+                    android:textSize="20sp"
                     android:layout_marginLeft="40dp"
-                    android:textColor="@color/primary_color_dark"/>
+                    android:textStyle="italic"/>
 
                 <TextView
                     android:id="@+id/tv_notifications_gcm_low"
@@ -212,10 +214,10 @@
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/tv_message_not_shown"
                     android:text="@string/settings_notification_privacy_reduced"
-                    android:layout_marginTop="18dp"
-                    android:textSize="18sp"
+                    android:layout_marginTop="17dp"
+                    android:textSize="20sp"
                     android:layout_marginLeft="40dp"
-                    android:textColor="@color/primary_color_dark"/>
+                    android:textStyle="italic"/>
 
                 <TextView
                     android:id="@+id/tv_notifications_gcm_reduced"
@@ -237,7 +239,6 @@
                     android:textSize="13sp"
                     android:textColor="@color/default_text_light_color_dark"
                     android:text="@string/settings_notification_privacy_nosecure_message_content"/>
-
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
