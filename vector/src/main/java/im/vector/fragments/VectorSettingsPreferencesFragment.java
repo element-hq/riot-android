@@ -88,7 +88,6 @@ import org.matrix.androidsdk.util.ResourceUtils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -116,7 +115,6 @@ import im.vector.preference.VectorGroupPreference;
 import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
-import im.vector.util.RageShake;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -143,6 +141,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static final int REQUEST_PHONEBOOK_COUNTRY = 789;
     private static final int REQUEST_LOCALE = 777;
     private static final int REQUEST_NOTIFICATION_RINGTONE = 888;
+    // TODO use this constant to handle startActivityForResult for notification privacy
     private static final int REQUEST_NOTIFICATION_PRIVACY = 999;
 
     // rule Id <-> preference name
@@ -1045,14 +1044,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             if (null != preference) {
                 if (preference instanceof BingRulePreference) {
                     BingRulePreference bingRulePreference = (BingRulePreference) preference;
-                    bingRulePreference.setEnabled((null != rules) && isConnected);
+                    bingRulePreference.setEnabled((null != rules) && isConnected && gcmMgr.areDeviceNotificationsAllowed());
                     bingRulePreference.setBingRule(mSession.getDataHandler().pushRules().findDefaultRule(mPushesRuleByResourceId.get(resourceText)));
-                } else {
+                } else if (preference instanceof CheckBoxPreference) {
                     CheckBoxPreference switchPreference = (CheckBoxPreference) preference;
                     if (resourceText.equals(PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)) {
                         switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
                     } else if (resourceText.equals(PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY)) {
                         switchPreference.setChecked(gcmMgr.isScreenTurnedOn());
+                        switchPreference.setEnabled(gcmMgr.areDeviceNotificationsAllowed());
                     } else {
                         switchPreference.setEnabled((null != rules) && isConnected);
                         switchPreference.setChecked(preferences.getBoolean(resourceText, false));
@@ -1060,6 +1060,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             }
         }
+
+        // If notifications are disable for the current user account or for the current user device
+        // The others notifications settings have to be disable too
+        boolean areNotifAllowed = rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL).isEnabled;
+        Preference notificationSoundPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
+        Preference notificationPrivacyPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
+
+        notificationSoundPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed());
+        notificationPrivacyPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed());
     }
 
     private void addButtons() {
