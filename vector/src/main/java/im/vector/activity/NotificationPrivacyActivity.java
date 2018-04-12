@@ -31,6 +31,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
 
+/*
+ * This activity allows the user to choose a notifications privacy policy.
+ * The interest is to educate the user on the impacts of his choice of the type of notifications
+ * on the privacy policy of his data.
+ */
 public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
 
     private static final String LOG_TAG = NotificationPrivacyActivity.class.getSimpleName();
