@@ -71,8 +71,7 @@
                     android:text="@string/normal"
                     android:textSize="20sp"
                     android:layout_marginTop="2dp"
-                    android:layout_marginLeft="40dp"
-                    android:textStyle="italic"/>
+                    android:layout_marginLeft="40dp" />
 
                 <TextView
                     android:id="@+id/tv_apps_needs_permission"
@@ -122,7 +121,7 @@
                 android:id="@+id/rly_power_saving_options"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp">
 
                 <TextView
@@ -132,8 +131,7 @@
                     android:layout_alignParentLeft="true"
                     android:text="@string/settings_notification_privacy_power_saving"
                     android:textSize="20sp"
-                    android:layout_marginLeft="40dp"
-                    android:textStyle="italic" />
+                    android:layout_marginLeft="40dp" />
 
                 <TextView
                     android:id="@+id/tv_apps_no_permission"
@@ -164,8 +162,7 @@
                     android:text="@string/settings_notification_privacy_low_detail"
                     android:layout_marginTop="17dp"
                     android:textSize="20sp"
-                    android:layout_marginLeft="40dp"
-                    android:textStyle="italic"/>
+                    android:layout_marginLeft="40dp" />
 
                 <TextView
                     android:id="@+id/tv_notifications_gcm_low"
@@ -216,8 +213,7 @@
                     android:text="@string/settings_notification_privacy_reduced"
                     android:layout_marginTop="17dp"
                     android:textSize="20sp"
-                    android:layout_marginLeft="40dp"
-                    android:textStyle="italic"/>
+                    android:layout_marginLeft="40dp" />
 
                 <TextView
                     android:id="@+id/tv_notifications_gcm_reduced"
