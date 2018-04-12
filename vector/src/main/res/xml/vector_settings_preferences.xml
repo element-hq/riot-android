@@ -137,11 +137,6 @@
 
     <PreferenceCategory android:title="@string/settings_notifications">
 
-        <im.vector.preference.VectorCustomActionEditTextPreference
-            android:dialogTitle="@string/settings_notification_ringtone"
-            android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
-            android:title="@string/settings_notification_ringtone" />
-
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
             android:title="@string/settings_enable_all_notif" />
@@ -150,6 +145,16 @@
             android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
             android:key="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:title="@string/settings_enable_this_device" />
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:dialogTitle="@string/settings_notification_privacy"
+            android:key="SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY"
+            android:title="@string/settings_notification_privacy" />
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:dialogTitle="@string/settings_notification_ringtone"
+            android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
+            android:title="@string/settings_notification_ringtone" />
 
         <im.vector.preference.VectorSwitchPreference
             android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"

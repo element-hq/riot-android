@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -40,7 +39,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -76,7 +74,6 @@ import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.group.Group;
-import org.matrix.androidsdk.rest.model.search.SearchGroup;
 import org.matrix.androidsdk.rest.model.sync.DeviceInfo;
 import org.matrix.androidsdk.rest.model.sync.DevicesListResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -91,7 +88,6 @@ import org.matrix.androidsdk.util.ResourceUtils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -106,6 +102,7 @@ import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.CountryPickerActivity;
 import im.vector.activity.LanguagePickerActivity;
+import im.vector.activity.NotificationPrivacyActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
@@ -118,7 +115,6 @@ import im.vector.preference.VectorGroupPreference;
 import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
-import im.vector.util.RageShake;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -145,6 +141,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static final int REQUEST_PHONEBOOK_COUNTRY = 789;
     private static final int REQUEST_LOCALE = 777;
     private static final int REQUEST_NOTIFICATION_RINGTONE = 888;
+    // TODO use this constant to handle startActivityForResult for notification privacy
+    private static final int REQUEST_NOTIFICATION_PRIVACY = 999;
 
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
@@ -289,6 +287,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
         refreshNotificationRingTone();
+
+        EditTextPreference notificationPrivacyPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
+        notificationPrivacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                // TODO use startActivityForResult to get the notification privacy preference key selected
+                startActivity(NotificationPrivacyActivity.getIntent(getActivity()));
+                return true;
+            }
+        });
+        refreshNotificationPrivacy();
 
         // application version
         VectorCustomActionEditTextPreference versionTextPreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY);
@@ -948,6 +957,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             // refresh anything else
             refreshPreferences();
+            refreshNotificationPrivacy();
             refreshDisplay();
             refreshBackgroundSyncPrefs();
         }
@@ -1035,14 +1045,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             if (null != preference) {
                 if (preference instanceof BingRulePreference) {
                     BingRulePreference bingRulePreference = (BingRulePreference) preference;
-                    bingRulePreference.setEnabled((null != rules) && isConnected);
+                    bingRulePreference.setEnabled((null != rules) && isConnected && gcmMgr.areDeviceNotificationsAllowed());
                     bingRulePreference.setBingRule(mSession.getDataHandler().pushRules().findDefaultRule(mPushesRuleByResourceId.get(resourceText)));
-                } else {
+                } else if (preference instanceof CheckBoxPreference) {
                     CheckBoxPreference switchPreference = (CheckBoxPreference) preference;
                     if (resourceText.equals(PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)) {
                         switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
                     } else if (resourceText.equals(PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY)) {
                         switchPreference.setChecked(gcmMgr.isScreenTurnedOn());
+                        switchPreference.setEnabled(gcmMgr.areDeviceNotificationsAllowed());
                     } else {
                         switchPreference.setEnabled((null != rules) && isConnected);
                         switchPreference.setChecked(preferences.getBoolean(resourceText, false));
@@ -1050,6 +1061,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             }
         }
+
+        // If notifications are disabled for the current user account or for the current user device
+        // The others notifications settings have to be disable too
+        boolean areNotifAllowed = rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL).isEnabled;
+        Preference notificationSoundPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
+        Preference notificationPrivacyPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
+
+        notificationSoundPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed());
+        notificationPrivacyPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed());
     }
 
     private void addButtons() {
@@ -1402,6 +1422,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         notificationRingTonePreference.setSummary(PreferencesManager.getNotificationRingToneName(getActivity()));
     }
 
+    private void refreshNotificationPrivacy() {
+        EditTextPreference notificationPrivacyPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
+        // TODO set the right notification privacy preference name
+        notificationPrivacyPreference.setSummary("Normal");
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1419,6 +1445,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     refreshNotificationRingTone();
                     break;
                 }
+                case REQUEST_NOTIFICATION_PRIVACY:
+                    refreshNotificationPrivacy();
+                    // TODO handle and display result of radio button selection
+                    break;
                 case REQUEST_E2E_FILE_REQUEST_CODE:
                     importKeys(data);
                     break;
