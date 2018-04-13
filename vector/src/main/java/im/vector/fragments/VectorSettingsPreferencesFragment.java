@@ -370,7 +370,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // privacy policy
         EditTextPreference privacyPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY);
 
-        if (null != termConditionsPreference) {
+        if (null != privacyPreference) {
             privacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -625,9 +625,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         mSyncRequestTimeoutPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY);
         mSyncRequestDelayPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY);
         final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY);
-        final CheckBoxPreference allowContentSendingPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_ENABLE_CONTENT_SENDING_PREFERENCE_KEY);
 
-        if (null != useBackgroundSyncPref || null != allowContentSendingPref) {
+        if (null != useBackgroundSyncPref) {
             final GcmRegistrationManager gcmMgr = Matrix.getInstance(appContext).getSharedGCMRegistrationManager();
 
             final GcmRegistrationManager.ThirdPartyRegistrationListener listener = new GcmRegistrationManager.ThirdPartyRegistrationListener() {
@@ -669,42 +668,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                         Matrix.getInstance(VectorSettingsPreferencesFragment.this.getActivity()).getSharedGCMRegistrationManager().forceSessionsRegistration(listener);
 
-                        // Display the content sending option only when the background sync is disabled whereas the GCM is supported.
-                        if (newValue || !gcmMgr.hasRegistrationToken()) {
-                            mBackgroundSyncCategory.removePreference(allowContentSendingPref);
-                        } else {
-                            mBackgroundSyncCategory.addPreference(allowContentSendingPref);
-                        }
-
                         return true;
                     }
                 });
-            }
-
-            if (null != allowContentSendingPref) {
-                allowContentSendingPref.setChecked(gcmMgr.isContentSendingAllowed());
-
-                allowContentSendingPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object aNewValue) {
-                        final boolean newValue = (boolean) aNewValue;
-
-                        if (newValue != gcmMgr.isContentSendingAllowed()) {
-                            gcmMgr.setContentSendingAllowed(newValue);
-                        }
-
-                        displayLoadingView();
-
-                        Matrix.getInstance(VectorSettingsPreferencesFragment.this.getActivity()).getSharedGCMRegistrationManager().forceSessionsRegistration(listener);
-
-                        return true;
-                    }
-                });
-
-                // Hide this pref if the background sync is allowed, or if the GCM is not supported
-                if (gcmMgr.isBackgroundSyncAllowed() || !gcmMgr.hasRegistrationToken()) {
-                    mBackgroundSyncCategory.removePreference(allowContentSendingPref);
-                }
             }
         }
 
@@ -1067,7 +1033,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         Preference notificationPrivacyPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
 
         notificationSoundPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed());
-        notificationPrivacyPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed());
+        notificationPrivacyPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed() && gcmMgr.useGCM());
     }
 
     private void addButtons() {
