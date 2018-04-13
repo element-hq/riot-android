@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -45,6 +47,15 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
 
     @BindView(R.id.tv_apps_no_permission)
     TextView tvNoPermission;
+
+    @BindView(R.id.rly_normal_notification_privacy)
+    View rlyNormalPrivacy;
+
+    @BindView(R.id.rly_low_detail_notifications)
+    View rlyLowDetailNotifications;
+
+    @BindView(R.id.rly_reduced_privacy_notifications)
+    View rlyReducedPrivacy;
 
     @BindView(R.id.rb_normal_notification_privacy)
     RadioButton rbPrivacyNormal;
@@ -94,7 +105,7 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
             tvNoPermission.setVisibility(View.GONE);
         }
 
-        rbPrivacyNormal.setOnClickListener(new View.OnClickListener() {
+        rlyNormalPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 rbPrivacyNormal.setChecked(true);
@@ -108,7 +119,7 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
             }
         });
 
-        rbPrivacyLowDetail.setOnClickListener(new View.OnClickListener() {
+        rlyLowDetailNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 rbPrivacyNormal.setChecked(false);
@@ -122,7 +133,7 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
             }
         });
 
-        rbPrivacyReduced.setOnClickListener(new View.OnClickListener() {
+        rlyReducedPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 rbPrivacyNormal.setChecked(false);
@@ -137,5 +148,14 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            setResult(RESULT_CANCELED);
+            finish();
+            return true;
+        }
 
+        return super.onOptionsItemSelected(item);
+    }
 }

@@ -372,9 +372,6 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_notification_privacy"
             android:theme="@style/CountryPickerTheme" >
-            <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="im.vector.activity.VectorSettingsActivity" />
         </activity>
 
         <!-- broadcast receiver -->
