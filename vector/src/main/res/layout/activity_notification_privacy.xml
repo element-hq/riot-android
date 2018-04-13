@@ -61,7 +61,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="3dp" />
+                    android:layout_marginLeft="3dp"
+                    android:clickable="false"/>
 
                 <TextView
                     android:id="@+id/tv_normal_notification_privacy"
@@ -144,97 +145,109 @@
                     android:textColor="@color/default_text_light_color_dark"
                     android:text="@string/settings_notification_privacy_no_permission"/>
 
-                <RadioButton
-                    android:id="@+id/rb_notification_low_detail"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/rly_low_detail_notifications"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@id/tv_apps_no_permission"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="15dp" />
+                    android:layout_below="@id/tv_apps_no_permission">
 
-                <TextView
-                    android:id="@+id/tv_notification_low_detail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@id/tv_apps_no_permission"
-                    android:text="@string/settings_notification_privacy_low_detail"
-                    android:layout_marginTop="17dp"
-                    android:textSize="20sp"
-                    android:layout_marginLeft="40dp" />
+                    <RadioButton
+                        android:id="@+id/rb_notification_low_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="15dp"
+                        android:clickable="false"/>
 
-                <TextView
-                    android:id="@+id/tv_notifications_gcm_low"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_notification_low_detail"
-                    android:layout_alignLeft="@+id/tv_notification_low_detail"
-                    android:layout_marginTop="3dp"
-                    android:textSize="13sp"
-                    android:textColor="@color/default_text_light_color_dark"
-                    android:text="@string/settings_notification_privacy_gcm"/>
+                    <TextView
+                        android:id="@+id/tv_notification_low_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="@string/settings_notification_privacy_low_detail"
+                        android:layout_marginTop="17dp"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="40dp" />
 
-                <TextView
-                    android:id="@+id/tv_notifications_metadata_low"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_notifications_gcm_low"
-                    android:layout_alignLeft="@+id/tv_notification_low_detail"
-                    android:textSize="13sp"
-                    android:textColor="@color/default_text_light_color_dark"
-                    android:text="@string/settings_notification_privacy_metadata"/>
+                    <TextView
+                        android:id="@+id/tv_notifications_gcm_low"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_notification_low_detail"
+                        android:layout_alignLeft="@+id/tv_notification_low_detail"
+                        android:layout_marginTop="3dp"
+                        android:textSize="13sp"
+                        android:textColor="@color/default_text_light_color_dark"
+                        android:text="@string/settings_notification_privacy_gcm"/>
 
-                <TextView
-                    android:id="@+id/tv_message_not_shown"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_notifications_metadata_low"
-                    android:layout_alignLeft="@+id/tv_notification_low_detail"
-                    android:textSize="13sp"
-                    android:textColor="@color/default_text_light_color_dark"
-                    android:text="@string/settings_notification_privacy_message_content_not_shown"/>
+                    <TextView
+                        android:id="@+id/tv_notifications_metadata_low"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_notifications_gcm_low"
+                        android:layout_alignLeft="@+id/tv_notification_low_detail"
+                        android:textSize="13sp"
+                        android:textColor="@color/default_text_light_color_dark"
+                        android:text="@string/settings_notification_privacy_metadata"/>
 
-                <RadioButton
-                    android:id="@+id/rb_notification_reduce_privacy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@id/tv_message_not_shown"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="15dp" />
+                    <TextView
+                        android:id="@+id/tv_message_not_shown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_notifications_metadata_low"
+                        android:layout_alignLeft="@+id/tv_notification_low_detail"
+                        android:textSize="13sp"
+                        android:textColor="@color/default_text_light_color_dark"
+                        android:text="@string/settings_notification_privacy_message_content_not_shown"/>
+                </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tv_notification_reduce_privacy"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/rly_reduced_privacy_notifications"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@id/tv_message_not_shown"
-                    android:text="@string/settings_notification_privacy_reduced"
-                    android:layout_marginTop="17dp"
-                    android:textSize="20sp"
-                    android:layout_marginLeft="40dp" />
+                    android:layout_below="@id/rly_low_detail_notifications">
 
-                <TextView
-                    android:id="@+id/tv_notifications_gcm_reduced"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_notification_reduce_privacy"
-                    android:layout_alignLeft="@+id/tv_notification_reduce_privacy"
-                    android:layout_marginTop="3dp"
-                    android:textSize="13sp"
-                    android:textColor="@color/default_text_light_color_dark"
-                    android:text="@string/settings_notification_privacy_gcm"/>
+                    <RadioButton
+                        android:id="@+id/rb_notification_reduce_privacy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="15dp"
+                        android:clickable="false"/>
 
-                <TextView
-                    android:id="@+id/tv_notifications_metadata_reduced"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_notifications_gcm_reduced"
-                    android:layout_alignLeft="@+id/tv_notification_reduce_privacy"
-                    android:textSize="13sp"
-                    android:textColor="@color/default_text_light_color_dark"
-                    android:text="@string/settings_notification_privacy_nosecure_message_content"/>
+                    <TextView
+                        android:id="@+id/tv_notification_reduce_privacy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="@string/settings_notification_privacy_reduced"
+                        android:layout_marginTop="17dp"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="40dp" />
+
+                    <TextView
+                        android:id="@+id/tv_notifications_gcm_reduced"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_notification_reduce_privacy"
+                        android:layout_alignLeft="@+id/tv_notification_reduce_privacy"
+                        android:layout_marginTop="3dp"
+                        android:textSize="13sp"
+                        android:textColor="@color/default_text_light_color_dark"
+                        android:text="@string/settings_notification_privacy_gcm"/>
+
+                    <TextView
+                        android:id="@+id/tv_notifications_metadata_reduced"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_notifications_gcm_reduced"
+                        android:layout_alignLeft="@+id/tv_notification_reduce_privacy"
+                        android:textSize="13sp"
+                        android:textColor="@color/default_text_light_color_dark"
+                        android:text="@string/settings_notification_privacy_nosecure_message_content"/>
+                </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
