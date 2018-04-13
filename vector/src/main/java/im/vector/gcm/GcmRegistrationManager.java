@@ -1064,6 +1064,35 @@ public final class GcmRegistrationManager {
     //================================================================================
 
     /**
+     * Notification privacy policies as displayed to the end user.
+     * In the code, this enumeration is currently implemented with combinations of booleans.
+     */
+    public enum NotificationPrivacy {
+        /**
+         * Reduced privacy: message metadata and content are sent through the push service.
+         * Notifications for messages in e2e rooms are displayed with low detail.
+         */
+        REDUCED,
+
+        /**
+         * Notifications are displayed with low detail (X messages in RoomY).
+         * Only message metadata is sent through the push service.
+         */
+        LOW_DETAIL,
+
+        /**
+         * Normal: full detailed notifications by keeping user privacy.
+         * Only message metadata is sent through the push service. The app then makes a sync in bg
+         * with the homeserver.
+         */
+        NORMAL
+
+        // Some hints for future usage
+        //UNKNOWN,              // the policy has not been set yet
+        //NO_NOTIFICATIONS,     // no notifications
+    }
+
+    /**
      * Clear the GCM preferences
      */
     public void clearPreferences() {
@@ -1086,6 +1115,53 @@ public final class GcmRegistrationManager {
             }
         }
         return mUseGCM;
+    }
+
+    /**
+     * @return the current notification privacy setting as displayed to the end user.
+     */
+    public NotificationPrivacy getNotificationPrivacy() {
+        NotificationPrivacy notificationPrivacy = NotificationPrivacy.LOW_DETAIL;
+
+        boolean isContentSendingAllowed = isContentSendingAllowed();
+        boolean isBackgroundSyncAllowed = isBackgroundSyncAllowed();
+
+        if (isContentSendingAllowed && !isBackgroundSyncAllowed)
+        {
+            notificationPrivacy = NotificationPrivacy.REDUCED;
+        }
+        else if (!isContentSendingAllowed && isBackgroundSyncAllowed)
+        {
+            notificationPrivacy = NotificationPrivacy.NORMAL;
+        }
+
+        return notificationPrivacy;
+    }
+
+    /**
+     * Update the notification privacy setting.
+     * Translate the setting displayed to end user into internal booleans.
+     *
+     * @param notificationPrivacy the new notification privacy.
+     */
+    public void setNotificationPrivacy(NotificationPrivacy notificationPrivacy) {
+
+        switch (notificationPrivacy) {
+            case REDUCED:
+                setContentSendingAllowed(true);
+                setBackgroundSyncAllowed(false);
+                break;
+            case LOW_DETAIL:
+                setContentSendingAllowed(false);
+                setBackgroundSyncAllowed(false);
+                break;
+            case NORMAL:
+                setContentSendingAllowed(false);
+                setBackgroundSyncAllowed(true);
+                break;
+        }
+
+        forceSessionsRegistration(null);
     }
 
     /**

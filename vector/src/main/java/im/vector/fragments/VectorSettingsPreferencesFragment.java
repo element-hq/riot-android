@@ -141,8 +141,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static final int REQUEST_PHONEBOOK_COUNTRY = 789;
     private static final int REQUEST_LOCALE = 777;
     private static final int REQUEST_NOTIFICATION_RINGTONE = 888;
-    // TODO use this constant to handle startActivityForResult for notification privacy
-    private static final int REQUEST_NOTIFICATION_PRIVACY = 999;
 
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
@@ -1423,9 +1421,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     }
 
     private void refreshNotificationPrivacy() {
+        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
+        String notificationPrivacyString = NotificationPrivacyActivity.getNotificationPrivacyString(getActivity().getApplicationContext(), gcmRegistrationManager.getNotificationPrivacy());
+
         EditTextPreference notificationPrivacyPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
-        // TODO set the right notification privacy preference name
-        notificationPrivacyPreference.setSummary("Normal");
+        notificationPrivacyPreference.setSummary(notificationPrivacyString);
     }
 
     @Override
@@ -1445,10 +1445,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     refreshNotificationRingTone();
                     break;
                 }
-                case REQUEST_NOTIFICATION_PRIVACY:
-                    refreshNotificationPrivacy();
-                    // TODO handle and display result of radio button selection
-                    break;
                 case REQUEST_E2E_FILE_REQUEST_CODE:
                     importKeys(data);
                     break;

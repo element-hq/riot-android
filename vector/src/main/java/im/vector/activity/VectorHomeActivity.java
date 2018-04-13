@@ -610,9 +610,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this, true);
 
             // by default, use GCM and low detail notifications
-            gcmMgr.setContentSendingAllowed(false);
-            gcmMgr.setBackgroundSyncAllowed(false);
-            gcmMgr.forceSessionsRegistration(null);
+            gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.startup_notification_privacy_title);
@@ -624,20 +622,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
                     Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
 
-                    // this is the normal policy on our "Notification Privacy" setting page:
-                    // use GCM, share only meta data with it. Then, background sync to fetch message content
-                    gcmMgr.setContentSendingAllowed(false);
-                    gcmMgr.setBackgroundSyncAllowed(true);
-                    gcmMgr.forceSessionsRegistration(null);
-
-                    // display the system dialog for granting the IgnoreBatteryOptimizations permission.
-                    // If already granted, the system will not show it.
-                    // Note: If the user finally does not grant the permission, gcmMgr.isBackgroundSyncAllowed()
-                    // will return false and low detail notifications will be displayed.
-                    Intent intent = new Intent();
-                    intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-                    intent.setData(Uri.parse("package:" + getPackageName()));
-                    startActivity(intent);
+                    // use NotificationPrivacyActivity in case we need to display the IgnoreBatteryOptimizations
+                    // grant permission dialog
+                    NotificationPrivacyActivity.setNotificationPrivacy(VectorHomeActivity.this,
+                            GcmRegistrationManager.NotificationPrivacy.NORMAL);
                 }
             });
 
@@ -647,7 +635,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
                     Log.d(LOG_TAG, "checkNotificationPrivacySetting: user opens notification policy setting screen");
 
-                    // @TODO: Audrey: Open the notification policy setting screen
+                    // open the notification policy setting screen
+                    startActivity(NotificationPrivacyActivity.getIntent(VectorHomeActivity.this));
                 }
             });
 

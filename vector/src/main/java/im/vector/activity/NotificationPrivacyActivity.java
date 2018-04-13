@@ -16,10 +16,13 @@
 
 package im.vector.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.view.MenuItem;
@@ -31,7 +34,9 @@ import org.matrix.androidsdk.util.Log;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import im.vector.Matrix;
 import im.vector.R;
+import im.vector.gcm.GcmRegistrationManager;
 
 /*
  * This activity allows the user to choose a notifications privacy policy.
@@ -105,47 +110,37 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
             tvNoPermission.setVisibility(View.GONE);
         }
 
+        refreshNotificationPrivacy();
+
         rlyNormalPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rbPrivacyNormal.setChecked(true);
-                rbPrivacyLowDetail.setChecked(false);
-                rbPrivacyReduced.setChecked(false);
-
-                rbPrivacyNormal.isChecked();
-                Log.d(LOG_TAG, "RadioButton NotificationPrivacyNormal is selected");
-
-                //TODO
+                setNotificationPrivacy(NotificationPrivacyActivity.this, GcmRegistrationManager.NotificationPrivacy.NORMAL);
+                refreshNotificationPrivacy();
             }
         });
 
         rlyLowDetailNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rbPrivacyNormal.setChecked(false);
-                rbPrivacyLowDetail.setChecked(true);
-                rbPrivacyReduced.setChecked(false);
-
-                rbPrivacyLowDetail.isChecked();
-                Log.d(LOG_TAG, "RadioButton NotificationPrivacyLowDetail is selected");
-
-                // TODO
+                setNotificationPrivacy(NotificationPrivacyActivity.this, GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL);
+                refreshNotificationPrivacy();
             }
         });
 
         rlyReducedPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rbPrivacyNormal.setChecked(false);
-                rbPrivacyLowDetail.setChecked(false);
-                rbPrivacyReduced.setChecked(true);
-
-                rbPrivacyReduced.isChecked();
-                Log.d(LOG_TAG, "RadioButton NotificationPrivacyReduced is selected");
-
-                //TODO
+                setNotificationPrivacy(NotificationPrivacyActivity.this, GcmRegistrationManager.NotificationPrivacy.REDUCED);
+                refreshNotificationPrivacy();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshNotificationPrivacy();
     }
 
     @Override
@@ -157,5 +152,78 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void refreshNotificationPrivacy() {
+        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGCMRegistrationManager();
+
+        switch (gcmRegistrationManager.getNotificationPrivacy()) {
+            case REDUCED:
+                rbPrivacyNormal.setChecked(false);
+                rbPrivacyLowDetail.setChecked(false);
+                rbPrivacyReduced.setChecked(true);
+                break;
+            case LOW_DETAIL:
+                rbPrivacyNormal.setChecked(false);
+                rbPrivacyLowDetail.setChecked(true);
+                rbPrivacyReduced.setChecked(false);
+                break;
+            case NORMAL:
+                rbPrivacyNormal.setChecked(true);
+                rbPrivacyLowDetail.setChecked(false);
+                rbPrivacyReduced.setChecked(false);
+                break;
+        }
+    }
+
+    /**
+     * Set the new notification privacy setting.
+     *
+     * @param activity the activity from which to display the IgnoreBatteryOptimizations permission request dialog, if required
+     * @param notificationPrivacy the new setting
+     */
+    static public void setNotificationPrivacy(Activity activity, GcmRegistrationManager.NotificationPrivacy notificationPrivacy) {
+        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(activity).getSharedGCMRegistrationManager();
+
+        // first, set the new privacy setting
+        gcmRegistrationManager.setNotificationPrivacy(notificationPrivacy);
+
+        // for the "NORMAL" privacy, the app needs to be able to run in background
+        // this requires the IgnoreBatteryOptimizations permission from android M
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && notificationPrivacy == GcmRegistrationManager.NotificationPrivacy.NORMAL) {
+            // display the system dialog for granting this permission. If previously granted, the
+            // system will not show it.
+            // Note: If the user finally does not grant the permission, gcmRegistrationManager.isBackgroundSyncAllowed()
+            // will return false and the notification privacy will fallback to "LOW_DETAIL".
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + activity.getPackageName()));
+            activity.startActivity(intent);
+        }
+    }
+
+    /**
+     * Get the displayed i18ned string for a notification privacy setting.
+     * 
+     * @param context
+     * @param notificationPrivacy the setting to stringify
+     * @return a string
+     */
+    static public String getNotificationPrivacyString(Context context, GcmRegistrationManager.NotificationPrivacy notificationPrivacy) {
+        String notificationPrivacyString = null;
+
+        switch (notificationPrivacy) {
+            case REDUCED:
+                notificationPrivacyString = context.getString(R.string.settings_notification_privacy_reduced);
+                break;
+            case LOW_DETAIL:
+                notificationPrivacyString = context.getString(R.string.settings_notification_privacy_low_detail);
+                break;
+            case NORMAL:
+                notificationPrivacyString = context.getString(R.string.settings_notification_privacy_normal);
+                break;}
+
+        return notificationPrivacyString;
     }
 }
