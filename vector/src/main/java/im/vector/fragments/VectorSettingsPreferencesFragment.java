@@ -290,7 +290,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             notificationPrivacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    // TODO use startActivityForResult to get the notification privacy preference key selected
                     startActivity(NotificationPrivacyActivity.getIntent(getActivity()));
                     return true;
                 }
