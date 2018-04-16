@@ -565,4 +565,5 @@
     // conference call
     <string name="has_been_kicked">Þér hefur verið sparkað úr %1$s af %2$s</string>
     <string name="has_been_banned">Þú hefur verið settur í bann á %1$s af %2$s</string>
+    <string name="room_settings_labs_pref_title">Tilraunir</string>
     </resources>
