@@ -49,8 +49,8 @@
     <string name="action_exit">Fara út</string>
     <string name="actions">Aðgerðir</string>
     <string name="action_sign_out">Skrá út</string>
-    <string name="action_voice_call">Raddsímtal</string>
-    <string name="action_video_call">Myndsímtal</string>
+    <string name="action_voice_call">Raddsamtal</string>
+    <string name="action_video_call">Myndsamtal</string>
     <string name="action_global_search">Víðvær leit</string>
     <string name="action_mark_all_as_read">Merkja allt sem lesið</string>
     <string name="action_historical">Ferilskráning</string>
@@ -102,8 +102,8 @@
     <string name="search">Leita</string>
 
     <string name="start_new_chat">Hefja nýtt spjall</string>
-    <string name="start_voice_call">Hefja raddsímtal</string>
-    <string name="start_video_call">Hefja myndsímtal</string>
+    <string name="start_voice_call">Hefja raddsamtal</string>
+    <string name="start_video_call">Hefja myndsamtal</string>
 
     <string name="option_send_files">Senda skrár</string>
     <string name="option_take_photo_video">Taka ljósmynd eða myndskeið</string>
@@ -160,12 +160,12 @@
     <string name="room_info_room_name">Nafn spjallrásar</string>
     <string name="room_info_room_topic">Umfjöllunarefni spjallrásar</string>
 
-    <string name="call">Símtal</string>
+    <string name="call">Samtal</string>
     <string name="call_ring">Hringi…</string>
     <string name="incoming_call">Innhringing</string>
-    <string name="incoming_video_call">Innhringing myndsímtals</string>
-    <string name="incoming_voice_call">Innhringing raddsímtals</string>
-    <string name="call_in_progress">Símtal í gangi</string>
+    <string name="incoming_video_call">Innhringing myndsamtals</string>
+    <string name="incoming_voice_call">Innhringing raddsamtals</string>
+    <string name="call_in_progress">Samtal í gangi</string>
 
     <string name="permissions_rationale_popup_title">Upplýsingar</string>
     <string name="media_slider_saved">Vistað</string>
@@ -210,7 +210,7 @@
     <string name="room_participants_ago">síðan</string>
 
     <string name="room_participants_header_admin_tools">KERFISSTJÓRNUNARTÓL</string>
-    <string name="room_participants_header_call">SÍMTAL</string>
+    <string name="room_participants_header_call">SAMTAL</string>
     <string name="room_participants_header_direct_chats">BEINT SPJALL</string>
     <string name="room_participants_header_devices">TÆKI</string>
 
@@ -221,7 +221,7 @@
     <string name="room_menu_search">Leita</string>
     <string name="room_one_user_is_typing">%s er að skrifa…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s eru að skrifa…</string>
-    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; aðrir eru að skrifa……</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; fleiri eru að skrifa……</string>
     <string name="room_message_placeholder_encrypted">Senda dulrituð skilaboð…</string>
     <string name="room_prompt_cancel">hætta við allt</string>
     <string name="room_message_file_not_found">Skrá fannst ekki</string>
@@ -410,7 +410,7 @@
     <string name="encryption_information_unblock">Taka af bannlista</string>
 
     <string name="directory_server_all_rooms_on_server">Allar spjallrásir á %s vefþjóninum</string>
-    <string name="directory_server_native_rooms">Allar innbyggðar spjallrásir %s</string>
+    <string name="directory_server_native_rooms">Allar innbyggðar %s-spjallrásir</string>
 
     <plurals name="notification_unread_notified_messages_in_room_rooms">
 	<item quantity="one">1 spjallrás</item>
@@ -476,4 +476,49 @@
     <string name="notice_avatar">Auðkennismynd tilkynningar</string>
     <string name="avatar">Auðkennismynd</string>
 
-</resources>
+<string name="view_decrypted_source">Skoða afkóðaða upprunaskrá</string>
+    <string name="active_call">Virkt samtal</string>
+    <string name="cannot_start_call">Mistókst að hefja samtal, reyndu aftur síðar</string>
+    <string name="missing_permissions_title_to_start_conf_call">Mistókst að hefja samtal</string>
+    <string name="action_quick_reply">Snöggt svar</string>
+    <string name="bottom_action_groups">Samfélög</string>
+
+    <string name="home_filter_placeholder_home">Leita að spjallrásum</string>
+    <string name="home_filter_placeholder_favorites">Leita að eftirlætum</string>
+    <string name="home_filter_placeholder_people">Leita að fólki</string>
+    <string name="home_filter_placeholder_rooms">Leita að spjallrásum</string>
+    <string name="home_filter_placeholder_groups">Leita að samfélagi</string>
+
+    <string name="matrix_only_filter">Einungis tengiliðir í Matrix</string>
+    <string name="no_public_room_placeholder">Engar opinberar spjallrásir tiltækar</string>
+    <string name="groups_header">Samfélög</string>
+    <string name="send_bug_report_progress">Framvinda (%s%%)</string>
+
+    <string name="auth_send_reset_email">Senda endurstillingarpóst</string>
+    <string name="auth_return_to_login">Fara aftur í innskráningargluggann</string>
+    <string name="auth_invalid_email">Þetta lítur ekki út eins og gilt tölvupóstfang</string>
+    <string name="auth_invalid_phone">Þetta lítur ekki út eins og gilt símanúmer</string>
+    <string name="auth_email_already_defined">Þetta tölvupóstfang er nú þegar skráð.</string>
+    <string name="auth_email_validation_message">Skoðaðu tölvupóstinn þinn til að geta haldið áfram með skráningu</string>
+    <string name="login_error_must_start_http">Slóð verður að byrja á http[s]://</string>
+    <string name="login_error_unable_login">Get ekki skráð inn</string>
+    <string name="login_error_invalid_home_server">Skráðu inn gilda URL-lóð</string>
+    <string name="login_error_forbidden">Ótækt notandanafn/lykilorð</string>
+    <string name="login_error_not_json">Inniheldur ekki gilt JSON</string>
+    <string name="login_error_limit_exceeded">Of margar beiðnir hafa verið sendar</string>
+    <string name="login_error_user_in_use">Þetta notandanafn er þegar í notkun</string>
+    <string name="groups_list">Listi yfir hópa</string>
+
+    <string name="call_connected">Samtal tengt</string>
+    <string name="call_connecting">Samtal tengist…</string>
+    <string name="call_ended">Samtali lokið</string>
+    <string name="call_error_answered_elsewhere">samtali svarað annars staðar</string>
+
+    <string name="settings_call_invitations">Boð um samtal</string>
+    <string name="settings_labs_native_camera">Nota innbyggða myndavél</string>
+
+    // share keys
+    <string name="create_community">Búa til samfélag</string>
+    <string name="community_name">Heiti samfélags</string>
+    <string name="community_id">Auðkenni samfélags</string>
+    </resources>
