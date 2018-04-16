@@ -201,7 +201,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private PreferenceCategory mIgnoredUserSettingsCategoryDivider;
     private PreferenceCategory mIgnoredUserSettingsCategory;
     // background sync category
-    private PreferenceCategory mBackgroundSyncCategory;
     private EditTextPreference mSyncRequestTimeoutPreference;
     private EditTextPreference mSyncRequestDelayPreference;
     private PreferenceCategory mLabsCategory;
@@ -620,57 +619,68 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         }
 
-        // background sync management
-        mBackgroundSyncCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY);
-        mSyncRequestTimeoutPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY);
-        mSyncRequestDelayPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY);
-        final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY);
+        // background sync tuning settings
+        // these settings are useless and hidden if the app is registered to the GCM push service
+        final GcmRegistrationManager gcmMgr = Matrix.getInstance(appContext).getSharedGCMRegistrationManager();
+        if (gcmMgr.useGCM() && gcmMgr.hasRegistrationToken()) {
+            // Hide the section
+            PreferenceScreen preferenceScreen = getPreferenceScreen();
+            PreferenceCategory backgroundSyncCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY);
+            PreferenceCategory backgroundSyncDivider = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY);
 
-        if (null != useBackgroundSyncPref) {
-            final GcmRegistrationManager gcmMgr = Matrix.getInstance(appContext).getSharedGCMRegistrationManager();
-
-            final GcmRegistrationManager.ThirdPartyRegistrationListener listener = new GcmRegistrationManager.ThirdPartyRegistrationListener() {
-
-                @Override
-                public void onThirdPartyRegistered() {
-                    hideLoadingView();
-                }
-
-                @Override
-                public void onThirdPartyRegistrationFailed() {
-                    hideLoadingView();
-                }
-
-                @Override
-                public void onThirdPartyUnregistered() {
-                    hideLoadingView();
-                }
-
-                @Override
-                public void onThirdPartyUnregistrationFailed() {
-                    hideLoadingView();
-                }
-            };
+            preferenceScreen.removePreference(backgroundSyncDivider);
+            preferenceScreen.removePreference(backgroundSyncCategory);
+        }
+        else {
+            mSyncRequestTimeoutPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY);
+            mSyncRequestDelayPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY);
+            final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY);
 
             if (null != useBackgroundSyncPref) {
-                useBackgroundSyncPref.setChecked(gcmMgr.isBackgroundSyncAllowed());
 
-                useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                final GcmRegistrationManager.ThirdPartyRegistrationListener listener = new GcmRegistrationManager.ThirdPartyRegistrationListener() {
+
                     @Override
-                    public boolean onPreferenceChange(Preference preference, Object aNewValue) {
-                        final boolean newValue = (boolean) aNewValue;
-
-                        if (newValue != gcmMgr.isBackgroundSyncAllowed()) {
-                            gcmMgr.setBackgroundSyncAllowed(newValue);
-                        }
-
-                        displayLoadingView();
-
-                        Matrix.getInstance(VectorSettingsPreferencesFragment.this.getActivity()).getSharedGCMRegistrationManager().forceSessionsRegistration(listener);
-
-                        return true;
+                    public void onThirdPartyRegistered() {
+                        hideLoadingView();
                     }
-                });
+
+                    @Override
+                    public void onThirdPartyRegistrationFailed() {
+                        hideLoadingView();
+                    }
+
+                    @Override
+                    public void onThirdPartyUnregistered() {
+                        hideLoadingView();
+                    }
+
+                    @Override
+                    public void onThirdPartyUnregistrationFailed() {
+                        hideLoadingView();
+                    }
+                };
+
+                if (null != useBackgroundSyncPref) {
+                    useBackgroundSyncPref.setChecked(gcmMgr.isBackgroundSyncAllowed());
+
+                    useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object aNewValue) {
+                            final boolean newValue = (boolean) aNewValue;
+
+                            if (newValue != gcmMgr.isBackgroundSyncAllowed()) {
+                                gcmMgr.setBackgroundSyncAllowed(newValue);
+                            }
+
+                            displayLoadingView();
+
+                            Matrix.getInstance(VectorSettingsPreferencesFragment.this.getActivity()).getSharedGCMRegistrationManager().forceSessionsRegistration(listener);
+
+                            return true;
+                        }
+                    });
+                }
             }
         }
 
@@ -2299,16 +2309,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     return false;
                 }
             });
-        }
-
-        // theses settings are dedicated when a client does not support GCM
-        if (gcmmgr.hasRegistrationToken()) {
-            final Preference autoStartSyncPref = findPreference(PreferencesManager.SETTINGS_START_ON_BOOT_PREFERENCE_KEY);
-            if (null != autoStartSyncPref) {
-                mBackgroundSyncCategory.removePreference(autoStartSyncPref);
-            }
-            mBackgroundSyncCategory.removePreference(mSyncRequestTimeoutPreference);
-            mBackgroundSyncCategory.removePreference(mSyncRequestDelayPreference);
         }
     }
 
