@@ -521,4 +521,48 @@
     <string name="create_community">Búa til samfélag</string>
     <string name="community_name">Heiti samfélags</string>
     <string name="community_id">Auðkenni samfélags</string>
+    <string name="room_participants_action_mention">Minnst á</string>
+    <string name="room_settings_mention_only">Aðeins minnst á</string>
+    <string name="settings_vibrate_on_mention">Titra þegar minnst er á</string>
+
+    <string name="settings_delete_threepid_confirmation">Ertu viss um að þú viljir fjarlægja %1$s %2$s?</string>
+
+    <string name="settings_phone_number_error">Ógilt símanúmer fyrir valið land</string>
+    <string name="settings_phone_number_verification_instruction">Við höfum sent SMS-skilaboð með virkjunarkóða. Settu þennan kóða inn hér fyrir neðan.</string>
+    <string name="settings_phone_number_verification_error_empty_code">Settu inn virkjunarkóða</string>
+    <string name="settings_phone_number_verification_error">Villa við að sannreyna símanúmerið þitt</string>
+    <string name="settings_flair">Hlutverksmerki</string>
+
+    <string name="room_settings_room_access_rules_pref_title">Aðgangur að spjallrás</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Lesanleiki ferilskrár spjallrásar</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Hver hefur aðgang að þessari spjallrás?</string>
+
+    <string name="room_settings_labs_end_to_end_is_active">Enda-í-enda dulritun er virk</string>
+    <string name="room_settings_no_flair">" Þessi spjallrás sýnir ekki hlutverksmerki fyrir nein samfélög"</string>
+    <string name="room_settings_addresses_e2e_enabled">Dulritun er virk í þessari spjallrás.</string>
+    <string name="room_settings_addresses_e2e_disabled">Dulritun er óvirk í þessari spjallrás.</string>
+    <string name="encryption_information_title">Enda-í-enda dulritunarupplýsingar</string>
+
+    <string name="encryption_information_curve25519_identity_key">Curve25519 auðkennislykill</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Tilkynnti Ed25519 fingrafarslykil</string>
+    <string name="encryption_export_e2e_room_keys">Flytja út E2E dulritunarlykla spjallrásar</string>
+    <string name="encryption_export_room_keys">Flytja út dulritunarlykla spjallrásar</string>
+    <string name="encryption_export_room_keys_summary">Flytja dulritunarlyklana út í skrá</string>
+    <string name="encryption_import_e2e_room_keys">Flytja inn E2E dulritunarlykla spjallrásar</string>
+    <string name="encryption_import_room_keys">Flytja inn dulritunarlykla spjallrásar</string>
+    <string name="encryption_import_room_keys_summary">Flytja lykla inn úr skrá á tæki</string>
+    <string name="encryption_information_not_verified">Ekki sannreynt</string>
+    <string name="encryption_information_verified">Sannreynt</string>
+    <string name="encryption_information_blocked">Á bannlista</string>
+
+    <string name="encryption_information_verify_device">Sannreyna tæki</string>
+    <string name="settings_labs_matrix_apps">Matrix-forrit</string>
+    <string name="room_add_matrix_apps">Bæta við Matrix-forritum</string>
+    <string name="start_verification">Hefja sannvottun</string>
+    <string name="share_without_verifying">Deila án sannvottunar</string>
+    <string name="ignore_request">Hunsa beiðni</string>
+
+    // conference call
+    <string name="has_been_kicked">Þér hefur verið sparkað úr %1$s af %2$s</string>
+    <string name="has_been_banned">Þú hefur verið settur í bann á %1$s af %2$s</string>
     </resources>
