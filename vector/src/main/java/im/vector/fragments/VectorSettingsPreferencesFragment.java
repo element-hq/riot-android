@@ -286,15 +286,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         refreshNotificationRingTone();
 
         EditTextPreference notificationPrivacyPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
-        notificationPrivacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                // TODO use startActivityForResult to get the notification privacy preference key selected
-                startActivity(NotificationPrivacyActivity.getIntent(getActivity()));
-                return true;
-            }
-        });
-        refreshNotificationPrivacy();
+        if (notificationPrivacyPreference != null) {
+            notificationPrivacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    // TODO use startActivityForResult to get the notification privacy preference key selected
+                    startActivity(NotificationPrivacyActivity.getIntent(getActivity()));
+                    return true;
+                }
+            });
+            refreshNotificationPrivacy();
+        }
 
         // application version
         VectorCustomActionEditTextPreference versionTextPreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY);
@@ -1039,11 +1041,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // If notifications are disabled for the current user account or for the current user device
         // The others notifications settings have to be disable too
         boolean areNotifAllowed = rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL).isEnabled;
-        Preference notificationSoundPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
-        Preference notificationPrivacyPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
 
+        Preference notificationSoundPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
         notificationSoundPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed());
-        notificationPrivacyPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed() && gcmMgr.useGCM());
+
+        Preference notificationPrivacyPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
+        if (notificationPrivacyPreference != null) {
+            notificationPrivacyPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed() && gcmMgr.useGCM());
+        }
     }
 
     private void addButtons() {
@@ -1389,19 +1394,31 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     }
 
     /**
-     * Refresh the nofication filename
+     * Refresh the notification ring tone
      */
     private void refreshNotificationRingTone() {
         EditTextPreference notificationRingTonePreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
         notificationRingTonePreference.setSummary(PreferencesManager.getNotificationRingToneName(getActivity()));
     }
 
+    /**
+     * Refresh the notification privacy setting
+     */
     private void refreshNotificationPrivacy() {
-        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
-        String notificationPrivacyString = NotificationPrivacyActivity.getNotificationPrivacyString(getActivity().getApplicationContext(), gcmRegistrationManager.getNotificationPrivacy());
-
         EditTextPreference notificationPrivacyPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY);
-        notificationPrivacyPreference.setSummary(notificationPrivacyString);
+
+        if (notificationPrivacyPreference != null) {
+            GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
+
+            // this setting apply only with GCM for the moment
+            if (gcmRegistrationManager.useGCM()) {
+                String notificationPrivacyString = NotificationPrivacyActivity.getNotificationPrivacyString(getActivity().getApplicationContext(), gcmRegistrationManager.getNotificationPrivacy());
+                notificationPrivacyPreference.setSummary(notificationPrivacyString);
+            } else {
+                PreferenceCategory notificationsSettingsCategory = (PreferenceCategory) findPreference(PreferencesManager.SETTINGS_NOTIFICATIONS_KEY);
+                notificationsSettingsCategory.removePreference(notificationPrivacyPreference);
+            }
+        }
     }
 
     @Override
