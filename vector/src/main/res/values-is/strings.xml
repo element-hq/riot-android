@@ -1,2 +1,479 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="resouces_language">is</string>
+    <string name="resouces_country">IS</string>
+
+    <string name="light_theme">Ljóst þema</string>
+    <string name="dark_theme">Dökkt þema</string>
+    <string name="black_them">Svart þema</string>
+
+    <string name="notification_sync_in_progress">Samstilli</string>
+    <string name="notification_listen_for_events">Hlusta eftir atburðum</string>
+    <string name="notification_noisy_notifications">Háværar tilkynningar</string>
+    <string name="notification_silent_notifications">Hljóðlegar tilkynningar</string>
+
+    <string name="title_activity_home">Skilaboð</string>
+    <string name="title_activity_room">Spjallrás</string>
+    <string name="title_activity_settings">Stillingar</string>
+    <string name="title_activity_member_details">Nánar um meðlim</string>
+    <string name="title_activity_historical">Ferilskráning</string>
+    <string name="title_activity_bug_report">Villuskýrsla</string>
+    <string name="title_activity_group_details">Nánar um samfélag</string>
+
+    <string name="loading">Hleð inn...</string>
+
+    <string name="ok">Í lagi</string>
+    <string name="cancel">Hætta við</string>
+    <string name="save">Vista</string>
+    <string name="leave">Fara út</string>
+    <string name="send">Senda</string>
+    <string name="copy">Afrita</string>
+    <string name="resend">Endursenda</string>
+    <string name="redact">Ritstýra</string>
+    <string name="quote">Tilvitnun</string>
+    <string name="share">Deila</string>
+    <string name="later">Seinna</string>
+    <string name="forward">Áframsenda</string>
+    <string name="permalink">Varanlegur tengill</string>
+    <string name="view_source">Skoða frumkóða</string>
+    <string name="delete">Eyða</string>
+    <string name="rename">Endurnefna</string>
+    <string name="ongoing_conference_call_voice">talskilaboð</string>
+    <string name="ongoing_conference_call_video">myndmerki</string>
+    <string name="device_information">Upplýsingar um tæki</string>
+    <string name="send_anyway">Senda samt</string>
+    <string name="or">eða</string>
+    <string name="and">og</string>
+    <string name="invite">Bjóða</string>
+    <string name="offline">Ónettengt</string>
+
+    <string name="action_exit">Fara út</string>
+    <string name="actions">Aðgerðir</string>
+    <string name="action_sign_out">Skrá út</string>
+    <string name="action_voice_call">Raddsímtal</string>
+    <string name="action_video_call">Myndsímtal</string>
+    <string name="action_global_search">Víðvær leit</string>
+    <string name="action_mark_all_as_read">Merkja allt sem lesið</string>
+    <string name="action_historical">Ferilskráning</string>
+    <string name="action_open">Opna</string>
+    <string name="action_close">Loka</string>
+    <string name="copied_to_clipboard">Afritað á klippispjald</string>
+    <string name="disable">Gera óvirkt</string>
+
+    <string name="dialog_title_confirmation">Staðfesting</string>
+    <string name="dialog_title_warning">Aðvörun</string>
+
+    <string name="bottom_action_home">Heim</string>
+    <string name="bottom_action_favourites">Eftirlæti</string>
+    <string name="bottom_action_people">Fólk</string>
+    <string name="bottom_action_rooms">Spjallrásir</string>
+    <string name="invitations_header">Boðsgestir</string>
+    <string name="low_priority_header">Lítill forgangur</string>
+
+    <string name="direct_chats_header">Samtöl</string>
+    <string name="local_address_book_header">Nafnaskrá á þessari tölvu</string>
+    <string name="no_conversation_placeholder">Engin samtöl</string>
+    <string name="no_result_placeholder">Engar niðurstöður</string>
+
+    <string name="rooms_header">Spjallrásir</string>
+    <string name="no_room_placeholder">Engar spjallrásir</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="one">1 notandi</item>
+	<item quantity="other">%d notendur</item>
+</plurals>
+
+    <string name="groups_invite_header">Bjóða</string>
+    <string name="no_group_placeholder">Engir hópar</string>
+
+    <string name="send_bug_report_include_logs">Senda atvikaskrá</string>
+    <string name="send_bug_report_include_crash_logs">Senda hrunskrár</string>
+    <string name="send_bug_report_include_screenshot">Senda skjámynd</string>
+    <string name="send_bug_report">Villuskýrsla</string>
+    <string name="send_bug_report_placeholder">Lýstu vandamálinu þínu hér</string>
+    <string name="send_files_in">Senda inn í</string>
+    <string name="read_receipt">Lesið</string>
+
+    <string name="join_room">Taka þátt í spjallrás</string>
+    <string name="username">Notandanafn</string>
+    <string name="create_account">Skrá þig</string>
+    <string name="login">Innskráning</string>
+    <string name="logout">Útskráning</string>
+    <string name="user">notandi</string>
+    <string name="users">notendur</string>
+    <string name="search">Leita</string>
+
+    <string name="start_new_chat">Hefja nýtt spjall</string>
+    <string name="start_voice_call">Hefja raddsímtal</string>
+    <string name="start_video_call">Hefja myndsímtal</string>
+
+    <string name="option_send_files">Senda skrár</string>
+    <string name="option_take_photo_video">Taka ljósmynd eða myndskeið</string>
+    <string name="option_take_photo">Taka ljósmynd</string>
+    <string name="option_take_video">Taka myndskeið</string>
+
+    <string name="auth_login">Innskráning</string>
+    <string name="auth_register">Nýskrá</string>
+    <string name="auth_submit">Senda inn</string>
+    <string name="auth_skip">Sleppa</string>
+    <string name="auth_user_id_placeholder">Tölvupóstfang eða notandanafn</string>
+    <string name="auth_password_placeholder">Lykilorð</string>
+    <string name="auth_new_password_placeholder">Nýtt lykilorð</string>
+    <string name="auth_user_name_placeholder">Notandanafn</string>
+    <string name="auth_email_placeholder">Tölvupóstfang</string>
+    <string name="auth_opt_email_placeholder">Tölvupóstfang (valfrjálst)</string>
+    <string name="auth_phone_number_placeholder">Símanúmer</string>
+    <string name="auth_opt_phone_number_placeholder">Símanúmer (valfrjálst)</string>
+    <string name="auth_repeat_password_placeholder">Endurtaka lykilorð</string>
+    <string name="auth_repeat_new_password_placeholder">Staðfestu nýtt lykilorð</string>
+    <string name="auth_invalid_login_param">Rangt notandanafn og/eða lykilorð</string>
+    <string name="auth_invalid_user_name">Notandanöfn mega einungis innihalda bókstafi, tölustafi, punkta, bandstrik eða undirstrik</string>
+    <string name="auth_invalid_password">Lykilorð er of stutt (lágmark 6 stafir)</string>
+    <string name="auth_missing_password">Lykilorð vantar</string>
+    <string name="auth_missing_email">Vantar tölvupóstfang</string>
+    <string name="auth_missing_phone">Vantar símanúmer</string>
+    <string name="auth_missing_email_or_phone">Vantar tölvupóstfang eða símanúmer</string>
+    <string name="auth_invalid_token">Ógilt teikn</string>
+    <string name="auth_password_dont_match">Lykilorðin stemma ekki</string>
+    <string name="auth_forgot_password">Gleymt lykilorð?</string>
+    <string name="auth_username_in_use">Notandanafn er í notkun</string>
+    <string name="login_mobile_device">Farsími</string>
+
+    <string name="login_error_bad_json">Gallað JSON</string>
+    <plurals name="membership_changes">
+	<item quantity="one">1 breyting á aðild</item>
+	<item quantity="other">%d breytingar á aðild</item>
+</plurals>
+
+    <string name="compression_options">"Senda sem "</string>
+    <string name="compression_opt_list_original">Upprunalegt</string>
+    <string name="compression_opt_list_large">Stórt</string>
+    <string name="compression_opt_list_medium">Miðlungs</string>
+    <string name="compression_opt_list_small">Lítið</string>
+
+    <string name="attachment_cancel_download">Hætta við niðurhalið?</string>
+    <string name="attachment_cancel_upload">Hætta við innsendinguna?</string>
+    <string name="attachment_remaining_time_seconds">%d sek</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+
+    <string name="yesterday">Í gær</string>
+    <string name="today">Í dag</string>
+
+    <string name="room_info_room_name">Nafn spjallrásar</string>
+    <string name="room_info_room_topic">Umfjöllunarefni spjallrásar</string>
+
+    <string name="call">Símtal</string>
+    <string name="call_ring">Hringi…</string>
+    <string name="incoming_call">Innhringing</string>
+    <string name="incoming_video_call">Innhringing myndsímtals</string>
+    <string name="incoming_voice_call">Innhringing raddsímtals</string>
+    <string name="call_in_progress">Símtal í gangi</string>
+
+    <string name="permissions_rationale_popup_title">Upplýsingar</string>
+    <string name="media_slider_saved">Vistað</string>
+    <string name="media_slider_saved_message">Vista í niðurhalsmöppu</string>
+    <string name="yes">JÁ</string>
+    <string name="no">NEI</string>
+    <string name="_continue">Halda áfram</string>
+
+    <string name="remove">Fjarlægja</string>
+    <string name="join">Taka þátt</string>
+    <string name="preview">Forskoðun</string>
+    <string name="reject">Hafna</string>
+
+    <string name="list_members">Listi meðlima</string>
+    <string name="open_chat_header">Opna haus</string>
+    <string name="room_sync_in_progress">Samstilli...</string>
+    <string name="room_preview_try_join_an_unknown_room_default">spjallrás</string>
+    <string name="room_creation_add_member">Bæta við meðlimi</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 virkur meðlimur</item>
+	<item quantity="other">%d virkir meðlimir</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 meðlimur</item>
+	<item quantity="other">%d meðlimir</item>
+</plurals>
+    <string name="room_title_one_member">1 meðlimur</string>
+    <string name="room_e2e_alert_title">Aðvörun!</string>
+    <string name="format_time_s">sek</string>
+    <string name="format_time_m">mín</string>
+    <string name="format_time_h">klst</string>
+    <string name="format_time_d">d</string>
+
+    <string name="room_participants_leave_prompt_title">Fara af spjallrás</string>
+    <string name="room_participants_leave_prompt_msg">Ertu viss um að þú viljir fara út spjallrásinni?</string>
+    <string name="room_participants_create">Búa til</string>
+
+    <string name="room_participants_online">Nettengt</string>
+    <string name="room_participants_offline">Ónettengt</string>
+    <string name="room_participants_idle">Iðjulaust</string>
+    <string name="room_participants_now">núna</string>
+    <string name="room_participants_ago">síðan</string>
+
+    <string name="room_participants_header_admin_tools">KERFISSTJÓRNUNARTÓL</string>
+    <string name="room_participants_header_call">SÍMTAL</string>
+    <string name="room_participants_header_direct_chats">BEINT SPJALL</string>
+    <string name="room_participants_header_devices">TÆKI</string>
+
+    <string name="room_participants_action_invite">Bjóða</string>
+    <string name="room_participants_action_leave">Fara af spjallrás</string>
+    <string name="room_participants_action_remove">Fjarlægja úr þessari spjallrás</string>
+    <string name="room_participants_action_set_admin">Gera að stjórnanda</string>
+    <string name="room_menu_search">Leita</string>
+    <string name="room_one_user_is_typing">%s er að skrifa…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s eru að skrifa…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; aðrir eru að skrifa……</string>
+    <string name="room_message_placeholder_encrypted">Senda dulrituð skilaboð…</string>
+    <string name="room_prompt_cancel">hætta við allt</string>
+    <string name="room_message_file_not_found">Skrá fannst ekki</string>
+    <string name="room_new_message_notification">1 ný skilaboð</string>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 ný skilaboð</item>
+	<item quantity="other">%d ný skilaboð</item>
+</plurals>
+
+    <string name="ssl_trust">Treysta</string>
+    <string name="ssl_do_not_trust">Ekki treysta</string>
+    <string name="ssl_logout_account">Útskráning</string>
+    <string name="ssl_remain_offline">Hunsa</string>
+    <string name="ssl_fingerprint_hash">Fingrafar (%s):</string>
+    <string name="room_details_title">Nánar um spjallrás</string>
+    <string name="room_details_people">Fólk</string>
+    <string name="room_details_files">Skrár</string>
+    <string name="room_details_settings">Stillingar</string>
+    <string name="room_details_selected">valið</string>
+    <string name="room_event_action_cancel_download">Hætta við niðurhal</string>
+
+    <string name="room_displayname_two_members">%1$s og %2$s</string>
+
+    <string name="room_displayname_many_members">%1$s og %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 annar</item>
+	<item quantity="other">%d aðrir</item>
+</plurals>
+
+    <string name="room_displayname_no_title">Tóm spjallrás</string>
+
+    <string name="search_hint">Leita</string>
+    <string name="search_members_hint">Sía meðlimi spjallrásar</string>
+    <string name="search_no_results">Engar niðurstöður</string>
+    <string name="tab_title_search_rooms">SPJALLRÁSIR</string>
+    <string name="tab_title_search_messages">SKILABOÐ</string>
+    <string name="tab_title_search_people">FÓLK</string>
+    <string name="tab_title_search_files">SKRÁR</string>
+
+    <string name="room_recents_join">TAKA ÞÁTT</string>
+    <string name="room_recents_directory">MAPPA</string>
+    <string name="room_recents_favourites">EFTIRLÆTI</string>
+    <string name="room_recents_conversations">SPJALLRÁSIR</string>
+    <string name="room_recents_low_priority">LÍTILL FORGANGUR</string>
+    <string name="room_recents_invites">BOÐSGESTIR</string>
+    <string name="room_recents_start_chat">Hefja spjall</string>
+    <string name="room_recents_create_room">Búa til spjallrás</string>
+    <string name="room_recents_join_room">Taka þátt í spjallrás</string>
+    <string name="room_recents_join_room_title">Taka þátt í spjallsvæði</string>
+    <string name="directory_search_results_title">Vafra í möppu</string>
+    <string name="directory_search_room">%1$ spjallrás</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 spjallrás</item>
+	<item quantity="other">%d spjallrásir</item>
+</plurals>
+    <string name="room_settings_all_messages">Öll skilaboð</string>
+    <string name="room_settings_mute">Þagga</string>
+    <string name="room_settings_favourite">Eftirlæti</string>
+    <string name="room_settings_direct_chat">Beint spjall</string>
+    <string name="room_settings_forget">Gleyma</string>
+    <string name="room_sliding_menu_messages">Skilaboð</string>
+    <string name="room_sliding_menu_settings">Stillingar</string>
+    <string name="room_sliding_menu_version">"Útgáfa "</string>
+    <string name="room_sliding_menu_term_and_conditions">Skilmálar og kvaðir</string>
+    <string name="room_sliding_menu_third_party_notices">Athugasemdir frá þriðja aðila</string>
+    <string name="room_sliding_menu_copyright">Höfundarréttur</string>
+    <string name="room_sliding_menu_privacy_policy">Meðferð persónuupplýsinga</string>
+
+    <string name="settings_profile_picture">Notandamynd</string>
+    <string name="settings_display_name">Birtingarnafn</string>
+    <string name="settings_email_address">Tölvupóstfang</string>
+    <string name="settings_add_email_address">Bæta við tölvupóstfangi</string>
+    <string name="settings_phone_number">Símanúmer</string>
+    <string name="settings_add_phone_number">Bæta við símanúmeri</string>
+    <string name="settings_summary_app_info_link">Kerfisupplýsingar forrits</string>
+    <string name="settings_title_app_info_link">Upplýsingar um forrit</string>
+
+    <string name="settings_second">sekúnda</string>
+    <string name="settings_seconds">sekúndur</string>
+
+    <string name="settings_version">Útgáfa</string>
+    <string name="settings_olm_version">Útgáfa olm</string>
+    <string name="settings_app_term_conditions">Skilmálar og kvaðir</string>
+    <string name="settings_third_party_notices">Athugasemdir frá þriðja aðila</string>
+    <string name="settings_copyright">Höfundarréttur</string>
+    <string name="settings_privacy_policy">Meðferð persónuupplýsinga</string>
+    <string name="settings_clear_cache">Hreinsa skyndiminni</string>
+    <string name="settings_clear_medias_cache">Hreinsa skyndiminni margmiðlunarefnis</string>
+    <string name="settings_notifications">Tilkynningar</string>
+    <string name="settings_ignored_users">Hunsaðir notendur</string>
+    <string name="settings_other">Annað</string>
+    <string name="settings_advanced">Ítarlegt</string>
+    <string name="settings_cryptography">Dulritun</string>
+    <string name="settings_contact">Tengiliðir á tæki</string>
+    <string name="settings_devices_list">Tæki</string>
+    <string name="settings_analytics">Greiningar</string>
+    <string name="devices_details_id_title">Auðkenni (ID)</string>
+    <string name="devices_details_name_title">Heiti</string>
+    <string name="devices_details_device_name">Heiti tækis</string>
+    <string name="devices_details_last_seen_title">Sást síðast</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_details_time_format">HH:mm:ss</string>
+    <string name="devices_delete_dialog_title">Auðkenning</string>
+    <string name="devices_delete_pswd">Lykilorð:</string>
+    <string name="devices_delete_submit_button_label">Senda inn</string>
+
+    <string name="settings_logged_in">Skráð inn sem</string>
+    <string name="settings_user_interface">Notandaviðmót</string>
+    <string name="settings_interface_language">Tungumál notandaviðmóts</string>
+    <string name="settings_select_language">Veldu tungumál</string>
+
+    <string name="account_email_validation_title">Sannvottun í bið</string>
+    <string name="settings_change_password">Breyta lykilorði</string>
+    <string name="settings_old_password">eldra lykilorð</string>
+    <string name="settings_new_password">nýtt lykilorð</string>
+    <string name="settings_confirm_password">staðfestu lykilorð</string>
+    <string name="settings_fail_to_update_password">Mistókst að uppfæra lykilorð</string>
+    <string name="settings_password_updated">Lykilorðið þitt hefur verið uppfært</string>
+    <string name="settings_unignore_user">Sýna öll skilaboð frá %s?</string>
+
+    <string name="settings_select_country">Veldu land</string>
+
+    <string name="settings_phone_number_country_label">Land</string>
+    <string name="settings_phone_number_country_error">Veldu land</string>
+    <string name="settings_phone_number_label">Símanúmer</string>
+    <string name="settings_phone_number_verification">Sannprófun símanúmers</string>
+    <string name="settings_phone_number_code">Kóði</string>
+
+
+    <string name="media_saving_period_3_days">3 dagar</string>
+    <string name="media_saving_period_1_week">1 vika</string>
+    <string name="media_saving_period_1_month">1 mánuður</string>
+    <string name="media_saving_period_forever">Að eilífu</string>
+
+    <string name="room_settings_room_photo">Mynd spjallrásar</string>
+    <string name="room_settings_room_name">Nafn spjallrásar</string>
+    <string name="room_settings_topic">Umfjöllunarefni</string>
+    <string name="room_settings_room_tag">Merki spjallrásar</string>
+    <string name="room_settings_tag_pref_dialog_title">Merkt sem:</string>
+
+    <string name="room_settings_tag_pref_entry_favourite">Eftirlæti</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Lítill forgangur</string>
+    <string name="room_settings_tag_pref_entry_none">Ekkert</string>
+    <string name="room_settings_tag_pref_no_tag">ekki merkt</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">eftirlæti</string>
+    <string name="room_settings_tag_pref_entry_value_low_priority">lítill</string>
+    <string name="room_settings_tag_pref_entry_value_none">enginn</string>
+
+    <string name="room_settings_category_access_visibility_title">Aðgengi og sýnileiki</string>
+    <string name="room_settings_room_notifications_title">Tilkynningar</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Hver getur lesið ferilskráningu?</string>
+    <string name="room_settings_read_history_entry_anyone">Hver sem er</string>
+    <string name="room_settings_banned_users_title">Bannaðir notendur</string>
+
+    <string name="room_settings_category_advanced_title">Ítarlegt</string>
+    <string name="room_settings_addresses_pref_title">Vistföng</string>
+    <string name="room_settings_labs_end_to_end">Enda-í-enda dulritun</string>
+    <string name="room_settings_addresses_e2e_prompt_title">Aðvörun!</string>
+    <string name="directory_title">Mappa</string>
+    <string name="settings_theme">Þema</string>
+
+    <string name="encryption_information_device_info">Upplýsingar um atburð</string>
+    <string name="encryption_information_user_id">Notandaauðkenni</string>
+    <string name="encryption_information_algorithm">Reiknirit</string>
+    <string name="encryption_information_session_id">Auðkenni setu</string>
+    <string name="encryption_information_decryption_error">Afkóðunarvilla</string>
+
+    <string name="encryption_information_sender_device_information">Upplýsingar um tæki sendanda</string>
+    <string name="encryption_information_device_name">Heiti tækis</string>
+    <string name="encryption_information_name">Heiti</string>
+    <string name="encryption_information_device_id">Auðkenni tækis</string>
+    <string name="encryption_information_device_key">Dulritunarlykill tækis</string>
+    <string name="encryption_information_verification">Sannvottun</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 fingrafar</string>
+
+    <string name="encryption_export_export">Flytja út</string>
+    <string name="encryption_export_enter_passphrase">Settu inn lykilsetningu (passphrase)</string>
+    <string name="encryption_export_confirm_passphrase">Staðfestu lykilsetningu</string>
+    <string name="encryption_import_import">Flytja inn</string>
+    <string name="encryption_information_unknown_device">óþekkt tæki</string>
+    <string name="encryption_information_none">ekkert</string>
+
+    <string name="encryption_information_verify">Sannreyna</string>
+    <string name="encryption_information_unverify">Afturkalla sannvottun</string>
+    <string name="encryption_information_block">Bannlisti</string>
+    <string name="encryption_information_unblock">Taka af bannlista</string>
+
+    <string name="directory_server_all_rooms_on_server">Allar spjallrásir á %s vefþjóninum</string>
+    <string name="directory_server_native_rooms">Allar innbyggðar spjallrásir %s</string>
+
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 spjallrás</item>
+	<item quantity="other">%d spjallrásir</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s í %2$s</string>
+
+    <string name="historical_placeholder">Leita í ferilskráningu</string>
+
+    <string name="font_size">Stærð leturs</string>
+    <string name="tiny">Örsmátt</string>
+    <string name="small">Lítið</string>
+    <string name="normal">Venjulegt</string>
+    <string name="large">Stórt</string>
+    <string name="larger">Stærra</string>
+    <string name="largest">Stærst</string>
+    <string name="huge">Flennistórt</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">1 virkur viðmótshluti</item>
+	<item quantity="other">%d virkir viðmótshlutar</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="widget_integration_must_be_in_room">Þú ert ekki á þessari spjallrás.</string>
+    <string name="widget_integration_no_permission_in_room">Þú hefur ekki réttindi til þess að gera þetta á þessari spjallrás.</string>
+    <string name="widget_integration_room_not_visible">Spjallrásin %s er ekki sýnileg.</string>
+    <string name="conference_call_warning_title">Aðvörun!</string>
+    <string name="command_error">Skipanavilla</string>
+    <string name="unrecognized_command">Óþekkt skipun: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Slökkt</string>
+    <string name="notification_on">Kveikt</string>
+    <string name="notification_noisy">Hávært</string>
+
+    <string name="encrypted_message">Dulrituð skilaboð</string>
+
+    // groups creation
+    <string name="create">Búa til</string>
+    <string name="community_name_hint">Dæmi</string>
+    <string name="community_id_hint">dæmi</string>
+
+    // group details
+    <string name="group_details_home">Heim</string>
+    <string name="group_details_people">Fólk</string>
+    <string name="group_details_rooms">Spjallrásir</string>
+    <string name="no_users_placeholder">Engir notendur</string>
+
+    <string name="rooms">Spjallrásir</string>
+    <string name="filter_group_members">Sía meðlimi hóps</string>
+    <string name="filter_group_rooms">Sía spjallrásahópa</string>
+
+    <string name="group_one_member">1 meðlimur</string>
+    <string name="group_members">%d meðlimir</string>
+
+    <string name="group_one_room">1 spjallrás</string>
+    <string name="group_rooms">%d spjallrásir</string>
+    <string name="reason_colon">Ástæða: %1$s</string>
+    <string name="forget_room">Gleyma spjallrás</string>
+
+    <string name="receipt_avatar">Auðkennismynd kvittunar</string>
+    <string name="notice_avatar">Auðkennismynd tilkynningar</string>
+    <string name="avatar">Auðkennismynd</string>
+
+</resources>
