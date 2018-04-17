@@ -276,6 +276,7 @@ class VectorMessagesAdapterMediasHelper {
             }
         }
 
+        // Use Ion library to display stickers (and animated gif stickers) 
         if (event.getType().equals(Event.EVENT_TYPE_STICKER)) {
             Ion.with(imageView).load(downloadId);
         }
