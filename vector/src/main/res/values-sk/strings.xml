@@ -497,7 +497,7 @@ Ste si istí?</string>
     <string name="settings_always_show_timestamps">Vždy zobrazovať časovú značku správ</string>
     <string name="settings_12_24_timestamps">Pri zobrazovaní časových značiek používať 12 hodinový formát (napr. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Skryť správy o vstupe a opustení miestnosti (netýka sa pozvaní/vykopnutí/zákazov vstupu)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Skryť zmeny zobrazovaného mena a avatara</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Skryť zmeny zobrazovaného mena a obrázka v profile</string>
 
     <string name="settings_disable_markdown">Pri odosielaní zakázať formátovanie textu Markdown</string>
     <string name="settings_data_save_mode">Režim šetrenia údajov</string>
@@ -559,7 +559,7 @@ Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
     <string name="media_saving_period_1_month">1 mesiac</string>
     <string name="media_saving_period_forever">Navždy</string>
 
-    <string name="room_settings_room_photo">Avatar miestnosti</string>
+    <string name="room_settings_room_photo">Obrázok miestnosti</string>
     <string name="room_settings_room_name">Názov miestnosti</string>
     <string name="room_settings_topic">Téma</string>
     <string name="room_settings_room_tag">Značka miestnosti</string>
@@ -928,7 +928,7 @@ Toto si vyžaduje odosielanie obsahu nešifrovaných správ na servery služieb 
 
     // Widget Integration Manager
     <string name="receipt_avatar">Potvrdenie o prečítaní</string>
-    <string name="notice_avatar">Avatar oznámenia</string>
-    <string name="avatar">Avatar</string>
+    <string name="notice_avatar">Obrázok oznámenia</string>
+    <string name="avatar">Obrázok</string>
 
 </resources>
