@@ -893,6 +893,4 @@
     <string name="receipt_avatar">Профилна снимка</string>
     <string name="notice_avatar">Профилна снимка</string>
     <string name="open_chat_header">Отвори заглавие</string>
-    <string name="settings_enable_content_sending">Остави детайлирани известия</string>
-    <string name="settings_enable_content_sending_summary">Включи тази опция, когато фоновата синхронизация е изключвена за показване на детайлирани известия. Това изисква изпращането на съдържанието на нешифровани съобщения през сървъри за Google услуги</string>
     </resources>

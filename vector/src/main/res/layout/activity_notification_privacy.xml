@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:text="@string/normal"
+                    android:text="@string/settings_notification_privacy_normal"
                     android:textSize="20sp"
                     android:layout_marginTop="2dp"
                     android:layout_marginLeft="40dp" />
