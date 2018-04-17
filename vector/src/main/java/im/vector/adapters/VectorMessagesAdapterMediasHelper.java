@@ -46,7 +46,6 @@ import org.matrix.androidsdk.rest.model.message.ImageInfo;
 import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.message.Message;
-import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.rest.model.message.VideoInfo;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
@@ -278,7 +277,10 @@ class VectorMessagesAdapterMediasHelper {
 
         // Use Ion library to display stickers (and animated gif stickers) 
         if (event.getType().equals(Event.EVENT_TYPE_STICKER)) {
-            Ion.with(imageView).load(downloadId);
+            Ion.with(mContext)
+                    .load(thumbUrl)
+                    .withBitmap()
+                    .intoImageView(imageView);
         }
 
         final View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
