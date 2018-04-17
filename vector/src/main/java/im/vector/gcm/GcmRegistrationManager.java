@@ -1090,6 +1090,8 @@ public final class GcmRegistrationManager {
         // Some hints for future usage
         //UNKNOWN,              // the policy has not been set yet
         //NO_NOTIFICATIONS,     // no notifications
+
+        // TODO: This enum could turn into an enum class with methods like isContentSendingAllowed()
     }
 
     /**
