@@ -161,9 +161,9 @@ dependencies {
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external lib
-    // compile(name: 'matrix-sdk', ext: 'aar')
+    compile(name: 'matrix-sdk', ext: 'aar')
     // use the matrix SDK as a sub project
-    compile project(':matrix-sdk')
+    // compile project(':matrix-sdk')
     compile(name: 'olm-sdk', ext: 'aar')
 
     /************* jitsi **************/
