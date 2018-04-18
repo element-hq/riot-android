@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonElement;
+import com.koushikdutta.ion.Ion;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -45,7 +46,6 @@ import org.matrix.androidsdk.rest.model.message.ImageInfo;
 import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.message.Message;
-import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.rest.model.message.VideoInfo;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
@@ -261,7 +261,10 @@ class VectorMessagesAdapterMediasHelper {
         final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) informationLayout.getLayoutParams();
 
         // the thumbnails are always pre - rotated
-        String downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(), imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle, ExifInterface.ORIENTATION_UNDEFINED, "image/jpeg", encryptedFileInfo);
+        String downloadId = null;
+        if (!event.getType().equals(Event.EVENT_TYPE_STICKER)) {
+            downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(), imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle, ExifInterface.ORIENTATION_UNDEFINED, "image/jpeg", encryptedFileInfo);
+        }
 
         // test if the media is downloading the thumbnail is not downloading
         if (null == downloadId) {
@@ -270,6 +273,14 @@ class VectorMessagesAdapterMediasHelper {
             } else if (message instanceof ImageMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
             }
+        }
+
+        // Use Ion library to display stickers (and animated gif stickers) 
+        if (event.getType().equals(Event.EVENT_TYPE_STICKER)) {
+            Ion.with(mContext)
+                    .load(thumbUrl)
+                    .withBitmap()
+                    .intoImageView(imageView);
         }
 
         final View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
@@ -374,6 +385,7 @@ class VectorMessagesAdapterMediasHelper {
             downloadProgressLayout.setVisibility(View.GONE);
         }
 
+        imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         imageView.setBackgroundColor(Color.TRANSPARENT);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }

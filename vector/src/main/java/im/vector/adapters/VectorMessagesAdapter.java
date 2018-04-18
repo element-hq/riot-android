@@ -1295,9 +1295,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else if (type == ROW_TYPE_STICKER) {
 
                 StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
-                if ("image/gif".equals(stickerMessage.getMimeType())) {
-                    waterMarkResourceId = R.drawable.filetype_gif;
-                }
                 message = stickerMessage;
             }
 
