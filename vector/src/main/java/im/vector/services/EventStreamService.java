@@ -113,7 +113,8 @@ public class EventStreamService extends Service {
     /**
      * Notification identifiers
      */
-    private static final int NOTIFICATION_ID = 123;
+    private static final int NOTIFICATION_ID_PERSISTENT = 123;
+    private static final int NOTIFICATION_ID = 1234;
 
     public enum NotificationState {
         // no notifications are displayed
@@ -864,7 +865,7 @@ public class EventStreamService extends Service {
 
             if (null != notification) {
                 mNotificationState = NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS;
-                startForeground(NOTIFICATION_ID, notification);
+                startForeground(NOTIFICATION_ID_PERSISTENT, notification);
                 mIsForeground = true;
                 Log.d(LOG_TAG, "## refreshStatusNotification : restore the events notification");
                 return;
@@ -882,7 +883,7 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "## refreshStatusNotification : put the service in foreground because of an initial sync " + mNotificationState);
 
             if (mNotificationState != NotificationState.INITIAL_SYNCING) {
-                startForeground(NOTIFICATION_ID, buildForegroundServiceNotification(getString(R.string.notification_sync_in_progress)));
+                startForeground(NOTIFICATION_ID_PERSISTENT, buildForegroundServiceNotification(getString(R.string.notification_sync_in_progress)));
                 mNotificationState = NotificationState.INITIAL_SYNCING;
             }
             mIsForeground = true;
@@ -890,7 +891,7 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "## refreshStatusNotification : put the service in foreground because of GCM registration");
 
             if (mNotificationState != NotificationState.LISTENING_FOR_EVENTS) {
-                startForeground(NOTIFICATION_ID, buildForegroundServiceNotification(getString(R.string.notification_listen_for_events)));
+                startForeground(NOTIFICATION_ID_PERSISTENT , buildForegroundServiceNotification(getString(R.string.notification_listen_for_events)));
                 mNotificationState = NotificationState.LISTENING_FOR_EVENTS;
             }
 
@@ -1287,7 +1288,7 @@ public class EventStreamService extends Service {
                 stopForeground(true);
                 mIsForeground = false;
             } else {
-                nm.cancel(NOTIFICATION_ID);
+                nm.cancel(NOTIFICATION_ID_PERSISTENT);
             }
 
             mNotificationState = NotificationState.NONE;
@@ -1381,16 +1382,20 @@ public class EventStreamService extends Service {
 
                             // the notification cannot be built
                             if (null != notif) {
-                                if (shouldDisplayListenForEventsNotification()) {
+                                // If we are not on fdroid and we fail google play registration, use hacked 'foreground' notifications
+                                if (shouldDisplayListenForEventsNotification() && mGcmRegistrationManager.useGCM()) {
                                     mIsForeground = true;
                                     startForeground(NOTIFICATION_ID, notif);
                                 } else {
-                                    if (mIsForeground) {
+                                    // If we are not on fdroid and we got GCM, clear foreground notifications
+                                    if (mIsForeground && mGcmRegistrationManager.useGCM()) {
                                         stopForeground(true);
                                         mIsForeground = false;
                                     }
+                                    // Notify normally if on fdroid or GCM registration passed
                                     nm.notify(NOTIFICATION_ID, notif);
                                 }
+
                                 mNotificationState = NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS;
                                 Log.d(LOG_TAG, "## refreshMessagesNotification() : display the notification");
                             } else {
@@ -1643,10 +1648,10 @@ public class EventStreamService extends Service {
                     session.getMyUserId(),
                     callId);
 
-
-            startForeground(NOTIFICATION_ID, notification);
-            mNotificationState = NotificationState.INCOMING_CALL;
+            startForeground(NOTIFICATION_ID_PERSISTENT, notification);
             mIsForeground = true;
+
+            mNotificationState = NotificationState.INCOMING_CALL;
 
             mIncomingCallId = callId;
 
@@ -1671,7 +1676,8 @@ public class EventStreamService extends Service {
     public void displayCallInProgressNotification(MXSession session, Room room, String callId) {
         if (null != callId) {
             Notification notification = NotificationUtils.buildPendingCallNotification(getApplicationContext(), room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
-            startForeground(NOTIFICATION_ID, notification);
+            startForeground(NOTIFICATION_ID_PERSISTENT, notification);
+            mIsForeground = true;
             mNotificationState = NotificationState.CALL_IN_PROGRESS;
             mCallIdInProgress = callId;
         }
@@ -1690,8 +1696,9 @@ public class EventStreamService extends Service {
             } else {
                 mIncomingCallId = null;
             }
-            nm.cancel(NOTIFICATION_ID);
+            nm.cancel(NOTIFICATION_ID_PERSISTENT);
             stopForeground(true);
+            mIsForeground = false;
 
             mNotificationState = NotificationState.NONE;
             refreshStatusNotification();
