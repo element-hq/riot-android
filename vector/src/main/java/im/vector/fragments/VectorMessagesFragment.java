@@ -51,6 +51,7 @@ public class VectorMessagesFragment extends MatrixMessagesFragment {
         }
 
         fragment.setArguments(args);
+        // FIXME This is a bug. If Fragment is recreated by the system, the listener and the session will not be set
         fragment.setMatrixMessagesListener(listener);
         fragment.setMXSession(session);
         return fragment;
