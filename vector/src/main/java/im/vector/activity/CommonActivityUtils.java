@@ -599,7 +599,7 @@ public class CommonActivityUtils {
             }
 
             if (null != EventStreamService.getInstance()) {
-                EventStreamService.getInstance().refreshStatusNotification();
+                EventStreamService.getInstance().refreshForegroundNotification();
             }
         }
     }

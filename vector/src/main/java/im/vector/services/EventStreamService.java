@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +81,9 @@ import im.vector.util.RiotEventDisplay;
 
 /**
  * A foreground service in charge of controlling whether the event stream is running or not.
+ *
+ * It manages messages notifications displayed to the end user. It can also display foreground
+ * notifications in some situations to let the app run in background.
  */
 public class EventStreamService extends Service {
     private static final String LOG_TAG = EventStreamService.class.getSimpleName();
@@ -111,27 +115,43 @@ public class EventStreamService extends Service {
     public static final String EXTRA_AUTO_RESTART_ACTION = "EventStreamService.EXTRA_AUTO_RESTART_ACTION";
 
     /**
-     * Notification identifiers
+     * Identifier of the notification used to display messages.
+     * Those messages are merged into a single notification.
      */
-    private static final int NOTIFICATION_ID = 123;
+    private static final int NOTIF_ID_MESSAGES = 60;
 
-    public enum NotificationState {
-        // no notifications are displayed
+    /**
+     * Identifier of the foreground notification used to keep the application alive
+     * when it runs in background.
+     * This notification, which is not removable by the end user, displays what
+     * the application is doing while in background.
+     */
+    private static final int NOTIF_ID_FOREGROUND_SERVICE = 61;
+
+    /**
+     * States of the foreground service notification.
+     */
+    public enum ForegroundNotificationState {
+        // the foreground notification is not displayed
         NONE,
-        // initial sync in progress
+        // initial sync in progress or the app is resuming
+        // once started, we want the application completes its first sync even if it is background meanwhile
         INITIAL_SYNCING,
         // fdroid mode or GCM registration failed
-        // put this service in foreground to keep it in life
+        // put this service in foreground to keep the app in life
         LISTENING_FOR_EVENTS,
-        // display events notifications
-        DISPLAYING_EVENTS_NOTIFICATIONS,
         // there is a pending incoming call
+        // continue to sync in background to keep the call signaling up
         INCOMING_CALL,
         // a call is in progress
+        // same requirement as INCOMING_CALL
         CALL_IN_PROGRESS,
     }
 
-    private static NotificationState mNotificationState = NotificationState.NONE;
+    /**
+     * The current state of the foreground service notification (`NOTIF_ID_FOREGROUND_SERVICE`).
+     */
+    private static ForegroundNotificationState mForegroundNotificationState = ForegroundNotificationState.NONE;
 
     /**
      * Default bing rule
@@ -176,11 +196,6 @@ public class EventStreamService extends Service {
      * incoming (foreground notification)
      */
     private String mIncomingCallId = null;
-
-    /**
-     * true when the service is in foreground ie the GCM registration failed or is disabled.
-     */
-    private boolean mIsForeground = false;
 
     /**
      * GCM manager
@@ -271,9 +286,9 @@ public class EventStreamService extends Service {
 
             // dismiss the initial sync notification
             // it seems there are some race conditions with onInitialSyncComplete
-            if (mNotificationState == NotificationState.INITIAL_SYNCING) {
+            if (mForegroundNotificationState == ForegroundNotificationState.INITIAL_SYNCING) {
                 Log.d(LOG_TAG, "onLiveEventsChunkProcessed : end of init sync");
-                refreshStatusNotification();
+                refreshForegroundNotification();
             }
         }
     };
@@ -449,7 +464,7 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "## autoRestart() : restarts after " + delay + " ms");
 
         // reset the service identifier
-        mNotificationState = NotificationState.NONE;
+        mForegroundNotificationState = ForegroundNotificationState.NONE;
 
         // restart the services after 3 seconds
         Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
@@ -482,15 +497,14 @@ public class EventStreamService extends Service {
         if (!mIsSelfDestroyed) {
             setServiceState(StreamAction.STOP);
 
-            // stop the foreground service on devices which uses the battery optimisation
+            // stop the foreground service on devices which respects battery optimizations
             // during the initial syncing
             // and if the GCM registration was done
-            if (PreferencesManager.useBatteryOptimisation(getApplicationContext()) &&
+            if (!PreferencesManager.isIgnoringBatteryOptimizations(getApplicationContext()) &&
                     (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) &&
-                    (mNotificationState == NotificationState.INITIAL_SYNCING)
+                    (mForegroundNotificationState == ForegroundNotificationState.INITIAL_SYNCING)
                     && Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager().hasRegistrationToken()) {
-                stopForeground(true);
-                mIsForeground = false;
+                setForegroundNotificationState(ForegroundNotificationState.NONE, null);
             }
 
             Log.d(LOG_TAG, "## onDestroy() : restart it");
@@ -571,7 +585,7 @@ public class EventStreamService extends Service {
                         (new Handler(getMainLooper())).post(new Runnable() {
                             @Override
                             public void run() {
-                                refreshStatusNotification();
+                                refreshForegroundNotification();
                             }
                         });
                     }
@@ -682,7 +696,7 @@ public class EventStreamService extends Service {
             monitorSession(session);
         }
 
-        refreshStatusNotification();
+        refreshForegroundNotification();
 
         setServiceState(StreamAction.START);
     }
@@ -702,9 +716,8 @@ public class EventStreamService extends Service {
     private void stop() {
         Log.d(LOG_TAG, "## stop(): the service is stopped");
 
-        if (mIsForeground) {
-            stopForeground(true);
-        }
+        // stop the foreground service, if any
+        setForegroundNotificationState(ForegroundNotificationState.NONE, null);
 
         if (mSessions != null) {
             for (MXSession session : mSessions) {
@@ -796,23 +809,25 @@ public class EventStreamService extends Service {
         setServiceState(StreamAction.START);
     }
 
+    //================================================================================
+    // notification management
+    //================================================================================
+
     /**
      * The GCM status has been updated (i.e disabled or enabled).
      */
     private void gcmStatusUpdate() {
         Log.d(LOG_TAG, "## gcmStatusUpdate");
 
-        if (mIsForeground) {
-            Log.d(LOG_TAG, "## gcmStatusUpdate : gcm status succeeds so stopForeground (" + mNotificationState + ")");
+        if (ForegroundNotificationState.NONE != mForegroundNotificationState) {
+            Log.d(LOG_TAG, "## gcmStatusUpdate : gcm status succeeds. So, stop foreground service (" + mForegroundNotificationState + ")");
 
-            if (NotificationState.LISTENING_FOR_EVENTS == mNotificationState) {
-                stopForeground(true);
-                mNotificationState = NotificationState.NONE;
-                mIsForeground = false;
+            if (ForegroundNotificationState.LISTENING_FOR_EVENTS == mForegroundNotificationState) {
+                setForegroundNotificationState(ForegroundNotificationState.NONE, null);
             }
         }
 
-        refreshStatusNotification();
+        refreshForegroundNotification();
     }
 
     /**
@@ -826,10 +841,11 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * Manages the "listen for events" and "synchronising" notifications
+     * Manages the sticky foreground notification.
+     * It displays the background state of the app ("Listen for events", "synchronising", ...)
      */
-    public void refreshStatusNotification() {
-        Log.d(LOG_TAG, "## refreshStatusNotification from state " + mNotificationState);
+    public void refreshForegroundNotification() {
+        Log.d(LOG_TAG, "## refreshForegroundNotification from state " + mForegroundNotificationState);
 
         MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
 
@@ -839,36 +855,9 @@ public class EventStreamService extends Service {
         }
 
         // call in progress notifications
-        if ((mNotificationState == NotificationState.INCOMING_CALL) || (mNotificationState == NotificationState.CALL_IN_PROGRESS)) {
-            Log.d(LOG_TAG, "## refreshStatusNotification : does nothing as there is a pending call");
+        if ((mForegroundNotificationState == ForegroundNotificationState.INCOMING_CALL) || (mForegroundNotificationState == ForegroundNotificationState.CALL_IN_PROGRESS)) {
+            Log.d(LOG_TAG, "## refreshForegroundNotification : does nothing as there is a pending call");
             return;
-        }
-
-        if (mNotificationState == NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS) {
-            if (PreferencesManager.useBatteryOptimisation(getApplicationContext()) &&
-                    ((mServiceState == StreamAction.CATCHUP) || isStopped()) && !mIsForeground) {
-                if (mServiceState == StreamAction.CATCHUP) {
-                    Log.d(LOG_TAG, "## refreshStatusNotification : events notif is displayed but the application is catchup up");
-                } else {
-                    Log.d(LOG_TAG, "## refreshStatusNotification : events notif is displayed but the service was stopped");
-                }
-                mNotificationState = NotificationState.NONE;
-            } else {
-                Log.d(LOG_TAG, "## refreshStatusNotification : displaying events notification");
-            }
-            return;
-        }
-
-        if (mNotificationState == NotificationState.NONE) {
-            Notification notification = NotificationUtils.buildMessageNotification(getApplicationContext(), true);
-
-            if (null != notification) {
-                mNotificationState = NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS;
-                startForeground(NOTIFICATION_ID, notification);
-                mIsForeground = true;
-                Log.d(LOG_TAG, "## refreshStatusNotification : restore the events notification");
-                return;
-            }
         }
 
         // GA issue
@@ -879,37 +868,59 @@ public class EventStreamService extends Service {
         boolean isInitialSyncInProgress = !session.getDataHandler().isInitialSyncComplete() || isStopped() || (mServiceState == StreamAction.CATCHUP);
 
         if (isInitialSyncInProgress) {
-            Log.d(LOG_TAG, "## refreshStatusNotification : put the service in foreground because of an initial sync " + mNotificationState);
-
-            if (mNotificationState != NotificationState.INITIAL_SYNCING) {
-                startForeground(NOTIFICATION_ID, buildForegroundServiceNotification(getString(R.string.notification_sync_in_progress)));
-                mNotificationState = NotificationState.INITIAL_SYNCING;
-            }
-            mIsForeground = true;
+            Log.d(LOG_TAG, "## refreshForegroundNotification : put the service in foreground because of an initial sync " + mForegroundNotificationState);
+            setForegroundNotificationState(ForegroundNotificationState.INITIAL_SYNCING, null);
         } else if (shouldDisplayListenForEventsNotification()) {
-            Log.d(LOG_TAG, "## refreshStatusNotification : put the service in foreground because of GCM registration");
-
-            if (mNotificationState != NotificationState.LISTENING_FOR_EVENTS) {
-                startForeground(NOTIFICATION_ID, buildForegroundServiceNotification(getString(R.string.notification_listen_for_events)));
-                mNotificationState = NotificationState.LISTENING_FOR_EVENTS;
-            }
-
-            mIsForeground = true;
+            Log.d(LOG_TAG, "## refreshForegroundNotification : put the service in foreground because of GCM registration");
+            setForegroundNotificationState(ForegroundNotificationState.LISTENING_FOR_EVENTS, null);
         } else {
-            if ((mNotificationState == NotificationState.LISTENING_FOR_EVENTS) || (mNotificationState == NotificationState.INITIAL_SYNCING)) {
-                Log.d(LOG_TAG, "## refreshStatusNotification : put the service in background from state " + mNotificationState);
-                stopForeground(true);
-                mNotificationState = NotificationState.NONE;
-            } else {
-                Log.d(LOG_TAG, "## refreshStatusNotification : nothing to do");
-            }
-            mIsForeground = false;
+            Log.d(LOG_TAG, "## refreshForegroundNotification : put the service in background from state " + mForegroundNotificationState);
+            setForegroundNotificationState(ForegroundNotificationState.NONE, null);
         }
     }
 
-    //================================================================================
-    // notification management
-    //================================================================================
+    /**
+     * Set the new foreground notification state.
+     * And display the foreground service notification (`NOTIF_ID_FOREGROUND_SERVICE`) if required.
+     *
+     * @param foregroundNotificationState the new state
+     * @param notification an already built notification. Required for `INCOMING_CALL` and `CALL_IN_PROGRESS`
+     */
+    private void setForegroundNotificationState(ForegroundNotificationState foregroundNotificationState, Notification notification) {
+
+        if (foregroundNotificationState == mForegroundNotificationState) {
+            return;
+        }
+
+        NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mForegroundNotificationState = foregroundNotificationState;
+        switch (mForegroundNotificationState) {
+            case NONE:
+                // The foreground/ sticky notification can be removed
+                nm.cancel(NOTIF_ID_FOREGROUND_SERVICE);
+                stopForeground(true);
+                break;
+            case INITIAL_SYNCING:
+                notification = buildForegroundServiceNotification(getString(R.string.notification_sync_in_progress));
+                break;
+            case LISTENING_FOR_EVENTS:
+                notification = buildForegroundServiceNotification(getString(R.string.notification_listen_for_events));
+                break;
+            case INCOMING_CALL:
+            case CALL_IN_PROGRESS:
+                // A prebuilt notification must be passed for changing to these states
+                if (notification == null) {
+                    throw new IllegalArgumentException("A notification object must be passed for state " + foregroundNotificationState);
+                }
+                break;
+        }
+
+        if (notification != null) {
+            // display the stick foreground notification
+            startForeground(NOTIF_ID_FOREGROUND_SERVICE, notification);
+        }
+    }
 
     /**
      * @return the polling thread listener notification
@@ -1256,43 +1267,48 @@ public class EventStreamService extends Service {
                 notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 mBackgroundNotificationStrings.add(0, notifiedLine);
-                Notification notification = NotificationUtils.buildMessagesListNotification(context, mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
-
-                if (null != notification) {
-                    nm.notify(NOTIFICATION_ID, notification);
-                    mNotificationState = NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS;
-                } else {
-                    nm.cancel(NOTIFICATION_ID);
-                    mNotificationState = NotificationState.NONE;
-                }
+                getInstance().displayMessagesNotification(mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
             }
         } else if (0 == unreadMessagesCount) {
             mBackgroundNotificationStrings.clear();
             mLastBackgroundNotificationUnreadCount = 0;
             mLastBackgroundNotificationRoomId = null;
-            nm.cancel(NOTIFICATION_ID);
-            mNotificationState = NotificationState.NONE;
+            getInstance().displayMessagesNotification(null, null);
         }
     }
 
     /**
-     * Dismiss the messages notifications.
+     * Display a list of messages in the messages notification.
      *
-     * @param nm the notifications manager
+     * @param messages the messages list, null will hide the messages notification.
+     * @param rule     the bing rule to use
      */
-    private void dismissMessagesNotification(NotificationManagerCompat nm) {
-        if (mNotificationState == NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS) {
-            Log.d(LOG_TAG, "## dismissMessagesNotification() : clear notification");
-            if (mIsForeground) {
-                stopForeground(true);
-                mIsForeground = false;
-            } else {
-                nm.cancel(NOTIFICATION_ID);
-            }
+    private void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
+        NotificationUtils.addNotificationChannels(this);
+        final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
-            mNotificationState = NotificationState.NONE;
-            RoomsNotifications.deleteCachedRoomNotifications(getApplicationContext());
-            refreshStatusNotification();
+        if (!mGcmRegistrationManager.areDeviceNotificationsAllowed() || (null == messages) || (0 == messages.size())) {
+            new Handler(getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    nm.cancel(NOTIF_ID_MESSAGES);
+                    RoomsNotifications.deleteCachedRoomNotifications(VectorApp.getInstance());
+                }
+            });
+        } else {
+            new Handler(getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Notification notif = NotificationUtils.buildMessagesListNotification(getApplicationContext(), messages, rule);
+
+                    if (null != notif) {
+                        nm.notify(NOTIF_ID_MESSAGES, notif);
+
+                    } else {
+                        nm.cancel(NOTIF_ID_MESSAGES);
+                    }
+                }
+            });
         }
     }
 
@@ -1315,7 +1331,7 @@ public class EventStreamService extends Service {
             new Handler(getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    dismissMessagesNotification(nm);
+                    displayMessagesNotification(null, null);
                 }
             });
         } else if (refreshNotifiedMessagesList()) {
@@ -1324,7 +1340,7 @@ public class EventStreamService extends Service {
                 new Handler(getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        dismissMessagesNotification(nm);
+                        displayMessagesNotification(null, null);
                     }
                 });
             } else {
@@ -1381,25 +1397,13 @@ public class EventStreamService extends Service {
 
                             // the notification cannot be built
                             if (null != notif) {
-                                if (shouldDisplayListenForEventsNotification()) {
-                                    mIsForeground = true;
-                                    startForeground(NOTIFICATION_ID, notif);
-                                } else {
-                                    if (mIsForeground) {
-                                        stopForeground(true);
-                                        mIsForeground = false;
-                                    }
-                                    nm.notify(NOTIFICATION_ID, notif);
-                                }
-                                mNotificationState = NotificationState.DISPLAYING_EVENTS_NOTIFICATIONS;
-                                Log.d(LOG_TAG, "## refreshMessagesNotification() : display the notification");
+                                nm.notify(NOTIF_ID_MESSAGES, notif);
                             } else {
-                                Log.d(LOG_TAG, "## refreshMessagesNotification() : nothing to display");
-                                dismissMessagesNotification(nm);
+                                displayMessagesNotification(null, null);
                             }
                         } else {
                             Log.e(LOG_TAG, "## refreshMessagesNotification() : mNotifiedEventsByRoomId is empty");
-                            dismissMessagesNotification(nm);
+                            displayMessagesNotification(null, null);
                         }
                     }
                 });
@@ -1642,11 +1646,7 @@ public class EventStreamService extends Service {
                     RoomsNotifications.getRoomName(getApplicationContext(), session, room, event),
                     session.getMyUserId(),
                     callId);
-
-
-            startForeground(NOTIFICATION_ID, notification);
-            mNotificationState = NotificationState.INCOMING_CALL;
-            mIsForeground = true;
+            setForegroundNotificationState(ForegroundNotificationState.INCOMING_CALL, notification);
 
             mIncomingCallId = callId;
 
@@ -1671,8 +1671,7 @@ public class EventStreamService extends Service {
     public void displayCallInProgressNotification(MXSession session, Room room, String callId) {
         if (null != callId) {
             Notification notification = NotificationUtils.buildPendingCallNotification(getApplicationContext(), room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
-            startForeground(NOTIFICATION_ID, notification);
-            mNotificationState = NotificationState.CALL_IN_PROGRESS;
+            setForegroundNotificationState(ForegroundNotificationState.CALL_IN_PROGRESS, notification);
             mCallIdInProgress = callId;
         }
     }
@@ -1683,18 +1682,18 @@ public class EventStreamService extends Service {
     public void hideCallNotifications() {
         NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // hide the call
-        if ((NotificationState.CALL_IN_PROGRESS == mNotificationState) || (NotificationState.INCOMING_CALL == mNotificationState)) {
-            if (NotificationState.CALL_IN_PROGRESS == mNotificationState) {
+        // hide the foreground notification for calls only if we are in these states 
+        if ((ForegroundNotificationState.CALL_IN_PROGRESS == mForegroundNotificationState)
+                || (ForegroundNotificationState.INCOMING_CALL == mForegroundNotificationState)) {
+            if (ForegroundNotificationState.CALL_IN_PROGRESS == mForegroundNotificationState) {
                 mCallIdInProgress = null;
             } else {
                 mIncomingCallId = null;
             }
-            nm.cancel(NOTIFICATION_ID);
-            stopForeground(true);
 
-            mNotificationState = NotificationState.NONE;
-            refreshStatusNotification();
+            setForegroundNotificationState(ForegroundNotificationState.NONE, null);
+            refreshForegroundNotification();
         }
     }
+
 }
