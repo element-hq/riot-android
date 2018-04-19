@@ -3,7 +3,7 @@ Changes in 0.8.6 (2018-04-20)
 
 Improvements: 
  * Update matrix-sdk.aar lib (v0.9.3).
- * Render stickers in the timeline (vector-im/riot-ios#1819).
+ * Render stickers in the timeline (#2097).
  * Hide "Show devices list" for local contacts who are not matrix users (#2153).
  * Login Activity: Code cleaning.
 
