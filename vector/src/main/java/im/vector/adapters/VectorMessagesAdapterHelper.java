@@ -605,7 +605,7 @@ class VectorMessagesAdapterHelper {
      *
      * @param convertView base view
      */
-    void hideStickerDescription(View convertView) {
+    public void hideStickerDescription(View convertView) {
         View stickerDescription = convertView.findViewById(R.id.message_adapter_sticker_layout);
 
         if (null != stickerDescription) {
@@ -619,7 +619,7 @@ class VectorMessagesAdapterHelper {
      * @param view base view
      * @param stickerMessage the sticker message
      */
-    void showStickerDescription(View view, StickerMessage stickerMessage) {
+    public void showStickerDescription(View view, StickerMessage stickerMessage) {
         View stickerDescriptionLayout = view.findViewById(R.id.message_adapter_sticker_layout);
         ImageView stickerTriangle = view.findViewById(R.id.message_adapter_sticker_triangle);
         TextView stickerDescription = view.findViewById(R.id.message_adapter_sticker_description);
@@ -1000,10 +1000,16 @@ class VectorMessagesAdapterHelper {
 
         if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
             // A message is displayable as long as it has a body
+            // Redacted messages should not be displayed
             Message message = JsonUtils.toMessage(event.getContent());
-            return !TextUtils.isEmpty(message.body) || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE);
+            // return !TextUtils.isEmpty(message.body) || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE);
+            return !event.isRedacted() || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE);
         } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
-            return true;
+            // A sticker is displayable as long as it has a body
+            // Redacted stickers should not be displayed
+            StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
+            return !event.isRedacted();
+            // return !TextUtils.isEmpty(stickerMessage.body);
         } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
                 || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)) {
             EventDisplay display = new RiotEventDisplay(context, event, roomState);

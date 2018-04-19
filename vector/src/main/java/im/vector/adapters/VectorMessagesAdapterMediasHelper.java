@@ -30,6 +30,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
@@ -261,15 +263,28 @@ class VectorMessagesAdapterMediasHelper {
         final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) informationLayout.getLayoutParams();
 
         // the thumbnails are always pre - rotated
-        String downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(), imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle, ExifInterface.ORIENTATION_UNDEFINED, "image/jpeg", encryptedFileInfo);
+        String downloadId = null;
+        if (!event.getType().equals(Event.EVENT_TYPE_STICKER)) {
+            downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(), imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle, ExifInterface.ORIENTATION_UNDEFINED, "image/jpeg", encryptedFileInfo);
+        }
 
         // test if the media is downloading the thumbnail is not downloading
         if (null == downloadId) {
             if (message instanceof VideoMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((VideoMessage) message).getUrl());
             } else if (message instanceof ImageMessage) {
-                downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
+                if (event.getType().equals(Event.EVENT_TYPE_STICKER)) {
+                    downloadId = mMediasCache.downloadIdStickerFromUrl(((StickerMessage) message).getUrl());
+                } else {
+                    downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
+                }
             }
+        }
+
+        // Use Glide library to display stickers into ImageView
+        // Glide support animated gif
+        if (event.getType().equals(Event.EVENT_TYPE_STICKER)) {
+            Glide.with(mContext).load(downloadId).into(imageView);
         }
 
         final View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);

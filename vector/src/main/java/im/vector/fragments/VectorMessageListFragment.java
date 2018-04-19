@@ -929,7 +929,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         for (int position = 0; position < mAdapter.getCount(); position++) {
             MessageRow row = mAdapter.getItem(position);
             Message message = JsonUtils.toMessage(row.getEvent().getContent());
-            String eventType = row.getEvent().getType();
 
             if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
 
@@ -954,19 +953,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 info.mThumbnailUrl = (null != videoMessage.info) ? videoMessage.info.thumbnail_url : null;
                 info.mMimeType = videoMessage.getMimeType();
                 info.mEncryptedFileInfo = videoMessage.file;
-                res.add(info);
-
-            } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
-
-                StickerMessage stickerMessage = (StickerMessage) message;
-                SlidableMediaInfo info = new SlidableMediaInfo();
-                info.mMessageType = null;
-                info.mFileName = stickerMessage.body;
-                info.mMediaUrl = stickerMessage.getUrl();
-                info.mRotationAngle = stickerMessage.getRotation();
-                info.mOrientation = stickerMessage.getOrientation();
-                info.mMimeType = stickerMessage.getMimeType();
-                info.mEncryptedFileInfo = stickerMessage.file;
                 res.add(info);
             }
         }
