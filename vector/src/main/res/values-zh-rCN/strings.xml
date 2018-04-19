@@ -763,7 +763,7 @@
     // notification statuses
     <string name="notification_off">关闭</string>
     <string name="notification_on">打开</string>
-    <string name="encrypted_message">加密的消息</string>
+    <string name="encrypted_message">加密消息</string>
 
 <string name="notification_noisy_notifications">通知并振铃</string>
     <string name="notification_silent_notifications">静默通知</string>
@@ -808,4 +808,35 @@
 <string name="room_settings_all_messages_noisy">所有消息（通知并振铃）</string>
     <string name="title_activity_group_details">社区细节</string>
 
+    <string name="actions">操作</string>
+    <string name="bottom_action_groups">社区</string>
+
+    <string name="home_filter_placeholder_groups">搜索社区</string>
+
+    <string name="groups_header">社区</string>
+    <string name="no_group_placeholder">没有群组</string>
+
+    <string name="send_bug_report_rage_shake">摇一摇报告 bug</string>
+
+    <string name="groups_list">群组列表</string>
+
+    <string name="room_sync_in_progress">正在同步…</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="other">%d 位在线成员</item>
+</plurals>
+    <plurals name="membership_changes">
+	<item quantity="other">%d 位成员的状态发生了变化</item>
+</plurals>
+
+    <plurals name="room_title_members">
+	<item quantity="other">%d 位成员</item>
+</plurals>
+    <string name="room_settings_invalid_group_format_dialog_title">社区 ID 无效</string>
+    <string name="room_settings_invalid_group_format_dialog_body">“%s” 不是一个有效的社区 ID</string>
+
+
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="other">%d 条未读消息</item>
+</plurals>
+    <string name="create_community">创建社区</string>
     </resources>
