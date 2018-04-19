@@ -1,6 +1,7 @@
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -593,7 +594,10 @@ public final class GcmRegistrationManager {
 
         Log.d(LOG_TAG, "registerToThirdPartyServer of " + session.getMyUserId());
 
-        boolean eventIdOnlyPushes = (isBackgroundSyncAllowed() ? true : !isContentSendingAllowed());
+        // send only the event id but not the event content if:
+        // - the user let the app run in background to fetch the event content from the homeserver
+        // - or, if the app cannot run in background, the user does not want to send event content to GCM
+        boolean eventIdOnlyPushes = isBackgroundSyncAllowed() || !isContentSendingAllowed();
 
         getPushersRestClient(session)
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
@@ -1060,6 +1064,37 @@ public final class GcmRegistrationManager {
     //================================================================================
 
     /**
+     * Notification privacy policies as displayed to the end user.
+     * In the code, this enumeration is currently implemented with combinations of booleans.
+     */
+    public enum NotificationPrivacy {
+        /**
+         * Reduced privacy: message metadata and content are sent through the push service.
+         * Notifications for messages in e2e rooms are displayed with low detail.
+         */
+        REDUCED,
+
+        /**
+         * Notifications are displayed with low detail (X messages in RoomY).
+         * Only message metadata is sent through the push service.
+         */
+        LOW_DETAIL,
+
+        /**
+         * Normal: full detailed notifications by keeping user privacy.
+         * Only message metadata is sent through the push service. The app then makes a sync in bg
+         * with the homeserver.
+         */
+        NORMAL
+
+        // Some hints for future usage
+        //UNKNOWN,              // the policy has not been set yet
+        //NO_NOTIFICATIONS,     // no notifications
+
+        // TODO: This enum could turn into an enum class with methods like isContentSendingAllowed()
+    }
+
+    /**
      * Clear the GCM preferences
      */
     public void clearPreferences() {
@@ -1082,6 +1117,53 @@ public final class GcmRegistrationManager {
             }
         }
         return mUseGCM;
+    }
+
+    /**
+     * @return the current notification privacy setting as displayed to the end user.
+     */
+    public NotificationPrivacy getNotificationPrivacy() {
+        NotificationPrivacy notificationPrivacy = NotificationPrivacy.LOW_DETAIL;
+
+        boolean isContentSendingAllowed = isContentSendingAllowed();
+        boolean isBackgroundSyncAllowed = isBackgroundSyncAllowed();
+
+        if (isContentSendingAllowed && !isBackgroundSyncAllowed)
+        {
+            notificationPrivacy = NotificationPrivacy.REDUCED;
+        }
+        else if (!isContentSendingAllowed && isBackgroundSyncAllowed)
+        {
+            notificationPrivacy = NotificationPrivacy.NORMAL;
+        }
+
+        return notificationPrivacy;
+    }
+
+    /**
+     * Update the notification privacy setting.
+     * Translate the setting displayed to end user into internal booleans.
+     *
+     * @param notificationPrivacy the new notification privacy.
+     */
+    public void setNotificationPrivacy(NotificationPrivacy notificationPrivacy) {
+
+        switch (notificationPrivacy) {
+            case REDUCED:
+                setContentSendingAllowed(true);
+                setBackgroundSyncAllowed(false);
+                break;
+            case LOW_DETAIL:
+                setContentSendingAllowed(false);
+                setBackgroundSyncAllowed(false);
+                break;
+            case NORMAL:
+                setContentSendingAllowed(false);
+                setBackgroundSyncAllowed(true);
+                break;
+        }
+
+        forceSessionsRegistration(null);
     }
 
     /**
@@ -1130,23 +1212,27 @@ public final class GcmRegistrationManager {
     }
 
     /**
+     * Tell if the application can run in background.
+     * It depends on the app settings and the `IgnoringBatteryOptimizations` permission.
+     *
      * @return true if the background sync is allowed
      */
     public boolean isBackgroundSyncAllowed() {
+        // first check if the application has the "run in background" permission.
+        // No permission, no background sync
+        if (!PreferencesManager.isIgnoringBatteryOptimizations(mContext))
+        {
+            return false;
+        }
+
+        // then, this depends on the user setting
         return getGcmSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
     }
 
     /**
-     * Tell if the application can be restarted in background
-     *
-     * @return true if the application can be restarted in background
-     */
-    public boolean canStartAppInBackground() {
-        return isBackgroundSyncAllowed() || (null != getStoredRegistrationToken());
-    }
-
-    /**
-     * Allow the background sync
+     * Allow the background sync.
+     * Background sync (isBackgroundSyncAllowed) is really enabled if the "isIgnoringBatteryOptimizations"
+     * permission has been granted.
      *
      * @param isAllowed true to allow the background sync.
      */
@@ -1159,6 +1245,15 @@ public final class GcmRegistrationManager {
 
         // when GCM is disabled, enable / disable the "Listen for events" notifications
         CommonActivityUtils.onGcmUpdate(mContext);
+    }
+
+    /**
+     * Tell if the application can be restarted in background
+     *
+     * @return true if the application can be restarted in background
+     */
+    public boolean canStartAppInBackground() {
+        return isBackgroundSyncAllowed() || (null != getStoredRegistrationToken());
     }
 
     /**

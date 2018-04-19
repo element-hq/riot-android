@@ -908,6 +908,4 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="notice_avatar">Jakinarazpen abatarra</string>
     <string name="avatar">Abatarra</string>
 
-<string name="settings_enable_content_sending">Mantendu jakinarazpen xehatuak</string>
-    <string name="settings_enable_content_sending_summary">"Gaitu aukera hau bigarren planoko sinkronizazioa desgaituta dagoenean jakinarazpen xehatuak bistaratzeko. Honek zifratu gabeko mezuaren edukia Google zerbitzarien bidez igortzea  eskatzen du"</string>
     </resources>

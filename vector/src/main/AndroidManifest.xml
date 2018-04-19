@@ -65,7 +65,7 @@
         android:required="false"
         tools:replace="required" />
 
-    <!-- ShortcutBadger permissions-->
+    <!-- ShortcutBadger permissions -->
     <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
     <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
     <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" />
@@ -85,10 +85,13 @@
 
     <!-- jitsi -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-feature android:name="android.hardware.telephony" android:required="false"/>
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <application
-        android:name="im.vector.VectorApp"
+        android:name=".VectorApp"
         android:allowBackup="false"
         android:icon="@drawable/logo"
         android:label="@string/riot_app_name"
@@ -100,7 +103,7 @@
 
         <!-- activities list starts here -->
         <activity
-            android:name="im.vector.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/LoginAppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
@@ -110,225 +113,189 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="im.vector.activity.AccountCreationActivity"
+            android:name=".activity.AccountCreationActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/create_account"></activity>
-
+            android:label="@string/create_account" />
         <activity
-            android:name="im.vector.activity.AccountCreationCaptchaActivity"
+            android:name=".activity.AccountCreationCaptchaActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/create_account"></activity>
-
+            android:label="@string/create_account" />
         <activity
-            android:name="im.vector.activity.FallbackLoginActivity"
+            android:name=".activity.FallbackLoginActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/login"></activity>
-
+            android:label="@string/login" />
         <activity
-            android:name="im.vector.activity.SplashActivity"
+            android:name=".activity.SplashActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="im.vector.activity.LoggingOutActivity"
+            android:name=".activity.LoggingOutActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="im.vector.activity.VectorHomeActivity"
+            android:name=".activity.VectorHomeActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_home"
             android:theme="@style/HomeActivityTheme"
-            android:windowSoftInputMode="adjustPan"></activity>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="im.vector.activity.HistoricalRoomsActivity"
+            android:name=".activity.HistoricalRoomsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_historical"
-            android:parentActivityName="im.vector.activity.VectorHomeActivity"
+            android:parentActivityName=".activity.VectorHomeActivity"
             android:theme="@style/HomeActivityTheme"
-            android:windowSoftInputMode="adjustPan"></activity>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="im.vector.activity.VectorRoomActivity"
+            android:name=".activity.VectorRoomActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_room"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <activity
-            android:name="im.vector.activity.VectorRoomCreationActivity"
+            android:name=".activity.VectorRoomCreationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/room_creation_title"
             android:launchMode="singleTop"
-            android:parentActivityName="im.vector.activity.VectorHomeActivity"
+            android:parentActivityName=".activity.VectorHomeActivity"
             android:windowSoftInputMode="adjustResize">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorRoomActivity" />
         </activity>
-
         <activity
-            android:name="im.vector.activity.VectorRoomDetailsActivity"
+            android:name=".activity.VectorRoomDetailsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/room_details_title"
             android:launchMode="singleTop"
-            android:parentActivityName="im.vector.activity.VectorRoomActivity"
+            android:parentActivityName=".activity.VectorRoomActivity"
             android:windowSoftInputMode="adjustResize">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorRoomActivity" />
         </activity>
-
         <activity
-            android:name="im.vector.activity.VectorSettingsActivity"
+            android:name=".activity.VectorSettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="im.vector.activity.VectorHomeActivity"
+            android:parentActivityName=".activity.VectorHomeActivity"
             android:windowSoftInputMode="adjustResize">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorHomeActivity" />
         </activity>
-
         <activity
-            android:name="im.vector.activity.VectorMemberDetailsActivity"
+            android:name=".activity.VectorMemberDetailsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_member_details"
-            android:parentActivityName="im.vector.activity.VectorRoomActivity"
+            android:parentActivityName=".activity.VectorRoomActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorRoomActivity" />
         </activity>
-
         <activity
-            android:name="im.vector.activity.LockScreenActivity"
+            android:name=".activity.LockScreenActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Holo.Light.Dialog" />
-
         <activity
-            android:name="im.vector.activity.JoinScreenActivity"
+            android:name=".activity.JoinScreenActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Holo.Light.Dialog" />
-
         <activity
-            android:name="im.vector.activity.VectorMediasViewerActivity"
+            android:name=".activity.VectorMediasViewerActivity"
             android:configChanges="orientation|screenSize"
             android:label="a filename"
             android:launchMode="singleTop"
-            android:parentActivityName="im.vector.activity.VectorRoomActivity"
+            android:parentActivityName=".activity.VectorRoomActivity"
             android:windowSoftInputMode="adjustResize">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorRoomActivity" />
         </activity>
-
         <activity
-            android:name="im.vector.activity.VectorCallViewActivity"
+            android:name=".activity.VectorCallViewActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/CallActivityTheme" />
-
         <activity
-            android:name="im.vector.activity.JitsiCallActivity"
+            android:name=".activity.JitsiCallActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
-
         <activity
-            android:name="im.vector.activity.WidgetActivity"
+            android:name=".activity.WidgetActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
-
         <activity
-            android:name="im.vector.activity.IntegrationManagerActivity"
+            android:name=".activity.IntegrationManagerActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
-
         <activity
-            android:name="im.vector.activity.VectorMediasPickerActivity"
+            android:name=".activity.VectorMediasPickerActivity"
             android:label="@string/media_picker_both_capture_title"
             android:launchMode="singleTop"
-            android:parentActivityName="im.vector.activity.VectorRoomActivity"
+            android:parentActivityName=".activity.VectorRoomActivity"
             android:theme="@style/AppTheme.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateHidden">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorHomeActivity" />
         </activity>
-
         <activity
-            android:name="im.vector.activity.VectorPublicRoomsActivity"
+            android:name=".activity.VectorPublicRoomsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/directory_title"
             android:launchMode="singleTop"
-            android:parentActivityName="im.vector.activity.VectorUnifiedSearchActivity"
+            android:parentActivityName=".activity.VectorUnifiedSearchActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorUnifiedSearchActivity" />
         </activity>
-
         <activity
             android:name=".activity.VectorUnifiedSearchActivity"
             android:configChanges="orientation|screenSize"
             android:label="Vector searches"
             android:launchMode="singleTop"
-            android:parentActivityName="im.vector.activity.VectorHomeActivity"
+            android:parentActivityName=".activity.VectorHomeActivity"
             android:theme="@style/SearchesAppTheme"
             android:windowSoftInputMode="adjustResize">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorHomeActivity" />
         </activity>
-
         <activity
             android:name=".activity.VectorRoomInviteMembersActivity"
             android:configChanges="orientation|screenSize"
             android:label="Vector searches"
             android:launchMode="singleTop"
-            android:parentActivityName="im.vector.activity.VectorRoomDetailsActivity"
+            android:parentActivityName=".activity.VectorRoomDetailsActivity"
             android:theme="@style/SearchesAppTheme"
             android:windowSoftInputMode="adjustResize">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorHomeActivity" />
         </activity>
-
         <activity
-            android:name="im.vector.activity.BugReportActivity"
+            android:name=".activity.BugReportActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_bug_report"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <activity
-            android:name="im.vector.activity.VectorGroupDetailsActivity"
+            android:name=".activity.VectorGroupDetailsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_group_details"
             android:launchMode="singleTop"
             android:theme="@style/GroupAppTheme"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
-
+            android:windowSoftInputMode="adjustResize"></activity>
         <activity android:name=".activity.VectorUniversalLinkActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -345,7 +312,6 @@
                 <!-- mail validation -->
                 <data android:pathPrefix="/_matrix/" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -362,7 +328,6 @@
                 <!-- mail validation -->
                 <data android:pathPrefix="/_matrix/" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -374,40 +339,40 @@
                 <data android:host="matrix.to" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.VectorFakeRoomPreviewActivity"
-            android:theme="@android:style/Theme.NoDisplay"></activity>
-
+            android:theme="@android:style/Theme.NoDisplay" />
         <activity
-            android:name="im.vector.activity.PhoneNumberAdditionActivity"
+            android:name=".activity.PhoneNumberAdditionActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_add_phone_number"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
-            android:name="im.vector.activity.CountryPickerActivity"
+            android:name=".activity.CountryPickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_select_country"
             android:theme="@style/CountryPickerTheme" />
-
         <activity
-            android:name="im.vector.activity.LanguagePickerActivity"
+            android:name=".activity.LanguagePickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_select_language"
             android:theme="@style/CountryPickerTheme" />
-
         <activity
-            android:name="im.vector.activity.RoomDirectoryPickerActivity"
+            android:name=".activity.RoomDirectoryPickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/select_room_directory"
             android:theme="@style/DirectoryPickerTheme" />
-
         <activity
-            android:name="im.vector.activity.PhoneNumberVerificationActivity"
+            android:name=".activity.PhoneNumberVerificationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_phone_number_verification"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.NotificationPrivacyActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_notification_privacy"
+            android:theme="@style/CountryPickerTheme" >
+        </activity>
 
         <!-- broadcast receiver -->
         <receiver
@@ -424,7 +389,6 @@
                 <data android:pathPrefix="/develop/" />
                 <data android:pathPrefix="/staging/" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="im.vector.receiver.UNIVERSAL_LINK" />
 
@@ -436,7 +400,6 @@
                 <data android:pathPrefix="/develop/" />
                 <data android:pathPrefix="/staging/" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="im.vector.receiver.UNIVERSAL_LINK" />
 
@@ -444,12 +407,10 @@
                 <data android:scheme="https" />
                 <data android:host="matrix.to" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="im.vector.receiver.UNIVERSAL_LINK_RESUME" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".receiver.VectorRegistrationReceiver"
             android:exported="false">
@@ -463,18 +424,15 @@
                 <data android:pathPrefix="/_matrix/" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name="im.vector.receiver.VectorBootReceiver">
+        <receiver android:name=".receiver.VectorBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.ACTION_USER_UNLOCKED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name="im.vector.receiver.DismissNotificationReceiver"/>
-
+        <receiver android:name=".receiver.DismissNotificationReceiver" />
         <receiver
-            android:name="im.vector.receiver.VectorReferrerReceiver"
+            android:name=".receiver.VectorReferrerReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -482,27 +440,24 @@
             </intent-filter>
         </receiver>
 
-
-        <!-- Shared items  -->
+        <!-- Shared items -->
         <activity
             android:name=".activity.VectorSharedFilesActivity"
             android:theme="@android:style/Theme.NoDisplay">
-
-            <intent-filter> 
-                <action android:name="android.intent.action.SEND" /> 
-                <category android:name="android.intent.category.DEFAULT" /> 
-                <data android:mimeType="*/*" /> 
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
             </intent-filter>
-             
 
-            <intent-filter> 
-                <action android:name="android.intent.action.SEND_MULTIPLE" /> 
-                <category android:name="android.intent.category.DEFAULT" /> 
-                <data android:mimeType="*/*" /> 
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
 
-        <service android:name="im.vector.services.EventStreamService" />
+        <service android:name=".services.EventStreamService" />
     </application>
 
 </manifest>
