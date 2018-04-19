@@ -1080,7 +1080,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mListViewAdapter.setCallActionsList(callActions);
 
             // devices
-            if (mUser != null) {
+            // don't show devices list if the member isn't a matrix user
+            if (mUser != null && MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(mMemberId).matches()) {
                 imageResource = R.drawable.ic_devices_info;
                 actionText = getResources().getString(R.string.room_participants_action_devices_list);
                 devicesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_DEVICES));
