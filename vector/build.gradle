@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '26.0.2'
 
     packagingOptions {
@@ -142,10 +142,10 @@ dependencies {
 
     compile 'me.leolin:ShortcutBadger:1.1.2@aar'
 
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.android.support:cardview-v7:26.1.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:design:27.1.1'
+    compile 'com.android.support:cardview-v7:27.1.1'
+    compile 'com.android.support:recyclerview-v7:27.1.1'
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
@@ -155,6 +155,10 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.2.0'
 
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
+
+    // Use Glide library to display image (Gif supported)
+    compile 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
     compile 'com.googlecode.libphonenumber:libphonenumber:8.0.1'
 
