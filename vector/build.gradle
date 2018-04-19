@@ -142,10 +142,10 @@ dependencies {
 
     compile 'me.leolin:ShortcutBadger:1.1.2@aar'
 
-    compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.android.support:design:27.1.1'
-    compile 'com.android.support:cardview-v7:27.1.1'
-    compile 'com.android.support:recyclerview-v7:27.1.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
@@ -208,7 +208,7 @@ dependencies {
     appCompile 'com.google.firebase:firebase-messaging:11.8.0'
 
     // fdroid flavor only
-    compile project(path: ':matrix-sdk')
+
 }
 
 
