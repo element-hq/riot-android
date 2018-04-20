@@ -1,14 +1,22 @@
-Changes in 0.8.6 (2018-04-20)
+Changes in Riot 0.8.6 (2018-04-20)
 ===================================================
 
+Features:
+ * Render stickers in the timeline (#2097).
+ 
 Improvements: 
  * Update matrix-sdk.aar lib (v0.9.3).
- * Render stickers in the timeline (#2097).
+ * Notifications: make them user friendly again (#2130).
+ * Add Notification privacy screen (PR #2152).
  * Hide "Show devices list" for local contacts who are not matrix users (#2153).
  * Login Activity: Code cleaning.
 
 Bug Fix:
  * Tapping on a room pill should not automatically join it (#2098).
+ * Notifications: Make the notification for messages no more sticky (PR #2148).
+ 
+Build:
+ * Update to SDK 27.
 
 Changes in Riot 0.8.5 (2018-03-31)
 ===================================================
