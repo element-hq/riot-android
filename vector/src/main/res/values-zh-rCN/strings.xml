@@ -839,4 +839,48 @@
 	<item quantity="other">%d 条未读消息</item>
 </plurals>
     <string name="create_community">创建社区</string>
+    <string name="list_members">显示成员</string>
+    <string name="open_chat_header">打开顶栏</string>
+    <string name="room_displayname_many_members">%1$s 和 %2$s</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="other">%d 个聊天室</item>
+</plurals>
+    <string name="settings_notification_privacy">通知隐私</string>
+    <string name="settings_notification_privacy_warning">Riot.im 将在后台运行以保证通知消息内容的私密性。 您可以更改此选项以减少电池使用量。</string>
+    <string name="settings_notification_privacy_need_permission">本应用需要在后台运行的权限</string>
+    <string name="settings_flair">Flair</string>
+
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="other">%d 个聊天室</item>
+</plurals>
+    <plurals name="active_widgets">
+	<item quantity="other">已启用 %d 个小部件</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="community_name">社区名称</string>
+    <string name="community_id">社区 ID</string>
+    <string name="group_details_home">主页</string>
+    <string name="group_details_people">用户</string>
+    <string name="group_details_rooms">聊天室</string>
+    <string name="rooms">聊天室</string>
+    <string name="no_users_placeholder">没有用户</string>
+
+    <string name="joined">已加入</string>
+    <string name="invited">已邀请</string>
+    <string name="filter_group_members">过滤社区成员</string>
+    <string name="filter_group_rooms">过滤社区聊天室</string>
+
+    <string name="group_one_member">1 位成员</string>
+    <string name="group_members">%d 位成员</string>
+
+    <string name="group_one_room">1 个聊天室</string>
+    <string name="group_rooms">%d 个聊天室</string>
+    <string name="has_been_kicked">您已被 %2$s 从 %1$s 中移除</string>
+    <string name="has_been_banned">您已被 %2$s 从 %1$s 中封禁</string>
+    <string name="reason_colon">理由：%1$s</string>
+    <string name="avatar">头像</string>
+
+<string name="receipt_avatar">Receipt 头像</string>
+    <string name="notice_avatar">通知头像</string>
     </resources>
