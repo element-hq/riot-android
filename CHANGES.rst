@@ -6,11 +6,14 @@ Features:
  
 Improvements: 
  * Update matrix-sdk.aar lib (v0.9.3).
+ * Notifications: make them user friendly again (#2130).
+ * Add Notification privacy screen (PR #2152).
  * Hide "Show devices list" for local contacts who are not matrix users (#2153).
  * Login Activity: Code cleaning.
 
 Bug Fix:
  * Tapping on a room pill should not automatically join it (#2098).
+ * Notifications: Make the notification for messages no more sticky (PR #2148).
  
 Build:
  * Update to SDK 27.
