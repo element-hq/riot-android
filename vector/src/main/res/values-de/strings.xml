@@ -954,7 +954,7 @@ Unbekannte Geräte:</string>
     <string name="receipt_avatar">Lesebestätigungs-Profilbild</string>
     <string name="notice_avatar">Notiz-Avatar</string>
     <string name="settings_notification_privacy">Datenschutz für Benachrichtigungen</string>
-    <string name="settings_notification_privacy_warning">Riot.im läuft im Hintergrund um die Benachrichtigungsinhalt privat zu halten. Du kannst diese Option ändern um den Stromverbrauch zu redizieren.</string>
+    <string name="settings_notification_privacy_warning">Riot.im läuft im Hintergrund um den Benachrichtigungsinhalt privat zu halten. Du kannst diese Option ändern um den Stromverbrauch zu reduzieren.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_power_saving">Energiesparoptionen</string>
     <string name="settings_notification_privacy_low_detail">Informationsarme Benachrichtigung</string>
