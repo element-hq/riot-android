@@ -963,9 +963,9 @@ Unbekannte Geräte:</string>
     <string name="settings_notification_privacy_no_permission">Die App braucht die Berechtigung im Hintergrund zu laufen <b>nicht</b></string>
     <string name="settings_notification_privacy_gcm">• Benachrichtigungen werden über Google Cloud Messaging versendet</string>
     <string name="settings_notification_privacy_metadata">• Benachrichtigungen enthalten nur Metadaten</string>
-    <string name="settings_notification_privacy_secure_message_content">• Der Nachrichteninhalt der Benachrichtigung wird &lt;/b&gt;sicher vom Matrix-Heimserver abgerufen&lt;/b&gt;<b>located securely direct from the Matrix homeserver</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Der Nachrichteninhalt der Benachrichtigung wird <b>sicher vom Matrix-Heimserver abgerufen</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Benachrichtigungen enthalten <b>Metadaten und Nachrichteninhalte</b></string>
-    <string name="settings_notification_privacy_message_content_not_shown">• Benachrichtigungen werden &lt;/b&gt;den Nachrichteninhalt nicht anzeigen&lt;/b&gt;<b>not show message content</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Benachrichtigungen werden <b>den Nachrichteninhalt nicht anzeigen</b></string>
 
     <string name="startup_notification_privacy_title">Benachrichtungs-Datenschutz</string>
     <string name="startup_notification_privacy_message">Riot.im kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten (dies kann den Energieverbrauch beeinflussen).</string>
