@@ -848,8 +848,6 @@
     <string name="settings_summary_app_info_link">شاشة معلومات التطبيق في النظام</string>
     <string name="settings_call_invitations">دعوات المكالمات</string>
     <string name="settings_start_on_boot">ابدأ عن الإقلاع</string>
-    <string name="settings_enable_content_sending">أبق الإخطارات مفصّلة</string>
-    <string name="settings_enable_content_sending_summary">فعّل هذا الخيار عندما تكون المزامنة في الخلفية معطّلة لعرض إخطارات مفصّلة. يتطلب هذا إرسال محتوى الرسائل دون تعمية عبر خواديم خدمات جوجل</string>
     <string name="settings_delete_threepid_confirmation">أمتأكّد من إزالة ‏⁨%1$s⁩ ‏⁨%2$s⁩؟</string>
 
     <string name="settings_phone_number_error">رقم الهاتف غير صالح حسب الدولة المنتقاة</string>

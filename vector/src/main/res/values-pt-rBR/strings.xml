@@ -896,9 +896,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
 	<item quantity="one">%1$s sala encontrada para %2$s</item>
 	<item quantity="other">%1$s salas encontradas para %2$s</item>
 </plurals>
-    <string name="settings_enable_content_sending">Manter notificações detalhadas</string>
-    <string name="send_bug_report_rage_shake">Balance fortemente o celular para informar um erro</string>
-
     <plurals name="membership_changes">
 	<item quantity="one">1 alteração de status de participação</item>
 	<item quantity="other">%s alterações de status de participação</item>

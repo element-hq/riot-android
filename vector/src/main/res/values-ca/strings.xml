@@ -901,8 +901,6 @@
 	<item quantity="other">%d canvis de membres</item>
 </plurals>
 
-    <string name="settings_enable_content_sending">Conserva les notificacions detallades</string>
-    <string name="settings_enable_content_sending_summary">Activa aquesta opció quan la sincronització en segon pla estigui desactivada. Fent-ho caldrà enviar missatges amb contingut sense xifrar a través dels servidors de serveis de Google</string>
     <plurals name="notification_unread_notified_messages">
 	<item quantity="one">1 missatge de notificació sense llegir</item>
 	<item quantity="other">%d missatges de notificació sense llegir</item>

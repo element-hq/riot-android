@@ -927,6 +927,4 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
 	<item quantity="other">%d ongelezen vermelde berichten</item>
 </plurals>
     <string name="notice_avatar">Vermeldingsavatar</string>
-    <string name="settings_enable_content_sending">Gedetailleerde notificaties houden</string>
-    <string name="settings_enable_content_sending_summary">Zet deze optie aan om gedetailleerde notificaties te behouden wanneer de achtergrond synchronisatie uit staat. Dit vereist het versturen van niet-versleutelde content door de servers van Google services</string>
     </resources>

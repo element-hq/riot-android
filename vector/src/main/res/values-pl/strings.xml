@@ -725,8 +725,6 @@ Jesteś pewien?</string>
     <string name="settings_notification_ringtone">Dźwięk powiadomień</string>
     <string name="settings_containing_my_display_name">Wiadomości zawierające moją publiczną nazwę użytkownika</string>
     <string name="settings_containing_my_user_name">Wiadomości zawierające moją nazwę użytkownika</string>
-    <string name="settings_enable_content_sending">Pozostaw szczegółowe powiadomienia</string>
-    <string name="settings_enable_content_sending_summary">Zaznacz tą opcję w momencie gdy synchronizacja w tle jest wyłączona aby otrzymywać szczegółowe powiadomienia. Wymaga to wysłania nieszyfrowanych wiadomości przez serwery Google</string>
     <string name="settings_set_sync_timeout">Żądanie synchronizacji nieudane z powodu przekroczenia limitu czasu</string>
     <string name="settings_set_sync_delay">Opóźnienie między dwoma żądaniami synchronizacji</string>
     <string name="settings_olm_version">wersja olm</string>

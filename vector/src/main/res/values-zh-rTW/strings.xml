@@ -373,7 +373,7 @@
 
     <string name="people_search_invite_by_id"><u>透過 ID 邀請</u></string>
     <string name="people_search_local_contacts">裝置上的聯絡人（%d）</string>
-    <string name="people_search_user_directory">使用者目錄</string>
+    <string name="people_search_user_directory">使用者目錄 (%s)</string>
     <string name="people_search_filter_text">只顯示 Matrix 使用者</string>
 
     <string name="people_search_invite_by_id_dialog_title">透過 ID 邀請使用者</string>
