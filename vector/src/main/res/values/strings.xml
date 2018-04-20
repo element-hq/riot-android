@@ -532,6 +532,20 @@
     <string name="settings_summary_app_info_link">Application system info screen</string>
     <string name="settings_title_app_info_link">Application info</string>
 
+    <string name="settings_notification_privacy">Notification privacy</string>
+    <string name="settings_notification_privacy_warning">Riot.im runs in the background to keep your notification message content private. You can change this option to reduce battery usage.</string>
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="settings_notification_privacy_power_saving">Power-saving Options</string>
+    <string name="settings_notification_privacy_low_detail">Low detail notifications</string>
+    <string name="settings_notification_privacy_reduced">Reduced privacy</string>
+    <string name="settings_notification_privacy_need_permission">The app needs permission to run in the background</string>
+    <string name="settings_notification_privacy_no_permission">The apps does <b>not</b> need permission to run in the background</string>
+    <string name="settings_notification_privacy_gcm">• Notifications are sent via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Notifications only contain meta data</string>
+    <string name="settings_notification_privacy_secure_message_content">• Message content of the notification is <b>located securely direct from the Matrix homeserver</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Notifications contain <b>meta and message data</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Notifications will <b>not show message content</b></string>
+
     <string name="settings_notification_ringtone">Notification sound</string>
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
     <string name="settings_enable_this_device">Enable notifications for this device</string>
@@ -548,8 +562,6 @@
     <string name="settings_start_on_boot">Start on boot</string>
     <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_enable_background_sync">Enable background sync</string>
-    <string name="settings_enable_content_sending">Keep detailed notifications</string>
-    <string name="settings_enable_content_sending_summary">Turn on this option when the background sync is disabled to display detailed notifications. This requires to send non encrypted message content through Google services servers</string>
     <string name="settings_set_sync_timeout">Sync request timeout</string>
     <string name="settings_set_sync_delay">Delay between two sync requests</string>
     <string name="settings_second">second</string>
@@ -588,6 +600,12 @@
     <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
     <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
+
+    <!-- startup -->
+    <string name="startup_notification_privacy_title">Notification Privacy</string>
+    <string name="startup_notification_privacy_message">Riot can run in the background to manage your notifications securely and privately (this might affect battery usage).</string>
+    <string name="startup_notification_privacy_button_grant">Grant permission</string>
+    <string name="startup_notification_privacy_button_other">Choose another option</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>

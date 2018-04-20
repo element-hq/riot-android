@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +80,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
     TextView mWidgetTypeTextView;
 
     @BindView(R.id.widget_progress_layout)
-    View mProgressLayout;
+    View waitingView;
 
     /**
      * Widget events listener
@@ -149,7 +150,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                mProgressLayout.setVisibility(View.VISIBLE);
+                                showWaitingView();
                                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
@@ -157,7 +158,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
                                     }
 
                                     private void onError(String errorMessage) {
-                                        mProgressLayout.setVisibility(View.GONE);
+                                        stopWaitingView();
                                         CommonActivityUtils.displayToast(WidgetActivity.this, errorMessage);
                                     }
 
@@ -258,11 +259,11 @@ public class WidgetActivity extends RiotAppCompatActivity {
             cookieManager.setAcceptThirdPartyCookies(mWidgetWebView, true);
         }
 
-        mProgressLayout.setVisibility(View.VISIBLE);
+        showWaitingView();
         WidgetsManager.getFormattedWidgetUrl(this, mWidget, new ApiCallback<String>() {
             @Override
             public void onSuccess(String url) {
-                mProgressLayout.setVisibility(View.GONE);
+                stopWaitingView();
                 mWidgetWebView.loadUrl(url);
             }
 

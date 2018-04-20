@@ -1,3 +1,33 @@
+Changes in 0.8.6 (2018-04-20)
+===================================================
+
+Improvements: 
+ * Update matrix-sdk.aar lib (v0.9.3).
+ * Render stickers in the timeline (#2097).
+ * Hide "Show devices list" for local contacts who are not matrix users (#2153).
+ * Login Activity: Code cleaning.
+
+Bug Fix:
+ * Tapping on a room pill should not automatically join it (#2098).
+
+Changes in Riot 0.8.5 (2018-03-31)
+===================================================
+
+Improvements: 
+ * Update matrix-sdk.aar lib (v0.9.2).
+ * Make state event redaction handling gentler with homeserver (#2117).
+
+Changes in Riot 0.8.3 (2018-03-16)
+===================================================
+
+Improvements: 
+ * Login screen : open keyboard form email.
+ * Matrix Apps: Enable them by default (#2022).
+ 
+Bug Fix:
+ * User Settings: background sync setting stays disabled (#2075).
+ * Room: Events with unexpected timestamps get stuck at the bottom of the history (#2081).
+
 Changes in Riot 0.8.2 (2018-03-14)
 ===================================================
  

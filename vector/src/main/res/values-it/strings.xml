@@ -822,8 +822,6 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="room_settings_mute">Silenzioso</string>
     <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia schermata iniziale</string>
 
-    <string name="settings_enable_content_sending">Mantieni notifiche dettagliate</string>
-    <string name="settings_enable_content_sending_summary">Attiva questa opzione per mostrare notifiche dettagliate quando la sincronizzazione in background è disabilitata. Ciò richiede l\'invio di messaggi non cifrati attraverso i server dei servizi di Google</string>
     <string name="settings_inline_url_preview">Attiva le anteprime URL in modo predefinito</string>
     <string name="settings_hide_join_leave_messages">Nascondi i messaggi di entrata/uscita (inviti/kick/ban esclusi)</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>

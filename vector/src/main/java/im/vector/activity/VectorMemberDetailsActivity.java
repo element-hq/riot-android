@@ -1,6 +1,7 @@
 /*
  * Copyright 2014 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,7 +118,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private ImageView mMemberAvatarBadgeImageView;
     private TextView mMemberNameTextView;
     private TextView mPresenceTextView;
-    private View mProgressBarView;
 
     // full screen avatar
     private View mFullMemberAvatarLayout;
@@ -1080,7 +1080,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mListViewAdapter.setCallActionsList(callActions);
 
             // devices
-            if (mUser != null) {
+            // don't show devices list if the member isn't a matrix user
+            if (mUser != null && MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(mMemberId).matches()) {
                 imageResource = R.drawable.ic_devices_info;
                 actionText = getResources().getString(R.string.room_participants_action_devices_list);
                 devicesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_DEVICES));
@@ -1163,7 +1164,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             mMemberNameTextView = findViewById(R.id.member_details_name);
             mPresenceTextView = findViewById(R.id.member_details_presence);
-            mProgressBarView = findViewById(R.id.member_details_list_view_progress_bar);
+            waitingView = findViewById(R.id.member_details_list_view_progress_bar);
 
             // setup the devices list view
             mDevicesListView = findViewById(R.id.member_details_devices_list_view);
@@ -1506,8 +1507,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param aIsProgressBarDisplayed true to show the progress bar screen, false to hide it
      */
     private void enableProgressBarView(boolean aIsProgressBarDisplayed) {
-        if (null != mProgressBarView) {
-            mProgressBarView.setVisibility(aIsProgressBarDisplayed ? View.VISIBLE : View.GONE);
+        if (null != waitingView) {
+           waitingView.setVisibility(aIsProgressBarDisplayed ? View.VISIBLE : View.GONE);
         }
     }
 

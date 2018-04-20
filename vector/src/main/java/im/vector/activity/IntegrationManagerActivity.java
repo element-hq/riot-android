@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +75,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
     private static final String EXTRA_SCREEN_ID = "EXTRA_SCREEN_ID";
 
     @BindView(R.id.integration_progress_layout)
-    View mProgressLayout;
+    View waitingView;
 
     @BindView(R.id.integration_webview)
     WebView mWebView;
@@ -138,13 +139,13 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
         mWidgetId = intent.getStringExtra(EXTRA_WIDGET_ID);
         mScreenId = intent.getStringExtra(EXTRA_SCREEN_ID);
 
-        mProgressLayout.setVisibility(View.VISIBLE);
+        showWaitingView();
 
         WidgetsManager.getSharedInstance().getScalarToken(this, mSession, new ApiCallback<String>() {
             @Override
             public void onSuccess(String scalarToken) {
                 mScalarToken = scalarToken;
-                mProgressLayout.setVisibility(View.GONE);
+                stopWaitingView();
                 launchUrl();
             }
 
