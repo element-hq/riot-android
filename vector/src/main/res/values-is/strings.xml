@@ -272,7 +272,7 @@
     <string name="room_recents_join_room">Taka þátt í spjallrás</string>
     <string name="room_recents_join_room_title">Taka þátt í spjallsvæði</string>
     <string name="directory_search_results_title">Vafra í möppu</string>
-    <string name="directory_search_room">%1$ spjallrás</string>
+    <string name="directory_search_room">%1$d spjallrás</string>
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 spjallrás</item>
 	<item quantity="other">%d spjallrásir</item>

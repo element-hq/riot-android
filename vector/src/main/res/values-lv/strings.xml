@@ -698,8 +698,6 @@ Lai turpinātu, ievadi savu paroli.</string>
 	<item quantity="one">%1$s istabas atrastas priekš %2$s</item>
 	<item quantity="other">%1$s istabas atrastas priekš %2$s</item>
 </plurals>
-    <string name="settings_enable_content_sending">Saglabāt detalizētos paziņojumus</string>
-    <string name="settings_enable_content_sending_summary">Ieslēgt šo opciju pie atslēgas fona sinhronizācijas, lai parādītu detalizētos paziņojumus. Tam nepieciešams nosūtīt nešifrētu ziņu (saturu) cauri Google pakalpojumu serveriem</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ir nederīgs kopienas Id</string>
 
 

@@ -902,7 +902,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
 </plurals>
 
     <string name="list_members">Lista de integrantes</string>
-    <string name="settings_enable_content_sending_summary">Ative esta opção para ver notificações detalhadas quando a sincronização em segundo plano não estiver habilitada. Isso requer que mensagens não criptografadas sejam enviadas por servidores da Google</string>
     <plurals name="notification_unread_notified_messages">
 	<item quantity="one">1 mensagem notificada não lida</item>
 	<item quantity="other">%d mensagens notificadas não lidas</item>

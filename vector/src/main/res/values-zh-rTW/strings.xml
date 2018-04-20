@@ -202,7 +202,7 @@
     <string name="auth_reset_password_message">要重設您的密碼，輸入連結帳號的電子郵件地址：</string>
     <string name="auth_reset_password_missing_email">必須輸入和您帳號關聯的電子郵件地址。</string>
     <string name="auth_reset_password_missing_password">一個新的密碼必須被輸入。</string>
-    <string name="auth_reset_password_email_validation_message">電子郵件已傳送至 %@，點擊下方的連結來前往。</string>
+    <string name="auth_reset_password_email_validation_message">電子郵件已傳送至 %s，點擊下方的連結來前往。</string>
     <string name="auth_reset_password_error_unauthorized">電子郵件地址驗證失敗： 請確保您已點擊郵件中的連結</string>
     <string name="auth_reset_password_success_message">您的密碼已重設。
 
