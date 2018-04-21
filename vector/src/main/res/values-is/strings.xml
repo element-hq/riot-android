@@ -597,7 +597,7 @@
     <string name="room_participants_action_set_moderator">Gera að umsjónarmanni</string>
     <string name="room_participants_action_ignore">Fela öll skilaboð frá þessum notanda</string>
     <string name="room_participants_action_unignore">Sýna öll skilaboð frá þessum notanda</string>
-    <string name="room_participants_invite_search_another_user">Notandauðkenni, nafn eða tölvupóstfang</string>
+    <string name="room_participants_invite_search_another_user">Notandaauðkenni, nafn eða tölvupóstfang</string>
     <string name="room_participants_action_devices_list">Birta lista yfir tæki</string>
     <string name="people_search_user_directory">SKRÁ YFIR NOTENDUR (%s)</string>
     <string name="people_search_filter_text">Einungis notendur Matrix</string>
