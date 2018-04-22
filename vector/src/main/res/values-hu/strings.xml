@@ -917,4 +917,8 @@ Ismeretlen eszközök:</string>
     <string name="settings_notification_privacy_metadata">• Az értesítések csak metaadatokat tartalmaznak</string>
     <string name="settings_notification_privacy_secure_message_content">• Az értesítés tartalma <b>közvetlenül a Matrix szerverről kerül letöltésre</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">Az értesítések <b>meta- és üzenet adatot is</b> tartalmaznak</string>
+    <string name="startup_notification_privacy_message">Riot futtatható a háttérben az értesítések biztonságos és titkos kezeléséhez (ami hatással lehet az akkumulátor használatra ).</string>
+    <string name="startup_notification_privacy_button_grant">Engedély megadása</string>
+    <string name="startup_notification_privacy_button_other">Más lehetőség választása</string>
+
     </resources>
