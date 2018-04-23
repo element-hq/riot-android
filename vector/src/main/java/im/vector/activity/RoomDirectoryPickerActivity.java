@@ -47,8 +47,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
@@ -64,9 +62,6 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
     private MXSession mSession;
     private RoomDirectoryAdapter mRoomDirectoryAdapter;
-
-    @BindView(R.id.room_directory_loading)
-    View waitingView;
 
      /*
      * *********************************************************************************************
@@ -92,7 +87,8 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
         setTitle(R.string.select_room_directory);
         setContentView(R.layout.activity_room_directory_picker);
-        ButterKnife.bind(this);
+
+        waitingView = findViewById(R.id.room_directory_loading);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -150,11 +146,11 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
      * Refresh the directory servers list.
      */
     private void refreshDirectoryServersList() {
-       waitingView.setVisibility(View.VISIBLE);
+       showWaitingView();
 
         mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
             private void onDone(List<RoomDirectoryData> list) {
-                waitingView.setVisibility(View.GONE);
+                stopWaitingView();
                 String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
                 String userHSUrl = mSession.getHomeServerConfig().getHomeserverUri().getHost();
 
@@ -230,7 +226,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
                 final String serverUrl = editText.getText().toString().trim();
 
                 if (!TextUtils.isEmpty(serverUrl)) {
-                    waitingView.setVisibility(View.VISIBLE);
+                    showWaitingView();
                     mSession.getEventsApiClient().getPublicRoomsCount(serverUrl, new ApiCallback<Integer>() {
                         @Override
                         public void onSuccess(Integer count) {
@@ -242,7 +238,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
                         private void onError(String error) {
                             Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
-                            waitingView.setVisibility(View.GONE);
+                            stopWaitingView();
                             Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
                         }
 
