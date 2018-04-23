@@ -270,7 +270,7 @@
     <string name="room_recents_start_chat">Hefja spjall</string>
     <string name="room_recents_create_room">Búa til spjallrás</string>
     <string name="room_recents_join_room">Taka þátt í spjallrás</string>
-    <string name="room_recents_join_room_title">Taka þátt í spjallsvæði</string>
+    <string name="room_recents_join_room_title">Taka þátt í spjallrás</string>
     <string name="directory_search_results_title">Vafra í möppu</string>
     <string name="directory_search_room">%1$d spjallrás</string>
     <plurals name="directory_search_rooms">
@@ -566,4 +566,142 @@
     <string name="has_been_kicked">Þér hefur verið sparkað úr %1$s af %2$s</string>
     <string name="has_been_banned">Þú hefur verið settur í bann á %1$s af %2$s</string>
     <string name="room_settings_labs_pref_title">Tilraunir</string>
+    <string name="report_content">Klaga efni</string>
+    <string name="user_directory_header">Skrá yfir notendur</string>
+    <string name="rooms_directory_header">Skrá yfir spjallrásir</string>
+    <string name="hs_url">Slóð á heimaþjón</string>
+    <string name="identity_url">Slóð á auðkennisþjón</string>
+    <string name="start_new_chat_prompt_msg">Ertu viss að þú viljir byrja nýtt spjall við %s?</string>
+    <string name="start_voice_call_prompt_msg">Ertu viss að þú viljir byrja raddsamtal?</string>
+    <string name="start_video_call_prompt_msg">Ertu viss að þú viljir byrja myndsamtal?</string>
+
+    <string name="auth_use_server_options">Nota sérsniðna valkosti vefþjóns (ítarlegt)</string>
+    <string name="auth_home_server">Heimaþjónn:</string>
+    <string name="auth_identity_server">Auðkennisþjónn:</string>
+    <string name="auth_reset_password_next_step_button">Ég hef staðfest tölvupóstfangið mitt</string>
+    <string name="auth_reset_password_missing_password">Það verður að setja inn nýtt lykilorð.</string>
+    <string name="login_error_network_error">Innskráning mistókst: bilun í netkerfi</string>
+    <string name="login_error_registration_network_error">Nýkráning mistókst: bilun í netkerfi</string>
+    <string name="login_error_unable_register">Nýkráning mistókst</string>
+    <string name="login_error_unable_register_mail_ownership">Nýkráning mistókst: mistök með eignarhald tölvupósts</string>
+    <string name="call_error_camera_init_failed">Gat ekki frumstillt myndavélina</string>
+    <string name="media_picker_both_capture_title">Taktu mynd eða myndskeið</string>
+    <string name="media_picker_cannot_record_video">Get ekki tekið upp myndskeið</string>
+
+    <string name="room_jump_to_first_unread">Fara í fyrstu ólesin skilaboð.</string>
+
+    <string name="room_creation_title">Nýtt spjall</string>
+    <string name="room_participants_action_ban">Banna</string>
+    <string name="room_participants_action_unban">Afbanna</string>
+    <string name="room_participants_action_set_default_power_level">Endurstilla sem venjulegan notanda</string>
+    <string name="room_participants_action_set_moderator">Gera að umsjónarmanni</string>
+    <string name="room_participants_action_ignore">Fela öll skilaboð frá þessum notanda</string>
+    <string name="room_participants_action_unignore">Sýna öll skilaboð frá þessum notanda</string>
+    <string name="room_participants_invite_search_another_user">Notandaauðkenni, nafn eða tölvupóstfang</string>
+    <string name="room_participants_action_devices_list">Birta lista yfir tæki</string>
+    <string name="people_search_user_directory">SKRÁ YFIR NOTENDUR (%s)</string>
+    <string name="people_search_filter_text">Einungis notendur Matrix</string>
+
+    <string name="people_search_invite_by_id_dialog_hint">Tölvupóstfang eða Matrix-auðkenni</string>
+
+    <string name="room_message_placeholder_not_encrypted">Senda skilaboð (ódulrituð)…</string>
+    <string name="room_offline_notification">Tenging við vefþjón hefur rofnað.</string>
+    <string name="room_prompt_resend">Endursenda allt</string>
+    <string name="room_resend_unsent_messages">Senda aftur ósend skilaboð</string>
+    <string name="room_delete_unsent_messages">Eyða ósendum skilaboðum</string>
+    <string name="room_do_not_have_permission_to_post">Þú hefur ekki heimild til að senda skilaboð á þessa spjallrás</string>
+    <string name="ssl_could_not_verify">Gat ekki sannreynt auðkenni fjartengds þjóns.</string>
+    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
+
+    <string name="room_details_people_invited_group_name">BOÐIÐ</string>
+    <string name="room_details_people_present_group_name">SKRÁÐUR</string>
+
+    <string name="room_event_action_report_prompt_reason">Ástæður fyrir tilkynningu um vankanta á þessu efni</string>
+    <string name="room_event_action_report_prompt_ignore_user">Viltu fela öll skilaboð frá þessum notanda?</string>
+    <string name="room_event_action_cancel_upload">Hætta við innsendingu</string>
+    <string name="directory_searching_title">Leita í yfirlitsskrá...</string>
+
+    <string name="room_settings_all_messages_noisy">Öll skilaboð (hávært)</string>
+    <string name="room_settings_de_prioritize">Minnka forgang</string>
+    <string name="room_settings_leave_conversation">Hætta í samtali</string>
+    <string name="room_settings_add_homescreen_shortcut">Bæta við flýtileið á aðalskjá</string>
+
+    <string name="settings_notification_privacy">Friðhelgi tilkynninga</string>
+    <string name="settings_notification_privacy_normal">Venjulegt</string>
+    <string name="settings_notification_privacy_power_saving">Valkostir aflstjórnunar</string>
+    <string name="settings_notification_privacy_reduced">Minnkuð friðhelgi</string>
+    <string name="settings_notification_ringtone">Hljóð með tilkynningu</string>
+    <string name="settings_enable_all_notif">Virkja tilkynningar fyrir þennan notandaaðgang</string>
+    <string name="settings_enable_this_device">Virkja tilkynningar á þessu tæki</string>
+    <string name="settings_turn_screen_on">Kveikja á skjá í 3 sekúndur</string>
+
+    <string name="settings_invited_to_room">Þegar mér er boðið á spjallrás</string>
+    <string name="settings_messages_sent_by_bot">Skilaboð send af vélmennum</string>
+
+    <string name="settings_start_on_boot">Virkja í ræsingu</string>
+    <string name="settings_background_sync">Samstilling í bakgrunni</string>
+    <string name="settings_enable_background_sync">Virkja samstillingu í bakgrunnsvinnslu</string>
+    <string name="settings_user_settings">Stillingar notanda</string>
+    <string name="settings_contacts_app_permission">Heimildir fyrir tengiliði</string>
+    <string name="settings_hide_read_receipts">Fela leskvittanir</string>
+    <string name="settings_always_show_timestamps">Alltaf birta tímamerki skilaboða</string>
+    <string name="settings_12_24_timestamps">Birta tímamerki á 12 stunda sniði (t.d. 2:30 fh)</string>
+    <string name="settings_disable_markdown">Gera Markdown-stílgerð óvirka við sendingu</string>
+    <string name="startup_notification_privacy_title">Friðhelgi tilkynninga</string>
+    <string name="startup_notification_privacy_button_grant">Gefa heimild</string>
+    <string name="startup_notification_privacy_button_other">Veldu annan valkost</string>
+
+    <string name="settings_opt_out_of_analytics">Ekki senda greiningargögn</string>
+    <string name="settings_data_save_mode">Gagnavistunarhamur</string>
+
+    <string name="devices_details_dialog_title">Nánar um tæki</string>
+    <string name="devices_delete_dialog_text">Þessi aðgerð krefst viðbótar-auðkenningar.
+Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
+    <string name="settings_home_server">Heimaþjónn</string>
+    <string name="settings_identity_server">Auðkennisþjónn</string>
+
+    <string name="account_email_already_used_error">Þetta tölvupóstfang er nú þegar í notkun</string>
+    <string name="account_email_not_found_error">Gat ekki sent tölvupóst: Þetta tölvupóstfang fannst ekki</string>
+    <string name="account_phone_number_already_used_error">Þetta símanúmer er nú þegar í notkun</string>
+
+    <string name="room_settings_directory_visibility">Setja þessa spjallrás á skrá yfir spjallrásir</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Einungis meðlimir (síðan þessi kostur var valinn)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Einungis meðlimir (síðan þeim var boðið)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Einungis meðlimir (síðan þeir skráðu sig)</string>
+
+    <string name="room_settings_room_internal_id">Innra auðkenni þessarar spjallrásar</string>
+    <string name="room_settings_addresses_add_new_address">Nýtt vistfang (t.d. #foo:matrix.org)</string>
+
+    <string name="room_settings_add_new_group">Nýtt samfélag (t.d. #foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Ógilt auðkenni samfélags</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' er ekki gilt auðkenni samfélags</string>
+
+
+    <string name="room_settings_copy_room_id">Afrita auðkenni spjallrásar</string>
+    <string name="room_settings_copy_room_address">Afrita vistfang spjallrásar</string>
+
+    <string name="encryption_information_verify_key_match">Ég staðfesti hvort dulritunarlyklarnir samsvari</string>
+
+    <string name="unknown_devices_alert_title">Spjallrás inniheldur óþekkt tæki</string>
+    <string name="select_room_directory">Veldu skrá yfir spjallrásir</string>
+    <string name="directory_server_placeholder">URL-slóð heimaþjóns</string>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 ólesin tilkynnt skilaboð</item>
+	<item quantity="other">%d ólesin tilkynnt skilaboð</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 ólesin tilkynnt skilaboð</item>
+	<item quantity="other">%d ólesin tilkynnt skilaboð</item>
+</plurals>
+    <string name="widget_no_power_to_manage">Þú þarft aðgangsheimildir til að sýsla með viðmótshluta á þessari spjallrás</string>
+    <string name="widget_creation_failure">Gerð viðmótshluta mistókst</string>
+    <string name="event_formatter_widget_added">%1$s bætt við af %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s fjarlægt af %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Búa til ráðstefnur með Jitsi</string>
+    <string name="widget_delete_message_confirmation">Ertu viss um að þú viljir eyða viðmótshlutanum?</string>
+    <string name="widget_integration_unable_to_create">Gat ekki búið til viðmótshluta.</string>
+    <string name="widget_integration_failed_to_send_request">Mistókst að senda beiðni.</string>
+    <string name="joined">Skráður</string>
+    <string name="invited">Boðið</string>
+    <string name="rejoin">Taka þátt aftur</string>
     </resources>
