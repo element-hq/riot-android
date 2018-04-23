@@ -926,4 +926,5 @@ Ismeretlen eszközök:</string>
     <string name="settings_notification_privacy_need_permission">"Az alkalmazásnak engedélyre van szüksége háttérben futáshoz "</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Az értesítések <b>nem mutatják az üzenet tartalmát</b></string>
 
+    <string name="startup_notification_privacy_title">Értesítés adatvédelme</string>
     </resources>
