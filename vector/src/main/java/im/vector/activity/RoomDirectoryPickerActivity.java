@@ -150,11 +150,11 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
      * Refresh the directory servers list.
      */
     private void refreshDirectoryServersList() {
-       showWaitingView();
+       waitingView.setVisibility(View.VISIBLE);
 
         mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
             private void onDone(List<RoomDirectoryData> list) {
-                stopWaitingView();
+                waitingView.setVisibility(View.GONE);
                 String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
                 String userHSUrl = mSession.getHomeServerConfig().getHomeserverUri().getHost();
 
@@ -230,7 +230,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
                 final String serverUrl = editText.getText().toString().trim();
 
                 if (!TextUtils.isEmpty(serverUrl)) {
-                    showWaitingView();
+                    waitingView.setVisibility(View.VISIBLE);
                     mSession.getEventsApiClient().getPublicRoomsCount(serverUrl, new ApiCallback<Integer>() {
                         @Override
                         public void onSuccess(Integer count) {
@@ -242,7 +242,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
                         private void onError(String error) {
                             Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
-                            stopWaitingView();
+                            waitingView.setVisibility(View.GONE);
                             Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
                         }
 
