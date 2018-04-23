@@ -921,4 +921,5 @@ Ismeretlen eszközök:</string>
     <string name="startup_notification_privacy_button_grant">Engedély megadása</string>
     <string name="startup_notification_privacy_button_other">Más lehetőség választása</string>
 
+    <string name="settings_notification_privacy">Értesítés adatvédelme</string>
     </resources>
