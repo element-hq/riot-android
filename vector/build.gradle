@@ -193,6 +193,10 @@ dependencies {
     compile(name: 'react-native', ext: 'aar')
     compile(name: 'react-native-locale-detector', ext: 'aar')
 
+    // Library to add the built-in emoj on the chat room
+    // Some changes were needed to integrate it into this project. Until the new build
+    // is released, the snapshot has to be used.
+    compile 'com.vanniktech:emoji-one:0.6.0-SNAPSHOT'
 
     // another tracking than GA
     compile 'org.piwik.sdk:piwik-sdk:2.0.0'
