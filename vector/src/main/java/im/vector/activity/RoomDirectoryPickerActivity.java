@@ -47,8 +47,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
@@ -64,9 +62,6 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
     private MXSession mSession;
     private RoomDirectoryAdapter mRoomDirectoryAdapter;
-
-    @BindView(R.id.room_directory_loading)
-    View waitingView;
 
      /*
      * *********************************************************************************************
@@ -92,7 +87,8 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
         setTitle(R.string.select_room_directory);
         setContentView(R.layout.activity_room_directory_picker);
-        ButterKnife.bind(this);
+
+        waitingView = findViewById(R.id.room_directory_loading);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
