@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_vector_room_root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
@@ -254,6 +255,7 @@
                         android:layout_height="40dp"
                         android:layout_centerVertical="true"
                         android:id="@+id/room_self_avatar"/>
+
                 </RelativeLayout>
 
                 <LinearLayout
@@ -264,6 +266,18 @@
                     android:layout_width="wrap_content"
                     android:minHeight="56dp"
                     android:layout_height="wrap_content">
+
+                    <!-- Button to change between keyboard and emoji views -->
+                    <ImageButton
+                        android:id="@+id/room_sending_message_emoji"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="12dp"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/emoji_one_category_smileysandpeople"
+                        tools:ignore="ContentDescription"
+                    />
 
                     <RelativeLayout
                         android:layout_width="20dp"

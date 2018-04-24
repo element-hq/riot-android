@@ -41,6 +41,9 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import com.vanniktech.emoji.one.EmojiOneProvider;
+import com.vanniktech.emoji.EmojiManager;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 import org.piwik.sdk.Piwik;
@@ -328,6 +331,9 @@ public class VectorApp extends MultiDexApplication {
             // reported by GA
             Log.e(LOG_TAG, "cannot create the mMarkdownParser " + e.getMessage());
         }
+
+        /* Adds the provider to handle the built-in emoji */
+        EmojiManager.install (new EmojiOneProvider ());
 
         // track external language updates
         // local update from the settings

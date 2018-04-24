@@ -32,6 +32,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,6 +66,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.vanniktech.emoji.EmojiImageView;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.EmojiView;
+import com.vanniktech.emoji.emoji.Emoji;
+import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiLongClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -214,6 +227,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private String mDefaultTopic;
 
     private MXLatestChatMessageCache mLatestChatMessageCache;
+
+
+    /**
+     * Popup to toggle between normal and emoji keyboards.
+     */
+    private EmojiPopup emojiPopup;
 
     private View mSendingMessagesLayout;
     private View mSendButtonLayout;
@@ -1148,6 +1167,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         refreshSelfAvatar();
 
+        /* Sets up the button to toggle an emoji keyboard */
+        setUpEmoji ();
+
+
         // in case a "Send as" dialog was in progress when the activity was destroyed (life cycle)
         mVectorRoomMediasSender.resumeResizeMediaAndSend();
 
@@ -1171,6 +1194,57 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         Log.d(LOG_TAG, "End of create");
+    }
+
+    /**
+     * Sets up everything for the emoji built-in popup.
+     */
+    public void setUpEmoji () {
+
+        final VectorAutoCompleteTextView editText = findViewById (R.id.editText_messageBox);
+        final ImageView emojiButton = findViewById (R.id.room_sending_message_emoji);
+
+        emojiButton.setColorFilter (
+            ContextCompat.getColor (this, R.color.emoji_icons)
+            , PorterDuff.Mode.SRC_IN
+        );
+
+        ViewGroup rootView = findViewById (R.id.activity_vector_room_root_view);
+        emojiButton.setOnClickListener (
+            new View.OnClickListener () {
+                @Override
+                public void onClick (View v) {
+                    emojiPopup.toggle ();
+                }
+            }
+        );
+
+        /* Sadly, lambdas aren't supported on Java 7 and that's the build platform */
+        emojiPopup = EmojiPopup.Builder
+                        .fromRootView (rootView)
+                        .setOnEmojiPopupShownListener (
+                            new OnEmojiPopupShownListener () {
+                                @Override
+                                public void onEmojiPopupShown () {
+                                    /* Changes the icon to a little keyboard */
+                                    emojiButton.setImageResource (
+                                        R.drawable.emoji_keyboard
+                                    );
+                                }
+                            }
+                        )
+                        .setOnEmojiPopupDismissListener (
+                            new OnEmojiPopupDismissListener () {
+                                @Override
+                                public void onEmojiPopupDismiss () {
+                                    /* Changes the icon to a little simley face */
+                                    emojiButton.setImageResource (
+                                        R.drawable.emoji_one_category_smileysandpeople
+                                    );
+                                }
+                            }
+                        )
+                        .build (editText);
     }
 
     @Override

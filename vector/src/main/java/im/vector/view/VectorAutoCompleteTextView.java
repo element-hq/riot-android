@@ -17,19 +17,29 @@
 package im.vector.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.CallSuper;
+import android.support.annotation.DimenRes;
+import android.support.annotation.Px;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.MultiAutoCompleteTextView;
+
+import com.vanniktech.emoji.EmojiEditTextInterface;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.emoji.Emoji;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -48,9 +58,12 @@ import im.vector.adapters.AutoCompletedUserAdapter;
 import org.matrix.androidsdk.util.Log;
 
 /**
- * Custom AppCompatMultiAutoCompleteTextView to display matrix id / displayname
+ * Custom AppCompatMultiAutoCompleteTextView to display matrix id / displayname, and
+ * to introduce messagges to be sent.
  */
-public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextView {
+public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextView
+                                        implements EmojiEditTextInterface {
+
     private static final String LOG_TAG = VectorAutoCompleteTextView.class.getSimpleName();
 
     // results adapter
@@ -68,18 +81,37 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     // add a colon when the inserted text is the first item of the string
     private boolean mAddColonOnFirstItem;
 
+    /**
+     * Size of the emoji to be shown on this textView.
+     */
+    private float emojiSize;
+
     public VectorAutoCompleteTextView(Context context) {
         super(context, null);
+        initEmoji ();
     }
 
     public VectorAutoCompleteTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initEmoji ();
         this.setInputType(this.getInputType() & (this.getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
     }
 
     public VectorAutoCompleteTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initEmoji ();
         this.setInputType(this.getInputType() & (this.getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
+    }
+
+    /**
+     * Initializes the emoji size.
+     */
+    private void initEmoji () {
+
+        final Paint.FontMetrics fontMetrics = getPaint ().getFontMetrics ();
+        final float defaultEmojiSize = fontMetrics.descent - fontMetrics.ascent;
+
+        emojiSize = defaultEmojiSize;
     }
 
     /**
@@ -328,4 +360,98 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
         }
     }
 
+
+    /**
+     * Event fired when the text changes.
+     * Replaces the unicode charcode with the emoji image.
+     */
+    @Override
+    @CallSuper
+    protected void onTextChanged (final CharSequence text
+                                , final int start
+                                , final int lengthBefore
+                                , final int lengthAfter) {
+
+        final Paint.FontMetrics fontMetrics = getPaint ().getFontMetrics ();
+        final float defaultEmojiSize = fontMetrics.descent - fontMetrics.ascent;
+
+        EmojiManager.getInstance ().replaceWithImages (getContext ()
+                                                    , getText ()
+                                                    , emojiSize
+                                                    , defaultEmojiSize
+        );
+    }
+
+
+    /* -------------------------------------------------------------------------- */
+    /* ---- Implementation of the methods inherited from the emoji interface ---- */
+    /* -------------------------------------------------------------------------- */
+
+    @Override
+    public void backspace () {
+
+        final KeyEvent event = new KeyEvent (0, 0, 0, KeyEvent.KEYCODE_DEL, 0
+                                            , 0, 0, 0, KeyEvent.KEYCODE_ENDCALL
+        );
+        dispatchKeyEvent (event);
+    }
+
+    @Override
+    public void input (Emoji emoji) {
+
+        if (emoji != null) {
+
+            final int start = getSelectionStart ();
+            final int end = getSelectionEnd ();
+
+            if (start < 0) {
+
+                append (emoji.getUnicode ());
+            } else {
+
+                getText ().replace (
+                        Math.min (start, end)
+                        , Math.max (start, end)
+                        , emoji.getUnicode ()
+                        , 0
+                        , emoji.getUnicode ().length ()
+                );
+            }
+        }
+    }
+
+    @Override
+    public float getEmojiSize () {
+
+        return emojiSize;
+    }
+
+    @Override
+    public void setEmojiSize (@Px int pixels) {
+
+        setEmojiSize (pixels, true);
+    }
+
+    @Override
+    public void setEmojiSize (@Px int pixels, boolean shouldInvalidate) {
+
+        emojiSize = pixels;
+
+        if (shouldInvalidate) {
+
+            setText (getText ());
+        }
+    }
+
+    @Override
+    public void setEmojiSizeRes (@DimenRes int res) {
+
+        setEmojiSizeRes (res, true);
+    }
+
+    @Override
+    public void setEmojiSizeRes (@DimenRes int res, boolean shouldInvalidate) {
+
+        setEmojiSize (getResources ().getDimensionPixelSize (res), shouldInvalidate);
+    }
 }
