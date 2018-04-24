@@ -273,9 +273,9 @@ class VectorMessagesAdapterMediasHelper {
         if (null == downloadId) {
             if (message instanceof VideoMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((VideoMessage) message).getUrl());
-            } else if (!event.getType().equals(Event.EVENT_TYPE_STICKER) && (message instanceof ImageMessage)) {
+            } else if (!(message instanceof StickerMessage) && (message instanceof ImageMessage)) {
                 downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
-            } else if (event.getType().equals(Event.EVENT_TYPE_STICKER) && (message instanceof StickerMessage)) {
+            } else if (message instanceof StickerMessage) {
                 downloadId = mMediasCache.downloadIdStickerFromUrl(((StickerMessage) message).getUrl());
             }
         }
