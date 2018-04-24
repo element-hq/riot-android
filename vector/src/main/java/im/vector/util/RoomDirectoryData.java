@@ -34,7 +34,7 @@ public class RoomDirectoryData implements Serializable {
     /**
      * The server name (might be null)
      */
-    private final String mHomeserver;
+    private final String mHomeServer;
 
     /**
      * The third party server identifier
@@ -59,7 +59,7 @@ public class RoomDirectoryData implements Serializable {
      * @param serverDisplayName the home server displayname
      * @return a new instance
      */
-    public static RoomDirectoryData getIncludeAllServers(String server, String serverDisplayName) {
+    public static RoomDirectoryData createIncludingAllNetworks(String server, String serverDisplayName) {
         return new RoomDirectoryData(server, serverDisplayName, null, null, true);
     }
 
@@ -75,14 +75,14 @@ public class RoomDirectoryData implements Serializable {
     /**
      * Constructor
      *
-     * @param homeserver           the server (might be null)
+     * @param homeServer           the server (might be null)
      * @param displayName          the displayName
      * @param avatarUrl            the avatar URL (might be null)
      * @param thirdPartyInstanceId the third party instance id (might be null)
      * @param includeAllNetworks   true to tell
      */
-    public RoomDirectoryData(String homeserver, String displayName, String avatarUrl, String thirdPartyInstanceId, boolean includeAllNetworks) {
-        mHomeserver = homeserver;
+    public RoomDirectoryData(String homeServer, String displayName, String avatarUrl, String thirdPartyInstanceId, boolean includeAllNetworks) {
+        mHomeServer = homeServer;
         mDisplayName = displayName;
         mAvatarUrl = avatarUrl;
         mThirdPartyInstanceId = thirdPartyInstanceId;
@@ -90,7 +90,7 @@ public class RoomDirectoryData implements Serializable {
     }
 
     public String getHomeServer() {
-        return mHomeserver;
+        return mHomeServer;
     }
 
     public String getDisplayName() {

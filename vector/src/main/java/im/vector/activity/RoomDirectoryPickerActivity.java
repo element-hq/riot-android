@@ -158,7 +158,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
                 int insertionIndex = 0;
 
                 // Add user's HS
-                list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(null, userHSName));
+                list.add(insertionIndex++, RoomDirectoryData.createIncludingAllNetworks(null, userHSName));
 
                 // Add user's HS but for Matrix public rooms only
                 if (!list.isEmpty()) {
@@ -169,7 +169,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
                 for (String hsName : hsNamesList) {
                     if (!TextUtils.equals(userHSName, hsName)) {
                         // Use the server name as a default display name
-                        list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(hsName, hsName));
+                        list.add(insertionIndex++, RoomDirectoryData.createIncludingAllNetworks(hsName, hsName));
                     }
                 }
 
