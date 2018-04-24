@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,18 +58,12 @@ public class RoomDirectoryData implements Serializable {
     /**
      * Creator
      *
-     * @param session    the session
-     * @param serverUrl  the home server url
-     * @param serverName the home server displayname
+     * @param serverName        the home server name (optional). Set null when the server is the current user's home server.
+     * @param serverDisplayName the home server displayname
      * @return a new instance
      */
-    public static RoomDirectoryData getIncludeAllServers(MXSession session, String serverUrl, String serverName) {
-        // the self server url should be null
-        if (TextUtils.equals(session.getHomeServerConfig().getHomeserverUri().getHost(), serverUrl)) {
-            return new RoomDirectoryData(null, serverName, null, null, true);
-        } else {
-            return new RoomDirectoryData(serverUrl, serverName, null, null, true);
-        }
+    public static RoomDirectoryData getIncludeAllServers(String serverName, String serverDisplayName) {
+        return new RoomDirectoryData(serverName, serverName, null, null, true);
     }
 
     /**

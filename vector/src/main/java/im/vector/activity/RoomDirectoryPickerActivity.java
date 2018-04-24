@@ -152,14 +152,13 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
             private void onDone(List<RoomDirectoryData> list) {
                 stopWaitingView();
                 String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
-                String userHSUrl = mSession.getHomeServerConfig().getHomeserverUri().getHost();
 
-                List<String> hsUrlsList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
+                List<String> hsNamesList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
 
                 int insertionIndex = 0;
 
                 // Add user's HS
-                list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(mSession, userHSUrl, userHSName));
+                list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(null, userHSName));
 
                 // Add user's HS but for Matrix public rooms only
                 if (!list.isEmpty()) {
@@ -167,9 +166,10 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
                 }
 
                 // Add custom directory servers
-                for (String hsURL : hsUrlsList) {
-                    if (!TextUtils.equals(userHSUrl, hsURL)) {
-                        list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(mSession, hsURL, hsURL));
+                for (String hsName : hsNamesList) {
+                    if (!TextUtils.equals(userHSName, hsName)) {
+                        // Use the server name as a default display name
+                        list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(hsName, hsName));
                     }
                 }
 
