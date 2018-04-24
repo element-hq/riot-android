@@ -126,7 +126,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
         final Intent intent = getIntent();
 
-        mSession = getSession(this, intent);
+        mSession = getSession(intent);
 
         if (mSession == null) {
             Log.e(LOG_TAG, "No MXSession.");

@@ -1333,7 +1333,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             if (null == (mMemberId = intent.getStringExtra(EXTRA_MEMBER_ID))) {
                 Log.e(LOG_TAG, "member ID missing in extra");
                 return false;
-            } else if (null == (mSession = getSession(this, intent))) {
+            } else if (null == (mSession = getSession(intent))) {
                 Log.e(LOG_TAG, "Invalid session");
                 return false;
             }
