@@ -169,7 +169,7 @@
     <string name="settings_contact">本地联系人</string>
     <string name="settings_devices_list">设备列表</string>
     <string name="devices_details_dialog_title">设备详情</string>
-    <string name="devices_details_device_name">设备名</string>
+    <string name="devices_details_device_name">设备名称</string>
     <string name="devices_delete_pswd">密码：</string>
     <string name="devices_delete_submit_button_label">提交</string>
 
@@ -331,7 +331,7 @@
     <string name="settings_ignored_users">已忽略的用户</string>
     <string name="settings_contacts_app_permission">联系人权限</string>
     <string name="devices_delete_dialog_text">这个操作需要额外的身份认证。
-请输入你的密码继续。</string>
+请输入你的密码以继续。</string>
     <string name="devices_delete_dialog_title">身份认证</string>
     <string name="settings_old_password">旧密码</string>
     <string name="settings_unignore_user">显示所有来自 %s 的消息？</string>
@@ -687,7 +687,7 @@
     <string name="settings_dont_send_typings_notifs">不发送打字通知</string>
     <string name="settings_always_show_timestamps">总是显示消息时间戳</string>
     <string name="settings_disable_markdown">发送时禁用 markdown 格式化</string>
-    <string name="settings_data_save_mode">数据节省模式</string>
+    <string name="settings_data_save_mode">省流量模式</string>
 
     <string name="media_saving_period_3_days">3天</string>
     <string name="media_saving_period_1_week">1周</string>
@@ -768,8 +768,8 @@
 <string name="notification_noisy_notifications">通知并振铃</string>
     <string name="notification_silent_notifications">静默通知</string>
 
-    <string name="settings_analytics">统计</string>
-    <string name="settings_opt_out_of_analytics">不再统计</string>
+    <string name="settings_analytics">数据收集</string>
+    <string name="settings_opt_out_of_analytics">退出统计分析计划</string>
     <string name="settings_opt_out_of_analytics_summary">Riot 会收集匿名统计数据来帮助我们改进程序。</string>
 
 
@@ -895,4 +895,9 @@
     <plurals name="notification_unread_notified_messages_in_room_msgs">
 	<item quantity="other">%d 条未读消息</item>
 </plurals>
+    <string name="startup_notification_privacy_title">通知隐私</string>
+    <string name="startup_notification_privacy_message">Riot 可以在后台运行以安全隐密地管理你的通知（这可能会影响电池消耗）。</string>
+    <string name="startup_notification_privacy_button_grant">获取权限</string>
+    <string name="startup_notification_privacy_button_other">选择其他选项</string>
+
     </resources>
