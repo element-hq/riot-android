@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
@@ -272,19 +273,23 @@ class VectorMessagesAdapterMediasHelper {
         if (null == downloadId) {
             if (message instanceof VideoMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((VideoMessage) message).getUrl());
+            } else if (message instanceof StickerMessage) {
+                downloadId = mMediasCache.downloadIdStickerFromUrl(((StickerMessage) message).getUrl());
             } else if (message instanceof ImageMessage) {
-                if (event.getType().equals(Event.EVENT_TYPE_STICKER)) {
-                    downloadId = mMediasCache.downloadIdStickerFromUrl(((StickerMessage) message).getUrl());
-                } else {
-                    downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
-                }
+                downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
             }
         }
 
         // Use Glide library to display stickers into ImageView
         // Glide support animated gif
         if (event.getType().equals(Event.EVENT_TYPE_STICKER)) {
-            Glide.with(mContext).load(downloadId).into(imageView);
+            Glide.with(mContext)
+                    .load(downloadId)
+                    .apply(new RequestOptions()
+                            .override(maxImageWidth, maxImageHeight)
+                            .fitCenter()
+                    )
+                    .into(imageView);
         }
 
         final View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
