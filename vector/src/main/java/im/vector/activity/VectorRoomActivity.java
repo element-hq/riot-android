@@ -576,7 +576,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
-        mSession = MXCActionBarActivity.getSession(this, intent);
+        mSession = getSession(intent);
 
         if ((mSession == null) || !mSession.isAlive()) {
             Log.e(LOG_TAG, "No MXSession.");
