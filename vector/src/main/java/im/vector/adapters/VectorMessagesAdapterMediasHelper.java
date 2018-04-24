@@ -273,10 +273,10 @@ class VectorMessagesAdapterMediasHelper {
         if (null == downloadId) {
             if (message instanceof VideoMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((VideoMessage) message).getUrl());
-            } else if (!(message instanceof StickerMessage) && (message instanceof ImageMessage)) {
-                downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
             } else if (message instanceof StickerMessage) {
                 downloadId = mMediasCache.downloadIdStickerFromUrl(((StickerMessage) message).getUrl());
+            } else if (message instanceof ImageMessage) {
+                downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
             }
         }
 
