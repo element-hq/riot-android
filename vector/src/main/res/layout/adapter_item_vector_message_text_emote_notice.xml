@@ -85,7 +85,7 @@
                             android:layout_height="14dp"
                             android:src="@drawable/e2e_verified" />
 
-                        <TextView
+                        <com.vanniktech.emoji.EmojiTextView
                             android:id="@+id/messagesAdapter_body"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
