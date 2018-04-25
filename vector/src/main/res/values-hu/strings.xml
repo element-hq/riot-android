@@ -908,4 +908,23 @@ Ismeretlen eszközök:</string>
 
 <string name="receipt_avatar">Visszaigazolási avatar</string>
     <string name="notice_avatar">Észlelés avatar</string>
+    <string name="settings_notification_privacy_warning">Riot.im a háttérben fut azért, hogy az értesítések tartalma titokban maradhasson. Ezt a beállítást megváltoztathatod kisebb akkumulátor használathoz.</string>
+    <string name="settings_notification_privacy_normal">Normál</string>
+    <string name="settings_notification_privacy_power_saving">Akkumulátor kímélő beállítások</string>
+    <string name="settings_notification_privacy_low_detail">Értesítések kevés részlettel</string>
+    <string name="settings_notification_privacy_no_permission">Az alkalmazásnak <b>nincs</b> szüksége engedélyre a háttérben való futáshoz</string>
+    <string name="settings_notification_privacy_gcm">• Az értesítések a Google Cloud Messaging rendszeren keresztül lesznek elküldve</string>
+    <string name="settings_notification_privacy_metadata">• Az értesítések csak metaadatokat tartalmaznak</string>
+    <string name="settings_notification_privacy_secure_message_content">• Az értesítés tartalma <b>közvetlenül a Matrix szerverről kerül letöltésre</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">Az értesítések <b>meta- és üzenet adatot is</b> tartalmaznak</string>
+    <string name="startup_notification_privacy_message">Riot futtatható a háttérben az értesítések biztonságos és titkos kezeléséhez (ami hatással lehet az akkumulátor használatra ).</string>
+    <string name="startup_notification_privacy_button_grant">Engedély megadása</string>
+    <string name="startup_notification_privacy_button_other">Más lehetőség választása</string>
+
+    <string name="settings_notification_privacy">Értesítés adatvédelme</string>
+    <string name="settings_notification_privacy_reduced">Csökkentett adatvédelem</string>
+    <string name="settings_notification_privacy_need_permission">"Az alkalmazásnak engedélyre van szüksége háttérben futáshoz "</string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Az értesítések <b>nem mutatják az üzenet tartalmát</b></string>
+
+    <string name="startup_notification_privacy_title">Értesítés adatvédelme</string>
     </resources>

@@ -47,8 +47,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
@@ -64,9 +62,6 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
     private MXSession mSession;
     private RoomDirectoryAdapter mRoomDirectoryAdapter;
-
-    @BindView(R.id.room_directory_loading)
-    View waitingView;
 
      /*
      * *********************************************************************************************
@@ -92,7 +87,8 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
         setTitle(R.string.select_room_directory);
         setContentView(R.layout.activity_room_directory_picker);
-        ButterKnife.bind(this);
+
+        waitingView = findViewById(R.id.room_directory_loading);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -156,14 +152,13 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
             private void onDone(List<RoomDirectoryData> list) {
                 stopWaitingView();
                 String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
-                String userHSUrl = mSession.getHomeServerConfig().getHomeserverUri().getHost();
 
-                List<String> hsUrlsList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
+                List<String> hsNamesList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
 
                 int insertionIndex = 0;
 
                 // Add user's HS
-                list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(mSession, userHSUrl, userHSName));
+                list.add(insertionIndex++, RoomDirectoryData.createIncludingAllNetworks(null, userHSName));
 
                 // Add user's HS but for Matrix public rooms only
                 if (!list.isEmpty()) {
@@ -171,9 +166,10 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
                 }
 
                 // Add custom directory servers
-                for (String hsURL : hsUrlsList) {
-                    if (!TextUtils.equals(userHSUrl, hsURL)) {
-                        list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(mSession, hsURL, hsURL));
+                for (String hsName : hsNamesList) {
+                    if (!TextUtils.equals(userHSName, hsName)) {
+                        // Use the server name as a default display name
+                        list.add(insertionIndex++, RoomDirectoryData.createIncludingAllNetworks(hsName, hsName));
                     }
                 }
 
