@@ -965,8 +965,6 @@ Email также позволит вам при необходимости во�
 	<item quantity="other"/>
 </plurals>
 
-    <string name="settings_enable_content_sending">Сохранять подробные уведомления</string>
-    <string name="settings_enable_content_sending_summary">Включите эту опцию при отключенной фоновой синхронизации для отображения подробных уведомлений. Для этого требуется отправлять нешифрованный контент через серверы служб Google</string>
     <plurals name="notification_unread_notified_messages">
 	<item quantity="one">1 непрочитанное уведомление</item>
 	<item quantity="few">%d непрочитанных уведомления</item>
@@ -977,6 +975,27 @@ Email также позволит вам при необходимости во�
 	<item quantity="one">1 непрочитанное уведомление</item>
 	<item quantity="few">%d непрочитанных уведомления</item>
 	<item quantity="many">%d непрочитанных уведомлений</item>
-	<item quantity="other"></item>
+	<item quantity="other"/>
 </plurals>
+    <string name="receipt_avatar">Получить аватар</string>
+    <string name="notice_avatar">Заметка аватара</string>
+    <string name="settings_flair">Настроение</string>
+
+    <string name="room_settings_no_flair">" Эта комната не показывает настроение для сообществ"</string>
+    <string name="settings_notification_privacy">Конфиденциальность уведомлений</string>
+    <string name="settings_notification_privacy_warning">Riot.im работает в фоновом режиме для сохранения приватности ваших уведомлений. Вы можете изменить этот параметр, чтобы уменьшить потребление заряда батареи.</string>
+    <string name="settings_notification_privacy_normal">Нормальный</string>
+    <string name="settings_notification_privacy_power_saving">Варианты энергосбережения</string>
+    <string name="settings_notification_privacy_need_permission">Приложение нуждается в разрешении на работу в фоновом режиме</string>
+    <string name="settings_notification_privacy_no_permission">Приложениям <b>не</b> требуется разрешение на работу в фоновом режиме</string>
+    <string name="settings_notification_privacy_gcm">• Уведомления отправляются через Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Уведомления содержат только метаданные</string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Уведомления содержат <b>метаданные и данные сообщения</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Уведомления <b>не будут показывать содержимое сообщения</b></string>
+
+    <string name="startup_notification_privacy_title">Конфиденциальность уведомлений</string>
+    <string name="startup_notification_privacy_message">Riot может работать в фоновом режиме для управления конфиденциальностью и безопасностью ваших уведомлений (это может повлиять на время работы от батареи).</string>
+    <string name="startup_notification_privacy_button_grant">Предоставить разрешение</string>
+    <string name="startup_notification_privacy_button_other">Выбрать другой вариант</string>
+
     </resources>

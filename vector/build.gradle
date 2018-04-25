@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '26.0.2'
 
     packagingOptions {
@@ -142,10 +142,10 @@ dependencies {
 
     compile 'me.leolin:ShortcutBadger:1.1.2@aar'
 
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.android.support:cardview-v7:26.1.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:design:27.1.1'
+    compile 'com.android.support:cardview-v7:27.1.1'
+    compile 'com.android.support:recyclerview-v7:27.1.1'
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
@@ -156,6 +156,10 @@ dependencies {
 
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
 
+    // Use Glide library to display image (Gif supported)
+    compile 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+
     compile 'com.googlecode.libphonenumber:libphonenumber:8.0.1'
 
     /************* Matrix SDK management **************/
@@ -163,7 +167,7 @@ dependencies {
     // use the matrix SDK as external lib
     compile(name: 'matrix-sdk', ext: 'aar')
     // use the matrix SDK as a sub project
-    // compile project(':matrix-sdk')
+    //compile project(':matrix-sdk')
     compile(name: 'olm-sdk', ext: 'aar')
 
     /************* jitsi **************/
@@ -178,7 +182,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp-urlconnection:3.6.0'
     compile 'com.squareup.okio:okio:1.13.0'
     compile 'org.webkit:android-jsc:r174650'
-
 
     compile(name: 'jitsi-sdk', ext: 'aar')
     compile(name: 'react-native-background-timer', ext: 'aar')
@@ -201,8 +204,8 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
-    appCompile 'com.google.firebase:firebase-core:11.6.2'
-    appCompile 'com.google.firebase:firebase-messaging:11.6.2'
+    appCompile 'com.google.firebase:firebase-core:11.8.0'
+    appCompile 'com.google.firebase:firebase-messaging:11.8.0'
 
     // fdroid flavor only
 }

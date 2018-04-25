@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">英</string>
-    <string name="resouces_country">英國</string>
+<resources><string name="resouces_language">en</string>
+    <string name="resouces_country">美國</string>
 
     <string name="light_theme">淺色主題</string>
     <string name="dark_theme">深色主題</string>
@@ -10,4 +10,403 @@
     <string name="notification_listen_for_events">聆聽事件</string>
 
     <string name="title_activity_home">信息</string>
+    <string name="title_activity_room">聊天室</string>
+    <string name="title_activity_settings">設置</string>
+    <string name="title_activity_member_details">成員詳情</string>
+    <string name="title_activity_bug_report">錯誤回報</string>
+    <string name="cancel">取消</string>
+    <string name="ok">確定</string>
+    <string name="leave">離開</string>
+    <string name="save">儲存</string>
+    <string name="loading">載入中...</string>
+
+    <string name="send">發送</string>
+    <string name="resend">重新發送</string>
+    <string name="share">分享</string>
+    <string name="view_source">查看源代碼</string>
+    <string name="notification_noisy_notifications">通知音效</string>
+    <string name="notification_silent_notifications">靜音通知</string>
+
+    <string name="title_activity_historical">歷史</string>
+    <string name="title_activity_group_details">社群細節</string>
+
+    <string name="copy">複製</string>
+    <string name="redact">撤除</string>
+    <string name="quote">引用</string>
+    <string name="later">稍後</string>
+    <string name="forward">轉寄</string>
+    <string name="permalink">永久連結</string>
+    <string name="view_decrypted_source">檢視解密的來源</string>
+    <string name="delete">刪除</string>
+    <string name="rename">重新命名</string>
+    <string name="report_content">回報內容</string>
+    <string name="active_call">進行中的通話</string>
+    <string name="ongoing_conference_call">" 正在進行電話會議，以語音或視訊加入。"</string>
+    <string name="ongoing_conference_call_voice">語音</string>
+    <string name="ongoing_conference_call_video">視訊</string>
+    <string name="cannot_start_call">無法啟用通話，請稍後再試</string>
+    <string name="missing_permissions_warning">由於缺少一些權限，也許會缺少一些功能..</string>
+    <string name="missing_permissions_to_start_conf_call">在此聊天室內，你需要權限來邀請並開始一個會議</string>
+    <string name="missing_permissions_title_to_start_conf_call">無法啟用通話</string>
+    <string name="device_information">裝置資訊</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">不支援在加密聊天室的會議通話</string>
+    <string name="send_anyway">無論如何都要傳送</string>
+    <string name="or">或</string>
+    <string name="and">和</string>
+    <string name="invite">邀請</string>
+    <string name="offline">離線</string>
+
+    <string name="action_exit">離開</string>
+    <string name="actions">動作</string>
+    <string name="action_sign_out">登出</string>
+    <string name="action_sign_out_confirmation">為了安全，登出將會刪除任何的端對端加密金鑰，會造成在你重新登入後，無法讀取先前已加密的歷史聊天。
+在登出前，選擇匯出來備份。</string>
+    <string name="action_voice_call">語音通話</string>
+    <string name="action_video_call">視訊通話</string>
+    <string name="action_global_search">全域搜尋</string>
+    <string name="action_mark_all_as_read">標記為已讀取</string>
+    <string name="action_historical">歷史</string>
+    <string name="action_quick_reply">快速回覆</string>
+    <string name="action_open">開啟</string>
+    <string name="action_close">關閉</string>
+    <string name="copied_to_clipboard">複製到剪貼簿</string>
+    <string name="disable">停用</string>
+
+    <string name="dialog_title_confirmation">確認</string>
+    <string name="dialog_title_warning">警告</string>
+
+    <string name="bottom_action_home">首頁</string>
+    <string name="bottom_action_favourites">收藏夾</string>
+    <string name="bottom_action_people">聯絡人</string>
+    <string name="bottom_action_rooms">聊天室</string>
+    <string name="bottom_action_groups">社群</string>
+
+    <string name="home_filter_placeholder_home">搜尋聊天室</string>
+    <string name="home_filter_placeholder_favorites">搜尋收藏夾</string>
+    <string name="home_filter_placeholder_people">搜尋人</string>
+    <string name="home_filter_placeholder_rooms">搜尋聊天室</string>
+    <string name="home_filter_placeholder_groups">搜尋社群</string>
+
+    <string name="invitations_header">邀請</string>
+    <string name="low_priority_header">低優先度</string>
+
+    <string name="direct_chats_header">聊天</string>
+    <string name="local_address_book_header">裝置上的通訊錄</string>
+    <string name="user_directory_header">使用者目錄</string>
+    <string name="matrix_only_filter">僅 Matrix 聯絡人</string>
+    <string name="no_conversation_placeholder">沒有對話</string>
+    <string name="no_contact_access_placeholder">您沒有允許 Riot 存取裝置上的聯絡資訊</string>
+    <string name="no_result_placeholder">沒有結果</string>
+
+    <string name="rooms_header">聊天室</string>
+    <string name="rooms_directory_header">聊天室目錄</string>
+    <string name="no_room_placeholder">沒有聊天室</string>
+    <string name="no_public_room_placeholder">沒有公開的聊天室</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="other">%d 個使用者</item>
+</plurals>
+
+    <string name="groups_invite_header">邀請</string>
+    <string name="groups_header">社群</string>
+    <string name="no_group_placeholder">沒有群組</string>
+
+    <string name="send_bug_report_include_logs">傳送記錄</string>
+    <string name="send_bug_report_include_crash_logs">傳送當機紀錄</string>
+    <string name="send_bug_report_include_screenshot">傳送螢幕截圖</string>
+    <string name="send_bug_report">錯誤回報</string>
+    <string name="send_bug_report_description">請描述此錯誤。做了什麼？預期發生什麼？實際發生什麼？</string>
+    <string name="send_bug_report_placeholder">在這裡描述你的問題</string>
+    <string name="send_bug_report_logs_description">為了要診斷問題，客戶端的紀錄將會與錯誤回報一起送出。如果您只想送出上方的文字，請取消勾選：</string>
+    <string name="send_bug_report_alert_message">您似乎沮喪的搖晃著手機。想送出錯誤回報？</string>
+    <string name="send_bug_report_app_crashed">此應用程式在上次當機。您想送出錯誤回報？</string>
+    <string name="send_bug_report_rage_shake">憤怒搖晃來回報錯誤</string>
+
+    <string name="send_bug_report_sent">此錯誤回報已成功送出</string>
+    <string name="send_bug_report_failed">此錯誤回報無法送出（%s）</string>
+    <string name="send_bug_report_progress">進度（%s%%）</string>
+
+    <string name="send_files_in">傳送到</string>
+    <string name="read_receipt">讀取</string>
+
+    <string name="join_room">加入聊天室</string>
+    <string name="username">使用者名稱</string>
+    <string name="create_account">註冊</string>
+    <string name="login">登入</string>
+    <string name="logout">登出</string>
+    <string name="hs_url">家伺服器網址</string>
+    <string name="identity_url">身份識別伺服器網址</string>
+    <string name="user">使用者</string>
+    <string name="users">使用者</string>
+    <string name="search">搜尋</string>
+
+    <string name="start_new_chat">開始新聊天</string>
+    <string name="start_voice_call">開始語音通話</string>
+    <string name="start_video_call">開始視訊通話</string>
+
+    <string name="start_new_chat_prompt_msg">您確定想要與 %s 開始新的聊天？</string>
+    <string name="start_voice_call_prompt_msg">您確定想要與 %s 開始語音通話？</string>
+    <string name="start_video_call_prompt_msg">您確定想要與 %s 開始視訊通話？</string>
+
+    <string name="option_send_files">傳送檔案</string>
+    <string name="option_take_photo_video">拍照或錄影</string>
+    <string name="option_take_photo">拍照</string>
+    <string name="option_take_video">錄影</string>
+
+    <string name="auth_login">登入</string>
+    <string name="auth_register">註冊</string>
+    <string name="auth_submit">傳送</string>
+    <string name="auth_skip">略過</string>
+    <string name="auth_send_reset_email">發送密碼重設郵件</string>
+    <string name="auth_return_to_login">返回到登入畫面</string>
+    <string name="auth_user_id_placeholder">電子郵件位址或使用者名稱</string>
+    <string name="auth_password_placeholder">密碼</string>
+    <string name="auth_new_password_placeholder">新密碼</string>
+    <string name="auth_user_name_placeholder">使用者名稱</string>
+    <string name="auth_add_email_message">輸入電子郵件位址來讓其他人找到您，以及方便您重設密碼。</string>
+    <string name="auth_add_phone_message">輸入電話號碼來讓其他人找到您。</string>
+    <string name="auth_add_email_phone_message">輸入電子郵件位址或電話號碼來讓其他人找到您。
+
+電子郵件位址也可以用來重設密碼。</string>
+    <string name="auth_add_email_and_phone_message">輸入電子郵件位址或電話號碼來讓其他人找到您。
+
+電子郵件位址也可以用來重設密碼。</string>
+    <string name="auth_email_placeholder">電子郵件地址</string>
+    <string name="auth_opt_email_placeholder">電子郵件位址（選擇性）</string>
+    <string name="auth_phone_number_placeholder">電話號碼</string>
+    <string name="auth_opt_phone_number_placeholder">電話號碼（選擇性）</string>
+    <string name="auth_repeat_password_placeholder">確認密碼</string>
+    <string name="auth_repeat_new_password_placeholder">確認新密碼</string>
+    <string name="auth_invalid_login_param">不正確的使用者名稱和／或密碼</string>
+    <string name="auth_invalid_user_name">使用者名稱僅能包含字母、數字、點、連字號與底線</string>
+    <string name="auth_invalid_password">密碼太短（至少需要 6 個字元）</string>
+    <string name="auth_missing_password">密碼遺失</string>
+    <string name="auth_invalid_email">這看起不像是有效的電子郵件地址</string>
+    <string name="auth_invalid_phone">這看起來不像有效的電話號碼</string>
+    <string name="auth_email_already_defined">此電子郵件位址已經被定義。</string>
+    <string name="auth_missing_email">缺少電子郵件位址</string>
+    <string name="auth_missing_phone">缺少電話號碼</string>
+    <string name="auth_missing_email_or_phone">缺少電子郵件位址或電話號碼</string>
+    <string name="auth_invalid_token">無效的權杖</string>
+    <string name="auth_password_dont_match">密碼不符合</string>
+    <string name="auth_forgot_password">忘記密碼？</string>
+    <string name="auth_use_server_options">使用自訂的伺服器選項（進階）</string>
+    <string name="auth_email_validation_message">請檢查您的電子郵件信箱以繼續註冊流程</string>
+    <string name="auth_threepid_warning_message">直到 API 存在之前，尚不支援同時使用電子郵件地址和電話號碼註冊，因此只有電話號碼會被採用。
+
+但您可以在基本資料中新增電子郵件地址。</string>
+    <string name="auth_recaptcha_message">這個家伺服器想要確定您不是機器人</string>
+    <string name="auth_username_in_use">使用者名稱已被使用</string>
+    <string name="auth_home_server">家伺服器：</string>
+    <string name="auth_identity_server">身份識別伺服器：</string>
+    <string name="auth_reset_password_next_step_button">我已經驗證了我的電子郵件地址</string>
+    <string name="auth_reset_password_message">要重設您的密碼，輸入連結帳號的電子郵件地址：</string>
+    <string name="auth_reset_password_missing_email">必須輸入和您帳號關聯的電子郵件地址。</string>
+    <string name="auth_reset_password_missing_password">一個新的密碼必須被輸入。</string>
+    <string name="auth_reset_password_email_validation_message">電子郵件已傳送至 %s，點擊下方的連結來前往。</string>
+    <string name="auth_reset_password_error_unauthorized">電子郵件地址驗證失敗： 請確保您已點擊郵件中的連結</string>
+    <string name="auth_reset_password_success_message">您的密碼已重設。
+
+您已在所有裝置上登出，並且不會再收到推送通知。要重新啟用通知，再次於每個裝置上登入。</string>
+
+    <string name="login_error_must_start_http">網址必須是 http[s]:// 開頭</string>
+    <string name="login_error_network_error">無法登入：網路錯誤</string>
+    <string name="login_error_unable_login">無法登入</string>
+    <string name="login_error_registration_network_error">無法註冊：網路錯誤</string>
+    <string name="login_error_unable_register">無法註冊</string>
+    <string name="login_error_unable_register_mail_ownership">無法註冊：電子郵件的擁有權失敗</string>
+    <string name="login_error_invalid_home_server">輸入有效的網址</string>
+    <string name="login_mobile_device">行動</string>
+
+    <string name="login_error_forbidden">無效的使用者名稱/密碼</string>
+    <string name="login_error_unknown_token">指定的存取權杖無法被認可</string>
+    <string name="login_error_bad_json">異常的 JSON</string>
+    <string name="login_error_not_json">沒有包含有效的 JSON</string>
+    <string name="login_error_limit_exceeded">傳送太多請求</string>
+    <string name="login_error_user_in_use">此使用者名稱已被使用</string>
+    <string name="login_error_login_email_not_yet">此電子郵件連結已經被點擊過</string>
+
+    <string name="e2e_need_log_in_again">你需要重新登入來產生此裝置的端對端加密金鑰，及送出公開金鑰到家伺服器。
+這會斷線一次。
+抱歉造成困擾。</string>
+
+    <string name="read_receipts_list">讀取接收者清單</string>
+
+    <string name="groups_list">群組清單</string>
+
+    <string name="compression_options">"傳送為 "</string>
+    <string name="compression_opt_list_original">原始</string>
+    <string name="compression_opt_list_large">大</string>
+    <string name="compression_opt_list_medium">中</string>
+    <string name="compression_opt_list_small">小</string>
+
+    <string name="attachment_cancel_download">取消下載？</string>
+    <string name="attachment_cancel_upload">取消上傳？</string>
+    <string name="attachment_remaining_time_seconds">%d 秒</string>
+    <string name="attachment_remaining_time_minutes">%1$d 分 %2$d 秒</string>
+
+    <string name="yesterday">昨天</string>
+    <string name="today">今天</string>
+
+    <string name="room_info_room_name">聊天室名稱</string>
+    <string name="room_info_room_topic">聊天室主題</string>
+
+    <string name="call">通話</string>
+    <string name="call_connected">通話已連接</string>
+    <string name="call_connecting">通話正在連接…</string>
+    <string name="call_ended">通話結束</string>
+    <string name="call_ring">正在通話…</string>
+    <string name="incoming_call">來電</string>
+    <string name="incoming_video_call">視訊來電</string>
+    <string name="incoming_voice_call">語音來電</string>
+    <string name="call_in_progress">通話進行中</string>
+
+    <string name="call_error_user_not_responding">遠端未能接聽。</string>
+    <string name="call_error_ice_failed">媒體連線失敗</string>
+    <string name="call_error_camera_init_failed">無法初始化相機</string>
+    <string name="call_error_answered_elsewhere">電話在另一處已答覆</string>
+
+    <string name="media_picker_both_capture_title">拍照或錄影</string>
+    <string name="media_picker_cannot_record_video">無法錄影</string>
+
+    <string name="permissions_rationale_popup_title">資訊</string>
+    <string name="permissions_rationale_msg_storage">Riot 需要權限來存取你的照片與影片庫，以傳送及儲存附件。
+
+請在下個彈跳視窗允許存取，來從手機傳送檔案。</string>
+    <string name="permissions_rationale_msg_camera">Riot 需要權限存取您的相機，來拍照與視訊通話。</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+為了要通話，請在下個彈跳視窗中允許存取。</string>
+    <string name="permissions_rationale_msg_record_audio">Riot 需要權限來存取麥克風，來撥打語音通話。</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+為了要通話，請在下個彈跳視窗中允許存取。</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot 需要權限來存取相機及麥克風來撥打視訊通話。
+
+為了要通話，請在下個彈跳視窗中允許存取。</string>
+    <string name="permissions_rationale_msg_contacts">Riot 需要權限來存取您的通訊錄，以利用電子郵件及電話號碼來尋找 Matrix 使用者。
+
+為了發現來自 Riot 通訊錄的使用者，請在下個彈跳視窗允許存取。</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot 需要權限來存取您的通訊錄，以利用電子郵件及電話號碼來尋找 Matrix 使用者。
+
+允許 Riot 來存取聯絡人？</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">抱歉.. 由於缺少權限，動作沒被執行</string>
+
+    <string name="media_slider_saved">已儲存</string>
+    <string name="media_slider_saved_message">儲存到下載</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="_continue">繼續</string>
+
+    <string name="remove">移除</string>
+    <string name="join">加入</string>
+    <string name="preview">預覽</string>
+    <string name="reject">拒絕</string>
+
+    <string name="list_members">列出成員</string>
+    <string name="open_chat_header">打開標頭</string>
+    <string name="room_sync_in_progress">同步中...</string>
+    <string name="room_jump_to_first_unread">跳到第一個未讀的訊息。</string>
+
+    <string name="room_preview_invitation_format">你已經被 %s 邀請加入此聊天室</string>
+    <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，與此帳號無關連。
+你也許希望以不同帳號登入，或加入電子郵件到此帳號。</string>
+    <string name="room_preview_try_join_an_unknown_room">您正在嘗試存取 %s，您想要加入已參與討論？</string>
+    <string name="room_preview_try_join_an_unknown_room_default">聊天室</string>
+    <string name="room_preview_room_interactions_disabled">這是聊天室的預覽，聊天室互動已停用。</string>
+
+    <string name="room_creation_title">新聊天</string>
+    <string name="room_creation_add_member">加入成員</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="other">%d 個活躍成員</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="other">%d 個成員</item>
+</plurals>
+    <string name="room_title_one_member">1 個成員</string>
+    <string name="room_e2e_alert_title">警告！</string>
+    <string name="room_e2e_alert_message">端對端加密正在測試，它可能會不可靠。
+
+您還不應該信任它會保護資料。
+
+從加入聊天室前，裝置還無法解密歷史訊息。
+
+加密的訊息，無法在還沒被實作加密的客戶端上被看到。</string>
+
+    <string name="format_time_s">秒</string>
+    <string name="format_time_m">分</string>
+    <string name="format_time_h">小時</string>
+    <string name="format_time_d">天</string>
+
+    <string name="room_participants_leave_prompt_title">離開聊天室</string>
+    <string name="room_participants_leave_prompt_msg">您確定想要離開聊天室？</string>
+    <string name="room_participants_remove_prompt_msg">你確定想從此聊天室移除 %s？</string>
+    <string name="room_participants_create">建立</string>
+
+    <string name="room_participants_online">線上</string>
+    <string name="room_participants_offline">離線</string>
+    <string name="room_participants_idle">閒置</string>
+    <string name="room_participants_now">現在</string>
+    <string name="room_participants_ago">之前</string>
+
+    <string name="room_participants_header_admin_tools">管理者工具</string>
+    <string name="room_participants_header_call">通話</string>
+    <string name="room_participants_header_direct_chats">私聊</string>
+    <string name="room_participants_header_devices">裝置</string>
+
+    <string name="room_participants_action_invite">邀請</string>
+    <string name="room_participants_action_leave">離開聊天室</string>
+    <string name="room_participants_action_remove">從此房間移除</string>
+    <string name="room_participants_action_ban">封鎖</string>
+    <string name="room_participants_action_unban">封禁</string>
+    <string name="room_participants_action_set_default_power_level">恢復到一般使用者</string>
+    <string name="room_participants_action_set_moderator">設定成版主</string>
+    <string name="room_participants_action_set_admin">設定成管理者</string>
+    <string name="room_participants_action_ignore">隱藏所有來自此使用者的訊息</string>
+    <string name="room_participants_action_unignore">顯示所有來自此使用者的訊息</string>
+    <string name="room_participants_invite_search_another_user">使用者 ID、名稱或電子郵件</string>
+    <string name="room_participants_action_mention">提及</string>
+    <string name="room_participants_action_devices_list">顯示裝置清單</string>
+    <string name="room_participants_invite_prompt_msg">您確定想要邀請 %s 到聊天室？</string>
+    <string name="room_participants_kick_prompt_msg">您確定想要把這個使用者從聊天室踢除？</string>
+    <string name="room_participants_ban_prompt_msg">您確定想要封鎖此聊天室的使用者？</string>
+
+    <string name="people_search_invite_by_id"><u>透過 ID 邀請</u></string>
+    <string name="people_search_local_contacts">裝置上的聯絡人（%d）</string>
+    <string name="people_search_user_directory">使用者目錄 (%s)</string>
+    <string name="people_search_filter_text">只顯示 Matrix 使用者</string>
+
+    <string name="people_search_invite_by_id_dialog_title">透過 ID 邀請使用者</string>
+    <string name="people_search_invite_by_id_dialog_description">請輸入一或多個電子郵件地址或 Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">電子郵件或 Matrix ID</string>
+
+    <string name="room_menu_search">搜尋</string>
+    <string name="room_one_user_is_typing">%s 正在打字…</string>
+    <string name="room_two_users_are_typing">%1$s 和 %2$s 正在打字…</string>
+    <string name="room_participants_power_level_prompt">由於你提升此使用者擁有的權限等級與你自己相同，所以，你將無法還原此變更。
+你確定？</string>
+
+    <string name="room_many_users_are_typing">%1$s 及 %2$s 和其他人正在打字…</string>
+    <string name="room_message_placeholder_encrypted">傳送加密的訊息…</string>
+    <string name="room_message_placeholder_not_encrypted">傳送訊息（未加密）…</string>
+    <string name="room_offline_notification">到伺服器的連接已遺失。</string>
+    <string name="room_unsent_messages_notification">訊息沒送出。現在，%1$s 或者 %2$s？</string>
+    <string name="room_unknown_devices_messages_notification">由於未知的設備，訊息沒送出。現在，%1$s 或者 %2$s？</string>
+    <string name="room_prompt_resend">全部重送</string>
+    <string name="room_prompt_cancel">取消全部</string>
+    <string name="room_resend_unsent_messages">重送沒送出的訊息</string>
+    <string name="room_delete_unsent_messages">刪除沒送出的訊息</string>
+    <string name="room_message_file_not_found">沒找到檔案</string>
+    <string name="room_do_not_have_permission_to_post">您沒有權限在此聊天室發言</string>
+    <string name="room_new_message_notification">1 則新訊息</string>
+    <plurals name="room_new_messages_notification">
+	<item quantity="other">%d 則新訊息</item>
+</plurals>
+
+    <string name="ssl_trust">信任</string>
+    <string name="ssl_do_not_trust">不信任</string>
+    <string name="ssl_logout_account">登出</string>
+    <string name="ssl_remain_offline">忽略</string>
+    <string name="ssl_fingerprint_hash">指紋（%s）：</string>
+    <string name="ssl_could_not_verify">無法驗證遠端伺服器的身份。</string>
     </resources>

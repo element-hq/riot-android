@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,8 +62,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     private TextInputLayout mCountryLayout;
     private TextInputEditText mPhoneNumber;
     private TextInputLayout mPhoneNumberLayout;
-    private View mLoadingView;
-
+    
     private MXSession mSession;
 
     // Ex "FR"
@@ -110,7 +110,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
         mCountryLayout = findViewById(R.id.phone_number_country);
         mPhoneNumber = findViewById(R.id.phone_number_value);
         mPhoneNumberLayout = findViewById(R.id.phone_number);
-        mLoadingView = findViewById(R.id.loading_view);
+        waitingView = findViewById(R.id.loading_view);
 
         final Intent intent = getIntent();
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));
@@ -263,7 +263,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
         if (!mIsSubmittingPhone) {
             mIsSubmittingPhone = true;
 
-            mLoadingView.setVisibility(View.VISIBLE);
+            showWaitingView();
 
             final String e164phone = PhoneNumberUtils.getE164format(phoneNumber);
             // Extract from phone number object instead of using mCurrentRegionCode just in case
@@ -273,7 +273,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
             mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    mLoadingView.setVisibility(View.GONE);
+                    stopWaitingView();
                     Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
                             mSession.getCredentials().userId, pid);
                     startActivityForResult(intent, REQUEST_VERIFICATION);
@@ -310,7 +310,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
      */
     private void onSubmitPhoneError(final String errorMessage) {
         mIsSubmittingPhone = false;
-        mLoadingView.setVisibility(View.GONE);
+        stopWaitingView();
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 

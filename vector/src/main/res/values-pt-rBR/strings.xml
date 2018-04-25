@@ -43,7 +43,7 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Chamadas de conferência não são permitidas em salas encriptografadas</string>
     <string name="send_anyway">Enviar de qualquer maneira</string>
     <string name="or">ou</string>
-    <string name="and">and</string>
+    <string name="and">e</string>
     <string name="invite">Invite</string>
 
     <!-- actions -->
@@ -51,9 +51,9 @@
     <string name="action_sign_out_confirmation">Por razões de segurança, ao sair, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas criptografadas não mais sejam acessíveis quando você entrar novamente.\nExporte estas conversas para o backup antes de sair se quiser armazená-las.</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
-    <string name="action_global_search">Global search</string>
+    <string name="action_global_search">Busca global</string>
     <string name="action_mark_all_as_read">Marcar como lido</string>
-    <string name="action_historical">Historical</string>
+    <string name="action_historical">Histórico</string>
     <string name="action_quick_reply">Resposta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Fechar</string>
@@ -65,42 +65,42 @@
     <string name="dialog_title_warning">Alerta</string>
 
     <!-- Bottom navigation buttons -->
-    <string name="bottom_action_home">Home</string>
-    <string name="bottom_action_favourites">Favourites</string>
-    <string name="bottom_action_people">People</string>
-    <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_home">Início</string>
+    <string name="bottom_action_favourites">Favoritos</string>
+    <string name="bottom_action_people">Pessoas</string>
+    <string name="bottom_action_rooms">Salas</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Search for rooms</string>
-    <string name="home_filter_placeholder_favorites">Search for favourites</string>
-    <string name="home_filter_placeholder_people">Search for people</string>
-    <string name="home_filter_placeholder_rooms">Search for rooms</string>
+    <string name="home_filter_placeholder_home">Pesquisar salas</string>
+    <string name="home_filter_placeholder_favorites">Pesquisar favoritos</string>
+    <string name="home_filter_placeholder_people">Pesquisar pessoas</string>
+    <string name="home_filter_placeholder_rooms">Pesquisar salas</string>
 
     <!-- Home fragment -->
-    <string name="invitations_header">Invites</string>
-    <string name="low_priority_header">Low priority</string>
+    <string name="invitations_header">Convites</string>
+    <string name="low_priority_header">Baixa prioridade</string>
 
     <!-- People fragment -->
-    <string name="direct_chats_header">Conversations</string>
-    <string name="local_address_book_header">Local address book</string>
-    <string name="matrix_only_filter">Matrix contacts only</string>
-    <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
-    <string name="no_result_placeholder">No results</string>
+    <string name="direct_chats_header">Conversas</string>
+    <string name="local_address_book_header">Agenda de endereços local</string>
+    <string name="matrix_only_filter">Apenas contatos Matrix</string>
+    <string name="no_conversation_placeholder">Não há conversas</string>
+    <string name="no_contact_access_placeholder">Você não autorizou o acesso deste App aos seus contatos locais</string>
+    <string name="no_result_placeholder">Nenhum resultado</string>
 
     <!-- Rooms fragment -->
-    <string name="rooms_header">Rooms</string>
-    <string name="rooms_directory_header">Room directory</string>
-    <string name="no_room_placeholder">No rooms</string>
-    <string name="no_public_room_placeholder">No public rooms available</string>
+    <string name="rooms_header">Salas</string>
+    <string name="rooms_directory_header">Lista de salas</string>
+    <string name="no_room_placeholder">Não há salas</string>
+    <string name="no_public_room_placeholder">Não há nenhuma sala pública disponível</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">%d user</item>
-        <item quantity="other">%d users</item>
-    </plurals>
+	<item quantity="one">1 usuária/o</item>
+	<item quantity="other">%d usuárias/os</item>
+</plurals>
 
     <string name="send_bug_report_include_logs">Enviar logs</string>
     <string name="send_bug_report_include_crash_logs">Enviar logs da falha</string>
-    <string name="send_bug_report_include_screenshot">Send screenshot</string>
+    <string name="send_bug_report_include_screenshot">Enviar print de tela</string>
     <string name="send_bug_report">Reportar erro (bug)</string>
     <string name="send_bug_report_description">Por favor, descreva o erro (bug). O que você fez? O que você esperava ocorrer? O que aconteceu?</string>
     <string name="send_bug_report_placeholder">Descreva o seu problema aqui</string>
@@ -123,7 +123,7 @@
     <string name="identity_url">URL do "Identity Server"</string>
     <string name="user">usuário</string>
     <string name="users">usuários</string>
-    <string name="search">Buscar</string>
+    <string name="search">Pesquisar</string>
 
     <string name="start_new_chat">Iniciar nova conversa</string>
     <string name="start_voice_call">Iniciar nova chamada de voz</string>
@@ -171,8 +171,8 @@
     <string name="auth_threepid_warning_message">O registro de nova conta com email e número de telefone não é permitido enquanto o API não é desenvolvido. Apenas o número de telefone será levado em consideração.\n\nVocê poderá depois adicionar um email para o seu perfil nas configurações.</string>
     <string name="auth_recaptcha_message">Este servidor de base quer ter certeza que você não é um robô</string>
     <string name="auth_username_in_use">Nome de usuário já existe</string>
-    <string name="auth_home_server">Servidor "Home Server":</string>
-    <string name="auth_identity_server">Servidor "Identity Server":</string>
+    <string name="auth_home_server">Servidor Principal (Home Server):</string>
+    <string name="auth_identity_server">Servidor de Identidade (Identity Server):</string>
     <string name="auth_reset_password_next_step_button">Eu verifiquei meu email</string>
     <string name="auth_reset_password_message">Para redefinir sua senha, coloque o email ligado à sua conta:</string>
     <string name="auth_reset_password_missing_email">O email ligado à sua conta tem que ser inserido.</string>
@@ -250,11 +250,19 @@
     <string name="permissions_rationale_popup_title">Informação</string>
     <string name="permissions_rationale_msg_storage">Riot necessita permissão para acessar sua biblitoeca de foto e vídeo para poder enviar e salvar anexos.\n\nPor favor, permita acesso na próxima tela para poder enviar arquivos do seu telefone.</string>
     <string name="permissions_rationale_msg_camera">Riot necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
-    <string name="permissions_rationale_msg_camera_explanation">\n\nPor favor, permita acesso na próxima tela para poder fazer a chamada.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+Por favor, autorize o acesso na próxima tela para poder fazer a chamada.</string>
     <string name="permissions_rationale_msg_record_audio">Riot necessita permissão para acessar seu microfone para realizar chamadas de áudio.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPor favor, permita acesso na próxima tela para poder fazer a chamada.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot necessita permissão para acessar sua câmera e seu microfone para realizar chamadas de vídeo.\n\nPor favor, permita acesso na próxima tela para poder fazer a chamada.</string>
-    <string name="permissions_rationale_msg_contacts">Riot necessita permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus emails e números de telefone.\n\nPor favor, permita acesso na próxima tela para poder encontrar usuários na sua agenda que podem ser contactados pelo Riot.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Por favor, autorize acesso na próxima tela para poder fazer a chamada.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot necessita permissão para acessar sua câmera e seu microfone para realizar chamadas de vídeo.
+
+Por favor, autorize acesso na próxima tela para poder fazer a chamada.</string>
+    <string name="permissions_rationale_msg_contacts">Riot necessita permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus emails e números de telefone.
+
+Por favor, autorize o acesso na próxima tela para poder encontrar usuários na sua agenda que podem ser contactados pelo Riot.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot necessita sua permissão para acessar os seus contatos para poder encontrar usuários na sua agenda a partir de seus emails e números de telefone.
 
 Você autoriza o Riot a acessar seus contatos?</string>
@@ -275,7 +283,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="reject">Rejeitar</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+    <string name="room_jump_to_first_unread">Ir para a primeira mensagem não lida.</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Você foi convidada(o) a entrar nesta sala por %s</string>
@@ -304,12 +312,12 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_participants_create">Criar</string>
 
     <string name="room_participants_online">Online</string>
-    <string name="room_participants_offline">Offline</string>
+    <string name="room_participants_offline">Desconectada/o</string>
     <string name="room_participants_idle">Ocioso</string>
     <string name="room_participants_now">agora</string>
     <string name="room_participants_ago">atrás</string>
 
-    <string name="room_participants_header_admin_tools">FERRAMENTAS DE ADMIN</string>
+    <string name="room_participants_header_admin_tools">FERRAMENTAS DE ADMINISTRAÇÃO</string>
     <string name="room_participants_header_call">CHAMADA</string>
     <string name="room_participants_header_direct_chats">CONVERSAS DIRETAS</string>
     <string name="room_participants_header_devices">DISPOSITIVOS</string>
@@ -318,7 +326,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_participants_action_leave">Deixar esta sala</string>
     <string name="room_participants_action_remove">Remover desta sala</string>
     <string name="room_participants_action_ban">Banir</string>
-    <string name="room_participants_action_unban">Desbanir</string>
+    <string name="room_participants_action_unban">Revogar banimento</string>
     <string name="room_participants_action_set_default_power_level">Redefinir como usuário normal</string>
     <string name="room_participants_action_set_moderator">Tornar moderador</string>
     <string name="room_participants_action_set_admin">Tornar admin</string>
@@ -332,16 +340,16 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_participants_invite_prompt_msg">"Você tem certeza que quer convidar %s para esta conversa?"</string>
 
     <!-- invitation -->
-    <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
+    <string name="people_search_invite_by_id"><u>Convidar por ID</u></string>
     <string name="people_search_local_contacts">CONTATOS LOCAIS (%d)</string>
     <string name="people_search_filter_text">Apenas usuários Matrix</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Convidar pessoa pelo seu ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Por favor, entre com um ou mais endereços de e-mail ou ID Matrix</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email ou ID Matrix</string>
 
     <!--  Chat -->
-    <string name="room_menu_search">Buscar</string>
+    <string name="room_menu_search">Pesquisar</string>
     <string name="room_one_user_is_typing">%s está digitando…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s estão digitando…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; outros estão digitando…</string>
@@ -395,7 +403,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_displayname_no_title">Sala vazia</string>
 
     <!-- Search -->
-    <string name="search_hint">Buscar</string>
+    <string name="search_hint">Pesquisar</string>
     <string name="search_members_hint">Filtrar integrantes da sala</string>
     <string name="search_no_results">Nenhum resultado</string>
     <string name="tab_title_search_rooms">SALAS</string>
@@ -405,19 +413,19 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <!-- Room recents -->
     <string name="room_recents_join">ENTRAR</string>
-    <string name="room_recents_directory">DIRECTÓRIO</string>
+    <string name="room_recents_directory">LISTA PÚBLICA</string>
     <string name="room_recents_favourites">FAVORITOS</string>
     <string name="room_recents_conversations">SALAS</string>
     <string name="room_recents_low_priority">BAIXA PRIORIDADE</string>
     <string name="room_recents_invites">CONVITES</string>
     <string name="room_recents_start_chat">Iniciar conversa</string>
     <string name="room_recents_create_room">Criar sala</string>
-    <string name="room_recents_join_room">Join room</string>
-    <string name="room_recents_join_room_title">Join a room</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
+    <string name="room_recents_join_room">Entrar na sala</string>
+    <string name="room_recents_join_room_title">Entrar em uma sala</string>
+    <string name="room_recents_join_room_prompt">Digite o ide ou o apelido de uma sala</string>
 
     <!-- Directory -->
-    <string name="directory_search_results_title">Buscar no diretório</string>
+    <string name="directory_search_results_title">Pesquisar na lista pública</string>
     <string name="directory_search_room">%1$d sala</string>
     <string name="directory_search_room_for">%1$d sala encontrada para %2$s</string>
     <string name="directory_searching_title">Buscando no diretório...</string>
@@ -427,7 +435,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Conversa direta</string>
     <string name="room_settings_leave_conversation">Deixar a conversa</string>
-    <string name="room_settings_forget">Forget</string>
+    <string name="room_settings_forget">Esquecer</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Mensagens</string>
@@ -455,7 +463,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <string name="settings_messages_in_one_to_one">Msgs em conversas diretas</string>
     <string name="settings_messages_in_group_chat">Msgs em salas</string>
-    <string name="settings_invited_to_room">Quando eu sou convidado a uma sala</string>
+    <string name="settings_invited_to_room">Quando eu sou convidada/o a uma sala</string>
     <string name="settings_call_invitations">Convites para chamadas</string>
     <string name="settings_messages_sent_by_bot">Mensagens enviadas por "bot"</string>
 
@@ -478,7 +486,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <string name="settings_user_settings">Configurações de usuário</string>
     <string name="settings_notifications">Notificações</string>
-    <string name="settings_ignored_users">Usuários ignorados</string>
+    <string name="settings_ignored_users">Usuárias/os ignorados</string>
     <string name="settings_other">Outros</string>
     <string name="settings_advanced">Avançado</string>
     <string name="settings_cryptography">Criptografia</string>
@@ -486,9 +494,9 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="settings_contact">Contatos locais</string>
     <string name="settings_contacts_app_permission">Permissão de acesso a contatos</string>
     <string name="settings_contacts_phonebook_country">País da agenda de contatos</string>
-    <string name="settings_home_display">Home display</string>
-    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
-    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
+    <string name="settings_home_display">Página inicial</string>
+    <string name="settings_pin_missed_notifications">Fixar salas com notificações perdidas</string>
+    <string name="settings_pin_unread_messages">Fixar salas com mensagens não lidas</string>
     <string name="settings_devices_list">Dispositivos</string>
     <string name="devices_details_dialog_title">Detalhes de dispositivos</string>
     <string name="devices_details_id_title">ID</string>
@@ -503,8 +511,8 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="devices_delete_submit_button_label">Enviar</string>
 
     <string name="settings_logged_in">Conectado como</string>
-    <string name="settings_home_server">Servidor "Home Server"</string>
-    <string name="settings_identity_server">Servidor "Identity Server"</string>
+    <string name="settings_home_server">Servidor Principal (Home Server)</string>
+    <string name="settings_identity_server">Servidor de Identidade (Identity Server)</string>
 
     <string name="account_email_validation_title">Verificação pendente</string>
     <string name="account_email_validation_message">Por favor verifique o seu email e clique no link que está lá. Feito isso, clique em continuar.</string>
@@ -512,7 +520,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <string name="account_email_already_used_error">This email address is already in use</string>
     <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
-    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+    <string name="account_phone_number_already_used_error">Este número de telefone já está em uso</string>
 
     <string name="settings_change_password">Mudar a senha</string>
     <string name="settings_old_password">senha antiga</string>
@@ -622,7 +630,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="encryption_information_title">Informação sobre criptografia ponta-a-ponta</string>
 
     <string name="encryption_information_device_info">Informação do evento</string>
-    <string name="encryption_information_user_id">ID do usuário</string>
+    <string name="encryption_information_user_id">ID de usuária/o</string>
     <string name="encryption_information_curve25519_identity_key">Chave de identidade curve25519</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Chave de impressão digital ed25519 reivindicada</string>
     <string name="encryption_information_algorithm">Algoritmo</string>
@@ -676,15 +684,15 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="unknown_devices_alert_message">Esta sala contém dispositivos desconhecidos que não foram verificados.\nIsso significa que não se pode garantir que estes dispositivos realmente pertencem aos usuários identificados.\nRecomendamos que você faça o processo de verificação para cada dispositivo desconhecido antes de continuar, mas você pode reenviar a mensagem sem verificar o dispositivo se preferir.\n\nDispositivos desconhecidos nesta sala:</string>
 
     <!-- directory activity  -->
-    <string name="select_room_directory">Select a room directory</string>
-    <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
-    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
-    <string name="directory_server_placeholder">Homeserver URL</string>
-    <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
-    <string name="directory_server_native_rooms">All native %s rooms</string>
+    <string name="select_room_directory">Escolha uma lista pública de salas</string>
+    <string name="directory_server_fail_to_retrieve_server">O servidor pode estar indisponível ou sobrecarregado</string>
+    <string name="directory_server_type_homeserver">Entre com um servidor principal (homeserver) a partir do qual serão listadas as salas públicas</string>
+    <string name="directory_server_placeholder">URL do Servidor Principal (Homeserver)</string>
+    <string name="directory_server_all_rooms_on_server">Todas as salas com o servidor %s</string>
+    <string name="directory_server_native_rooms">Todas as salas nativas em %s</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Search for historical</string>
+    <string name="historical_placeholder">Pesquisar no histórico</string>
 <string name="offline">Desconectada(o)</string>
 
     <string name="user_directory_header">Lista de usuárias(os)</string>
@@ -735,7 +743,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="action_exit">Sair</string>
     <string name="bottom_action_groups">Comunidades</string>
 
-    <string name="home_filter_placeholder_groups">Buscar comunidades</string>
+    <string name="home_filter_placeholder_groups">Pesquisar comunidades</string>
 
     <string name="groups_invite_header">Convidar</string>
     <string name="groups_header">Comunidades</string>
@@ -858,4 +866,64 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Entrar novamente</string>
     <string name="forget_room">Esquecer a sala</string>
+<string name="actions">Ações</string>
+    <string name="open_chat_header">Abrir cabeçalho</string>
+    <string name="room_sync_in_progress">Sincronizando...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 membro ativo</item>
+	<item quantity="other">%d membros ativos</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 membro</item>
+	<item quantity="other">%d membros</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 nova mensagem</item>
+	<item quantity="other">%d novas mensagens</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s e %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 outra/o</item>
+	<item quantity="other">%d outras/os</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d salas</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s sala encontrada para %2$s</item>
+	<item quantity="other">%1$s salas encontradas para %2$s</item>
+</plurals>
+    <plurals name="membership_changes">
+	<item quantity="one">1 alteração de status de participação</item>
+	<item quantity="other">%s alterações de status de participação</item>
+</plurals>
+
+    <string name="list_members">Lista de integrantes</string>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 mensagem notificada não lida</item>
+	<item quantity="other">%d mensagens notificadas não lidas</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 mensagem notificada não lida</item>
+	<item quantity="other">%d mensagens notificadas não lidas</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d salas</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s em %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">1 widget ativo</item>
+	<item quantity="other">%d widgets ativos</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="receipt_avatar">Imagem de recebimento</string>
+    <string name="notice_avatar">Imagem de notificação</string>
+    <string name="avatar">Imagem de perfil</string>
+
 </resources>

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +34,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.BackgroundColorSpan;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,7 +55,6 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.rest.model.URLPreview;
 import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
@@ -64,6 +63,7 @@ import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
@@ -80,7 +80,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -96,7 +95,6 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
-import im.vector.util.VectorMarkdownParser;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -148,7 +146,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_ROOM_MEMBER = 8;
     static final int ROW_TYPE_EMOJI = 9;
     static final int ROW_TYPE_CODE = 10;
-    static final int NUM_ROW_TYPES = 11;
+    static final int ROW_TYPE_STICKER = 11;
+    static final int NUM_ROW_TYPES = 12;
 
     final Context mContext;
     private final HashMap<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
@@ -215,10 +214,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_room_member,
                 R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_file,
-                R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_message_merge,
+                R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_message_emoji,
                 R.layout.adapter_item_vector_message_code,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_hidden_message,
                 mediasCache);
     }
 
@@ -226,15 +227,21 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Expanded constructor.
      * each message type has its own layout.
      *
-     * @param session           the dedicated layout.
-     * @param context           the context
-     * @param textResLayoutId   the text message layout.
-     * @param imageResLayoutId  the image message layout.
-     * @param noticeResLayoutId the notice message layout.
-     * @param emoteRestLayoutId the emote message layout
-     * @param fileResLayoutId   the file message layout
-     * @param videoResLayoutId  the video message layout
-     * @param mediasCache       the medias cache.
+     * @param session                 the dedicated layout.
+     * @param context                 the context
+     * @param textResLayoutId         the text message layout.
+     * @param imageResLayoutId        the image message layout.
+     * @param noticeResLayoutId       the notice message layout.
+     * @param roomMemberResLayoutId   the room member message layout.
+     * @param emoteRestLayoutId       the emote message layout
+     * @param fileResLayoutId         the file message layout
+     * @param mergeResLayoutId        the merge message layout
+     * @param videoResLayoutId        the video message layout
+     * @param emojiResLayoutId        the emoji message layout
+     * @param codeResLayoutId         the code message layout
+     * @param stickerResLayoutId      the sticker message layout
+     * @param hiddenResLayoutId       the hidden message layout
+     * @param mediasCache             the medias cache.
      */
     VectorMessagesAdapter(MXSession session,
                           Context context,
@@ -244,10 +251,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                           int roomMemberResLayoutId,
                           int emoteRestLayoutId,
                           int fileResLayoutId,
-                          int videoResLayoutId,
                           int mergeResLayoutId,
+                          int videoResLayoutId,
                           int emojiResLayoutId,
                           int codeResLayoutId,
+                          int stickerResLayoutId,
+                          int hiddenResLayoutId,
                           MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
@@ -257,12 +266,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_ROOM_MEMBER, roomMemberResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_EMOTE, emoteRestLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_FILE, fileResLayoutId);
-        mRowTypeToLayoutId.put(ROW_TYPE_VIDEO, videoResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_MERGE, mergeResLayoutId);
-        mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, R.layout.adapter_item_vector_hidden_message);
+        mRowTypeToLayoutId.put(ROW_TYPE_VIDEO, videoResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_EMOJI, emojiResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_CODE, codeResLayoutId);
-
+        mRowTypeToLayoutId.put(ROW_TYPE_STICKER, stickerResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, hiddenResLayoutId);
         mMediasCache = mediasCache;
         mLayoutInflater = LayoutInflater.from(mContext);
         // the refresh will be triggered only when it is required
@@ -686,6 +695,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 break;
             case ROW_TYPE_IMAGE:
             case ROW_TYPE_VIDEO:
+            case ROW_TYPE_STICKER:
                 inflatedView = getImageVideoView(viewType, position, convertView, parent);
                 break;
             case ROW_TYPE_NOTICE:
@@ -974,6 +984,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 // Default is to display the body as text
                 viewType = ROW_TYPE_TEXT;
             }
+        } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
+            viewType = ROW_TYPE_STICKER;
         } else if (
                 event.isCallEvent() ||
                         Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType) ||
@@ -1020,7 +1032,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         convertView.setClickable(true);
 
-        // click on the avatar opens the details page
+        // click on the message row select it
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1030,7 +1042,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
         });
 
-        // click on the avatar opens the details page
+        // long click on the message row display the message options menu
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -1111,7 +1123,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         setReadMarker(convertView, row, isMergedView, avatarLayoutView, bodyLayoutView);
 
         // download / upload progress layout
-        if ((ROW_TYPE_IMAGE == msgType) || (ROW_TYPE_FILE == msgType) || (ROW_TYPE_VIDEO == msgType)) {
+        if ((ROW_TYPE_IMAGE == msgType) || (ROW_TYPE_FILE == msgType) || (ROW_TYPE_VIDEO == msgType) || (ROW_TYPE_STICKER == msgType)) {
             VectorMessagesAdapterHelper.setMediaProgressLayout(convertView, bodyLayoutView);
         }
     }
@@ -1262,11 +1274,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         try {
             MessageRow row = getItem(position);
             Event event = row.getEvent();
+            Message message = null;
 
-            Message message;
             int waterMarkResourceId = -1;
 
             if (type == ROW_TYPE_IMAGE) {
+
                 ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
 
                 if ("image/gif".equals(imageMessage.getMimeType())) {
@@ -1274,9 +1287,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
                 message = imageMessage;
 
-            } else {
+            } else if (type == ROW_TYPE_VIDEO) {
+
                 message = JsonUtils.toVideoMessage(event.getContent());
                 waterMarkResourceId = R.drawable.filetype_video;
+
+            } else if (type == ROW_TYPE_STICKER) {
+
+                StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
+                message = stickerMessage;
             }
 
             // display a type watermark
@@ -1296,11 +1315,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 imageTypeView.setVisibility(View.GONE);
             }
 
-            // download management
-            mMediasHelper.managePendingImageVideoDownload(convertView, event, message, position);
+            if (null != message) {
+                mHelper.hideStickerDescription(convertView);
 
-            // upload management
-            mMediasHelper.managePendingImageVideoUpload(convertView, event, message);
+                // download management
+                mMediasHelper.managePendingImageVideoDownload(convertView, event, message, position);
+
+                // upload management
+                mMediasHelper.managePendingImageVideoUpload(convertView, event, message);
+            }
 
             // dimmed when the message is not sent
             View imageLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
@@ -1849,6 +1872,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             tsTextView.setVisibility(View.VISIBLE);
         }
 
+        // Show the description of the sticker only on message row click
+        if (Event.EVENT_TYPE_STICKER.equals(event.getType())) {
+            StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
+            if (null != stickerMessage && isInSelectionMode && isSelected) {
+                mHelper.showStickerDescription(contentView, stickerMessage);
+            }
+        }
+
         if (!(event instanceof EventGroup)) {
             contentView.findViewById(R.id.message_timestamp_layout).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -2389,6 +2420,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                 // offer to report a message content
                 menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()));
+            }
+
+            if (Event.EVENT_TYPE_STICKER.equals((event.getType()))) {
+                menu.findItem(R.id.ic_action_vector_redact_message).setVisible(true);
+                menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
             }
 
         }

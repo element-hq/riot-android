@@ -497,7 +497,7 @@ Ste si istí?</string>
     <string name="settings_always_show_timestamps">Vždy zobrazovať časovú značku správ</string>
     <string name="settings_12_24_timestamps">Pri zobrazovaní časových značiek používať 12 hodinový formát (napr. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Skryť správy o vstupe a opustení miestnosti (netýka sa pozvaní/vykopnutí/zákazov vstupu)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Skryť zmeny zobrazovaného mena a avatara</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Skryť zmeny zobrazovaného mena a obrázka v profile</string>
 
     <string name="settings_disable_markdown">Pri odosielaní zakázať formátovanie textu Markdown</string>
     <string name="settings_data_save_mode">Režim šetrenia údajov</string>
@@ -559,7 +559,7 @@ Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
     <string name="media_saving_period_1_month">1 mesiac</string>
     <string name="media_saving_period_forever">Navždy</string>
 
-    <string name="room_settings_room_photo">Avatar miestnosti</string>
+    <string name="room_settings_room_photo">Obrázok miestnosti</string>
     <string name="room_settings_room_name">Názov miestnosti</string>
     <string name="room_settings_topic">Téma</string>
     <string name="room_settings_room_tag">Značka miestnosti</string>
@@ -844,4 +844,88 @@ Neznáme zariadenia:</string>
     <string name="reason_colon">Dôvod: %1$s</string>
     <string name="rejoin">Vstúpiť znovu</string>
     <string name="forget_room">Zabudnúť miestnosť</string>
+<string name="actions">Akcie</string>
+    <string name="send_bug_report_rage_shake">Oznámiť chybu zatrasením zariadenia</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">1 zmena stavu</item>
+	<item quantity="few">%d zmeny stavu</item>
+	<item quantity="many">%d zmien stavu</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="list_members">Zobraziť členov</string>
+    <string name="open_chat_header">Otvoriť záhlavie</string>
+    <string name="room_sync_in_progress">Synchronizácia...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 aktívny člen</item>
+	<item quantity="few">%d aktívni členovia</item>
+	<item quantity="many">%d aktívnych členov</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 člen</item>
+	<item quantity="few">%d členovia</item>
+	<item quantity="many">%d členov</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 nová správa</item>
+	<item quantity="few">%d nové správy</item>
+	<item quantity="many">%d nových správ</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s a %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 ďalší</item>
+	<item quantity="few">%d ďalší</item>
+	<item quantity="many">%d ďalších</item>
+	<item quantity="other"/>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 miestnosť</item>
+	<item quantity="few">%d miestnosti</item>
+	<item quantity="many">%d miestností</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">Nájdená %1$s miestnosť pre %2$s</item>
+	<item quantity="few">Nájdené %1$s miestnosti pre %2$s</item>
+	<item quantity="many">Nájdených %1$s miestností pre %2$s</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 neprečítaná správa</item>
+	<item quantity="few">%d neprečítané správy</item>
+	<item quantity="many">%d neprečítaných správ</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 neprečítaná správa</item>
+	<item quantity="few">%d neprečítané správy</item>
+	<item quantity="many">%d neprečítaných správ</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 miestnosti</item>
+	<item quantity="few">%d miestnostiach</item>
+	<item quantity="many">%d miestnostiach</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s v %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">1 aktívny widget</item>
+	<item quantity="few">%d aktívne widgety</item>
+	<item quantity="many">%d aktívnych widgetov</item>
+	<item quantity="other"/>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="receipt_avatar">Potvrdenie o prečítaní</string>
+    <string name="notice_avatar">Obrázok oznámenia</string>
+    <string name="avatar">Obrázok</string>
+
 </resources>

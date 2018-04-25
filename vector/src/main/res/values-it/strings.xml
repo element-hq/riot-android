@@ -49,7 +49,7 @@
     <string name="offline">Offline</string>
 
     <!-- actions -->
-    <string name="action_sign_out">Disconnettiti</string>
+    <string name="action_sign_out">Disconnetti</string>
     <string name="action_sign_out_confirmation">Per ragioni di sicurezza, la disconnessione causerà l\'eliminazione di qualsiasi chiave di crittografia da-utente-a-utente rendendo illeggibile la storia delle chat precedentemente criptate qualora volessi riconnetterti.\nSeleziona esporta per fare un backup delle chat prima di disconnetterti.</string>
     <string name="action_voice_call">Chiamata voce</string>
     <string name="action_video_call">Chiamata video</string>
@@ -104,7 +104,7 @@
     <string name="send_bug_report_include_logs">Invia registri</string>
     <string name="send_bug_report_include_crash_logs">Invia registri di crash</string>
     <string name="send_bug_report_include_screenshot">Invia istantanea</string>
-    <string name="send_bug_report">Rapporto bug</string>
+    <string name="send_bug_report">Segnalazione errori</string>
     <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa hai fatto? Cosa ti aspettavi sarebbe accaduto? Cosa è effettivamente successo?</string>
     <string name="send_bug_report_placeholder">Descrivi il problema qui</string>
     <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Se preferisci inviare solo il testo soprastante, togli la spunta:</string>
@@ -444,7 +444,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="room_sliding_menu_messages">Messaggi</string>
     <string name="room_sliding_menu_settings">Impostazioni</string>
     <string name="room_sliding_menu_version">Versione </string>
-    <string name="room_sliding_menu_term_and_conditions">Termini &amp; condizioni</string>
+    <string name="room_sliding_menu_term_and_conditions">Termini e condizioni</string>
     <string name="room_sliding_menu_third_party_notices">Avvisi di terze parti</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
     <string name="room_sliding_menu_privacy_policy">Politica sulla privacy</string>
@@ -471,8 +471,8 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="settings_messages_sent_by_bot">Messaggi inviati da bot</string>
 
     <string name="settings_start_on_boot">Esegui all\'avvio</string>
-    <string name="settings_background_sync">Sincronizzazione in sottofondo</string>
-    <string name="settings_enable_background_sync">Abilita sync in sottofondo</string>
+    <string name="settings_background_sync">Sincronizzazione in secondo piano</string>
+    <string name="settings_enable_background_sync">Abilita sync in secondo piano</string>
     <string name="settings_set_sync_timeout">Attesa per una richiesta di sync</string>
     <string name="settings_set_sync_delay">Pausa tra due richieste di sync</string>
     <string name="settings_second">secondo</string>
@@ -480,7 +480,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
 
     <string name="settings_version">Versione</string>
     <string name="settings_olm_version">Versione olm</string>
-    <string name="settings_app_term_conditions">Termini &amp; condizioni</string>
+    <string name="settings_app_term_conditions">Termini e condizioni</string>
     <string name="settings_third_party_notices">Avvisi di terze parti</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Politica sulla privacy</string>
@@ -498,7 +498,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="settings_contact">Contatti locali</string>
     <string name="settings_contacts_app_permission">Autorizzazione contatti</string>
     <string name="settings_contacts_phonebook_country">Nazione rubrica telefonica</string>
-    <string name="settings_home_display">Pagina home</string>
+    <string name="settings_home_display">Schermata iniziale</string>
     <string name="settings_pin_missed_notifications">Segna le stanze con notifiche perse</string>
     <string name="settings_pin_unread_messages">Segna le stanze con messaggi non letti</string>
     <string name="settings_devices_list">Dispositivi</string>
@@ -711,7 +711,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="directory_server_native_rooms">Tutte le stanze native %s</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Cerca nello storico</string>
+    <string name="historical_placeholder">Cerca nella cronologia</string>
 
     <!-- text size selection -->
     <string name="font_size">Grandezza font</string>
@@ -754,7 +754,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
 
     <string name="notification_noisy_notifications">Notifiche Audio</string>
     <string name="notification_listen_for_events">In Ascolto su Eventi</string>
-    <string name="title_activity_bug_report">Rapporto Bug</string>
+    <string name="title_activity_bug_report">Segnalazione errori</string>
 
     <string name="login_mobile_device">Cellulare</string>
 
@@ -822,14 +822,12 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="room_settings_mute">Silenzioso</string>
     <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia schermata iniziale</string>
 
-    <string name="settings_enable_content_sending">Mantieni notifiche dettagliate</string>
-    <string name="settings_enable_content_sending_summary">Attiva questa opzione per mostrare notifiche dettagliate quando la sincronizzazione in background è disabilitata. Ciò richiede l\'invio di messaggi non cifrati attraverso i server dei servizi di Google</string>
     <string name="settings_inline_url_preview">Attiva le anteprime URL in modo predefinito</string>
     <string name="settings_hide_join_leave_messages">Nascondi i messaggi di entrata/uscita (inviti/kick/ban esclusi)</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
 
-    <string name="settings_analytics">Analitiche</string>
-    <string name="settings_opt_out_of_analytics">Rifiuta le analitiche</string>
+    <string name="settings_analytics">Statistiche</string>
+    <string name="settings_opt_out_of_analytics">Rifiuta le statistiche</string>
     <string name="settings_opt_out_of_analytics_summary">Riot raccoglie statistiche d\'uso anonime per consentirci di migliorare l\'applicazione.</string>
 
     <string name="room_settings_room_notifications_title">Notifiche</string>
@@ -920,4 +918,12 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
 <string name="settings_flair">Predisposizione</string>
 
     <string name="room_settings_no_flair">" Questa stanza non mostra predisposizione per alcuna comunità"</string>
+    <string name="widget_integration_positive_power_level">Il livello di poteri deve essere un intero positivo.</string>
+    <string name="notice_avatar">Avatar notifica</string>
+    <string name="receipt_avatar">Avatar ricevuta</string>
+    <plurals name="membership_changes">
+	<item quantity="one">1 cambio tra i membri</item>
+	<item quantity="other">%d cambi tra i membri</item>
+</plurals>
+
     </resources>

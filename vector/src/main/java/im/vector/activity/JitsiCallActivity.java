@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,7 +95,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
     View mConnectingTextView;
 
     @BindView(R.id.jitsi_progress_layout)
-    View mProgressLayout;
+    View waitingView;
 
     /**
      * Widget events listener
@@ -173,7 +174,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProgressLayout.setVisibility(View.VISIBLE);
+                showWaitingView();
                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
@@ -181,7 +182,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                     }
 
                     private void onError(String errorMessage) {
-                        mProgressLayout.setVisibility(View.GONE);
+                        stopWaitingView();
                         CommonActivityUtils.displayToast(JitsiCallActivity.this, errorMessage);
                     }
 
@@ -266,7 +267,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                 JitsiCallActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mProgressLayout.setVisibility(View.GONE);
+                        stopWaitingView();
                     }
                 });
             }

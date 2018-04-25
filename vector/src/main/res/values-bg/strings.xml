@@ -117,7 +117,7 @@
     <string name="notification_silent_notifications">Известия без звук</string>
 
     <string name="title_activity_member_details">Информация</string>
-    <string name="view_decrypted_source">Прегледай шифрования източник</string>
+    <string name="view_decrypted_source">Прегледай разшифрования източник</string>
     <string name="ongoing_conference_call">" Текущ групов разговор. Присъедини се с глас или видео."</string>
     <string name="cannot_start_call">Неуспешно започване на разговора. Моля, опитайте по-късно</string>
     <string name="missing_permissions_warning">Поради липсващи разрешения, някои функции може да липсват...</string>
@@ -186,14 +186,14 @@
     <string name="no_group_placeholder">Няма групи</string>
 
     <string name="send_bug_report_include_logs">Изпращане на логове</string>
-    <string name="send_bug_report_include_crash_logs">Изпращане на</string>
+    <string name="send_bug_report_include_crash_logs">Изпращане на логове за забивания</string>
     <string name="send_bug_report_include_screenshot">Изпращане на снимка на екрана</string>
     <string name="send_bug_report">Съобщение за грешка</string>
     <string name="send_bug_report_description">Моля, опишете грешката. Какво направихте? Какво очаквахте да стане? Какво стана всъщност?</string>
     <string name="send_bug_report_placeholder">Опишете своя проблем тук</string>
     <string name="send_bug_report_logs_description">За да се диагностицират проблемите, логовете от този клиент ще бъдат изпратени с този доклад за грешки. Ако предпочитате да изпратите само текста по-горе, моля, премахнете отметката:</string>
     <string name="send_bug_report_alert_message">Изглежда, че разклащате телефона, което ни кара да мислим, че не сте доволни от Riot. Искате ли да изпратите съобщение за грешка?</string>
-    <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да изпратите съобщение за грешка?</string>
+    <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да изпратите съобщение за забиване?</string>
     <string name="send_bug_report_rage_shake">Силно разклащане на телефона за изпращане на грешка</string>
 
     <string name="send_bug_report_sent">Съобщението за грешка беше успешно изпратено</string>
@@ -279,7 +279,7 @@
     <string name="login_error_unable_login">Неуспешно влизане в профила</string>
     <string name="send_bug_report_progress">Напредък (%s%%)</string>
 
-    <string name="send_files_in">Изпрати в</string>
+    <string name="send_files_in">Изпрати към</string>
     <string name="auth_user_id_placeholder">Имейл или потребителско име</string>
     <string name="auth_send_reset_email">Изпрати имейл за възстановяване</string>
     <string name="auth_return_to_login">Връщане към страницата за влизане в профила</string>
@@ -288,7 +288,7 @@
 Можете да добавите имейл към профила си в настройките.</string>
     <string name="login_error_registration_network_error">Неуспешна регистрация: Грешка в мрежата</string>
     <string name="login_error_unable_register">Неуспешна регистрация</string>
-    <string name="login_error_unable_register_mail_ownership">Неуспешна регистрация: неуспешно потвърждаване на имейла</string>
+    <string name="login_error_unable_register_mail_ownership">Неуспешна регистрация: неуспешно потвърждаване на собствеността на имейла</string>
     <string name="login_error_invalid_home_server">Въведете валиден URL адрес</string>
     <string name="login_mobile_device">Мобилно устройство</string>
 
@@ -586,7 +586,7 @@
     <string name="room_settings_category_advanced_title">Разширени</string>
     <string name="room_settings_addresses_pref_title">Адреси</string>
     <string name="room_settings_labs_pref_title">Експерименти</string>
-    <string name="room_settings_labs_warning_message">Това са експериментални функции , които могат да се счупят по неочаквани начини. Внимавайте при използване.</string>
+    <string name="room_settings_labs_warning_message">Това са експериментални функции, които могат да се счупят по неочаквани начини. Внимавайте при използване.</string>
     <string name="room_settings_labs_end_to_end">Шифроване от край до край</string>
     <string name="room_settings_labs_end_to_end_is_active">Шифроване от край до край е включено</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Шифроване само за потвърдени устройства</string>
@@ -730,7 +730,7 @@
     <string name="permissions_rationale_msg_storage">Riot иска разрешение за достъп до Вашата галерия със снимки и видеа, за да изпраща и запазва прикачени файлове.
 
 Моля, разрешете достъпа от следващия прозорец, който се покаже, за да можете да изпращате файлове от телефона си.</string>
-    <string name="permissions_rationale_msg_camera">Riot иска разшерение за достъп до Вашата камера, за да направи снимки или да осъществи видео разговори.</string>
+    <string name="permissions_rationale_msg_camera">Riot иска разшерение за достъп до Вашата камера, за да прави снимки или да осъществи видео разговори.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
@@ -893,6 +893,4 @@
     <string name="receipt_avatar">Профилна снимка</string>
     <string name="notice_avatar">Профилна снимка</string>
     <string name="open_chat_header">Отвори заглавие</string>
-    <string name="settings_enable_content_sending">Остави детайлирани известия</string>
-    <string name="settings_enable_content_sending_summary">Включи тази опция, когато фоновата синхронизация е изключвена за показване на детайлирани известия. Това изисква изпращането на съдържанието на нешифровани съобщения през сървъри за Google услуги</string>
     </resources>

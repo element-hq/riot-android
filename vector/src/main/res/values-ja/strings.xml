@@ -840,4 +840,38 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="has_been_banned">あなたは%2$sによって%1$sへの入室を禁止されました</string>
     <string name="reason_colon">理由: %1$s</string>
     <string name="rejoin">再参加</string>
-    </resources>
+    <string name="send_bug_report_rage_shake">バグを報告するには端末を降ってください</string>
+
+    <plurals name="membership_changes">
+	<item quantity="other">%d権限の変更</item>
+</plurals>
+
+    <string name="list_members">参加者を表示</string>
+    <string name="open_chat_header">見出しを開く</string>
+    <string name="room_sync_in_progress">同期中…</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="other">%d名のオンラインの参加者</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="other">%d名</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="other">%d件の新しいメッセージ</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$sと%2$s</string>
+    <plurals name="others">
+	<item quantity="other">他%d名</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="other">%d部屋</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="other">%2$sに%1$s部屋見つかりました</item>
+</plurals>
+    <string name="forget_room">部屋の記録を消す</string>
+
+    <string name="avatar">アバター</string>
+
+</resources>

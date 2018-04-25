@@ -928,6 +928,20 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 	<item quantity="one">1 miembro activo</item>
 	<item quantity="other">%d miembros activos</item>
 </plurals>
-    <string name="settings_enable_content_sending">Mantener las notificaciones detalladas</string>
-    <string name="settings_enable_content_sending_summary">Encender esta opción cuando la sincronización en segundo plano está desactivada para mostrar notificaciones detalladas. Esto requiere enviar el contenido de mensajes no cifrados a través de servidores de servicios de Google</string>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 mensaje sin leer</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 mensaje sin leer</item>
+	<item quantity="other">%d mensajes sin leer</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s de %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">"1  widget activo"</item>
+	<item quantity="other"></item>
+</plurals>
+
+    // Widget Integration Manager
     </resources>

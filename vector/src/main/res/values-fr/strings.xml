@@ -902,4 +902,31 @@ Appareils inconnus :</string>
     // Widget Integration Manager
     <string name="avatar">Avatar</string>
 
-</resources>
+<plurals name="membership_changes">
+	<item quantity="one">Un changement de statut</item>
+	<item quantity="other">%d changements de statut</item>
+</plurals>
+
+    <string name="open_chat_header">Développer l\'entête</string>
+    <string name="receipt_avatar">Réception de l\'avatar</string>
+    <string name="settings_notification_privacy">Confidentialité des notifications</string>
+    <string name="settings_notification_privacy_warning">Riot.im fonctionne en arrière-plan pour que le contenu du message de notification reste privé. Vous pouvez désactiver cette option pour réduire l\'utilisation de la batterie.</string>
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="settings_notification_privacy_power_saving">Options d\'économie d\'énergie</string>
+    <string name="settings_notification_privacy_low_detail">Notifications avec peu de détails</string>
+    <string name="settings_notification_privacy_reduced">Confidentialité réduite</string>
+    <string name="settings_notification_privacy_need_permission">L\'application a besoin de la permission de fonctionner en arrière-plan</string>
+    <string name="settings_notification_privacy_no_permission">L\'application <b>n\'</b>a <b>pas</b> besoin de la permission pour fonctionner en arrière-plan</string>
+    <string name="settings_notification_privacy_gcm">• Les notifications sont envoyées via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Les notifications ne contiennent que des métadonnées</string>
+    <string name="settings_notification_privacy_secure_message_content">• Le contenu du message de notification est <b>issu directement du serveur d\'accueil Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Les notifications contiennent <b>des métadonnées et des messages</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Les notifications <b>n\'afficheront pas le contenu des messages</b></string>
+
+    <string name="startup_notification_privacy_title">Confidentialité des notifications</string>
+    <string name="startup_notification_privacy_message">Riot peut fonctionner en arrière-plan pour gérer vos notifications de façon sécurisée et confidentielle (cela peut affecter l\'utilisation de la batterie).</string>
+    <string name="startup_notification_privacy_button_grant">Donner la permission</string>
+    <string name="startup_notification_privacy_button_other">Choisir une autre option</string>
+
+    <string name="notice_avatar">Avatar de l\'annonce</string>
+    </resources>

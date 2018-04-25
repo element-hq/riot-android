@@ -30,4 +30,25 @@
     <string name="resouces_country">US</string>
 
     <string name="forget_room">Zapomenout místnost</string>
-</resources>
+<string name="notification_sync_in_progress">Synchronizace</string>
+    <string name="notification_noisy_notifications">Hlasitá oznámení</string>
+    <string name="notification_silent_notifications">Tichá oznámení</string>
+
+    <string name="title_activity_bug_report">Nahlásit chybu</string>
+    <string name="title_activity_member_details">Detail člena</string>
+    <string name="title_activity_historical">Historický</string>
+    <string name="title_activity_group_details">Detail komunity</string>
+
+    <string name="notification_listen_for_events">Naslouchat událostem</string>
+    <string name="resend">Poslat znovu</string>
+    <string name="redact">Redigovat</string>
+    <string name="quote">Citovat</string>
+    <string name="later">Později</string>
+    <string name="permalink">Trvalý odkaz</string>
+    <string name="view_decrypted_source">Zobraz dešifrovaný zdroj</string>
+    <string name="report_content">Nahlasit obsah</string>
+    <string name="active_call">Aktivní hovor</string>
+    <string name="ongoing_conference_call">" Probíhající konferenční hovor. Připojit se jako hlasový nebo video hovor."</string>
+    <string name="cannot_start_call">Nemohu spustit hovor, prosím zkusit později</string>
+    <string name="missing_permissions_warning">Z důvodu chybějících práv, některé funkce mohou chybět..</string>
+    </resources>

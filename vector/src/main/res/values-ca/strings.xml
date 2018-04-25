@@ -237,7 +237,7 @@
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
-    <string name="compression_options">Envia la imatge </string>
+    <string name="compression_options">"Envia com "</string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Gran</string>
     <string name="compression_opt_list_medium">Mitjana</string>
@@ -891,9 +891,26 @@
 	<item quantity="one">1 sala</item>
 	<item quantity="other">%d sales</item>
 </plurals>
-    <string name="open_chat_header"/>
+    <string name="open_chat_header">Obrir la capçalera</string>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one"/>
-	<item quantity="other"/>
+	<item quantity="one">1 missatge de notificació sense llegir</item>
+	<item quantity="other">%d missatges de notificació sense llegir</item>
 </plurals>
+    <plurals name="membership_changes">
+	<item quantity="one">1 canvi de membres</item>
+	<item quantity="other">%d canvis de membres</item>
+</plurals>
+
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 missatge de notificació sense llegir</item>
+	<item quantity="other">%d missatges de notificació sense llegir</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s a %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">1 complement actiu</item>
+	<item quantity="other">%d complements actius</item>
+</plurals>
+
+    // Widget Integration Manager
     </resources>

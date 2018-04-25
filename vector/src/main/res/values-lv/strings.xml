@@ -9,10 +9,10 @@
     <string name="title_activity_room">Istaba</string>
     <string name="title_activity_settings">Iestatījumi</string>
     <string name="title_activity_member_details">Dalībnieka informācija</string>
-    <string name="title_activity_historical">Vēsturisks</string>
+    <string name="title_activity_historical">Bijušie</string>
 
-    <string name="ok">Labs ir</string>
-    <string name="cancel">Atcelt</string>
+    <string name="ok">Lai notiek</string>
+    <string name="cancel">Tomēr nē</string>
     <string name="save">Saglabāt</string>
     <string name="leave">Atstāt</string>
     <string name="send">Nosūtīt</string>
@@ -49,8 +49,8 @@
     <string name="action_voice_call">Balss zvans</string>
     <string name="action_video_call">Video zvans</string>
     <string name="action_global_search">Globālā meklēšana</string>
-    <string name="action_mark_all_as_read">Atzīmēt visu, kā lasītu</string>
-    <string name="action_historical">Vēsturisks</string>
+    <string name="action_mark_all_as_read">Atzīmēt visas ziņas, kā lasītas</string>
+    <string name="action_historical">Bijušie</string>
     <string name="action_quick_reply">Ātrā atbilde</string>
     <string name="action_open">Atvērt</string>
     <string name="action_close">Aizvērt</string>
@@ -93,10 +93,10 @@
     <string name="send_bug_report_include_logs">Nosūtīt logfailus</string>
     <string name="send_bug_report_include_crash_logs">Nosūtīt sistēmas avārijas logfailus</string>
     <string name="send_bug_report_include_screenshot">Nosūtīt ekrānattēlu</string>
-    <string name="send_bug_report">Paziņojums par kļūdu</string>
+    <string name="send_bug_report">Kļūdu paziņojumi</string>
     <string name="send_bug_report_description">Lūdzu apraksti kļūdu. Kāda darbība tika veikta? Kāds bija gaidāmais rezultāts? Kas tieši notika?</string>
-    <string name="send_bug_report_placeholder">Apraksti savu problēmu šeit</string>
-    <string name="send_bug_report_logs_description">Lai diagnosticētu problēmu, logfaili no šīs klienta programmas tiks nosūtīti kopā ar šo kļūdas paziņojumu. Ja vēlies nosūtīt vienīgi augstākminēto tekstu, lūdzu noņem:</string>
+    <string name="send_bug_report_placeholder">Šeit apraksti problēmu</string>
+    <string name="send_bug_report_logs_description">Lai diagnosticētu problēmu, logfaili no šīs lietotnes tiks nosūtīti kopā ar šo kļūdas paziņojumu. Ja vēlies nosūtīt vienīgi augstākminēto tekstu, lūdzu noņem:</string>
     <string name="send_bug_report_alert_message">Jūs, šķiet, satricinājāt tālruni. Vai vēlaties iesniegt kļūdu ziņojumu?</string>
     <string name="send_bug_report_app_crashed">Šī programma iepriekš \"salūza\". Vai vēlies iesniegt paziņojumu par kļūdu?</string>
 
@@ -143,13 +143,13 @@
     <string name="auth_add_email_phone_message">Pievieno savam kontam epasta adresi un/vai telefona numuru, lai ļautu pārējiem dalībniekiem Tevi atrast.
 
 Kā arī epasta adrese ļaus Tev atiestatīt paroli.</string>
-    <string name="light_theme">Gaiša tēma</string>
-    <string name="dark_theme">Tumša tēma</string>
-    <string name="black_them">Melna tēma</string>
+    <string name="light_theme">Gaiša ādiņa</string>
+    <string name="dark_theme">Tumša ādiņa</string>
+    <string name="black_them">Melna ādiņa</string>
 
     <string name="notification_sync_in_progress">Sinhronizācija</string>
     <string name="notification_listen_for_events">Notikumu monitorings</string>
-    <string name="notification_noisy_notifications">Skaņas paziņojumi</string>
+    <string name="notification_noisy_notifications">Skaņi paziņojumi</string>
     <string name="notification_silent_notifications">Klusi paziņojumi</string>
 
     <string name="title_activity_bug_report">Kļūdas atskaite</string>
@@ -157,18 +157,18 @@ Kā arī epasta adrese ļaus Tev atiestatīt paroli.</string>
 
     <string name="loading">Ielādējas...</string>
 
-    <string name="action_exit">Iziet</string>
+    <string name="action_exit">Izslēgt</string>
     <string name="bottom_action_groups">Kopienas</string>
 
     <string name="home_filter_placeholder_groups">Meklēt kopienas</string>
 
     <string name="groups_invite_header">Uzaicināt</string>
     <string name="groups_header">Kopienas</string>
-    <string name="no_group_placeholder">Grupu nav</string>
+    <string name="no_group_placeholder">nav kopienu</string>
 
-    <string name="start_new_chat_prompt_msg">Vai tiešām vēlies sāktu jaunu čatu ar %s?</string>
-    <string name="start_voice_call_prompt_msg">Vai tiešām vēlies sākt audio zvanu?</string>
-    <string name="start_video_call_prompt_msg">Vai tiešām vēlies sākt video zvanu?</string>
+    <string name="start_new_chat_prompt_msg">Vai tiešām vēlies sākt jaunu čatu ar %s?</string>
+    <string name="start_voice_call_prompt_msg">Tiešām vēlies veikt AUDIO zvanu?</string>
+    <string name="start_video_call_prompt_msg">Tiešām vēlies veikt VIDEO zvanu?</string>
 
     <string name="option_take_photo">Uzņemt foto</string>
     <string name="option_take_video">Uzņemt video</string>
@@ -210,7 +210,7 @@ Savu epastu vari pievienot profila iestatījumos.</string>
     <string name="auth_reset_password_missing_password">Jāievada jauna parole.</string>
     <string name="auth_reset_password_email_validation_message">Epasts ir nosūtīts uz %s. Pēc tam, kad nospiedīsi uz tajā ietverto tīmekļa saiti, noklikšķini zemāk.</string>
     <string name="auth_reset_password_error_unauthorized">Neizdevās verificēt epasta adresi: pārbaudi vai esi noklikšķinājis(usi) uz saiti atsūtītajā epastā</string>
-    <string name="auth_reset_password_success_message">Tava parole ir atiestatīta.
+    <string name="auth_reset_password_success_message">Tava parole ir atstatīta.
 
 Tu esi izrakstīts no visām ierīcēm un vairāk nesaņemsi \"push\" paziņojumus. Lai atjaunotu \"push\" paziņojumu saņemšanu, pieraksties katrā no savām ierīcēm.</string>
 
@@ -232,17 +232,17 @@ Tu esi izrakstīts no visām ierīcēm un vairāk nesaņemsi \"push\" paziņojum
     <string name="login_error_login_email_not_yet">Nav noklikšķināts uz tīmekļa saites saņemtajā epastā</string>
 
     <string name="e2e_need_log_in_again">Tev jāieiet sistēmā, lai šai ierīcei ģenerētu \"end-to-end\" šifrēšanas atslēgas un nosūtītu publisko atslēgu bāzes serverim.
-Šī darbība jāveic tikai vienu riezi. Atvainojamies par neērtībām.</string>
+Šī darbība jāveic tikai vienu reizi. Atvainojamies par neērtībām.</string>
 
-    <string name="read_receipts_list">Lasīt ___ sarakstu</string>
+    <string name="read_receipts_list">Lasīt jaunbiedru sarakstu</string>
 
     <string name="groups_list">Grupu saraksts</string>
 
     <string name="compression_options">"Nosūtīt kā "</string>
-    <string name="compression_opt_list_original">Oriģināls</string>
-    <string name="compression_opt_list_large">Liels</string>
-    <string name="compression_opt_list_medium">Vidējs</string>
-    <string name="compression_opt_list_small">Mazs</string>
+    <string name="compression_opt_list_original">oriģinālu</string>
+    <string name="compression_opt_list_large">lielu</string>
+    <string name="compression_opt_list_medium">vidēju</string>
+    <string name="compression_opt_list_small">mazu</string>
 
     <string name="attachment_cancel_download">Vai atcelt lejupielādi?</string>
     <string name="attachment_cancel_upload">Vai atcelt augšupielādi (nosūtīšanu)?</string>
@@ -257,7 +257,7 @@ Tu esi izrakstīts no visām ierīcēm un vairāk nesaņemsi \"push\" paziņojum
 
     <string name="call">Zvans</string>
     <string name="call_connected">Zvans savienots</string>
-    <string name="call_connecting">Notiek zvana savienošana…</string>
+    <string name="call_connecting">Tiek veidots savienojums…</string>
     <string name="call_ended">Zvans beigts</string>
     <string name="call_ring">Zvana…</string>
     <string name="incoming_call">Ienākošs zvans</string>
@@ -467,7 +467,7 @@ Vai vēlies turpināt?</string>
     <string name="room_sliding_menu_messages">Ziņas</string>
     <string name="room_sliding_menu_settings">Iestatījumi</string>
     <string name="room_sliding_menu_version">"Versija "</string>
-    <string name="room_sliding_menu_term_and_conditions">Noteikumi &amp; nosacījumi</string>
+    <string name="room_sliding_menu_term_and_conditions">Lietošanas noteikumi</string>
     <string name="room_sliding_menu_third_party_notices">Trešo pušu paziņojumi</string>
     <string name="room_sliding_menu_copyright">Autortiesības</string>
     <string name="room_sliding_menu_privacy_policy">Privātuma politika</string>
@@ -478,8 +478,8 @@ Vai vēlies turpināt?</string>
     <string name="settings_add_email_address">Pievienot epasta adresi</string>
     <string name="settings_phone_number">Tālrunis</string>
     <string name="settings_add_phone_number">Pievienot tālruņa #</string>
-    <string name="settings_summary_app_info_link">Programmas sistēmas informācijas ekrāns</string>
-    <string name="settings_title_app_info_link">Programmas informācija</string>
+    <string name="settings_summary_app_info_link">Doties uz Android Lietotņu informācijas sadaļu</string>
+    <string name="settings_title_app_info_link">Lietotnes informācija</string>
 
     <string name="settings_notification_ringtone">Paziņojumu skaņa</string>
     <string name="settings_enable_all_notif">Iespējot šim kontam paziņojumus</string>
@@ -503,14 +503,14 @@ Vai vēlies turpināt?</string>
     <string name="settings_seconds">sekundes</string>
 
     <string name="settings_version">Versija</string>
-    <string name="settings_olm_version">olm versija</string>
-    <string name="settings_app_term_conditions">Noteikumi &amp; nosacījumi</string>
+    <string name="settings_olm_version">Olm versija</string>
+    <string name="settings_app_term_conditions">Lietošanas noteikumi</string>
     <string name="settings_third_party_notices">Trešo pušu paziņojumi</string>
     <string name="settings_copyright">Autortiesības</string>
     <string name="settings_privacy_policy">Privātuma politika</string>
-    <string name="settings_clear_cache">Iztīrīt kešu</string>
-    <string name="settings_clear_medias_cache">Iztīrīt mēdija kešu</string>
-    <string name="settings_keep_media">Saglabāt (paturēt) mēdiju</string>
+    <string name="settings_clear_cache">Iztīrīt ķešu</string>
+    <string name="settings_clear_medias_cache">Iztīrīt mēdija ķešu</string>
+    <string name="settings_keep_media">Turēt mēdiju (?)</string>
 
     <string name="settings_user_settings">Lietotāja iestatījumi</string>
     <string name="settings_notifications">Paziņojumi</string>
@@ -526,9 +526,9 @@ Vai vēlies turpināt?</string>
     <string name="settings_pin_missed_notifications">Piestiprināt istabas ar garām palaistiem paziņojumiem</string>
     <string name="settings_pin_unread_messages">Piestiprināt istabas ar neizlasītām ziņām</string>
     <string name="settings_devices_list">Ierīces</string>
-    <string name="settings_inline_url_preview">Iespējot URL-adrešu priekšskatu pēc noklusējuma</string>
-    <string name="settings_hide_read_receipts">Nerādīt atzīmes par izlasīšanu</string>
-    <string name="settings_dont_send_typings_notifs">Nesūtīt paziņojumu par to, ka rakstu</string>
+    <string name="settings_inline_url_preview">Iespējot URL priekšskatu pēc noklusējuma</string>
+    <string name="settings_hide_read_receipts">Nerādīt atzīmes, ka ziņu esmu izlasījis</string>
+    <string name="settings_dont_send_typings_notifs">Nerādīt paziņojumu par to, ka rakstu</string>
     <string name="settings_always_show_timestamps">Vienmēr rādīt ziņu laiku</string>
     <string name="settings_12_24_timestamps">Rādīt ziņu laiku 12 stundu formātā (piem. 12:12pm)</string>
     <string name="settings_hide_join_leave_messages">Slēpt \"pievienojās/atstāja\" istabu paziņojumus (neietekmē uzaicinājumus/izsperšanu/nobanošanu)</string>
@@ -537,7 +537,7 @@ Vai vēlies turpināt?</string>
     <string name="settings_vibrate_on_mention">Vibrācija, kad pieminējums</string>
 
     <string name="settings_analytics">Analītika</string>
-    <string name="settings_opt_out_of_analytics">Attiekšanās no analītikas</string>
+    <string name="settings_opt_out_of_analytics">Atteikties no analītikas</string>
     <string name="settings_opt_out_of_analytics_summary">Riot vāc anonīmu analītiku, lai ļautu padarīt šo atklātā koda programmu vēl labāku.</string>
 
     <string name="settings_data_save_mode">Trafika ekonomijas režīms</string>
@@ -570,7 +570,7 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="account_email_not_found_error">Neizdevās nosūtīt epastu: šī epasta adrese netika atrasta</string>
     <string name="account_phone_number_already_used_error">Šis tālruņa # sistēmā tiek jau lietots</string>
 
-    <string name="settings_change_password">Nomaini paroli</string>
+    <string name="settings_change_password">Nomainīt paroli</string>
     <string name="settings_old_password">vecā parole</string>
     <string name="settings_new_password">jaunā parole</string>
     <string name="settings_confirm_password">apstiprini paroli</string>
@@ -634,13 +634,13 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Visi, kuri zin saiti uz istabu, izņemot viesus</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Visi, kuri zin saiti uz istabu, ieskatot viesus</string>
 
-    <string name="room_settings_banned_users_title">Nobanotie dalībnieki</string>
+    <string name="room_settings_banned_users_title">Banotie lietotāji</string>
 
     <string name="room_settings_category_advanced_title">Papildus</string>
-    <string name="room_settings_room_internal_id">Šīs istabas iekšējais ID</string>
+    <string name="room_settings_room_internal_id">Šīs istabas iekšējais Id</string>
     <string name="room_settings_addresses_pref_title">Adreses</string>
-    <string name="room_settings_labs_pref_title">Izmēģinājumu stacija</string>
-    <string name="room_settings_labs_warning_message">Šīs ir eksperimentālas funkcijas, kuras var radīt negaidītus rezultātus. Lietot piesardzīgi.</string>
+    <string name="room_settings_labs_pref_title">Izmēģinājumu lauciņš</string>
+    <string name="room_settings_labs_warning_message">Šīs ir eksperimentālas funkcijas, kuras var radīt pārsteidzošus rezultātus! Lietot ar piesardzību.</string>
     <string name="room_settings_labs_end_to_end">\"End-to-end\" šifrēšana</string>
     <string name="room_settings_labs_end_to_end_is_active">\"End-to-End\" šifrēšana ir aktivizēta</string>
     <string name="room_settings_labs_end_to_end_warnings">Tev nepieciešams izrakstīties, lai iespējotu šifrēšanu.</string>
@@ -651,6 +651,265 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="room_settings_addresses_add_new_address">Jaunā adrese (e.g #foo:matrix.org)</string>
 
     <string name="room_settings_no_flair">" Šī istaba nerāda gaidas nevienā kopienā"</string>
-    <string name="room_settings_add_new_group">Kopienas jaunais ID (piem. +foo:matrix.org)</string>
-    <string name="room_settings_invalid_group_format_dialog_title">Nederīgs kopienas ID</string>
-    </resources>
+    <string name="room_settings_add_new_group">Kopienas jaunais Id (piem. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Nederīgs kopienas Id</string>
+    <string name="actions">Darbības</string>
+    <string name="send_bug_report_rage_shake">Ņipri papurināt ierīci, lai paziņotu par kļūdu</string>
+
+    <plurals name="membership_changes">
+	<item quantity="zero">1 biedru izmaiņa</item>
+	<item quantity="one">%d biedru izmaiņas</item>
+	<item quantity="other">%d biedru izmaiņas</item>
+</plurals>
+
+    <string name="list_members">Biedru katalogs</string>
+    <string name="open_chat_header">Atvērt galveni</string>
+    <string name="room_sync_in_progress">Notiek sinhronizācija...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="zero">1 aktīvs biedrs</item>
+	<item quantity="one">%d aktīvi biedri</item>
+	<item quantity="other">%d aktīvu biedru</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="zero">1 biedrs</item>
+	<item quantity="one">%d biedri</item>
+	<item quantity="other">%d biedru</item>
+</plurals>
+    <plurals name="room_new_messages_notification">
+	<item quantity="zero">1 jauna ziņa</item>
+	<item quantity="one">%d jaunas ziņas</item>
+	<item quantity="other">%d jaunu ziņu</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s un %2$s</string>
+    <plurals name="others">
+	<item quantity="zero">1 cits</item>
+	<item quantity="one">%d citi</item>
+	<item quantity="other">%d citu</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="zero">1 istaba</item>
+	<item quantity="one">%d istabas</item>
+	<item quantity="other">%d istabu</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="zero">%1$s istaba atrasta priekš %2$s</item>
+	<item quantity="one">%1$s istabas atrastas priekš %2$s</item>
+	<item quantity="other">%1$s istabas atrastas priekš %2$s</item>
+</plurals>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ir nederīgs kopienas Id</string>
+
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">Nepareizs alias formāts</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' nav pareizs formāts priekš aliases (pseidonīma)</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Tev nebūs norādīta galvenā adrese. Pēc noklusējuma šīs istabas galvenā adrese tiks izvēlēta uz labu laimi</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Galvenās adreses brīdinājums</string>
+
+    <string name="room_settings_set_main_address">Iestatīt kā Galveno adresi</string>
+    <string name="room_settings_unset_main_address">Atstatīt kā Galveno adresi</string>
+    <string name="room_settings_copy_room_id">Kopēt istabas Id</string>
+    <string name="room_settings_copy_room_address">Kopēt istabas adresi</string>
+
+    <string name="room_settings_addresses_e2e_enabled">Šajā istabā darbojas šifrēšana.</string>
+    <string name="room_settings_addresses_e2e_disabled">Šajā istabā nav ieslēgta šifrēšana.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Ieslēgt šifrēšanu 
+(brīdinājums: vēlāk to nav iespējams izslēgt!)</string>
+    <string name="room_settings_addresses_e2e_prompt_title">Brīdinājums!</string>
+    <string name="room_settings_addresses_e2e_prompt_message">End-to-end šifrēšana atrodas beta stadijā un nevar tikt uzskatīta kā uzticama.
+
+Tu tai nevari uzticēties kā datu drošību nodrošinošai.
+
+Ierīces nebūs spējīgas atšifrēt sarakstes vēsturi, kura bijusi pirms Tavas pievienošanās istabai.
+
+Ja reiz šifrēšana istabā tiek ieslēgta, tā vairs nevar tikt izslēgta (pagaidām).
+
+Šifrētās ziņas nebūs redzamas/salasāmas klientos (ierīcēs), kuros tā pagaidām nav ieviesta.</string>
+
+    <string name="directory_title">Katalogs</string>
+    <string name="settings_theme">Ādiņa</string>
+
+    <string name="failed_to_load_timeline_position">%s centās ielādēt istabas vēsturi, bet nevarēja to atrast.</string>
+
+    <string name="encryption_information_title">End-to-end šifrēšanas informācija</string>
+
+    <string name="encryption_information_device_info">Notikuma informācija</string>
+    <string name="encryption_information_user_id">Lietotāta Id</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519 identitātes atslēga</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Nepieciešams Ed25519 pirkstnospieduma atslēga</string>
+    <string name="encryption_information_algorithm">Algoritms</string>
+    <string name="encryption_information_session_id">Sesijas Id</string>
+    <string name="encryption_information_decryption_error">Atšifrēšanas kļūda</string>
+
+    <string name="encryption_information_sender_device_information">Nosūtītāja ierīces informācija</string>
+    <string name="encryption_information_device_name">Ierīces nosaukums</string>
+    <string name="encryption_information_name">Vārds</string>
+    <string name="encryption_information_device_id">Ierīces Id</string>
+    <string name="encryption_information_device_key">Ierīces atslēga</string>
+    <string name="encryption_information_verification">Pārbaude (verifikācija)</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 pirkstnospiedums</string>
+
+    <string name="encryption_export_e2e_room_keys">Eksportēt E2E istabas atslēgas</string>
+    <string name="encryption_export_room_keys">Eksportēt istabas atslēgas</string>
+    <string name="encryption_export_room_keys_summary">Eksportēt atslēgas vietējā failā</string>
+    <string name="encryption_export_export">Eksports</string>
+    <string name="encryption_export_enter_passphrase">Ievadi paroli (paroles frāzi)</string>
+    <string name="encryption_export_confirm_passphrase">Apstiprināt paroli</string>
+    <string name="encryption_export_saved_as">E2E istabas atslēgas ir saglabātas failā \'%s\'</string>
+
+    <string name="encryption_import_e2e_room_keys">Importēt E2E istabas atslēgas</string>
+    <string name="encryption_import_room_keys">Importēt istabas atslēgas</string>
+    <string name="encryption_import_room_keys_summary">Importēt atslēgas no vietējā faila</string>
+    <string name="encryption_import_import">Imports</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Šifrēt vienīgi uz pārbaudītām ierīcēm</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nekad nesūtīt šifrētas ziņas uz nepārbaudītām ierīcēm no šīs ierīces</string>
+
+    <string name="encryption_information_not_verified">NEpārbaudīta</string>
+    <string name="encryption_information_verified">Pārbaudīta</string>
+    <string name="encryption_information_blocked">Melnajā sarakstā</string>
+
+    <string name="encryption_information_unknown_device">nepazīstama ierīce</string>
+    <string name="encryption_information_none">nekā</string>
+
+    <string name="encryption_information_verify">Apstiprināt</string>
+    <string name="encryption_information_unverify">Apstiprinājumu atcelt</string>
+    <string name="encryption_information_block">Ietvert melnajā sarakstā</string>
+    <string name="encryption_information_unblock">Izņemt no melnā saraksta</string>
+
+    <string name="encryption_information_verify_device">Verificēt ierīci</string>
+    <string name="encryption_information_verify_device_warning">" Lai pārbaudītu vai šī ierīce ir uzticama, lūdzu sazinies ar tās īpašnieku izmantojot kādus citus saziņas līdzekļus (klātienē vai ar telefona zvana starpniecību) un pavaicā viņam vai viņa ierīces atslēga Lietotāja iestatījumos sakrīt ar to, kura redzama zemāk:"</string>
+    <string name="encryption_information_verify_device_warning2">Ja tā sakrīt, nospied zemāk esošo verifikācijas pogu. Ja tā nesakrīt, tad kāds ir pārtvēris šo ierīci un Tu droši vien vēlies šo ierīci pievienot melnajam sarakstam.
+Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
+    <string name="encryption_information_verify_key_match">Apstiprinu, ka atslēgas sakrīt</string>
+
+    <string name="e2e_enabling_on_app_update">Riot tagad nodrošina end-to-end šifrēšanu, bet Tev ir jāizrakstās un jāierakstās par jaunu, lai to iespējotu.
+
+Tu to vari izdarīt tūlīt vai vēlāk - lietotnes Iestatījumos.</string>
+
+    <string name="unknown_devices_alert_title">Istabā atrodas nepazīstamas ierīces</string>
+    <string name="unknown_devices_alert_message">Šajā istabā atrodas nepazīstamas ierīces, kuras nav verificētas.
+Tas nozīmē, ka nav garantijas, ka ierīces pieder tiem lietotājiem kuri par tādiem uzdodas.
+Tiek rekomendēts veikt verificēšanas procedūru katrai ierīcei pirms turpināt, bet, ja vēlies, vari arī veikt atkārtotu nosūtīšanu bez verificēšanas.
+
+Nepazīstamas ierīces:</string>
+
+    <string name="select_room_directory">Izvēlies istabu katalogu</string>
+    <string name="directory_server_fail_to_retrieve_server">Serveris, iespējams, ir nepieejams vai pārslogots</string>
+    <string name="directory_server_type_homeserver">Ievadi pamatserveri no kura pieprasīt tā publisko istabu sarakstu</string>
+    <string name="directory_server_placeholder">Pamatservera URL</string>
+    <string name="directory_server_all_rooms_on_server">Visas istabas %s serverī</string>
+    <string name="directory_server_native_rooms">Visas vietējās %s istabas</string>
+
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="zero">1 nelasīta paziņota ziņa</item>
+	<item quantity="one">%d nelasītas paziņotas ziņas</item>
+	<item quantity="other">%d nelasītu paziņotu ziņu</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="zero">1 nelasīta paziņota ziņa</item>
+	<item quantity="one">%d nelasītas paziņotas ziņas</item>
+	<item quantity="other">%d nelasītu paziņotu ziņu</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="zero">1 istaba</item>
+	<item quantity="one">%d istabas</item>
+	<item quantity="other">%d istabu</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s iekš %2$s</string>
+
+    <string name="historical_placeholder">Meklēt vēsturē</string>
+
+    <string name="font_size">Šrifta izmērs</string>
+    <string name="tiny">Sīks</string>
+    <string name="small">Mazs</string>
+    <string name="normal">Normāls</string>
+    <string name="large">Liels</string>
+    <string name="larger">Lielāks</string>
+    <string name="largest">Lielākais</string>
+    <string name="huge">Milzīgs</string>
+
+    <string name="widget_no_power_to_manage">Tev nepietiek atļauju, lai rīkotos ar vidžetiem šajā istabā</string>
+    <string name="widget_creation_failure">Vidžeta izveide neizdevās</string>
+    <string name="event_formatter_widget_added">%1$s pievienoja %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s noņēma %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Konferences zvaniem izmantot Jitsi</string>
+    <string name="widget_delete_message_confirmation">Vai tiešām vēlies dzēst vidžetu?</string>
+    <plurals name="active_widgets">
+	<item quantity="zero">1 aktīvs vidžets</item>
+	<item quantity="one">%d aktīvi vidžeti</item>
+	<item quantity="other">%d aktīvu vidžetu</item>
+</plurals>
+
+    // Widget Integration Manager
+    <string name="widget_integration_unable_to_create">Neizdevās uzstādīt vidžetu.</string>
+    <string name="widget_integration_failed_to_send_request">Neizdevās nosūtīt pieprasījumu.</string>
+    <string name="widget_integration_positive_power_level">Pieejas līmenim jābūt lielākam par 0.</string>
+    <string name="widget_integration_must_be_in_room">Tu neesi šīs istabas iemītnieks (biedrs).</string>
+    <string name="widget_integration_no_permission_in_room">Tev nepietiek tiesību to darīt šajā istabā.</string>
+    <string name="widget_integration_missing_room_id">Pieprasījumā iztrūkst room_id.</string>
+    <string name="widget_integration_missing_user_id">Pieprasījumā iztrūkst user_id.</string>
+    <string name="widget_integration_room_not_visible">Istaba %s ir neredzama.</string>
+    <string name="settings_labs_matrix_apps">Matrix aplikācijas/programmiņas</string>
+    <string name="room_add_matrix_apps">Pievienot Matrix programmiņu</string>
+    <string name="settings_labs_native_camera">Lietot iebūvēto kameru</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Tu pievienoji jaunu ierīci \'%s\', kura pieprasa šifrēšanas atslēgas.</string>
+    <string name="your_unverified_device_requesting">Tava neverificētā ierīce \'%s\' pieprasa šifrēšanas atslēgas.</string>
+    <string name="start_verification">Sākt tās verifikāciju</string>
+    <string name="share_without_verifying">Dalīties bez verificēšanas</string>
+    <string name="ignore_request">Ignorēt pieprasījumu</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Uzmanību!</string>
+    <string name="conference_call_warning_message">Konferences zvans ir izstrādes stadijā un var nebūt uzticams.</string>
+
+    // slash commands
+    <string name="command_error">Komandas kļūda</string>
+    <string name="unrecognized_command">Nepazīstama komanda: %s</string>
+
+    // notification statuses
+    <string name="notification_off">Izslēgts</string>
+    <string name="notification_on">Ieslēgts</string>
+    <string name="notification_noisy">Ar skaņu</string>
+
+    <string name="encrypted_message">Šifrēta ziņa</string>
+
+    // groups creation
+    <string name="create">Izveidot</string>
+    <string name="create_community">Izveidot kopienu</string>
+    <string name="community_name">Kopienas nosaukums</string>
+    <string name="community_name_hint">Piemērs</string>
+    <string name="community_id">Kopienas Id</string>
+    <string name="community_id_hint">piemērs</string>
+
+    // group details
+    <string name="group_details_home">Sākums</string>
+    <string name="group_details_people">Cilvēki</string>
+    <string name="group_details_rooms">Istabas</string>
+    <string name="no_users_placeholder">Nav lietotāju</string>
+
+    <string name="rooms">Istabas</string>
+    <string name="joined">Pievienojās</string>
+    <string name="invited">Uzaicināts</string>
+    <string name="filter_group_members">Grupas biedru filtrs</string>
+    <string name="filter_group_rooms">Grupas istabu filtrs</string>
+
+    <string name="group_one_member">1 biedrs</string>
+    <string name="group_members">%d biedri</string>
+
+    <string name="group_one_room">1 istaba</string>
+    <string name="group_rooms">%d istabas</string>
+    <string name="group_no_long_description">Kopienas admins nav izveidojis šīs kopienas garo aprakstu.</string>
+
+    <string name="has_been_kicked">Tevi no %1$s padzina %2$s</string>
+    <string name="has_been_banned">Tev pieeju %1$s liedza (nobanoja) %2$s</string>
+    <string name="reason_colon">Iemesls: %1$s</string>
+    <string name="rejoin">Pievienoties par jaunu</string>
+    <string name="forget_room">Aizmirst istabu</string>
+
+    <string name="receipt_avatar">Saņemt avataru</string>
+    <string name="notice_avatar">Ievērot avataru</string>
+    <string name="avatar">Avatars</string>
+
+</resources>

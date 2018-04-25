@@ -53,11 +53,13 @@ import org.matrix.androidsdk.rest.model.group.GroupProfile;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.view.HtmlTagHandler;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -346,10 +348,20 @@ class VectorMessagesAdapterHelper {
         final String tag = event.getSender() + "__" + event.eventId;
 
         if (null == mRoom) {
-            mRoom = mSession.getDataHandler().getRoom(event.roomId);
+            // The flair handling required the room state. So we retrieve the current room (if any).
+            // Do not create it if it is not available. For example the room is not available during a room preview.
+            // Indeed the room is then stored in memory, and we could not reach it from here for the moment.
+            // TODO render the flair in the room preview history.
+            mRoom = mSession.getDataHandler().getRoom(event.roomId, false);
+
+            if (null == mRoom) {
+                Log.d(LOG_TAG, "## refreshGroupFlairView () : the room is not available");
+                groupFlairView.setVisibility(View.GONE);
+                return;
+            }
         }
 
-        // no related groups to this room
+        // Check whether there are some related groups to this room
         if (mRoom.getLiveState().getRelatedGroups().isEmpty()) {
             Log.d(LOG_TAG, "## refreshGroupFlairView () : no related group");
             groupFlairView.setVisibility(View.GONE);
@@ -589,6 +601,38 @@ class VectorMessagesAdapterHelper {
     }
 
     /**
+     * Hide the sticker description view
+     *
+     * @param convertView base view
+     */
+    public void hideStickerDescription(View convertView) {
+        View stickerDescription = convertView.findViewById(R.id.message_adapter_sticker_layout);
+
+        if (null != stickerDescription) {
+            stickerDescription.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Show the sticker description view
+     *
+     * @param view base view
+     * @param stickerMessage the sticker message
+     */
+    public void showStickerDescription(View view, StickerMessage stickerMessage) {
+        View stickerDescriptionLayout = view.findViewById(R.id.message_adapter_sticker_layout);
+        ImageView stickerTriangle = view.findViewById(R.id.message_adapter_sticker_triangle);
+        TextView stickerDescription = view.findViewById(R.id.message_adapter_sticker_description);
+
+        if (null != stickerDescriptionLayout && null != stickerTriangle && null != stickerDescription) {
+            stickerDescriptionLayout.setVisibility(View.VISIBLE);
+            stickerTriangle.setVisibility(View.VISIBLE);
+            stickerDescription.setVisibility(View.VISIBLE);
+            stickerDescription.setText(stickerMessage.body);
+        }
+    }
+
+    /**
      * Hide the read receipts view
      *
      * @param convertView base view
@@ -749,23 +793,27 @@ class VectorMessagesAdapterHelper {
                 Drawable drawable = mPillsDrawableCache.get(key);
 
                 if (null == drawable) {
-                    final PillView aView = new PillView(mContext);
-                    aView.initData(strBuilder.subSequence(start, end), span.getURL(), mSession, new PillView.OnUpdateListener() {
+                    PillView pillView = new PillView(mContext);
+                    pillView.setBackgroundResource(android.R.color.transparent);
+                    // Define a weak reference of the view because of the cross reference in the OnUpdateListener.
+                    final WeakReference<PillView> weakView = new WeakReference<>(pillView);
+
+                    pillView.initData(strBuilder.subSequence(start, end), span.getURL(), mSession, new PillView.OnUpdateListener() {
                         @Override
                         public void onAvatarUpdate() {
-                            // force to compose
-                            aView.setBackgroundResource(android.R.color.transparent);
-
-                            // get a drawable from the view
-                            Drawable updatedDrawable = aView.getDrawable();
-                            mPillsDrawableCache.put(key, updatedDrawable);
-                            // should update only the current cell
-                            // but it might have been recycled
-                            mAdapter.notifyDataSetChanged();
+                            if ((null != weakView) && (null != weakView.get())) {
+                                PillView pillView = weakView.get();
+                                // get a drawable from the view (force to compose)
+                                Drawable updatedDrawable = pillView.getDrawable(true);
+                                mPillsDrawableCache.put(key, updatedDrawable);
+                                // should update only the current cell
+                                // but it might have been recycled
+                                mAdapter.notifyDataSetChanged();
+                            }
                         }
                     });
-                    aView.setHighlighted(isHighlighted);
-                    drawable = aView.getDrawable();
+                    pillView.setHighlighted(isHighlighted);
+                    drawable = pillView.getDrawable(false);
                 }
 
                 if (null != drawable) {
@@ -952,8 +1000,16 @@ class VectorMessagesAdapterHelper {
 
         if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
             // A message is displayable as long as it has a body
+            // Redacted messages should not be displayed
             Message message = JsonUtils.toMessage(event.getContent());
-            return !TextUtils.isEmpty(message.body) || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE);
+            // return !TextUtils.isEmpty(message.body) || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE);
+            return !event.isRedacted() || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE);
+        } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
+            // A sticker is displayable as long as it has a body
+            // Redacted stickers should not be displayed
+            StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
+            return !event.isRedacted();
+            // return !TextUtils.isEmpty(stickerMessage.body);
         } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
                 || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)) {
             EventDisplay display = new RiotEventDisplay(context, event, roomState);
@@ -961,8 +1017,7 @@ class VectorMessagesAdapterHelper {
         } else if (event.isCallEvent()) {
             return Event.EVENT_TYPE_CALL_INVITE.equals(eventType) ||
                     Event.EVENT_TYPE_CALL_ANSWER.equals(eventType) ||
-                    Event.EVENT_TYPE_CALL_HANGUP.equals(eventType)
-                    ;
+                    Event.EVENT_TYPE_CALL_HANGUP.equals(eventType);
         } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)) {
             // if we can display text for it, it's valid.
             EventDisplay display = new RiotEventDisplay(context, event, roomState);

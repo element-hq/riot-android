@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,16 +51,18 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
     public VectorSearchMessagesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediasCache mediasCache) {
         super(session, context,
-                R.layout.adapter_item_vector_search_message_text_emote_notice,
-                R.layout.adapter_item_vector_search_message_image_video,
-                R.layout.adapter_item_vector_search_message_text_emote_notice,
-                R.layout.adapter_item_vector_search_message_room_member,
-                R.layout.adapter_item_vector_search_message_text_emote_notice,
-                R.layout.adapter_item_vector_search_message_file,
-                R.layout.adapter_item_vector_search_message_image_video,
-                -1,
-                R.layout.adapter_item_vector_search_message_emoji,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_room_member,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_file,
+                R.layout.adapter_item_vector_message_merge,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_emoji,
                 R.layout.adapter_item_vector_message_code,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_hidden_message,
                 mediasCache);
 
         setNotifyOnChange(true);
