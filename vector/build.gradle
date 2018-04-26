@@ -1,4 +1,9 @@
+repositories {
+    mavenCentral()
+}
+
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 27
@@ -137,6 +142,9 @@ def gitBranchName() {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     compile 'com.android.support:multidex:1.0.0'
 
