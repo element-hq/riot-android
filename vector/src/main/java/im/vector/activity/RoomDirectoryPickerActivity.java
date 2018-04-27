@@ -88,7 +88,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
         setTitle(R.string.select_room_directory);
         setContentView(R.layout.activity_room_directory_picker);
 
-        waitingView = findViewById(R.id.room_directory_loading);
+        setWaitingView(findViewById(R.id.room_directory_loading));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -150,7 +150,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
         mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
             private void onDone(List<RoomDirectoryData> list) {
-                stopWaitingView();
+                hideWaitingView();
                 String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
 
                 List<String> hsNamesList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
@@ -238,7 +238,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
                         private void onError(String error) {
                             Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
-                            stopWaitingView();
+                            hideWaitingView();
                             Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
                         }
 

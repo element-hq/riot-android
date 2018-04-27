@@ -99,7 +99,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         // UI widgets binding & init fields
         mBackgroundImageView = findViewById(R.id.search_background_imageview);
         mNoResultsTxtView = findViewById(R.id.search_no_result_textview);
-        waitingView = findViewById(R.id.search_in_progress_view);
+        setWaitingView(findViewById(R.id.search_in_progress_view));
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
 
         if (null != getIntent()) {
@@ -225,9 +225,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
      */
     private void resetUi(boolean showBackgroundImage) {
         // stop "wait while searching" screen
-        if (null != waitingView) {
-            stopWaitingView();
-        }
+        hideWaitingView();
 
         // display the background
         if (null != mBackgroundImageView) {
@@ -253,7 +251,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         if (mViewPager.getCurrentItem() == tabIndex) {
             Log.d(LOG_TAG, "## onSearchEnd() nbrMsg=" + nbrMessages);
             // stop "wait while searching" screen
-            stopWaitingView();
+            hideWaitingView();
 
             // display the background view if there is no pending such
             mBackgroundImageView.setVisibility(!mPagerAdapter.isSearchInPeoplesFragment(tabIndex)

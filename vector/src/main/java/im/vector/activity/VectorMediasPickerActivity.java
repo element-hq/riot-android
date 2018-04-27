@@ -842,7 +842,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param aOrigin          CAMERA or GALLERY
      */
     private void displayImagePreview(final Bitmap bitmap, final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin) {
-        waitingView = findViewById(R.id.medias_preview_progress_bar_layout);
+        setWaitingView(findViewById(R.id.medias_preview_progress_bar_layout));
         showWaitingView();
         mTakeImageView.setEnabled(false);
 
@@ -941,7 +941,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         mTakeImageView.setEnabled(true);
         updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, aOrigin);
-        stopWaitingView();
+        hideWaitingView();
     }
 
     /**
