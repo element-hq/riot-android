@@ -17,16 +17,15 @@ package im.vector.widgets;
 
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.http.Body;
-import retrofit.http.POST;
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
 interface WidgetsApi {
     /**
      * register to the server
      * @param body the body content
-     * @param callback the asynchronous callback called when finished
      */
-    @POST("/register")
-    void register(@Body Map<Object, Object> body, Callback<Map<String, String>> callback);
+    @POST("register")
+    Call<Map<String, String>> register(@Body Map<Object, Object> body);
 }
