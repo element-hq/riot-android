@@ -77,6 +77,9 @@ android {
         matrixorg.initWith(buildTypes.release)
         matrixorg {
             signingConfig signingConfigs.release
+
+            // When building with source of the SDK, there is no buildType 'matrixorg' in the SDK so fallback to 'release'
+            matchingFallbacks = ['release']
         }
     }
 
@@ -189,6 +192,7 @@ dependencies {
     // use the matrix SDK as external lib
     implementation(name: 'matrix-sdk', ext: 'aar')
     // use the matrix SDK as a sub project
+    // you have to uncomment some lines in settings.gradle
     //implementation project(':matrix-sdk')
     implementation(name: 'olm-sdk', ext: 'aar')
 
@@ -241,10 +245,6 @@ dependencies {
 
     // another tracking than GA
     implementation 'org.piwik.sdk:piwik-sdk:2.0.0'
-
-    // use the matrix SDK as a part of the project
-    // you have to uncomment some lines in settings.gradle
-    //implementation project(':matrix-sdk')
 
     /************* flavors management **************/
 
