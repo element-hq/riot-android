@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
     android:fontFamily="sans-serif-medium"
-    android:maxLines="1"
+    android:singleLine="true"
     android:textAlignment="inherit"
     android:textColor="?attr/list_header_public_room_spinner_text_color"
     tools:text="One long text for testing purpose" />
