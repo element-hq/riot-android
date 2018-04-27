@@ -165,19 +165,15 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.5.1'
     kapt 'com.jakewharton:butterknife-compiler:8.5.1'
 
-<<<<<<< refs/remotes/origin/develop
-    compile 'com.squareup.retrofit2:retrofit:2.4.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.4.0'
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
-    compile 'com.facebook.stetho:stetho:1.5.0'
-    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-=======
-    implementation 'com.squareup.retrofit:retrofit:1.6.1'
-    implementation 'com.google.code.gson:gson:2.3'
-    implementation 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
-    implementation 'com.squareup.okhttp:okhttp:2.2.0'
->>>>>>> Upgrade gradle form 3.3 to 4.7 Upgrade tools from 2.3.3 to 3.1.2 Upgrade build-tools from 26.0.2 to 27.0.3 Upgrade com.google.gms:google-services from 3.0.0 to 3.2.0 Downgrade kotlin version from 1.2.40 to 1.2.30 to match Android Studio Kotlin plugin version Add google() repository Set org.gradle.configureondemand to false (must also be disabled in AndroidStudio preferences Fix issues related to these upgrade (compile -> implementation, etc.)
+    // Network
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.10.0'
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    implementation 'com.squareup.okio:okio:1.13.0'
 
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
 
@@ -190,35 +186,13 @@ dependencies {
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external lib
-    implementation(name: 'matrix-sdk', ext: 'aar')
+    //implementation(name: 'matrix-sdk', ext: 'aar')
     // use the matrix SDK as a sub project
     // you have to uncomment some lines in settings.gradle
-    //implementation project(':matrix-sdk')
+    implementation project(':matrix-sdk')
     implementation(name: 'olm-sdk', ext: 'aar')
 
     /************* jitsi **************/
-<<<<<<< refs/remotes/origin/develop
-    compile 'javax.inject:javax.inject:1'
-
-    compile 'com.facebook.fbui.textlayoutbuilder:textlayoutbuilder:1.0.0'
-    compile 'com.facebook.fresco:fresco:1.3.0'
-    compile 'com.facebook.fresco:imagepipeline-okhttp3:1.3.0'
-    compile 'com.facebook.soloader:soloader:0.1.0'
-    compile 'com.google.code.findbugs:jsr305:3.0.0'
-    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.6.0'
-    compile 'com.squareup.okio:okio:1.13.0'
-    compile 'org.webkit:android-jsc:r174650'
-
-    compile(name: 'jitsi-sdk', ext: 'aar')
-    compile(name: 'react-native-background-timer', ext: 'aar')
-    compile(name: 'react-native-fetch-blob', ext: 'aar')
-    compile(name: 'react-native-immersive', ext: 'aar')
-    compile(name: 'react-native-keep-awake', ext: 'aar')
-    compile(name: 'react-native-vector-icons', ext: 'aar')
-    compile(name: 'react-native-webrtc', ext: 'aar')
-    compile(name: 'react-native', ext: 'aar')
-    compile(name: 'react-native-locale-detector', ext: 'aar')
-=======
     implementation 'javax.inject:javax.inject:1'
 
     implementation 'com.facebook.fbui.textlayoutbuilder:textlayoutbuilder:1.0.0'
@@ -226,9 +200,6 @@ dependencies {
     implementation 'com.facebook.fresco:imagepipeline-okhttp3:1.3.0'
     implementation 'com.facebook.soloader:soloader:0.1.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.6.0'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.6.0'
-    implementation 'com.squareup.okio:okio:1.13.0'
     implementation 'org.webkit:android-jsc:r174650'
 
     implementation(name: 'jitsi-sdk', ext: 'aar')
@@ -240,7 +211,6 @@ dependencies {
     implementation(name: 'react-native-webrtc', ext: 'aar')
     implementation(name: 'react-native', ext: 'aar')
     implementation(name: 'react-native-locale-detector', ext: 'aar')
->>>>>>> Upgrade gradle form 3.3 to 4.7 Upgrade tools from 2.3.3 to 3.1.2 Upgrade build-tools from 26.0.2 to 27.0.3 Upgrade com.google.gms:google-services from 3.0.0 to 3.2.0 Downgrade kotlin version from 1.2.40 to 1.2.30 to match Android Studio Kotlin plugin version Add google() repository Set org.gradle.configureondemand to false (must also be disabled in AndroidStudio preferences Fix issues related to these upgrade (compile -> implementation, etc.)
 
 
     // another tracking than GA
