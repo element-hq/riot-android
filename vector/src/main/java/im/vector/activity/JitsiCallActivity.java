@@ -182,7 +182,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                     }
 
                     private void onError(String errorMessage) {
-                        stopWaitingView();
+                        hideWaitingView();
                         CommonActivityUtils.displayToast(JitsiCallActivity.this, errorMessage);
                     }
 
@@ -267,7 +267,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                 JitsiCallActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        stopWaitingView();
+                        hideWaitingView();
                     }
                 });
             }

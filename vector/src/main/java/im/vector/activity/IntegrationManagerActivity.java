@@ -145,7 +145,7 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
             @Override
             public void onSuccess(String scalarToken) {
                 mScalarToken = scalarToken;
-                stopWaitingView();
+                hideWaitingView();
                 launchUrl();
             }
 

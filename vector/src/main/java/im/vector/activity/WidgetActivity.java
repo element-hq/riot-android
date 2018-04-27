@@ -158,7 +158,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
                                     }
 
                                     private void onError(String errorMessage) {
-                                        stopWaitingView();
+                                        hideWaitingView();
                                         CommonActivityUtils.displayToast(WidgetActivity.this, errorMessage);
                                     }
 
@@ -263,7 +263,7 @@ public class WidgetActivity extends RiotAppCompatActivity {
         WidgetsManager.getFormattedWidgetUrl(this, mWidget, new ApiCallback<String>() {
             @Override
             public void onSuccess(String url) {
-                stopWaitingView();
+                hideWaitingView();
                 mWidgetWebView.loadUrl(url);
             }
 

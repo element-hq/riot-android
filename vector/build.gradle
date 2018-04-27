@@ -4,10 +4,11 @@ repositories {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
 
     packagingOptions {
         exclude 'META-INF/LICENSE'
@@ -79,6 +80,9 @@ android {
         }
     }
 
+    // Specifies a flavor dimension (no need to specify it in each productsFlavor, cause we only declare one dimension).
+    flavorDimensions "flavor_dimension_vector"
+
     productFlavors {
         app {
             applicationId "im.vector.alpha"
@@ -125,62 +129,71 @@ android {
     }
 }
 
-def gitRevision() {
+static def gitRevision() {
     def cmd = "git rev-parse --short HEAD"
     return cmd.execute().text.trim()
 }
 
-def gitRevisionDate() {
+static def gitRevisionDate() {
     def cmd = "git show -s --format=%ci HEAD^{commit}"
     return cmd.execute().text.trim()
 }
 
-def gitBranchName() {
+static def gitBranchName() {
     def cmd = "git name-rev --name-only HEAD"
     return cmd.execute().text.trim()
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
     // Kotlin
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    compile 'com.android.support:multidex:1.0.0'
+    // Kotlin KTX
+    implementation 'androidx.core:core-ktx:0.3'
 
-    compile 'me.leolin:ShortcutBadger:1.1.2@aar'
+    implementation 'com.android.support:multidex:1.0.0'
 
-    compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.android.support:design:27.1.1'
-    compile 'com.android.support:cardview-v7:27.1.1'
-    compile 'com.android.support:recyclerview-v7:27.1.1'
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    implementation 'me.leolin:ShortcutBadger:1.1.2@aar'
 
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.jakewharton:butterknife:8.5.1'
+    kapt 'com.jakewharton:butterknife-compiler:8.5.1'
+
+<<<<<<< refs/remotes/origin/develop
     compile 'com.squareup.retrofit2:retrofit:2.4.0'
     compile 'com.squareup.retrofit2:converter-gson:2.4.0'
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.squareup.okhttp3:okhttp:3.10.0'
     compile 'com.facebook.stetho:stetho:1.5.0'
     compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+=======
+    implementation 'com.squareup.retrofit:retrofit:1.6.1'
+    implementation 'com.google.code.gson:gson:2.3'
+    implementation 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    implementation 'com.squareup.okhttp:okhttp:2.2.0'
+>>>>>>> Upgrade gradle form 3.3 to 4.7 Upgrade tools from 2.3.3 to 3.1.2 Upgrade build-tools from 26.0.2 to 27.0.3 Upgrade com.google.gms:google-services from 3.0.0 to 3.2.0 Downgrade kotlin version from 1.2.40 to 1.2.30 to match Android Studio Kotlin plugin version Add google() repository Set org.gradle.configureondemand to false (must also be disabled in AndroidStudio preferences Fix issues related to these upgrade (compile -> implementation, etc.)
 
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
 
     // Use Glide library to display image (Gif supported)
-    compile 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
 
-    compile 'com.googlecode.libphonenumber:libphonenumber:8.0.1'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.0.1'
 
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external lib
-    compile(name: 'matrix-sdk', ext: 'aar')
+    implementation(name: 'matrix-sdk', ext: 'aar')
     // use the matrix SDK as a sub project
-    //compile project(':matrix-sdk')
-    compile(name: 'olm-sdk', ext: 'aar')
+    //implementation project(':matrix-sdk')
+    implementation(name: 'olm-sdk', ext: 'aar')
 
     /************* jitsi **************/
+<<<<<<< refs/remotes/origin/develop
     compile 'javax.inject:javax.inject:1'
 
     compile 'com.facebook.fbui.textlayoutbuilder:textlayoutbuilder:1.0.0'
@@ -201,20 +214,43 @@ dependencies {
     compile(name: 'react-native-webrtc', ext: 'aar')
     compile(name: 'react-native', ext: 'aar')
     compile(name: 'react-native-locale-detector', ext: 'aar')
+=======
+    implementation 'javax.inject:javax.inject:1'
+
+    implementation 'com.facebook.fbui.textlayoutbuilder:textlayoutbuilder:1.0.0'
+    implementation 'com.facebook.fresco:fresco:1.3.0'
+    implementation 'com.facebook.fresco:imagepipeline-okhttp3:1.3.0'
+    implementation 'com.facebook.soloader:soloader:0.1.0'
+    implementation 'com.google.code.findbugs:jsr305:3.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.6.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.6.0'
+    implementation 'com.squareup.okio:okio:1.13.0'
+    implementation 'org.webkit:android-jsc:r174650'
+
+    implementation(name: 'jitsi-sdk', ext: 'aar')
+    implementation(name: 'react-native-background-timer', ext: 'aar')
+    implementation(name: 'react-native-fetch-blob', ext: 'aar')
+    implementation(name: 'react-native-immersive', ext: 'aar')
+    implementation(name: 'react-native-keep-awake', ext: 'aar')
+    implementation(name: 'react-native-vector-icons', ext: 'aar')
+    implementation(name: 'react-native-webrtc', ext: 'aar')
+    implementation(name: 'react-native', ext: 'aar')
+    implementation(name: 'react-native-locale-detector', ext: 'aar')
+>>>>>>> Upgrade gradle form 3.3 to 4.7 Upgrade tools from 2.3.3 to 3.1.2 Upgrade build-tools from 26.0.2 to 27.0.3 Upgrade com.google.gms:google-services from 3.0.0 to 3.2.0 Downgrade kotlin version from 1.2.40 to 1.2.30 to match Android Studio Kotlin plugin version Add google() repository Set org.gradle.configureondemand to false (must also be disabled in AndroidStudio preferences Fix issues related to these upgrade (compile -> implementation, etc.)
 
 
     // another tracking than GA
-    compile 'org.piwik.sdk:piwik-sdk:2.0.0'
+    implementation 'org.piwik.sdk:piwik-sdk:2.0.0'
 
     // use the matrix SDK as a part of the project
     // you have to uncomment some lines in settings.gradle
-    //compile project(':matrix-sdk')
+    //implementation project(':matrix-sdk')
 
     /************* flavors management **************/
 
     // app flavor only
-    appCompile 'com.google.firebase:firebase-core:11.8.0'
-    appCompile 'com.google.firebase:firebase-messaging:11.8.0'
+    appImplementation 'com.google.firebase:firebase-core:11.8.0'
+    appImplementation 'com.google.firebase:firebase-messaging:11.8.0'
 
     // fdroid flavor only
 }

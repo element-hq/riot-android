@@ -412,7 +412,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mActivity.stopWaitingView();
+                    mActivity.hideWaitingView();
                     if (!TextUtils.isEmpty(errorMessage)) {
                         Toast.makeText(mActivity, errorMessage, Toast.LENGTH_SHORT).show();
                     }
@@ -432,7 +432,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
             public void onSuccess(Void info) {
                 // check if the activity is still attached
                 if ((null != mActivity) && !mActivity.isFinishing()) {
-                    mActivity.stopWaitingView();
+                    mActivity.hideWaitingView();
                     mActivity.refreshUnreadBadges();
 
                     // if the fragment is still the active one

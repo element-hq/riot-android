@@ -88,7 +88,7 @@ public class GroupDetailsRoomsFragment extends GroupDetailsBaseFragment {
                 GroupUtils.openGroupRoom(mActivity, mSession, groupRoom, new SimpleApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
-                        mActivity.stopWaitingView();
+                        mActivity.hideWaitingView();
                     }
                 });
             }
