@@ -3,13 +3,13 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">zh</string>
-    <string name="resouces_country">US</string>
+    <string name="resouces_country">CN</string>
 
     <string name="resend">重新发送</string>
     <string name="quote">引用</string>
     <string name="share">分享</string>
     <string name="forward">转发</string>
-    <string name="action_voice_call">音频通话</string>
+    <string name="action_voice_call">语音通话</string>
     <string name="action_video_call">视频通话</string>
     <string name="action_mark_all_as_read">将所有标记为已读</string>
     <string name="action_quick_reply">快速回复</string>
@@ -62,7 +62,7 @@
     <string name="title_activity_home">消息</string>
     <string name="title_activity_room">聊天室</string>
     <string name="title_activity_settings">设置</string>
-    <string name="title_activity_member_details">成员细节</string>
+    <string name="title_activity_member_details">成员信息</string>
 
     <string name="save">保存</string>
     <string name="leave">退出</string>
@@ -185,7 +185,7 @@
     <string name="encryption_information_decryption_error">解密错误</string>
 
     <string name="encryption_information_sender_device_information">发送者的设备信息</string>
-    <string name="encryption_information_device_name">设备名</string>
+    <string name="encryption_information_device_name">设备名称</string>
     <string name="encryption_information_device_id">设备识别码</string>
     <string name="encryption_information_device_key">设备密钥</string>
     <string name="encryption_information_verification">验证</string>
@@ -408,7 +408,7 @@
     <string name="encryption_information_verify_key_match">我验证密钥匹配</string>
 
     <string name="unknown_devices_alert_title">聊天室有未知设备</string>
-<string name="later">稍后</string>
+<string name="later">稍后再说</string>
     <string name="permalink">永久链接</string>
     <string name="rename">重命名</string>
     <string name="report_content">报告内容</string>
@@ -587,7 +587,7 @@
     <string name="settings_contacts_phonebook_country">通讯录国家</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">名称</string>
-    <string name="devices_details_last_seen_title">最后一次上线</string>
+    <string name="devices_details_last_seen_title">最近一次上线</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="settings_home_server">主服务器</string>
@@ -600,8 +600,9 @@
     <string name="room_settings_labs_end_to_end_is_active">端对端加密已激活</string>
     <string name="failed_to_load_timeline_position">%s 正在尝试在这个聊天室的时间轴上加载一个特定的点，但无法找到它.</string>
     <string name="encryption_information_name">名称</string>
-    <string name="encryption_information_verify_device_warning">" 要验证此设备是否可信任，请使用其他方式（例如亲自或打电话）联系其所有者，并询问他们在其设备的用户设置中看到的密钥是否与以下密钥相匹配："</string>
-    <string name="encryption_information_verify_device_warning2">如果匹配，请按下面的验证按钮。如果没有，那么其他人正在拦截此设备，而您可能想要按阻止按钮。\n在将来，此验证过程将会更加复杂。</string>
+    <string name="encryption_information_verify_device_warning">" 为验证此设备是否可信，请通过其他方式（例如面对面交换或拨打电话）与其拥有者联系，并询问他们该设备的用户设置中的密钥是否与以下密钥匹配："</string>
+    <string name="encryption_information_verify_device_warning2">如果匹配，请点击下面的验证按钮。 如果不匹配，那么这可能说明其他人正在盗用此设备，而您应当点击黑名单按钮。
+未来，这个验证过程将会变得更加精致、巧妙一些。</string>
     <string name="unknown_devices_alert_message">这个聊天室包含未经验证的未知设备。
 这意味着设备不能保证属于他们声称的用户。
 我们建议您在继续操作之前，先验证每个设备，如果你愿意也可以重新发送消息而不验证。
@@ -733,14 +734,14 @@
     <string name="widget_integration_room_not_visible">聊天室 %s 不可见。</string>
     <string name="settings_labs_matrix_apps">Matrix 应用</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
-    <string name="notification_sync_in_progress">同步中</string>
+    <string name="notification_sync_in_progress">正在同步</string>
     <string name="notification_listen_for_events">监听事件</string>
 
     <string name="call">通话</string>
     <string name="settings_containing_my_display_name">包含我昵称的消息</string>
     <string name="settings_containing_my_user_name">包含我用户名的消息</string>
-    <string name="you_added_a_new_device">你添加了一个新设备 \'%s\'，它正在请求加密密钥。</string>
-    <string name="your_unverified_device_requesting">你的未验证的设备 \'%s\' 正在请求加密密钥。</string>
+    <string name="you_added_a_new_device">您添加了一个新设备 \"%s\"，它正在请求加密密钥。</string>
+    <string name="your_unverified_device_requesting">您的未验证设备 “%s” 正在请求加密密钥。</string>
     <string name="start_verification">开始验证</string>
     <string name="share_without_verifying">不验证而分享</string>
     <string name="ignore_request">忽略请求</string>
@@ -763,9 +764,9 @@
     // notification statuses
     <string name="notification_off">关闭</string>
     <string name="notification_on">打开</string>
-    <string name="encrypted_message">加密消息</string>
+    <string name="encrypted_message">已加密消息</string>
 
-<string name="notification_noisy_notifications">通知并振铃</string>
+<string name="notification_noisy_notifications">铃声通知</string>
     <string name="notification_silent_notifications">静默通知</string>
 
     <string name="settings_analytics">数据收集</string>
@@ -775,7 +776,7 @@
 
     <string name="notification_noisy">通知并振铃</string>
 
-    <string name="loading">正在加载...</string>
+    <string name="loading">正在加载…</string>
 
     <string name="action_exit">退出</string>
     <string name="groups_invite_header">邀请</string>
@@ -796,7 +797,7 @@
 
     <string name="room_settings_room_notifications_title">通知</string>
     <string name="create">创建</string>
-    <string name="community_name_hint">例子</string>
+    <string name="community_name_hint"/>
 
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 条新消息</item>
@@ -806,7 +807,7 @@
     <string name="rejoin">重新加入</string>
     <string name="forget_room">忘记聊天室</string>
 <string name="room_settings_all_messages_noisy">所有消息（通知并振铃）</string>
-    <string name="title_activity_group_details">社区细节</string>
+    <string name="title_activity_group_details">社区信息</string>
 
     <string name="actions">操作</string>
     <string name="bottom_action_groups">社区</string>
