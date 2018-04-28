@@ -999,6 +999,6 @@ Email также позволит вам при необходимости во�
     <string name="startup_notification_privacy_button_other">Выбрать другой вариант</string>
 
     <string name="settings_notification_privacy_low_detail">Уведомления без подробностей</string>
-    <string name="settings_notification_privacy_reduced">Пониженная секретность</string>
+    <string name="settings_notification_privacy_reduced">Ограниченная конфиденциальность</string>
     <string name="settings_notification_privacy_secure_message_content"><b> надежно от Matrix-Homeserver получено </b></string>
     </resources>
