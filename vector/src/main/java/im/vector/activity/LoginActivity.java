@@ -80,6 +80,7 @@ import im.vector.PhoneNumberHandler;
 import im.vector.R;
 import im.vector.RegistrationManager;
 import im.vector.UnrecognizedCertHandler;
+import im.vector.activity.util.RequestCodesKt;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -90,10 +91,6 @@ import im.vector.util.PhoneNumberUtils;
  */
 public class LoginActivity extends MXCActionBarActivity implements RegistrationManager.RegistrationListener, RegistrationManager.UsernameValidityListener {
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
-
-    private static final int ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314;
-    private static final int FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315;
-    private static final int CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316;
 
     private final static int REGISTER_POLLING_PERIOD = 10 * 1000;
 
@@ -1322,7 +1319,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             Intent intent = new Intent(LoginActivity.this, AccountCreationActivity.class);
             intent.putExtra(AccountCreationActivity.EXTRA_HOME_SERVER_ID, hs);
-            startActivityForResult(intent, ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
+            startActivityForResult(intent, RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
         }
     }
 
@@ -1710,7 +1707,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (!isSupported) {
                                 Intent intent = new Intent(LoginActivity.this, FallbackLoginActivity.class);
                                 intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_ID, hsConfig.getHomeserverUri().toString());
-                                startActivityForResult(intent, FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
+                                startActivityForResult(intent, RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
                             } else if (mIsPendingLogin) {
                                 onLoginClick();
                             }
@@ -2021,7 +2018,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE) && mLoginPhoneNumberHandler != null) {
                 mLoginPhoneNumberHandler.setCountryCode(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE));
             }
-        } else if (CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE == requestCode) {
+        } else if (RequestCodesKt.CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
                 String captchaResponse = data.getStringExtra("response");
@@ -2035,7 +2032,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 enableLoadingScreen(false);
                 refreshDisplay();
             }
-        } else if ((ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
+        } else if ((RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
                 String homeServer = data.getStringExtra("homeServer");
@@ -2063,7 +2060,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Matrix.getInstance(getApplicationContext()).addSession(session);
                 goToSplash();
                 finish();
-            } else if ((resultCode == RESULT_CANCELED) && (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
+            } else if ((resultCode == RESULT_CANCELED) && (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
                 Log.d(LOG_TAG, "## onActivityResult(): RESULT_CANCELED && FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE");
                 // reset the home server to let the user writes a valid one.
                 mHomeServerText.setText("https://");
@@ -2379,7 +2376,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             Intent intent = new Intent(LoginActivity.this, AccountCreationCaptchaActivity.class);
             intent.putExtra(AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL, mHomeServerUrl);
             intent.putExtra(AccountCreationCaptchaActivity.EXTRA_SITE_KEY, publicKey);
-            startActivityForResult(intent, CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
+            startActivityForResult(intent, RequestCodesKt.CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
         } else {
             Log.d(LOG_TAG, "## onWaitingCaptcha(): captcha flow cannot be done");
             Toast.makeText(this, getString(R.string.login_error_unable_register), Toast.LENGTH_SHORT).show();
