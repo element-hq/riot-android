@@ -654,7 +654,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @return the identity server URL according to custom HS checkbox
      */
     private String getIdentityServerUrl() {
-        String url = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url));
+        String url = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_identity_server_url));
 
         if (mUseCustomHomeServersCheckbox.isChecked()) {
             url = mIdentityServerText.getText().toString().trim();

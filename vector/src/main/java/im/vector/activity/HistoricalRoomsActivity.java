@@ -245,7 +245,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
      * Init history rooms data
      */
     private void initHistoricalRoomsData() {
-        stopWaitingView();
+        hideWaitingView();
         final List<Room> historicalRooms = new ArrayList<>(mSession.getDataHandler().getLeftRooms());
         for (Iterator<Room> iterator = historicalRooms.iterator(); iterator.hasNext(); ) {
             final Room room = iterator.next();
@@ -345,7 +345,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    stopWaitingView();
+                    hideWaitingView();
                     if (!TextUtils.isEmpty(errorMessage)) {
                         Toast.makeText(HistoricalRoomsActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }

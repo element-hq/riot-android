@@ -62,7 +62,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     private TextInputLayout mCountryLayout;
     private TextInputEditText mPhoneNumber;
     private TextInputLayout mPhoneNumberLayout;
-    
+
     private MXSession mSession;
 
     // Ex "FR"
@@ -75,7 +75,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     // Used to prevent user to submit several times in a row
     private boolean mIsSubmittingPhone;
 
-     /*
+    /*
      * *********************************************************************************************
      * Static methods
      * *********************************************************************************************
@@ -88,10 +88,10 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     }
 
     /*
-    * *********************************************************************************************
-    * Activity lifecycle
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Activity lifecycle
+     * *********************************************************************************************
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +110,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
         mCountryLayout = findViewById(R.id.phone_number_country);
         mPhoneNumber = findViewById(R.id.phone_number_value);
         mPhoneNumberLayout = findViewById(R.id.phone_number);
-        waitingView = findViewById(R.id.loading_view);
+        setWaitingView(findViewById(R.id.loading_view));
 
         final Intent intent = getIntent();
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));
@@ -190,10 +190,10 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     }
 
     /*
-    * *********************************************************************************************
-    * Utils
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Utils
+     * *********************************************************************************************
+     */
 
     private void initViews() {
         setCountryCode(PhoneNumberUtils.getCountryCode(this));
@@ -273,7 +273,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
             mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    stopWaitingView();
+                    hideWaitingView();
                     Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
                             mSession.getCredentials().userId, pid);
                     startActivityForResult(intent, REQUEST_VERIFICATION);
@@ -310,15 +310,15 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
      */
     private void onSubmitPhoneError(final String errorMessage) {
         mIsSubmittingPhone = false;
-        stopWaitingView();
+        hideWaitingView();
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     /*
-    * *********************************************************************************************
-    * Listeners
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Listeners
+     * *********************************************************************************************
+     */
 
     @Override
     public void onClick(View v) {

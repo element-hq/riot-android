@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_LOGS" tools:ignore="ProtectedPermissions"/>
 
     <!-- universal links management -->
     <uses-permission android:name="android.permission.REORDER_TASKS" />
@@ -22,11 +22,11 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <!-- required on android 6.0.0 devices -->
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" tools:ignore="ProtectedPermissions"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <!-- shared files from external application -->
-    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" tools:ignore="ProtectedPermissions"/>
 
     <!-- to be able to turn on display when a notification is received-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />

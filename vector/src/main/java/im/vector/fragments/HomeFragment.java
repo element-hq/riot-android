@@ -312,7 +312,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         sortAndDisplay(lowPriorities, notificationComparator, mLowPrioritySection);
         sortAndDisplay(otherRooms, notificationComparator, mRoomsSection);
 
-        mActivity.stopWaitingView();
+        mActivity.hideWaitingView();
 
         mInvitationsSection.setRooms(mActivity.getRoomInvitations());
     }

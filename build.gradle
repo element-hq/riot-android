@@ -1,12 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext.kotlin_version = '1.2.30'
+
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.google.gms:google-services:3.2.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -14,8 +19,8 @@ buildscript {
 
 // global properties used in sub modules
 ext {
-    versionCodeProp = 80700
-    versionNameProp = "0.8.7-dev"
+    versionCodeProp = 80800
+    versionNameProp = "0.8.8-dev"
     versionBuild = System.getenv("BUILD_NUMBER") as Integer ?: 0
     buildNumberProp = "${versionBuild}"
 }
@@ -27,5 +32,6 @@ allprojects {
         maven {
             url "https://maven.google.com"
         }
+        google()
     }
 }

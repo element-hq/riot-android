@@ -220,7 +220,7 @@ public class GroupsFragment extends AbsHomeFragment {
                         if ((null != errorMessage) && (null != getActivity())) {
                             Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                         }
-                        mActivity.stopWaitingView();
+                        mActivity.hideWaitingView();
                     }
 
                     @Override
@@ -300,7 +300,7 @@ public class GroupsFragment extends AbsHomeFragment {
                 if ((null != errorMessage) && (null != getActivity())) {
                     Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
-                mActivity.stopWaitingView();
+                mActivity.hideWaitingView();
             }
 
             @Override
@@ -404,7 +404,7 @@ public class GroupsFragment extends AbsHomeFragment {
                                         Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
                                     }
 
-                                    mActivity.stopWaitingView();
+                                    mActivity.hideWaitingView();
 
                                     refreshGroups();
                                 }

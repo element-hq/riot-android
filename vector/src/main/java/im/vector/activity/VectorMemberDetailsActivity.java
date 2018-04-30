@@ -1164,7 +1164,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             mMemberNameTextView = findViewById(R.id.member_details_name);
             mPresenceTextView = findViewById(R.id.member_details_presence);
-            waitingView = findViewById(R.id.member_details_list_view_progress_bar);
+            setWaitingView(findViewById(R.id.member_details_list_view_progress_bar));
 
             // setup the devices list view
             mDevicesListView = findViewById(R.id.member_details_devices_list_view);
@@ -1507,8 +1507,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param aIsProgressBarDisplayed true to show the progress bar screen, false to hide it
      */
     private void enableProgressBarView(boolean aIsProgressBarDisplayed) {
-        if (null != waitingView) {
-           waitingView.setVisibility(aIsProgressBarDisplayed ? View.VISIBLE : View.GONE);
+        if(aIsProgressBarDisplayed) {
+            showWaitingView();
+        } else {
+            hideWaitingView();
         }
     }
 

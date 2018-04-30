@@ -352,7 +352,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
      * @param errorMessage the error message if any.
      */
     private void onRoomTagUpdated(String errorMessage) {
-        mActivity.stopWaitingView();
+        mActivity.hideWaitingView();
 
         refreshFavorites();
         mFavoritesAdapter.notifyDataSetChanged();
