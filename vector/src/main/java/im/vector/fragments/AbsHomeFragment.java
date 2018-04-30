@@ -55,13 +55,10 @@ import im.vector.util.RoomUtils;
 /**
  * Abstract fragment providing the universal search
  */
-public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.RoomInvitationListener, AbsAdapter.MoreRoomActionListener, RoomUtils.MoreActionListener {
+public abstract class AbsHomeFragment extends VectorBaseFragment implements AbsAdapter.RoomInvitationListener, AbsAdapter.MoreRoomActionListener, RoomUtils.MoreActionListener {
 
     private static final String LOG_TAG = AbsHomeFragment.class.getSimpleName();
     private static final String CURRENT_FILTER = "CURRENT_FILTER";
-
-    // Butterknife unbinder
-    private Unbinder mUnBinder;
 
     VectorHomeActivity mActivity;
 
@@ -95,13 +92,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    @CallSuper
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mUnBinder = ButterKnife.bind(this, view);
     }
 
     @Override
@@ -149,7 +139,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Roo
     @CallSuper
     public void onDestroyView() {
         super.onDestroyView();
-        mUnBinder.unbind();
         mCurrentFilter = null;
     }
 
