@@ -34,7 +34,6 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.util.Log;
 
-import android.view.View;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -156,7 +155,7 @@ public class VectorRoomMediasSender {
                 public void run() {
                     mVectorMessageListFragment.scrollToBottom();
                     mVectorRoomActivity.cancelSelectionMode();
-                    mVectorRoomActivity.stopWaitingView();
+                    mVectorRoomActivity.hideWaitingView();
                 }
             });
 

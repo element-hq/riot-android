@@ -13,5 +13,5 @@ sed -i '' -e 's/\/\/include/include/' settings.gradle || true
 sed -i '' -e 's/\/\/project/project/' settings.gradle || true
 
 echo replace step 2
-sed -i '' -e "s/compile(name: 'matrix/\/\/compile(name: 'matrix/" vector/build.gradle || true
-sed -i '' -e "s/\/\/compile project(':matrix-/compile project(':matrix-/" vector/build.gradle || true
+sed -i '' -e "s/implementation(name: 'matrix/\/\/implementation(name: 'matrix/" vector/build.gradle || true
+sed -i '' -e "s/\/\/implementation project(':matrix-/implementation project(':matrix-/" vector/build.gradle || true

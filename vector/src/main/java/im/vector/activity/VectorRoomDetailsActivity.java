@@ -145,7 +145,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         setContentView(R.layout.activity_vector_room_details);
 
         // UI widgets binding & init fields
-        waitingView = findViewById(R.id.settings_loading_layout);
+        setWaitingView(findViewById(R.id.settings_loading_layout));
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
 
         // tab creation and restore tabs UI context
@@ -269,9 +269,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
      */
     private void resetUi() {
         // stop "wait while searching" screen
-        if (null != waitingView) {
-            stopWaitingView();
-        }
+        hideWaitingView();
 
         if (null != mLoadOldestContentView) {
             mLoadOldestContentView.setVisibility(View.GONE);
@@ -432,7 +430,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         if (mCurrentTabIndex == tabIndex) {
             Log.d(LOG_TAG, "## onSearchEnd() nbrMsg=" + nbrMessages);
             // stop "wait while searching" screen
-            stopWaitingView();
+            hideWaitingView();
         }
     }
 

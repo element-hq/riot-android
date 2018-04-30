@@ -29,7 +29,6 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,7 +94,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
 
         mPhoneNumberCode = findViewById(R.id.phone_number_code_value);
         mPhoneNumberCodeLayout = findViewById(R.id.phone_number_code);
-        waitingView = findViewById(R.id.loading_view);
+        setWaitingView(findViewById(R.id.loading_view));
 
         final Intent intent = getIntent();
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));
@@ -218,7 +217,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
 
     private void onSubmitCodeError(final String errorMessage) {
         mIsSubmittingToken = false;
-        stopWaitingView();
+        hideWaitingView();
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 

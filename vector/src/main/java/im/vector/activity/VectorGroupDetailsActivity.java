@@ -185,7 +185,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
         setContentView(R.layout.activity_vector_group_details);
 
         // UI widgets binding & init fields
-        waitingView = findViewById(R.id.group_loading_layout);
+        setWaitingView(findViewById(R.id.group_loading_layout));
 
         // tab creation and restore tabs UI context
         ActionBar actionBar = getSupportActionBar();
