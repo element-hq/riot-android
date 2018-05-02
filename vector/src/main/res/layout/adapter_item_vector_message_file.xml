@@ -27,7 +27,8 @@
             android:layout_width="6dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp"
+            tools:background="@color/vector_green_color" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -104,7 +105,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:autoLink="none"
-                                android:text="A filename here" />
+                                tools:text="A filename here" />
+
                         </LinearLayout>
 
                         <!-- the thumbnail has been uploaded : sending the message -->
@@ -115,6 +117,7 @@
                             android:layout_centerInParent="true" />
 
                     </RelativeLayout>
+
                 </FrameLayout>
 
                 <RelativeLayout
@@ -124,6 +127,7 @@
                     <include
                         android:id="@+id/content_download_progress_layout"
                         layout="@layout/media_upload_download_progress_layout" />
+
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -133,9 +137,13 @@
                     <include
                         android:id="@+id/content_upload_progress_layout"
                         layout="@layout/media_upload_download_progress_layout" />
+
                 </RelativeLayout>
+
             </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
 
     <include
